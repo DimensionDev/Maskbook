@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useCallback } from 'react'
 
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { useWallet, useWeb3 } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
@@ -40,13 +40,10 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTAvatarInTwitterProps {}
-function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
+function NFTAvatarInTwitter() {
     const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
-    const web3 = useWeb3()
-
     const _avatar = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const [avatarId, setAvatarId] = useState('')
@@ -54,26 +51,25 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     const getProfileImageSelector = () =>
         searchTwitterAvatarSelector().querySelector<HTMLElement>('div > :nth-child(2) > div img')
 
-    const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent | undefined>()
+    const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const onUpdate = useCallback(
         (data: NFTAvatarEvent) => {
-            const oldAvatarId = getAvatarId(identity.avatar ?? '')
             const timer = setInterval(() => {
                 const imgNode = getProfileImageSelector().evaluate()
                 const avatarId = getAvatarId(imgNode?.getAttribute('src') ?? '')
-                if ((oldAvatarId && avatarId && oldAvatarId !== avatarId) || retries <= 0) {
-                    console.log(oldAvatarId)
-                    console.log(avatarId)
+                if ((data.avatarId && avatarId && data.avatarId !== avatarId) || retries <= 0) {
                     clearInterval(timer)
-                    setNFTEvent({
-                        ...data,
+                    setNFTEvent(() => ({
+                        userId: data.userId,
+                        tokenId: data.tokenId,
+                        address: data.address,
                         avatarId: retries <= 0 ? '' : avatarId,
-                    })
+                    }))
                 }
                 setRetries((retries) => retries - 1)
             }, 500)
         },
-        [retries],
+        [NFTEvent, retries],
     )
 
     useEffect(() => {
@@ -81,27 +77,41 @@ function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
     }, [identity, getAvatarId])
 
     useEffect(() => {
-        if (!NFTEvent) return
         if (!wallet) return
+
+        if (!NFTEvent?.address || !NFTEvent?.tokenId) {
+            setAvatar(undefined)
+            MaskMessage.events.NFTAvatarTimeLineUpdated.sendToAll({
+                userId: identity.identifier.userId,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+                address: '',
+                tokenId: '',
+            })
+            return
+        }
 
         PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, NFTEvent as AvatarMetaDB).then(
             (avatar: AvatarMetaDB | undefined) => {
-                if (!avatar) throw new Error('Not Found')
                 setAvatar(avatar)
+                if (avatar) setAvatarId(avatar.avatarId)
+                MaskMessage.events.NFTAvatarTimeLineUpdated.sendToAll(
+                    avatar ?? {
+                        userId: identity.identifier.userId,
+                        avatarId: getAvatarId(identity.avatar ?? ''),
+                        address: '',
+                        tokenId: '',
+                    },
+                )
             },
         )
-
-        setAvatarId(NFTEvent.avatarId)
-    }, [NFTEvent, PluginNFTAvatarRPC])
+    }, [NFTEvent, PluginNFTAvatarRPC, wallet])
 
     useEffect(() => {
         setAvatar(_avatar)
     }, [_avatar])
 
     useEffect(() => {
-        return MaskMessage.events.NFTAvatarUpdated.on((data) => {
-            onUpdate(data)
-        })
+        return MaskMessage.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [onUpdate])
 
     if (!avatar) return null

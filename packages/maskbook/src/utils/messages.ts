@@ -38,8 +38,8 @@ export interface ProfileNFTsPageEvent {
 export interface NFTAvatarEvent {
     userId: string
     avatarId: string
-    address: string
-    tokenId: string
+    address?: string
+    tokenId?: string
 }
 
 export interface MaskMessages extends SettingsEvents {
@@ -73,6 +73,7 @@ export interface MaskMessages extends SettingsEvents {
     }
 
     NFTAvatarUpdated: NFTAvatarEvent
+    NFTAvatarTimeLineUpdated: NFTAvatarEvent
     maskSDKHotModuleReload: void
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })

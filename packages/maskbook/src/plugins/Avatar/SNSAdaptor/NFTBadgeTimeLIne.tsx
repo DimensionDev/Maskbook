@@ -1,5 +1,8 @@
 import { makeStyles } from '@masknet/theme'
+import { useEffect, useState } from 'react'
+import { MaskMessage } from '../../../utils'
 import { useNFTAvatar } from '../hooks'
+import type { AvatarMetaDB } from '../types'
 import { NFTBadge } from './NFTBadge'
 
 const useStyles = makeStyles()((theme) => ({
@@ -20,10 +23,31 @@ interface NFTBadgeTimeLineProps {
 export function NFTBadgeTimeLine(props: NFTBadgeTimeLineProps) {
     const { userId, avatarId } = props
     const { classes } = useStyles()
-    const avatar = useNFTAvatar(userId)
+    const _avatar = useNFTAvatar(userId)
+    const [avatar, setAvatar] = useState<AvatarMetaDB>()
+    const [avatarId_, setAvatarId_] = useState('')
+
+    const onUpdate = (data: AvatarMetaDB) => {
+        if (!data.address || !data.tokenId) {
+            setAvatar(undefined)
+            return
+        }
+        setAvatar(data)
+        setAvatarId_(data.avatarId)
+    }
+
+    useEffect(() => {
+        setAvatarId_(avatarId)
+    }, [avatarId])
+
+    useEffect(() => {
+        setAvatar(_avatar)
+    }, [_avatar])
+
+    useEffect(() => MaskMessage.events.NFTAvatarTimeLineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
 
     if (!avatar) return null
-    if (avatar.avatarId !== avatarId) return null
+    if (avatarId_ && avatar.avatarId !== avatarId_) return null
 
     return (
         <div className={classes.root}>

@@ -1,8 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { blobToArrayBuffer } from '@dimensiondev/kit'
-import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
 import {
     searchAvatarOpenFileSelector,
     searchProfileAvatarSelector,
@@ -41,7 +41,7 @@ function NFTAvatarInTwitter() {
     const identity = useCurrentVisitingIdentity()
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 
-    const onChange = useCallback(async (token: ERC721TokenDetailed) => {
+    const onChange = async (token: ERC721TokenDetailed) => {
         if (!token.info.image) return
         const image = await toPNG(token.info.image)
         if (!image) return
@@ -53,15 +53,21 @@ function NFTAvatarInTwitter() {
             address: token.contractDetailed.address,
             tokenId: token.tokenId,
         })
-    }, [])
+    }
 
     const handler = () => {
-        if (!avatarEvent) return
-        MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
+        MaskMessage.events.NFTAvatarUpdated.sendToLocal(
+            avatarEvent ?? {
+                userId: identity.identifier.userId,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+                address: '',
+                tokenId: '',
+            },
+        )
+        setAvatarEvent(undefined)
     }
 
     useEffect(() => {
-        if (!Flags.nft_avatar_enabled) return
         const profileSave = searchProfileSaveSelector().evaluate()
         if (!profileSave) return
         profileSave.addEventListener('click', handler)
@@ -69,6 +75,5 @@ function NFTAvatarInTwitter() {
     }, [handler])
 
     if (identity.identifier.userId !== currentIdentifier?.userId) return null
-    if (!Flags.nft_avatar_enabled) return null
     return <NFTAvatar onChange={onChange} classes={classes} />
 }
