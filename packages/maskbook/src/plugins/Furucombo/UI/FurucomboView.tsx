@@ -83,8 +83,18 @@ export function FurucomboView(props: PoolViewProps) {
     const [tabIndex, setTabIndex] = useState(0)
     const currentChainId = useChainId()
 
-    const { value: investablesData = {}, loading, error } = useFetchPools()
-    const { investables = [] } = investablesData
+    const { value, loading, error } = useFetchPools()
+
+    if (loading) return <Typography align="center">Loading...</Typography>
+
+    if (error || !value)
+        return (
+            <Typography align="center" color="textPrimary">
+                {t('plugin_furucombo_smt_wrong')}
+            </Typography>
+        )
+
+    const { investables = [] } = value
 
     const investable = investables.find(
         (investable: Investable) =>
@@ -92,15 +102,6 @@ export function FurucomboView(props: PoolViewProps) {
             investable.chainId === currentChainId &&
             investable.category === props.category,
     )
-
-    if (loading) return <Typography align="center">Loading...</Typography>
-
-    if (error)
-        return (
-            <Typography align="center" color="textPrimary">
-                {t('plugin_furucombo_smt_wrong')}
-            </Typography>
-        )
 
     if (!investable)
         return (
