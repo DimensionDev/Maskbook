@@ -10,4 +10,5 @@ export interface NFT {
     symbol: string
     name: string
     image: string
+    owner: string
 }

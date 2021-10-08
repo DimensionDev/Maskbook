@@ -28,6 +28,7 @@ export async function getNFT(address: string, tokenId: string) {
         name: asset.name,
         symbol: order?.paymentTokenContract?.symbol ?? asset.lastSale?.paymentToken?.symbol ?? 'ETH',
         image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
+        owner: asset.owner.address,
     }
 }
 
