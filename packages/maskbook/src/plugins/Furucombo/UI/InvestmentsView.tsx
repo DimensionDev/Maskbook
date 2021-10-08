@@ -83,7 +83,7 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        fontFamily: 'Muli,Helvetica,Arial,"sans-serif"',
+        fontFamily: 'inherit',
         backgroundColor: '#232535',
         color: 'white',
         borderRadius: 0,
@@ -96,7 +96,7 @@ const useStyles = makeStyles()((theme) => ({
         color: 'white',
     },
     cell: {
-        fontFamily: 'Muli,Helvetica,Arial,"sans-serif"',
+        fontFamily: 'inherit',
 
         color: 'white',
         borderBottom: '1px solid #393b4a',
@@ -110,15 +110,15 @@ const useStyles = makeStyles()((theme) => ({
     pagination: {
         '& .MuiIconButton-root, .MuiTablePagination-select, .MuiTablePagination-, .MuiTablePagination-selectLabel': {
             color: 'white',
-            fontFamily: 'Muli,Helvetica,Arial,"sans-serif"',
+            fontFamily: 'inherit',
         },
         '& .MuiTablePagination-displayedRows, .MuiTablePagination-selectIcon': {
             color: 'white',
-            fontFamily: 'Muli,Helvetica,Arial,"sans-serif"',
+            fontFamily: 'inherit',
         },
         '& .MuiTablePagination-menuItem': {
             color: 'black',
-            fontFamily: 'Muli,Helvetica,Arial,"sans-serif"',
+            fontFamily: 'inherit',
         },
     },
     invest: {

@@ -12,7 +12,7 @@ import { apyFormatter, liquidityFormatter } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        fontFamily: 'Muli,Helvetica,Arial,"sans-serif" !important',
+        fontFamily: 'inherit',
         backgroundColor: '#232535',
         color: 'white',
         padding: theme.spacing(2),

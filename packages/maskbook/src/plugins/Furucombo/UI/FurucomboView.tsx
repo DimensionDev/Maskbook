@@ -12,7 +12,7 @@ import { PoolView } from './PoolView'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        fontFamily: 'Muli,Helvetica,Arial,"sans-serif"',
+        fontFamily: 'Muli,Helvetica,-apple-system,system-ui,"sans-serif"',
         width: '100%',
         boxShadow: 'none',
         border: `solid 1px ${theme.palette.divider}`,
