@@ -98,6 +98,7 @@ export interface MaskBox extends BaseContract {
             started: boolean
             expired: boolean
             remaining: string
+            total: string
             qualification: string
             0: string
             1: string
@@ -108,6 +109,7 @@ export interface MaskBox extends BaseContract {
             6: boolean
             7: string
             8: string
+            9: string
         }>
 
         getNftListForSale(

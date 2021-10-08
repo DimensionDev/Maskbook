@@ -66,7 +66,7 @@ function useContext(initialState?: { boxId: string }) {
             remaining: maskBoxInfo.remaining,
             startAt: new Date(Number.parseInt(maskBoxCreationEvent.returnValues.start_time, 10) * 1000),
             endAt: new Date(Number.parseInt(maskBoxCreationEvent.returnValues.end_time, 10) * 1000),
-            total: new BigNumber(allTokens?.length ?? 0).toFixed(),
+            total: maskBoxInfo.total,
             tokenIds: allTokens,
             tokenIdsPurchased: purchasedTokens,
             payments: paymentTokens.map((token, i) => {
