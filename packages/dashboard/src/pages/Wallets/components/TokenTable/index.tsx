@@ -7,11 +7,12 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { TokenTableRow } from '../TokenTableRow'
 import {
     Asset,
+    ChainId,
     formatBalance,
     FungibleTokenDetailed,
     useAssets,
-    useChainId,
-    useTrustedERC20Tokens,
+    useWallet,
+    useWeb3State,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -53,18 +54,22 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const TokenTable = memo(() => {
-    const navigate = useNavigate()
-    const chainId = useChainId()
+interface TokenTableProps {
+    selectedChainId: ChainId | null
+}
 
-    const trustedERC20Tokens = useTrustedERC20Tokens()
+export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
+    const navigate = useNavigate()
+    const wallet = useWallet()
+
+    const trustedERC20Tokens = useWeb3State().erc20Tokens
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     const {
         error: detailedTokensError,
         loading: detailedTokensLoading,
         value: detailedTokens,
-    } = useAssets(trustedERC20Tokens || [])
+    } = useAssets(trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [])
 
     const onSwap = useCallback((token: FungibleTokenDetailed) => {
         openSwapDialog({

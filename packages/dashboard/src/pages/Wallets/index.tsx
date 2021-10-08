@@ -1,5 +1,6 @@
 import { PageFrame } from '../../components/DashboardFrame'
 import {
+    ChainId,
     getTokenUSDValue,
     useAssets,
     useChainDetailed,
@@ -18,9 +19,10 @@ import BigNumber from 'bignumber.js'
 import { ReceiveDialog } from './components/ReceiveDialog'
 import { RoutePaths } from '../../type'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages } from '../../API'
+import { PluginMessages, PluginServices } from '../../API'
 import { WalletStateBar } from './components/WalletStateBar'
 import { useDashboardI18N } from '../../locales'
+import { useAsync } from 'react-use'
 
 function Wallets() {
     const wallet = useWallet()
@@ -34,6 +36,7 @@ function Wallets() {
     const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
 
     const [receiveOpen, setReceiveOpen] = useState(false)
+    const [selectedChainId, setSelectedChainId] = useState<ChainId | null>(null)
 
     const erc20Tokens = useTrustedERC20Tokens()
 
@@ -41,6 +44,7 @@ function Wallets() {
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     const { value: detailedTokens } = useAssets(erc20Tokens || [])
+    const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
 
     const balance = useMemo(() => {
         return BigNumber.sum
@@ -74,9 +78,12 @@ function Wallets() {
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}
                         onReceive={() => setReceiveOpen(true)}
+                        networks={networks ?? []}
+                        onSelectNetwork={(chainId) => setSelectedChainId(chainId)}
+                        selectedChainId={selectedChainId}
                     />
                     <Routes>
-                        <Route path="/" element={<TokenAssets />} />
+                        <Route path="/" element={<TokenAssets selectedChainId={selectedChainId} />} />
                         <Route path="transfer" element={<Transfer />} />
                         <Route path="history" element={<History />} />
                     </Routes>

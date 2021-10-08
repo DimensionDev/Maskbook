@@ -9,6 +9,7 @@ import { CollectibleList } from '../CollectibleList'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
+import type { ChainId } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -37,7 +38,11 @@ export enum AssetTab {
 
 const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
-export const TokenAssets = memo(() => {
+interface TokenAssetsProps {
+    selectedChainId: ChainId | null
+}
+
+export const TokenAssets = memo<TokenAssetsProps>(({ selectedChainId }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
@@ -82,7 +87,7 @@ export const TokenAssets = memo(() => {
                         value={AssetTab.Token}
                         key={AssetTab.Token}
                         className={activeTab === AssetTab.Token ? classes.tab : undefined}>
-                        <TokenTable />
+                        <TokenTable selectedChainId={selectedChainId} />
                     </TabPanel>
                     <TabPanel
                         value={AssetTab.Collectibles}

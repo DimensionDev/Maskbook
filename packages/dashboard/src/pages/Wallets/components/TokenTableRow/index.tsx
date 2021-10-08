@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Box, Button, TableCell, TableRow, Typography } from '@material-ui/core'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { ChainIcon, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Asset, CurrencyType, formatBalance, formatCurrency, getTokenUSDValue, pow10 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useDashboardI18N } from '../../../../locales'
@@ -22,6 +22,13 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         color: theme.palette.mode === 'dark' ? getMaskColor(theme).white : getMaskColor(theme).primary,
     },
+    chainIcon: {
+        position: 'absolute',
+        right: -8,
+        bottom: 0,
+        height: 16,
+        width: 16,
+    },
 }))
 
 export interface TokenTableRowProps {
@@ -38,14 +45,19 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
         <TableRow>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <TokenIcon
-                        classes={{ icon: classes.icon }}
-                        address={asset.token.address}
-                        name={asset.token.name}
-                        chainId={asset.token.chainId}
-                        logoURI={asset.token.logoURI}
-                        AvatarProps={{ sx: { width: 36, height: 36 } }}
-                    />
+                    <Box position="relative">
+                        <TokenIcon
+                            classes={{ icon: classes.icon }}
+                            address={asset.token.address}
+                            name={asset.token.name}
+                            chainId={asset.token.chainId}
+                            logoURI={asset.token.logoURI}
+                            AvatarProps={{ sx: { width: 36, height: 36 } }}
+                        />
+                        <Box className={classes.chainIcon}>
+                            <ChainIcon chainId={asset.token.chainId} size={16} />
+                        </Box>
+                    </Box>
                     <Typography className={classes.symbol}>{asset.token.symbol}</Typography>
                 </Box>
             </TableCell>
