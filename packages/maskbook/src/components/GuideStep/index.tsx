@@ -170,7 +170,7 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
-    const [bottomAvaiable, setBottomAvaiable] = useState(true)
+    const [bottomAvailable, setBottomAvailable] = useState(true)
     const ui = activatedSocialNetworkUI
     const lastStepRef = currentSetupGuideStatus[ui.networkIdentifier]
     const lastStep = useValueRef(lastStepRef)
@@ -207,8 +207,8 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
             const cr = childrenRef.current?.getBoundingClientRect()
 
             if (cr) {
-                const bottomAvaiable = window.innerHeight - cr.height - cr.top > 200
-                setBottomAvaiable(bottomAvaiable)
+                const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
+                setBottomAvailable(bottomAvailable)
                 if (!cr.width) {
                     setClientRect({ ...cr, top: 30, left: 'calc(100vw - 300px)' })
                 } else {
@@ -251,10 +251,10 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                     <div
                                         className={classNames(
                                             classes.card,
-                                            arrow ? (bottomAvaiable ? 'arrow-top' : 'arrow-bottom') : '',
+                                            arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
                                         )}
                                         style={{
-                                            [bottomAvaiable ? 'top' : 'bottom']: clientRect.height + 16,
+                                            [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
                                         }}>
                                         <div style={{ paddingBottom: '16px' }}>
                                             <Typography sx={{ fontSize: 20 }}>
