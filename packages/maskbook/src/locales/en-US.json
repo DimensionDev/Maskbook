@@ -870,7 +870,7 @@
     "plugin_furucombo_invest": "Invest",
     "plugin_furucombo_pool_not_found": "Invalid pool address.",
     "plugin_furucombo_smt_wrong": "Something went wrong!",
-    "plugin_furucombo_tablehead_pools": "Pools",
+    "plugin_furucombo_head_pools": "Pools",
     "plugin_furucombo_head_action": "Action",
     "popups_welcome": "Welcome",
     "popups_wallet_token": "Token",

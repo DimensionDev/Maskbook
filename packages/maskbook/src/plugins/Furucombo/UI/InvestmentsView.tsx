@@ -187,7 +187,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                 <TableHead>
                     <TableRow className={classes.head}>
                         <TableCell className={classes.cell} key="pools">
-                            {t('plugin_furucombo_tablehead_pools')}
+                            {t('plugin_furucombo_head_pools')}
                         </TableCell>
                         <TableCell className={classes.cell} key="apy">
                             <TableSortLabel
