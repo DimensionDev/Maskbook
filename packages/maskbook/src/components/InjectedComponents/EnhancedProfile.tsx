@@ -5,7 +5,7 @@ import { Box, Link, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import { useState, useEffect } from 'react'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
-import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/injection/useEthereumName'
+import { useEthereumAddress } from '@masknet/web3-shared/'
 import { MaskMessage, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 

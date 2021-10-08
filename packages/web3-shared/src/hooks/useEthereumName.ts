@@ -1,6 +1,8 @@
-import { useResolveENS, useResolveUNS, useAddressNames } from '@masknet/web3-shared'
 import { useEffect, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
+import { useAddressNames } from './useAddressNames'
+import { useResolveENS } from './useResolveENS'
+import { useResolveUNS } from './useResolveUNS'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ENS_RE_FULL = new RegExp(`^${ENS_RE.source}$`)
