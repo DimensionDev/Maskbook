@@ -111,7 +111,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
 
     return (
         <Stack direction="row" justifyContent="center" mt={4}>
-            <Stack maxWidth={640} minWidth={500}>
+            <Stack width={640} minWidth={500}>
                 <Box>
                     <MaskTextField
                         required
