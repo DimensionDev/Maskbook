@@ -211,8 +211,8 @@ export interface WalletMessage {
     walletsUpdated: void
     phrasesUpdated: void
     addressBookUpdated: void
-    recentTransactionsUpdated: void
-    receiptUpdated: TransactionReceipt
+    transactionsUpdated: void
+    transactionStateUpdated: TransactionState
     requestsUpdated: { hasRequest: boolean }
     erc20TokensUpdated: void
     erc721TokensUpdated: void

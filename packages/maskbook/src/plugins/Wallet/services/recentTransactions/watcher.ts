@@ -1,9 +1,10 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, TransactionStateType } from '@masknet/web3-shared-evm'
 import type { TransactionReceipt } from 'web3-core'
 import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import { currentChainIdSettings } from '../../settings'
-import { MAX_RECENT_TRANSACTIONS_SIZE } from './database'
+import * as database from './database'
+import * as helpers from './helpers'
 
 let timer: NodeJS.Timer | null = null
 const WATCHED_TRANSACTION_CHECK_DELAY = 15 * 1000 // 15s
@@ -28,7 +29,8 @@ function getTransactionMap() {
 function getTransactionReceipt(hash: string) {
     return EthereumService.getTransactionReceipt(hash)
         .then((receipt) => {
-            if (receipt) WalletMessages.events.receiptUpdated.sendToAll(receipt)
+            if (!receipt) return null
+            WalletMessages.events.transactionStateUpdated.sendToAll(helpers.getTransactionState(receipt))
             return receipt
         })
         .catch(() => null)
@@ -42,14 +44,14 @@ async function checkReceipt() {
 
     const map = getTransactionMap()
     const transactions = [...map.entries()].sort(([, a], [, z]) => z.at - a.at)
-    const watchedTransactions = transactions.slice(0, MAX_RECENT_TRANSACTIONS_SIZE + WATCHED_TRANSACTION_DELTA)
-    const unwatchedTransactions = transactions.slice(MAX_RECENT_TRANSACTIONS_SIZE + WATCHED_TRANSACTION_DELTA)
+    const watchedTransactions = transactions.slice(0, database.MAX_RECENT_TRANSACTIONS_SIZE + WATCHED_TRANSACTION_DELTA)
+    const unwatchedTransactions = transactions.slice(database.MAX_RECENT_TRANSACTIONS_SIZE + WATCHED_TRANSACTION_DELTA)
     unwatchedTransactions.forEach(([hash]) => unwatchTransaction(hash))
 
     const checkResult = await Promise.allSettled(
         watchedTransactions.map(async ([hash, transaction]) => {
             const receipt = await map.get(hash)?.receipt
-            if (receipt) return true
+            if (receipt && receipt.blockNumber) return true
             map.set(hash, {
                 at: transaction.at,
                 receipt: getTransactionReceipt(hash),
@@ -65,11 +67,16 @@ async function checkReceipt() {
 
 export async function watchTransaction(hash: string) {
     const map = getTransactionMap()
-    if (!map.has(hash))
+    if (!map.has(hash)) {
         map.set(hash, {
             at: Date.now(),
             receipt: getTransactionReceipt(hash),
         })
+        WalletMessages.events.transactionStateUpdated.sendToAll({
+            type: TransactionStateType.HASH,
+            hash,
+        })
+    }
     if (timer === null) timer = setTimeout(checkReceipt, WATCHED_TRANSACTION_CHECK_DELAY)
 }
 

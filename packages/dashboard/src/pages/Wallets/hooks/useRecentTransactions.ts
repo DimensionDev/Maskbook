@@ -14,8 +14,8 @@ export function useRecentTransactions(status?: TransactionStatusType) {
         return transactions.filter((x) => (typeof status !== 'undefined' ? x.status === status : true))
     }, [account, status, chainId])
 
-    useEffect(() => PluginMessages.Wallet.events.receiptUpdated.on(result.retry), [result.retry])
-    useEffect(() => PluginMessages.Wallet.events.recentTransactionsUpdated.on(result.retry), [result.retry])
+    useEffect(() => PluginMessages.Wallet.events.transactionStateUpdated.on(result.retry), [result.retry])
+    useEffect(() => PluginMessages.Wallet.events.transactionsUpdated.on(result.retry), [result.retry])
 
     return result
 }

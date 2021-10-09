@@ -52,7 +52,7 @@ export async function addRecentTransaction(address: string, hash: string, payloa
         createdAt: chunk?.createdAt ?? now,
         updatedAt: now,
     })
-    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+    WalletMessages.events.transactionsUpdated.sendToAll()
 }
 
 export async function replaceRecentTransaction(address: string, oldHash: string, newHash: string) {
@@ -71,7 +71,7 @@ export async function replaceRecentTransaction(address: string, oldHash: string,
         createdAt: chunk?.createdAt ?? now,
         updatedAt: now,
     })
-    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+    WalletMessages.events.transactionsUpdated.sendToAll()
 }
 
 export async function removeRecentTransaction(address: string, hash: string) {
@@ -88,7 +88,7 @@ export async function removeRecentTransaction(address: string, hash: string) {
         createdAt: chunk.createdAt,
         updatedAt: now,
     })
-    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+    WalletMessages.events.transactionsUpdated.sendToAll()
 }
 
 export async function getRecentTransactions(address: string) {
@@ -100,5 +100,5 @@ export async function getRecentTransactions(address: string) {
 export async function clearRecentTransactions(address: string) {
     const recordId = getRecordId(address)
     await PluginDB.remove('recent-transactions', recordId)
-    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+    WalletMessages.events.transactionsUpdated.sendToAll()
 }
