@@ -77,6 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         left: 59,
         bottom: 10,
         cursor: 'pointer',
+        fontSize: 12,
         '&:hover': {
             textDecoration: 'none',
         },
