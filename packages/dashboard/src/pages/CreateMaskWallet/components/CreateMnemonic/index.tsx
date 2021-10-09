@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useState } from 'react'
 import { Alert, Box, Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
-import { RefreshIcon } from '@masknet/icons'
+import { InfoIcon, RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
 import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
@@ -17,7 +17,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 // Private key at m/purpose'/coin_type'/account'/change
 export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     container: {
         padding: '120px 18%',
         display: 'flex',
@@ -42,9 +42,10 @@ const useStyles = makeStyles()({
     },
     words: {
         marginTop: 24,
-        backgroundColor: MaskColorVar.lightBackground,
+        backgroundColor: MaskColorVar.bottom,
         padding: 30,
         width: '100%',
+        borderRadius: 8,
     },
     controller: {
         marginTop: 24,
@@ -60,12 +61,19 @@ const useStyles = makeStyles()({
         borderRadius: 24,
         fontSize: 18,
     },
+    cancelButton: {
+        height: 48,
+        borderRadius: 24,
+        fontSize: 18,
+        background: theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA',
+    },
     alert: {
         marginTop: 24,
         padding: 24,
-        width: '100%',
+        backgroundColor: MaskColorVar.errorBackground,
+        color: MaskColorVar.redMain,
     },
-})
+}))
 
 const CreateMnemonic = memo(() => {
     const location = useLocation() as { search: Search; state: { password: string } }
@@ -157,7 +165,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                 <MnemonicReveal words={words} />
             </div>
             <Box className={classes.controller}>
-                <Button color="secondary" className={classes.button} onClick={() => navigate(-1)}>
+                <Button color="secondary" className={classes.cancelButton} onClick={() => navigate(-1)}>
                     {t.cancel()}
                 </Button>
                 <Button className={classes.button} onClick={onVerifyClick}>
@@ -165,7 +173,7 @@ export const CreateMnemonicUI = memo<CreateMnemonicUIProps>(({ words, onRefreshW
                 </Button>
             </Box>
             {open ? (
-                <Alert severity="error" onClose={() => setOpen(false)} className={classes.alert}>
+                <Alert icon={<InfoIcon />} severity="error" onClose={() => setOpen(false)} className={classes.alert}>
                     {t.create_wallet_mnemonic_tip()}
                 </Alert>
             ) : null}

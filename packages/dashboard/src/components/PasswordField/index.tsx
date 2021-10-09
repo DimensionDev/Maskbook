@@ -14,6 +14,7 @@ const PasswordField = forwardRef((props: PasswordFieldProps, ref: ForwardedRef<a
             ref={ref}
             type={showPassword ? 'text' : 'password'}
             InputProps={{
+                ...props.InputProps,
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton

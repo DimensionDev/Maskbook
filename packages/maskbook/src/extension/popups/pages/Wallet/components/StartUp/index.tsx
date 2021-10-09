@@ -17,18 +17,20 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     alert: {
-        padding: '0px 10px',
+        padding: '2px 10px',
+        backgroundColor: '#EFF5FF',
     },
     alertTitle: {
         fontWeight: 600,
-        fontSize: 12,
-        color: theme.palette.primary.main,
+        fontSize: 14,
+        color: '#1C68F3',
         marginBottom: 3,
+        lineHeight: '20px',
     },
     alertContent: {
         fontSize: 12,
         lineHeight: '16px',
-        color: theme.palette.primary.main,
+        color: '#1C68F3',
     },
     header: {
         padding: 10,
@@ -48,7 +50,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: '#f7f9fa',
     },
     item: {
-        padding: '8px 16px',
+        padding: '12px 16px',
         backgroundColor: '#ffffff',
         display: 'flex',
         alignItems: 'center',
@@ -90,7 +92,7 @@ export const WalletStartUp = memo(() => {
                     <NetworkSelector />
                 </Box>
                 <Box className={classes.item} onClick={onEnterCreateWallet}>
-                    <MaskWalletIcon sx={{ fontSize: 20 }} />
+                    <MaskWalletIcon sx={{ fontSize: 24 }} />
                     <Typography className={classes.itemTitle}>{t('wallet_new')}</Typography>
                 </Box>
                 {!loading ? (
@@ -98,7 +100,7 @@ export const WalletStartUp = memo(() => {
                         to={!hasPassword ? PopupRoutes.SetPaymentPassword : PopupRoutes.ImportWallet}
                         style={{ textDecoration: 'none' }}>
                         <Box className={classes.item}>
-                            <ImportWalletIcon sx={{ fontSize: 20 }} />
+                            <ImportWalletIcon sx={{ fontSize: 24 }} />
                             <Typography className={classes.itemTitle}>{t('plugin_wallet_import_wallet')}</Typography>
                         </Box>
                     </Link>
