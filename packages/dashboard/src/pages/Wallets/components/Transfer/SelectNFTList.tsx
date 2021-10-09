@@ -23,12 +23,25 @@ export const SelectNFTList = memo<SelectNFTListProps>(
         useScrollBottomEvent(containerRef, onScroll)
 
         const renderStatus = useMemo(() => {
-            if (loading) return <LoadingAnimation />
+            if (loading) {
+                return (
+                    <ImageListItem sx={{ height: '30px !important' }} cols={4}>
+                        <Stack direction="row" justifyContent="center">
+                            <LoadingAnimation />
+                        </Stack>
+                    </ImageListItem>
+                )
+            }
+
             if (!loadMore)
                 return (
-                    <Typography component="span" variant="body2">
-                        {t.wallets_collectible_load_end()}
-                    </Typography>
+                    <ImageListItem sx={{ height: '30px !important' }} cols={4}>
+                        <Stack direction="row" justifyContent="center">
+                            <Typography component="span" variant="body2">
+                                {t.wallets_collectible_load_end()}
+                            </Typography>
+                        </Stack>
+                    </ImageListItem>
                 )
             return null
         }, [loading, loadMore])
@@ -47,7 +60,7 @@ export const SelectNFTList = memo<SelectNFTListProps>(
                     cols={4}
                     gap={12}
                     rowHeight={186}
-                    sx={{ width: '100%', height: 'auto', maxHeight: '400px', p: 2 }}>
+                    sx={{ width: '100%', height: 'auto', maxHeight: '400px', p: 2, pb: 0.5 }}>
                     {list.map((token) => (
                         <NFTCard
                             key={token.tokenId}
@@ -56,11 +69,7 @@ export const SelectNFTList = memo<SelectNFTListProps>(
                             onSelect={onSelect}
                         />
                     ))}
-                    <ImageListItem sx={{ height: '30px !important' }} cols={4}>
-                        <Stack direction="row" justifyContent="center">
-                            {renderStatus}
-                        </Stack>
-                    </ImageListItem>
+                    {renderStatus}
                 </ImageList>
             </Box>
         )

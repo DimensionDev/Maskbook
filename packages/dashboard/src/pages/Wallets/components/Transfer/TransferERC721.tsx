@@ -87,12 +87,6 @@ export const TransferERC721 = memo(() => {
         setDefaultToken(state.erc721Token)
     }, [state])
 
-    useEffect(() => {
-        if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.contractDetailed.address)) {
-            setDefaultToken(null)
-        }
-    }, [contract])
-
     const allFormFields = watch()
 
     const erc721GasLimit = useGasLimit(
@@ -127,13 +121,25 @@ export const TransferERC721 = memo(() => {
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
             if (ev.open || !ev.contract || ev.uuid !== id) return
-            setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
-            setContract(ev.contract)
+            if (!contract || (contract && !isSameAddress(contract.address, ev.contract.address))) {
+                if (
+                    contract &&
+                    defaultToken &&
+                    !isSameAddress(contract.address, defaultToken.contractDetailed.address)
+                ) {
+                    setDefaultToken(null)
+                }
+                setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
+                setContract(ev.contract)
+                setValue('tokenId', '')
+                setOffset(0)
+            }
         },
     )
 
     const {
         asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+        refreshing,
     } = useERC721TokenDetailedOwnerList(contract, account, offset)
     const { tokenDetailedOwnerList, loadMore } = value
 
@@ -208,13 +214,13 @@ export const TransferERC721 = memo(() => {
                             name="contract"
                         />
                     </Box>
-                    {loadingOwnerList && tokenDetailedOwnerList.length === 0 && (
+                    {((loadingOwnerList && tokenDetailedOwnerList.length === 0) || refreshing) && (
                         <Box pt={4}>
                             <LoadingPlaceholder />
                         </Box>
                     )}
                     <Box width="100%" mt={2}>
-                        {tokenDetailedOwnerList.length > 0 && (
+                        {tokenDetailedOwnerList.length > 0 && !refreshing && (
                             <Controller
                                 control={control}
                                 render={(field) => (

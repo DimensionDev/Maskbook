@@ -81,6 +81,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
                 borderTopLeftRadius: '10px',
                 borderTopRightRadius: '10px',
                 mb: 6,
+                maxWidth: '140px',
                 background: (theme) => (theme.palette.mode === 'dark' ? getMaskColor(theme).white : '#F9F9FA'),
             }}
             className={isDisabled ? classes.disabled : ''}>
