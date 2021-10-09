@@ -39,7 +39,7 @@ const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const { t } = useI18N()
 
     return (
-        <GuideStep step={4} total={4} tip={t('user_guide_tip_4')} onComplete={props.onHintButtonClicked}>
+        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')}>
             <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
                 <MaskSharpIcon color="primary" />
             </IconButton>
