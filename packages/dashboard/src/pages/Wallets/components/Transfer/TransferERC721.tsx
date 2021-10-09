@@ -127,7 +127,7 @@ export const TransferERC721 = memo(() => {
         WalletMessages.events.selectNftContractDialogUpdated,
         (ev) => {
             if (ev.open || !ev.contract || ev.uuid !== id) return
-            setValue('contract', ev.contract.name, { shouldValidate: true })
+            setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
             setContract(ev.contract)
         },
     )
@@ -163,7 +163,7 @@ export const TransferERC721 = memo(() => {
 
     return (
         <Stack direction="row" justifyContent="center" mt={4} maxHeight="100%">
-            <form onSubmit={handleSubmit(onTransfer)}>
+            <form onSubmit={handleSubmit(onTransfer)} noValidate>
                 <Stack width={640} minWidth={500} alignItems="center">
                     <Box width="100%">
                         <Controller
@@ -171,6 +171,7 @@ export const TransferERC721 = memo(() => {
                             render={(field) => (
                                 <MaskTextField
                                     {...field}
+                                    required
                                     onChange={(e) => setValue('recipient', e.currentTarget.value)}
                                     helperText={errors.recipient?.message}
                                     error={!!errors.recipient}

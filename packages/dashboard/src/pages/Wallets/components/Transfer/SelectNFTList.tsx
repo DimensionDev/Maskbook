@@ -4,6 +4,8 @@ import { Box, ImageList, Typography } from '@mui/material'
 import { NFTCard } from './NFTCard'
 import { LoadingAnimation, useScrollBottomEvent } from '@masknet/shared'
 import { ImageListItem, Stack } from '@material-ui/core'
+import { MaskColorVar } from '@masknet/theme'
+import { useDashboardI18N } from '../../../../locales'
 
 interface SelectNFTListProps {
     onScroll(): void
@@ -16,6 +18,7 @@ interface SelectNFTListProps {
 
 export const SelectNFTList = memo<SelectNFTListProps>(
     ({ list, onSelect, selectedTokenId, onScroll, loading, loadMore }) => {
+        const t = useDashboardI18N()
         const containerRef = useRef<HTMLUListElement>(null)
         useScrollBottomEvent(containerRef, onScroll)
 
@@ -24,21 +27,27 @@ export const SelectNFTList = memo<SelectNFTListProps>(
             if (!loadMore)
                 return (
                     <Typography component="span" variant="body2">
-                        Load end
+                        {t.wallets_collectible_load_end()}
                     </Typography>
                 )
             return null
         }, [loading, loadMore])
 
         return (
-            <Box>
+            <Box
+                sx={{
+                    width: 640,
+                    borderRadius: '12px',
+                    background: (theme) =>
+                        theme.palette.mode === 'dark' ? MaskColorVar.lightBackground : MaskColorVar.normalBackground,
+                }}>
                 <ImageList
                     ref={containerRef}
                     variant="quilted"
                     cols={4}
                     gap={12}
-                    rowHeight={200}
-                    sx={{ width: '100%', maxWidth: 640, height: 'auto', maxHeight: '400px' }}>
+                    rowHeight={186}
+                    sx={{ width: '100%', height: 'auto', maxHeight: '400px', p: 2 }}>
                     {list.map((token) => (
                         <NFTCard
                             key={token.tokenId}

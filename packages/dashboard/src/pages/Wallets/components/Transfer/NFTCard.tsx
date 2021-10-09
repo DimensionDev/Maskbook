@@ -2,7 +2,7 @@ import type { ERC721TokenDetailed } from '@masknet/web3-shared'
 import { memo, useMemo, useState } from 'react'
 import { Checkbox, ImageListItem, ImageListItemBar } from '@material-ui/core'
 import { Box } from '@mui/system'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import { MiniMaskIcon, CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()({
@@ -15,16 +15,16 @@ const useStyles = makeStyles()({
         right: 0,
     },
     container: {
-        borderRadius: 8,
-        width: 140,
-        height: 215,
+        borderTopLeftRadius: 8,
+        borderTopRightRadius: 8,
+        height: '100%',
         backgroundColor: MaskColorVar.lineLight,
         display: 'flex',
         flexDirection: 'column',
     },
     placeholder: {
         width: '100%',
-        height: 186,
+        height: 200,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -35,6 +35,10 @@ const useStyles = makeStyles()({
     disabled: {
         filter: 'opacity(0.5)',
         cursor: 'not-allowed',
+    },
+    barTitle: {
+        padding: 0,
+        lineHeight: '16px',
     },
 })
 
@@ -54,25 +58,46 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
         [selectedTokenId, token.tokenId],
     )
 
+    const NFTNameBar = useMemo(() => {
+        return (
+            <ImageListItemBar
+                sx={{
+                    px: 1,
+                    py: 1.5,
+                    borderBottomLeftRadius: '8px',
+                    borderBottomRightRadius: '8px',
+                    background: (theme) => (theme.palette.mode === 'dark' ? MaskColorVar.primaryBackground : '#F9F9FA'),
+                }}
+                classes={{ titleWrap: classes.barTitle }}
+                subtitle={<span>{token.info.name || token.tokenId}</span>}
+                position="below"
+            />
+        )
+    }, [token.info.name, token.tokenId])
+
     return (
-        <ImageListItem sx={{ height: 186, width: 144, mb: 4 }} className={isDisabled ? classes.disabled : ''}>
+        <ImageListItem
+            sx={{
+                borderTopLeftRadius: '10px',
+                borderTopRightRadius: '10px',
+                mb: 6,
+                background: (theme) => (theme.palette.mode === 'dark' ? getMaskColor(theme).white : '#F9F9FA'),
+            }}
+            className={isDisabled ? classes.disabled : ''}>
             {loadFailed || !token.info.image ? (
                 <div className={classes.container}>
                     <div className={classes.placeholder}>
                         <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48 }} />
                     </div>
-                    <div className={classes.description} />
                 </div>
             ) : (
-                <>
-                    <img
-                        onError={() => setLoadFailed(true)}
-                        src={token.info.image}
-                        style={{ width: '100%', height: '100%', borderRadius: '8px 8px 0px 0px', objectFit: 'cover' }}
-                    />
-                    <ImageListItemBar sx={{ py: 1 }} subtitle={<span>{token.info.name}</span>} position="below" />
-                </>
+                <img
+                    onError={() => setLoadFailed(true)}
+                    src={token.info.image}
+                    style={{ width: '100%', height: '100%', borderRadius: '8px 8px 0px 0px', objectFit: 'cover' }}
+                />
             )}
+            {NFTNameBar}
             <Box className={classes.checkbox}>
                 <Checkbox
                     defaultChecked={selectedTokenId === token.tokenId}
