@@ -7,6 +7,7 @@ import { currentImportingBackup } from '../../settings/settings'
 
 const base: SocialNetwork.Base = {
     networkIdentifier: 'localhost',
+    name: '',
     declarativePermissions: { origins: [] },
     shouldActivate() {
         return isEnvironment(Environment.ManifestOptions)
