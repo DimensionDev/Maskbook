@@ -42,8 +42,7 @@ export const useGasConfig = (gasLimit: string) => {
     useEffect(() => {
         if (!gasNow) return
 
-        // aka is1559Supported
-        if (typeof gasNow.medium !== 'number') {
+        if (is1559Supported) {
             const gasLevel = gasNow.medium as Exclude<typeof gasNow.medium, number>
             setMaxFee((oldVal) => {
                 return !oldVal ? gweiToWei(gasLevel.suggestedMaxFeePerGas) : oldVal
