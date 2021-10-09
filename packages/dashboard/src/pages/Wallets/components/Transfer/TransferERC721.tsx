@@ -7,6 +7,7 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     formatWeiToEther,
+    isSameAddress,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -78,12 +79,19 @@ export const TransferERC721 = memo(() => {
         if (!state) return
         if (!state.erc721Token || state.type !== TransferTab.Collectibles) return
         if (state.erc721Token.contractDetailed.chainId !== chainId) return
+        if (contract && !isSameAddress(contract.address, state.erc721Token.contractDetailed.address)) return
 
         setContract(state.erc721Token.contractDetailed)
         setValue('contract', state.erc721Token.contractDetailed.name)
         setValue('tokenId', state.erc721Token.tokenId)
         setDefaultToken(state.erc721Token)
     }, [state])
+
+    useEffect(() => {
+        if (contract && defaultToken && !isSameAddress(contract.address, defaultToken.contractDetailed.address)) {
+            setDefaultToken(null)
+        }
+    }, [contract])
 
     const allFormFields = watch()
 
