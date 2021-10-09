@@ -139,7 +139,7 @@ export async function removeToken(token: DatabaseTokenDetailed) {
     const type = getTokenType(token)
     const tokenId = getTokenId(token)
     const address = getTokenAddress(token)
-    if (!(await hasToken(type, address))) throw new Error(`Failed to remove token ${address}.`)
+    if (!(await hasToken(type, address, tokenId))) throw new Error(`Failed to remove token ${address}.`)
     await PluginDB.remove(getDatabaseType(type), getRecordId(address, tokenId))
     getEventMessage(type).sendToAll()
 }
