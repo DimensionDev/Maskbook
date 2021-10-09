@@ -16,7 +16,6 @@ export const buildInfoMarkdown = `## Build info
 - target: ${process.env.engine}
 - build: ${process.env.channel}
 - architecture: ${process.env.architecture}
-- resolution: ${process.env.preferredResolution}
 - BUILD_DATE: ${process.env.BUILD_DATE}
 - VERSION: ${process.env.VERSION}
 

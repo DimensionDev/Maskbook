@@ -7,10 +7,6 @@ declare module NodeJS {
         readonly NODE_ENV: 'development' | 'production'
         readonly channel: 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
-        /**
-         * Which version of Web Extension manifest
-         */
-        readonly manifest: 2 | 3
 
         VERSION: string
         TAG_NAME: string

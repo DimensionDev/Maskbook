@@ -6,19 +6,9 @@
 declare module NodeJS {
     interface ProcessEnv {
         readonly NODE_ENV: 'development' | 'production'
-        readonly target: 'chromium' | 'firefox' | 'safari'
+        readonly engine: 'chromium' | 'firefox' | 'safari'
         readonly channel: 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
-        /**
-         * STRONGLY SUGGEST to make the app flexible as possible!
-         * This value is the build time fallback for the screen size.
-         * It DOESN't means the app MUST run in this size.
-         */
-        readonly preferredResolution: 'desktop' | 'mobile'
-        /**
-         * Which version of Web Extension manifest
-         */
-        readonly manifest: 2 | 3
 
         /**
          * Debug flags

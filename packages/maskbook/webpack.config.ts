@@ -419,7 +419,6 @@ function getCompilationInfo(argv: any) {
     // ! this section must match packages/maskbook/src/env.d.ts
     let engine: 'chromium' | 'firefox' | 'safari' = 'chromium'
     let architecture: 'web' | 'app' = 'web'
-    let preferredResolution: 'desktop' | 'mobile' = 'desktop'
     let channel: 'stable' | 'beta' | 'insider' = 'stable'
     let manifest: 2 | 3 = 2
     const readonlyCache = !!argv.readonlyCache
@@ -438,11 +437,9 @@ function getCompilationInfo(argv: any) {
     } else if (preset === 'android') {
         engine = 'firefox'
         architecture = 'app'
-        preferredResolution = 'mobile'
     } else if (preset === 'iOS') {
         engine = 'safari'
         architecture = 'app'
-        preferredResolution = 'mobile'
     } else {
         throw new TypeError('Unknown preset ' + preset)
     }
@@ -455,7 +452,7 @@ function getCompilationInfo(argv: any) {
     //#endregion
 
     return {
-        runtimeEnv: { engine, architecture, preferredResolution, channel, manifest },
+        runtimeEnv: { engine, architecture, channel },
         isReproducibleBuild,
         isProfile,
         webExtensionFirefoxLaunchVariant,
