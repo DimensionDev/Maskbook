@@ -91,7 +91,7 @@ export const CollectibleList = memo(() => {
                 e && isSameAddress(e.contractDetailed.address, x.contractDetailed.address) && x.tokenId === e.tokenId,
         )
         if (owner && !isSameAddress(owner.info.owner, account)) {
-            PluginServices.Wallet.removeToken(x)
+            PluginServices.Wallet.removeToken(owner)
             return false
         }
 
