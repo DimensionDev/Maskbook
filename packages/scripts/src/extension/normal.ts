@@ -41,6 +41,9 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
         '--mode',
         mode === 'dev' ? 'development' : 'production',
         args.progress && '--progress',
+        args.profile && '--profile',
+        // this command runs in the /packages/maskbook folder.
+        args.profile && '--json=../../compilation-stats.json',
     ]
     const flags: BuildFlags = {
         channel: 'stable',
