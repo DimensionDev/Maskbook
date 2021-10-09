@@ -12,7 +12,7 @@ export function activateSocialNetworkUI() {
 }
 export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
     if (UI.notReadyForProduction) {
-        if (process.env.build === 'stable' && process.env.NODE_ENV === 'production') return UI
+        if (process.env.channel === 'stable' && process.env.NODE_ENV === 'production') return UI
     }
     definedSocialNetworkUIsLocal.set(UI.networkIdentifier, UI)
     return UI
@@ -21,7 +21,7 @@ export function defineSocialNetworkUI(UI: SocialNetworkUI.DeferredDefinition) {
 export const definedSocialNetworkWorkers = new Set<SocialNetworkWorker.DeferredDefinition>()
 export function defineSocialNetworkWorker(worker: SocialNetworkWorker.DeferredDefinition) {
     if (worker.notReadyForProduction) {
-        if (process.env.build === 'stable' && process.env.NODE_ENV === 'production') return
+        if (process.env.channel === 'stable' && process.env.NODE_ENV === 'production') return
     }
     definedSocialNetworkWorkers.add(worker)
 }

@@ -367,7 +367,7 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
         return [...path, src('./src/polyfill/permissions.js')]
     }
     function withBrowserPolyfill(...path: string[]) {
-        if (target.iOS || target.runtimeEnv.target === 'firefox') return path
+        if (target.iOS || target.runtimeEnv.engine === 'firefox') return path
         return [src('./miscs/browser-loader.js'), ...path]
     }
     function emitManifestFile() {
@@ -385,8 +385,8 @@ export default async function (cli_env: Record<string, boolean> = {}, argv: Argv
 
                 if (isManifestV3) modifiers.manifestV3(manifest)
 
-                if (target.runtimeEnv.build === 'beta') modifiers.beta(manifest)
-                else if (target.runtimeEnv.build === 'insider') modifiers.nightly(manifest)
+                if (target.runtimeEnv.channel === 'beta') modifiers.beta(manifest)
+                else if (target.runtimeEnv.channel === 'insider') modifiers.nightly(manifest)
 
                 return JSON.stringify(manifest, null, 4)
             },
@@ -417,11 +417,10 @@ function getCompilationInfo(argv: any) {
     //#endregion
 
     // ! this section must match packages/maskbook/src/env.d.ts
-    let target: 'chromium' | 'firefox' | 'safari' = 'chromium'
-    let firefoxVariant: 'fennec' | 'geckoview' | false = false
+    let engine: 'chromium' | 'firefox' | 'safari' = 'chromium'
     let architecture: 'web' | 'app' = 'web'
-    let resolution: 'desktop' | 'mobile' = 'desktop'
-    let build: 'stable' | 'beta' | 'insider' = 'stable'
+    let preferredResolution: 'desktop' | 'mobile' = 'desktop'
+    let channel: 'stable' | 'beta' | 'insider' = 'stable'
     let manifest: 2 | 3 = 2
     const readonlyCache = !!argv.readonlyCache
 
@@ -435,30 +434,28 @@ function getCompilationInfo(argv: any) {
     //#region Build presets
     if (preset === 'chromium') {
     } else if (preset === 'firefox') {
-        target = 'firefox'
-        firefoxVariant = 'fennec'
+        engine = 'firefox'
     } else if (preset === 'android') {
-        target = 'firefox'
-        firefoxVariant = 'geckoview'
+        engine = 'firefox'
         architecture = 'app'
-        resolution = 'mobile'
+        preferredResolution = 'mobile'
     } else if (preset === 'iOS') {
-        target = 'safari'
+        engine = 'safari'
         architecture = 'app'
-        resolution = 'mobile'
+        preferredResolution = 'mobile'
     } else {
         throw new TypeError('Unknown preset ' + preset)
     }
     //#endregion
 
     //#region Build version Stable/Beta/Insider
-    if (argv.insider) build = 'insider'
-    else if (argv.beta) build = 'beta'
-    else build = 'stable'
+    if (argv.insider) channel = 'insider'
+    else if (argv.beta) channel = 'beta'
+    else channel = 'stable'
     //#endregion
 
     return {
-        runtimeEnv: { target, firefoxVariant, architecture, resolution, build, manifest },
+        runtimeEnv: { engine, architecture, preferredResolution, channel, manifest },
         isReproducibleBuild,
         isProfile,
         webExtensionFirefoxLaunchVariant,
