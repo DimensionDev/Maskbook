@@ -19,8 +19,8 @@ export const PaletteModeProviderFacebook: SocialNetworkUI.Customization.PaletteM
 
 export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor(isDarkMode: boolean) {
-        const contrastColor = isDarkMode ? 'rgb(228,230,235)' : 'rgb(5,5,5)'
-        const backgroundColor = isDarkMode ? 'rgb(24,25,26)' : 'rgb(240,242,245)'
+        const contrastColor = 'rgb(255,255,255)'
+        const backgroundColor = isDarkMode ? 'rgb(0,0,0)' : 'rgb(255,255,255)'
         PaletteModeProviderFacebook.current.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
         primaryColorContrastColorRef.value = contrastColor
         backgroundColorRef.value = backgroundColor
