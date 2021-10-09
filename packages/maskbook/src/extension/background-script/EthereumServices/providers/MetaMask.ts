@@ -6,7 +6,7 @@ import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { delay } from '@masknet/shared-base'
 import { updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
-import { replaceRecentTransaction } from '../../../../plugins/Wallet/services/recentTransactions/database'
+import { replaceRecentTransaction } from '../../../../plugins/Wallet/services/transaction/database'
 
 let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
@@ -41,7 +41,12 @@ async function onMessage(message: {
     }
 }) {
     if (message.type !== 'tx_replacement') return
-    await replaceRecentTransaction(message.data.from, message.data.oldTx, message.data.newTx)
+    await replaceRecentTransaction(
+        currentChainIdSettings.value,
+        message.data.from,
+        message.data.oldTx,
+        message.data.newTx,
+    )
 }
 
 export async function createProvider() {

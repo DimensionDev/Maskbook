@@ -13,8 +13,6 @@ export enum TransactionStateType {
     CONFIRMED = 4,
     /** Fail to send */
     FAILED = 5,
-    /** Reject by external provider */
-    REJECTED = 6,
 }
 
 export type TransactionState =
@@ -23,6 +21,8 @@ export type TransactionState =
       }
     | {
           type: TransactionStateType.WAIT_FOR_CONFIRMING
+
+          // @deprecated don't depend on this property will be removed in the future
           hash?: string
       }
     | {
@@ -42,6 +42,7 @@ export type TransactionState =
     | {
           type: TransactionStateType.FAILED
           error: Error & { code?: number }
+          receipt?: TransactionReceipt
       }
 
 export function useTransactionState() {

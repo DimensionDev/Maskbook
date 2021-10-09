@@ -90,6 +90,24 @@ export async function getTransactionCount(address: string, overrides?: SendOverr
     return Number.parseInt(count, 16) || 0
 }
 
+export async function getPendingTransactions(address: string, overrides?: SendOverrides) {
+    const filterId = await request<string>(
+        {
+            method: EthereumMethodType.ETH_NEW_PENDING_TRANSACTION_FILTER,
+            params: [],
+        },
+        overrides,
+    )
+    const transactions = await request<string[]>(
+        {
+            method: EthereumMethodType.ETH_GET_FILTER_CHANGES,
+            params: [filterId],
+        },
+        overrides,
+    )
+    return transactions
+}
+
 export async function call(config: TransactionConfig, overrides?: SendOverrides) {
     return request<string>(
         {

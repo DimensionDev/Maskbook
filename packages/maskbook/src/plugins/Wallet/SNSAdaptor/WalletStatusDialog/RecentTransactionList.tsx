@@ -50,10 +50,10 @@ export function RecentTransactionList(props: RecentTransactionListProps) {
     //#region clear the most recent transactions
     const onClear = useSnackbarCallback(
         async () => {
-            await WalletRPC.clearRecentTransactions(account)
+            await WalletRPC.clearRecentTransactions(chainId, account)
             retry()
         },
-        [],
+        [chainId],
         undefined,
         undefined,
         undefined,

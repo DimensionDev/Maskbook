@@ -19,17 +19,17 @@ export interface AddressBookChunk {
     updatedAt: Date
 }
 
-export async function getAllAddress() {
-    const chunk = await PluginDB.get('address-book', currentChainIdSettings.value)
+export async function getAllAddress(chainId: ChainId) {
+    const chunk = await PluginDB.get('address-book', chainId)
     return chunk?.records ?? []
 }
 
-export async function addAddress(address: string) {
+export async function addAddress(chainId: ChainId, address: string) {
     const now = new Date()
     const address_ = formatEthereumAddress(address)
-    const chunk = await PluginDB.get('address-book', currentChainIdSettings.value)
+    const chunk = await PluginDB.get('address-book', chainId)
     await PluginDB.add({
-        id: currentChainIdSettings.value,
+        id: chainId,
         type: 'address-book',
         records: uniqBy(
             [
@@ -48,12 +48,12 @@ export async function addAddress(address: string) {
     WalletMessages.events.addressBookUpdated.sendToAll()
 }
 
-export async function removeAddress(address: string) {
+export async function removeAddress(chainId: ChainId, address: string) {
     const now = new Date()
-    const chunk = await PluginDB.get('address-book', currentChainIdSettings.value)
+    const chunk = await PluginDB.get('address-book', chainId)
     if (!chunk) return
     await PluginDB.add({
-        id: currentChainIdSettings.value,
+        id: chainId,
         type: 'address-book',
         records: chunk.records.filter((x) => !isSameAddress(x.address, address)) ?? [],
         createdAt: chunk.createdAt,
