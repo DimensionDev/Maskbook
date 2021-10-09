@@ -33,7 +33,7 @@ export function useGasLimit(
                     from: account,
                 })
             case EthereumTokenType.ERC721:
-                return erc721Contract?.methods.transferFrom(account, recipient, tokenId?.toString() ?? '').estimateGas({
+                return erc721Contract?.methods.transferFrom(account, recipient, tokenId ?? '').estimateGas({
                     from: account,
                 })
             case EthereumTokenType.ERC1155:

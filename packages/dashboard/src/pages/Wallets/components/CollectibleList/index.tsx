@@ -87,7 +87,8 @@ export const CollectibleList = memo(() => {
         if (x.contractDetailed.chainId !== chainId) return false
 
         const owner = erc721TokensOwners.find(
-            (e) => e?.contractDetailed.address === x.contractDetailed.address && x.tokenId === e?.tokenId,
+            (e) =>
+                e && isSameAddress(e.contractDetailed.address, x.contractDetailed.address) && x.tokenId === e.tokenId,
         )
         if (owner && !isSameAddress(owner.info.owner, account)) {
             PluginServices.Wallet.removeToken(x)

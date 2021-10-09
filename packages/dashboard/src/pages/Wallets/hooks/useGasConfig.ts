@@ -12,7 +12,7 @@ function gweiToWei(gwei: number | string) {
 export const useGasConfig = (gasLimit: string) => {
     const chainId = useChainId()
 
-    const [gasLimit_, setGasLimit_] = useState<string>('0')
+    const [gasLimit_, setGasLimit_] = useState('0')
     const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const [maxFee, setMaxFee] = useState<string | null>(null)
