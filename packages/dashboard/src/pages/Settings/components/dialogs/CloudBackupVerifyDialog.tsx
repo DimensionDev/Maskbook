@@ -23,7 +23,7 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     const { showSnackbar } = useCustomSnackbar()
     const t = useDashboardI18N()
     const { user } = useContext(UserContext)
-    const [mode, setMode] = useState((user.email ?? user.phone) || '')
+    const [mode, setMode] = useState(user.email || user.phone || '')
     const [code, setCode] = useState('')
     const [invalidCode, setInvalidCode] = useState(false)
 

@@ -1,11 +1,10 @@
-import type { InternalEvents } from '../../shared'
 import {
     constructXrayUnwrappedFilesFromUintLike,
     overwriteFunctionOnXRayObject,
     unwrapXRay_CPPBindingObject,
 } from '../utils'
 // TODO: This file is not audited
-export async function instagramUpload(url: InternalEvents['instagramUpload'][0]) {
+export async function instagramUpload(url: string) {
     const result = await window.fetch(url).then((x) => x.arrayBuffer())
     const file = constructXrayUnwrappedFilesFromUintLike('image/jpeg', 'image.jpg', new Uint8Array(result))
 
