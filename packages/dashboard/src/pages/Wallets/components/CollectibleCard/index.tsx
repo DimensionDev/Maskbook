@@ -7,12 +7,12 @@ import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     card: {
         borderRadius: 8,
         width: 140,
         minHeight: 215,
-        backgroundColor: MaskColorVar.lightestBackground,
+        backgroundColor: theme.palette.mode === 'dark' ? MaskColorVar.lineLight : MaskColorVar.lightestBackground,
         display: 'flex',
         flexDirection: 'column',
     },
@@ -36,7 +36,7 @@ const useStyles = makeStyles()({
             filter: 'drop-shadow(0px 12px 28px rgba(0, 0, 0, 0.1))',
         },
     },
-})
+}))
 
 export interface CollectibleCardProps {
     chainId: ChainId
