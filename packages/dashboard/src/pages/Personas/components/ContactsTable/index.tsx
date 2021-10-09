@@ -130,7 +130,8 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                                                 contact={item}
                                                 index={page * PageSize + index + 1}
                                                 network={network}
-                                            onReset={onReset}/>
+                                                onReset={onReset}
+                                            />
                                         ))}
                                     </TableBody>
                                 ) : null}
