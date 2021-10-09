@@ -1,5 +1,6 @@
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import type { ERC1155TokenDetailed, ERC20TokenDetailed, ERC721TokenDetailed, Wallet } from '@masknet/web3-shared'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 
 export interface ERC20TokenRecord extends Omit<ERC20TokenDetailed, 'type'> {
     id: string
@@ -37,4 +38,12 @@ export interface SecretRecord {
     iv: ArrayBuffer
     key: ArrayBuffer
     encrypted: ArrayBuffer
+}
+
+export interface UnconfirmedRequestsChunkRecord {
+    id: string
+    type: 'unconfirmed-requests'
+    requests: JsonRpcPayload[]
+    createdAt: Date
+    updatedAt: Date
 }

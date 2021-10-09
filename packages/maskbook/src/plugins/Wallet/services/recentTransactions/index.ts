@@ -1,9 +1,9 @@
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { TransactionStatusType } from '@masknet/web3-shared'
-import { getSendTransactionComputedPayload } from '../../../../extension/background-script/EthereumService'
 import * as database from './database'
 import * as watcher from './watcher'
+import * as computedPayload from '../computedPayload'
 
 function getReceiptStatus(receipt: TransactionReceipt | null) {
     if (!receipt) return TransactionStatusType.NOT_DEPEND
@@ -19,7 +19,7 @@ export interface RecentTransaction {
     status: TransactionStatusType
     receipt?: TransactionReceipt | null
     payload?: JsonRpcPayload
-    computedPayload?: UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>
+    computedPayload?: computedPayload.ComputedPayload
 }
 
 export async function addRecentTransaction(address: string, hash: string, payload: JsonRpcPayload) {
@@ -50,7 +50,7 @@ export async function getRecentTransactionList(address: string): Promise<RecentT
                 status: getReceiptStatus(receipt),
                 receipt,
                 payload,
-                computedPayload: await getSendTransactionComputedPayload(payload),
+                computedPayload: await computedPayload.getSendTransactionComputedPayload(payload),
             }
         }),
     )

@@ -9,7 +9,7 @@ import {
     FungibleTokenDetailed,
     pow10,
 } from '@masknet/web3-shared'
-import type Services from '../../../../extension/service'
+import type { ComputedPayload } from '../../services'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
     return `${negative ? '-' : ''}${
@@ -22,7 +22,7 @@ function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDe
 function getTransactionDescription(
     nativeTokenDetailed?: NativeTokenDetailed,
     tokenDetailed?: ERC20TokenDetailed,
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
+    computedPayload?: ComputedPayload | null,
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
@@ -75,7 +75,7 @@ function getTransactionDescription(
 export interface RecentTransactionDescriptionProps {
     hash: string
     receipt?: TransactionReceipt | null
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null
+    computedPayload?: ComputedPayload | null
 }
 
 export function RecentTransactionDescription(props: RecentTransactionDescriptionProps) {

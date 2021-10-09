@@ -1,8 +1,8 @@
 import { uniqBy } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ChainId, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
-import { currentChainIdSettings } from '../settings'
-import { PluginDB } from '../database/Plugin.db'
+import { currentChainIdSettings } from '../../settings'
+import { PluginDB } from '../../database/Plugin.db'
 
 const MAX_ADDRESS_BOOK_SIZE = 20
 

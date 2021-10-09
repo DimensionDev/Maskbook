@@ -1,10 +1,10 @@
+import { uniq } from 'lodash-es'
+import { UPDATE_CHAIN_STATE_DELAY } from '@masknet/plugin-wallet'
 import { CryptoPrice, CurrencyType } from '@masknet/web3-shared'
 import { pollingTask } from '@masknet/shared'
-import { getTokenPrices, getNativeTokenPrice } from '../../../extension/background-script/EthereumService'
-import { startEffects } from '../../../utils'
-import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
-import { currentTokenPricesSettings } from '../settings'
-import { uniq } from 'lodash-es'
+import * as coingecko from '../../apis/coingecko'
+import { currentTokenPricesSettings } from '../../settings'
+import { startEffects } from '../../../../utils'
 
 function updateCurrentPrices(data: CryptoPrice) {
     const currentPrices: CryptoPrice = { ...currentTokenPricesSettings.value }
@@ -44,7 +44,7 @@ export async function updateTokenPrices() {
         const platforms = Object.keys(trackingContracts)
         await Promise.allSettled(
             platforms.map(async (platform) => {
-                const prices = await getTokenPrices(platform, trackingContracts[platform], CurrencyType.USD)
+                const prices = await coingecko.getTokenPrices(platform, trackingContracts[platform], CurrencyType.USD)
                 updateCurrentPrices(prices)
             }),
         )
@@ -70,7 +70,7 @@ export async function updateNativeTokenPrices() {
 
     // update chain state
     try {
-        const prices = await getNativeTokenPrice(trackingNativeTokenIds, CurrencyType.USD)
+        const prices = await coingecko.getNativeTokenPrice(trackingNativeTokenIds, CurrencyType.USD)
         updateCurrentPrices(prices)
     } catch {
         // do nothing

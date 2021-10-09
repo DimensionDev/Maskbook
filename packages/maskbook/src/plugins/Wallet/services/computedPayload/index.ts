@@ -2,8 +2,8 @@ import * as ABICoder from 'web3-eth-abi'
 import { EthereumRpcComputed, EthereumRpcType, EthereumMethodType, getChainDetailedCAIP } from '@masknet/web3-shared'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { getCode } from '../network'
 import ABI_LIST from './abi_list.json'
+import { getCode } from '../../../../extension/background-script/EthereumService'
 
 type AbiItem = {
     name: string
@@ -170,3 +170,5 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
 
     return
 }
+
+export type ComputedPayload = UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>

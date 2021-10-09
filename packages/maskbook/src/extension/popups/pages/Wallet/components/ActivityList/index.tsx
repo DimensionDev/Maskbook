@@ -16,8 +16,7 @@ import {
 import formatDateTime from 'date-fns/format'
 import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon } from '@masknet/icons'
 import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
-import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
-import type Services from '../../../../../service'
+import type { ComputedPayload, RecentTransaction } from '../../../../../../plugins/Wallet/services'
 import type { TransactionReceipt } from 'web3-core'
 import { useI18N } from '../../../../../../utils'
 
@@ -163,10 +162,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
     )
 })
 
-function getToAddress(
-    receipt?: TransactionReceipt | null,
-    computedPayload?: UnboxPromise<ReturnType<typeof Services.Ethereum.getSendTransactionComputedPayload>> | null,
-) {
+function getToAddress(receipt?: TransactionReceipt | null, computedPayload?: ComputedPayload | null) {
     if (!computedPayload) return undefined
     const type = computedPayload.type
     switch (type) {

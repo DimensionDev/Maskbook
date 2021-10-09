@@ -1,7 +1,7 @@
-import { EthereumAddress } from 'wallet.ts'
 import { first } from 'lodash-es'
-import type { HttpProvider } from 'web3-core'
+import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
+import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     addGasMargin,
@@ -29,7 +29,6 @@ import { debugModeSetting } from '../../../settings/settings'
 import { Flags } from '../../../utils'
 import { nativeAPI } from '../../../utils/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
-import { getSendTransactionComputedPayload } from './rpc'
 
 export interface SendOverrides {
     chainId?: ChainId
@@ -81,7 +80,7 @@ function getChainIdFromPayload(payload: JsonRpcPayload) {
 
 async function handleTransferTransaction(payload: JsonRpcPayload) {
     if (payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
-    const computedPayload = await getSendTransactionComputedPayload(payload)
+    const computedPayload = await WalletRPC.getSendTransactionComputedPayload(payload)
     if (!computedPayload) return
     switch (computedPayload.type) {
         case EthereumRpcType.SEND_ETHER:

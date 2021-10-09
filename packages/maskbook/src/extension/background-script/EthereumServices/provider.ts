@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import * as MaskWallet from './providers/Mask'
+import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'

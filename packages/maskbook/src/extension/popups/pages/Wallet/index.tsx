@@ -1,18 +1,16 @@
-import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
-import { WalletAssets } from './components/WalletAssets'
-import { Route, Switch, useHistory } from 'react-router-dom'
+import { first } from 'lodash-es'
 import { lazy, Suspense, useEffect } from 'react'
+import { useAsyncRetry } from 'react-use'
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom'
+import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
+import { WalletStartUp } from './components/StartUp'
+import { WalletAssets } from './components/WalletAssets'
 import { PopupRoutes } from '../../index'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
-import { useLocation } from 'react-router-dom'
-import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
-import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
-import { first } from 'lodash-es'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -51,7 +49,7 @@ export default function Wallet() {
         const payload = await WalletRPC.topUnconfirmedRequest()
         if (!payload) return
 
-        const computedPayload = await Services.Ethereum.getComputedPayload(payload)
+        const computedPayload = await WalletRPC.getComputedPayload(payload)
         const value = {
             payload,
             computedPayload,
@@ -84,7 +82,7 @@ export default function Wallet() {
     }, [isLocked, location.pathname, getLockStatusLoading])
 
     useEffect(() => {
-        return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
+        return WalletMessages.events.unconfirmedRequestsUpdated.on(({ hasRequest }) => {
             if (hasRequest) retry()
         })
     }, [retry])

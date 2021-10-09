@@ -1,6 +1,6 @@
 import { ProviderType } from '@masknet/web3-shared'
 import { unreachable } from '@dimensiondev/kit'
-import * as MaskWallet from './providers/Mask'
+import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
