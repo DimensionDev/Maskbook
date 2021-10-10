@@ -5,9 +5,9 @@ let disconnected = false
 export default function (signal: AbortSignal) {
     // Listen to API request from dashboard
     if (
-        (process.env.NODE_ENV === 'development' || process.env.build !== 'stable') &&
+        (process.env.NODE_ENV === 'development' || process.env.channel !== 'stable') &&
         process.env.architecture === 'web' &&
-        process.env.target === 'chromium'
+        process.env.engine === 'chromium'
     ) {
         WebExtensionMessage.acceptExternalConnect((conn) => {
             if (disconnected) return false

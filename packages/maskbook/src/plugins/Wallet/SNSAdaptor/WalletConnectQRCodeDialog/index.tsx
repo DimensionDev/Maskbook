@@ -42,9 +42,9 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
     }, [open, uri, closeDialog])
 
     let mode: QRCodeDialogProps['mode'] = 'qrcode'
-    if (process.env.architecture === 'app' && process.env.target === 'firefox') {
+    if (process.env.architecture === 'app' && process.env.engine === 'firefox') {
         mode = 'firefox'
-    } else if (process.env.architecture === 'app' && process.env.target === 'safari') {
+    } else if (process.env.architecture === 'app' && process.env.engine === 'safari') {
         mode = 'safari'
     }
     return <QRCodeDialog uri={uri} open={open} mode={mode} onClose={closeDialog} />

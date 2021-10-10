@@ -44,8 +44,8 @@ export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
 export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$="/photo"] img')
-export const searchHeaderPhotoSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$=/header_photo] img')
+export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('head > link[href^="https://twitter.com"] + meta[property="og:image"]')
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
