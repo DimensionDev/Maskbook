@@ -435,6 +435,7 @@ export enum TransactionStatusType {
     NOT_DEPEND = 0,
     SUCCEED = 1,
     FAILED = 2,
+    CANCELLED = 3,
 }
 
 export type GasNow = {

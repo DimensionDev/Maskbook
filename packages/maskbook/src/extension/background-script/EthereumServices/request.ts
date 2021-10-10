@@ -1,4 +1,4 @@
-import type { RequestArguments } from 'web3-core'
+import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { INTERNAL_nativeSend, INTERNAL_send, SendOverrides } from './send'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
@@ -106,7 +106,7 @@ export async function confirmRequest(payload: JsonRpcPayload) {
             UNCONFIRMED_CALLBACK_MAP.get(pid)?.(error, response)
 
             if (error) reject(error)
-            else if (response?.error) reject(new Error('Failed to send transaction.'))
+            else if (response?.error) reject(new Error(`Failed to send transaction: ${response.error}`))
             else {
                 WalletRPC.deleteUnconfirmedRequest(payload)
                     // Close pop-up window when request is confirmed
@@ -134,4 +134,39 @@ export async function rejectRequest(payload: JsonRpcPayload) {
     // Close pop-up window when request is rejected
     await Services.Helper.removePopupWindow()
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
+}
+
+export async function replaceRequest(payload: JsonRpcPayload, overrides?: TransactionConfig) {
+    const pid = getPayloadId(payload)
+    if (!pid || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
+
+    const [config] = payload.params as [TransactionConfig]
+    return request<string>({
+        method: payload.method,
+        params: [
+            {
+                ...config,
+                ...overrides,
+            },
+        ],
+    })
+}
+
+export async function cancelRequest(payload: JsonRpcPayload, overrides?: TransactionConfig) {
+    const pid = getPayloadId(payload)
+    if (!pid || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
+
+    const [config] = payload.params as [TransactionConfig]
+    return request<string>({
+        method: payload.method,
+        params: [
+            {
+                ...config,
+                ...overrides,
+                to: config.from,
+                data: '0x',
+                value: '0x0',
+            },
+        ],
+    })
 }
