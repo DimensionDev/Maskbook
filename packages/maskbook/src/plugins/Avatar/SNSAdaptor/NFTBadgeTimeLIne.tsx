@@ -1,5 +1,5 @@
-import { makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
+import { makeStyles } from '@masknet/theme'
 import { MaskMessage } from '../../../utils'
 import { useNFTAvatar } from '../hooks'
 import type { AvatarMetaDB } from '../types'

@@ -1,6 +1,6 @@
-import { isSameAddress } from '@masknet/web3-shared'
-import RSS3 from 'rss3-next'
 import Web3 from 'web3'
+import RSS3 from 'rss3-next'
+import { isSameAddress } from '@masknet/web3-shared'
 import { personalSign } from '../../../extension/background-script/EthereumService'
 import { RSS3_APP } from '../constants'
 import type { AvatarMetaDB } from '../types'
@@ -16,10 +16,6 @@ export async function createRSS(address: string) {
         endpoint: RSS3_APP,
         address,
         sign: async (message: string) => {
-            console.log('DEBUG: sign message')
-            console.log({
-                message,
-            })
             return personalSign(message, address)
         },
     })
@@ -43,20 +39,14 @@ export async function saveNFTAvatarFromRSS(address: string, nft: AvatarMetaDB) {
     if (!rss) return
 
     const file = await rss.files.get(rss.account.address)
-    if (!file) {
-        throw new Error('Not Found')
-    }
+    if (!file) throw new Error('The account was not found.')
 
-    const signature = await personalSign(nft.userId, address)
-
-    const f = Object.assign(file, {
+    rss.files.set(Object.assign(file, {
         _nft: {
-            signature: String(signature),
-            nft: nft,
+            signature: await personalSign(nft.userId, address),
+            nft,
         },
-    })
-
-    rss.files.set(f)
+    }))
     await rss.files.sync()
 
     return nft
