@@ -1,24 +1,15 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState } from 'react'
 import { Button, TextField, Grid } from '@material-ui/core'
 import type { AbiItem } from 'web3-utils'
-import BigNumber from 'bignumber.js'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import {
-    EthereumTokenType,
     useContract,
     useAccount,
     TransactionStateType,
     useTransactionState,
-    FungibleTokenDetailed,
     ChainId,
-    useChainId,
-    formatBalance,
-    pow10,
-    useNativeTokenDetailed,
-    useFungibleTokenBalance,
     useFoundationConstants,
 } from '@masknet/web3-shared'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import FoundationAbi from '@masknet/web3-contracts/abis/Foundation.json'
 import type { Foundation } from '@masknet/web3-contracts/types/Foundation'
@@ -27,12 +18,6 @@ import Web3 from 'web3'
 import { makeStyles } from '@masknet/theme'
 import FoudationCountdown from './FoudationCountdown'
 import type { Nft, Metadata } from '../types'
-import { PluginFoundationMessages } from '../messages'
-import { v4 as uuid } from 'uuid'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
-import { activatedSocialNetworkUI } from '../../../social-network'
-import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -42,27 +27,7 @@ const useStyles = makeStyles()((theme) => {
             margin: '16px',
             width: '100%',
         },
-        paper: {
-            width: '450px !important',
-        },
-        form: {
-            '& > *': {
-                margin: theme.spacing(1, 0),
-            },
-        },
-        root: {
-            margin: theme.spacing(2, 0),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            padding: theme.spacing(2, 2, 0, 2),
-        },
         button: {
-            margin: theme.spacing(1.5, 0, 0),
-            padding: 12,
-        },
-        button1: {
             width: '100%',
             padding: '16px',
         },
@@ -76,99 +41,6 @@ interface Props extends React.PropsWithChildren<{}> {
     nft: Nft
     metadata: Metadata
     chainId: ChainId
-}
-
-export interface FoudationDialogProps extends withClasses<never> {}
-
-function PlaceBid1(props: FoudationDialogProps) {
-    const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
-
-    const [title, setTitle] = useState('')
-    const [auctionId, setAuctionId] = useState('')
-
-    // context
-    const account = useAccount()
-    const chainId = useChainId()
-    const nativeTokenDetailed = useNativeTokenDetailed()
-    const { MARKET_ADDRESS } = useFoundationConstants()
-
-    //#region remote controlled dialog
-    const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(
-        PluginFoundationMessages.foundationDialogUpdated,
-        (ev) => {
-            if (!ev.open) return
-            setTitle(ev.title)
-            setAuctionId(ev.auctionId)
-        },
-    )
-    //#endregion
-
-    //#region the selected token
-    const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
-        nativeTokenDetailed.value,
-    )
-    const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
-    //#endregion
-
-    //#region select token dialog
-    const [id] = useState(uuid())
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
-            disableNativeToken: false,
-            FixedTokenListProps: {
-                selectedTokens: token ? [token.address] : [],
-            },
-        })
-    }, [id, token?.address])
-    //#endregion
-
-    //#region amount
-    const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
-    //#endregion
-
-    //#region blocking
-    const [placeBidState, PlaceBidCallback, resetCallback] = usePlaceBidCallback(auctionId, amount.toFixed())
-    //#endregion
-
-    //#region transaction dialog
-    const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
-        .getShareLinkURL?.(
-            token
-                ? [
-                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
-                          token.symbol
-                      }. Follow @realMaskNetwork (mask.io) to donate Gitcoin grants.`,
-                      '#mask_io',
-                  ].join('\n')
-                : '',
-        )
-        .toString()
-
-    // close the transaction dialog
-    const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
-        WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            if (placeBidState.type === TransactionStateType.HASH) setRawAmount('')
-            resetCallback()
-        },
-    )
 }
 
 function PlaceBid(props: Props) {
@@ -210,7 +82,7 @@ function PlaceBid(props: Props) {
                                     </Grid>
                                     <Grid item xs={4}>
                                         <Button
-                                            className={classes.button1}
+                                            className={classes.button}
                                             onClick={async () => {
                                                 const auctionId = String(
                                                     props.nft.mostRecentAuction.id.split('-').at(-1),

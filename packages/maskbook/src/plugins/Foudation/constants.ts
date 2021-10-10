@@ -1,3 +1,4 @@
+export const foundation_ID = 'co.foundation'
 export const foundationHostnames = ['foundation.app', 'goerli.foundation.app']
 export const foundationPathnameRegexMatcher = /\/@([^-]*-\d+)/
 

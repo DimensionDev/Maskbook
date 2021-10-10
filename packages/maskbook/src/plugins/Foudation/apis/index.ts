@@ -26,3 +26,10 @@ export async function getMetadata(url: string) {
     ).json()
     return fetchResponse
 }
+
+// export async function fetchApi(link: string, chainId: ChainId) {
+//     const tokenId = getTokenId(link)
+//     const graph: GraphData = await querySubgaphs(tokenId[tokenId.length - 1], chainId)
+//     const metadata: Metadata = await getMetadata(graph.data.nfts[0].tokenIPFSPath.split('/')[0])
+//     return { graph, metadata }
+// }

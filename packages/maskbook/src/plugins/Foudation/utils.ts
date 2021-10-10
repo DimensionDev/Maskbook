@@ -68,9 +68,9 @@ export function getTokenId(link: string) {
     return link.split('-')
 }
 
-export async function fetchApi(link: string, chainId: ChainId) {
+export async function fetchApi(link: string, chainid: ChainId) {
     const tokenId = getTokenId(link)
-    const graph: GraphData = await querySubgaphs(tokenId[tokenId.length - 1], chainId)
+    const graph: GraphData = await querySubgaphs(tokenId[tokenId.length - 1], chainid)
     const metadata: Metadata = await getMetadata(graph.data.nfts[0].tokenIPFSPath.split('/')[0])
     return { graph, metadata }
 }

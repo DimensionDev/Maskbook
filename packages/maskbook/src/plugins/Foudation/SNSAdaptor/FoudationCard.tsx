@@ -61,7 +61,9 @@ const useStyles = makeStyles()((theme) => {
 function FoudationCard(props: Props) {
     const { classes } = useStyles()
     const { t } = useI18N()
+    // const { SUBGRAPHS } = useFoundationConstants()
     const nftData = useAsync(async () => {
+        // const result = await fetchApi(props.link, 'SUBGRAPHS')
         const result = await fetchApi(props.link, props.chainId)
         return result
     }, [props.link, props.chainId])
@@ -109,29 +111,6 @@ function FoudationCard(props: Props) {
             )}
         </Card>
     )
-    // if (nftData.loading) {
-    //     return (
-    //         <Card className={classes.root} elevation={0}>
-    //             <FoudationHeader nftData={nftData} />
-    //             <FoudationContent nft={nftData.graph.data.nfts[0]} metadata={nftData.metadata} />
-    //             <FoundationPlaceBid nftData={nftData} />
-    //             <CardActions className={classes.footer}>
-    //                 <Typography className={classes.footnote} variant="subtitle2">
-    //                     <span>{t('plugin_powered_by')} </span>
-    //                     <Link
-    //                         className={classes.footLink}
-    //                         color="textSecondary"
-    //                         target="_blank"
-    //                         rel="noopener noreferrer"
-    //                         title="Mask"
-    //                         href="https://mask.io">
-    //                         <MaskTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
-    //                     </Link>
-    //                 </Typography>
-    //             </CardActions>
-    //         </Card>
-    //     )
-    // }
 }
 
 export default FoudationCard
