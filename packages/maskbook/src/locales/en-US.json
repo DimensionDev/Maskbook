@@ -940,5 +940,6 @@
     "nft_list_title": "NFT Avatar Setting",
     "nft_wallet_label": "Wallet",
     "nft_wallet_change": "Change",
-    "nft_collectible_add": "Add Collectibles"
+    "nft_collectible_add": "Add Collectibles",
+    "nft_avatar": "NFT Avatar"
 }

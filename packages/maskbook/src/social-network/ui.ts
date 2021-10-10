@@ -90,6 +90,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         ui.injection.enhancedProfileNFTAvatar?.(signal)
     }
 
+    ui.injection.openNFTAvatar?.(signal)
+
     startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
 
     function i18nOverwrite() {

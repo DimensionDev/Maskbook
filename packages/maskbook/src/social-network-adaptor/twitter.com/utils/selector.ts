@@ -46,6 +46,9 @@ export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$="/photo"] img')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('head > link[href^="https://twitter.com"] + meta[property="og:image"]')
+
+export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] a[href="/settings/profile"]')
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [

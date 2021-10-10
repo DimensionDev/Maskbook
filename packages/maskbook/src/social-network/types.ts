@@ -143,6 +143,9 @@ export namespace SocialNetworkUI {
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             postAvatar?(signal: AbortSignal, current: PostInfo): void
+
+            /** open edit profile dialog */
+            openNFTAvatar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void

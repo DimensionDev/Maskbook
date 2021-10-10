@@ -1,5 +1,5 @@
 import { PLUGIN_ID } from './constants'
-import type { Plugin } from '@masknet/plugin-infra'
+import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared'
 
 export const base: Plugin.Shared.Definition = {
@@ -11,7 +11,7 @@ export const base: Plugin.Shared.Definition = {
     publisher: { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' },
     enableRequirement: {
         architecture: { app: true, web: true },
-        networks: { type: 'opt-out', networks: {} },
+        networks: { type: 'opt-in', networks: { [CurrentSNSNetwork.Twitter]: true } },
         target: 'stable',
         web3: {
             operatingSupportedChains: [ChainId.Mainnet],
