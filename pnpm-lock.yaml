@@ -809,9 +809,9 @@ importers:
       urlcat: ^2.0.4
       use-subscription: ^1.5.1
       wallet.ts: ^1.0.1
-      web3: ^1.5.2
+      web3: 1.5.2
       web3-core: ^1.5.2
-      web3-utils: ^1.5.2
+      web3-utils: 1.5.2
     dependencies:
       '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_f991c289939c8299bed5e4a6a5a79a62
       '@ensdomains/address-encoder': 0.2.6
@@ -829,7 +829,7 @@ importers:
       wallet.ts: 1.0.1
       web3: 1.5.2
       web3-core: 1.5.2
-      web3-utils: 1.5.3
+      web3-utils: 1.5.2
     devDependencies:
       '@types/use-subscription': 1.0.0
 
