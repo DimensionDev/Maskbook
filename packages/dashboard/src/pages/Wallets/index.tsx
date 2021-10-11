@@ -43,7 +43,7 @@ function Wallets() {
     const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { value: detailedTokens } = useAssets(erc20Tokens || [])
+    const { value: detailedTokens } = useAssets(erc20Tokens || [], 'all')
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
 
     const balance = useMemo(() => {

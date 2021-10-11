@@ -69,7 +69,10 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         error: detailedTokensError,
         loading: detailedTokensLoading,
         value: detailedTokens,
-    } = useAssets(trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [])
+    } = useAssets(
+        trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
+        selectedChainId === null ? 'all' : selectedChainId,
+    )
 
     const onSwap = useCallback((token: FungibleTokenDetailed) => {
         openSwapDialog({

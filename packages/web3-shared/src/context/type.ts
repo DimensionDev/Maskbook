@@ -40,7 +40,7 @@ export interface Web3ProviderType {
     trustToken: (address: string, token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     blockToken: (address: string, token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
 
-    getAssetsList: (address: string, network: NetworkType, provider: PortfolioProvider) => Promise<Asset[]>
+    getAssetsList: (address: string, provider: PortfolioProvider, network?: NetworkType) => Promise<Asset[]>
     getAssetsListNFT: (
         address: string,
         chainId: ChainId,

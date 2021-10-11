@@ -141,6 +141,7 @@ export const Balance = memo<BalanceCardProps>(
                                 const chainId = getChainIdFromNetworkType(network)
                                 return (
                                     <Box
+                                        key={chainId}
                                         position="relative"
                                         ml={1}
                                         height={30}
