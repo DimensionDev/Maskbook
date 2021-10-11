@@ -10,6 +10,7 @@ import {
     Toolbar,
     Typography,
     useMediaQuery,
+    useTheme,
 } from '@material-ui/core'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Close as CloseIcon, Menu as MenuIcon } from '@material-ui/icons'
@@ -22,7 +23,6 @@ import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
 import { useLocation } from 'react-router-dom'
 import { RoutePaths } from '../../type'
-import { useAppearance } from '../../pages/Personas/api'
 
 const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
 
@@ -165,7 +165,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
     const { classes } = useStyle()
 
     return (

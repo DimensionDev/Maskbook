@@ -1,10 +1,9 @@
-import { Button } from '@material-ui/core'
+import { Button, useTheme } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@material-ui/core/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
-import { useAppearance } from '../Personas/api'
 import { useDashboardI18N } from '../../locales'
 
 const Content = styled('div')(
@@ -32,7 +31,7 @@ const IFrame = styled('iframe')(
 
 export default function Welcome() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
     const navigate = useNavigate()
 
     const agreementContentPageURL = new URL(`./en.html`, import.meta.url).toString()

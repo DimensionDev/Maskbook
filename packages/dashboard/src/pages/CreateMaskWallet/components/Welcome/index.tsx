@@ -1,44 +1,37 @@
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
-import { useAppearance } from '../../../Personas/api'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
-import { styled } from '@mui/material/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import { useDashboardI18N } from '../../../../locales'
 import { Button } from '@mui/material'
 import { MaskNotSquareIcon } from '@masknet/icons'
 
-const Content = styled('div')(
-    ({ theme }) => `
-    padding: 130px 120px 100px  120px;
+const Content = styled('div')`
+    padding: 130px 120px 100px 120px;
     width: 100%;
     overflow: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-`,
-)
+`
 
-const ButtonGroup = styled('div')(
-    ({ theme }) => `
+const ButtonGroup = styled('div')`
     display: grid;
-    grid-template-columns: repeat(2,1fr);
+    grid-template-columns: repeat(2, 1fr);
     padding: 33px 120px;
     gap: 10px;
     margin-top: 24px;
     width: 100%;
     max-width: 864px;
-`,
-)
+`
 
-const IFrame = styled('iframe')(
-    ({ theme }) => `
+const IFrame = styled('iframe')`
     border: none;
     width: 100%;
     min-height: 412px;
     max-width: 864px;
-`,
-)
+`
 
 const StyledButton = styled(Button)(
     () => `
@@ -52,7 +45,7 @@ const StyledButton = styled(Button)(
 
 const Welcome = memo(() => {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
     const navigate = useNavigate()
 
     const privacyPolicyURL = new URL('../../en.html', import.meta.url).toString()
