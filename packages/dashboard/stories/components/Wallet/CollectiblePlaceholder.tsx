@@ -6,8 +6,5 @@ const { meta, of } = story(C)
 
 export default meta({ title: 'Pages/Wallet/Collectible Placeholder' })
 export const CollectiblePlaceholder = of({
-    args: {
-        onSend: () => {},
-        isHovering: true,
-    },
+    args: {},
 })

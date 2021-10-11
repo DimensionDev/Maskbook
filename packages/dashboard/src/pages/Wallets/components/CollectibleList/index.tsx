@@ -11,8 +11,8 @@ import {
     useAccount,
     useChainId,
     useCollectibles,
-    useERC721Tokens,
     useWallet,
+    useWeb3State,
 } from '@masknet/web3-shared'
 import { useCurrentCollectibleDataProvider } from '../../api'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
@@ -42,14 +42,18 @@ const useStyles = makeStyles()({
     },
 })
 
-export const CollectibleList = memo(() => {
+interface CollectibleListProps {
+    selectedChainId: ChainId | null
+}
+
+export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
     const chainId = useChainId()
     const wallet = useWallet()
     const account = useAccount()
     const provider = useCurrentCollectibleDataProvider()
-    const erc721Tokens = useERC721Tokens()
+    const erc721Tokens = useWeb3State().erc721Tokens
     const { value: erc721TokensOwners = [], loading: loadingERC721Owners } = useCollectibleOwners(erc721Tokens)
 
     const onSend = useCallback(
@@ -68,7 +72,7 @@ export const CollectibleList = memo(() => {
         loading: collectiblesLoading,
         error: collectiblesError,
         retry,
-    } = useCollectibles(account, chainId, provider, page, 20)
+    } = useCollectibles(account, selectedChainId, provider, page, 20)
 
     useEffect(() => {
         PluginMessages.Wallet.events.erc721TokensUpdated.on(() => {
@@ -79,7 +83,7 @@ export const CollectibleList = memo(() => {
     const { collectibles = [], hasNextPage } = value
 
     const dataSource = collectibles.filter((x) => {
-        if (x.contractDetailed.chainId !== chainId) return false
+        if (selectedChainId !== null && x.contractDetailed.chainId !== selectedChainId) return false
 
         const owner = erc721TokensOwners.find(
             (e) =>

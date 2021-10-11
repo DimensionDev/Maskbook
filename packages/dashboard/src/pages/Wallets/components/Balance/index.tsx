@@ -66,6 +66,7 @@ const BalanceContent = styled(Typography)(
 
 const useStyles = makeStyles()((theme) => ({
     networkSelected: {
+        opacity: 1,
         '&:after': {
             content: '""',
             position: 'absolute',
@@ -92,6 +93,7 @@ const AllNetworkButton = styled(Button)(({ theme }) => ({
     '&:hover': {
         boxShadow: 'none',
     },
+    opacity: 0.5,
 }))
 
 const ButtonGroup = styled('div')`
@@ -146,7 +148,7 @@ export const Balance = memo<BalanceCardProps>(
                                         ml={1}
                                         height={30}
                                         onClick={() => onSelectNetwork(chainId)}
-                                        sx={{ cursor: 'pointer' }}
+                                        sx={{ cursor: 'pointer', opacity: '0.6' }}
                                         className={selectedChainId === chainId ? classes.networkSelected : ''}>
                                         <ChainIcon chainId={chainId} size={30} />
                                     </Box>

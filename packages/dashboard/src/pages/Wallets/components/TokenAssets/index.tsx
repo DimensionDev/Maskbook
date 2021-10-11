@@ -93,7 +93,7 @@ export const TokenAssets = memo<TokenAssetsProps>(({ selectedChainId }) => {
                         value={AssetTab.Collectibles}
                         key={AssetTab.Collectibles}
                         className={activeTab === AssetTab.Collectibles ? classes.tab : undefined}>
-                        <CollectibleList />
+                        <CollectibleList selectedChainId={selectedChainId} />
                     </TabPanel>
                 </TabContext>
             </ContentContainer>

@@ -1,14 +1,27 @@
 import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared'
-import { memo, useRef } from 'react'
-import { Box, Button, Link, Typography } from '@material-ui/core'
+import { memo, useMemo, useRef, useState } from 'react'
+import { Box, Button, Link, Tooltip, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
+import { ChainIcon } from '@masknet/shared'
+import { ChangeNetworkTip } from '../TokenTableRow/ChangeNetworkTip'
 
 const useStyles = makeStyles()((theme) => ({
+    container: {
+        paddingTop: 8,
+        paddingBottom: 8,
+    },
+    hover: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        transform: 'scale(1.1)',
+        filter: 'drop-shadow(0px 12px 28px rgba(0, 0, 0, 0.1))',
+    },
     card: {
+        position: 'relative',
         borderRadius: 8,
         width: 140,
         minHeight: 215,
@@ -30,11 +43,19 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         fontSize: 12,
     },
-    hover: {
-        '&:hover': {
-            transform: 'scale(1.1)',
-            filter: 'drop-shadow(0px 12px 28px rgba(0, 0, 0, 0.1))',
-        },
+    chainIcon: {
+        position: 'absolute',
+        right: 8,
+        top: 8,
+        height: 20,
+        width: 20,
+    },
+    tip: {
+        padding: theme.spacing(1),
+        background: MaskColorVar.mainBackground,
+    },
+    tipArrow: {
+        color: MaskColorVar.mainBackground,
     },
 }))
 
@@ -49,12 +70,17 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const ref = useRef(null)
+    const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
+    const isOnCurrentChain = useMemo(() => chainId === token.contractDetailed.chainId, [chainId, token])
 
     return (
-        <Box className={classes.hover} ref={ref}>
-            {token.info.image ? (
-                <div className={classes.card}>
+        <Box className={`${classes.container} ${isHoveringTooltip || isHovering ? classes.hover : ''}`} ref={ref}>
+            <div className={classes.card}>
+                <Box className={classes.chainIcon}>
+                    <ChainIcon chainId={token.contractDetailed.chainId} size={20} />
+                </Box>
+                {token.info.image ? (
                     <Link
                         target="_blank"
                         rel="noopener noreferrer"
@@ -66,31 +92,42 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                             />
                         </div>
                     </Link>
-                    <Box className={classes.description} py={1} px={3}>
-                        {isHovering ? (
-                            <Box>
-                                <Button
-                                    size="small"
-                                    fullWidth
-                                    onClick={onSend}
-                                    variant="rounded"
-                                    style={{ boxShadow: 'none' }}
-                                    sx={{ fontWeight: 'bolder', height: '28px' }}>
-                                    {t.send()}
-                                </Button>
-                            </Box>
-                        ) : (
-                            <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
-                                {token.info.name}
-                            </Typography>
-                        )}
+                ) : (
+                    <Box>
+                        <CollectiblePlaceholder chainId={token.contractDetailed.chainId} />
                     </Box>
-                </div>
-            ) : (
-                <Box>
-                    <CollectiblePlaceholder onSend={onSend} isHovering={isHovering} />
+                )}
+                <Box className={classes.description} py={1} px={3}>
+                    {isHovering || isHoveringTooltip ? (
+                        <Box>
+                            <Tooltip
+                                onOpen={() => setHoveringTooltip(true)}
+                                onClose={() => setHoveringTooltip(false)}
+                                disableHoverListener={isOnCurrentChain}
+                                title={<ChangeNetworkTip chainId={token.contractDetailed.chainId} />}
+                                placement="top"
+                                classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
+                                arrow>
+                                <span>
+                                    <Button
+                                        size="small"
+                                        fullWidth
+                                        onClick={onSend}
+                                        variant="rounded"
+                                        style={{ boxShadow: 'none' }}
+                                        sx={{ fontWeight: 'bolder', height: '28px' }}>
+                                        {t.send()}
+                                    </Button>
+                                </span>
+                            </Tooltip>
+                        </Box>
+                    ) : (
+                        <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
+                            {token.info.name || token.tokenId}
+                        </Typography>
+                    )}
                 </Box>
-            )}
+            </div>
         </Box>
     )
 })
