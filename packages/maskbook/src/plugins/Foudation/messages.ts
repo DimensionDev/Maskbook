@@ -1,28 +1,14 @@
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import { foundation_ID } from './constants'
-
-type FoundationDialogUpdated =
-    | {
-          open: true
-          title: string
-          auctionId: string
-      }
-    | {
-          open: false
-      }
+import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
+import { FOUNDATION_PLUGIN_ID } from './constants'
 
 interface FoundationMessages {
-    /**
-     * Open donation dialog
-     */
-    foundationDialogUpdated: FoundationDialogUpdated
-
     rpc: unknown
 }
 
-export const PluginFoundationMessages: PluginMessageEmitter<FoundationMessages> = createPluginMessage(foundation_ID)
-// export const PluginGitcoinRPC = createPluginRPC(
-//     foundation_ID,
-//     () => import('./services'),
-//     PluginGitcoinMessages.rpc,
-// )
+export const PluginFoundationMessage: PluginMessageEmitter<FoundationMessages> =
+    createPluginMessage(FOUNDATION_PLUGIN_ID)
+export const PluginFoundationRPC = createPluginRPC(
+    FOUNDATION_PLUGIN_ID,
+    () => import('./services'),
+    PluginFoundationMessage.rpc,
+)

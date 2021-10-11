@@ -6,10 +6,14 @@ import { makeStyles } from '@masknet/theme'
 import FoudationProvenances from './FoudationProvenances'
 import FoudationImage from './FoudationImage'
 import FoudationDescription from './FoudationDescription'
+import FoundationPlaceBid from './FoundationPlaceBid'
+import type { ChainId } from '@masknet/web3-shared'
 
 interface Props extends React.PropsWithChildren<{}> {
     nft: Nft
     metadata: Metadata
+    chainId: ChainId
+    link: string
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -28,6 +32,7 @@ const useStyles = makeStyles()((theme) => {
             minHeight: 'unset',
             borderTop: `solid 1px ${theme.palette.divider}`,
             borderBottom: `solid 1px ${theme.palette.divider}`,
+            margin: theme.spacing(1, 0, 2, 0),
         },
         tab: {
             height: 'var(--tabHeight)',
@@ -73,6 +78,7 @@ function FoudationContent(props: Props) {
                 {tabIndex === 1 ? <FoudationDescription description={props.metadata.description} /> : null}
                 {tabIndex === 2 ? <FoudationProvenances histories={props.nft.nftHistory} /> : null}
             </Paper>
+            <FoundationPlaceBid chainId={props.chainId} nft={props.nft} metadata={props.metadata} link={props.link} />
         </CardContent>
     )
 }

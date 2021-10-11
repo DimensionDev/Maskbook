@@ -1,35 +1,28 @@
 import { FoundationAddressIdQuery } from '../queries/'
-import { ChainId } from '@masknet/web3-shared'
+import type { GraphData, Metadata } from '../types'
 
-export async function querySubgaphs(tokenId: string, chainId: ChainId) {
-    const url =
-        chainId === ChainId.Mainnet
-            ? 'https://api.thegraph.com/subgraphs/name/f8n/fnd'
-            : 'https://api.thegraph.com/subgraphs/name/f8n/fnd-goerli'
-    const fetchResponse = await (
-        await fetch(url, {
+function getTokenId(foudationUrl: string) {
+    if (foudationUrl.includes('/~/')) {
+        return foudationUrl.split('/')
+    }
+    return foudationUrl.split('-')
+}
+export async function fetchApi(foudationUrl: string, subgraphsUrl: string | undefined) {
+    if (!subgraphsUrl) return null
+    const tokenId = getTokenId(foudationUrl)
+    const subgraphResponse: GraphData = await (
+        await fetch(subgraphsUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: FoundationAddressIdQuery(tokenId) }),
+            body: JSON.stringify({ query: FoundationAddressIdQuery(tokenId[tokenId.length - 1]) }),
             mode: 'cors',
         })
     ).json()
-    return fetchResponse
-}
-
-export async function getMetadata(url: string) {
-    const fetchResponse = await (
-        await fetch(`https://ipfs.io/ipfs/${url}/metadata.json`, {
+    const metadataResponse: Metadata = await (
+        await fetch(`https://ipfs.io/ipfs/${subgraphResponse.data.nfts[0].tokenIPFSPath.split('/')[0]}/metadata.json`, {
             method: 'GET',
             mode: 'cors',
         })
     ).json()
-    return fetchResponse
+    return { subgraphResponse, metadataResponse }
 }
-
-// export async function fetchApi(link: string, chainId: ChainId) {
-//     const tokenId = getTokenId(link)
-//     const graph: GraphData = await querySubgaphs(tokenId[tokenId.length - 1], chainId)
-//     const metadata: Metadata = await getMetadata(graph.data.nfts[0].tokenIPFSPath.split('/')[0])
-//     return { graph, metadata }
-// }

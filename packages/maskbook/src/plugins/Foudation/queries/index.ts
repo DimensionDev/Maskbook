@@ -3,9 +3,6 @@ query {
     nfts(where: {tokenId: ${tokenId} })
         {
         id
-        creator{
-            id
-        }
         auctions{
             id
             dateEnding

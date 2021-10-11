@@ -1,16 +1,27 @@
-import { CurrentPrice } from '../utils'
+import React, { useCallback } from 'react'
 import type { Nft, Metadata } from '../types'
 import { CardHeader, Link, Typography } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 
 interface Props extends React.PropsWithChildren<{}> {
-    nft: Nft[] | undefined
-    metadata: Metadata | undefined
+    nft: Nft
+    metadata: Metadata
     link: string
 }
-// nftData.graph.data.nfts[0].mostRecentAuction)}
+
 function FoudationHeader(props: Props) {
     const { t } = useI18N()
+
+    const CurrentPrice = useCallback(() => {
+        if (props.nft.mostRecentAuction) {
+            if (props.nft.mostRecentAuction.highestBid) {
+                return `${t('plugin_foundation_highest')} ${props.nft.mostRecentAuction.highestBid.amountInETH}`
+            }
+            return `${t('plugin_foundation_reserve')} ${props.nft.mostRecentAuction.reservePriceInETH}`
+        }
+        return null
+    }, [])
+
     return (
         <CardHeader
             title={
@@ -22,7 +33,7 @@ function FoudationHeader(props: Props) {
             }
             subheader={
                 <Typography variant="h5" align="center" color="text.secondary">
-                    {props.nft && CurrentPrice(t, props.nft[0].mostRecentAuction)}
+                    {CurrentPrice()}
                 </Typography>
             }
         />

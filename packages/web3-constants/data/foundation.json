@@ -28,11 +28,11 @@
         "xDai": ""
     },
     "SUBGRAPHS": {
-        "Mainnet": "0x3b3ee1931dc30c1957379fac9aba94d1c48a5405",
+        "Mainnet": "https://api.thegraph.com/subgraphs/name/f8n/fnd",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
-        "Gorli": "0x44458837ac4036337e5ce46ce28a744e05e02016",
+        "Gorli": "https://api.thegraph.com/subgraphs/name/f8n/fnd-goerli",
         "BSC": "",
         "BSCT": "",
         "Matic": "",

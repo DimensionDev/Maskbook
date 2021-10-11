@@ -1,14 +1,13 @@
-import React, { useState, useCallback } from 'react'
-import { Button, TextField, Grid } from '@material-ui/core'
-import type { AbiItem } from 'web3-utils'
+import React, { useState, useEffect, useMemo } from 'react'
+import { Grid } from '@material-ui/core'
+import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import BigNumber from 'bignumber.js'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
+import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import {
     EthereumTokenType,
-    useContract,
     useAccount,
     TransactionStateType,
-    useTransactionState,
     FungibleTokenDetailed,
     ChainId,
     useChainId,
@@ -16,129 +15,56 @@ import {
     pow10,
     useNativeTokenDetailed,
     useFungibleTokenBalance,
-    useFoundationConstants,
 } from '@masknet/web3-shared'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
-import type { PayableTx } from '@masknet/web3-contracts/types/types'
-import FoundationAbi from '@masknet/web3-contracts/abis/Foundation.json'
-import type { Foundation } from '@masknet/web3-contracts/types/Foundation'
 import { useI18N } from '../../../utils'
-import Web3 from 'web3'
 import { makeStyles } from '@masknet/theme'
 import FoudationCountdown from './FoudationCountdown'
 import type { Nft, Metadata } from '../types'
-import { PluginFoundationMessages } from '../messages'
-import { v4 as uuid } from 'uuid'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { WalletMessages } from '../../Wallet/messages'
 import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        body: {
-            display: 'flex',
-            justifyContent: 'center',
-            margin: '16px',
-            width: '100%',
-        },
-        paper: {
-            width: '450px !important',
-        },
         form: {
             '& > *': {
                 margin: theme.spacing(1, 0),
             },
-        },
-        root: {
-            margin: theme.spacing(2, 0),
-        },
-        tip: {
-            fontSize: 12,
-            color: theme.palette.text.secondary,
-            padding: theme.spacing(2, 2, 0, 2),
+            width: '100%',
         },
         button: {
-            margin: theme.spacing(1.5, 0, 0),
-            padding: 12,
-        },
-        button1: {
             width: '100%',
-            padding: '16px',
-        },
-        input: {
-            maxWidth: '100%',
         },
     }
 })
 
-interface Props extends React.PropsWithChildren<{}> {
+interface Props extends withClasses<never> {
     nft: Nft
     metadata: Metadata
     chainId: ChainId
+    link: string
 }
 
-export interface FoudationDialogProps extends withClasses<never> {}
-
-function PlaceBid1(props: FoudationDialogProps) {
+function FoundationPlaceBid(props: Props) {
+    //#region context
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
-
-    const [title, setTitle] = useState('')
-    const [auctionId, setAuctionId] = useState('')
-
-    // context
     const account = useAccount()
     const chainId = useChainId()
     const nativeTokenDetailed = useNativeTokenDetailed()
-    const { MARKET_ADDRESS } = useFoundationConstants()
-
-    //#region remote controlled dialog
-    const { open, closeDialog: closeDonationDialog } = useRemoteControlledDialog(
-        PluginFoundationMessages.foundationDialogUpdated,
-        (ev) => {
-            if (!ev.open) return
-            setTitle(ev.title)
-            setAuctionId(ev.auctionId)
-        },
-    )
+    const classes = useStylesExtends(useStyles(), props)
+    const auctionId = props.nft.mostRecentAuction.id.split('-')[1]
     //#endregion
 
     //#region the selected token
-    const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
-        nativeTokenDetailed.value,
-    )
+    const [token = nativeTokenDetailed.value] = useState<FungibleTokenDetailed | undefined>(nativeTokenDetailed.value)
     const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
-    //#endregion
-
-    //#region select token dialog
-    const [id] = useState(uuid())
-    const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectTokenDialogUpdated,
-        useCallback(
-            (ev: SelectTokenDialogEvent) => {
-                if (ev.open || !ev.token || ev.uuid !== id) return
-                setToken(ev.token)
-            },
-            [id],
-        ),
-    )
-
-    const onSelectTokenChipClick = useCallback(() => {
-        setSelectTokenDialog({
-            open: true,
-            uuid: id,
-            disableNativeToken: false,
-            FixedTokenListProps: {
-                selectedTokens: token ? [token.address] : [],
-            },
-        })
-    }, [id, token?.address])
     //#endregion
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(18))
     //#endregion
 
     //#region blocking
@@ -151,9 +77,12 @@ function PlaceBid1(props: FoudationDialogProps) {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
-                          token.symbol
-                      }. Follow @realMaskNetwork (mask.io) to donate Gitcoin grants.`,
+                      t('plugin_foundation_sharelink', {
+                          link: props.link,
+                          amount: formatBalance(amount, token.decimals),
+                          cashTag: cashTag,
+                          symbol: token.symbol,
+                      }),
                       '#mask_io',
                   ].join('\n')
                 : '',
@@ -169,106 +98,71 @@ function PlaceBid1(props: FoudationDialogProps) {
             resetCallback()
         },
     )
-}
 
-function PlaceBid(props: Props) {
-    const { classes } = useStyles()
-    const { t } = useI18N()
-    const [transactionState, setTransactionState] = useTransactionState()
-    const account = useAccount()
-    const hasnHighestBid = () => {
-        if (props.nft.mostRecentAuction.highestBid) {
-            return props.nft.mostRecentAuction.highestBid.bidder.id.includes('account')
-        }
-        return false
-    }
-    const [amount, setAmount] = useState<string>('0')
-    const { MARKET_ADDRESS } = useFoundationConstants()
-    const contract = useContract<Foundation>(MARKET_ADDRESS, FoundationAbi as AbiItem[])
-    if (props.nft.mostRecentAuction?.status === 'Open') {
-        return (
+    // open the transaction dialog
+    useEffect(() => {
+        if (!token) return
+        if (placeBidState.type === TransactionStateType.UNKNOWN) return
+        setTransactionDialog({
+            open: true,
+            shareLink,
+            state: placeBidState,
+            summary: t('plugin_foundation_open_dialog', {
+                amount: formatBalance(amount, token.decimals),
+                symbol: token.symbol,
+                name: props.metadata.name,
+            }),
+        })
+    }, [placeBidState /* update tx dialog only if state changed */])
+    //#endregion
+
+    //#region submit button
+    const validationMessage = useMemo(() => {
+        if (props.nft.mostRecentAuction.status !== 'Open') return t('plugin_foundation_auction_over')
+        if (props.nft.mostRecentAuction.highestBid?.bidder.id.includes(account.toLocaleLowerCase()))
+            return t('plugin_foundation_you_outstanding_bid')
+        if (props.nft.mostRecentAuction.reservePriceInETH > rawAmount) return t('plugin_foundation_bid_least_reserve')
+        if (!token) return t('plugin_foundation_select_a_token')
+        if (!account) return t('plugin_wallet_connect_a_wallet')
+        if (!auctionId || amount.isZero()) return t('plugin_foundation_enter_an_amount')
+        if (amount.isGreaterThan(tokenBalance.value ?? '0'))
+            return t('plugin_foundation_insufficient_balance', {
+                symbol: token.symbol,
+            })
+        return ''
+    }, [account, amount.toFixed(), chainId, token, tokenBalance.value ?? '0'])
+    //#endregion
+    if (!auctionId) return null
+
+    return (
+        <Grid item xs={12}>
             <EthereumWalletConnectedBoundary offChain={true}>
-                <div className={classes.body}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <FoudationCountdown auctions={props.nft.auctions} />
-                        </Grid>
-                        {hasnHighestBid() === false && (
-                            <Grid item xs={12}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={8}>
-                                        <TextField
-                                            className={classes.input}
-                                            id="outlined-helperText"
-                                            label={t('plugin_foundation_eth_amount')}
-                                            required
-                                            fullWidth
-                                            onChange={(e) => {
-                                                setAmount(Web3.utils.toWei(e.target.value, 'ether'))
-                                            }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Button
-                                            className={classes.button1}
-                                            onClick={async () => {
-                                                const auctionId = String(
-                                                    props.nft.mostRecentAuction.id.split('-').at(-1),
-                                                )
-                                                const config = {
-                                                    from: account,
-                                                    gas: await contract?.methods
-                                                        .placeBid(auctionId)
-                                                        .estimateGas({
-                                                            from: account,
-                                                            value: amount,
-                                                        })
-                                                        .catch((error) => {
-                                                            return contract?.methods.placeBid(auctionId).estimateGas({
-                                                                from: account,
-                                                                value: amount,
-                                                            })
-                                                        })
-                                                        .catch((error) => {
-                                                            setTransactionState({
-                                                                type: TransactionStateType.FAILED,
-                                                                error,
-                                                            })
-                                                            throw error
-                                                        }),
-                                                    value: amount,
-                                                }
-                                                const bid = contract?.methods
-                                                    .placeBid(auctionId)
-                                                    .send(config as PayableTx)
-                                            }}
-                                            variant="contained"
-                                            fullWidth
-                                            disableElevation>
-                                            {t('plugin_foundation_place_bid')}
-                                        </Button>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        )}
-                        {hasnHighestBid() && (
-                            <Grid item xs={12}>
-                                <Button
-                                    disabled
-                                    style={{ width: '500px', padding: '16px' }}
-                                    variant="contained"
-                                    fullWidth
-                                    disableElevation>
-                                    {t('plugin_foundation_user_highest')}
-                                </Button>
-                            </Grid>
-                        )}
-                    </Grid>
-                </div>
+                <FoudationCountdown dateEnding={props.nft.mostRecentAuction.dateEnding} />
+                {props.nft.mostRecentAuction.status === 'Open' && (
+                    <form className={classes.form} noValidate autoComplete="off">
+                        <TokenAmountPanel
+                            label="Amount"
+                            amount={rawAmount}
+                            balance={tokenBalance.value ?? '0'}
+                            token={token}
+                            onAmountChange={setRawAmount}
+                            SelectTokenChip={{
+                                loading: tokenBalance.loading,
+                            }}
+                        />
+                    </form>
+                )}
+                <ActionButton
+                    fullWidth
+                    size="large"
+                    disabled={!!validationMessage}
+                    onClick={PlaceBidCallback}
+                    variant="contained">
+                    {validationMessage || t('plugin_foundation_place_bid')}
+                </ActionButton>
             </EthereumWalletConnectedBoundary>
-        )
-    }
-    return null
+        </Grid>
+    )
 }
 
-export default PlaceBid
+export default FoundationPlaceBid

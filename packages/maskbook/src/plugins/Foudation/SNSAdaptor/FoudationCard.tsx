@@ -1,12 +1,11 @@
-import { fetchApi } from '../utils'
 import { makeStyles } from '@masknet/theme'
-import type { ChainId } from '@masknet/web3-shared'
-import { Card, Link, Typography, CardActions } from '@material-ui/core'
+import { ChainId, useFoundationConstants } from '@masknet/web3-shared'
+import { Card, Typography, CardActions, Link } from '@material-ui/core'
 import { useI18N } from '../../../utils'
-import FoudationContent from './FoudationContent'
-import FoundationPlaceBid from './FoundationPlaceBid'
+import { useFetchApi } from '../hooks/useFetchApi'
 import FoudationHeader from './FoudationHeader'
-import { useAsync } from 'react-use'
+import FoudationContent from './FoudationContent'
+import { MaskTextIcon } from '../../../resources/MaskIcon'
 
 interface Props extends React.PropsWithChildren<{}> {
     link: string
@@ -51,7 +50,16 @@ const useStyles = makeStyles()((theme) => {
                 marginRight: 0,
             },
         },
-        maskbook: {
+        footMenu: {
+            color: theme.palette.text.secondary,
+            fontSize: 10,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        footName: {
+            marginLeft: theme.spacing(0.5),
+        },
+        mask: {
             width: 40,
             height: 10,
         },
@@ -61,38 +69,34 @@ const useStyles = makeStyles()((theme) => {
 function FoudationCard(props: Props) {
     const { classes } = useStyles()
     const { t } = useI18N()
-    // const { SUBGRAPHS } = useFoundationConstants()
-    const nftData = useAsync(async () => {
-        // const result = await fetchApi(props.link, 'SUBGRAPHS')
-        const result = await fetchApi(props.link, props.chainId)
-        return result
-    }, [props.link, props.chainId])
+    const { SUBGRAPHS } = useFoundationConstants()
+    const { value: nftData, error, loading } = useFetchApi(props.link, SUBGRAPHS)
     return (
         <Card className={classes.root} elevation={0}>
-            {nftData.loading ? (
+            {loading ? (
                 <Typography variant="h6" align="center">
                     Loading...
                 </Typography>
-            ) : nftData.error ? (
+            ) : error ? (
                 <Typography className={classes.error} variant="h6" align="center">
-                    Error: {nftData.error.message}
+                    Error: {error.message}
                 </Typography>
-            ) : typeof nftData.value === 'undefined' ? (
+            ) : typeof nftData === 'undefined' || nftData === null ? (
                 <Typography className={classes.error} variant="h6" align="center">
                     {t('plugin_foundation_error_metadata')}
                 </Typography>
             ) : (
                 <div>
                     <FoudationHeader
-                        nft={nftData.value?.graph.data.nfts}
-                        metadata={nftData.value?.metadata}
+                        nft={nftData.subgraphResponse.data.nfts[0]}
+                        metadata={nftData.metadataResponse}
                         link={props.link}
                     />
-                    <FoudationContent nft={nftData.value?.graph.data.nfts[0]} metadata={nftData.value?.metadata} />
-                    <FoundationPlaceBid
+                    <FoudationContent
+                        nft={nftData.subgraphResponse.data.nfts[0]}
+                        metadata={nftData.metadataResponse}
                         chainId={props.chainId}
-                        nft={nftData.value?.graph.data.nfts[0]}
-                        metadata={nftData.value?.metadata}
+                        link={props.link}
                     />
                     <CardActions className={classes.footer}>
                         <Typography className={classes.footnote} variant="subtitle2">
@@ -103,8 +107,9 @@ function FoudationCard(props: Props) {
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 title="Mask"
-                                href="https://mask.io"
-                            />
+                                href="https://mask.io">
+                                <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
+                            </Link>
                         </Typography>
                     </CardActions>
                 </div>

@@ -1,20 +1,22 @@
-import { Typography, Grid } from '@material-ui/core'
+import { Typography, Box } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
-import type { Auction } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     return {
+        body: {
+            width: '100%',
+            margin: theme.spacing(1.5),
+        },
         countdown: {
             color: '#eb5757',
-            padding: theme.spacing(0.5, 2),
         },
     }
 })
 
 interface Props extends React.PropsWithChildren<{}> {
-    auctions: Auction[]
+    dateEnding: string
 }
 
 export interface CountdownDate {
@@ -27,7 +29,7 @@ function FoudationCountdown(props: Props) {
     const [currentCount, setCount] = useState<CountdownDate>()
     const { classes } = useStyles()
     const { t } = useI18N()
-    const NftdateEnding = new Date(Number(props.auctions.at(-1)?.dateEnding) * 1000).getTime()
+    const NftdateEnding = new Date(Number(props.dateEnding) * 1000).getTime()
     useEffect(() => {
         const timer = setInterval(() => {
             const now = Date.now()
@@ -43,11 +45,11 @@ function FoudationCountdown(props: Props) {
         }
     }, [currentCount])
     return (
-        <Grid item xs={12}>
+        <Box className={classes.body}>
             {NftdateEnding > Date.now() && (
                 <Typography
                     style={{ width: '100%' }}
-                    variant="h4"
+                    variant="h5"
                     align="center"
                     gutterBottom
                     className={classes.countdown}>
@@ -56,7 +58,7 @@ function FoudationCountdown(props: Props) {
                     } s`}
                 </Typography>
             )}
-        </Grid>
+        </Box>
     )
 }
 export default FoudationCountdown

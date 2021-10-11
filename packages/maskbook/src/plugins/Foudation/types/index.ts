@@ -47,6 +47,7 @@ export interface Nft {
     auctions: Auction[]
     creator: Creator
     id: string
+    isFirstSale: boolean
     mostRecentAuction: MostRecentAuction
     nftContract: NftContract
     nftHistory: NftHistory[]
