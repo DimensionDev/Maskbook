@@ -1,17 +1,16 @@
 import { useAsync } from 'react-use'
 import { PluginNFTAvatarRPC } from '../messages'
-import type { AvatarMetaDB } from '../types'
 
-const cache = new Map<string, Promise<AvatarMetaDB | undefined>>()
-export function useNFTAvatar(userId: string) {
+const cache = new Map<string, Promise<string | undefined>>()
+export function useUserOwnerAddress(userId: string) {
     return useAsync(async () => {
         if (!userId) return
         let f = cache.get(userId)
         if (!f) {
-            f = PluginNFTAvatarRPC.getNFTAvatar(userId)
+            f = PluginNFTAvatarRPC.getAddress(userId)
             cache.set(userId, f)
         }
-        const avatar = await f
-        return avatar
+        const address = await f
+        return address
     }, [userId, cache]).value
 }

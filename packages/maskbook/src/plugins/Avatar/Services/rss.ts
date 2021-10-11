@@ -34,19 +34,21 @@ export async function getNFTAvatarFromRSS(address: string) {
     return data.nft
 }
 
-export async function saveNFTAvatarFromRSS(address: string, nft: AvatarMetaDB) {
+export async function saveNFTAvatarFromRSS(address: string, nft: AvatarMetaDB, signature: string) {
     const rss = await createRSS(address)
     if (!rss) return
 
     const file = await rss.files.get(rss.account.address)
     if (!file) throw new Error('The account was not found.')
 
-    rss.files.set(Object.assign(file, {
-        _nft: {
-            signature: await personalSign(nft.userId, address),
-            nft,
-        },
-    }))
+    rss.files.set(
+        Object.assign(file, {
+            _nft: {
+                signature: signature,
+                nft,
+            },
+        }),
+    )
     await rss.files.sync()
 
     return nft

@@ -11,11 +11,7 @@ import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
-import { IconButton } from '@material-ui/core'
-import UpdateIcon from '@mui/icons-material/Update'
-import { useCurrentProfileIdentifier } from '../../../../plugins/Avatar/hooks/useCurrentUserInfo'
-
-const RETRIES_NUMBER = 10
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -23,7 +19,7 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     root: {
         position: 'absolute',
         bottom: '-10px !important',
@@ -53,41 +49,19 @@ const useStyles = makeStyles()((theme) => ({
 function NFTAvatarInTwitter() {
     const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
-    const currentUserInfo = useCurrentProfileIdentifier()
     const wallet = useWallet()
     const _avatar = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
-    const [avatarId, setAvatarId] = useState('')
-    const [retries, setRetries] = useState(RETRIES_NUMBER)
-    const getProfileImageSelector = () =>
-        searchTwitterAvatarSelector().querySelector<HTMLElement>('div > :nth-child(2) > div img')
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const onUpdate = (data: NFTAvatarEvent) => {
-        const timer = setInterval(() => {
-            const imgNode = getProfileImageSelector().evaluate()
-            const avatarId = getAvatarId(imgNode?.getAttribute('src') ?? '')
-            if ((data.avatarId && avatarId && data.avatarId !== avatarId) || retries <= 0) {
-                clearInterval(timer)
-                setNFTEvent(() => ({
-                    userId: data.userId,
-                    tokenId: data.tokenId,
-                    address: data.address,
-                    avatarId: retries <= 0 ? data.avatarId : avatarId,
-                }))
-            }
-            setRetries((retries) => retries - 1)
-        }, 500)
+        setNFTEvent(data)
     }
 
     useEffect(() => {
-        setAvatarId(getAvatarId(identity.avatar ?? ''))
-    }, [identity, getAvatarId])
+        if (!wallet || !NFTAvatar) return
 
-    useEffect(() => {
-        if (!wallet) return
-
-        if (!NFTEvent || !NFTEvent?.address || !NFTEvent?.tokenId) {
+        if (!NFTEvent?.address || !NFTEvent?.tokenId) {
             setAvatar(undefined)
             MaskMessage.events.NFTAvatarTimeLineUpdated.sendToAll({
                 userId: identity.identifier.userId,
@@ -100,10 +74,9 @@ function NFTAvatarInTwitter() {
 
         PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
             ...NFTEvent,
-            updateFlag: retries <= 0,
+            avatarId: getAvatarId(identity.avatar ?? ''),
         } as AvatarMetaDB).then((avatar: AvatarMetaDB | undefined) => {
             setAvatar(avatar)
-            if (avatar) setAvatarId(avatar.avatarId)
             MaskMessage.events.NFTAvatarTimeLineUpdated.sendToAll(
                 avatar ?? {
                     userId: identity.identifier.userId,
@@ -113,7 +86,8 @@ function NFTAvatarInTwitter() {
                 },
             )
         })
-    }, [NFTEvent, PluginNFTAvatarRPC, wallet, retries])
+        setNFTEvent(undefined)
+    }, [identity.avatar])
 
     useEffect(() => {
         setAvatar(_avatar)
@@ -123,35 +97,10 @@ function NFTAvatarInTwitter() {
         return MaskMessage.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [onUpdate])
 
-    const onClick = () => {
-        if (!avatar) return
-        const imgNode = getProfileImageSelector().evaluate()
-        const avatarId = getAvatarId(imgNode?.getAttribute('src') ?? '')
-
-        if (avatarId !== avatar.avatarId) {
-            setNFTEvent({
-                ...avatar,
-                avatarId,
-            })
-
-            setRetries(RETRIES_NUMBER)
-        }
-    }
-
     if (!avatar) return null
-
-    if (identity.identifier.userId === currentUserInfo?.userId && avatar.updateFlag) {
-        return (
-            <div className={classes.update}>
-                <IconButton onClick={onClick}>
-                    <UpdateIcon />
-                </IconButton>
-            </div>
-        )
-    }
     return (
         <>
-            {avatarId === avatar.avatarId && avatar.avatarId ? (
+            {getAvatarId(identity.avatar ?? '') === avatar.avatarId && avatar.avatarId ? (
                 <NFTBadge
                     avatar={avatar}
                     size={14}

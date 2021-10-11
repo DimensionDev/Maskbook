@@ -14,8 +14,11 @@ export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        minHeight: 34,
-        fontSize: 'inherit',
+        minHeight: 32,
+        fontSize: 14,
+        marginBottom: 11,
+        marginTop: 1,
+        marginRight: theme.spacing(0.5),
     },
 }))
 

@@ -45,7 +45,7 @@ export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
 export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$="/photo"] img')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('head > link[href^="https://twitter.com"] + meta[property="og:image"]')
+    querySelector<E>('head > meta[property="og:image"]:last-child')
 
 export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] a[href="/settings/profile"]')
