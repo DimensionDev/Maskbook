@@ -1,7 +1,7 @@
 import { UnionIcon } from '@masknet/icons'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { resolveOpenSeaLink } from '@masknet/web3-shared'
+import { isSameAddress, resolveOpenSeaLink } from '@masknet/web3-shared'
 import { CircularProgress, Link, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
@@ -91,7 +91,7 @@ export function NFTBadge(props: NFTBadgeProps) {
 
     const { amount, symbol, name, owner } = value
 
-    // if (!isSameAddress(owner, address)) return null
+    if (!isSameAddress(owner, address)) return null
     return (
         <div
             className={classes.root}
