@@ -1,7 +1,7 @@
 import { useLayoutEffect, RefObject, useCallback } from 'react'
 import { debounce } from 'lodash-es'
 
-export function useScrollBottomEvent(ref: RefObject<HTMLDivElement>, cb: () => void) {
+export function useScrollBottomEvent(ref: RefObject<HTMLDivElement | HTMLUListElement>, cb: () => void) {
     const onScroll = useCallback(
         debounce(function (_ev: Event) {
             // ev.currentTarget is always null when applies debounce().

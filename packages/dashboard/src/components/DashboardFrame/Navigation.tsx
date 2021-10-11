@@ -11,6 +11,7 @@ import {
     listItemIconClasses,
     ListItemProps,
     listItemTextClasses,
+    useTheme,
 } from '@material-ui/core'
 import { ExpandLess, ExpandMore } from '@material-ui/icons'
 import { useContext } from 'react'
@@ -31,7 +32,6 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
-import { useAppearance } from '../../pages/Personas/api'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -117,7 +117,7 @@ export function Navigation({}: NavigationProps) {
 
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
 
     return (
         <List>

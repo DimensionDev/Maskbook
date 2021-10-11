@@ -10,6 +10,7 @@ export const MAX_RECENT_TRANSACTIONS_SIZE = 20
 export interface RecentTransaction {
     at: Date
     hash: string
+    hashReplacement?: string
     payload: JsonRpcPayload
 }
 
@@ -60,7 +61,7 @@ export async function replaceRecentTransaction(address: string, oldHash: string,
     const chunk = await PluginDB.get('recent-transactions', recordId)
     const transaction = chunk?.transactions.find((x) => x.hash === oldHash)
     if (!transaction) throw new Error('Failed to find the old transaction.')
-    transaction.hash = newHash
+    transaction.hashReplacement = newHash
     await PluginDB.add({
         type: 'recent-transactions',
         id: getRecordId(address),
@@ -70,6 +71,7 @@ export async function replaceRecentTransaction(address: string, oldHash: string,
         createdAt: chunk?.createdAt ?? now,
         updatedAt: now,
     })
+    WalletMessages.events.recentTransactionsUpdated.sendToAll()
 }
 
 export async function removeRecentTransaction(address: string, hash: string) {

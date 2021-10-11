@@ -10,9 +10,8 @@ import {
     useWeb3StateContext,
 } from '@masknet/web3-shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { FormattedAddress, ProviderIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { FormattedAddress, LoadingAnimation, ProviderIcon, useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
-import { LoadingIcon } from '@masknet/icons'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
 import { useNetworkSelector } from './useNetworkSelector'
@@ -117,7 +116,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     justifyContent="center"
                     sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
                     className={classes.bar}>
-                    <LoadingIcon sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
+                    <LoadingAnimation sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                     <Typography component="span" fontSize={12} display="inline-block">
                         {t.wallet_transactions_pending()}
                     </Typography>

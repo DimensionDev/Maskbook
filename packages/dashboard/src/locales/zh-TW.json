@@ -1,6 +1,7 @@
 {
     "wallets": "錢包",
     "footer_bounty_list": "賞金列表",
+    "sign_in_account_private_key_error": "私钥不正确",
     "wallets_transfer": "轉賬",
     "wallets_red_packet": "紅包",
     "wallets_sell": "賣出",

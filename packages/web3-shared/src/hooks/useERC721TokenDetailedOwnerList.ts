@@ -6,7 +6,7 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { safeNonPayableTransactionCall } from '../utils'
 import { ERC721ContractDetailed, ERC721TokenDetailed, EthereumTokenType, ChainId } from '../types'
 import { getERC721TokenDetailedFromChain } from './useERC721TokenDetailed'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { min, uniqBy } from 'lodash-es'
 import urlcat from 'urlcat'
 import { useChainId } from '../index'
@@ -22,14 +22,23 @@ export function useERC721TokenDetailedOwnerList(
     const chainId = useChainId()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     const allListRef = useRef<ERC721TokenDetailed[]>([])
+    const [refreshing, setRefreshing] = useState(false)
+
+    useEffect(() => {
+        setRefreshing(true)
+        clearTokenDetailedOwnerList()
+    }, [owner, contractDetailed?.address])
+
     const asyncRetry = useAsyncRetry(async () => {
         if (
             !erc721TokenContract ||
             !contractDetailed?.address ||
             !EthereumAddress.isValid(contractDetailed?.address) ||
             !owner
-        )
+        ) {
+            setRefreshing(false)
             return
+        }
 
         let lists: ERC721TokenDetailed[]
 
@@ -52,11 +61,12 @@ export function useERC721TokenDetailedOwnerList(
             (await getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner, offset))
 
         allListRef.current = allListRef.current.concat(lists)
+        setRefreshing(false)
 
         return { tokenDetailedOwnerList: allListRef.current, loadMore: lists.length > 0 }
     }, [GET_ASSETS_URL, contractDetailed, owner, offset, chainId])
     const clearTokenDetailedOwnerList = () => (allListRef.current = [])
-    return { asyncRetry, clearTokenDetailedOwnerList }
+    return { asyncRetry, clearTokenDetailedOwnerList, refreshing }
 }
 
 async function getERC721TokenDetailedOwnerListFromChain(
@@ -76,7 +86,7 @@ async function getERC721TokenDetailedOwnerListFromChain(
 
     const allRequest = Array.from({ length: min([Number(balance), queryLimit])! }).map(async (_v, i) => {
         const tokenId = await safeNonPayableTransactionCall(
-            erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i + offset * queryLimit),
+            erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i + offset),
         )
 
         if (!tokenId) {
