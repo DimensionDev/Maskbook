@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         width: 14,
-        heigth: 14,
+        height: 14,
         marginLeft: 2,
     },
 }))
