@@ -18,13 +18,13 @@ if (process.env.architecture === 'app') {
         key: 'native',
         parameterStructures: 'by-name',
     }
-    if (process.env.target === 'safari') {
+    if (process.env.engine === 'safari') {
         const api = (sharedNativeAPI = AsyncCall<iOSNativeAPIs>(MaskNetworkAPI, {
             ...options,
             channel: new iOSWebkitChannel(),
         }))
         nativeAPI = { type: 'iOS', api }
-    } else if (process.env.target === 'firefox') {
+    } else if (process.env.engine === 'firefox') {
         const api = (sharedNativeAPI = AsyncCall<AndroidNativeAPIs>(MaskNetworkAPI, {
             ...options,
             channel: new AndroidGeckoViewChannel(),

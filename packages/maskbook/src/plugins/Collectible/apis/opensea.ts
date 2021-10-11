@@ -60,9 +60,7 @@ export async function getAsset(tokenAddress: string, tokenId: string, chainId?: 
     ).json()
 
     const endTime = head<{ closing_date: Date }>(
-        fetchResponse.orders.filter(
-            (item: { side: number; closing_extendable: boolean }) => item.side === 1 && item.closing_extendable,
-        ),
+        fetchResponse.orders.filter((item: { side: number; closing_extendable: boolean }) => item.side === 1),
     )?.closing_date
 
     return {

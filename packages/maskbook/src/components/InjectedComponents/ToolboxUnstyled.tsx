@@ -121,15 +121,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         typeof walletTitle === 'string' ? <Typography className={classes.font}>{walletTitle}</Typography> : walletTitle
     return (
         <>
-            <GuideStep
-                step={1}
-                total={4}
-                arrow={false}
-                tip={t('user_guide_tip_1', { sns: activatedSocialNetworkUI.name })}>
-                <span />
-            </GuideStep>
-
-            <GuideStep step={2} total={4} tip={t('user_guide_tip_2')}>
+            <GuideStep step={1} total={3} tip={t('user_guide_tip_1', { sns: activatedSocialNetworkUI.name })}>
                 <Container>
                     <ListItemButton onClick={openMenu}>
                         <ListItemIcon>
@@ -142,7 +134,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                 </Container>
             </GuideStep>
             {menu}
-            <GuideStep step={3} total={4} tip={t('user_guide_tip_3')}>
+            <GuideStep step={2} total={3} tip={t('user_guide_tip_2')}>
                 <Container>
                     <ListItemButton onClick={openWallet}>
                         <ListItemIcon>

@@ -1,12 +1,11 @@
 import { useValueRef } from '@masknet/shared'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Box, Portal, Typography, styled, InputAdornment, TextField, Theme, ThemeProvider } from '@mui/material'
+import { Box, Portal, Typography, styled } from '@mui/material'
 import classNames from 'classnames'
 import { PropsWithChildren, useRef, cloneElement, useEffect, ReactElement, useState } from 'react'
-import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
+import { userGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { extendsTheme, useI18N } from '../../utils'
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
+import { useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -23,6 +22,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100vw',
         height: '100vh',
         background: 'transparent',
+        zIndex: 1000,
     },
     card: {
         position: 'absolute',
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '16px',
         background: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 0.8)' : '#fff',
         color: theme.palette.mode === 'light' ? '#fff' : '#111432',
-        '&.arrow:after': {
+        '&.arrow-top:after': {
             content: '""',
             display: 'inline-block',
             width: 0,
@@ -45,6 +45,19 @@ const useStyles = makeStyles()((theme) => ({
             top: '-13px',
             left: '24px',
         },
+        '&.arrow-bottom:after': {
+            content: '""',
+            display: 'inline-block',
+            width: 0,
+            height: 0,
+            border: 'solid 8px transparent',
+            borderTopColor: theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 0.8)' : '#fff',
+            borderTopWidth: '13px',
+            borderBottomWidth: 0,
+            position: 'absolute',
+            bottom: '-13px',
+            left: '24px',
+        },
     },
     buttonContainer: {
         display: 'flex',
@@ -54,6 +67,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const ActionButton = styled('div')(({ theme }) => ({
+    boxSizing: 'border-box',
     width: '80px',
     height: '26px',
     lineHeight: '26px',
@@ -62,6 +76,7 @@ const ActionButton = styled('div')(({ theme }) => ({
     border: 'solid 1px #000',
     borderColor: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 0.8)',
     cursor: 'pointer',
+    fontFamily: 'PingFang SC',
 }))
 
 const NextButton = styled(ActionButton)({
@@ -69,79 +84,6 @@ const NextButton = styled(ActionButton)({
     color: '#fff',
     background: '#1C68F3',
 })
-
-const usernameTheme = extendsTheme((theme: Theme) => {
-    const color = theme.palette.mode === 'light' ? '#fff' : '#0f1419'
-
-    return {
-        components: {
-            MuiInputLabel: {
-                styleOverrides: {
-                    root: {
-                        color,
-                        '&.Mui-disabled': { color },
-                    },
-                },
-            },
-            MuiInputAdornment: {
-                styleOverrides: {
-                    root: {
-                        color,
-                    },
-                },
-            },
-            MuiOutlinedInput: {
-                styleOverrides: {
-                    input: {
-                        color,
-                        ':disabled': { color, '-webkit-text-fill-color': color },
-                    },
-                },
-            },
-            MuiTextField: {
-                styleOverrides: {
-                    root: {
-                        color,
-                        fieldset: {
-                            borderColor: `${color} !important`,
-                        },
-                    },
-                },
-            },
-        },
-    }
-})
-
-const FindUsername = () => {
-    const { t } = useI18N()
-    const ui = activatedSocialNetworkUI
-    const username = userGuideStatus[ui.networkIdentifier].value
-
-    return (
-        <>
-            <Typography variant="h3" sx={{ fontSize: '18px' }}>
-                {t('setup_guide_find_username_title')}
-            </Typography>
-            <ThemeProvider theme={usernameTheme}>
-                <TextField
-                    disabled
-                    fullWidth
-                    label={t('username')}
-                    value={username}
-                    sx={{ margin: '24px 0 16px' }}
-                    InputProps={{
-                        size: 'small',
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <AlternateEmailIcon sx={{ fontSize: '16px' }} />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-            </ThemeProvider>
-        </>
-    )
-}
 
 export interface GuideStepProps extends PropsWithChildren<{}> {
     total: number
@@ -157,35 +99,29 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const childrenRef = useRef<HTMLElement>()
     const [clientRect, setClientRect] = useState<any>({})
     const [open, setOpen] = useState(false)
+    const [bottomAvailable, setBottomAvailable] = useState(true)
     const ui = activatedSocialNetworkUI
-    const lastStepRef = currentSetupGuideStatus[ui.networkIdentifier]
+    const lastStepRef = userGuideStatus[ui.networkIdentifier]
     const lastStep = useValueRef(lastStepRef)
 
     useEffect(() => {
         const open = +lastStep === step
         setOpen(open)
-
-        if (open) {
-            document.body.style.overflow = 'hidden'
-        }
     }, [lastStep])
 
-    const resetOverflow = () => {
-        document.body.style.overflow = ''
-    }
+    useEffect(() => {
+        document.body.style.overflow = open ? 'hidden' : ''
+    }, [open])
 
     const onSkip = () => {
         setOpen(false)
-        resetOverflow()
-        currentSetupGuideStatus[ui.networkIdentifier].value = ''
         userGuideStatus[ui.networkIdentifier].value = 'completed'
     }
 
     const onNext = () => {
         setOpen(false)
-        resetOverflow()
         if (step !== total) {
-            currentSetupGuideStatus[ui.networkIdentifier].value = String(step + 1)
+            userGuideStatus[ui.networkIdentifier].value = String(step + 1)
         }
     }
 
@@ -198,8 +134,14 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
         const onResize = () => {
             const cr = childrenRef.current?.getBoundingClientRect()
 
-            if (cr && !cr.width) {
-                setClientRect({ ...cr, top: 30, left: 'calc(100vw - 300px)' })
+            if (cr) {
+                const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
+                setBottomAvailable(bottomAvailable)
+                if (!cr.width) {
+                    setClientRect({ ...cr, top: 30, left: 'calc(100vw - 300px)' })
+                } else {
+                    setClientRect(cr)
+                }
             } else {
                 setClientRect(cr)
             }
@@ -235,22 +177,24 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                         height: clientRect.height,
                                     }}>
                                     <div
-                                        className={classNames(classes.card, arrow ? 'arrow' : '')}
+                                        className={classNames(
+                                            classes.card,
+                                            arrow ? (bottomAvailable ? 'arrow-top' : 'arrow-bottom') : '',
+                                        )}
                                         style={{
-                                            top: clientRect.height + 16,
+                                            [bottomAvailable ? 'top' : 'bottom']: clientRect.height + 16,
                                         }}>
                                         <div style={{ paddingBottom: '16px' }}>
                                             <Typography sx={{ fontSize: 20 }}>
                                                 <span style={{ color: '#1C68F3' }}>{step}</span>/{total}
                                             </Typography>
                                         </div>
-                                        {step === 1 ? <FindUsername /> : null}
                                         <div>
                                             <Typography>{tip}</Typography>
                                         </div>
                                         <div className={classes.buttonContainer}>
                                             {step === total ? (
-                                                <NextButton onClick={onTry}>{t('trying')}</NextButton>
+                                                <NextButton onClick={onTry}>{t('try')}</NextButton>
                                             ) : (
                                                 <>
                                                     <ActionButton onClick={onSkip}>{t('skip')}</ActionButton>

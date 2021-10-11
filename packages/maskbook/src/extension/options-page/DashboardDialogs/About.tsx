@@ -122,9 +122,9 @@ export function DashboardAboutDialog(props: WrappedDialogProps) {
                     />
                     {makeTitle()}
                     <Typography className={classes.version} variant="body2" color="inherit">
-                        {t(process.env.build === 'stable' ? 'version_of_stable' : 'version_of_unstable', {
+                        {t(process.env.channel === 'stable' ? 'version_of_stable' : 'version_of_unstable', {
                             version,
-                            build: process.env.build,
+                            build: process.env.channel,
                             hash: process.env.COMMIT_HASH,
                         })}
                     </Typography>
