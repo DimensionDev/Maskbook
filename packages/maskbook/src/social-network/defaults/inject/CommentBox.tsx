@@ -44,14 +44,13 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
             [payload, postContent, info, dom, iv],
         )
 
-        console.log(payload, postContent)
         if (!postContent.items.length) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })
     return (signal: AbortSignal, current: PostInfo) => {
-        if (!current.commentBoxSelector) return noop
+        if (!current.comment?.commentBoxSelector) return noop
         const commentBoxWatcher = new MutationObserverWatcher(
-            current.commentBoxSelector.clone(),
+            current.comment.commentBoxSelector.clone(),
             current.rootNode || void 0,
         ).useForeach((node, key, meta) => {
             try {

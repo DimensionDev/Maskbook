@@ -27,9 +27,9 @@ export function injectPostCommentsDefault<T extends string>(
         return <PostComment {...props} {...additional} />
     })
     return function injectPostComments(signal: AbortSignal, current: PostInfo) {
-        const selector = current.commentsSelector
+        const selector = current.comment?.commentsSelector
         if (!selector) return noop
-        const commentWatcher = new MutationObserverWatcher(selector, current.rootNode || void 0).useForeach(
+        const commentWatcher = new MutationObserverWatcher(selector, document.body).useForeach(
             (commentNode, key, meta) => {
                 const commentRef = new ValueRef(collectNodeText(commentNode))
                 const needZipF =

@@ -9,7 +9,7 @@ export async function pasteToCommentBoxFacebook(encryptedComment: string, curren
         MaskMessages.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
     }
     if (isMobileFacebook) {
-        const root = dom || current.commentBoxSelector!.evaluate()[0]
+        const root = dom || current.comment?.commentBoxSelector?.evaluate()[0]
         if (!root) return fail()
         const textarea = root.querySelector('textarea')
         if (!textarea) return fail()
