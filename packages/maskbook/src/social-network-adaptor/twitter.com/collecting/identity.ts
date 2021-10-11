@@ -1,6 +1,11 @@
 import { isNil } from 'lodash-es'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { selfInfoSelectors, searchAvatarSelector, searchAvatarMetaSelector } from '../utils/selector'
+import {
+    selfInfoSelectors,
+    searchAvatarSelector,
+    searchLastLinkSelector,
+    searchLastMetaSelector,
+} from '../utils/selector'
 import { ProfileIdentifier } from '../../../database/type'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { twitterBase } from '../base'
@@ -39,13 +44,14 @@ function resolveCurrentVisitingIdentityInner(
     cancel: AbortSignal,
 ) {
     const avatarSelector = searchAvatarSelector()
-    const avatarMetaSelector = searchAvatarMetaSelector()
+    const avatarLastMetaSelector = searchLastMetaSelector()
+    const avatarLastLinkSelector = searchLastLinkSelector()
     const assign = async () => {
-        await delay(500)
+        await delay(3000)
         const bio = getBioDescription()
-        const nickname = getNickname()
-        const handle = getTwitterId()
         const avatar = getAvatar()
+        const handle = getTwitterId()
+        const nickname = getNickname()
 
         ref.value = {
             identifier: new ProfileIdentifier(twitterBase.networkIdentifier, handle),
@@ -71,7 +77,8 @@ function resolveCurrentVisitingIdentityInner(
     }
 
     createWatcher(avatarSelector)
-    createWatcher(avatarMetaSelector)
+    createWatcher(avatarLastMetaSelector)
+    createWatcher(avatarLastLinkSelector)
 }
 
 export const IdentityProviderTwitter: Next.CollectingCapabilities.IdentityResolveProvider = {
