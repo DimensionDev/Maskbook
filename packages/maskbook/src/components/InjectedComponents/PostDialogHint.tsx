@@ -71,6 +71,6 @@ export function PostDialogHint(props: PostDialogHintProps) {
     const identities = useMyIdentities()
     const connecting = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
 
-    if ((connecting && !/[1-4]/.test(connecting)) || identities.length === 0) return null
+    if (connecting || identities.length === 0) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }
