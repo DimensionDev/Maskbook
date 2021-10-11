@@ -1,6 +1,6 @@
 import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
 import { i18n } from '../utils/i18n-next'
-import { sideEffect } from '../utils/side-effects'
+import { startEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
@@ -91,7 +91,7 @@ export const currentPopupWindowId = createGlobalSettings<number>('currentPopupWi
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-sideEffect.then(() => {
+startEffect(import.meta.webpackHot, () => {
     // reset it to false after Mask startup
     currentImportingBackup.value = false
 

@@ -119,7 +119,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             </Button>
                         ) : null}
                         {url ? (
-                            process.env.architecture === 'app' && process.env.target === 'firefox' ? (
+                            process.env.architecture === 'app' && process.env.engine === 'firefox' ? (
                                 <Button
                                     component={Link}
                                     variant="text"

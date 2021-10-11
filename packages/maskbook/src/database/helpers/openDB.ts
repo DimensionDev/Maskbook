@@ -14,7 +14,7 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         db = undefined
     }
     return async () => {
-        if (process.env.target === 'safari') await import('safari-14-idb-fix').then(({ default: ready }) => ready())
+        if (process.env.engine === 'safari') await import('safari-14-idb-fix').then(({ default: ready }) => ready())
         assertEnvironment(Environment.ManifestBackground)
         if (db) {
             try {
