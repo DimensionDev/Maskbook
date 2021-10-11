@@ -44,7 +44,8 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
             [payload, postContent, info, dom, iv],
         )
 
-        if (!(payload && postContent)) return null
+        console.log(payload, postContent)
+        if (!postContent.items.length) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })
     return (signal: AbortSignal, current: PostInfo) => {
