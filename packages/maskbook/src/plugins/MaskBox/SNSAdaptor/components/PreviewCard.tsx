@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useContainer } from 'unstated-next'
 import { Box, Button, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { formatBalance, TransactionStateType } from '@masknet/web3-shared'
+import { formatBalance, TransactionStateType, useTransactionCallback } from '@masknet/web3-shared'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -12,9 +12,9 @@ import { BoxState, CardTab } from '../../type'
 import { ArticlesTab } from './ArticlesTab'
 import { DetailsTab } from './DetailsTab'
 import { DrawResultDialog } from './DrawResultDialog'
-import { useOpenBoxCallback } from '../../hooks/useOpenBoxCallback'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../../Wallet/messages'
+import { useOpenBoxTransaction } from '../../hooks/useOpenBoxTransaction'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -61,14 +61,32 @@ export function PreviewCard(props: PreviewCardProps) {
         setPaymentTokenAddress,
         paymentTokenPrice,
         paymentTokenDetailed,
+        retryMaskBoxInfo,
+        retryMaskBoxCreationSuccessEvent,
+        retryMaskBoxTokensForSale,
+        retryMaskBoxPurchasedTokens,
     } = useContainer(Context)
     const { value: boxInfo, loading: loadingBoxInfo, error: errorBoxInfo, retry: retryBoxInfo } = boxInfo_
 
     //#region open box
-    const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useOpenBoxCallback(boxId, paymentCount)
+    const openBoxTransaction = useOpenBoxTransaction(boxId, paymentCount)
+    const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
+        openBoxTransaction?.config,
+        openBoxTransaction?.method,
+    )
     const onDraw = useCallback(async () => {
         await openBoxCallback()
-    }, [openBoxCallback])
+        retryMaskBoxInfo()
+        retryMaskBoxCreationSuccessEvent()
+        retryMaskBoxTokensForSale()
+        retryMaskBoxPurchasedTokens()
+    }, [
+        openBoxCallback,
+        retryMaskBoxInfo,
+        retryMaskBoxCreationSuccessEvent,
+        retryMaskBoxTokensForSale,
+        retryMaskBoxPurchasedTokens,
+    ])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,

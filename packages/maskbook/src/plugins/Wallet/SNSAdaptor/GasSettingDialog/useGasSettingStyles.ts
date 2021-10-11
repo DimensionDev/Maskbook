@@ -46,9 +46,9 @@ export const useGasSettingStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     selected: {
-        backgroundColor: '#1C68F3',
+        backgroundColor: theme.palette.primary.main,
         '& > *': {
-            color: '#ffffff!important',
+            color: theme.palette.primary.contrastText,
         },
     },
     button: {

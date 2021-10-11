@@ -18,7 +18,7 @@ import {
 } from '@masknet/web3-shared'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
-import { useMaskBoxCreationEvent } from './useMaskBoxCreationEvent'
+import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent'
 import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
 import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { useHeartBit } from './useHeartBit'
@@ -37,12 +37,9 @@ function useContext(initialState?: { boxId: string }) {
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     //#region the box info
-    const { value: maskBoxInfo = null } = useMaskBoxInfo(boxId)
-    const { value: maskBoxCreationEvent = null } = useMaskBoxCreationEvent(
-        maskBoxInfo?.creator ?? '',
-        maskBoxInfo?.nft_address ?? '',
-        boxId,
-    )
+    const { value: maskBoxInfo = null, retry: retryMaskBoxInfo } = useMaskBoxInfo(boxId)
+    const { value: maskBoxCreationSuccessEvent = null, retry: retryMaskBoxCreationSuccessEvent } =
+        useMaskBoxCreationSuccessEvent(maskBoxInfo?.creator ?? '', maskBoxInfo?.nft_address ?? '', boxId)
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
         maskBoxInfo?.payment?.map(([address]) => {
             return {
@@ -52,22 +49,25 @@ function useContext(initialState?: { boxId: string }) {
         }) ?? [],
         chainId,
     )
-    const { value: allTokens = [] } = useMaskBoxTokensForSale(boxId)
-    const { value: purchasedTokens = [] } = useMaskBoxPurchasedTokens(boxId, account)
+    const { value: allTokens = [], retry: retryMaskBoxTokensForSale } = useMaskBoxTokensForSale(boxId)
+    const { value: purchasedTokens = [], retry: retryMaskBoxPurchasedTokens } = useMaskBoxPurchasedTokens(
+        boxId,
+        account,
+    )
 
     const boxInfo = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxCreationEvent) return null
+        if (!maskBoxInfo || !maskBoxCreationSuccessEvent) return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const info: BoxInfo = {
             boxId,
             creator: maskBoxInfo.creator,
             name: maskBoxInfo.name,
-            sellAll: maskBoxCreationEvent.returnValues.sell_all,
+            sellAll: maskBoxCreationSuccessEvent.returnValues.sell_all,
             personalLimit: personalLimit,
             personalRemaining: Math.max(0, personalLimit - purchasedTokens.length),
             remaining: Number.parseInt(maskBoxInfo.remaining, 10),
-            startAt: new Date(Number.parseInt(maskBoxCreationEvent.returnValues.start_time, 10) * 1000),
-            endAt: new Date(Number.parseInt(maskBoxCreationEvent.returnValues.end_time, 10) * 1000),
+            startAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.start_time, 10) * 1000),
+            endAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.end_time, 10) * 1000),
             total: maskBoxInfo.total,
             tokenIds: allTokens,
             tokenIdsPurchased: purchasedTokens,
@@ -89,7 +89,7 @@ function useContext(initialState?: { boxId: string }) {
         purchasedTokens.join(),
         paymentTokens?.map((x) => x.address).join(),
         maskBoxInfo,
-        maskBoxCreationEvent,
+        maskBoxCreationSuccessEvent,
     ])
 
     const boxState = useMemo(() => {
@@ -162,7 +162,7 @@ function useContext(initialState?: { boxId: string }) {
         allTokens,
         purchasedTokens,
         maskBoxInfo,
-        maskBoxCreationEvent,
+        maskBoxCreationSuccessEvent,
         boxInfo,
         boxState,
         paymentNativeTokenBalance,
@@ -203,6 +203,12 @@ function useContext(initialState?: { boxId: string }) {
             ? paymentNativeTokenBalance
             : paymentERC20TokenBalance,
         paymentTokenDetailed: paymentTokenInfo?.token ?? null,
+
+        // callbacks
+        retryMaskBoxInfo,
+        retryMaskBoxCreationSuccessEvent,
+        retryMaskBoxTokensForSale,
+        retryMaskBoxPurchasedTokens,
     }
 }
 

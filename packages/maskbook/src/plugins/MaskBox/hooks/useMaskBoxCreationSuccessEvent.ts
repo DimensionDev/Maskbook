@@ -4,7 +4,7 @@ import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox'
 import { useMaskBoxConstants } from '@masknet/web3-shared'
 import { useMaskBoxContract } from './useMaskBoxContract'
 
-export function useMaskBoxCreationEvent(creatorAddress: string, tokenAddress: string, boxId: string) {
+export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddress: string, boxId: string) {
     const maskBoxContract = useMaskBoxContract()
     const { MASK_BOX_CONTRACT_FROM_BLOCK } = useMaskBoxConstants()
 

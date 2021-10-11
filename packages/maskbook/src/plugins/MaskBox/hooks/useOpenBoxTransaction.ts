@@ -11,7 +11,7 @@ export function useOpenBoxTransaction(boxId: string, amount: number, overrides?:
     const maskBoxContract = useMaskBoxContract()
     const { paymentTokenIndex, paymentTokenPrice, paymentTokenDetailed } = useContainer(Context)
     return useMemo(() => {
-        if (!maskBoxContract) return
+        if (!boxId || amount <= 0 || !maskBoxContract) return
         return {
             config: {
                 ...overrides,
@@ -24,9 +24,4 @@ export function useOpenBoxTransaction(boxId: string, amount: number, overrides?:
             method: maskBoxContract.methods.openBox(boxId, amount, paymentTokenIndex, '0x0'),
         }
     }, [account, amount, boxId, maskBoxContract, paymentTokenIndex, paymentTokenPrice, paymentTokenDetailed])
-}
-
-export function useOpenBoxCallback(boxId: string, amount: number, overrides?: NonPayableTx) {
-    const transaction = useOpenBoxTransaction(boxId, amount, overrides)
-    return useTransactionCallback(transaction?.config, transaction?.method)
 }
