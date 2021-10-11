@@ -1,6 +1,6 @@
 {
     "MASK_BOX_CONTRACT_ADDRESS": {
-        "Mainnet": "",
+        "Mainnet": "0x0dFB34D213f613Dda67a2924F60b5301d42ABFb7",
         "Ropsten": "",
         "Rinkeby": "0xbFcf8210F5B6764D86a9C5252218ad627A6a949d",
         "Kovan": "",
@@ -14,7 +14,7 @@
         "xDai": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
-        "Mainnet": 0,
+        "Mainnet": 13396393,
         "Ropsten": 0,
         "Rinkeby": 9369286,
         "Kovan": 0,

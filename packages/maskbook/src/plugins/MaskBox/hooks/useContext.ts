@@ -57,13 +57,15 @@ function useContext(initialState?: { boxId: string }) {
 
     const boxInfo = useAsyncRetry<BoxInfo | null>(async () => {
         if (!maskBoxInfo || !maskBoxCreationEvent) return null
+        const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const info: BoxInfo = {
             boxId,
             creator: maskBoxInfo.creator,
             name: maskBoxInfo.name,
             sellAll: maskBoxCreationEvent.returnValues.sell_all,
-            personalLimit: Number.parseInt(maskBoxInfo.personal_limit, 10),
-            remaining: maskBoxInfo.remaining,
+            personalLimit: personalLimit,
+            personalRemaining: Math.max(0, personalLimit - purchasedTokens.length),
+            remaining: Number.parseInt(maskBoxInfo.remaining, 10),
             startAt: new Date(Number.parseInt(maskBoxCreationEvent.returnValues.start_time, 10) * 1000),
             endAt: new Date(Number.parseInt(maskBoxCreationEvent.returnValues.end_time, 10) * 1000),
             total: maskBoxInfo.total,
@@ -137,9 +139,9 @@ function useContext(initialState?: { boxId: string }) {
     const [paymentCount, setPaymentCount] = useState(1)
     const setPaymentCount_ = useCallback(
         (count: number) => {
-            setPaymentCount(clamp(count || 1, 1, boxInfo.value?.personalLimit ?? 1))
+            setPaymentCount(clamp(count || 1, 1, boxInfo.value?.personalRemaining ?? 1))
         },
-        [boxInfo.value?.personalLimit],
+        [boxInfo.value?.personalRemaining],
     )
     //#endregion
 

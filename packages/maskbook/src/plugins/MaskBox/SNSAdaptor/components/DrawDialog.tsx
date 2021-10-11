@@ -178,8 +178,8 @@ export function DrawDialog(props: DrawDialogProps) {
                                             title: 'Token Amount',
                                             inputMode: 'decimal',
                                             min: 0,
+                                            max: 999,
                                             minLength: 1,
-                                            maxLength: boxInfo.personalLimit,
                                             pattern: '^[0-9]*[.,]?[0-9]*$',
                                             spellCheck: false,
                                         },
@@ -189,7 +189,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     className={classes.field}
                                     variant="outlined"
                                     color="inherit"
-                                    disabled={paymentCount >= boxInfo.personalLimit}
+                                    disabled={paymentCount >= boxInfo.remaining || boxInfo.remaining === 0}
                                     onClick={() => onCount(1)}>
                                     <Add color="inherit" />
                                 </Button>

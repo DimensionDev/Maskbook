@@ -35,8 +35,9 @@ export interface BoxInfo {
     name: string
     sellAll: boolean
     personalLimit: number
+    personalRemaining: number
     payments: PaymentInfo[]
-    remaining: string
+    remaining: number
     total: string
     startAt: Date
     endAt: Date
