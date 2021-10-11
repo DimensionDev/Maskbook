@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     mask: {
         position: 'fixed',
+        zIndex: 9999,
         top: 0,
         width: '100vw',
         height: '100vh',
