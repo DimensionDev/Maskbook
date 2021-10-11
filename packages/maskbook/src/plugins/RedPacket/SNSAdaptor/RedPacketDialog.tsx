@@ -39,9 +39,6 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         position: 'absolute',
     },
-    focusTab: {
-        backgroundColor: theme.palette.mode === 'light' ? 'rgba(247, 249, 250, 1)' : 'rgba(255, 255, 255, 0.08)',
-    },
     dialogContent: {
         padding: 0,
     },
@@ -88,8 +85,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
                 if (payload.contract_version === 1) {
-                    alert('Unable to share a red packet without a password. But you can still withdraw the red packet.')
-                    payload.password = prompt('Please enter the password of the red packet:', '') ?? ''
+                    alert('Unable to share a lucky drop without a password. But you can still withdraw the lucky drop.')
+                    payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
                 } else if (payload.contract_version > 1 && payload.contract_version < 4) {
                     // just sign out the password if it is lost.
                     payload.password = await Services.Ethereum.personalSign(
@@ -255,7 +252,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         ],
         state,
         classes: {
-            focusTab: classes.focusTab,
+            // focusTab: classes.focusTab,
             tabPaper: classes.tabPaper,
         },
     }

@@ -78,7 +78,7 @@ async function fetchCommonERC20TokensFromTokenList(
         .filter(
             (x) =>
                 x.chainId === chainId &&
-                (process.env.NODE_ENV === 'production' && process.env.build === 'stable'
+                (process.env.NODE_ENV === 'production' && process.env.channel === 'stable'
                     ? getChainDetailed(chainId)?.network === 'mainnet'
                     : true),
         )

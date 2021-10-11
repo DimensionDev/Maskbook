@@ -72,7 +72,7 @@ export function DashboardBackupDialog(props: WrappedDialogProps) {
                             records={records}
                         />
                         {/* Hack: this is an un-dry and costly temporary solution, will be replaced later */}
-                        {process.env.architecture === 'app' && process.env.target === 'firefox' ? (
+                        {process.env.architecture === 'app' && process.env.engine === 'firefox' ? (
                             backupInfo.loading || loading ? null : (
                                 <Button
                                     component={Link}

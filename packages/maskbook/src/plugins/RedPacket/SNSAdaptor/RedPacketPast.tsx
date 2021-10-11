@@ -21,19 +21,18 @@ const useStyles = makeStyles()((theme) => ({
         height: 36,
         minHeight: 36,
         fontWeight: 300,
-        color: theme.palette.mode === 'light' ? '#15181B' : '#D9D9D9',
     },
     tabs: {
-        backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
         width: 544,
         height: 36,
         minHeight: 36,
         margin: '0 auto',
-        '& .Mui-selected': {
-            backgroundColor: '#1C68F3',
-            color: '#fff !important',
-        },
         borderRadius: 4,
+        backgroundColor: theme.palette.background.default,
+        '& .Mui-selected': {
+            color: theme.palette.primary.contrastText,
+            backgroundColor: theme.palette.primary.main,
+        },
     },
     indicator: {
         display: 'none',

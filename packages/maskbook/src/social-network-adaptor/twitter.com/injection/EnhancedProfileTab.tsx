@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { EnhancedProfileTab } from '../../../components/InjectedComponents/EnhancedProfileTab'
-import { createReactRootShadowed, startWatch } from '../../../utils'
+import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
 import {
     searchForegroundColorSelector,
     searchNewTweetButtonSelector,
@@ -71,7 +71,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 
 const EMPTY_STYLE = {} as CSSStyleDeclaration
 
-function clear() {
+async function clear() {
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     if (!eleTab) return
     const style = window.getComputedStyle(eleTab)
@@ -87,6 +87,7 @@ function clear() {
     if (eleEmpty) eleEmpty.style.display = 'none'
 
     // set display: none will change the height of the original element
+    await untilElementAvailable(searchProfileTabPageSelector())
     const elePage = searchProfileTabPageSelector().evaluate()
     if (elePage) elePage.style.visibility = 'hidden'
 }

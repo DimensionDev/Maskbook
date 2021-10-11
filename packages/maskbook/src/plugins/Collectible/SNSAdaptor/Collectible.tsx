@@ -185,7 +185,6 @@ export function Collectible(props: CollectibleProps) {
     ]
 
     const endDate = asset.value?.end_time
-
     return (
         <>
             <CollectibleCard classes={classes}>
