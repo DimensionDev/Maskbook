@@ -37,7 +37,7 @@ const useTabsStyles = makeStyles()((theme) => ({
         display: 'none',
     },
     tabPanel: {
-        marginTop: theme.spacing(3),
+        marginTop: `${theme.spacing(2)} !important`,
     },
 }))
 
@@ -71,17 +71,26 @@ export function PreviewCard(props: PreviewCardProps) {
     //#region open box
     const openBoxTransaction = useOpenBoxTransaction(boxId, paymentCount)
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
+        TransactionStateType.CONFIRMED,
         openBoxTransaction?.config,
         openBoxTransaction?.method,
     )
-    const onDraw = useCallback(async () => {
-        await openBoxCallback()
+    const onRefresh = useCallback(() => {
+        state[1](CardTab.Articles)
+        setPaymentCount(1)
+        setPaymentTokenAddress('')
+        resetOpenBoxCallback()
         retryMaskBoxInfo()
         retryMaskBoxCreationSuccessEvent()
         retryMaskBoxTokensForSale()
         retryMaskBoxPurchasedTokens()
+    }, [])
+    const onDraw = useCallback(async () => {
+        setOpenDrawDialog(false)
+        await openBoxCallback()
     }, [
         openBoxCallback,
+        onRefresh,
         retryMaskBoxInfo,
         retryMaskBoxCreationSuccessEvent,
         retryMaskBoxTokensForSale,
@@ -92,10 +101,8 @@ export function PreviewCard(props: PreviewCardProps) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            retryBoxInfo()
-            setPaymentCount(1)
-            setPaymentTokenAddress('')
-            resetOpenBoxCallback()
+            if (openBoxState.type === TransactionStateType.CONFIRMED) setOpenDrawResultDialog(true)
+            onRefresh()
         },
     )
 
@@ -106,7 +113,7 @@ export function PreviewCard(props: PreviewCardProps) {
             state: openBoxState,
             summary: `Open ${boxInfo?.name ?? 'box'}...`,
         })
-    }, [openBoxState, setTransactionDialog])
+    }, [openBoxState.type])
     //#endregion
 
     if (loadingBoxInfo)

@@ -158,17 +158,6 @@ function useContext(initialState?: { boxId: string }) {
     }, [paymentTokenAddress, boxInfo.value?.payments.map((x) => x.token.address).join()])
     //#endregion
 
-    console.log({
-        allTokens,
-        purchasedTokens,
-        maskBoxInfo,
-        maskBoxCreationSuccessEvent,
-        boxInfo,
-        boxState,
-        paymentNativeTokenBalance,
-        paymentERC20TokenBalance,
-    })
-
     return {
         // box id
         boxId,

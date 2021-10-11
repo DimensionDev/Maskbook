@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { EthereumTokenType, useAccount, useTransactionCallback } from '@masknet/web3-shared'
+import { EthereumTokenType, useAccount } from '@masknet/web3-shared'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { useContainer } from 'unstated-next'
 import { Context } from './useContext'

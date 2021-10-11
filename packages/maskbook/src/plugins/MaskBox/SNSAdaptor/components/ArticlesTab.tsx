@@ -9,6 +9,7 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 360,
         overflow: 'hidden',
         borderRadius: 8,
+        border: `solid 1px ${theme.palette.divider}`,
     },
     footer: {
         margin: theme.spacing(2.75, 0),
@@ -18,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         maxHeight: 360,
         minHeight: 360,
+        objectFit: 'scale-down',
     },
     name: {
         whiteSpace: 'nowrap',

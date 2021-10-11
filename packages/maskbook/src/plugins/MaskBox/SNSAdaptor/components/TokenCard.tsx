@@ -1,9 +1,19 @@
-import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared'
+import { Typography } from '@material-ui/core'
+import { CollectibleProvider, ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared'
+import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
+    title: {
+        textAlign: 'center',
+        margin: theme.spacing(1, 0),
+        maxWidth: 160,
+    },
+    name: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+    },
 }))
 
 export interface TokenCardProps {
@@ -14,13 +24,22 @@ export interface TokenCardProps {
 export function TokenCard(props: TokenCardProps) {
     const { contractDetailed, tokenId } = props
     const { classes } = useStyles()
-    const { value: tokenDetailed } = useERC721TokenDetailed(contractDetailed, tokenId)
-
-    if (!tokenDetailed) return <Box className={classes.root} />
+    const {
+        value: tokenDetailed = {
+            tokenId,
+            contractDetailed,
+            info: {},
+        },
+    } = useERC721TokenDetailed(contractDetailed, tokenId)
 
     return (
-        <Box className={classes.root}>
-            <Typography>{tokenDetailed?.info.name}</Typography>
-        </Box>
+        <>
+            <CollectibleCard provider={CollectibleProvider.OPENSEA} token={tokenDetailed} />
+            <div className={classes.title}>
+                <Typography className={classes.name} color="textSecondary" variant="body2">
+                    {tokenDetailed.info.name ?? tokenId}
+                </Typography>
+            </div>
+        </>
     )
 }

@@ -3,7 +3,11 @@ import type { PayableTransactionObject, PayableTx } from '@masknet/web3-contract
 import { TransactionStateType, useTransactionState } from '.'
 import { TransactionEventType } from '..'
 
-export function useTransactionCallback<T extends unknown>(config?: PayableTx, method?: PayableTransactionObject<T>) {
+export function useTransactionCallback<T extends unknown>(
+    type: TransactionStateType.HASH | TransactionStateType.CONFIRMED,
+    config: PayableTx | undefined,
+    method: PayableTransactionObject<T> | undefined,
+) {
     const [state, setState] = useTransactionState()
 
     const updateCallback = useCallback(async () => {
@@ -32,16 +36,22 @@ export function useTransactionCallback<T extends unknown>(config?: PayableTx, me
             }
         }
 
+        let confirmed = false
+
         return new Promise<void>(async (resolve, reject) => {
             method
                 .send(config)
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                    if (type !== TransactionStateType.HASH) return
                     setState({
                         type: TransactionStateType.HASH,
                         hash,
                     })
                 })
                 .on(TransactionEventType.RECEIPT, (receipt) => {
+                    // avoid double confirmation
+                    confirmed = true
+                    if (type !== TransactionStateType.CONFIRMED) return
                     setState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
@@ -49,6 +59,8 @@ export function useTransactionCallback<T extends unknown>(config?: PayableTx, me
                     })
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                    if (confirmed) return
+                    if (type !== TransactionStateType.CONFIRMED) return
                     setState({
                         type: TransactionStateType.CONFIRMED,
                         no,
@@ -64,7 +76,7 @@ export function useTransactionCallback<T extends unknown>(config?: PayableTx, me
                     reject(error)
                 })
         })
-    }, [config, method])
+    }, [type, config, method])
 
     const resetCallback = useCallback(() => {
         setState({
