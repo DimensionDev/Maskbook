@@ -4,12 +4,11 @@ import { useDashboardI18N } from '../../../../locales'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@masknet/icons'
 import type { NetworkType } from '@masknet/web3-shared'
-import { ChainId, getChainIdFromNetworkType } from '@masknet/web3-shared'
+import { ChainId, getChainIdFromNetworkType, getChainName } from '@masknet/web3-shared'
 import { ChainIcon } from '@masknet/shared'
 
 export interface BalanceCardProps {
     balance: number
-    chainName: string
     onSend(): void
     onBuy(): void
     onSwap(): void
@@ -109,7 +108,7 @@ const ButtonGroup = styled('div')`
 `
 
 export const Balance = memo<BalanceCardProps>(
-    ({ balance, chainName, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedChainId }) => {
+    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedChainId }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
 
@@ -121,7 +120,8 @@ export const Balance = memo<BalanceCardProps>(
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>
-                            {t.wallets_balance()} {chainName}
+                            {t.wallets_balance()}{' '}
+                            {selectedChainId ? getChainName(selectedChainId) : t.wallets_balance_all_chain()}
                         </BalanceTitle>
                         <BalanceContent sx={{ py: 0.5 }}>
                             {isNaN(balance)

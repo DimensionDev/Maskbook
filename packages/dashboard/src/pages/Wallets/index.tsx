@@ -1,13 +1,5 @@
 import { PageFrame } from '../../components/DashboardFrame'
-import {
-    ChainId,
-    getTokenUSDValue,
-    useAssets,
-    useChainDetailed,
-    useTrustedERC20Tokens,
-    useWallet,
-    useWallets,
-} from '@masknet/web3-shared'
+import { ChainId, getTokenUSDValue, useAssets, useWallet, useWallets, useWeb3State } from '@masknet/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
 import { Route, Routes, useMatch, useNavigate } from 'react-router-dom'
@@ -28,8 +20,8 @@ function Wallets() {
     const wallet = useWallet()
     const wallets = useWallets()
     const navigate = useNavigate()
-    const chain = useChainDetailed()
     const t = useDashboardI18N()
+    const trustedERC20Tokens = useWeb3State().erc20Tokens
 
     const isWalletPath = useMatch(RoutePaths.Wallets)
     const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
@@ -38,13 +30,14 @@ function Wallets() {
     const [receiveOpen, setReceiveOpen] = useState(false)
     const [selectedChainId, setSelectedChainId] = useState<ChainId | null>(null)
 
-    const erc20Tokens = useTrustedERC20Tokens()
-
     const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { value: detailedTokens } = useAssets(erc20Tokens || [], 'all')
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
+    const { value: detailedTokens } = useAssets(
+        trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
+        selectedChainId === null ? 'all' : selectedChainId,
+    )
 
     const balance = useMemo(() => {
         return BigNumber.sum
@@ -53,7 +46,7 @@ function Wallets() {
                 detailedTokens.map((asset) => getTokenUSDValue(asset)),
             )
             .toNumber()
-    }, [detailedTokens])
+    }, [detailedTokens, selectedChainId])
 
     const pateTitle = useMemo(() => {
         if (wallets.length === 0) return t.create_wallet_form_title()
@@ -73,7 +66,6 @@ function Wallets() {
                 <>
                     <Balance
                         balance={balance}
-                        chainName={chain?.name ?? ''}
                         onSend={() => navigate(RoutePaths.WalletsTransfer)}
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}
