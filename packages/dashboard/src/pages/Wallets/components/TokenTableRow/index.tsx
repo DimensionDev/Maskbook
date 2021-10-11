@@ -1,10 +1,19 @@
 import { memo } from 'react'
-import { Box, Button, TableCell, TableRow, Typography } from '@material-ui/core'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@material-ui/core'
+import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainIcon, FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { Asset, CurrencyType, formatBalance, formatCurrency, getTokenUSDValue, pow10 } from '@masknet/web3-shared'
+import {
+    Asset,
+    CurrencyType,
+    formatBalance,
+    formatCurrency,
+    getTokenUSDValue,
+    pow10,
+    useChainId,
+} from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useDashboardI18N } from '../../../../locales'
+import { ChangeNetworkTip } from './ChangeNetworkTip'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -22,12 +31,27 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         color: theme.palette.mode === 'dark' ? getMaskColor(theme).white : getMaskColor(theme).primary,
     },
+    disabledButton: {
+        opacity: 0.6,
+        cursor: 'default',
+        '&:hover': {
+            boxShadow: 'none',
+            outline: 'none',
+        },
+    },
     chainIcon: {
         position: 'absolute',
         right: -8,
         bottom: 0,
         height: 16,
         width: 16,
+    },
+    tip: {
+        padding: theme.spacing(1),
+        background: MaskColorVar.mainBackground,
+    },
+    tipArrow: {
+        color: MaskColorVar.mainBackground,
     },
 }))
 
@@ -39,7 +63,10 @@ export interface TokenTableRowProps {
 
 export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
     const t = useDashboardI18N()
+    const currentChainId = useChainId()
     const { classes } = useStyles()
+
+    const isOnCurrentChain = currentChainId === asset.token.chainId
 
     return (
         <TableRow>
@@ -83,18 +110,35 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                 </Typography>
             </TableCell>
             <TableCell sx={{ minWidth: '200px' }} className={classes.cell} align="center" variant="body">
-                <Button
-                    size="small"
-                    variant="outlined"
-                    color="secondary"
-                    sx={{ marginRight: 1 }}
-                    className={classes.button}
-                    onClick={onSend}>
-                    {t.wallets_balance_Send()}
-                </Button>
-                <Button size="small" variant="outlined" color="secondary" onClick={onSwap} className={classes.button}>
-                    {t.wallets_balance_Swap()}
-                </Button>
+                <Tooltip
+                    disableHoverListener={isOnCurrentChain}
+                    title={<ChangeNetworkTip chainId={asset.token.chainId} />}
+                    placement="top"
+                    classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
+                    arrow>
+                    <Button
+                        size="small"variant="outlined"
+                        color="secondary"
+                        sx={{ marginRight: 1 }}
+                        className={`${classes.button} ${!isOnCurrentChain ? classes.disabledButton : ''}`}
+                        onClick={() => isOnCurrentChain && onSend()}>
+                        {t.wallets_balance_Send()}
+                    </Button>
+                </Tooltip>
+                <Tooltip
+                    disableHoverListener={isOnCurrentChain}
+                    title={<ChangeNetworkTip chainId={asset.token.chainId} />}
+                    placement="top"
+                    classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
+                    arrow>
+                    <Button
+                       size="small" variant="outlined"
+                        color="secondary"
+                        onClick={() => isOnCurrentChain && onSwap()}
+                        className={`${classes.button} ${!isOnCurrentChain ? classes.disabledButton : ''}`}>
+                        {t.wallets_balance_Swap()}
+                    </Button>
+                </Tooltip>
             </TableCell>
         </TableRow>
     )

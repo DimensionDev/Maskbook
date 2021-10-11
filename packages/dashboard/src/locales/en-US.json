@@ -141,6 +141,8 @@
     "wallets_balance_Swap": "Swap",
     "wallets_balance_Receive": "Receive",
     "wallets_assets_token": "Token",
+    "wallets_assets_token_sent_not_connect_tip": "Not connected to {{chainName}}.",
+    "wallets_assets_token_sent_switch_network_tip": "Click to switch.",
     "wallets_assets_investment": "Investment",
     "wallets_assets_collectibles": "Collectibles",
     "wallets_assets_custom_token": "Custom Token",
