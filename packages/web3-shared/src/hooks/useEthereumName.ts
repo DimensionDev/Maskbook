@@ -1,7 +1,10 @@
-import { useResolveENS, useResolveUNS, useAddressNames } from '@masknet/web3-shared'
 import { useEffect, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { EthereumAddress } from 'wallet.ts'
+import { EthereumNameType } from '../constants'
+import { useAddressNames } from './useAddressNames'
+import { useResolveENS } from './useResolveENS'
+import { useResolveUNS } from './useResolveUNS'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ENS_RE_FULL = new RegExp(`^${ENS_RE.source}$`)
@@ -48,7 +51,11 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
         value: isLoading
             ? undefined
             : {
-                  type: addressENS ? 'ENS' : addressUNS ? 'UNS' : 'address',
+                  type: addressENS
+                      ? EthereumNameType.ENS_TYPE
+                      : addressUNS
+                      ? EthereumNameType.UNS_TYPE
+                      : EthereumNameType.DEFAULT,
                   name: addressENS || addressUNS ? name : '',
                   address: isLoading ? '' : addressENS ?? addressUNS ?? ownerAddress ?? '',
               },
