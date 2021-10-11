@@ -15,6 +15,7 @@ import { usePasswordForm } from '../hooks/usePasswordForm'
 const useStyles = makeStyles()({
     container: {
         padding: '16px 10px',
+        flex: 1,
     },
     header: {
         display: 'flex',
@@ -50,6 +51,14 @@ const useStyles = makeStyles()({
         padding: '9px 10px',
         borderRadius: 20,
     },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
+    },
+    controller: {
+        padding: '16px 10px',
+    },
 })
 
 const SetPaymentPassword = memo(() => {
@@ -82,56 +91,60 @@ const SetPaymentPassword = memo(() => {
     const onSubmit = handleSubmit(onConfirm)
 
     return (
-        <div className={classes.container}>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('popups_wallet_set_payment_password')}</Typography>
-            </div>
-            <form className={classes.form}>
-                <div style={{ marginTop: 16 }}>
-                    <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
-                    <Controller
-                        control={control}
-                        render={({ field }) => (
-                            <PasswordField
-                                {...field}
-                                classes={{ root: classes.textField }}
-                                type="password"
-                                variant="filled"
-                                placeholder={t('popups_wallet_payment_password')}
-                                error={!isValid && !!errors.password?.message}
-                                helperText={!isValid ? errors.password?.message : ''}
-                            />
-                        )}
-                        name="password"
-                    />
-                    <Controller
-                        render={({ field }) => (
-                            <PasswordField
-                                classes={{ root: classes.textField }}
-                                {...field}
-                                error={!isValid && !!errors.confirm?.message}
-                                helperText={!isValid ? errors.confirm?.message : ''}
-                                type="password"
-                                variant="filled"
-                                placeholder="Re-enter the payment password"
-                            />
-                        )}
-                        name="confirm"
-                        control={control}
-                    />
+        <>
+            <div className={classes.container}>
+                <div className={classes.header}>
+                    <Typography className={classes.title}>{t('popups_wallet_set_payment_password')}</Typography>
                 </div>
-                <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
-            </form>
-            <LoadingButton
-                loading={loading}
-                variant="contained"
-                fullWidth
-                className={classes.button}
-                disabled={!isValid}
-                onClick={onSubmit}>
-                {t('confirm')}
-            </LoadingButton>
-        </div>
+                <form className={classes.form}>
+                    <div style={{ marginTop: 16 }}>
+                        <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
+                        <Controller
+                            control={control}
+                            render={({ field }) => (
+                                <PasswordField
+                                    {...field}
+                                    classes={{ root: classes.textField }}
+                                    type="password"
+                                    variant="filled"
+                                    placeholder={t('popups_wallet_payment_password')}
+                                    error={!isValid && !!errors.password?.message}
+                                    helperText={!isValid ? errors.password?.message : ''}
+                                />
+                            )}
+                            name="password"
+                        />
+                        <Controller
+                            render={({ field }) => (
+                                <PasswordField
+                                    classes={{ root: classes.textField }}
+                                    {...field}
+                                    error={!isValid && !!errors.confirm?.message}
+                                    helperText={!isValid ? errors.confirm?.message : ''}
+                                    type="password"
+                                    variant="filled"
+                                    placeholder="Re-enter the payment password"
+                                />
+                            )}
+                            name="confirm"
+                            control={control}
+                        />
+                    </div>
+                    <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
+                </form>
+            </div>
+            <div className={classes.controller}>
+                <LoadingButton
+                    loading={loading}
+                    variant="contained"
+                    fullWidth
+                    classes={{ root: classes.button, disabled: classes.disabled }}
+                    disabled={!isValid}
+                    onClick={onSubmit}>
+                    {t('confirm')}
+                </LoadingButton>
+            </div>
+        </>
     )
 })
 

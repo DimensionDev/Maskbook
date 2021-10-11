@@ -124,6 +124,9 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
                     defaultChecked={added}
                     sx={{
                         color: '#1C68F3',
+                        padding: 0,
+                        width: 16,
+                        height: 16,
                         '&.Mui-checked': {
                             color: '#1C68F3',
                         },

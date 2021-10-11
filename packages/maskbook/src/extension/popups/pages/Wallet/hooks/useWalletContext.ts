@@ -6,7 +6,7 @@ import { useRecentTransactions } from '../../../../../plugins/Wallet/hooks/useRe
 function useWalletContext() {
     const chainDetailed = useChainDetailed()
     const erc20Tokens = useTrustedERC20Tokens()
-    const { value: assets, error, loading } = useAssets(erc20Tokens)
+    const { value: assets, loading } = useAssets(erc20Tokens)
     const { value: transactions } = useRecentTransactions()
     const [currentToken, setCurrentToken] = useState<Asset>()
 

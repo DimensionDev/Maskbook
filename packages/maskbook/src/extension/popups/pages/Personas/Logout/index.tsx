@@ -77,6 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         padding: '8px 16px',
         margin: '20px 0',
+        width: '100%',
     },
 }))
 

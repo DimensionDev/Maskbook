@@ -94,6 +94,11 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         color: '#15181B',
     },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
+    },
 }))
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
@@ -447,7 +452,7 @@ export const GasSetting1559 = memo(() => {
                 loading={loading}
                 variant="contained"
                 fullWidth
-                className={classes.button}
+                classes={{ root: classes.button, disabled: classes.disabled }}
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
                 {t('confirm')}

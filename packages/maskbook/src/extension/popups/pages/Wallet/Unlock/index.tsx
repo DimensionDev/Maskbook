@@ -45,6 +45,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: '9px 0',
         borderRadius: 20,
     },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
+    },
 }))
 
 const Unlock = memo(() => {
@@ -87,7 +92,7 @@ const Unlock = memo(() => {
                     loading={loading}
                     fullWidth
                     variant="contained"
-                    className={classes.button}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
                     disabled={!password}
                     onClick={handleUnlock}>
                     {t('unlock')}

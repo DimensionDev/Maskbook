@@ -50,7 +50,7 @@ export function validatePassword(unverifiedPassword: string) {
     if (!unverifiedPassword) return false
     if (unverifiedPassword.length < 8) return false
     if (unverifiedPassword.length > 20) return false
-    return [/\d/, /[a-z]/i, /[^\da-z]/i].filter((x) => x.test(unverifiedPassword)).length >= 2
+    return [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((x) => x.test(unverifiedPassword)).length >= 2
 }
 
 export function validatePasswordRequired(unverifiedPassword: string) {

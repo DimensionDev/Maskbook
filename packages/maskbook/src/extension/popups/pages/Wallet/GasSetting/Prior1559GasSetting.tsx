@@ -79,6 +79,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: '9px 10px',
         borderRadius: 20,
     },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
+    },
 }))
 
 export const Prior1559GasSetting = memo(() => {
@@ -301,7 +306,7 @@ export const Prior1559GasSetting = memo(() => {
                 loading={loading}
                 variant="contained"
                 fullWidth
-                className={classes.button}
+                classes={{ root: classes.button, disabled: classes.disabled }}
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
                 {t('confirm')}

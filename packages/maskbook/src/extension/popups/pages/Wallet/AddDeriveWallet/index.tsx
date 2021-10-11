@@ -1,6 +1,6 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { Typography, TablePagination } from '@material-ui/core'
+import { Typography, TablePagination, tablePaginationClasses } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
@@ -47,7 +47,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        margin: '12px 0',
         gap: 4,
     },
     paginationIcon: {
@@ -58,6 +57,14 @@ const useStyles = makeStyles()({
         justifyContent: 'center',
         alignItems: 'center',
         padding: 4,
+    },
+    toolbar: {
+        padding: 0,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 })
 
@@ -141,6 +148,11 @@ const AddDeriveWallet = memo(() => {
                     rowsPerPage={10}
                     rowsPerPageOptions={[10]}
                     labelDisplayedRows={() => null}
+                    sx={{
+                        [`& .${tablePaginationClasses.actions}`]: {
+                            marginLeft: 0,
+                        },
+                    }}
                     backIconButtonProps={{
                         onClick: () => setPage((prev) => prev - 1),
                         size: 'small',
@@ -151,14 +163,14 @@ const AddDeriveWallet = memo(() => {
                         size: 'small',
                         disabled: confirmLoading,
                     }}
-                    className={classes.pagination}
+                    classes={{ root: classes.pagination, toolbar: classes.toolbar }}
                 />
             ) : null}
             <LoadingButton
                 loading={confirmLoading}
                 disabled={confirmLoading || loading}
                 variant="contained"
-                className={classes.button}
+                classes={{ root: classes.button, disabled: classes.disabled }}
                 onClick={onConfirm}
                 fullWidth>
                 {t('popups_wallet_done')}
