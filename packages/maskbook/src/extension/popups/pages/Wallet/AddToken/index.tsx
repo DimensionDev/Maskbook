@@ -49,9 +49,9 @@ const AddToken = memo(() => {
             <div className={classes.header}>{t('add_token')}</div>
             <div className={classes.content}>
                 <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
-                <ERC20TokenList FixedSizeListProps={{ height: 290, itemSize: 54 }} blacklist={excludeTokens} />
+                <ERC20TokenList FixedSizeListProps={{ height: 340, itemSize: 54 }} blacklist={excludeTokens} />
             </div>
-            <Stack height="100%" sx={{ px: 2 }} justifyContent="center" alignItems="center">
+            <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
                 <Button fullWidth className={classes.button} onClick={history.goBack}>
                     {t('popups_wallet_go_back')}
                 </Button>
