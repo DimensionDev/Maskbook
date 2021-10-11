@@ -23,7 +23,7 @@ import { makeStyles } from '../../makeStyles'
 import { MaskColorVar } from '../../constants'
 
 export { SnackbarProvider, useSnackbar } from 'notistack'
-export type { VariantType, OptionsObject, SnackbarKey } from 'notistack'
+export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
 const useStyles = makeStyles()((theme, _, createRef) => {
     const { palette } = theme
@@ -36,12 +36,14 @@ to {
     const title = {
         ref: createRef(),
         color: MaskColorVar.textPrimary,
+        fontWeight: 400,
         fontSize: 14,
         lineHeight: '20px',
     } as const
     const message = {
         ref: createRef(),
         color: MaskColorVar.textSecondary,
+        fontWeight: 400,
         display: 'flex',
         alignItems: 'center',
         fontSize: 12,
@@ -54,7 +56,7 @@ to {
         },
     }
     const success = {
-        backgroundColor: '#77E0B5',
+        backgroundColor: '#60DFAB',
         color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
@@ -65,7 +67,7 @@ to {
     } as const
 
     const error = {
-        background: MaskColorVar.redMain,
+        background: '#FF5F5F',
         color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
@@ -76,7 +78,7 @@ to {
     } as const
 
     const info = {
-        background: '#B9CDF0',
+        background: '#8CA3C7',
         color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
@@ -88,7 +90,7 @@ to {
 
     const warning = {
         ref: createRef(),
-        backgroundColor: '#FFB110',
+        backgroundColor: '#FFB915',
         color: '#ffffff',
         [`& .${title.ref}`]: {
             color: 'inherit',
@@ -133,19 +135,20 @@ to {
         error,
         info,
         warning,
-        icon: {},
+        icon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
         spinning: {
             display: 'flex',
             animation: `${spinningAnimationKeyFrames} 2s infinite linear`,
         },
         action: {
             marginLeft: 'auto',
-            padding: theme.spacing(0, 1),
         },
         closeButton: {
             color: 'inherit',
-            width: 50,
-            height: 50,
         },
         texts: {
             marginLeft: theme.spacing(2),
@@ -166,18 +169,13 @@ export interface CustomSnackbarContentProps {
     icon?: React.ReactNode
     processing?: boolean
     variant?: VariantType
-    link?: string
     action?: SnackbarAction
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
     success: <DoneIcon color="inherit" />,
     error: <RiskIcon />,
-    warning: (
-        <span style={{ color: MaskColorVar.warning }}>
-            <WarningIcon />
-        </span>
-    ),
+    warning: <WarningIcon color="inherit" />,
     info: <InfoIcon color="inherit" />,
 }
 
@@ -246,14 +244,16 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps>((props) => {
     )
 })
 
-interface Options extends OptionsObject, Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon'> {}
+export interface ShowSnackbarOptions
+    extends OptionsObject,
+        Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon'> {}
 
 export function useCustomSnackbar() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const showSnackbar = useCallback(
         (
             text: SnackbarMessage,
-            options: Options = {
+            options: ShowSnackbarOptions = {
                 variant: 'default',
             },
         ) => {

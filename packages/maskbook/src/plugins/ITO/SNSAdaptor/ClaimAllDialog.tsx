@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useLayoutEffect, useRef } from 'react'
 import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
-import { getMaskColor, useCustomSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
+import { useCustomSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -26,7 +26,6 @@ import { useClaimCallback } from './hooks/useClaimCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { useLayoutEffect, useRef } from 'react'
 
 interface StyleProps {
     shortITOwrapper: boolean
@@ -129,19 +128,18 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: 36,
         minHeight: 36,
         fontWeight: 300,
-        color: theme.palette.mode === 'light' ? '#15181B' : '#D9D9D9',
     },
     tabs: {
-        backgroundColor: getMaskColor(theme).twitterBackground,
         width: 536,
         height: 36,
         minHeight: 36,
         margin: '0 auto',
-        '& .Mui-selected': {
-            backgroundColor: '#1C68F3',
-            color: '#fff',
-        },
         borderRadius: 4,
+        backgroundColor: theme.palette.background.default,
+        '& .Mui-selected': {
+            color: theme.palette.primary.contrastText,
+            backgroundColor: theme.palette.primary.main,
+        },
     },
     indicator: {
         display: 'none',
@@ -417,12 +415,8 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     chainId={chainId}
                                     noSwitchNetworkTip={true}
                                     switchButtonStyle={{
-                                        backgroundColor: '#1C68F3',
-                                        '&:hover': {
-                                            backgroundColor: '#1854c4',
-                                        },
                                         minHeight: 'auto',
-                                        width: '540px',
+                                        width: 540,
                                         fontSize: 18,
                                         fontWeight: 400,
                                     }}>

@@ -219,7 +219,7 @@ export default function DashboardSettingsRouter() {
                                 <SettingsUIEnum
                                     classes={listStyle}
                                     enumObject={LanguageOptions}
-                                    ignoredItems={process.env.build !== 'stable' ? [] : notReadyLanguages}
+                                    ignoredItems={process.env.channel !== 'stable' ? [] : notReadyLanguages}
                                     getText={langMapper}
                                     icon={<LanguageIcon />}
                                     value={languageSettings}
@@ -302,7 +302,7 @@ export default function DashboardSettingsRouter() {
                                     icon={<FlipToFrontIcon />}
                                     value={allPostReplacementSettings}
                                 />
-                                {process.env.NODE_ENV === 'development' || process.env.build !== 'stable' ? (
+                                {process.env.NODE_ENV === 'development' || process.env.channel !== 'stable' ? (
                                     <SettingsUI
                                         classes={listStyle}
                                         icon={<MemoryOutlinedIcon />}

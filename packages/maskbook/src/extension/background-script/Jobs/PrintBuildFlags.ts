@@ -13,11 +13,9 @@ console.log('Build info', {
 export const buildInfoMarkdown = `## Build info
 - Version: ${globalThis.browser?.runtime?.getManifest?.()?.version ?? process.env.TAG_NAME?.slice(1)}
 - NODE_ENV: ${process.env.NODE_ENV}
-- target: ${process.env.target}
-- build: ${process.env.build}
+- target: ${process.env.engine}
+- build: ${process.env.channel}
 - architecture: ${process.env.architecture}
-- firefoxVariant: ${process.env.firefoxVariant}
-- resolution: ${process.env.resolution}
 - BUILD_DATE: ${process.env.BUILD_DATE}
 - VERSION: ${process.env.VERSION}
 

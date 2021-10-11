@@ -6,6 +6,8 @@ import { isMobileFacebook } from '../utils/isMobile'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint'
 import { MaskMessage } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
+import { taskOpenComposeBoxFacebook } from '../automation/openComposeBox'
+
 let composeBox: LiveSelector<Element>
 if (isMobileFacebook) {
     composeBox = new LiveSelector().querySelector('#structured_composer_form')
@@ -22,6 +24,15 @@ export function injectCompositionFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(composeBox.clone())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<UI />)
+
+    signal.addEventListener(
+        'abort',
+        MaskMessage.events.requestComposition.on((data) => {
+            if (data.reason === 'popup') return
+            if (data.open === false) return
+            taskOpenComposeBoxFacebook(data.content || '', data.options)
+        }),
+    )
 }
 function UI() {
     const onHintButtonClicked = useCallback(

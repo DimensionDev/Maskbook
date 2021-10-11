@@ -3,8 +3,6 @@ import {
     ChainId,
     formatBalance,
     getChainIdFromName,
-    isDAI,
-    isOKB,
     resolveNetworkName,
     TransactionStateType,
     useAccount,
@@ -17,7 +15,6 @@ import classNames from 'classnames'
 import { useCallback, useEffect, useMemo } from 'react'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
-import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../../utils'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { WalletMessages } from '../../../Wallet/messages'
@@ -59,18 +56,11 @@ export function RedPacket(props: RedPacketProps) {
     const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            canClaim
-                ? t(
-                      isTwitter(activatedSocialNetworkUI)
-                          ? 'plugin_red_packet_share_message'
-                          : 'plugin_red_packet_share_message_not_twitter',
-                      {
-                          sender: payload.sender.name,
-                          payload: postLink,
-                          network: resolveNetworkName(networkType),
-                      },
-                  ).trim()
-                : '',
+            t('plugin_red_packet_share_message', {
+                sender: payload.sender.name,
+                payload: postLink,
+                network: resolveNetworkName(networkType),
+            }).trim(),
         )
         .toString()
 
@@ -123,15 +113,8 @@ export function RedPacket(props: RedPacketProps) {
         else if (canRefund) await refundCallback()
     }, [canClaim, canRefund, claimCallback, refundCallback])
 
-    const subtitle = useMemo(() => {
-        if (!availability || !token) return
-
-        if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-            return t('plugin_red_packet_description_refund', {
-                balance: formatBalance(availability.balance, token.decimals),
-                symbol: token.symbol,
-            })
-        if (listOfStatus.includes(RedPacketStatus.claimed))
+    const myStatus = useMemo(() => {
+        if (token && listOfStatus.includes(RedPacketStatus.claimed))
             return t(
                 'plugin_red_packet_description_claimed',
                 (availability as RedPacketAvailability).claimed_amount
@@ -141,6 +124,17 @@ export function RedPacket(props: RedPacketProps) {
                       }
                     : { amount: '', symbol: '' },
             )
+        return ''
+    }, [listOfStatus, t, token])
+
+    const subtitle = useMemo(() => {
+        if (!availability || !token) return
+
+        if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
+            return t('plugin_red_packet_description_refund', {
+                balance: formatBalance(availability.balance, token.decimals),
+                symbol: token.symbol,
+            })
         if (listOfStatus.includes(RedPacketStatus.refunded)) return t('plugin_red_packet_description_refunded')
         if (listOfStatus.includes(RedPacketStatus.expired)) return t('plugin_red_packet_description_expired')
         if (listOfStatus.includes(RedPacketStatus.empty)) return t('plugin_red_packet_description_empty')
@@ -187,9 +181,6 @@ export function RedPacket(props: RedPacketProps) {
         <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
             <Card className={classNames(classes.root)} component="article" elevation={0}>
                 <div className={classes.header}>
-                    <Typography className={classes.from} variant="body1" color="inherit">
-                        {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
-                    </Typography>
                     {/* it might be fontSize: 12 on twitter based on theme? */}
                     {canFetch && listOfStatus.length ? (
                         <Typography className={classes.label} variant="body2">
@@ -202,24 +193,20 @@ export function RedPacket(props: RedPacketProps) {
                         {payload.sender.message}
                     </Typography>
                     <Typography variant="body2">{subtitle}</Typography>
+                    <Typography className={classes.myStatus} variant="body1">
+                        {myStatus}
+                    </Typography>
+                    <Typography className={classes.from} variant="body1">
+                        {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
+                    </Typography>
                 </div>
-                <div
-                    className={classNames(classes.packet, {
-                        [classes.dai]: token?.name === 'DAI' || isDAI(token?.address ?? ''),
-                        [classes.okb]: token?.name === 'OKB' || isOKB(token?.address ?? ''),
-                    })}
-                />
-                <div
-                    className={classNames(classes.loader, {
-                        [classes.dimmer]: !canClaim && !canRefund,
-                    })}
-                />
             </Card>
             <OperationFooter
                 canClaim={canClaim}
                 canRefund={canRefund}
                 claimState={claimState}
                 refundState={refundState}
+                shareLink={shareLink}
                 onClaimOrRefund={onClaimOrRefund}
             />
         </EthereumChainBoundary>
