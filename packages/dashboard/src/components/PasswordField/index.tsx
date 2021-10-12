@@ -1,8 +1,7 @@
 import { MaskTextField, MaskTextFieldProps } from '@masknet/theme'
 import { IconButton, InputAdornment } from '@material-ui/core'
-import Visibility from '@material-ui/icons/Visibility'
-import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import { ForwardedRef, useState, forwardRef } from 'react'
+import { EyeIcon, EyeOffIcon } from '@masknet/icons'
 
 export type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'>
 
@@ -23,7 +22,7 @@ const PasswordField = forwardRef((props: PasswordFieldProps, ref: ForwardedRef<a
                             onMouseDown={(event) => event.preventDefault()}
                             edge="end"
                             size="small">
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
                         </IconButton>
                     </InputAdornment>
                 ),
