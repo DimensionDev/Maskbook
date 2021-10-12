@@ -193,7 +193,11 @@ export function DrawDialog(props: DrawDialogProps) {
                                     className={classes.field}
                                     variant="outlined"
                                     color="inherit"
-                                    disabled={paymentCount >= boxInfo.remaining || boxInfo.remaining === 0}
+                                    disabled={
+                                        paymentCount >= Math.min(boxInfo.remaining, boxInfo.personalRemaining) ||
+                                        boxInfo.remaining === 0 ||
+                                        boxInfo.personalRemaining === 1
+                                    }
                                     onClick={() => onCount(1)}>
                                     <Add color="inherit" />
                                 </Button>
@@ -205,9 +209,7 @@ export function DrawDialog(props: DrawDialogProps) {
                             </Typography>
                             <Typography className={classes.content} color="textPrimary">
                                 {boxInfo.personalLimit}
-                                {boxInfo.tokenIdsPurchased.length
-                                    ? ` (${boxInfo.personalLimit - boxInfo.tokenIdsPurchased.length} remaining)`
-                                    : ''}
+                                {boxInfo.tokenIdsPurchased.length ? ` (${boxInfo.personalRemaining} remaining)` : ''}
                             </Typography>
                         </Box>
                         <Box className={classes.section} display="flex" alignItems="center">

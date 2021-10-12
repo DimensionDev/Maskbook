@@ -80,11 +80,6 @@ export function PreviewCard(props: PreviewCardProps) {
     } = useContainer(Context)
     const { value: boxInfo, loading: loadingBoxInfo, error: errorBoxInfo, retry: retryBoxInfo } = boxInfo_
 
-    console.log({
-        openBoxTransactionOverrides,
-        openBoxTransactionGasLimit,
-    })
-
     //#region open box
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
         TransactionStateType.CONFIRMED,

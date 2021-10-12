@@ -34,7 +34,7 @@ export function TokenCard(props: TokenCardProps) {
 
     return (
         <>
-            <CollectibleCard provider={CollectibleProvider.OPENSEA} token={tokenDetailed} />
+            <CollectibleCard readonly provider={CollectibleProvider.OPENSEA} token={tokenDetailed} />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
                     {tokenDetailed.info.name ?? tokenId}

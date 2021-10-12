@@ -24,11 +24,11 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const { gasLimit: initialGasLimit, onChange } = props
 
     const chainId = useChainId()
-    const [gasLimit, setGasLimit] = useState<string>(new BigNumber(initialGasLimit).toFixed())
-    const [maxFee, setMaxFee] = useState<string | null>(null)
-    const [priorityFee, setPriorityFee] = useState<string | null>(null)
-    const { value: defaultGasPrice = '0' } = useGasPrice()
+    const [gasLimit, setGasLimit] = useState(new BigNumber(initialGasLimit).toFixed())
+    const [maxFee, setMaxFee] = useState('0')
+    const [priorityFee, setPriorityFee] = useState('0')
     const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
+    const { value: defaultGasPrice = '0' } = useGasPrice()
     const gasPrice = customGasPrice || defaultGasPrice
 
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
@@ -36,42 +36,46 @@ export function GasSettingBar(props: GasSettingBarProps) {
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
     const onOpenGasSettingDialog = useCallback(() => {
-        setGasSettingDialog({
-            open: true,
-            gasLimit,
-            gasOption,
-        })
-    }, [gasLimit, gasOption])
+        setGasSettingDialog(
+            isEIP1559Supported(chainId)
+                ? {
+                      open: true,
+                      gasLimit,
+                      maxFee,
+                      priorityFee,
+                      gasOption,
+                  }
+                : {
+                      open: true,
+                      gasLimit,
+                      gasPrice,
+                      gasOption,
+                  },
+        )
+    }, [chainId, gasLimit, gasOption])
 
     // set initial options
     useEffect(() => {
         return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
             if (evt.open) return
-            if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
-            if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
+            if (evt.gasOption) setGasOption(evt.gasOption)
+            if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
             if (evt.maxFee) setMaxFee(evt.maxFee)
             if (evt.priorityFee) setPriorityFee(evt.priorityFee)
+
+            onChange((
+                isEIP1559Supported(chainId) ? {
+                    gas: evt.gasLimit,
+                    maxFee: evt.maxFee,
+                    priorityFee: evt.priorityFee,
+                } : {
+                    gas: evt.gasLimit,
+                    gasPrice: evt.gasPrice,
+                }
+            ) as NonPayableTx)
         })
     }, [])
-
-    // update options
-    useEffect(() => {
-        onChange(
-            isEIP1559Supported(chainId)
-                ? {
-                      gas: gasLimit,
-                      // @ts-ignore
-                      maxFee,
-                      // @ts-ignore
-                      priorityFee,
-                  }
-                : {
-                      gas: gasLimit,
-                      gasPrice,
-                  },
-        )
-    }, [chainId, gasLimit, maxFee, priorityFee, gasPrice, onChange])
 
     const gasFee = useMemo(() => {
         const price = isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice
