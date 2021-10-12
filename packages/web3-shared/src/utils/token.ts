@@ -216,4 +216,26 @@ export const makeSortAssertFn = (chainId: ChainId, options: { isMaskBoost?: bool
         return 0
     }
 }
+
+export const makeSortAssertWithoutChainFn = () => {
+    return (a: Asset, b: Asset) => {
+        // Token with high usd value estimation has priority
+        const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
+        if (valueDifference !== 0) return valueDifference
+
+        // native token sort
+        if (a.token.type === EthereumTokenType.Native) return -1
+        if (b.token.type === EthereumTokenType.Native) return 1
+
+        // Token with big balance has priority
+        if (getBalanceValue(a) > getBalanceValue(b)) return -1
+        if (getBalanceValue(a) < getBalanceValue(b)) return 1
+
+        // Sorted by alphabet
+        if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
+        if ((a.token.name ?? '') < (b.token.name ?? '')) return -1
+
+        return 0
+    }
+}
 //#endregion

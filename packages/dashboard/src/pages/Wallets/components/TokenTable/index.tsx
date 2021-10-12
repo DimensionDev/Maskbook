@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useMemo } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
@@ -8,17 +8,22 @@ import { TokenTableRow } from '../TokenTableRow'
 import {
     Asset,
     ChainId,
+    createNativeToken,
+    EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
+    getChainDetailed,
+    getChainIdFromNetworkType,
+    makeSortAssertWithoutChainFn,
     useAssets,
-    useWallet,
     useWeb3State,
 } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages } from '../../../../API'
+import { PluginMessages, PluginServices } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -60,10 +65,22 @@ interface TokenTableProps {
 
 export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
-    const wallet = useWallet()
 
     const trustedERC20Tokens = useWeb3State().erc20Tokens
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+
+    const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
+    const supportedNetworkNativeTokenAssets = useMemo(() => {
+        if (selectedChainId || !networks) return []
+        return networks.map((x) => {
+            const chainId = getChainIdFromNetworkType(x)
+            return {
+                chain: getChainDetailed(chainId)?.shortName.toLowerCase() ?? 'unknown',
+                token: createNativeToken(chainId),
+                balance: '0',
+            }
+        })
+    }, [selectedChainId, networks])
 
     const {
         error: detailedTokensError,
@@ -73,6 +90,17 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
         selectedChainId === null ? 'all' : selectedChainId,
     )
+
+    const assetsWithNativeToken = useMemo(() => {
+        if (selectedChainId) return detailedTokens
+        const assets = supportedNetworkNativeTokenAssets.filter(
+            (x) =>
+                !detailedTokens.find(
+                    (t) => t.token.chainId === x.token.chainId && t.token.type === EthereumTokenType.Native,
+                ),
+        )
+        return [...detailedTokens, ...assets].sort(makeSortAssertWithoutChainFn())
+    }, [selectedChainId, supportedNetworkNativeTokenAssets, detailedTokens])
 
     const onSwap = useCallback((token: FungibleTokenDetailed) => {
         openSwapDialog({
@@ -98,7 +126,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         <TokenTableUI
             isLoading={detailedTokensLoading}
             isEmpty={!!detailedTokensError || !detailedTokens.length}
-            dataSource={detailedTokens}
+            dataSource={assetsWithNativeToken}
             onSwap={onSwap}
             onSend={onSend}
         />

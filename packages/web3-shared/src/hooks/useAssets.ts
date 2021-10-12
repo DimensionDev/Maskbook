@@ -36,7 +36,10 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
         retryAssetsDetailedDebank()
     }, [retryNativeTokenDetailed, retryAssetsDetailedChain, retryAssetsDetailedDebank])
 
-    const assetsDetailed = useAssetsMerged(assetsDetailedProvider, assetsDetailedChain)
+    const assetsDetailed = useAssetsMerged(
+        assetsDetailedProvider,
+        assetsDetailedChain.filter((x) => !chainId || chainId === 'all' || x.token.chainId === chainId),
+    )
 
     return {
         value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatEthereumAddress(x.token.address))),
