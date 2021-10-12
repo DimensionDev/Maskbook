@@ -2,7 +2,7 @@ import { ReactNode, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
-import { InputAdornment } from '@mui/material'
+import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
 import { Search } from '@mui/icons-material'
 import { MaskColorVar } from '../../constants'
@@ -88,20 +88,22 @@ export function SearchableList<T>({
 
     return (
         <div className={classes.container}>
-            <MaskTextField
-                placeholder="Search"
-                autoFocus
-                fullWidth
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <Search />
-                        </InputAdornment>
-                    ),
-                }}
-                onChange={(e) => handleSearch(e.currentTarget.value)}
-                {...textFieldProps}
-            />
+            <Box pt={0.5}>
+                <MaskTextField
+                    placeholder="Search"
+                    autoFocus
+                    fullWidth
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <Search />
+                            </InputAdornment>
+                        ),
+                    }}
+                    onChange={(e) => handleSearch(e.currentTarget.value)}
+                    {...textFieldProps}
+                />
+            </Box>
             {placeholder}
             {!placeholder && (
                 <div className={classes.list}>

@@ -18,6 +18,27 @@ function css_var<T extends Record<string, unknown>>(
 }
 type Theme = ThemeOptions | ((mode: PaletteMode, colors: Color) => ThemeOptions)
 
+export const BaseLine: Theme = (mode, colors): ThemeOptions => ({
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    scrollbarColor: 'red',
+                    '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
+                        width: '10px',
+                    },
+                    '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
+                        borderRadius: '6px',
+                        border: '2px solid rgba(0, 0, 0, 0)',
+                        backgroundColor: mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                        backgroundClip: 'padding-box',
+                    },
+                },
+            },
+        },
+    },
+})
+
 export const Grid: Theme = {
     components: { MuiGrid: {} },
 }
