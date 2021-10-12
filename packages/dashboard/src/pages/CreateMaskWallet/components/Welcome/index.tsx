@@ -5,10 +5,8 @@ import { styled, useTheme } from '@mui/material/styles'
 import { useDashboardI18N } from '../../../../locales'
 import { Button } from '@mui/material'
 import { MaskNotSquareIcon } from '@masknet/icons'
-import { MaskColorVar } from '@masknet/theme'
 
 const Content = styled('div')`
-    padding: 130px 120px 100px 120px;
     width: 100%;
     overflow: auto;
     display: flex;
@@ -32,17 +30,6 @@ const IFrame = styled('iframe')`
     width: 100%;
     min-height: 498px;
     max-width: 864px;
-    &::-webkit-scrollbar {
-        width: 7px;
-    }
-    &::-webkit-scrollbar-track {
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
-    }
-    &::-webkit-scrollbar-thumb {
-        border-radius: 4px;
-        background-color: ${MaskColorVar.normalBackground};
-    }
 `
 
 const StyledButton = styled(Button)(
@@ -82,6 +69,17 @@ const Welcome = memo(() => {
         style.innerHTML = `
               h3, h6 { color: ${mode === 'dark' ? '#D4D4D4' : '#111432'}; }
               p { color: ${mode === 'dark' ? '#D4D4D4;' : '#7b8192'}; }
+              body::-webkit-scrollbar {
+                width: 7px;
+              }
+              body::-webkit-scrollbar-track {
+                box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+                -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0);
+              }
+              body::-webkit-scrollbar-thumb {
+                border-radius: 4px;
+
+              }
             `
         iframeDocument.head?.appendChild(style)
     }

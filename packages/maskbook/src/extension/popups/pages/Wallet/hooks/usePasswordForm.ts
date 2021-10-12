@@ -28,7 +28,7 @@ export function usePasswordForm() {
     }, [])
 
     const formValue = useForm<zod.infer<typeof schema>>({
-        mode: 'onChange',
+        mode: 'onBlur',
         resolver: zodResolver(schema),
         defaultValues: {
             password: '',
