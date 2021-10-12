@@ -9,7 +9,7 @@ import { PreviewCard } from './components/PreviewCard'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { Context } from '../hooks/useContext'
 
-const isMaskBox = (x: string) => x.startsWith('https://box.mask.io')
+const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
