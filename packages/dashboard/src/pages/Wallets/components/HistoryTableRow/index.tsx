@@ -109,7 +109,6 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                     )
                 })}
             </TableCell>
-            {/*<TableCell className={classes.cell} align="center"></TableCell>*/}
             <TableCell className={classes.cell} align="center">
                 <Box className={classes.link}>
                     <Typography variant="body2">{formatEthereumAddress(transaction.toAddress, 4)}</Typography>
