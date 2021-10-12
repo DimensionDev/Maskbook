@@ -112,6 +112,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                                     <Button
                                         size="small"
                                         fullWidth
+                                        disabled={!isOnCurrentChain}
                                         onClick={onSend}
                                         variant="rounded"
                                         style={{ boxShadow: 'none' }}
