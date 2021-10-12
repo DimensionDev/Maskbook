@@ -70,7 +70,6 @@ function useContext(initialState?: { boxId: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        console.log(maskBoxInfo)
         if (
             !maskBoxInfo ||
             isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS) ||
@@ -112,9 +111,10 @@ function useContext(initialState?: { boxId: string }) {
     ])
 
     const boxState = useMemo(() => {
-        if (loadingMaskBoxInfo || loadingBoxInfo) return BoxState.UNKNOWN
         if (errorMaskBoxInfo || errorBoxInfo) return BoxState.ERROR
-        if (!boxInfo) return BoxState.NOT_FOUND
+        if (loadingMaskBoxInfo || loadingBoxInfo) return BoxState.UNKNOWN
+        if (maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
+        if (!maskBoxInfo || !boxInfo) return BoxState.NOT_FOUND
         const now = new Date()
         if (new BigNumber(boxInfo.tokenIdsPurchased.length).isGreaterThanOrEqualTo(boxInfo.personalLimit))
             return BoxState.DRAWED_OUT

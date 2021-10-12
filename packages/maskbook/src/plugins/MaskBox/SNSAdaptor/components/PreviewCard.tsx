@@ -116,8 +116,10 @@ export function PreviewCard(props: PreviewCardProps) {
         (ev) => {
             if (ev.open) return
             const isConfirmed = openBoxState.type === TransactionStateType.CONFIRMED
-            onRefresh()
-            if (isConfirmed) setOpenDrawResultDialog(true)
+            if (isConfirmed) {
+                onRefresh()
+                setOpenDrawResultDialog(true)
+            }
         },
     )
 
