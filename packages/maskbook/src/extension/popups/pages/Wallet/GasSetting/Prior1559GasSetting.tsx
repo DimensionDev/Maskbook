@@ -62,15 +62,15 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     label: {
-        color: '#1C68F3',
+        color: theme.palette.primary.main,
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
     },
     selected: {
-        backgroundColor: '#1C68F3',
+        backgroundColor: theme.palette.primary.main,
         '& > *': {
-            color: '#ffffff!important',
+            color: theme.palette.primary.contrastText,
         },
     },
     button: {
@@ -136,12 +136,12 @@ export const Prior1559GasSetting = memo(() => {
         return zod.object({
             gasLimit: zod
                 .string()
-                .min(1, t('wallet_transfer_error_gasLimit_absence'))
+                .min(1, t('wallet_transfer_error_gas_limit_absence'))
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(gas),
                     `Gas limit must be at least ${gas}.`,
                 ),
-            gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
+            gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
         })
     }, [gas])
 

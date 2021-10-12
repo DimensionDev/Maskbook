@@ -252,7 +252,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         ],
         state,
         classes: {
-            // focusTab: classes.focusTab,
             tabPaper: classes.tabPaper,
         },
     }

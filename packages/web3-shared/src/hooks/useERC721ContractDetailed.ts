@@ -7,12 +7,12 @@ import { createERC721ContractDetailed, safeNonPayableTransactionCall } from '../
 import type { ERC721 } from '../../../web3-contracts/types/ERC721'
 import { useOpenseaAPIConstants } from '../constants'
 
-export function useERC721ContractDetailed(address: string) {
+export function useERC721ContractDetailed(address?: string) {
     const chainId = useChainId()
     const { GET_CONTRACT_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(address)
     return useAsyncRetry(async () => {
-        if (!EthereumAddress.isValid(address) || !erc721TokenContract) return
+        if (!address || !EthereumAddress.isValid(address) || !erc721TokenContract) return
         if (!GET_CONTRACT_URL) return getERC721ContractDetailedFromChain(address, chainId, erc721TokenContract)
         const contractDetailedFromOpensea = await getERC721ContractDetailedFromOpensea(
             address,
@@ -21,7 +21,7 @@ export function useERC721ContractDetailed(address: string) {
         )
 
         return contractDetailedFromOpensea ?? getERC721ContractDetailedFromChain(address, chainId, erc721TokenContract)
-    }, [chainId, erc721TokenContract, address])
+    }, [address, chainId, erc721TokenContract])
 }
 
 const lazyBlank = Promise.resolve('')

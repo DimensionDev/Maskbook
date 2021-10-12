@@ -177,14 +177,14 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
                 gasLimit: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_gasLimit_absence'))
+                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimitContext),
                         ` Gas limit must be at least ${minGasLimitContext}.`,
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_maxPriority_fee_absence'))
+                    .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
                     .refine(
                         (value) => new BigNumber(value).isPositive(),
                         t('wallet_transfer_error_max_priority_gas_fee_positive'),
@@ -205,7 +205,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     ),
                 maxFeePerGas: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_maxFee_absence'))
+                    .min(1, t('wallet_transfer_error_max_fee_absence'))
                     .refine(
                         (value) =>
                             new BigNumber(value).isGreaterThanOrEqualTo(
