@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useState } from 'react'
 import { Box, Typography, styled, Button, Dialog, DialogTitle, DialogContent } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { LoadingButton } from '@material-ui/lab'
@@ -132,6 +132,8 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
     }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
+        const [verified, setVerified] = useState(false)
+
         return (
             <Dialog open={open} onClose={!address ? onClose : undefined} maxWidth="md">
                 <DialogTitle className={classes.dialogTitle}>{t.wallets_create_wallet_verification()}</DialogTitle>
@@ -165,7 +167,7 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                     />
                                 </Box>
 
-                                {!matched ? (
+                                {!matched && verified ? (
                                     <Typography className={classes.tips}>
                                         {t.create_wallet_mnemonic_word_not_match()}
                                     </Typography>
@@ -175,9 +177,10 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                     loading={loading}
                                     fullWidth
                                     className={classes.button}
-                                    disabled={!matched}
-                                    onClick={onSubmit}>
-                                    {/*{!matched ? t.create_wallet_mnemonic_word_not_match() : t.verify()}*/}
+                                    onClick={() => {
+                                        if (!verified) setVerified(true)
+                                        if (matched) onSubmit()
+                                    }}>
                                     {t.verify()}
                                 </LoadingButton>
                             </>
