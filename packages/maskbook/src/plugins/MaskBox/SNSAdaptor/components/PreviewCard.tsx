@@ -14,7 +14,6 @@ import { DetailsTab } from './DetailsTab'
 import { DrawResultDialog } from './DrawResultDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../../Wallet/messages'
-import { useOpenBoxTransaction } from '../../hooks/useOpenBoxTransaction'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -61,6 +60,12 @@ export function PreviewCard(props: PreviewCardProps) {
         setPaymentTokenAddress,
         paymentTokenPrice,
         paymentTokenDetailed,
+
+        // transaction
+        openBoxTransaction,
+        openBoxTransactionGasLimit,
+
+        // retry
         retryMaskBoxInfo,
         retryMaskBoxCreationSuccessEvent,
         retryMaskBoxTokensForSale,
@@ -69,10 +74,12 @@ export function PreviewCard(props: PreviewCardProps) {
     const { value: boxInfo, loading: loadingBoxInfo, error: errorBoxInfo, retry: retryBoxInfo } = boxInfo_
 
     //#region open box
-    const openBoxTransaction = useOpenBoxTransaction(boxId, paymentCount)
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
         TransactionStateType.CONFIRMED,
-        openBoxTransaction?.config,
+        {
+            ...openBoxTransaction?.config,
+            gas: openBoxTransaction?.config.gas ?? openBoxTransactionGasLimit,
+        },
         openBoxTransaction?.method,
     )
     const onRefresh = useCallback(() => {
@@ -84,25 +91,25 @@ export function PreviewCard(props: PreviewCardProps) {
         retryMaskBoxCreationSuccessEvent()
         retryMaskBoxTokensForSale()
         retryMaskBoxPurchasedTokens()
-    }, [])
-    const onDraw = useCallback(async () => {
-        setOpenDrawDialog(false)
-        await openBoxCallback()
     }, [
-        openBoxCallback,
-        onRefresh,
+        resetOpenBoxCallback,
         retryMaskBoxInfo,
         retryMaskBoxCreationSuccessEvent,
         retryMaskBoxTokensForSale,
         retryMaskBoxPurchasedTokens,
     ])
+    const onDraw = useCallback(async () => {
+        setOpenDrawDialog(false)
+        await openBoxCallback()
+    }, [openBoxCallback])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (openBoxState.type === TransactionStateType.CONFIRMED) setOpenDrawResultDialog(true)
+            const isConfirmed = openBoxState.type === TransactionStateType.CONFIRMED
             onRefresh()
+            if (isConfirmed) setOpenDrawResultDialog(true)
         },
     )
 

@@ -21,7 +21,6 @@ import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
-import { EthereumERC721TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC721TokenApprovedBoundary'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -105,6 +104,11 @@ export function DrawDialog(props: DrawDialogProps) {
         paymentTokenPrice,
         paymentTokenBalance,
         paymentTokenDetailed,
+
+        openBoxTransaction,
+        openBoxTransactionGasLimit,
+        openBoxTransactionOverrides,
+        setOpenBoxTransactionOverrides,
     } = useContainer(Context)
 
     const account = useAccount()
@@ -233,37 +237,32 @@ export function DrawDialog(props: DrawDialogProps) {
                                 Gas Fee:
                             </Typography>
                             <Box className={classes.content}>
-                                <GasSettingBar />
+                                <GasSettingBar
+                                    gasLimit={openBoxTransactionGasLimit}
+                                    onChange={setOpenBoxTransactionOverrides}
+                                />
                             </Box>
                         </Box>
                     </Box>
                 </Box>
 
                 <EthereumWalletConnectedBoundary>
-                    <EthereumERC721TokenApprovedBoundary
-                        owner={account}
-                        contractDetailed={contractDetailed}
-                        operator={MASK_BOX_CONTRACT_ADDRESS}
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).toFixed()}
+                        spender={MASK_BOX_CONTRACT_ADDRESS}
+                        token={
+                            paymentTokenDetailed?.type === EthereumTokenType.ERC20 ? paymentTokenDetailed : undefined
+                        }
                         ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
-                        <EthereumERC20TokenApprovedBoundary
-                            amount={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).toFixed()}
-                            spender={MASK_BOX_CONTRACT_ADDRESS}
-                            token={
-                                paymentTokenDetailed?.type === EthereumTokenType.ERC20
-                                    ? paymentTokenDetailed
-                                    : undefined
-                            }
-                            ActionButtonProps={{ size: 'medium', sx: { marginTop: 2 } }}>
-                            <ActionButton
-                                size="medium"
-                                fullWidth
-                                variant="contained"
-                                sx={{ marginTop: 2 }}
-                                onClick={onSubmit}>
-                                Draw
-                            </ActionButton>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </EthereumERC721TokenApprovedBoundary>
+                        <ActionButton
+                            size="medium"
+                            fullWidth
+                            variant="contained"
+                            sx={{ marginTop: 2 }}
+                            onClick={onSubmit}>
+                            Draw
+                        </ActionButton>
+                    </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>
             </DialogContent>
         </InjectedDialog>

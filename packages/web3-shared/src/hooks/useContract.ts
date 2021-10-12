@@ -8,7 +8,7 @@ import { useWeb3 } from './useWeb3'
 export function createContract<T extends BaseContract>(web3: Web3, address: string, ABI: AbiItem[]) {
     if (!address || !EthereumAddress.isValid(address)) return null
     const contract = new web3.eth.Contract(ABI, address) as unknown as T
-    contract.transactionConfirmationBlocks = 1
+    contract.transactionConfirmationBlocks = 0
     contract.transactionPollingTimeout = 5000
     return contract
 }

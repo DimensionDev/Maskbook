@@ -4,7 +4,7 @@ import { TransactionStateType, useTransactionState } from '.'
 import { TransactionEventType } from '..'
 
 export function useTransactionCallback<T extends unknown>(
-    type: TransactionStateType.HASH | TransactionStateType.CONFIRMED,
+    type: TransactionStateType.HASH | TransactionStateType.RECEIPT | TransactionStateType.CONFIRMED,
     config: PayableTx | undefined,
     method: PayableTransactionObject<T> | undefined,
 ) {
@@ -36,30 +36,26 @@ export function useTransactionCallback<T extends unknown>(
             }
         }
 
-        let confirmed = false
-
         return new Promise<void>(async (resolve, reject) => {
             method
                 .send(config)
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
+                .once(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     if (type !== TransactionStateType.HASH) return
                     setState({
                         type: TransactionStateType.HASH,
                         hash,
                     })
+                    resolve()
                 })
-                .on(TransactionEventType.RECEIPT, (receipt) => {
-                    // avoid double confirmation
-                    confirmed = true
-                    if (type !== TransactionStateType.CONFIRMED) return
+                .once(TransactionEventType.RECEIPT, (receipt) => {
+                    if (type !== TransactionStateType.RECEIPT) return
                     setState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
+                        type: TransactionStateType.RECEIPT,
                         receipt,
                     })
+                    resolve()
                 })
-                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
-                    if (confirmed) return
+                .once(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     if (type !== TransactionStateType.CONFIRMED) return
                     setState({
                         type: TransactionStateType.CONFIRMED,
@@ -68,7 +64,7 @@ export function useTransactionCallback<T extends unknown>(
                     })
                     resolve()
                 })
-                .on(TransactionEventType.ERROR, (error) => {
+                .once(TransactionEventType.ERROR, (error) => {
                     setState({
                         type: TransactionStateType.FAILED,
                         error,

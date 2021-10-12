@@ -15,7 +15,9 @@ import {
     useChainId,
     useAccount,
     useERC721ContractDetailed,
+    addGasMargin,
 } from '@masknet/web3-shared'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'
 import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent'
@@ -23,6 +25,7 @@ import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
 import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { useHeartBit } from './useHeartBit'
 import { formatCountdown } from '../helpers/formatCountdown'
+import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
@@ -151,11 +154,35 @@ function useContext(initialState?: { boxId: string }) {
         isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS) ? '' : paymentTokenAddress,
     )
     const paymentTokenInfo = boxInfo.value?.payments.find((x) => isSameAddress(x.token.address, paymentTokenAddress))
+    const paymentTokenIndex =
+        boxInfo.value?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1
+    const paymentTokenPrice = paymentTokenInfo?.price ?? '0'
+    const paymentTokenBalance = isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
+        ? paymentNativeTokenBalance
+        : paymentERC20TokenBalance
+    const paymentTokenDetailed = paymentTokenInfo?.token ?? null
 
     useEffect(() => {
         const firstPaymentTokenAddress = first(boxInfo.value?.payments)?.token.address
         if (paymentTokenAddress === '' && firstPaymentTokenAddress) setPaymentTokenAddress(firstPaymentTokenAddress)
     }, [paymentTokenAddress, boxInfo.value?.payments.map((x) => x.token.address).join()])
+    //#endregion
+
+    //#region transactions
+    const [openBoxTransactionOverrides, setOpenBoxTransactionOverrides] = useState<NonPayableTx>()
+    const openBoxTransaction = useOpenBoxTransaction(
+        boxId,
+        paymentCount,
+        paymentTokenIndex,
+        paymentTokenPrice,
+        paymentTokenDetailed,
+        openBoxTransactionOverrides,
+    )
+    const { value: openBoxTransactionGasLimit = 0 } = useAsyncRetry(async () => {
+        if (!openBoxTransaction) return 0
+        const estimatedGas = await openBoxTransaction.method.estimateGas(openBoxTransaction.config)
+        return addGasMargin(estimatedGas, 5000).toNumber()
+    }, [openBoxTransaction])
     //#endregion
 
     return {
@@ -185,15 +212,18 @@ function useContext(initialState?: { boxId: string }) {
         },
 
         // payment token
-        paymentTokenPrice: paymentTokenInfo?.price ?? '0',
-        paymentTokenIndex:
-            boxInfo.value?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1,
-        paymentTokenBalance: isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
-            ? paymentNativeTokenBalance
-            : paymentERC20TokenBalance,
-        paymentTokenDetailed: paymentTokenInfo?.token ?? null,
+        paymentTokenPrice,
+        paymentTokenIndex,
+        paymentTokenBalance,
+        paymentTokenDetailed,
 
-        // callbacks
+        // transactions
+        openBoxTransaction,
+        openBoxTransactionGasLimit,
+        openBoxTransactionOverrides,
+        setOpenBoxTransactionOverrides,
+
+        // retry callbacks
         retryMaskBoxInfo,
         retryMaskBoxCreationSuccessEvent,
         retryMaskBoxTokensForSale,
