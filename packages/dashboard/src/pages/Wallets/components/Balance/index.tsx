@@ -168,7 +168,7 @@ export const Balance = memo<BalanceCardProps>(
                         {t.wallets_balance_Swap()}
                     </Button>
                     <Button
-                    size="small"
+                        size="small"
                         color="secondary"
                         onClick={onReceive}
                         endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
