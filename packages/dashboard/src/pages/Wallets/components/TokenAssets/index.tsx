@@ -3,7 +3,6 @@ import { ContentContainer } from '../../../../components/ContentContainer'
 import { TabContext, TabPanel } from '@material-ui/lab'
 import { Tab, Tabs, Box, Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
 import { TokenTable } from '../TokenTable'
 import { useDashboardI18N } from '../../../../locales'
 import { CollectibleList } from '../CollectibleList'
@@ -17,17 +16,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottom: `1px solid ${MaskColorVar.lineLighter}`,
     },
     addCustomTokenButton: {
         borderRadius: Number(theme.shape.borderRadius) * 3.5,
         fontSize: theme.typography.caption.fontSize,
-        lineHeight: theme.typography.pxToRem(16),
     },
     tab: {
         flex: 1,
         padding: '0px',
-        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
     },
@@ -59,8 +55,7 @@ export const TokenAssets = memo(() => {
 
     return (
         <>
-            <ContentContainer
-                sx={{ marginTop: 3, display: 'flex', flexDirection: 'column', maxHeight: 'calc(100% - 114px)' }}>
+            <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
                 <TabContext value={activeTab}>
                     <Box className={classes.caption}>
                         <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
@@ -69,6 +64,7 @@ export const TokenAssets = memo(() => {
                             ))}
                         </Tabs>
                         <Button
+                            size="small"
                             color="secondary"
                             className={classes.addCustomTokenButton}
                             onClick={() =>

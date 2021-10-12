@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useContacts } from '../../hooks/useContacts'
 import type { RelationProfile } from '@masknet/shared'
-import { Table, TableContainer, TableBody, Box, TablePagination } from '@material-ui/core'
+import { Table, TableContainer, TableBody, Box, TablePagination, Stack } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { ContactTableRow } from '../ContactTableRow'
@@ -17,10 +17,8 @@ import { RelationFavor } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        maxHeight: 'calc(100% - 58px)',
     },
     header: {
         color: MaskColorVar.normalText,
@@ -29,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: MaskColorVar.primaryBackground,
     },
     footer: {
-        flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -116,30 +113,32 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
         const t = useDashboardI18N()
         const { classes } = useStyles()
         return (
-            <>
-                <TableContainer className={classes.container}>
-                    {isEmpty || isLoading ? (
-                        <Box flex={1}>
-                            {isLoading ? <LoadingPlaceholder /> : isEmpty ? <EmptyContactPlaceholder /> : null}
-                        </Box>
-                    ) : (
-                        <Table stickyHeader>
-                            {dataSource.length ? (
-                                <TableBody>
-                                    {dataSource.map((item, index) => (
-                                        <ContactTableRow
-                                            key={index}
-                                            contact={item}
-                                            index={page * PageSize + index + 1}
-                                            network={network}
-                                            onReset={onReset}
-                                        />
-                                    ))}
-                                </TableBody>
-                            ) : null}
-                        </Table>
-                    )}
-                </TableContainer>
+            <Stack justifyContent="space-between" height="100%">
+                <Box flex={1}>
+                    <TableContainer className={classes.container}>
+                        {isEmpty || isLoading ? (
+                            <Box flex={1}>
+                                {isLoading ? <LoadingPlaceholder /> : isEmpty ? <EmptyContactPlaceholder /> : null}
+                            </Box>
+                        ) : (
+                            <Table stickyHeader>
+                                {dataSource.length ? (
+                                    <TableBody>
+                                        {dataSource.map((item, index) => (
+                                            <ContactTableRow
+                                                key={index}
+                                                contact={item}
+                                                index={page * PageSize + index + 1}
+                                                network={network}
+                                                onReset={onReset}
+                                            />
+                                        ))}
+                                    </TableBody>
+                                ) : null}
+                            </Table>
+                        )}
+                    </TableContainer>
+                </Box>
                 {showPagination && !isEmpty ? (
                     <Box className={classes.footer}>
                         <TablePagination
@@ -163,7 +162,7 @@ export const ContactsTableUI = memo<ContactsTableUIProps>(
                         />
                     </Box>
                 ) : null}
-            </>
+            </Stack>
         )
     },
 )

@@ -133,6 +133,7 @@ export const RestoreFromLocal = memo(() => {
             <ButtonContainer>
                 <LoadingButton
                     variant="rounded"
+                    size="large"
                     color="primary"
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
                     disabled={restoreStatus === RestoreStatus.Verified ? !json : !file}>

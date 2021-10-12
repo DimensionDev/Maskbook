@@ -29,16 +29,24 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         padding: theme.spacing(1),
-        background:
-            theme.palette.mode === 'dark' ? getMaskColor(theme).lightBackground : getMaskColor(theme).normalBackground,
-        fontSize: 12,
+        background: theme.palette.mode === 'dark' ? MaskColorVar.lightBackground : '#F6F6F8',
+        fontSize: 13,
         lineHeight: '16px',
         borderRadius: 6,
-        border: `1px solid ${theme.palette.mode === 'dark' ? '#3D4166' : MaskColorVar.lineLighter}`,
         [`&.${formHelperTextClasses.error}`]: {
             boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
             border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,
         },
+    },
+    inputDisabled: {
+        opacity: 0.5,
+        color: 'rgba(255, 255, 255, 0.4)',
+        background: theme.palette.mode === 'dark' ? MaskColorVar.primaryBackground : '#F0F0F4',
+    },
+    inputFocused: {
+        background: MaskColorVar.primaryBackground,
+        padding: 7,
+        boxShadow: `0 0 0 ${theme.spacing(0.5)} rgba(28, 104, 243, 0.2)`,
     },
 }))
 
@@ -67,7 +75,12 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 classes={{ root: classes.field }}
                 variant="standard"
                 required={required}
-                InputProps={{ ...inputProps, disableUnderline: true, className: classes.input }}
+                InputProps={{
+                    ...inputProps,
+                    disableUnderline: true,
+                    className: classes.input,
+                    classes: { ...inputProps.classes, disabled: classes.inputDisabled, focused: classes.inputFocused },
+                }}
             />
         </Box>
     )

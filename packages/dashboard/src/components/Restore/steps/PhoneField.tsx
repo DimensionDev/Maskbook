@@ -42,6 +42,7 @@ export const PhoneField = memo(({ toStep }: StepCommonProps) => {
                 <Button
                     variant="rounded"
                     color="primary"
+                    size="large"
                     onClick={() => handleClick()}
                     disabled={!account || invalidPhone}>
                     {t.next()}
