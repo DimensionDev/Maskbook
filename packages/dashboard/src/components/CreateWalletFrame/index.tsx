@@ -7,6 +7,8 @@ const useStyles = makeStyles()({
         padding: '3vw',
         minHeight: '100vh',
         backgroundColor: MaskColorVar.bottom,
+        display: 'flex',
+        flexDirection: 'column',
     },
     container: {
         backgroundColor: MaskColorVar.background,
@@ -15,6 +17,7 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        flex: 1,
     },
 })
 

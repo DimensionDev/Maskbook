@@ -26,6 +26,7 @@ const useStyles = makeStyles()({
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
+        marginBottom: 70,
     },
     placeholder: {
         flex: 1,

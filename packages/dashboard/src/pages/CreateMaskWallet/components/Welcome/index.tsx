@@ -29,7 +29,7 @@ const ButtonGroup = styled('div')`
 const IFrame = styled('iframe')`
     border: none;
     width: 100%;
-    min-height: 412px;
+    min-height: 498px;
     max-width: 864px;
 `
 
