@@ -456,7 +456,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     }, [lastState_])
     useEffect(() => {
         // check user guide status
-        if (userGuideStatusVal !== 'completed') return
+        if (ui.networkIdentifier === 'twitter.com' && userGuideStatusVal !== 'completed') return
         if (!lastState.status) return
         setStep(lastState.status)
     }, [step, setStep, lastState, userGuideStatusVal])

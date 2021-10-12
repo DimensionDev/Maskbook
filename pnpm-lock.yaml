@@ -406,7 +406,7 @@ importers:
       webpack: ^5.53.0
       webpack-cli: ^4.8.0
       webpack-dev-server: ^4.2.1
-      webpack-target-webextension: ^0.4.4
+      webpack-target-webextension: ^1.0.0
       z-schema: ^5.0.1
       zod: 3.8.2
     dependencies:
@@ -558,7 +558,7 @@ importers:
       webpack: 5.53.0_2c70efa82749997cbd7c40601aecc63f
       webpack-cli: 4.8.0_cf8cd09e748782d29c72c0708b4c941f
       webpack-dev-server: 4.2.1_webpack-cli@4.8.0+webpack@5.53.0
-      webpack-target-webextension: 0.4.4_webpack@5.53.0
+      webpack-target-webextension: 1.0.0_webpack@5.53.0
 
   packages/plugin-infra:
     specifiers:
@@ -24500,11 +24500,11 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /webpack-target-webextension/0.4.4_webpack@5.53.0:
-    resolution: {integrity: sha512-RnR03jw8zjLo2vQ3wdVAj3EvjUwlj7iZ0uU1nHRuRCHzeIMDUiDbvAZfFYtUudkp3aibiRHvapZLSlQH3ct9iw==}
-    engines: {node: '>=10.0.0'}
+  /webpack-target-webextension/1.0.0_webpack@5.53.0:
+    resolution: {integrity: sha512-ETTp0ks9Gwf8bBH0RP5KSn5VjjbSSg3EnOxeo6x2U93xaRVLCw1hb3FaGQEVq/gN4WF3WRCIf8/4+96ko5KirA==}
+    engines: {node: '>=14.17.6'}
     peerDependencies:
-      webpack: 4.x || ^5.0.0
+      webpack: ^5.0.0
     dependencies:
       webpack: 5.53.0_2c70efa82749997cbd7c40601aecc63f
     dev: true
