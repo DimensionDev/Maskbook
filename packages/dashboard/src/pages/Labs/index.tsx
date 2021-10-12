@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import PluginItem, { PluginItemPlaceholder } from './components/PluginItem'
 import {
@@ -29,7 +29,11 @@ import { ContentContainer } from '../../components/ContentContainer'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
+        flex: 1,
+        borderRadius: Number(theme.shape.borderRadius) * 3,
+        backgroundColor: MaskColorVar.primaryBackground,
         padding: theme.spacing(2),
+        marginBottom: theme.spacing(2),
     },
     list: {
         display: 'flex',

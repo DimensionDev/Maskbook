@@ -1,16 +1,16 @@
-export const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
-export const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
+export const is_iOSApp = process.env.engine === 'safari' && process.env.architecture === 'app'
+export const isAndroidApp = process.env.architecture === 'app' && process.env.engine === 'firefox'
 
 const appOnly = process.env.architecture === 'app'
 const devOnly = process.env.NODE_ENV === 'development'
 const webOnly = process.env.architecture === 'web' || devOnly
-const insiderOnly = process.env.build === 'insider' || devOnly
-const betaOrInsiderOnly = insiderOnly || process.env.build === 'beta'
+const insiderOnly = process.env.channel === 'insider' || devOnly
+const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
     __raw__: {
-        target: process.env.target,
+        target: process.env.engine,
         architecture: process.env.architecture,
     },
     /** The Mask Network v2 main switch. */
@@ -26,7 +26,7 @@ export const Flags = {
     /** Don't show welcome page in this mode. Native side will do the job. */
     has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
-    has_firefox_xray_vision: process.env.target === 'firefox',
+    has_firefox_xray_vision: process.env.engine === 'firefox',
     support_eth_network_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
@@ -58,7 +58,7 @@ export const Flags = {
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API
      */
     no_web_extension_dynamic_permission_request: is_iOSApp,
-    has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.query,
+    has_no_WebRTC: process.env.engine === 'safari' || !globalThis?.navigator?.permissions?.query,
     //#endregion
     using_emoji_flag: true,
 
