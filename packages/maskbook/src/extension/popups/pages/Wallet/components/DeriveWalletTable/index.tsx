@@ -48,7 +48,7 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
     const { classes } = useStyles()
 
     return (
-        <Table size="small" padding="none">
+        <Table size="small" padding="none" stickyHeader>
             <TableHead>
                 <TableRow>
                     <TableCell key="address" align="center" variant="head" className={classes.header}>

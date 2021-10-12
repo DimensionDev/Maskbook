@@ -48,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         flex: 1,
         backgroundColor: '#f7f9fa',
+        paddingBottom: 40,
     },
     item: {
         padding: '12px 16px',

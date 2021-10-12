@@ -1,6 +1,6 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { Typography, TablePagination, tablePaginationClasses } from '@material-ui/core'
+import { Typography, TablePagination, tablePaginationClasses, TableContainer } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
@@ -133,12 +133,14 @@ const AddDeriveWallet = memo(() => {
                     path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
                 })}
             </Typography>
-            <DeriveWalletTable
-                loading={loading}
-                dataSource={dataSource}
-                onCheck={onCheck}
-                confirmLoading={confirmLoading}
-            />
+            <TableContainer sx={{ maxHeight: 320 }}>
+                <DeriveWalletTable
+                    loading={loading}
+                    dataSource={dataSource}
+                    onCheck={onCheck}
+                    confirmLoading={confirmLoading}
+                />
+            </TableContainer>
             {!loading ? (
                 <TablePagination
                     count={-1}
