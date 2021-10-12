@@ -48,7 +48,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
     const flags: BuildFlags = {
         channel: 'stable',
         mode: mode === 'dev' ? 'development' : 'production',
-        runtime: { architecture: 'web', engine: 'firefox', manifest: 2 },
+        runtime: { architecture: 'web', engine: 'chromium', manifest: 2 },
     }
     if (args.reproducible) flags.reproducibleBuild = true
     if (args.readonlyCache) flags.readonlyCache = true
