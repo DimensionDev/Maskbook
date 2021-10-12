@@ -22,7 +22,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        console.log(usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks()))
         const link = usePostInfoDetails
             .postMetadataMentionedLinks()
             .concat(usePostInfoDetails.postMentionedLinks())

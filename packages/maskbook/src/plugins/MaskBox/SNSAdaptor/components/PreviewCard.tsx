@@ -157,8 +157,6 @@ export function PreviewCard(props: PreviewCardProps) {
             </Box>
         )
 
-    console.log(boxInfo)
-
     const tabProps: AbstractTabProps = {
         tabs: [
             {
