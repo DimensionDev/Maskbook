@@ -10,6 +10,7 @@ import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'
 import { NetworkSelector } from '../../../components/NetworkSelector'
+import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles()({
     header: {
@@ -100,6 +101,10 @@ const SwitchWallet = memo(() => {
             await WalletRPC.updateMaskAccount({
                 account: address,
             })
+
+            if (currentProviderSettings.value === ProviderType.MaskWallet)
+                await WalletRPC.updateAccount({ account: address, providerType: ProviderType.MaskWallet })
+
             history.replace(PopupRoutes.Wallet)
         },
         [history],

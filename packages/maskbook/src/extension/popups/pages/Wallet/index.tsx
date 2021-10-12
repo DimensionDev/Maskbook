@@ -13,6 +13,7 @@ import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import { first } from 'lodash-es'
+import { currentAccountSettings } from '../../../../plugins/Wallet/settings'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -42,9 +43,12 @@ export default function Wallet() {
 
     const { loading, retry } = useAsyncRetry(async () => {
         if (
-            [PopupRoutes.ContractInteraction, PopupRoutes.WalletSignRequest, PopupRoutes.GasSetting].some(
-                (item) => item === location.pathname,
-            )
+            [
+                PopupRoutes.ContractInteraction,
+                PopupRoutes.WalletSignRequest,
+                PopupRoutes.GasSetting,
+                PopupRoutes.Unlock,
+            ].some((item) => item === location.pathname)
         )
             return
 
@@ -94,6 +98,12 @@ export default function Wallet() {
             WalletRPC.updateMaskAccount({
                 account: first(wallets)?.address,
             })
+
+            if (!currentAccountSettings.value)
+                WalletRPC.updateAccount({
+                    account: first(wallets)?.address,
+                    providerType: ProviderType.MaskWallet,
+                })
         }
     }, [wallets, wallet])
 
