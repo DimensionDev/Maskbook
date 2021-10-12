@@ -236,7 +236,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <EthereumERC721TokenApprovedBoundary
                         validationMessage={validationMessage}
                         owner={account}
-                        contract={contract}
+                        contractDetailed={contract}
                         operator={RED_PACKET_NFT_ADDRESS}>
                         <ActionButton
                             variant="contained"

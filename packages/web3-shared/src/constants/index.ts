@@ -8,6 +8,7 @@ import NftRedPacket from '@masknet/web3-constants/data/nft-red-packet.json'
 import Token from '@masknet/web3-constants/data/token.json'
 import Trader from '@masknet/web3-constants/data/trader.json'
 import Trending from '@masknet/web3-constants/data/trending.json'
+import MaskBox from '@masknet/web3-constants/data/mask-box.json'
 import RPC from '@masknet/web3-constants/data/rpc.json'
 import PoolTogether from '@masknet/web3-constants/data/pooltogether.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/data/token-asset-base-url.json'
@@ -45,10 +46,14 @@ export const useTraderConstants = hookTransform(getTraderConstants)
 export const getTrendingConstants = transform(Trending)
 export const useTrendingConstants = hookTransform(getTrendingConstants)
 
+export const getMaskBoxConstants = transform(MaskBox)
+export const useMaskBoxConstants = hookTransform(getMaskBoxConstants)
+
 let WEB3_CONSTANTS_RPC = ''
 try {
     WEB3_CONSTANTS_RPC = process.env.WEB3_CONSTANTS_RPC ?? ''
 } catch {}
+
 export const getRPCConstants = transformFromJSON(WEB3_CONSTANTS_RPC, RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
 

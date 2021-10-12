@@ -63,15 +63,15 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     label: {
-        color: '#1C68F3',
+        color: theme.palette.primary.main,
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
     },
     selected: {
-        backgroundColor: '#1C68F3',
+        backgroundColor: theme.palette.primary.main,
         '& > *': {
-            color: '#ffffff!important',
+            color: theme.palette.primary.contrastText,
         },
     },
     button: {
