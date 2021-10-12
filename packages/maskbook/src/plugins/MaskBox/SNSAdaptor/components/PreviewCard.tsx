@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useContainer } from 'unstated-next'
-import { Box, Button, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
+import { Box, Button, Skeleton, Typography } from '@material-ui/core'
 import { formatBalance, TransactionStateType, useTransactionCallback } from '@masknet/web3-shared'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -53,6 +53,7 @@ export function PreviewCard(props: PreviewCardProps) {
         boxState,
         boxStateMessage,
         boxInfo: boxInfo_,
+        boxMetadata,
         contractDetailed,
         paymentCount,
         setPaymentCount,
@@ -61,9 +62,15 @@ export function PreviewCard(props: PreviewCardProps) {
         paymentTokenPrice,
         paymentTokenDetailed,
 
+        // token ids
+        lastPurchasedTokenIds,
+        refreshLastPurchasedTokenIds,
+
         // transaction
         openBoxTransaction,
+        openBoxTransactionOverrides,
         openBoxTransactionGasLimit,
+        setOpenBoxTransactionOverrides,
 
         // retry
         retryMaskBoxInfo,
@@ -73,12 +80,17 @@ export function PreviewCard(props: PreviewCardProps) {
     } = useContainer(Context)
     const { value: boxInfo, loading: loadingBoxInfo, error: errorBoxInfo, retry: retryBoxInfo } = boxInfo_
 
+    console.log({
+        openBoxTransactionOverrides,
+        openBoxTransactionGasLimit,
+    })
+
     //#region open box
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
         TransactionStateType.CONFIRMED,
         {
             ...openBoxTransaction?.config,
-            gas: openBoxTransaction?.config.gas ?? openBoxTransactionGasLimit,
+            gas: openBoxTransactionOverrides?.gas ?? openBoxTransactionGasLimit,
         },
         openBoxTransaction?.method,
     )
@@ -100,8 +112,9 @@ export function PreviewCard(props: PreviewCardProps) {
     ])
     const onDraw = useCallback(async () => {
         setOpenDrawDialog(false)
+        refreshLastPurchasedTokenIds()
         await openBoxCallback()
-    }, [openBoxCallback])
+    }, [openBoxCallback, refreshLastPurchasedTokenIds])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
@@ -145,12 +158,12 @@ export function PreviewCard(props: PreviewCardProps) {
         tabs: [
             {
                 label: 'Articles',
-                children: boxInfo ? <ArticlesTab boxInfo={boxInfo} /> : null,
+                children: boxInfo ? <ArticlesTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null,
                 sx: { p: 0 },
             },
             {
                 label: 'Details',
-                children: boxInfo ? <DetailsTab boxInfo={boxInfo} /> : null,
+                children: boxInfo ? <DetailsTab boxInfo={boxInfo} boxMetadata={boxMetadata} /> : null,
                 sx: { p: 0 },
             },
         ],
@@ -181,14 +194,20 @@ export function PreviewCard(props: PreviewCardProps) {
             <DrawDialog
                 boxInfo={boxInfo}
                 open={openDrawDialog}
-                onClose={() => setOpenDrawDialog(false)}
+                onClose={() => {
+                    setOpenBoxTransactionOverrides(null)
+                    setOpenDrawDialog(false)
+                }}
                 onSubmit={onDraw}
             />
             <DrawResultDialog
                 boxInfo={boxInfo}
                 contractDetailed={contractDetailed}
                 open={openDrawResultDialog}
-                onClose={() => setOpenDrawResultDialog(false)}
+                onClose={() => {
+                    refreshLastPurchasedTokenIds()
+                    setOpenDrawResultDialog(false)
+                }}
             />
         </Box>
     )

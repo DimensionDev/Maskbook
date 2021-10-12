@@ -22,6 +22,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
+        console.log(usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks()))
         const link = usePostInfoDetails
             .postMetadataMentionedLinks()
             .concat(usePostInfoDetails.postMentionedLinks())
@@ -34,7 +35,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
-    const [, chainId, boxId] = props.url.match(/(\d+)\/(\d+)/) ?? []
+    const [, chainId] = props.url.match(/chain=(\d+)/i) ?? []
+    const [, boxId] = props.url.match(/box=(\d+)/i) ?? []
 
     if (!chainId || !boxId) return null
 

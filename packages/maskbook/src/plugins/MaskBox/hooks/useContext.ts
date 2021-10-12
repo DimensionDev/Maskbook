@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { clamp, first } from 'lodash-es'
+import { omit, clamp, first, uniq } from 'lodash-es'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
 import { unreachable } from '@dimensiondev/kit'
@@ -26,6 +26,7 @@ import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { useHeartBit } from './useHeartBit'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
+import { useMaskBoxMetadata } from './useMaskBoxMetadata'
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
@@ -82,8 +83,7 @@ function useContext(initialState?: { boxId: string }) {
                 }
             }),
             tokenAddress: maskBoxInfo.nft_address,
-            heroImageURL:
-                'https://lh3.googleusercontent.com/J734DD96jgdCHK95vKF1lb1sGn2qyxRIo2wF7pDYN3rEoQqZSBTHH2tRecaxgFCux-oIZcJAZSsVYY9xaGhSIZwpkQlh3R6YHf8w=w600',
+            heroImageURL: '',
             qualificationAddress: maskBoxInfo.qualification,
         }
         return Promise.resolve(info)
@@ -134,6 +134,10 @@ function useContext(initialState?: { boxId: string }) {
     }, [boxState, heartBit])
     //#endregion
 
+    //#region the box metadata
+    const { value: boxMetadata, retry: retryBoxMetadata } = useMaskBoxMetadata(boxId, boxInfo.value?.creator ?? '')
+    //#endregion
+
     //#region the erc721 contract detailed
     const { value: contractDetailed } = useERC721ContractDetailed(maskBoxInfo?.nft_address)
     //#endregion
@@ -146,6 +150,14 @@ function useContext(initialState?: { boxId: string }) {
         },
         [boxInfo.value?.personalRemaining],
     )
+    //#endregion
+
+    //#region token ids
+    const [lastAllTokenIds, setLastAllTokenIds] = useState<string[]>([])
+    const [lastPurchasedTokenIds, setLastPurchasedTokenIds] = useState<string[]>([])
+    const refreshLastPurchasedTokenIds = useCallback(() => {
+        setLastPurchasedTokenIds((tokenIds) => uniq([...tokenIds, ...purchasedTokens]))
+    }, [purchasedTokens.length])
     //#endregion
 
     //#region the payment token
@@ -169,7 +181,7 @@ function useContext(initialState?: { boxId: string }) {
     //#endregion
 
     //#region transactions
-    const [openBoxTransactionOverrides, setOpenBoxTransactionOverrides] = useState<NonPayableTx>()
+    const [openBoxTransactionOverrides, setOpenBoxTransactionOverrides] = useState<NonPayableTx | null>(null)
     const openBoxTransaction = useOpenBoxTransaction(
         boxId,
         paymentCount,
@@ -180,8 +192,8 @@ function useContext(initialState?: { boxId: string }) {
     )
     const { value: openBoxTransactionGasLimit = 0 } = useAsyncRetry(async () => {
         if (!openBoxTransaction) return 0
-        const estimatedGas = await openBoxTransaction.method.estimateGas(openBoxTransaction.config)
-        return addGasMargin(estimatedGas, 5000).toNumber()
+        const estimatedGas = await openBoxTransaction.method.estimateGas(omit(openBoxTransaction.config, 'gas'))
+        return addGasMargin(estimatedGas).toNumber()
     }, [openBoxTransaction])
     //#endregion
 
@@ -190,8 +202,9 @@ function useContext(initialState?: { boxId: string }) {
         boxId,
         setBoxId,
 
-        // box info
+        // box info & metadata
         boxInfo,
+        boxMetadata,
 
         // box state
         boxState,
@@ -211,6 +224,13 @@ function useContext(initialState?: { boxId: string }) {
                 setPaymentTokenAddress(address)
         },
 
+        // token ids
+        lastAllTokenIds,
+        setLastAllTokenIds,
+        lastPurchasedTokenIds,
+        setLastPurchasedTokenIds,
+        refreshLastPurchasedTokenIds,
+
         // payment token
         paymentTokenPrice,
         paymentTokenIndex,
@@ -225,6 +245,7 @@ function useContext(initialState?: { boxId: string }) {
 
         // retry callbacks
         retryMaskBoxInfo,
+        retryBoxMetadata,
         retryMaskBoxCreationSuccessEvent,
         retryMaskBoxTokensForSale,
         retryMaskBoxPurchasedTokens,

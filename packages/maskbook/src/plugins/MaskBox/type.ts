@@ -1,4 +1,4 @@
-import type { ERC721TokenDetailed, FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared'
 
 export enum CardTab {
     Articles = 0,
@@ -48,8 +48,12 @@ export interface BoxInfo {
     qualificationAddress: string
 }
 
-export interface MaskBoxState {
-    boxId: string
-    boxInfo?: BoxInfo
-    tokenInfo?: ERC721TokenDetailed
+export interface BoxMetadata {
+    id: string
+    name: string
+    cover: string
+    activities: {
+        title: string
+        body: string
+    }[]
 }

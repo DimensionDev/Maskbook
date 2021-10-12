@@ -1,4 +1,6 @@
 import { useCallback } from 'react'
+import { difference } from 'lodash-es'
+import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Box, DialogContent } from '@material-ui/core'
 import type { ERC721ContractDetailed } from '@masknet/web3-shared'
@@ -8,6 +10,7 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
+import { Context } from '../../hooks/useContext'
 
 const useStyles = makeStyles()((theme) => ({
     main: {},
@@ -34,6 +37,8 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
     const { open, onClose, boxInfo, contractDetailed } = props
     const { classes } = useStyles()
 
+    const { lastPurchasedTokenIds, setLastPurchasedTokenIds } = useContainer(Context)
+
     const postLink = usePostLink()
     const shareSuccessLink = activatedSocialNetworkUI.utils.getShareLinkURL?.(
         `I just claimed a #MaskBox with @realMaskNetwork. Install mask.io and create your own NFT mystery box! \n ${postLink}`,
@@ -51,7 +56,7 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
             <DialogContent>
                 <Box className={classes.main}>
                     <Box className={classes.list} display="flex" flexWrap="wrap">
-                        {boxInfo.tokenIdsPurchased.map((x) => (
+                        {difference(boxInfo.tokenIdsPurchased, lastPurchasedTokenIds).map((x) => (
                             <Box className={classes.token} key={x} flex={1}>
                                 <TokenCard tokenId={x} contractDetailed={contractDetailed} />
                             </Box>

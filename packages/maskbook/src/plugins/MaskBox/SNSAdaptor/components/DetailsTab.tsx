@@ -1,10 +1,10 @@
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import type { BoxInfo } from '../../type'
+import type { BoxInfo, BoxMetadata } from '../../type'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
-        maxHeight: 500,
+        height: 360,
         overflow: 'auto',
         marginBottom: theme.spacing(2.75),
     },
@@ -16,6 +16,10 @@ const useStyles = makeStyles()((theme) => ({
         '&:last-child': {
             marginBottom: 0,
         },
+    },
+    placeholder: {
+        textAlign: 'center',
+        marginTop: 170,
     },
     title: {
         fontSize: 18,
@@ -31,27 +35,30 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface DetailsTabProps {
     boxInfo: BoxInfo
+    boxMetadata?: BoxMetadata
 }
 
 export function DetailsTab(props: DetailsTabProps) {
-    const { boxInfo } = props
+    const { boxInfo, boxMetadata } = props
     const { classes } = useStyles()
 
-    const definitions = [
-        {
-            title: 'Rule Introduction',
-            content: `A novel is a relatively long work of narrative fiction, typically written in prose and published as a book. The present English word for a long work of prose fiction derives from the Italian: novella for "new", "news", or "short story of something new", itself from the Latin: novella, a singular noun use of the neuter plural of novellus, diminutive of novus, meaning "new".`,
-        },
-    ]
+    const definitions = boxMetadata?.activities.map((x) => ({
+        title: x.title,
+        content: x.body,
+    }))
+
+    if (!definitions)
+        return (
+            <Box className={classes.main}>
+                <Typography className={classes.placeholder} color="textPrimary">
+                    No detailed information.
+                </Typography>
+            </Box>
+        )
 
     return (
         <Box className={classes.main}>
-            <section className={classes.section}>
-                <Typography className={classes.title} color="textPrimary" variant="h3">
-                    Draw Probability
-                </Typography>
-            </section>
-            {definitions.map((x, i) => (
+            {definitions?.map((x, i) => (
                 <section className={classes.section} key={i}>
                     <Typography className={classes.title} color="textPrimary" variant="h3">
                         {x.title}

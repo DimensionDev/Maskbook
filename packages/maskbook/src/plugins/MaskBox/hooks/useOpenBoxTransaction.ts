@@ -10,7 +10,7 @@ export function useOpenBoxTransaction(
     paymentTokenIndex: number,
     paymentTokenPrice: string,
     paymentTokenDetailed: FungibleTokenDetailed | null,
-    overrides?: NonPayableTx,
+    overrides?: NonPayableTx | null,
 ) {
     const account = useAccount()
     const maskBoxContract = useMaskBoxContract()
