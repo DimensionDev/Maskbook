@@ -8,7 +8,7 @@ import {
     pow10,
     TransactionStateType,
     useAccount,
-    useTokenBalance,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared'
 import { CircularProgress, DialogContent, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -123,7 +123,7 @@ export function SellDialog(props: SellDialogProps) {
         loading: loadingTokenBalance,
         error: errorTokenBalance,
         retry: retryTokenBalance,
-    } = useTokenBalance(EthereumTokenType.ERC20, outcome?.shareToken ?? '')
+    } = useFungibleTokenBalance(EthereumTokenType.ERC20, outcome?.shareToken ?? '')
 
     useEffect(() => {
         retryTokenBalance()

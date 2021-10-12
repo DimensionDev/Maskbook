@@ -348,11 +348,8 @@
     "relative_time_seconds_ago": "{{seconds}} seconds ago",
     "relative_time_years_ago": "{{years}} years ago",
     "plugin_powered_by": "Powered by",
-<<<<<<< HEAD
     "plugin_wallet_collections": "Collections",
-=======
     "plugin_supported_by": "Supported by",
->>>>>>> feat: implemented fetch sport market
     "plugin_wallet_select_a_token": "Select a Token",
     "plugin_wallet_select_a_nft_contract": "Select an NFT Contract",
     "plugin_wallet_select_a_nft_owner": "Select an NFT Contract Owner",

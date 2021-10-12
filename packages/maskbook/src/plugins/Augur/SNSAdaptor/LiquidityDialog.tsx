@@ -5,7 +5,7 @@ import {
     FungibleTokenDetailed,
     pow10,
     TransactionStateType,
-    useTokenBalance,
+    useFungibleTokenBalance,
     useTransactionState,
     ZERO,
 } from '@masknet/web3-shared'
@@ -147,7 +147,7 @@ export function LiquidityDialog(props: LiquidityDialogProps) {
         loading: loadingTokenBalance,
         error: errorTokenBalance,
         retry: retryTokenBalance,
-    } = useTokenBalance(token.type, token.address ?? '')
+    } = useFungibleTokenBalance(token.type, token.address ?? '')
 
     // Reduce balance accuracy to $BALANCE_DECIMALS
     const _formattedBalance = new BN(formatBalance(_tokenBalance, token?.decimals ?? 0))

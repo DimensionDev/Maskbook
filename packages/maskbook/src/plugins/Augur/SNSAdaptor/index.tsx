@@ -2,11 +2,11 @@ import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@material-ui/core'
 import { base } from '../base'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
 import { MarketView } from '../UI/MarketView'
 import { AUGUR_CHAIN_ID, URL_REGEX, PLUGIN_NAME } from '../constants'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 
 function createMatchLink() {
     return URL_REGEX
@@ -49,12 +49,12 @@ export default sns
 
 function Renderer(props: React.PropsWithChildren<{ link: string; address: string; id: string }>) {
     return (
-        <MaskbookPluginWrapper pluginName={PLUGIN_NAME}>
+        <MaskPluginWrapper pluginName={PLUGIN_NAME}>
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={AUGUR_CHAIN_ID}>
                     <MarketView link={props.link} address={props.address} id={props.id} />
                 </EthereumChainBoundary>
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }

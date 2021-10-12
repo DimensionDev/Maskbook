@@ -9,7 +9,7 @@ import {
     pow10,
     TransactionStateType,
     useAccount,
-    useTokenBalance,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared'
 import { CircularProgress, DialogContent, IconButton, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -125,7 +125,7 @@ export function BuyDialog(props: BuyDialogProps) {
         loading: loadingTokenBalance,
         error: errorTokenBalance,
         retry: retryTokenBalance,
-    } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
 
     useEffect(() => {
         retryTokenBalance()
