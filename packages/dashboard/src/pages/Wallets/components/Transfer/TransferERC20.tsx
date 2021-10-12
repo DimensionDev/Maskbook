@@ -126,8 +126,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
             if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
             if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
-            if (evt.maxFee) setMaxFee(evt.maxFee)
-            if (evt.priorityFee) setPriorityFee(evt.priorityFee)
+            if (evt.maxFee) setMaxFee(new BigNumber(evt.maxFee).toFixed())
+            if (evt.priorityFee) setPriorityFee(new BigNumber(evt.priorityFee).toFixed())
         })
     }, [])
     const gasConfig = useMemo(() => {

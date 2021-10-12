@@ -16,22 +16,19 @@ import { WalletMessages } from '../../messages'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 
 export interface GasSettingBarProps {
-    gasLimit: BigNumber.Value
+    gasLimit: string
+    gasPrice?: BigNumber.Value
+    maxFee?: BigNumber.Value
+    priorityFee?: BigNumber.Value
     onChange: (tx: NonPayableTx) => void
 }
 
 export function GasSettingBar(props: GasSettingBarProps) {
-    const { gasLimit: initialGasLimit, onChange } = props
+    const { gasLimit, gasPrice, maxFee, priorityFee, onChange } = props
 
     const chainId = useChainId()
-    const [gasLimit, setGasLimit] = useState(new BigNumber(initialGasLimit).toFixed())
-    const [maxFee, setMaxFee] = useState('0')
-    const [priorityFee, setPriorityFee] = useState('0')
-    const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
-    const { value: defaultGasPrice = '0' } = useGasPrice()
-    const gasPrice = customGasPrice || defaultGasPrice
-
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const { value: gasPriceDefault = '0' } = useGasPrice()
 
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
     const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
@@ -52,34 +49,32 @@ export function GasSettingBar(props: GasSettingBarProps) {
                       gasOption,
                   },
         )
-    }, [chainId, gasLimit, gasOption])
+    }, [chainId, gasLimit, gasPrice, maxFee, priorityFee, gasOption])
 
     // set initial options
     useEffect(() => {
         return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
             if (evt.open) return
-            if (evt.gasLimit) setGasLimit(evt.gasLimit)
             if (evt.gasOption) setGasOption(evt.gasOption)
-            if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
-            if (evt.maxFee) setMaxFee(evt.maxFee)
-            if (evt.priorityFee) setPriorityFee(evt.priorityFee)
-
-            onChange((
-                isEIP1559Supported(chainId) ? {
-                    gas: evt.gasLimit,
-                    maxFee: evt.maxFee,
-                    priorityFee: evt.priorityFee,
-                } : {
-                    gas: evt.gasLimit,
-                    gasPrice: evt.gasPrice,
-                }
-            ) as NonPayableTx)
+            onChange(
+                (isEIP1559Supported(chainId)
+                    ? {
+                          gas: evt.gasLimit,
+                          maxFee: evt.maxFee,
+                          priorityFee: evt.priorityFee,
+                      }
+                    : {
+                          gas: evt.gasLimit,
+                          gasPrice: evt.gasPrice,
+                      }) as NonPayableTx,
+            )
         })
     }, [])
 
     const gasFee = useMemo(() => {
-        const price = isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice
-        return new BigNumber(gasLimit).multipliedBy(price)
+        return new BigNumber(gasLimit).multipliedBy(
+            isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
+        )
     }, [chainId, gasLimit, gasPrice, maxFee])
 
     return (

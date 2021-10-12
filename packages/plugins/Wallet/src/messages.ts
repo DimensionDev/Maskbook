@@ -80,8 +80,8 @@ export type GasSettingDialogEvent = {
     open: boolean
     gasLimit: string
     gasPrice?: BigNumber.Value
-    maxFee?: string
-    priorityFee?: string
+    maxFee?: BigNumber.Value
+    priorityFee?: BigNumber.Value
     gasOption?: GasOption
 }
 

@@ -240,7 +240,7 @@ export function DrawDialog(props: DrawDialogProps) {
                             </Typography>
                             <Box className={classes.content}>
                                 <GasSettingBar
-                                    gasLimit={openBoxTransactionGasLimit}
+                                    gasLimit={openBoxTransactionGasLimit.toString()}
                                     onChange={setOpenBoxTransactionOverrides}
                                 />
                             </Box>
