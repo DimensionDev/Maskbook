@@ -52,7 +52,7 @@ export function PreviewCard(props: PreviewCardProps) {
         boxId,
         boxState,
         boxStateMessage,
-        boxInfo: boxInfo_,
+        boxInfo,
         boxMetadata,
         contractDetailed,
         paymentCount,
@@ -74,11 +74,11 @@ export function PreviewCard(props: PreviewCardProps) {
 
         // retry
         retryMaskBoxInfo,
+        retryBoxInfo,
         retryMaskBoxCreationSuccessEvent,
         retryMaskBoxTokensForSale,
         retryMaskBoxPurchasedTokens,
     } = useContainer(Context)
-    const { value: boxInfo, loading: loadingBoxInfo, error: errorBoxInfo, retry: retryBoxInfo } = boxInfo_
 
     //#region open box
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
@@ -131,14 +131,14 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [openBoxState.type])
     //#endregion
 
-    if (loadingBoxInfo)
+    if (boxState === BoxState.UNKNOWN)
         return (
             <Box>
                 <Skeleton animation="wave" variant="rectangular" width="100%" height={36} />
                 <Skeleton animation="wave" variant="rectangular" width="100%" height={300} sx={{ marginTop: 2 }} />
             </Box>
         )
-    if (errorBoxInfo)
+    if (boxState === BoxState.ERROR)
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
                 <Typography color="textPrimary">Something went wrong.</Typography>
@@ -147,7 +147,17 @@ export function PreviewCard(props: PreviewCardProps) {
                 </Button>
             </Box>
         )
-    if (!boxInfo) return null
+    if (boxState === BoxState.NOT_FOUND || !boxInfo)
+        return (
+            <Box display="flex" flexDirection="column" alignItems="center">
+                <Typography color="textPrimary">Failed to load box.</Typography>
+                <Button sx={{ marginTop: 1 }} size="small" onClick={retryMaskBoxInfo}>
+                    Retry
+                </Button>
+            </Box>
+        )
+
+    console.log(boxInfo)
 
     const tabProps: AbstractTabProps = {
         tabs: [

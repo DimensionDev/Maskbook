@@ -41,7 +41,12 @@ function useContext(initialState?: { boxId: string }) {
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
 
     //#region the box info
-    const { value: maskBoxInfo = null, retry: retryMaskBoxInfo } = useMaskBoxInfo(boxId)
+    const {
+        value: maskBoxInfo = null,
+        error: errorMaskBoxInfo,
+        loading: loadingMaskBoxInfo,
+        retry: retryMaskBoxInfo,
+    } = useMaskBoxInfo(boxId)
     const { value: maskBoxCreationSuccessEvent = null, retry: retryMaskBoxCreationSuccessEvent } =
         useMaskBoxCreationSuccessEvent(maskBoxInfo?.creator ?? '', maskBoxInfo?.nft_address ?? '', boxId)
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
@@ -59,8 +64,19 @@ function useContext(initialState?: { boxId: string }) {
         account,
     )
 
-    const boxInfo = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxCreationSuccessEvent) return null
+    const {
+        value: boxInfo = null,
+        error: errorBoxInfo,
+        loading: loadingBoxInfo,
+        retry: retryBoxInfo,
+    } = useAsyncRetry<BoxInfo | null>(async () => {
+        console.log(maskBoxInfo)
+        if (
+            !maskBoxInfo ||
+            isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS) ||
+            !maskBoxCreationSuccessEvent
+        )
+            return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const info: BoxInfo = {
             boxId,
@@ -96,17 +112,17 @@ function useContext(initialState?: { boxId: string }) {
     ])
 
     const boxState = useMemo(() => {
-        const { value: info, loading, error } = boxInfo
-        if (loading) return BoxState.UNKNOWN
-        if (error || !info) return BoxState.ERROR
+        if (loadingMaskBoxInfo || loadingBoxInfo) return BoxState.UNKNOWN
+        if (errorMaskBoxInfo || errorBoxInfo) return BoxState.ERROR
+        if (!boxInfo) return BoxState.NOT_FOUND
         const now = new Date()
-        if (new BigNumber(info.tokenIdsPurchased.length).isGreaterThanOrEqualTo(info.personalLimit))
+        if (new BigNumber(boxInfo.tokenIdsPurchased.length).isGreaterThanOrEqualTo(boxInfo.personalLimit))
             return BoxState.DRAWED_OUT
-        if (new BigNumber(info.remaining).isLessThanOrEqualTo(0)) return BoxState.SOLD_OUT
-        if (info.startAt > now) return BoxState.NOT_READY
-        if (info.endAt < now || maskBoxInfo?.expired) return BoxState.EXPIRED
+        if (new BigNumber(boxInfo.remaining).isLessThanOrEqualTo(0)) return BoxState.SOLD_OUT
+        if (boxInfo.startAt > now) return BoxState.NOT_READY
+        if (boxInfo.endAt < now || maskBoxInfo?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, maskBoxInfo, heartBit])
+    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBit])
 
     const boxStateMessage = useMemo(() => {
         switch (boxState) {
@@ -118,7 +134,7 @@ function useContext(initialState?: { boxId: string }) {
                 return 'Ended'
             case BoxState.NOT_READY:
                 const now = Date.now()
-                const startAt = boxInfo?.value?.startAt.getTime() ?? 0
+                const startAt = boxInfo?.startAt.getTime() ?? 0
                 if (startAt <= now) return 'Loading...'
                 const countdown = formatCountdown(startAt - now)
                 return countdown ? `Start sale in ${countdown}` : 'Loading...'
@@ -127,6 +143,8 @@ function useContext(initialState?: { boxId: string }) {
             case BoxState.DRAWED_OUT:
                 return 'Drawed Out'
             case BoxState.ERROR:
+                return 'Something went wrong.'
+            case BoxState.NOT_FOUND:
                 return 'Failed to load box info.'
             default:
                 unreachable(boxState)
@@ -135,7 +153,7 @@ function useContext(initialState?: { boxId: string }) {
     //#endregion
 
     //#region the box metadata
-    const { value: boxMetadata, retry: retryBoxMetadata } = useMaskBoxMetadata(boxId, boxInfo.value?.creator ?? '')
+    const { value: boxMetadata, retry: retryBoxMetadata } = useMaskBoxMetadata(boxId, boxInfo?.creator ?? '')
     //#endregion
 
     //#region the erc721 contract detailed
@@ -146,9 +164,9 @@ function useContext(initialState?: { boxId: string }) {
     const [paymentCount, setPaymentCount] = useState(1)
     const setPaymentCount_ = useCallback(
         (count: number) => {
-            setPaymentCount(clamp(count || 1, 1, boxInfo.value?.personalRemaining ?? 1))
+            setPaymentCount(clamp(count || 1, 1, boxInfo?.personalRemaining ?? 1))
         },
-        [boxInfo.value?.personalRemaining],
+        [boxInfo?.personalRemaining],
     )
     //#endregion
 
@@ -165,9 +183,9 @@ function useContext(initialState?: { boxId: string }) {
     const { value: paymentERC20TokenBalance = '0' } = useERC20TokenBalance(
         isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS) ? '' : paymentTokenAddress,
     )
-    const paymentTokenInfo = boxInfo.value?.payments.find((x) => isSameAddress(x.token.address, paymentTokenAddress))
+    const paymentTokenInfo = boxInfo?.payments.find((x) => isSameAddress(x.token.address, paymentTokenAddress))
     const paymentTokenIndex =
-        boxInfo.value?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1
+        boxInfo?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1
     const paymentTokenPrice = paymentTokenInfo?.price ?? '0'
     const paymentTokenBalance = isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
         ? paymentNativeTokenBalance
@@ -175,9 +193,9 @@ function useContext(initialState?: { boxId: string }) {
     const paymentTokenDetailed = paymentTokenInfo?.token ?? null
 
     useEffect(() => {
-        const firstPaymentTokenAddress = first(boxInfo.value?.payments)?.token.address
+        const firstPaymentTokenAddress = first(boxInfo?.payments)?.token.address
         if (paymentTokenAddress === '' && firstPaymentTokenAddress) setPaymentTokenAddress(firstPaymentTokenAddress)
-    }, [paymentTokenAddress, boxInfo.value?.payments.map((x) => x.token.address).join()])
+    }, [paymentTokenAddress, boxInfo?.payments.map((x) => x.token.address).join()])
     //#endregion
 
     //#region transactions
@@ -218,9 +236,9 @@ function useContext(initialState?: { boxId: string }) {
         setPaymentCount: setPaymentCount_,
 
         // payment address
-        paymentTokenAddress: paymentTokenAddress || (first(boxInfo.value?.payments)?.token.address ?? ''),
+        paymentTokenAddress: paymentTokenAddress || (first(boxInfo?.payments)?.token.address ?? ''),
         setPaymentTokenAddress: (address: string) => {
-            if (boxInfo.value?.payments.some((x) => isSameAddress(x.token.address ?? '', address)))
+            if (boxInfo?.payments.some((x) => isSameAddress(x.token.address ?? '', address)))
                 setPaymentTokenAddress(address)
         },
 
@@ -245,6 +263,7 @@ function useContext(initialState?: { boxId: string }) {
 
         // retry callbacks
         retryMaskBoxInfo,
+        retryBoxInfo,
         retryBoxMetadata,
         retryMaskBoxCreationSuccessEvent,
         retryMaskBoxTokensForSale,

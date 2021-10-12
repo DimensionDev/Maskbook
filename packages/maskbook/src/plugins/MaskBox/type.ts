@@ -16,6 +16,8 @@ export enum BoxState {
     DRAWED_OUT = 5,
     /** error occur */
     ERROR = 6,
+    /** 404 */
+    NOT_FOUND = 7,
 }
 
 export interface PaymentOption {
