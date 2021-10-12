@@ -1,6 +1,8 @@
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
+import { EthereumAddress } from 'wallet.ts'
 import { MaskTextField } from '@masknet/theme'
 import { Box, Button, Stack } from '@material-ui/core'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -12,11 +14,9 @@ import {
     useGasPrice,
     useTokenTransferCallback,
 } from '@masknet/web3-shared'
-import BigNumber from 'bignumber.js'
 import { TokenAmountPanel } from '@masknet/shared'
 import { SelectTokenDialog } from '../SelectTokenDialog'
 import { useDashboardI18N } from '../../../../locales'
-import { EthereumAddress } from 'wallet.ts'
 
 interface TransferERC20Props {
     token: FungibleTokenDetailed

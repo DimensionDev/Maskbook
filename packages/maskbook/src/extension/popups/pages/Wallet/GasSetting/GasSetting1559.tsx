@@ -56,15 +56,15 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     label: {
-        color: '#1C68F3',
+        color: theme.palette.primary.main,
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
     },
     selected: {
-        backgroundColor: '#1C68F3',
+        backgroundColor: theme.palette.primary.main,
         '& > *': {
-            color: '#ffffff!important',
+            color: theme.palette.primary.contrastText,
         },
     },
     button: {
@@ -132,14 +132,14 @@ export const GasSetting1559 = memo(() => {
             .object({
                 gasLimit: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_gasLimit_absence'))
+                    .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(gas),
                         `Gas limit must be at least ${gas}.`,
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_maxPriority_fee_absence'))
+                    .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
                     .refine(
                         (value) => new BigNumber(value).isPositive(),
                         t('wallet_transfer_error_max_priority_gas_fee_positive'),
@@ -160,7 +160,7 @@ export const GasSetting1559 = memo(() => {
                     ),
                 maxFeePerGas: zod
                     .string()
-                    .min(1, t('wallet_transfer_error_maxFee_absence'))
+                    .min(1, t('wallet_transfer_error_max_fee_absence'))
                     .refine(
                         (value) =>
                             new BigNumber(value).isGreaterThanOrEqualTo(gasNow?.slow?.suggestedMaxFeePerGas ?? 0),

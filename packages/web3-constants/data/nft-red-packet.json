@@ -10,7 +10,8 @@
         "Matic": "0xf6Dc042717EF4C097348bE00f4BaE688dcaDD4eA",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-mainnet",
@@ -23,6 +24,7 @@
         "Matic": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-polygon",
         "Mumbai": "",
         "Arbitrum": "",
-        "Arbitrum_Rinkeby": ""
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
     }
 }
