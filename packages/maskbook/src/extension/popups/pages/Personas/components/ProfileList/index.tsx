@@ -12,7 +12,9 @@ import { GrayMasks } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
-        padding: 0,
+        padding: '0 0 70px 0',
+        height: 487,
+        overflow: 'auto',
     },
     item: {
         padding: '14px 16px',
@@ -110,7 +112,7 @@ export const ProfileListUI = memo<ProfileListUIProps>(
     ({ networks, profiles, onConnect, onDisconnect, openProfilePage }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-        console.log(profiles)
+
         return (
             <List dense className={classes.list}>
                 {profiles.map(({ nickname, identifier, avatar }) => {

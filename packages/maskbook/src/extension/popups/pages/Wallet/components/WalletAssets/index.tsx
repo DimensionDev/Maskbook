@@ -25,6 +25,7 @@ const useStyles = makeStyles()({
         padding: 0,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'auto',
     },
     addToken: {
         padding: 16,
@@ -102,7 +103,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                     <TabPanel
                         value={WalletTabs.Assets}
                         className={classes.tabPanel}
-                        style={{ flex: currentTab === WalletTabs.Assets ? '1' : '0' }}>
+                        style={{ height: currentTab === WalletTabs.Assets ? 362 : 0 }}>
                         <AssetsList />
                         <div style={{ padding: 16 }}>
                             <Button className={classes.button} fullWidth onClick={onAddTokenClick}>
@@ -113,7 +114,7 @@ export const WalletAssetsUI = memo<WalletAssetsUIProps>(({ onAddTokenClick }) =>
                     <TabPanel
                         value={WalletTabs.Activity}
                         className={classes.tabPanel}
-                        style={{ flex: currentTab === WalletTabs.Activity ? '1' : '0' }}>
+                        style={{ height: currentTab === WalletTabs.Activity ? 362 : 0 }}>
                         <ActivityList />
                     </TabPanel>
                 </TabContext>

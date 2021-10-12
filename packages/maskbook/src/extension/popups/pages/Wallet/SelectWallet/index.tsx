@@ -22,11 +22,10 @@ import { first } from 'lodash-es'
 
 const useStyles = makeStyles()({
     content: {
-        flex: 1,
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
-        marginBottom: 70,
+        paddingBottom: 70,
     },
     placeholder: {
         flex: 1,

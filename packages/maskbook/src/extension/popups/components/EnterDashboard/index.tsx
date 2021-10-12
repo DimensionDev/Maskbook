@@ -13,7 +13,8 @@ export const EnterDashboard = memo(() => {
                 padding: '12px 16px',
                 cursor: 'pointer',
                 backgroundColor: '#ffffff',
-                position: 'sticky',
+                width: '100%',
+                position: 'fixed',
                 bottom: 0,
             }}
             onClick={onEnter}>
