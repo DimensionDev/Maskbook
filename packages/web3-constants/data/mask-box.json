@@ -1,0 +1,72 @@
+{
+    "MASK_BOX_CONTRACT_ADDRESS": {
+        "Mainnet": "0x0dFB34D213f613Dda67a2924F60b5301d42ABFb7",
+        "Ropsten": "",
+        "Rinkeby": "0xbFcf8210F5B6764D86a9C5252218ad627A6a949d",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "MASK_BOX_CONTRACT_FROM_BLOCK": {
+        "Mainnet": 13396393,
+        "Ropsten": 0,
+        "Rinkeby": 9369286,
+        "Kovan": 0,
+        "Gorli": 0,
+        "BSC": 0,
+        "BSCT": 0,
+        "Matic": 0,
+        "Mumbai": 0,
+        "Arbitrum": 0,
+        "Arbitrum_Rinkeby": 0,
+        "xDai": 0
+    },
+    "MASK_BOX_TEST_NFT": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "0x996A9DCe6247cd8AaFA60de34cDD5332d9AdE702",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "0x9a656528700493348132823C6A3C59CdFa48283d",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    }
+}
