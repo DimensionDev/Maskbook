@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
-import { Route, Routes, useMatch, useNavigate } from 'react-router-dom'
+import { Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { Balance } from './components/Balance'
 import { Transfer } from './components/Transfer'
 import { History } from './components/History'
@@ -32,6 +32,7 @@ function Wallets() {
     const currentChainId = useChainId()
     const trustedERC20Tokens = useWeb3State().erc20Tokens
 
+    const { pathname } = useLocation()
     const isWalletPath = useMatch(RoutePaths.Wallets)
     const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
     const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
@@ -49,9 +50,17 @@ function Wallets() {
     )
 
     useEffect(() => {
-        if (isWalletTransferPath) setSelectedChainId(currentChainId)
+        if (isWalletPath) return
+        setSelectedChainId(currentChainId)
+    }, [currentChainId])
+
+    useEffect(() => {
+        if (isWalletTransferPath || isWalletHistoryPath) {
+            setSelectedChainId(currentChainId)
+            return
+        }
         setSelectedChainId(null)
-    }, [isWalletTransferPath, isWalletHistoryPath, isWalletPath])
+    }, [pathname])
 
     const balance = useMemo(() => {
         return BigNumber.sum
@@ -91,7 +100,10 @@ function Wallets() {
                     <Routes>
                         <Route path="/" element={<TokenAssets selectedChainId={selectedChainId} />} />
                         <Route path="transfer" element={<Transfer />} />
-                        <Route path="history" element={<History />} />
+                        <Route
+                            path="history"
+                            element={<History selectedChainId={selectedChainId ?? currentChainId} />}
+                        />
                     </Routes>
                 </>
             )}

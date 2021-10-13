@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { Transaction, useAccount, useChainId, useTransactions } from '@masknet/web3-shared'
+import { ChainId, Transaction, useAccount, useTransactions } from '@masknet/web3-shared'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import {
@@ -12,8 +12,7 @@ import {
     TablePagination,
     TableRow,
 } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
@@ -53,21 +52,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const HistoryTable = memo(() => {
+interface HistoryTableProps {
+    selectedChainId: ChainId
+}
+
+export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
-    const chainId = useChainId()
     const account = useAccount()
     const {
         value = { transactions: [], hasNextPage: false },
         loading: transactionLoading,
         error: transactionError,
-    } = useTransactions(account, page, 50)
+    } = useTransactions(account, page, 50, selectedChainId)
 
     const { transactions = [], hasNextPage } = value
 
     useUpdateEffect(() => {
         setPage(0)
-    }, [account, chainId])
+    }, [account, selectedChainId])
 
     return (
         <HistoryTableUI

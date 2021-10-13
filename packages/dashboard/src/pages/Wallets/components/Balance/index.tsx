@@ -121,7 +121,11 @@ export const Balance = memo<BalanceCardProps>(
     ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedChainId }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
-        const isDisabledChange = useMatch(RoutePaths.WalletsTransfer)
+
+        const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
+        const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
+        const isDisabledChange = isWalletTransferPath
+        const isHiddenAllButton = isWalletHistoryPath || isWalletTransferPath
 
         return (
             <BalanceContainer>
@@ -143,7 +147,7 @@ export const Balance = memo<BalanceCardProps>(
                                   })}
                         </BalanceContent>
                         <Stack direction="row">
-                            {!isDisabledChange && (
+                            {!isHiddenAllButton && (
                                 <AllNetworkButton
                                     className={selectedChainId === null ? classes.networkSelected : ''}
                                     onClick={() => onSelectNetwork(null)}>

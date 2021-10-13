@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { HistoryTable } from '../HistoryTable'
+import type { ChainId } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()({
     container: {
@@ -13,11 +14,15 @@ const useStyles = makeStyles()({
     },
 })
 
-export const History = memo(() => {
+interface HistoryProps {
+    selectedChainId: ChainId
+}
+
+export const History = memo<HistoryProps>(({ selectedChainId }) => {
     const { classes } = useStyles()
     return (
         <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
-            <HistoryTable />
+            <HistoryTable selectedChainId={selectedChainId} />
         </ContentContainer>
     )
 })
