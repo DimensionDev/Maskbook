@@ -19,8 +19,8 @@ const ActionCardButton = styled('div')(
     font-size: 14px;
 
     & > button {
-        width: 140px;
-        border-radius: ${theme.spacing(2)};
+        width: 164px;
+        border-radius: ${theme.spacing(3)};
     }
 `,
 )
@@ -40,7 +40,11 @@ export const ActionCard = ({ icon, title, subtitle, action }: ISetupActionCardPr
     return (
         <Card
             variant="outlined"
-            sx={{ padding: (theme) => theme.spacing(2.5), marginBottom: (theme) => theme.spacing(2.5) }}>
+            sx={{
+                padding: (theme) => theme.spacing(2.5),
+                marginBottom: (theme) => theme.spacing(2.5),
+                boxShadow: 'none',
+            }}>
             <Stack spacing={2} direction="row" alignItems="center" justifyContent="space-between" width="100%">
                 <ActionCardIcon>{icon}</ActionCardIcon>
                 <Box flex={1}>
@@ -52,7 +56,7 @@ export const ActionCard = ({ icon, title, subtitle, action }: ISetupActionCardPr
                     </Typography>
                 </Box>
                 <ActionCardButton>
-                    <Button size="small" variant="contained" color={action.type} onClick={action.handler}>
+                    <Button size="medium" variant="contained" color={action.type} onClick={action.handler}>
                         {action.text}
                     </Button>
                 </ActionCardButton>

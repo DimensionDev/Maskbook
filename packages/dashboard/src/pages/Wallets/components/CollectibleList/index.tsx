@@ -26,13 +26,8 @@ import { TransferTab } from '../Transfer'
 import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
 
 const useStyles = makeStyles()({
-    container: {
-        padding: '24px 26px 0px',
-        height: 'calc(100% - 58px)',
-        maxHeight: 'calc(100% - 58px)',
-        overflow: 'auto',
-    },
     root: {
+        padding: '24px 26px 0px',
         display: 'flex',
         flexWrap: 'wrap',
     },
@@ -151,7 +146,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
 
         return (
             <>
-                <Box className={classes.container}>
+                <>
                     {isLoading ? (
                         <LoadingPlaceholder />
                     ) : isEmpty ? (
@@ -170,7 +165,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                             ))}
                         </div>
                     )}
-                </Box>
+                </>
                 {showPagination ? (
                     <Box className={classes.footer}>
                         <TablePagination

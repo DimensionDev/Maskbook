@@ -103,8 +103,6 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             postContentNode: opt.suggestedInjectionPoint,
 
             comment: opt.comments,
-            commentBoxSelector: opt.comments?.commentBoxSelector,
-            commentsSelector: opt.comments?.commentsSelector,
 
             postIdentifier,
             url: debug({

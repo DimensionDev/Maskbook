@@ -4,15 +4,15 @@ import { Button, Typography } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 
 const HeaderContainer = styled('header')(({ theme }) => ({
-    flex: '5 1',
     width: '78%',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
-    maxHeight: '30%',
-    minHeight: '15%',
+    flexBasis: '350px',
+
     [theme.breakpoints.down('md')]: {
         width: '95%',
+        flexBasis: '180px',
     },
 }))
 
@@ -31,13 +31,15 @@ const Subtitle = styled(Typography)(
 `,
 )
 
-const Action = styled(Button)(
-    ({ theme }) => `
-    color: ${theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.primary};
-    font-weight: bold;
-    min-width: 150px;
-`,
-)
+const Action = styled(Button)(({ theme }) => ({
+    display: 'inline-block',
+    color: theme.palette.mode === 'dark' ? MaskColorVar.textPrimary : MaskColorVar.primary,
+    fontWeight: 'bold',
+    textAlign: 'right',
+    '&:hover': {
+        background: 'transparent',
+    },
+}))
 
 export interface HeaderProps {
     title: string

@@ -15,7 +15,7 @@ export const ConfirmSynchronizePasswordDialog = memo<ConfirmSynchronizePasswordD
         const t = useDashboardI18N()
 
         return (
-            <MaskDialog open={open} title={t.personas_delete_dialog_title()} onClose={onClose} maxWidth="xs">
+            <MaskDialog open={open} title={t.cloud_backup()} onClose={onClose} maxWidth="xs">
                 <DialogContent>
                     <Stack alignItems="center" py={2}>
                         <SuccessIcon sx={{ fontSize: 54 }} />

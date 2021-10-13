@@ -1,4 +1,3 @@
-import { Box } from '@material-ui/core'
 import { PageFrame } from '../../components/DashboardFrame'
 import {
     getTokenUSDValue,
@@ -67,7 +66,7 @@ function Wallets() {
             {!wallet ? (
                 <StartUp />
             ) : (
-                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <>
                     <Balance
                         balance={balance}
                         chainName={chain?.name ?? ''}
@@ -81,7 +80,7 @@ function Wallets() {
                         <Route path="transfer" element={<Transfer />} />
                         <Route path="history" element={<History />} />
                     </Routes>
-                </Box>
+                </>
             )}
             {wallet ? (
                 <ReceiveDialog

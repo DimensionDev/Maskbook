@@ -68,7 +68,7 @@ export default function FooterLine() {
     const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
-        if (process.env.build === 'stable' && !event.metaKey) {
+        if (process.env.channel === 'stable' && !event.metaKey) {
             open(t('version_of_release', { tag: `v${version}` }))
         } else {
             open(t('version_of_hash', { hash: process.env.COMMIT_HASH }))
@@ -80,9 +80,9 @@ export default function FooterLine() {
                 <FooterLink href="https://mask.io">Mask.io</FooterLink>
                 <FooterLink onClick={openAboutDialog}>{t('about')}</FooterLink>
                 <FooterLink onClick={openVersionLink} title={process.env.VERSION}>
-                    {t(process.env.build === 'stable' ? 'version_of_stable' : 'version_of_unstable', {
+                    {t(process.env.channel === 'stable' ? 'version_of_stable' : 'version_of_unstable', {
                         version,
-                        build: process.env.build,
+                        build: process.env.channel,
                         hash: process.env.COMMIT_HASH,
                     })}
                 </FooterLink>

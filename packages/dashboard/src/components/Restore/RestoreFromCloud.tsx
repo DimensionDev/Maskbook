@@ -162,7 +162,7 @@ export const RestoreFromCloud = memo(() => {
                                 <BackupPreviewCard json={backupBasicInfoJson} />
                             </Box>
                             <ButtonContainer>
-                                <LoadingButton variant="rounded" color="primary" onClick={handleRestore}>
+                                <LoadingButton size="large" variant="rounded" color="primary" onClick={handleRestore}>
                                     {t.restore()}
                                 </LoadingButton>
                             </ButtonContainer>

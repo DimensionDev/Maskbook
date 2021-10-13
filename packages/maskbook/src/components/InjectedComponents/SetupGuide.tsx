@@ -1,5 +1,4 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
-import { useCopyToClipboard } from 'react-use'
 import {
     Paper,
     Typography,
@@ -14,12 +13,10 @@ import {
     Theme,
 } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
 import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
 import CloseIcon from '@material-ui/icons/Close'
-import stringify from 'json-stable-stringify'
-import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
 import { useValueRef } from '@masknet/shared'
 import { useI18N, MaskMessages, useMatchXS, extendsTheme } from '../../utils'
@@ -30,7 +27,6 @@ import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } fro
 import Services from '../../extension/service'
 
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { makeTypedMessageText } from '../../protocols/typed-message'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -226,14 +222,6 @@ function ContentUI(props: ContentUIProps) {
                 </Box>
             )
 
-        case SetupGuideStep.SayHelloWorld:
-            return (
-                <Box>
-                    <main className={classes.content}>{props.content}</main>
-                    <div>{props.tip}</div>
-                    <footer className={classes.footer}>{props.footer}</footer>
-                </Box>
-            )
         default:
             return null
     }
@@ -343,6 +331,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const { t } = useI18N()
     const ui = activatedSocialNetworkUI
     const gotoProfilePageImpl = ui.automation.redirect?.profilePage
+    const [connected, setConnected] = useState(false)
 
     const { classes } = useWizardDialogStyles()
     const { classes: findUsernameClasses } = useFindUsernameStyles()
@@ -378,6 +367,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                         <TextField
                             label={t('username')}
                             value={username}
+                            disabled={connected}
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
@@ -408,7 +398,9 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 <Typography
                     className={classes.tip}
                     variant="body2"
-                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}
+                    dangerouslySetInnerHTML={{
+                        __html: connected ? t('user_guide_tip_connected') : t('setup_guide_find_username_text'),
+                    }}
                 />
             }
             footer={
@@ -421,7 +413,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
-                    autoComplete={userGuideStatus[ui.networkIdentifier].value !== 'completed'}
+                    onComplete={() => setConnected(true)}
                     disabled={!username}
                     completeIcon={null}
                     failIcon={null}
@@ -430,85 +422,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     {t('confirm')}
                 </ActionButtonPromise>
             }
-            onClose={onClose}
-        />
-    )
-}
-//#endregion
-
-//#region say hello world
-const useSayHelloWorldStyles = makeStyles()((theme) => ({
-    primary: {
-        marginTop: 24,
-        marginBottom: 16,
-    },
-    secondary: {
-        color: theme.palette.text.secondary,
-        fontSize: 14,
-    },
-}))
-
-interface SayHelloWorldProps extends Partial<WizardDialogProps> {
-    createStatus: boolean | 'undetermined'
-    onSkip?: () => void
-    onCreate: () => Promise<void>
-}
-
-function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayHelloWorldProps) {
-    const { t } = useI18N()
-    const { classes } = useWizardDialogStyles()
-    const { classes: sayHelloWorldClasses } = useSayHelloWorldStyles()
-    const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
-
-    return (
-        <WizardDialog
-            completion={100}
-            dialogType={SetupGuideStep.SayHelloWorld}
-            status={createStatus}
-            optional
-            title={t('setup_guide_say_hello_title')}
-            tip={
-                <form>
-                    <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
-                        {t('setup_guide_say_hello_primary')}
-                    </Typography>
-                    <Typography
-                        className={classNames(classes.tip, sayHelloWorldClasses.secondary)}
-                        variant="body2"
-                        sx={{ paddingBottom: '16px' }}>
-                        {t('setup_guide_say_hello_secondary')}
-                    </Typography>
-                </form>
-            }
-            footer={
-                <>
-                    <ActionButtonPromise
-                        className={classes.button}
-                        variant="contained"
-                        init={t('setup_guide_create_post_auto')}
-                        waiting={t('creating')}
-                        complete={t('done')}
-                        failed={t('setup_guide_create_post_failed')}
-                        executor={onCreate}
-                        completeOnClick={onSkip}
-                        completeIcon={null}
-                        failIcon={null}
-                        failedOnClick="use executor"
-                        data-testid="create_button"
-                    />
-                    {xsOnly ? (
-                        <ActionButton
-                            className={classes.textButton}
-                            color="inherit"
-                            variant="text"
-                            onClick={onSkip}
-                            data-testid="skip_button">
-                            {t('skip')}
-                        </ActionButton>
-                    ) : null}
-                </>
-            }
-            onBack={onBack}
             onClose={onClose}
         />
     )
@@ -524,12 +437,16 @@ interface SetupGuideUIProps {
 function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
-    const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const ui = activatedSocialNetworkUI
+    const [step, setStep] = useState(
+        userGuideStatus[ui.networkIdentifier].value === 'completed' ? SetupGuideStep.FindUsername : '',
+    )
 
     //#region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
+    const userGuideStatusRef = userGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
+    const userGuideStatusVal = useValueRef(userGuideStatusRef)
     const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
@@ -538,10 +455,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         }
     }, [lastState_])
     useEffect(() => {
+        // check user guide status
+        if (ui.networkIdentifier === 'twitter.com' && userGuideStatusVal !== 'completed') return
         if (!lastState.status) return
-        if (step === SetupGuideStep.FindUsername && lastState.username) setStep(lastState.status)
-        else if (step === SetupGuideStep.SayHelloWorld && !lastState.username) setStep(SetupGuideStep.FindUsername)
-    }, [step, setStep, lastState])
+        setStep(lastState.status)
+    }, [step, setStep, lastState, userGuideStatusVal])
     //#endregion
 
     //#region setup username
@@ -558,53 +476,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     )
     //#endregion
 
-    //#region create post status
-    const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
-    //#endregion
-
-    const copyToClipboard = useCopyToClipboard()[1]
-
-    const onNext = async () => {
-        switch (step) {
-            case SetupGuideStep.FindUsername:
-                if (userGuideStatus[ui.networkIdentifier].value !== 'completed') {
-                    onClose()
-                    currentSetupGuideStatus[ui.networkIdentifier].value = '1'
-                    userGuideStatus[ui.networkIdentifier].value = username
-                } else {
-                    currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
-                        status: SetupGuideStep.SayHelloWorld,
-                        username,
-                        persona: persona.toText(),
-                    } as SetupGuideCrossContextStatus)
-                    if (activatedSocialNetworkUI.configuration.setupWizard?.disableSayHello) {
-                        onConnect().then(onClose)
-                    } else {
-                        ui.automation.redirect?.newsFeed?.()
-                        setStep(SetupGuideStep.SayHelloWorld)
-                    }
-                }
-                break
-            case SetupGuideStep.SayHelloWorld:
-                onClose()
-                break
-        }
-    }
-    const onBack = async () => {
-        switch (step) {
-            case SetupGuideStep.SayHelloWorld:
-                const username_ = getUsername()
-                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
-                    status: SetupGuideStep.FindUsername,
-                    username: '', // ensure staying find-username page
-                    persona: persona.toText(),
-                } as SetupGuideCrossContextStatus)
-                const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
-                await Services.Identity.detachProfile(connected)
-                setStep(SetupGuideStep.FindUsername)
-                break
-        }
-    }
     const onConnect = async () => {
         // attach persona with SNS profile
         await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
@@ -619,43 +490,21 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         await Services.Identity.setupPersona(persona_.identifier)
         MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
-    const onCreate = async () => {
-        const content = t('setup_guide_say_hello_content')
-        copyToClipboard(content)
-        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
-            target: 'Everyone',
-        })
-    }
+
     const onClose = () => {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
         props.onClose?.()
     }
 
-    switch (step) {
-        case SetupGuideStep.FindUsername:
-            return (
-                <FindUsername
-                    username={username}
-                    onUsernameChange={setUsername}
-                    onConnect={onConnect}
-                    onDone={onNext}
-                    onBack={onBack}
-                    onClose={onClose}
-                />
-            )
-        case SetupGuideStep.SayHelloWorld:
-            return (
-                <SayHelloWorld
-                    createStatus={createStatus}
-                    onCreate={onCreate}
-                    onSkip={onNext}
-                    onBack={onBack}
-                    onClose={onClose}
-                />
-            )
-        default:
-            return null
-    }
+    return step === SetupGuideStep.FindUsername ? (
+        <FindUsername
+            username={username}
+            onUsernameChange={setUsername}
+            onConnect={onConnect}
+            onDone={onClose}
+            onClose={onClose}
+        />
+    ) : null
 }
 //#endregion
 

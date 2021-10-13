@@ -79,7 +79,7 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
             open={open}
             onClose={handleClose}
             onConfirm={handleConfirm}>
-            <Box sx={{ minHeight: '160px' }}>
+            <Box sx={{ minHeight: '160px' }} py={1}>
                 {user.backupPassword ? (
                     <PasswordField
                         fullWidth

@@ -87,6 +87,18 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
                     props: { color: 'warning' },
                     style: { [button.main]: colors.warning, [button.contrast]: colors.primaryContrastText },
                 },
+                {
+                    props: { size: 'small' },
+                    style: { height: '28px', fontSize: '12px' },
+                },
+                {
+                    props: { size: 'medium' },
+                    style: { height: '38px', fontSize: '14px' },
+                },
+                {
+                    props: { size: 'large' },
+                    style: { height: '48px', fontSize: '16px' },
+                },
             ],
         },
     },

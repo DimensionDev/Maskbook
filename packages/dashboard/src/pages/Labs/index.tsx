@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import PluginItem, { PluginItemPlaceholder } from './components/PluginItem'
 import {
@@ -25,10 +25,15 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { Services } from '../../API'
 import { PLUGIN_IDS } from './constants'
 import { useLocation } from 'react-router-dom'
+import { ContentContainer } from '../../components/ContentContainer'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
+        flex: 1,
+        borderRadius: Number(theme.shape.borderRadius) * 3,
+        backgroundColor: MaskColorVar.primaryBackground,
         padding: theme.spacing(2),
+        marginBottom: theme.spacing(2),
     },
     list: {
         display: 'flex',
@@ -120,115 +125,117 @@ export default function Plugins() {
 
     return (
         <PageFrame title={t.labs()}>
-            <Box className={classes.root}>
-                <Box className={classes.list}>
-                    <PluginItem
-                        id={PLUGIN_IDS.FILE_SERVICE}
-                        title={t.labs_file_service()}
-                        desc={t.labs_file_service_desc()}
-                        icon={<FileServiceIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.FILE_SERVICE]}
-                        onTwitter={onTwitter}
-                        onFacebook={onFacebook}
-                        onSwitch={onSwitch}
-                    />
-                    <PluginItem
-                        id={PLUGIN_IDS.MARKETS}
-                        title={t.labs_markets()}
-                        desc={t.labs_markets_desc()}
-                        icon={<MarketsIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.MARKETS]}
-                        onTwitter={onTwitter}
-                        onFacebook={onFacebook}
-                        onSwitch={onSwitch}
-                    />
-                    <PluginItem
-                        id={PLUGIN_IDS.RED_PACKET}
-                        title={t.labs_red_packet()}
-                        desc={t.labs_red_packet_desc()}
-                        icon={<RedPacketIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.RED_PACKET]}
-                        onTwitter={onTwitter}
-                        onFacebook={onFacebook}
-                        onSwitch={onSwitch}
-                    />
+            <ContentContainer>
+                <Box className={classes.root}>
+                    <Box className={classes.list}>
+                        <PluginItem
+                            id={PLUGIN_IDS.FILE_SERVICE}
+                            title={t.labs_file_service()}
+                            desc={t.labs_file_service_desc()}
+                            icon={<FileServiceIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.FILE_SERVICE]}
+                            onTwitter={onTwitter}
+                            onFacebook={onFacebook}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.MARKETS}
+                            title={t.labs_markets()}
+                            desc={t.labs_markets_desc()}
+                            icon={<MarketsIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.MARKETS]}
+                            onTwitter={onTwitter}
+                            onFacebook={onFacebook}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.RED_PACKET}
+                            title={t.labs_red_packet()}
+                            desc={t.labs_red_packet_desc()}
+                            icon={<RedPacketIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.RED_PACKET]}
+                            onTwitter={onTwitter}
+                            onFacebook={onFacebook}
+                            onSwitch={onSwitch}
+                        />
+                    </Box>
+                    <Box className={classes.list}>
+                        <PluginItem
+                            id={PLUGIN_IDS.SWAP}
+                            title={t.labs_swap()}
+                            desc={t.labs_swap_desc()}
+                            enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
+                            onSwitch={onSwitch}
+                            onExplore={onExplore}
+                            onSetting={onSetting}
+                            icon={<SwapServiceIcon />}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.TRANSAK}
+                            title={t.labs_transak()}
+                            desc={t.labs_transak_desc()}
+                            icon={<TransakIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.TRANSAK]}
+                            onExplore={onExplore}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItemPlaceholder />
+                    </Box>
+                    <Box className={classes.list}>
+                        <PluginItem
+                            id={PLUGIN_IDS.SNAPSHOT}
+                            title={t.labs_snapshot()}
+                            desc={t.labs_snapshot_desc()}
+                            icon={<SnapshotIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.SNAPSHOT]}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.MARKET_TREND}
+                            title={t.labs_market_trend()}
+                            desc={t.labs_market_trend_desc()}
+                            icon={<MarketTrendIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
+                            onSetting={onSetting}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.COLLECTIBLES}
+                            title={t.labs_collectibles()}
+                            desc={t.labs_collectibles_desc()}
+                            icon={<CollectiblesIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.COLLECTIBLES]}
+                            onSwitch={onSwitch}
+                        />
+                    </Box>
+                    <Box className={classes.list}>
+                        <PluginItem
+                            id={PLUGIN_IDS.GITCOIN}
+                            title={t.labs_gitcoin()}
+                            desc={t.labs_gitcoin_desc()}
+                            icon={<GitcoinIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.GITCOIN]}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.VALUABLES}
+                            title={t.labs_valuables()}
+                            desc={t.labs_valuables_desc()}
+                            icon={<ValuablesIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.VALUABLES]}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.DHEDGE}
+                            title={t.labs_dhedge()}
+                            desc={t.labs_dhedge_desc()}
+                            icon={<DhedgeIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.DHEDGE]}
+                            onSwitch={onSwitch}
+                        />
+                    </Box>
                 </Box>
-                <Box className={classes.list}>
-                    <PluginItem
-                        id={PLUGIN_IDS.SWAP}
-                        title={t.labs_swap()}
-                        desc={t.labs_swap_desc()}
-                        enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
-                        onSwitch={onSwitch}
-                        onExplore={onExplore}
-                        onSetting={onSetting}
-                        icon={<SwapServiceIcon />}
-                    />
-                    <PluginItem
-                        id={PLUGIN_IDS.TRANSAK}
-                        title={t.labs_transak()}
-                        desc={t.labs_transak_desc()}
-                        icon={<TransakIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.TRANSAK]}
-                        onExplore={onExplore}
-                        onSwitch={onSwitch}
-                    />
-                    <PluginItemPlaceholder />
-                </Box>
-                <Box className={classes.list}>
-                    <PluginItem
-                        id={PLUGIN_IDS.SNAPSHOT}
-                        title={t.labs_snapshot()}
-                        desc={t.labs_snapshot_desc()}
-                        icon={<SnapshotIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.SNAPSHOT]}
-                        onSwitch={onSwitch}
-                    />
-                    <PluginItem
-                        id={PLUGIN_IDS.MARKET_TREND}
-                        title={t.labs_market_trend()}
-                        desc={t.labs_market_trend_desc()}
-                        icon={<MarketTrendIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
-                        onSetting={onSetting}
-                        onSwitch={onSwitch}
-                    />
-                    <PluginItem
-                        id={PLUGIN_IDS.COLLECTIBLES}
-                        title={t.labs_collectibles()}
-                        desc={t.labs_collectibles_desc()}
-                        icon={<CollectiblesIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.COLLECTIBLES]}
-                        onSwitch={onSwitch}
-                    />
-                </Box>
-                <Box className={classes.list}>
-                    <PluginItem
-                        id={PLUGIN_IDS.GITCOIN}
-                        title={t.labs_gitcoin()}
-                        desc={t.labs_gitcoin_desc()}
-                        icon={<GitcoinIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.GITCOIN]}
-                        onSwitch={onSwitch}
-                    />
-                    <PluginItem
-                        id={PLUGIN_IDS.VALUABLES}
-                        title={t.labs_valuables()}
-                        desc={t.labs_valuables_desc()}
-                        icon={<ValuablesIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.VALUABLES]}
-                        onSwitch={onSwitch}
-                    />
-                    <PluginItem
-                        id={PLUGIN_IDS.DHEDGE}
-                        title={t.labs_dhedge()}
-                        desc={t.labs_dhedge_desc()}
-                        icon={<DhedgeIcon />}
-                        enabled={pluginStatus[PLUGIN_IDS.DHEDGE]}
-                        onSwitch={onSwitch}
-                    />
-                </Box>
-            </Box>
+            </ContentContainer>
 
             <SwapSettingDialog open={openSwapSetting} onClose={() => setOpenSwapSetting(false)} />
             <MarketTrendSettingDialog open={openTrendSetting} onClose={() => setOpenTrendSetting(false)} />

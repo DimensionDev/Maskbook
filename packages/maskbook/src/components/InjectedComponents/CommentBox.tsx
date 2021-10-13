@@ -1,12 +1,12 @@
 import { makeStyles } from '@masknet/theme'
-import { InputBase } from '@material-ui/core'
+import { InputBase, Box } from '@material-ui/core'
 import { useI18N } from '../../utils'
 
 const useStyles = makeStyles()({
     root: {
+        flex: 1,
         fontSize: 13,
         background: '#3a3b3c',
-        width: '100%',
         height: 34,
         borderRadius: 20,
         padding: '2px 1em',
@@ -33,19 +33,21 @@ export function CommentBox(props: CommentBoxProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
     return (
-        <InputBase
-            className={classes.root}
-            inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
-            placeholder={t('comment_box__placeholder')}
-            onKeyDownCapture={(e) => {
-                const node = e.target as HTMLInputElement
-                if (!node.value) return
-                if (e.key === 'Enter') {
-                    props.onSubmit(node.value)
-                    node.value = ''
-                }
-            }}
-            {...props.inputProps}
-        />
+        <Box sx={{ display: 'flex', width: '100%' }}>
+            <InputBase
+                className={classes.root}
+                inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
+                placeholder={t('comment_box__placeholder')}
+                onKeyDownCapture={(e) => {
+                    const node = e.target as HTMLInputElement
+                    if (!node.value) return
+                    if (e.key === 'Enter') {
+                        props.onSubmit(node.value)
+                        node.value = ''
+                    }
+                }}
+                {...props.inputProps}
+            />
+        </Box>
     )
 }

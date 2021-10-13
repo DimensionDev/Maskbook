@@ -95,11 +95,10 @@ const PageTitle = styled(Grid)(({ theme }) => ({
 }))
 
 const Containment = styled(Grid)(({ theme }) => ({
-    contain: 'strict',
+    maxWidth: '100%',
     display: 'flex',
-    [theme.breakpoints.down('lg')]: {
-        minHeight: `calc(100vh - 64px)`,
-    },
+    height: `calc(100vh - 64px)`,
+    overflow: 'hidden',
 }))
 
 const NavigationDrawer = styled(Drawer)(({ theme }) => ({
@@ -115,26 +114,29 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
 }))
 
 const ShapeHelper = styled('div')(({ theme }) => ({
-    height: '100%',
     padding: theme.spacing(3),
     paddingBottom: 0,
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : MaskColorVar.secondaryBackground,
-    overflow: 'auto',
-    flex: 1,
     display: 'flex',
     flexDirection: 'column',
-    '& > :last-child': {
-        marginBottom: theme.spacing(3),
-    },
+    flex: 1,
+    overflow: 'auto',
 }))
 
 const ContentContainer = styled('div')(({ theme }) => ({
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     borderRadius: Number(theme.shape.borderRadius) * 5,
+    backgroundColor: 'transparent',
+    minHeight: '100%',
+    position: 'relative',
+    '&:after': {
+        content: '""',
+        display: 'block',
+        paddingTop: theme.spacing(3),
+    },
 }))
 
 const useStyle = makeStyles()((theme) => ({
@@ -187,7 +189,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     </PageTitle>
                 </Toolbar>
             </AppBar>
-            <Containment item xs>
+            <Containment>
                 {!isLargeScreen && (
                     <NavigationDrawer
                         open={drawerOpen}
@@ -204,8 +206,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
-                    <ContentContainer
-                        className={props.noBackgroundFill ? undefined : classes.shapeContainerWithBackground}>
+                    <ContentContainer>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </ContentContainer>
                 </ShapeHelper>

@@ -115,6 +115,5 @@ export function useThemeMindsVariant() {
 }
 
 export function MindsThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
-    if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
     return createElement(ThemeProvider, { theme: useThemeMindsVariant(), ...props })
 }

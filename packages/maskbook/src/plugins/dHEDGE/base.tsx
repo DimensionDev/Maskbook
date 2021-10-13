@@ -9,7 +9,7 @@ export const base: Plugin.Shared.Definition = {
     description: { fallback: 'Decentralized hedge funds on Ethereum.' },
     publisher: { name: { fallback: 'iRhonin' }, link: 'https://github.com/iRhonin' },
     enableRequirement: {
-        architecture: { app: false, web: true },
+        architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },

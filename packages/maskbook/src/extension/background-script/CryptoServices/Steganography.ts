@@ -2,22 +2,17 @@ import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform'
 import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/cjs/stego'
-import { downloadUrl } from '../../utils/utils'
-import { memoizePromise } from '../../utils/memoize'
-import { getDimension } from '../../utils/image'
-import { decodeArrayBuffer, encodeArrayBuffer, blobToArrayBuffer } from '@dimensiondev/kit'
-import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { ImageTemplateTypes } from '../../resources/image-payload'
-
-assertEnvironment(Environment.ManifestBackground)
+import { downloadUrl } from '../../../utils/utils'
+import { memoizePromise } from '../../../utils/memoize'
+import { getDimension } from '../../../utils/image'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
+import type { ImageTemplateTypes } from '../../../resources/image-payload'
 
 type Mask = 'v1' | 'v2' | 'v4' | 'transparent'
-
 type Dimension = {
     width: number
     height: number
 }
-
 const dimensionPreset: (Dimension & { mask: Mask })[] = [
     {
         width: 1024,
@@ -64,15 +59,14 @@ const images: Record<Mask, string> = {
 }
 const getMaskBuf = memoizePromise(async (type: Mask) => blobToArrayBuffer(await downloadUrl(images[type])), void 0)
 
-type EncodeImageOptions = {
+export type EncodeImageOptions = {
     template?: ImageTemplateTypes
 } & PartialRequired<Required<EncodeOptions>, 'text' | 'pass'>
 
-export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImageOptions) {
+export async function steganographyEncodeImage(buf: ArrayBuffer, options: EncodeImageOptions) {
     const { template } = options
-    const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
-    return encodeArrayBuffer(
-        await encode(_buf, await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent'), {
+    return new Uint8Array(
+        await encode(buf, await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent'), {
             ...defaultOptions,
             fakeMaskPixels: false,
             cropEdgePixels: template !== 'v2' && template !== 'v3' && template !== 'v4',
@@ -84,20 +78,19 @@ export async function encodeImage(buf: string | ArrayBuffer, options: EncodeImag
     )
 }
 
-type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
+export type DecodeImageOptions = PartialRequired<Required<DecodeOptions>, 'pass'>
 
-export async function decodeImage(buf: string | ArrayBuffer, options: DecodeImageOptions) {
-    const _buf = typeof buf === 'string' ? decodeArrayBuffer(buf) : buf
-    const _dimension = getDimension(_buf)
-    const preset = dimensionPreset.find((d) => isSameDimension(d, _dimension))
+async function steganographyDecodeImage(buf: ArrayBuffer, options: DecodeImageOptions) {
+    const dimension = getDimension(buf)
+    const preset = dimensionPreset.find((d) => isSameDimension(d, dimension))
     if (!preset) return ''
-    return decode(_buf, await getMaskBuf(preset.mask), {
+    return decode(buf, await getMaskBuf(preset.mask), {
         ...defaultOptions,
         transformAlgorithm: TransformAlgorithm.FFT1D,
         ...options,
     })
 }
 
-export async function decodeImageUrl(url: string, options: DecodeImageOptions) {
-    return decodeImage(await blobToArrayBuffer(await downloadUrl(url)), options)
+export async function steganographyDecodeImageUrl(url: string, options: DecodeImageOptions) {
+    return steganographyDecodeImage(await blobToArrayBuffer(await downloadUrl(url)), options)
 }

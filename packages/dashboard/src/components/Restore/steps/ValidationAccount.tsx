@@ -58,7 +58,12 @@ export const ValidationAccount = ({ account, toStep, type, onNext }: ValidationA
                 onSend={handleSendCodeFn}
             />
             <ButtonContainer>
-                <Button variant="rounded" color="primary" onClick={handleNext} disabled={!account || !code}>
+                <Button
+                    size="large"
+                    variant="rounded"
+                    color="primary"
+                    onClick={handleNext}
+                    disabled={!account || !code}>
                     {t.next()}
                 </Button>
             </ButtonContainer>

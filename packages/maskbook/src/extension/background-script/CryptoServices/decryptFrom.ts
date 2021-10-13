@@ -16,7 +16,7 @@ import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { delay } from '../../../utils/utils'
 import type { AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
-import { decodeImageUrl } from '../SteganographyService'
+import { steganographyDecodeImageUrl } from './Steganography'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
@@ -316,7 +316,7 @@ async function* decryptFromImageUrlWithProgress_raw(
 ): ReturnOfDecryptPostContentWithProgress {
     if (successDecryptionCache.has(url)) return successDecryptionCache.get(url)!
     yield makeProgress('decode_post', true)
-    const post = await decodeImageUrl(url, {
+    const post = await steganographyDecodeImageUrl(url, {
         pass: author.toText(),
     })
     if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))

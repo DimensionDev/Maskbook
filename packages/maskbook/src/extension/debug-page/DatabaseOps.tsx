@@ -36,6 +36,7 @@ export const DatabaseOps: React.FC = () => {
         }
         await Promise.all(
             databases.map(async ({ name }) => {
+                if (!name) return
                 await timeout(wrap(indexedDB.deleteDatabase(name)), 500)
             }),
         )
@@ -118,6 +119,7 @@ async function backupAll() {
     }
     const instances: BackupFormat['instances'] = []
     for (const { name, version } of databases) {
+        if (!name || !version) continue
         const db = await timeout(openDB(name, version), 500)
         if (db === undefined) {
             continue
