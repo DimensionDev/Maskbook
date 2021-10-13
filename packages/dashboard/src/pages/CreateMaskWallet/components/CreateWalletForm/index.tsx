@@ -164,7 +164,7 @@ const CreateWalletForm = memo(() => {
                                 error={!!errors.name?.message}
                                 helperText={errors.name?.message}
                                 placeholder={t.create_wallet_name_placeholder()}
-                                inputProps={{ autocomplete: 'off' }}
+                                inputProps={{ autoComplete: 'off' }}
                                 InputProps={{ className: classes.textField }}
                             />
                         )}

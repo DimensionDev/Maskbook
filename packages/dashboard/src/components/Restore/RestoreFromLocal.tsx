@@ -18,6 +18,8 @@ import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { LoadingButton } from '../LoadingButton'
 import PasswordField from '../PasswordField'
+import { first } from 'lodash-es'
+import { ProviderType } from '@masknet/web3-shared'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -96,6 +98,19 @@ export const RestoreFromLocal = memo(() => {
             }
 
             await Services.Welcome.checkPermissionsAndRestore(backupId)
+
+            // If user don't have a wallet
+            if (json?.wallets && !(await Services.Settings.getSelectedWalletAddress())) {
+                const wallets = await PluginServices.Wallet.getWallets()
+                const address = first(wallets)?.address
+                if (address) {
+                    await PluginServices.Wallet.updateAccount({
+                        account: address,
+                        providerType: ProviderType.MaskWallet,
+                    })
+                }
+            }
+
             if (!currentPersona) {
                 const lastedPersona = await Services.Identity.queryLastPersonaCreated()
                 if (lastedPersona) {

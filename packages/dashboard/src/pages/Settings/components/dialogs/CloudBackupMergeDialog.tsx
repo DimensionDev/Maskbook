@@ -19,6 +19,8 @@ import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import PasswordField from '../../../../components/PasswordField'
+import { first } from 'lodash-es'
+import { ProviderType } from '@masknet/web3-shared'
 
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
@@ -64,6 +66,18 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
 
             if (data?.id) {
                 await Services.Welcome.checkPermissionsAndRestore(data.id)
+            }
+
+            // If user don't have a wallet
+            if (data?.info?.wallets && !(await Services.Settings.getSelectedWalletAddress())) {
+                const wallets = await PluginServices.Wallet.getWallets()
+                const address = first(wallets)?.address
+                if (address) {
+                    await PluginServices.Wallet.updateAccount({
+                        account: address,
+                        providerType: ProviderType.MaskWallet,
+                    })
+                }
             }
 
             onMerged(true)
