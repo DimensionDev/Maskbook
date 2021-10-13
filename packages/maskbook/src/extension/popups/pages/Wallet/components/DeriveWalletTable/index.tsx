@@ -32,6 +32,7 @@ const useStyles = makeStyles()({
         borderBottom: 'none',
     },
     button: {
+        fontWeight: 600,
         minWidth: 0,
         padding: '0 5px',
     },

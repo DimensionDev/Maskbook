@@ -23,6 +23,7 @@ const useStyles = makeStyles()({
         padding: '0 10px',
     },
     button: {
+        fontWeight: 600,
         paddingTop: 10,
         paddingBottom: 10,
         fontSize: 14,

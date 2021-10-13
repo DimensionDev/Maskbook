@@ -75,6 +75,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     button: {
+        fontWeight: 600,
         marginTop: 10,
         padding: '9px 10px',
         borderRadius: 20,

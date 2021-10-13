@@ -44,6 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 20,
     },
     button: {
+        fontWeight: 600,
         padding: '10px 0',
         borderRadius: 20,
         fontSize: 14,

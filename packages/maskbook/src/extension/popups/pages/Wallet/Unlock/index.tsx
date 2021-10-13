@@ -41,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     button: {
+        fontWeight: 600,
         marginTop: 50,
         padding: '9px 0',
         borderRadius: 20,
