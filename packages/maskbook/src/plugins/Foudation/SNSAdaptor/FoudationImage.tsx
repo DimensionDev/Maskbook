@@ -62,8 +62,7 @@ const Asset: FC<AssetProps> = ({ src, alt }) => {
             />
         )
     }
-    return null
-    // return <img className={classes.image} src={src} alt={alt} />
+    return <img className={classes.image} src={src} alt={alt} />
 }
 
 function FoudationImage(props: Props) {

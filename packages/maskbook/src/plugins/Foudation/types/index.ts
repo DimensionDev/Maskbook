@@ -5,10 +5,6 @@ export interface Auction {
     dateEnding: string
 }
 
-export interface Creator {
-    id: string
-}
-
 export interface Bidder {
     id: string
 }
@@ -45,7 +41,6 @@ export interface NftHistory {
 
 export interface Nft {
     auctions: Auction[]
-    creator: Creator
     id: string
     isFirstSale: boolean
     mostRecentAuction: MostRecentAuction
