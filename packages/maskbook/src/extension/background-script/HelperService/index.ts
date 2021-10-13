@@ -1,6 +1,6 @@
 import { memoizePromise } from '../../../utils'
 import { getNetworkWorker } from '../../../social-network'
-import { constructRequestPermissionURL, PopupRoutes } from '../../popups'
+import { PopupRoutes } from '../../popups'
 import urlcat from 'urlcat'
 import { currentPopupWindowId } from '../../../settings/settings'
 
@@ -36,34 +36,7 @@ export function fetch(url: string) {
 export function fetchJSON(url: string): Promise<unknown> {
     return globalThis.fetch(url).then((x) => x.json())
 }
-
-export async function requestBrowserPermission(permission: browser.permissions.Permissions) {
-    if (await browser.permissions.contains(permission)) return true
-    try {
-        return await browser.permissions.request(permission)
-    } catch {
-        // which means we're on Firefox.
-        // Chrome allows permission request from the background.
-    }
-    const popup = await browser.windows.create({
-        height: 600,
-        width: 350,
-        type: 'popup',
-        url: constructRequestPermissionURL(permission),
-    })
-    return new Promise((resolve) => {
-        browser.windows.onRemoved.addListener(function listener(windowID: number) {
-            if (windowID === popup.id) {
-                resolve(browser.permissions.contains(permission))
-                browser.windows.onRemoved.removeListener(listener)
-            }
-        })
-    })
-}
-
-export function queryPermission(permission: browser.permissions.Permissions) {
-    return browser.permissions.contains(permission)
-}
+export { requestExtensionPermission, queryExtensionPermission } from './extensionPermission'
 
 export async function createNewWindowAndPasteShareContent(SNSIdentifier: string, post: string) {
     const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
