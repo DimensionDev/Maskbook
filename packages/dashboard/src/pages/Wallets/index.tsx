@@ -1,12 +1,20 @@
 import { PageFrame } from '../../components/DashboardFrame'
-import { ChainId, getTokenUSDValue, useAssets, useWallet, useWallets, useWeb3State } from '@masknet/web3-shared'
+import {
+    ChainId,
+    getTokenUSDValue,
+    useAssets,
+    useChainId,
+    useWallet,
+    useWallets,
+    useWeb3State,
+} from '@masknet/web3-shared'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
 import { Route, Routes, useMatch, useNavigate } from 'react-router-dom'
 import { Balance } from './components/Balance'
 import { Transfer } from './components/Transfer'
 import { History } from './components/History'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { ReceiveDialog } from './components/ReceiveDialog'
 import { RoutePaths } from '../../type'
@@ -21,6 +29,7 @@ function Wallets() {
     const wallets = useWallets()
     const navigate = useNavigate()
     const t = useDashboardI18N()
+    const currentChainId = useChainId()
     const trustedERC20Tokens = useWeb3State().erc20Tokens
 
     const isWalletPath = useMatch(RoutePaths.Wallets)
@@ -38,6 +47,11 @@ function Wallets() {
         trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
         selectedChainId === null ? 'all' : selectedChainId,
     )
+
+    useEffect(() => {
+        if (isWalletTransferPath) setSelectedChainId(currentChainId)
+        setSelectedChainId(null)
+    }, [isWalletTransferPath, isWalletHistoryPath, isWalletPath])
 
     const balance = useMemo(() => {
         return BigNumber.sum

@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
+        height: '100%',
     },
     header: {
         color: MaskColorVar.normalText,
@@ -147,6 +148,7 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                             disabled: !hasNextPage,
                             size: 'small',
                         }}
+                        sx={{ overflow: 'hidden' }}
                     />
                 ) : null}
             </>

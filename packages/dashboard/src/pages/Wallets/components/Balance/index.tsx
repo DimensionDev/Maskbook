@@ -6,6 +6,8 @@ import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@mas
 import type { NetworkType } from '@masknet/web3-shared'
 import { ChainId, getChainIdFromNetworkType, getChainName } from '@masknet/web3-shared'
 import { ChainIcon } from '@masknet/shared'
+import { useMatch } from 'react-router-dom'
+import { RoutePaths } from '../../../../type'
 
 export interface BalanceCardProps {
     balance: number
@@ -79,6 +81,12 @@ const useStyles = makeStyles()((theme) => ({
             borderRadius: '50%',
         },
     },
+    networkDisabled: {
+        cursor: 'not-allowed',
+        '&:hover': {
+            opacity: 0.6,
+        },
+    },
 }))
 
 const AllNetworkButton = styled(Button)(({ theme }) => ({
@@ -113,6 +121,7 @@ export const Balance = memo<BalanceCardProps>(
     ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedChainId }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
+        const isDisabledChange = useMatch(RoutePaths.WalletsTransfer)
 
         return (
             <BalanceContainer>
@@ -134,11 +143,13 @@ export const Balance = memo<BalanceCardProps>(
                                   })}
                         </BalanceContent>
                         <Stack direction="row">
-                            <AllNetworkButton
-                                className={selectedChainId === null ? classes.networkSelected : ''}
-                                onClick={() => onSelectNetwork(null)}>
-                                ALL
-                            </AllNetworkButton>
+                            {!isDisabledChange && (
+                                <AllNetworkButton
+                                    className={selectedChainId === null ? classes.networkSelected : ''}
+                                    onClick={() => onSelectNetwork(null)}>
+                                    ALL
+                                </AllNetworkButton>
+                            )}
                             {networks.map((network) => {
                                 const chainId = getChainIdFromNetworkType(network)
                                 return (
@@ -147,9 +158,15 @@ export const Balance = memo<BalanceCardProps>(
                                         position="relative"
                                         ml={1}
                                         height={30}
-                                        onClick={() => onSelectNetwork(chainId)}
-                                        sx={{ cursor: 'pointer', opacity: '0.6' }}
-                                        className={selectedChainId === chainId ? classes.networkSelected : ''}>
+                                        onClick={() => !isDisabledChange && onSelectNetwork(chainId)}
+                                        sx={{ cursor: 'pointer', opacity: '0.6', ':hover': { opacity: 1 } }}
+                                        className={
+                                            selectedChainId === chainId
+                                                ? classes.networkSelected
+                                                : isDisabledChange
+                                                ? classes.networkDisabled
+                                                : ''
+                                        }>
                                         <ChainIcon chainId={chainId} size={30} />
                                     </Box>
                                 )
