@@ -1,9 +1,4 @@
-import {
-    Body,
-    ColumnContentLayout,
-    Footer,
-    SignUpAccountLogo,
-} from '../../../components/RegisterFrame/ColumnContentLayout'
+import { Body, ColumnContentLayout, SignUpAccountLogo } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../type'
@@ -18,6 +13,7 @@ import { memo, useState } from 'react'
 import { some } from 'lodash-es'
 import { useSnackbar } from '@masknet/theme'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
+import { Box } from '@mui/system'
 
 enum CreateWalletStep {
     NameAndWords = 0,
@@ -97,9 +93,10 @@ export const MnemonicRevealForm = memo(() => {
                         </ButtonContainer>
                     </>
                 )}
-                <MaskAlert description={t.create_account_identity_warning()} type="error" />
+                <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
+                    <MaskAlert description={t.create_account_identity_warning()} type="error" />
+                </Box>
             </Body>
-            <Footer />
         </ColumnContentLayout>
     )
 })

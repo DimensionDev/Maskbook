@@ -1,7 +1,6 @@
 import { MaskBannerIcon } from '@masknet/icons'
 import { styled } from '@material-ui/core/styles'
 import { memo } from 'react'
-import { LightColor } from '@masknet/theme/constants'
 import { Container } from '@material-ui/core'
 import { MaskColorVar } from '@masknet/theme'
 
@@ -36,7 +35,7 @@ const RightContent = styled('div')(
     justify-content: center;
     max-height: 100%;
     overflow: auto;
-    background: ${theme.palette.mode === 'dark' ? LightColor.textPrimary : theme.palette.common};
+    background: transparent;
 `,
 )
 
