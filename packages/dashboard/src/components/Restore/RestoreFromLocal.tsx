@@ -18,6 +18,7 @@ import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { LoadingButton } from '../LoadingButton'
 import PasswordField from '../PasswordField'
+import { PopupRoutes } from '@masknet/shared'
 import { first } from 'lodash-es'
 import { ProviderType } from '@masknet/web3-shared'
 
@@ -93,7 +94,7 @@ export const RestoreFromLocal = memo(() => {
                 json?.wallets &&
                 (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
             ) {
-                await Services.Helper.openPopupsWindow('/wallet/recovered', { backupId })
+                await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId })
                 return
             }
 

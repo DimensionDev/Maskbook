@@ -161,7 +161,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     }
 
     async function activateSNSAdaptorPluginOnStart() {
-        const plugin = await Services.Settings.shouldActivatePluginOnSNSStart()
+        const plugin = await Services.SocialNetwork.getDesignatedAutoStartPluginID()
         if (!plugin) return
 
         await delay(500)

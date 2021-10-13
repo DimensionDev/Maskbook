@@ -21,6 +21,7 @@ import { decode, encode } from '@msgpack/msgpack'
 import PasswordField from '../../../../components/PasswordField'
 import { first } from 'lodash-es'
 import { ProviderType } from '@masknet/web3-shared'
+import { PopupRoutes } from '@masknet/shared'
 
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
@@ -60,7 +61,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                 data?.info.wallets &&
                 (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
             ) {
-                await Services.Helper.openPopupsWindow('/wallet/recovered', { backupId: data.id })
+                await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId: data.id })
                 return
             }
 

@@ -1,4 +1,7 @@
-import { getStorage, setStorage } from '../../../extension/background-script/HelperService/storage'
+import {
+    __deprecated__getStorage,
+    __deprecated__setStorage,
+} from '../../../extension/background-script/HelperService/storage'
 
 const HOST_MAP = {
     production: 'https://backup.mask.io/api',
@@ -10,10 +13,14 @@ const COULD_BASE_URL = HOST_MAP[process.env.NODE_ENV]
 const RISK_WARNING_KEY = 'com.maskbook.agreement+riskWarning'
 
 export const setRiskWarningConfirmed = (address: string, confirmed: boolean) =>
-    setStorage<Record<string, boolean>>(RISK_WARNING_KEY, { [address]: confirmed }, { howToUpdate: 'merge' })
+    __deprecated__setStorage<Record<string, boolean>>(
+        RISK_WARNING_KEY,
+        { [address]: confirmed },
+        { howToUpdate: 'merge' },
+    )
 
 export const getRiskWarningConfirmed = async (address: string) => {
-    const allStatus = await getStorage<Record<string, boolean>>(RISK_WARNING_KEY)
+    const allStatus = await __deprecated__getStorage<Record<string, boolean>>(RISK_WARNING_KEY)
     return allStatus?.[address]
 }
 

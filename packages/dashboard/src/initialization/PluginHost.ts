@@ -10,7 +10,7 @@ const PluginHost: Plugin.__Host.Host = {
     enabled: {
         events: new Emitter(),
         isEnabled: (id) => {
-            return Services.Settings.isPluginEnabled(id)
+            return Services.Settings.getPluginEnabled(id)
         },
     },
     addI18NResource(plugin, resource) {

@@ -24,10 +24,11 @@ if (isEnvironment(Environment.ManifestBackground)) {
     MaskMessages.events.createInternalSettingsChanged.on(async (payload) => {
         const { id, key, value, initial } = payload
 
-        const stored = await Services.Helper.getStorage(key)
-        if (!initial || (initial && typeof stored === 'undefined')) await Services.Helper.setStorage(key, value)
+        const stored = await Services.Helper.__deprecated__getStorage(key)
+        if (!initial || (initial && typeof stored === 'undefined'))
+            await Services.Helper.__deprecated__setStorage(key, value)
 
-        const updated = await Services.Helper.getStorage(key)
+        const updated = await Services.Helper.__deprecated__getStorage(key)
         if (typeof updated === 'undefined') return
         MaskMessages.events.createInternalSettingsUpdated.sendToAll({
             id,

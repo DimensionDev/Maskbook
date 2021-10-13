@@ -7,7 +7,8 @@ import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGen
 import type { PersonaIdentifier, ProfileIdentifier } from '../../database/type'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { requestBrowserPermission, saveAsFileFromBuffer } from './HelperService'
+import { requestExtensionPermission } from './HelperService/extensionPermission'
+import { saveAsFileFromBuffer } from './HelperService/saveAsFile'
 import type { DashboardRoute } from '../options-page/Route'
 import {
     BackupJSONFileLatest,
@@ -134,7 +135,7 @@ export async function checkPermissionsAndRestore(id: string) {
     if (json) {
         const permissions = await extraPermissions(json.grantedHostPermissions)
         if (permissions.length) {
-            const granted = await requestBrowserPermission({ origins: permissions })
+            const granted = await requestExtensionPermission({ origins: permissions })
             if (!granted) return
         }
 

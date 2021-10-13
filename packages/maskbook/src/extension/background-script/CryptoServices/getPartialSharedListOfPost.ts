@@ -8,7 +8,7 @@ import { GunAPI } from '../../../network/gun'
  * Get already shared target of the post
  * @param postSalt
  */
-export async function getSharedListOfPost(
+export async function getPartialSharedListOfPost(
     version: -40 | -39 | -38,
     postSalt: string,
     postBy: ProfileIdentifier,

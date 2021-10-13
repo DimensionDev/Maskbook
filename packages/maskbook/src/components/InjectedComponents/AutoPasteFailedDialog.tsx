@@ -22,7 +22,9 @@ import { DraggableDiv } from '../shared/DraggableDiv'
 import Download from '@material-ui/icons/CloudDownload'
 import CloseIcon from '@material-ui/icons/Close'
 import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
-import { saveAsFileFromUrl } from '../../extension/background-script/HelperService'
+// TODO: it should not import a background service, but
+// it might downloading a blob:// file thus rewrite to Services.Helpers.* might trigger a CSP failure.
+import { saveAsFileFromUrl } from '../../extension/background-script/HelperService/saveAsFile'
 
 export interface AutoPasteFailedDialogProps extends withClasses<never> {
     onClose: () => void

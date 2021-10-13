@@ -18,7 +18,7 @@ export function useGameContractAddress(id: string) {
                 contractAddress: '',
             }
 
-        const gameData = await Services.Helper.fetchJson(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
+        const gameData: any = await Services.Helper.fetchJSON(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
         return gameData?.[id] || gameData?.default || {}
     }, [id, GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
 

@@ -8,12 +8,12 @@ export function useCompositionClipboardRequest(
 ): Pick<CompositionProps, 'hasClipboardPermission' | 'requireClipboardPermission' | 'onRequestClipboardPermission'> {
     const { retry, value: hasClipboardPermission = true } = useAsyncRetry(async () => {
         if (!requireClipboardPermission) return true
-        return Services.Helper.queryPermission({ permissions: ['clipboardRead'] })
+        return Services.Helper.queryExtensionPermission({ permissions: ['clipboardRead'] })
     }, [requireClipboardPermission])
 
     const onRequestClipboardPermission = useCallback(() => {
         if (!requireClipboardPermission) return
-        Services.Helper.requestBrowserPermission({ permissions: ['clipboardRead'] }).finally(retry)
+        Services.Helper.requestExtensionPermission({ permissions: ['clipboardRead'] }).finally(retry)
     }, [requireClipboardPermission, retry])
 
     return {

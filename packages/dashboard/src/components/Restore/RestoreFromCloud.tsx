@@ -23,6 +23,7 @@ import { LoadingButton } from '../LoadingButton'
 import type { BackupPreview } from '../../../../maskbook/src/utils'
 import { ProviderType } from '@masknet/web3-shared'
 import { first } from 'lodash-es'
+import { PopupRoutes } from '@masknet/shared'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
@@ -92,7 +93,7 @@ export const RestoreFromCloud = memo(() => {
                     backupInfo.info?.wallets &&
                     (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
                 ) {
-                    await Services.Helper.openPopupsWindow('/wallet/recovered', { backupId: backupInfo.id })
+                    await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId: backupInfo.id })
                     return
                 }
 
