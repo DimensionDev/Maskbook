@@ -1,6 +1,6 @@
 import { memo, useMemo } from 'react'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@material-ui/core'
-import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ChainIcon, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import {
     Asset,
@@ -43,10 +43,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     tip: {
         padding: theme.spacing(1),
-        background: MaskColorVar.mainBackground,
+        background: '#111432',
     },
     tipArrow: {
-        color: MaskColorVar.mainBackground,
+        color: '#111432',
     },
 }))
 

@@ -52,10 +52,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     tip: {
         padding: theme.spacing(1),
-        background: MaskColorVar.mainBackground,
+        background: '#111432',
     },
     tipArrow: {
-        color: MaskColorVar.mainBackground,
+        color: '#111432',
     },
 }))
 
