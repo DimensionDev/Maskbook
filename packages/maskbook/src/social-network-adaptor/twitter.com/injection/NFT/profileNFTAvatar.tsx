@@ -29,10 +29,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 async function changeImageToActiveElements(image: File | Blob): Promise<void> {
-    hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(await blobToArrayBuffer(image)))
-    setTimeout(() => {
-        ;(searchAvatarOpenFileSelector().evaluate()[0]?.parentElement?.children[0] as HTMLElement)?.click()
-    }, 50)
+    const imageBuffer = await blobToArrayBuffer(image)
+    hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
+    ;(searchAvatarOpenFileSelector().evaluate()[0]?.parentElement?.children[0] as HTMLElement)?.click()
 }
 
 function NFTAvatarInTwitter() {

@@ -5,8 +5,10 @@ import { dispatchEventRaw } from './capture'
 
 const proto = HTMLInputElement.prototype
 const { defineProperty, deleteProperty } = Reflect
-const timeout = setTimeout.bind(window)
+const setTimeoutCaptured = setTimeout.bind(window)
+const clearTimeoutCaptured = clearTimeout.bind(window)
 export function hookInputUploadOnce(...[format, fileName, fileArray]: InternalEvents['hookInputUploadOnce']) {
+    let timer: number | null = null
     const e = new no_xray_Event('change', {
         bubbles: true,
         cancelable: true,
@@ -27,9 +29,10 @@ export function hookInputUploadOnce(...[format, fileName, fileArray]: InternalEv
             configurable: true,
             value: fileList,
         })
-        dispatchEventRaw(this, e, {})
-        proto.click = old
-        timeout(() => {
+        if (timer !== null) clearTimeoutCaptured(timer)
+        timer = setTimeoutCaptured(() => {
+            dispatchEventRaw(this, e, {})
+            proto.click = old
             deleteProperty(this, 'files')
         }, 200)
     }

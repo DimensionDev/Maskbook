@@ -51,21 +51,20 @@ export async function createNFT(address: string, tokenId: string) {
 export function toPNG(image: string) {
     return new Promise<Blob | null>((resolve, reject) => {
         const img = new Image()
-        img.src = image
-        img.setAttribute('CrossOrigin', 'Anonymous')
         const canvas = document.createElement('canvas')
         const ctx = canvas.getContext('2d')
         if (isNull(ctx)) throw new Error('Canvas was not supported')
-
         img.addEventListener('load', () => {
             ;[canvas.width, canvas.height] = [img.width, img.height]
             ctx.drawImage(img, 0, 0, img.width, img.height)
             canvas.toBlob((blob) => {
                 resolve(blob)
-            })
+            }, 'image/png')
         })
         img.addEventListener('error', () => {
             reject(new Error('Could not load image'))
         })
+        img.setAttribute('CrossOrigin', 'Anonymous')
+        img.src = image
     })
 }
