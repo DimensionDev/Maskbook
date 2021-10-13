@@ -111,7 +111,7 @@ const DeleteWallet = memo(() => {
                     account: first(wallets)?.address ?? '',
                 })
 
-                if (!currentAccountSettings.value) {
+                if (currentAccountSettings.value === wallet.address) {
                     await WalletRPC.updateAccount({
                         account: first(wallets)?.address ?? '',
                         providerType: ProviderType.MaskWallet,
