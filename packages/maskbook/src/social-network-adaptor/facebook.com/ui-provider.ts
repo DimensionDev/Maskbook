@@ -101,7 +101,7 @@ const facebookUI: SocialNetworkUI.Definition = {
         },
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
-        setupWizard: createTaskStartSetupGuideDefault(facebookBase.networkIdentifier),
+        setupWizard: createTaskStartSetupGuideDefault(),
         toolbox: injectToolboxAtFacebook,
     },
     configuration: {

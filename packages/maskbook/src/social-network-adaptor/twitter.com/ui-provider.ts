@@ -162,7 +162,7 @@ const twitterUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        setupWizard: createTaskStartSetupGuideDefault('twitter.com'),
+        setupWizard: createTaskStartSetupGuideDefault(),
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
         userAvatar: injectUserNFTAvatarAtTwitter,

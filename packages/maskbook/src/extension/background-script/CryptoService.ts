@@ -6,7 +6,6 @@ export { encryptTo, publishPostAESKey } from './CryptoServices/encryptTo'
 export { appendShareTarget } from './CryptoServices/appendShareTarget'
 export { getPartialSharedListOfPost } from './CryptoServices/getPartialSharedListOfPost'
 export { verifyOthersProve } from './CryptoServices/verifyOthersProve'
-export { getMyProveBio } from './CryptoServices/getMyProveBio'
 export { steganographyEncodeImage } from './CryptoServices/Steganography'
 
 import type { debugShowAllPossibleHashForPost as orig } from './CryptoServices/debugShowAllPossibleHashForPost'

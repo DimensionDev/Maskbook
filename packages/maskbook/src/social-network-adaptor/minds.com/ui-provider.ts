@@ -78,7 +78,7 @@ const mindsUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        setupWizard: createTaskStartSetupGuideDefault('minds.com'),
+        setupWizard: createTaskStartSetupGuideDefault(),
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
             commentInspector: injectCommentBoxAtMinds(),
