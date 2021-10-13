@@ -100,10 +100,3 @@ export async function removePopupWindow() {
         browser.windows.remove(currentPopupWindowId.value)
     }
 }
-
-export function openInternalPage(path: string) {
-    browser.tabs.create({
-        active: true,
-        url: browser.runtime.getURL(path),
-    })
-}
