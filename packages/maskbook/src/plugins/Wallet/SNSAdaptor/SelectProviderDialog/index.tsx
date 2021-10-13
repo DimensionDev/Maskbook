@@ -18,6 +18,7 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags } from '../../../../utils'
 import Services from '../../../../extension/service'
+import { PopupRoutes } from '../../../../extension/popups'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -148,7 +149,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
             switch (providerType) {
                 case ProviderType.MaskWallet:
-                    await Services.Helper.openPopupsWindow(wallets.length > 0 ? '/wallet/select' : '', {
+                    await Services.Helper.openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
                         chainId: getChainIdFromNetworkType(undeterminedNetworkType),
                     })
                     break

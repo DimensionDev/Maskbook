@@ -3,10 +3,9 @@ import { PopupRoutes } from '../../popups'
 import urlcat from 'urlcat'
 import { currentPopupWindowId } from '../../../settings/settings'
 
-export * from './storage'
+export { __deprecated__getStorage, __deprecated__setStorage } from './storage'
 
 const cache = new Map<string, string>()
-
 export const resolveTCOLink = memoizePromise(
     async (u: string) => {
         if (!u.startsWith('https://t.co/')) return null
@@ -37,7 +36,7 @@ export function fetchJSON(url: string): Promise<unknown> {
 }
 export { requestExtensionPermission, queryExtensionPermission } from './extensionPermission'
 
-export async function openPopupsWindow(route?: string, params?: Record<string, any>) {
+export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>) {
     const windows = await browser.windows.getAll()
     const popup = windows.find((win) => win && win.type === 'popup' && win.id === currentPopupWindowId.value)
 

@@ -10,7 +10,7 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { defer, Flags } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
-import { openPopupsWindow } from '../HelperService'
+import { openPopupWindow } from '../HelperService'
 import Services from '../../service'
 
 let id = 0
@@ -90,7 +90,7 @@ export async function requestSend(
             return
         }
         UNCONFIRMED_CALLBACK_MAP.set(payload_.id, callback)
-        if (popupsWindow) openPopupsWindow()
+        if (popupsWindow) openPopupWindow()
         return
     }
     getSendMethod()(payload_, callback, overrides)

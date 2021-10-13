@@ -7,6 +7,7 @@ import Services from '../../../service'
 import { WalletStateBarUI } from '../../components/WalletStateBar'
 import { SwapBox } from './SwapBox'
 import { SwapWeb3Context } from '../../../../web3/context'
+import { PopupRoutes } from '../..'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -58,7 +59,7 @@ export default function SwapPage() {
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     const wallet = useWallet()
     const openPopupsWindow = useCallback(() => {
-        Services.Helper.openPopupsWindow('/wallet/select', {
+        Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
             chainId,
         })
     }, [chainId])
