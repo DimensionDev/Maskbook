@@ -9,6 +9,7 @@ import type { UnlockLocks } from '../types'
 import { PluginUnlockProtocolRPC } from '../messages'
 import { SelectRecipientsUnlockDialogUI } from './SelectRecipientsUnlockDialog'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { makeStyles } from '@masknet/theme'
 
 interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
     open: boolean
@@ -17,10 +18,17 @@ interface UnlockProtocolDialogProps extends withClasses<'wrapper'> {
     children?: React.ReactNode
 }
 
+const useStyles = makeStyles()(() => ({
+    actions: {
+        flexDirection: 'row',
+    },
+}))
+
 export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
     const { t } = useI18N()
     const [open, setOpen] = useState(false)
     const address = useAccount()
+    const { classes } = useStyles()
     const [currentUnlockChain, setCurrentUnlockChain] = useState(useChainId())
     const [currentUnlockPost, setCurrentUnlockPost] = useState('')
     const [currentUnlockTarget, setCurrentUnlockTarget] = useState<UnlockLocks[]>(() => [])
@@ -94,7 +102,7 @@ export default function UnlockProtocolDialog(props: UnlockProtocolDialogProps) {
                     onChange={(e) => setCurrentUnlockPost(e.target.value)}
                 />
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={classes.actions}>
                 <Chip label={t('plugin_unlockprotocol_select_unlock_lock')} onClick={() => setOpen(true)} />
                 <SelectRecipientsUnlockDialogUI
                     onSelect={(item) => setCurrentUnlockTarget([...currentUnlockTarget, item])}

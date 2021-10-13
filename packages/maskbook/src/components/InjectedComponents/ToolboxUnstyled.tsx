@@ -116,8 +116,6 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         shouldDisplayChainIndicator,
     } = useToolbox()
 
-    const walletJSX =
-        typeof walletTitle === 'string' ? <Typography className={classes.font}>{walletTitle}</Typography> : walletTitle
     return (
         <>
             <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
@@ -144,7 +142,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                                 primary={
                                     <Box
                                         sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        {walletJSX}
+                                        <Typography className={classes.font}>{walletTitle}</Typography>
                                         {shouldDisplayChainIndicator ? (
                                             <FiberManualRecordIcon
                                                 className={classes.chainIcon}

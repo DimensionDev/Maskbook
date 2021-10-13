@@ -9,7 +9,7 @@ import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useI18N } from '../../utils'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Typography, Link } from '@material-ui/core'
-import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useMemo, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { useStylesExtends } from '@masknet/shared'
@@ -38,18 +38,19 @@ const useStyles = makeStyles()(() => ({
 export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'approveButton'> {
     children?: React.ReactNode
     owner: string | undefined
-    contract: ERC721ContractDetailed | undefined
+    contractDetailed: ERC721ContractDetailed | undefined
     validationMessage?: string
     operator: string | undefined
+    ActionButtonProps?: ActionButtonProps
 }
 
 export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
-    const { owner, contract, operator, children, validationMessage: _validationMessage } = props
+    const { owner, contractDetailed, operator, children, validationMessage: _validationMessage } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-    const { value, loading, retry } = useERC721ContractIsApproveForAll(contract?.address, owner, operator)
+    const { value, loading, retry } = useERC721ContractIsApproveForAll(contractDetailed?.address, owner, operator)
     const [approveState, approveCallback, resetCallback] = useERC721ContractSetApproveForAllCallback(
-        contract?.address,
+        contractDetailed?.address,
         operator,
         true,
     )
@@ -60,10 +61,13 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             showSnackbar(
                 <div className={classes.snackBar}>
                     <Typography className={classes.snackBarText}>
-                        {t('plugin_wallet_approve_all_nft_successfully', { symbol: contract?.symbol })}
+                        {t('plugin_wallet_approve_all_nft_successfully', { symbol: contractDetailed?.symbol })}
                     </Typography>
                     <Link
-                        href={resolveTransactionLinkOnExplorer(contract!.chainId, approveState.receipt.transactionHash)}
+                        href={resolveTransactionLinkOnExplorer(
+                            contractDetailed!.chainId,
+                            approveState.receipt.transactionHash,
+                        )}
                         target="_blank"
                         rel="noopener noreferrer"
                         className={classes.snackBarLink}>
@@ -83,54 +87,75 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             })
             resetCallback()
         }
-    }, [approveState, contract])
+    }, [approveState, contractDetailed])
 
     const validationMessage = useMemo(() => {
-        if (!contract?.address || !EthereumAddress.isValid(contract?.address))
+        if (!contractDetailed?.address || !EthereumAddress.isValid(contractDetailed?.address))
             return t('plugin_wallet_select_a_nft_contract')
         if (!owner || !EthereumAddress.isValid(owner)) return t('plugin_wallet_select_a_nft_owner')
         if (!operator || !EthereumAddress.isValid(operator)) return t('plugin_wallet_select_a_nft_operator')
         if (!!_validationMessage) return _validationMessage
         return ''
-    }, [contract, owner, operator, _validationMessage])
+    }, [contractDetailed, owner, operator, _validationMessage])
 
     if ([TransactionStateType.WAIT_FOR_CONFIRMING, TransactionStateType.HASH].includes(approveState.type)) {
         return (
-            <ActionButton variant="contained" size="large" fullWidth className={classes.approveButton} loading disabled>
-                {t('plugin_wallet_nft_approving_all', { symbol: contract?.symbol })}
+            <ActionButton
+                className={classes.approveButton}
+                variant="contained"
+                size="large"
+                fullWidth
+                loading
+                disabled
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_nft_approving_all', { symbol: contractDetailed?.symbol })}
             </ActionButton>
         )
     } else if (!!validationMessage) {
         return (
-            <ActionButton variant="contained" size="large" fullWidth className={classes.approveButton} disabled>
+            <ActionButton
+                className={classes.approveButton}
+                variant="contained"
+                size="large"
+                fullWidth
+                disabled
+                {...props.ActionButtonProps}>
                 {validationMessage}
             </ActionButton>
         )
     } else if (loading) {
         return (
             <ActionButton
+                className={classes.approveButton}
                 variant="contained"
                 size="large"
                 fullWidth
-                className={classes.approveButton}
                 loading
                 disabled
+                {...props.ActionButtonProps}
             />
         )
     } else if (value === false) {
         return (
             <ActionButton
+                className={classes.approveButton}
                 variant="contained"
                 size="large"
                 fullWidth
-                className={classes.approveButton}
-                onClick={approveCallback}>
-                {t('plugin_wallet_approve_all_nft', { symbol: contract?.symbol })}
+                onClick={approveCallback}
+                {...props.ActionButtonProps}>
+                {t('plugin_wallet_approve_all_nft', { symbol: contractDetailed?.symbol })}
             </ActionButton>
         )
     } else if (value === undefined) {
         return (
-            <ActionButton variant="contained" size="large" fullWidth className={classes.approveButton} onClick={retry}>
+            <ActionButton
+                className={classes.approveButton}
+                variant="contained"
+                size="large"
+                fullWidth
+                onClick={retry}
+                {...props.ActionButtonProps}>
                 {t('plugin_wallet_fail_to_load_nft_contract')}
             </ActionButton>
         )

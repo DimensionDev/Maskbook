@@ -300,7 +300,9 @@
         "gamification",
         "Defi",
         "powah",
-        "Switcher"
+        "Switcher",
+        "drawed",
+        "DRAWED"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
