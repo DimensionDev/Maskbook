@@ -55,15 +55,12 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         textAlign: 'center',
         paddingTop: theme.spacing(1),
+        display: 'flex',
+        justifyContent: 'space-around',
+        flexDirection: 'row',
     },
-    setNFTAvatar: {
-        paddingLeft: 64,
-        paddingRight: 64,
-    },
+    setNFTAvatar: {},
     imgBackground: {
-        '&:hover': {
-            backgroundColor: getMaskColor(theme).blue,
-        },
         height: 97,
         padding: 6,
         borderRadius: '100%',
@@ -71,6 +68,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    hover: {
+        '&:hover': {
+            backgroundColor: getMaskColor(theme).blue,
+        },
     },
     selected: {
         backgroundColor: getMaskColor(theme).blue,
@@ -111,7 +113,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
         retry,
         error,
     } = useCollectibles(account, chainId, provider, page, 50)
-    //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 
     const { collectibles, hasNextPage } = value
 
@@ -164,11 +165,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 </Box>
                 <EthereumChainBoundary chainId={chainId}>
                     <Box className={classes.NFTBox}>
-                        <Box className={classes.AddCollectible}>
-                            <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
-                                {t('nft_collectible_add')}
-                            </Button>
-                        </Box>
                         <Box className={classes.NFTImage}>
                             {loading
                                 ? LoadStatus
@@ -187,6 +183,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                           <div
                                               className={classNames(
                                                   classes.imgBackground,
+                                                  classes.hover,
                                                   selectedToken === token ? classes.selected : '',
                                               )}
                                               key={i}>
@@ -221,6 +218,10 @@ export function NFTAvatar(props: NFTAvatarProps) {
                             />
                         ) : null}
                         <Box className={classes.button}>
+                            <Button variant="outlined" size="medium" onClick={() => setOpen_(true)}>
+                                {t('nft_collectible_add')}
+                            </Button>
+
                             <Button
                                 variant="contained"
                                 size="medium"
