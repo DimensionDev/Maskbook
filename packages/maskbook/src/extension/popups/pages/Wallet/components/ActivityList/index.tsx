@@ -66,7 +66,6 @@ const useStyles = makeStyles()({
     button: {
         fontWeight: 600,
         fontSize: 14,
-        fontWeight: 600,
         color: '#1C68F3',
         lineHeight: '20px',
         padding: '10px 0',
