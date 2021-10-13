@@ -25,8 +25,6 @@ const useStyles = makeStyles()({
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
-        flex: 1,
-        paddingBottom: 70,
     },
     placeholder: {
         flex: 1,
@@ -64,6 +62,8 @@ const useStyles = makeStyles()({
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
+        height: 'calc(100vh - 168px)',
+        overflow: 'auto',
     },
     item: {
         padding: 10,

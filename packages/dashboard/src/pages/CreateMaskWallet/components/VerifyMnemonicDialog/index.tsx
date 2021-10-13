@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 48,
         borderRadius: 24,
         fontSize: 18,
-        marginTop: 10,
+        marginTop: 24,
     },
     addressTitle: {
         color: MaskColorVar.normalText,

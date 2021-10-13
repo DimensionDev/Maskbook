@@ -12,8 +12,8 @@ import Services from '../../../../../service'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
-        padding: '0 0 70px 0',
-        height: 487,
+        padding: 0,
+        height: 'calc(100vh - 185px)',
         overflow: 'auto',
     },
     item: {

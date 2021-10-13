@@ -20,16 +20,16 @@ const useStyles = makeStyles()({
         backgroundColor: '#ffffff',
     },
     content: {
-        height: 500,
         overflow: 'auto',
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
-        paddingBottom: 70,
     },
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
+        height: 'calc(100vh - 168px)',
+        overflow: 'auto',
     },
     item: {
         padding: 10,
