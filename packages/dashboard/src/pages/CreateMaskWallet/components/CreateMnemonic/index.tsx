@@ -4,12 +4,12 @@ import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { InfoIcon, RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
-import { ProviderType, useAccount, useMnemonicWordsPuzzle } from '@masknet/web3-shared'
+import { ProviderType, useMnemonicWordsPuzzle } from '@masknet/web3-shared'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { PluginServices } from '../../../../API'
+import { PluginServices, Services } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import type { Search } from 'history'
 import { WalletMessages } from '@masknet/plugin-wallet'
@@ -76,7 +76,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const CreateMnemonic = memo(() => {
-    const account = useAccount()
     const location = useLocation() as { search: Search; state: { password: string } }
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
@@ -114,6 +113,8 @@ const CreateMnemonic = memo(() => {
 
         await PluginServices.Wallet.updateMaskAccount({ account: address_ })
 
+        const account = await Services.Settings.getSelectedWalletAddress()
+
         if (!account)
             await PluginServices.Wallet.updateAccount({
                 account: address_,
@@ -121,7 +122,7 @@ const CreateMnemonic = memo(() => {
             })
 
         return address_
-    }, [location.search, words, resetCallback, hasPassword, account])
+    }, [location.search, words, resetCallback, hasPassword])
 
     const onClose = useCallback(() => {
         refreshCallback()
