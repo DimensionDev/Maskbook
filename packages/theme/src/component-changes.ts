@@ -145,7 +145,21 @@ export const Dialog: Theme = (mode, colors): ThemeOptions => ({
         },
         MuiDialogTitle: {
             styleOverrides: {
-                root: { backgroundColor: colors.mainBackground },
+                root: {
+                    backgroundColor: colors.mainBackground,
+                    '&.dashboard-dialog-title-hook': {
+                        backgroundColor: colors.mainBackground,
+                        display: 'flex',
+                        flexDirection: 'row-reverse',
+                        alignItems: 'center',
+                        borderBottom: 'none!important',
+                        p: {
+                            width: '100%',
+                            display: 'inline-flex',
+                            justifyContent: 'start',
+                        },
+                    },
+                },
             },
         },
         MuiDialogContent: {
