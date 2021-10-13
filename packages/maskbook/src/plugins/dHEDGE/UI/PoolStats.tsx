@@ -60,7 +60,7 @@ export function PoolStats(props: PoolStatsProps) {
     return (
         <div className={classes.root}>
             <div className={classes.meta}>
-                <Grid container className={classes.meta} direction="column">
+                <Grid container direction="column" alignItems="center">
                     <Grid item xs={6}>
                         <Typography variant="body2" color="textSecondary" className={classes.title}>
                             <Trans i18nKey="plugin_dhedge_value_managed" />

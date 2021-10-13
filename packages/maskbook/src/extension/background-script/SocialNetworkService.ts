@@ -21,7 +21,7 @@ export async function connectSocialNetwork(identifier: PersonaIdentifier, networ
     if (!Flags.no_web_extension_dynamic_permission_request) {
         if (!(await requestSNSAdaptorPermission(ui))) return
     }
-    if (userGuideStatus[network].value !== 'completed') {
+    if (network === 'twitter.com' && userGuideStatus[network].value !== 'completed') {
         userGuideStatus[network].value = '1'
     }
     currentSetupGuideStatus[network].value = stringify({
