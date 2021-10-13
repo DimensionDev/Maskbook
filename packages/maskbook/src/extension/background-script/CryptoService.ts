@@ -9,6 +9,7 @@ export { getSharedListOfPost } from './CryptoServices/getSharedListOfPost'
 export { verifyOthersProve } from './CryptoServices/verifyOthersProve'
 export { getMyProveBio } from './CryptoServices/getMyProveBio'
 export { getEncryptBackupInfo } from './CryptoServices/backup'
+export { steganographyEncodeImage } from './CryptoServices/Steganography'
 
 import type { debugShowAllPossibleHashForPost as orig } from './CryptoServices/debugShowAllPossibleHashForPost'
 // This module requires lazy loading otherwise it will load gun
