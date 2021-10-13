@@ -61,13 +61,13 @@ export const FeaturePromotions = memo(() => {
             return
         }
         if (isConnectedTwitter) {
-            await Services.Settings.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/home`, pluginId)
+            await Services.SocialNetwork.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/home`, pluginId)
             return
         }
         connectPersona(currentPersona.identifier, TWITTER_NETWORK)
     }
 
-    const openMaskNetwork = () => Services.Settings.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/realMaskNetwork`, '')
+    const openMaskNetwork = () => window.open(`${TWITTER_ADDRESS}/realMaskNetwork`)
 
     return (
         <div className={classes.container}>

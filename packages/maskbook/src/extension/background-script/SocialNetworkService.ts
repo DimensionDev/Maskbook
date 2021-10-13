@@ -36,7 +36,6 @@ export async function openProfilePage(network: string, userId?: string) {
     const ui = await loadSocialNetworkUI(network)
     const profile = ui.utils.getProfilePage?.(userId)
     if (!Flags.no_web_extension_dynamic_permission_request) {
-        // TODO: requesting permission need a popup in Firefox.
         if (!(await requestSNSAdaptorPermission(ui))) return
     }
     await delay(100)
@@ -47,4 +46,20 @@ export async function openShareLink(SNSIdentifier: string, post: string) {
     const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
     if (!url) return
     browser.tabs.create({ active: true, url: url.toString() })
+}
+
+const key = 'openSNSAndActivatePlugin'
+/**
+ * This function will open a new web page, then open the composition dialog and activate the composition entry of the given plugin.
+ * @param url URL to open
+ * @param pluginID Plugin to activate
+ */
+export async function openSNSAndActivatePlugin(url: string, pluginID: string) {
+    await browser.tabs.create({ active: true, url })
+    sessionStorage.setItem(key, pluginID)
+}
+export async function getDesignatedAutoStartPluginID() {
+    const val = sessionStorage.getItem(key)
+    sessionStorage.removeItem(key)
+    return val
 }

@@ -119,26 +119,11 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
 }
-export async function isPluginEnabled(id: string) {
+export async function getPluginEnabled(id: string) {
     return currentPluginEnabledStatus['plugin:' + id].value
 }
-export async function setPluginStatus(id: string, enabled: boolean) {
+export async function setPluginEnabled(id: string, enabled: boolean) {
     currentPluginEnabledStatus['plugin:' + id].value = enabled
-}
-const key = 'openSNSAndActivatePlugin'
-/**
- * This function will open a new web page, then open the composition dialog and activate the composition entry of the given plugin.
- * @param url URL to open
- * @param pluginID Plugin to activate
- */
-export async function openSNSAndActivatePlugin(url: string, pluginID: string) {
-    await browser.tabs.create({ active: true, url })
-    sessionStorage.setItem(key, pluginID)
-}
-export async function shouldActivatePluginOnSNSStart() {
-    const val = sessionStorage.getItem(key)
-    sessionStorage.removeItem(key)
-    return val
 }
 
 export async function openTab(url: string) {

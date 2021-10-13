@@ -76,16 +76,16 @@ export default function Plugins() {
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     async function onSwitch(id: string, checked: boolean) {
-        await Services.Settings.setPluginStatus(id, checked)
+        await Services.Settings.setPluginEnabled(id, checked)
         setPluginStatus({ ...pluginStatus, [id]: checked })
     }
 
     async function onTwitter(id: string) {
-        await Services.Settings.openSNSAndActivatePlugin('https://www.twitter.com/home', id)
+        await Services.SocialNetwork.openSNSAndActivatePlugin('https://www.twitter.com/home', id)
     }
 
     async function onFacebook(id: string) {
-        await Services.Settings.openSNSAndActivatePlugin('https://www.facebook.com', id)
+        await Services.SocialNetwork.openSNSAndActivatePlugin('https://www.facebook.com', id)
     }
 
     function onExplore(id: string) {
@@ -106,7 +106,7 @@ export default function Plugins() {
 
     useEffect(() => {
         Object.values(PLUGIN_IDS).forEach(async (id) => {
-            const enabled = await Services.Settings.isPluginEnabled(id)
+            const enabled = await Services.Settings.getPluginEnabled(id)
             setPluginStatus((status) => ({ ...status, [id]: enabled }))
         })
     }, [])

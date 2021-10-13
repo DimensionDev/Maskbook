@@ -61,8 +61,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             })
         return stringify(connectedPersonas)
     },
-    app_isPluginEnabled: ({ pluginID }) => Services.Settings.isPluginEnabled(pluginID),
-    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginStatus(pluginID, enabled),
+    app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginEnabled(pluginID),
+    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginEnabled(pluginID, enabled),
     setting_getNetworkTraderProvider: ({ network }) => {
         switch (network) {
             case NetworkType.Ethereum:
