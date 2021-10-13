@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Avatar, Link, List, ListItem, ListItemText } from '@material-ui/core'
+import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@material-ui/core'
 import { definedSocialNetworkUIs } from '../../../../../../social-network'
 import { ProfileIdentifier, ProfileInformation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { compact } from 'lodash-es'
@@ -31,6 +31,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         cursor: 'pointer',
+        fontWeight: 600,
+        fontSize: 12,
     },
     avatarContainer: {
         marginRight: 15,
@@ -143,7 +145,9 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                 className={classes.text}
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => openProfilePage(identifier.network, identifier.userId)}>
-                                @{identifier.userId}
+                                <Typography fontSize={12} fontWeight={600}>
+                                    @{identifier.userId}
+                                </Typography>
                             </ListItemText>
                         </ListItem>
                     )
@@ -157,7 +161,9 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                             onClick={() => onConnect(networkIdentifier)}>
                             {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                             <ListItemText className={classes.text}>
-                                {t('popups_persona_connect_to', { type: networkIdentifier })}
+                                <Typography fontSize={12} fontWeight={600}>
+                                    {t('popups_persona_connect_to', { type: networkIdentifier })}
+                                </Typography>
                             </ListItemText>
                         </ListItem>
                     )

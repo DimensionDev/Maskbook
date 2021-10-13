@@ -10,6 +10,7 @@ import { PopupRoutes } from '../../../index'
 import { first } from 'lodash-es'
 import { FormattedAddress } from '@masknet/shared'
 import { PasswordField } from '../../../components/PasswordField'
+import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles()({
     content: {
@@ -109,6 +110,13 @@ const DeleteWallet = memo(() => {
                 await WalletRPC.updateMaskAccount({
                     account: first(wallets)?.address ?? '',
                 })
+
+                if (!currentAccountSettings.value) {
+                    await WalletRPC.updateAccount({
+                        account: first(wallets)?.address ?? '',
+                        providerType: ProviderType.MaskWallet,
+                    })
+                }
                 history.replace(PopupRoutes.Wallet)
             } catch (error) {
                 if (error instanceof Error) {
