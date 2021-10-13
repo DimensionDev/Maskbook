@@ -22,6 +22,10 @@ const useStyles = makeStyles()((theme) => ({
         height: 14,
         marginLeft: 2,
     },
+    text: {
+        display: 'flex',
+        alignItems: 'center',
+    },
 }))
 
 interface NFTAvatarButtonProps extends withClasses<'root'> {
@@ -35,7 +39,7 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
 
     return (
         <div className={classes.root} onClick={onClick}>
-            <Typography variant="body1" display="flex">
+            <Typography variant="body1" className={classes.text}>
                 {`🔥${t('nft_avatar')}`} <GearSettingsIcon className={classes.icon} />
             </Typography>
         </div>
