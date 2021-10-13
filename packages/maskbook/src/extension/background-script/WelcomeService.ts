@@ -142,8 +142,3 @@ export async function checkPermissionsAndRestore(id: string) {
         await restoreBackup(json)
     }
 }
-
-// permissions
-export function queryPermission(permission: browser.permissions.Permissions) {
-    return browser.permissions.contains(permission)
-}
