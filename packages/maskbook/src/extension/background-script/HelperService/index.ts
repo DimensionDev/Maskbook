@@ -33,7 +33,7 @@ export function fetch(url: string) {
     return globalThis.fetch(url).then((x) => x.blob())
 }
 
-export function fetchJson(url: string) {
+export function fetchJSON(url: string): Promise<unknown> {
     return globalThis.fetch(url).then((x) => x.json())
 }
 

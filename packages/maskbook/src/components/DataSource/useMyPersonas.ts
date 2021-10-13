@@ -19,7 +19,7 @@ const independentRef = {
             independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
             independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
             isLoading = null
-            Services.Helper.setStorage<boolean>(
+            Services.Helper.__deprecated__setStorage<boolean>(
                 'mobileIsMyPersonasInitialized',
                 independentRef.myPersonasRef.value.length > 0,
             )
