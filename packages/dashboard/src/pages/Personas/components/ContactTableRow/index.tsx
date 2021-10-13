@@ -70,7 +70,7 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
     }, [contact, currentPersona, onReset])
 
     const [{ loading }, handleClickInvite] = useAsyncFn(async () => {
-        return Services.Helper.createNewWindowAndPasteShareContent(
+        return Services.SocialNetwork.openShareLink(
             network,
             t.personas_invite_post({ identifier: contact.identifier.userId }),
         )

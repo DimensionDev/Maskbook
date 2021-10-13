@@ -1,4 +1,4 @@
-import { definedSocialNetworkUIs, loadSocialNetworkUI } from '../../social-network'
+import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI } from '../../social-network'
 import { Flags } from '../../utils/flags'
 import { requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
@@ -41,4 +41,10 @@ export async function openProfilePage(network: string, userId?: string) {
     }
     await delay(100)
     profile && browser.tabs.create({ active: true, url: profile })
+}
+
+export async function openShareLink(SNSIdentifier: string, post: string) {
+    const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
+    if (!url) return
+    browser.tabs.create({ active: true, url: url.toString() })
 }

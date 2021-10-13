@@ -1,5 +1,4 @@
 import { memoizePromise } from '../../../utils'
-import { getNetworkWorker } from '../../../social-network'
 import { PopupRoutes } from '../../popups'
 import urlcat from 'urlcat'
 import { currentPopupWindowId } from '../../../settings/settings'
@@ -37,12 +36,6 @@ export function fetchJSON(url: string): Promise<unknown> {
     return globalThis.fetch(url).then((x) => x.json())
 }
 export { requestExtensionPermission, queryExtensionPermission } from './extensionPermission'
-
-export async function createNewWindowAndPasteShareContent(SNSIdentifier: string, post: string) {
-    const url = (await getNetworkWorker(SNSIdentifier)).utils.getShareLinkURL?.(post)
-    if (!url) return
-    browser.tabs.create({ active: true, url: url.toString() })
-}
 
 export async function openPopupsWindow(route?: string, params?: Record<string, any>) {
     const windows = await browser.windows.getAll()
