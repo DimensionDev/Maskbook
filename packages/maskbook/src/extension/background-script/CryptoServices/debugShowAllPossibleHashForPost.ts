@@ -19,7 +19,7 @@ export async function debugShowAllPossibleHashForPost(post: PostIVIdentifier, pa
                                 (await queryPublicKey(x.identifier))!,
                             )),
                         x.linkedPersona?.fingerprint!,
-                    ] as [string, string, string],
+                    ] as [identifier: string, postHash: string, fingerPrint: string],
             ),
     )
 }
