@@ -2,7 +2,6 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 assertEnvironment(Environment.ManifestBackground)
 
 export { encryptComment, decryptComment } from '../../crypto/crypto-alpha-40'
-export { encryptBackup, decryptBackup } from '../../crypto/crypto-alpha-38'
 export { encryptTo, publishPostAESKey } from './CryptoServices/encryptTo'
 export { appendShareTarget } from './CryptoServices/appendShareTarget'
 export { getSharedListOfPost } from './CryptoServices/getSharedListOfPost'
