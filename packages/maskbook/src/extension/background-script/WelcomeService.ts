@@ -7,7 +7,8 @@ import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGen
 import type { PersonaIdentifier, ProfileIdentifier } from '../../database/type'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { requestBrowserPermission, saveAsFileFromBuffer } from './HelperService'
+import { requestBrowserPermission } from './HelperService'
+import { saveAsFileFromBuffer } from './HelperService/saveAsFile'
 import type { DashboardRoute } from '../options-page/Route'
 import {
     BackupJSONFileLatest,
