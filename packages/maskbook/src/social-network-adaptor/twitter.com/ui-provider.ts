@@ -52,7 +52,6 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             '&': {
                 display: 'block !important',
-                borderRadius: '0 !important',
             },
         },
     },
@@ -69,7 +68,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
         },
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'start',
             maxWidth: 600,
             margin: '0 auto',
             padding: '7px 14px 6px 11px !important',
