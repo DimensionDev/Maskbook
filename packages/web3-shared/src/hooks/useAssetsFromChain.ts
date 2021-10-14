@@ -1,14 +1,16 @@
 import { first } from 'lodash-es'
-import { Asset, EthereumTokenType, FungibleTokenDetailed } from '../types'
+import { Asset, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
 import { useBalance } from './useBalance'
+import { getChainDetailed } from '../utils'
 
-export function useAssetsFromChain(tokens: FungibleTokenDetailed[]) {
+export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
     const balance = useBalance()
     const chainDetailed = useChainDetailed()
+    const passedChainDetailed = getChainDetailed(chainId)
 
-    const chain = chainDetailed?.shortName.toLowerCase() ?? 'unknown'
+    const chain = passedChainDetailed?.shortName.toLowerCase() ?? chainDetailed?.shortName.toLowerCase() ?? 'unknown'
     const nativeToken = first(tokens.filter((x) => x.type === EthereumTokenType.Native))
     const erc20Tokens = tokens.filter((x) => x.type === EthereumTokenType.ERC20)
 

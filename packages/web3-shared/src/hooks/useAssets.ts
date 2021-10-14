@@ -1,4 +1,4 @@
-import type { FungibleTokenDetailed } from '../types'
+import type { ChainId, FungibleTokenDetailed } from '../types'
 import { useWallet } from './useWallet'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 import { useAssetsFromChain } from './useAssetsFromChain'
@@ -7,14 +7,14 @@ import { useCallback } from 'react'
 import { useAssetsMerged } from './useAssetsMerged'
 import { formatEthereumAddress } from '../utils'
 
-export function useAssets(tokens: FungibleTokenDetailed[]) {
+export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | 'all') {
     const wallet = useWallet()
     const {
         value: nativeTokenDetailed,
         loading: nativeTokenDetailedLoading,
         error: nativeTokenDetailedError,
         retry: retryNativeTokenDetailed,
-    } = useNativeTokenDetailed()
+    } = useNativeTokenDetailed(chainId === 'all' ? undefined : chainId)
 
     const {
         value: assetsDetailedChain = [],
@@ -28,7 +28,7 @@ export function useAssets(tokens: FungibleTokenDetailed[]) {
         loading: assetsDetailedProviderLoading,
         error: assetsDetailedProviderError,
         retry: retryAssetsDetailedDebank,
-    } = useAssetsFromProvider()
+    } = useAssetsFromProvider(chainId)
 
     const detailedTokensRetry = useCallback(() => {
         retryNativeTokenDetailed()
@@ -36,7 +36,10 @@ export function useAssets(tokens: FungibleTokenDetailed[]) {
         retryAssetsDetailedDebank()
     }, [retryNativeTokenDetailed, retryAssetsDetailedChain, retryAssetsDetailedDebank])
 
-    const assetsDetailed = useAssetsMerged(assetsDetailedProvider, assetsDetailedChain)
+    const assetsDetailed = useAssetsMerged(
+        assetsDetailedProvider,
+        assetsDetailedChain.filter((x) => !chainId || chainId === 'all' || x.token.chainId === chainId),
+    )
 
     return {
         value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatEthereumAddress(x.token.address))),

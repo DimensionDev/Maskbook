@@ -78,7 +78,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                         <Typography textAlign="left" className={classes.type} variant="body2">
                             {(transaction.type ?? '').replace(/_/g, ' ')}
                         </Typography>
-                        <Typography fontSize={12} color={MaskColorVar.textSecondary}>
+                        <Typography fontSize={12} textAlign="left" color={MaskColorVar.textSecondary}>
                             {formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}
                         </Typography>
                     </Stack>

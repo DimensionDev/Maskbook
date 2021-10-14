@@ -29,7 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         padding: theme.spacing(1),
-        background: theme.palette.mode === 'dark' ? MaskColorVar.lightBackground : '#F6F6F8',
+        background: theme.palette.mode === 'dark' ? '#2B2E4C' : '#F6F6F8',
         fontSize: 13,
         lineHeight: '16px',
         borderRadius: 6,
@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
     inputFocused: {
         background: MaskColorVar.primaryBackground,
         padding: 7,
-        boxShadow: `0 0 0 ${theme.spacing(0.5)} rgba(28, 104, 243, 0.2)`,
+        boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
     },
 }))
 

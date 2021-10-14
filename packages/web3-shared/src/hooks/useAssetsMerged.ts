@@ -15,6 +15,6 @@ export function useAssetsMerged(...listOfTokens: Asset[][]) {
     if (!NATIVE_TOKEN_ADDRESS) return []
     return uniqBy(
         listOfTokens.flatMap((x) => x),
-        (x) => `${x.chain}_${formatEthereumAddress(x.token.address)}`,
+        (x) => `${x.token.chainId}_${formatEthereumAddress(x.token.address)}`,
     ).sort(makeSortAssertFn(chainId))
 }

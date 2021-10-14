@@ -154,6 +154,8 @@ export function parseStringOrBytes32(
 //#region asset sort
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
 export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
+export const getTokenChainIdValue = (asset: Asset) =>
+    asset.token.type === EthereumTokenType.Native ? 1 / asset.token.chainId : 0
 
 export const makeSortTokenFn = (chainId: ChainId, options: { isMaskBoost?: boolean } = {}) => {
     const { isMaskBoost = false } = options
@@ -208,6 +210,28 @@ export const makeSortAssertFn = (chainId: ChainId, options: { isMaskBoost?: bool
             if (isSameAddress(a.token.address, MASK_ADDRESS)) return -1
             if (isSameAddress(b.token.address, MASK_ADDRESS)) return 1
         }
+
+        // Sorted by alphabet
+        if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
+        if ((a.token.name ?? '') < (b.token.name ?? '')) return -1
+
+        return 0
+    }
+}
+
+export const makeSortAssertWithoutChainFn = () => {
+    return (a: Asset, b: Asset) => {
+        // Token with high usd value estimation has priority
+        const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
+        if (valueDifference !== 0) return valueDifference
+
+        // native token sort
+        const chainValueDifference = getTokenChainIdValue(b) - getTokenChainIdValue(a)
+        if (chainValueDifference !== 0) return chainValueDifference
+
+        // Token with big balance has priority
+        if (getBalanceValue(a) > getBalanceValue(b)) return -1
+        if (getBalanceValue(a) < getBalanceValue(b)) return 1
 
         // Sorted by alphabet
         if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
