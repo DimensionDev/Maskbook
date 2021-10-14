@@ -268,7 +268,16 @@ export async function patchCreateOrUpdateRelation(
 export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
     await consistentPersonaDBWriteAccess(async (t) => {
         for (const relation of relations) {
-            createRelationDB(
+            const relationInDB = await t
+                .objectStore('relations')
+                .get([relation.linked.toText(), relation.profile.toText()])
+
+            if (relationInDB) {
+                await updateRelationDB(relation, t, true)
+                continue
+            }
+
+            await createRelationDB(
                 {
                     ...relation,
                     favor: relation.favor === RelationFavor.DEPRECATED ? RelationFavor.UNCOLLECTED : relation.favor,
