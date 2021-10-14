@@ -21,8 +21,6 @@ import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
 import { LoadingButton } from '../LoadingButton'
 import type { BackupPreview } from '../../../../maskbook/src/utils'
-import { ProviderType } from '@masknet/web3-shared'
-import { first } from 'lodash-es'
 import { PopupRoutes } from '@masknet/shared'
 
 export const RestoreFromCloud = memo(() => {
@@ -99,17 +97,8 @@ export const RestoreFromCloud = memo(() => {
 
                 await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)
 
-                // If user don't have a wallet
-                if (backupInfo.info?.wallets && !(await Services.Settings.getSelectedWalletAddress())) {
-                    const wallets = await PluginServices.Wallet.getWallets()
-                    const address = first(wallets)?.address
-                    if (address) {
-                        await PluginServices.Wallet.updateAccount({
-                            account: address,
-                            providerType: ProviderType.MaskWallet,
-                        })
-                    }
-                }
+                // Set default wallet
+                if (backupInfo.info?.wallets) PluginServices.Wallet.setDefaultWallet
 
                 if (!currentPersona) {
                     const lastedPersona = await Services.Identity.queryLastPersonaCreated()

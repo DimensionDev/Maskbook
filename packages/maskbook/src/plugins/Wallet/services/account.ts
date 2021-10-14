@@ -17,7 +17,8 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
-import { hasWallet, updateWallet } from '.'
+import { getWallets, hasWallet, updateWallet } from '.'
+import { first } from 'lodash-es'
 
 export async function updateAccount(
     options: {
@@ -94,6 +95,17 @@ export async function resetAccount(
     if (chainId) currentChainIdSettings.value = chainId
     if (networkType) currentNetworkSettings.value = networkType
     if (providerType) currentProviderSettings.value = providerType
+}
+
+export async function setDefaultWallet() {
+    if (currentAccountSettings.value) return
+    const wallets = await getWallets()
+    const address = first(wallets)?.address
+    if (address)
+        await updateAccount({
+            account: address,
+            providerType: ProviderType.MaskWallet,
+        })
 }
 
 export async function getSupportedNetworks() {
