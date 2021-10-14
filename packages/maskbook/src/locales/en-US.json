@@ -854,7 +854,7 @@
     "popups_wallet_set_up_payment_password": "Set up payment password",
     "popups_wallet_payment_password_tip": "The Payment password must be a combination of 2 categories out of numbers, letters, and special characters with a length of 8-20 characters.",
     "popups_wallet_go_back": "Go back",
-    "popups_wallet_start_up_tip": "Connect to your wallet，create a new wallet or recover an existing wallet using a seed phrase.",
+    "popups_wallet_start_up_tip": "Connect to your wallet, create a new wallet or recover an existing wallet using a seed phrase.",
     "popups_wallet_name_placeholder": "Enter 1-12 characters",
     "popups_wallet_tab_assets": "Assets",
     "popups_wallet_tab_activity": "Activity",
