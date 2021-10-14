@@ -14,7 +14,6 @@ import {
     useWallet,
     useWeb3State,
 } from '@masknet/web3-shared'
-import { useCurrentCollectibleDataProvider } from '../../api'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
@@ -44,15 +43,15 @@ const useStyles = makeStyles()({
 
 interface CollectibleListProps {
     selectedChainId: ChainId | null
+    provider: CollectibleProvider
 }
 
-export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId }) => {
+export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId, provider }) => {
     const [page, setPage] = useState(0)
     const navigate = useNavigate()
     const chainId = useChainId()
     const wallet = useWallet()
     const account = useAccount()
-    const provider = useCurrentCollectibleDataProvider()
     const erc721Tokens = useWeb3State().erc721Tokens
     const { value: erc721TokensOwners = [], loading: loadingERC721Owners } = useCollectibleOwners(erc721Tokens)
 

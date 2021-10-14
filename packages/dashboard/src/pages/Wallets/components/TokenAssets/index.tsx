@@ -1,8 +1,8 @@
 import { memo, useState } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
-import { TabContext, TabPanel } from '@material-ui/lab'
-import { Tab, Tabs, Box, Button } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { TabContext, TabList, TabPanel } from '@material-ui/lab'
+import { Box, Button, Tab } from '@material-ui/core'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { TokenTable } from '../TokenTable'
 import { useDashboardI18N } from '../../../../locales'
 import { CollectibleList } from '../CollectibleList'
@@ -10,6 +10,7 @@ import { AddCollectibleDialog } from '../AddCollectibleDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
 import type { ChainId } from '@masknet/web3-shared'
+import { useCurrentCollectibleDataProvider } from '../../api'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -50,8 +51,10 @@ export const TokenAssets = memo<TokenAssetsProps>(({ selectedChainId }) => {
         [AssetTab.Investment]: t.wallets_assets_investment(),
         [AssetTab.Collectibles]: t.wallets_assets_collectibles(),
     }
+    // Workaround: if useCurrentCollectibleDataProvider hook in CollectibleList component, will lead tooltip error: Maximum update depth exceeded.
+    const provider = useCurrentCollectibleDataProvider()
 
-    const [activeTab, setActiveTab] = useState<AssetTab>(assetTabs[0])
+    const [currentTab, onChange] = useTabs(AssetTab.Token, AssetTab.Collectibles)
 
     const [addCollectibleOpen, setAddCollectibleOpen] = useState(false)
     const { setDialog: setSelectToken } = useRemoteControlledDialog(
@@ -61,39 +64,33 @@ export const TokenAssets = memo<TokenAssetsProps>(({ selectedChainId }) => {
     return (
         <>
             <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
-                <TabContext value={activeTab}>
+                <TabContext value={currentTab}>
                     <Box className={classes.caption}>
-                        <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
+                        <TabList onChange={onChange}>
                             {assetTabs.map((key) => (
                                 <Tab key={key} value={key} label={assetTabsLabel[key]} />
                             ))}
-                        </Tabs>
+                        </TabList>
                         <Button
                             size="small"
                             color="secondary"
                             className={classes.addCustomTokenButton}
                             onClick={() =>
-                                activeTab === AssetTab.Token
+                                currentTab === AssetTab.Token
                                     ? setSelectToken({ open: true, props: { whitelist: [] } })
                                     : setAddCollectibleOpen(true)
                             }>
                             +{' '}
-                            {activeTab === AssetTab.Token
+                            {currentTab === AssetTab.Token
                                 ? t.wallets_add_token()
                                 : t.wallets_assets_custom_collectible()}
                         </Button>
                     </Box>
-                    <TabPanel
-                        value={AssetTab.Token}
-                        key={AssetTab.Token}
-                        className={activeTab === AssetTab.Token ? classes.tab : undefined}>
+                    <TabPanel value={AssetTab.Token} key={AssetTab.Token}>
                         <TokenTable selectedChainId={selectedChainId} />
                     </TabPanel>
-                    <TabPanel
-                        value={AssetTab.Collectibles}
-                        key={AssetTab.Collectibles}
-                        className={activeTab === AssetTab.Collectibles ? classes.tab : undefined}>
-                        <CollectibleList selectedChainId={selectedChainId} />
+                    <TabPanel value={AssetTab.Collectibles} key={AssetTab.Collectibles}>
+                        <CollectibleList selectedChainId={selectedChainId} provider={provider} />
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
