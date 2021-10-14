@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
-import { EthereumAddress } from 'wallet.ts'
 import { EthereumNameType } from '../constants'
 import { useAddressNames } from './useAddressNames'
 import { useResolveENS } from './useResolveENS'
@@ -9,6 +8,7 @@ import { useResolveUNS } from './useResolveUNS'
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ENS_RE_FULL = new RegExp(`^${ENS_RE.source}$`)
 const ADDRESS_FULL = /0x\w+/
+const ADDRESS = /^0x[\dA-Fa-f]{40}$/
 
 export function useEthereumName(nickname: string, twitterId: string, bio: string) {
     const [ethereumName, setEthereumName] = useState('')
@@ -41,7 +41,7 @@ export function useEthereumAddress(nickname: string, twitterId: string, bio: str
     useEffect(() => {
         setAddress('')
         const matched = bio.match(ADDRESS_FULL)
-        if (matched?.[0] && EthereumAddress.isValid(matched[0])) setAddress(matched[0])
+        if (matched && ADDRESS.test(matched[0])) setAddress(matched[0])
     }, [bio])
 
     const isLoading = loadingAddressENS || loadingAddressUNS || loadingAddressNames
