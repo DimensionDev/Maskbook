@@ -65,7 +65,7 @@ const Asset: FC<AssetProps> = ({ src, alt }) => {
     return <img className={classes.image} src={src} alt={alt} />
 }
 
-function FoudationImage(props: Props) {
+function FoundationImage(props: Props) {
     const { classes } = useStyles()
     const image = props.metadata.image.split('/')
     const src = `${props.nftContract.baseURI}${image.at(-2)}/${image.at(-1)}`
@@ -78,4 +78,4 @@ function FoudationImage(props: Props) {
     )
 }
 
-export default FoudationImage
+export default FoundationImage

@@ -9,7 +9,7 @@ interface Props extends React.PropsWithChildren<{}> {
     histories: NftHistory[]
 }
 
-function FoudationProvenances(props: Props) {
+function FoundationProvenances(props: Props) {
     const { t } = useI18N()
     const account = useAccount()
     props.histories.sort((first: NftHistory, second: NftHistory) => {
@@ -72,4 +72,4 @@ function FoudationProvenances(props: Props) {
     )
 }
 
-export default FoudationProvenances
+export default FoundationProvenances

@@ -1,15 +1,15 @@
-import { FoundationAddressIdQuery } from '../queries/'
+import { FoundationAddressIdQuery } from '../queries'
 import type { GraphData, Metadata } from '../types'
 
-function getTokenId(foudationUrl: string) {
-    if (foudationUrl.includes('/~/')) {
-        return foudationUrl.split('/')
+function getTokenId(foundationUrl: string) {
+    if (foundationUrl.includes('/~/')) {
+        return foundationUrl.split('/')
     }
-    return foudationUrl.split('-')
+    return foundationUrl.split('-')
 }
-export async function fetchApi(foudationUrl: string, subgraphsUrl: string | undefined) {
+export async function fetchApi(foundationUrl: string, subgraphsUrl: string | undefined) {
     if (!subgraphsUrl) return null
-    const tokenId = getTokenId(foudationUrl)
+    const tokenId = getTokenId(foundationUrl)
     const subgraphResponse: GraphData = await (
         await fetch(subgraphsUrl, {
             method: 'POST',

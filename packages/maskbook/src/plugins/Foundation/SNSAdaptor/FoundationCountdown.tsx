@@ -25,7 +25,7 @@ export interface CountdownDate {
     seconds: number
 }
 
-function FoudationCountdown(props: Props) {
+function FoundationCountdown(props: Props) {
     const [currentCount, setCount] = useState<CountdownDate>()
     const { classes } = useStyles()
     const { t } = useI18N()
@@ -61,4 +61,4 @@ function FoudationCountdown(props: Props) {
         </Box>
     )
 }
-export default FoudationCountdown
+export default FoundationCountdown

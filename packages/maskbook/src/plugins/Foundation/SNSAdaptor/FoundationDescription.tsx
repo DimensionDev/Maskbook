@@ -13,7 +13,7 @@ interface Props extends React.PropsWithChildren<{}> {
     description: string
 }
 
-function FoudationDescription(props: Props) {
+function FoundationDescription(props: Props) {
     const { classes } = useStyles()
     return (
         <Typography className={classes.description} variant="body1" gutterBottom>
@@ -22,4 +22,4 @@ function FoudationDescription(props: Props) {
     )
 }
 
-export default FoudationDescription
+export default FoundationDescription

@@ -7,7 +7,7 @@ import {
     useWeb3,
 } from '@masknet/web3-shared'
 import { useCallback, useMemo } from 'react'
-import { useFoudationContract } from '../contracts/useFoudationContract'
+import { useFoundationContract } from '../contracts/useFoundationContract'
 import { useFoundationConstants } from '@masknet/web3-shared'
 /**
  * A callback for place Bid
@@ -17,7 +17,7 @@ import { useFoundationConstants } from '@masknet/web3-shared'
 export function usePlaceBidCallback(auctionId: string, amount: string) {
     const { MARKET_ADDRESS } = useFoundationConstants()
     const web3 = useWeb3()
-    const foudationContract = useFoudationContract()
+    const foundationContract = useFoundationContract()
     const account = useAccount()
     const [placeBidState, setPlaceBidState] = useTransactionState()
 
@@ -33,7 +33,7 @@ export function usePlaceBidCallback(auctionId: string, amount: string) {
     }, [auctionId, amount])
 
     const PlaceBidCallback = useCallback(async () => {
-        if (!auctionId || !amount || !foudationContract || !bids.length) {
+        if (!auctionId || !amount || !foundationContract || !bids.length) {
             setPlaceBidState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -48,7 +48,7 @@ export function usePlaceBidCallback(auctionId: string, amount: string) {
         // estimate gas and compose transaction
         const config = {
             from: account,
-            gas: await foudationContract.methods
+            gas: await foundationContract.methods
                 .placeBid(auctionId)
                 .estimateGas({
                     from: account,
@@ -66,7 +66,7 @@ export function usePlaceBidCallback(auctionId: string, amount: string) {
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
-            foudationContract.methods
+            foundationContract.methods
                 .placeBid(auctionId)
                 .send(config as PayableTx)
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {

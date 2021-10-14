@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 import { useI18N } from '../../../utils'
 import type { Nft, Metadata } from '../types'
 import { makeStyles } from '@masknet/theme'
-import FoudationProvenances from './FoudationProvenances'
-import FoudationImage from './FoudationImage'
-import FoudationDescription from './FoudationDescription'
+import FoundationProvenances from './FoundationProvenances'
+import FoundationImage from './FoundationImage'
+import FoundationDescription from './FoundationDescription'
 import FoundationPlaceBid from './FoundationPlaceBid'
 import type { ChainId } from '@masknet/web3-shared'
 
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-function FoudationContent(props: Props) {
+function FoundationContent(props: Props) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -73,14 +73,14 @@ function FoudationContent(props: Props) {
             </Tabs>
             <Paper className={classes.body}>
                 {tabIndex === 0 ? (
-                    <FoudationImage nftContract={props.nft.nftContract} metadata={props.metadata} />
+                    <FoundationImage nftContract={props.nft.nftContract} metadata={props.metadata} />
                 ) : null}
-                {tabIndex === 1 ? <FoudationDescription description={props.metadata.description} /> : null}
-                {tabIndex === 2 ? <FoudationProvenances histories={props.nft.nftHistory} /> : null}
+                {tabIndex === 1 ? <FoundationDescription description={props.metadata.description} /> : null}
+                {tabIndex === 2 ? <FoundationProvenances histories={props.nft.nftHistory} /> : null}
             </Paper>
             <FoundationPlaceBid chainId={props.chainId} nft={props.nft} metadata={props.metadata} link={props.link} />
         </CardContent>
     )
 }
 
-export default FoudationContent
+export default FoundationContent

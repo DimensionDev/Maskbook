@@ -9,7 +9,7 @@ interface Props extends React.PropsWithChildren<{}> {
     link: string
 }
 
-function FoudationHeader(props: Props) {
+function FoundationHeader(props: Props) {
     const { t } = useI18N()
 
     const CurrentPrice = useCallback(() => {
@@ -40,4 +40,4 @@ function FoudationHeader(props: Props) {
     )
 }
 
-export default FoudationHeader
+export default FoundationHeader

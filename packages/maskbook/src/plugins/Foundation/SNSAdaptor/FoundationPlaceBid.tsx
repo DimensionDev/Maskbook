@@ -19,7 +19,7 @@ import {
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
-import FoudationCountdown from './FoudationCountdown'
+import FoundationCountdown from './FoundationCountdown'
 import type { Nft, Metadata } from '../types'
 import { WalletMessages } from '../../Wallet/messages'
 import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
@@ -137,7 +137,7 @@ function FoundationPlaceBid(props: Props) {
     return (
         <Grid item xs={12}>
             <EthereumWalletConnectedBoundary offChain={true}>
-                <FoudationCountdown dateEnding={props.nft.mostRecentAuction.dateEnding} />
+                <FoundationCountdown dateEnding={props.nft.mostRecentAuction.dateEnding} />
                 {props.nft.mostRecentAuction.status === 'Open' && (
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel

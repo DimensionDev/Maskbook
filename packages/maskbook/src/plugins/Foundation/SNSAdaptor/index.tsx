@@ -6,7 +6,7 @@ import { checkUrl, getRelevantUrl } from '../utils'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
 import { ChainId } from '@masknet/web3-shared'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import FoudationCard from './FoudationCard'
+import FoundationCard from './FoundationCard'
 
 interface Props extends React.PropsWithChildren<{}> {
     link: string
@@ -33,9 +33,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 function renderPostInspector(props: Props) {
     return (
-        <MaskPluginWrapper pluginName="Foudation">
+        <MaskPluginWrapper pluginName="Foundation">
             <EthereumChainBoundary chainId={props.chainId}>
-                <FoudationCard link={props.link} chainId={props.chainId} />
+                <FoundationCard link={props.link} chainId={props.chainId} />
             </EthereumChainBoundary>
         </MaskPluginWrapper>
     )

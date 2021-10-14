@@ -3,8 +3,8 @@ import { ChainId, useFoundationConstants } from '@masknet/web3-shared'
 import { Card, Typography, CardActions, Link } from '@material-ui/core'
 import { useI18N } from '../../../utils'
 import { useFetchApi } from '../hooks/useFetchApi'
-import FoudationHeader from './FoudationHeader'
-import FoudationContent from './FoudationContent'
+import FoundationHeader from './FoundationHeader'
+import FoundationContent from './FoundationContent'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 
 interface Props extends React.PropsWithChildren<{}> {
@@ -66,7 +66,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-function FoudationCard(props: Props) {
+function FoundationCard(props: Props) {
     const { classes } = useStyles()
     const { t } = useI18N()
     const { SUBGRAPHS } = useFoundationConstants()
@@ -87,12 +87,12 @@ function FoudationCard(props: Props) {
                 </Typography>
             ) : (
                 <div>
-                    <FoudationHeader
+                    <FoundationHeader
                         nft={nftData.subgraphResponse.data.nfts[0]}
                         metadata={nftData.metadataResponse}
                         link={props.link}
                     />
-                    <FoudationContent
+                    <FoundationContent
                         nft={nftData.subgraphResponse.data.nfts[0]}
                         metadata={nftData.metadataResponse}
                         chainId={props.chainId}
@@ -118,4 +118,4 @@ function FoudationCard(props: Props) {
     )
 }
 
-export default FoudationCard
+export default FoundationCard
