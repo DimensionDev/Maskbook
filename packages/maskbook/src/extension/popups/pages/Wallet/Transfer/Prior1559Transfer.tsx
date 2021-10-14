@@ -41,6 +41,7 @@ const useStyles = makeStyles()({
     label: {
         color: '#1C68F3',
         fontSize: 12,
+        fontWeight: 600,
         lineHeight: '16px',
         margin: '10px 0',
         display: 'flex',
@@ -48,10 +49,10 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
     accountName: {
-        fontSize: 12,
+        fontSize: 16,
+        fontWeight: 600,
         linHeight: '16px',
         color: '#15181B',
-        padding: '10px 0 20px 10px',
     },
     user: {
         stroke: '#15181B',
@@ -112,6 +113,7 @@ const useStyles = makeStyles()({
         padding: 16,
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,

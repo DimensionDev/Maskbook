@@ -14,6 +14,7 @@ import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { useAsync } from 'react-use'
 import Services from '../../../../../service'
+import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()({
     header: {
@@ -31,6 +32,7 @@ const useStyles = makeStyles()({
         borderBottom: 'none',
     },
     button: {
+        fontWeight: 600,
         minWidth: 0,
         padding: '0 5px',
     },
@@ -47,7 +49,7 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
     const { classes } = useStyles()
 
     return (
-        <Table size="small" padding="none">
+        <Table size="small" padding="none" stickyHeader>
             <TableHead>
                 <TableRow>
                     <TableCell key="address" align="center" variant="head" className={classes.header}>
@@ -122,8 +124,14 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
                 <Checkbox
                     disabled={added}
                     defaultChecked={added}
+                    icon={<CheckedBorderIcon sx={{ fontSize: '16px', stroke: '#1C68F3' }} />}
+                    checkedIcon={<CheckedIcon sx={{ fontSize: '16px' }} />}
                     sx={{
                         color: '#1C68F3',
+                        padding: 0,
+                        width: 16,
+                        height: 16,
+                        borderRadius: 1,
                         '&.Mui-checked': {
                             color: '#1C68F3',
                         },

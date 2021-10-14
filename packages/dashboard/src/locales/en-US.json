@@ -346,9 +346,9 @@
     "create_wallet_wallet_name": "Wallet Name",
     "create_wallet_payment_password": "Payment Password",
     "create_wallet_re_enter_payment_password": "Re-enter the payment password",
-    "create_wallet_payment_password_tip": "The password must be between 8 and 20 characters and contains at least a number, an uppercase letter,\n a lowercase letter and a special character.",
+    "create_wallet_payment_password_tip": "Payment Password must be a combination of 2 categories out of numbers, letters and special characters with a length of 8-20 characters.",
     "create_wallet_your_wallet_address": "Your wallet address",
     "create_wallet_done": "Done",
     "create_wallet_verify_words": "Verify mnemonic words",
-    "create_wallet_mnemonic_word_not_match": "Mismatch of mnemonic words"
+    "create_wallet_mnemonic_word_not_match": "The mnemonic word is incorrect"
 }

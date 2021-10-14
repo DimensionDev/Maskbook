@@ -13,11 +13,12 @@ export const EnterDashboard = memo(() => {
                 padding: '12px 16px',
                 cursor: 'pointer',
                 backgroundColor: '#ffffff',
-                position: 'sticky',
+                width: '100%',
+                position: 'fixed',
                 bottom: 0,
             }}
             onClick={onEnter}>
-            <Typography style={{ fontSize: 12, lineHeight: '16px' }} color="primary">
+            <Typography style={{ fontSize: 12, lineHeight: '16px', fontWeight: 600 }} color="primary">
                 {t('browser_action_enter_dashboard')}
             </Typography>
         </Box>

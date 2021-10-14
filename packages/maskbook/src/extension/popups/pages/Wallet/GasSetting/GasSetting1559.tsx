@@ -78,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     button: {
+        fontWeight: 600,
         marginTop: 10,
         padding: '9px 10px',
         borderRadius: 20,
@@ -93,6 +94,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         lineHeight: '16px',
         color: '#15181B',
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 }))
 
@@ -447,7 +453,7 @@ export const GasSetting1559 = memo(() => {
                 loading={loading}
                 variant="contained"
                 fullWidth
-                className={classes.button}
+                classes={{ root: classes.button, disabled: classes.disabled }}
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
                 {t('confirm')}

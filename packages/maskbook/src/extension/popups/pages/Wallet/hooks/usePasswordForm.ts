@@ -19,7 +19,7 @@ export function usePasswordForm() {
                             [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2,
                         t('popups_wallet_password_satisfied_requirement'),
                     ),
-                confirm: zod.string().min(8).max(20),
+                confirm: zod.string().optional(),
             })
             .refine((data) => data.password === data.confirm, {
                 message: t('popups_wallet_password_dont_match'),
@@ -28,7 +28,7 @@ export function usePasswordForm() {
     }, [])
 
     const formValue = useForm<zod.infer<typeof schema>>({
-        mode: 'onChange',
+        mode: 'onBlur',
         resolver: zodResolver(schema),
         defaultValues: {
             password: '',

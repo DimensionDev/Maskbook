@@ -64,13 +64,24 @@ const useStyles = makeStyles()({
         padding: 16,
     },
     button: {
-        fontSize: 14,
         fontWeight: 600,
+        fontSize: 14,
         color: '#1C68F3',
         lineHeight: '20px',
         padding: '10px 0',
         borderRadius: 20,
         backgroundColor: '#ffffff',
+    },
+    empty: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+        fontSize: 12,
+        lineHeight: '16px',
+        fontWeight: 600,
+        color: '#7B8192',
+        background: '#F7F9FA',
     },
 })
 
@@ -108,6 +119,9 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
     const { classes } = useStyles()
     const { t } = useI18N()
     const [isExpand, setIsExpand] = useState(!(dataSource.length > 3))
+
+    if (dataSource.length === 0) return <div className={classes.empty}>{t('popups_wallet_no_transactions')}</div>
+
     return (
         <>
             <List dense className={classes.list}>

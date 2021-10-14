@@ -55,7 +55,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'transparent',
-        borderRadius: '4px 4px 0px 0px',
         fontSize: 16,
         fontWeight: 500,
         color: theme.palette.primary.contrastText,
@@ -107,7 +106,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     return (
         <>
             <GlobalCss />
-            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600 }}>
+            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
                         {excludePath || history.length === 1 ? (

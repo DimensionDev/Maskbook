@@ -97,6 +97,10 @@ export const RestoreFromLocal = memo(() => {
             }
 
             await Services.Welcome.checkPermissionsAndRestore(backupId)
+
+            // Set default wallet
+            if (json?.wallets) await PluginServices.Wallet.setDefaultWallet()
+
             if (!currentPersona) {
                 const lastedPersona = await Services.Identity.queryLastPersonaCreated()
                 if (lastedPersona) {

@@ -75,10 +75,10 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 variant="standard"
                 required={required}
                 InputProps={{
-                    ...inputProps,
                     disableUnderline: true,
                     className: classes.input,
                     classes: { disabled: classes.inputDisabled, focused: classes.inputFocused, ...inputProps.classes },
+                    ...inputProps,
                 }}
             />
         </Box>

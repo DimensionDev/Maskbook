@@ -22,7 +22,6 @@ import { first } from 'lodash-es'
 
 const useStyles = makeStyles()({
     content: {
-        flex: 1,
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
@@ -63,6 +62,8 @@ const useStyles = makeStyles()({
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
+        height: 'calc(100vh - 168px)',
+        overflow: 'auto',
     },
     item: {
         padding: 10,
@@ -99,8 +100,14 @@ const useStyles = makeStyles()({
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
         padding: 16,
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        backgroundColor: '#ffffff',
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,

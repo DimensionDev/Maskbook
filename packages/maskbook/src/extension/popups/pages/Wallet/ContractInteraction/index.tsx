@@ -89,6 +89,7 @@ const useStyles = makeStyles()(() => ({
         padding: '0px 16px 16px 16px',
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,

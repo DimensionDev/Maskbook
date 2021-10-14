@@ -30,8 +30,14 @@ const useStyles = makeStyles()({
         padding: 16,
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 })
 
@@ -82,7 +88,7 @@ const WalletRename = memo(() => {
                     loading={loading}
                     variant="contained"
                     disabled={!isValid}
-                    className={classes.button}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
                     onClick={onSubmit}>
                     {t('confirm')}
                 </LoadingButton>

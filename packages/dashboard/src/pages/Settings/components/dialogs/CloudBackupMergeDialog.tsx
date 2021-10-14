@@ -67,6 +67,9 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                 await Services.Welcome.checkPermissionsAndRestore(data.id)
             }
 
+            // Set default wallet
+            if (data?.info?.wallets) await PluginServices.Wallet.setDefaultWallet()
+
             onMerged(true)
             showSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
         } catch (error) {

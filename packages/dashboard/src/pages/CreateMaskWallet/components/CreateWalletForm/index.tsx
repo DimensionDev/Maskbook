@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import { Alert, Box, Button, Typography } from '@material-ui/core'
+import { Alert, Box, Button, formHelperTextClasses, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
@@ -14,8 +14,9 @@ import { PluginServices } from '../../../../API'
 import urlcat from 'urlcat'
 import { MaskTextField } from '@masknet/theme'
 import PasswordField from '../../../../components/PasswordField'
+import { InfoIcon } from '@masknet/icons'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     container: {
         padding: '120px 18%',
         display: 'flex',
@@ -36,11 +37,22 @@ const useStyles = makeStyles()({
     label: {
         fontSize: 12,
         lineHeight: '16px',
-        color: MaskColorVar.blue,
+        color: MaskColorVar.main,
     },
     input: {
         width: '100%',
         marginTop: 10,
+    },
+    textField: {
+        background: theme.palette.mode === 'dark' ? '#1D2023' : '#F7F9FA',
+        padding: theme.spacing(1),
+        fontSize: 12,
+        lineHeight: '16px',
+        borderRadius: 6,
+        [`&.${formHelperTextClasses.error}`]: {
+            boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
+            border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,
+        },
     },
     tips: {
         fontSize: 12,
@@ -61,11 +73,19 @@ const useStyles = makeStyles()({
         borderRadius: 24,
         fontSize: 18,
     },
+    cancelButton: {
+        height: 48,
+        borderRadius: 24,
+        fontSize: 18,
+        background: theme.palette.mode === 'dark' ? '#1A1D20' : '#F7F9FA',
+    },
     alert: {
         marginTop: 24,
         padding: 24,
+        backgroundColor: MaskColorVar.errorBackground,
+        color: MaskColorVar.redMain,
     },
-})
+}))
 
 const CreateWalletForm = memo(() => {
     const t = useDashboardI18N()
@@ -88,7 +108,7 @@ const CreateWalletForm = memo(() => {
                 (input) => [/[A-Z]/, /[a-z]/, /\d/, /[^\dA-Za-z]/].filter((regex) => regex.test(input)).length >= 2,
                 t.create_wallet_password_satisfied_requirement(),
             )
-        const confirmRule = zod.string().min(8).max(20)
+
         return zod
             .object(
                 hasPassword
@@ -96,7 +116,7 @@ const CreateWalletForm = memo(() => {
                     : {
                           name: zod.string().min(1).max(12),
                           password: hasPassword ? passwordRule.optional() : passwordRule,
-                          confirm: hasPassword ? confirmRule.optional() : confirmRule,
+                          confirm: zod.string().optional(),
                       },
             )
             .refine((data) => (!hasPassword ? data.password === data.confirm : true), {
@@ -110,7 +130,7 @@ const CreateWalletForm = memo(() => {
         handleSubmit,
         formState: { errors, isValid },
     } = useForm<zod.infer<typeof schema>>({
-        mode: 'onChange',
+        mode: 'onBlur',
         resolver: zodResolver(schema),
         defaultValues: {
             name: '',
@@ -144,7 +164,8 @@ const CreateWalletForm = memo(() => {
                                 error={!!errors.name?.message}
                                 helperText={errors.name?.message}
                                 placeholder={t.create_wallet_name_placeholder()}
-                                InputProps={{ disableUnderline: true }}
+                                inputProps={{ autoComplete: 'off' }}
+                                InputProps={{ className: classes.textField }}
                             />
                         )}
                         control={control}
@@ -164,6 +185,7 @@ const CreateWalletForm = memo(() => {
                                         placeholder={t.create_wallet_payment_password()}
                                         error={!isValid && !!errors.password?.message}
                                         helperText={!isValid ? errors.password?.message : ''}
+                                        InputProps={{ className: classes.textField }}
                                     />
                                 )}
                                 name="password"
@@ -176,6 +198,7 @@ const CreateWalletForm = memo(() => {
                                         error={!isValid && !!errors.confirm?.message}
                                         helperText={!isValid ? errors.confirm?.message : ''}
                                         placeholder={t.create_wallet_re_enter_payment_password()}
+                                        InputProps={{ className: classes.textField }}
                                     />
                                 )}
                                 name="confirm"
@@ -186,7 +209,7 @@ const CreateWalletForm = memo(() => {
                     </>
                 ) : null}
                 <Box className={classes.controller}>
-                    <Button color="secondary" className={classes.button} onClick={() => navigate(-1)}>
+                    <Button color="secondary" className={classes.cancelButton} onClick={() => navigate(-1)}>
                         {t.cancel()}
                     </Button>
                     <Button className={classes.button} onClick={onSubmit} disabled={!isValid}>
@@ -194,7 +217,11 @@ const CreateWalletForm = memo(() => {
                     </Button>
                 </Box>
                 {open ? (
-                    <Alert severity="error" onClose={() => setOpen(false)} className={classes.alert}>
+                    <Alert
+                        icon={<InfoIcon />}
+                        severity="error"
+                        onClose={() => setOpen(false)}
+                        className={classes.alert}>
                         {t.create_wallet_mnemonic_tip()}
                     </Alert>
                 ) : null}

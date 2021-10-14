@@ -70,6 +70,7 @@ const useStyles = makeStyles()({
     },
     multilineInput: {
         padding: 6,
+        borderRadius: 6,
         backgroundColor: '#F7F9FA',
     },
     textArea: {
@@ -77,6 +78,7 @@ const useStyles = makeStyles()({
         fontSize: 12,
     },
     button: {
+        fontWeight: 600,
         padding: '9px 10px',
         borderRadius: 20,
     },
@@ -89,6 +91,11 @@ const useStyles = makeStyles()({
     },
     controller: {
         padding: '20px 10px',
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 })
 
@@ -276,7 +283,7 @@ const ImportWallet = memo(() => {
                     loading={loading}
                     variant="contained"
                     fullWidth
-                    className={classes.button}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
                     disabled={disabled}
                     onClick={onSubmit}>
                     {t('import')}

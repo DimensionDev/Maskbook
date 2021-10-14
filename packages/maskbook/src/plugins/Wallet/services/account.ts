@@ -17,7 +17,8 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
-import { hasWallet, updateWallet } from '.'
+import { getWallets, hasWallet, updateWallet } from '.'
+import { first } from 'lodash-es'
 
 export async function updateAccount(
     options: {
@@ -32,7 +33,7 @@ export async function updateAccount(
     if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
 
     // make sure account and provider type to be updating both
-    if ((options.account && !options.providerType) || (!options.account && options.providerType))
+    if ((options.account && !options.providerType) || (options.account === undefined && options.providerType))
         throw new Error('Account and provider type must be updating both')
 
     const { name, account, chainId, providerType, networkType } = options
@@ -58,7 +59,7 @@ export async function updateAccount(
         }
     }
     if (networkType) currentNetworkSettings.value = networkType
-    if (account) currentAccountSettings.value = account
+    if (account !== undefined) currentAccountSettings.value = account
     if (providerType) currentProviderSettings.value = providerType
     if (currentProviderSettings.value === ProviderType.MaskWallet) {
         await updateMaskAccount({
@@ -94,6 +95,17 @@ export async function resetAccount(
     if (chainId) currentChainIdSettings.value = chainId
     if (networkType) currentNetworkSettings.value = networkType
     if (providerType) currentProviderSettings.value = providerType
+}
+
+export async function setDefaultWallet() {
+    if (currentAccountSettings.value) return
+    const wallets = await getWallets()
+    const address = first(wallets)?.address
+    if (address)
+        await updateAccount({
+            account: address,
+            providerType: ProviderType.MaskWallet,
+        })
 }
 
 export async function getSupportedNetworks() {
