@@ -47,18 +47,7 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                 </Typography>
                 {children}
             </Link>
-            <ShadowRootMenu
-                open={!!anchorEl}
-                onClose={onClose}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'left',
-                }}
-                transformOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
-                }}>
+            <ShadowRootMenu open={!!anchorEl} onClose={onClose} anchorEl={anchorEl}>
                 {options.map((x, i) => (
                     <MenuItem selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
                         {x.name}
