@@ -26,7 +26,7 @@ export function usePower(identifier: ProposalIdentifier) {
         )
             .map((v) => mapKeys(v, (_value, key) => key.toLowerCase()) as { [x: string]: number })
             .reduce((acc, cur) => {
-                return acc + cur[account.toLowerCase()]
+                return acc + (cur[account.toLowerCase()] ?? 0)
             }, 0)
     }, [blockNumber, account])
 }
