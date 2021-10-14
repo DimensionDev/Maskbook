@@ -62,7 +62,9 @@ export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
             {t.wallets_assets_token_sent_not_connect_tip({
                 chainName: getNetworkTypeFromChainId(chainId) ?? 'Unknown Network',
             })}{' '}
-            <Link sx={{ cursor: 'pointer' }} onClick={() => onChainChange(chainId)}>
+            <Link
+                sx={{ cursor: 'pointer', color: MaskColorVar.white, textDecoration: 'underline' }}
+                onClick={() => onChainChange(chainId)}>
                 {t.wallets_assets_token_sent_switch_network_tip()}
             </Link>
         </Typography>

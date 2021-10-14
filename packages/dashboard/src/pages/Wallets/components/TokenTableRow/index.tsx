@@ -23,6 +23,11 @@ const useStyles = makeStyles()((theme) => ({
     symbol: {
         marginLeft: 14,
         fontSize: theme.typography.pxToRem(14),
+        maxWidth: '100px',
+        textOverflow: 'ellipsis',
+        textTransform: 'capitalize',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     cell: {
         padding: theme.spacing(2),

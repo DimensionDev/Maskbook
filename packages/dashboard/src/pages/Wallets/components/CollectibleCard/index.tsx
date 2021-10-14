@@ -84,7 +84,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                     <Link
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={resolveCollectibleLink(chainId, provider, token)}>
+                        href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
                         <div className={classes.imgContainer}>
                             <img
                                 src={token.info.image}

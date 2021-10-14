@@ -29,7 +29,15 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100%',
+        height: '100%',
+    },
+    table: {
+        paddingLeft: theme.spacing(5),
+        paddingRight: theme.spacing(5),
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+        },
     },
     header: {
         color: MaskColorVar.normalText,
@@ -152,7 +160,7 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                     {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
                 </>
             ) : (
-                <Table stickyHeader sx={{ padding: '0 44px' }}>
+                <Table stickyHeader className={classes.table}>
                     <TableHead>
                         <TableRow>
                             <TableCell key="Asset" align="center" variant="head" className={classes.header}>

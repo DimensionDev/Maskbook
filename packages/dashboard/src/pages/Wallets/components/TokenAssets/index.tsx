@@ -86,10 +86,13 @@ export const TokenAssets = memo<TokenAssetsProps>(({ selectedChainId }) => {
                                 : t.wallets_assets_custom_collectible()}
                         </Button>
                     </Box>
-                    <TabPanel value={AssetTab.Token} key={AssetTab.Token}>
+                    <TabPanel value={AssetTab.Token} key={AssetTab.Token} sx={{ minHeight: 'calc(100% - 48px)' }}>
                         <TokenTable selectedChainId={selectedChainId} />
                     </TabPanel>
-                    <TabPanel value={AssetTab.Collectibles} key={AssetTab.Collectibles}>
+                    <TabPanel
+                        value={AssetTab.Collectibles}
+                        key={AssetTab.Collectibles}
+                        sx={{ minHeight: 'calc(100% - 48px)' }}>
                         <CollectibleList selectedChainId={selectedChainId} provider={provider} />
                     </TabPanel>
                 </TabContext>

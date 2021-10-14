@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react'
-import { Box, TablePagination } from '@material-ui/core'
+import { Box, Stack, TablePagination } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -148,25 +148,27 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
         const { classes } = useStyles()
 
         return (
-            <>
+            <Stack flexDirection="column" justifyContent="space-between" height="100%">
                 <>
                     {isLoading ? (
                         <LoadingPlaceholder />
                     ) : isEmpty ? (
                         <EmptyPlaceholder children={t.wallets_empty_collectible_tip()} />
                     ) : (
-                        <div className={classes.root}>
-                            {dataSource.map((x) => (
-                                <div className={classes.card} key={x.tokenId}>
-                                    <CollectibleCard
-                                        chainId={chainId}
-                                        provider={provider}
-                                        token={x}
-                                        onSend={() => onSend(x)}
-                                    />
-                                </div>
-                            ))}
-                        </div>
+                        <Box>
+                            <div className={classes.root}>
+                                {dataSource.map((x) => (
+                                    <div className={classes.card} key={x.tokenId}>
+                                        <CollectibleCard
+                                            chainId={chainId}
+                                            provider={provider}
+                                            token={x}
+                                            onSend={() => onSend(x)}
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                        </Box>
                     )}
                 </>
                 {showPagination ? (
@@ -192,7 +194,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                         />
                     </Box>
                 ) : null}
-            </>
+            </Stack>
         )
     },
 )
