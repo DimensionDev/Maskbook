@@ -98,7 +98,7 @@ export const RestoreFromCloud = memo(() => {
                 await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)
 
                 // Set default wallet
-                if (backupInfo.info?.wallets) PluginServices.Wallet.setDefaultWallet
+                if (backupInfo.info?.wallets) PluginServices.Wallet.setDefaultWallet()
 
                 if (!currentPersona) {
                     const lastedPersona = await Services.Identity.queryLastPersonaCreated()
