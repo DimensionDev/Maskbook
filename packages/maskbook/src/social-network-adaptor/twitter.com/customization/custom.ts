@@ -1,11 +1,9 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef } from '@masknet/shared'
-import { Appearance } from '@masknet/theme'
-import { PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core'
+import { SubscriptionFromValueRef, useValueRef } from '@masknet/shared'
+import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@material-ui/core'
 import produce, { setAutoFreeze } from 'immer'
-import { createElement, useMemo } from 'react'
+import { useMemo } from 'react'
 import type { SocialNetworkUI } from '../../../social-network'
-import { useClassicMaskTheme } from '../../../utils/theme'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
 import { isMobileTwitter } from '../utils/isMobile'
 import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
@@ -15,8 +13,9 @@ const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
 
+const palette = new ValueRef<PaletteMode>('light')
 export const PaletteModeProviderTwitter: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: new ValueRef<PaletteMode>('light'),
+    current: SubscriptionFromValueRef(palette),
     start: startWatchThemeColor,
 }
 
@@ -25,7 +24,7 @@ export function startWatchThemeColor(signal: AbortSignal) {
         const color = getBackgroundColor(composeAnchorSelector().evaluate()!)
         const contrastColor = getForegroundColor(composeAnchorTextSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
-        PaletteModeProviderTwitter.current.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
+        palette.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
 
         if (color) primaryColorRef.value = color
         if (contrastColor) primaryColorContrastColorRef.value = contrastColor
@@ -40,19 +39,17 @@ export function startWatchThemeColor(signal: AbortSignal) {
         })
     signal.addEventListener('abort', () => watcher.stopWatch())
 }
-export function useThemeTwitterVariant() {
+export function useThemeTwitterVariant(baseTheme: Theme) {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-    const MaskTheme = useClassicMaskTheme({
-        appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
-    })
+
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
         const primaryContrastColorRGB = fromRGB(primaryContrastColor)
         setAutoFreeze(false)
 
-        const TwitterTheme = produce(MaskTheme, (theme) => {
+        const TwitterTheme = produce(baseTheme, (theme) => {
             theme.palette.background.paper = backgroundColor
             const isDark = theme.palette.mode === 'dark'
             const isDarker = backgroundColor === 'rgb(0,0,0)'
@@ -120,9 +117,5 @@ export function useThemeTwitterVariant() {
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(TwitterTheme)
-    }, [MaskTheme, backgroundColor, primaryColor, primaryContrastColor])
-}
-
-export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
-    return createElement(ThemeProvider, { theme: useThemeTwitterVariant(), ...props })
+    }, [baseTheme, backgroundColor, primaryColor, primaryContrastColor])
 }

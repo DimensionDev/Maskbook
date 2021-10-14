@@ -3,7 +3,7 @@ import '../../setup.ui'
 
 import { useState } from 'react'
 import { useAsync } from 'react-use'
-import { CssBaseline, NoSsr, CircularProgress, Box, Typography, Card } from '@material-ui/core'
+import { CircularProgress, Box, Typography, Card } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import PeopleOutlinedIcon from '@material-ui/icons/PeopleOutlined'
 import CreditCardIcon from '@material-ui/icons/CreditCard'
@@ -12,7 +12,7 @@ import SettingsOutlinedIcon from '@material-ui/icons/SettingsOutlined'
 import PowerIcon from '@material-ui/icons/Power'
 import { HashRouter as Router, Route, Switch, Redirect, useHistory } from 'react-router-dom'
 
-import { useI18N, createNormalReactRoot, Flags, useMatchXS } from '../../utils'
+import { useI18N, createNormalReactRoot, Flags, useMatchXS, useClassicMaskFullPageTheme } from '../../utils'
 
 import FooterLine from './DashboardComponents/FooterLine'
 import Drawer from './DashboardComponents/Drawer'
@@ -214,16 +214,15 @@ function RenderWithErrorBoundary(Component: React.ComponentType) {
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export function Dashboard() {
-    return MaskUIRoot(
-        <DashboardSnackbarProvider>
-            <NoSsr>
+    return (
+        <MaskUIRoot useTheme={useClassicMaskFullPageTheme} kind="fullpage">
+            <DashboardSnackbarProvider>
                 <Router>
-                    <CssBaseline />
                     <DashboardUI />
                     <PluginRender />
                 </Router>
-            </NoSsr>
-        </DashboardSnackbarProvider>,
+            </DashboardSnackbarProvider>
+        </MaskUIRoot>
     )
 }
 

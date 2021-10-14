@@ -80,22 +80,21 @@ function createElement(key: keyof HTMLElementTagNameMap, kind: string) {
 /** @internal */
 export interface ShadowRootStyleProviderProps extends React.PropsWithChildren<{}> {
     shadow: ShadowRoot
-    onHeadCreate?(head: HTMLHeadElement): void
 }
 /** @internal */
 export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     const { shadow, children } = props
     const { muiEmotionCache, tssEmotionCache } = initOnce(shadow, () => init(props))
+
     return (
         <EmotionCacheProvider value={muiEmotionCache}>
             <TssCacheProvider value={tssEmotionCache}>{children}</TssCacheProvider>
         </EmotionCacheProvider>
     )
 }
-function init({ shadow, onHeadCreate }: ShadowRootStyleProviderProps) {
+function init({ shadow }: ShadowRootStyleProviderProps) {
     const head = shadow.appendChild(createElement('head', 'css-container'))
 
-    onHeadCreate?.(head)
     //#region Emotion
     const MuiInsertionPoint = head.appendChild(createElement('div', 'mui-area'))
     const TSSInsertionPoint = head.appendChild(createElement('div', 'tss-area'))

@@ -3,7 +3,7 @@ import { noop } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import { Button, Paper, Typography, Box, GlobalStyles } from '@material-ui/core'
-import { useI18N, delay, Flags } from '../../utils'
+import { useI18N, delay, Flags, useClassicMaskFullPageTheme } from '../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { ChooseIdentity } from '../../components/shared/ChooseIdentity'
@@ -189,10 +189,10 @@ function BrowserActionUI() {
 }
 
 export function BrowserActionRoot() {
-    return MaskUIRoot(
-        <>
+    return (
+        <MaskUIRoot useTheme={useClassicMaskFullPageTheme} kind="fullpage">
             <GlobalCss />
             <BrowserActionUI />
-        </>,
+        </MaskUIRoot>
     )
 }

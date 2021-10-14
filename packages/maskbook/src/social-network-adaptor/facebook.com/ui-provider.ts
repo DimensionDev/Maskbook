@@ -24,6 +24,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { ProfileIdentifier } from '@masknet/shared'
 import { globalUIState } from '../../social-network'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
+import { PaletteProviderFacebook } from './customization/PaletteProvider'
 
 const facebookUI: SocialNetworkUI.Definition = {
     ...facebookBase,
@@ -60,7 +61,9 @@ const facebookUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
     },
-    customization: {},
+    customization: {
+        paletteMode: PaletteProviderFacebook,
+    },
     init(signal) {
         const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()

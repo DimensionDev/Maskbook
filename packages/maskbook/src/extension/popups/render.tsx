@@ -1,14 +1,13 @@
-import { lazy, Suspense } from 'react'
+import { lazy } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, startPluginDashboard, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { PopupRoutes } from '.'
-import { createNormalReactRoot, useClassicMaskTheme } from '../../utils'
+import { createNormalReactRoot, useClassicMaskFullPageTheme } from '../../utils'
 import '../../social-network-adaptor/browser-action'
 import { Web3Provider } from '@masknet/web3-shared'
 import { PopupWeb3Context } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
-import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'
 import { Appearance } from '@masknet/theme'
 import { createPluginHost } from '../../../src/plugin-infra/host'
 import { MaskUIRoot } from '../../UIRoot'
@@ -24,38 +23,36 @@ const SignRequest = lazy(() => import('./SignRequest'))
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
+function useAlwaysLightTheme() {
+    return useClassicMaskFullPageTheme({ forcePalette: Appearance.light })
+}
 function Dialogs() {
-    const theme = useClassicMaskTheme({ appearance: Appearance.light })
-    return MaskUIRoot(
-        <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={theme}>
-                <Web3Provider value={PopupWeb3Context}>
-                    <HashRouter>
-                        <Suspense fallback="">
-                            <Switch>
-                                <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
-                                <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
-                                <Route path={PopupRoutes.Swap} children={<SwapPage />} />
-                                <Route path={PopupRoutes.RequestPermission} exact>
-                                    <RequestPermissionPage />
-                                </Route>
-                                <Route path={PopupRoutes.PermissionAwareRedirect} exact>
-                                    <PermissionAwareRedirect />
-                                </Route>
-                                <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
-                                    <ThirdPartyRequestPermission />
-                                </Route>
-                                <Route path={PopupRoutes.SignRequest} exact>
-                                    <SignRequest />
-                                </Route>
-                                <Route children={<Redirect to={PopupRoutes.Wallet} />} />
-                            </Switch>
-                        </Suspense>
-                    </HashRouter>
-                    <PluginRender />
-                </Web3Provider>
-            </ThemeProvider>
-        </StyledEngineProvider>,
+    return (
+        <MaskUIRoot useTheme={useAlwaysLightTheme} kind="fullpage">
+            <Web3Provider value={PopupWeb3Context}>
+                <HashRouter>
+                    <Switch>
+                        <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
+                        <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
+                        <Route path={PopupRoutes.Swap} children={<SwapPage />} />
+                        <Route path={PopupRoutes.RequestPermission} exact>
+                            <RequestPermissionPage />
+                        </Route>
+                        <Route path={PopupRoutes.PermissionAwareRedirect} exact>
+                            <PermissionAwareRedirect />
+                        </Route>
+                        <Route path={PopupRoutes.ThirdPartyRequestPermission} exact>
+                            <ThirdPartyRequestPermission />
+                        </Route>
+                        <Route path={PopupRoutes.SignRequest} exact>
+                            <SignRequest />
+                        </Route>
+                        <Route children={<Redirect to={PopupRoutes.Wallet} />} />
+                    </Switch>
+                </HashRouter>
+                <PluginRender />
+            </Web3Provider>
+        </MaskUIRoot>
     )
 }
 status.then(() => createNormalReactRoot(<Dialogs />))
