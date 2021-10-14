@@ -56,7 +56,6 @@ import { RelationFavor } from '@masknet/shared-base'
 assertEnvironment(Environment.ManifestBackground)
 
 export { validateMnemonic } from '../../utils/mnemonic-code'
-export { storeAvatar, queryAvatarDataURL } from '../../database'
 
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'

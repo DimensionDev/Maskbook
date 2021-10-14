@@ -18,6 +18,27 @@ function css_var<T extends Record<string, unknown>>(
 }
 type Theme = ThemeOptions | ((mode: PaletteMode, colors: Color) => ThemeOptions)
 
+export const BaseLine: Theme = (mode, colors): ThemeOptions => ({
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    scrollbarColor: 'red',
+                    '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
+                        width: '10px',
+                    },
+                    '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
+                        borderRadius: '6px',
+                        border: '2px solid rgba(0, 0, 0, 0)',
+                        backgroundColor: mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                        backgroundClip: 'padding-box',
+                    },
+                },
+            },
+        },
+    },
+})
+
 export const Grid: Theme = {
     components: { MuiGrid: {} },
 }
@@ -124,7 +145,21 @@ export const Dialog: Theme = (mode, colors): ThemeOptions => ({
         },
         MuiDialogTitle: {
             styleOverrides: {
-                root: { backgroundColor: colors.mainBackground },
+                root: {
+                    backgroundColor: colors.mainBackground,
+                    '&.dashboard-dialog-title-hook': {
+                        backgroundColor: colors.mainBackground,
+                        display: 'flex',
+                        flexDirection: 'row-reverse',
+                        alignItems: 'center',
+                        borderBottom: 'none!important',
+                        p: {
+                            width: '100%',
+                            display: 'inline-flex',
+                            justifyContent: 'start',
+                        },
+                    },
+                },
             },
         },
         MuiDialogContent: {

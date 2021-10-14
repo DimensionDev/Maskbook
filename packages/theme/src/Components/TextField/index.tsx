@@ -41,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
     inputDisabled: {
         opacity: 0.5,
         color: 'rgba(255, 255, 255, 0.4)',
-        background: theme.palette.mode === 'dark' ? MaskColorVar.primaryBackground : '#F0F0F4',
     },
     inputFocused: {
         background: MaskColorVar.primaryBackground,
@@ -78,7 +77,7 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 InputProps={{
                     disableUnderline: true,
                     className: classes.input,
-                    classes: { ...inputProps.classes, disabled: classes.inputDisabled, focused: classes.inputFocused },
+                    classes: { disabled: classes.inputDisabled, focused: classes.inputFocused, ...inputProps.classes },
                     ...inputProps,
                 }}
             />

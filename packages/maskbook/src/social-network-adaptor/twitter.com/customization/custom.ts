@@ -87,7 +87,7 @@ export function useThemeTwitterVariant() {
                         boxShadow: 'none',
                         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                             '&': {
-                                height: '28px !important',
+                                height: '42px !important',
                                 minHeight: 'auto !important',
                                 padding: '0 14px !important',
                             },

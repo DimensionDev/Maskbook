@@ -1,4 +1,4 @@
-import { MaskTextField } from '@masknet/theme'
+import { makeStyles, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Stack, Typography } from '@material-ui/core'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -37,6 +37,12 @@ import { useLocation } from 'react-router-dom'
 import { TransferTab } from './index'
 import { unionBy } from 'lodash-es'
 
+const useStyles = makeStyles()((theme) => ({
+    disabled: {
+        opacity: 1,
+    },
+}))
+
 type FormInputs = {
     recipient: string
     contract: string
@@ -49,6 +55,7 @@ export const TransferERC721 = memo(() => {
     const { state } = useLocation() as {
         state: { erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
     }
+    const { classes } = useStyles()
     const [defaultToken, setDefaultToken] = useState<ERC721TokenDetailed | null>(null)
     const navigate = useNavigate()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
@@ -200,6 +207,9 @@ export const TransferERC721 = memo(() => {
                                         placeholder={t.wallets_transfer_contract_placeholder()}
                                         disabled
                                         InputProps={{
+                                            classes: {
+                                                disabled: classes.disabled,
+                                            },
                                             startAdornment: contractIcon,
                                             endAdornment: <KeyboardArrowDownIcon />,
                                         }}

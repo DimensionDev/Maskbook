@@ -6,11 +6,12 @@ import { styled } from '@material-ui/core/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useDashboardI18N } from '../../locales'
 
-const Content = styled('div')(
-    ({ theme }) => `
-    padding: ${theme.spacing(1)} ${theme.spacing(8)};
-`,
-)
+const Content = styled('div')(({ theme }) => ({
+    padding: `${theme.spacing(1)} ${theme.spacing(4)}`,
+    [theme.breakpoints.down('md')]: {
+        padding: `${theme.spacing(1)} ${theme.spacing(0)}`,
+    },
+}))
 
 const ButtonGroup = styled('div')(
     ({ theme }) => `
@@ -21,13 +22,11 @@ const ButtonGroup = styled('div')(
 `,
 )
 
-const IFrame = styled('iframe')(
-    ({ theme }) => `
-    border: none;
-    width: 100%;
-    min-height: 500px;
-`,
-)
+const IFrame = styled('iframe')(({ theme }) => ({
+    border: 'none',
+    width: '100%',
+    minHeight: '500px',
+}))
 
 export default function Welcome() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
