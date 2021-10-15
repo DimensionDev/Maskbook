@@ -228,6 +228,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             }),
         })
     }, [fillState, poolSettings, setTransactionDialog])
+    //#endregion
 
     useEffect(() => {
         if (!ITO2_CONTRACT_ADDRESS) onClose()

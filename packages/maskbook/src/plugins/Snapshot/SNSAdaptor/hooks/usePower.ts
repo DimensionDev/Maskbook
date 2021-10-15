@@ -3,6 +3,7 @@ import { useAccount, useBlockNumber } from '@masknet/web3-shared'
 import { PluginSnapshotRPC } from '../../messages'
 import type { ProposalIdentifier } from '../../types'
 import { useProposal } from './useProposal'
+import { mapKeys } from 'lodash-es'
 
 export function usePower(identifier: ProposalIdentifier) {
     const {
@@ -13,14 +14,19 @@ export function usePower(identifier: ProposalIdentifier) {
     const blockNumber = useBlockNumber()
     return useAsyncRetry(async () => {
         if (!account) return 0
-        const scores = await PluginSnapshotRPC.getScores(
-            message,
-            [account],
-            blockNumber,
-            proposal.network,
-            identifier.space,
-            proposal.strategies,
+        return (
+            await PluginSnapshotRPC.getScores(
+                message,
+                [account],
+                blockNumber,
+                proposal.network,
+                identifier.space,
+                proposal.strategies,
+            )
         )
-        return scores[0]![account]!
+            .map((v) => mapKeys(v, (_value, key) => key.toLowerCase()) as { [x: string]: number })
+            .reduce((acc, cur) => {
+                return acc + (cur[account.toLowerCase()] ?? 0)
+            }, 0)
     }, [blockNumber, account])
 }

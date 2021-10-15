@@ -48,7 +48,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
     const flags: BuildFlags = {
         channel: 'stable',
         mode: mode === 'dev' ? 'development' : 'production',
-        runtime: { architecture: 'web', engine: 'firefox', manifest: 2 },
+        runtime: { architecture: 'web', engine: 'chromium', manifest: 2 },
     }
     if (args.reproducible) flags.reproducibleBuild = true
     if (args.readonlyCache) flags.readonlyCache = true
@@ -77,7 +77,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
         flags.runtime.architecture = 'web'
     }
 
-    command.push('--env', 'flags=' + JSON.stringify(JSON.stringify(flags)))
+    command.push('--env', 'flags=' + Buffer.from(JSON.stringify(flags), 'utf-8').toString('hex'))
     return spawn('npx', compact(command), {
         cwd: resolve(PKG_PATH, 'maskbook'),
         stdio: 'inherit',

@@ -2,11 +2,8 @@ import { memo } from 'react'
 import { IconButton } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
-import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { BannerProps } from '../Welcomes/Banner'
-import { useValueRef, useStylesExtends } from '@masknet/shared'
-import { currentSetupGuideStatus } from '../../settings/settings'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { useStylesExtends } from '@masknet/shared'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import GuideStep from '../GuideStep'
@@ -68,9 +65,5 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
 export function PostDialogHint(props: PostDialogHintProps) {
-    const identities = useMyIdentities()
-    const connecting = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
-
-    if ((connecting && !/[1-4]/.test(connecting)) || identities.length === 0) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }
