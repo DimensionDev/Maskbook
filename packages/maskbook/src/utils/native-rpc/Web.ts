@@ -218,10 +218,11 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     profile_queryRelationPaged: async ({ network, after, count }) => {
         let afterRecord
         if (after) {
-            Object.assign(after, {
+            afterRecord = {
+                ...after,
                 profile: stringToProfileIdentifier(after.profile),
                 linked: stringToPersonaIdentifier(after.linked),
-            })
+            }
         }
         const records = await Services.Identity.queryRelationPaged({ network, after: afterRecord }, count)
 
