@@ -11,8 +11,6 @@ import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
 import { DonateDialog } from './DonateDialog'
 import { parseURL } from '../../../utils/utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -31,13 +29,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <DonateDialog />
     },
     PostInspector() {
-        const isFacebookLink = activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID
-        const links = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .map((v) => {
-                return !isFacebookLink ? v : v.replace(/\?fbclid=[\S\s]*#/, '#')
-            })
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+
         const link = links.find(isGitcoin)
         if (!link) return null
         return <Renderer url={link} />

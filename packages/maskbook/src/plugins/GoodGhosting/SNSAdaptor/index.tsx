@@ -9,8 +9,6 @@ import { PreviewCard } from '../UI/PreviewCard'
 import { ChainId } from '@masknet/web3-shared'
 import { base } from '../base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
 const isGoodGhosting = (x: string): boolean => /^https:\/\/goodghosting.com/.test(x)
 
@@ -25,14 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const isFacebookLink = activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID
-
-        const links = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .map((v) => {
-                return !isFacebookLink ? v : v.replace(/\?fbclid=[\S\s]*#/, '#')
-            })
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
 
         const link = links.find(isGoodGhosting)
         if (!link) return null

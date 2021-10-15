@@ -7,21 +7,12 @@ import { base } from '../base'
 import type { CollectibleJSON_Payload } from '../types'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_NAME } from '../constants'
-import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     PostInspector: function Component() {
-        const isFacebookLink = activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID
-
-        const links = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .map((v) => {
-                return !isFacebookLink ? v : v.replace(/\?fbclid=[\S\s]*#/, '#')
-            })
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
 
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
