@@ -11,7 +11,7 @@ import { SignUpRoutePath } from '../routePath'
 import RefreshIcon from '@material-ui/icons/Refresh'
 import { memo, useState } from 'react'
 import { some } from 'lodash-es'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
 import { Box } from '@mui/system'
 
@@ -23,14 +23,14 @@ enum CreateWalletStep {
 export const MnemonicRevealForm = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
 
     const [step, setStep] = useState(CreateWalletStep.NameAndWords)
 
     const onSubmit = async () => {
         if (words.join(' ') !== puzzleWords.join(' ')) {
-            enqueueSnackbar(t.create_account_mnemonic_confirm_failed(), { variant: 'error' })
+            showSnackbar(t.create_account_mnemonic_confirm_failed(), { variant: 'error' })
         } else {
             navigate(`${SignUpRoutePath.PersonaCreate}`, {
                 replace: true,

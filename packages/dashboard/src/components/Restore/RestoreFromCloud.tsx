@@ -7,7 +7,7 @@ import { fetchBackupValue } from '../../pages/Settings/api'
 import { PluginServices, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
@@ -26,7 +26,7 @@ import { PopupRoutes } from '@masknet/shared'
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = useContext(UserContext)
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
 
@@ -54,7 +54,7 @@ export const RestoreFromCloud = memo(() => {
 
     useEffect(() => {
         if (!fetchBackupValueError) return
-        enqueueSnackbar(t.sign_in_account_cloud_backup_download_failed(), { variant: 'error' })
+        showSnackbar(t.sign_in_account_cloud_backup_download_failed(), { variant: 'error' })
     }, [fetchBackupValueError])
 
     const onValidated = useCallback(
@@ -116,7 +116,7 @@ export const RestoreFromCloud = memo(() => {
                 }
                 toggleSynchronizePasswordDialog(true)
             } catch {
-                enqueueSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
+                showSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
             }
         },
         [user],

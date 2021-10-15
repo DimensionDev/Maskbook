@@ -2,7 +2,6 @@ import { memo, useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Card } from '@material-ui/core'
 import type { BackupPreview } from '@masknet/public-api'
-import { useSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { PluginServices, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
@@ -19,6 +18,7 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { LoadingButton } from '../LoadingButton'
 import PasswordField from '../PasswordField'
 import { PopupRoutes } from '@masknet/shared'
+import { useCustomSnackbar } from '@masknet/theme'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -30,7 +30,7 @@ enum RestoreStatus {
 export const RestoreFromLocal = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
 
     const [file, setFile] = useState<File | null>(null)
@@ -49,7 +49,7 @@ export const RestoreFromLocal = memo(() => {
         } else if (['application/octet-stream', 'application/macbinary'].includes(file.type)) {
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {
-            enqueueSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
+            showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
         }
     }, [])
 
@@ -69,7 +69,7 @@ export const RestoreFromLocal = memo(() => {
                 setBackupValue('')
             }
         } catch {
-            enqueueSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
+            showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
             setRestoreStatus(RestoreStatus.WaitingInput)
             setBackupValue('')
         }
@@ -109,7 +109,7 @@ export const RestoreFromLocal = memo(() => {
             }
             navigate(RoutePaths.Personas, { replace: true })
         } catch {
-            enqueueSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
+            showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         }
     }, [backupId, json])
 
