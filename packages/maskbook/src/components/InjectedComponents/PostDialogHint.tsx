@@ -3,10 +3,12 @@ import { IconButton } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import type { BannerProps } from '../Welcomes/Banner'
-import { useStylesExtends } from '@masknet/shared'
+import { useStylesExtends, useValueRef } from '@masknet/shared'
 import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
-import GuideStep from '../GuideStep'
+import { useMyIdentities } from '../DataSource/useActivatedUI'
+import { currentSetupGuideStatus } from '../../settings/settings'
+import { activatedSocialNetworkUI } from '../../social-network'
 
 export interface PostDialogHintUIProps extends withClasses<'buttonTransform'> {
     onHintButtonClicked: () => void
@@ -33,14 +35,11 @@ const useStyles = makeStyles()((theme) => ({
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStylesExtends(useStyles(), props)
-    const { t } = useI18N()
 
     return (
-        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')}>
-            <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
-                <MaskSharpIcon color="primary" />
-            </IconButton>
-        </GuideStep>
+        <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
+            <MaskSharpIcon color="primary" />
+        </IconButton>
     )
 })
 
@@ -65,5 +64,9 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
     NotSetupYetPromptProps?: Partial<BannerProps>
 }
 export function PostDialogHint(props: PostDialogHintProps) {
+    const identities = useMyIdentities()
+    const connecting = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
+
+    if (connecting || identities.length === 0) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }
