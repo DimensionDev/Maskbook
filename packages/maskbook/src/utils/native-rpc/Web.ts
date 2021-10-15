@@ -185,6 +185,13 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         return privateKey
     },
+    persona_getCurrentPersonaIdentifier: async () => {
+        const identifier = await Services.Settings.getCurrentPersonaIdentifier()
+        return identifier?.toText()
+    },
+    persona_setCurrentPersonaIdentifier: async ({ identifier }) => {
+        await Services.Settings.setCurrentPersonaIdentifier(stringToPersonaIdentifier(identifier))
+    },
     profile_queryProfiles: async ({ network }) => {
         const result = await Services.Identity.queryProfiles(network)
 
@@ -200,6 +207,30 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     profile_removeProfile: async ({ identifier }) => {
         await Services.Identity.removeProfile(stringToProfileIdentifier(identifier))
+    },
+    profile_updateRelation: async ({ profile, linked, favor }) => {
+        await Services.Identity.updateRelation(
+            stringToProfileIdentifier(profile),
+            stringToPersonaIdentifier(linked),
+            favor,
+        )
+    },
+    profile_queryRelationPaged: async ({ network, after, count }) => {
+        let afterRecord
+        if (after) {
+            Object.assign(after, {
+                profile: stringToProfileIdentifier(after.profile),
+                linked: stringToPersonaIdentifier(after.linked),
+            })
+        }
+        const records = await Services.Identity.queryRelationPaged({ network, after: afterRecord }, count)
+
+        return records.map((x) => ({
+            profile: x.profile.toText(),
+            linked: x.linked.toText(),
+            network: x.network,
+            favor: x.favor,
+        }))
     },
     wallet_updateEthereumAccount: async ({ account }) => {
         await WalletRPC.updateAccount({
