@@ -1,7 +1,7 @@
 /// <reference path="./global.d.ts" />
-import { PostIdentifier, ProfileIdentifier, Identifier, PostIVIdentifier, GroupIdentifier } from './type'
-import { openDB, DBSchema, IDBPTransaction } from 'idb/with-async-ittr-cjs'
-import { restorePrototype, restorePrototypeArray, PrototypeLess } from '../utils/type'
+import { GroupIdentifier, Identifier, PostIdentifier, PostIVIdentifier, ProfileIdentifier } from './type'
+import { DBSchema, IDBPTransaction, openDB } from 'idb/with-async-ittr-cjs'
+import { PrototypeLess, restorePrototype, restorePrototypeArray } from '../utils/type'
 import { IdentifierMap } from './IdentifierMap'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from './helpers/openDB'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
@@ -183,6 +183,24 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
 export const PostDBAccess = db
 
 type PostTransaction = IDBPTransaction<PostDB, ['post']>
+
+export async function consistentPostDBWriteAccess(action: (t: PostTransaction) => Promise<void>) {
+    const t = (await db()).transaction('post', 'readwrite')
+    let finished = false
+    const finish = () => (finished = true)
+    t.addEventListener('abort', finish)
+    t.addEventListener('complete', finish)
+    t.addEventListener('error', finish)
+
+    try {
+        await action(t)
+    } finally {
+        if (finished) {
+            console.warn('The transaction ends too early! There MUST be a bug in the program!')
+            console.trace()
+        }
+    }
+}
 export async function createPostDB(record: PostRecord, t?: PostTransaction) {
     t = t || (await db()).transaction('post', 'readwrite')
     const toSave = postToDB(record)

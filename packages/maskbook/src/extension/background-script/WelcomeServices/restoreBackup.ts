@@ -10,7 +10,7 @@ import {
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { createOrUpdatePostDB } from '../../../database'
+import { consistentPostDBWriteAccess, createOrUpdatePostDB } from '../../../database'
 import { currentImportingBackup } from '../../../settings/settings'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { recoverWalletFromMnemonic, recoverWalletFromPrivateKey } from '../../../plugins/Wallet/services'
@@ -67,9 +67,11 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             }
         }
 
-        for (const x of data.posts) {
-            await createOrUpdatePostDB(PostRecordFromJSONFormat(x), 'append')
-        }
+        await consistentPostDBWriteAccess(async (t) => {
+            for (const x of data.posts) {
+                await createOrUpdatePostDB(PostRecordFromJSONFormat(x), 'append', t)
+            }
+        })
 
         if (data.relations?.length) {
             const relations = data.relations.map(RelationRecordFromJSONFormat)
