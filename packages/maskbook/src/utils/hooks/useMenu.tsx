@@ -1,11 +1,13 @@
 import { SyntheticEvent, cloneElement, isValidElement, useCallback, useRef, useState, createElement } from 'react'
-import { Menu } from '@material-ui/core'
+import { Menu, PopoverOrigin } from '@material-ui/core'
 import type { MenuListProps, PaperProps } from '@material-ui/core'
 import { ShadowRootMenu } from '../shadow-root/ShadowRootComponents'
 
 interface MenuProps {
     paperProps?: PaperProps
     menuListProps?: MenuListProps
+    anchorOrigin?: PopoverOrigin
+    transformOrigin?: PopoverOrigin
 }
 
 /**
@@ -31,6 +33,9 @@ export function useMenu(
                 anchorEl: anchorElRef.current,
                 onClose: close,
                 onClick: close,
+
+                anchorOrigin: props?.anchorOrigin,
+                transformOrigin: props?.transformOrigin,
             },
             elements?.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
