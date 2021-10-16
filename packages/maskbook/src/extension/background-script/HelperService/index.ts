@@ -84,7 +84,7 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
             })
 
             // firefox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1271047
-            if (process.env.target === 'firefox') {
+            if (process.env.engine === 'firefox') {
                 browser.windows.update(id, {
                     left,
                     top,

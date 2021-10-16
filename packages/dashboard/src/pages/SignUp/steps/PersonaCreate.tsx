@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { MaskTextField, useSnackbar } from '@masknet/theme'
+import { MaskTextField, useCustomSnackbar } from '@masknet/theme'
 import {
     Body,
     ColumnContentLayout,
@@ -32,7 +32,7 @@ export const PersonaCreate = () => {
     const navigate = useNavigate()
     const createPersona = useCreatePersonaV2()
     const createPersonaByPrivateKey = useCreatePersonaByPrivateKey()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const { state } = useLocation() as { state: { mnemonic: string[]; privateKey: string } }
 
@@ -55,7 +55,7 @@ export const PersonaCreate = () => {
                 : await createPersonaByPrivateKey(state?.privateKey, personaName)
 
             await changeCurrentPersona(identifier)
-            enqueueSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
+            showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
 
             await delay(300)
             navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
