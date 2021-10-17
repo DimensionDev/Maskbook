@@ -3,7 +3,7 @@ import { API_URL } from '../constants'
 import { PluginDHedgeRPC } from '../messages'
 import { Period, Pool, PoolType } from '../types'
 import { useDHedgePoolManagerContract } from '../contracts/useDHedgePool'
-import { useChainId, useTokenConstants } from '@masknet/web3-shared'
+import { useChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 
 export function useFetchPool(address: string) {
     return useAsyncRetry(async () => {

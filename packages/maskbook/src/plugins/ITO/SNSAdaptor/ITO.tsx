@@ -16,7 +16,7 @@ import {
     useTokenConstants,
     ZERO,
     isGreaterThan,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Box, Card, Grid, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'

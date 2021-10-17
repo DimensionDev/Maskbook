@@ -1,4 +1,4 @@
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { OPENSEA_API_KEY } from '../constants'
 
 interface AssetContract {

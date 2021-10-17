@@ -9,7 +9,7 @@ import {
     useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Card, Skeleton, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo } from 'react'

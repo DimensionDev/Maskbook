@@ -1,4 +1,4 @@
-import { ProviderType } from '@masknet/web3-shared'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import {
     BackupJSONFileLatest,
     BackupPreview,

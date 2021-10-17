@@ -2,7 +2,7 @@ import { Box, Button, DialogContent, DialogActions, Typography } from '@material
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { ERC20TokenDetailed, formatBalance, useERC20TokenBalance } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, formatBalance, useERC20TokenBalance } from '@masknet/web3-shared-evm'
 import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useI18N } from '../../../utils'

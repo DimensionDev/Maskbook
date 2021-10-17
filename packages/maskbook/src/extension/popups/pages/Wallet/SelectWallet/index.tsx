@@ -10,7 +10,7 @@ import {
     useAccount,
     useChainIdValid,
     useWallets,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { ChainIcon, FormattedAddress } from '@masknet/shared'
 import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'

@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared'
-import { ERC1155TokenDetailed, EthereumTokenType, useWallet } from '@masknet/web3-shared'
+import { ERC1155TokenDetailed, EthereumTokenType, useWallet } from '@masknet/web3-shared-evm'
 import type { ERC1155TokenRecord } from '../database/types'
 import { ERC1155TokenArrayComparer } from '../helpers'
 import { WalletMessages, WalletRPC } from '../messages'

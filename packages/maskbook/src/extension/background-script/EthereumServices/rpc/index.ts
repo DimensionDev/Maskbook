@@ -1,5 +1,10 @@
 import * as ABICoder from 'web3-eth-abi'
-import { EthereumRpcComputed, EthereumRpcType, EthereumMethodType, getChainDetailedCAIP } from '@masknet/web3-shared'
+import {
+    EthereumRpcComputed,
+    EthereumRpcType,
+    EthereumMethodType,
+    getChainDetailedCAIP,
+} from '@masknet/web3-shared-evm'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getCode } from '../network'

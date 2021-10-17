@@ -1,10 +1,10 @@
 import { useAsyncRetry } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
+import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import type { ChainId } from '../types'
 import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { createERC721ContractDetailed, safeNonPayableTransactionCall } from '../utils'
-import type { ERC721 } from '../../../web3-contracts/types/ERC721'
 import { useOpenseaAPIConstants } from '../constants'
 
 export function useERC721ContractDetailed(address?: string) {

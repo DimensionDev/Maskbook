@@ -15,7 +15,7 @@ import {
     useTransactionState,
     isSameAddress,
     useITOConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'

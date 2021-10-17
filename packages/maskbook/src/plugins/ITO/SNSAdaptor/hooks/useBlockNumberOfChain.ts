@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { ChainId, EthereumMethodType } from '@masknet/web3-shared'
+import { ChainId, EthereumMethodType } from '@masknet/web3-shared-evm'
 import Services from '../../../../extension/service'
 
 /**

@@ -10,7 +10,7 @@ import {
     EthereumTransactionConfig,
     isEIP1559Supported,
     ProviderType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'

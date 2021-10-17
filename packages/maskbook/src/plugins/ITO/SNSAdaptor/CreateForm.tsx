@@ -8,7 +8,7 @@ import {
     useAccount,
     useITOConstants,
     useFungibleTokenBalance,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import CheckIcon from '@material-ui/icons/Check'

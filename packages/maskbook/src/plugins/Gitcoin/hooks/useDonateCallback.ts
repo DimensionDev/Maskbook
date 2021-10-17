@@ -8,7 +8,7 @@ import {
     useGitcoinConstants,
     useTransactionState,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useCallback, useMemo } from 'react'
 import { useBulkCheckoutContract } from '../contracts/useBulkCheckoutWallet'

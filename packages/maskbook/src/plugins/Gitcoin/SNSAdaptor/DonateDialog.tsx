@@ -9,7 +9,7 @@ import {
     useGitcoinConstants,
     useNativeTokenDetailed,
     useFungibleTokenBalance,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'

@@ -14,7 +14,7 @@ import {
     useAccount,
     useChainId,
     useNftRedPacketConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import CloseIcon from '@material-ui/icons/Close'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'

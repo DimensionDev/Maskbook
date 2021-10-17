@@ -9,7 +9,7 @@ import {
     resolveTokenLinkOnExplorer,
     useChainId,
     useITOConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Card, Grid, IconButton, Link, Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@material-ui/icons/Launch'

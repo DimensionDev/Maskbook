@@ -12,7 +12,7 @@ import {
     ERC721ContractDetailed,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import LaunchIcon from '@material-ui/icons/Launch'
 import {

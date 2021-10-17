@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import type BigNumber from 'bignumber.js'
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 
 export function useAvailability(index: string, amount: BigNumber, proof: string[]) {

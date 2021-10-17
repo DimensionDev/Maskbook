@@ -1,5 +1,5 @@
 import { RefreshIcon } from '@masknet/icons'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { Card, CardActions, CardContent, CardHeader, Link, Paper, Tab, Tabs, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'

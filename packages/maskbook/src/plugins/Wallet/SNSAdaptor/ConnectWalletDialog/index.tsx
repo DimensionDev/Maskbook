@@ -11,7 +11,7 @@ import {
     ProviderType,
     resolveNetworkName,
     resolveProviderName,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { delay } from '../../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'

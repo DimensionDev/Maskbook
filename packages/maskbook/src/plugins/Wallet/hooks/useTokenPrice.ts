@@ -3,7 +3,7 @@ import { pollingTask } from '@masknet/shared'
 import { UPDATE_CHAIN_STATE_DELAY } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../messages'
 import { currentTokenPricesSettings } from '../settings'
-import { ChainId, CurrencyType, getCoingeckoCoinId, getCoingeckoPlatformId } from '@masknet/web3-shared'
+import { ChainId, CurrencyType, getCoingeckoCoinId, getCoingeckoPlatformId } from '@masknet/web3-shared-evm'
 
 const task = pollingTask(
     async () => {

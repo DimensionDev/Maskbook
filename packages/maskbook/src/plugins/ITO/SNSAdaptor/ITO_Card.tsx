@@ -1,4 +1,4 @@
-import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Alert, Box, Skeleton, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useEffect } from 'react'

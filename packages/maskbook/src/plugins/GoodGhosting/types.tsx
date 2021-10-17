@@ -1,4 +1,4 @@
-import type { Asset, TransactionStateType } from '@masknet/web3-shared'
+import type { Asset, TransactionStateType } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
 
 export interface GameMetaData {

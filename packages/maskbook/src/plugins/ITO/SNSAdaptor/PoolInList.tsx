@@ -12,7 +12,7 @@ import {
     useFungibleTokenDetailed,
     useFungibleTokensDetailed,
     EthereumTokenType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import {
     Box,
     Card,

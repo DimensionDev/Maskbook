@@ -1,5 +1,5 @@
 import { useAsync } from 'react-use'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { PluginTraderRPC } from '../messages'

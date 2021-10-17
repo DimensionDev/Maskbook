@@ -8,7 +8,7 @@ import {
     formatBalance,
     TransactionStateType,
     useERC20TokenApproveCallback,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'

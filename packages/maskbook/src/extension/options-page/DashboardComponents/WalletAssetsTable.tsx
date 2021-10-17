@@ -18,7 +18,7 @@ import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import { Asset, useTrustedERC20Tokens } from '@masknet/web3-shared'
+import { Asset, useTrustedERC20Tokens } from '@masknet/web3-shared-evm'
 import {
     CurrencyType,
     currySameAddress,
@@ -31,7 +31,7 @@ import {
     useChainDetailed,
     useStableTokensDebank,
     Wallet,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { FormattedCurrency, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N, useMatchXS } from '../../../utils'
 import { ActionsBarFT } from './ActionsBarFT'

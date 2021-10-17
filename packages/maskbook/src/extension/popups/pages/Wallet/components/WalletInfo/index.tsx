@@ -6,7 +6,7 @@ import { CopyIcon, EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '../../../../index'
-import { useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared-evm'
 import { useCopyToClipboard } from 'react-use'
 
 const useStyles = makeStyles()({

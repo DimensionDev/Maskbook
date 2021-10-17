@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared'
-import { ERC721TokenDetailed, useChainId, useWallet } from '@masknet/web3-shared'
+import { ERC721TokenDetailed, useChainId, useWallet } from '@masknet/web3-shared-evm'
 import { ERC721TokenArrayComparer } from '../helpers'
 import { WalletMessages, WalletRPC } from '../messages'
 

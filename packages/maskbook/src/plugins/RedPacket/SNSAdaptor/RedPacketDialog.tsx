@@ -21,7 +21,7 @@ import {
     useChainId,
     useNetworkType,
     useRedPacketConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit } from 'lodash-es'
