@@ -141,15 +141,21 @@ export async function replaceRequest(payload: JsonRpcPayload, overrides?: Transa
     if (!pid || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
     const [config] = payload.params as [TransactionConfig]
-    return request<string>({
-        method: payload.method,
-        params: [
-            {
-                ...config,
-                ...overrides,
-            },
-        ],
-    })
+    return request<string>(
+        {
+            method: payload.method,
+            params: [
+                {
+                    ...config,
+                    ...overrides,
+                },
+            ],
+        },
+        undefined,
+        {
+            popupsWindow: false,
+        },
+    )
 }
 
 export async function cancelRequest(payload: JsonRpcPayload, overrides?: TransactionConfig) {
@@ -157,16 +163,22 @@ export async function cancelRequest(payload: JsonRpcPayload, overrides?: Transac
     if (!pid || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
     const [config] = payload.params as [TransactionConfig]
-    return request<string>({
-        method: payload.method,
-        params: [
-            {
-                ...config,
-                ...overrides,
-                to: config.from,
-                data: '0x',
-                value: '0x0',
-            },
-        ],
-    })
+    return request<string>(
+        {
+            method: payload.method,
+            params: [
+                {
+                    ...config,
+                    ...overrides,
+                    to: config.from,
+                    data: '0x',
+                    value: '0x0',
+                },
+            ],
+        },
+        undefined,
+        {
+            popupsWindow: false,
+        },
+    )
 }
