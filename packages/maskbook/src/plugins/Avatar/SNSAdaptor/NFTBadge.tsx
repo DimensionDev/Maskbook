@@ -23,20 +23,10 @@ const useStyles = makeStyles()({
         flexDirection: 'column',
         alignItems: 'center',
     },
-    icon: {
-        width: 12,
-        height: 12,
-        transform: 'translate(0px, 2px)',
-    },
-    text: {
-        paddingLeft: 4,
-        paddingRight: 4,
-        fontSize: 10,
-        whiteSpace: 'nowrap',
-        margin: 0,
-        color: 'white',
-        textShadow:
-            '1px 1px black, 1px 0px black, 0px 1px black, -1px 0px black, 0px -1px black, -1px -1px black, 1px -1px black, -1px 1px black',
+    box: {
+        background:
+            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
+        borderRadius: 4,
     },
     link: {
         display: 'flex',
@@ -44,20 +34,13 @@ const useStyles = makeStyles()({
         alignItems: 'center',
         AlignJustify: 'center',
     },
-    box: {
-        background:
-            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
-        borderRadius: 4,
-    },
+
     loading: {
         width: 64,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         height: '100%',
-    },
-    nft: {
-        marginTop: 20,
     },
 })
 
@@ -125,6 +108,44 @@ export function NFTBadge(props: NFTBadgeProps) {
     )
 }
 
+const useShowPriceStyles = makeStyles()((theme) => ({
+    root: {
+        borderRadius: 4,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '100% 100%',
+        textAlign: 'center',
+    },
+    haveAmount: {
+        backgroundImage: `url(${new URL('./background/amount.png', import.meta.url)})`,
+    },
+    noName: {
+        backgroundImage: `url(${new URL('./background/noname.png', import.meta.url)})`,
+    },
+    noAmount: {
+        backgroundImage: `url(${new URL('./background/noamount.png', import.meta.url)})`,
+    },
+    icon: {
+        width: 12,
+        height: 12,
+        transform: 'translate(0px, 2px)',
+    },
+    text: {
+        paddingLeft: 4,
+        paddingRight: 4,
+        fontSize: 10,
+        whiteSpace: 'nowrap',
+        margin: 0,
+        color: 'white',
+        textShadow:
+            '1px 1px black, 1px 0px black, 0px 1px black, -1px 0px black, 0px -1px black, -1px -1px black, 1px -1px black, -1px 1px black',
+    },
+    nft: {
+        marginTop: 20,
+        background:
+            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
+        borderRadius: 4,
+    },
+}))
 interface ShowPriceProps {
     price: string
     symbol: string
@@ -133,34 +154,32 @@ interface ShowPriceProps {
 }
 
 function ShowPrice({ name, symbol, tokenId, price }: ShowPriceProps) {
-    const { classes } = useStyles()
+    const { classes } = useShowPriceStyles()
     const text = (str: string, showIcon = false) => (
-        <div className={classes.box}>
-            <Typography className={classes.text}>
-                {str}
-                {showIcon ? <UnionIcon className={classes.icon} /> : null}
-            </Typography>
-        </div>
+        <Typography className={classes.text}>
+            {str}
+            {showIcon ? <UnionIcon className={classes.icon} /> : null}
+        </Typography>
     )
 
     return (
         <>
             {symbol && name && price !== '0' ? (
-                <>
+                <div className={classNames(classes.root, classes.haveAmount)}>
                     {text(`${name}`)} {text(`${price} ${symbol}`, true)}
-                </>
+                </div>
             ) : !symbol && !name && price !== '0' ? (
-                <>
+                <div className={classNames(classes.root, classes.noName)}>
                     {text('NFT', true)} {text(`${price} ${symbol}`)}
-                </>
+                </div>
             ) : symbol && name && price === '0' ? (
-                <>
+                <div className={classNames(classes.root, classes.noAmount)}>
                     {text(`${name}`)} {text('NFT', true)}
-                </>
+                </div>
             ) : symbol && !name && price !== '0' ? (
-                <>
+                <div className={classNames(classes.root, classes.noName)}>
                     {text('NFT', true)} {text(`${price} ${symbol}`)}
-                </>
+                </div>
             ) : (
                 <div className={classes.nft}> {text('NFT', true)}</div>
             )}
