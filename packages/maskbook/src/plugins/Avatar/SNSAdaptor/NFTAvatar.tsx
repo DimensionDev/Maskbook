@@ -1,15 +1,16 @@
+import { NFTLinkIcon, NFTSelectedIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import {
     ERC721TokenDetailed,
     formatEthereumAddress,
+    resolveCollectibleLink,
     useAccount,
     useChainId,
     useCollectibles,
 } from '@masknet/web3-shared'
-import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
-import classNames from 'classnames'
+import { Box, Button, Link, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
@@ -45,13 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 150,
         overflowY: 'auto',
     },
-    image: {
-        width: 97,
-        height: 97,
-        objectFit: 'cover',
-        borderRadius: '100%',
-        boxSizing: 'border-box',
-    },
     button: {
         textAlign: 'center',
         paddingTop: theme.spacing(1),
@@ -60,22 +54,14 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'row',
     },
     setNFTAvatar: {},
-    imgBackground: {
+    skeleton: {
+        width: 97,
         height: 97,
-        padding: 6,
+        objectFit: 'cover',
         borderRadius: '100%',
+        boxSizing: 'border-box',
+        padding: 6,
         margin: theme.spacing(0.5, 1),
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    hover: {
-        '&:hover': {
-            backgroundColor: getMaskColor(theme).blue,
-        },
-    },
-    selected: {
-        backgroundColor: getMaskColor(theme).blue,
     },
     error: {
         display: 'flex',
@@ -134,8 +120,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const LoadStatus = Array.from({ length: 8 })
         .fill(0)
         .map((_, i) => (
-            <div className={classes.imgBackground} key={i}>
-                <Skeleton animation="wave" variant="rectangular" className={classes.image} key={i} />
+            <div key={i}>
+                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
             </div>
         ))
     const Retry = (
@@ -180,19 +166,12 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                               !token.info.image?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i),
                                       )
                                       .map((token: ERC721TokenDetailed, i) => (
-                                          <div
-                                              className={classNames(
-                                                  classes.imgBackground,
-                                                  classes.hover,
-                                                  selectedToken === token ? classes.selected : '',
-                                              )}
-                                              key={i}>
-                                              <img
-                                                  onClick={() => setSelectedToken(token)}
-                                                  src={token.info.image}
-                                                  className={classes.image}
-                                              />
-                                          </div>
+                                          <NFTImage
+                                              token={token}
+                                              key={i}
+                                              selectedToken={selectedToken}
+                                              onChange={(token) => setSelectedToken(token)}
+                                          />
                                       ))}
                         </Box>
 
@@ -236,5 +215,53 @@ export function NFTAvatar(props: NFTAvatarProps) {
             </Box>
             <AddNFT open={open_} onClose={() => setOpen_(false)} onAddClick={onAddClick} />
         </>
+    )
+}
+
+const useNFTImageStyles = makeStyles()((theme) => ({
+    imgBackground: {
+        position: 'relative',
+        padding: 6,
+        margin: theme.spacing(0.5, 1),
+    },
+    icon: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        width: 24,
+        height: 24,
+    },
+    image: {
+        width: 97,
+        height: 97,
+        objectFit: 'cover',
+        borderRadius: '100%',
+        boxSizing: 'border-box',
+    },
+}))
+
+interface NFTImageProps {
+    token: ERC721TokenDetailed
+    selectedToken?: ERC721TokenDetailed
+    onChange: (token: ERC721TokenDetailed) => void
+}
+
+function NFTImage(props: NFTImageProps) {
+    const { token, onChange, selectedToken } = props
+    const { classes } = useNFTImageStyles()
+    const chainId = useChainId()
+    const provider = useValueRef(currentCollectibleDataProviderSettings)
+
+    return (
+        <div className={classes.imgBackground}>
+            <img onClick={() => onChange(token)} src={token.info.image} className={classes.image} />
+            <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
+                {selectedToken === token ? (
+                    <NFTSelectedIcon className={classes.icon} />
+                ) : (
+                    <NFTLinkIcon className={classes.icon} />
+                )}
+            </Link>
+        </div>
     )
 }
