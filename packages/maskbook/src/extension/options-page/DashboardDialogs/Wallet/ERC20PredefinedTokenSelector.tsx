@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, ERC20TokenDetailed } from '@masknet/web3-shared'
+import { EthereumTokenType, ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { FixedTokenList } from '../../DashboardComponents/FixedTokenList'
 import { SearchInput } from '../../DashboardComponents/SearchInput'

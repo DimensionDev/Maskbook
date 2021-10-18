@@ -9,7 +9,7 @@ import {
     useBlockie,
     useChainId,
     useTokenAssetBaseURLConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useImageFailOver } from '../../index'

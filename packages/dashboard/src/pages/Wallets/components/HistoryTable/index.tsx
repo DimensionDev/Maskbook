@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { Transaction, useAccount, useChainId, useTransactions } from '@masknet/web3-shared'
+import { Transaction, useAccount, useChainId, useTransactions } from '@masknet/web3-shared-evm'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import {

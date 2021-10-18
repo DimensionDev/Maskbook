@@ -1,7 +1,7 @@
 import { first } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
 import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox'
-import { useMaskBoxConstants } from '@masknet/web3-shared'
+import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
 
 export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddress: string, boxId: string) {

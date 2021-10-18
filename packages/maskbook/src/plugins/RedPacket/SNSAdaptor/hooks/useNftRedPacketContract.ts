@@ -1,5 +1,5 @@
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
-import { useContract, useNftRedPacketConstants } from '@masknet/web3-shared'
+import { useContract, useNftRedPacketConstants } from '@masknet/web3-shared-evm'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket'
 import type { AbiItem } from 'web3-utils'
 

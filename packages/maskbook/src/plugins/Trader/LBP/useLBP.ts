@@ -1,4 +1,4 @@
-import { ERC20TokenDetailed, isSameAddress } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import LBP from '../apis/LBP/LBP.json'
 import { useMemo } from 'react'
 import { Flags } from '../../../utils/flags'

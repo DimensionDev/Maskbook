@@ -1,6 +1,6 @@
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared'
+import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { fill } from 'lodash-es'

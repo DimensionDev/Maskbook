@@ -7,7 +7,7 @@ import {
     useAccount,
     useChainId,
     useTokenConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { first, head, uniqBy } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'

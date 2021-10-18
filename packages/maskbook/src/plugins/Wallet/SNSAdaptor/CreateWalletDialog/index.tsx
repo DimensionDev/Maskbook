@@ -9,7 +9,7 @@ import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '../../constants'
 
 import { StepNameAndWords } from './StepNameAndWords'
 import { StepVerify } from './StepVerify'
-import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
+import { useMnemonicWordsPuzzle } from '@masknet/web3-shared-evm'
 
 enum CreateWalletStep {
     NameAndWords = 0,

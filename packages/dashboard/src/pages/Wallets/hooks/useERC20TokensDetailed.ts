@@ -6,7 +6,7 @@ import {
     useEthereumConstants,
     useNativeTokenDetailed,
     useTokenConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-es'
 import { useMemo } from 'react'
 

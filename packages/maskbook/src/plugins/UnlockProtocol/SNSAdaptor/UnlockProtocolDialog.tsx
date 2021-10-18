@@ -1,4 +1,4 @@
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@material-ui/core'
 import { useEffect } from 'react'
 import { useState } from 'react'

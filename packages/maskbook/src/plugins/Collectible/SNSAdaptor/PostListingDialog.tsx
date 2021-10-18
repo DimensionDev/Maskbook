@@ -6,7 +6,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
 import type { useAsset } from '../hooks/useAsset'
-import { useChainId, useFungibleTokenWatched } from '@masknet/web3-shared'
+import { useChainId, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {

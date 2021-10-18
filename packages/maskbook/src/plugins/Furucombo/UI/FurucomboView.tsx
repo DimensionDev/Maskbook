@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, useChainId } from '@masknet/web3-shared'
+import { isSameAddress, useChainId } from '@masknet/web3-shared-evm'
 import { Card, CardContent, CardActions, Tabs, Tab, Typography, Link, Paper } from '@material-ui/core'
 import { useState } from 'react'
 import { FurucomboIcon } from '../../../resources/FurucomboIcon'

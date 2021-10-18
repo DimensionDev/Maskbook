@@ -6,7 +6,7 @@ import {
     useERC721ContractDetailed,
     useERC721TokenDetailedCallback,
     useWallet,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'

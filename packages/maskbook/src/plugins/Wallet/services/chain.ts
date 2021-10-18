@@ -1,4 +1,4 @@
-import { ChainId, ProviderType } from '@masknet/web3-shared'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { pollingTask } from '@masknet/shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../utils'

@@ -1,4 +1,4 @@
-import { ChainId, getChainConstants, getITOConstants, isSameAddress } from '@masknet/web3-shared'
+import { ChainId, getChainConstants, getITOConstants, isSameAddress } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import urlcat from 'urlcat'

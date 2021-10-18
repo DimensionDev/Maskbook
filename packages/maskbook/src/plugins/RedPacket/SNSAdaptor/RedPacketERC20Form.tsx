@@ -11,7 +11,7 @@ import {
     useRedPacketConstants,
     useFungibleTokenBalance,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-es'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'

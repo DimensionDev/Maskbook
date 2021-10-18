@@ -12,7 +12,7 @@ import {
     useAssets,
     useChainId,
     useTrustedERC20Tokens,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatGweiToEther, useChainId, useNativeTokenDetailed, GasOption } from '@masknet/web3-shared'
+import { formatGweiToEther, useChainId, useNativeTokenDetailed, GasOption } from '@masknet/web3-shared-evm'
 import { toWei } from 'web3-utils'
 import { Typography } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'

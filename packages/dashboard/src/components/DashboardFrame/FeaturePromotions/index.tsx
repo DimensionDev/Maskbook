@@ -1,12 +1,12 @@
 import { memo, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages, Services } from '../../../API'
 import { PLUGIN_IDS } from '../../../pages/Labs/constants'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
-import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../type'
-import { useAccount } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

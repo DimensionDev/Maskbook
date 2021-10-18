@@ -226,7 +226,7 @@
         "Swither",
         "nftscan",
         "apikey",
-        "fbclid"
+        "solana"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -301,7 +301,9 @@
         "powah",
         "Switcher",
         "drawed",
-        "DRAWED"
+        "DRAWED",
+        "devnet",
+        "fbclid"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

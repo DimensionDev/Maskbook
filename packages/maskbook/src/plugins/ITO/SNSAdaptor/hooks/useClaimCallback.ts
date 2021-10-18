@@ -9,7 +9,7 @@ import {
     useTransactionState,
     useITOConstants,
     isSameAddress,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useITO_Contract } from './useITO_Contract'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
 

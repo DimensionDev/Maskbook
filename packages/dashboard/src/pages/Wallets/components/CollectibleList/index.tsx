@@ -11,7 +11,7 @@ import {
     useChainId,
     useCollectibles,
     useWallet,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useCurrentCollectibleDataProvider } from '../../api'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'

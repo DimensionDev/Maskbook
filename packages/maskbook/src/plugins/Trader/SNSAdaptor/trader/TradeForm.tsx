@@ -12,7 +12,7 @@ import { TokenPanelType, TradeComputed, TradeStrategy, WarningLevel } from '../.
 import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
-import { EthereumTokenType, formatPercentage, FungibleTokenDetailed, isLessThan, pow10 } from '@masknet/web3-shared'
+import { EthereumTokenType, formatPercentage, FungibleTokenDetailed, isLessThan, pow10 } from '@masknet/web3-shared-evm'
 import { currentSlippageSettings } from '../../settings'
 import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'

@@ -10,7 +10,7 @@ import {
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
     useTrustedERC20Tokens,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { Typography } from '@material-ui/core'
 import { uniqBy } from 'lodash-es'

@@ -1,4 +1,4 @@
-import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { isNative } from 'lodash-es'

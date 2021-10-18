@@ -7,7 +7,7 @@ import {
     useChainId,
     useGasPrice,
     useNativeTokenDetailed,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Tune } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'

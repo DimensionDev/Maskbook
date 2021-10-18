@@ -9,7 +9,7 @@ import Services from '../../extension/service'
 import type { Persona, Profile } from '../../database'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
-import { ProviderType } from '@masknet/web3-shared'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()

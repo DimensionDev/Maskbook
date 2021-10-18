@@ -1,6 +1,6 @@
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { TransactionStatusType } from '@masknet/web3-shared'
+import { TransactionStatusType } from '@masknet/web3-shared-evm'
 import { getSendTransactionComputedPayload } from '../../../../extension/background-script/EthereumService'
 import * as database from './database'
 import * as watcher from './watcher'

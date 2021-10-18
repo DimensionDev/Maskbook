@@ -2,7 +2,7 @@ import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } fr
 import { makeStyles } from '@masknet/theme'
 import type { Order } from 'opensea-js/lib/types'
 import { Image } from '../../../components/shared/Image'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared-evm'
 import type { useAsset } from '../hooks/useAsset'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
 import { useI18N } from '../../../utils'

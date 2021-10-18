@@ -1,7 +1,7 @@
 import { Typography, List } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
 import { useEffect } from 'react'

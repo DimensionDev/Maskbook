@@ -1,7 +1,7 @@
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
 import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import { first } from 'lodash-es'
-import { ChainId, getRPCConstants } from '@masknet/web3-shared'
+import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import type { Availability } from '../../types'

@@ -1,6 +1,6 @@
 import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
-import { ERC721TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
+import { ERC721TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'

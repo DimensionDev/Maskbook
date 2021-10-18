@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared'
+import { TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../messages'
 import { WalletMessages } from '@masknet/plugin-wallet'
 
