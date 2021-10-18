@@ -33,12 +33,7 @@ export function NFTBadgeTimeLine(props: NFTBadgeTimeLineProps) {
             return
         }
         setAvatar(data)
-        setAvatarId_(data.avatarId)
     }
-
-    useEffect(() => {
-        setAvatarId_(avatarId)
-    }, [avatarId])
 
     useEffect(() => {
         setAvatar(_avatar)
@@ -47,7 +42,7 @@ export function NFTBadgeTimeLine(props: NFTBadgeTimeLineProps) {
     useEffect(() => MaskMessage.events.NFTAvatarTimeLineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
 
     if (!avatar) return null
-    if (avatarId_ && avatar.avatarId !== avatarId_) return null
+    if (avatar.avatarId !== avatarId) return null
 
     return (
         <div className={classes.root}>
