@@ -270,6 +270,9 @@ export enum EthereumMethodType {
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+
+    // only for mask
+    ETH_REPLACE_TRANSACTION = 'eth_replaceTransaction',
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {
