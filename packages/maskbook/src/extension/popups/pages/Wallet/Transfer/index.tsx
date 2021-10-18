@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { NetworkType, ProviderType, useWallets } from '@masknet/web3-shared'
+import { NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@material-ui/core'
 import { FormattedBalance, TokenIcon, useMenu, useValueRef } from '@masknet/shared'
 import { useContainer } from 'unstated-next'

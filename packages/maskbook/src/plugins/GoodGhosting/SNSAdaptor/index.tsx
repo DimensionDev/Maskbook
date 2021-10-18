@@ -6,7 +6,7 @@ import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from '../UI/PreviewCard'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { base } from '../base'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 

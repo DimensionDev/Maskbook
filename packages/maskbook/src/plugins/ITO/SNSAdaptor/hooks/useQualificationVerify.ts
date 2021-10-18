@@ -7,7 +7,7 @@ import {
     QUALIFICATION_HAS_START_TIME_INTERFACE_ID,
     QUALIFICATION_HAS_LUCKY_INTERFACE_ID,
 } from '../../constants'
-import { useAccount, useERC165 } from '@masknet/web3-shared'
+import { useAccount, useERC165 } from '@masknet/web3-shared-evm'
 import { useQualificationContract } from './useQualificationContract'
 
 export function useQualificationVerify(address: string, ito_address?: string) {

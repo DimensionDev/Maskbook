@@ -12,7 +12,7 @@ import {
     useChainId,
     useMaskBoxConstants,
     EthereumTokenType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'

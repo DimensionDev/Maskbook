@@ -1,7 +1,7 @@
 import { uniqBy } from 'lodash-es'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../settings'
 import { PluginDB } from '../../database/Plugin.db'
 

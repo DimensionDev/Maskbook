@@ -8,7 +8,7 @@ import type {
     TransactionState,
     Wallet,
     GasOption,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { TransactionReceipt } from 'web3-core'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'

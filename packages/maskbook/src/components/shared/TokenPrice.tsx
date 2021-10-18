@@ -1,6 +1,6 @@
 import type { FC, HTMLProps } from 'react'
 import BigNumber from 'bignumber.js'
-import { ChainId, CurrencyType } from '@masknet/web3-shared'
+import { ChainId, CurrencyType } from '@masknet/web3-shared-evm'
 import { useTokenPrice } from '../../plugins/Wallet/hooks/useTokenPrice'
 
 interface TokenPriceProps extends Omit<HTMLProps<HTMLSpanElement>, 'children'> {

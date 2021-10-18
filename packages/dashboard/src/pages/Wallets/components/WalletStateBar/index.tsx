@@ -8,7 +8,7 @@ import {
     useChainId,
     useWallet,
     useWeb3StateContext,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { FormattedAddress, ProviderIcon, useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'

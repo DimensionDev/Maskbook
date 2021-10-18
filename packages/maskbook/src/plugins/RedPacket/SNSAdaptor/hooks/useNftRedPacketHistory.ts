@@ -1,4 +1,4 @@
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { RedPacketRPC } from '../../messages'
 import type { NftRedPacketHistory } from '../../types'

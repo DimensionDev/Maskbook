@@ -1,5 +1,5 @@
 import { compact } from 'lodash-es'
-import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@masknet/web3-shared'
+import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketJSONPayload, RedPacketStatus, RedPacketAvailability } from '../../types'
 import { useAvailability } from './useAvailability'
 

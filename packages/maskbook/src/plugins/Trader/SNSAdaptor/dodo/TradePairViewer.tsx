@@ -3,7 +3,7 @@ import { Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { resolveTradePairLink } from '../../pipes'
 import type { TradeComputed } from '../../types'
-import { useNetworkType } from '@masknet/web3-shared'
+import { useNetworkType } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => {

@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { pow10 } from '../utils'
+import { pow10 } from '.'
 
 export function formatPercentage(value: BigNumber.Value) {
     const percentage = new BigNumber(value)

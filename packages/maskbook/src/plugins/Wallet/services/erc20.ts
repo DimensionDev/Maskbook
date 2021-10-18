@@ -6,7 +6,7 @@ import { WalletMessages } from '../messages'
 import { assert } from '../../../utils/utils'
 import { ERC20TokenRecordIntoDB, getWalletByAddress, WalletRecordIntoDB } from './helpers'
 import type { ERC20TokenRecord } from '../database/types'
-import { ERC20TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 export async function getERC20TokensCount() {

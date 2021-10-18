@@ -1,5 +1,5 @@
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Option, Result } from 'ts-results'
 

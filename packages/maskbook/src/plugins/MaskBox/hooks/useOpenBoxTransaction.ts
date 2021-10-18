@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { EthereumTokenType, FungibleTokenDetailed, useAccount } from '@masknet/web3-shared'
+import { EthereumTokenType, FungibleTokenDetailed, useAccount } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
 
 export function useOpenBoxTransaction(

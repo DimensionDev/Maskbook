@@ -5,7 +5,7 @@ import {
     useTransactionState,
     TransactionStateType,
     TransactionEventType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import type { CampaignInfo } from '../../types'
 import type { SpaceStationGalaxy } from '@masknet/web3-contracts/types/SpaceStationGalaxy'

@@ -2,7 +2,12 @@ import { Check, XCircle } from 'react-feather'
 import { Box, Button, CircularProgress, Link, List, ListItem, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { resolveTransactionLinkOnExplorer, TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared'
+import {
+    resolveTransactionLinkOnExplorer,
+    TransactionStatusType,
+    useAccount,
+    useChainId,
+} from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'

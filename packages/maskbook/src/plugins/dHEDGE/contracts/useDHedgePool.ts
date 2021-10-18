@@ -5,7 +5,7 @@ import DHedgePoolManagerABI from '@masknet/web3-contracts/abis/DHedgePoolManager
 import type { DHedgePoolV1 } from '@masknet/web3-contracts/types/DHedgePoolV1'
 import type { DHedgePoolV2 } from '@masknet/web3-contracts/types/DHedgePoolV2'
 import type { DHedgePoolManager } from '@masknet/web3-contracts/types/DHedgePoolManager'
-import { useContract } from '@masknet/web3-shared'
+import { useContract } from '@masknet/web3-shared-evm'
 
 export function useDHedgePoolV1Contract(address?: string) {
     return useContract<DHedgePoolV1>(address, DHedgePoolV1ABI as AbiItem[])

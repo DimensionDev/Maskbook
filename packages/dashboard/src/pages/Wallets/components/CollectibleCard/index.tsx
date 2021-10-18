@@ -1,4 +1,4 @@
-import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared'
+import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared-evm'
 import { memo } from 'react'
 import { Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'

@@ -1,6 +1,6 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared'
+import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
 import { Box } from '@material-ui/core'
 import { useCallback } from 'react'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'

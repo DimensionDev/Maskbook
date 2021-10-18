@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionEventType, TransactionStateType, useAccount, useTransactionState } from '@masknet/web3-shared'
+import { TransactionEventType, TransactionStateType, useAccount, useTransactionState } from '@masknet/web3-shared-evm'
 import { useITO_Contract } from './useITO_Contract'
 
 export function useDestructCallback(ito_address: string) {

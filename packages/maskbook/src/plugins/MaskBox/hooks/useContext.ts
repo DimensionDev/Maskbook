@@ -16,7 +16,7 @@ import {
     useAccount,
     useERC721ContractDetailed,
     addGasMargin,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
 import { useMaskBoxInfo } from './useMaskBoxInfo'

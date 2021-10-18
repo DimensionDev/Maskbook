@@ -19,7 +19,7 @@ import {
     ERC20TokenDetailed,
     TransactionState,
     FAKE_SIGN_PASSWORD,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useITO_Contract } from './useITO_Contract'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'

@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Button, TableCell, TableRow, Typography } from '@material-ui/core'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { Asset, CurrencyType, formatBalance, formatCurrency, getTokenUSDValue, pow10 } from '@masknet/web3-shared'
+import { Asset, CurrencyType, formatBalance, formatCurrency, getTokenUSDValue, pow10 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useDashboardI18N } from '../../../../locales'
 

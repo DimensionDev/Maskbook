@@ -18,7 +18,7 @@ import {
     GasOption,
     isEIP1559Supported,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
 import TuneIcon from '@material-ui/icons/Tune'

@@ -1,4 +1,4 @@
-import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared'
+import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { isNil } from 'lodash-es'
 import * as DeBankAPI from '../apis/debank'

@@ -1,7 +1,15 @@
 import { pick, noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ChainId, PortfolioProvider, ProviderType } from '@masknet/web3-shared'
-import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
+import {
+    ChainId,
+    PortfolioProvider,
+    ProviderType,
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    NetworkType,
+    Wallet,
+    Web3ProviderType,
+} from '@masknet/web3-shared-evm'
 import { Messages, PluginMessages, PluginServices, Services } from '../API'
 
 const Web3Provider = createExternalProvider()

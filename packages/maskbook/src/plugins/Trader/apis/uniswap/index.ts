@@ -17,7 +17,7 @@ import {
     fetchBlockNumbersObjectByTimestamps,
 } from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
-import { isGreaterThan } from '@masknet/web3-shared'
+import { isGreaterThan } from '@masknet/web3-shared-evm'
 
 type Value = string | number | BigNumber | undefined
 

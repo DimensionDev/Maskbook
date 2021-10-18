@@ -1,4 +1,4 @@
-import { ChainId, useChainId } from '@masknet/web3-shared'
+import { ChainId, useChainId } from '@masknet/web3-shared-evm'
 import { APP_URL, COMMUNITY_URL } from '../constants'
 import type { Pool } from '../types'
 

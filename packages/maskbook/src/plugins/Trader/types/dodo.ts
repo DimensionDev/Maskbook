@@ -1,4 +1,4 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
 export interface SwapRouteRequest {
     isNativeSellToken: boolean

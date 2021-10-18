@@ -11,7 +11,7 @@ import {
     FungibleTokenDetailed,
     isSameAddress,
     isGreaterThan,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { ONE_HUNDRED_PERCENT, WNATIVE, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {

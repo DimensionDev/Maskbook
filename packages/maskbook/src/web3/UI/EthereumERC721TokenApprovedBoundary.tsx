@@ -4,7 +4,7 @@ import {
     TransactionStateType,
     ERC721ContractDetailed,
     resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import { useI18N } from '../../utils'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'

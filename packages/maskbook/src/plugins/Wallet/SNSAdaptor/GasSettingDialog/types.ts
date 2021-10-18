@@ -1,4 +1,4 @@
-import type { GasOption } from '@masknet/web3-shared'
+import type { GasOption } from '@masknet/web3-shared-evm'
 
 interface EIP1559ConfirmOptions {
     gasLimit: string

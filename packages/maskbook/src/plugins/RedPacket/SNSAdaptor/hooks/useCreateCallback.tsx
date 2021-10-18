@@ -18,7 +18,7 @@ import {
     useTransactionState,
     useBlockNumber,
     isSameAddress,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useSpeedUpTransaction } from '../../../Wallet/hooks/useSpeedUpTransaction'
 import { Link } from '@material-ui/core'
 import LaunchIcon from '@material-ui/icons/Launch'
