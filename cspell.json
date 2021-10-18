@@ -302,7 +302,8 @@
         "powah",
         "Switcher",
         "drawed",
-        "DRAWED"
+        "DRAWED",
+        "fbclid"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
