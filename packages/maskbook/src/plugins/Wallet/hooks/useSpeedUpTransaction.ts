@@ -6,7 +6,7 @@ import {
     useChainConstants,
     useWeb3,
     isSameAddress,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { Transaction } from 'web3-core'
 import { useAsync } from 'react-use'
 import { useState, useEffect } from 'react'
