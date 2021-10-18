@@ -69,11 +69,7 @@ export interface MaskNetworkAPIs {
         linked: PersonaIdentifier_string
         favor: 0 | 1
     }): Promise<void>
-    profile_queryRelationPaged(params: {
-        network: string
-        after?: RelationRecord
-        count: number
-    }): Promise<RelationRecord[]>
+    profile_queryRelationPaged(params: { network: string; after?: RelationRecord; count: number }): Promise<Profile[]>
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
@@ -108,6 +104,17 @@ export interface Profile {
     createdAt: number
     /** Unix timestamp */
     updatedAt: number
+}
+
+export interface ProfileRelation {
+    identifier: string
+    nickname?: string
+    linkedPersona: boolean
+    /** Unix timestamp */
+    createdAt: number
+    /** Unix timestamp */
+    updatedAt: number
+    favor: 0 | 1
 }
 
 export interface ProfileState {

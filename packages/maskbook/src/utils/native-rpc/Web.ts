@@ -41,6 +41,17 @@ const profileFormatter = (p: Profile) => {
     }
 }
 
+const profileRelationFormatter = (p: Profile, favor: 0 | 1 | undefined) => {
+    return {
+        identifier: p.identifier.toText(),
+        nickname: p.nickname,
+        linkedPersona: !!p.linkedPersona,
+        createdAt: p.createdAt.getTime(),
+        updatedAt: p.updatedAt.getTime(),
+        favor: favor,
+    }
+}
+
 export const MaskNetworkAPI: MaskNetworkAPIs = {
     web_echo: async (arg) => arg.echo,
     getDashboardURL: async () => browser.runtime.getURL('/index.html'),
@@ -226,12 +237,12 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         }
         const records = await Services.Identity.queryRelationPaged({ network, after: afterRecord }, count)
 
-        return records.map((x) => ({
-            profile: x.profile.toText(),
-            linked: x.linked.toText(),
-            network: x.network,
-            favor: x.favor,
-        }))
+        const profiles = await Services.Identity.queryProfilesWithIdentifiers(records.map((x) => x.profile))
+
+        return profiles.map((profile) => {
+            const favor = records.find((x) => x.profile.equals(profile.identifier))?.favor
+            return profileRelationFormatter(profile, favor)
+        })
     },
     wallet_updateEthereumAccount: async ({ account }) => {
         await WalletRPC.updateAccount({
