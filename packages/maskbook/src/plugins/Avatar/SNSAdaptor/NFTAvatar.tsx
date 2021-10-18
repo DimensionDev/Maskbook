@@ -30,24 +30,20 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
-    AddCollectible: {
-        textAlign: 'right',
-        paddingBottom: theme.spacing(1),
-    },
-    NFTBox: {
-        border: `1px solid ${theme.palette.mode === 'dark' ? 'rgb(61, 84, 102)' : 'rgb(207, 217, 222)'}`,
+    galleryItem: {
+        border: `1px solid ${theme.palette.divider}`,
         borderRadius: 4,
         padding: theme.spacing(1),
     },
-    NFTImage: {
+    gallery: {
         display: 'flex',
         flexFlow: 'row wrap',
         height: 150,
         overflowY: 'auto',
     },
     image: {
-        width: 97,
-        height: 97,
+        width: 48,
+        height: 48,
         objectFit: 'cover',
         borderRadius: '100%',
         boxSizing: 'border-box',
@@ -59,12 +55,16 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-around',
         flexDirection: 'row',
     },
-    setNFTAvatar: {},
+    buttons: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
     imgBackground: {
-        height: 97,
-        padding: 6,
+        height: 48,
+        padding: 4,
         borderRadius: '100%',
-        margin: theme.spacing(0.5, 1),
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -141,7 +141,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-
             <Button className={classes.button} variant="text" onClick={retry}>
                 {t('plugin_collectible_retry')}
             </Button>
@@ -164,8 +163,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
                     ) : null}
                 </Box>
                 <EthereumChainBoundary chainId={chainId}>
-                    <Box className={classes.NFTBox}>
-                        <Box className={classes.NFTImage}>
+                    <Box className={classes.galleryItem}>
+                        <Box className={classes.gallery}>
                             {loading
                                 ? LoadStatus
                                 : error || (collectibles.length === 0 && collectibles_.length === 0)
@@ -217,18 +216,17 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 }}
                             />
                         ) : null}
-                        <Box className={classes.button}>
-                            <Button variant="outlined" size="medium" onClick={() => setOpen_(true)}>
-                                {t('nft_collectible_add')}
+                        <Box className={classes.buttons}>
+                            <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
+                                {t('nft_button_add_collectible')}
                             </Button>
-
                             <Button
                                 variant="contained"
-                                size="medium"
-                                className={classes.setNFTAvatar}
+                                size="small"
+                                sx={{ marginLeft: 2 }}
                                 onClick={onClick}
                                 disabled={!selectedToken}>
-                                {t('profile_nft_avatar_set')}
+                                {t('nft_button_set_avatar')}
                             </Button>
                         </Box>
                     </Box>
