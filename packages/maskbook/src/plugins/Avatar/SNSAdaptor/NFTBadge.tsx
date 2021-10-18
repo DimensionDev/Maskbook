@@ -1,12 +1,12 @@
 import { UnionIcon } from '@masknet/icons'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import { CircularProgress, Link, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useNFT } from '../hooks'
-import { useUserOwnerAddress } from '../hooks/useUserOwnerAddress'
+import { useCheckAddress } from '../hooks/useCheckAddress'
 import type { AvatarMetaDB } from '../types'
 
 const useStyles = makeStyles()({
@@ -65,7 +65,7 @@ function formatText(symbol: string, length: number) {
 export function NFTBadge(props: NFTBadgeProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { avatar, size = 18 } = props
-    const address = useUserOwnerAddress(avatar.userId)
+
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
         avatar.userId,
         avatar.address,
@@ -73,8 +73,9 @@ export function NFTBadge(props: NFTBadgeProps) {
     )
 
     const { amount, symbol, name, owner } = value
+    const isShow = useCheckAddress(avatar.userId, owner)
 
-    if (!isSameAddress(owner, address)) return null
+    if (!isShow) return null
     return (
         <div
             className={classes.root}
