@@ -115,6 +115,7 @@ export interface ProfileRelation {
     /** Unix timestamp */
     updatedAt: number
     favor: 0 | 1
+    personaIdentifier?: string
 }
 
 export interface ProfileState {

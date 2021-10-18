@@ -41,13 +41,14 @@ const profileFormatter = (p: Profile) => {
     }
 }
 
-const profileRelationFormatter = (p: Profile, favor: 0 | 1 | undefined) => {
+const profileRelationFormatter = (p: Profile, personaIdentifier: string | undefined, favor: 0 | 1 | undefined) => {
     return {
         identifier: p.identifier.toText(),
         nickname: p.nickname,
         linkedPersona: !!p.linkedPersona,
         createdAt: p.createdAt.getTime(),
         updatedAt: p.updatedAt.getTime(),
+        personaIdentifier: personaIdentifier,
         favor: favor,
     }
 }
@@ -240,8 +241,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const profiles = await Services.Identity.queryProfilesWithIdentifiers(records.map((x) => x.profile))
 
         return profiles.map((profile) => {
-            const favor = records.find((x) => x.profile.equals(profile.identifier))?.favor
-            return profileRelationFormatter(profile, favor)
+            const record = records.find((x) => x.profile.equals(profile.identifier))
+            const favor = record?.favor
+            const personaIdentifier = record?.linked.toText()
+            return profileRelationFormatter(profile, personaIdentifier, favor)
         })
     },
     wallet_updateEthereumAccount: async ({ account }) => {
