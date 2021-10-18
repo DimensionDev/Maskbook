@@ -32,6 +32,7 @@ const ContractInteraction = lazy(() => import('./ContractInteraction'))
 const Unlock = lazy(() => import('./Unlock'))
 const SetPaymentPassword = lazy(() => import('./SetPaymentPassword'))
 const WalletRecovery = lazy(() => import('./WalletRecovery'))
+const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
 
 export default function Wallet() {
     const wallet = useWallet()
@@ -135,6 +136,7 @@ export default function Wallet() {
                         <Route path={PopupRoutes.SelectWallet} children={<SelectWallet />} />
                         <Route path={PopupRoutes.Unlock} children={<Unlock />} />
                         <Route path={PopupRoutes.SetPaymentPassword} children={<SetPaymentPassword />} exact />
+                        <Route path={PopupRoutes.ReplaceTransaction} children={<ReplaceTransaction />} exact />
                     </Switch>
                 )}
             </WalletContext.Provider>
