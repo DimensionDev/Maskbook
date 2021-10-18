@@ -18,7 +18,7 @@ import {
     pow10,
     getChainShortName,
     getChainIdFromNetworkType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'

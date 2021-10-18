@@ -8,7 +8,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import BigNumber from 'bignumber.js'

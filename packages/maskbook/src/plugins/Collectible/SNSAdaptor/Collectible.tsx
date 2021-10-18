@@ -36,7 +36,7 @@ import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 

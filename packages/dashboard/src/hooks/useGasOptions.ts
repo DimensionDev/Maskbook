@@ -1,4 +1,4 @@
-import { GasOption, isEIP1559Supported, useChainId } from '@masknet/web3-shared'
+import { GasOption, isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { useDashboardI18N } from '../locales'

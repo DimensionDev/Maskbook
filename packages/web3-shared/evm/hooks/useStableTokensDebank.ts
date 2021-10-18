@@ -1,5 +1,5 @@
 import { useChainId } from './useChainId'
-import STABLE_COINS from '../assets/stable_coins.json'
+import STABLE_COINS from '../assets/stable-coins.json'
 import { ChainId } from '../types'
 import { createERC20Token, formatEthereumAddress } from '../utils'
 

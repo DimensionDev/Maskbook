@@ -8,7 +8,7 @@ import {
     useFungibleTokensDetailed,
     isSameAddress,
     useTokenConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from './helpers'
 import { usePoolPayload } from './hooks/usePoolPayload'

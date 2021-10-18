@@ -1,4 +1,4 @@
-import { useAssets, useChainId, useERC20TokenContract, useERC20TokenDetailed } from '@masknet/web3-shared'
+import { useAssets, useChainId, useERC20TokenContract, useERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'

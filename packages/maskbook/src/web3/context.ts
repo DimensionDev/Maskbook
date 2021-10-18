@@ -1,6 +1,6 @@
 import { noop, pick } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ERC20TokenDetailed, EthereumTokenType, ProviderType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
+import { ERC20TokenDetailed, EthereumTokenType, ProviderType, Wallet, Web3ProviderType } from '@masknet/web3-shared-evm'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,

@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import RSS3 from 'rss3-next'
-import { isSameAddress } from '@masknet/web3-shared'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { personalSign } from '../../../extension/background-script/EthereumService'
 import { RSS3_APP } from '../constants'
 import type { AvatarMetaDB } from '../types'

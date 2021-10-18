@@ -1,4 +1,4 @@
-import { useBlockie } from '@masknet/web3-shared'
+import { useBlockie } from '@masknet/web3-shared-evm'
 import { Avatar, AvatarProps } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'

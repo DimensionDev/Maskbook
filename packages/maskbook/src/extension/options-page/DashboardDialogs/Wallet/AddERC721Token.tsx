@@ -8,7 +8,7 @@ import {
     useERC721ContractDetailed,
     useAccount,
     isSameAddress,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'

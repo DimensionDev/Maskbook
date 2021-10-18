@@ -1,5 +1,5 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { TransactionReceipt } from 'web3-core'
 import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import { currentChainIdSettings } from '../../settings'

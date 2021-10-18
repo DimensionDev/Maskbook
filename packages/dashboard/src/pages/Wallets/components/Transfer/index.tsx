@@ -4,7 +4,7 @@ import { Box, Tab } from '@material-ui/core'
 import { useTabs } from '@masknet/theme'
 import { TabContext, TabList, TabPanel } from '@material-ui/lab'
 import { TransferERC20 } from './TransferERC20'
-import { FungibleTokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared'
+import { FungibleTokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
 import { useLocation } from 'react-router-dom'
 import { useDashboardI18N } from '../../../../locales'
 

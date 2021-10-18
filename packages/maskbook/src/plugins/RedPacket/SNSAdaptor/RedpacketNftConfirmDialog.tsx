@@ -11,7 +11,7 @@ import {
     useWeb3,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@material-ui/core'

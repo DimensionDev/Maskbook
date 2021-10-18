@@ -7,7 +7,7 @@ import {
     resolveAddressLinkOnExplorer,
     useChainId,
     useAccount,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
@@ -16,7 +16,7 @@ import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import Fuse from 'fuse.js'
-import { useERC721ContractDetailed } from '@masknet/web3-shared'
+import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { useNFTscanFindAssets } from '../hooks/useNFTscanFindAssets'
 

@@ -1,0 +1,9 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/solana",
+    "tsBuildInfoFile": "../dist/solana.tsbuildinfo"
+  },
+  "include": ["./", "./**/*.json"]
+}

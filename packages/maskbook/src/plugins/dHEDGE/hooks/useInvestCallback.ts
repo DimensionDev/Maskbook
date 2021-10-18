@@ -7,7 +7,7 @@ import {
     useTransactionState,
     TransactionStateType,
     TransactionEventType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
 

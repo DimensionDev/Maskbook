@@ -227,7 +227,8 @@
         "nftscan",
         "apikey",
         "tokenid",
-        "NFTRSS"
+        "NFTRSS",
+        "solana"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -303,6 +304,7 @@
         "Switcher",
         "drawed",
         "DRAWED",
+        "devnet",
         "fbclid"
     ],
     "ignoreRegExpList": ["/@servie/"],

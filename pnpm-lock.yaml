@@ -129,7 +129,7 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@masknet/theme': workspace:*
-      '@masknet/web3-shared': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
       '@msgpack/msgpack': ^2.7.1
       '@servie/events': ^3.0.0
       '@storybook/addon-actions': ^6.4.0-alpha.38
@@ -178,7 +178,7 @@ importers:
       '@masknet/shared': link:../shared
       '@masknet/storybook-shared': link:../storybook-shared
       '@masknet/theme': link:../theme
-      '@masknet/web3-shared': link:../web3-shared
+      '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@msgpack/msgpack': 2.7.1
       '@servie/events': 3.0.0
       '@types/color': 3.0.2
@@ -290,7 +290,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-contracts': workspace:*
-      '@masknet/web3-shared': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
       '@msgpack/msgpack': ^2.7.1
       '@nice-labs/emit-file-webpack-plugin': ^1.0.1
       '@openzeppelin/contracts': ^3.2.0
@@ -438,7 +438,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
       '@masknet/web3-contracts': link:../web3-contracts
-      '@masknet/web3-shared': link:../web3-shared
+      '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@msgpack/msgpack': 2.7.1
       '@openzeppelin/contracts': 3.4.1
       '@servie/events': 3.0.0
@@ -565,7 +565,7 @@ importers:
       '@dimensiondev/holoflows-kit': '=0.9.0-20210726055325-dfbe7fd'
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
-      '@masknet/web3-shared': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
       async-call-rpc: ^6.0.0
@@ -575,7 +575,7 @@ importers:
       '@dimensiondev/holoflows-kit': 0.9.0-20210726055325-dfbe7fd
       '@masknet/shared': link:../shared
       '@masknet/theme': link:../theme
-      '@masknet/web3-shared': link:../web3-shared
+      '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
       async-call-rpc: 6.0.0
@@ -587,7 +587,7 @@ importers:
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
-      '@masknet/web3-shared': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
       bignumber.js: ^9.0.1
       react-use: ^17.3.1
       web3-core: ^1.5.2
@@ -595,7 +595,7 @@ importers:
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/theme': link:../../theme
-      '@masknet/web3-shared': link:../../web3-shared
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.1
       react-use: 17.3.1_f991c289939c8299bed5e4a6a5a79a62
       web3-core: 1.5.2
@@ -648,7 +648,7 @@ importers:
       '@masknet/icons': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
-      '@masknet/web3-shared': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
       anchorme: ^2.1.2
       bignumber.js: ^9.0.1
       classnames: ^2.3.1
@@ -663,7 +663,7 @@ importers:
       '@masknet/icons': link:../icons
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
-      '@masknet/web3-shared': link:../web3-shared
+      '@masknet/web3-shared-evm': link:../web3-shared/evm
       anchorme: 2.1.2
       bignumber.js: 9.0.1
       classnames: 2.3.1
@@ -792,7 +792,7 @@ importers:
       web3-core: 1.5.2
       web3-eth-contract: 1.4.0
 
-  packages/web3-shared:
+  packages/web3-shared/evm:
     specifiers:
       '@dimensiondev/kit': ^0.0.0-20210913111737-84c17d7
       '@ensdomains/address-encoder': ^0.2.6
@@ -815,8 +815,8 @@ importers:
     dependencies:
       '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_f991c289939c8299bed5e4a6a5a79a62
       '@ensdomains/address-encoder': 0.2.6
-      '@masknet/web3-constants': link:../web3-constants
-      '@masknet/web3-contracts': link:../web3-contracts
+      '@masknet/web3-constants': link:../../web3-constants
+      '@masknet/web3-contracts': link:../../web3-contracts
       '@unstoppabledomains/resolution': 5.0.1
       bignumber.js: 9.0.1
       ethereum-blockies: 0.1.1
@@ -832,6 +832,9 @@ importers:
       web3-utils: 1.5.2
     devDependencies:
       '@types/use-subscription': 1.0.0
+
+  packages/web3-shared/solana:
+    specifiers: {}
 
 packages:
 
@@ -8767,7 +8770,7 @@ packages:
       ethereum-ens-network-map: 1.0.2
       js-sha256: 0.9.0
       js-sha3: 0.8.0
-      node-fetch: 2.6.1
+      node-fetch: 2.6.2
     dev: false
 
   /@walletconnect/browser-utils/1.4.1:
@@ -18661,7 +18664,6 @@ packages:
   /node-fetch/2.6.2:
     resolution: {integrity: sha512-aLoxToI6RfZ+0NOjmWAgn9+LEd30YCkJKFSyWacNZdEKTit/ZMcKjGkTRo8uWEsnIb/hfKecNPEbln02PdWbcA==}
     engines: {node: 4.x || >=6.0.0}
-    dev: true
 
   /node-forge/0.10.0:
     resolution: {integrity: sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==}

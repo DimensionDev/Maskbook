@@ -3,7 +3,7 @@ import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
 import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
 import type { ITO } from '@masknet/web3-contracts/types/ITO'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
-import { useITOConstants, useContract, isSameAddress } from '@masknet/web3-shared'
+import { useITOConstants, useContract, isSameAddress } from '@masknet/web3-shared-evm'
 
 export function useITO_Contract(contractAddress?: string) {
     const { ITO_CONTRACT_ADDRESS, ITO2_CONTRACT_ADDRESS } = useITOConstants()

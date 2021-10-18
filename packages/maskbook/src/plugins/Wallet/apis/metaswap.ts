@@ -1,4 +1,4 @@
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import type { estimateSuggestResponse } from '../types/metaswap'
 

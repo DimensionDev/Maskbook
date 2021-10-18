@@ -8,7 +8,7 @@ import {
     useAccount,
     useChainId,
     useTraderConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useCallback, useState } from 'react'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'

@@ -12,7 +12,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'

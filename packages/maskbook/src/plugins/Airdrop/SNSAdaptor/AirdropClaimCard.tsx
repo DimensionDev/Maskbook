@@ -15,7 +15,7 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../Wallet/messages'
 import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'

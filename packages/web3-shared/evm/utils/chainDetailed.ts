@@ -1,10 +1,10 @@
+import { upperFirst } from 'lodash-es'
 import { createLookupTableResolver } from './enum'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
 import { ChainId, NetworkType } from '../types'
 import COINGECKO_PLATFORMS from '../assets/coingecko-asset-platforms.json'
 import COINGECKO_COIN_LIST from '../assets/coingecko-coin-list.json'
-import { upperFirst } from 'lodash-es'
 
 export function isChainIdValid(chainId: ChainId, allowTestnet = false) {
     const chainDetailed = getChainDetailed(chainId)

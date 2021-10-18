@@ -1,6 +1,6 @@
 import { PLUGIN_ID } from './constants'
 import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,

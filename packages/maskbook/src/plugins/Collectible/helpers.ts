@@ -1,6 +1,6 @@
 import type { Asset, OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
 import BigNumber from 'bignumber.js'
-import { ChainId, createERC20Token, createNativeToken, pow10 } from '@masknet/web3-shared'
+import { ChainId, createERC20Token, createNativeToken, pow10 } from '@masknet/web3-shared-evm'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '../../protocols/typed-message'
 import { PLUGIN_META_KEY, RaribleIPFSURL } from './constants'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types'

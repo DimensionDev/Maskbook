@@ -9,8 +9,8 @@ import { TokenPanel } from './TokenPanel'
 import { PriceStaleWarning } from './PriceStaleWarning'
 import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { formatBalance } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => ({

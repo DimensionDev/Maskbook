@@ -7,7 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
-import { currySameAddress, useWallets } from '@masknet/web3-shared'
+import { currySameAddress, useWallets } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 
 const useStyles = makeStyles()({

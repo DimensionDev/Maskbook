@@ -1,5 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatWeiToEther, formatWeiToGwei, GasOption, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
+import {
+    formatWeiToEther,
+    formatWeiToGwei,
+    GasOption,
+    useChainId,
+    useNativeTokenDetailed,
+} from '@masknet/web3-shared-evm'
 import { Typography } from '@material-ui/core'
 import { LoadingButton } from '@material-ui/lab'
 import BigNumber from 'bignumber.js'

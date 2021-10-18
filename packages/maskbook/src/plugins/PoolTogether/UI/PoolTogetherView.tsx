@@ -1,6 +1,6 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/constants'
-import { usePoolTogetherConstants } from '@masknet/web3-shared'
+import { usePoolTogetherConstants } from '@masknet/web3-shared-evm'
 import { Card, CardActions, CardContent, CircularProgress, Link, Paper, Tab, Tabs, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'

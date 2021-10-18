@@ -7,7 +7,7 @@ import {
     useRPCConstants,
     useTokenConstants,
     useTraderConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'

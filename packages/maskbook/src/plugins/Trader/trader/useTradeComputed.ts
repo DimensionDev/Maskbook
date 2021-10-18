@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import BigNumber from 'bignumber.js'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { pow10 } from '@masknet/web3-shared'
+import { pow10, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import type { TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'

@@ -2,7 +2,7 @@ import { Avatar, Link, TableCell, TableRow, Typography } from '@material-ui/core
 import { makeStyles } from '@masknet/theme'
 import LinkIcon from '@material-ui/icons/Link'
 import { FormattedBalance } from '@masknet/shared'
-import { formatBalance } from '@masknet/web3-shared'
+import { formatBalance } from '@masknet/web3-shared-evm'
 import { formatElapsed } from '../../../Wallet/formatter'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'

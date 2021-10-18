@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared'
+import { TransactionStatusType, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { PluginMessages, PluginServices } from '../../../API'
 
 // todo: should merge in plugin infra package when plugin infra ready

@@ -1,5 +1,6 @@
 {
-  "name": "@masknet/web3-shared",
+  "name": "@masknet/web3-shared-evm",
+  "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {

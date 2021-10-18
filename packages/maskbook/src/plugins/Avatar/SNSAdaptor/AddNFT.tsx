@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared'
+import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@material-ui/core'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

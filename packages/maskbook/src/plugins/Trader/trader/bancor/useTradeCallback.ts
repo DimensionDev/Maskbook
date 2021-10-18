@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
-import { TransactionState, TransactionStateType, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared'
+import { TransactionState, TransactionStateType, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import type { SwapBancorRequest } from '../../types/bancor'
 import type { TradeComputed } from '../../types'
 import { PluginTraderRPC } from '../../messages'

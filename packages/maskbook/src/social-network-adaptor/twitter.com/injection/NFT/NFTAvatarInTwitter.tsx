@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
 
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'

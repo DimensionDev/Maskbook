@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from 'react'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@material-ui/core'
 import MaskPluginWrapper from '../../MaskPluginWrapper'

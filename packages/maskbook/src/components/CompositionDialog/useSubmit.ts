@@ -1,5 +1,5 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { EthereumTokenType, isDAI, isOKB } from '@masknet/web3-shared'
+import { EthereumTokenType, isDAI, isOKB } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'

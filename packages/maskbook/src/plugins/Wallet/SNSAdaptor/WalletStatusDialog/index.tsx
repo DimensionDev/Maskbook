@@ -5,7 +5,7 @@ import {
     useChainId,
     useChainIdValid,
     useWallet,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import ErrorIcon from '@material-ui/icons/Error'

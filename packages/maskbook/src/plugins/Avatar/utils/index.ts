@@ -1,9 +1,9 @@
-import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared'
 import BigNumber from 'bignumber.js'
 import { head, isNull } from 'lodash-es'
 import type { Order } from 'opensea-js/lib/types'
 import { PluginCollectibleRPC } from '../../Collectible/messages'
 import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../Collectible/utils'
+import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared-evm'
 
 export async function getNFT(address: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)

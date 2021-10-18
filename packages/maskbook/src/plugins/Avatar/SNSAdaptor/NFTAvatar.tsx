@@ -7,7 +7,7 @@ import {
     useAccount,
     useChainId,
     useCollectibles,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import classNames from 'classnames'
 import { uniqBy } from 'lodash-es'

@@ -25,11 +25,13 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         fontWeight: 500,
         lineHeight: '24px',
+        wordBreak: 'break-all',
         marginBottom: theme.spacing(4),
     },
     content: {
         fontSize: 14,
         lineHeight: '24px',
+        wordBreak: 'break-all',
     },
 }))
 

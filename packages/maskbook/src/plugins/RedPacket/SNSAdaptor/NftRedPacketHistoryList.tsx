@@ -1,7 +1,7 @@
 import { useScrollBottomEvent } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared'
+import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography } from '@material-ui/core'
 import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
