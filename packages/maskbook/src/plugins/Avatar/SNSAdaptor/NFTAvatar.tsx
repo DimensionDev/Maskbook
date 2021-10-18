@@ -1,16 +1,15 @@
-import { NFTLinkIcon, NFTSelectedIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
     ERC721TokenDetailed,
     formatEthereumAddress,
-    resolveCollectibleLink,
     useAccount,
     useChainId,
     useCollectibles,
 } from '@masknet/web3-shared'
-import { Box, Button, Link, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import classNames from 'classnames'
 import { uniqBy } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
@@ -58,6 +57,10 @@ const useStyles = makeStyles()((theme) => ({
         boxSizing: 'border-box',
         padding: 6,
         margin: theme.spacing(0.5, 1),
+    },
+    skeletonBox: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
     error: {
         display: 'flex',
@@ -122,7 +125,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const LoadStatus = Array.from({ length: 8 })
         .fill(0)
         .map((_, i) => (
-            <div key={i}>
+            <div key={i} className={classes.skeletonBox}>
                 <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
             </div>
         ))
@@ -223,6 +226,10 @@ const useNFTImageStyles = makeStyles()((theme) => ({
         position: 'relative',
         padding: 6,
         margin: theme.spacing(0.5, 1),
+        borderRadius: '100%',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     icon: {
         position: 'absolute',
@@ -238,6 +245,14 @@ const useNFTImageStyles = makeStyles()((theme) => ({
         borderRadius: '100%',
         boxSizing: 'border-box',
     },
+    selected: {
+        backgroundColor: theme.palette.primary.main,
+    },
+    hover: {
+        '&:hover': {
+            backgroundColor: theme.palette.primary.main,
+        },
+    },
 }))
 
 interface NFTImageProps {
@@ -249,19 +264,15 @@ interface NFTImageProps {
 function NFTImage(props: NFTImageProps) {
     const { token, onChange, selectedToken } = props
     const { classes } = useNFTImageStyles()
-    const chainId = useChainId()
-    const provider = useValueRef(currentCollectibleDataProviderSettings)
 
     return (
-        <div className={classes.imgBackground}>
+        <div
+            className={classNames(
+                classes.imgBackground,
+                classes.hover,
+                token === selectedToken ? classes.selected : '',
+            )}>
             <img onClick={() => onChange(token)} src={token.info.image} className={classes.image} />
-            <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
-                {selectedToken === token ? (
-                    <NFTSelectedIcon className={classes.icon} />
-                ) : (
-                    <NFTLinkIcon className={classes.icon} />
-                )}
-            </Link>
         </div>
     )
 }
