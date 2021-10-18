@@ -37,6 +37,7 @@ import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { hasNativeAPI, nativeAPI, useI18N, useMenu } from '../../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
@@ -118,7 +119,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
     return (
         <>
-            <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
+            <GuideStep step={1} total={3} tip={t('user_guide_tip_1', { sns: activatedSocialNetworkUI.name })}>
                 <Container>
                     <ListItemButton onClick={openMenu}>
                         <ListItemIcon>
