@@ -1,7 +1,10 @@
+import Services from '../../extension/service'
 import type { SocialNetworkUI } from '../types'
 
 export function requestSNSAdaptorPermission(ui: SocialNetworkUI.Definition) {
-    return ui.permission?.request() ?? browser.permissions.request({ origins: [...ui.declarativePermissions.origins] })
+    const req = ui.permission?.request()
+    if (req) return req
+    return Services.Helper.requestBrowserPermission({ origins: [...ui.declarativePermissions.origins] })
 }
 
 export function hasSNSAdaptorPermission(ui: SocialNetworkUI.Definition) {

@@ -46,8 +46,9 @@ export type ConfirmPasswordOption = {
 }
 
 export function UserProvider({ children }: PropsWithChildren<{}>) {
+    const backupPassword = localStorage.getItem('backupPassword')
     const [user, setUser] = useState({
-        backupPassword: localStorage.getItem('backupPassword'),
+        backupPassword: backupPassword && atob(backupPassword),
         email: localStorage.getItem('email'),
         phone: localStorage.getItem('phone'),
         backupMethod: localStorage.getItem('backupMethod'),
@@ -61,7 +62,7 @@ export function UserProvider({ children }: PropsWithChildren<{}>) {
     const updateUser = (obj: Partial<User>) => {
         const updated = { ...user, ...obj }
         setUser(updated)
-        localStorage.setItem('backupPassword', updated.backupPassword || '')
+        localStorage.setItem('backupPassword', btoa(updated.backupPassword ?? ''))
         localStorage.setItem('email', updated.email || '')
         localStorage.setItem('phone', updated.phone || '')
         localStorage.setItem('backupMethod', updated.backupMethod || '')

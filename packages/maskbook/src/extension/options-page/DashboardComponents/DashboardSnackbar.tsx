@@ -1,5 +1,5 @@
 import { forwardRef } from 'react'
-import { useSnackbar, SnackbarProvider } from '@masknet/theme'
+import { SnackbarProvider } from '@masknet/theme'
 import { useTheme } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 
@@ -20,7 +20,6 @@ export const DashboardSnackbar = forwardRef<HTMLDivElement, DashboardSnackbarPro
     (props: DashboardSnackbarProps, ref) => {
         const { key, message } = props
         const { classes } = useStyles()
-        const { closeSnackbar } = useSnackbar()
         const theme = useTheme()
         return (
             <div id={String(key)} className={classes.root} ref={ref}>

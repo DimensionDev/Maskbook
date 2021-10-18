@@ -58,7 +58,7 @@ export function DebounceButton(_props: DebounceButtonProps) {
     )
 }
 
-interface ActionButtonProps extends ButtonProps {
+export interface ActionButtonProps extends ButtonProps {
     width?: number | string
     loading?: boolean
     component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
@@ -92,6 +92,7 @@ interface ActionButtonPromiseProps extends ButtonProps {
     failedOnClick?: 'use executor' | (() => void)
     completeIcon?: React.ReactNode
     failIcon?: React.ReactNode
+    onComplete?: () => void
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
@@ -105,6 +106,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         completeOnClick,
         waitingOnClick,
         failedOnClick,
+        onComplete,
         completeIcon = <CheckIcon />,
         failIcon = <ErrorIcon />,
         ...b
@@ -117,7 +119,10 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const run = () => {
         setState('wait')
         executor().then(
-            () => setState('complete'),
+            () => {
+                setState('complete')
+                onComplete?.()
+            },
             () => setState('fail'),
         )
     }

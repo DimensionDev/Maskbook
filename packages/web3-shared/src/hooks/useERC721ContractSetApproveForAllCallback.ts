@@ -10,7 +10,7 @@ import {
 } from '../index'
 
 /**
- * @param contractAddress Nft contract Address.
+ * @param contractAddress NFT contract Address.
  * @param operator Address to add to the set of authorized operators.
  * @param approved True if the operator is approved, false to revoke approval.
  */

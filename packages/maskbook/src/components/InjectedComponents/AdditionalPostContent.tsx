@@ -7,7 +7,7 @@ import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedM
 import CheckIcon from '@material-ui/icons/Check'
 import CloseIcon from '@material-ui/icons/Close'
 import green from '@material-ui/core/colors/green'
-import { MaskbookIcon } from '../../resources/MaskbookIcon'
+import { MaskIcon } from '../../resources/MaskIcon'
 import { memo, useCallback, useMemo } from 'react'
 
 export enum AdditionalIcon {
@@ -55,7 +55,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             color={message ? 'textSecondary' : 'textPrimary'}
             gutterBottom
             className={classNames(classes.title)}>
-            <span className={classes.icon}>{ProgressJSX || <MaskbookIcon />}</span>
+            <span className={classes.icon}>{ProgressJSX || <MaskIcon />}</span>
             <Box
                 sx={{
                     flex: 1,

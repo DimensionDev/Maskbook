@@ -3,7 +3,7 @@ import { first } from 'lodash-es'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { ProviderType, ChainId } from '@masknet/web3-shared'
-import * as Maskbook from '../providers/Maskbook'
+import * as Maskbook from './Mask'
 import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 

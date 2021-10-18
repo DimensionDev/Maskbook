@@ -107,7 +107,7 @@ export const FooterLine = memo(() => {
 
     const openVersionLink = (event: React.MouseEvent) => {
         // `MouseEvent.prototype.metaKey` on macOS (`Command` key), Windows (`Windows` key), Linux (`Super` key)
-        if (process.env.build === 'stable' && !event.metaKey) {
+        if (process.env.channel === 'stable' && !event.metaKey) {
             open(`${links.DOWNLOAD_LINK_STABLE_PREFIX}/v${version}`)
         } else {
             open(`${links.DOWNLOAD_LINK_UNSTABLE_PREFIX}/${process.env.COMMIT_HASH}`)
@@ -125,7 +125,7 @@ export const FooterLine = memo(() => {
                     <Version />
                 </FooterLinkButton>
                 <FooterLinkExternal href={links.MOBILE_DOWNLOAD_LINK}>{t.dashboard_mobile_test()}</FooterLinkExternal>
-                <FooterLinkExternal href={links.MASKBOOK_GITHUB}>{t.dashboard_source_code()}</FooterLinkExternal>
+                <FooterLinkExternal href={links.MASK_GITHUB}>{t.dashboard_source_code()}</FooterLinkExternal>
                 <FooterLinkExternal href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLinkExternal>
                 <FooterLinkTo to={RoutePaths.PrivacyPolicy}>{t.privacy_policy()}</FooterLinkTo>
             </Breadcrumbs>

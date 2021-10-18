@@ -24,10 +24,15 @@ function __meetRegisterRequirement(def: Plugin.Shared.Definition) {
 
     // build variant check
     if (process.env.NODE_ENV === 'production') {
-        if (process.env.build === 'stable' && def.enableRequirement.target !== 'stable') {
-            return false
-        } else if (process.env.build === 'beta' && def.enableRequirement.target === 'insider') {
-            return false
+        try {
+            if (process.env.channel === 'stable' && def.enableRequirement.target !== 'stable') {
+                return false
+            } else if (process.env.channel === 'beta' && def.enableRequirement.target === 'insider') {
+                return false
+            }
+        } catch {
+            // process.env.channel might not be possible in each build environment.
+            if (def.enableRequirement.target !== 'stable') return false
         }
     }
     return true

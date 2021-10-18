@@ -89,6 +89,7 @@
         "fileservice",
         "formating",
         "fullfilled",
+        "furucombo",
         "gasnow",
         "geckoview",
         "gltf",
@@ -102,6 +103,7 @@
         "immer",
         "importmap",
         "imtokenv2",
+        "investables",
         "ipfs",
         "ipfsurl",
         "ittr",
@@ -121,6 +123,7 @@
         "maskbookjsonrpc",
         "maskface",
         "masknet",
+        "masknetwork",
         "masknightly",
         "masktext",
         "messagepack",
@@ -155,6 +158,7 @@
         "promi",
         "proxied",
         "pushstate",
+        "unstyled",
         "pvtsutils",
         "qrcode",
         "quickswap",
@@ -205,6 +209,7 @@
         "webextension",
         "webm",
         "withdrawed",
+        "wmatic",
         "wnative",
         "xdai",
         "xlarge",
@@ -220,7 +225,8 @@
         "majeure",
         "Swither",
         "nftscan",
-        "apikey"
+        "apikey",
+        "fbclid"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -293,7 +299,9 @@
         "gamification",
         "Defi",
         "powah",
-        "Switcher"
+        "Switcher",
+        "drawed",
+        "DRAWED"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

@@ -2,7 +2,7 @@ import { Suspense, useMemo } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@material-ui/core'
 import { parseURL } from '../../../utils/utils'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from '../UI/PreviewCard'
@@ -23,10 +23,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isGoodGhosting)
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+
+        const link = links.find(isGoodGhosting)
         if (!link) return null
         return <Renderer url={link} />
     },
@@ -39,13 +38,13 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     }
 
     return (
-        <MaskbookPluginWrapper pluginName="GoodGhosting">
+        <MaskPluginWrapper pluginName="GoodGhosting">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={ChainId.Matic}>
                     <PreviewCard id={id} />
                 </EthereumChainBoundary>
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }
 

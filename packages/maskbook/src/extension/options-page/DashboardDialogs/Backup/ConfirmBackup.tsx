@@ -1,7 +1,7 @@
 import { Box } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { green } from '@material-ui/core/colors'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useI18N, BackupJSONFileLatest } from '../../../../utils'
@@ -43,7 +43,7 @@ export function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackup
     const { classes } = useConfirmBackupStyles({
         imported: imported === true,
     })
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const time = new Date(date ? Number(date) : 0)
     const records = [
@@ -54,7 +54,7 @@ export function ConfirmBackup({ restoreId, date, backup, onDone }: ConfirmBackup
     ]
 
     const onConfirm = async () => {
-        const failToRestore = () => enqueueSnackbar(t('set_up_restore_fail'), { variant: 'error' })
+        const failToRestore = () => showSnackbar(t('set_up_restore_fail'), { variant: 'error' })
         if (restoreId) {
             try {
                 setImported('loading')

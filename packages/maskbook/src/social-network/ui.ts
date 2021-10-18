@@ -32,6 +32,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     },
     injection: {},
     networkIdentifier: 'localhost',
+    name: '',
     shouldActivate: () => false,
     utils: { createPostContext: null! },
     notReadyForProduction: true,
@@ -73,7 +74,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     startPostListener()
     ui.collecting.currentVisitingIdentityProvider?.start(signal)
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
+    if (Flags.toolbox_enabled) ui.injection.toolbox?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)

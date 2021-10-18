@@ -1,4 +1,4 @@
-import { MaskDialog, CountdownButton, useSnackbar, MaskTextField, MaskColorVar } from '@masknet/theme'
+import { MaskDialog, CountdownButton, useCustomSnackbar, MaskTextField, MaskColorVar } from '@masknet/theme'
 import { MenuItem, Select, Box } from '@material-ui/core'
 import { useDashboardI18N } from '../../../../locales'
 import { useState, useContext, useMemo, useEffect } from 'react'
@@ -20,10 +20,10 @@ export interface CloudBackupVerifyDialogProps {
 
 export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVerifyDialogProps) {
     const language = useLanguage()
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const t = useDashboardI18N()
     const { user } = useContext(UserContext)
-    const [mode, setMode] = useState((user.email ?? user.phone) || '')
+    const [mode, setMode] = useState(user.email || user.phone || '')
     const [code, setCode] = useState('')
     const [invalidCode, setInvalidCode] = useState(false)
 
@@ -38,12 +38,10 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     }, [mode, code])
 
     const sendVerifyCode = async () => {
-        const res = await sendCode(params).catch((error) =>
-            snackbar.enqueueSnackbar(error.message, { variant: 'error' }),
-        )
+        const res = await sendCode(params).catch((error) => showSnackbar(error.message, { variant: 'error' }))
 
         if (res) {
-            snackbar.enqueueSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
+            showSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
         }
     }
 

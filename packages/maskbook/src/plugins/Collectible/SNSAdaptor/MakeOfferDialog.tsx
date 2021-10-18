@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-es'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
@@ -79,7 +79,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -108,11 +108,11 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             })
         } catch (error) {
             if (error instanceof Error) {
-                enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
             }
             throw error
         }
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, enqueueSnackbar])
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, showSnackbar])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

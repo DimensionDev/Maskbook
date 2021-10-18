@@ -25,7 +25,8 @@ build
 /build-*
 storybook-static
 packages/netlify/sites/
-/Maskbook.*.zip
+/MaskNetwork.*.zip
+compilation-stats.json
 
 # Environment files
 .env.local
