@@ -302,7 +302,8 @@
         "Switcher",
         "drawed",
         "DRAWED",
-        "devnet"
+        "devnet",
+        "fbclid"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

@@ -30,6 +30,7 @@ import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
 import { calculateOdds, getPrizePeriod } from '../utils'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -192,12 +193,18 @@ export function DepositDialog() {
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
-                ? t('plugin_pooltogether_share', {
-                      amount: rawAmount,
-                      cashTag: cashTag,
-                      symbol: token.symbol,
-                      pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
-                  })
+                ? t(
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? 'plugin_pooltogether_share'
+                          : 'plugin_pooltogether_share_no_official_account',
+                      {
+                          amount: rawAmount,
+                          cashTag: cashTag,
+                          symbol: token.symbol,
+                          pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                      },
+                  )
                 : '',
         )
         .toString()

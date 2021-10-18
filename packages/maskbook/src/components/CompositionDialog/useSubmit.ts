@@ -11,6 +11,7 @@ import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTex
 import type { SubmitComposition } from './CompositionUI'
 import { unreachable } from '@dimensiondev/kit'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 
 export function useSubmit(onClose: () => void) {
     const { t } = useI18N()
@@ -33,9 +34,13 @@ export function useSubmit(onClose: () => void) {
                 whoAmI?.identifier ?? currentProfile,
                 target === 'Everyone',
             )
-            const redPacketPreText = isTwitter(activatedSocialNetworkUI)
-                ? t('additional_post_box__encrypted_post_pre_red_packet_twitter', { encrypted })
-                : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
+            const redPacketPreText =
+                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
+                          encrypted,
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                      })
+                    : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
 
             // TODO: move into the plugin system
             const redPacketMetadata = RedPacketMetadataReader(content.meta)

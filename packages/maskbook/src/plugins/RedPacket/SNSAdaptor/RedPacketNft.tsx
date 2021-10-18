@@ -39,6 +39,7 @@ import classNames from 'classnames'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -349,23 +350,25 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         .getShareLinkURL?.(
             availability?.isClaimed
                 ? t(
-                      isTwitter(activatedSocialNetworkUI)
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                           ? 'plugin_red_packet_nft_share_claimed_message'
                           : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
                       {
                           sender: payload.senderName,
                           payload: postLink,
                           network: resolveNetworkName(networkType),
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
                       },
                   ).trim()
                 : t(
-                      isTwitter(activatedSocialNetworkUI)
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                           ? 'plugin_red_packet_nft_share_foreshow_message'
                           : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
                       {
                           sender: payload.senderName,
                           payload: postLink,
                           network: resolveNetworkName(networkType),
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
                       },
                   ).trim(),
         )
