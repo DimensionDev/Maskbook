@@ -135,7 +135,7 @@
     "wallets_collectible_field_token_id_require": "The token id is required",
     "wallets_collectible_load_end": "Load end",
     "wallets_balance": "Balance on",
-    "wallets_balance_all_chain": "All Chain",
+    "wallets_balance_all_chain": "all chains",
     "wallets_balance_Send": "Send",
     "wallets_balance_Buy": "Buy",
     "wallets_balance_Swap": "Swap",
