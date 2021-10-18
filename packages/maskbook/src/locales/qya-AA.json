@@ -12,7 +12,7 @@
     "add_nft_contract_search_hint": "crwdns8123:0crwdne8123:0",
     "add_asset": "crwdns3989:0crwdne3989:0",
     "additional_post_box__encrypted_post_pre": "crwdns3991:0{{encrypted}}crwdne3991:0",
-    "additional_post_box__encrypted_post_pre_red_packet_twitter": "crwdns3993:0{{encrypted}}crwdne3993:0",
+    "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "crwdns3993:0{{encrypted}}crwdne3993:0",
     "additional_post_box__encrypted_post_pre_red_packet": "crwdns3995:0{{encrypted}}crwdne3995:0",
     "additional_post_box__steganography_post_pre": "crwdns3997:0{{random}}crwdne3997:0",
     "auto_paste_failed_dialog_title": "crwdns3999:0crwdne3999:0",
@@ -434,7 +434,7 @@
     "plugin_red_packet_data_broken": "crwdns7999:0{{duration}}crwdne7999:0",
     "plugin_red_packet_refunding": "crwdns4733:0crwdne4733:0",
     "plugin_red_packet_select_existing": "crwdns4735:0crwdne4735:0",
-    "plugin_red_packet_share_message": "crwdns4737:0{{sender}}crwdnd4737:0{{network}}crwdnd4737:0{{payload}}crwdne4737:0",
+    "plugin_red_packet_share_message_official_account": "crwdns4737:0{{sender}}crwdnd4737:0{{network}}crwdnd4737:0{{payload}}crwdne4737:0",
     "plugin_red_packet_nft_share_foreshow_message": "crwdns8151:0{{sender}}crwdnd8151:0{{network}}crwdnd8151:0{{payload}}crwdne8151:0",
     "plugin_red_packet_nft_share_foreshow_message_not_twitter": "crwdns9011:0{{sender}}crwdnd9011:0{{network}}crwdnd9011:0{{payload}}crwdne9011:0",
     "plugin_red_packet_nft_share_claimed_message": "crwdns8153:0{{sender}}crwdnd8153:0{{network}}crwdnd8153:0{{payload}}crwdne8153:0",
@@ -924,5 +924,5 @@
     "popups_password_do_not_match": "crwdns8983:0crwdne8983:0",
     "popups_backup_password": "crwdns8985:0crwdne8985:0",
     "popups_rename_error_tip": "crwdns8987:0{{length}}crwdne8987:0",
-    "profile_nft_avatar_set": "crwdns8189:0crwdne8189:0"
+    "nft_button_set_avatar": "crwdns8189:0crwdne8189:0"
 }

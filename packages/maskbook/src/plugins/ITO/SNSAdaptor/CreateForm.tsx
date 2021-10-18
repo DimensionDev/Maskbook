@@ -50,6 +50,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         flex: 1,
     },
+    inputLabel: {
+        left: 8,
+        top: 8,
+    },
     label: {
         paddingLeft: theme.spacing(2),
     },
@@ -58,6 +62,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
     },
     button: {
+        color: '#fff',
         marginTop: theme.spacing(1.5),
     },
     date: {
@@ -338,6 +343,9 @@ export function CreateForm(props: CreateFormProps) {
                     onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
                     InputLabelProps={{
                         shrink: true,
+                        classes: {
+                            root: classes.inputLabel,
+                        },
                     }}
                 />
             </Box>
@@ -349,6 +357,9 @@ export function CreateForm(props: CreateFormProps) {
                     value={totalOfPerWallet}
                     InputLabelProps={{
                         shrink: true,
+                        classes: {
+                            root: classes.inputLabel,
+                        },
                     }}
                     InputProps={{
                         endAdornment: tokenAndAmount?.token?.symbol,
@@ -376,6 +387,9 @@ export function CreateForm(props: CreateFormProps) {
                         label={t('plugin_ito_region_label')}
                         InputLabelProps={{
                             shrink: true,
+                            classes: {
+                                root: classes.inputLabel,
+                            },
                         }}
                         InputProps={{
                             inputComponent: RegionSelect,
@@ -397,6 +411,9 @@ export function CreateForm(props: CreateFormProps) {
                         value={qualificationAddress}
                         InputLabelProps={{
                             shrink: true,
+                            classes: {
+                                root: classes.inputLabel,
+                            },
                         }}
                         InputProps={{
                             endAdornment: qualification?.isQualification ? (

@@ -32,6 +32,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     },
     injection: {},
     networkIdentifier: 'localhost',
+    name: '',
     shouldActivate: () => false,
     utils: { createPostContext: null! },
     notReadyForProduction: true,

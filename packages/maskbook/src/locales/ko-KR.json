@@ -12,7 +12,7 @@
     "add_nft_contract_search_hint": "NFT 컨트렉트 이름이나 주소를 검색하기",
     "add_asset": "자산 추가",
     "additional_post_box__encrypted_post_pre": "#mask_io로 이 게시물을 해독하기. {{encrypted}}",
-    "additional_post_box__encrypted_post_pre_red_packet_twitter": "레드 패킷을 수령하고 #mask_io @realMaskNetwork {{encrypted}} 하세요.",
+    "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "레드 패킷을 수령하고 #mask_io @{{account}} {{encrypted}} 하세요.",
     "additional_post_box__encrypted_post_pre_red_packet": "#mask_io {{encrypted}} 덧붙이고 레드 패킷을 수령하세요.",
     "additional_post_box__steganography_post_pre": "암호화된 이미지입니다. 📪🔑 mask.io 설치하고 해독하세요. {{random}}",
     "auto_paste_failed_dialog_title": "수동으로 붙여넣기",
@@ -423,7 +423,7 @@
     "plugin_red_packet_data_broken": "데이터 손상으로 인해 레드 패킷을 보낼 수 없습니다. {{duration}} 후 자산을 인출할 수 있습니다.",
     "plugin_red_packet_refunding": "환급 중",
     "plugin_red_packet_select_existing": "기존 빨간 백 선택",
-    "plugin_red_packet_share_message": "{{network}} 네트워크에서 @{{sender}}의 레트 패킷을 받았어요. @realMaskNetwork (mask.io) 팔로우하고 레드 패킷을 받으세요.\n#mask_io #RedPacket\n{{payload}}",
+    "plugin_red_packet_share_message_official_account": "{{network}} 네트워크에서 @{{sender}}의 레트 패킷을 받았어요. @{{account}} (mask.io) 팔로우하고 레드 패킷을 받으세요.\n#mask_io #RedPacket\n{{payload}}",
     "plugin_red_packet_nft_share_foreshow_message": "@{{network}} 네트워크에서 @{{sender}} 레트 패킷을 보내고 있습니다. @realMaskNetwork (mask.io) 팔로우하고 NFT 레드 패킷을 받으세요.\n#mask_io #RedPacket\n{{payload}}",
     "plugin_red_packet_nft_share_foreshow_message_not_twitter": "@{{network}} 네트워크에서 @{{sender}} NFT 레트 패킷을 보내고 있습니다. \n{{payload}}",
     "plugin_red_packet_nft_share_claimed_message": "{{network}} 네트워크에서 @{{sender}}의 NFT 레트 패킷을 받았어요. @realMaskNetwork (mask.io) 팔로우하고 NFT 레드 패킷을 받으세요.\n#mask_io #RedPacket\n{{payload}}",
@@ -633,8 +633,8 @@
     "plugin_ito_swapped_status": "{{remain}} / {{total}} {{token}} 스왑됨",
     "plugin_ito_congratulations": "축하합니다!",
     "plugin_ito_out_of_stock_hit": "다음에 운이 더 좋으시길 바랍니다",
-    "plugin_ito_claim_success_share": "제가 @realMaskNetwork 로 @{{user}}'s #ITO에 참여하여 ${{symbol}} 스왑을 했습니다. Mask.io를 설치하고 자기만의 ITO를 시작하세요! \n {{link}}",
-    "plugin_ito_claim_foreshow_share": "{{symbol}}({{name}}) 새로운 #ITO를 진행하고 있습니다. 어서 참가하세요! @realMaskNetwork (mask.io) 팔로우하여 더 많은 이벤트를 참여하세요! \n {{link}}",
+    "plugin_ito_claim_success_share": "제가 @{{account}} 로 @{{user}}'s #ITO에 참여하여 ${{symbol}} 스왑을 했습니다. Mask.io를 설치하고 자기만의 ITO를 시작하세요! \n {{link}}",
+    "plugin_ito_claim_foreshow_share": "{{symbol}}({{name}}) 새로운 #ITO를 진행하고 있습니다. 어서 참가하세요! @{{account}} (mask.io) 팔로우하여 더 많은 이벤트를 참여하세요! \n {{link}}",
     "plugin_ito_password": "비밀번호: {{password}}",
     "plugin_ito_status_no_start": "아직 시작하지 않음",
     "plugin_ito_status_ongoing": "진행 중",
@@ -909,5 +909,5 @@
     "popups_password_do_not_match": "잘못된 백업 비밀번호",
     "popups_backup_password": "백업 비밀번호",
     "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다.",
-    "profile_nft_avatar_set": "NFT 아바타 설정"
+    "nft_button_set_avatar": "NFT 아바타 설정"
 }

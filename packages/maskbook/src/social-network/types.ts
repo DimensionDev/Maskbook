@@ -53,6 +53,7 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
+        name: string
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
@@ -143,8 +144,7 @@ export namespace SocialNetworkUI {
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             postAvatar?(signal: AbortSignal, current: PostInfo): void
-
-            /** open edit profile dialog */
+            /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {

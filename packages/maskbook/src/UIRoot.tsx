@@ -8,6 +8,8 @@ import { useClassicMaskTheme } from './utils/theme'
 import { Web3Context } from './web3/context'
 import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
 import { Suspense } from 'react'
+import { FACEBOOK_ID } from './social-network-adaptor/facebook.com/base'
+import { activatedSocialNetworkUI } from './social-network'
 
 export function MaskUIRootWithinShadow(JSX: JSX.Element) {
     return (
@@ -30,6 +32,7 @@ export function MaskUIRoot(JSX: JSX.Element) {
             <ThemeProvider theme={useClassicMaskTheme()}>
                 <CssBaseline />
                 <CustomSnackbarProvider
+                    isFacebook={activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID}
                     disableWindowBlurListener={false}
                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                     {JSX}
