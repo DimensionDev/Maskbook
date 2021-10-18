@@ -69,6 +69,12 @@ const useStyles = makeStyles()((theme) => ({
     changeButton: {
         fontSize: 14,
     },
+    buttons: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
 }))
 
 export interface NFTAvatarProps extends withClasses<'root'> {
