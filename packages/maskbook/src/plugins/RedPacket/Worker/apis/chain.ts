@@ -1,4 +1,10 @@
-import { ChainId, getChainConstants, getRedPacketConstants, isSameAddress, getChainName } from '@masknet/web3-shared'
+import {
+    ChainId,
+    getChainConstants,
+    getRedPacketConstants,
+    isSameAddress,
+    getChainName,
+} from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { Interface } from '@ethersproject/abi'
 import type { RedPacketJSONPayloadFromChain } from '../../types'

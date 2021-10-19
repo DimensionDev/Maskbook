@@ -9,6 +9,7 @@ import {
     useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
+    EthereumTokenType,
 } from '@masknet/web3-shared-evm'
 import { Card, Skeleton, Typography } from '@material-ui/core'
 import classNames from 'classnames'
@@ -48,7 +49,8 @@ export function RedPacket(props: RedPacketProps) {
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
-    const { value: tokenDetailed } = useFungibleTokenDetailed(payload.token_type, payload.token?.address ?? '')
+    const tokenType = payload.token ? EthereumTokenType.Native : EthereumTokenType.ERC20
+    const { value: tokenDetailed } = useFungibleTokenDetailed(tokenType, payload.token?.address ?? '')
     const token = payload.token ?? tokenDetailed
     //#endregion
 
