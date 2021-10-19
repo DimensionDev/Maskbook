@@ -111,11 +111,13 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
+
         const { owner } = await getNFT(selectedToken.contractDetailed.address, selectedToken.tokenId)
         if (!isSameAddress(owner, account)) {
             enqueueSnackbar(t('nft_owner_check_info'), { variant: 'error' })
             return
         }
+
         onChange(selectedToken)
         setSelectedToken(undefined)
     }, [onChange, selectedToken, setSelectedToken])

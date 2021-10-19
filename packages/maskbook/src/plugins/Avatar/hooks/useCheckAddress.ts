@@ -1,3 +1,4 @@
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import { PluginNFTAvatarRPC } from '../messages'
 import { getNFTAvatarFromJSON } from '../Services/db'
@@ -16,6 +17,6 @@ export function useCheckAddress(userId: string, owner: string) {
             const avatar = await getNFTAvatarFromJSON(userId)
             return !!avatar
         }
-        return address === owner
+        return isSameAddress(address, owner)
     }).value
 }
