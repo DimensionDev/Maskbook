@@ -13,7 +13,7 @@ import {
 } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
-import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
+import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 
 import { MarketViewDeck } from './MarketViewDeck'
@@ -227,7 +227,7 @@ export function MarketView(props: MarketViewProps) {
                         rel="noopener noreferrer"
                         title="Mask"
                         href="https://mask.io">
-                        <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                        <MaskTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
                     </Link>
                 </Typography>
                 <Typography className={classes.footnote} variant="subtitle2">
