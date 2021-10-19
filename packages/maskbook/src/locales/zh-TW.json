@@ -245,7 +245,6 @@
     "wallet_new": "新錢包",
     "wallet_notification": "這將建立預設認錢包以外的新錢包。你負責保管錢包的私密金鑰。請注意，Mask 將無法支付您在乙太坊的交易費用。",
     "wallets": "錢包",
-    "wallet_status_title": "帳戶",
     "wallet_status_button_change": "更改",
     "wallet_status_button_disconnect": "取消連接",
     "wallet_status_button_copy_address": "複製地址",

@@ -243,7 +243,6 @@
     "wallet_new": "新規ウォレット名",
     "wallet_notification": "デフォルトのウォレット以外の新しい通貨ウォレットを作成します。ウォレットの秘密鍵を安全に保管する責任はあなたにあります。また、Mask が Ethereum 上でのあなたの取引の支払いをすることはありませんのでご注意ください。",
     "wallets": "ウォレット",
-    "wallet_status_title": "アカウント",
     "wallet_status_button_change": "変更",
     "wallet_status_button_disconnect": "接続を外す",
     "wallet_status_button_copy_address": "アドレスをコピー",

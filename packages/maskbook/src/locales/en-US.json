@@ -300,7 +300,6 @@
     "wallet_new": "New Wallet",
     "wallet_notification": "This will create a new wallet other than the default wallet. You are responsible for keeping the private key to the wallet safe. Please also note that Mask won't be able to pay for your transactions on Ethereum.",
     "wallets": "Wallets",
-    "wallet_status_title": "Account",
     "wallet_status_button_change": "Change",
     "wallet_status_button_disconnect": "Disconnect",
     "wallet_status_button_copy_address": "Copy Address",
