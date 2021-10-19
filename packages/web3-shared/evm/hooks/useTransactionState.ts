@@ -23,6 +23,8 @@ export type TransactionState =
       }
     | {
           type: TransactionStateType.WAIT_FOR_CONFIRMING
+
+          // @deprecated don't depend on this property will be removed in the future
           hash?: string
       }
     | {
