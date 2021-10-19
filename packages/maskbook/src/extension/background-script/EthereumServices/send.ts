@@ -246,7 +246,7 @@ export async function INTERNAL_send(
         })()
 
         // add nonce
-        if (providerType === ProviderType.MaskWallet && config.from)
+        if (providerType === ProviderType.MaskWallet && config.from && !config.nonce)
             config.nonce = await getNonce(config.from as string)
 
         // add gas margin
