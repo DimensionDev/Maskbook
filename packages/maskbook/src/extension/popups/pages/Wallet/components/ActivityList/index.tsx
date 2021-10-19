@@ -188,7 +188,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                                                     setTransaction(transaction)
                                                     history.push(
                                                         urlcat(PopupRoutes.ReplaceTransaction, {
-                                                            type: ReplaceType.SPEEDUP,
+                                                            type: ReplaceType.SPEED_UP,
                                                         }),
                                                     )
                                                 }}>

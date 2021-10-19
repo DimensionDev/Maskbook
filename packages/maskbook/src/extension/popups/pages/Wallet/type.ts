@@ -1,4 +1,4 @@
 export enum ReplaceType {
     CANCEL = 'CANCEL',
-    SPEEDUP = 'SPEEDUP',
+    SPEED_UP = 'SPEED_UP',
 }
