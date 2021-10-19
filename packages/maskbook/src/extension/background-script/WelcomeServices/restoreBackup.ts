@@ -17,8 +17,8 @@ import { recoverWalletFromMnemonic, recoverWalletFromPrivateKey } from '../../..
 import { activatedPluginsWorker, registeredPluginIDs } from '@masknet/plugin-infra'
 import { Result } from 'ts-results'
 import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
-import { RelationRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 import { patchCreateNewRelation, patchCreateOrUpdateRelation } from '../IdentityService'
+import { RelationRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 
 /**
  * Restore the backup
