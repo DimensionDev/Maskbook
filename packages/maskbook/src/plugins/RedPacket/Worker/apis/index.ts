@@ -5,7 +5,7 @@ import {
     getChainName,
     getRedPacketConstants,
     NativeTokenDetailed,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first, pick } from 'lodash-es'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'

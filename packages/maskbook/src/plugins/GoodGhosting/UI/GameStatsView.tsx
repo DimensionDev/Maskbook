@@ -1,4 +1,4 @@
-import { formatBalance } from '@masknet/web3-shared'
+import { formatBalance } from '@masknet/web3-shared-evm'
 import { Grid, Typography, Box, Button } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'

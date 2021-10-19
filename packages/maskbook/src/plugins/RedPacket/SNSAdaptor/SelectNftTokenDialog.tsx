@@ -6,7 +6,7 @@ import {
     useERC721TokenDetailedCallback,
     useAccount,
     isSameAddress,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'

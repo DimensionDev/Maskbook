@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { ERC721TokenDetailed, getERC721TokenDetailedFromChain, useERC721TokenContracts } from '@masknet/web3-shared'
+import { ERC721TokenDetailed, getERC721TokenDetailedFromChain, useERC721TokenContracts } from '@masknet/web3-shared-evm'
 
 export const useCollectibleOwners = (tokens: ERC721TokenDetailed[]) => {
     const contracts = useERC721TokenContracts(tokens.map((x) => x.contractDetailed.address))

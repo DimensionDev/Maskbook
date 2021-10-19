@@ -7,7 +7,7 @@ import type {
 } from '../../types/dodo'
 import { DODO_BASE_URL } from '../../constants/dodo'
 import BigNumber from 'bignumber.js'
-import { pow10 } from '@masknet/web3-shared'
+import { pow10 } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 
 export async function swapRoute(request: SwapRouteRequest) {

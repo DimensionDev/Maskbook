@@ -1,6 +1,6 @@
 import type { RefObject } from 'react'
 import type { Dimension } from './useDimension'
-import { formatCurrency } from '@masknet/web3-shared'
+import { formatCurrency } from '@masknet/web3-shared-evm'
 import { useLineChart } from './useLineChart'
 
 export function usePriceLineChart(

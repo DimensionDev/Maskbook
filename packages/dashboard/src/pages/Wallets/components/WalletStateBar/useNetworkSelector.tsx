@@ -11,7 +11,7 @@ import {
     useAccount,
     useChainId,
     useWeb3StateContext,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { ChainIcon, useMenu, useRemoteControlledDialog } from '@masknet/shared'
 import { useAsync } from 'react-use'
 import { PluginMessages, PluginServices } from '../../../../API'

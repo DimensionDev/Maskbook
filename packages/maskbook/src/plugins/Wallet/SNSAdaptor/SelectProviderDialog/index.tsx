@@ -5,7 +5,7 @@ import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typograph
 import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
-import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared'
+import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared-evm'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { useI18N } from '../../../../utils/i18n-next-ui'

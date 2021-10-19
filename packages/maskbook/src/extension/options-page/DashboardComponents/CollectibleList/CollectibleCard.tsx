@@ -6,7 +6,7 @@ import {
     ERC721TokenDetailed,
     resolveCollectibleLink,
     CollectibleProvider,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Image } from '../../../../components/shared/Image'
 import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'

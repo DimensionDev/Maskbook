@@ -4,7 +4,7 @@ import {
     useTransactionState,
     TransactionStateType,
     TransactionEventType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { TransactionReceipt } from 'web3-core'
 import { useNftRedPacketContract } from './useNftRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'

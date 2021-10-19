@@ -1,5 +1,5 @@
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { formatBalance } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'

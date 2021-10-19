@@ -7,7 +7,7 @@
   },
   "include": ["./src", "./src/**/*.json"],
   "references": [
-    { "path": "../web3-shared" },
+    { "path": "../web3-shared/evm" },
     { "path": "../theme" },
     { "path": "../shared-base" },
     { "path": "../icons" }

@@ -12,7 +12,7 @@ import addSeconds from 'date-fns/addSeconds'
 import differenceInDays from 'date-fns/differenceInDays'
 import formatDuration from 'date-fns/formatDuration'
 import isBefore from 'date-fns/isBefore'
-import { CurrencyType, TransactionStateType } from '@masknet/web3-shared'
+import { CurrencyType, TransactionStateType } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 
 export enum PlayerStatus {

@@ -8,7 +8,7 @@ import { memo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
-import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared'
+import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     content: {

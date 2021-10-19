@@ -1,5 +1,5 @@
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
-import type { ERC1155TokenDetailed, ERC20TokenDetailed, ERC721TokenDetailed, Wallet } from '@masknet/web3-shared'
+import type { ERC1155TokenDetailed, ERC20TokenDetailed, ERC721TokenDetailed, Wallet } from '@masknet/web3-shared-evm'
 
 export interface ERC20TokenRecord extends Omit<ERC20TokenDetailed, 'type'> {
     id: string

@@ -1,6 +1,6 @@
 //#region dhedge types
 
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export enum PoolType {
     v1 = 'V1.0',

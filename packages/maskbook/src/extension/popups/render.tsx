@@ -5,7 +5,7 @@ import { createInjectHooksRenderer, startPluginDashboard, useActivatedPluginsDas
 import { PopupRoutes } from '.'
 import { createNormalReactRoot, useClassicMaskTheme } from '../../utils'
 import '../../social-network-adaptor/browser-action'
-import { Web3Provider } from '@masknet/web3-shared'
+import { Web3Provider } from '@masknet/web3-shared-evm'
 import { PopupWeb3Context } from '../../web3/context'
 import { PopupFrame } from './components/PopupFrame'
 import { StyledEngineProvider, ThemeProvider } from '@material-ui/core'

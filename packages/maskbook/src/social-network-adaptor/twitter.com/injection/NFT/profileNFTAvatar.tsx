@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import type { ProfileIdentifier } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { useCallback, useEffect, useState } from 'react'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'

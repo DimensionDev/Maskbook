@@ -18,6 +18,8 @@ import {
 } from '@masknet/shared'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
+import { activatedSocialNetworkUI } from '../'
+import { resolveFacebookLink } from '../../social-network-adaptor/facebook.com/utils/resolveFacebookLink'
 
 export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSActions) {
     return function createPostContext(opt: PostContextCreation): PostContext {
@@ -37,14 +39,20 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
         cancel.push(
             postContent.addListener((post) => {
                 links.clear()
-                parseURL(post).forEach((link) => links.add(link))
-                opt.postMentionedLinksProvider?.getCurrentValue().forEach((link) => links.add(link))
+                parseURL(post).forEach((link) =>
+                    links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)),
+                )
+                opt.postMentionedLinksProvider
+                    ?.getCurrentValue()
+                    .forEach((link) => links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)))
             }),
         )
         cancel.push(
             opt.postMentionedLinksProvider?.subscribe(() => {
                 // Not clean old links cause post content not changed
-                opt.postMentionedLinksProvider?.getCurrentValue().forEach((link) => links.add(link))
+                opt.postMentionedLinksProvider
+                    ?.getCurrentValue()
+                    .forEach((link) => links.add(resolveFacebookLink(link, activatedSocialNetworkUI.networkIdentifier)))
             }),
         )
         const linksSubscribe: Subscription<string[]> = debug({

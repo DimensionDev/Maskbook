@@ -1,11 +1,12 @@
 import type { FC, HTMLProps } from 'react'
-import { ChainId, CurrencyType } from '@masknet/web3-shared'
+import BigNumber from 'bignumber.js'
+import { ChainId, CurrencyType } from '@masknet/web3-shared-evm'
 import { useTokenPrice } from '../../plugins/Wallet/hooks/useTokenPrice'
 
 interface TokenPriceProps extends Omit<HTMLProps<HTMLSpanElement>, 'children'> {
     chainId: ChainId
     contractAddress: string | undefined
-    amount: number
+    amount: BigNumber.Value
     currencyType?: CurrencyType
 }
 
@@ -17,5 +18,5 @@ export const TokenPrice: FC<TokenPriceProps> = ({
     ...rest
 }) => {
     const price = useTokenPrice(chainId, contractAddress, currencyType)
-    return <span {...rest}>${(price * amount).toFixed(2)}</span>
+    return <span {...rest}>${new BigNumber(amount).multipliedBy(price).toFixed(2)}</span>
 }

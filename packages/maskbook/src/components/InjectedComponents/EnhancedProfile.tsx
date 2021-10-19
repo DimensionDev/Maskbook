@@ -1,11 +1,16 @@
+import { useState, useEffect } from 'react'
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, ChainId, EthereumNameType } from '@masknet/web3-shared'
-import { Box, Link, Typography } from '@material-ui/core'
+import {
+    formatEthereumAddress,
+    resolveAddressLinkOnExplorer,
+    ChainId,
+    EthereumNameType,
+    useEthereumAddress,
+} from '@masknet/web3-shared-evm'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import { useState, useEffect } from 'react'
+import { Box, Link, Typography } from '@material-ui/core'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
-import { useEthereumAddress } from '@masknet/web3-shared'
 import { MaskMessages, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 

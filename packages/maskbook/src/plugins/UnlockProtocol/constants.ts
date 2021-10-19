@@ -1,4 +1,4 @@
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export const pluginIcon = '🔓'
 export const pluginName = 'Unlock Protocol'

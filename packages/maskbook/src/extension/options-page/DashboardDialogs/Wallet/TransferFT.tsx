@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Send as SendIcon } from 'react-feather'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'

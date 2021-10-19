@@ -1,6 +1,6 @@
 import { uniqBy } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { ChainId, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
+import { ChainId, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../settings'
 import { PluginDB } from '../database/Plugin.db'
 

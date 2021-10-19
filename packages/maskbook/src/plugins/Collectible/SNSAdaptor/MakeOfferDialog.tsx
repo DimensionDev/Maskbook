@@ -20,7 +20,7 @@ import {
     useAccount,
     isNative,
     useFungibleTokenWatched,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'

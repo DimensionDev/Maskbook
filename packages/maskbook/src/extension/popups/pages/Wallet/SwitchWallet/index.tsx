@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, ProviderType, useWallet, useWalletPrimary, useWallets } from '@masknet/web3-shared'
+import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
 import { CopyIcon, MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'

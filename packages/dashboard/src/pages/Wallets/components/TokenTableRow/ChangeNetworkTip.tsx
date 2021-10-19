@@ -6,7 +6,7 @@ import {
     ProviderType,
     useAccount,
     useWeb3StateContext,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@material-ui/core'
 import { PluginMessages, PluginServices } from '../../../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'

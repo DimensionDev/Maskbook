@@ -9,7 +9,7 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { isZero, useAccount } from '@masknet/web3-shared'
+import { isZero, useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {

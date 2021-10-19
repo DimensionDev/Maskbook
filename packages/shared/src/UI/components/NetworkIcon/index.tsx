@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { NetworkType } from '@masknet/web3-shared'
+import { NetworkType } from '@masknet/web3-shared-evm'
 import { useStylesExtends } from '../..'
 
 const useStyles = makeStyles()({

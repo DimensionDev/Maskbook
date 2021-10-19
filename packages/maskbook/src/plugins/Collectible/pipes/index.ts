@@ -1,6 +1,6 @@
 import { identity } from 'lodash-es'
 import { Network } from 'opensea-js'
-import { ChainId, createLookupTableResolver } from '@masknet/web3-shared'
+import { ChainId, createLookupTableResolver } from '@masknet/web3-shared-evm'
 import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
 import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../types'
 import urlcat from 'urlcat'

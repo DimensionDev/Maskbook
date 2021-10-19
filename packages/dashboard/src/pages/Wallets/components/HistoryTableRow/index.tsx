@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import formatDateTime from 'date-fns/format'
-import type { Transaction } from '@masknet/web3-shared'
+import type { Transaction } from '@masknet/web3-shared-evm'
 import { Box, TableCell, TableRow, Typography, Link, Stack } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -10,7 +10,7 @@ import {
     resolveTransactionLinkOnExplorer,
     useChainId,
     ZerionTransactionDirection,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'

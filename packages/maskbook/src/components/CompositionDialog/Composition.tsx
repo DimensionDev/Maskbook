@@ -35,7 +35,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     // we need to avoid opening multiple dialogs in the same time to make them
                     // stacked in the right order.
                     UI.current?.startPlugin(options.startupPlugin!)
-                }, 200)
+                }, 1000)
             }
         })
     }, [type])

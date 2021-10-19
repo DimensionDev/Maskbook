@@ -16,7 +16,7 @@ import {
     resolveAddressLinkOnExplorer,
     useChainId,
     useFungibleTokenBalance,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'

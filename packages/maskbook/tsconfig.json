@@ -14,7 +14,7 @@
     { "path": "../public-api" },
     { "path": "../shared" },
     { "path": "../shared-base" },
-    { "path": "../web3-shared" },
+    { "path": "../web3-shared/evm" },
     { "path": "../theme" },
     { "path": "../icons" },
     { "path": "../plugin-infra" },

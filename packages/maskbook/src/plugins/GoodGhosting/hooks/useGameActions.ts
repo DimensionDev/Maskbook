@@ -1,4 +1,4 @@
-import { TransactionEventType, TransactionStateType, useAccount, useGasPrice } from '@masknet/web3-shared'
+import { TransactionEventType, TransactionStateType, useAccount, useGasPrice } from '@masknet/web3-shared-evm'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GoodGhostingInfo } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'

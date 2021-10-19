@@ -7,7 +7,7 @@ import {
     TransactionStateType,
     useAccount,
     useFungibleTokenBalance,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { DialogContent } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
@@ -17,6 +17,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -152,7 +153,13 @@ export function InvestDialog() {
                 ? [
                       `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
                           pool?.name
-                      }. Follow @realMaskNetwork (mask.io) to invest dHEDGE pools.`,
+                      }. ${
+                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                              ? `Follow @${
+                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                                } (mask.io) to invest dHEDGE pools.`
+                              : ''
+                      }`,
                       '#mask_io',
                   ].join('\n')
                 : '',

@@ -1,4 +1,4 @@
-import type { FungibleTokenDetailed, ChainId } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed, ChainId } from '@masknet/web3-shared-evm'
 import type { TradeStrategy } from '../types'
 
 export type SwapBancorRequest = {

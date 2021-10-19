@@ -1,4 +1,4 @@
-import { useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useSingleContractMultipleData } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
