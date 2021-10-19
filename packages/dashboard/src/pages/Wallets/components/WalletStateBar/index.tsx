@@ -46,13 +46,13 @@ export const WalletStateBar = memo(() => {
 
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
 
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+        PluginMessages.Wallet.events.walletStatusDialogUpdated,
     )
 
     const [menu, openMenu] = useNetworkSelector()
     if (!wallet) {
-        return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
+        return <Button onClick={openWalletStatusDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
     return (
         <WalletStateBarUI
@@ -60,7 +60,7 @@ export const WalletStateBar = memo(() => {
             networkName={getNetworkName(chainId)}
             chainColor={chainColor}
             providerType={providerType}
-            openConnectWalletDialog={openConnectWalletDialog}
+            openConnectWalletDialog={openWalletStatusDialog}
             openMenu={openMenu}
             walletName={wallet.name ?? ''}
             walletAddress={wallet.address}>
