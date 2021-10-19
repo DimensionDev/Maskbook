@@ -1,5 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeLIne'
+import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
 import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
 import { postAvatarsContentSelector } from '../../utils/selector'
 import { getAvatarId } from '../../utils/user'

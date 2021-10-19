@@ -77,7 +77,7 @@ function NFTAvatarInTwitter() {
             avatarId: getAvatarId(identity.avatar ?? ''),
         } as AvatarMetaDB).then((avatar: AvatarMetaDB | undefined) => {
             setAvatar(avatar)
-            MaskMessage.events.NFTAvatarTimeLineUpdated.sendToAll(
+            MaskMessage.events.NFTAvatarTimelineUpdated.sendToAll(
                 avatar ?? {
                     userId: identity.identifier.userId,
                     avatarId: getAvatarId(identity.avatar ?? ''),
