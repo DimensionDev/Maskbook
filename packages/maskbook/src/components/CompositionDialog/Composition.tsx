@@ -9,11 +9,13 @@ import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import { useSubmit } from './useSubmit'
 import { DialogStackingProvider } from '@masknet/theme'
+import Services from '../../extension/service'
 
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
     requireClipboardPermission?: boolean
 }
+let openOnInitAnswered = false
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
     const { t } = useI18N()
 
@@ -23,20 +25,25 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         setOpen(false)
         UI.current?.reset()
     }, [])
+
+    useEffect(() => {
+        if (openOnInitAnswered) return
+        openOnInitAnswered = true
+        Services.SocialNetwork.getDesignatedAutoStartPluginID().then((plugin) => {
+            if (!plugin) return
+
+            setOpen(true)
+            UI.current?.startPlugin(plugin)
+        })
+    }, [])
+
     useEffect(() => {
         return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
             if (reason !== type || globalUIState.profiles.value.length <= 0) return
             setOpen(open)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
-            if (options?.startupPlugin) {
-                setTimeout(() => {
-                    // HACK: Because of we're using DialogStackingProvider,
-                    // we need to avoid opening multiple dialogs in the same time to make them
-                    // stacked in the right order.
-                    UI.current?.startPlugin(options.startupPlugin!)
-                }, 1000)
-            }
+            if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin!)
         })
     }, [type])
     useEffect(() => {

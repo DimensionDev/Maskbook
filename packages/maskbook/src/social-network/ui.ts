@@ -79,8 +79,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
 
-    setTimeout(activateSNSAdaptorPluginOnStart, 1000)
-
     ui.injection.enhancedProfile?.(signal)
     ui.injection.enhancedProfileTab?.(signal)
 
@@ -158,18 +156,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         currentSetupGuideStatus[network].addListener(onStatusUpdate)
         currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
         onStatusUpdate(id)
-    }
-
-    async function activateSNSAdaptorPluginOnStart() {
-        const plugin = await Services.SocialNetwork.getDesignatedAutoStartPluginID()
-        if (!plugin) return
-
-        await delay(500)
-        MaskMessages.events.requestComposition.sendToLocal({
-            open: true,
-            reason: 'timeline',
-            options: plugin === 'none' ? {} : { startupPlugin: plugin },
-        })
     }
 }
 
