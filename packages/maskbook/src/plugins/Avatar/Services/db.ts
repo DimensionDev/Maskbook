@@ -6,7 +6,11 @@ const EXPIRED_TIME = 5 * 60 * 1000
 const cache = new Map<'avatar', [number, Promise<AvatarMetaDB[]>]>()
 
 async function fetchData() {
-    const response = await fetch(NFT_AVATAR_JSON_SERVER)
+    const response = await fetch(NFT_AVATAR_JSON_SERVER, {
+        method: 'GET',
+        mode: 'cors',
+        credentials: 'omit',
+    })
     if (!response.ok) return []
     const json = (await response.json()) as AvatarMetaDB[]
     return json
@@ -31,7 +35,6 @@ async function _fetch() {
         f = fetchData()
         cache.set('avatar', [Date.now(), f])
     }
-
     json = await f
     return json
 }
