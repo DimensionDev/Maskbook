@@ -15,12 +15,12 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'scale(0.65)',
     },
 }))
-interface NFTBadgeTimeLineProps {
+interface NFTBadgeTimelineProps {
     userId: string
     avatarId: string
 }
 
-export function NFTBadgeTimeLine(props: NFTBadgeTimeLineProps) {
+export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { userId, avatarId } = props
     const { classes } = useStyles()
     const _avatar = useNFTAvatar(userId)
@@ -44,7 +44,7 @@ export function NFTBadgeTimeLine(props: NFTBadgeTimeLineProps) {
         setAvatar(_avatar)
     }, [_avatar])
 
-    useEffect(() => MaskMessage.events.NFTAvatarTimeLineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
+    useEffect(() => MaskMessage.events.NFTAvatarTimelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
 
     if (!avatar) return null
     if (avatarId_ && avatar.avatarId !== avatarId_) return null

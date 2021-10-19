@@ -63,7 +63,7 @@ function NFTAvatarInTwitter() {
 
         if (!NFTEvent?.address || !NFTEvent?.tokenId) {
             setAvatar(undefined)
-            MaskMessage.events.NFTAvatarTimeLineUpdated.sendToAll({
+            MaskMessage.events.NFTAvatarTimelineUpdated.sendToAll({
                 userId: identity.identifier.userId,
                 avatarId: getAvatarId(identity.avatar ?? ''),
                 address: '',

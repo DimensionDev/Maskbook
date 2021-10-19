@@ -73,7 +73,7 @@ export interface MaskMessages extends SettingsEvents {
     }
 
     NFTAvatarUpdated: NFTAvatarEvent
-    NFTAvatarTimeLineUpdated: NFTAvatarEvent
+    NFTAvatarTimelineUpdated: NFTAvatarEvent
     maskSDKHotModuleReload: void
 }
 export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })

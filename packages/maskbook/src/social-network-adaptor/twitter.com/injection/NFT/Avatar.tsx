@@ -1,5 +1,5 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeLine } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeLIne'
+import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeLIne'
 import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
 import { postAvatarsContentSelector } from '../../utils/selector'
 import { getAvatarId } from '../../utils/user'
@@ -27,7 +27,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = nftDom
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
-                root.render(<NFTBadgeTimeLine userId={twitterId} avatarId={avatarId} />)
+                root.render(<NFTBadgeTimeline userId={twitterId} avatarId={avatarId} />)
                 remover = root.destory
             }
 

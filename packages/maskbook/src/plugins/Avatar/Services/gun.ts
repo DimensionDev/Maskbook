@@ -2,17 +2,17 @@ import { delay } from '@masknet/shared'
 import { gun2 } from '../../../network/gun/version.2'
 import { NFT_AVATAR_GUN_SERVER } from '../constants'
 
-const NFTAavatarGUN = gun2.get(NFT_AVATAR_GUN_SERVER)
+const NFTAvatarGUN = gun2.get(NFT_AVATAR_GUN_SERVER)
 
 // After reinstalling the system, it cannot be retrieved for the first time, so it needs to be taken twice
 export async function getUserAddress(userId: string) {
-    let result = await NFTAavatarGUN
+    let result = await NFTAvatarGUN
         //@ts-expect-error
         .get(userId).then!()
 
     if (!result) {
         await delay(500)
-        result = await NFTAavatarGUN
+        result = await NFTAvatarGUN
             //@ts-expect-error
             .get(userId).then!()
     }
@@ -22,14 +22,14 @@ export async function getUserAddress(userId: string) {
 
 export async function setUserAddress(userId: string, address: string) {
     // delete userId
-    await NFTAavatarGUN
+    await NFTAvatarGUN
         //@ts-expect-error
         .get(userId)
         //@ts-expect-error
         .put(null).then!()
 
     // save userId
-    await NFTAavatarGUN
+    await NFTAvatarGUN
         // @ts-expect-error
         .get(userId)
         // @ts-expect-error
