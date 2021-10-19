@@ -1,4 +1,4 @@
-import { ProviderType } from '@masknet/web3-shared'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import * as MaskWallet from './providers/Mask'
 import * as MetaMask from './providers/MetaMask'

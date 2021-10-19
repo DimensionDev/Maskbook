@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ErrorIcon from '@mui/icons-material/Error'
 import { noop } from 'lodash-es'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales'
 import { TokenIcon } from '../TokenIcon'
 

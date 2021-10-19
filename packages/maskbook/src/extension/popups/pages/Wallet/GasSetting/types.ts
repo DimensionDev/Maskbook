@@ -1,4 +1,4 @@
-import type { GasOption } from '@masknet/web3-shared'
+import type { GasOption } from '@masknet/web3-shared-evm'
 
 export interface GasSettingProps {
     gasLimit?: number | string

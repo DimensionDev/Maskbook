@@ -2,7 +2,7 @@ import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/
 import { DialogContent, Box, DialogActions, Button, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon, useStylesExtends } from '@masknet/shared'
-import type { ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

@@ -6,7 +6,7 @@ import { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { encodeRouteToPath, Route, Trade } from '@uniswap/v3-sdk'
 import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
 import { useAllV3Routes } from './useAllV3Routes'
-import { useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useSingleContractMultipleData } from '@masknet/web3-shared-evm'
 import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants'
 
 export enum V3TradeState {

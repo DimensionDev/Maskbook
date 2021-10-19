@@ -7,7 +7,7 @@ import {
     formatEthereumAddress,
     TransactionStateType,
     useTokenTransferCallback,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Image } from '../../../../components/shared/Image'

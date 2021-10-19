@@ -17,7 +17,7 @@ import {
     getChainIdFromName,
     ERC721TokenDetailed,
     ERC721TokenRecordInDatabase,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 
 export async function getWalletByAddress(t: IDBPSafeTransaction<WalletDB, ['Wallet'], 'readonly'>, address: string) {
     const record = await t.objectStore('Wallet').get(formatEthereumAddress(address))

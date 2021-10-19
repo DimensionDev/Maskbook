@@ -1,4 +1,5 @@
 import { memo, useMemo } from 'react'
+import BigNumber from 'bignumber.js'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@material-ui/core'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { ChainIcon, FormattedCurrency, TokenIcon } from '@masknet/shared'
@@ -10,8 +11,7 @@ import {
     getTokenUSDValue,
     pow10,
     useChainId,
-} from '@masknet/web3-shared'
-import BigNumber from 'bignumber.js'
+} from '@masknet/web3-shared-evm'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 

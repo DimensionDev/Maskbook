@@ -19,7 +19,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
 import SwapSettingDialog from './components/SwapSettingDialog'
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Services } from '../../API'

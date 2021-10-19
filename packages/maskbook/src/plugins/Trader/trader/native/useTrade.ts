@@ -1,5 +1,5 @@
-import { EthereumTokenType, FungibleTokenDetailed, isSameAddress, useTokenConstants } from '@masknet/web3-shared'
 import { useAsyncRetry } from 'react-use'
+import { EthereumTokenType, FungibleTokenDetailed, isSameAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 
 export function useTrade(inputToken?: FungibleTokenDetailed, outputToken?: FungibleTokenDetailed) {
     const { WNATIVE_ADDRESS } = useTokenConstants()

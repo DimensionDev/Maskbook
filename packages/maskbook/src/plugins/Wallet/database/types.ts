@@ -1,4 +1,4 @@
-import type { ChainId, TransactionStatusType } from '@masknet/web3-shared'
+import type { ChainId, TransactionStatusType } from '@masknet/web3-shared-evm'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 
 export interface ERC20TokenRecord {

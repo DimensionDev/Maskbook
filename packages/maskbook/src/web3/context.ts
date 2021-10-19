@@ -7,7 +7,7 @@ import {
     EthereumTokenType,
     ProviderType,
     Web3ProviderType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,

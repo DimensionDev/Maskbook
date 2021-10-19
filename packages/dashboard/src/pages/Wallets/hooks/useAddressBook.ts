@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { PluginMessages, PluginServices } from '../../../API'
 

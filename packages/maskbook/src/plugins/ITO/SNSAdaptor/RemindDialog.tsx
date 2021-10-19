@@ -12,7 +12,7 @@ import {
     resolveNetworkName,
     useERC20TokenDetailedFromTokenLists,
     useNetworkType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide'
 import { getMaskColor } from '@masknet/theme'
 import urlcat from 'urlcat'

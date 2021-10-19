@@ -1,4 +1,4 @@
-import { Asset, CurrencyType, ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared'
+import { Asset, CurrencyType, ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import type { ERC20TokenRecord, ERC1155TokenRecord } from './database/types'
 
 export function ERC20TokenComparer(a: ERC20TokenRecord | null, b: ERC20TokenRecord | null) {

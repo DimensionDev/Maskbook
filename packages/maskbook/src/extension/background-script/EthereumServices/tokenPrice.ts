@@ -1,4 +1,4 @@
-import type { CurrencyType, CryptoPrice } from '@masknet/web3-shared'
+import type { CurrencyType, CryptoPrice } from '@masknet/web3-shared-evm'
 
 const URL_BASE = 'https://api.coingecko.com/api/v3'
 

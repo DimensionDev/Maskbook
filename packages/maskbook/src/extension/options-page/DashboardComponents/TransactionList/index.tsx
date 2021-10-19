@@ -13,7 +13,7 @@ import {
     Typography,
 } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useAccount, useChainId, useTransactions, FilterTransactionType } from '@masknet/web3-shared'
+import { useAccount, useChainId, useTransactions, FilterTransactionType } from '@masknet/web3-shared-evm'
 import { Row } from './Row'
 
 const useStyles = makeStyles()({

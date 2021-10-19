@@ -5,7 +5,7 @@ import type {
     ERC20TokenDetailed,
     ChainId,
     ERC721TokenDetailed,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 
 /**
  * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary

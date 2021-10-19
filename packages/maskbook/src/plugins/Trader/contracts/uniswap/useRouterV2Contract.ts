@@ -1,6 +1,6 @@
 import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
 import type { RouterV2 } from '@masknet/web3-contracts/types/RouterV2'
-import { useContract } from '@masknet/web3-shared'
+import { useContract } from '@masknet/web3-shared-evm'
 import type { AbiItem } from 'web3-utils'
 
 export function useRouterV2Contract(address?: string) {

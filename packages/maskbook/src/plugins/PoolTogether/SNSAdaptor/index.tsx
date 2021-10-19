@@ -1,7 +1,7 @@
 import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { SnackbarContent } from '@material-ui/core'
 import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
@@ -23,10 +23,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component() {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isPoolTogetherUrl)
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const link = links.find(isPoolTogetherUrl)
 
         if (!link) return null
         return <Renderer url={link} />

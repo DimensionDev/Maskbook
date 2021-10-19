@@ -6,7 +6,7 @@ import {
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
 } from '../settings'
-import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
+import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { TradeProvider } from '@masknet/public-api'
 import { currentChainIdSettings } from '../../Wallet/settings'

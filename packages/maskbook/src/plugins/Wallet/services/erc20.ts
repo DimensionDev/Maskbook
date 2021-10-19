@@ -1,11 +1,11 @@
 import Fuse from 'fuse.js'
 import { EthereumAddress } from 'wallet.ts'
+import { ERC20TokenDetailed, EthereumTokenType, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared-evm'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { ERC20TokenRecordIntoDB, ERC20TokenRecordOutDB } from './helpers'
 import type { ERC20TokenRecord } from '../database/types'
-import { ERC20TokenDetailed, EthereumTokenType, formatEthereumAddress, isSameAddress } from '@masknet/web3-shared'
 import { queryTransactionPaged } from '../../../database/helpers/pagination'
 
 /** @deprecated */

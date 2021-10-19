@@ -17,7 +17,7 @@ import {
     makeSortAssertWithoutChainFn,
     useAssets,
     useWeb3State,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages, PluginServices } from '../../../../API'

@@ -5,7 +5,7 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     NonFungibleTokenDetailed,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginDB } from '../../../database/Plugin.db'

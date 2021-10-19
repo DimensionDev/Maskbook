@@ -1,5 +1,5 @@
-import type { ERC20TokenDetailed } from '@masknet/web3-shared'
-import { formatEthereumAddress, useTokenConstants } from '@masknet/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Button, CircularProgress, IconButton, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import RefreshIcon from '@material-ui/icons/Refresh'

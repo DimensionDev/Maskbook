@@ -5,7 +5,7 @@ import {
     useAccount,
     resolveTransactionLinkOnExplorer,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { Box, Typography, Button, TextField, CircularProgress, Link } from '@material-ui/core'
 import { useSpaceStationClaimableTokenCountCallback } from './hooks/useSpaceStationClaimableTokenCountCallback'

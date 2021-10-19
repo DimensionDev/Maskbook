@@ -9,7 +9,7 @@ import { CollectibleList } from '../CollectibleList'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useCurrentCollectibleDataProvider } from '../../api'
 
 const useStyles = makeStyles()((theme) => ({

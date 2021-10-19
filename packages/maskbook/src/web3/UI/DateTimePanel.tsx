@@ -16,6 +16,10 @@ const useStyles = makeStyles()({
             backgroundImage: `url(${new URL('./calendar.png', import.meta.url)})`,
         },
     },
+    inputLabel: {
+        left: 8,
+        top: 8,
+    },
 })
 
 export function DateTimePanel(props: DateTimePanelProps) {
@@ -31,7 +35,12 @@ export function DateTimePanel(props: DateTimePanelProps) {
                 const date = new Date(e.currentTarget.value)
                 onChange(date)
             }}
-            InputLabelProps={{ shrink: true }}
+            InputLabelProps={{
+                shrink: true,
+                classes: {
+                    root: classes.inputLabel,
+                },
+            }}
             inputProps={{ className: classes.datetime, ...inputProps, min, max }}
             type="datetime-local"
         />

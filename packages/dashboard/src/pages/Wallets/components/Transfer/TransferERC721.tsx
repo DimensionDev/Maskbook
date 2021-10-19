@@ -16,7 +16,7 @@ import {
     useGasPrice,
     useNativeTokenDetailed,
     useTokenTransferCallback,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'

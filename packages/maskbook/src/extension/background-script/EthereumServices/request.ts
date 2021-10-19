@@ -2,7 +2,7 @@ import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { INTERNAL_nativeSend, INTERNAL_send, SendOverrides } from './send'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
-import { EthereumMethodType, ProviderType } from '@masknet/web3-shared'
+import { EthereumMethodType, ProviderType } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountWalletSettings,
     currentMaskWalletChainIdSettings,

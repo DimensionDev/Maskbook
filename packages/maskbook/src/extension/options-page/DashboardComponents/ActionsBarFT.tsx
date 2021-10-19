@@ -9,7 +9,7 @@ import {
     useChainIdValid,
     useChainIdMatched,
     getChainIdFromName,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useMenu, useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { useModal } from '../DashboardDialogs/Base'

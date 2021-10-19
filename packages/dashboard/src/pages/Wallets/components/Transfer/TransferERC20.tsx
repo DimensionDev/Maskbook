@@ -16,7 +16,7 @@ import {
     useGasPrice,
     useNativeTokenDetailed,
     useTokenTransferCallback,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { TokenAmountPanel } from '@masknet/shared'
 import TuneIcon from '@material-ui/icons/Tune'
@@ -64,6 +64,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const erc20GasLimit = useGasLimit(selectedToken.type, selectedToken.address, transferAmount, address)
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_)
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
+
     useEffect(() => {
         setGasLimit_(isNativeToken ? GAS_LIMIT : erc20GasLimit.value?.toFixed() ?? '0')
     }, [isNativeToken, erc20GasLimit.value])

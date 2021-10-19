@@ -1,9 +1,9 @@
-import { GasOption, isEIP1559Supported, useChainId, useGasPrice } from '@masknet/web3-shared'
 import { useEffect, useMemo, useState } from 'react'
+import { toHex, toWei } from 'web3-utils'
 import BigNumber from 'bignumber.js'
+import { GasOption, isEIP1559Supported, useChainId, useGasPrice } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { toHex, toWei } from 'web3-utils'
 import { useGasOptions } from '../../../hooks/useGasOptions'
 
 function gweiToWei(gwei: number | string) {
@@ -15,8 +15,8 @@ export const useGasConfig = (gasLimit: string) => {
     const [gasLimit_, setGasLimit_] = useState('0')
     const [customGasPrice, setCustomGasPrice] = useState<BigNumber.Value>(0)
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
-    const [maxFee, setMaxFee] = useState<string | null>(null)
-    const [priorityFee, setPriorityFee] = useState<string | null>(null)
+    const [maxFee, setMaxFee] = useState<BigNumber.Value>(0)
+    const [priorityFee, setPriorityFee] = useState<BigNumber.Value>(0)
 
     const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
     const { value: defaultGasPrice = '0' } = useGasPrice()
@@ -59,8 +59,8 @@ export const useGasConfig = (gasLimit: string) => {
         return is1559Supported
             ? {
                   gas: Number.parseInt(gasLimit_, 10),
-                  maxFeePerGas: toHex(maxFee ?? '0'),
-                  maxPriorityFeePerGas: toHex(priorityFee ?? '0'),
+                  maxFeePerGas: toHex(new BigNumber(maxFee).toFixed()),
+                  maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).toFixed()),
               }
             : { gas: Number.parseInt(gasLimit_, 10), gasPrice: new BigNumber(gasPrice).toNumber() }
     }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice])

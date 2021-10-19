@@ -13,7 +13,7 @@ import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
 import Services from '../../../extension/service'
-import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared'
+import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
@@ -228,6 +228,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             }),
         })
     }, [fillState, poolSettings, setTransactionDialog])
+    //#endregion
 
     useEffect(() => {
         if (!ITO2_CONTRACT_ADDRESS) onClose()

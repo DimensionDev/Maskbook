@@ -9,7 +9,7 @@ import {
     useITOConstants,
     ChainId,
     FungibleToken,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useClaimablePoolsBySubgraph } from './useClaimablePoolsBySubgraph'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
 import { useMemo } from 'react'

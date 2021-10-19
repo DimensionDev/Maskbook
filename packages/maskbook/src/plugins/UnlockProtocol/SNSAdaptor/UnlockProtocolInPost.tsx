@@ -5,7 +5,7 @@ import { useI18N } from '../../../utils'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { paywallUrl } from '../constants'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { PluginUnlockProtocolRPC } from '../messages'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 

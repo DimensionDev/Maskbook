@@ -1,4 +1,4 @@
-import { FungibleTokenDetailed, pow10, ONE } from '@masknet/web3-shared'
+import { FungibleTokenDetailed, pow10, ONE } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { BIPS_BASE } from '../../constants'
 

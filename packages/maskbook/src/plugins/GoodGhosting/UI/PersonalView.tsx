@@ -4,7 +4,7 @@ import {
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Grid, Typography, Button, Link } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'

@@ -12,9 +12,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     PostInspector: function Component() {
-        const link = uniq(
-            usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks()),
-        ).find(checkUrl)
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+
+        const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
 
         return asset ? renderPostInspector(asset) : null

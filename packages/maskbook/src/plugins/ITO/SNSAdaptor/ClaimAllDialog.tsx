@@ -13,7 +13,7 @@ import {
     ChainId,
     useChainId,
     useAccount,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'

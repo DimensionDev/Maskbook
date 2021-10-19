@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { ChainId, useChainId } from '@masknet/web3-shared'
+import { ChainId, useChainId } from '@masknet/web3-shared-evm'
 import { CollectibleToken, NFTHistory, CollectibleProvider, OpenSeaAssetEventType } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { NullAddress, NullContractAddress, OpenSeaAccountURL } from '../constants'

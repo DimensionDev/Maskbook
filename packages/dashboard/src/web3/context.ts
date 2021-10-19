@@ -6,8 +6,11 @@ import {
     ERC721TokenDetailed,
     PortfolioProvider,
     ProviderType,
-} from '@masknet/web3-shared'
-import { ERC20TokenDetailed, EthereumTokenType, NetworkType, Web3ProviderType } from '@masknet/web3-shared'
+    ERC20TokenDetailed,
+    EthereumTokenType,
+    NetworkType,
+    Web3ProviderType,
+} from '@masknet/web3-shared-evm'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 
 const Web3Provider = createExternalProvider()

@@ -1,6 +1,6 @@
 import MaskWallet from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { ChainId, getChainRPC } from '@masknet/web3-shared'
+import { ChainId, getChainRPC } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { getWallets } from '../../../../plugins/Wallet/services'
 

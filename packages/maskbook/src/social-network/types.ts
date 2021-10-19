@@ -53,6 +53,7 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
+        name: string
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
