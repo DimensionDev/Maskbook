@@ -1,6 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
 import { makeStyles, useSnackbar } from '@masknet/theme'
+import { ChainId } from '@masknet/web3-shared-evm'
 import {
     ERC721TokenDetailed,
     formatEthereumAddress,
@@ -106,7 +107,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         loading,
         retry,
         error,
-    } = useCollectibles(account, chainId, provider, page, 50)
+    } = useCollectibles(account, ChainId.Mainnet, provider, page, 50)
     const { collectibles, hasNextPage } = value
 
     const onClick = useCallback(async () => {
