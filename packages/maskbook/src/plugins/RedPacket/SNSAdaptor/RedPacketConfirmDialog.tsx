@@ -1,4 +1,4 @@
-import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { isNative } from 'lodash-es'
@@ -28,7 +28,8 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         fontWeight: 300,
         borderRadius: 8,
-        backgroundColor: theme.palette.divider,
+        backgroundColor: '#f7f9fa',
+        color: '#15181B',
         padding: theme.spacing(1, 0),
         marginBottom: theme.spacing(1),
     },
@@ -163,7 +164,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
             <Grid item xs={12}>
                 <Paper className={classes.hit}>
-                    <Typography variant="body1" color="textPrimary" align="center">
+                    <Typography variant="body1" align="center">
                         {t('plugin_red_packet_hint')}
                     </Typography>
                 </Paper>

@@ -8,7 +8,7 @@ import type {
     SwapServerErrorResponse,
     SwapValidationErrorResponse,
 } from '../../types'
-import type { NetworkType } from '@masknet/web3-shared'
+import type { NetworkType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 
 export async function swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {

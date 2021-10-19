@@ -13,7 +13,7 @@ import {
     useAccount,
     useAllowTestnet,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'

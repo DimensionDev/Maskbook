@@ -1,4 +1,4 @@
-import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
+import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, Grid, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'

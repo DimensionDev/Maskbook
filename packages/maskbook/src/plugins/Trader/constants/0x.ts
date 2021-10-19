@@ -1,4 +1,4 @@
-import { NetworkType } from '@masknet/web3-shared'
+import { NetworkType } from '@masknet/web3-shared-evm'
 
 export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: 'https://api.0x.org',

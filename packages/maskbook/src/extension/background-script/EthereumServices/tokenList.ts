@@ -5,7 +5,7 @@ import {
     EthereumTokenType,
     formatEthereumAddress,
     getChainDetailed,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { groupBy } from 'lodash-es'
 
 const NATIVE_TOKEN_ADDRESS_IN_1INCH = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
@@ -78,7 +78,7 @@ async function fetchCommonERC20TokensFromTokenList(
         .filter(
             (x) =>
                 x.chainId === chainId &&
-                (process.env.NODE_ENV === 'production' && process.env.build === 'stable'
+                (process.env.NODE_ENV === 'production' && process.env.channel === 'stable'
                     ? getChainDetailed(chainId)?.network === 'mainnet'
                     : true),
         )

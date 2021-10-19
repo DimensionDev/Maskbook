@@ -43,7 +43,7 @@ export function useThemeMindsVariant() {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-    const MaskbookTheme = useClassicMaskTheme({
+    const MaskTheme = useClassicMaskTheme({
         appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
     })
     return useMemo(() => {
@@ -51,7 +51,7 @@ export function useThemeMindsVariant() {
         const primaryContrastColorRGB = fromRGB(primaryContrastColor)
         setAutoFreeze(false)
 
-        const MindsTheme = produce(MaskbookTheme, (theme) => {
+        const MindsTheme = produce(MaskTheme, (theme) => {
             theme.palette.background.paper = backgroundColor
             theme.palette.primary = {
                 light: toRGB(shade(primaryColorRGB, 10)),
@@ -111,10 +111,9 @@ export function useThemeMindsVariant() {
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(MindsTheme)
-    }, [MaskbookTheme, backgroundColor, primaryColor, primaryContrastColor])
+    }, [MaskTheme, backgroundColor, primaryColor, primaryContrastColor])
 }
 
 export function MindsThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
-    if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
     return createElement(ThemeProvider, { theme: useThemeMindsVariant(), ...props })
 }

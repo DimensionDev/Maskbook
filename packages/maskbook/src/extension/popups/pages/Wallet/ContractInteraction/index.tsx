@@ -13,7 +13,7 @@ import {
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@material-ui/core'
 import { useI18N } from '../../../../../utils'
@@ -223,7 +223,7 @@ const ContractInteraction = memo(() => {
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             return {
-                gasPrice: response.data.normal.price,
+                gasPrice: response?.data.normal.price ?? 0,
             }
         }
         return {}

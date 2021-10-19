@@ -2,7 +2,7 @@ import type { JSON_PayloadInMask, PoolRecord, PoolFromNetwork } from '../types'
 import * as subgraph from './apis/subgraph'
 import * as chain from './apis/chain'
 import * as database from './database'
-import { getChainDetailed, ChainId, getITOConstants } from '@masknet/web3-shared'
+import { getChainDetailed, ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 
 export async function getTradeInfo(pid: string, trader: string) {
     const tradeInfo = await subgraph.getTradeInfo(pid, trader)

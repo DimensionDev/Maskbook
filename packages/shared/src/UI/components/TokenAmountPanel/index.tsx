@@ -4,8 +4,7 @@ import { makeStyles, MaskTextField } from '@masknet/theme'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from '../SelectTokenChip'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { formatBalance } from '@masknet/web3-shared'
+import { FungibleTokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales'
 import { useStylesExtends } from '../..'
 import { FormattedBalance } from '../../../wallet'
@@ -67,7 +66,7 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     TextFieldProps?: Exclude<StandardTextFieldProps, 'variant'>
 }
 
-// todo: merge into one with maskbook TokenAmountPanel
+// todo: merge into one with TokenAmountPanel
 export function TokenAmountPanel(props: TokenAmountPanelProps) {
     const {
         amount,

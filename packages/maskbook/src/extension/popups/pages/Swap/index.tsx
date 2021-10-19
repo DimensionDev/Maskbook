@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { TransactionStatusType, useWallet, useWeb3StateContext } from '@masknet/web3-shared'
+import { TransactionStatusType, useWallet, useWeb3StateContext } from '@masknet/web3-shared-evm'
 import { Typography } from '@material-ui/core'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'

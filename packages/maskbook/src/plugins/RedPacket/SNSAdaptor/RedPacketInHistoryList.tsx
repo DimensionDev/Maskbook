@@ -15,7 +15,7 @@ import {
     EthereumTokenType,
     useFungibleTokenDetailed,
     useTokenConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -186,7 +186,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
                 open: true,
                 state: refundState,
                 summary: availability
-                    ? `Refunding red packet for ${formatBalance(
+                    ? `Refunding lucky drop for ${formatBalance(
                           new BigNumber(availability.balance),
                           historyToken?.decimals ?? 0,
                           historyToken?.decimals ?? 0,

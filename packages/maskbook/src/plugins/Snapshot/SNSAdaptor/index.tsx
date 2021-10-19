@@ -3,7 +3,7 @@ import { base } from '../base'
 import { useMemo, Suspense } from 'react'
 import { Skeleton } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PostInspector } from './PostInspector'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
@@ -26,7 +26,7 @@ const isSnapshotURL = (x: string): boolean =>
 function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()
     return (
-        <MaskbookPluginWrapper pluginName="Snapshot">
+        <MaskPluginWrapper pluginName="Snapshot">
             <Suspense
                 fallback={Array.from({ length: 2 })
                     .fill(0)
@@ -42,7 +42,7 @@ function Renderer({ url }: { url: string }) {
                     ))}>
                 <PostInspector url={url} />
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }
 
@@ -57,10 +57,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isSnapshotURL)
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+
+        const link = links.find(isSnapshotURL)
         if (!link) return null
         return <Renderer url={link} />
     },

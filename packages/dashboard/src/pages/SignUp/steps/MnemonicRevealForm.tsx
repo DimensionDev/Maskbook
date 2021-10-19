@@ -4,7 +4,7 @@ import {
     Footer,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
-import { useMnemonicWordsPuzzle } from '@masknet/web3-shared'
+import { useMnemonicWordsPuzzle } from '@masknet/web3-shared-evm'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'

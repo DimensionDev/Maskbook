@@ -4,7 +4,7 @@ import {
     getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { EthereumAddress } from 'wallet.ts'
 import type { WalletRecord } from '../database/types'
 import {

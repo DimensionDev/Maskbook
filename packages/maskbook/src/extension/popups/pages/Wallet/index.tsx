@@ -1,5 +1,5 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
+import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'

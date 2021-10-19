@@ -1,4 +1,4 @@
-import { getLBPConstants } from '@masknet/web3-shared'
+import { getLBPConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 

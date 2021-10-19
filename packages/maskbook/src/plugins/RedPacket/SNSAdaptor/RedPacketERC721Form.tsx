@@ -14,7 +14,7 @@ import {
     useAccount,
     useChainId,
     useNftRedPacketConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import CloseIcon from '@material-ui/icons/Close'
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
@@ -236,7 +236,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <EthereumERC721TokenApprovedBoundary
                         validationMessage={validationMessage}
                         owner={account}
-                        contract={contract}
+                        contractDetailed={contract}
                         operator={RED_PACKET_NFT_ADDRESS}>
                         <ActionButton
                             variant="contained"

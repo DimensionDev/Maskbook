@@ -8,7 +8,7 @@ import {
     NetworkType,
     GasNow,
     CryptoPrice,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-es'
 

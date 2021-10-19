@@ -2,7 +2,7 @@ import { head } from 'lodash-es'
 import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
@@ -60,9 +60,7 @@ export async function getAsset(tokenAddress: string, tokenId: string, chainId?: 
     ).json()
 
     const endTime = head<{ closing_date: Date }>(
-        fetchResponse.orders.filter(
-            (item: { side: number; closing_extendable: boolean }) => item.side === 1 && item.closing_extendable,
-        ),
+        fetchResponse.orders.filter((item: { side: number; closing_extendable: boolean }) => item.side === 1),
     )?.closing_date
 
     return {

@@ -44,7 +44,7 @@ export function useThemeTwitterVariant() {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-    const MaskbookTheme = useClassicMaskTheme({
+    const MaskTheme = useClassicMaskTheme({
         appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
     })
     return useMemo(() => {
@@ -52,7 +52,7 @@ export function useThemeTwitterVariant() {
         const primaryContrastColorRGB = fromRGB(primaryContrastColor)
         setAutoFreeze(false)
 
-        const TwitterTheme = produce(MaskbookTheme, (theme) => {
+        const TwitterTheme = produce(MaskTheme, (theme) => {
             theme.palette.background.paper = backgroundColor
             const isDark = theme.palette.mode === 'dark'
             const isDarker = backgroundColor === 'rgb(0,0,0)'
@@ -120,10 +120,9 @@ export function useThemeTwitterVariant() {
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(TwitterTheme)
-    }, [MaskbookTheme, backgroundColor, primaryColor, primaryContrastColor])
+    }, [MaskTheme, backgroundColor, primaryColor, primaryContrastColor])
 }
 
 export function TwitterThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
-    if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
     return createElement(ThemeProvider, { theme: useThemeTwitterVariant(), ...props })
 }

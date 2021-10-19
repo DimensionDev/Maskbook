@@ -1,4 +1,4 @@
-import { Asset, isSameAddress, CurrencyType, ERC721TokenDetailed } from '@masknet/web3-shared'
+import { Asset, isSameAddress, CurrencyType, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import type { WalletRecord, ERC20TokenRecord, ERC1155TokenRecord, PhraseRecord } from './database/types'
 

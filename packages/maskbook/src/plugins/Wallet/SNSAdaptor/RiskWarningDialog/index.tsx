@@ -3,11 +3,11 @@ import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
-import { getMaskColor, useSnackbar } from '@masknet/theme'
+import { getMaskColor, useCustomSnackbar } from '@masknet/theme'
 import { useCallback } from 'react'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
@@ -58,7 +58,7 @@ export function WalletRiskWarningDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const account = useAccount()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
 
     const onClose = useCallback(async () => {
@@ -68,7 +68,7 @@ export function WalletRiskWarningDialog() {
 
     const onConfirm = useCallback(async () => {
         if (!account) {
-            enqueueSnackbar(t('wallet_risk_warning_no_select_wallet'), {
+            showSnackbar(t('wallet_risk_warning_no_select_wallet'), {
                 variant: 'error',
                 preventDuplicate: true,
             })
@@ -76,7 +76,7 @@ export function WalletRiskWarningDialog() {
         }
         await WalletRPC.confirmRiskWarning(account)
         setDialog({ open: false, type: 'confirm' })
-    }, [enqueueSnackbar, account, setDialog])
+    }, [showSnackbar, account, setDialog])
 
     return (
         <InjectedDialog title={t('wallet_risk_warning_dialog_title')} open={open} onClose={onClose}>

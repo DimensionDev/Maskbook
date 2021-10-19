@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { ProviderType } from '@masknet/web3-shared'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 import { MaskBlueIcon, MetaMaskIcon, WalletConnectIcon } from '@masknet/icons'
 

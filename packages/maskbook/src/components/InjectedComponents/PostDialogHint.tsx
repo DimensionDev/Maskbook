@@ -2,13 +2,13 @@ import { memo } from 'react'
 import { IconButton } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
-import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { BannerProps } from '../Welcomes/Banner'
-import { useValueRef, useStylesExtends } from '@masknet/shared'
+import { useStylesExtends, useValueRef } from '@masknet/shared'
+import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
+import { MaskSharpIcon } from '../../resources/MaskIcon'
+import { useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
-import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 
 export interface PostDialogHintUIProps extends withClasses<'buttonTransform'> {
     onHintButtonClicked: () => void
@@ -35,9 +35,10 @@ const useStyles = makeStyles()((theme) => ({
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStylesExtends(useStyles(), props)
+
     return (
         <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
-            <MaskbookSharpIcon color="primary" />
+            <MaskSharpIcon color="primary" />
         </IconButton>
     )
 })
@@ -65,6 +66,7 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
 export function PostDialogHint(props: PostDialogHintProps) {
     const identities = useMyIdentities()
     const connecting = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
+
     if (connecting || identities.length === 0) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }

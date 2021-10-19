@@ -1,8 +1,8 @@
 import { Suspense, useMemo } from 'react'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@material-ui/core'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from './PreviewCard'
@@ -29,10 +29,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <DonateDialog />
     },
     PostInspector() {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isGitcoin)
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+
+        const link = links.find(isGitcoin)
         if (!link) return null
         return <Renderer url={link} />
     },
@@ -41,13 +40,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [id = ''] = props.url.match(/\d+/) ?? []
     return (
-        <MaskbookPluginWrapper pluginName="Gitcoin">
+        <MaskPluginWrapper pluginName="Gitcoin">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={ChainId.Mainnet}>
                     <PreviewCard id={id} />
                 </EthereumChainBoundary>
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }
 

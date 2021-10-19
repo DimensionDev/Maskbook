@@ -1,6 +1,12 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ChainId, EthereumTokenType, formatBalance, getChainDetailed, getChainIdFromName } from '@masknet/web3-shared'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import {
+    ChainId,
+    EthereumTokenType,
+    formatBalance,
+    getChainDetailed,
+    getChainIdFromName,
+} from '@masknet/web3-shared-evm'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { base } from '../base'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import {
@@ -21,20 +27,20 @@ const sns: Plugin.SNSAdaptor.Definition = {
     DecryptedInspector(props) {
         if (RedPacketMetadataReader(props.message.meta).ok)
             return (
-                <MaskbookPluginWrapper pluginName="Red Packet">
+                <MaskPluginWrapper pluginName="Lucky Drop">
                     {renderWithRedPacketMetadata(props.message.meta, (r) => (
                         <RedPacketInPost payload={r} />
                     ))}
-                </MaskbookPluginWrapper>
+                </MaskPluginWrapper>
             )
 
         if (RedPacketNftMetadataReader(props.message.meta).ok)
             return (
-                <MaskbookPluginWrapper pluginName="Red Packet NFT">
+                <MaskPluginWrapper pluginName="NFT Lucky Drop">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
                         <RedPacketNftInPost payload={r} />
                     ))}
-                </MaskbookPluginWrapper>
+                </MaskPluginWrapper>
             )
         return null
     },
@@ -47,7 +53,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const chainDetailed = getChainDetailed(chainId)
                 const tokenDetailed =
                     payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token
-                return `🧧 A Red Packet with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
+                return `🧧 A Lucky Drop with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
                     tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
                 } from ${payload.sender.name}`
             },
@@ -56,13 +62,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
             RedPacketNftMetaKey,
             (_payload) => {
                 const payload = _payload as RedPacketNftJSONPayload
-                return payload.message ? `🧧 ${payload.message}` : '🧧 An NFT Red Packet'
+                return payload.message ? `🧧 ${payload.message}` : '🧧 An NFT Lucky Drop'
             },
         ],
     ]),
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
-        label: { fallback: '💰 Red Packet' },
+        label: { fallback: '💰 Lucky Drop' },
     },
     ToolbarEntry: {
         ...ToolIconURLs.redpacket,

@@ -12,7 +12,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
@@ -63,15 +63,15 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
     },
     label: {
-        color: '#1C68F3',
+        color: theme.palette.primary.main,
         fontSize: 12,
         lineHeight: '16px',
         margin: '10px 0',
     },
     selected: {
-        backgroundColor: '#1C68F3',
+        backgroundColor: theme.palette.primary.main,
         '& > *': {
-            color: '#ffffff!important',
+            color: theme.palette.primary.contrastText,
         },
     },
     button: {
@@ -96,6 +96,8 @@ export const Prior1559GasSetting = memo(() => {
     //#region Get gas now from debank
     const { value: gasNow } = useAsync(async () => {
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+        if (!response) return { slow: 0, standard: 0, fast: 0 }
+
         return {
             slow: response.data.slow.price,
             standard: response.data.normal.price,
@@ -149,12 +151,12 @@ export const Prior1559GasSetting = memo(() => {
         return zod.object({
             gasLimit: zod
                 .string()
-                .min(1, t('wallet_transfer_error_gasLimit_absence'))
+                .min(1, t('wallet_transfer_error_gas_limit_absence'))
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
                     t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                 ),
-            gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
+            gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
         })
     }, [minGasLimit])
 

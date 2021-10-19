@@ -1,4 +1,4 @@
-import { GasOption, isEIP1559Supported, useChainId } from '@masknet/web3-shared'
+import { GasOption, isEIP1559Supported, useChainId } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { useDashboardI18N } from '../locales'
@@ -19,6 +19,7 @@ export function useGasOptions() {
     const { value: gasFromDebank, loading: getFromDebankLoading } = useAsync(async () => {
         if (is1559Supported) return
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+        if (!response) return null
         return {
             low: response.data.slow.price,
             medium: response.data.normal.price,

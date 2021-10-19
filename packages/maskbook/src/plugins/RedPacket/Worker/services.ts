@@ -1,4 +1,4 @@
-import { ChainId, getRedPacketConstants } from '@masknet/web3-shared'
+import { ChainId, getRedPacketConstants } from '@masknet/web3-shared-evm'
 import type { RedPacketRecord, RedPacketJSONPayload, RedPacketJSONPayloadFromChain } from '../types'
 import * as subgraph from './apis/subgraph'
 import * as chain from './apis/chain'

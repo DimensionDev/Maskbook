@@ -4,13 +4,13 @@ import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
-import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared'
+import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared-evm'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { Provider } from '../Provider'
 import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
-import { MaskbookIcon } from '../../../../resources/MaskbookIcon'
+import { MaskIcon } from '../../../../resources/MaskIcon'
 import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -230,7 +230,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         rowHeight={151}>
                         <ImageListItem>
                             <Provider
-                                logo={<MaskbookIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
+                                logo={<MaskIcon size={45} />}
                                 name="Mask Network"
                                 onClick={() => onConnectProvider(ProviderType.MaskWallet)}
                             />

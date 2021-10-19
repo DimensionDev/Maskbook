@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import { PluginPollRPC } from '../messages'
 import { renderWithPollMetadata, PollMetadataReader } from '../helpers'
@@ -45,9 +45,9 @@ export default function PollsInPost(props: PollsInPostProps) {
         ? renderWithPollMetadata(props.message.meta, (r) => {
               return (
                   <div>
-                      <MaskbookPluginWrapper width={400} pluginName="Poll">
+                      <MaskPluginWrapper width={400} pluginName="Poll">
                           <PollCardUI poll={updatedPoll ?? r} vote={vote} status={status} />
-                      </MaskbookPluginWrapper>
+                      </MaskPluginWrapper>
                   </div>
               )
           })

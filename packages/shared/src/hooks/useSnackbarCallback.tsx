@@ -1,4 +1,4 @@
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useCallback } from 'react'
 import { useSharedI18N } from '../locales'
 
@@ -21,7 +21,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
     successText?: string,
 ) {
     const t = useSharedI18N()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const executor = typeof opts === 'function' ? opts : opts.executor
     if (typeof opts === 'object') {
         ;[deps, onSuccess, onError, key, successText] = [
@@ -36,7 +36,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
         (...args) =>
             executor(...args).then(
                 (res) => {
-                    enqueueSnackbar(successText ?? t.snackbar_done(), {
+                    showSnackbar(successText ?? t.snackbar_done(), {
                         key,
                         variant: 'success',
                         preventDuplicate: true,
@@ -45,7 +45,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     return res
                 },
                 (error) => {
-                    enqueueSnackbar(`Error: ${error.message || error}`, {
+                    showSnackbar(`Error: ${error.message || error}`, {
                         key,
                         preventDuplicate: true,
                         variant: 'error',
@@ -54,7 +54,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     throw error
                 },
             ),
-        [...deps!, enqueueSnackbar, executor, onError, onSuccess, key, successText],
+        [...deps!, showSnackbar, executor, onError, onSuccess, key, successText],
     )
 }
 

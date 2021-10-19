@@ -5,7 +5,7 @@ import type {
     ChainId,
     ERC721TokenDetailed,
     ERC721TokenOutMask,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 
 //#region erc20 red packet
 export interface RedPacketRecord {

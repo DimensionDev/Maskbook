@@ -64,7 +64,7 @@ export const DefaultTypedMessageTextRenderer = memo(function DefaultTypedMessage
 })
 registerTypedMessageRenderer('text', {
     component: DefaultTypedMessageTextRenderer,
-    id: 'maskbook.text',
+    id: 'mask.text',
     priority: 0,
 })
 
@@ -89,7 +89,7 @@ export const DefaultTypedMessageAnchorRenderer = memo(function DefaultTypedMessa
 })
 registerTypedMessageRenderer('x-anchor', {
     component: DefaultTypedMessageAnchorRenderer,
-    id: 'maskbook.anchor',
+    id: 'mask.anchor',
     priority: 0,
 })
 
@@ -106,7 +106,7 @@ export const DefaultTypedMessageImageRenderer = memo(function DefaultTypedMessag
 })
 registerTypedMessageRenderer('image', {
     component: DefaultTypedMessageImageRenderer,
-    id: 'maskbook.image',
+    id: 'mask.image',
     priority: 0,
 })
 
@@ -134,7 +134,7 @@ export const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessag
 })
 registerTypedMessageRenderer('tuple', {
     component: DefaultTypedMessageTupleRenderer,
-    id: 'maskbook.compound',
+    id: 'mask.compound',
     priority: 0,
 })
 
@@ -145,7 +145,7 @@ export const DefaultTypedMessageEmptyRenderer = memo(function DefaultTypedMessag
 })
 registerTypedMessageRenderer('empty', {
     component: DefaultTypedMessageEmptyRenderer,
-    id: 'maskbook.empty',
+    id: 'mask.empty',
     priority: 0,
 })
 
@@ -156,7 +156,7 @@ export const DefaultTypedMessageUnknownRenderer = memo(function DefaultTypedMess
 })
 registerTypedMessageRenderer('unknown', {
     component: DefaultTypedMessageUnknownRenderer,
-    id: 'maskbook.unknown',
+    id: 'mask.unknown',
     priority: 0,
 })
 
@@ -179,7 +179,7 @@ export const DefaultTypedMessageSuspendedRenderer = memo(function DefaultTypedMe
 })
 registerTypedMessageRenderer('promise', {
     component: DefaultTypedMessageSuspendedRenderer,
-    id: 'maskbook.suspended',
+    id: 'mask.suspended',
     priority: 0,
 })
 

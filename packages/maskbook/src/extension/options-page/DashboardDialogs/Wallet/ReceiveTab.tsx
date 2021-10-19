@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
 import { useCopyToClipboard } from 'react-use'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
-import type { Wallet } from '@masknet/web3-shared'
+import type { Wallet } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 
 const useReceiveTabStyles = makeStyles()((theme) => ({

@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed, FungibleTokenOutMask } from '@masknet/web3-shared'
+import type { ChainId, FungibleTokenDetailed, FungibleTokenOutMask } from '@masknet/web3-shared-evm'
 
 export interface JSON_PayloadInMask {
     contract_address: string

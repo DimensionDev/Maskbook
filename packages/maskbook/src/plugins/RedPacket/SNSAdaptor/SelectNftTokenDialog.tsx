@@ -6,7 +6,7 @@ import {
     useERC721TokenDetailedCallback,
     useAccount,
     isSameAddress,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
@@ -291,7 +291,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 <DialogContent className={classes.dialogContent}>
                     <Box className={classes.tokenBox}>
                         <div className={classes.searchWrapperSingle}>
-                            <Paper component="form" className={classes.search} elevation={0}>
+                            <Paper className={classes.search} elevation={0}>
                                 <SearchIcon className={classes.iconButton} />
                                 <InputBase
                                     value={tokenId}
@@ -345,7 +345,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 <DialogContent className={classNames(classes.dialogContent, classes.dialogContentFixedHeight)}>
                     <Box className={classes.ownerTokenBox}>
                         <div className={classes.searchWrapper}>
-                            <Paper component="form" className={classes.search} elevation={0}>
+                            <Paper className={classes.search} elevation={0}>
                                 <SearchIcon className={classes.iconButton} />
                                 <InputBase
                                     value={tokenId}

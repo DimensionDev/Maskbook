@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { Grid } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -8,10 +8,10 @@ import {
     formatBalance,
     TransactionStateType,
     useERC20TokenApproveCallback,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
-import ActionButton from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -39,6 +39,7 @@ export interface EthereumERC20TokenApprovedBoundaryProps {
     token?: ERC20TokenDetailed
     fallback?: React.ReactNode
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
+    ActionButtonProps?: ActionButtonProps
 }
 
 export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenApprovedBoundaryProps) {
@@ -46,7 +47,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
@@ -61,8 +62,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     useEffect(() => {
         if (transactionState.type === TransactionStateType.FAILED)
-            enqueueSnackbar(transactionState.error.message, { variant: 'error' })
-    }, [transactionState.type, enqueueSnackbar])
+            showSnackbar(transactionState.error.message, { variant: 'error' })
+    }, [transactionState.type, showSnackbar])
 
     // not a valid erc20 token, please given token as undefined
     if (!token) return <Grid container>{children}</Grid>
@@ -70,7 +71,13 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
+                <ActionButton
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disabled
+                    {...props.ActionButtonProps}>
                     {fallback ?? 'Enter an amount'}
                 </ActionButton>
             </Grid>
@@ -83,7 +90,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={resetApproveCallback}>
+                    onClick={resetApproveCallback}
+                    {...props.ActionButtonProps}>
                     Failed to load {token.symbol ?? token.name ?? 'Token'}. Click to retry.
                 </ActionButton>
             </Grid>
@@ -97,7 +105,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         fullWidth
                         variant="contained"
                         size="large"
-                        onClick={() => onApprove(true)}>
+                        onClick={() => onApprove(true)}
+                        {...props.ActionButtonProps}>
                         <span className={classes.buttonLabel}>{t('plugin_wallet_token_unlock')}</span>
                         <span className={classes.buttonAmount}>{`${formatBalance(amount, token.decimals, 2)} ${
                             token?.symbol ?? 'Token'
@@ -110,7 +119,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         fullWidth
                         variant="contained"
                         size="large"
-                        onClick={() => onApprove(false)}>
+                        onClick={() => onApprove(false)}
+                        {...props.ActionButtonProps}>
                         {t('plugin_wallet_token_infinite_unlock')}
                     </ActionButton>
                 </Grid>
@@ -119,7 +129,13 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)
         return (
             <Grid container>
-                <ActionButton className={classes.button} fullWidth variant="contained" size="large" disabled>
+                <ActionButton
+                    className={classes.button}
+                    fullWidth
+                    variant="contained"
+                    size="large"
+                    disabled
+                    {...props.ActionButtonProps}>
                     {approveStateType === ApproveStateType.PENDING
                         ? t('plugin_ito_unlocking_symbol', { symbol: token.symbol })
                         : `Updating ${token.symbol}`}

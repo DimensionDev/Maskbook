@@ -19,7 +19,7 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
 import { injectPostBoxComposed } from './injection/inject'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
-import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
+import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
@@ -143,7 +143,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         return { friends, profiles }
     },
     injection: {
-        toolBoxInNavBar: injectToolboxHintAtTwitter,
+        toolbox: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),

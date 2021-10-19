@@ -7,7 +7,7 @@ import {
     useAccount,
     useChainId,
     useCollectibles,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import classnames from 'classnames'
 import { uniqBy } from 'lodash-es'
@@ -89,7 +89,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
         retry,
         error,
     } = useCollectibles(account, chainId, provider, page, 50)
-    //0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
 
     const { collectibles, hasNextPage } = value
 

@@ -1,7 +1,7 @@
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../messages'
 import { first } from 'lodash-es'
-import { useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared-evm'
 
 /** Return the wallet with mnemonic words */
 export function useWalletHD() {

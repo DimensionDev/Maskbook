@@ -1,4 +1,4 @@
-import { ChainId, createERC20Tokens, getChainDetailed, ONE } from '@masknet/web3-shared'
+import { ChainId, createERC20Tokens, getChainDetailed, ONE } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import type { ERC20AgainstToken } from './types'
 

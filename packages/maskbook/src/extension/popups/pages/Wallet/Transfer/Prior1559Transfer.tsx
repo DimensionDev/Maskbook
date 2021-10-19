@@ -16,7 +16,7 @@ import {
     useGasLimit,
     useTokenTransferCallback,
     useWallet,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -156,12 +156,12 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
             gasLimit: zod
                 .string()
-                .min(1, t('wallet_transfer_error_gasLimit_absence'))
+                .min(1, t('wallet_transfer_error_gas_limit_absence'))
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimitContext),
                     t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
                 ),
-            gasPrice: zod.string().min(1, t('wallet_transfer_error_gasPrice_absence')),
+            gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
         })
     }, [selectedAsset, minGasLimitContext])
 

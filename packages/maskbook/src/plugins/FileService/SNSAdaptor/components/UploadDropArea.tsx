@@ -1,5 +1,5 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
@@ -78,7 +78,7 @@ interface Props {
 export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const [bond, { over }] = useDropArea({
         onFiles(files) {
             if (files.length > 1) {
@@ -111,7 +111,7 @@ export const UploadDropArea: React.FC<Props> = ({ maxFileSize, onFile }) => {
             102: t('plugin_file_service_error_102', { limit: MAX_FILE_SIZE }),
         }
         if (code in messages) {
-            snackbar.enqueueSnackbar(`Error ${code}: ${messages[code]}`, { variant: 'error' })
+            showSnackbar(`Error ${code}: ${messages[code]}`, { variant: 'error' })
         }
     }
     return (

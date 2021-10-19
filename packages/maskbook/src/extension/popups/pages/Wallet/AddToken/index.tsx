@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { Button, Stack, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared-evm'
 import { ERC20TokenList } from '@masknet/shared'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'

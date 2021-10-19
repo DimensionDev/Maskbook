@@ -8,7 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { Link, useRouteMatch } from 'react-router-dom'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { useI18N, useMatchXS, extendsTheme } from '../../../utils'
-import Logo from './MaskbookLogo'
+import Logo from './MaskLogo'
 import { Carousel } from './Carousel'
 import { makeNewBugIssueURL } from '../../debug-page/issue'
 

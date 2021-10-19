@@ -32,7 +32,7 @@
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
-    "@masknet/web3-shared": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
     "@msgpack/msgpack": "^2.7.1",
     "@openzeppelin/contracts": "^3.2.0",
     "@servie/events": "^3.0.0",
@@ -105,6 +105,7 @@
     "react-virtualized-auto-sizer": "^1.0.6",
     "react-window": "^1.8.6",
     "remarkable": "^2.0.1",
+    "rss3-next": "0.6.17",
     "safari-14-idb-fix": "^2.0.3",
     "scrypt-js": "^3.0.1",
     "socket.io-client": "2.4.0",
@@ -153,7 +154,7 @@
     "webpack": "^5.53.0",
     "webpack-cli": "^4.8.0",
     "webpack-dev-server": "^4.2.1",
-    "webpack-target-webextension": "^0.4.4"
+    "webpack-target-webextension": "^1.0.0"
   },
   "peerDependencies": {
     "tss-react": "*"

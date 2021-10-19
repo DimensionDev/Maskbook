@@ -1,11 +1,16 @@
+import { useState, useEffect } from 'react'
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, ChainId } from '@masknet/web3-shared'
+import {
+    formatEthereumAddress,
+    resolveAddressLinkOnExplorer,
+    ChainId,
+    EthereumNameType,
+    useEthereumAddress,
+} from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@material-ui/core'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import { useState, useEffect } from 'react'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
-import { useEthereumAddress } from '../../social-network-adaptor/twitter.com/injection/useEthereumName'
 import { MaskMessage, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 
@@ -81,7 +86,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                         href={resolveAddressLinkOnExplorer(ChainId.Mainnet, address)}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {type === 'address' ? formatEthereumAddress(address, 4) : name}
+                        {type === EthereumNameType.DEFAULT ? formatEthereumAddress(address, 4) : name}
                     </Link>
                 </Typography>
                 <Typography

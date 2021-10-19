@@ -3,7 +3,7 @@ import { InputAdornment } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { v4 as uuid } from 'uuid'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { ITO_EXCHANGE_RATION_MAX } from '../constants'
 import {

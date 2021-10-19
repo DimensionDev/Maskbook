@@ -1,5 +1,4 @@
 //#region Polyfills
-import 'webpack-target-webextension/lib/background' // Dynamic import and chunk splitting
 import './polyfill'
 // @ts-ignore WebCrypto
 import { crypto } from 'webcrypto-liner/build/index.es'

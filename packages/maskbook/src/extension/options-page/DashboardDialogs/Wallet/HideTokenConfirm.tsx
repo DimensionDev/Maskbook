@@ -7,7 +7,7 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isNative,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'

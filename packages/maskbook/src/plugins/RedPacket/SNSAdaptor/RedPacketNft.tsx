@@ -1,6 +1,6 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { makeStyles, useSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
     useAccount,
     resolveAddressLinkOnExplorer,
@@ -12,7 +12,7 @@ import {
     ERC721ContractDetailed,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import LaunchIcon from '@material-ui/icons/Launch'
 import {
@@ -39,6 +39,7 @@ import classNames from 'classnames'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -250,7 +251,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { classes } = useStyles()
     const web3 = useWeb3()
     const account = useAccount()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const {
         value: availability,
@@ -311,12 +312,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
 
         if (claimState.type === TransactionStateType.FAILED) {
-            enqueueSnackbar(claimState.error.message, {
+            showSnackbar(claimState.error.message, {
                 variant: 'error',
                 anchorOrigin: { horizontal: 'right', vertical: 'top' },
             })
         } else if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
-            enqueueSnackbar(
+            showSnackbar(
                 <div className={classes.snackBar}>
                     <Typography className={classes.snackBarText}>
                         {t('plugin_red_packet_claim_successfully')}
@@ -349,23 +350,25 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         .getShareLinkURL?.(
             availability?.isClaimed
                 ? t(
-                      isTwitter(activatedSocialNetworkUI)
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                           ? 'plugin_red_packet_nft_share_claimed_message'
                           : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
                       {
                           sender: payload.senderName,
                           payload: postLink,
                           network: resolveNetworkName(networkType),
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
                       },
                   ).trim()
                 : t(
-                      isTwitter(activatedSocialNetworkUI)
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                           ? 'plugin_red_packet_nft_share_foreshow_message'
                           : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
                       {
                           sender: payload.senderName,
                           payload: postLink,
                           network: resolveNetworkName(networkType),
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
                       },
                   ).trim(),
         )
