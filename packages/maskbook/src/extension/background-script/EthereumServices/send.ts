@@ -63,6 +63,7 @@ function isSignableMethod(payload: JsonRpcPayload) {
         EthereumMethodType.ETH_SIGN,
         EthereumMethodType.PERSONAL_SIGN,
         EthereumMethodType.ETH_SIGN_TRANSACTION,
+        EthereumMethodType.ETH_REPLACE_TRANSACTION,
         EthereumMethodType.ETH_SIGN_TYPED_DATA,
         EthereumMethodType.ETH_SEND_TRANSACTION,
     ].includes(payload.method as EthereumMethodType)
