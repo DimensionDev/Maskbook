@@ -1,17 +1,18 @@
 import { makeStyles } from '@masknet/theme'
-import { ERC721TokenDetailed, useAccount } from '@masknet/web3-shared-evm'
+import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@material-ui/core'
 import { useCallback, useState } from 'react'
+import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'
-import { InjectedDialog } from '../../shared/InjectedDialog'
-import { createNFT } from './utils'
+import { useI18N } from '../../../utils'
+import { createNFT } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
     addNFT: {
         position: 'absolute',
         right: 20,
-        top: 20,
+        top: 10,
     },
     input: {
         marginTop: theme.spacing(1),
@@ -31,6 +32,7 @@ export interface AddNFTProps {
     open: boolean
 }
 export function AddNFT(props: AddNFTProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const [address, setAddress] = useState('')
     const [tokenId, setTokenId] = useState('')
@@ -40,20 +42,25 @@ export function AddNFT(props: AddNFTProps) {
 
     const onClick = useCallback(async () => {
         if (!address) {
-            setMessage('Please input contract address')
+            setMessage(t('nft_input_address_label'))
             return
         }
         if (!tokenId) {
-            setMessage('Please input token ID')
+            setMessage(t('nft_input_tokenid_label'))
             return
         }
 
-        createNFT(account, address, tokenId)
-            .then((token) => {
-                onAddClick(token)
+        createNFT(address, tokenId)
+            .then((value) => {
+                if (!isSameAddress(value.account, account)) {
+                    setMessage(t('nft_owner_hint'))
+                    return
+                }
+
+                onAddClick(value.token)
                 handleClose()
             })
-            .catch((error) => setMessage(error.message))
+            .catch((error) => setMessage(t('nft_owner_hint')))
     }, [tokenId, address, onAddClick, onClose])
 
     const onAddressChange = useCallback((address: string) => {
@@ -71,10 +78,10 @@ export function AddNFT(props: AddNFTProps) {
     }
 
     return (
-        <InjectedDialog title="Add collectibles" open={open} onClose={handleClose}>
+        <InjectedDialog title={t('nft_add_dialog_title')} open={open} onClose={handleClose}>
             <DialogContent>
-                <Button className={classes.addNFT} variant="outlined" size="small" onClick={onClick}>
-                    Add
+                <Button className={classes.addNFT} variant="contained" size="small" onClick={onClick}>
+                    {t('nft_add_button_label')}
                 </Button>
                 <div className={classes.input}>
                     <InputBox label="Input Contract Address" onChange={(address) => onAddressChange(address)} />

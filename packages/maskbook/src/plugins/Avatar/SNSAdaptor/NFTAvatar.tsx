@@ -1,21 +1,24 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
+import { ChainId } from '@masknet/web3-shared-evm'
 import {
     ERC721TokenDetailed,
     formatEthereumAddress,
     useAccount,
     useChainId,
     useCollectibles,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
-import classnames from 'classnames'
 import { uniqBy } from 'lodash-es'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { getNFT } from '../utils'
 import { AddNFT } from './AddNFT'
+import { NFTImage } from './NFTImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},
@@ -23,46 +26,61 @@ const useStyles = makeStyles()((theme) => ({
         padding: 0,
         display: 'flex',
         justifyContent: 'space-between',
+        fontSize: 14,
+        alignItems: 'center',
     },
-    AddCollectible: {
-        textAlign: 'right',
-        paddingBottom: theme.spacing(1),
+    account: {
+        display: 'flex',
+        alignItems: 'center',
     },
-    NFTBox: {
-        border: `1px solid ${theme.palette.mode === 'dark' ? 'rgb(61, 84, 102)' : 'rgb(207, 217, 222)'}`,
+    galleryItem: {
+        border: `1px solid ${theme.palette.divider}`,
         borderRadius: 4,
         padding: theme.spacing(1),
     },
-    NFTImage: {
+    gallery: {
         display: 'flex',
         flexFlow: 'row wrap',
         height: 150,
         overflowY: 'auto',
-        justifyContent: 'center',
-    },
-    image: {
-        width: 97,
-        height: 97,
-        objectFit: 'cover',
-        margin: theme.spacing(0.5, 1.5),
-        borderRadius: '100%',
-        '&:hover': {
-            border: `1px solid ${getMaskColor(theme).blue}`,
-        },
-        boxSizing: 'border-box',
     },
     button: {
         textAlign: 'center',
         paddingTop: theme.spacing(1),
+        display: 'flex',
+        justifyContent: 'space-around',
+        flexDirection: 'row',
     },
-    setNFTAvatar: {
-        paddingLeft: 64,
-        paddingRight: 64,
+    setNFTAvatar: {},
+    skeleton: {
+        width: 97,
+        height: 97,
+        objectFit: 'cover',
+        borderRadius: '100%',
+        boxSizing: 'border-box',
+        padding: 6,
+        margin: theme.spacing(0.5, 1),
     },
-    selected: {
-        border: `1px solid ${getMaskColor(theme).blue}`,
+    skeletonBox: {
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
-    error: {},
+    error: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: 'auto',
+    },
+    changeButton: {
+        fontSize: 14,
+    },
+    buttons: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+    },
 }))
 
 export interface NFTAvatarProps extends withClasses<'root'> {
@@ -71,6 +89,7 @@ export interface NFTAvatarProps extends withClasses<'root'> {
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange } = props
+    const { enqueueSnackbar } = useSnackbar()
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const chainId = useChainId()
@@ -88,18 +107,21 @@ export function NFTAvatar(props: NFTAvatarProps) {
         loading,
         retry,
         error,
-    } = useCollectibles(account, chainId, provider, page, 50)
-
+    } = useCollectibles(account, ChainId.Mainnet, provider, page, 50)
     const { collectibles, hasNextPage } = value
-
-    useEffect(() => {
-        setCollectibles_(collectibles)
-    }, [collectibles])
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
+
+        const { owner } = await getNFT(selectedToken.contractDetailed.address, selectedToken.tokenId)
+        if (!isSameAddress(owner, account)) {
+            enqueueSnackbar(t('nft_owner_check_info'), { variant: 'error' })
+            return
+        }
+
         onChange(selectedToken)
-    }, [onChange, selectedToken])
+        setSelectedToken(undefined)
+    }, [onChange, selectedToken, setSelectedToken])
 
     const onAddClick = useCallback((token) => {
         setSelectedToken(token)
@@ -110,14 +132,17 @@ export function NFTAvatar(props: NFTAvatarProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
-    const LoadStatus = Array.from({ length: 6 })
+    const LoadStatus = Array.from({ length: 8 })
         .fill(0)
-        .map((_, i) => <Skeleton animation="wave" variant="rectangular" className={classes.image} key={i} />)
+        .map((_, i) => (
+            <div key={i} className={classes.skeletonBox}>
+                <Skeleton animation="wave" variant="rectangular" className={classes.skeleton} />
+            </div>
+        ))
     const Retry = (
         <Box className={classes.error}>
             <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
-
-            <Button className={classes.button} variant="text" onClick={() => retry()}>
+            <Button className={classes.button} variant="text" onClick={retry}>
                 {t('plugin_collectible_retry')}
             </Button>
         </Box>
@@ -127,43 +152,44 @@ export function NFTAvatar(props: NFTAvatarProps) {
             <Box className={classes.root}>
                 <Box className={classes.title}>
                     <Typography variant="body1" color="textPrimary">
-                        NFT Avatar Setting
+                        {t('nft_list_title')}
                     </Typography>
                     {account ? (
-                        <Typography variant="body1" color="textPrimary">
-                            Wallet: {formatEthereumAddress(account, 4)}
-                            <Button onClick={openSelectProviderDialog} size="small">
-                                Change
+                        <Typography variant="body1" color="textPrimary" className={classes.account}>
+                            {t('nft_wallet_label')}: {formatEthereumAddress(account, 4)}
+                            <Button onClick={openSelectProviderDialog} size="small" className={classes.changeButton}>
+                                {t('nft_wallet_change')}
                             </Button>
                         </Typography>
                     ) : null}
                 </Box>
                 <EthereumChainBoundary chainId={chainId}>
-                    <Box className={classes.NFTBox}>
-                        <Box className={classes.AddCollectible}>
-                            <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
-                                Add Collectibles
-                            </Button>
-                        </Box>
-                        <Box className={classes.NFTImage}>
+                    <Box className={classes.galleryItem}>
+                        <Box className={classes.gallery}>
                             {loading
                                 ? LoadStatus
-                                : error || collectibles_.length === 0
+                                : error || (collectibles.length === 0 && collectibles_.length === 0)
                                 ? Retry
-                                : collectibles_.map((token: ERC721TokenDetailed, i) => (
-                                      <img
-                                          key={i}
-                                          onClick={() => setSelectedToken(token)}
-                                          src={token.info.image}
-                                          className={classnames(
-                                              classes.image,
-                                              selectedToken === token ? classes.selected : '',
-                                          )}
-                                      />
-                                  ))}
+                                : uniqBy(
+                                      [...collectibles_, ...collectibles],
+                                      (x) => x.contractDetailed.address && x.tokenId,
+                                  )
+                                      .filter(
+                                          (token: ERC721TokenDetailed) =>
+                                              token.info.image &&
+                                              !token.info.image?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i),
+                                      )
+                                      .map((token: ERC721TokenDetailed, i) => (
+                                          <NFTImage
+                                              token={token}
+                                              key={i}
+                                              selectedToken={selectedToken}
+                                              onChange={(token) => setSelectedToken(token)}
+                                          />
+                                      ))}
                         </Box>
 
-                        {!(page === 0 && collectibles_.length === 0) ? (
+                        {hasNextPage || page > 0 ? (
                             <TablePagination
                                 count={-1}
                                 component="div"
@@ -184,14 +210,17 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                 }}
                             />
                         ) : null}
-                        <Box className={classes.button}>
+                        <Box className={classes.buttons}>
+                            <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
+                                {t('nft_button_add_collectible')}
+                            </Button>
                             <Button
                                 variant="contained"
-                                size="medium"
-                                className={classes.setNFTAvatar}
-                                onClick={() => onClick()}
+                                size="small"
+                                sx={{ marginLeft: 2 }}
+                                onClick={onClick}
                                 disabled={!selectedToken}>
-                                {t('profile_nft_avatar_set')}
+                                {t('nft_button_set_avatar')}
                             </Button>
                         </Box>
                     </Box>
