@@ -6,6 +6,7 @@ const cache = new Map<string, Promise<AvatarMetaDB | undefined>>()
 export function useNFTAvatar(userId: string) {
     return useAsync(async () => {
         if (!userId) return
+        if (userId === '$unknown') return
         let f = cache.get(userId)
         if (!f) {
             f = PluginNFTAvatarRPC.getNFTAvatar(userId)

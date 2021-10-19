@@ -51,6 +51,7 @@ function NFTAvatarInTwitter() {
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
     const _avatar = useNFTAvatar(identity.identifier.userId)
+    console.log(_avatar)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
