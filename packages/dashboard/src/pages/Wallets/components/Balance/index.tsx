@@ -91,6 +91,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const AllNetworkButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
+    marginRight: theme.spacing(1),
     padding: 0,
     lineHeight: '30px',
     width: 30,
@@ -160,7 +161,7 @@ export const Balance = memo<BalanceCardProps>(
                                     <Box
                                         key={chainId}
                                         position="relative"
-                                        ml={1}
+                                        mr={1}
                                         height={30}
                                         onClick={() => !isDisabledChange && onSelectNetwork(chainId)}
                                         sx={{ cursor: 'pointer', opacity: '0.6', ':hover': { opacity: 1 } }}
