@@ -3,6 +3,8 @@ import { gun2 } from '../../../network/gun/version.2'
 import { NFT_AVATAR_GUN_SERVER } from '../constants'
 
 const NFTAavatarGUN = gun2.get(NFT_AVATAR_GUN_SERVER)
+
+// After reinstalling the system, it cannot be retrieved for the first time, so it needs to be taken twice
 export async function getUserAddress(userId: string) {
     let result = await NFTAavatarGUN
         //@ts-expect-error
