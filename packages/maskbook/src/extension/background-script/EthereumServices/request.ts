@@ -82,7 +82,7 @@ export async function requestSend(
         Flags.v2_enabled &&
         providerType === ProviderType.MaskWallet &&
         isRiskMethod(payload_.method as EthereumMethodType)
-        ) {
+    ) {
         try {
             await WalletRPC.pushUnconfirmedRequest(payload_)
         } catch (error) {
