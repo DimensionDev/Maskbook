@@ -16,7 +16,7 @@ import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwai
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
 import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
-import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
+import { asyncIteratorWithResult } from '@masknet/shared-base/src/utils/asyncIteratorHelpers'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
 import type { Payload } from '../../../utils/type-transform/Payload'
 

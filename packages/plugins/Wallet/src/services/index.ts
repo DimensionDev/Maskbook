@@ -1,14 +1,14 @@
 import * as bip39 from 'bip39'
 import { first, last } from 'lodash-es'
+import type { TransactionConfig } from 'web3-core'
 import { toHex } from 'web3-utils'
 import { encodeText } from '@dimensiondev/kit'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
-import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
-import * as sdk from './maskwallet'
-import * as database from './database'
+import * as sdk from '../sdk/maskwallet'
+import * as database from '../database'
 import * as password from './password'
-import type { TransactionConfig } from 'web3-core'
+import { HD_PATH_WITHOUT_INDEX_ETHEREUM, MAX_DERIVE_COUNT } from '..'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -17,21 +17,8 @@ function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     return [...splitted.slice(0, -1), index + 1].join('/')
 }
 
-// token db
-export {
-    getToken,
-    getTokens,
-    getTokensCount,
-    getTokensPaged,
-    hasToken,
-    addToken,
-    removeToken,
-    trustToken,
-    blockToken,
-} from './database/token'
-
 // wallet db
-export { getWallet, getWallets, hasWallet, updateWallet, updateWalletToken } from './database/wallet'
+export { getWallet, getWallets, hasWallet, updateWallet, updateWalletToken } from '../database/wallet'
 
 // password
 export { setPassword, hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'

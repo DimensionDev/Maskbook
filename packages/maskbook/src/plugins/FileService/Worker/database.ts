@@ -1,5 +1,5 @@
 import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
-import { asyncIteratorToArray } from '../../../utils/type-transform/asyncIteratorHelpers'
+import { asyncIteratorToArray } from '@masknet/shared-base/src/utils/asyncIteratorHelpers'
 import { base } from '../base'
 import { FileInfoV1ToV2 } from '../helpers'
 import type { FileInfo, FileInfoV1 } from '../types'

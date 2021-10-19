@@ -1,20 +1,16 @@
+import { createPluginDatabase } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from '../constants'
-import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
 import type { AddressBookChunk } from '../services/addressBook'
-import type { RecentTransactionChunk } from '../services/recentTransactions/database'
+import type { RecentTransactionChunk } from '../database/RecentTransactions'
 import type {
     ERC1155TokenRecord,
     ERC20TokenRecord,
     ERC721TokenRecord,
-    SecretRecord,
-    WalletRecord,
-} from '../services/wallet/type'
+} from '../type'
 
 export const PluginDB = createPluginDatabase<
     | AddressBookChunk
     | RecentTransactionChunk
-    | WalletRecord
-    | SecretRecord
     | ERC20TokenRecord
     | ERC721TokenRecord
     | ERC1155TokenRecord

@@ -1,4 +1,4 @@
-export * from './asyncIteratorHelpers'
+export * from '@masknet/shared-base/src/utils/asyncIteratorHelpers'
 export * from './BackupFileShortRepresentation'
 export * from './BackupFormat'
 export * from './CryptoKey-JsonWebKey'

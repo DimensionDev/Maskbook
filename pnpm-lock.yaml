@@ -590,19 +590,33 @@ importers:
 
   packages/plugins/Wallet:
     specifiers:
+      '@dimensiondev/kit': ^0.0.0-20210913111737-84c17d7
+      '@dimensiondev/mask-wallet-core': 0.1.0-20210924093144-ddecbc3
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       bignumber.js: ^9.0.1
+      bip39: ^3.0.2
+      lodash-es: ^4.17.21
       react-use: ^17.3.1
+      wallet.ts: ^1.0.1
+      web3-core: 1.5.2
+      web3-utils: 1.5.2
     dependencies:
+      '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_f991c289939c8299bed5e4a6a5a79a62
+      '@dimensiondev/mask-wallet-core': 0.1.0-20210924093144-ddecbc3
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/theme': link:../../theme
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.1
+      bip39: 3.0.4
+      lodash-es: 4.17.21
       react-use: 17.3.1_f991c289939c8299bed5e4a6a5a79a62
+      wallet.ts: 1.0.1
+      web3-core: 1.5.2
+      web3-utils: 1.5.2
 
   packages/plugins/example:
     specifiers:
@@ -3772,6 +3786,12 @@ packages:
       react-use: 15.3.8_f991c289939c8299bed5e4a6a5a79a62
     transitivePeerDependencies:
       - react-dom
+    dev: false
+
+  /@dimensiondev/mask-wallet-core/0.1.0-20210924093144-ddecbc3:
+    resolution: {integrity: sha512-OZKJsBjklpnhsAZOr/l6QC89IF5C7ZmnoLWW8DBCRrD8nF/f2kOxwfKeJFT+V0j/BiV7H3qebOxTYXubfFusPg==, tarball: download/@dimensiondev/mask-wallet-core/0.1.0-20210924093144-ddecbc3/bfa279cf644e3466227bb83bc57777e6d6669f0ca914cfd5f3f53c961a5a45e9}
+    peerDependencies:
+      protobufjs: '>= 6.10 < 7'
     dev: false
 
   /@dimensiondev/mask-wallet-core/0.1.0-20210924093144-ddecbc3_protobufjs@6.11.2:
@@ -17570,15 +17590,6 @@ packages:
     resolution: {integrity: sha512-qpcRocdkUmf+UTNBYx5w6dexX5J31AKK1OmPwH630a83DdVVUIngk55RSAiIGpQyoH0dlr872VHfPjnQnK1qDQ==}
     dev: true
 
-  /keccak/3.0.1:
-    resolution: {integrity: sha512-epq90L9jlFWCW7+pQa6JOnKn2Xgl2mtI664seYR6MHskvI9agt7AnDqmAlp9TqU4/caMYbA08Hi5DMZAl5zdkA==}
-    engines: {node: '>=10.0.0'}
-    requiresBuild: true
-    dependencies:
-      node-addon-api: 2.0.2
-      node-gyp-build: 4.2.3
-    dev: false
-
   /keccak/3.0.2:
     resolution: {integrity: sha512-PyKKjkH53wDMLGrvmRGSNWgmSxZOUqbnXwKL9tmgbFYA1iAYqW21kfR7mZXV0MlESiefxQQE9X9fTa3X+2MPDQ==}
     engines: {node: '>=10.0.0'}
@@ -18736,11 +18747,6 @@ packages:
     resolution: {integrity: sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==}
     engines: {node: '>= 6.0.0'}
     dev: true
-
-  /node-gyp-build/4.2.3:
-    resolution: {integrity: sha512-MN6ZpzmfNCRM+3t57PTJHgHyw/h4OWnZ6mR8P5j/uZtqQr46RRuDE/P+g3n0YR/AiYXeWixZZzaip77gdICfRg==}
-    hasBin: true
-    dev: false
 
   /node-gyp-build/4.3.0:
     resolution: {integrity: sha512-iWjXZvmboq0ja1pUGULQBexmxq8CV4xBhX7VDOTbL7ZR4FOowwY/VOtRxBN/yKxmdGoIp4j5ysNT4u3S2pDQ3Q==}
@@ -23947,7 +23953,7 @@ packages:
       bn.js: 5.2.0
       bs58: 4.0.1
       elliptic: 6.5.4
-      keccak: 3.0.1
+      keccak: 3.0.2
     dev: false
 
   /warning/4.0.3:

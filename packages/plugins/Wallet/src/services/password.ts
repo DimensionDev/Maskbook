@@ -1,5 +1,5 @@
 import { validate } from 'uuid'
-import * as database from './database'
+import * as database from '../database'
 import { i18n } from '../../../../utils'
 
 let password = ''
