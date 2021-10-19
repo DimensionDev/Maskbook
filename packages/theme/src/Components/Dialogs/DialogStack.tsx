@@ -1,58 +1,107 @@
-/* eslint-disable no-bitwise */
-/* eslint-disable @typescript-eslint/prefer-literal-enum-member */
-import { createContainer } from 'unstated-next'
-import { useRef, useEffect, useState } from 'react'
-import { first, last } from 'lodash-es'
+import { useRef, useContext, createContext, useState, useEffect } from 'react'
 import type { DialogProps } from '@mui/material'
 
+const StackingScopeEnabled = createContext<boolean>(false)
+const Stack = createContext({ level: -1, onHideChange(shouldHide: boolean) {} })
 /**
- * If you're using <Dialog> solely and you want to support DialogStack, please use this hook.
+ * If you're using <Dialog> on its own and you want to support DialogStack, please use this hook.
  *
- * Your dialog component MUST support `style` attribute and `disable`
+ * Your dialog component MUST support the following attributes with the same semantics with MUI Dialog component.
+ *
+ * - disableEscapeKeyDown
+ * - disableScrollLock
+ * - hideBackdrop
+ * - style
+ * - aria-hidden
+ * - open
+ * - transitionDuration
  * @example
  * function SomeComponent() {
  *     const [open, setOpen] = useState(false)
- *     const {shouldReplaceExitWithBack, extraProps} = useDialogStackConsumer(open)
- *     return <>
+ *     const { shouldReplaceExitWithBack, extraProps } = useDialogStackConsumer(open)
+ *     return <IncreaseStack>
  *         <button onClick={() => setOpen(true)}></button>
  *         <Dialog open={open} {...extraProps}>
  *             You MUST hide Close button and and BackButton based on the value of `shouldReplaceExitWithBack`
  *         </Dialog>
- *     </>
+ *     </IncreaseStack>
  * }
  */
-export function useDialogStackConsumer(open: boolean): { shouldReplaceExitWithBack: boolean; extraProps: DialogProps } {
-    const [status, setStatus] = useState(Type.None)
-    const { enabled, openDialog, closeDialog } = useDialogStackingContext()
-    const { current: id } = useRef(Math.random())
+export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
+    const selfID = useRef(Math.random())
+    const featureEnabled = useContext(StackingScopeEnabled)
+    const { level: upperLevel, onHideChange } = useContext(Stack)
+    // this is an object that stores all request hiding state of it's decedents.
+    // e.g for component tree:
+    // <Dialog1> (selfID=0)
+    // ---- <Dialog2> (selfID=1)
+    // ---- <Dialog3> (selfID=2)
+    //
+    // When dialog2 opened, it will set hide of Dialog1 to { 1: true }
+    // If any value in hide is true, it means one of it decedents requested to hide this parent.
+    const [hide, setHide] = useState<Record<number, boolean>>({})
+
+    const LatestOnHideChange = useRef<(hide: boolean) => void>(onHideChange)
+    LatestOnHideChange.current = onHideChange
+
+    // Here we rely on the assumption that level is impossible to change.
+    // because it requires a reorder in the component tree, which is not possible to happen
+    // in React's reconciliation algorithm
+    const Increase = useRef<React.ComponentType<React.PropsWithChildren<{}>>>(null!)
+    if (!Increase.current) {
+        Increase.current = function IncreaseStackLevel(props: React.PropsWithChildren<{}>) {
+            return (
+                <Stack.Provider
+                    children={props.children}
+                    value={{
+                        level: upperLevel + 1,
+                        onHideChange: (hide) => {
+                            setHide((val) => ({ ...val, [selfID.current]: hide }))
+                        },
+                    }}
+                />
+            )
+        }
+    }
 
     useEffect(() => {
-        open ? openDialog(id, setStatus) : closeDialog(id)
-    }, [open])
+        if (!featureEnabled) return LatestOnHideChange.current(false)
+        LatestOnHideChange.current(open)
+    }, [featureEnabled, open])
 
-    useEffect(() => () => closeDialog(id), [])
+    useEffect(() => {
+        return () => LatestOnHideChange.current(false)
+    }, [])
 
-    const shouldReplaceExitWithBack = !!(status & Type.shouldReplaceExitWithBack)
-    const isTop = !!(status & Type.TopMostDialog)
+    const returnVal: useDialogStackActorReturn = {
+        shouldReplaceExitWithBack: upperLevel !== -1,
+        extraProps: { open },
+        IncreaseStack: Increase.current,
+    }
 
-    if (!enabled || !open) return { shouldReplaceExitWithBack: false, extraProps: { open } }
-    if (isTop)
-        return {
-            shouldReplaceExitWithBack,
-            extraProps: { open, transitionDuration: shouldReplaceExitWithBack ? 0 : undefined },
-        }
-    return {
-        shouldReplaceExitWithBack,
-        extraProps: {
+    if (!featureEnabled || !open) return returnVal
+
+    if (returnVal.shouldReplaceExitWithBack) {
+        returnVal.extraProps.transitionDuration = 0
+    }
+
+    if (Object.values(hide).some(Boolean)) {
+        returnVal.extraProps = {
+            ...returnVal.extraProps,
             disableEscapeKeyDown: true,
             disableScrollLock: true,
             hideBackdrop: true,
             style: { visibility: 'hidden' },
             'aria-hidden': true,
-            open,
-            transitionDuration: shouldReplaceExitWithBack ? 0 : undefined,
-        },
+        }
     }
+    return returnVal
+}
+
+export interface useDialogStackActorReturn {
+    shouldReplaceExitWithBack: boolean
+    extraProps: DialogProps
+    IncreaseStack: React.ComponentType<React.PropsWithChildren<{}>>
 }
 
 export interface DialogStackingProviderProps extends React.PropsWithChildren<{}> {
@@ -76,52 +125,5 @@ export interface DialogStackingProviderProps extends React.PropsWithChildren<{}>
  * becomes "BackArrow".
  */
 export function DialogStackingProvider(props: DialogStackingProviderProps) {
-    return <Provider initialState={!props.disabled}>{props.children}</Provider>
+    return <StackingScopeEnabled.Provider children={props.children} value={!props.disabled} />
 }
-
-function useDialogStackingContext(): ReturnType<typeof useStack> {
-    try {
-        return useContainer()
-    } catch {
-        return {
-            enabled: false,
-            closeDialog: () => [],
-            openDialog: () => [],
-        }
-    }
-}
-
-enum Type {
-    None = 0,
-    TopMostDialog = 1 << 0,
-    shouldReplaceExitWithBack = 1 << 1,
-}
-
-function useStack(enabled = true) {
-    type F = (status: Type) => void
-    const functions = useRef<Map<number, F>>(new Map())
-    const stack = useRef<readonly number[]>([])
-
-    function update() {
-        for (const [id, update] of functions.current) {
-            let result: Type = Type.None
-            if (stack.current.length > 1 && first(stack.current) !== id) result |= Type.shouldReplaceExitWithBack
-            if (last(stack.current) === id) result |= Type.TopMostDialog
-            update(result)
-        }
-    }
-    return {
-        enabled,
-        openDialog: (id: number, onUpdate: F) => {
-            ;(functions.current = new Map(functions.current)).set(id, onUpdate)
-            stack.current = [...stack.current, id]
-            update()
-        },
-        closeDialog: (id: number) => {
-            ;(functions.current = new Map(functions.current)).delete(id)
-            stack.current = stack.current.filter((x) => x !== id)
-            update()
-        },
-    }
-}
-const { Provider, useContainer } = createContainer(useStack)
