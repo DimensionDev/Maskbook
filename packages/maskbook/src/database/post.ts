@@ -184,23 +184,6 @@ export const PostDBAccess = db
 
 type PostTransaction = IDBPTransaction<PostDB, ['post']>
 
-export async function consistentPostDBWriteAccess(action: (t: PostTransaction) => Promise<void>) {
-    const t = (await db()).transaction('post', 'readwrite')
-    let finished = false
-    const finish = () => (finished = true)
-    t.addEventListener('abort', finish)
-    t.addEventListener('complete', finish)
-    t.addEventListener('error', finish)
-
-    try {
-        await action(t)
-    } finally {
-        if (finished) {
-            console.warn('The transaction ends too early! There MUST be a bug in the program!')
-            console.trace()
-        }
-    }
-}
 export async function createPostDB(record: PostRecord, t?: PostTransaction) {
     t = t || (await db()).transaction('post', 'readwrite')
     const toSave = postToDB(record)
