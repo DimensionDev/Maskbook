@@ -31,6 +31,7 @@ import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectProfileNFTAvatarInTwitter } from './injection/NFT/profileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
+import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
     root: {
@@ -167,6 +168,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         userAvatar: injectUserNFTAvatarAtTwitter,
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
+        openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
     },
     configuration: {
         steganography: {

@@ -84,9 +84,9 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)
-    if (Flags.nft_avatar_enabled) {
-        ui.injection.enhancedProfileNFTAvatar?.(signal)
-    }
+
+    ui.injection.enhancedProfileNFTAvatar?.(signal)
+    ui.injection.openNFTAvatar?.(signal)
 
     startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
 

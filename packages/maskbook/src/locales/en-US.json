@@ -923,5 +923,16 @@
     "popups_password_do_not_match": "Incorrect backup password",
     "popups_backup_password": "Backup Password",
     "popups_rename_error_tip": "Maximum length is {{length}} characters long.",
-    "profile_nft_avatar_set": "Set NFT Avatar"
+    "nft_button_set_avatar": "Set NFT Avatar",
+    "nft_input_address_label": "Please input contract address",
+    "nft_input_tokenid_label": "Please input token ID",
+    "nft_owner_hint": "This NFT does not exist or does not belong to you.",
+    "nft_add_dialog_title": "Add Collectible",
+    "nft_add_button_label": "Add",
+    "nft_list_title": "NFT Avatar",
+    "nft_wallet_label": "Wallet",
+    "nft_wallet_change": "Change",
+    "nft_button_add_collectible": "Add Collectible",
+    "nft_avatar": "NFT Avatar",
+    "nft_owner_check_info": "This NFT does not belong to you!"
 }

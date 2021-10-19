@@ -896,5 +896,5 @@
     "popups_password_do_not_match": "crwdns8983:0crwdne8983:0",
     "popups_backup_password": "crwdns8985:0crwdne8985:0",
     "popups_rename_error_tip": "crwdns8987:0{{length}}crwdne8987:0",
-    "profile_nft_avatar_set": "crwdns8189:0crwdne8189:0"
+    "nft_button_set_avatar": "crwdns8189:0crwdne8189:0"
 }

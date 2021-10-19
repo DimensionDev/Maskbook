@@ -45,7 +45,10 @@ export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
 export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] a[role="link"][href$="/photo"] img')
 export const searchAvatarMetaSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('head > link[href^="https://twitter.com"] + meta[property="og:image"]')
+    querySelector<E>('head > meta[property="og:image"]:last-child')
+
+export const searchEditProfileSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="primaryColumn"] a[href="/settings/profile"]')
 export const bioCardSelector = <SingleMode extends boolean = true>(singleMode = true) =>
     querySelector<HTMLDivElement, SingleMode>(
         [
@@ -196,7 +199,7 @@ export const searchAvatarSelectorImage = () =>
         .closest<HTMLDivElement>(2)
         .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
 
-export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(0)
+export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
 //#endregion
 
