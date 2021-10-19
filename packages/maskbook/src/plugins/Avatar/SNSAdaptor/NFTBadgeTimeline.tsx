@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { MaskMessage } from '../../../utils'
+import { MaskMessages } from '../../../utils'
 import { useNFTAvatar } from '../hooks'
 import type { AvatarMetaDB } from '../types'
 import { NFTBadge } from './NFTBadge'
@@ -44,7 +44,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
         setAvatar(_avatar)
     }, [_avatar])
 
-    useEffect(() => MaskMessage.events.NFTAvatarTimelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
+    useEffect(() => MaskMessages.events.NFTAvatarTimelineUpdated.on((data) => onUpdate(data as AvatarMetaDB)), [])
 
     if (!avatar) return null
     if (avatarId_ && avatar.avatarId !== avatarId_) return null
