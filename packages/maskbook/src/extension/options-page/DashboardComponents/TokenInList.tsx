@@ -6,7 +6,7 @@ import {
     isSameAddress,
     resolveTokenLinkOnExplorer,
     useTokenConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Link, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
 import ListItemButton from '@material-ui/core/ListItemButton'
 import { makeStyles } from '@masknet/theme'

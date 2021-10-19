@@ -1,4 +1,4 @@
-import { CryptoPrice, CurrencyType } from '@masknet/web3-shared'
+import { CryptoPrice, CurrencyType } from '@masknet/web3-shared-evm'
 import { pollingTask } from '@masknet/shared'
 import { getTokenPrices, getNativeTokenPrice } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../utils'

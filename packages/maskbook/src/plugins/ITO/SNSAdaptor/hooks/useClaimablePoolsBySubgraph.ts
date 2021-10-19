@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, ChainId } from '@masknet/web3-shared'
+import { useAccount, ChainId } from '@masknet/web3-shared-evm'
 import type { ClaimablePool } from '../../types'
 import { PluginITO_RPC } from '../../messages'
 

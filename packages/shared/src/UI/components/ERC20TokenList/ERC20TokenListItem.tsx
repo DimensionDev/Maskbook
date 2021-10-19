@@ -8,7 +8,7 @@ import {
     isSameAddress,
     useAddERC20TokenCallback,
     useTrustERC20TokenCallback,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { makeStyles, MaskLoadingButton } from '@masknet/theme'

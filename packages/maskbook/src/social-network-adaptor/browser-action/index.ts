@@ -4,6 +4,7 @@ import { IdentifierMap } from '../../database/IdentifierMap'
 
 const base: SocialNetwork.Base = {
     networkIdentifier: 'localhost',
+    name: '',
     declarativePermissions: { origins: [] },
     shouldActivate(location) {
         return isEnvironment(Environment.ManifestAction)

@@ -15,7 +15,7 @@ import {
     resolveCoinId,
     resolveNetworkType,
 } from './hotfix'
-import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
+import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings, currentNetworkSettings } from '../../../Wallet/settings'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 

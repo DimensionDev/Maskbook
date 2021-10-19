@@ -9,7 +9,7 @@ import {
     useChainIdValid,
     useWallet,
     useNativeTokenBalance,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Button, ButtonProps, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'

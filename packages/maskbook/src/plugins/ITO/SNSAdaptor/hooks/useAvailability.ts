@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useITOConstants, useChainId, isSameAddress } from '@masknet/web3-shared'
+import { useAccount, useITOConstants, useChainId, isSameAddress } from '@masknet/web3-shared-evm'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
 
 export function useAvailability(id: string, contract_address: string) {

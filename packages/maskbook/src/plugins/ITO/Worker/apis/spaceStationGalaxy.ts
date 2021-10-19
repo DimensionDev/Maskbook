@@ -1,4 +1,4 @@
-import { ChainId, getSpaceStationGalaxyConstants } from '@masknet/web3-shared'
+import { ChainId, getSpaceStationGalaxyConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { EthereumAddress } from 'wallet.ts'
 import type { ClaimableCount, CampaignInfo, ClaimParams } from '../../types'

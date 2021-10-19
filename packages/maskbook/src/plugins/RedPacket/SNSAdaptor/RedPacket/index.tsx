@@ -1,4 +1,7 @@
+import classNames from 'classnames'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
+import { Card, Skeleton, Typography } from '@material-ui/core'
 import {
     ChainId,
     formatBalance,
@@ -9,12 +12,11 @@ import {
     useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
-} from '@masknet/web3-shared'
-import { Card, Skeleton, Typography } from '@material-ui/core'
-import classNames from 'classnames'
-import { useCallback, useEffect, useMemo } from 'react'
+} from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
+import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { useI18N } from '../../../../utils'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { WalletMessages } from '../../../Wallet/messages'
@@ -56,11 +58,19 @@ export function RedPacket(props: RedPacketProps) {
     const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            t('plugin_red_packet_share_message', {
-                sender: payload.sender.name,
-                payload: postLink,
-                network: resolveNetworkName(networkType),
-            }).trim(),
+            canClaim
+                ? t(
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? 'plugin_red_packet_share_message_official_account'
+                          : 'plugin_red_packet_share_message_not_twitter',
+                      {
+                          sender: payload.sender.name,
+                          payload: postLink,
+                          network: resolveNetworkName(networkType),
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                      },
+                  ).trim()
+                : '',
         )
         .toString()
 

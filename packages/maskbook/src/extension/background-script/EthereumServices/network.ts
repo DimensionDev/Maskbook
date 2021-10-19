@@ -7,7 +7,7 @@ import type {
     Log,
 } from 'web3-core'
 import { toHex } from 'web3-utils'
-import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
+import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { request } from './request'
 import type { SendOverrides } from './send'
 

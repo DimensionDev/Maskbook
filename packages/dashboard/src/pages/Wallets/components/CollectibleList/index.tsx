@@ -13,7 +13,7 @@ import {
     useCollectibles,
     useWallet,
     useWeb3State,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'

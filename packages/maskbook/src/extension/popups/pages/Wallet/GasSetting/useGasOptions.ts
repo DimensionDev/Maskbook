@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
-import { useChainId, GasOption } from '@masknet/web3-shared'
+import { useChainId, GasOption } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 

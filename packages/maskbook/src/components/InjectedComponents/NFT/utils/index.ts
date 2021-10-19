@@ -1,4 +1,4 @@
-import { ChainId, createERC721Token, EthereumTokenType, isSameAddress } from '@masknet/web3-shared'
+import { ChainId, createERC721Token, EthereumTokenType, isSameAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { head } from 'lodash-es'
 import type { Order } from 'opensea-js/lib/types'

@@ -1,7 +1,7 @@
 import { LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, ProviderIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import type { ProviderType } from '@masknet/web3-shared'
+import type { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Stack, StackProps, Typography } from '@material-ui/core'
 import { FC, memo } from 'react'
 import { NetworkSelector } from '../../components/NetworkSelector'

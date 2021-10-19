@@ -1,5 +1,5 @@
 import type { TradeProvider } from '@masknet/public-api'
-import { formatBalance } from '@masknet/web3-shared'
+import { formatBalance } from '@masknet/web3-shared-evm'
 import { TradeStrategy } from '../types'
 import { useTradeComputed } from './useTradeComputed'
 import { useTradeState } from './useTradeState'

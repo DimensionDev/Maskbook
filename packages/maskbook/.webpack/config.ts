@@ -74,7 +74,8 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
-                    '@masknet/web3-shared': join(__dirname, '../../web3-shared/src/'),
+                    '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
+                    '@masknet/web3-shared-solana': join(__dirname, '../../web3-shared/solana/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }

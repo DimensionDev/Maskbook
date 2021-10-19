@@ -1,6 +1,6 @@
 import { TokenIcon } from '@masknet/shared'
 import { DarkColor } from '@masknet/theme/constants'
-import { formatBalance, useChainId } from '@masknet/web3-shared'
+import { formatBalance, useChainId } from '@masknet/web3-shared-evm'
 import { Grid, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { PoolTogetherTrophy } from '../../../resources/PoolTogetherIcon'

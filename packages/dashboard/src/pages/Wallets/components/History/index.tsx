@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { HistoryTable } from '../HistoryTable'
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     container: {

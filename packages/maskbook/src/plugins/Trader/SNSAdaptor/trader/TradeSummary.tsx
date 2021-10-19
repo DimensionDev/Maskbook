@@ -4,7 +4,7 @@ import { IconButton, List, ListItem, ListItemSecondaryAction, ListItemText, Pape
 import { makeStyles } from '@masknet/theme'
 import { TradeProvider } from '@masknet/public-api'
 import LoopIcon from '@material-ui/icons/Loop'
-import { formatBalance, formatPercentage, isGreaterThan, pow10, FungibleTokenDetailed } from '@masknet/web3-shared'
+import { formatBalance, formatPercentage, isGreaterThan, pow10, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { ONE_BIPS } from '../../constants'
 import { useStylesExtends } from '@masknet/shared'
 import { SwapQuoteResponse, TradeComputed, TradeStrategy } from '../../types'

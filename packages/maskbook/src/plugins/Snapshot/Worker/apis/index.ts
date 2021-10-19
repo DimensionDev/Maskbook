@@ -9,7 +9,7 @@ import type {
     Strategy,
 } from '../../types'
 import Services from '../../../../extension/service'
-import { resolveIPFSLink } from '@masknet/web3-shared'
+import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 import { transform } from 'lodash-es'
 
 export async function fetchProposal(id: string) {

@@ -2,7 +2,14 @@ import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-es'
 import type { TransactionConfig } from 'web3-core'
-import { ChainId, TransactionState, TransactionStateType, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared'
+import {
+    ChainId,
+    TransactionState,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useWeb3,
+} from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {

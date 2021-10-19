@@ -1,7 +1,7 @@
 export * from './apis'
 
 import { unreachable } from '@dimensiondev/kit'
-import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
+import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../Wallet/settings'
 import {
     currentTradeProviderSettings,

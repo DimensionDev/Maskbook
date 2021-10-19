@@ -11,7 +11,7 @@ import {
     formatEthereumAddress,
     isSameAddress,
     ProviderType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { EthereumAddress } from 'wallet.ts'
 import { asyncIteratorToArray } from '../../../../../utils'
 import { PluginDB } from '../../../database/Plugin.db'

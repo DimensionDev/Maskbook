@@ -1,4 +1,4 @@
-import { createERC20Tokens, getChainDetailed } from '@masknet/web3-shared'
+import { createERC20Tokens, getChainDetailed } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_ID = 'co.good_ghosting'
 export const PLUGIN_NAME = 'GoodGhosting'

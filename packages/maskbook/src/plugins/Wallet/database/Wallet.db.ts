@@ -7,7 +7,7 @@ import type {
     UnconfirmedRequestChunkRecordInDatabase,
     LegacyWalletRecordInDatabase,
 } from './types'
-import type { ERC721TokenRecordInDatabase } from '@masknet/web3-shared'
+import type { ERC721TokenRecordInDatabase } from '@masknet/web3-shared-evm'
 
 function path<T>(x: T) {
     return x

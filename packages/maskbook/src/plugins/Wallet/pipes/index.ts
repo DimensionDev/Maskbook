@@ -5,7 +5,7 @@ import {
     FilterTransactionType,
     NetworkType,
     PortfolioProvider,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { SocketRequestAssetScope } from '../types'
 
 export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {

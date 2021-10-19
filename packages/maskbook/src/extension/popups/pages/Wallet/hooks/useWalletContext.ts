@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createContainer } from 'unstated-next'
-import { useAssets, useTrustedERC20Tokens, Asset, useChainDetailed, getChainIdFromName } from '@masknet/web3-shared'
+import { useAssets, useTrustedERC20Tokens, Asset, useChainDetailed, getChainIdFromName } from '@masknet/web3-shared-evm'
 import { useRecentTransactions } from '../../../../../plugins/Wallet/hooks/useRecentTransactions'
 
 function useWalletContext() {

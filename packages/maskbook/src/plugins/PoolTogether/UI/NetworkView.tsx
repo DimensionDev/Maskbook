@@ -1,4 +1,4 @@
-import { ChainId, getChainDetailed, getNetworkTypeFromChainId } from '@masknet/web3-shared'
+import { ChainId, getChainDetailed, getNetworkTypeFromChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import { NetworkIcon, useStylesExtends } from '@masknet/shared'

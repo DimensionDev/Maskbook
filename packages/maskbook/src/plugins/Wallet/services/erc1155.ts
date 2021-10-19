@@ -1,8 +1,7 @@
+import { ERC1155TokenDetailed, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { createTransaction } from '../../../database/helpers/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
-import type { ERC1155TokenDetailed } from '@masknet/web3-shared'
-import { formatEthereumAddress } from '@masknet/web3-shared'
 import { ERC1155TokenRecordIntoDB } from './helpers'
 
 /** @deprecated */

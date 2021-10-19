@@ -1,6 +1,6 @@
 import { currentMaskWalletLockStatusSettings } from '../../settings'
 import * as password from './password'
-import { LockStatus } from '@masknet/web3-shared'
+import { LockStatus } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../messages'
 
 export async function isLocked() {

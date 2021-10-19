@@ -9,7 +9,7 @@ import type { NftRedPacketHistory, RedPacketJSONPayload } from '../types'
 import { RedPacketNftMetaKey } from '../constants'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import type { ERC721ContractDetailed } from '@masknet/web3-shared'
+import type { ERC721ContractDetailed } from '@masknet/web3-shared-evm'
 
 enum RpTypeTabs {
     ERC20 = 0,

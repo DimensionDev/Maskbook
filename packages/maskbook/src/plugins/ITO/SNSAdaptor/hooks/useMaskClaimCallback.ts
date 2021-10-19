@@ -6,7 +6,7 @@ import {
     useTransactionState,
     useAccount,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useMaskITO_Contract } from './useMaskITO_Contract'
 
 export function useMaskClaimCallback() {

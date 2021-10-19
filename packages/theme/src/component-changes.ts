@@ -132,7 +132,7 @@ export const Dialog: Theme = (mode, colors): ThemeOptions => ({
                 root: {
                     [`& .dashboard-style`]: { backgroundColor: 'initial' },
                 },
-                paper: { minHeight: 200, minWidth: 440, backgroundColor: colors.mainBackground },
+                paper: { minHeight: 200, minWidth: 440, background: colors.mainBackground },
             },
             defaultProps: {
                 BackdropProps: {

@@ -1,4 +1,4 @@
-import { ChainId, getITOConstants } from '@masknet/web3-shared'
+import { ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first, omit } from 'lodash-es'
 import { currentChainIdSettings } from '../../../Wallet/settings'

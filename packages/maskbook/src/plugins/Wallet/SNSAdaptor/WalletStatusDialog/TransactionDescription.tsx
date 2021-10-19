@@ -8,7 +8,7 @@ import {
     ERC20TokenDetailed,
     FungibleTokenDetailed,
     pow10,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type Services from '../../../../extension/service'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {

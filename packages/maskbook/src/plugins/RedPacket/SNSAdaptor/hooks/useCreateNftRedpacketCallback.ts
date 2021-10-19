@@ -4,7 +4,7 @@ import {
     useChainId,
     TransactionStateType,
     TransactionEventType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'

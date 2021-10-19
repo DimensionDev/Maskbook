@@ -7,7 +7,7 @@ import {
     useWallet,
     useWallets,
     useWeb3State,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
 import { Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom'

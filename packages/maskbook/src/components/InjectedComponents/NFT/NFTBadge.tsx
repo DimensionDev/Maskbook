@@ -1,7 +1,7 @@
 import { UnionIcon } from '@masknet/icons'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { resolveOpenSeaLink } from '@masknet/web3-shared'
+import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import { CircularProgress, Link, Typography } from '@material-ui/core'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'

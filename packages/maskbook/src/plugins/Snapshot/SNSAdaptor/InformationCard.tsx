@@ -4,7 +4,7 @@ import {
     resolveBlockLinkOnExplorer,
     resolveIPFSLink,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import OpenInNew from '@material-ui/icons/OpenInNew'
