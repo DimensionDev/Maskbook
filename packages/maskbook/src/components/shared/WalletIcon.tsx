@@ -1,6 +1,8 @@
 import { NetworkIcon, ProviderIcon, useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { currentNetworkSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
+import classNames from 'classnames'
+import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     root: {
@@ -20,13 +22,14 @@ const useStyles = makeStyles()({
     },
 })
 
-interface WalletIconProps {
+interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
     size?: number
     badgeSize?: number
 }
 
-export const WalletIcon = ({ size = 24, badgeSize = 14 }: WalletIconProps) => {
-    const { classes } = useStyles()
+export const WalletIcon = (props: WalletIconProps) => {
+    const classes = useStylesExtends(useStyles(), props)
+    const { size = 24, badgeSize = 14 } = props
     const selectedNetwork = useValueRef(currentNetworkSettings)
     const selectedWalletProvider = useValueRef(currentProviderSettings)
     return (
@@ -36,9 +39,13 @@ export const WalletIcon = ({ size = 24, badgeSize = 14 }: WalletIconProps) => {
                 height: size,
                 width: size,
             }}>
-            <NetworkIcon classes={{ icon: classes.mainIcon }} size={size} networkType={selectedNetwork} />
+            <NetworkIcon
+                classes={{ icon: classNames(classes.mainIcon, classes.networkIcon) }}
+                size={size}
+                networkType={selectedNetwork}
+            />
             <ProviderIcon
-                classes={{ icon: classes.badgeIcon }}
+                classes={{ icon: classNames(classes.badgeIcon, classes.providerIcon) }}
                 size={badgeSize}
                 providerType={selectedWalletProvider}
             />
