@@ -209,7 +209,7 @@ function useToolbox() {
             open: true,
             address: account,
         })
-    }, [])
+    }, [account])
     //#endregion
 
     //#region Swap
