@@ -6,7 +6,7 @@ import {
     EthereumRpcType,
     EthereumMethodType,
     getChainDetailedCAIP,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getCode } from '../network'

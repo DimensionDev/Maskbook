@@ -12,7 +12,7 @@ import {
     getChainIdFromNetworkType,
     isEIP1559Supported,
     useNativeTokenDetailed,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useValueRef } from '@masknet/shared'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import BigNumber from 'bignumber.js'
