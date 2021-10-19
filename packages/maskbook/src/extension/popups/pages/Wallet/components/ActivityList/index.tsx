@@ -152,7 +152,8 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                             <ListItem className={classes.item}>
                                 {transaction.status === TransactionStatusType.NOT_DEPEND ? (
                                     <LoaderIcon className={classes.loader} />
-                                ) : transaction.status === TransactionStatusType.SUCCEED ? (
+                                ) : transaction.status === TransactionStatusType.SUCCEED ||
+                                  transaction.status === TransactionStatusType.CANCELLED ? (
                                     <InteractionCircleIcon className={classes.interaction} />
                                 ) : (
                                     <CircleCloseIcon style={{ fill: 'none' }} />
