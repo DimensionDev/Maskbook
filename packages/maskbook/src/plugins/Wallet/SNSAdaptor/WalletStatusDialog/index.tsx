@@ -11,20 +11,20 @@ import { makeStyles } from '@masknet/theme'
 import ErrorIcon from '@mui/icons-material/Error'
 import classNames from 'classnames'
 import { useCallback } from 'react'
-import { Copy, Edit3, ExternalLink } from 'react-feather'
+import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { MaskApplicationBox } from '../../../../components/shared/MaskApplicationBox'
 import { WalletIcon } from '../../../../components/shared/WalletIcon'
 import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
-import { RecentTransactionList } from './RecentTransactionList'
 import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(2, 4, 3),
+        padding: theme.spacing(2, 3, 3),
     },
     currentAccount: {
         padding: theme.spacing(2, 3),
@@ -61,6 +61,15 @@ const useStyles = makeStyles()((theme) => ({
     actionButton: {
         fontSize: 12,
         marginLeft: theme.spacing(1),
+        backgroundColor: theme.palette.mode === 'light' ? '#111418' : 'rgb(29, 155, 240)',
+        ...(theme.palette.mode === 'light'
+            ? {
+                  '&:hover': {
+                      backgroundColor: '#2f3640',
+                  },
+              }
+            : {}),
+        padding: theme.spacing(1, 2),
     },
     changeButton: {
         borderRadius: 20,
@@ -88,6 +97,49 @@ const useStyles = makeStyles()((theme) => ({
     },
     linkIcon: {
         marginRight: theme.spacing(1),
+        color: '#1C68F3',
+    },
+    subTitle: {
+        fontSize: 18,
+        lineHeight: '24px',
+        fontWeight: 600,
+        marginBottom: 11.5,
+        color: theme.palette.text.primary,
+    },
+    networkIcon: {
+        backgroundColor: '#fff !important',
+    },
+    providerIcon: {
+        backgroundColor: '#F7F9FA !important',
+    },
+    applicationBox: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: getMaskColor(theme).twitterBackground,
+        borderRadius: '8px',
+        cursor: 'pointer',
+        height: 100,
+        '&:hover': {
+            transform: 'translateX(2.5px) translateY(-2px)',
+            boxShadow: `0px 12px 28px ${
+                theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.02)'
+            }`,
+        },
+    },
+    applicationWrapper: {
+        display: 'grid',
+        gridTemplateColumns: '123px 123px 123px 123px',
+        gridTemplateRows: '100px',
+        rowGap: 12,
+        justifyContent: 'space-between',
+        height: 324,
+    },
+    applicationImg: {
+        width: 36,
+        height: 36,
+        marginBottom: 10,
     },
 }))
 
@@ -151,10 +203,18 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     if (!selectedWallet) return null
 
     return (
-        <InjectedDialog title={t('wallet_status_title')} open={open} onClose={closeDialog} maxWidth="sm">
+        <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
+                <Typography className={classes.subTitle}>{t('wallets')}</Typography>
                 <section className={classes.currentAccount}>
-                    <WalletIcon size={48} badgeSize={18} />
+                    <WalletIcon
+                        size={48}
+                        badgeSize={18}
+                        classes={{
+                            networkIcon: classes.networkIcon,
+                            providerIcon: classes.providerIcon,
+                        }}
+                    />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
@@ -167,12 +227,12 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                                         wallet: selectedWallet,
                                     })
                                 }}>
-                                <Edit3 size={16} color="currentcolor" />
+                                {/* <Edit3 size={16} color="currentcolor" /> */}
                             </Link>
                         </div>
                         <div className={classes.infoRow}>
                             <Typography className={classes.address} variant="body2">
-                                <FormattedAddress address={selectedWallet.address} size={4} />
+                                <FormattedAddress address={selectedWallet.address} size={9} />
                             </Typography>
                             <Link
                                 className={classes.link}
@@ -213,9 +273,8 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                         </Button>
                     </section>
                 </section>
-                <section className={classes.transactionList}>
-                    <RecentTransactionList />
-                </section>
+                <Typography className={classes.subTitle}>{t('applications')}</Typography>
+                <MaskApplicationBox closeDialog={closeDialog} />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

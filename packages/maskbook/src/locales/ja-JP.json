@@ -235,7 +235,6 @@
     "wallet_value": "価値",
     "wallet_new": "新規ウォレット名",
     "wallets": "ウォレット",
-    "wallet_status_title": "アカウント",
     "wallet_status_button_change": "変更",
     "wallet_status_button_disconnect": "接続を外す",
     "wallet_status_button_copy_address": "アドレスをコピー",
