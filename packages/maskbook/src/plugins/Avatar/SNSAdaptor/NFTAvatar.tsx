@@ -7,6 +7,7 @@ import {
     useAccount,
     useChainId,
     useCollectibles,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
 import classNames from 'classnames'
@@ -15,6 +16,7 @@ import { useCallback, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { getNFT } from '../utils'
 import { AddNFT } from './AddNFT'
 
 const useStyles = makeStyles()((theme) => ({
@@ -109,6 +111,8 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
+        const { owner } = await getNFT(selectedToken.contractDetailed.address, selectedToken.tokenId)
+        if (!isSameAddress(owner, account)) throw new Error(t('nft_owner_check_info'))
         onChange(selectedToken)
         setSelectedToken(undefined)
     }, [onChange, selectedToken, setSelectedToken])

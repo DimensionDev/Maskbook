@@ -305,7 +305,8 @@
         "drawed",
         "DRAWED",
         "devnet",
-        "fbclid"
+        "fbclid",
+        "noamount"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
