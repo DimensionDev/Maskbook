@@ -1,6 +1,6 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useSnackbar } from '@masknet/theme'
 import {
     ERC721TokenDetailed,
     formatEthereumAddress,
@@ -88,6 +88,7 @@ export interface NFTAvatarProps extends withClasses<'root'> {
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange } = props
+    const { enqueueSnackbar } = useSnackbar()
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const chainId = useChainId()
@@ -106,13 +107,15 @@ export function NFTAvatar(props: NFTAvatarProps) {
         retry,
         error,
     } = useCollectibles(account, chainId, provider, page, 50)
-
     const { collectibles, hasNextPage } = value
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
         const { owner } = await getNFT(selectedToken.contractDetailed.address, selectedToken.tokenId)
-        if (!isSameAddress(owner, account)) throw new Error(t('nft_owner_check_info'))
+        if (!isSameAddress(owner, account)) {
+            enqueueSnackbar(t('nft_owner_check_info'), { variant: 'error' })
+            return
+        }
         onChange(selectedToken)
         setSelectedToken(undefined)
     }, [onChange, selectedToken, setSelectedToken])
@@ -228,7 +231,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
 const useNFTImageStyles = makeStyles()((theme) => ({
     imgBackground: {
         position: 'relative',
-        padding: 6,
         margin: theme.spacing(0.5, 1),
         borderRadius: '100%',
         display: 'flex',
@@ -248,14 +250,12 @@ const useNFTImageStyles = makeStyles()((theme) => ({
         objectFit: 'cover',
         borderRadius: '100%',
         boxSizing: 'border-box',
+        '&:hover': {
+            border: `4px solid ${theme.palette.primary.main}`,
+        },
     },
     selected: {
-        backgroundColor: theme.palette.primary.main,
-    },
-    hover: {
-        '&:hover': {
-            backgroundColor: theme.palette.primary.main,
-        },
+        border: `4px solid ${theme.palette.primary.main}`,
     },
 }))
 
@@ -265,18 +265,25 @@ interface NFTImageProps {
     onChange: (token: ERC721TokenDetailed) => void
 }
 
+function isSameNFT(a: ERC721TokenDetailed, b?: ERC721TokenDetailed) {
+    return (
+        isSameAddress(a.contractDetailed.address, b?.contractDetailed.address) &&
+        a.contractDetailed.chainId === b?.contractDetailed.chainId &&
+        a.tokenId === b?.tokenId
+    )
+}
+
 function NFTImage(props: NFTImageProps) {
     const { token, onChange, selectedToken } = props
     const { classes } = useNFTImageStyles()
 
     return (
-        <div
-            className={classNames(
-                classes.imgBackground,
-                classes.hover,
-                token === selectedToken ? classes.selected : '',
-            )}>
-            <img onClick={() => onChange(token)} src={token.info.image} className={classes.image} />
+        <div className={classes.imgBackground}>
+            <img
+                onClick={() => onChange(token)}
+                src={token.info.image}
+                className={classNames(classes.image, isSameNFT(token, selectedToken) ? classes.selected : '')}
+            />
         </div>
     )
 }
