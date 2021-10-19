@@ -1,6 +1,5 @@
 import { PLUGIN_ID } from './constants'
 import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
-import { ChainId } from '@masknet/web3-shared-evm'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -13,8 +12,5 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: { type: 'opt-in', networks: { [CurrentSNSNetwork.Twitter]: true } },
         target: 'stable',
-        web3: {
-            operatingSupportedChains: [ChainId.Mainnet],
-        },
     },
 }
