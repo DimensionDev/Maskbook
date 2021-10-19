@@ -1,5 +1,12 @@
+import BigNumber from 'bignumber.js'
 import * as ABICoder from 'web3-eth-abi'
-import { EthereumRpcComputed, EthereumRpcType, EthereumMethodType, getChainDetailedCAIP } from '@masknet/web3-shared'
+import {
+    isSameAddress,
+    EthereumRpcComputed,
+    EthereumRpcType,
+    EthereumMethodType,
+    getChainDetailedCAIP,
+} from '@masknet/web3-shared'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getCode } from '../network'
@@ -113,6 +120,8 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
 
 export async function getSendTransactionComputedPayload(payload: JsonRpcPayload) {
     const [config] = payload.params as [TransactionConfig]
+    const from = (config.from as string | undefined) ?? ''
+    const value = (config.value as string | undefined) ?? '0x0'
     const data = getData(config)
     const to = getTo(config)
     const signature = getFunctionSignature(config)
@@ -136,10 +145,18 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
         }
 
         // contract deployment
-        if (to === ADDRESS_ZERO) {
+        if (isSameAddress(to, ADDRESS_ZERO)) {
             return {
                 type: EthereumRpcType.CONTRACT_DEPLOYMENT,
                 code: data,
+                _tx: config,
+            }
+        }
+
+        // cancel tx
+        if (isSameAddress(from, to) && new BigNumber(value).isZero()) {
+            return {
+                type: EthereumRpcType.CANCEL,
                 _tx: config,
             }
         }

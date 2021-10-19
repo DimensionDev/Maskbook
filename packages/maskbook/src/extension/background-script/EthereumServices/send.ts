@@ -124,7 +124,7 @@ function handleReplaceRecentTransaction(
 ) {
     const hash = getHashFromResponse(response)
     if (!hash) return
-    WalletRPC.replaceRecentTransaction(account, previousHash, hash)
+    WalletRPC.replaceRecentTransaction(account, previousHash, hash, payload)
 }
 
 async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {

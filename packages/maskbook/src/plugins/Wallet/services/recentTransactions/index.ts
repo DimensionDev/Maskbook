@@ -35,10 +35,15 @@ export async function removeRecentTransaction(address: string, hash: string) {
     await database.removeRecentTransaction(address, hash)
 }
 
-export async function replaceRecentTransaction(address: string, hash: string, newHash: string) {
+export async function replaceRecentTransaction(
+    address: string,
+    hash: string,
+    newHash: string,
+    payload?: JsonRpcPayload,
+) {
     watcher.watchTransaction(hash)
     watcher.watchTransaction(newHash)
-    await database.replaceRecentTransaction(address, hash, newHash)
+    await database.replaceRecentTransaction(address, hash, newHash, payload)
 }
 
 export async function clearRecentTransactions(address: string) {

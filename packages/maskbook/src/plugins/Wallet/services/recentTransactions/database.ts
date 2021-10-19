@@ -12,6 +12,7 @@ export interface RecentTransaction {
     hash: string
     hashReplacement?: string
     payload: JsonRpcPayload
+    payloadReplacement?: JsonRpcPayload
 }
 
 export interface RecentTransactionChunk {
@@ -55,13 +56,19 @@ export async function addRecentTransaction(address: string, hash: string, payloa
     WalletMessages.events.recentTransactionsUpdated.sendToAll()
 }
 
-export async function replaceRecentTransaction(address: string, oldHash: string, newHash: string) {
+export async function replaceRecentTransaction(
+    address: string,
+    oldHash: string,
+    newHash: string,
+    payload?: JsonRpcPayload,
+) {
     const now = new Date()
     const recordId = getRecordId(address)
     const chunk = await PluginDB.get('recent-transactions', recordId)
     const transaction = chunk?.transactions.find((x) => x.hash === oldHash)
     if (!transaction) throw new Error('Failed to find the old transaction.')
     transaction.hashReplacement = newHash
+    transaction.payloadReplacement = payload
     await PluginDB.add({
         type: 'recent-transactions',
         id: getRecordId(address),

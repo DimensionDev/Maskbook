@@ -312,11 +312,6 @@ export type EthereumRpcComputed =
           type: EthereumRpcType.CANCEL | EthereumRpcType.RETRY
 
           /**
-           * The replacement transaction
-           */
-          tx: EthereumTransactionConfig
-
-          /**
            * The original transaction config
            */
           _tx: EthereumTransactionConfig
