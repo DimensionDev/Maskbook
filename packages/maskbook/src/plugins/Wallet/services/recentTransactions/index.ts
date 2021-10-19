@@ -22,6 +22,7 @@ export interface RecentTransaction {
     status: TransactionStatusType
     receipt?: TransactionReceipt | null
     payload?: JsonRpcPayload
+    payloadReplacement?: JsonRpcPayload
     computedPayload?: UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>
 }
 
@@ -55,24 +56,27 @@ export async function clearRecentTransactions(address: string) {
 export async function getRecentTransactionList(address: string): Promise<RecentTransaction[]> {
     const transactions = await database.getRecentTransactions(address)
     const allSettled = await Promise.allSettled(
-        transactions.map<Promise<RecentTransaction>>(async ({ at, hash, hashReplacement, payload }) => {
-            watcher.watchTransaction(hash)
-            if (hashReplacement) watcher.watchTransaction(hash)
+        transactions.map<Promise<RecentTransaction>>(
+            async ({ at, hash, hashReplacement, payload, payloadReplacement }) => {
+                watcher.watchTransaction(hash)
+                if (hashReplacement) watcher.watchTransaction(hash)
 
-            // read receipt in race
-            const receipt =
-                (await watcher.getReceipt(hash)) ||
-                (await (hashReplacement ? watcher.getReceipt(hashReplacement) : null))
+                // read receipt in race
+                const receipt =
+                    (await watcher.getReceipt(hash)) ||
+                    (await (hashReplacement ? watcher.getReceipt(hashReplacement) : null))
 
-            return {
-                at,
-                hash: receipt?.transactionHash ?? hash,
-                status: getReceiptStatus(receipt),
-                receipt,
-                payload,
-                computedPayload: await getSendTransactionComputedPayload(payload),
-            }
-        }),
+                return {
+                    at,
+                    hash: receipt?.transactionHash ?? hash,
+                    status: getReceiptStatus(receipt),
+                    receipt,
+                    payload,
+                    payloadReplacement,
+                    computedPayload: await getSendTransactionComputedPayload(payloadReplacement ?? payload),
+                }
+            },
+        ),
     )
 
     // compose result

@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 import { ReplaceType } from '../type'
 import { makeStyles } from '@masknet/theme'
@@ -66,7 +66,7 @@ const ReplaceTransaction = memo(() => {
     const location = useLocation()
     const search = new URLSearchParams(location.search)
     const type = search.get('type') as ReplaceType
-
+    const [errorMessage, setErrorMessage] = useState('')
     const { transaction } = useContainer(WalletContext)
 
     const defaultGas = transaction?.computedPayload?._tx.gas ?? 0
@@ -142,31 +142,39 @@ const ReplaceTransaction = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            if (transaction?.payload) {
-                const config = transaction.payload.params.map((param) => ({
-                    ...param,
-                    gas: toHex(new BigNumber(data.gas).toString()),
-                    ...(is1559
-                        ? {
-                              maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas ?? 0).toString()),
-                              maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
-                          }
-                        : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
-                }))
+            try {
+                if (transaction?.payload) {
+                    const config = transaction.payload.params.map((param) => ({
+                        ...param,
+                        gas: toHex(new BigNumber(data.gas).toString()),
+                        ...(is1559
+                            ? {
+                                  maxPriorityFeePerGas: toHex(
+                                      formatGweiToWei(data.maxPriorityFeePerGas ?? 0).toString(),
+                                  ),
+                                  maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
+                              }
+                            : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
+                    }))
 
-                if (type === ReplaceType.CANCEL) {
-                    await Services.Ethereum.cancelRequest(transaction.hash, {
-                        ...transaction.payload,
-                        params: config,
-                    })
-                } else {
-                    await Services.Ethereum.replaceRequest(transaction.hash, {
-                        ...transaction.payload,
-                        params: config,
-                    })
+                    if (type === ReplaceType.CANCEL) {
+                        await Services.Ethereum.cancelRequest(transaction.hash, {
+                            ...transaction.payload,
+                            params: config,
+                        })
+                    } else {
+                        await Services.Ethereum.replaceRequest(transaction.hash, {
+                            ...transaction.payload,
+                            params: config,
+                        })
+                    }
+
+                    history.goBack()
                 }
-
-                history.goBack()
+            } catch (error) {
+                if (error instanceof Error) {
+                    setErrorMessage(error.message)
+                }
             }
         },
         [transaction, is1559, type],
@@ -294,6 +302,11 @@ const ReplaceTransaction = memo(() => {
                     </Box>
                 </form>
             )}
+            {errorMessage ? (
+                <Typography color="#FF5F5F" fontSize={12} py={0.5}>
+                    {errorMessage}
+                </Typography>
+            ) : null}
             <LoadingButton
                 loading={loading}
                 variant="contained"
