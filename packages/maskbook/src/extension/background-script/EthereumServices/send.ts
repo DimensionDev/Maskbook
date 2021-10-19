@@ -9,7 +9,9 @@ import {
     EthereumMethodType,
     EthereumRpcType,
     EthereumTransactionConfig,
+    getTokenConstants,
     isEIP1559Supported,
+    isSameAddress,
     ProviderType,
 } from '@masknet/web3-shared'
 import type { IJsonRpcRequest } from '@walletconnect/types'
@@ -79,26 +81,49 @@ function getChainIdFromPayload(payload: JsonRpcPayload) {
     }
 }
 
+function getHashFromResponse(response: JsonRpcResponse | undefined) {
+    if (!response) return
+    const hash = response?.result as string | undefined
+    if (typeof hash !== 'string') return
+    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
+    return hash
+}
+
 async function handleTransferTransaction(payload: JsonRpcPayload) {
     if (payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
     const computedPayload = await getSendTransactionComputedPayload(payload)
     if (!computedPayload) return
-    switch (computedPayload.type) {
-        case EthereumRpcType.SEND_ETHER:
-            if (computedPayload._tx.to) await WalletRPC.addAddress(computedPayload._tx.to)
-            break
-        case EthereumRpcType.CONTRACT_INTERACTION:
-            if (['transfer', 'transferFrom'].includes(computedPayload.name ?? '') && computedPayload.parameters?.to)
-                await WalletRPC.addAddress(computedPayload.parameters.to)
-            break
-    }
+
+    const from = (computedPayload._tx.from as string) ?? ''
+    const to = (() => {
+        switch (computedPayload.type) {
+            case EthereumRpcType.SEND_ETHER:
+                return computedPayload._tx.to ?? ''
+            case EthereumRpcType.CONTRACT_INTERACTION:
+                if (['transfer', 'transferFrom'].includes(computedPayload.name ?? ''))
+                    return (computedPayload.parameters?.to as string) ?? ''
+        }
+        return ''
+    })()
+    if (!isSameAddress(from, to) && !isSameAddress(to, getTokenConstants(ChainId.Mainnet).ZERO_ADDRESS))
+        await WalletRPC.addAddress(to)
 }
 
 function handleRecentTransaction(account: string, payload: JsonRpcPayload, response: JsonRpcResponse | undefined) {
-    const hash = response?.result as string | undefined
-    if (typeof hash !== 'string') return
-    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
+    const hash = getHashFromResponse(response)
+    if (!hash) return
     WalletRPC.addRecentTransaction(account, hash, payload)
+}
+
+function handleReplaceRecentTransaction(
+    previousHash: string,
+    account: string,
+    payload: JsonRpcPayload,
+    response: JsonRpcResponse | undefined,
+) {
+    const hash = getHashFromResponse(response)
+    if (!hash) return
+    WalletRPC.replaceRecentTransaction(account, previousHash, hash)
 }
 
 async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
@@ -198,7 +223,26 @@ export async function INTERNAL_send(
     }
 
     async function sendTransaction() {
-        const [config] = payload.params as [EthereumTransactionConfig]
+        const { hash, config } = (() => {
+            switch (payload.method) {
+                case EthereumMethodType.ETH_SEND_TRANSACTION: {
+                    const params = payload.params as [EthereumTransactionConfig]
+                    return {
+                        hash: '',
+                        config: params[0],
+                    }
+                }
+                case EthereumMethodType.ETH_REPLACE_TRANSACTION: {
+                    const params = payload.params as [string, EthereumTransactionConfig]
+                    return {
+                        hash: params[0],
+                        config: params[1],
+                    }
+                }
+                default:
+                    throw new Error('Failed to send transaction.')
+            }
+        })()
 
         // add nonce
         if (providerType === ProviderType.MaskWallet && config.from)
@@ -244,9 +288,16 @@ export async function INTERNAL_send(
                     },
                     (error, response) => {
                         callback(error, response)
-                        handleNonce(account, error, response)
-                        handleTransferTransaction(payload)
-                        handleRecentTransaction(account, payload, response)
+                        switch (payload.method) {
+                            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                                handleNonce(account, error, response)
+                                handleTransferTransaction(payload)
+                                handleRecentTransaction(account, payload, response)
+                                break
+                            case EthereumMethodType.ETH_REPLACE_TRANSACTION:
+                                handleReplaceRecentTransaction(hash, account, payload, response)
+                                break
+                        }
                     },
                 )
                 break
@@ -282,6 +333,11 @@ export async function INTERNAL_send(
                 await personalSign()
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
+                await sendTransaction()
+                break
+            case EthereumMethodType.ETH_REPLACE_TRANSACTION:
+                if (providerType !== ProviderType.MaskWallet)
+                    throw new Error(`Cannot replace transaction for ${providerType}.`)
                 await sendTransaction()
                 break
             default:

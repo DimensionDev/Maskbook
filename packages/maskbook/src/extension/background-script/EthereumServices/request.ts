@@ -80,9 +80,9 @@ export async function requestSend(
     }
     if (
         Flags.v2_enabled &&
-        isRiskMethod(payload_.method as EthereumMethodType) &&
-        providerType === ProviderType.MaskWallet
-    ) {
+        providerType === ProviderType.MaskWallet &&
+        isRiskMethod(payload_.method as EthereumMethodType)
+        ) {
         try {
             await WalletRPC.pushUnconfirmedRequest(payload_)
         } catch (error) {
@@ -136,49 +136,33 @@ export async function rejectRequest(payload: JsonRpcPayload) {
     UNCONFIRMED_CALLBACK_MAP.delete(pid)
 }
 
-export async function replaceRequest(payload: JsonRpcPayload, overrides?: TransactionConfig) {
+export async function replaceRequest(hash: string, payload: JsonRpcPayload, overrides?: TransactionConfig) {
     const pid = getPayloadId(payload)
     if (!pid || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
     const [config] = payload.params as [TransactionConfig]
-    return request<string>(
-        {
-            method: payload.method,
-            params: [
-                {
-                    ...config,
-                    ...overrides,
-                },
-            ],
-        },
-        undefined,
-        {
-            popupsWindow: false,
-        },
-    )
+    return request<string>({
+        method: EthereumMethodType.ETH_REPLACE_TRANSACTION,
+        params: [
+            hash,
+            {
+                ...config,
+                ...overrides,
+            },
+        ],
+    })
 }
 
-export async function cancelRequest(payload: JsonRpcPayload, overrides?: TransactionConfig) {
+export async function cancelRequest(hash: string, payload: JsonRpcPayload, overrides?: TransactionConfig) {
     const pid = getPayloadId(payload)
     if (!pid || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
     const [config] = payload.params as [TransactionConfig]
-    return request<string>(
-        {
-            method: payload.method,
-            params: [
-                {
-                    ...config,
-                    ...overrides,
-                    to: config.from,
-                    data: '0x',
-                    value: '0x0',
-                },
-            ],
-        },
-        undefined,
-        {
-            popupsWindow: false,
-        },
-    )
+    return replaceRequest(hash, payload, {
+        ...config,
+        ...overrides,
+        to: config.from as string,
+        data: '0x',
+        value: '0x0',
+    })
 }
