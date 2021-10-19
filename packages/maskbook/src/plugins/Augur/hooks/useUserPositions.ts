@@ -1,4 +1,4 @@
-import { useAccount, useAugurConstants, useWeb3 } from '@masknet/web3-shared'
+import { useAccount, useAugurConstants, useWeb3 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { PluginAugurRPC } from '../messages'
 import { fetchMarket } from './useMarket'

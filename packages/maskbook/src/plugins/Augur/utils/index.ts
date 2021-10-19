@@ -10,7 +10,7 @@ import {
 } from '../types'
 import { BigNumber as BN } from 'bignumber.js'
 import { MINIMUM_BALANCE, SWAP_FEE_DECIMALS } from '../constants'
-import { formatAmount, formatBalance, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared'
+import { formatAmount, formatBalance, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared-evm'
 import { calcSellCompleteSets, estimateBuy } from './bmath'
 import Sports from '../constants/sports'
 

@@ -1,4 +1,4 @@
-import { ZERO } from '@masknet/web3-shared'
+import { ZERO } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import type { GraphAmmExchange, Liquidity, Trade } from '../types'
 

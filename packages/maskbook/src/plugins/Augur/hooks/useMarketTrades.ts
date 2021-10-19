@@ -1,4 +1,4 @@
-import { useAugurConstants } from '@masknet/web3-shared'
+import { useAugurConstants } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { PluginAugurRPC } from '../messages'
 import type { Market } from '../types'

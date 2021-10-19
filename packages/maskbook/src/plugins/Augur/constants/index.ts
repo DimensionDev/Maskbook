@@ -1,4 +1,4 @@
-import { ChainId, formatAmount } from '@masknet/web3-shared'
+import { ChainId, formatAmount } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { escapeRegExp } from 'lodash-es'
 

@@ -2,7 +2,7 @@ import { Team, Sport, SportMarketType, MarketTitle, Outcome, SportType, NAMING_T
 import { BigNumber as BN } from 'bignumber.js'
 import { AWAY_TEAM_OUTCOME, NO_CONTEST, NO_CONTEST_OUTCOME_ID, NO_CONTEST_TIE } from '../constants'
 import { getFullTeamName } from '.'
-import { isSameAddress } from '@masknet/web3-shared'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 
 export const deriveSportMarketInfo = (
     address: string,

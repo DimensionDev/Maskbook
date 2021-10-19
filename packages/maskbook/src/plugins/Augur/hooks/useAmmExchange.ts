@@ -1,4 +1,4 @@
-import { createContract, getERC20TokenDetailed, useAugurConstants, useChainId, useWeb3 } from '@masknet/web3-shared'
+import { createContract, getERC20TokenDetailed, useAugurConstants, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
 import { useAsyncRetry } from 'react-use'

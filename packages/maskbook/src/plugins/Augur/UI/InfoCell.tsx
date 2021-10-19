@@ -1,4 +1,4 @@
-import { formatBalance } from '@masknet/web3-shared'
+import { formatBalance } from '@masknet/web3-shared-evm'
 import { Grid, Typography } from '@material-ui/core'
 import { rawToFixed } from '../utils'
 

@@ -1,4 +1,4 @@
-import { ZERO } from '@masknet/web3-shared'
+import { ZERO } from '@masknet/web3-shared-evm'
 import type BigNumber from 'bignumber.js'
 import { MARKET_ID_REGEX, MIN_LP_COLLATERAL } from '../constants'
 import type { RawUserMarket, UserMarket } from '../types'

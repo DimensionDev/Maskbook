@@ -8,7 +8,7 @@ import {
     useFungibleTokenBalance,
     useTransactionState,
     ZERO,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { BigNumber as BN } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {

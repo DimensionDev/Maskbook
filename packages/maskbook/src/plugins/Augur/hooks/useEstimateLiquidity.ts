@@ -1,6 +1,6 @@
 import type { AugurAmmFactory } from '@masknet/web3-contracts/types/AugurAmmFactory'
 import type { AugurBalancerPool } from '@masknet/web3-contracts/types/AugurBalancerPool'
-import { formatPercentage, useAccount } from '@masknet/web3-shared'
+import { formatPercentage, useAccount } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
 import { DUST_POSITION_AMOUNT_ON_CHAIN } from '../constants'

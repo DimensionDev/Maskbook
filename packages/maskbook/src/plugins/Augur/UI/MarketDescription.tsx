@@ -6,7 +6,7 @@ import type { Market } from '../types'
 import { getResolutionRules } from '../utils'
 
 import { DESCRIPTION_PRECISION, MARKET_DESCRIPTION_LIMIT } from '../constants'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import DOMPurify from 'isomorphic-dompurify'
 import { InfoCell } from './InfoCell'
 import { useI18N } from '../../../utils'

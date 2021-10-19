@@ -8,7 +8,7 @@ import {
     TransactionStateType,
     addGasMargin,
     TransactionEventType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useAmmFactory } from '../contracts/useAmmFactory'
 import { LiquidityActionType, LiquidityBreakdown, Market } from '../types'
 import { currentSlippageSettings } from '../../Trader/settings'

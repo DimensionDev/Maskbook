@@ -1,9 +1,10 @@
 import type { AugurAmmFactory } from '@masknet/web3-contracts/types/AugurAmmFactory'
 import type { AugurMmaLinkMarketFactoryV2 } from '@masknet/web3-contracts/types/AugurMmaLinkMarketFactoryV2'
 import type { AugurSportsLinkMarketFactoryV2 } from '@masknet/web3-contracts/types/AugurSportsLinkMarketFactoryV2'
-import { createContract, formatAmount, formatBalance, useAugurConstants, useWeb3 } from '@masknet/web3-shared'
+import { createContract, formatAmount, formatBalance, useAugurConstants, useWeb3 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
+import type Web3 from 'web3'
 import { FALLBACK_SWAP_FEE, SWAP_FEE_DECIMALS } from '../constants'
 import { PluginAugurRPC } from '../messages'
 import { BasicMarket, Market, MarketType, SportType } from '../types'
@@ -41,7 +42,7 @@ export function useMarkets(basicMarkets: BasicMarket[], cache: RequestCache = 'd
 export async function fetchMarket(
     basicMarket: BasicMarket,
     GRAPH_URL: string,
-    web3: any,
+    web3: Web3,
     cache: RequestCache = 'default',
 ): Promise<Market | undefined> {
     const { address, id, link, ammAddress } = basicMarket

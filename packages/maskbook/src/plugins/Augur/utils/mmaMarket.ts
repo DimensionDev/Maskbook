@@ -1,4 +1,4 @@
-import { isSameAddress } from '@masknet/web3-shared'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import { NO_CONTEST_OUTCOME_ID } from '../constants'
 import { MarketTitle, MMA_MARKET_TYPE, Outcome, Sport } from '../types'
 
