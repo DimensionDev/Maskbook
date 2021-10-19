@@ -18,7 +18,7 @@ import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
-import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 
 export interface EthereumChainBoundaryProps {
@@ -105,9 +105,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     variant="contained"
                     size="small"
                     sx={{ marginTop: 1.5 }}
-                    onClick={() => {
-                        hasNativeAPI ? nativeAPI?.api.misc_openCreateWalletView() : openSelectProviderDialog()
-                    }}>
+                    onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_wallet')}
                 </ActionButton>
             </Box>

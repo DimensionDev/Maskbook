@@ -16,7 +16,7 @@ import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
-import { Flags } from '../../../../utils'
+import { Flags, hasNativeAPI, nativeAPI } from '../../../../utils'
 import Services from '../../../../extension/service'
 import { PopupRoutes } from '../../../../extension/popups'
 
@@ -105,6 +105,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     //#endregion
 
+    //#region native app
+    useEffect(() => {
+        if (!open) return
+        if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
+    }, [open])
+    //#endregion
+
     //#region wallet status dialog
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
@@ -187,8 +194,14 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         ],
     )
 
+    // not available for the native app
+    if (hasNativeAPI) return null
+
     return (
-        <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
+        <InjectedDialog
+            title={t('plugin_wallet_select_provider_dialog_title')}
+            open={open}
+            onClose={closeDialog}>
             <DialogContent className={classes.content}>
                 <Box className={classes.step}>
                     <Typography className={classes.stepTitle} variant="h2" component="h2">

@@ -1,6 +1,9 @@
+import { useCallback, useEffect, useState } from 'react'
+import classnames from 'classnames'
+import { uniqBy } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
+import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
 import {
     ERC721TokenDetailed,
     formatEthereumAddress,
@@ -9,9 +12,6 @@ import {
     useCollectibles,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
-import classnames from 'classnames'
-import { uniqBy } from 'lodash-es'
-import { useCallback, useEffect, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
