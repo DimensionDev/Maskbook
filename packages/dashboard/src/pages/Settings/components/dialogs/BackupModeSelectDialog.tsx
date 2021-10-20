@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface BackupModeSelectDialogProps {
     open: boolean
     onClose(): void
-    onSelect(mode: 'local' | 'cloud'): void
+    onSelect(mode: 'local' | 'cloud' | 'ceramic'): void
 }
 
 export default function BackupModeSelectDialog({ open, onClose, onSelect }: BackupModeSelectDialogProps) {
@@ -72,6 +72,10 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
                     <Box className={classes.mode} onClick={() => onSelect('local')}>
                         <LocalBackupIcon className={classes.icon} />
                         <Typography className={classes.label}>Local Backup</Typography>
+                    </Box>
+                    <Box className={classes.mode} onClick={() => onSelect('ceramic')}>
+                        <LocalBackupIcon className={classes.icon} />
+                        <Typography className={classes.label}>Ceramic Backup</Typography>
                     </Box>
                     <Box className={classNames(classes.mode, cloudDisabled && 'disabled')}>
                         {cloudDisabled ? (

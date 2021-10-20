@@ -21,7 +21,7 @@ export default function BackupSetting() {
         verify: false,
         merge: false,
     })
-    const [localMode, setLocalMode] = useState(true)
+    const [localMode, setLocalMode] = useState('local')
     const [params, setParams] = useState<VerifyCodeRequest | undefined>(undefined)
     const [cloudFileInfo, setCloudFileInfo] = useState<BackupFileInfo | undefined>(undefined)
 
@@ -34,12 +34,11 @@ export default function BackupSetting() {
         ensurePasswordSet(() => setShowDialog({ ...showDialog, mode: true }))
     }
 
-    const onSelectMode = (mode: 'local' | 'cloud') => {
+    const onSelectMode = (mode: 'local' | 'cloud' | 'ceramic') => {
+        setLocalMode(mode)
         if (mode === 'cloud') {
-            setLocalMode(false)
             setShowDialog({ ...showDialog, mode: false, verify: true })
         } else {
-            setLocalMode(true)
             setShowDialog({ ...showDialog, mode: false, backup: true })
         }
     }
@@ -60,7 +59,7 @@ export default function BackupSetting() {
             <SettingButton onClick={onBackup}>{t.settings_button_backup()}</SettingButton>
             {showDialog.backup ? (
                 <BackupDialog
-                    local={localMode}
+                    mode={localMode}
                     params={params}
                     open={showDialog.backup}
                     merged={merged}

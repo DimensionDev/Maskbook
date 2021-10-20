@@ -12,7 +12,12 @@ export default function BackupSettingItem() {
 
     useEffect(() => {
         if (user.backupAt) {
-            const method = user.backupMethod === 'local' ? t.settings_local_backup() : t.settings_cloud_backup()
+            const method =
+                user.backupMethod === 'local'
+                    ? t.settings_local_backup()
+                    : user.backupMethod === 'cloud'
+                    ? t.settings_cloud_backup()
+                    : t.settings_ceramic_backup()
             const last = t.settings_global_backup_last({ backupMethod: method, backupAt: user.backupAt })
 
             setDesc(last)

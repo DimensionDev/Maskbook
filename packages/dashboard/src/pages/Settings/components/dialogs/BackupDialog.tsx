@@ -15,15 +15,24 @@ import { encode } from '@msgpack/msgpack'
 import PasswordFiled from '../../../../components/PasswordField'
 import { MaskAlert } from '../../../../components/MaskAlert'
 
+import CeramicClient from '@ceramicnetwork/http-client'
+import KeyDidResolver from 'key-did-resolver'
+import { DID } from 'dids'
+
+import { Ed25519Provider } from 'key-did-provider-ed25519'
+import { randomBytes } from '@stablelib/random'
+
+import { TileDocument } from '@ceramicnetwork/stream-tile'
+
 export interface BackupDialogProps {
-    local?: boolean
+    mode?: string
     params?: VerifyCodeRequest
     open: boolean
     merged?: boolean
     onClose(): void
 }
 
-export default function BackupDialog({ local = true, params, open, merged, onClose }: BackupDialogProps) {
+export default function BackupDialog({ mode = 'local', params, open, merged, onClose }: BackupDialogProps) {
     const { showSnackbar } = useCustomSnackbar()
     const t = useDashboardI18N()
     const [backupPassword, setBackupPassword] = useState('')
@@ -34,8 +43,15 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
         base: true,
         wallet: false,
     })
-    const title = local ? t.settings_local_backup() : t.settings_cloud_backup()
+    const title =
+        mode === 'local'
+            ? t.settings_local_backup()
+            : mode === 'cloud'
+            ? t.settings_cloud_backup()
+            : t.settings_ceramic_backup()
     const { user, updateUser } = useContext(UserContext)
+
+    let streamId = user.streamId
 
     const { value: previewInfo, loading: searching } = useAsync(() => Services.Welcome.generateBackupPreviewInfo())
 
@@ -65,10 +81,33 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                 onlyBackupWhoAmI: false,
             })
 
-            if (local) {
+            if (mode === 'local') {
                 // local backup, no account
                 const encrypted = await encryptBackup(encode(backupPassword), encode(fileJson))
                 await Services.Welcome.downloadBackupV2(encrypted)
+            } else if (mode === 'ceramic') {
+                //store to ceramic
+                const API_URL = 'https://ceramic-clay.3boxlabs.com'
+                const ceramic = new CeramicClient(API_URL)
+
+                const resolver = {
+                    ...KeyDidResolver.getResolver(),
+                }
+                const did = new DID({ resolver })
+                ceramic.did = did
+
+                const seed = randomBytes(32)
+                const provider = new Ed25519Provider(seed)
+                ceramic.did.setProvider(provider)
+                await ceramic.did.authenticate()
+
+                const doc = await TileDocument.create(ceramic, fileJson, {
+                    controllers: [ceramic.did.id],
+                    family: 'ceramicBackup',
+                })
+                streamId = doc.id.toString()
+
+                console.log(streamId)
             } else if (params) {
                 const abstract = fileJson.personas
                     .filter((x) => x.nickname)
@@ -83,8 +122,9 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
             }
 
             updateUser({
-                backupMethod: local ? 'local' : 'cloud',
+                backupMethod: mode,
                 backupAt: formatDateTime(new Date(), 'yyyy-MM-dd HH:mm'),
+                streamId: streamId,
             })
 
             onClose()
