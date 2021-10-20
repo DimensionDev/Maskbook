@@ -1,17 +1,17 @@
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import {
+    EthereumTokenType,
     formatBalance,
-    isZero,
-    pow10,
+    FungibleToken,
     getChainDetailed,
     isSameAddress,
-    useAccount,
-    FungibleToken,
-    useTokenConstants,
+    isZero,
+    pow10,
     TransactionStateType,
+    useAccount,
     useFungibleTokenDetailed,
     useFungibleTokensDetailed,
-    EthereumTokenType,
+    useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import {
     Box,
@@ -30,13 +30,12 @@ import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
 import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
-import { ITO_Status, JSON_PayloadInMask, PoolFromNetwork, JSON_PayloadFromChain } from '../types'
+import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-es'
@@ -46,6 +45,9 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
         boxSizing: 'border-box',
         padding: theme.spacing(1, 2, 1),
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            padding: theme.spacing(1, 0, 1),
+        },
     },
     root: {
         borderRadius: 10,
@@ -66,20 +68,28 @@ const useStyles = makeStyles()((theme) => ({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
+        overflowX: 'hidden',
     },
     header: {
         display: 'flex',
         alignItems: 'center',
         paddingBottom: theme.spacing(1),
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            flexDirection: 'column',
+        },
     },
     button: {
         borderRadius: 50,
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            width: '100%',
+        },
     },
     title: {
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
         paddingBottom: theme.spacing(1),
+        width: '100%',
     },
     date: {
         fontSize: 12,
@@ -98,7 +108,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     table: {
-        paddingBottom: theme.spacing(1),
+        padding: theme.spacing(0, 0, 1, 0),
         borderRadius: 0,
     },
     cell: {
@@ -183,11 +193,12 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
+                    <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
                     <ActionButton
+                        fullWidth
                         size="small"
                         variant="contained"
                         onClick={() =>
@@ -201,7 +212,7 @@ export function PoolInList(props: PoolInListProps) {
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton size="small" variant="contained" disabled={true}>
+                    <ActionButton fullWidth size="small" variant="contained" disabled={true}>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}
@@ -273,7 +284,7 @@ export function PoolInList(props: PoolInListProps) {
 
                     <Box className={classes.details}>
                         <TableContainer component={Paper} className={classes.table}>
-                            <Table size="small">
+                            <Table size="small" stickyHeader>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell className={classes.head} align="center" size="small">

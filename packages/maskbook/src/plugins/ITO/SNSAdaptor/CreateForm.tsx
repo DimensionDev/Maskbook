@@ -9,7 +9,7 @@ import {
     useITOConstants,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
+import { Box, CircularProgress, Stack, TextField, Typography } from '@material-ui/core'
 import { makeStyles } from '@masknet/theme'
 import CheckIcon from '@material-ui/icons/Check'
 import UnCheckIcon from '@material-ui/icons/Close'
@@ -38,6 +38,9 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(1),
         paddingBottom: theme.spacing(2),
         display: 'flex',
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            margin: theme.spacing(0),
+        },
     },
     column: {
         flexDirection: 'column',
@@ -64,6 +67,10 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         color: '#fff',
         marginTop: theme.spacing(1.5),
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            lineHeight: 1.2,
+            marginTop: theme.spacing(0),
+        },
     },
     date: {
         margin: theme.spacing(1),
@@ -71,6 +78,15 @@ const useStyles = makeStyles()((theme) => ({
         '& > * ': {
             flex: 1,
             padding: theme.spacing(1),
+            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                flexDirection: 'column',
+                padding: theme.spacing(2, 0, 1, 0),
+            },
+        },
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            flexDirection: 'column',
+            paddingLeft: 0,
+            paddingRight: 0,
         },
     },
     iconWrapper: {
@@ -374,9 +390,9 @@ export function CreateForm(props: CreateFormProps) {
                     }}
                 />
             </Box>
-            <Box className={classes.date}>
+            <Stack className={classes.date} direction="row">
                 {StartTime} {EndTime}
-            </Box>
+            </Stack>
             <Box className={classes.line}>
                 <AdvanceSetting advanceSettingData={advanceSettingData} setAdvanceSettingData={setAdvanceSettingData} />
             </Box>
