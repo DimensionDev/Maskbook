@@ -105,7 +105,7 @@
     "react-virtualized-auto-sizer": "^1.0.6",
     "react-window": "^1.8.6",
     "remarkable": "^2.0.1",
-    "rss3-next": "0.6.17",
+    "rss3-next": "^0.6.17",
     "safari-14-idb-fix": "^2.0.3",
     "scrypt-js": "^3.0.1",
     "socket.io-client": "2.4.0",

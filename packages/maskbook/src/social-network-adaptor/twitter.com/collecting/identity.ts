@@ -61,6 +61,8 @@ function resolveCurrentVisitingIdentityInner(
             .startWatch({
                 childList: true,
                 subtree: true,
+                attributes: true,
+                attributeFilter: ['src', 'content'],
             })
 
         window.addEventListener('locationchange', assign)

@@ -377,7 +377,7 @@ importers:
       react-virtualized-auto-sizer: ^1.0.6
       react-window: ^1.8.6
       remarkable: ^2.0.1
-      rss3-next: 0.6.17
+      rss3-next: ^0.6.17
       safari-14-idb-fix: ^2.0.3
       scrypt-js: ^3.0.1
       socket.io-client: 2.4.0
@@ -809,9 +809,9 @@ importers:
       urlcat: ^2.0.4
       use-subscription: ^1.5.1
       wallet.ts: ^1.0.1
-      web3: ^1.3.6
+      web3: 1.5.2
       web3-core: ^1.5.2
-      web3-utils: ^1.3.6
+      web3-utils: 1.5.2
     dependencies:
       '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_f991c289939c8299bed5e4a6a5a79a62
       '@ensdomains/address-encoder': 0.2.6
@@ -829,7 +829,7 @@ importers:
       wallet.ts: 1.0.1
       web3: 1.5.2
       web3-core: 1.5.2
-      web3-utils: 1.5.3
+      web3-utils: 1.5.2
     devDependencies:
       '@types/use-subscription': 1.0.0
 
@@ -4308,12 +4308,6 @@ packages:
     dependencies:
       '@ethersproject/logger': 5.4.0
 
-  /@ethersproject/networks/5.4.2:
-    resolution: {integrity: sha512-eekOhvJyBnuibfJnhtK46b8HimBc5+4gqpvd1/H9LEl7Q7/qhsIhM81dI9Fcnjpk3jB1aTy6bj0hz3cifhNeYw==}
-    dependencies:
-      '@ethersproject/logger': 5.4.0
-    dev: false
-
   /@ethersproject/pbkdf2/5.4.0:
     resolution: {integrity: sha512-x94aIv6tiA04g6BnazZSLoRXqyusawRyZWlUhKip2jvoLpzJuLb//KtMM6PEovE47pMbW+Qe1uw+68ameJjB7g==}
     dependencies:
@@ -4357,15 +4351,15 @@ packages:
     resolution: {integrity: sha512-p06eiFKz8nu/5Ju0kIX024gzEQIgE5pvvGrBCngpyVjpuLtUIWT3097Agw4mTn9/dEA0FMcfByzFqacBMSgCVg==}
     dependencies:
       '@ethersproject/abstract-provider': 5.4.0
-      '@ethersproject/abstract-signer': 5.4.0
+      '@ethersproject/abstract-signer': 5.4.1
       '@ethersproject/address': 5.4.0
       '@ethersproject/basex': 5.4.0
-      '@ethersproject/bignumber': 5.4.0
+      '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
       '@ethersproject/constants': 5.4.0
       '@ethersproject/hash': 5.4.0
       '@ethersproject/logger': 5.4.0
-      '@ethersproject/networks': 5.4.2
+      '@ethersproject/networks': 5.4.1
       '@ethersproject/properties': 5.4.0
       '@ethersproject/random': 5.4.0
       '@ethersproject/rlp': 5.4.0
@@ -20694,6 +20688,7 @@ packages:
 
   /reflect-metadata/0.1.13:
     resolution: {integrity: sha512-Ts1Y/anZELhSsjMcU605fU9RE4Oi3p5ORujwbIKXfWa+0Zxs510Qrmrce5/Jowq3cHSZSJqBjypxmHarc+vEWg==}
+    requiresBuild: true
     dev: false
     optional: true
 

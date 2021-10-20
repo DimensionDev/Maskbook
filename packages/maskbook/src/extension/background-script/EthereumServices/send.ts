@@ -204,6 +204,9 @@ export async function INTERNAL_send(
         // if the transaction is eip-1559, need to remove gasPrice from the config
         if (Flags.EIP1559_enabled && isEIP1559Valid) {
             config.gasPrice = undefined
+        } else {
+            config.maxFeePerGas = undefined
+            config.maxPriorityFeePerGas = undefined
         }
 
         // send the transaction

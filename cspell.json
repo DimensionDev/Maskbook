@@ -227,6 +227,8 @@
         "nftscan",
         "apikey",
         "redpackets",
+        "tokenid",
+        "NFTRSS",
         "solana"
     ],
     "ignoreWords": [
@@ -304,7 +306,8 @@
         "drawed",
         "DRAWED",
         "devnet",
-        "fbclid"
+        "fbclid",
+        "noamount"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

@@ -1,9 +1,9 @@
-import { ChainId, createERC721Token, EthereumTokenType, isSameAddress } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { head } from 'lodash-es'
+import { head, isNull } from 'lodash-es'
 import type { Order } from 'opensea-js/lib/types'
-import { PluginCollectibleRPC } from '../../../../plugins/Collectible/messages'
-import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../../../plugins/Collectible/utils'
+import { PluginCollectibleRPC } from '../../Collectible/messages'
+import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../Collectible/utils'
+import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared-evm'
 
 export async function getNFT(address: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
@@ -28,13 +28,13 @@ export async function getNFT(address: string, tokenId: string) {
         name: asset.name,
         symbol: order?.paymentTokenContract?.symbol ?? asset.lastSale?.paymentToken?.symbol ?? 'ETH',
         image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
+        owner: asset.owner.address,
     }
 }
 
-export async function createNFT(account: string, contract: string, tokenId: string) {
-    const asset = await PluginCollectibleRPC.getAsset(contract, tokenId, ChainId.Mainnet)
-    if (!isSameAddress(asset.owner.address, account)) throw new Error('TokenId does not belong to account')
-    return createERC721Token(
+export async function createNFT(address: string, tokenId: string) {
+    const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
+    const token = createERC721Token(
         {
             chainId: ChainId.Mainnet,
             type: EthereumTokenType.ERC721,
@@ -45,4 +45,26 @@ export async function createNFT(account: string, contract: string, tokenId: stri
         { name: asset.name, description: asset.description, image: asset.imageUrl ?? asset.imagePreviewUrl ?? '' },
         tokenId,
     )
+    return { account: asset.owner.address, token }
+}
+
+export function toPNG(image: string) {
+    return new Promise<Blob | null>((resolve, reject) => {
+        const img = new Image()
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')
+        if (isNull(ctx)) throw new Error('Canvas was not supported')
+        img.addEventListener('load', () => {
+            ;[canvas.width, canvas.height] = [img.width, img.height]
+            ctx.drawImage(img, 0, 0, img.width, img.height)
+            canvas.toBlob((blob) => {
+                resolve(blob)
+            }, 'image/png')
+        })
+        img.addEventListener('error', () => {
+            reject(new Error('Could not load image'))
+        })
+        img.setAttribute('CrossOrigin', 'Anonymous')
+        img.src = image
+    })
 }
