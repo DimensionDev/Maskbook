@@ -940,5 +940,16 @@
     "popups_password_do_not_match": "crwdns8983:0crwdne8983:0",
     "popups_backup_password": "crwdns8985:0crwdne8985:0",
     "popups_rename_error_tip": "crwdns8987:0{{length}}crwdne8987:0",
-    "profile_nft_avatar_set": "crwdns8189:0crwdne8189:0"
+    "nft_button_set_avatar": "crwdns9191:0crwdne9191:0",
+    "nft_input_address_label": "crwdns9193:0crwdne9193:0",
+    "nft_input_tokenid_label": "crwdns9195:0crwdne9195:0",
+    "nft_owner_hint": "crwdns9197:0crwdne9197:0",
+    "nft_add_dialog_title": "crwdns9199:0crwdne9199:0",
+    "nft_add_button_label": "crwdns9201:0crwdne9201:0",
+    "nft_list_title": "crwdns9203:0crwdne9203:0",
+    "nft_wallet_label": "crwdns9205:0crwdne9205:0",
+    "nft_wallet_change": "crwdns9207:0crwdne9207:0",
+    "nft_button_add_collectible": "crwdns9209:0crwdne9209:0",
+    "nft_avatar": "crwdns9211:0crwdne9211:0",
+    "nft_owner_check_info": "crwdns9213:0crwdne9213:0"
 }
