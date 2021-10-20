@@ -9,6 +9,8 @@ interface Props extends React.PropsWithChildren<{}> {
     histories: NftHistory[]
 }
 
+const formatAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`
+
 function FoundationProvenances(props: Props) {
     const { t } = useI18N()
     const account = useAccount()
@@ -29,7 +31,7 @@ function FoundationProvenances(props: Props) {
                         <Grid item xs={8}>
                             <Box>
                                 <Typography variant="h6">
-                                    {`${history.event} ${t('plugin_foundation_placed_by')}`}
+                                    {`${history.event} ${t('plugin_foundation_by')} `}
                                     <Link
                                         href={`https://etherscan.io/address/${history.txOrigin.id}`}
                                         color="inherit"
@@ -37,9 +39,7 @@ function FoundationProvenances(props: Props) {
                                         {account === history.txOrigin.id ? (
                                             <span>{t('plugin_foundation_you_address')}</span>
                                         ) : (
-                                            <span>{`${history.txOrigin.id.slice(0, 6)}...${history.txOrigin.id.slice(
-                                                -4,
-                                            )}`}</span>
+                                            <span>{formatAddress(history.txOrigin.id)}</span>
                                         )}
                                     </Link>
                                 </Typography>

@@ -43,7 +43,7 @@ function FoundationCountdown(props: Props) {
         return () => {
             clearTimeout(timer)
         }
-    }, [currentCount])
+    }, [NftdateEnding])
     return (
         <Box className={classes.body}>
             {NftdateEnding > Date.now() && (
