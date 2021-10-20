@@ -8,7 +8,8 @@ import { useStylesExtends } from '@masknet/shared'
 import { DashboardRoute } from '../../extension/options-page/Route'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
-import { hasNativeAPI, nativeAPI } from '../../utils'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
+import GuideStep from '../GuideStep'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'button'> {
     description?: string
@@ -35,10 +36,14 @@ const useStyles = makeStyles()({
 
 export function BannerUI(props: BannerUIProps) {
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
+
     return props.nextStep === 'hidden' ? null : (
-        <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-            <MaskSharpIcon color="primary" />
-        </IconButton>
+        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')}>
+            <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
+                <MaskSharpIcon color="primary" />
+            </IconButton>
+        </GuideStep>
     )
 }
 
