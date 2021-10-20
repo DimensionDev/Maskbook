@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
 import type { Pool } from '../types'
-import { Typography, Grid, CircularProgress, Button } from '@material-ui/core'
+import { Typography, Grid, CircularProgress, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useChainId, useERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { RefreshIcon } from '@masknet/icons'

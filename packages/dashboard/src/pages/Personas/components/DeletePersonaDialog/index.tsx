@@ -1,4 +1,4 @@
-import { Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { DashboardTrans, useDashboardI18N } from '../../../../locales'

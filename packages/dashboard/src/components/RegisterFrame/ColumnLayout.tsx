@@ -1,6 +1,6 @@
-import { styled, useTheme } from '@material-ui/core/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import { FooterLine } from '../FooterLine'
-import { Paper, Typography } from '@material-ui/core'
+import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 

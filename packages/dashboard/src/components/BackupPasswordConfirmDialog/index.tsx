@@ -1,5 +1,5 @@
 import { memo, useContext, useMemo, useState } from 'react'
-import { Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/UserContext'
 import { MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'

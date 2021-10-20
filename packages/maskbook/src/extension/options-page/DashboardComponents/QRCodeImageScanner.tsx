@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react'
 import { useQRCodeImageScan } from '../../../utils/hooks/useQRCodeImageScan'
-import { CircularProgress } from '@material-ui/core'
+import { CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()({

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
+import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
 import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'

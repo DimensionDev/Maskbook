@@ -1,5 +1,5 @@
 import { LoadingIcon } from '@masknet/icons'
-import { Card, Stack, Typography } from '@material-ui/core'
+import { Card, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
 
 interface LoadingProps {

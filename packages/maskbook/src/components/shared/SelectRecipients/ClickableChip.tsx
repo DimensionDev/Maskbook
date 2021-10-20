@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
-import DoneIcon from '@material-ui/icons/Done'
-import Chip, { ChipProps } from '@material-ui/core/Chip'
+import DoneIcon from '@mui/icons-material/Done'
+import Chip, { ChipProps } from '@mui/material/Chip'
 
 export interface ClickableChipProps extends ChipProps {
     checked?: boolean

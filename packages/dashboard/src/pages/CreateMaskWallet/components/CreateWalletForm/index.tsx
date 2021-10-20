@@ -1,5 +1,5 @@
 import { memo, useEffect, useMemo, useState } from 'react'
-import { Alert, Box, Button, formHelperTextClasses, Typography } from '@material-ui/core'
+import { Alert, Box, Button, formHelperTextClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'

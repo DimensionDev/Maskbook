@@ -1,4 +1,4 @@
-import { Box, InputBase } from '@material-ui/core'
+import { Box, InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'

@@ -1,9 +1,9 @@
-import { Typography, IconButton, Link } from '@material-ui/core'
+import { Typography, IconButton, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { capitalize } from 'lodash-es'
-import LinkOffIcon from '@material-ui/icons/LinkOff'
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
+import LinkOffIcon from '@mui/icons-material/LinkOff'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
 
 import { useI18N, Flags } from '../../../utils'
 import { useStylesExtends } from '@masknet/shared'

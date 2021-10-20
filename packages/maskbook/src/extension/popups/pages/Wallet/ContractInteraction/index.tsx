@@ -15,11 +15,11 @@ import {
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
-import { Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'

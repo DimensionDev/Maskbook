@@ -1,6 +1,6 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import React, { useContext, useState } from 'react'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import PasswordField from '../../../../components/PasswordField'

@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from 'react'
 import classNames from 'classnames'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context'
 import { useAccount } from '@masknet/web3-shared-evm'

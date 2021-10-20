@@ -1,5 +1,5 @@
 import { ExternalLink } from 'react-feather'
-import { Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { resolveTradePairLink } from '../../pipes'
 import type { TradeComputed } from '../../types'

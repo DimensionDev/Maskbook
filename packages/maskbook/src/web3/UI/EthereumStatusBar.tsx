@@ -1,4 +1,4 @@
-import { Box, ButtonProps, BoxProps } from '@material-ui/core'
+import { Box, ButtonProps, BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { EthereumAccountButton } from './EthereumAccountButton'

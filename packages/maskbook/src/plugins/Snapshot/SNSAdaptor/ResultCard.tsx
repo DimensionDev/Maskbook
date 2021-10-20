@@ -1,15 +1,6 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
-import {
-    Box,
-    List,
-    ListItem,
-    Typography,
-    LinearProgress,
-    styled,
-    Button,
-    linearProgressClasses,
-} from '@material-ui/core'
+import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ShadowRootTooltip, useI18N } from '../../../utils'
 import millify from 'millify'

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import type { Pool } from '../types'
-import { Divider, Grid, Typography } from '@material-ui/core'
+import { Divider, Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { formatAmountPostfix } from '../utils'

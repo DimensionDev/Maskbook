@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect, MouseEvent } from 'react'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
-import { Box, ListItem, Typography, Popper } from '@material-ui/core'
+import { Box, ListItem, Typography, Popper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { RedPacketHistory, RedPacketJSONPayload, RedPacketStatus } from '../types'

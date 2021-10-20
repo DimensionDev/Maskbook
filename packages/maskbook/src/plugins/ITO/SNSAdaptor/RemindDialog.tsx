@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import classNames from 'classnames'
-import { Checkbox, FormControlLabel, Link, Typography } from '@material-ui/core'
+import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../utils'

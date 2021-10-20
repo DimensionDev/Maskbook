@@ -1,4 +1,4 @@
-import { TextField } from '@material-ui/core'
+import { TextField } from '@mui/material'
 import { useState } from 'react'
 import { Search } from 'react-feather'
 import { useI18N } from '../../../../utils'

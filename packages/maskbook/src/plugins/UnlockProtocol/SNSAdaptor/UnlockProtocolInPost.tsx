@@ -1,5 +1,5 @@
 import type { TypedMessage } from '../../../protocols/typed-message'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import MaskPluginWrapper from '../../MaskPluginWrapper'

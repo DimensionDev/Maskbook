@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'

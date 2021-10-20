@@ -1,4 +1,4 @@
-import { SvgIcon, SvgIconProps } from '@material-ui/core'
+import { SvgIcon, SvgIconProps } from '@mui/material'
 
 const AirdropIconSVG = (
     <svg viewBox="0 0 70 79" fill="none" xmlns="http://www.w3.org/2000/svg">

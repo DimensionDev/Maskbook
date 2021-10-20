@@ -1,5 +1,5 @@
 import { MaskTextField } from '@masknet/theme'
-import { Box, Button, IconButton, Stack, Typography } from '@material-ui/core'
+import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import {
     EthereumTokenType,
@@ -19,7 +19,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { TokenAmountPanel } from '@masknet/shared'
-import TuneIcon from '@material-ui/icons/Tune'
+import TuneIcon from '@mui/icons-material/Tune'
 import { EthereumAddress } from 'wallet.ts'
 import { SelectTokenDialog } from '../SelectTokenDialog'
 import { useDashboardI18N } from '../../../../locales'

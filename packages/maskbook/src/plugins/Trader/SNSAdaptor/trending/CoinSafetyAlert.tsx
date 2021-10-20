@@ -1,4 +1,4 @@
-import { Alert, AlertTitle, Box, Button, Link, Paper } from '@material-ui/core'
+import { Alert, AlertTitle, Box, Button, Link, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'

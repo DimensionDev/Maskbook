@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { Box, Card } from '@material-ui/core'
+import { Box, Card } from '@mui/material'
 import type { BackupPreview } from '@masknet/public-api'
 import { useDashboardI18N } from '../../locales'
 import { PluginServices, Services } from '../../API'

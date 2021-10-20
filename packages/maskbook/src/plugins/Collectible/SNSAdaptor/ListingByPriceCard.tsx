@@ -1,16 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { useCustomSnackbar } from '@masknet/theme'
-import {
-    Box,
-    Card,
-    CardActions,
-    CardContent,
-    Checkbox,
-    FormControlLabel,
-    TextField,
-    Typography,
-} from '@material-ui/core'
+import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,

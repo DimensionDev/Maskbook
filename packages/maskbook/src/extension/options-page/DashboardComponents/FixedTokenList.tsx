@@ -12,7 +12,7 @@ import {
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { uniqBy } from 'lodash-es'
 import { useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'

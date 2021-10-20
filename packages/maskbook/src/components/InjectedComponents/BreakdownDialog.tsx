@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DialogContent, Typography } from '@material-ui/core'
+import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog, InjectedDialogProps } from '../shared/InjectedDialog'
 import { makeStyles } from '@masknet/theme'
 import { MaskIcon } from '../../resources/MaskIcon'

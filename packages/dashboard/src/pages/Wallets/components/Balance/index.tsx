@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { styled, Typography, Box, Button, buttonClasses, Stack } from '@material-ui/core'
+import { styled, Typography, Box, Button, buttonClasses, Stack } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@masknet/icons'

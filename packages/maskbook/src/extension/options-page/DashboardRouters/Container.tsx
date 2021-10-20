@@ -1,5 +1,5 @@
 import { cloneElement } from 'react'
-import { Typography, Divider, Fade, Fab, PropTypes } from '@material-ui/core'
+import { Typography, Divider, Fade, Fab, PropTypes } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useMatchXS } from '../../../utils/hooks/useMatchXS'

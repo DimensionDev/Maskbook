@@ -1,5 +1,5 @@
 import { MaskTextField } from '@masknet/theme'
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import { memo } from 'react'
 
 export interface DesktopMnemonicConfirmProps {

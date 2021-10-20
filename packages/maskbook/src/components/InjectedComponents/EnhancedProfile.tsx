@@ -8,8 +8,8 @@ import {
     EthereumNameType,
     useEthereumAddress,
 } from '@masknet/web3-shared-evm'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import { Box, Link, Typography } from '@material-ui/core'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import { Box, Link, Typography } from '@mui/material'
 import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
 import { MaskMessages, useI18N } from '../../utils'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'

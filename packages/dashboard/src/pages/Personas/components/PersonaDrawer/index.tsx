@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Box, Button, Drawer, Stack } from '@material-ui/core'
+import { Box, Button, Drawer, Stack } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { PersonaCard } from '../PersonaCard'

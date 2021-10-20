@@ -1,6 +1,6 @@
-import { useTheme } from '@material-ui/core'
+import { useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import AddBoxOutlinedIcon from '@material-ui/icons/AddBoxOutlined'
+import AddBoxOutlinedIcon from '@mui/icons-material/AddBoxOutlined'
 import { useStylesExtends } from '@masknet/shared'
 import ActionButton from './ActionButton'
 

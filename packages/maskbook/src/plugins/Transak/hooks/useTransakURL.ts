@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { rgbToHex, useTheme } from '@material-ui/core'
+import { rgbToHex, useTheme } from '@mui/material'
 import stringify from 'json-stable-stringify'
 import { TRANSAK_API_KEY_PRODUCTION, TRANSAK_API_KEY_STAGING } from '../constants'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'

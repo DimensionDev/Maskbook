@@ -1,6 +1,6 @@
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { green } from '@material-ui/core/colors'
+import { green } from '@mui/material/colors'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { Database as DatabaseIcon } from 'react-feather'

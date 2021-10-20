@@ -1,5 +1,5 @@
 import { memo, MouseEvent, useState } from 'react'
-import { Box, Button, Link, Typography } from '@material-ui/core'
+import { Box, Button, Link, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { makeStyles } from '@masknet/theme'

@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'

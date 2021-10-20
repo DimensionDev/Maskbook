@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
-import { Button, DialogActions, DialogContent, TextField } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useFormContext, Controller } from 'react-hook-form'

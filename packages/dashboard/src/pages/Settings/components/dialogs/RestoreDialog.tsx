@@ -1,5 +1,5 @@
-import { TabList, TabPanel, TabContext, tabPanelClasses } from '@material-ui/lab'
-import { Tab, styled, tabClasses, tabsClasses, InputBase, inputBaseClasses } from '@material-ui/core'
+import { TabList, TabPanel, TabContext, tabPanelClasses } from '@mui/lab'
+import { Tab, styled, tabClasses, tabsClasses, InputBase, inputBaseClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useAsync } from 'react-use'

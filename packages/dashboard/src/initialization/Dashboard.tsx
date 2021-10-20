@@ -1,5 +1,5 @@
 import { HashRouter } from 'react-router-dom'
-import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@material-ui/core'
+import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@mui/material'
 import {
     CustomSnackbarProvider,
     MaskLightTheme,

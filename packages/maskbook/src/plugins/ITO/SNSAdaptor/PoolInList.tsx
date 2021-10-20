@@ -25,7 +25,7 @@ import {
     TableHead,
     TableRow,
     Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'

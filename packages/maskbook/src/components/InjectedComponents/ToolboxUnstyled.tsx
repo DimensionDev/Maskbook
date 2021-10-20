@@ -48,7 +48,7 @@ import { WalletIcon } from '../shared/WalletIcon'
 import { MaskIcon, MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
 const useStyles = makeStyles()((theme) => ({
     font: {

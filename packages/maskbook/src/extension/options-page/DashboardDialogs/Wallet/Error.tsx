@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { Info as InfoIcon } from 'react-feather'
 import { useHistory } from 'react-router-dom'
 import { useQueryParams, useI18N, delay } from '../../../../utils'

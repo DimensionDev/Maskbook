@@ -10,7 +10,7 @@ import {
     useNativeTokenDetailed,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { DialogContent, Link, Typography } from '@material-ui/core'
+import { DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'

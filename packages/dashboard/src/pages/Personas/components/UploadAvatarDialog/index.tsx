@@ -1,6 +1,6 @@
 import { DocumentIcon } from '@masknet/icons'
 import { MaskDialog } from '@masknet/theme'
-import { Box, Button, DialogContent, Slider } from '@material-ui/core'
+import { Box, Button, DialogContent, Slider } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
 import { useStateList } from 'react-use'

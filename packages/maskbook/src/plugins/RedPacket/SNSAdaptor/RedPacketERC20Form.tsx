@@ -13,7 +13,7 @@ import {
     useWeb3,
 } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-es'
-import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@material-ui/core'
+import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'

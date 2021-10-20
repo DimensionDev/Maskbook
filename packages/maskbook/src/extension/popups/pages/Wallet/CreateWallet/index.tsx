@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Controller } from 'react-hook-form'
 import type { z as zod } from 'zod'

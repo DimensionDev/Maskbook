@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { MaskTextField } from '@masknet/theme'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button } from '@mui/material'
 import { useDashboardI18N } from '../../locales'
 import { MaskAlert } from '../MaskAlert'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'

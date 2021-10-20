@@ -1,5 +1,5 @@
 import { useDashboardI18N } from '../../locales'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 
 export const Version = ({ className }: { className?: string }) => {
     const t = useDashboardI18N()

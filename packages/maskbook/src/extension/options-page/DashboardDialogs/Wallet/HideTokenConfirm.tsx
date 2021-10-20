@@ -1,5 +1,5 @@
 import { Trash2 as TrashIcon } from 'react-feather'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ERC20TokenDetailed,

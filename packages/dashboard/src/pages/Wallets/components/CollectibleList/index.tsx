@@ -1,5 +1,5 @@
 import { Dispatch, memo, SetStateAction, useCallback, useEffect, useState } from 'react'
-import { Box, Stack, TablePagination } from '@material-ui/core'
+import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,

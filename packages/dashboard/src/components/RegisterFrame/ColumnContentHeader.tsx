@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { styled } from '@material-ui/core/styles'
-import { Button, Typography } from '@material-ui/core'
+import { styled } from '@mui/material/styles'
+import { Button, Typography } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 
 const HeaderContainer = styled('header')(({ theme }) => ({

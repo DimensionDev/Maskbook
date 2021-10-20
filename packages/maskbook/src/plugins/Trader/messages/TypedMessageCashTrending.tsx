@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@mui/material'
 import {
     TypedMessageAnchor,
     registerTypedMessageRenderer,

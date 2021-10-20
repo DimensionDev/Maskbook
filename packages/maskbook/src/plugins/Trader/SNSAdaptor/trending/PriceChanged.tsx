@@ -1,8 +1,8 @@
 import classNames from 'classnames'
 import { useColorStyles } from '../../../../utils/theme'
 import { makeStyles } from '@masknet/theme'
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp'
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 
 const useStyles = makeStyles()({
     root: {

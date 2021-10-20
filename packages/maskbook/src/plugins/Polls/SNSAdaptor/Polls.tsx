@@ -1,4 +1,4 @@
-import { Card, Typography, CircularProgress, List, ListItem } from '@material-ui/core'
+import { Card, Typography, CircularProgress, List, ListItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import isValid from 'date-fns/isValid'
 import formatDistance from 'date-fns/formatDistance'

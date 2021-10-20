@@ -1,6 +1,6 @@
 import { TwitterIcon, FacebookIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
-import { Button, buttonClasses, styled } from '@material-ui/core'
+import { Button, buttonClasses, styled } from '@mui/material'
 
 const StyledButton = styled<typeof Button>(Button)(({ theme }) => ({
     height: '26px',

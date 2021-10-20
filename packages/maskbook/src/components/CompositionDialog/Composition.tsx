@@ -1,4 +1,4 @@
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { useRef } from 'react'
 import { useCallback, useEffect, useState } from 'react'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'

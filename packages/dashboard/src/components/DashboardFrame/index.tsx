@@ -11,9 +11,9 @@ import {
     Typography,
     useMediaQuery,
     useTheme,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Close as CloseIcon, Menu as MenuIcon } from '@material-ui/icons'
+import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
 import { ErrorBoundary } from '@masknet/shared'
 import { memo, Suspense, useContext, useMemo, useState } from 'react'

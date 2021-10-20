@@ -1,4 +1,4 @@
-import { TextField, CircularProgress } from '@material-ui/core'
+import { TextField, CircularProgress } from '@mui/material'
 import { useMemo, useState, useEffect } from 'react'
 import { Octagon as OctagonIcon } from 'react-feather'
 import { EthereumAddress } from 'wallet.ts'

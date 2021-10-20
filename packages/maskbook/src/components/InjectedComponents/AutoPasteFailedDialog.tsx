@@ -14,14 +14,14 @@ import {
     Paper,
     Link,
     Button,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useStylesExtends } from '@masknet/shared'
 import { Image } from '../shared/Image'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'
-import Download from '@material-ui/icons/CloudDownload'
-import CloseIcon from '@material-ui/icons/Close'
-import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
+import Download from '@mui/icons-material/CloudDownload'
+import CloseIcon from '@mui/icons-material/Close'
+import OpenInBrowser from '@mui/icons-material/OpenInBrowser'
 // TODO: it should not import a background service, but
 // it might downloading a blob:// file thus rewrite to Services.Helpers.* might trigger a CSP failure.
 import { saveAsFileFromUrl } from '../../extension/background-script/HelperService/saveAsFile'

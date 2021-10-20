@@ -1,7 +1,7 @@
 import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useContacts } from '../../hooks/useContacts'
 import type { RelationProfile } from '@masknet/shared'
-import { Table, TableContainer, TableBody, Box, TablePagination, Stack } from '@material-ui/core'
+import { Table, TableContainer, TableBody, Box, TablePagination, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { ContactTableRow } from '../ContactTableRow'

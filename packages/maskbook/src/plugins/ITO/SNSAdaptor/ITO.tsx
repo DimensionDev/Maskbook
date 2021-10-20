@@ -17,9 +17,9 @@ import {
     ZERO,
     isGreaterThan,
 } from '@masknet/web3-shared-evm'
-import { Box, Card, Grid, Link, Typography } from '@material-ui/core'
+import { Box, Card, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'

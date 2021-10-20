@@ -11,9 +11,9 @@ import {
     ThemeProvider,
     InputBase,
     FormControlLabel,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { green } from '@material-ui/core/colors'
+import { green } from '@mui/material/colors'
 import { useParams, useRouteMatch, Switch, Route, Redirect, Link, useHistory } from 'react-router-dom'
 
 import {

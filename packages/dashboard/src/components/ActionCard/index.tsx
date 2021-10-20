@@ -1,6 +1,6 @@
-import { Box, Button, Card, Stack, Typography } from '@material-ui/core'
+import { Box, Button, Card, Stack, Typography } from '@mui/material'
 import type { ReactNode } from 'react'
-import { experimentalStyled as styled } from '@material-ui/core/styles'
+import { experimentalStyled as styled } from '@mui/material/styles'
 
 const ActionCardIcon = styled('div')(
     ({ theme }) => `

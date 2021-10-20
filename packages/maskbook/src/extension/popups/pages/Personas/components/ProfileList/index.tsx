@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network'
 import { ProfileIdentifier, ProfileInformation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { compact } from 'lodash-es'

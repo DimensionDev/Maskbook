@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import formatDateTime from 'date-fns/format'
 import type { Transaction } from '@masknet/web3-shared-evm'
-import { Box, TableCell, TableRow, Typography, Link, Stack } from '@material-ui/core'
+import { Box, TableCell, TableRow, Typography, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,

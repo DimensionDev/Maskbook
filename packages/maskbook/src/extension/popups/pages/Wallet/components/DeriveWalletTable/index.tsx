@@ -9,7 +9,7 @@ import {
     Skeleton,
     CircularProgress,
     Checkbox,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { useAsync } from 'react-use'

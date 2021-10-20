@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Button, DialogContent, DialogActions, TextField } from '@material-ui/core'
+import { Button, DialogContent, DialogActions, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Wallet } from '@masknet/web3-shared-evm'
 import { WalletMessages, WalletRPC } from '../messages'

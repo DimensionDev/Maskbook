@@ -1,4 +1,4 @@
-import { Button, Stack, Typography } from '@material-ui/core'
+import { Button, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
 import { AccountType } from '../../../pages/Settings/type'
 

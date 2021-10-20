@@ -1,5 +1,5 @@
-import { styled } from '@material-ui/core'
-import type {} from '@material-ui/system'
+import { styled } from '@mui/material'
+import type {} from '@mui/system'
 /**
  * This component is an abstraction of a list of "start up action suggestions".
  */

@@ -1,4 +1,4 @@
-import { Box, Stack, TablePagination } from '@material-ui/core'
+import { Box, Stack, TablePagination } from '@mui/material'
 import { usePostHistory } from '../../hooks/usePostHistory'
 import { PostHistoryRow } from './PostHistoryRow'
 import { memo, useState } from 'react'

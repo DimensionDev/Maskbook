@@ -1,6 +1,6 @@
 import { SyntheticEvent, cloneElement, isValidElement, useCallback, useState, createElement } from 'react'
-import { Menu, PopoverOrigin } from '@material-ui/core'
-import type { MenuListProps, PaperProps } from '@material-ui/core'
+import { Menu, PopoverOrigin } from '@mui/material'
+import type { MenuListProps, PaperProps } from '@mui/material'
 import { ShadowRootMenu } from '../shadow-root/ShadowRootComponents'
 import { useUpdate } from 'react-use'
 

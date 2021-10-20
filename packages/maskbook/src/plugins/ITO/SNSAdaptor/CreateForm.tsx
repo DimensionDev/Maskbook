@@ -9,10 +9,10 @@ import {
     useITOConstants,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
+import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import CheckIcon from '@material-ui/icons/Check'
-import UnCheckIcon from '@material-ui/icons/Close'
+import CheckIcon from '@mui/icons-material/Check'
+import UnCheckIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'

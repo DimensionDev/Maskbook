@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Button, Stack, Typography } from '@material-ui/core'
+import { Button, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-shared-evm'
 import { ERC20TokenList } from '@masknet/shared'

@@ -1,6 +1,6 @@
-import { IconButton, InputAdornment, TextField } from '@material-ui/core'
+import { IconButton, InputAdornment, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined'
+import FileCopyOutlinedIcon from '@mui/icons-material/FileCopyOutlined'
 import { useCopyToClipboard } from 'react-use'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
 import type { Wallet } from '@masknet/web3-shared-evm'

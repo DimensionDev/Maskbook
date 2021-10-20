@@ -16,8 +16,8 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
-import { Link } from '@material-ui/core'
-import LaunchIcon from '@material-ui/icons/Launch'
+import { Link } from '@mui/material'
+import LaunchIcon from '@mui/icons-material/Launch'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-es'
 import React, { FC, memo, useCallback, useRef, useState } from 'react'

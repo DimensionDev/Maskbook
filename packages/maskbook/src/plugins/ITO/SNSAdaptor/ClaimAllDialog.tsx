@@ -3,7 +3,7 @@ import { flatten, uniq } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import { useCustomSnackbar, VariantType, SnackbarProvider } from '@masknet/theme'
 import { FormattedBalance, useRemoteControlledDialog } from '@masknet/shared'
-import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@material-ui/core'
+import { DialogContent, CircularProgress, Typography, List, ListItem, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     formatBalance,

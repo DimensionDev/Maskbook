@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
-import { Typography, DialogContent, DialogActions, Button, CircularProgress, Link } from '@material-ui/core'
+import { Typography, DialogContent, DialogActions, Button, CircularProgress, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import WarningIcon from '@material-ui/icons/Warning'
-import DoneIcon from '@material-ui/icons/Done'
+import WarningIcon from '@mui/icons-material/Warning'
+import DoneIcon from '@mui/icons-material/Done'
 import {
     useChainId,
     TransactionState,

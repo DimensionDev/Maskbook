@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { InputBase, Box } from '@material-ui/core'
+import { InputBase, Box } from '@mui/material'
 import { useI18N } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'

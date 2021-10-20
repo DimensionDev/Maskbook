@@ -7,7 +7,7 @@ import type {
     ReadonlyIdentifierMap,
     ObservableWeakMap,
 } from '@masknet/shared'
-import type { PaletteMode, Theme } from '@material-ui/core'
+import type { PaletteMode, Theme } from '@mui/material'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { PostInfo } from './PostInfo'

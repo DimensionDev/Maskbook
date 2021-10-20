@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@material-ui/core'
+import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'

@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { FC } from 'react'
 import { TokenIcon } from '@masknet/shared'

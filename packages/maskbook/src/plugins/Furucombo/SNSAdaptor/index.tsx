@@ -1,6 +1,6 @@
 import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@material-ui/core'
+import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { parseURL } from '../../../utils/utils'

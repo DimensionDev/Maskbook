@@ -1,7 +1,7 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
 import { useValueRef } from '@masknet/shared'
 import { Appearance } from '@masknet/theme'
-import { PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@material-ui/core'
+import { PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { createElement, useMemo } from 'react'
 import type { SocialNetworkUI } from '../../../social-network'

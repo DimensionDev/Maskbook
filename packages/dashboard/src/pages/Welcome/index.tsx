@@ -2,7 +2,7 @@ import { Button, useTheme } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useDashboardI18N } from '../../locales'
 

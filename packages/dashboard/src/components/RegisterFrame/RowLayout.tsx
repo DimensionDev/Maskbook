@@ -1,7 +1,7 @@
 import { MaskBannerIcon } from '@masknet/icons'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { memo } from 'react'
-import { Container } from '@material-ui/core'
+import { Container } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 
 const LayoutContainer = styled('div')(

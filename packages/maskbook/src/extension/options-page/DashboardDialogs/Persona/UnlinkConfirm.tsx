@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import Services from '../../../service'

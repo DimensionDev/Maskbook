@@ -1,6 +1,6 @@
 import { WalletHeader } from '../components/WalletHeader'
 import { WalletInfo } from '../components/WalletInfo'
-import { Link, List, ListItem, ListItemText } from '@material-ui/core'
+import { Link, List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'

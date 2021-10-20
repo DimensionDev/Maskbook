@@ -11,13 +11,13 @@ import {
     SnackbarAction,
     OptionsObject,
 } from 'notistack'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { IconButton } from '@mui/material'
 import classnames from 'classnames'
 import { Close as CloseIcon } from '@mui/icons-material'
-import WarningIcon from '@material-ui/icons/Warning'
-import InfoIcon from '@material-ui/icons/Info'
-import DoneIcon from '@material-ui/icons/Done'
+import WarningIcon from '@mui/icons-material/Warning'
+import InfoIcon from '@mui/icons-material/Info'
+import DoneIcon from '@mui/icons-material/Done'
 import { LoadingIcon, RiskIcon } from '@masknet/icons'
 import { makeStyles } from '../../makeStyles'
 import { MaskColorVar } from '../../constants'

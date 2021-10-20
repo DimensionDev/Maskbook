@@ -1,4 +1,4 @@
-import { Box, Button, Link } from '@material-ui/core'
+import { Box, Button, Link } from '@mui/material'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Database as DatabaseIcon } from 'react-feather'
 import { useAsync } from 'react-use'

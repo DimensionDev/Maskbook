@@ -1,4 +1,4 @@
-import { Box, Paper, Link, Typography } from '@material-ui/core'
+import { Box, Paper, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'

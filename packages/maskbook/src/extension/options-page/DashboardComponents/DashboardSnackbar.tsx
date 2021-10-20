@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 import { SnackbarProvider } from '@masknet/theme'
-import { useTheme } from '@material-ui/core'
+import { useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()({

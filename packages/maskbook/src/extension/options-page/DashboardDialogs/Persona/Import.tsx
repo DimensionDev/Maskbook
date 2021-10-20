@@ -1,4 +1,4 @@
-import { TextField } from '@material-ui/core'
+import { TextField } from '@mui/material'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { UserCheck } from 'react-feather'

@@ -9,8 +9,8 @@ import {
     Card,
     CardContent,
     CardActions,
-} from '@material-ui/core'
-import ListItemButton from '@material-ui/core/ListItemButton'
+} from '@mui/material'
+import ListItemButton from '@mui/material/ListItemButton'
 import { useMap } from 'react-use'
 import type { ExternalPluginLoadDetails } from '../types'
 

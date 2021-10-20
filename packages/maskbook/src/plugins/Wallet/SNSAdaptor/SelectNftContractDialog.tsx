@@ -1,6 +1,6 @@
 import { useCallback, useState, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { DialogContent, List, ListItem, Typography, Box, Link } from '@material-ui/core'
+import { DialogContent, List, ListItem, Typography, Box, Link } from '@mui/material'
 import {
     ChainId,
     ERC721ContractDetailed,
@@ -15,7 +15,7 @@ import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'

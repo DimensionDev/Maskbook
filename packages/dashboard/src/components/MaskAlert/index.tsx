@@ -1,6 +1,6 @@
 import { memo, useCallback, useState } from 'react'
-import { Alert, alertClasses, Collapse, styled, IconButton } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+import { Alert, alertClasses, Collapse, styled, IconButton } from '@mui/material'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { InfoIcon, RiskIcon, SuccessIcon } from '@masknet/icons'
 

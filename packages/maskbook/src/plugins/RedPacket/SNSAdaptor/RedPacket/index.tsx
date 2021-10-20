@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { Card, Skeleton, Typography } from '@material-ui/core'
+import { Card, Skeleton, Typography } from '@mui/material'
 import {
     ChainId,
     formatBalance,

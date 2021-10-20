@@ -1,4 +1,4 @@
-import { Card } from '@material-ui/core'
+import { Card } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 

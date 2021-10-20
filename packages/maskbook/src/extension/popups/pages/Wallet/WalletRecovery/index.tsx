@@ -6,7 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
 import { useHasPassword } from '../../../hook/useHasPassword'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
@@ -16,7 +16,7 @@ import { usePasswordForm } from '../hooks/usePasswordForm'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { PopupRoutes } from '../../../index'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()({
     container: {

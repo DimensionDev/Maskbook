@@ -1,4 +1,4 @@
-import { TextField } from '@material-ui/core'
+import { TextField } from '@mui/material'
 import { useState } from 'react'
 import { UserPlus } from 'react-feather'
 import { useHistory } from 'react-router-dom'

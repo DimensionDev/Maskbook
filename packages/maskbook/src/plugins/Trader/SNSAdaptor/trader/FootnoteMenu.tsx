@@ -1,4 +1,4 @@
-import { Typography, MenuItem, Link } from '@material-ui/core'
+import { Typography, MenuItem, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useMenu } from '../../../../utils'
 

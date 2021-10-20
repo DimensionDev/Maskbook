@@ -8,10 +8,10 @@ import {
     Typography,
     SvgIconProps,
     IconButtonProps,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ThemeProvider } from '@material-ui/core/styles'
-import CloseIcon from '@material-ui/icons/Close'
+import { ThemeProvider } from '@mui/material/styles'
+import CloseIcon from '@mui/icons-material/Close'
 import { extendsTheme, useClassicMaskTheme, useMatchXS } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({

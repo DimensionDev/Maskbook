@@ -1,6 +1,6 @@
 import { getMaskColor, makeStyles, MaskLoadingButton } from '@masknet/theme'
 import { memo } from 'react'
-import { ButtonProps, Stack } from '@material-ui/core'
+import { ButtonProps, Stack } from '@mui/material'
 import { LoadingAnimation } from '@masknet/shared'
 
 interface LoadingButtonProps extends ButtonProps {

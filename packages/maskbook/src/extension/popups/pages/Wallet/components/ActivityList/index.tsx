@@ -2,7 +2,7 @@ import { memo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
-import { Button, Link, List, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { Button, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import {
     ChainId,
     EthereumRpcType,

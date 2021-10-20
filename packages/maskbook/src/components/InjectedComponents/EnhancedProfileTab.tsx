@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import classnames from 'classnames'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
 

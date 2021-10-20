@@ -12,7 +12,7 @@ import {
     useWallets,
 } from '@masknet/web3-shared-evm'
 import { ChainIcon, FormattedAddress } from '@masknet/shared'
-import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { SuccessIcon } from '@masknet/icons'

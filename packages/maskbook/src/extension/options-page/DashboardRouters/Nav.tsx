@@ -1,5 +1,5 @@
 import DashboardRouterContainer from './Container'
-import { ThemeProvider, Theme } from '@material-ui/core'
+import { ThemeProvider, Theme } from '@mui/material'
 const navTheme = (theme: Theme): Theme => theme
 
 export interface DashboardNavRouterProps {

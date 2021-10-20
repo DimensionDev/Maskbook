@@ -1,7 +1,7 @@
 import type { ReactElement, ReactNode } from 'react'
 import React, { Children, cloneElement, isValidElement, useEffect, useState } from 'react'
 import { useMap } from 'react-use'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()({

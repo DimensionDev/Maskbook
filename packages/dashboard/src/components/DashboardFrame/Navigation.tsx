@@ -12,8 +12,8 @@ import {
     ListItemProps,
     listItemTextClasses,
     useTheme,
-} from '@material-ui/core'
-import { ExpandLess, ExpandMore } from '@material-ui/icons'
+} from '@mui/material'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'

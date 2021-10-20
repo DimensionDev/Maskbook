@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Link, Tab, Tabs } from '@material-ui/core'
+import { Link, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef } from '@masknet/shared'
 import { useI18N, useSettingsSwitcher } from '../../../../utils'

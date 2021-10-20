@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { Alert, AlertTitle, Box, Typography } from '@material-ui/core'
+import { Alert, AlertTitle, Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Link } from 'react-router-dom'
 import { MaskWalletIcon, ImportWalletIcon } from '@masknet/icons'

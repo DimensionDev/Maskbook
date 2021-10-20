@@ -1,4 +1,4 @@
-import { Typography, ThemeProvider, SnackbarContent } from '@material-ui/core'
+import { Typography, ThemeProvider, SnackbarContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'

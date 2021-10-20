@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { Paper, Typography, TypographyProps } from '@material-ui/core'
+import { Paper, Typography, TypographyProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCustomSnackbar } from '@masknet/theme'
 import { selectElementContents, useI18N, useMatchXS } from '../../../utils'

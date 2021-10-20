@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
+import { Tabs, Tab, Box, BoxProps, Paper } from '@mui/material'
 import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({

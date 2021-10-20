@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Skeleton, Typography } from '@material-ui/core'
+import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { formatBalance, TransactionStateType, useTransactionCallback } from '@masknet/web3-shared-evm'
 import AbstractTab, { AbstractTabProps } from '../../../../components/shared/AbstractTab'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'

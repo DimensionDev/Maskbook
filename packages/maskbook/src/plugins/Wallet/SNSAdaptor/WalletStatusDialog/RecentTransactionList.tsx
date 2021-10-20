@@ -1,7 +1,7 @@
 import { Check, XCircle } from 'react-feather'
-import { Box, Button, CircularProgress, Link, List, ListItem, Typography } from '@material-ui/core'
+import { Box, Button, CircularProgress, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import {
     resolveTransactionLinkOnExplorer,
     TransactionStatusType,

@@ -1,4 +1,4 @@
-import { FormControl, Typography, Divider } from '@material-ui/core'
+import { FormControl, Typography, Divider } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 

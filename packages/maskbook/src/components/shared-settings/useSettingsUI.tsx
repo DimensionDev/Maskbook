@@ -10,9 +10,9 @@ import {
     Select,
     SelectProps,
     Switch,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos'
 import { texts } from '../../settings/createSettings'
 import { useMatchXS } from '../../utils'
 import { useStylesExtends } from '@masknet/shared'

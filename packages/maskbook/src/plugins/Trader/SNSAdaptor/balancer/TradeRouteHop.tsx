@@ -1,4 +1,4 @@
-import { Box, AvatarGroup, Link } from '@material-ui/core'
+import { Box, AvatarGroup, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import { useNetworkType } from '@masknet/web3-shared-evm'

@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { ERC721TokenDetailed, isSameAddress, useAccount } from '@masknet/web3-shared-evm'
-import { Button, DialogContent, Typography } from '@material-ui/core'
+import { Button, DialogContent, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { InputBox } from '../../../extension/options-page/DashboardComponents/InputBox'

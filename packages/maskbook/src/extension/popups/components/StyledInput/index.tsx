@@ -1,5 +1,5 @@
 import { forwardRef, memo } from 'react'
-import { TextFieldProps, TextField } from '@material-ui/core'
+import { TextFieldProps, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 

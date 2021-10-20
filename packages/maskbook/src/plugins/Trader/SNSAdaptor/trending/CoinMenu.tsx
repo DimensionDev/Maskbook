@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Typography, MenuItem } from '@material-ui/core'
+import { Typography, MenuItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponents'
 import type { Coin } from '../../types'

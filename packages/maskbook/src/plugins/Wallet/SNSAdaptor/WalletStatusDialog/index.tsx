@@ -6,9 +6,9 @@ import {
     useChainIdValid,
     useWallet,
 } from '@masknet/web3-shared-evm'
-import { Button, DialogActions, DialogContent, Link, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import ErrorIcon from '@material-ui/icons/Error'
+import ErrorIcon from '@mui/icons-material/Error'
 import classNames from 'classnames'
 import { useCallback } from 'react'
 import { Copy, Edit3, ExternalLink } from 'react-feather'

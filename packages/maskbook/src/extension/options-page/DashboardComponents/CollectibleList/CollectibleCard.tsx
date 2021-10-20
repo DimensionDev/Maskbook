@@ -1,4 +1,4 @@
-import { Card, Link } from '@material-ui/core'
+import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     Wallet,

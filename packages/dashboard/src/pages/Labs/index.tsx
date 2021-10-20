@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import PluginItem, { PluginItemPlaceholder } from './components/PluginItem'

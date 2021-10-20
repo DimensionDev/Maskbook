@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { UserMinus } from 'react-feather'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../../utils'

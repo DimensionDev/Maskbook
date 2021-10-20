@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@material-ui/core'
+import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import type { Profile } from '../../../database'

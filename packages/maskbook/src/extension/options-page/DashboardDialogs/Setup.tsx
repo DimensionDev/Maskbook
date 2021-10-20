@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { DashboardDialogCore, WrappedDialogProps } from './Base'
 import { useI18N, delay } from '../../../utils'

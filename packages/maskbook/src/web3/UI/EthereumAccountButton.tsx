@@ -10,11 +10,11 @@ import {
     useWallet,
     useNativeTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { Button, ButtonProps, Typography } from '@material-ui/core'
+import { Button, ButtonProps, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
-import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet'
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 import { WalletIcon } from '../../components/shared/WalletIcon'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags, useI18N } from '../../utils'

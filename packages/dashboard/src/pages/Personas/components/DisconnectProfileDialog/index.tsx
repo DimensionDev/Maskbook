@@ -1,5 +1,5 @@
 import { getMaskColor, makeStyles, MaskColorVar, MaskDialog } from '@masknet/theme'
-import { Box, Button, DialogContent, Link, Stack, Typography } from '@material-ui/core'
+import { Box, Button, DialogContent, Link, Stack, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { ProfileIdentifier, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { useState } from 'react'

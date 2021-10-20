@@ -7,10 +7,10 @@ import {
     resolveTokenLinkOnExplorer,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
-import { Link, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
-import ListItemButton from '@material-ui/core/ListItemButton'
+import { Link, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import ListItemButton from '@mui/material/ListItemButton'
 import { makeStyles } from '@masknet/theme'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { useCallback } from 'react'
 import { TokenIcon } from '@masknet/shared'
 

@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'
-import { Link, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { resolveLinkOnExplorer, ChainId, useChainDetailed } from '@masknet/web3-shared-evm'
 import { Record } from './Record'

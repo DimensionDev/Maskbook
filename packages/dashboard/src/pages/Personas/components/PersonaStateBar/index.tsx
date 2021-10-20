@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Box, IconButton, Stack, Typography } from '@material-ui/core'
+import { Box, IconButton, Stack, Typography } from '@mui/material'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ArrowDownRound, ArrowUpRound } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'

@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { useValueRef } from '@masknet/shared'
 import { NetworkType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'

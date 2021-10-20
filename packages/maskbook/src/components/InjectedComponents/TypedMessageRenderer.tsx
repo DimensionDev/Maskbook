@@ -1,5 +1,5 @@
 import { Fragment, memo, createElement } from 'react'
-import { Typography, Link } from '@material-ui/core'
+import { Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import anchorme from 'anchorme'
 import classNames from 'classnames'

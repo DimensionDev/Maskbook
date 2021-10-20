@@ -1,4 +1,4 @@
-import { Slider } from '@material-ui/core'
+import { Slider } from '@mui/material'
 import { formatPercentage } from '@masknet/web3-shared-evm'
 import { SLIPPAGE_DEFAULT, SLIPPAGE_MAX, SLIPPAGE_MIN } from '../../constants'
 import { toBips } from '../../helpers'

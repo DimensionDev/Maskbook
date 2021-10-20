@@ -1,4 +1,4 @@
-import type { SvgIconClassKey } from '@material-ui/core'
+import type { SvgIconClassKey } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { MaskSharpIcon } from '../../resources/MaskIcon'

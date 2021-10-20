@@ -1,5 +1,5 @@
 import { memo, useMemo, useRef, useState } from 'react'
-import { Box, Button, Link, Tooltip, Typography } from '@material-ui/core'
+import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'

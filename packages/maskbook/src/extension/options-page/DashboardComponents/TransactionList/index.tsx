@@ -11,7 +11,7 @@ import {
     TablePagination,
     TableRow,
     Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAccount, useChainId, useTransactions, FilterTransactionType } from '@masknet/web3-shared-evm'
 import { Row } from './Row'

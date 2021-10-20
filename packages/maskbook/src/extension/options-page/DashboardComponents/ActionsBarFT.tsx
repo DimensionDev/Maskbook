@@ -1,6 +1,6 @@
-import { IconButton, MenuItem } from '@material-ui/core'
+import { IconButton, MenuItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import {
     Wallet,
     isNative,

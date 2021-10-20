@@ -1,6 +1,6 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { Typography, TablePagination, tablePaginationClasses, TableContainer } from '@material-ui/core'
+import { Typography, TablePagination, tablePaginationClasses, TableContainer } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
@@ -9,7 +9,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
 import { currySameAddress, useWallets } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()({

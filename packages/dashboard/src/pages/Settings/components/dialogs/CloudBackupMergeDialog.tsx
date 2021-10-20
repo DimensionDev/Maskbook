@@ -1,15 +1,7 @@
 import { useEffect, useState } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
-import {
-    Box,
-    FormControlLabel,
-    formControlLabelClasses,
-    Radio,
-    RadioGroup,
-    styled,
-    Typography,
-} from '@material-ui/core'
-import LoadingButton from '@material-ui/lab/LoadingButton'
+import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styled, Typography } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
 import type { BackupFileInfo } from '../../type'
 import { useDashboardI18N } from '../../../../locales'

@@ -1,4 +1,4 @@
-import { ThemeProvider } from '@material-ui/core'
+import { ThemeProvider } from '@mui/material'
 import { useState } from 'react'
 import { extendsTheme } from '../../../../utils/theme'
 import type { BackupJSONFileLatest } from '../../../../utils/type-transform/BackupFormat/JSON/latest'

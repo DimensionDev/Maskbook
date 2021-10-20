@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EthereumTokenType, ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'

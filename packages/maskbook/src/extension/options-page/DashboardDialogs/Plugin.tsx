@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 
-import { Card, List, ListItem, ListItemIcon, ListItemText, Paper } from '@material-ui/core'
+import { Card, List, ListItem, ListItemIcon, ListItemText, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import DescriptionIcon from '@material-ui/icons/Description'
-import FingerprintIcon from '@material-ui/icons/Fingerprint'
+import DescriptionIcon from '@mui/icons-material/Description'
+import FingerprintIcon from '@mui/icons-material/Fingerprint'
 
 import { useI18N } from '../../../utils'
 

@@ -5,7 +5,7 @@ import {
     useChainId,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { Button, Typography, Link } from '@material-ui/core'
+import { Button, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'

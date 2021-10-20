@@ -1,6 +1,6 @@
 import type { RelationProfile } from '@masknet/shared'
 import { memo, useCallback } from 'react'
-import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@material-ui/core'
+import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { StarIcon, MaskBlueIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
@@ -10,7 +10,7 @@ import { generateContactAvatarColor } from '../../../../utils/generateContactAva
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn } from 'react-use'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()({
     favorite: {

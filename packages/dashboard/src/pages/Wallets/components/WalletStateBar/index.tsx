@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { Box, Button, Stack, Typography } from '@material-ui/core'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import {
     getNetworkName,
     ProviderType,

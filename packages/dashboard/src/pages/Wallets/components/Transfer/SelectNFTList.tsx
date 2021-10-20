@@ -3,7 +3,7 @@ import { memo, useMemo, useRef } from 'react'
 import { Box, ImageList, Typography } from '@mui/material'
 import { NFTCard } from './NFTCard'
 import { LoadingAnimation, useScrollBottomEvent } from '@masknet/shared'
-import { ImageListItem, Stack } from '@material-ui/core'
+import { ImageListItem, Stack } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 

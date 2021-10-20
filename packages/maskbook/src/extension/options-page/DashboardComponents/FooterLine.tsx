@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Link } from 'react-router-dom'
-import { Breadcrumbs, Typography, Link as MuiLink } from '@material-ui/core'
+import { Breadcrumbs, Typography, Link as MuiLink } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { DashboardAboutDialog } from '../DashboardDialogs/About'
 import { useModal } from '../DashboardDialogs/Base'

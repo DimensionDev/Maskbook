@@ -11,7 +11,7 @@ import {
 import { Tune } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { Box, IconButton, Typography } from '@material-ui/core'
+import { Box, IconButton, Typography } from '@mui/material'
 import { WalletMessages } from '../../messages'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 

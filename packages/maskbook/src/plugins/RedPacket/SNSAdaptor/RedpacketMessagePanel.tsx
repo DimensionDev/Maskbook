@@ -1,5 +1,5 @@
 import classNames from 'classnames'
-import { Box, InputBase, Typography } from '@material-ui/core'
+import { Box, InputBase, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 

@@ -1,5 +1,5 @@
 import { MaskTextField, MaskTextFieldProps } from '@masknet/theme'
-import { IconButton, InputAdornment } from '@material-ui/core'
+import { IconButton, InputAdornment } from '@mui/material'
 import { ForwardedRef, useState, forwardRef } from 'react'
 import { EyeIcon, EyeOffIcon } from '@masknet/icons'
 

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Button, styled, Typography } from '@material-ui/core'
+import { Button, styled, Typography } from '@mui/material'
 import { SuccessIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'

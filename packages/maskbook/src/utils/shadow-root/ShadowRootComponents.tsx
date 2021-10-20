@@ -1,4 +1,4 @@
-import { Menu, Popper, Tooltip } from '@material-ui/core'
+import { Menu, Popper, Tooltip } from '@mui/material'
 import { createShadowRootForwardedComponent, createShadowRootForwardedPopperComponent } from '@masknet/theme'
 
 export const ShadowRootTooltip = createShadowRootForwardedPopperComponent(Tooltip)

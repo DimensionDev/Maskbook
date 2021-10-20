@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { ERC20TokenList } from '@masknet/shared'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
 export interface SelectTokenDialogProps {

@@ -1,5 +1,5 @@
-import { Chip } from '@material-ui/core'
-import type { ChipProps } from '@material-ui/core/Chip'
+import { Chip } from '@mui/material'
+import type { ChipProps } from '@mui/material/Chip'
 import { Avatar } from '../../../utils'
 import type { Profile } from '../../../database'
 

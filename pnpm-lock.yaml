@@ -18,10 +18,6 @@ importers:
       '@jest/globals': ^27.2.0
       '@magic-works/i18n-codegen': ^0.0.6
       '@masknet/cli': workspace:*
-      '@material-ui/core': npm:@mui/material@5.0.0
-      '@material-ui/icons': npm:@mui/icons-material@5.0.0
-      '@material-ui/lab': npm:@mui/lab@5.0.0-alpha.47
-      '@material-ui/system': npm:@mui/system@5.0.0
       '@mui/icons-material': 5.0.0
       '@mui/lab': 5.0.0-alpha.47
       '@mui/material': 5.0.0
@@ -63,10 +59,6 @@ importers:
       '@emotion/serialize': 1.0.2
       '@emotion/styled': 11.3.0_24d2700d523eb782a2d487473564bc6b
       '@emotion/utils': 1.0.0
-      '@material-ui/core': /@mui/material/5.0.0_1e859c092bac536d111226b2d5f6daac
-      '@material-ui/icons': /@mui/icons-material/5.0.0_fdaff92d980cbb5257cc1dee21e21b11
-      '@material-ui/lab': /@mui/lab/5.0.0-alpha.47_e20e0c30c3a4143299eb85d1c3d5a7f1
-      '@material-ui/system': /@mui/system/5.0.0_947ee211b88db2e073ff66339fb1f462
       '@mui/icons-material': 5.0.0_fdaff92d980cbb5257cc1dee21e21b11
       '@mui/lab': 5.0.0-alpha.47_e20e0c30c3a4143299eb85d1c3d5a7f1
       '@mui/material': 5.0.0_1e859c092bac536d111226b2d5f6daac
@@ -679,10 +671,6 @@ importers:
 
   packages/shared-base:
     specifiers:
-      '@material-ui/core': ../empty
-      '@material-ui/icons': ../empty
-      '@material-ui/lab': ../empty
-      '@material-ui/system': ../empty
       '@mui/icons-material': link:..\empty
       '@mui/lab': link:..\empty
       '@mui/material': link:..\empty
@@ -699,10 +687,6 @@ importers:
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
     dependencies:
-      '@material-ui/core': link:../empty
-      '@material-ui/icons': link:../empty
-      '@material-ui/lab': link:../empty
-      '@material-ui/system': link:../empty
       '@mui/icons-material': link:../empty
       '@mui/lab': link:../empty
       '@mui/material': link:../empty
@@ -7778,7 +7762,7 @@ packages:
     resolution: {integrity: sha512-a6bTJ21vFOGIkwM0kzh9Yr89ziVxq4vYH2fQ6N8AeipEzai/cFK6aGMArIkUeIdRIgpwQa+2bXiLuUJCpSf2Cg==}
     dependencies:
       '@types/connect': 3.4.35
-      '@types/node': 16.7.10
+      '@types/node': 16.10.2
     dev: true
 
   /@types/bonjour/3.5.9:
@@ -7822,7 +7806,7 @@ packages:
   /@types/connect/3.4.35:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
-      '@types/node': 16.7.10
+      '@types/node': 16.10.2
     dev: true
 
   /@types/d3-array/1.2.9:
@@ -8054,7 +8038,7 @@ packages:
   /@types/express-serve-static-core/4.17.24:
     resolution: {integrity: sha512-3UJuW+Qxhzwjq3xhwXm2onQcFHn76frIYVbTu+kn24LFxI+dEhdfISDFovPB8VpEgW8oQCTpRuCe+0zJxB7NEA==}
     dependencies:
-      '@types/node': 16.7.10
+      '@types/node': 16.10.2
       '@types/qs': 6.9.7
       '@types/range-parser': 1.2.4
     dev: true
@@ -8138,7 +8122,7 @@ packages:
   /@types/http-proxy/1.17.7:
     resolution: {integrity: sha512-9hdj6iXH64tHSLTY+Vt2eYOGzSogC+JQ2H7bdPWkuh7KXP5qLllWx++t+K9Wk556c3dkDdPws/SpMRi0sdCT1w==}
     dependencies:
-      '@types/node': 16.9.1
+      '@types/node': 16.10.2
     dev: true
 
   /@types/inquirer/7.3.3:
@@ -8617,7 +8601,7 @@ packages:
   /@types/webpack-sources/3.2.0:
     resolution: {integrity: sha512-Ft7YH3lEVRQ6ls8k4Ff1oB4jN6oy/XmU6tQISKdhfh+1mR+viZFphS6WL0IrtDOzvefmJg5a0s7ZQoRXwqTEFg==}
     dependencies:
-      '@types/node': 16.7.10
+      '@types/node': 16.10.2
       '@types/source-list-map': 0.1.2
       source-map: 0.7.3
     dev: true
@@ -13203,7 +13187,7 @@ packages:
     resolution: {integrity: sha1-BCHjOf1xQZs9oT0Smzl5BAIwR24=}
     engines: {node: '>=4.3.0 <5.0.0 || >=5.10'}
     dependencies:
-      graceful-fs: 4.2.6
+      graceful-fs: 4.2.8
       memory-fs: 0.4.1
       object-assign: 4.1.1
       tapable: 0.2.9
@@ -14641,16 +14625,6 @@ packages:
       readable-stream: 2.3.7
     dev: true
 
-  /follow-redirects/1.14.3:
-    resolution: {integrity: sha512-3MkHxknWMUtb23apkgz/83fDoe+y+qr0TdgacGIA7bew+QLBo3vdgEN2xEsuXNivpFy4CyDhBBZnNZOtalmenw==}
-    engines: {node: '>=4.0'}
-    peerDependencies:
-      debug: '*'
-    peerDependenciesMeta:
-      debug:
-        optional: true
-    dev: true
-
   /follow-redirects/1.14.4:
     resolution: {integrity: sha512-zwGkiSXC1MUJG/qmeIFH2HBJx9u0V46QGUe3YR1fXG8bXQxq7fLj0RjLZQ5nubr9qNJUZrH+xUcwXEoXNpfS+g==}
     engines: {node: '>=4.0'}
@@ -14659,7 +14633,6 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
-    dev: false
 
   /for-each/0.3.3:
     resolution: {integrity: sha512-jqYfLp7mo9vIyQf8ykW2v7A+2N4QjeCeI5+Dz9XraiO1ign81wjiH7Fb9vSOWvQfNtmSa4H2RoQTrrXivdUZmw==}
@@ -15861,7 +15834,7 @@ packages:
     engines: {node: '>=8.0.0'}
     dependencies:
       eventemitter3: 4.0.7
-      follow-redirects: 1.14.3
+      follow-redirects: 1.14.4
       requires-port: 1.0.0
     transitivePeerDependencies:
       - debug
@@ -17247,7 +17220,7 @@ packages:
     resolution: {integrity: sha512-mO4PHb2QWLn9yRXGp7rkvXLAYuxwhq1ZYUo0LoDhg8wqvv4QizP1ZWEJOeolgbEgAWZLIEU0wsku8J+lGWfBhg==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      '@types/node': 16.7.10
+      '@types/node': 16.10.2
       merge-stream: 2.0.0
       supports-color: 8.1.1
     dev: true
@@ -17810,7 +17783,7 @@ packages:
     resolution: {integrity: sha1-eUfkIUmvgNaWy/eXvKq8/h/inKg=}
     engines: {node: '>=4'}
     dependencies:
-      graceful-fs: 4.2.6
+      graceful-fs: 4.2.8
       parse-json: 2.2.0
       pify: 2.3.0
       strip-bom: 3.0.0
@@ -24603,7 +24576,7 @@ packages:
       mime-types: 2.1.32
       neo-async: 2.6.2
       schema-utils: 3.1.1
-      tapable: 2.2.0
+      tapable: 2.2.1
       terser-webpack-plugin: 5.2.0_@swc+core@1.2.83+webpack@5.51.1
       watchpack: 2.2.0
       webpack-cli: 4.8.0_cf8cd09e748782d29c72c0708b4c941f

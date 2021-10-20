@@ -1,4 +1,4 @@
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useState } from 'react'

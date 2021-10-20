@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Box, GlobalStyles, Paper } from '@material-ui/core'
+import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'

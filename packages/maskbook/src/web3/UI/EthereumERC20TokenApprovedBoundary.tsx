@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ApproveStateType,

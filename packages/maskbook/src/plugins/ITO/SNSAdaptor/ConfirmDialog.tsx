@@ -10,10 +10,10 @@ import {
     useChainId,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
-import { Card, Grid, IconButton, Link, Paper, Typography } from '@material-ui/core'
+import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import LaunchIcon from '@material-ui/icons/Launch'
-import RepeatIcon from '@material-ui/icons/Repeat'
+import LaunchIcon from '@mui/icons-material/Launch'
+import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'

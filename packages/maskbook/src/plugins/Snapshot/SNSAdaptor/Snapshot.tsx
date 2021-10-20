@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react'
-import { Box, Card, CardHeader, CardContent, Typography, Tab, Tabs, Chip, Paper } from '@material-ui/core'
+import { Box, Card, CardHeader, CardContent, Typography, Tab, Tabs, Chip, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context'
 import { useProposal } from './hooks/useProposal'

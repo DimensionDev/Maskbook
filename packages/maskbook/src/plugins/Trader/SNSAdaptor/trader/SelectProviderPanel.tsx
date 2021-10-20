@@ -1,4 +1,4 @@
-import { Chip } from '@material-ui/core'
+import { Chip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { TradeProvider } from '@masknet/public-api'

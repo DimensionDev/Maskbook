@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FungibleTokenDetailed, useNativeTokenDetailed, useChainDetailed } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

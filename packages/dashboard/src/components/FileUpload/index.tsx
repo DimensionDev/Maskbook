@@ -1,5 +1,5 @@
 import { MaskColorVar } from '@masknet/theme'
-import { Card, Typography } from '@material-ui/core'
+import { Card, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ReactNode, useEffect, useState } from 'react'
 import { File as FileIcon } from '@masknet/icons'

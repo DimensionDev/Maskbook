@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import type { BannerProps } from '../Welcomes/Banner'

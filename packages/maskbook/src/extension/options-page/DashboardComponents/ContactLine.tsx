@@ -1,12 +1,12 @@
-import { Typography, IconButton, MenuItem, ListItemTypeMap } from '@material-ui/core'
-import ListItemButton from '@material-ui/core/ListItemButton'
+import { Typography, IconButton, MenuItem, ListItemTypeMap } from '@mui/material'
+import ListItemButton from '@mui/material/ListItemButton'
 import { makeStyles } from '@masknet/theme'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import type { Profile } from '../../../database'
 import { Avatar, useMenu, useI18N, useMatchXS } from '../../../utils'
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardContactDialog, DashboardContactDeleteConfirmDialog } from '../DashboardDialogs/Contact'
-import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 
 const useStyles = makeStyles()((theme) => ({
     line: {

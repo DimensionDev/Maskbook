@@ -1,4 +1,4 @@
-import { SnackbarContent } from '@material-ui/core'
+import { SnackbarContent } from '@mui/material'
 import { useAsyncRetry } from 'react-use'
 import { Suspense, useRef } from 'react'
 import type { ExternalPluginLoadDetails } from '../types'

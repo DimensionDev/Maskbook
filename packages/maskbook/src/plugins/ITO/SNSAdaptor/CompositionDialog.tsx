@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'

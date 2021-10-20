@@ -11,11 +11,11 @@ import {
     Box,
     useMediaQuery,
     Theme,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowRight } from 'react-feather'
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
-import CloseIcon from '@material-ui/icons/Close'
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
+import CloseIcon from '@mui/icons-material/Close'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
 import { useValueRef } from '@masknet/shared'

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { Box, Typography, Theme } from '@material-ui/core'
-import type { SxProps } from '@material-ui/system'
+import { Box, Typography, Theme } from '@mui/material'
+import type { SxProps } from '@mui/system'
 import {
     ChainId,
     getChainDetailedCAIP,

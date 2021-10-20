@@ -1,5 +1,5 @@
 import { makeStyles, MaskTextField } from '@masknet/theme'
-import { Box, Button, IconButton, Stack, Typography } from '@material-ui/core'
+import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import {

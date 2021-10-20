@@ -1,4 +1,4 @@
-import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@material-ui/core'
+import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Order } from 'opensea-js/lib/types'
 import { Image } from '../../../components/shared/Image'

@@ -9,7 +9,7 @@ import {
     FormControlLabel,
     Typography,
     Link,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-es'
 import { useCustomSnackbar } from '@masknet/theme'

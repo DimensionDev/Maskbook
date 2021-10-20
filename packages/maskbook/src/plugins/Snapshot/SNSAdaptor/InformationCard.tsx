@@ -5,9 +5,9 @@ import {
     resolveIPFSLink,
     useChainId,
 } from '@masknet/web3-shared-evm'
-import { Avatar, Box, Link, Typography } from '@material-ui/core'
+import { Avatar, Box, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import OpenInNew from '@material-ui/icons/OpenInNew'
+import OpenInNew from '@mui/icons-material/OpenInNew'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
 import { TokenIcon } from '@masknet/shared'

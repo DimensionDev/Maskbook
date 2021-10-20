@@ -1,6 +1,6 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
 import type { TypedMessage } from '@masknet/shared-base'
-import { Box, Tooltip, Chip } from '@material-ui/core'
+import { Box, Tooltip, Chip } from '@mui/material'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 
 export interface BadgeRendererProps {

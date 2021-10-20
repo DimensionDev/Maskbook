@@ -1,4 +1,4 @@
-import { LinearProgress, LinearProgressProps } from '@material-ui/core'
+import { LinearProgress, LinearProgressProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 interface StyledLinearProgress extends LinearProgressProps {
     barColor?: string

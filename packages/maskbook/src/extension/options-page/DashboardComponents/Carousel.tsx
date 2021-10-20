@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useInterval } from 'react-use'
-import { Fade } from '@material-ui/core'
+import { Fade } from '@mui/material'
 
 export interface CarouselProps {
     items: React.ReactElement[]

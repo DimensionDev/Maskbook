@@ -1,4 +1,4 @@
-import { Typography, List } from '@material-ui/core'
+import { Typography, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
 import { useAccount, useChainId } from '@masknet/web3-shared-evm'

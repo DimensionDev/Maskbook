@@ -13,8 +13,8 @@ import {
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import LaunchIcon from '@material-ui/icons/Launch'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import LaunchIcon from '@mui/icons-material/Launch'
 import {
     Grid,
     Card,
@@ -27,7 +27,7 @@ import {
     Box,
     Skeleton,
     CircularProgress,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useCallback, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'

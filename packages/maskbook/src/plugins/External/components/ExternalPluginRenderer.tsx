@@ -1,5 +1,5 @@
 import type { ExternalPluginLoadDetails } from '../types'
-import { Card, CardHeader, CardContent, Typography, Link, Button } from '@material-ui/core'
+import { Card, CardHeader, CardContent, Typography, Link, Button } from '@mui/material'
 import Services from '../../../extension/service'
 import { MaskExternalPluginPreviewRenderer, RenderContext } from '@masknet/external-plugin-previewer'
 import { PermissionAwareRedirectOf } from '../../../extension/popups'

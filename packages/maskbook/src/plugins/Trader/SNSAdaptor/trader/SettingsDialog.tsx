@@ -12,7 +12,7 @@ import {
     Paper,
     Switch,
     Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { TradeProvider } from '@masknet/public-api'

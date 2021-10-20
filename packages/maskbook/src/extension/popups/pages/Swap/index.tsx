@@ -6,7 +6,7 @@ import {
     useWeb3StateContext,
     Web3Provider,
 } from '@masknet/web3-shared-evm'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
 import Services from '../../../service'

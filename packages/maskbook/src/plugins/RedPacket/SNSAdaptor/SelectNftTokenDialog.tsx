@@ -8,11 +8,11 @@ import {
     isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@material-ui/core'
+import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useEffect, useRef } from 'react'
 import { SearchIcon } from '@masknet/icons'
-import CheckIcon from '@material-ui/icons/Check'
+import CheckIcon from '@mui/icons-material/Check'
 import { useScrollBottomEvent } from '@masknet/shared'
 import { useUpdate } from 'react-use'
 

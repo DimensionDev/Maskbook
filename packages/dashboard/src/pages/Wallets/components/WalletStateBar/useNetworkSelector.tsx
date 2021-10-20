@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { MenuItem, Stack, Typography } from '@material-ui/core'
+import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,

@@ -1,5 +1,5 @@
 import { ECKeyIdentifier, Identifier } from '@masknet/shared-base'
-import { Box, Button, DialogActions, DialogContent, MenuItem, Select, TextField, Typography } from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { delay } from 'opensea-js/lib/utils/utils'
 import { useEffect } from 'react'

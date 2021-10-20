@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
 import { CopyIcon, MaskWalletIcon, SuccessIcon } from '@masknet/icons'

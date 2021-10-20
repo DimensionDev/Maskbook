@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { Box, MenuItem, Typography } from '@material-ui/core'
+import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../utils'
 import {

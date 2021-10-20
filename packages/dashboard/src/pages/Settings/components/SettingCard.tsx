@@ -1,4 +1,4 @@
-import { Typography, styled } from '@material-ui/core'
+import { Typography, styled } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 
 const Card = styled('div')(({ theme }) => ({

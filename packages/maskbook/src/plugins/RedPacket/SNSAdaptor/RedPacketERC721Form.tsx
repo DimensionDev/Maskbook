@@ -1,4 +1,4 @@
-import { Box, Typography, List, ListItem } from '@material-ui/core'
+import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../../../utils'
@@ -15,8 +15,8 @@ import {
     useChainId,
     useNftRedPacketConstants,
 } from '@masknet/web3-shared-evm'
-import CloseIcon from '@material-ui/icons/Close'
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+import CloseIcon from '@mui/icons-material/Close'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'

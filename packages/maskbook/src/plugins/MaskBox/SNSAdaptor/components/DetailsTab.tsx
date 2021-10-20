@@ -1,4 +1,4 @@
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { BoxInfo, BoxMetadata } from '../../type'
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DialogContent, Tab, Tabs } from '@material-ui/core'
+import { DialogContent, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

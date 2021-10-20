@@ -1,4 +1,4 @@
-import { Avatar, Link, TableCell, TableRow, Typography } from '@material-ui/core'
+import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { CollectibleProvider, NFTOrder } from '../types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'

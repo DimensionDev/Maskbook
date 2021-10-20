@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Button, Divider, Grid, Typography, Container } from '@material-ui/core'
+import { Button, Divider, Grid, Typography, Container } from '@mui/material'
 import { FurucomboIcon } from '../../../resources/FurucomboIcon'
 import { useI18N } from '../../../utils'
 import { BASE_URL } from '../constants'

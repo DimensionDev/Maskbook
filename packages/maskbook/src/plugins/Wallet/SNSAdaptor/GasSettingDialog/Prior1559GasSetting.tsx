@@ -6,8 +6,8 @@ import {
     useChainId,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { Typography } from '@material-ui/core'
-import { LoadingButton } from '@material-ui/lab'
+import { Typography } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-es'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'

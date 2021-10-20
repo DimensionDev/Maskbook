@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { safeUnreachable } from '@dimensiondev/kit'
 import {

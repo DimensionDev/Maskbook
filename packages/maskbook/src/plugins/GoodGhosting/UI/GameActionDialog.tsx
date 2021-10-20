@@ -1,4 +1,4 @@
-import { Box, Button, DialogContent, DialogActions, Typography } from '@material-ui/core'
+import { Box, Button, DialogContent, DialogActions, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'

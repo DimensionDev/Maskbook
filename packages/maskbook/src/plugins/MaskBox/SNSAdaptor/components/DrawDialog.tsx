@@ -2,9 +2,9 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
-import { Add, Remove } from '@material-ui/icons'
+import { Add, Remove } from '@mui/icons-material'
 import { FormattedAddress, FormattedBalance, ProviderIcon } from '@masknet/shared'
-import { Box, Button, DialogContent, TextField, Typography } from '@material-ui/core'
+import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
 import {
     formatBalance,
     useAccount,

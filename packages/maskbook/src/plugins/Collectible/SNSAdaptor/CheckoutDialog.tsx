@@ -9,7 +9,7 @@ import {
     FormControlLabel,
     Typography,
     Link,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Trans } from 'react-i18next'

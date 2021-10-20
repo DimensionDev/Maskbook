@@ -1,15 +1,15 @@
 import { ChangeEvent, useCallback } from 'react'
 import classNames from 'classnames'
-import { ListItemText, Checkbox, ListItemAvatar } from '@material-ui/core'
-import ListItemButton from '@material-ui/core/ListItemButton'
+import { ListItemText, Checkbox, ListItemAvatar } from '@mui/material'
+import ListItemButton from '@mui/material/ListItemButton'
 import { makeStyles } from '@masknet/theme'
 import Highlighter from 'react-highlight-words'
 import { useStylesExtends } from '@masknet/shared'
-import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import type { Profile } from '../../../database'
 import { Avatar } from '../../../utils/components/Avatar'
-import type { CheckboxProps } from '@material-ui/core/Checkbox'
-import type { ListItemTypeMap } from '@material-ui/core/ListItem'
+import type { CheckboxProps } from '@mui/material/Checkbox'
+import type { ListItemTypeMap } from '@mui/material/ListItem'
 
 const useStyle = makeStyles()({
     root: {

@@ -1,6 +1,6 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
-import { Box, Button, DialogActions, DialogContent } from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import {
     EthereumTokenType,
     isSameAddress,

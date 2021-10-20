@@ -10,7 +10,7 @@ import {
     useCollectibles,
     isSameAddress,
 } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
 import { uniqBy } from 'lodash-es'
 import { useCallback, useState } from 'react'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'

@@ -5,7 +5,7 @@ import {
     useChainId,
     formatPercentage,
 } from '@masknet/web3-shared-evm'
-import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@material-ui/core'
+import { Avatar, Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import millify from 'millify'

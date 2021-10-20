@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { ThemeProvider } from '@material-ui/core/styles'
+import { ThemeProvider } from '@mui/material/styles'
 import { CustomSnackbarProvider } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { MaskUIRootWithinShadow } from '../../UIRoot'

@@ -7,7 +7,7 @@ import {
     useAccount,
     useWeb3StateContext,
 } from '@masknet/web3-shared-evm'
-import { Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@mui/material'
 import { PluginMessages, PluginServices } from '../../../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'

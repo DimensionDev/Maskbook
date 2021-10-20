@@ -1,6 +1,6 @@
 import { useDashboardI18N } from '../../../locales'
 import { memo, useState } from 'react'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button } from '@mui/material'
 import { BackupInfoCard } from '../BackupInfoCard'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
 import type { StepCommonProps } from '../../Stepper'

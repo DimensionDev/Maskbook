@@ -8,10 +8,10 @@ import {
     DialogContent,
     DialogActions,
     CircularProgress,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import millify from 'millify'
-import OpenInNew from '@material-ui/icons/OpenInNew'
+import OpenInNew from '@mui/icons-material/OpenInNew'
 import { resolveBlockLinkOnExplorer, ChainId } from '@masknet/web3-shared-evm'
 import type { ProposalMessage } from '../types'
 import { useI18N } from '../../../utils'

@@ -1,11 +1,11 @@
 import { memo } from 'react'
-import { Button, styled, FilledInput, Tab } from '@material-ui/core'
+import { Button, styled, FilledInput, Tab } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { MaskAlert } from '../../../../components/MaskAlert'
 import { useDashboardI18N } from '../../../../locales'
-import { TabContext, TabPanel } from '@material-ui/lab'
+import { TabContext, TabPanel } from '@mui/lab'
 
 const Container = styled('div')`
     display: flex;

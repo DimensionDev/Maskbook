@@ -10,7 +10,7 @@ import {
     useTheme,
     Dialog,
     useMediaQuery,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles, useDialogStackActor } from '@masknet/theme'
 import { Children, cloneElement } from 'react'
 import { useI18N, usePortalShadowRoot } from '../../utils'

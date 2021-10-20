@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react'
 import Fuse from 'fuse.js'
-import { List, ListItem, ListItemText, Button, InputBase, DialogContent, DialogActions } from '@material-ui/core'
+import { List, ListItem, ListItemText, Button, InputBase, DialogContent, DialogActions } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useStylesExtends } from '@masknet/shared'

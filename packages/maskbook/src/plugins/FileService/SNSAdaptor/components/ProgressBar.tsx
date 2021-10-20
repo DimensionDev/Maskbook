@@ -1,5 +1,5 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { Typography, LinearProgress, Box } from '@material-ui/core'
+import { Typography, LinearProgress, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 

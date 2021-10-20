@@ -1,7 +1,7 @@
 import { GearSettingsIcon } from '@masknet/icons'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({

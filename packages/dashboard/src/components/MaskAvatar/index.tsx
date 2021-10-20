@@ -1,4 +1,4 @@
-import { Avatar } from '@material-ui/core'
+import { Avatar } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MenuPersonasActiveIcon } from '@masknet/icons'
 import { memo } from 'react'

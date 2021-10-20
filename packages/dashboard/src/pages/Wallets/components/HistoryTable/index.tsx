@@ -2,16 +2,7 @@ import { Dispatch, memo, SetStateAction, useState } from 'react'
 import { ChainId, Transaction, useAccount, useTransactions } from '@masknet/web3-shared-evm'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
-import {
-    Box,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-} from '@material-ui/core'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
