@@ -939,6 +939,5 @@
     "popups_persona_persona_name_exists": "이미 존재된 페르소나입니다",
     "popups_password_do_not_match": "잘못된 백업 비밀번호",
     "popups_backup_password": "백업 비밀번호",
-    "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다.",
-    "profile_nft_avatar_set": "NFT 아바타 설정"
+    "popups_rename_error_tip": "최대 길이는 {{length}} 자입니다."
 }
