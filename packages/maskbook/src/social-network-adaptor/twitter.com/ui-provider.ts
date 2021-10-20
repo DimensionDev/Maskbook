@@ -82,7 +82,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
             flexDirection: 'column',
             maxWidth: 600,
             margin: '0 auto',
-            padding: '7px 14px 6px !important',
+            padding: '7px 14px 6px',
         },
     },
     dialogActions: {

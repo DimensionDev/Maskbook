@@ -30,6 +30,10 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: theme.spacing(1),
         borderRadius: 10,
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            margin: theme.spacing(0),
+            padding: theme.spacing(0, 0, 0, 0.5),
+        },
     },
 }))
 
