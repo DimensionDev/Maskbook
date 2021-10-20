@@ -108,8 +108,10 @@ const ListSubTextItem = styled(ListItemText)(({ theme }) => ({
     },
 }))
 
-export interface NavigationProps {}
-export function Navigation({}: NavigationProps) {
+export interface NavigationProps {
+    onClose?: () => void
+}
+export function Navigation({ onClose }: NavigationProps) {
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
     const isWalletPath = useMatch(RoutePaths.Wallets)
     const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
@@ -119,14 +121,19 @@ export function Navigation({}: NavigationProps) {
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
 
+    const onExpand = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        toggleNavigationExpand()
+    }
+
     return (
-        <List>
+        <List onClick={() => onClose?.()}>
             {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</LogoItem>}
             <ListItemLink to={RoutePaths.Personas}>
                 <ItemIcon>{useMatch(RoutePaths.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}</ItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItemLink to="" selected={!!useMatch(RoutePaths.Wallets)} onClick={toggleNavigationExpand}>
+            <ListItemLink to="" selected={!!useMatch(RoutePaths.Wallets)} onClick={onExpand}>
                 <ItemIcon>
                     {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
                         <MenuWalletsActiveIcon />

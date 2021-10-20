@@ -205,7 +205,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         transitionDuration={300}
                         variant="temporary"
                         elevation={0}>
-                        <Navigation />
+                        <Navigation onClose={toggleDrawer} />
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
