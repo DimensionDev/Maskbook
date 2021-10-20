@@ -27,6 +27,12 @@ enum RestoreStatus {
     Decrypting = 3,
 }
 
+const supportedFileType = {
+    json: 'application/json',
+    octetStream: 'application/octet-stream',
+    macBinary: 'application/macbinary',
+}
+
 export const RestoreFromLocal = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
@@ -43,10 +49,10 @@ export const RestoreFromLocal = memo(() => {
 
     const handleSetFile = useCallback(async (file: File) => {
         setFile(file)
-        if (file.type === 'application/json') {
+        if (file.type === supportedFileType.json) {
             const content = await blobToText(file)
             setBackupValue(content)
-        } else if (['application/octet-stream', 'application/macbinary'].includes(file.type)) {
+        } else if ([supportedFileType.octetStream, supportedFileType.macBinary].includes(file.type)) {
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {
             showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
@@ -119,7 +125,7 @@ export const RestoreFromLocal = memo(() => {
                 {restoreStatus === RestoreStatus.Verifying && <LoadingCard text="Verifying" />}
                 {restoreStatus === RestoreStatus.WaitingInput && (
                     <Card variant="background" sx={{ height: '144px' }}>
-                        <FileUpload onChange={handleSetFile} accept="application/octet-stream, application/json" />
+                        <FileUpload onChange={handleSetFile} accept={Object.values(supportedFileType).join(',')} />
                     </Card>
                 )}
                 {restoreStatus === RestoreStatus.Verified && json && <BackupPreviewCard json={json} />}
