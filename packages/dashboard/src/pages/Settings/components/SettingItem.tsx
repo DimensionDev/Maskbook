@@ -22,6 +22,7 @@ const IconWrapper = styled(ListItemIcon)(({ theme }) => ({
 const TextWrapper = styled(ListItemText)(({ theme }) => ({
     [`& .${listItemTextClasses.primary}`]: {
         fontWeight: '600',
+        fontSize: 18,
         paddingBottom: theme.spacing(2),
     },
     [`&.${listItemTextClasses.root}.error .${listItemTextClasses.secondary}`]: {

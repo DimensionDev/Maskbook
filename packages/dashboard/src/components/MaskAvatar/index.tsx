@@ -3,6 +3,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MenuPersonasActiveIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { usePersonaAvatar } from '../../pages/Personas/api'
+import { Box } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => ({
     author: {
@@ -26,7 +27,11 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     }
 
     if (!avatar) {
-        return <MenuPersonasActiveIcon {...commonProps} />
+        return (
+            <Box borderRadius="50%" sx={{ background: MaskColorVar.lightBackground }} height={size}>
+                <MenuPersonasActiveIcon {...commonProps} />
+            </Box>
+        )
     }
 
     return <Avatar src={avatar} {...commonProps} />

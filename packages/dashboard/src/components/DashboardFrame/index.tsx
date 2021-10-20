@@ -89,6 +89,9 @@ const PageTitle = styled(Grid)(({ theme }) => ({
     minHeight: 40,
     alignItems: 'center',
     paddingLeft: theme.spacing(4.25),
+    '& > h6': {
+        fontSize: '1.5rem',
+    },
     [theme.breakpoints.down('lg')]: {
         flex: 1,
     },

@@ -10,6 +10,7 @@ const Card = styled('div')(({ theme }) => ({
 
 const CardTitle = styled(Typography)(({ theme }) => ({
     fontSize: 18,
+    fontWeight: 600,
     color: theme.palette.text.primary,
     paddingBottom: theme.spacing(4),
 }))
