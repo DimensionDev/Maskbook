@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface Props extends React.PropsWithChildren<{}> {
-    dateEnding: string
+    dateEnding: number
 }
 
 export interface CountdownDate {
@@ -30,7 +30,7 @@ function FoundationCountdown(props: Props) {
     const [ended, setEnded] = useState<boolean>(false)
     const { classes } = useStyles()
     const { t } = useI18N()
-    const nftDateEnding = new Date(Number(props.dateEnding) * 1000).getTime()
+    const nftDateEnding = props.dateEnding
     useEffect(() => {
         if (nftDateEnding > Date.now()) {
             const timer = setInterval(() => {

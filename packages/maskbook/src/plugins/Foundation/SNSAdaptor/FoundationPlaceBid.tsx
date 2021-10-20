@@ -50,12 +50,16 @@ interface Props extends withClasses<never> {
     link: string
 }
 
-function hasCountdown(date: string) {
-    const unixDate = new Date(Number(date) * 1000).getTime()
+interface propshasCountdown extends withClasses<never> {
+    date: string
+}
+
+function HasCountdown(props: propshasCountdown) {
+    const unixDate = new Date(Number(props.date) * 1000).getTime()
     if (unixDate > Date.now()) {
-        return true
+        return <FoundationCountdown dateEnding={unixDate} />
     }
-    return false
+    return null
 }
 
 function FoundationPlaceBid(props: Props) {
@@ -150,7 +154,7 @@ function FoundationPlaceBid(props: Props) {
     return (
         <Grid item xs={12} className={classes.body}>
             <EthereumWalletConnectedBoundary>
-                {hasCountdown(dateEnding) ? <FoundationCountdown dateEnding={dateEnding} /> : null}
+                <HasCountdown date={dateEnding} />
                 {props.nft.mostRecentAuction.status === 'Open' && (
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
