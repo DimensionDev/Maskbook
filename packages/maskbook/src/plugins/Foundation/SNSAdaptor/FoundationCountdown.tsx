@@ -7,7 +7,6 @@ const useStyles = makeStyles()((theme) => {
     return {
         body: {
             width: '100%',
-            margin: theme.spacing(1.5),
         },
         countdown: {
             color: '#eb5757',
@@ -20,6 +19,7 @@ interface Props extends React.PropsWithChildren<{}> {
 }
 
 export interface CountdownDate {
+    days: number
     hours: number
     minutes: number
     seconds: number
@@ -27,35 +27,55 @@ export interface CountdownDate {
 
 function FoundationCountdown(props: Props) {
     const [currentCount, setCount] = useState<CountdownDate>()
+    const [ended, setEnded] = useState<boolean>(false)
     const { classes } = useStyles()
     const { t } = useI18N()
-    const NftdateEnding = new Date(Number(props.dateEnding) * 1000).getTime()
+    const nftDateEnding = new Date(Number(props.dateEnding) * 1000).getTime()
     useEffect(() => {
-        const timer = setInterval(() => {
-            const now = Date.now()
-            const distance = NftdateEnding - now
-            setCount({
-                hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-                minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds: Math.floor((distance % (1000 * 60)) / 1000),
-            })
-        }, 1000)
-        return () => {
-            clearTimeout(timer)
+        if (nftDateEnding > Date.now()) {
+            const timer = setInterval(() => {
+                const now = Date.now()
+                const distance = nftDateEnding - now
+                setCount({
+                    days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                    hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                    minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                    seconds: Math.floor((distance % (1000 * 60)) / 1000),
+                })
+                console.log(currentCount)
+            }, 1000)
+            return () => {
+                clearTimeout(timer)
+            }
         }
-    }, [NftdateEnding])
+        setEnded(true)
+        return
+    }, [currentCount])
+
     return (
         <Box className={classes.body}>
-            {NftdateEnding > Date.now() && (
+            {ended ? (
                 <Typography
                     style={{ width: '100%' }}
                     variant="h5"
                     align="center"
                     gutterBottom
                     className={classes.countdown}>
-                    {`${t('plugin_foundation_ending_in')} ${currentCount?.hours} h ${currentCount?.minutes} m ${
-                        currentCount?.seconds
-                    } s`}
+                    {t('plugin_foundation_auction_over')}
+                </Typography>
+            ) : (
+                <Typography
+                    style={{ width: '100%' }}
+                    variant="h5"
+                    align="center"
+                    gutterBottom
+                    className={classes.countdown}>
+                    {t('plugin_foundation_ending_in', {
+                        days: currentCount?.days,
+                        hours: currentCount?.hours,
+                        minutes: currentCount?.minutes,
+                        seconds: currentCount?.seconds,
+                    })}
                 </Typography>
             )}
         </Box>

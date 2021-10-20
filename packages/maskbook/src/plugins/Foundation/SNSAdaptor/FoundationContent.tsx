@@ -49,7 +49,7 @@ function FoundationContent(props: Props) {
 
     const [tabIndex, setTabIndex] = useState<number>(0)
     const tabs = [
-        <Tab className={classes.tab} key="metade" label={t('plugin_foundation_metade')} />,
+        <Tab className={classes.tab} key="metadata" label={t('plugin_foundation_metadata')} />,
         <Tab className={classes.tab} key="description" label={t('plugin_foundation_description')} />,
         <Tab className={classes.tab} key="provenance" label={t('plugin_foundation_provenace')} />,
     ]

@@ -28,6 +28,9 @@ import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 const useStyles = makeStyles()((theme) => {
     return {
+        body: {
+            margin: theme.spacing(1, 0, 1),
+        },
         form: {
             '& > *': {
                 margin: theme.spacing(1, 0),
@@ -47,6 +50,14 @@ interface Props extends withClasses<never> {
     link: string
 }
 
+function hasCountdown(date: string) {
+    const unixDate = new Date(Number(date) * 1000).getTime()
+    if (unixDate > Date.now()) {
+        return true
+    }
+    return false
+}
+
 function FoundationPlaceBid(props: Props) {
     //#region context
     const { t } = useI18N()
@@ -55,6 +66,8 @@ function FoundationPlaceBid(props: Props) {
     const nativeTokenDetailed = useNativeTokenDetailed()
     const classes = useStylesExtends(useStyles(), props)
     const auctionId = props.nft.mostRecentAuction.id.split('-')[1]
+    const dateEnding = props.nft.mostRecentAuction.dateEnding
+    const auctionStatus = props.nft.mostRecentAuction.status
     //#endregion
 
     //#region the selected token
@@ -118,7 +131,7 @@ function FoundationPlaceBid(props: Props) {
 
     //#region submit button
     const validationMessage = useMemo(() => {
-        if (props.nft.mostRecentAuction.status !== 'Open') return t('plugin_foundation_auction_over')
+        if (auctionStatus !== 'Open') return t('plugin_foundation_auction_over')
         if (props.nft.mostRecentAuction.highestBid?.bidder.id.includes(account.toLocaleLowerCase()))
             return t('plugin_foundation_you_outstanding_bid')
         if (props.nft.mostRecentAuction.reservePriceInETH > rawAmount) return t('plugin_foundation_bid_least_reserve')
@@ -135,9 +148,9 @@ function FoundationPlaceBid(props: Props) {
     if (!auctionId) return null
 
     return (
-        <Grid item xs={12}>
-            <EthereumWalletConnectedBoundary offChain={true}>
-                <FoundationCountdown dateEnding={props.nft.mostRecentAuction.dateEnding} />
+        <Grid item xs={12} className={classes.body}>
+            <EthereumWalletConnectedBoundary>
+                {hasCountdown(dateEnding) ? <FoundationCountdown dateEnding={dateEnding} /> : null}
                 {props.nft.mostRecentAuction.status === 'Open' && (
                     <form className={classes.form} noValidate autoComplete="off">
                         <TokenAmountPanel
