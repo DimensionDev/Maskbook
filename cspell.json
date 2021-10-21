@@ -229,7 +229,9 @@
         "apikey",
         "tokenid",
         "NFTRSS",
-        "solana"
+        "solana",
+        "lspace",
+        "rspace"
     ],
     "ignoreWords": [
         "cryptopunks",
