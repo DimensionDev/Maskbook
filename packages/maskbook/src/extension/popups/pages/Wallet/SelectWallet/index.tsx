@@ -1,7 +1,6 @@
-import { memo, useCallback, useEffect, useState } from 'react'
-import { useI18N } from '../../../../../utils'
+import { CopyIcon, MaskWalletIcon, SuccessIcon } from '@masknet/icons'
+import { ChainIcon, FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useLocation } from 'react-router-dom'
 import {
     ChainId,
     getNetworkName,
@@ -11,14 +10,15 @@ import {
     useChainIdValid,
     useWallets,
 } from '@masknet/web3-shared-evm'
-import { ChainIcon, FormattedAddress } from '@masknet/shared'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
-import { useCopyToClipboard } from 'react-use'
-import { SuccessIcon } from '@masknet/icons'
-import Services from '../../../../service'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { first } from 'lodash-es'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useCopyToClipboard } from 'react-use'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
+import { useI18N } from '../../../../../utils'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()({
     content: {
@@ -141,15 +141,17 @@ const SelectWallet = memo(() => {
     const handleCancel = useCallback(() => Services.Helper.removePopupWindow(), [])
 
     const handleConfirm = useCallback(async () => {
-        await WalletRPC.updateAccount({
-            chainId,
-            account: selected,
-            providerType: ProviderType.MaskWallet,
-        })
         await WalletRPC.updateMaskAccount({
             chainId,
             account: selected,
         })
+        if (currentProviderSettings.value === ProviderType.MaskWallet) {
+            await WalletRPC.updateAccount({
+                chainId,
+                account: selected,
+                providerType: ProviderType.MaskWallet,
+            })
+        }
 
         return Services.Helper.removePopupWindow()
     }, [chainId, selected])
