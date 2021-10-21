@@ -248,16 +248,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/render.tsx')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
-        /** @deprecated */
-        optionsPage: normalizeEntryDescription(join(__dirname, '../src/extension/options-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'next.html' }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
         addHTMLEntry({ chunks: ['browserAction'], filename: 'browser-action.html' }),
         addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
         addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
         addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
-        addHTMLEntry({ chunks: ['optionsPage'], filename: 'index.html' }),
     )
     // background
     if (runtime.manifest === 3) {

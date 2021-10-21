@@ -27,11 +27,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+/** @deprecated Do not use in new code. */
 export interface DashboardDialogCoreProps extends DialogProps {
     CloseIconProps?: Partial<SvgIconProps>
     CloseButtonProps?: Partial<IconButtonProps>
 }
-
+/** @deprecated Do not use in new code. */
 export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     const { fullScreen, children, CloseIconProps, CloseButtonProps, ...dialogProps } = props
 
@@ -52,6 +53,7 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     )
 }
 
+/** @deprecated Do not use in new code. */
 export interface WrappedDialogProps<T extends object = any> extends DialogProps {
     ComponentProps?: T
     onClose(): void
@@ -73,6 +75,7 @@ function reducer<Props extends object>(
     return { state: DialogState.Destroyed }
 }
 
+/** @deprecated Do not use in new code. */
 export function useModal<DialogProps extends object, AdditionalPropsAppendByDispatch extends Partial<DialogProps>>(
     Modal: React.FunctionComponent<WrappedDialogProps<DialogProps>>,
     ComponentProps?: DialogProps,
@@ -239,6 +242,7 @@ interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
     footer?: React.ReactNode
 }
 
+/** @deprecated Do not use in new code */
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     const { size, icon, iconColor, primary, secondary, constraintSecondary = true, content, footer } = props
     const { classes } = useDashboardDialogWrapperStyles(props)

@@ -9,7 +9,6 @@ import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBac
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { requestExtensionPermission } from './HelperService/extensionPermission'
 import { saveAsFileFromBuffer } from './HelperService/saveAsFile'
-import type { DashboardRoute } from '../options-page/Route'
 import {
     BackupJSONFileLatest,
     getBackupPreviewInfo,
@@ -109,10 +108,11 @@ async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
     return { buffer, mimeType, fileName }
 }
 
-export async function openOptionsPage(route?: DashboardRoute, search?: string) {
+// TODO: URL review
+export async function openOptionsPage() {
     return browser.tabs.create({
         active: true,
-        url: browser.runtime.getURL(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html'),
+        url: browser.runtime.getURL(`/dashboard.html`),
     })
 }
 

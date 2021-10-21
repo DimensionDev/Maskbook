@@ -12,12 +12,14 @@ import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
-import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
-import type { WalletProps } from './types'
+import type { Wallet } from '@masknet/web3-shared-evm'
+import { Box, BoxProps } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import classNames from 'classnames'
 
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: FungibleTokenDetailed | ERC721TokenDetailed }>,
+    props: WrappedDialogProps<{ wallet: Wallet; token: FungibleTokenDetailed | ERC721TokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
@@ -70,4 +72,20 @@ export function DashboardWalletHideTokenConfirmDialog(
             />
         </DashboardDialogCore>
     )
+}
+
+const useStyles = makeStyles()((theme) => ({
+    buttonGroup: {
+        flexGrow: 0,
+        flexShrink: 0,
+        '& > *:not(:last-child)': {
+            marginRight: theme.spacing(2),
+        },
+    },
+}))
+
+function SpacedButtonGroup(_props: BoxProps) {
+    const { classes } = useStyles()
+    const { className, ...props } = _props
+    return <Box className={classNames(className, classes.buttonGroup)} {...props} />
 }

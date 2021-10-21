@@ -10,7 +10,7 @@ export const useEnterDashboard = () => {
         } else {
             browser.tabs.create({
                 active: true,
-                url: browser.runtime.getURL('/next.html'),
+                url: browser.runtime.getURL('/dashboard.html'),
             })
         }
     }, [])

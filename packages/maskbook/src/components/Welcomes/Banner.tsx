@@ -5,7 +5,6 @@ import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useAct
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { useStylesExtends } from '@masknet/shared'
-import { DashboardRoute } from '../../extension/options-page/Route'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
@@ -63,7 +62,8 @@ export function Banner(props: BannerProps) {
             return
         }
 
-        hasNativeAPI ? nativeAPI?.api.misc_openDashboardView() : Services.Welcome.openOptionsPage(DashboardRoute.Setup)
+        // TODO: URL review
+        hasNativeAPI ? nativeAPI?.api.misc_openDashboardView() : Services.Welcome.openOptionsPage()
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {

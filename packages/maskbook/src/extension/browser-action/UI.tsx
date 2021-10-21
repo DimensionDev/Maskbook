@@ -79,24 +79,18 @@ function BrowserActionUI() {
     )
 
     const onEnter = useCallback((event: React.MouseEvent) => {
-        const openLegacyDashboard = () => browser.runtime.openOptionsPage()
         const openNextDashboard = () =>
             browser.tabs.create({
                 active: true,
-                url: browser.runtime.getURL('/next.html'),
+                url: browser.runtime.getURL('/dashboard.html'),
             })
-        const shouldOpenNextDashboard =
-            (process.env.NODE_ENV === 'development' && event.ctrlKey && !Flags.v2_enabled) ||
-            (Flags.v2_enabled && !event.ctrlKey)
         if (event.shiftKey) {
             browser.tabs.create({
                 active: true,
                 url: browser.runtime.getURL('/debug.html'),
             })
-        } else if (shouldOpenNextDashboard) {
-            openNextDashboard()
         } else {
-            openLegacyDashboard()
+            openNextDashboard()
         }
     }, [])
 

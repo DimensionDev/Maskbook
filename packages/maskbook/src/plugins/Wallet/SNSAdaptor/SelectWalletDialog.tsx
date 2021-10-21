@@ -9,7 +9,6 @@ import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
-import { DashboardRoute } from '../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useState } from 'react'
 
@@ -54,8 +53,9 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onCreate = useCallback(async () => {
         closeDialog()
         await delay(100)
-        if (isEnvironment(Environment.ManifestOptions)) history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
-        else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
+        // TODO: URL review
+        if (isEnvironment(Environment.ManifestOptions)) history.push('')
+        else await Services.Welcome.openOptionsPage()
     }, [history, closeDialog])
     //#endregion
 

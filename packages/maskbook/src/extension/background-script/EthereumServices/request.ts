@@ -8,7 +8,7 @@ import {
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
-import { defer, Flags } from '../../../utils'
+import { defer } from '../../../utils'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { openPopupWindow } from '../HelperService'
 import Services from '../../service'
@@ -78,11 +78,7 @@ export async function requestSend(
         ...payload,
         id,
     }
-    if (
-        Flags.v2_enabled &&
-        isRiskMethod(payload_.method as EthereumMethodType) &&
-        providerType === ProviderType.MaskWallet
-    ) {
+    if (isRiskMethod(payload_.method as EthereumMethodType) && providerType === ProviderType.MaskWallet) {
         try {
             await WalletRPC.pushUnconfirmedRequest(payload_)
         } catch (error) {

@@ -68,9 +68,6 @@ export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('u
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  */
 export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
-export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
 //#endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
@@ -92,9 +89,6 @@ export const currentPopupWindowId = createGlobalSettings<number>('currentPopupWi
 })
 
 startEffect(import.meta.webpackHot, () => {
-    // reset it to false after Mask startup
-    currentImportingBackup.value = false
-
     // Migrate language settings
     const lng: string = languageSettings.value
     if (lng === 'en') languageSettings.value = LanguageOptions.enUS
