@@ -15,7 +15,7 @@ import {
     useAccount,
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
+import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { useI18N } from '../../../utils'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
@@ -336,24 +336,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         })
     }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
-    const createTabItem = (name: string, chainId: ChainId) => ({
-        label: <span>{name}</span>,
-        sx: { p: 0 },
-        cb: () => setChainId(chainId),
-    })
-
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            createTabItem('ETH', ChainId.Mainnet),
-            createTabItem('BSC', ChainId.BSC),
-            createTabItem('Polygon/Matic', ChainId.Matic),
-            createTabItem('Arbitrum', ChainId.Arbitrum),
-            createTabItem('xDai', ChainId.xDai),
-        ],
-        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].indexOf(chainId),
-        classes,
-        hasOnlyOneChild: true,
-    }
     return (
         <SnackbarProvider
             domRoot={DialogRef.current as HTMLElement}
@@ -364,7 +346,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
                     <div className={classes.abstractTabWrapper}>
-                        <AbstractTab {...tabProps} />
+                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {(showNftAirdrop || loadingAirdrop) && chainId === ChainId.Matic ? (
