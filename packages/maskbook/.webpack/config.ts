@@ -77,6 +77,8 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
                     '@masknet/web3-shared-solana': join(__dirname, '../../web3-shared/solana/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
+                    '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
+                    '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
