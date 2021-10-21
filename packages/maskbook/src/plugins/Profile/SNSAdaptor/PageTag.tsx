@@ -16,8 +16,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.mode === 'dark' ? 'rgba(239, 243, 244, 1)' : 'rgba(17, 20, 24, 1) ',
     },
     selected: {
-        border: '1px solid rgba(28, 104, 243, 1)',
-        color: 'rgba(28, 104, 243, 1)',
+        border: `1px solid ${theme.palette.primary.main}`,
+        color: theme.palette.primary.main,
     },
     hidden: {
         display: 'none',
@@ -35,6 +35,7 @@ export function PageTag(props: PageTagProps) {
     return (
         <div className={classes.root}>
             <Button
+                variant="outlined"
                 className={classNames(
                     classes.hidden,
                     classes.button,
@@ -45,12 +46,14 @@ export function PageTag(props: PageTagProps) {
                 Wallets
             </Button>
             <Button
+                variant="outlined"
                 className={classNames(classes.button, tag === PageTags.NFTTag ? classes.selected : '')}
                 onClick={() => onChange(PageTags.NFTTag)}
                 size="medium">
                 NFTs
             </Button>
             <Button
+                variant="outlined"
                 className={classNames(
                     classes.hidden,
                     classes.button,

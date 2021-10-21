@@ -45,7 +45,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        padding: props.padding,
+        padding: theme.spacing(0, props.padding),
         color: props.color,
         font: props.font,
         fontSize: props.fontSize,
@@ -53,6 +53,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         '&:hover': {
             color: props.color,
         },
+        height: props.height,
     },
     selected: {
         color: `${props.hover} !important`,
