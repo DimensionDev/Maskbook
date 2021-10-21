@@ -74,7 +74,6 @@ export function NFTBadge(props: NFTBadgeProps) {
     )
     const { amount, symbol, name, owner } = value
     const isShow = useCheckAddress(avatar.userId, avatar.tokenId, contract)
-
     if (!isShow) return null
     return (
         <div

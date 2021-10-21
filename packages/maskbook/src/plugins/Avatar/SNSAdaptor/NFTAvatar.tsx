@@ -2,15 +2,14 @@ import { useCallback, useState } from 'react'
 import { uniqBy } from 'lodash-es'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
-import { makeStyles, useSnackbar } from '@masknet/theme'
-import { ChainId, safeNonPayableTransactionCall, useERC721TokenContract } from '@masknet/web3-shared-evm'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ChainId, isSameAddress, safeNonPayableTransactionCall, useERC721TokenContract } from '@masknet/web3-shared-evm'
 import {
     ERC721TokenDetailed,
     formatEthereumAddress,
     useAccount,
     useChainId,
     useCollectibles,
-    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
 import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
@@ -88,10 +87,10 @@ export interface NFTAvatarProps extends withClasses<'root'> {
 
 export function NFTAvatar(props: NFTAvatarProps) {
     const { onChange } = props
-    const { enqueueSnackbar } = useSnackbar()
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const chainId = useChainId()
+    const { showSnackbar } = useCustomSnackbar()
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const [page, setPage] = useState(0)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
@@ -116,13 +115,13 @@ export function NFTAvatar(props: NFTAvatarProps) {
 
         const owner = await safeNonPayableTransactionCall(erc721Contract.methods.ownerOf(selectedToken.tokenId))
         if (!isSameAddress(owner, account)) {
-            enqueueSnackbar(t('nft_owner_check_info'), { variant: 'error' })
+            showSnackbar(t('nft_owner_check_info'), { variant: 'error' })
             return
         }
 
         onChange(selectedToken)
         setSelectedToken(undefined)
-    }, [onChange, selectedToken, setSelectedToken, erc721Contract])
+    }, [onChange, selectedToken, showSnackbar, erc721Contract])
 
     const onAddClick = useCallback((token) => {
         setSelectedToken(token)
