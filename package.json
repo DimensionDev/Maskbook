@@ -1,6 +1,6 @@
 {
   "name": "mask-network",
-  "version": "1.38.0",
+  "version": "1.38.1",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
