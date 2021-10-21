@@ -17,9 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 100,
         '&:hover': {
             transform: 'translateX(2.5px) translateY(-2px)',
-            boxShadow: `0px 12px 28px ${
-                theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.02)'
-            }`,
+            boxShadow: theme.palette.mode === 'light' ? '0px 12px 28px rgba(0, 0, 0, 0.1)' : 'none',
         },
     },
     applicationWrapper: {
@@ -111,10 +109,10 @@ export function MaskApplicationBox({ closeDialog }: MaskApplicationBoxProps) {
                     title: 'Alternative',
                     img: new URL('./assets/more.png', import.meta.url).toString(),
                 },
-            ].map(({ title, img, onClick }) => (
-                <div className={classes.applicationBox} onClick={onClick}>
+            ].map(({ title, img, onClick }, i) => (
+                <div className={classes.applicationBox} onClick={onClick} key={i.toString()}>
                     <img src={img} className={classes.applicationImg} />
-                    <Typography>{title}</Typography>
+                    <Typography color="textPrimary">{title}</Typography>
                 </div>
             ))}
         </section>
