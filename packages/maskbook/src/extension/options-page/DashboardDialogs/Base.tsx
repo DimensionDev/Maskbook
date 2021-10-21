@@ -12,7 +12,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
-import { extendsTheme, useClassicMaskTheme, useMatchXS } from '../../../utils'
+import { extendsTheme, useClassicMaskFullPageTheme, useMatchXS } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -73,6 +73,7 @@ function reducer<Props extends object>(
     return { state: DialogState.Destroyed }
 }
 
+/** @deprecated */
 export function useModal<DialogProps extends object, AdditionalPropsAppendByDispatch extends Partial<DialogProps>>(
     Modal: React.FunctionComponent<WrappedDialogProps<DialogProps>>,
     ComponentProps?: DialogProps,
@@ -97,7 +98,8 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
         open: state === DialogState.Opened,
         onClose,
     }
-    const theme = useClassicMaskTheme()
+    // Restore old theme
+    const theme = useClassicMaskFullPageTheme()
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <ThemeProvider theme={theme}>

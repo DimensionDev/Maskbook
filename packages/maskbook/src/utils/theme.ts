@@ -1,18 +1,18 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef, or } from '@masknet/shared'
-import { safeUnreachable } from '@dimensiondev/kit'
+import { useValueRef, or, SubscriptionFromValueRef } from '@masknet/shared'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
-import { unstable_createMuiStrictModeTheme, useMediaQuery } from '@mui/material'
+import { PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { blue, green, grey, orange, red } from '@mui/material/colors'
-import { jaJP, koKR, zhTW, zhCN, esES, itIT, ruRU, faIR, frFR } from '@mui/material/locale/index'
+import { jaJP, koKR, zhTW, zhCN, esES, itIT, ruRU, faIR, frFR, enUS, Localization } from '@mui/material/locale/index'
 import { makeStyles } from '@masknet/theme'
 import type { Theme, ThemeOptions } from '@mui/material/styles/createTheme'
 import { cloneDeep, merge } from 'lodash-es'
-import { useMemo, useRef } from 'react'
+import { useRef } from 'react'
 import { appearanceSettings, languageSettings } from '../settings/settings'
 import { activatedSocialNetworkUI } from '../social-network'
 import './theme-global.d'
+import { Subscription, useSubscription } from 'use-subscription'
 
 function getFontFamily(monospace?: boolean) {
     // We want to look native.
@@ -109,80 +109,63 @@ const baseTheme = (theme: 'dark' | 'light') => {
 // Theme
 const MaskLightTheme = unstable_createMuiStrictModeTheme(baseTheme('light'))
 const MaskDarkTheme = unstable_createMuiStrictModeTheme(baseTheme('dark'))
+const staticSubscription: Subscription<PaletteMode> = SubscriptionFromValueRef(new ValueRef('light'))
+export function useClassicMaskSNSTheme() {
+    const { current: provider } = useRef(
+        activatedSocialNetworkUI.customization.paletteMode?.current || staticSubscription,
+    )
+    const { current: usePostTheme = (t: Theme) => t } = useRef(activatedSocialNetworkUI.customization.useTheme)
+    const palette = useSubscription(provider)
+    const baseTheme = palette === 'dark' ? MaskDarkTheme : MaskLightTheme
 
-export function getMaskTheme(opt?: { appearance?: Appearance; language?: SupportedLanguages }) {
-    let language = opt?.language
-    if (!language) {
-        const settings = languageSettings.value
-        // TODO:
-        if (settings === LanguageOptions.__auto__) language = SupportedLanguages.enUS
-        else language = settings as any
-    }
-    if (!language) language = SupportedLanguages.enUS
-    const preference = opt?.appearance ?? appearanceSettings.value
-
-    // Priority:
-    // PaletteModeProvider (in SNS adaptor) > User preference > OS preference
-    const isDarkBrowser = matchMedia('(prefers-color-scheme: dark)').matches
-    const detectedPalette = activatedSocialNetworkUI.customization.paletteMode?.current.value
-    let isDark = (isDarkBrowser && preference === Appearance.default) || preference === Appearance.dark
-    if (detectedPalette) {
-        isDark = detectedPalette === 'dark'
-    } else if (preference === Appearance.default) {
-        isDark = isDarkBrowser
-    } else {
-        isDark = preference === Appearance.dark
-    }
-    const baseTheme = isDark ? MaskDarkTheme : MaskLightTheme
-    switch (language) {
-        case SupportedLanguages.enUS:
-            return baseTheme
-        case SupportedLanguages.jaJP:
-            return unstable_createMuiStrictModeTheme(baseTheme, jaJP)
-        case SupportedLanguages.koKR:
-            return unstable_createMuiStrictModeTheme(baseTheme, koKR)
-        case SupportedLanguages.zhTW:
-            return unstable_createMuiStrictModeTheme(baseTheme, zhTW)
-        case SupportedLanguages.zhCN:
-            return unstable_createMuiStrictModeTheme(baseTheme, zhCN)
-        case SupportedLanguages.ruRU:
-            return unstable_createMuiStrictModeTheme(baseTheme, ruRU)
-        case SupportedLanguages.itIT:
-            return unstable_createMuiStrictModeTheme(baseTheme, itIT)
-        case SupportedLanguages.esES:
-            return unstable_createMuiStrictModeTheme(baseTheme, esES)
-        case SupportedLanguages.frFR:
-            return unstable_createMuiStrictModeTheme(baseTheme, frFR)
-        // TODO: it should be a RTL theme.
-        case SupportedLanguages.faIR:
-            return unstable_createMuiStrictModeTheme(baseTheme, faIR)
-        default:
-            safeUnreachable(language)
-            return baseTheme
-    }
+    // TODO: support RTL?
+    const [localization, isRTL] = useThemeLanguage()
+    const theme = unstable_createMuiStrictModeTheme(baseTheme, localization)
+    return usePostTheme(theme)
 }
-// We're developing a new theme in the theme/ package
-export function useClassicMaskTheme(opt?: { appearance?: Appearance; language?: SupportedLanguages }) {
-    const langSettingsValue = useValueRef(languageSettings)
-    let language = opt?.language
-    if (!language) {
-        // TODO:
-        if (langSettingsValue === LanguageOptions.__auto__) language = SupportedLanguages.enUS
-        else language = langSettingsValue as any
-    }
+/**
+ * @deprecated
+ * - 1.x dashboard: will be removed in 2.0
+ * - Popups: migrate to \@masknet/theme package
+ */
+export function useClassicMaskFullPageTheme(overwrite?: ClassicMaskFullPageThemeOptions) {
+    const userPreference = or(overwrite?.forcePalette, useValueRef(appearanceSettings))
+    const systemPreference: PaletteMode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+    const finalPalette: PaletteMode = userPreference === Appearance.default ? systemPreference : userPreference
 
-    const appearance = or(opt?.appearance, useValueRef(appearanceSettings))
-    const systemPreference = useMediaQuery('(prefers-color-scheme: dark)')
-    const paletteProvider = useRef(
-        activatedSocialNetworkUI.customization.paletteMode?.current || new ValueRef('light'),
-    ).current
-    const palette = useValueRef(paletteProvider)
-    return useMemo(() => getMaskTheme({ appearance, language }), [language, appearance, systemPreference, palette])
+    const baseTheme = finalPalette === 'dark' ? MaskDarkTheme : MaskLightTheme
+    const [localization, isRTL] = useThemeLanguage()
+    // TODO: support RTL
+    return unstable_createMuiStrictModeTheme(baseTheme, localization)
 }
 
-export const useColorStyles: (params: void) => {
-    classes: Record<'error' | 'success' | 'info', string>
-} = makeStyles()((theme: typeof MaskDarkTheme) => {
+function useThemeLanguage(): [loc: Localization, RTL: boolean] {
+    let language = useValueRef(languageSettings)
+    // TODO: support auto language
+    if (language === LanguageOptions.__auto__) language = LanguageOptions.enUS
+
+    const displayLanguage = language as any as SupportedLanguages
+
+    const langs: Record<SupportedLanguages, Localization> = {
+        [SupportedLanguages.enUS]: enUS,
+        [SupportedLanguages.jaJP]: jaJP,
+        [SupportedLanguages.koKR]: koKR,
+        [SupportedLanguages.zhTW]: zhTW,
+        [SupportedLanguages.zhCN]: zhCN,
+        [SupportedLanguages.ruRU]: ruRU,
+        [SupportedLanguages.itIT]: itIT,
+        [SupportedLanguages.esES]: esES,
+        [SupportedLanguages.frFR]: frFR,
+        [SupportedLanguages.faIR]: faIR,
+    }
+    return [langs[displayLanguage] || enUS, language === LanguageOptions.faIR]
+}
+
+export interface ClassicMaskFullPageThemeOptions {
+    forcePalette?: Appearance
+}
+
+export const useColorStyles = makeStyles()((theme: typeof MaskDarkTheme) => {
     const dark = theme.palette.mode === 'dark'
     return {
         error: {
@@ -196,9 +179,7 @@ export const useColorStyles: (params: void) => {
         },
     }
 })
-export const useErrorStyles: (params: void) => {
-    classes: Record<'containedPrimary' | 'outlinedPrimary', string>
-} = makeStyles()((theme) => {
+export const useErrorStyles = makeStyles()((theme) => {
     const dark = theme.palette.mode === 'dark'
     return {
         containedPrimary: {

@@ -1,11 +1,9 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@mui/material'
+import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
-import { createElement, useMemo } from 'react'
-import { Appearance } from '@masknet/theme'
-import { useValueRef } from '@masknet/shared'
+import { useMemo } from 'react'
+import { useValueRef, SubscriptionFromValueRef } from '@masknet/shared'
 import type { SocialNetworkUI } from '../../../social-network'
-import { useClassicMaskTheme } from '../../../utils/theme'
 import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
 import { themeListItemSelector } from '../utils/selector'
 
@@ -14,8 +12,9 @@ const primaryColorRef = new ValueRef(toRGB([68, 170, 255]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
 
+const currentTheme = new ValueRef<PaletteMode>('light')
 export const PaletteModeProviderMinds: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: new ValueRef<PaletteMode>('light'),
+    current: SubscriptionFromValueRef(currentTheme),
     start: startWatchThemeColor,
 }
 
@@ -23,7 +22,7 @@ export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
         const contrastColor = getForegroundColor(themeListItemSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
-        PaletteModeProviderMinds.current.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
+        currentTheme.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
 
         if (contrastColor) primaryColorContrastColorRef.value = contrastColor
         if (backgroundColor) backgroundColorRef.value = backgroundColor
@@ -39,19 +38,16 @@ export function startWatchThemeColor(signal: AbortSignal) {
     signal.addEventListener('abort', () => watcher.stopWatch())
 }
 
-export function useThemeMindsVariant() {
+export function useThemeMindsVariant(baseTheme: Theme) {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-    const MaskTheme = useClassicMaskTheme({
-        appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
-    })
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
         const primaryContrastColorRGB = fromRGB(primaryContrastColor)
         setAutoFreeze(false)
 
-        const MindsTheme = produce(MaskTheme, (theme) => {
+        const MindsTheme = produce(baseTheme, (theme) => {
             theme.palette.background.paper = backgroundColor
             theme.palette.primary = {
                 light: toRGB(shade(primaryColorRGB, 10)),
@@ -111,9 +107,5 @@ export function useThemeMindsVariant() {
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(MindsTheme)
-    }, [MaskTheme, backgroundColor, primaryColor, primaryContrastColor])
-}
-
-export function MindsThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
-    return createElement(ThemeProvider, { theme: useThemeMindsVariant(), ...props })
+    }, [baseTheme, backgroundColor, primaryColor, primaryContrastColor])
 }
