@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { MaskNetworkAPIs, NetworkType } from '@masknet/public-api'
+import { MaskNetworkAPIs, NetworkType, RelationFavor } from '@masknet/public-api'
 import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
@@ -41,7 +41,11 @@ const profileFormatter = (p: Profile) => {
     }
 }
 
-const profileRelationFormatter = (p: Profile, personaIdentifier: string | undefined, favor: 0 | 1 | undefined) => {
+const profileRelationFormatter = (
+    p: Profile,
+    personaIdentifier: string | undefined,
+    favor: RelationFavor | undefined,
+) => {
     return {
         identifier: p.identifier.toText(),
         nickname: p.nickname,
