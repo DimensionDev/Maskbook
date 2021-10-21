@@ -67,7 +67,7 @@ export interface MaskNetworkAPIs {
     profile_updateRelation(params: {
         profile: ProfileIdentifier_string
         linked: PersonaIdentifier_string
-        favor: 0 | 1
+        favor: RelationFavor
     }): Promise<void>
     profile_queryRelationPaged(params: { network: string; after?: RelationRecord; count: number }): Promise<Profile[]>
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
@@ -80,7 +80,13 @@ export interface RelationRecord {
     profile: ProfileIdentifier_string
     linked: PersonaIdentifier_string
     network: string
-    favor: 0 | 1
+    favor: RelationFavor
+}
+
+export enum RelationFavor {
+    COLLECTED = -1,
+    UNCOLLECTED = 1,
+    DEPRECATED = 0,
 }
 
 export interface WalletInfo {
@@ -114,7 +120,7 @@ export interface ProfileRelation {
     createdAt: number
     /** Unix timestamp */
     updatedAt: number
-    favor: 0 | 1
+    favor: RelationFavor
     personaIdentifier?: string
 }
 
