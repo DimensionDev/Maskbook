@@ -54,7 +54,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.DonationTag:
                 return <DonationPage />
             default:
-                return unreachable(currentTag)
+                unreachable(currentTag)
         }
     }, [currentTag])
 
