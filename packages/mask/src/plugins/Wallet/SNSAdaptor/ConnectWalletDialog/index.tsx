@@ -84,6 +84,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
+            case ProviderType.Injected:
+                throw new Error('To be implemented.')
             default:
                 safeUnreachable(providerType)
                 break

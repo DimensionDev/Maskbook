@@ -24,6 +24,8 @@ export async function createWeb3({
             })
         case ProviderType.CustomNetwork:
             throw new Error('To be implemented.')
+        case ProviderType.Injected:
+            throw new Error('To be implemented.')
         default:
             unreachable(providerType)
     }

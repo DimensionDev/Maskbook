@@ -14,6 +14,7 @@ import urlcat from 'urlcat'
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
     {
+        [ProviderType.Injected]: 'Injected Web3',
         [ProviderType.MaskWallet]: 'Mask',
         [ProviderType.MetaMask]: 'MetaMask',
         [ProviderType.WalletConnect]: 'WalletConnect',
