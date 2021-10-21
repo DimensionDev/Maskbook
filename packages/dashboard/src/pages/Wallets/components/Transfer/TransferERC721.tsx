@@ -107,7 +107,7 @@ export const TransferERC721 = memo(() => {
     useEffect(() => {
         setGasLimit_(erc721GasLimit.value?.toFixed() ?? '0')
     }, [erc721GasLimit.value])
-    const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_)
+    const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, 0)
 
     const account = useAccount()
     const nativeToken = useNativeTokenDetailed()

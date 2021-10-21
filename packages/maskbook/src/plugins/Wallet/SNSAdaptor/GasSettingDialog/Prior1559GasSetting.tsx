@@ -23,7 +23,7 @@ import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
-    ({ gasLimit, gasOption = GasOption.Medium, onConfirm = noop }) => {
+    ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
         const { classes } = useGasSettingStyles()
         const { t } = useI18N()
         const chainId = useChainId()
@@ -66,15 +66,13 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         )
         const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
 
-        const minGasLimit = gasLimit
-
         const schema = useMemo(() => {
             return zod.object({
                 gasLimit: zod
-                    .string()
+                    .number()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
-                        (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
+                        (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit),
                         t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                     ),
                 gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
@@ -91,7 +89,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             mode: 'onChange',
             resolver: zodResolver(schema),
             defaultValues: {
-                gasLimit: gasLimit ?? '',
+                gasLimit: gasLimit ?? 0,
                 gasPrice: '',
             },
             context: {
@@ -102,7 +100,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const [inputGasLimit] = watch(['gasLimit'])
 
         useUpdateEffect(() => {
-            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+            if (gasLimit) setValue('gasLimit', gasLimit)
         }, [gasLimit, setValue])
 
         useEffect(() => {
