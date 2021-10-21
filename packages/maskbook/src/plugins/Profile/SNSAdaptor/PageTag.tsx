@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classNames from 'classnames'
-import { useI18N } from '../../../utils'
 import { PageTags } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
@@ -20,36 +19,46 @@ const useStyles = makeStyles()((theme) => ({
         border: '1px solid rgba(28, 104, 243, 1)',
         color: 'rgba(28, 104, 243, 1)',
     },
+    hidden: {
+        display: 'none',
+    },
 }))
 
-interface TabPageTagsProps {
+interface PageTagProps {
     onChange: (tag: PageTags) => void
     tag: PageTags
 }
 
-export function TabPageTags(props: TabPageTagsProps) {
-    const { t } = useI18N()
+export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
     const { onChange, tag } = props
     return (
         <div className={classes.root}>
             <Button
-                className={classNames(classes.button, tag === PageTags.TagWallet ? classes.selected : '')}
-                onClick={() => onChange(PageTags.TagWallet)}
+                className={classNames(
+                    classes.hidden,
+                    classes.button,
+                    tag === PageTags.WalletTag ? classes.selected : '',
+                )}
+                onClick={() => onChange(PageTags.WalletTag)}
                 size="medium">
-                {t('wallets')}
+                Wallets
             </Button>
             <Button
-                className={classNames(classes.button, tag === PageTags.TagNFT ? classes.selected : '')}
-                onClick={() => onChange(PageTags.TagNFT)}
+                className={classNames(classes.button, tag === PageTags.NFTTag ? classes.selected : '')}
+                onClick={() => onChange(PageTags.NFTTag)}
                 size="medium">
-                {t('nfts')}
+                NFTs
             </Button>
             <Button
-                className={classNames(classes.button, tag === PageTags.TagDonation ? classes.selected : '')}
-                onClick={() => onChange(PageTags.TagDonation)}
+                className={classNames(
+                    classes.hidden,
+                    classes.button,
+                    tag === PageTags.DonationTag ? classes.selected : '',
+                )}
+                onClick={() => onChange(PageTags.DonationTag)}
                 size="medium">
-                {t('donations')}
+                Donations
             </Button>
         </div>
     )

@@ -2,13 +2,14 @@ import { useState, useEffect, useMemo } from 'react'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 
-import { MaskMessages, useI18N } from '../../../utils'
+import { MaskMessages } from '../../../utils'
 import { useLocationChange } from '../../../utils/hooks/useLocationChange'
-import { TabPageTags } from './PageTags'
 import { WalletsPage } from './WalletsPage'
 import { NFTPage } from './NFTPage'
 import { DonationPage } from './DonationsPage'
 import { PageTags } from '../types'
+import { unreachable } from '@dimensiondev/kit'
+import { PageTag } from './PageTag'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 1,
     },
     tags: {
-        padding: theme.spacing(1),
+        padding: theme.spacing(2),
     },
     content: {
         position: 'relative',
@@ -32,8 +33,7 @@ interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {}
 export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const [show, setShow] = useState(false)
     const classes = useStylesExtends(useStyles(), props)
-    const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.TagWallet)
-    const { t } = useI18N()
+    const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
 
     useLocationChange(() => {
         MaskMessages.events.profileNFTsTabUpdated.sendToLocal('reset')
@@ -47,14 +47,14 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     const content = useMemo(() => {
         switch (currentTag) {
-            case PageTags.TagWallet:
+            case PageTags.WalletTag:
                 return <WalletsPage />
-            case PageTags.TagNFT:
+            case PageTags.NFTTag:
                 return <NFTPage />
-            case PageTags.TagDonation:
+            case PageTags.DonationTag:
                 return <DonationPage />
             default:
-                return null
+                return unreachable(currentTag)
         }
     }, [currentTag])
 
@@ -63,7 +63,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     return (
         <div className={classes.root}>
             <div className={classes.tags}>
-                <TabPageTags onChange={(tag) => setCurrentTag(tag)} tag={currentTag} />
+                <PageTag onChange={(tag) => setCurrentTag(tag)} tag={currentTag} />
             </div>
             <div className={classes.content}>{content}</div>
         </div>

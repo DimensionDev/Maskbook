@@ -1,5 +1,5 @@
 export enum PageTags {
-    TagWallet = 'Wallets',
-    TagNFT = 'NFTs',
-    TagDonation = 'Donations',
+    WalletTag = 'Wallets',
+    NFTTag = 'NFTs',
+    DonationTag = 'Donations',
 }
