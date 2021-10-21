@@ -24,6 +24,7 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
 ): Result<T> {
     const [HOOK_ID] = useState(uuid()) // create a id for every hook
     const [open, setOpen] = useState(false)
+
     useEffect(
         () =>
             event.on((_ev: T) => {
