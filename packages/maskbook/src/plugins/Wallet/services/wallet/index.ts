@@ -1,14 +1,17 @@
 import * as bip39 from 'bip39'
 import { first, last } from 'lodash-es'
 import { toHex } from 'web3-utils'
+import type { TransactionConfig } from 'web3-core'
 import { encodeText } from '@dimensiondev/kit'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { MAX_DERIVE_COUNT, HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import * as sdk from './maskwallet'
 import * as database from './database'
 import * as password from './password'
-import type { TransactionConfig } from 'web3-core'
+import * as EthereumServices from '../../../../extension/background-script/EthereumService'
+import { hasNativeAPI } from '../../../../utils'
+import type { WalletRecord } from './type'
 
 function bumpDerivationPath(path = `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`) {
     const splitted = path.split('/')
@@ -31,7 +34,7 @@ export {
 } from './database/token'
 
 // wallet db
-export { getWallet, getWallets, hasWallet, updateWallet, updateWalletToken } from './database/wallet'
+export { hasWallet, updateWallet, updateWalletToken } from './database/wallet'
 
 // password
 export { setPassword, hasPassword, verifyPassword, changePassword, validatePassword, clearPassword } from './password'
@@ -39,11 +42,57 @@ export { setPassword, hasPassword, verifyPassword, changePassword, validatePassw
 // locker
 export { isLocked, lockWallet, unlockWallet } from './locker'
 
+export async function getWallet(address?: string) {
+    if (hasNativeAPI) {
+        const wallets = await getWallets(ProviderType.MaskWallet)
+        return wallets.find((x) => isSameAddress(x.address, address))
+    }
+    return database.getWallet(address)
+}
+
+export async function getWallets(providerType?: ProviderType): Promise<
+    (Omit<WalletRecord, 'type'> & {
+        hasStoredKeyInfo: boolean
+        hasDerivationPath: boolean
+    })[]
+> {
+    if (hasNativeAPI) {
+        if (providerType && providerType !== ProviderType.MaskWallet) return []
+
+        // read wallet from rpc
+        const accounts = await EthereumServices.getAccounts()
+        const address = first(accounts) ?? ''
+        if (!address) return []
+
+        const now = new Date()
+        const address_ = formatEthereumAddress(address)
+        return [
+            {
+                id: address_,
+                name: 'Mask Network',
+                address: address_,
+                createdAt: now,
+                updatedAt: now,
+                erc20_token_blacklist: new Set(),
+                erc20_token_whitelist: new Set(),
+                erc721_token_whitelist: new Set(),
+                erc721_token_blacklist: new Set(),
+                erc1155_token_whitelist: new Set(),
+                erc1155_token_blacklist: new Set(),
+                hasStoredKeyInfo: false,
+                hasDerivationPath: false,
+            },
+        ]
+    }
+    return database.getWallets(providerType)
+}
+
 export function createMnemonicWords() {
     return bip39.generateMnemonic().split(' ')
 }
 
 export async function getWalletPrimary() {
+    if (hasNativeAPI) return null
     return (
         first(
             (await database.getWallets(ProviderType.MaskWallet))
