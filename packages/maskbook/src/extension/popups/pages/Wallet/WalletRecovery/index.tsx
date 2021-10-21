@@ -15,7 +15,6 @@ import { Controller } from 'react-hook-form'
 import { usePasswordForm } from '../hooks/usePasswordForm'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { PopupRoutes } from '../../../index'
 import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()({
@@ -71,7 +70,7 @@ const WalletRecovery = memo(() => {
     const [{ value: hasError, loading: unlockLoading }, handleUnlock] = useAsyncFn(async () => {
         const result = await WalletRPC.unlockWallet(password)
         if (result) {
-            history.replace(PopupRoutes.Wallet)
+            await Services.Helper.removePopupWindow()
             return false
         } else {
             return true
@@ -100,7 +99,7 @@ const WalletRecovery = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             try {
                 await WalletRPC.setPassword(data.password)
-                history.replace(PopupRoutes.ImportWallet)
+                await Services.Helper.removePopupWindow()
             } catch (error) {
                 if (error instanceof Error) {
                     setError('password', { message: error.message })
@@ -117,8 +116,6 @@ const WalletRecovery = memo(() => {
             await onSubmit()
         }
         if (isLocked) await handleUnlock()
-
-        await Services.Helper.removePopupWindow()
     }, [onSubmit, isLocked, handleUnlock, hasPassword])
 
     return loading || getHasPasswordLoading || getLockStatusLoading ? (
