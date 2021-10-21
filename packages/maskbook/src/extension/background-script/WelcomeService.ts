@@ -19,6 +19,7 @@ import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { decompressBackupFile, extraPermissions } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
+import type { DashboardRoutes } from '@masknet/shared-base'
 
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
@@ -108,7 +109,7 @@ async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
     return { buffer, mimeType, fileName }
 }
 
-export async function openOptionsPage(route?: string, search?: string) {
+export async function openOptionsPage(route?: DashboardRoutes, search?: string) {
     return browser.tabs.create({
         active: true,
         url: browser.runtime.getURL(`/dashboard.html#/${route}${search ? `?${search}` : ''}`),

@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared-evm'
 import { delay, useI18N } from '../../../utils'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { DashboardRoutes, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
@@ -54,7 +54,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
         closeDialog()
         await delay(100)
         if (isEnvironment(Environment.ManifestOptions)) history.push('')
-        else await Services.Welcome.openOptionsPage('create-mask-wallet', `create=${Date.now()}`)
+        else await Services.Welcome.openOptionsPage(DashboardRoutes.CreateMaskWallet, `create=${Date.now()}`)
     }, [history, closeDialog])
     //#endregion
 
