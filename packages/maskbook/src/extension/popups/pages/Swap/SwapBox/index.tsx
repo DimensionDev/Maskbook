@@ -1,13 +1,15 @@
-import { useState, useMemo } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { useLocation, useHistory } from 'react-router-dom'
 import type { TradeProvider } from '@masknet/public-api'
 import { useChainId } from '@masknet/web3-shared-evm'
-import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader'
+import { useCallback, useMemo } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
+import { useUpdateEffect } from 'react-use'
+import { currentTradeProviderSettings } from '../../../../../plugins/Trader/settings'
+import type { FootnoteMenuOption } from '../../../../../plugins/Trader/SNSAdaptor/trader/FootnoteMenu'
 import { TradeFooter } from '../../../../../plugins/Trader/SNSAdaptor/trader/TradeFooter'
+import { Trader } from '../../../../../plugins/Trader/SNSAdaptor/trader/Trader'
 import { TradeContext, useTradeContext } from '../../../../../plugins/Trader/trader/useTradeContext'
-import { useCurrentTradeProvider } from '../../../../../plugins/Trader/trending/useCurrentTradeProvider'
 import { useAvailableTraderProviders } from '../../../../../plugins/Trader/trending/useAvailableTraderProviders'
+import { useCurrentTradeProvider } from '../../../../../plugins/Trader/trending/useCurrentTradeProvider'
 import { Coin, TagType } from '../../../../../plugins/Trader/types'
 import { PopupRoutes } from '../../../index'
 
@@ -15,14 +17,9 @@ export function SwapBox() {
     const location = useLocation()
     const history = useHistory()
     const chainId = useChainId()
-    const [currentProvider, setCurrentProvider] = useState<TradeProvider | null>(null)
     const tradeProvider = useCurrentTradeProvider(chainId)
     const tradeContext = useTradeContext(tradeProvider)
     const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK')
-
-    const provider = useMemo(() => {
-        return currentProvider ?? tradeProvider
-    }, [currentProvider, tradeProvider])
 
     const coin = useMemo(() => {
         if (!location.search) return undefined
@@ -40,15 +37,19 @@ export function SwapBox() {
         history.replace(PopupRoutes.Swap)
     }, [chainId])
 
+    const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
+        currentTradeProviderSettings.value = option.value as TradeProvider
+    }, [])
+
     return (
         <TradeContext.Provider value={tradeContext}>
             <Trader coin={coin} />
             <TradeFooter
                 showDataProviderIcon={false}
                 showTradeProviderIcon
-                tradeProvider={provider}
+                tradeProvider={tradeProvider}
                 tradeProviders={tradeProviders}
-                onTradeProviderChange={(newProvider) => setCurrentProvider(newProvider.value)}
+                onTradeProviderChange={onTradeProviderChange}
             />
         </TradeContext.Provider>
     )
