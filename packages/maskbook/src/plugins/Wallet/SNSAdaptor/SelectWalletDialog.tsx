@@ -53,9 +53,8 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onCreate = useCallback(async () => {
         closeDialog()
         await delay(100)
-        // TODO: URL review
         if (isEnvironment(Environment.ManifestOptions)) history.push('')
-        else await Services.Welcome.openOptionsPage()
+        else await Services.Welcome.openOptionsPage('create-mask-wallet', `create=${Date.now()}`)
     }, [history, closeDialog])
     //#endregion
 

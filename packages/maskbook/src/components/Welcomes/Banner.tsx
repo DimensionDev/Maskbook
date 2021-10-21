@@ -62,8 +62,7 @@ export function Banner(props: BannerProps) {
             return
         }
 
-        // TODO: URL review
-        hasNativeAPI ? nativeAPI?.api.misc_openDashboardView() : Services.Welcome.openOptionsPage()
+        hasNativeAPI ? nativeAPI?.api.misc_openDashboardView() : Services.Welcome.openOptionsPage('setup')
     }, [networkIdentifier, nextStep])
     const defaultUserName = networkIdentifier
         ? {

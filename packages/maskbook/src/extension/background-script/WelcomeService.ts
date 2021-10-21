@@ -108,11 +108,10 @@ async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
     return { buffer, mimeType, fileName }
 }
 
-// TODO: URL review
-export async function openOptionsPage() {
+export async function openOptionsPage(route?: string, search?: string) {
     return browser.tabs.create({
         active: true,
-        url: browser.runtime.getURL(`/dashboard.html`),
+        url: browser.runtime.getURL(`/dashboard.html#/${route}${search ? `?${search}` : ''}`),
     })
 }
 
