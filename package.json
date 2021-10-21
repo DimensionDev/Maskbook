@@ -36,8 +36,8 @@
     "@types/web": "^0.0.32",
     "i18next": "^20.6.1",
     "idb": "5.0.8",
-    "react": "=18.0.0-alpha-aecb3b6d1",
-    "react-dom": "=18.0.0-alpha-aecb3b6d1",
+    "react": "=18.0.0-alpha-5ca4b0433-20211020",
+    "react-dom": "=18.0.0-alpha-5ca4b0433-20211020",
     "react-i18next": "^11.12.0",
     "web3-core": "1.5.2",
     "web3-core-method": "1.5.2"
