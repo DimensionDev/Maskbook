@@ -128,6 +128,10 @@ const SelectWallet = memo(() => {
     const search = new URLSearchParams(location.search)
 
     const chainId = parseInt(search.get('chainId') ?? '0', 10) as ChainId
+    // Swap page also uses SelectWallet, but changing wallet in Swap page
+    // should not affect other pages, for example, dashboard.
+    // So we make Swap page 'internal' for popups
+    const isInternal = search.get('internal')
 
     const chainIdValid = useChainIdValid()
 
@@ -145,7 +149,7 @@ const SelectWallet = memo(() => {
             chainId,
             account: selected,
         })
-        if (currentProviderSettings.value === ProviderType.MaskWallet) {
+        if (currentProviderSettings.value === ProviderType.MaskWallet || !isInternal) {
             await WalletRPC.updateAccount({
                 chainId,
                 account: selected,
@@ -154,7 +158,7 @@ const SelectWallet = memo(() => {
         }
 
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected])
+    }, [chainId, selected, isInternal])
 
     useEffect(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
