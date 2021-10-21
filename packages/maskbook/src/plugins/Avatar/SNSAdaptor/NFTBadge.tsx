@@ -1,7 +1,7 @@
 import { UnionIcon } from '@masknet/icons'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
+import { resolveOpenSeaLink, useERC721TokenContract } from '@masknet/web3-shared-evm'
 import { CircularProgress, Link, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
@@ -65,6 +65,7 @@ function formatText(symbol: string, length: number) {
 export function NFTBadge(props: NFTBadgeProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { avatar, size = 18 } = props
+    const contract = useERC721TokenContract(avatar.address)
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
         avatar.userId,
@@ -72,7 +73,7 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.tokenId,
     )
     const { amount, symbol, name, owner } = value
-    const isShow = useCheckAddress(avatar.userId, owner)
+    const isShow = useCheckAddress(avatar.userId, avatar.tokenId, contract)
 
     if (!isShow) return null
     return (
