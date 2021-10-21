@@ -14,7 +14,7 @@ import {
     useTheme,
 } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { useContext } from 'react'
+import { startTransition, useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
 import {
@@ -41,7 +41,9 @@ const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) 
             {...props}
             selected={!!useMatch(to)}
             onClick={(event) => {
-                navigate(to)
+                startTransition(() => {
+                    navigate(to)
+                })
                 props.onClick?.(event)
             }}
         />
