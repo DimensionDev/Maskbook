@@ -934,5 +934,6 @@
     "nft_wallet_change": "Change",
     "nft_button_add_collectible": "Add Collectible",
     "nft_avatar": "NFT Avatar",
-    "nft_owner_check_info": "This NFT does not belong to you!"
+    "nft_owner_check_info": "This NFT does not belong to you!",
+    "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain."
 }
