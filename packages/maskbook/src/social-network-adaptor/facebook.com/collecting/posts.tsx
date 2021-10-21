@@ -62,7 +62,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
             // ? inject comment text field
             const commentBoxSelectorPC = root
                 .clone()
-                .querySelectorAll<HTMLFormElement>('[role="article"] [role="presentation"]')
+                .querySelectorAll<HTMLFormElement>('[role="article"] [role="presentation"]:not(img)')
                 .map((x) => x.parentElement)
 
             const commentBoxSelectorMobile = root
