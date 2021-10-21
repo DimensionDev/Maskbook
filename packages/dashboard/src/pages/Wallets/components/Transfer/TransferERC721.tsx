@@ -61,7 +61,7 @@ export const TransferERC721 = memo(() => {
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
-    const [gasLimit_, setGasLimit_] = useState('0')
+    const [gasLimit_, setGasLimit_] = useState(0)
 
     // form
     const schema = z.object({
@@ -105,7 +105,7 @@ export const TransferERC721 = memo(() => {
     )
 
     useEffect(() => {
-        setGasLimit_(erc721GasLimit.value?.toFixed() ?? '0')
+        setGasLimit_(erc721GasLimit.value ?? 0)
     }, [erc721GasLimit.value])
     const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, 0)
 
