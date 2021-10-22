@@ -59,7 +59,7 @@ function Dialogs() {
     )
 }
 status.then(() => createNormalReactRoot(<Dialogs />))
-startPluginDashboard(createPluginHost())
+startPluginDashboard(createPluginHost(undefined, () => undefined))
 
 function frame(x: React.ReactNode) {
     return <PopupFrame children={x} />

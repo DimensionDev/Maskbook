@@ -97,6 +97,7 @@ export async function getToken(type: DatabaseTokenType, address: string, tokenId
 export async function getTokens<T extends DatabaseTokenDetailed>(type: DatabaseTokenType) {
     const tokens = await asyncIteratorToArray(PluginDB.iterate(getDatabaseType(type)))
     return tokens
+        .map((x) => x.value)
         .sort((a, z) => z.createdAt.getTime() - a.createdAt.getTime())
         .slice(0, MAX_TOKEN_COUNT)
         .map((x) => TokenRecordOutDatabase(type, x) as T)
@@ -109,7 +110,7 @@ export async function getTokensCount(type: DatabaseTokenType) {
 export async function getTokensPaged(type: DatabaseTokenType, index: number, count: number) {
     let read = 0
     const records: DatabaseTokenRecord[] = []
-    for await (const record of PluginDB.iterate(getDatabaseType(type))) {
+    for await (const { value: record } of PluginDB.iterate(getDatabaseType(type))) {
         if (read > (index + 1) * count) break
         if (read < index * count) continue
         records.push(record)
