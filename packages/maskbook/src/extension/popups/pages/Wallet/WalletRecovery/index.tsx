@@ -59,6 +59,11 @@ const useStyles = makeStyles()({
         padding: '9px 10px',
         borderRadius: 20,
     },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
+    },
 })
 
 const WalletRecovery = memo(() => {
@@ -196,7 +201,7 @@ const WalletRecovery = memo(() => {
                     loading={unlockLoading || setPasswordLoading}
                     fullWidth
                     disabled={hasPassword ? password === '' : !isValid}
-                    className={classes.button}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
                     variant="contained"
                     onClick={onConfirm}>
                     {t('confirm')}

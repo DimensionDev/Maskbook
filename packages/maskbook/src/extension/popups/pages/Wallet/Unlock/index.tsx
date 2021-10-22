@@ -1,6 +1,6 @@
 import { memo, useState } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { MaskWalletIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
@@ -56,6 +56,7 @@ const useStyles = makeStyles()((theme) => ({
 const Unlock = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const location = useLocation()
     const [password, setPassword] = useState('')
 
     const history = useHistory()
@@ -68,9 +69,10 @@ const Unlock = memo(() => {
 
     useAsync(async () => {
         if (isLocked === false && !getLockStatusLoading) {
-            history.replace(PopupRoutes.Wallet)
+            const from = new URLSearchParams(location.search).get('from')
+            history.replace(from ?? PopupRoutes.Wallet)
         }
-    }, [isLocked, getLockStatusLoading])
+    }, [isLocked, getLockStatusLoading, location.search])
 
     return (
         <>

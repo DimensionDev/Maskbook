@@ -14,6 +14,7 @@ import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
 import { first } from 'lodash-es'
 import { currentAccountSettings } from '../../../../plugins/Wallet/settings'
+import urlcat from 'urlcat'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -82,7 +83,7 @@ export default function Wallet() {
             !getLockStatusLoading &&
             ![PopupRoutes.WalletRecovered, PopupRoutes.Unlock].some((item) => item === location.pathname)
         ) {
-            history.replace(PopupRoutes.Unlock)
+            history.replace(urlcat(PopupRoutes.Unlock, { from: location.pathname }))
             return
         }
     }, [isLocked, location.pathname, getLockStatusLoading])
