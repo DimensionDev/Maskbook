@@ -17,7 +17,7 @@ export enum ValidationCodeStep {
 export const Label = memo(({ mode, onModeChange }: LabelProps) => {
     return (
         <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="body2" sx={{ fontWeight: 'bolder' }} color="textPrimary">
+            <Typography variant="body2" sx={{ fontWeight: 'bolder', fontSize: 12 }} color="textPrimary">
                 {mode === 'email' ? 'Email' : 'Phone Number'}
             </Typography>
             {mode === 'email' ? (

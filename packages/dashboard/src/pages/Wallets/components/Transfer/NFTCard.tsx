@@ -1,7 +1,6 @@
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { memo, useMemo, useState } from 'react'
-import { Checkbox, ImageListItem, ImageListItemBar } from '@mui/material'
-import { Box } from '@mui/system'
+import { Checkbox, ImageListItem, ImageListItemBar, Box } from '@mui/material'
 import { getMaskColor, makeStyles, MaskColorVar } from '@masknet/theme'
 import { MiniMaskIcon, CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
 

@@ -127,6 +127,7 @@ export async function getAssetsList(
 function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
     return data
         .filter((x) => !network || getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
+        .filter((x) => x.is_verified)
         .map((y): Asset => {
             const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet
             // the asset id is the token address or the name of the chain
