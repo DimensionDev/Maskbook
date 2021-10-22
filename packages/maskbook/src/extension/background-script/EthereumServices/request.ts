@@ -78,6 +78,7 @@ export async function requestSend(
         ...payload,
         id,
     }
+    if (hasNativeAPI && nativeAPI) getSendMethod()(payload_, callback, overrides)
     if (
         Flags.v2_enabled &&
         isRiskMethod(payload_.method as EthereumMethodType) &&
