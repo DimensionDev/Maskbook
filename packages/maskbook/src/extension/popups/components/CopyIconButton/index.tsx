@@ -13,14 +13,19 @@ export const CopyIconButton = memo<CopyIconButtonProps>(({ text, ...props }) => 
     const [, copyToClipboard] = useCopyToClipboard()
     const [open, setOpen] = useState(false)
 
-    const onCopy = useCallback(() => {
-        copyToClipboard(text)
-        setOpen(true)
-        // Close tooltip after five seconds of copying
-        setTimeout(() => {
-            setOpen(false)
-        }, 5000)
-    }, [text, copyToClipboard])
+    const onCopy = useCallback(
+        (e: React.MouseEvent) => {
+            e.preventDefault()
+            e.stopPropagation()
+            copyToClipboard(text)
+            setOpen(true)
+            // Close tooltip after five seconds of copying
+            setTimeout(() => {
+                setOpen(false)
+            }, 5000)
+        },
+        [text, copyToClipboard],
+    )
 
     return (
         <Tooltip
