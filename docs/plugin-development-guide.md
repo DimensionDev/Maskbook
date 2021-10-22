@@ -45,7 +45,7 @@ Plugins defined at `packages/plugins/*` and compatible with the isolated dashboa
 ## Plugin APIs
 
 - Plugin definition: `packages/plugin-infra/src/types.ts`
-- Database: `createPluginDatabase` in `packages/maskbook/src/database/Plugin/wrap-plugin-database.ts`
+- Database: `context.getStorage()` (2nd parameter of the `init` method of your `Worker` definition). See example in `packages/plugins/example/src/Worker/index.ts`.
 - Message emitter: `createPluginMessage` in `packages/plugin-infra/src/utils/message.ts`
 - RPC: `createPluginRPC` in `packages/plugin-infra/src/utils/rpc.ts`
 - Metadata reader: `createTypedMessageMetadataReader` in `packages/maskbook/src/protocols/typed-message/metadata.ts`
