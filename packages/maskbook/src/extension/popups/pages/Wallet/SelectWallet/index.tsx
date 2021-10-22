@@ -127,7 +127,7 @@ const SelectWallet = memo(() => {
 
     const search = new URLSearchParams(location.search)
 
-    const chainId = parseInt(search.get('chainId') ?? '0', 10) as ChainId
+    const chainId = Number.parseInt(search.get('chainId') ?? '0', 10) as ChainId
     // Swap page also uses SelectWallet, but changing wallet in Swap page
     // should not affect other pages, for example, dashboard.
     // So we make Swap page 'internal' for popups
