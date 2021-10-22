@@ -81,6 +81,10 @@ export function CompositionDialog(props: CompositionDialogProps) {
     }, [fillCallback])
     //#endregion
 
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
@@ -174,6 +178,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             if (payload) attachMetadata(ITO_MetaKey_2, payloadDetail)
             else dropMetadata(ITO_MetaKey_2)
 
+            closeWalletStatusDialog()
             props.onConfirm(payload)
             // storing the created pool in DB, it helps retrieve the pool password later
             PluginITO_RPC.discoverPool('', payload)

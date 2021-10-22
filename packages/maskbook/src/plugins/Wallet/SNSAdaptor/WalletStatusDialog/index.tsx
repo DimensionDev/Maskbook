@@ -20,6 +20,7 @@ import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
+import { MaskMessages } from '../../../../utils/messages'
 import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -170,7 +171,17 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     //#endregion
 
     //#region remote controlled dialog logic
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.walletStatusDialogUpdated)
+    const { open, closeDialog: _closeDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
+
+    const closeDialog = useCallback(() => {
+        _closeDialog()
+        MaskMessages.events.requestComposition.sendToLocal({
+            reason: 'timeline',
+            open: false,
+        })
+    }, [])
     //#endregion
 
     //#region change provider
@@ -274,7 +285,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                     </section>
                 </section>
                 <Typography className={classes.subTitle}>{t('applications')}</Typography>
-                <MaskApplicationBox closeDialog={closeDialog} />
+                <MaskApplicationBox />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>
