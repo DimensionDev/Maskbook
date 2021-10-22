@@ -16,7 +16,7 @@ import { WalletMessages } from '../../messages'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 
 export interface GasSettingBarProps {
-    gasLimit: string
+    gasLimit: number
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value

@@ -98,16 +98,13 @@ export function DrawDialog(props: DrawDialogProps) {
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
 
     const {
-        contractDetailed,
         paymentCount,
         setPaymentCount,
         paymentTokenPrice,
         paymentTokenBalance,
         paymentTokenDetailed,
 
-        openBoxTransaction,
         openBoxTransactionGasLimit,
-        openBoxTransactionOverrides,
         setOpenBoxTransactionOverrides,
     } = useContainer(Context)
 
@@ -240,7 +237,7 @@ export function DrawDialog(props: DrawDialogProps) {
                             </Typography>
                             <Box className={classes.content}>
                                 <GasSettingBar
-                                    gasLimit={openBoxTransactionGasLimit.toString()}
+                                    gasLimit={openBoxTransactionGasLimit}
                                     onChange={setOpenBoxTransactionOverrides}
                                 />
                             </Box>
