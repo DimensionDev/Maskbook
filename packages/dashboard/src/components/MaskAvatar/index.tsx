@@ -1,9 +1,8 @@
-import { Avatar } from '@mui/material'
+import { Avatar, Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MenuPersonasActiveIcon } from '@masknet/icons'
 import { memo } from 'react'
 import { usePersonaAvatar } from '../../pages/Personas/api'
-import { Box } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => ({
     author: {
