@@ -25,7 +25,7 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
     let livingTransaction: IDBPTransaction<PluginDatabase, ['PluginStore']> | undefined = undefined
     let ended = false
     signal?.addEventListener('abort', () => {
-        // give some extra time after the plugin shutdow to store data.
+        // give some extra time after the plugin shutdown to store data.
         setTimeout(() => (ended = true), 1500)
     })
     function key(data: IndexableTaggedUnion) {
