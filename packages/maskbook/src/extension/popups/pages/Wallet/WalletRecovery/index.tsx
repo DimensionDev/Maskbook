@@ -200,7 +200,7 @@ const WalletRecovery = memo(() => {
                 <LoadingButton
                     loading={unlockLoading || setPasswordLoading}
                     fullWidth
-                    disabled={hasPassword ? password === '' : !isValid}
+                    disabled={hasPassword ? !password : !isValid}
                     classes={{ root: classes.button, disabled: classes.disabled }}
                     variant="contained"
                     onClick={onConfirm}>

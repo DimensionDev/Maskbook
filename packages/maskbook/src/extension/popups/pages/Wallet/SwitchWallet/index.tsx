@@ -2,7 +2,7 @@ import { memo, useCallback } from 'react'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
-import { CopyIcon, MaskWalletIcon, SuccessIcon } from '@masknet/icons'
+import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
@@ -11,6 +11,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
+import { CopyIconButton } from '../../../components/CopyIconButton'
 
 const useStyles = makeStyles()({
     header: {
@@ -132,7 +133,7 @@ const SwitchWallet = memo(() => {
                                 <Typography className={classes.name}>{item.name}</Typography>
                                 <Typography className={classes.address}>
                                     <FormattedAddress address={item.address} size={12} />
-                                    <CopyIcon className={classes.copy} onClick={() => onCopy(item.address)} />
+                                    <CopyIconButton className={classes.copy} text={item.address} />
                                 </Typography>
                             </ListItemText>
                             {isSameAddress(item.address, wallet?.address) ? <SuccessIcon /> : null}

@@ -13,12 +13,13 @@ import {
 } from '@masknet/web3-shared-evm'
 import { ChainIcon, FormattedAddress } from '@masknet/shared'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
+import { MaskWalletIcon } from '@masknet/icons'
 import { useCopyToClipboard } from 'react-use'
 import { SuccessIcon } from '@masknet/icons'
 import Services from '../../../../service'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { first } from 'lodash-es'
+import { CopyIconButton } from '../../../components/CopyIconButton'
 
 const useStyles = makeStyles()({
     content: {
@@ -179,7 +180,7 @@ const SelectWallet = memo(() => {
                                         <Typography className={classes.name}>{item.name}</Typography>
                                         <Typography className={classes.address}>
                                             <FormattedAddress address={item.address} size={12} />
-                                            <CopyIcon className={classes.copy} onClick={() => onCopy(item.address)} />
+                                            <CopyIconButton className={classes.copy} text={item.address} />
                                         </Typography>
                                     </div>
                                     {isSameAddress(item.address, selected) ? <SuccessIcon /> : null}
