@@ -19,7 +19,7 @@ import type { GasSettingProps } from './types'
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559: FC<GasSettingProps> = memo(
-    ({ gasLimit, gasOption = GasOption.Medium, onConfirm = noop }) => {
+    ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
         const { classes } = useGasSettingStyles()
         const { t } = useI18N()
         const chainId = useChainId()
@@ -56,7 +56,6 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
         )
         //#endregion
         const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
-        const minGasLimit = gasLimit
 
         //#region Form field define schema
         const schema = useMemo(() => {
@@ -66,7 +65,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                         .string()
                         .min(1, t('wallet_transfer_error_gas_limit_absence'))
                         .refine(
-                            (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit ?? 0),
+                            (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit),
                             t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                         ),
                     maxPriorityFeePerGas: zod

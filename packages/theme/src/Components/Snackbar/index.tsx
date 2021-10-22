@@ -228,7 +228,7 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isFacebook?
             ref={ref}
             maxSnack={30}
             disableWindowBlurListener
-            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             hideIconVariant
             content={(key, title) => (
                 <CustomSnackbarContent

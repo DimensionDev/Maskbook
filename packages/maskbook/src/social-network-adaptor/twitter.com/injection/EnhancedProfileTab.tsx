@@ -1,5 +1,4 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { EnhancedProfileTab } from '../../../components/InjectedComponents/EnhancedProfileTab'
 import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
 import {
     searchForegroundColorSelector,
@@ -12,6 +11,7 @@ import {
 } from '../utils/selector'
 import Color from 'color'
 import { makeStyles } from '@masknet/theme'
+import { EnhancedProfileTab } from '../../../plugins/Profile/SNSAdaptor/EnhancedProfileTab'
 
 export function injectEnhancedProfileTabAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
@@ -45,7 +45,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         justifyContent: 'center',
         alignItems: 'center',
         textAlign: 'center',
-        padding: props.padding,
+        padding: theme.spacing(0, props.padding),
         color: props.color,
         font: props.font,
         fontSize: props.fontSize,
@@ -53,6 +53,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         '&:hover': {
             color: props.color,
         },
+        height: props.height,
     },
     selected: {
         color: `${props.hover} !important`,
@@ -133,6 +134,12 @@ export function EnhancedProfileTabAtTwitter() {
     const style = getStyle()
     const { classes } = useStyles(style)
     return (
-        <EnhancedProfileTab classes={classes} reset={reset} clear={clear} children={<div className={classes.line} />} />
+        <EnhancedProfileTab
+            title="Web3"
+            classes={classes}
+            reset={reset}
+            clear={clear}
+            children={<div className={classes.line} />}
+        />
     )
 }

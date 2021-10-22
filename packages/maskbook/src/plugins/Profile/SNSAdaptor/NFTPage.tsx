@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react'
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import {
@@ -10,9 +9,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Box, Link, Typography } from '@mui/material'
-import { CollectibleListAddress } from '../../extension/options-page/DashboardComponents/CollectibleList'
-import { MaskMessages, useI18N } from '../../utils'
-import { useLocationChange } from '../../utils/hooks/useLocationChange'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { CollectibleListAddress } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { useI18N } from '../../../utils'
 
 const RULE_TIP = [
     '1. Twitter name or bio contains ENS (e.g. vitalik.eth);',
@@ -41,31 +40,14 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {
-    bioDescription: string
-    nickname: string
-    twitterId: string
-}
+interface NFTPageProps extends withClasses<'text' | 'button'> {}
 
-export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
-    const [show, setShow] = useState(false)
+export function NFTPage(props: NFTPageProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { bioDescription, nickname, twitterId } = props
     const { t } = useI18N()
+    const identity = useCurrentVisitingIdentity()
 
-    useLocationChange(() => {
-        MaskMessages.events.profileNFTsTabUpdated.sendToLocal('reset')
-    })
-
-    useEffect(() => {
-        return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
-            setShow(data.show)
-        })
-    }, [])
-
-    const { value } = useEthereumAddress(nickname, twitterId, bioDescription)
-
-    if (!show) return null
+    const { value } = useEthereumAddress(identity.nickname ?? '', identity.identifier.userId, identity.bio ?? '')
 
     const { type, name, address } = value ?? {}
 

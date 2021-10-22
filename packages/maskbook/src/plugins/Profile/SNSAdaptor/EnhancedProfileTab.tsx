@@ -1,8 +1,7 @@
 import { Typography } from '@mui/material'
 import classnames from 'classnames'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
-
-import { MaskMessages } from '../../utils'
+import { MaskMessages } from '../../../utils'
 
 export interface EnhancedProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {
     clear(): void
@@ -10,10 +9,11 @@ export interface EnhancedProfileTabProps extends withClasses<'tab' | 'button' | 
     children?: ReactElement
     // Required! This component don't have it own style.
     classes: Record<'tab' | 'button' | 'selected', string>
+    title: string
 }
 
 export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
-    const { reset, clear, children, classes } = props
+    const { reset, clear, children, classes, title } = props
     const [active, setActive] = useState(false)
 
     const onClose = () => {
@@ -41,7 +41,7 @@ export function EnhancedProfileTab(props: EnhancedProfileTabProps) {
                 className={classnames(classes.button, active ? classes.selected : '')}
                 onClick={onClick}
                 component="div">
-                NFTs
+                {title}
                 {active && children ? children : null}
             </Typography>
         </div>
