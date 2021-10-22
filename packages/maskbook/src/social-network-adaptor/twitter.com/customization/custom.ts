@@ -71,6 +71,7 @@ export function useThemeTwitterVariant() {
             theme.shape.borderRadius = isMobileTwitter ? 0 : 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
+            const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
             theme.components.MuiButton = {
                 defaultProps: {
                     size: 'medium',
@@ -85,9 +86,9 @@ export function useThemeTwitterVariant() {
                         paddingLeft: 15,
                         paddingRight: 15,
                         boxShadow: 'none',
-                        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+                        [smallQuery]: {
                             '&': {
-                                height: '42px !important',
+                                height: 30,
                                 minHeight: 'auto !important',
                                 padding: '0 14px !important',
                             },
@@ -97,11 +98,27 @@ export function useThemeTwitterVariant() {
                         minHeight: 49,
                         paddingLeft: 30,
                         paddingRight: 30,
+                        [smallQuery]: {
+                            '&': {
+                                height: 28,
+                                minHeight: 28,
+                                paddingLeft: 15,
+                                paddingRight: 15,
+                            },
+                        },
                     },
                     sizeSmall: {
                         minHeight: 30,
                         paddingLeft: 15,
                         paddingRight: 15,
+                        [smallQuery]: {
+                            '&': {
+                                height: 25,
+                                minHeight: 29,
+                                paddingLeft: 10,
+                                paddingRight: 10,
+                            },
+                        },
                     },
                 },
             }
