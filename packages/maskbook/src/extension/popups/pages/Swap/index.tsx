@@ -67,6 +67,7 @@ export default function SwapPage() {
     const openPopupsWindow = useCallback(() => {
         Services.Helper.openPopupWindow(PopupRoutes.SelectWallet, {
             chainId,
+            internal: true,
         })
     }, [chainId])
     return (
