@@ -85,7 +85,7 @@ you can insert your metadata into the post and it will be contained in the encry
 When you see metadata in the post payload,
 you should render some UI to reveal the information in the metadata and allow the user to interact with it.
 
-Notice please treat the metadata you received as untrustable data,
+Notice please treat the metadata you received as non trustable data,
 make sure you have validated the formats and the data range.
 We provided a utility to read the data from the post and validate it with JSON schema.
 
