@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { MaskNetworkAPIs, NetworkType } from '@masknet/public-api'
+import { MaskNetworkAPIs, NetworkType, RelationFavor } from '@masknet/public-api'
 import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
@@ -38,6 +38,22 @@ const profileFormatter = (p: Profile) => {
         linkedPersona: !!p.linkedPersona,
         createdAt: p.createdAt.getTime(),
         updatedAt: p.updatedAt.getTime(),
+    }
+}
+
+const profileRelationFormatter = (
+    p: Profile,
+    personaIdentifier: string | undefined,
+    favor: RelationFavor | undefined,
+) => {
+    return {
+        identifier: p.identifier.toText(),
+        nickname: p.nickname,
+        linkedPersona: !!p.linkedPersona,
+        createdAt: p.createdAt.getTime(),
+        updatedAt: p.updatedAt.getTime(),
+        personaIdentifier: personaIdentifier,
+        favor: favor,
     }
 }
 
@@ -185,6 +201,13 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         return privateKey
     },
+    persona_getCurrentPersonaIdentifier: async () => {
+        const identifier = await Services.Settings.getCurrentPersonaIdentifier()
+        return identifier?.toText()
+    },
+    persona_setCurrentPersonaIdentifier: async ({ identifier }) => {
+        await Services.Settings.setCurrentPersonaIdentifier(stringToPersonaIdentifier(identifier))
+    },
     profile_queryProfiles: async ({ network }) => {
         const result = await Services.Identity.queryProfiles(network)
 
@@ -200,6 +223,33 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     },
     profile_removeProfile: async ({ identifier }) => {
         await Services.Identity.removeProfile(stringToProfileIdentifier(identifier))
+    },
+    profile_updateRelation: async ({ profile, linked, favor }) => {
+        await Services.Identity.updateRelation(
+            stringToProfileIdentifier(profile),
+            stringToPersonaIdentifier(linked),
+            favor,
+        )
+    },
+    profile_queryRelationPaged: async ({ network, after, count }) => {
+        let afterRecord
+        if (after) {
+            afterRecord = {
+                ...after,
+                profile: stringToProfileIdentifier(after.profile),
+                linked: stringToPersonaIdentifier(after.linked),
+            }
+        }
+        const records = await Services.Identity.queryRelationPaged({ network, after: afterRecord }, count)
+
+        const profiles = await Services.Identity.queryProfilesWithIdentifiers(records.map((x) => x.profile))
+
+        return profiles.map((profile) => {
+            const record = records.find((x) => x.profile.equals(profile.identifier))
+            const favor = record?.favor
+            const personaIdentifier = record?.linked.toText()
+            return profileRelationFormatter(profile, personaIdentifier, favor)
+        })
     },
     wallet_updateEthereumAccount: async ({ account }) => {
         await WalletRPC.updateAccount({

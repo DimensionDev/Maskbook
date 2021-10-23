@@ -18,13 +18,15 @@ export const GasSettingDialog: FC = () => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
-    const [gasLimit, setGasLimit] = useState<string>('0')
+    const [gasLimit, setGasLimit] = useState(0)
+    const [minGasLimit, setMinGasLimit] = useState(0)
     const { open, closeDialog, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.gasSettingDialogUpdated,
         (evt) => {
             if (!evt.open) return
             if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
+            if (evt.minGasLimit !== undefined) setMinGasLimit(evt.minGasLimit)
         },
     )
 
@@ -33,6 +35,7 @@ export const GasSettingDialog: FC = () => {
             <DialogContent className={classes.content}>
                 <GasSetting
                     gasLimit={gasLimit}
+                    minGasLimit={minGasLimit}
                     onGasLimitChange={setGasLimit}
                     gasOption={gasOption}
                     onGasOptionChange={setGasOption}

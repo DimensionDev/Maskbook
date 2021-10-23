@@ -6,7 +6,6 @@ import { CircularProgress, Link, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useNFT } from '../hooks'
-import { useCheckAddress } from '../hooks/useCheckAddress'
 import type { AvatarMetaDB } from '../types'
 
 const useStyles = makeStyles()({
@@ -72,9 +71,7 @@ export function NFTBadge(props: NFTBadgeProps) {
         avatar.tokenId,
     )
     const { amount, symbol, name, owner } = value
-    const isShow = useCheckAddress(avatar.userId, owner)
 
-    if (!isShow) return null
     return (
         <div
             className={classes.root}
