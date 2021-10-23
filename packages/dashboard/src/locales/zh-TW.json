@@ -28,7 +28,7 @@
     "wallets_startup_connect": "連結其他錢包",
     "wallets_startup_connect_desc": "Mask network 支援 Metamask 和 Connect Wallet.",
     "wallets_startup_connect_action": "連結",
-    "wallets_connect_wallet_connect": "連結錢包",
+    "wallets_connect_wallet_connect": "連接錢包",
     "wallets_connect_wallet_polka": "PolkaDot 錢包",
     "wallets_create_wallet_input_placeholder": "錢包名稱",
     "wallets_create_successfully_title": "成功",
