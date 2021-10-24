@@ -117,29 +117,29 @@ export const GasSetting1559 = memo(() => {
 
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
 
-    //#region Get suggest gas now data from meta swap api
-    const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
+    //#region Get suggest gas options data from meta swap api
+    const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
         return WalletRPC.getEstimateGasFees(chainId)
     }, [chainId])
     //#endregion
 
-    //#region Gas now options
+    //#region Gas options
     const options = useMemo(
         () => [
             {
                 title: t('popups_wallet_gas_fee_settings_low'),
-                content: gasNow?.low,
+                content: gasOptions?.low,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_medium'),
-                content: gasNow?.medium,
+                content: gasOptions?.medium,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_high'),
-                content: gasNow?.high,
+                content: gasOptions?.high,
             },
         ],
-        [gasNow],
+        [gasOptions],
     )
     //#endregion
 
@@ -204,7 +204,7 @@ export const GasSetting1559 = memo(() => {
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
-    }, [minGasLimit, gasNow])
+    }, [minGasLimit, gasOptions])
     //#endregion
 
     const {
@@ -224,7 +224,7 @@ export const GasSetting1559 = memo(() => {
         },
         context: {
             minGasLimit,
-            gasNow,
+            gasOptions,
         },
     })
 
@@ -297,32 +297,32 @@ export const GasSetting1559 = memo(() => {
 
     //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
-        if (getGasNowLoading) return undefined
-        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasNow?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (getGasOptionsLoading) return undefined
+        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
             new BigNumber(maxPriorityFeePerGas).isGreaterThan(
-                new BigNumber(gasNow?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
+                new BigNumber(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
                     HIGH_FEE_WARNING_MULTIPLIER,
                 ),
             )
         )
             return t('wallet_transfer_error_max_priority_gas_fee_too_high')
         return undefined
-    }, [maxPriorityFeePerGas, gasNow, getGasNowLoading])
+    }, [maxPriorityFeePerGas, gasOptions, getGasOptionsLoading])
 
     const maxFeeGasHelperText = useMemo(() => {
-        if (getGasNowLoading) return undefined
-        if (new BigNumber(maxFeePerGas).isLessThan(gasNow?.estimatedBaseFee ?? 0))
+        if (getGasOptionsLoading) return undefined
+        if (new BigNumber(maxFeePerGas).isLessThan(gasOptions?.estimatedBaseFee ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
             new BigNumber(maxFeePerGas).isGreaterThan(
-                new BigNumber(gasNow?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
+                new BigNumber(gasOptions?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
             return t('wallet_transfer_error_max_fee_too_high')
         return undefined
-    }, [maxFeePerGas, gasNow, getGasNowLoading])
+    }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
     //endregion
 
     //#region If the payload is consumed it needs to be redirected

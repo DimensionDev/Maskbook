@@ -21,7 +21,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
     const { value: defaultGasPrice = '0' } = useGasPrice()
     const gasPrice = customGasPrice || defaultGasPrice
-    const { gasNow } = useGasOptions()
+    const { gasOptions } = useGasOptions()
 
     const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
 
@@ -40,10 +40,10 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     }, [])
 
     useEffect(() => {
-        if (!gasNow) return
+        if (!gasOptions) return
 
         if (is1559Supported) {
-            const gasLevel = gasNow.medium as Exclude<typeof gasNow.medium, number>
+            const gasLevel = gasOptions.medium as Exclude<typeof gasOptions.medium, number>
             setMaxFee((oldVal) => {
                 return !oldVal ? gweiToWei(gasLevel.suggestedMaxFeePerGas) : oldVal
             })
@@ -51,9 +51,9 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
                 return !oldVal ? gweiToWei(gasLevel.suggestedMaxPriorityFeePerGas) : oldVal
             })
         } else {
-            setCustomGasPrice((oldVal) => (!oldVal ? (gasNow.medium as number) : oldVal))
+            setCustomGasPrice((oldVal) => (!oldVal ? (gasOptions.medium as number) : oldVal))
         }
-    }, [is1559Supported, gasNow])
+    }, [is1559Supported, gasOptions])
 
     const gasConfig = useMemo(() => {
         return is1559Supported

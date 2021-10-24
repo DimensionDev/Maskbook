@@ -2,7 +2,7 @@ import type BigNumber from 'bignumber.js'
 import type {
     FungibleTokenDetailed,
     ERC721ContractDetailed,
-    GasNow,
+    GasOptions,
     NetworkType,
     ProviderType,
     TransactionState,
@@ -27,7 +27,7 @@ export type TransactionDialogEvent =
 
 export type GasPriceDialogEvent = {
     open: boolean
-    type?: keyof GasNow
+    type?: keyof GasOptions
 }
 
 export type SelectProviderDialogEvent =
