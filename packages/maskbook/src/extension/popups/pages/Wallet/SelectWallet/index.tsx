@@ -1,4 +1,4 @@
-import { CopyIcon, MaskWalletIcon, SuccessIcon } from '@masknet/icons'
+import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { ChainIcon, FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -16,6 +16,7 @@ import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useCopyToClipboard } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { CopyIconButton } from '../../../components/CopyIconButton'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
@@ -185,7 +186,7 @@ const SelectWallet = memo(() => {
                                         <Typography className={classes.name}>{item.name}</Typography>
                                         <Typography className={classes.address}>
                                             <FormattedAddress address={item.address} size={12} />
-                                            <CopyIcon className={classes.copy} onClick={() => onCopy(item.address)} />
+                                            <CopyIconButton className={classes.copy} text={item.address} />
                                         </Typography>
                                     </div>
                                     {isSameAddress(item.address, selected) ? <SuccessIcon /> : null}
