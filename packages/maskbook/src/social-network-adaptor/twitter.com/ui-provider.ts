@@ -54,6 +54,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             backgroundImage: 'none',
             [smallQuery]: {
                 display: 'block !important',
+                margin: 12,
             },
         },
         dialogTitle: {

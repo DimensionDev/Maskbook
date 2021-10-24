@@ -23,7 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 300,
     },
     tabs: {
-        width: 544,
         height: 36,
         minHeight: 36,
         margin: '0 auto',
