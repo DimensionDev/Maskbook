@@ -7,13 +7,18 @@ import { getNFTAvatarFromJSON } from '../Services/db'
 export function useCheckAddress(userId: string, tokenId: string, erc721Contract: ERC721 | null) {
     return useAsync(async () => {
         if (!userId || !tokenId || !erc721Contract) return false
-        const owner = await safeNonPayableTransactionCall(erc721Contract.methods.ownerOf(tokenId))
-        const address = await PluginNFTAvatarRPC.getAddress(userId)
-        if (!address) {
-            const avatar = await getNFTAvatarFromJSON(userId)
-            return !!avatar
-        }
+        try {
+            const owner = await safeNonPayableTransactionCall(erc721Contract.methods.ownerOf(tokenId))
+            const address = await PluginNFTAvatarRPC.getAddress(userId)
+            if (!address) {
+                const avatar = await getNFTAvatarFromJSON(userId)
+                return !!avatar
+            }
 
-        return isSameAddress(address, owner)
-    }, [userId, erc721Contract]).value
+            return isSameAddress(address, owner)
+        } catch (err) {
+            console.log(err)
+            return false
+        }
+    }, [userId, erc721Contract, tokenId, PluginNFTAvatarRPC]).value
 }

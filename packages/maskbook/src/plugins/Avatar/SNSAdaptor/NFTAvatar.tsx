@@ -113,15 +113,21 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const onClick = useCallback(async () => {
         if (!selectedToken || !erc721Contract) return
 
-        const owner = await safeNonPayableTransactionCall(erc721Contract.methods.ownerOf(selectedToken.tokenId))
-        if (!isSameAddress(owner, account)) {
-            showSnackbar(t('nft_owner_check_info'), { variant: 'error' })
+        try {
+            const owner = await safeNonPayableTransactionCall(erc721Contract.methods.ownerOf(selectedToken.tokenId))
+
+            if (!isSameAddress(owner, account)) {
+                showSnackbar(t('nft_owner_check_info'), { variant: 'error' })
+                return
+            }
+        } catch (err) {
+            console.log(err)
             return
         }
 
         onChange(selectedToken)
         setSelectedToken(undefined)
-    }, [onChange, selectedToken, showSnackbar, erc721Contract])
+    }, [onChange, selectedToken, showSnackbar, erc721Contract, account])
 
     const onAddClick = useCallback((token) => {
         setSelectedToken(token)
