@@ -40,87 +40,90 @@ import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-es'
 
-const useStyles = makeStyles()((theme) => ({
-    top: {
-        width: '100%',
-        boxSizing: 'border-box',
-        padding: theme.spacing(1, 2, 1),
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            padding: theme.spacing(1, 0, 1),
+const useStyles = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        top: {
+            width: '100%',
+            boxSizing: 'border-box',
+            padding: theme.spacing(1, 2, 1),
+            [smallQuery]: {
+                padding: theme.spacing(1, 0, 1),
+            },
         },
-    },
-    root: {
-        borderRadius: 10,
-        display: 'flex',
-        padding: theme.spacing(2),
-    },
-    iconbar: {
-        display: 'flex',
-        justifyContent: 'center',
-        paddingTop: theme.spacing(0.5),
-        paddingRight: theme.spacing(1),
-    },
-    icon: {
-        width: 32,
-        height: 32,
-    },
-    content: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        overflowX: 'hidden',
-    },
-    header: {
-        display: 'flex',
-        alignItems: 'center',
-        paddingBottom: theme.spacing(1),
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+        root: {
+            borderRadius: 10,
+            display: 'flex',
+            padding: theme.spacing(2),
+        },
+        iconbar: {
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: theme.spacing(0.5),
+            paddingRight: theme.spacing(1),
+        },
+        icon: {
+            width: 32,
+            height: 32,
+        },
+        content: {
+            flex: 1,
+            display: 'flex',
             flexDirection: 'column',
+            overflowX: 'hidden',
         },
-    },
-    button: {
-        borderRadius: 50,
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+        header: {
+            display: 'flex',
+            alignItems: 'center',
+            paddingBottom: theme.spacing(1),
+            [smallQuery]: {
+                flexDirection: 'column',
+            },
+        },
+        button: {
+            borderRadius: 50,
+            [smallQuery]: {
+                width: '100%',
+            },
+        },
+        title: {
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            paddingBottom: theme.spacing(1),
             width: '100%',
         },
-    },
-    title: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        paddingBottom: theme.spacing(1),
-        width: '100%',
-    },
-    date: {
-        fontSize: 12,
-    },
-    progress: {
-        paddingBottom: theme.spacing(1),
-    },
-    price: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        paddingBottom: theme.spacing(1),
-    },
-    details: {
-        '& > *': {
+        date: {
+            fontSize: 12,
+        },
+        progress: {
             paddingBottom: theme.spacing(1),
         },
-    },
-    table: {
-        padding: theme.spacing(0, 0, 1, 0),
-        borderRadius: 0,
-    },
-    cell: {
-        border: '1px solid rgba(224, 224, 224, 1)',
-        color: theme.palette.text.primary,
-        wordBreak: 'break-word',
-    },
-    head: {
-        border: '1px solid rgba(224, 224, 224, 1)',
-        color: theme.palette.text.secondary,
-    },
-}))
+        price: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingBottom: theme.spacing(1),
+        },
+        details: {
+            '& > *': {
+                paddingBottom: theme.spacing(1),
+            },
+        },
+        table: {
+            padding: theme.spacing(0, 0, 1, 0),
+            borderRadius: 0,
+        },
+        cell: {
+            border: '1px solid rgba(224, 224, 224, 1)',
+            color: theme.palette.text.primary,
+            wordBreak: 'break-word',
+        },
+        head: {
+            border: '1px solid rgba(224, 224, 224, 1)',
+            color: theme.palette.text.secondary,
+        },
+    }
+})
 
 export interface PoolInListProps extends PoolFromNetwork {
     onSend?: (pool: JSON_PayloadInMask) => void
