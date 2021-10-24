@@ -32,8 +32,8 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
 
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-        //#region Get gas now from debank
-        const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
+        //#region Get gas options from debank
+        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             if (!response) return { slow: 0, standard: 0, fast: 0 }
             return {
@@ -49,20 +49,20 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                 {
                     title: t('popups_wallet_gas_fee_settings_low'),
                     gasOption: GasOption.Low,
-                    gasPrice: gasNow?.slow ?? 0,
+                    gasPrice: gasOptions?.slow ?? 0,
                 },
                 {
                     title: t('popups_wallet_gas_fee_settings_medium'),
                     gasOption: GasOption.Medium,
-                    gasPrice: gasNow?.standard ?? 0,
+                    gasPrice: gasOptions?.standard ?? 0,
                 },
                 {
                     title: t('popups_wallet_gas_fee_settings_high'),
                     gasOption: GasOption.High,
-                    gasPrice: gasNow?.fast ?? 0,
+                    gasPrice: gasOptions?.fast ?? 0,
                 },
             ],
-            [gasNow],
+            [gasOptions],
         )
         const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
 
@@ -186,7 +186,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     />
                 </form>
                 <LoadingButton
-                    loading={getGasNowLoading}
+                    loading={getGasOptionsLoading}
                     variant="contained"
                     fullWidth
                     className={classes.button}

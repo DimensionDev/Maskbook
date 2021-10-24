@@ -25,7 +25,7 @@ import {
     currentProviderSettings,
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
-    currentGasNowSettings,
+    currentGasOptionsSettings,
     currentEtherPriceSettings,
     currentTokenPricesSettings,
     currentMaskWalletLockStatusSettings,
@@ -53,8 +53,8 @@ export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
-export const [getGasNow, setGasNow] = create(currentGasNowSettings)
-export const [getGasPrice, setGasPrice] = create(currentGasNowSettings)
+export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
+export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
 export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
     ethereumNetworkTradeProviderSettings,
