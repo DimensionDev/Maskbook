@@ -23,7 +23,7 @@ interface NFTBadgeTimelineProps {
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { userId, avatarId } = props
     const { classes } = useStyles()
-    const _avatar = useNFTAvatar(userId)
+    const { loading, value: _avatar } = useNFTAvatar(userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
 

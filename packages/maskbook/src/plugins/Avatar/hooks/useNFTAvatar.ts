@@ -14,5 +14,5 @@ export function useNFTAvatar(userId: string) {
         }
         const avatar = await f
         return avatar
-    }, [userId, cache]).value
+    }, [userId, cache])
 }

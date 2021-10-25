@@ -12,5 +12,5 @@ export function useUserOwnerAddress(userId: string) {
         }
         const address = await f
         return address
-    }, [userId, cache]).value
+    }, [userId, cache])
 }

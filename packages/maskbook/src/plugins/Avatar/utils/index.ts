@@ -42,10 +42,15 @@ export async function createNFT(address: string, tokenId: string) {
             symbol: asset.assetContract.tokenSymbol,
             address: asset.assetContract.address,
         },
-        { name: asset.name, description: asset.description, image: asset.imageUrl ?? asset.imagePreviewUrl ?? '' },
+        {
+            name: asset.name,
+            description: asset.description,
+            image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
+            owner: asset.top_ownerships[0].owner.address,
+        },
         tokenId,
     )
-    return { account: asset.owner.address, token }
+    return token
 }
 
 export function toPNG(image: string) {
