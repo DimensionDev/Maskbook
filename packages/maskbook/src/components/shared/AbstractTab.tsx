@@ -6,6 +6,7 @@ import { useStylesExtends } from '@masknet/shared'
 const useStyles = makeStyles()((theme) => ({
     tab: {
         minWidth: 'unset',
+        background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
     },
     tabPanel: {
         marginTop: theme.spacing(1),
