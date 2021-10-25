@@ -1,9 +1,9 @@
 import { ALL_EVENTS } from '@servie/events'
-import { useSubscription, Subscription } from 'use-subscription'
+import { Subscription, useSubscription } from 'use-subscription'
 import { createManager } from './manage'
 import { getPluginDefine } from './store'
 import type { CurrentSNSNetwork, Plugin } from '../types'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { ChainId, useChainId } from '@masknet/web3-shared-evm'
 
 const { events, activated, startDaemon } = createManager({
     getLoader: (plugin) => plugin.SNSAdaptor,
@@ -23,6 +23,15 @@ export function useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet() {
     return plugins.reduce<Record<string, boolean>>((acc, cur) => {
         const operatingSupportedChains = cur.enableRequirement.web3?.operatingSupportedChains
         acc[cur.ID] = !Boolean(operatingSupportedChains) || Boolean(operatingSupportedChains?.includes(chainId))
+        return acc
+    }, {})
+}
+
+export function useActivatedPluginSNSAdaptorWithOperatingChainSupportedNets() {
+    const chainId = useChainId()
+    const plugins = useActivatedPluginsSNSAdaptor()
+    return plugins.reduce<Record<string, ChainId[]>>((acc, cur) => {
+        acc[cur.ID] = cur.enableRequirement.web3?.operatingSupportedChains ?? []
         return acc
     }, {})
 }
