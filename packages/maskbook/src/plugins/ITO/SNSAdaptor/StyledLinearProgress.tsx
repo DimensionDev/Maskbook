@@ -13,7 +13,7 @@ const useStyles = makeStyles<StyledLinearProgress>()((_theme, props) => ({
     },
     bar: {
         borderRadius: 5,
-        backgroundColor: props.barColor ?? '#fff',
+        backgroundColor: props.barColor ?? 'rgb(44, 164, 239)',
     },
 }))
 

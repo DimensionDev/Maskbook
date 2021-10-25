@@ -33,86 +33,89 @@ import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 
-const useStyles = makeStyles()((theme) => ({
-    line: {
-        margin: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
-        display: 'flex',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            margin: theme.spacing(0),
-        },
-    },
-    column: {
-        flexDirection: 'column',
-    },
-    flow: {
-        margin: theme.spacing(1),
-        textAlign: 'center',
-    },
-    input: {
-        padding: theme.spacing(1),
-        flex: 1,
-    },
-    inputLabel: {
-        left: 8,
-        top: 8,
-    },
-    label: {
-        paddingLeft: theme.spacing(2),
-    },
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-    },
-    button: {
-        color: '#fff',
-        marginTop: theme.spacing(1.5),
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            lineHeight: 1.2,
-            marginTop: theme.spacing(0),
-        },
-    },
-    date: {
-        margin: theme.spacing(1),
-        display: 'flex',
-        '& > * ': {
-            flex: 1,
-            padding: theme.spacing(1),
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                flexDirection: 'column',
-                padding: theme.spacing(2, 0, 1, 0),
+const useStyles = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        line: {
+            margin: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
+            display: 'flex',
+            [smallQuery]: {
+                margin: theme.spacing(0),
             },
         },
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+        column: {
             flexDirection: 'column',
-            paddingLeft: 0,
-            paddingRight: 0,
         },
-    },
-    iconWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 26,
-        height: 24,
-        borderRadius: 500,
-    },
-    success: {
-        backgroundColor: 'rgba(119, 224, 181, 0.2)',
-    },
-    fail: {
-        backgroundColor: 'rgba(255, 78, 89, 0.2)',
-    },
-    qualStartTime: {
-        padding: '0 16px',
-        opacity: 0.8,
-    },
-    field: {
-        flex: 1,
-        padding: theme.spacing(1),
-        marginTop: theme.spacing(1),
-    },
-}))
+        flow: {
+            margin: theme.spacing(1),
+            textAlign: 'center',
+        },
+        input: {
+            padding: theme.spacing(1),
+            flex: 1,
+        },
+        inputLabel: {
+            left: 8,
+            top: 8,
+        },
+        label: {
+            paddingLeft: theme.spacing(2),
+        },
+        tip: {
+            fontSize: 12,
+            color: theme.palette.text.secondary,
+        },
+        button: {
+            color: '#fff',
+            marginTop: theme.spacing(1.5),
+            [smallQuery]: {
+                lineHeight: 1.2,
+                marginTop: theme.spacing(0),
+            },
+        },
+        date: {
+            margin: theme.spacing(1),
+            display: 'flex',
+            '& > * ': {
+                flex: 1,
+                padding: theme.spacing(1),
+                [smallQuery]: {
+                    flexDirection: 'column',
+                    padding: theme.spacing(2, 0, 1, 0),
+                },
+            },
+            [smallQuery]: {
+                flexDirection: 'column',
+                paddingLeft: 0,
+                paddingRight: 0,
+            },
+        },
+        iconWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 26,
+            height: 24,
+            borderRadius: 500,
+        },
+        success: {
+            backgroundColor: 'rgba(119, 224, 181, 0.2)',
+        },
+        fail: {
+            backgroundColor: 'rgba(255, 78, 89, 0.2)',
+        },
+        qualStartTime: {
+            padding: '0 16px',
+            opacity: 0.8,
+        },
+        field: {
+            flex: 1,
+            padding: theme.spacing(1),
+            marginTop: theme.spacing(1),
+        },
+    }
+})
 
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void

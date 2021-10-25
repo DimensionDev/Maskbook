@@ -100,8 +100,8 @@ export const Prior1559GasSetting = memo(() => {
 
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-    //#region Get gas now from debank
-    const { value: gasNow } = useAsync(async () => {
+    //#region Get gas options from debank
+    const { value: gasOptions } = useAsync(async () => {
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         if (!response) return { slow: 0, standard: 0, fast: 0 }
 
@@ -117,18 +117,18 @@ export const Prior1559GasSetting = memo(() => {
         () => [
             {
                 title: t('popups_wallet_gas_fee_settings_low'),
-                gasPrice: gasNow?.slow ?? 0,
+                gasPrice: gasOptions?.slow ?? 0,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_medium'),
-                gasPrice: gasNow?.standard ?? 0,
+                gasPrice: gasOptions?.standard ?? 0,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_high'),
-                gasPrice: gasNow?.fast ?? 0,
+                gasPrice: gasOptions?.fast ?? 0,
             },
         ],
-        [gasNow],
+        [gasOptions],
     )
 
     const gas = useMemo(() => {

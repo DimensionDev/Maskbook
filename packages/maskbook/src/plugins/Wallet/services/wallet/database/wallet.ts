@@ -66,7 +66,7 @@ export async function hasStoredKeyInfoRequired(storedKeyInfo?: api.IStoredKeyInf
 }
 
 export async function getWallets(provider?: ProviderType) {
-    const wallets = await asyncIteratorToArray(PluginDB.iterate('wallet'))
+    const wallets = (await asyncIteratorToArray(PluginDB.iterate('wallet'))).map((x) => x.value)
     const address =
         provider === ProviderType.MaskWallet
             ? currentMaskWalletAccountWalletSettings.value

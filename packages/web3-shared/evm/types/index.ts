@@ -438,7 +438,7 @@ export enum TransactionStatusType {
     CANCELLED = 3,
 }
 
-export type GasNow = {
+export type GasOptions = {
     rapid: number
     fast: number
     standard: number

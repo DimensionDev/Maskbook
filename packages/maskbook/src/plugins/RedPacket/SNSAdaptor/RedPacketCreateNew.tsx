@@ -19,7 +19,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         fontWeight: 300,
     },
     tabs: {
-        width: 544,
         height: 36,
         minHeight: 36,
         margin: `0 ${snsId === MINDS_ID ? '12px' : 'auto'}`,

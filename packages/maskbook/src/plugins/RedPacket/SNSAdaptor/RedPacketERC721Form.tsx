@@ -25,12 +25,12 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'stretch',
             flexDirection: 'column',
         },
         line: {
             display: 'flex',
-            margin: theme.spacing(1, 1, 2, 1),
+            margin: theme.spacing(1, 0, 2, 0),
         },
         nftNameWrapper: {
             width: '100%',
@@ -91,7 +91,6 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
         },
         tokenSelectorParent: {
-            width: 544,
             background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
             borderRadius: 12,
             paddingBottom: 5,

@@ -4,7 +4,7 @@ import {
     ChainId,
     CollectibleProvider,
     CryptoPrice,
-    GasNow,
+    GasOptions,
     NetworkType,
     PortfolioProvider,
     ProviderType,
@@ -150,15 +150,15 @@ export const currentGasPriceSettings = createGlobalSettings<number>(
 )
 
 /**
- * Gas Now
+ * Gas Options
  */
-export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
-    `${PLUGIN_IDENTIFIER}+gasNow`,
+export const currentGasOptionsSettings = createGlobalSettings<GasOptions | null>(
+    `${PLUGIN_IDENTIFIER}+gasOptions`,
     null,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
-    (a: GasNow | null, b: GasNow | null) => isEqual(a, b),
+    (a: GasOptions | null, b: GasOptions | null) => isEqual(a, b),
 )
 
 /**

@@ -27,74 +27,77 @@ import { injectToolboxHintAtMinds } from './injection/ToolboxHint'
 import { mindsShared } from './shared'
 import { makeStyles } from '@masknet/theme'
 
-const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => ({
-    root: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'block !important',
-        },
-    },
-    container: {
-        alignItems: 'center',
-    },
-    paper: {
-        width: '600px !important',
-        maxWidth: 'none',
-        boxShadow: 'none',
-        backgroundImage: 'none',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            '&': {
+const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        root: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            [smallQuery]: {
                 display: 'block !important',
-                borderRadius: '0 !important',
             },
         },
-    },
-    dialogTitle: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '3px 16px',
-        borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
-        '& > h2': {
-            display: 'inline-block',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
+        container: {
+            alignItems: 'center',
         },
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+        paper: {
+            width: '600px !important',
+            maxWidth: 'none',
+            boxShadow: 'none',
+            backgroundImage: 'none',
+            [smallQuery]: {
+                '&': {
+                    display: 'block !important',
+                    borderRadius: '0 !important',
+                },
+            },
+        },
+        dialogTitle: {
             display: 'flex',
-            justifyContent: 'space-between',
-            maxWidth: 600,
-            margin: '0 auto',
-            padding: '7px 14px 6px 11px !important',
+            alignItems: 'center',
+            padding: '3px 16px',
+            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            '& > h2': {
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+            },
+            [smallQuery]: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px 11px !important',
+            },
         },
-    },
-    dialogContent: {
-        padding: 16,
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'flex',
-            flexDirection: 'column',
-            maxWidth: 600,
-            margin: '0 auto',
-            padding: '7px 14px 6px !important',
+        dialogContent: {
+            padding: 16,
+            [smallQuery]: {
+                display: 'flex',
+                flexDirection: 'column',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
         },
-    },
-    dialogActions: {
-        padding: '6px 16px',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            maxWidth: 600,
-            margin: '0 auto',
-            padding: '7px 14px 6px !important',
+        dialogActions: {
+            padding: '6px 16px',
+            [smallQuery]: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
         },
-    },
-    dialogBackdropRoot: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
-    },
-}))
+        dialogBackdropRoot: {
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+        },
+    }
+})
 
 const mindsUI: SocialNetworkUI.Definition = {
     ...mindsBase,

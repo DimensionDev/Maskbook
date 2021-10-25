@@ -10,7 +10,10 @@ import { MaskMessages } from '../utils/messages'
 import i18nNextInstance from '../utils/i18n-next'
 import { createI18NBundle } from '@masknet/shared'
 
-export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
+export function createPluginHost<Context>(
+    signal: AbortSignal | undefined,
+    createContext: (plugin: string, signal: AbortSignal) => Context,
+): Plugin.__Host.Host<Context> {
     const listening = new Set<string>()
     const enabled: Plugin.__Host.EnabledStatusReporter = {
         isEnabled: (id) => {
@@ -38,5 +41,6 @@ export function createPluginHost(signal?: AbortSignal): Plugin.__Host.Host {
         addI18NResource(plugin, resource) {
             createI18NBundle(plugin, resource)(i18nNextInstance)
         },
+        createContext,
     }
 }

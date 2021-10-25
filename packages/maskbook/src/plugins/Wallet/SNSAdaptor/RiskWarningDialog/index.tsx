@@ -24,9 +24,7 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         borderRadius: 9999,
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            '&': {
-                marginBottom: theme.spacing(2),
-            },
+            marginBottom: theme.spacing(2),
         },
     },
     cancel: {
