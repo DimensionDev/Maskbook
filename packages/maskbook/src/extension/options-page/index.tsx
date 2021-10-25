@@ -228,4 +228,4 @@ export function Dashboard() {
 }
 
 export default createNormalReactRoot(<Dashboard />)
-startPluginDashboard(createPluginHost())
+startPluginDashboard(createPluginHost(undefined, () => undefined))

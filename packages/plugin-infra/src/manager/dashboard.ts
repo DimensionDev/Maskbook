@@ -3,9 +3,7 @@ import { useSubscription, Subscription } from 'use-subscription'
 import { createManager } from './manage'
 import type { Plugin } from '../types'
 
-const { activated, startDaemon, events } = createManager({
-    getLoader: (plugin) => plugin.Dashboard,
-})
+const { activated, startDaemon, events } = createManager((def) => def.Dashboard)
 
 const subscription: Subscription<Plugin.Dashboard.Definition[]> = {
     getCurrentValue: () => [...activated.plugins],

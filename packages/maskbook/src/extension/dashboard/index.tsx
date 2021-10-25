@@ -27,5 +27,5 @@ setMessages(MaskMessages)
 setPluginServices(rpc)
 // @ts-ignore
 setPluginMessages(msg)
-startPluginDashboard(createPluginHost())
+startPluginDashboard(createPluginHost(undefined, () => undefined))
 createNormalReactRoot(<IntegratedDashboard />)
