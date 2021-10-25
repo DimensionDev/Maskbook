@@ -1,5 +1,5 @@
-import { getRedPacketConstants, getTokenConstants } from '../constants'
 import { EthereumAddress } from 'wallet.ts'
+import { getRedPacketConstants, getTokenConstants } from '../constants'
 
 export function isSameAddress(addrA: string = '', addrB: string = '') {
     if (!addrA || !addrB) return false
@@ -17,10 +17,6 @@ export function currySameAddress(base?: string) {
         throw new Error('Unsupported `target` address format')
     }
 }
-
-export const isDAI = currySameAddress(getTokenConstants().DAI_ADDRESS)
-
-export const isOKB = currySameAddress(getTokenConstants().OKB_ADDRESS)
 
 export const isNative = currySameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS)
 
