@@ -190,7 +190,7 @@ function BrowserActionUI() {
 
 export function BrowserActionRoot() {
     return (
-        <MaskUIRoot useTheme={useClassicMaskFullPageTheme} kind="fullpage">
+        <MaskUIRoot useTheme={useClassicMaskFullPageTheme} kind="page">
             <GlobalCss />
             <BrowserActionUI />
         </MaskUIRoot>

@@ -44,7 +44,7 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
     )
 }
 export interface MaskUIRootProps extends React.PropsWithChildren<{}> {
-    kind: 'fullpage' | 'sns'
+    kind: 'page' | 'sns'
     useTheme(): Theme
 }
 
@@ -56,9 +56,9 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
         (jsx) => <ErrorBoundary children={jsx} />,
         (jsx) => <Web3Provider value={Web3Context} children={jsx} />,
         (jsx) => <I18nextProvider i18n={i18nNextInstance} children={jsx} />,
-        kind === 'fullpage' ? (jsx) => <StyledEngineProvider injectFirst children={jsx} /> : identity,
+        kind === 'page' ? (jsx) => <StyledEngineProvider injectFirst children={jsx} /> : identity,
         (jsx) => (
-            <MaskThemeProvider useTheme={useTheme} baseline={kind === 'fullpage'}>
+            <MaskThemeProvider useTheme={useTheme} baseline={kind === 'page'}>
                 <CssBaseline />
                 {jsx}
             </MaskThemeProvider>

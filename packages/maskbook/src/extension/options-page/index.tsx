@@ -215,7 +215,7 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 
 export function Dashboard() {
     return (
-        <MaskUIRoot useTheme={useClassicMaskFullPageTheme} kind="fullpage">
+        <MaskUIRoot useTheme={useClassicMaskFullPageTheme} kind="page">
             <DashboardSnackbarProvider>
                 <Router>
                     <DashboardUI />

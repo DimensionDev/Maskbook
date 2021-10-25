@@ -26,7 +26,7 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 
 export default function Popups() {
     return (
-        <MaskUIRoot useTheme={useAlwaysLightTheme} kind="fullpage">
+        <MaskUIRoot useTheme={useAlwaysLightTheme} kind="page">
             <Web3Provider value={PopupWeb3Context}>
                 <HashRouter>
                     {/* ! Don't remove this suspense. Otherwise react-router v5 doesn't work while changing routes.  */}
