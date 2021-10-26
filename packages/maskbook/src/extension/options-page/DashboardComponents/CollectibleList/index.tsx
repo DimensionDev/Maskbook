@@ -1,15 +1,7 @@
 import { createContext, useState, useEffect } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useStylesExtends, useValueRef } from '@masknet/shared'
-import {
-    ChainId,
-    CollectibleProvider,
-    ERC721TokenDetailed,
-    useAccount,
-    useChainId,
-    useCollectibles,
-    Wallet,
-} from '@masknet/web3-shared-evm'
+import { ChainId, CollectibleProvider, ERC721TokenDetailed, useCollectibles, Wallet } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
@@ -218,52 +210,6 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             hasRetry={!!address}
             onPrevPage={() => setPage((prev) => prev - 1)}
             onNextPage={() => setPage((next) => next + 1)}
-        />
-    )
-}
-
-export interface CollectibleListProps {
-    wallet: Wallet
-    readonly?: boolean
-}
-
-export function CollectibleList({ wallet, readonly }: CollectibleListProps) {
-    const account = useAccount()
-    const chainId = useChainId()
-    const [page, setPage] = useState(0)
-    const provider = useValueRef(currentCollectibleDataProviderSettings)
-    const {
-        value = { collectibles: [], hasNextPage: false },
-        loading: collectiblesLoading,
-        retry: collectiblesRetry,
-        error: collectiblesError,
-    } = useCollectibles(account, chainId, provider, page, 50)
-
-    const { collectibles = [], hasNextPage } = value
-
-    useUpdateEffect(() => {
-        setPage(0)
-    }, [account, provider])
-
-    useEffect(() => {
-        const tab = searchProfileTabSelector().evaluate()
-        if (!tab) return
-        tab.scrollIntoView()
-    }, [page])
-
-    return (
-        <CollectibleListUI
-            provider={provider}
-            wallet={wallet}
-            collectibles={collectibles}
-            loading={collectiblesLoading}
-            error={collectiblesError}
-            collectiblesRetry={collectiblesRetry}
-            hasNextPage={hasNextPage}
-            readonly={readonly}
-            page={page}
-            onPrevPage={() => setPage((prev) => prev - 1)}
-            onNextPage={() => setPage((prev) => prev + 1)}
         />
     )
 }

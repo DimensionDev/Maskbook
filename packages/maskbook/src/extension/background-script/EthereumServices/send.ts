@@ -205,7 +205,7 @@ export async function INTERNAL_send(
             config.nonce = await getNonce(config.from as string)
 
         // add gas margin
-        if (config.gas && !Flags.v2_enabled) config.gas = addGasMargin(config.gas).toString(16)
+        if (config.gas) config.gas = addGasMargin(config.gas).toString(16)
         config.gas = toHex(config.gas ?? '0')
 
         // add chain id

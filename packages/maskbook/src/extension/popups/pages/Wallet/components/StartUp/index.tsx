@@ -74,7 +74,7 @@ export const WalletStartUp = memo(() => {
     const onEnterCreateWallet = useCallback(async () => {
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL('/next.html#/create-mask-wallet'),
+            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet'),
         })
         await Services.Helper.removePopupWindow()
     }, [])

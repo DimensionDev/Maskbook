@@ -10,14 +10,12 @@ let isLoading: Promise<void> | null
 
 const independentRef = {
     myPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
-    myUninitializedPersonasRef: new ValueRef<Persona[]>([], PersonaArrayComparer),
 }
 
 {
     const query = () => {
         return Services.Identity.queryMyPersonas().then((p) => {
             independentRef.myPersonasRef.value = p.filter((x) => !x.uninitialized)
-            independentRef.myUninitializedPersonasRef.value = p.filter((x) => x.uninitialized)
             isLoading = null
             Services.Helper.__deprecated__setStorage<boolean>(
                 'mobileIsMyPersonasInitialized',
@@ -35,9 +33,4 @@ const independentRef = {
 export function useMyPersonas() {
     if (isLoading) throw isLoading
     return useValueRef(independentRef.myPersonasRef)
-}
-
-export function useMyUninitializedPersonas() {
-    if (isLoading) throw isLoading
-    return useValueRef(independentRef.myUninitializedPersonasRef)
 }

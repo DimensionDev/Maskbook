@@ -1,7 +1,6 @@
-import { ECKeyIdentifier, Identifier } from '@masknet/shared-base'
+import { ECKeyIdentifier, Identifier, delay } from '@masknet/shared-base'
 import { Box, Button, DialogActions, DialogContent, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { delay } from 'opensea-js/lib/utils/utils'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useLocation } from 'react-router-dom'

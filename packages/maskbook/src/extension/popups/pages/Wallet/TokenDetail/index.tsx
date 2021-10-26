@@ -83,7 +83,7 @@ const TokenDetail = memo(() => {
                 code: currentToken?.token.symbol ?? currentToken?.token.name,
             })
         } else {
-            const url = urlcat('next.html#', 'labs', {
+            const url = urlcat('dashboard.html#', 'labs', {
                 open: 'Transak',
                 code: currentToken?.token.symbol ?? currentToken?.token.name,
             })
