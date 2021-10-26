@@ -8,10 +8,6 @@ const AllNetworkButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
     marginRight: theme.spacing(1),
     padding: 0,
-    lineHeight: '30px',
-    width: 30,
-    height: 30,
-    minWidth: 30,
     borderRadius: '50%',
     fontSize: 12,
     '&:hover': {
@@ -20,14 +16,14 @@ const AllNetworkButton = styled(Button)(({ theme }) => ({
     opacity: 0.5,
 }))
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ size: number }>()((theme, props) => ({
     networkSelected: {
         opacity: 1,
         '&:after': {
             content: '""',
             position: 'absolute',
             bottom: -8,
-            right: 13,
+            right: (props.size - 4) / 2,
             display: 'inline-block',
             width: 4,
             height: 4,
@@ -49,17 +45,31 @@ export interface NetworkSelectorMinProps {
     onSelect(chainId: null | ChainId): void
     hideAllNetworkButton?: boolean
     disabledNonCurrentNetwork?: boolean
+    size?: number
 }
 
 export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
-    ({ hideAllNetworkButton = false, onSelect, selectedChainId, networks = [], disabledNonCurrentNetwork = false }) => {
-        const { classes } = useStyles()
+    ({
+        hideAllNetworkButton = false,
+        onSelect,
+        selectedChainId,
+        networks = [],
+        disabledNonCurrentNetwork = false,
+        size = 30,
+    }) => {
+        const { classes } = useStyles({ size: size })
 
         return (
             <Stack direction="row">
                 {!hideAllNetworkButton && (
                     <AllNetworkButton
                         className={selectedChainId === null ? classes.networkSelected : ''}
+                        sx={{
+                            width: size,
+                            height: size,
+                            minWidth: size,
+                            lineHeight: `${size}px`,
+                        }}
                         onClick={() => onSelect(null)}>
                         ALL
                     </AllNetworkButton>
@@ -71,9 +81,15 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                             key={chainId}
                             position="relative"
                             mr={1}
-                            height={30}
+                            height={size}
                             onClick={() => !disabledNonCurrentNetwork && onSelect(chainId)}
-                            sx={{ cursor: 'pointer', opacity: '0.6', ':hover': { opacity: 1 }, userSelect: 'none' }}
+                            sx={{
+                                cursor: 'pointer',
+                                opacity: '0.6',
+                                ':hover': { opacity: 1 },
+                                userSelect: 'none',
+                                lineHeight: `${size}px`,
+                            }}
                             className={
                                 selectedChainId === chainId
                                     ? classes.networkSelected
@@ -81,7 +97,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                                     ? classes.networkDisabled
                                     : ''
                             }>
-                            <ChainIcon chainId={chainId} size={30} />
+                            <ChainIcon chainId={chainId} size={size} />
                         </Box>
                     )
                 })}
