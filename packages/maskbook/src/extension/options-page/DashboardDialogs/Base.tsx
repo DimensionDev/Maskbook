@@ -101,6 +101,7 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
         onClose,
     }
     // Restore old theme
+    // eslint-disable-next-line import/no-deprecated
     const theme = useClassicMaskFullPageTheme()
     const renderedComponent =
         state === DialogState.Destroyed ? null : (

@@ -12,6 +12,7 @@ import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
+// eslint-disable-next-line import/no-deprecated
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 import type { Wallet } from '@masknet/web3-shared-evm'
 import { Box, BoxProps } from '@mui/material'
@@ -19,6 +20,7 @@ import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 
 export function DashboardWalletHideTokenConfirmDialog(
+    // eslint-disable-next-line import/no-deprecated
     props: WrappedDialogProps<{ wallet: Wallet; token: FungibleTokenDetailed | ERC721TokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!

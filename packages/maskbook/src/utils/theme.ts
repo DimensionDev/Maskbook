@@ -125,7 +125,6 @@ export function useClassicMaskSNSTheme() {
 }
 /**
  * @deprecated
- * - 1.x dashboard: will be removed in 2.0
  * - Popups: migrate to \@masknet/theme package
  */
 export function useClassicMaskFullPageTheme(overwrite?: ClassicMaskFullPageThemeOptions) {
