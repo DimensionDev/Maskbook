@@ -14,6 +14,7 @@ import {
     Paper,
     Link,
     Button,
+    Typography,
 } from '@mui/material'
 import { useStylesExtends } from '@masknet/shared'
 import { Image } from '../shared/Image'
@@ -32,7 +33,8 @@ export interface AutoPasteFailedDialogProps extends withClasses<never> {
 }
 const useStyles = makeStyles()((theme) => ({
     title: { marginLeft: theme.spacing(1) },
-    paper: { border: '1px solid white' },
+    paper: {},
+    button: { marginRight: theme.spacing(1) },
 }))
 
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
@@ -57,8 +59,12 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         <span className={classes.title}>{t('auto_paste_failed_dialog_title')}</span>
                     </DialogTitle>
                 </nav>
-                <DialogContent>
-                    <DialogContentText>{t('auto_paste_failed_dialog_content')}</DialogContentText>
+                <DialogContent sx={{ paddingTop: 0 }}>
+                    <DialogContentText>
+                        <Typography color="textPrimary" sx={{ marginBottom: 1 }}>
+                            {t('auto_paste_failed_dialog_content')}
+                        </Typography>
+                    </DialogContentText>
                     {props.data.text ? (
                         <>
                             <TextField multiline fullWidth value={data.text} InputProps={{ readOnly: true }} />
@@ -68,6 +74,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 }}
                             />
                             <Button
+                                className={classes.button}
                                 variant="contained"
                                 onClick={() => {
                                     copy(data.text)
@@ -93,7 +100,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
-                            <Image component="img" onURL={setURL} src={data.image} width={260} height={180} />
+                            <Image component="img" onURL={setURL} src={data.image} style={{ height: 'auto' }} />
                         ) : null}
                         <Box
                             sx={{
@@ -102,6 +109,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         />
                         {permission === 'granted' ? (
                             <Button
+                                className={classes.button}
                                 variant="contained"
                                 onClick={async () => {
                                     if (!data.image) return
@@ -123,6 +131,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         {url ? (
                             process.env.architecture === 'app' && process.env.engine === 'firefox' ? (
                                 <Button
+                                    className={classes.button}
                                     component={Link}
                                     variant="text"
                                     href={url}
@@ -132,6 +141,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 </Button>
                             ) : (
                                 <Button
+                                    className={classes.button}
                                     variant="text"
                                     onClick={() => saveAsFileFromUrl(url, fileName)}
                                     startIcon={<Download />}>
@@ -142,6 +152,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         {/* Open it in a new tab does not make sense for app. */}
                         {url && process.env.architecture === 'web' ? (
                             <Button
+                                className={classes.button}
                                 variant="text"
                                 component={Link}
                                 href={url}
