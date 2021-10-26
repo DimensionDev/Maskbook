@@ -29,7 +29,7 @@ export interface AdditionalContentProps
 const useStyles = makeStyles()((theme) => ({
     root: { boxSizing: 'border-box', width: '100%', backgroundColor: 'transparent', borderColor: 'transparent' },
     title: { display: 'flex', alignItems: 'center' },
-    icon: { paddingRight: theme.spacing(0.75), display: 'flex', width: 20, height: 20 },
+    icon: { marginRight: theme.spacing(1), display: 'flex', width: 24, height: 24 },
     content: { margin: theme.spacing(1, 0), padding: 0, overflowWrap: 'break-word' },
     rightIcon: { paddingLeft: theme.spacing(0.75) },
 }))

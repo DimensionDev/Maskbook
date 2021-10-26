@@ -14,6 +14,7 @@ import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
+import type { Subscription } from 'use-subscription'
 
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
@@ -249,14 +250,14 @@ export namespace SocialNetworkUI {
              *
              * Should follow the color scheme of the website.
              */
-            useTheme?(): Theme
+            useTheme?(baseTheme: Theme): Theme
             /** Provide the ability to detect the current color scheme (light or dark) in the current SNS */
             paletteMode?: PaletteModeProvider
             i18nOverwrite?: I18NOverwrite
             componentOverwrite?: ComponentOverwrite
         }
         export interface PaletteModeProvider {
-            current: ValueRef<PaletteMode>
+            current: Subscription<PaletteMode>
             start(signal: AbortSignal): void
         }
         export interface ComponentOverwrite {

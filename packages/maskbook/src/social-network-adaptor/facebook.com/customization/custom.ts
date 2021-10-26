@@ -1,19 +1,18 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { PaletteMode, ThemeProvider, unstable_createMuiStrictModeTheme } from '@mui/material'
+import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
-import { createElement, useMemo } from 'react'
-import { Appearance } from '@masknet/theme'
-import { useValueRef } from '@masknet/shared'
+import { useMemo } from 'react'
+import { SubscriptionFromValueRef, useValueRef } from '@masknet/shared'
 import type { SocialNetworkUI } from '../../../social-network'
-import { useClassicMaskTheme } from '../../../utils/theme'
 import { fromRGB, isDark, shade, toRGB } from '../../../utils/theme-tools'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
 const backgroundColorRef = new ValueRef(toRGB([255, 255, 255]))
 
+const currentTheme = new ValueRef<PaletteMode>('light')
 export const PaletteModeProviderFacebook: SocialNetworkUI.Customization.PaletteModeProvider = {
-    current: new ValueRef<PaletteMode>('light'),
+    current: SubscriptionFromValueRef(currentTheme),
     start: startWatchThemeColor,
 }
 
@@ -21,7 +20,7 @@ export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor(isDarkMode: boolean) {
         const contrastColor = 'rgb(255,255,255)'
         const backgroundColor = isDarkMode ? 'rgb(0,0,0)' : 'rgb(255,255,255)'
-        PaletteModeProviderFacebook.current.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
+        currentTheme.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
         primaryColorContrastColorRef.value = contrastColor
         backgroundColorRef.value = backgroundColor
     }
@@ -45,19 +44,16 @@ export function startWatchThemeColor(signal: AbortSignal) {
     signal.addEventListener('abort', () => observer.disconnect())
 }
 
-export function useThemeFacebookVariant() {
+export function useThemeFacebookVariant(baseTheme: Theme) {
     const primaryColor = useValueRef(primaryColorRef)
     const primaryContrastColor = useValueRef(primaryColorContrastColorRef)
     const backgroundColor = useValueRef(backgroundColorRef)
-    const MaskbookTheme = useClassicMaskTheme({
-        appearance: isDark(fromRGB(backgroundColor)!) ? Appearance.dark : Appearance.light,
-    })
     return useMemo(() => {
         const primaryColorRGB = fromRGB(primaryColor)!
         const primaryContrastColorRGB = fromRGB(primaryContrastColor)
         setAutoFreeze(false)
 
-        const FacebookTheme = produce(MaskbookTheme, (theme) => {
+        const FacebookTheme = produce(baseTheme, (theme) => {
             theme.palette.background.paper = backgroundColor
             theme.palette.primary = {
                 light: toRGB(shade(primaryColorRGB, 10)),
@@ -117,10 +113,5 @@ export function useThemeFacebookVariant() {
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(FacebookTheme)
-    }, [MaskbookTheme, backgroundColor, primaryColor, primaryContrastColor])
-}
-
-export function FacebookThemeProvider(props: Required<React.PropsWithChildren<{}>>) {
-    if (!process.env.STORYBOOK) throw new Error('This API is only for Storybook!')
-    return createElement(ThemeProvider, { theme: useThemeFacebookVariant(), ...props })
+    }, [baseTheme, backgroundColor, primaryColor, primaryContrastColor])
 }
