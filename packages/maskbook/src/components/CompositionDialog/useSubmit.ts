@@ -1,5 +1,4 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { EthereumTokenType, isDAI, isOKB } from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
@@ -46,13 +45,7 @@ export function useSubmit(onClose: () => void) {
             const redPacketMetadata = RedPacketMetadataReader(content.meta)
             if (encode === 'image') {
                 if (redPacketMetadata.ok) {
-                    const isErc20 =
-                        redPacketMetadata.val?.token && redPacketMetadata.val.token_type === EthereumTokenType.ERC20
-                    const isDai = isErc20 && isDAI(redPacketMetadata.val.token?.address ?? '')
-                    const isOkb = isErc20 && isOKB(redPacketMetadata.val.token?.address ?? '')
-                    const template: ImageTemplateTypes = isDai ? 'dai' : isOkb ? 'okb' : 'eth'
-                    const text = redPacketPreText.replace(encrypted, '')
-                    await pasteImage(encrypted, template, text)
+                    await pasteImage(encrypted, 'eth', redPacketPreText.replace(encrypted, ''))
                 } else {
                     await pasteImage(encrypted, 'v2', null)
                 }

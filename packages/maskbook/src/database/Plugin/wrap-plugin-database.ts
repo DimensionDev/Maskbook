@@ -3,7 +3,7 @@ import type { Plugin, IndexableTaggedUnion } from '@masknet/plugin-infra'
 import { createPluginDBAccess, PluginDatabase, pluginDataHasValidKeyPath, toStore } from '.'
 
 /**
- * @deprecated Avoid calling it directly.
+ * Avoid calling it directly.
  *
  * You should get the instance from WorkerContext when the plugin is initialized.
  *
