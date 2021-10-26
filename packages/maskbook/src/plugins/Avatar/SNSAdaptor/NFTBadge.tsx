@@ -1,12 +1,12 @@
 import { UnionIcon } from '@masknet/icons'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
-import { CircularProgress, Link, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useNFT } from '../hooks'
 import type { AvatarMetaDB } from '../types'
+import { NFTAvatarRingIcon } from './ring'
 
 const useStyles = makeStyles()({
     root: {
@@ -41,6 +41,12 @@ const useStyles = makeStyles()({
         alignItems: 'center',
         height: '100%',
     },
+
+    test: {
+        position: 'absolute',
+        left: -23,
+        top: -109,
+    },
 })
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
@@ -73,6 +79,12 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { amount, symbol, name, owner } = value
 
     return (
+        <div className={classes.test}>
+            <NFTAvatarRingIcon size={100} text="Punk 100 ETH" />
+        </div>
+    )
+    /*
+    return (
         <div
             className={classes.root}
             onClick={(e) => {
@@ -103,6 +115,7 @@ export function NFTBadge(props: NFTBadgeProps) {
             </Link>
         </div>
     )
+    */
 }
 
 const useShowPriceStyles = makeStyles()((theme) => ({
