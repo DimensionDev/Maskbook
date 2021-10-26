@@ -87,6 +87,9 @@ const useStyles = makeStyles()(() => ({
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
         padding: '0px 16px 16px 16px',
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
     },
     button: {
         fontWeight: 600,
