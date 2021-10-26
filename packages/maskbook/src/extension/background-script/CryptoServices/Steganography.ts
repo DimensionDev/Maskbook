@@ -1,3 +1,5 @@
+import { omit } from 'lodash-es'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform'
@@ -5,39 +7,52 @@ import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/cjs/st
 import { downloadUrl } from '../../../utils/utils'
 import { memoizePromise } from '../../../utils/memoize'
 import { getDimension } from '../../../utils/image'
-import { blobToArrayBuffer } from '@dimensiondev/kit'
 import type { ImageTemplateTypes } from '../../../resources/image-payload'
 
-type Mask = 'v1' | 'v2' | 'v4' | 'transparent'
 type Dimension = {
     width: number
     height: number
 }
-const dimensionPreset: (Dimension & { mask: Mask })[] = [
+
+const dimensionPreset: (Dimension & {
+    mask: string
+    template?: ImageTemplateTypes
+    options?: Partial<EncodeOptions>
+})[] = [
+    // @deprecated legacy post
     {
         width: 1024,
         height: 1240,
-        mask: 'v1',
+        mask: new URL('./SteganographyResources/mask-v1.png', import.meta.url).toString(),
     },
+    // text
     {
         width: 1200,
         height: 681,
-        mask: 'v2',
+        template: 'v2',
+        mask: new URL('./SteganographyResources/mask-v2.png', import.meta.url).toString(),
     },
+    // lucky drop
     {
         width: 1200,
         height: 680,
-        mask: 'transparent',
+        template: 'eth',
+        mask: new URL('./SteganographyResources/mask-transparent.png', import.meta.url).toString(),
+        options: {
+            cropEdgePixels: true,
+        },
     },
+    // @deprecated election 2020
     {
         width: 1000,
         height: 558,
-        mask: 'transparent',
+        mask: new URL('./SteganographyResources/mask-transparent.png', import.meta.url).toString(),
     },
+    // @deprecated NFT
     {
         width: 1000,
         height: 560,
-        mask: 'v4',
+        mask: new URL('./SteganographyResources/mask-v4.png', import.meta.url).toString(),
     },
 ]
 
@@ -46,18 +61,17 @@ const defaultOptions = {
     narrow: 0,
     copies: 3,
     tolerance: 128,
+    exhaustPixels: true,
+    cropEdgePixels: false,
+    fakeMaskPixels: false,
+    grayscaleAlgorithm: GrayscaleAlgorithm.NONE,
+    transformAlgorithm: TransformAlgorithm.FFT1D,
 }
 
 const isSameDimension = (dimension: Dimension, otherDimension: Dimension) =>
     dimension.width === otherDimension.width && dimension.height === otherDimension.height
 
-const images: Record<Mask, string> = {
-    v1: new URL('./SteganographyResources/mask-v1.png', import.meta.url).toString(),
-    v2: new URL('./SteganographyResources/mask-v2.png', import.meta.url).toString(),
-    v4: new URL('./SteganographyResources/mask-v4.png', import.meta.url).toString(),
-    transparent: new URL('./SteganographyResources/mask-transparent.png', import.meta.url).toString(),
-}
-const getMaskBuf = memoizePromise(async (type: Mask) => blobToArrayBuffer(await downloadUrl(images[type])), void 0)
+const getMaskBuf = memoizePromise(async (url: string) => blobToArrayBuffer(await downloadUrl(url)), void 0)
 
 export type EncodeImageOptions = {
     template?: ImageTemplateTypes
@@ -65,15 +79,13 @@ export type EncodeImageOptions = {
 
 export async function steganographyEncodeImage(buf: ArrayBuffer, options: EncodeImageOptions) {
     const { template } = options
+    const preset = dimensionPreset.find((d) => d.template && d.template === template)
+    if (!preset) throw new Error('Failed to find preset.')
     return new Uint8Array(
-        await encode(buf, await getMaskBuf(template === 'v2' || template === 'v4' ? template : 'transparent'), {
+        await encode(buf, await getMaskBuf(preset.mask), {
             ...defaultOptions,
-            fakeMaskPixels: false,
-            cropEdgePixels: template !== 'v2' && template !== 'v3' && template !== 'v4',
-            exhaustPixels: true,
-            grayscaleAlgorithm: template === 'v3' ? GrayscaleAlgorithm.LUMINANCE : GrayscaleAlgorithm.NONE,
-            transformAlgorithm: TransformAlgorithm.FFT1D,
-            ...options,
+            ...preset?.options,
+            ...omit(options, 'template'),
         }),
     )
 }
