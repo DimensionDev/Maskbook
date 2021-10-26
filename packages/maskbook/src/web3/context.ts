@@ -158,14 +158,13 @@ function createSubscriptionFromAsync<T>(
     }
     return {
         getCurrentValue: () => {
-            if (isLoading) throw init
             return state
         },
         subscribe: (sub) => {
             const a = subscribe(sub)
-            const b = onChange(() => {
+            const b = onChange(async () => {
                 beats += 1
-                if (beats === 1) flush()
+                if (beats === 1) await flush()
             })
             return () => void [a(), b()]
         },
