@@ -1,26 +1,30 @@
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from './AbstractTab'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
 
 interface StyleProps {
     chainLength: number
     parentWidth: number
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+    tab: {
+        background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
+    },
     tabs: {
         '& .MuiTabs-flexContainer': {
             display: 'grid',
             gridTemplateColumns: Array(props.chainLength)
-                .fill(props.parentWidth / props.chainLength + 'px')
+                .fill(Math.floor(props.parentWidth / props.chainLength) - 1 + 'px')
                 .join(' '),
             columnGap: 1,
             backgroundColor: theme.palette.background.paper,
         },
     },
 }))
+
 interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
-    chains: { chainName: string; chainId: ChainId }[]
+    chains: ChainId[]
     setChainId: (chainId: ChainId) => void
     chainId: ChainId
     parentWidth: number
@@ -38,8 +42,10 @@ export function NetworkTab(props: NetworkTabProps) {
     })
 
     const tabProps: AbstractTabProps = {
-        tabs: chains.map((chain) => createTabItem(chain.chainName, chain.chainId)),
-        index: chains.map((chain) => chain.chainId).indexOf(chainId),
+        tabs: chains.map((chainId) =>
+            createTabItem(getChainDetailed(chainId)?.chain?.replace('Matic', 'Polygon') ?? 'Unknown', chainId),
+        ),
+        index: chains.indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
     }

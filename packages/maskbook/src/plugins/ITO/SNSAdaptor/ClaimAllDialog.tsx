@@ -359,13 +359,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             chainId={chainId}
                             setChainId={setChainId}
                             classes={classes}
-                            chains={[
-                                { chainName: 'ETH', chainId: ChainId.Mainnet },
-                                { chainName: 'BSC', chainId: ChainId.BSC },
-                                { chainName: 'Polygon/Matic', chainId: ChainId.Matic },
-                                { chainName: 'Arbitrum', chainId: ChainId.Arbitrum },
-                                { chainName: 'xDai', chainId: ChainId.xDai },
-                            ]}
+                            chains={[ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai]}
                         />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
