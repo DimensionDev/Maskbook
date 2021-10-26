@@ -12,7 +12,6 @@ import { Box, Link, Typography, CircularProgress } from '@mui/material'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { CollectibleListAddress } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { useI18N } from '../../../utils'
-import { useNFTAvatar } from '../../Avatar/hooks/useNFTAvatar'
 import { useUserOwnerAddress } from '../../Avatar/hooks/useUserOwnerAddress'
 
 const RULE_TIP = [
@@ -44,7 +43,6 @@ export function NFTPage(props: NFTPageProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const identity = useCurrentVisitingIdentity()
-    const { loading, value: avatar } = useNFTAvatar(identity.identifier.userId)
     const { loading: loadingENS, value } = useEthereumAddress(
         identity.nickname ?? '',
         identity.identifier.userId,
@@ -64,7 +62,7 @@ export function NFTPage(props: NFTPageProps) {
 
     return (
         <div className={classes.root}>
-            {loading || loadingWalletGun || loadingENS ? (
+            {loadingWalletGun || loadingENS ? (
                 <Box className={classes.note} display="flex" alignItems="center" justifyContent="center">
                     <CircularProgress />
                 </Box>
@@ -97,11 +95,7 @@ export function NFTPage(props: NFTPageProps) {
                             <InfoOutlinedIcon color="inherit" fontSize="small" />
                         </Typography>
                     </Box>
-                    <CollectibleListAddress
-                        address={(address?.length === 0 ? walletAddressGun : address) ?? ''}
-                        contractAddress={avatar?.address}
-                        tokenId={avatar?.tokenId}
-                    />
+                    <CollectibleListAddress address={(address?.length === 0 ? walletAddressGun : address) ?? ''} />
                 </>
             )}
         </div>

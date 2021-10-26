@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { useStylesExtends, useValueRef } from '@masknet/shared'
 import {
     ChainId,
@@ -17,7 +17,6 @@ import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { searchProfileTabSelector } from '../../../../social-network-adaptor/twitter.com/utils/selector'
-import { createNFT } from '../../../../plugins/Avatar/utils'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -178,23 +177,14 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 
 export interface CollectibleListAddressProps extends withClasses<'empty' | 'button'> {
     address: string
-    contractAddress?: string
-    tokenId?: string
 }
 
 export function CollectibleListAddress(props: CollectibleListAddressProps) {
-    const { address, contractAddress, tokenId } = props
+    const { address } = props
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
     const classes = props.classes ?? {}
-
-    // create nft from opensea api
-    const { loading: loadingNFT, value: token } = useAsync(async () => {
-        if (!contractAddress || !tokenId) return
-        const value = await createNFT(contractAddress, tokenId)
-        return value
-    }, [contractAddress, tokenId])
 
     const {
         value = { collectibles: [], hasNextPage: false },
@@ -218,8 +208,8 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
         <CollectibleListUI
             classes={classes}
             provider={provider}
-            collectibles={token ? [token, ...collectibles] : collectibles}
-            loading={collectiblesLoading || loadingNFT}
+            collectibles={collectibles}
+            loading={collectiblesLoading}
             collectiblesRetry={collectiblesRetry}
             error={collectiblesError}
             readonly={true}
