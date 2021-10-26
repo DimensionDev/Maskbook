@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NetworkSelectorMinProps {
+export interface NetworkSelectorMinProps {
     selectedChainId: null | ChainId
     networks: NetworkType[]
     onSelect(chainId: null | ChainId): void
