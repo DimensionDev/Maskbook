@@ -5,7 +5,6 @@ import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
 
 interface StyleProps {
     chainLength: number
-    parentWidth: number
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     tab: {
@@ -15,7 +14,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         '& .MuiTabs-flexContainer': {
             display: 'grid',
             gridTemplateColumns: Array(props.chainLength)
-                .fill(Math.floor(props.parentWidth / props.chainLength) - 1 + 'px')
+                .fill(100 / props.chainLength + '%')
                 .join(' '),
             columnGap: 1,
             backgroundColor: theme.palette.background.paper,
@@ -27,13 +26,9 @@ interface NetworkTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'ind
     chains: ChainId[]
     setChainId: (chainId: ChainId) => void
     chainId: ChainId
-    parentWidth: number
 }
 export function NetworkTab(props: NetworkTabProps) {
-    const classes = useStylesExtends(
-        useStyles({ chainLength: props.chains.length, parentWidth: props.parentWidth }),
-        props,
-    )
+    const classes = useStylesExtends(useStyles({ chainLength: props.chains.length }), props)
     const { chainId, setChainId, chains } = props
     const createTabItem = (name: string, chainId: ChainId) => ({
         label: <span>{name}</span>,

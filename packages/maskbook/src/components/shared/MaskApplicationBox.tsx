@@ -217,7 +217,6 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
             {secondEntryChainTabs?.length ? (
                 <div className={classes.abstractTabWrapper}>
                     <NetworkTab
-                        parentWidth={552}
                         chainId={chainId}
                         setChainId={setChainId}
                         classes={classes}

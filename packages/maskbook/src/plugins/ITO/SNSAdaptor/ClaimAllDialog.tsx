@@ -355,7 +355,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                     </div>
                     <div className={classes.abstractTabWrapper}>
                         <NetworkTab
-                            parentWidth={536}
                             chainId={chainId}
                             setChainId={setChainId}
                             classes={classes}
