@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import { unreachable } from '@dimensiondev/kit'
 import { isNextStateAvailable } from '..'
 
 export enum TransactionStateType {
