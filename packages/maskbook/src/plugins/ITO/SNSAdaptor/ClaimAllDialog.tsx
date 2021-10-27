@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
-import { useI18N } from '../../../utils'
+import { useI18N, Flags } from '../../../utils'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -217,7 +217,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
-    const { value: campaignInfos, loading: loadingAirdrop, retry: retryAirdrop } = useSpaceStationCampaignInfo(account)
+    const {
+        value: campaignInfos,
+        loading: loadingAirdrop,
+        retry: retryAirdrop,
+    } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(
         [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
@@ -246,8 +250,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const claimablePidsOld = uniq(flatten(swappedTokensOld?.filter((t) => t.isClaimable).map((t) => t.pids)))
     const [claimState, claimCallback, resetClaimCallback] = useClaimCallback(claimablePids, ITO2_CONTRACT_ADDRESS)
     const [claimStateOld, resetClaimCallbackOld] = useClaimCallback(claimablePidsOld, ITO_CONTRACT_ADDRESS_MAINNET)
-
-    const showNftAirdrop = chainId === ChainId.Matic && campaignInfos
+    const showNftAirdrop = chainId === ChainId.Matic && campaignInfos && Flags.nft_airdrop_enabled
     const { classes } = useStyles({
         shortITOwrapper:
             (showNftAirdrop &&
@@ -367,7 +370,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         <AbstractTab {...tabProps} />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
-                        {(showNftAirdrop || loadingAirdrop) && chainId === ChainId.Matic ? (
+                        {(showNftAirdrop || loadingAirdrop) &&
+                        chainId === ChainId.Matic &&
+                        Flags.nft_airdrop_enabled ? (
                             <NftAirdropCard
                                 campaignInfos={campaignInfos!}
                                 loading={loadingAirdrop}
@@ -409,7 +414,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         ) : null}
                         {(swappedTokens && swappedTokens.length > 0) ||
                         (swappedTokensOld && swappedTokensOld.length > 0) ||
-                        chainId === ChainId.Matic ? (
+                        (chainId === ChainId.Matic && Flags.nft_airdrop_enabled) ? (
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
                                     chainId={chainId}
