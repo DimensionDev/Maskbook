@@ -14,7 +14,6 @@ import {
     decodeArrayBufferF,
     decodeTextF,
     decryptWithAES,
-    encodeTextF,
     assertIVLengthEq16,
     importAESFromJWK,
     importAsymmetryKeyFromJsonWebKeyOrSPKI,
@@ -23,8 +22,9 @@ import {
 import { Convert } from 'pvtsutils'
 import { isPoint, isPointCompressed, pointCompress } from 'tiny-secp256k1'
 import type { PayloadParserResult } from '.'
+import { get_v38PublicSharedCryptoKey } from './shared'
+import { encodeText } from '@dimensiondev/kit'
 
-const encodeText = encodeTextF(EKinds.InvalidPayload, EKinds.DecodeFailed)
 const decodeArrayBuffer = decodeArrayBufferF(EKinds.InvalidPayload, EKinds.DecodeFailed)
 const decodeText = decodeTextF(EKinds.InvalidPayload, EKinds.DecodeFailed)
 const JSONParse = JSONParseF(EKinds.InvalidPayload, EKinds.DecodeFailed)
@@ -77,12 +77,10 @@ export async function parse38(payload: string): PayloadParserResult {
     if (signature && raw_iv.ok && raw_aes.ok && normalized.encrypted.ok) {
         const message = encodeText(`4/4|${AESKeyEncrypted}|${iv}|${encryptedText}`)
         const sig = decodeArrayBuffer(signature)
-        if (message.ok && sig.ok) {
-            normalized.signature = OptionalResult.Some<Signature>({ signee: message.val, signature: sig.val })
-        } else if (sig.err) {
+        if (sig.ok) {
+            normalized.signature = OptionalResult.Some<Signature>({ signee: message, signature: sig.val })
+        } else {
             normalized.signature = sig
-        } else if (message.err) {
-            normalized.signature = message
         }
     }
     return Ok(normalized)
@@ -104,32 +102,19 @@ function splitFields(raw: string) {
     ] as const
 }
 
-// In payload version 38, the AES key is encrypted by this key.
-const publicSharedJwk: JsonWebKey = {
-    alg: 'A256GCM',
-    ext: true,
-    /* cspell:disable-next-line */
-    k: '3Bf8BJ3ZPSMUM2jg2ThODeLuRRD_-_iwQEaeLdcQXpg',
-    key_ops: ['encrypt', 'decrypt'],
-    kty: 'oct',
-}
-let publicSharedKey: CryptoKey
 async function decodePublicSharedAESKey(
     iv: Result<ArrayBuffer, Err<DecodeExceptions>>,
     encryptedKey: Result<ArrayBuffer, Err<DecodeExceptions>>,
 ): Promise<PayloadParseResult.PublicEncryption['AESKey']> {
     if (iv.err) return iv
     if (encryptedKey.err) return encryptedKey
+    const publicSharedKey = await get_v38PublicSharedCryptoKey()
+    if (publicSharedKey.err) return publicSharedKey
 
     const import_AES_GCM_256 = Err.withErr(importAESFromJWK.AES_GCM_256, EKinds.InvalidCryptoKey)
     const decrypt = Err.withErr(decryptWithAES, EKinds.DecodeFailed)
 
-    if (!publicSharedKey) {
-        const imported = await import_AES_GCM_256(publicSharedJwk)
-        if (imported.err) return imported
-        publicSharedKey = imported.val
-    }
-    const jwk_in_ab = decrypt(AESAlgorithmEnum.AES_GCM_256, publicSharedKey, iv.val, encryptedKey.val)
+    const jwk_in_ab = decrypt(AESAlgorithmEnum.AES_GCM_256, publicSharedKey.val, iv.val, encryptedKey.val)
     const jwk_in_text = andThenAsync(jwk_in_ab, decodeText)
     const jwk = andThenAsync(jwk_in_text, JSONParse)
     const aes = await andThenAsync(jwk, import_AES_GCM_256)
@@ -154,7 +139,10 @@ async function decodeECDHPublicKey(
     }
     const imported = await importEC(jwk, PublicKeyAlgorithmEnum.secp256k1)
     if (imported.err) return imported
-    return OptionalResult.Some([PublicKeyAlgorithmEnum.secp256k1, imported.val])
+    return OptionalResult.Some<AsymmetryCryptoKey>({
+        algr: PublicKeyAlgorithmEnum.secp256k1,
+        key: imported.val,
+    })
 }
 
 function decompressK256Point(point: ArrayBuffer) {

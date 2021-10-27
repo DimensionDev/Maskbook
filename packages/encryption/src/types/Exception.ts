@@ -1,10 +1,12 @@
 import { Result, Err } from 'ts-results'
 
 export enum EKinds {
+    EncodeFailed = '[@masknet/encryption] Failed to encode the payload.',
     DecodeFailed = '[@masknet/encryption] Failed to decode the payload.',
     InvalidPayload = '[@masknet/encryption] Payload decoded, but it violates the schema.',
     UnknownEnumMember = '[@masknet/encryption] Payload includes an unknown enum member.',
     InvalidCryptoKey = '[@masknet/encryption] Payload contains an invalid CryptoKey.',
+    EncryptFailed = '[@masknet/encryption] Failed to encrypt.',
     DecryptFailed = '[@masknet/encryption] Failed to decrypt.',
     UnsupportedAlgorithm = '[@masknet/encryption] Unsupported crypto algorithm.',
 }

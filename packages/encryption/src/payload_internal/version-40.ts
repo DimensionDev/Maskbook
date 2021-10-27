@@ -1,11 +1,11 @@
 import type { PayloadParseResult, Signature } from '../payload'
 import { Ok } from 'ts-results'
 import { EKindsError as Err, EKinds, OptionalResult } from '../types'
-import { decodeArrayBufferF, encodeTextF, assertIVLengthEq16 } from '../utils'
+import { decodeArrayBufferF, assertIVLengthEq16 } from '../utils'
 import type { PayloadParserResult } from '.'
+import { encodeText } from '@dimensiondev/kit'
 
 const decodeArrayBuffer = decodeArrayBufferF(EKinds.InvalidPayload, EKinds.DecodeFailed)
-const encodeText = encodeTextF(EKinds.InvalidPayload, EKinds.DecodeFailed)
 // ? Payload format: (text format)
 // ? Version 40:🎼2/4|ownersAESKeyEncrypted|iv|encryptedText|signature:||
 // ? Older version is lacking of signature, like:
@@ -39,12 +39,10 @@ export async function parse40(payload: string): PayloadParserResult {
     if (signature && encryption.iv.ok && encryption.ownersAESKeyEncrypted.ok && normalized.encrypted.ok) {
         const message = encodeText(`4/4|${ownersAESKeyEncrypted}|${iv}|${encryptedText}`)
         const sig = decodeArrayBuffer(signature)
-        if (message.ok && sig.ok) {
-            normalized.signature = OptionalResult.Some<Signature>({ signee: message.val, signature: sig.val })
-        } else if (sig.err) {
+        if (sig.ok) {
+            normalized.signature = OptionalResult.Some<Signature>({ signee: message, signature: sig.val })
+        } else {
             normalized.signature = sig
-        } else if (message.err) {
-            normalized.signature = message
         }
     }
     return Ok(normalized)

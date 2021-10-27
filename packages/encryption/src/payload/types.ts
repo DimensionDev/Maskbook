@@ -76,6 +76,7 @@ export declare namespace PayloadWellFormed {
      */
     export interface PublicEncryption {
         readonly type: 'public'
+        /** The key used to encrypt the payload. */
         readonly AESKey: AESKey
         readonly iv: ArrayBuffer
     }
@@ -93,7 +94,10 @@ export interface Signature {
     readonly signee: ArrayBuffer
     readonly signature: ArrayBuffer
 }
-export type AsymmetryCryptoKey = readonly [algr: PublicKeyAlgorithmEnum, key: CryptoKey]
+export interface AsymmetryCryptoKey {
+    readonly algr: PublicKeyAlgorithmEnum
+    readonly key: CryptoKey
+}
 export interface AESKey {
     readonly algr: AESAlgorithmEnum
     readonly key: CryptoKey

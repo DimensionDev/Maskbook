@@ -131,16 +131,16 @@ function parseAES(aes: unknown) {
         return err('Invalid AES key')
     })
 }
-function importAsymmetryKey(alg: unknown, key: unknown, name: string) {
+function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
     type T = Promise<Result<AsymmetryCryptoKey, Err<PayloadParseResult.CryptoKeyException>>>
     return andThenAsync(assertArrayBuffer(key, name), async (pubKey): T => {
-        if (typeof alg !== 'string' && typeof alg !== 'number') return err('Invalid PublicKeyAlgorithm')
+        if (typeof algr !== 'string' && typeof algr !== 'number') return err('Invalid PublicKeyAlgorithm')
 
-        if (typeof alg === 'number') {
-            if (alg in PublicKeyAlgorithmEnum) {
-                const key = await importSpki(pubKey, alg)
+        if (typeof algr === 'number') {
+            if (algr in PublicKeyAlgorithmEnum) {
+                const key = await importSpki(pubKey, algr)
                 if (key.err) return key
-                return Ok<AsymmetryCryptoKey>([alg, key.val])
+                return Ok<AsymmetryCryptoKey>({ algr, key: key.val })
             }
         }
         return err('Invalid AES key algorithm', EKinds.UnsupportedAlgorithm)

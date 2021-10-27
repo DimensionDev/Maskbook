@@ -15,6 +15,16 @@ export function importAESFromJWK(key: JsonWebKey, kind: AESAlgorithmEnum) {
 }
 importAESFromJWK.AES_GCM_256 = (key: JsonWebKey) => importAESFromJWK(key, AESAlgorithmEnum.AES_GCM_256)
 
+export function exportCryptoKeyToJWK(key: CryptoKey) {
+    return Result.wrapAsync(() => crypto.subtle.exportKey('jwk', key))
+}
+export function exportCryptoKeyToSPKI(key: CryptoKey) {
+    return Result.wrapAsync(() => crypto.subtle.exportKey('spki', key))
+}
+export function exportCryptoKeyToRaw(key: CryptoKey) {
+    return Result.wrapAsync(() => crypto.subtle.exportKey('raw', key))
+}
+
 export function importAsymmetryKeyFromJsonWebKeyOrSPKI(key: JsonWebKey | ArrayBuffer, kind: PublicKeyAlgorithmEnum) {
     const DeriveKeyUsage: KeyUsage[] = ['deriveKey', 'deriveBits']
     const ImportParamsMap = {
@@ -33,6 +43,14 @@ export function importAsymmetryKeyFromJsonWebKeyOrSPKI(key: JsonWebKey | ArrayBu
     })
 }
 
+export function encryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: ArrayBuffer, message: ArrayBuffer) {
+    const param = {
+        [AESAlgorithmEnum.AES_GCM_256]: { name: 'AES_GCM', iv } as AesGcmParams,
+    } as const
+    return Result.wrapAsync(() => {
+        return crypto.subtle.encrypt(param[kind], key, message) as Promise<ArrayBuffer>
+    })
+}
 export function decryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: ArrayBuffer, message: ArrayBuffer) {
     const param = {
         [AESAlgorithmEnum.AES_GCM_256]: { name: 'AES_GCM', iv } as AesGcmParams,

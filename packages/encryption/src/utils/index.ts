@@ -1,20 +1,15 @@
 import { EKinds, EKindsError as Err } from '../types'
 import { Result } from 'ts-results'
-import { encodeArrayBuffer, decodeArrayBuffer, encodeText, decodeText } from '@dimensiondev/kit'
-import { decode as decodeMessagePack, encode as _encodeMessagePack } from '@msgpack/msgpack'
+import { decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
+import { decode as decodeMessagePack } from '@msgpack/msgpack'
 export * from './crypto'
 
 const firstArgString = (e: unknown) => typeof e !== 'string'
 const firstArgArrayBuffer = (e: unknown) => e instanceof ArrayBuffer
-export const encodeArrayBufferF = wrap(encodeArrayBuffer, firstArgArrayBuffer)
 export const decodeArrayBufferF = wrap(decodeArrayBuffer as (x: string) => ArrayBuffer, firstArgString)
-export const encodeTextF = wrap(encodeText, firstArgString)
 export const decodeTextF = wrap(decodeText, firstArgArrayBuffer)
 export const JSONParseF = wrap(JSON.parse, firstArgString)
 export const decodeMessagePackF = wrap(decodeMessagePackSpecialized, firstArgArrayBuffer)
-export function encodeMessagePack(x: unknown) {
-    return _encodeMessagePack(x)
-}
 
 function decodeMessagePackSpecialized(arrayBuffer: ArrayBuffer) {
     return decodeMessagePack(arrayBuffer)
