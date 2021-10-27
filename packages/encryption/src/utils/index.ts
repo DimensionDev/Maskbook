@@ -11,9 +11,13 @@ export const decodeArrayBufferF = wrap(decodeArrayBuffer as (x: string) => Array
 export const encodeTextF = wrap(encodeText, firstArgString)
 export const decodeTextF = wrap(decodeText, firstArgArrayBuffer)
 export const JSONParseF = wrap(JSON.parse, firstArgString)
-export const decodeMessagePackF = wrap(decodeMessagePack, firstArgArrayBuffer)
+export const decodeMessagePackF = wrap(decodeMessagePackSpecialized, firstArgArrayBuffer)
 export function encodeMessagePack(x: unknown) {
     return _encodeMessagePack(x)
+}
+
+function decodeMessagePackSpecialized(arrayBuffer: ArrayBuffer) {
+    return decodeMessagePack(arrayBuffer)
 }
 
 function wrap<P extends any[], T>(f: (...args: P) => T, valid: (...args: P) => boolean) {

@@ -75,7 +75,7 @@ type PayloadAlpha37 = [
 enum SocialNetworkEnum {
   Facebook = 0,
   Twitter = 1,
-  Instgram = 2,
+  Instagram = 2,
   Minds = 3,
 }
 enum PublicKeyAlgorithmEnum {

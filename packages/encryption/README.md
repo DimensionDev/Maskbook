@@ -8,7 +8,7 @@ This package is designed with OCap and prepared to run under SES.
 
 - Access to WebCrypto API
 
-## Roadmap
+## Todo
 
 - [ ] Add test cases
 
@@ -31,6 +31,6 @@ This package is designed with OCap and prepared to run under SES.
 
 ### Other
 
-- [ ] Epheremal encryption
+- [ ] Ephemeral encryption
 - [ ] P-256 support
 - [ ] ed25519 support

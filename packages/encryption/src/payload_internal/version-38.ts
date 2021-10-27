@@ -108,6 +108,7 @@ function splitFields(raw: string) {
 const publicSharedJwk: JsonWebKey = {
     alg: 'A256GCM',
     ext: true,
+    /* cspell:disable-next-line */
     k: '3Bf8BJ3ZPSMUM2jg2ThODeLuRRD_-_iwQEaeLdcQXpg',
     key_ops: ['encrypt', 'decrypt'],
     kty: 'oct',

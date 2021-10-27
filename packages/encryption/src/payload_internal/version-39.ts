@@ -2,7 +2,7 @@ import { parse40 } from './version-40'
 import { EKindsError as Err, EKinds } from '../types'
 import type { PayloadParserResult } from '.'
 
-// -39 payload is exactally the same as -40.
+// -39 payload is totally the same as -40.
 // -40 uses unstable JSON stringify in E2E encryption, -39 fixes that.
 // We can reuse the payload parser here.
 // ? Payload format: (text format)

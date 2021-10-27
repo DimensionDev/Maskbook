@@ -65,7 +65,7 @@ function parseAuthor(network: unknown, id: string): PayloadParseResult.Payload['
     let net = ''
     if (network === SocialNetworkEnum.Facebook) net = 'facebook.com'
     else if (network === SocialNetworkEnum.Twitter) net = 'twitter.com'
-    else if (network === SocialNetworkEnum.Instgram) net = 'instagram.com'
+    else if (network === SocialNetworkEnum.Instagram) net = 'instagram.com'
     else if (network === SocialNetworkEnum.Minds) net = 'minds.com'
     else if (typeof network === 'string') net = network
     else if (typeof network !== 'number') return err('Invalid network')
@@ -149,7 +149,7 @@ function importAsymmetryKey(alg: unknown, key: unknown, name: string) {
 enum SocialNetworkEnum {
     Facebook = 0,
     Twitter = 1,
-    Instgram = 2,
+    Instagram = 2,
     Minds = 3,
 }
 enum EncryptionKind {
