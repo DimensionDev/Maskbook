@@ -274,7 +274,8 @@ export enum EthereumMethodType {
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
 
     // only for mask
-    ETH_REPLACE_TRANSACTION = 'eth_replaceTransaction',
+    MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
+    MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {

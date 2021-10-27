@@ -120,7 +120,8 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
 }
 
 export async function getSendTransactionComputedPayload(payload: JsonRpcPayload) {
-    const config = payload.method === EthereumMethodType.ETH_REPLACE_TRANSACTION ? payload.params[1] : payload.params[0]
+    const config =
+        payload.method === EthereumMethodType.MASK_REPLACE_TRANSACTION ? payload.params[1] : payload.params[0]
     const from = (config.from as string | undefined) ?? ''
     const value = (config.value as string | undefined) ?? '0x0'
     const data = getData(config)

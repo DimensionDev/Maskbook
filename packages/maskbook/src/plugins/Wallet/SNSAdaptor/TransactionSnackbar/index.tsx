@@ -1,4 +1,7 @@
-import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
+import { ReactNode, useCallback, useEffect, useRef } from 'react'
+import { Link } from '@mui/material'
+import LaunchIcon from '@mui/icons-material/Launch'
+import type { TransactionReceipt } from 'web3-core'
 import {
     createLookupTableResolver,
     resolveTransactionLinkOnExplorer,
@@ -8,11 +11,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { WalletMessages } from '../../messages'
-import { getSendTransactionComputedPayload } from '../../../../extension/background-script/EthereumService'
 import { RecentTransactionDescription } from '../WalletStatusDialog/TransactionDescription'
-import { Link } from '@mui/material'
-import LaunchIcon from '@mui/icons-material/Launch'
-import type { TransactionReceipt } from 'web3-core'
+import Services from '../../../../extension/service'
 
 export const resolveSnackbarConfig = createLookupTableResolver<
     TransactionStateType,
@@ -21,28 +21,28 @@ export const resolveSnackbarConfig = createLookupTableResolver<
     {
         [TransactionStateType.WAIT_FOR_CONFIRMING]: {
             processing: true,
-            variant: 'success',
+            variant: 'default',
             message: 'Confirm this transaction in your wallet',
         },
         [TransactionStateType.HASH]: {
             processing: true,
-            variant: 'success',
+            variant: 'default',
             message: 'Transaction Submitted',
         },
         [TransactionStateType.CONFIRMED]: {
             processing: false,
             variant: 'success',
-            message: 'Transaction Successfully',
+            message: 'Transaction Confirmed',
         },
         [TransactionStateType.RECEIPT]: {
             processing: false,
-            variant: 'error',
-            message: 'Transaction rejected',
+            variant: 'success',
+            message: 'Transaction Confirmed',
         },
         [TransactionStateType.FAILED]: {
             processing: false,
             variant: 'error',
-            message: 'Transaction rejected',
+            message: 'Transaction Failed',
         },
         [TransactionStateType.UNKNOWN]: {
             processing: false,
@@ -102,9 +102,10 @@ export function TransactionSnackbar() {
 
     useEffect(() => {
         return WalletMessages.events.transactionProgressUpdated.on(async (progress) => {
+            if (location.href.includes('popups.html')) return
             if (progress.state.type === TransactionStateType.UNKNOWN) return
 
-            const payload = await getSendTransactionComputedPayload(progress.payload)
+            const payload = await Services.Ethereum.getSendTransactionComputedPayload(progress.payload)
             const config = resolveSnackbarConfig(progress.state.type)
             const hash =
                 (progress.state as { hash?: string }).hash ??
@@ -115,7 +116,7 @@ export function TransactionSnackbar() {
                 ...{ message: getFullMessage(config.message, hash) },
             } as ShowSnackbarOptions)
         })
-    }, [])
+    }, [getTitle, getFullMessage])
 
     return null
 }

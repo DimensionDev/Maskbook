@@ -72,7 +72,7 @@ export async function getTransactionByHash(hash: string, overrides?: SendOverrid
 export async function getTransactionReceipt(hash: string, overrides?: SendOverrides) {
     return request<TransactionReceipt | null>(
         {
-            method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+            method: EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
             params: [hash],
         },
         overrides,

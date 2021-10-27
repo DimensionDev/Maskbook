@@ -89,13 +89,6 @@ export async function requestSend(
                 type: TransactionStateType.FAILED,
                 error,
             })
-        if (notifyProgress) {
-            console.log('DEBUG: request send')
-            console.log({
-                response,
-                error,
-            })
-        }
         callback(error, response)
     }
 
@@ -180,7 +173,7 @@ export async function replaceRequest(hash: string, payload: JsonRpcPayload, over
 
     const [config] = payload.params as [TransactionConfig]
     return request<string>({
-        method: EthereumMethodType.ETH_REPLACE_TRANSACTION,
+        method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
         params: [
             hash,
             {

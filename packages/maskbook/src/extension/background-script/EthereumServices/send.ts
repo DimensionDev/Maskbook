@@ -63,7 +63,7 @@ function isSignableMethod(payload: JsonRpcPayload) {
         EthereumMethodType.ETH_SIGN,
         EthereumMethodType.PERSONAL_SIGN,
         EthereumMethodType.ETH_SIGN_TRANSACTION,
-        EthereumMethodType.ETH_REPLACE_TRANSACTION,
+        EthereumMethodType.MASK_REPLACE_TRANSACTION,
         EthereumMethodType.ETH_SIGN_TYPED_DATA,
         EthereumMethodType.ETH_SEND_TRANSACTION,
     ].includes(payload.method as EthereumMethodType)
@@ -100,7 +100,7 @@ function getPayloadConfig(payload: JsonRpcPayload) {
             const [config] = payload.params as [EthereumTransactionConfig]
             return config
         }
-        case EthereumMethodType.ETH_REPLACE_TRANSACTION: {
+        case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
             const [, config] = payload.params as [string, EthereumTransactionConfig]
             return config
         }
@@ -114,7 +114,7 @@ function getPayloadHash(payload: JsonRpcPayload) {
         case EthereumMethodType.ETH_SEND_TRANSACTION: {
             return ''
         }
-        case EthereumMethodType.ETH_REPLACE_TRANSACTION: {
+        case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
             const [hash] = payload.params as [string]
             return hash
         }
@@ -330,7 +330,7 @@ export async function INTERNAL_send(
                                 handleTransferTransaction(chainIdFinally, payload)
                                 handleRecentTransaction(chainIdFinally, account, payload, response)
                                 break
-                            case EthereumMethodType.ETH_REPLACE_TRANSACTION:
+                            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                                 handleReplaceRecentTransaction(chainIdFinally, hash, account, payload, response)
                                 break
                         }
@@ -367,15 +367,46 @@ export async function INTERNAL_send(
         }
     }
 
+    async function getTransactionReceipt() {
+        const [hash] = payload.params as [string]
+
+        try {
+            callback(null, {
+                id: payload.id,
+                jsonrpc: payload.jsonrpc,
+                // redirect receipt queries to tx watcher
+                result: await WalletRPC.getReceipt(chainIdFinally, hash),
+            } as JsonRpcResponse)
+        } catch {
+            callback(null, {
+                id: payload.id,
+                jsonrpc: payload.jsonrpc,
+                result: null,
+            } as JsonRpcResponse)
+        }
+    }
+
     try {
         switch (payload.method) {
+            case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
+                await getTransactionReceipt()
+                break
             case EthereumMethodType.PERSONAL_SIGN:
                 await personalSign()
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 await sendTransaction()
                 break
-            case EthereumMethodType.ETH_REPLACE_TRANSACTION:
+            case EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT:
+                provider.send(
+                    {
+                        ...payload,
+                        method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+                    },
+                    callback,
+                )
+                break
+            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
                 if (providerType !== ProviderType.MaskWallet)
                     throw new Error(`Cannot replace transaction for ${providerType}.`)
                 await sendTransaction()
