@@ -45,6 +45,7 @@ export function useERC721TokenDetailedOwnerList(
         if (!GET_ASSETS_URL) {
             lists = await getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner, offset)
             allListRef.current = uniqBy<ERC721TokenDetailed>([...allListRef.current, ...lists], 'tokenId')
+            setRefreshing(false)
             return { tokenDetailedOwnerList: allListRef.current, loadMore: lists.length > 0 }
         }
 
