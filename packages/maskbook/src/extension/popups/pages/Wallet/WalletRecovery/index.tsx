@@ -22,7 +22,7 @@ const useStyles = makeStyles()({
         flex: 1,
         display: 'flex',
         flexDirection: 'column',
-        padding: '16px 10px',
+        padding: '16px 10px 80px 10px',
     },
     textField: {
         marginTop: 10,
@@ -53,6 +53,9 @@ const useStyles = makeStyles()({
     },
     controller: {
         padding: '20px 10px',
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
     },
     button: {
         fontWeight: 600,
