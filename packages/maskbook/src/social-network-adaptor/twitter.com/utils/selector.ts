@@ -215,3 +215,6 @@ export const searchAccountSwitherButtonSelector = () =>
 
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
 //#endregion
+
+export const searchTweetAvatarSelector = () =>
+    querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)

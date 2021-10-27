@@ -1,3 +1,4 @@
+import { useStylesExtends } from '@masknet/shared'
 import { keyframes, makeStyles } from '@masknet/theme'
 import { useEffect, useState } from 'react'
 import { MaskMessages } from '../../../utils'
@@ -55,14 +56,14 @@ const useStyles = makeStyles()(() => ({
         borderRadius: 99999,
     },
 }))
-interface NFTBadgeTimelineProps {
+interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
     avatarId: string
 }
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { userId, avatarId } = props
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     const _avatar = useNFTAvatar(userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
