@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
+import { unreachable } from '@dimensiondev/kit'
+import { isNextStateAvailable } from '..'
 
 export enum TransactionStateType {
     UNKNOWN = 0,
@@ -46,7 +48,15 @@ export type TransactionState =
       }
 
 export function useTransactionState() {
-    return useState<TransactionState>({
+    const [state, setState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
+    const setStateWithConfirmation = useCallback(
+        (nextState: TransactionState) => {
+            if (!isNextStateAvailable(state.type, nextState.type)) return
+            setState(nextState)
+        },
+        [state],
+    )
+    return [state, setStateWithConfirmation] as const
 }

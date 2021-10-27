@@ -207,13 +207,6 @@ export function useSwapCallback(
                 })
                 reject(error)
             }
-            const onHash = (hash: string) => {
-                setSwapState({
-                    type: TransactionStateType.HASH,
-                    hash,
-                })
-                resolve()
-            }
             const promiEvent = (
                 version === 1
                     ? (ITO_Contract as ITO).methods.swap(...swapParamsV1)
@@ -221,10 +214,9 @@ export function useSwapCallback(
             ).send(config as PayableTx)
 
             promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, onHash)
-                .on(TransactionEventType.ERROR, onFailed)
-                .on(TransactionEventType.CONFIRMATION, onSucceed)
                 .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
+                .on(TransactionEventType.CONFIRMATION, onSucceed)
+                .on(TransactionEventType.ERROR, onFailed)
         })
     }, [ITO_Contract, chainId, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
 

@@ -1,8 +1,7 @@
 import type { Transaction } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { unreachable } from '@dimensiondev/kit'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
+import { isFinalState, isNextStateAvailable, TransactionState } from '@masknet/web3-shared-evm'
 import * as helpers from './helpers'
 
 export interface TransactionProgress {
@@ -40,59 +39,13 @@ function updateProgressState(progressId: string, state: TransactionState) {
     WalletMessages.events.transactionProgressUpdated.sendToAll(progress)
 
     // stop watch progress
-    if (isFinalProgress(progressId, state)) removeProgress(progressId)
-}
-
-function isFinalProgress(progressId: string, state: TransactionState) {
-    const progress = watched.get(progressId)
-    if (!progress) return false
-
-    return [TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(progress.state.type)
-}
-
-function isNextProgressAvailable(progressId: string, state: TransactionState) {
-    const progress = watched.get(progressId)
-    if (!progress) return false
-
-    const type = state.type
-    switch (type) {
-        case TransactionStateType.UNKNOWN:
-            return false
-        case TransactionStateType.WAIT_FOR_CONFIRMING:
-            return [TransactionStateType.UNKNOWN].includes(progress.state.type)
-        case TransactionStateType.HASH:
-            return [TransactionStateType.UNKNOWN, TransactionStateType.WAIT_FOR_CONFIRMING].includes(
-                progress.state.type,
-            )
-        case TransactionStateType.RECEIPT:
-            return [
-                TransactionStateType.UNKNOWN,
-                TransactionStateType.WAIT_FOR_CONFIRMING,
-                TransactionStateType.HASH,
-            ].includes(progress.state.type)
-        case TransactionStateType.CONFIRMED:
-            return [
-                TransactionStateType.UNKNOWN,
-                TransactionStateType.WAIT_FOR_CONFIRMING,
-                TransactionStateType.HASH,
-                TransactionStateType.RECEIPT,
-            ].includes(progress.state.type)
-        case TransactionStateType.FAILED:
-            return [
-                TransactionStateType.UNKNOWN,
-                TransactionStateType.WAIT_FOR_CONFIRMING,
-                TransactionStateType.HASH,
-                TransactionStateType.RECEIPT,
-            ].includes(progress.state.type)
-        default:
-            unreachable(type)
-    }
+    if (isFinalState(progress.state.type)) removeProgress(progressId)
 }
 
 export function notifyProgress(progressId: string, state: TransactionState) {
     const progress = watched.get(progressId)
     if (!progress) return
-    if (isNextProgressAvailable(progressId, state)) updateProgressState(progressId, state)
+    if (isNextStateAvailable(progress.state.type, state.type)) updateProgressState(progressId, state)
 }
 
 export function notifyPayloadProgress(payload: JsonRpcPayload, state: TransactionState) {

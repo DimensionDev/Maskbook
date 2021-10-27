@@ -56,29 +56,22 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
         return new Promise<void>((resolve, reject) => {
             const promiEvent = claim().send(config as NonPayableTx)
 
-            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                setClaimState({
-                    type: TransactionStateType.HASH,
-                    hash,
+            promiEvent
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setClaimState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
                 })
-                resolve()
-            })
-
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setClaimState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
-                resolve()
-            })
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setClaimState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                reject(error)
-            })
         })
     }, [id, password, from, redPacketContract])
 

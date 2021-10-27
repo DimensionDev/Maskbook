@@ -51,12 +51,6 @@ export function useERC721ContractSetApproveForAllCallback(
                 .send(config as NonPayableTx)
 
             promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setApproveState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                })
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setApproveState({
                         type: TransactionStateType.CONFIRMED,

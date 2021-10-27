@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-es'
-import React, { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
@@ -46,10 +46,7 @@ type paramsObjType = {
     token?: FungibleTokenDetailed
 }
 
-function checkParams(
-    paramsObj: paramsObjType,
-    setCreateState?: (value: React.SetStateAction<TransactionState>) => void,
-) {
+function checkParams(paramsObj: paramsObjType, setCreateState?: (value: TransactionState) => void) {
     if (isLessThan(paramsObj.total, paramsObj.shares)) {
         setCreateState?.({
             type: TransactionStateType.FAILED,

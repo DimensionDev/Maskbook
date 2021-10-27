@@ -40,31 +40,24 @@ export function useRefundCallback(version: number, from: string, id?: string) {
 
         // step 2: blocking
         return new Promise<void>((resolve, reject) => {
-            const promiEvent = redPacketContract.methods.refund(id).send(config as NonPayableTx)
-
-            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                setRefundState({
-                    type: TransactionStateType.HASH,
-                    hash,
+            redPacketContract.methods
+                .refund(id)
+                .send(config as NonPayableTx)
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setRefundState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
                 })
-                resolve()
-            })
-
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setRefundState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setRefundState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
-                resolve()
-            })
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setRefundState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                reject(error)
-            })
         })
     }, [id, redPacketContract, from])
 
