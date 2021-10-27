@@ -5,7 +5,7 @@ export default function () {
     browser.runtime.onInstalled.addListener((detail) => {
         if (Flags.has_native_welcome_ui) return
         if (detail.reason === 'install') {
-            const welcomePageURL = browser.runtime.getURL(`dashboard.html#/${DashboardRoutes.Welcome}`)
+            const welcomePageURL = browser.runtime.getURL(`dashboard.html#${DashboardRoutes.Welcome}`)
             browser.tabs.create({ url: welcomePageURL })
         }
     })
