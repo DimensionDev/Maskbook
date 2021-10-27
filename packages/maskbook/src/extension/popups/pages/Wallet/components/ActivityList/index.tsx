@@ -180,20 +180,22 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
 
                                     {transaction.status === TransactionStatusType.NOT_DEPEND ? (
                                         <Box display="flex" mt={1}>
-                                            <Button
-                                                className={classes.button}
-                                                variant="contained"
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    setTransaction(transaction)
-                                                    history.push(
-                                                        urlcat(PopupRoutes.ReplaceTransaction, {
-                                                            type: ReplaceType.SPEED_UP,
-                                                        }),
-                                                    )
-                                                }}>
-                                                {t('speed_up')}
-                                            </Button>
+                                            {!transaction.payloadReplacement ? (
+                                                <Button
+                                                    className={classes.button}
+                                                    variant="contained"
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        setTransaction(transaction)
+                                                        history.push(
+                                                            urlcat(PopupRoutes.ReplaceTransaction, {
+                                                                type: ReplaceType.SPEED_UP,
+                                                            }),
+                                                        )
+                                                    }}>
+                                                    {t('speed_up')}
+                                                </Button>
+                                            ) : null}
                                             <Button
                                                 className={classes.button}
                                                 style={{ color: '#1C68F3', backgroundColor: '#F7F9FA', marginLeft: 2 }}
