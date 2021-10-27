@@ -7,10 +7,13 @@ import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
+import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
-import { ChainId, useChainId } from '@masknet/web3-shared-evm'
+import { ChainId, useChainId, useAccount } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -55,8 +58,8 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         height: 100,
         '&:hover': {
-            transform: 'translateX(2.5px) translateY(-2px)',
-            boxShadow: theme.palette.mode === 'light' ? '0px 12px 28px rgba(0, 0, 0, 0.1)' : 'none',
+            transform: 'scale(1.05) translateY(-4px)',
+            boxShadow: theme.palette.mode === 'light' ? '0px 10px 16px rgba(0, 0, 0, 0.1)' : 'none',
         },
     },
     applicationWrapper: {
@@ -90,6 +93,7 @@ interface MaskApplicationBoxProps {
 export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: MaskApplicationBoxProps) {
     const { classes } = useStyles()
     const currentChainId = useChainId()
+    const account = useAccount()
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
@@ -110,6 +114,14 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
         onOpen: onClaimAllDialogOpen,
         onClose: onClaimAllDialogClose,
     } = useControlledDialog()
+    //#endregion
+
+    //#region Swap
+    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+    //#endregion
+
+    //#region Fiat on/off ramp
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     //#endregion
 
     //#region second level entry dialog
@@ -145,20 +157,24 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
     }
 
     const firstLevelEntries: MaskAppEntry[] = [
-        createEntry('Lucky Drop', new URL('./assets/lucky_drop.png', import.meta.url).toString(), () => {
-            openEncryptedMessage(RedPacketPluginID)
-        }),
-        createEntry('File service', new URL('./assets/files.png', import.meta.url).toString(), () => {
-            openEncryptedMessage(FileServicePluginID)
-        }),
-        createEntry('ITO', new URL('./assets/token.png', import.meta.url).toString(), () => {
-            openEncryptedMessage(ITO_PluginID)
-        }),
+        createEntry('Lucky Drop', new URL('./assets/lucky_drop.png', import.meta.url).toString(), () =>
+            openEncryptedMessage(RedPacketPluginID),
+        ),
+        createEntry('File service', new URL('./assets/files.png', import.meta.url).toString(), () =>
+            openEncryptedMessage(FileServicePluginID),
+        ),
+        createEntry('ITO', new URL('./assets/token.png', import.meta.url).toString(), () =>
+            openEncryptedMessage(ITO_PluginID),
+        ),
         createEntry('Claim', new URL('./assets/gift.png', import.meta.url).toString(), onClaimAllDialogOpen),
-        createEntry('Mask Bridge', new URL('./assets/bridge.png', import.meta.url).toString(), undefined),
+        createEntry('Mask Bridge', new URL('./assets/bridge.png', import.meta.url).toString(), () =>
+            window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
+        ),
         createEntry('Mask Box', new URL('./assets/mask_box.png', import.meta.url).toString(), undefined),
-        createEntry('Swap', new URL('./assets/swap.png', import.meta.url).toString(), undefined),
-        createEntry('Fiat on/off ramp', new URL('./assets/fiat_ramp.png', import.meta.url).toString(), undefined),
+        createEntry('Swap', new URL('./assets/swap.png', import.meta.url).toString(), openSwapDialog),
+        createEntry('Fiat on/off ramp', new URL('./assets/fiat_ramp.png', import.meta.url).toString(), () =>
+            setBuyDialog({ open: true, address: account }),
+        ),
         createEntry('NFTs', new URL('./assets/nft.png', import.meta.url).toString(), () =>
             openSecondEntryDir(
                 'NFTs',

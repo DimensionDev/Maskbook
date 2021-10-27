@@ -141,9 +141,8 @@ export function WalletStatusBox() {
                                 open: true,
                                 wallet: selectedWallet,
                             })
-                        }}>
-                        {/* <Edit3 size={16} color="currentcolor" /> */}
-                    </Link>
+                        }}
+                    />
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2">

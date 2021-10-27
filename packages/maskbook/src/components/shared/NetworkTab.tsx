@@ -9,6 +9,10 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     tab: {
         background: theme.palette.mode === 'light' ? '#F6F8F8' : '#17191D',
+        marginRight: 1,
+        '&:last-child': {
+            marginRight: 0,
+        },
     },
     tabs: {
         '& .MuiTabs-flexContainer': {
@@ -16,7 +20,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
             gridTemplateColumns: Array(props.chainLength)
                 .fill(100 / props.chainLength + '%')
                 .join(' '),
-            columnGap: 1,
             backgroundColor: theme.palette.background.paper,
         },
     },
@@ -37,9 +40,7 @@ export function NetworkTab(props: NetworkTabProps) {
     })
 
     const tabProps: AbstractTabProps = {
-        tabs: chains.map((chainId) =>
-            createTabItem(getChainDetailed(chainId)?.chain?.replace('Matic', 'Polygon') ?? 'Unknown', chainId),
-        ),
+        tabs: chains.map((chainId) => createTabItem(getChainDetailed(chainId)?.chain ?? 'Unknown', chainId)),
         index: chains.indexOf(chainId),
         classes,
         hasOnlyOneChild: true,
