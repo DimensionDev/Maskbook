@@ -57,6 +57,7 @@ export function WalletRecordFromJSONFormat(wallet: WalletBackup): WalletRecord &
         createdAt: new Date(wallet.createdAt),
         updatedAt: new Date(wallet.updatedAt),
         mnemonic: wallet.mnemonic?.words,
+        derivationPath: wallet.mnemonic?.parameter.path,
         privateKey: wallet.privateKey ? JWKToKey(wallet.privateKey, 'private') : undefined,
     }
 }

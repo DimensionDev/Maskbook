@@ -12,7 +12,6 @@ import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Co
 import { i18n } from '../../../utils/i18n-next'
 import { isTypedMessageText, TypedMessage, TypedMessageText } from '../../../protocols/typed-message'
 import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
-import { Flags } from '../../../utils'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -88,11 +87,9 @@ export async function encryptTo(
         foundAt: new Date(),
         encryptBy: usingPersona.linkedPersona?.identifier,
     }
-    if (Flags.v2_enabled) {
-        if (isTypedMessageText(content)) {
-            newPostRecord.summary = getSummary(content)
-            newPostRecord.interestedMeta = content.meta
-        }
+    if (isTypedMessageText(content)) {
+        newPostRecord.summary = getSummary(content)
+        newPostRecord.interestedMeta = content.meta
     }
     await createPostDB(newPostRecord)
 

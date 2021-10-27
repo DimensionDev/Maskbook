@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MasksIcon, TipIcon } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
@@ -85,7 +85,15 @@ const useStyles = makeStyles()((theme) => ({
 const Logout = memo(() => {
     const { deletingPersona } = PersonaContext.useContainer()
     const history = useHistory()
-    const backupPassword = localStorage.getItem('backupPassword')
+    const backupPassword = useMemo(() => {
+        try {
+            const password = localStorage.getItem('backupPassword')
+            if (!password) return ''
+            return atob(password)
+        } catch {
+            return ''
+        }
+    }, [])
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
         if (deletingPersona) {
@@ -103,7 +111,7 @@ const Logout = memo(() => {
     return (
         <LogoutUI
             deletingPersona={deletingPersona}
-            backupPassword={backupPassword ?? ''}
+            backupPassword={(backupPassword && atob(backupPassword)) ?? ''}
             loading={loading}
             onLogout={onLogout}
             onCancel={() => history.goBack()}

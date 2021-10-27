@@ -94,7 +94,6 @@ export async function requestSend(
 
     // redirect risk rpc to the mask wallet
     if (
-        Flags.v2_enabled &&
         !hasNativeAPI &&
         providerType === ProviderType.MaskWallet &&
         isRiskMethod(payload_.method as EthereumMethodType)

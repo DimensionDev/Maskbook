@@ -10,19 +10,21 @@ export function emitGitInfo(reproducible: boolean) {
 
 /** Get git info */
 export function getGitInfo(reproducible: boolean) {
-    if (!reproducible && git.isRepository()) {
-        return {
-            BUILD_DATE: new Date().toISOString(),
-            VERSION: git.describe('--dirty'),
-            TAG_NAME: git.tag(),
-            COMMIT_HASH: git.commitHash(true),
-            COMMIT_DATE: git.commitDate().toISOString(),
-            REMOTE_URL: git.remoteURL(),
-            BRANCH_NAME: git.branchName(),
-            DIRTY: git.isDirty(),
-            TAG_DIRTY: git.isTagDirty(),
+    try {
+        if (!reproducible && git.isRepository()) {
+            return {
+                BUILD_DATE: new Date().toISOString(),
+                VERSION: git.describe('--dirty'),
+                TAG_NAME: git.tag(),
+                COMMIT_HASH: git.commitHash(true),
+                COMMIT_DATE: git.commitDate().toISOString(),
+                REMOTE_URL: git.remoteURL(),
+                BRANCH_NAME: git.branchName(),
+                DIRTY: git.isDirty(),
+                TAG_DIRTY: git.isTagDirty(),
+            }
         }
-    }
+    } catch {}
     return {
         BUILD_DATE: new Date(0).toISOString(),
         VERSION: require('../package.json').version + '-reproducible',

@@ -141,7 +141,7 @@ const PersonaHome = memo(() => {
                         onClick={() => {
                             browser.tabs.create({
                                 active: true,
-                                url: browser.runtime.getURL('/next.html#/sign-up'),
+                                url: browser.runtime.getURL('/dashboard.html#/sign-up'),
                             })
                         }}
                         style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
@@ -153,7 +153,7 @@ const PersonaHome = memo(() => {
                         onClick={() => {
                             browser.tabs.create({
                                 active: true,
-                                url: browser.runtime.getURL(urlcat('/next.html#/sign-in', { from: 'popups' })),
+                                url: browser.runtime.getURL(urlcat('/dashboard.html#/sign-in', { from: 'popups' })),
                             })
                         }}>
                         {t('import')}

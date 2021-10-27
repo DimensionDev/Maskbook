@@ -2,11 +2,11 @@
  * Prefer function declaration than const f = () => ...
  * in this file please.
  */
-import { WALLET_OR_PERSONA_NAME_MAX_LEN } from './constants'
 import { pasteImage } from '@masknet/injected-script'
-
-import { isNull, noop } from 'lodash-es'
-
+import { isNull } from 'lodash-es'
+import Services from '../extension/service'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
+export { parseURL } from '@masknet/shared'
 export { timeout, delay } from '@masknet/shared'
 /**
  * Download given url return as Blob
@@ -41,10 +41,6 @@ export function selectElementContents(el: Node) {
     sel.removeAllRanges()
     sel.addRange(range)
     return sel
-}
-
-export function nopWithUnmount(..._args: unknown[]) {
-    return noop
 }
 
 /**
@@ -119,10 +115,6 @@ export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
     c.set(y, x.length)
     return c
 }
-
-import Services from '../extension/service'
-import { blobToArrayBuffer } from '@dimensiondev/kit'
-export { parseURL } from '@masknet/shared'
 /**
  * !!!! Please use the Promise constructor if possible
  * If you don't understand https://groups.google.com/forum/#!topic/bluebird-js/mUiX2-vXW2s
@@ -152,10 +144,6 @@ export function hex2buf(hex: string) {
 export function assert(x: any, ...args: any): asserts x {
     console.assert(x, ...args)
     if (!x) throw new Error('Assert failed!')
-}
-
-export function checkInputLengthExceed(name: string) {
-    return name.length >= WALLET_OR_PERSONA_NAME_MAX_LEN
 }
 
 export function nonNullable<T>(x: undefined | null | T): x is T {

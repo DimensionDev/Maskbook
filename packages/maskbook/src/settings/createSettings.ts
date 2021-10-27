@@ -7,8 +7,6 @@ export interface SettingsTexts {
     primary: () => string
     secondary?: () => string
 }
-export const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
-
 export type InternalSettings<T> = ValueRef<T> & {
     readonly key: string
     readonly ready: boolean
@@ -98,7 +96,6 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     comparer: (a: T, b: T) => boolean = (a, b) => a === b,
 ) {
     const settings = createInternalSettings(`settings+${key}`, value, comparer)
-    texts.set(settings, UITexts)
     return settings
 }
 
