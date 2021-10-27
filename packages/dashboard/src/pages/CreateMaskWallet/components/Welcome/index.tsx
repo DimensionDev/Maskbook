@@ -95,7 +95,7 @@ const Welcome = memo(() => {
     }
 
     const handleLinkClick = () => {
-        window.open(`next.html#${RoutePaths.PrivacyPolicy}`)
+        window.open(`dashboard.html#${RoutePaths.PrivacyPolicy}`)
     }
 
     useEffect(

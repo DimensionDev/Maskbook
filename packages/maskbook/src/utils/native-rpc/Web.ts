@@ -59,7 +59,7 @@ const profileRelationFormatter = (
 
 export const MaskNetworkAPI: MaskNetworkAPIs = {
     web_echo: async (arg) => arg.echo,
-    getDashboardURL: async () => browser.runtime.getURL('/index.html'),
+    getDashboardURL: async () => browser.runtime.getURL('/dashboard.html'),
     getConnectedPersonas: async () => {
         const personas = await Services.Identity.queryMyPersonas()
         const connectedPersonas: { network: string; connected: boolean }[][] = personas

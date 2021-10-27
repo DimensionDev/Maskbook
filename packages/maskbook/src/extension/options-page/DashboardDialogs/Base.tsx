@@ -12,7 +12,8 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { ThemeProvider } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
-import { extendsTheme, useClassicMaskTheme, useMatchXS } from '../../../utils'
+// eslint-disable-next-line import/no-deprecated
+import { extendsTheme, useClassicMaskFullPageTheme, useMatchXS } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -27,11 +28,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+/** @deprecated Do not use in new code. */
 export interface DashboardDialogCoreProps extends DialogProps {
     CloseIconProps?: Partial<SvgIconProps>
     CloseButtonProps?: Partial<IconButtonProps>
 }
-
+/** @deprecated Do not use in new code. */
 export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     const { fullScreen, children, CloseIconProps, CloseButtonProps, ...dialogProps } = props
 
@@ -52,6 +54,7 @@ export function DashboardDialogCore(props: DashboardDialogCoreProps) {
     )
 }
 
+/** @deprecated Do not use in new code. */
 export interface WrappedDialogProps<T extends object = any> extends DialogProps {
     ComponentProps?: T
     onClose(): void
@@ -73,7 +76,9 @@ function reducer<Props extends object>(
     return { state: DialogState.Destroyed }
 }
 
+/** @deprecated */
 export function useModal<DialogProps extends object, AdditionalPropsAppendByDispatch extends Partial<DialogProps>>(
+    // eslint-disable-next-line import/no-deprecated
     Modal: React.FunctionComponent<WrappedDialogProps<DialogProps>>,
     ComponentProps?: DialogProps,
 ): [React.ReactNode, () => void, (props: AdditionalPropsAppendByDispatch) => void] {
@@ -91,13 +96,16 @@ export function useModal<DialogProps extends object, AdditionalPropsAppendByDisp
     const compositeProps =
         ComponentProps || props ? { ComponentProps: { ...ComponentProps, ...props } as DialogProps } : {}
 
+    // eslint-disable-next-line import/no-deprecated
     const modalProps: WrappedDialogProps<DialogProps> = {
         TransitionProps: { onExited },
         ...compositeProps,
         open: state === DialogState.Opened,
         onClose,
     }
-    const theme = useClassicMaskTheme()
+    // Restore old theme
+    // eslint-disable-next-line import/no-deprecated
+    const theme = useClassicMaskFullPageTheme()
     const renderedComponent =
         state === DialogState.Destroyed ? null : (
             <ThemeProvider theme={theme}>
@@ -239,6 +247,7 @@ interface DashboardDialogWrapperProps extends withClasses<'wrapper'> {
     footer?: React.ReactNode
 }
 
+/** @deprecated Do not use in new code */
 export function DashboardDialogWrapper(props: DashboardDialogWrapperProps) {
     const { size, icon, iconColor, primary, secondary, constraintSecondary = true, content, footer } = props
     const { classes } = useDashboardDialogWrapperStyles(props)

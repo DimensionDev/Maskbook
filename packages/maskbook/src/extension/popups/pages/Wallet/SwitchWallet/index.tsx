@@ -91,7 +91,7 @@ const SwitchWallet = memo(() => {
         if (!walletPrimary) {
             browser.tabs.create({
                 active: true,
-                url: browser.runtime.getURL('/next.html#/create-mask-wallet'),
+                url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet'),
             })
         } else {
             history.push(PopupRoutes.CreateWallet)
