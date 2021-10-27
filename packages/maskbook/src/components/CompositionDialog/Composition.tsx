@@ -1,6 +1,5 @@
 import { DialogContent } from '@mui/material'
-import { useRef } from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
 import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
@@ -37,6 +36,11 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         })
     }, [])
 
+    const { onQueryClipboardPermission, hasClipboardPermission, onRequestClipboardPermission } =
+        useCompositionClipboardRequest(requireClipboardPermission || false)
+
+    MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
+
     useEffect(() => {
         return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
             if (reason !== type || globalUIState.profiles.value.length <= 0) return
@@ -65,7 +69,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                 <DialogContent>
                     <CompositionDialogUI
                         ref={UI}
-                        {...useCompositionClipboardRequest(requireClipboardPermission || false)}
+                        hasClipboardPermission={hasClipboardPermission}
+                        onRequestClipboardPermission={onRequestClipboardPermission}
+                        requireClipboardPermission={requireClipboardPermission}
                         recipients={useRecipientsList()}
                         maxLength={560}
                         onSubmit={useSubmit(onClose)}
