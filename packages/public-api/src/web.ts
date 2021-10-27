@@ -33,6 +33,7 @@ export interface MaskNetworkAPIs {
     settings_getLanguage(): Promise<LanguageOptions>
     settings_setLanguage(params: { language: LanguageOptions }): Promise<void>
     settings_createBackupJson(params: Partial<BackupOptions>): Promise<unknown>
+    settings_createBackupJsonString(params: Partial<BackupOptions>): Promise<string>
     settings_getBackupPreviewInfo(params: { backupInfo: string }): Promise<BackupPreview | undefined>
     settings_restoreBackup(params: { backupInfo: string }): Promise<void>
     persona_createPersonaByMnemonic(params: { mnemonic: string; nickname: string; password: string }): Promise<Persona>
