@@ -21,7 +21,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 ) as HTMLImageElement
                 if (!avatarIdNode) return
                 const avatarId = getAvatarId(avatarIdNode.getAttribute('src') ?? '')
-                const nftDom = ele.firstChild?.firstChild?.firstChild?.nextSibling?.firstChild
+                const nftDom = ele.firstChild?.firstChild?.firstChild?.nextSibling?.firstChild?.firstChild?.firstChild
                     ?.firstChild as HTMLElement
                 if (!nftDom) return
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })

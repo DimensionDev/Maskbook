@@ -29,3 +29,5 @@ export async function getAddress(userId: string) {
     const address = await getUserAddress(userId)
     return address
 }
+
+export { getNFTContractVerifiedFromJSON } from './verified'
