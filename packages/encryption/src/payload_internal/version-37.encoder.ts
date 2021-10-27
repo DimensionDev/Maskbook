@@ -1,5 +1,4 @@
 import { encode } from '@msgpack/msgpack'
-import type { Result } from 'ts-results'
 import type { PayloadWellFormed } from '..'
 import { exportCryptoKeyToSPKI } from '../utils'
 
@@ -12,10 +11,7 @@ const enum Index {
     encryption = 5,
     data = 6,
 }
-export async function encode37(
-    payload: PayloadWellFormed.Payload,
-    sign: (payload: ArrayBuffer) => Promise<Result<ArrayBuffer, any>>,
-) {
+export async function encode37(payload: PayloadWellFormed.Payload) {
     const payload_arr: any[] = [-37]
 
     if (payload.author.some) {
@@ -50,15 +46,5 @@ export async function encode37(
     }
     payload_arr[Index.data] = payload.encrypted
 
-    const encoded = encode(payload_arr)
-    const sig = await sign(encoded)
-    if (sig.err) {
-        console.error(`[@masknet/encryption] Failed to sign the payload.`, sig.val)
-    }
-    return encodeSignatureContainer(encoded, sig.unwrapOr(null))
-}
-
-function encodeSignatureContainer(payload: ArrayBuffer, signature: ArrayBuffer | null) {
-    const container = [0, payload, signature]
-    return encode(container)
+    return encode(payload_arr)
 }

@@ -1,4 +1,4 @@
-import { Result, Err } from 'ts-results'
+import { Result, Err, Ok } from 'ts-results'
 
 export enum EKinds {
     EncodeFailed = '[@masknet/encryption] Failed to encode the payload.',
@@ -39,5 +39,16 @@ export class EKindsError<T extends EKinds> extends Error {
     }
     toErr() {
         return Err(this)
+    }
+}
+
+export function assertArrayBuffer(x: unknown, name: string, kinds: EKinds) {
+    if (x instanceof ArrayBuffer) return Ok(x)
+    return new EKindsError(kinds, `${name} is not a Binary`).toErr()
+}
+export function assertArray(name: string, kinds: EKinds) {
+    return (x: unknown) => {
+        if (Array.isArray(x)) return Ok(x)
+        return new EKindsError(kinds, `${name} is no an Array`).toErr()
     }
 }

@@ -1,4 +1,3 @@
-import type { Result } from 'ts-results'
 import type { PayloadWellFormed } from '..'
 import { encode37, encode38, parse37, parse38, parse39, parse40, PayloadParserResult } from '../payload_internal'
 import { EKindsError as Err, EKinds, EKindsError } from '../types'
@@ -16,11 +15,8 @@ export async function parsePayload(payload: unknown): PayloadParserResult {
     return new Err(EKinds.InvalidPayload, 'Unknown version').toErr()
 }
 
-export function encodePayload(
-    payload: PayloadWellFormed.Payload,
-    sign: (payload: ArrayBuffer) => Promise<Result<ArrayBuffer, any>>,
-) {
+export function encodePayload(payload: PayloadWellFormed.Payload) {
     if (payload.version === -38) return encode38(payload)
-    else if (payload.version === -37) return encode37(payload, sign)
+    else if (payload.version === -37) return encode37(payload)
     return new EKindsError(EKinds.EncodeFailed, 'unsupported payload version').toErr()
 }
