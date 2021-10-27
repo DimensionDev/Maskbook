@@ -16,6 +16,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
+import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../utils'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
@@ -200,9 +201,13 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         top: 0,
         width: '100%',
         zIndex: 2,
-        paddingTop: theme.spacing(4),
+        paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
         backgroundColor: theme.palette.background.paper,
+    },
+    walletStatusBox: {
+        width: 535,
+        margin: '24px auto',
     },
 }))
 
@@ -345,8 +350,16 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }}>
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
+                    <div className={classes.walletStatusBox}>
+                        <WalletStatusBox />
+                    </div>
                     <div className={classes.abstractTabWrapper}>
-                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} />
+                        <NetworkTab
+                            chainId={chainId}
+                            setChainId={setChainId}
+                            classes={classes}
+                            chains={[ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai]}
+                        />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {(showNftAirdrop || loadingAirdrop) && chainId === ChainId.Matic ? (
