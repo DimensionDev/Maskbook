@@ -32,7 +32,7 @@ const CONFIG_MAPPING = {
     [TransactionStateType.RECEIPT]: {
         processing: false,
         variant: 'error',
-        message: 'Transaction rejected 1',
+        message: 'Transaction rejected',
     },
     [TransactionStateType.FAILED]: {
         processing: false,
