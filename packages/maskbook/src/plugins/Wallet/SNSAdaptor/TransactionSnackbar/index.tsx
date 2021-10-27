@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { ReactNode, useCallback, useEffect, useRef } from 'react'
 import {
+    createLookupTableResolver,
     resolveTransactionLinkOnExplorer,
     TransactionState,
     TransactionStateType,
@@ -13,33 +14,44 @@ import { Link } from '@mui/material'
 import LaunchIcon from '@mui/icons-material/Launch'
 import type { TransactionReceipt } from 'web3-core'
 
-const CONFIG_MAPPING = {
-    [TransactionStateType.WAIT_FOR_CONFIRMING]: {
-        processing: true,
-        variant: 'success',
-        message: 'Confirm this transaction in your wallet',
+export const resolveSnackbarConfig = createLookupTableResolver<
+    TransactionStateType,
+    Pick<ShowSnackbarOptions, 'message' | 'processing' | 'variant'>
+>(
+    {
+        [TransactionStateType.WAIT_FOR_CONFIRMING]: {
+            processing: true,
+            variant: 'success',
+            message: 'Confirm this transaction in your wallet',
+        },
+        [TransactionStateType.HASH]: {
+            processing: true,
+            variant: 'success',
+            message: 'Transaction Submitted',
+        },
+        [TransactionStateType.CONFIRMED]: {
+            processing: false,
+            variant: 'success',
+            message: 'Transaction Successfully',
+        },
+        [TransactionStateType.RECEIPT]: {
+            processing: false,
+            variant: 'error',
+            message: 'Transaction rejected',
+        },
+        [TransactionStateType.FAILED]: {
+            processing: false,
+            variant: 'error',
+            message: 'Transaction rejected',
+        },
+        [TransactionStateType.UNKNOWN]: {
+            processing: false,
+            variant: 'error',
+            message: '',
+        },
     },
-    [TransactionStateType.HASH]: {
-        processing: true,
-        variant: 'success',
-        message: 'Transaction Submitted',
-    },
-    [TransactionStateType.CONFIRMED]: {
-        processing: false,
-        variant: 'success',
-        message: 'Transaction Successfully',
-    },
-    [TransactionStateType.RECEIPT]: {
-        processing: false,
-        variant: 'error',
-        message: 'Transaction rejected',
-    },
-    [TransactionStateType.FAILED]: {
-        processing: false,
-        variant: 'error',
-        message: 'Transaction rejected',
-    },
-}
+    {},
+)
 
 const useStyles = makeStyles()({
     link: {
@@ -76,7 +88,7 @@ export function TransactionSnackbar() {
     }, [])
 
     const getFullMessage = useCallback(
-        (message: string, hash?: string) => {
+        (message: ReactNode, hash?: string) => {
             if (!hash) return message
             const link = resolveTransactionLinkOnExplorer(chainId, hash)
             return (
@@ -93,7 +105,7 @@ export function TransactionSnackbar() {
             if (progress.state.type === TransactionStateType.UNKNOWN) return
 
             const payload = await getSendTransactionComputedPayload(progress.payload)
-            const config = CONFIG_MAPPING[progress.state.type]
+            const config = resolveSnackbarConfig(progress.state.type)
             const hash =
                 (progress.state as { hash?: string }).hash ??
                 (progress.state as { receipt?: TransactionReceipt }).receipt?.transactionHash
