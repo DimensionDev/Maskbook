@@ -323,7 +323,7 @@ const ContractInteraction = memo(() => {
                             <>
                                 <Typography className={classes.amount}>
                                     {new BigNumber(formatBalance(tokenAmount, tokenDecimals)).isGreaterThan(10 ** 9) ? (
-                                        new BigNumber(formatBalance(tokenAmount, tokenDecimals)).toPrecision(3)
+                                        'infinite'
                                     ) : (
                                         <FormattedBalance
                                             value={tokenAmount}
@@ -334,7 +334,7 @@ const ContractInteraction = memo(() => {
                                 </Typography>
                                 <Typography>
                                     {new BigNumber(tokenValueUSD).isGreaterThan(10 ** 9) ? (
-                                        new BigNumber(tokenValueUSD).toPrecision(3)
+                                        'infinite'
                                     ) : (
                                         <FormattedCurrency value={tokenValueUSD} sign="$" />
                                     )}
@@ -369,7 +369,7 @@ const ContractInteraction = memo(() => {
                         </Typography>
                         <Typography className={classes.gasPrice}>
                             {new BigNumber(totalUSD).isGreaterThan(10 ** 9) ? (
-                                new BigNumber(totalUSD).toPrecision(3)
+                                'infinite'
                             ) : (
                                 <FormattedCurrency value={totalUSD} sign="$" />
                             )}
