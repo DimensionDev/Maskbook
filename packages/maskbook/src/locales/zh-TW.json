@@ -336,7 +336,6 @@
     "plugin_red_packet_history_claimed": "已認領: <strong>{{claimedShares}}/{{shares}}</strong> 分享數",
     "plugin_red_packet_history_split_mode": "分割模式: {{mode}}",
     "plugin_red_packet_history_send": "送出",
-    "plugin_red_packet_create_title": "創建一個紅包",
     "plugin_gitcoin_readme": "通過使用此服務，您還將向 <fund>Gitcoin grants development fund</fund> 捐款 5%",
     "plugin_gitcoin_select_a_token": "選擇一個代幣",
     "plugin_gitcoin_enter_an_amount": "輸入一個金額",

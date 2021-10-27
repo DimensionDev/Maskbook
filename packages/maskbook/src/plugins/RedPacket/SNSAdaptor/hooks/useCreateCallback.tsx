@@ -1,8 +1,13 @@
+import BigNumber from 'bignumber.js'
+import { omit } from 'lodash-es'
+import React, { useCallback, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
+import type { TransactionReceipt } from 'web3-core'
+import Web3Utils from 'web3-utils'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
-    formatBalance,
     FungibleTokenDetailed,
     isLessThan,
     TransactionEventType,
@@ -13,13 +18,6 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
-import { omit } from 'lodash-es'
-import React, { useCallback, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
-import type { TransactionReceipt } from 'web3-core'
-import Web3Utils from 'web3-utils'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
@@ -127,7 +125,6 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
     const account = useAccount()
     const chainId = useChainId()
-    const { t } = useI18N()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
@@ -166,10 +163,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // estimate gas and compose transaction
         const value = new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0').toFixed()
-        const formattedValue = formatBalance(
-            new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0'),
-            token.decimals,
-        )
         const config = {
             from: account,
             value,
@@ -179,7 +172,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
-            const snackbarTitle = t('plugin_red_packet_create_title')
             promiEvent.once(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
                 setCreateState({
                     type: TransactionStateType.WAIT_FOR_CONFIRMING,
