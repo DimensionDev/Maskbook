@@ -1,5 +1,3 @@
-import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
-import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
@@ -7,7 +5,6 @@ import {
     formatBalance,
     FungibleTokenDetailed,
     isLessThan,
-    resolveTransactionLinkOnExplorer,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
@@ -16,23 +13,14 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
-import { Link } from '@mui/material'
-import LaunchIcon from '@mui/icons-material/Launch'
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-es'
-import React, { FC, memo, useCallback, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useRedPacketContract } from './useRedPacketContract'
-
-const useStyles = makeStyles()({
-    link: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-})
 
 export interface RedPacketSettings {
     publicKey: string
@@ -136,21 +124,6 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     }, [redPacketSettings, account, redPacketContract]).value
 }
 
-const TransactionLink: FC<{ txHash?: string }> = memo(({ children, txHash }) => {
-    const { classes } = useStyles()
-    const chainId = useChainId()
-    if (!txHash) {
-        return null
-    }
-    const link = resolveTransactionLinkOnExplorer(chainId, txHash)
-    return (
-        <Link className={classes.link} color="inherit" href={link} target="_blank" rel="noopener noreferrer">
-            {children}
-            <LaunchIcon fontSize="inherit" />
-        </Link>
-    )
-})
-
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
     const account = useAccount()
     const chainId = useChainId()
@@ -159,19 +132,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const paramResult = useCreateParams(redPacketSettings, version)
-
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
-    const snackbarKeyRef = useRef<SnackbarKey>()
-    const showSingletonSnackbar = useCallback(
-        (title: SnackbarMessage, options: ShowSnackbarOptions) => {
-            if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
-            snackbarKeyRef.current = showSnackbar(title, options)
-            return () => {
-                closeSnackbar(snackbarKeyRef.current)
-            }
-        },
-        [showSnackbar, closeSnackbar],
-    )
 
     const transactionHashRef = useRef<string>()
 
@@ -226,13 +186,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     hash,
                 })
                 transactionHashRef.current = hash
-                showSingletonSnackbar(snackbarTitle, {
-                    processing: true,
-                    persist: true,
-                    message: (
-                        <TransactionLink txHash={hash}>{t('plugin_red_packet_transaction_submitted')}</TransactionLink>
-                    ),
-                })
             })
             promiEvent.once(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                 setCreateState({
@@ -241,14 +194,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     receipt,
                 })
                 transactionHashRef.current = receipt.transactionHash
-                showSingletonSnackbar(snackbarTitle, {
-                    variant: 'success',
-                    message: (
-                        <TransactionLink txHash={receipt.transactionHash}>
-                            {t('plugin_red_packet_transaction_submitted')}
-                        </TransactionLink>
-                    ),
-                })
             })
 
             promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
@@ -259,17 +204,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 })
                 transactionHashRef.current = receipt.transactionHash
                 resolve()
-                showSingletonSnackbar(snackbarTitle, {
-                    variant: 'success',
-                    message: (
-                        <TransactionLink txHash={receipt.transactionHash}>
-                            {t('plugin_red_packet_success', {
-                                value: formattedValue,
-                                symbol: token.symbol,
-                            })}
-                        </TransactionLink>
-                    ),
-                })
             })
 
             promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
@@ -278,17 +212,9 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     error,
                 })
                 reject(error)
-                showSingletonSnackbar(snackbarTitle, {
-                    variant: 'error',
-                    message: (
-                        <TransactionLink txHash={transactionHashRef.current}>
-                            {t('plugin_red_packet_transaction_rejected')}
-                        </TransactionLink>
-                    ),
-                })
             })
         })
-    }, [account, redPacketContract, redPacketSettings, chainId, paramResult, showSingletonSnackbar])
+    }, [account, redPacketContract, redPacketSettings, chainId, paramResult])
 
     const resetCallback = useCallback(() => {
         setCreateState({
