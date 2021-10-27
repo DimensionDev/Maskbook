@@ -22,7 +22,7 @@ This package is designed with OCap and prepared to run under SES.
 ### Payload encoder
 
 - [x] v38 encoder
-- [ ] v37 encoder
+- [x] v37 encoder
 
 ### Encryption & Decryption
 
