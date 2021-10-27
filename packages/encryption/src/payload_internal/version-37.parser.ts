@@ -33,9 +33,12 @@ function parseSignatureContainer(payload: ArrayBuffer) {
             const [version, payload, rawSignature] = item
             if (version !== 0) return err('Invalid version')
             return assertArrayBuffer(payload, 'SignatureContainer[1]').andThen((payload) => {
-                const signature = assertArrayBuffer(rawSignature, 'SignatureContainer[2]').andThen((sig) =>
-                    OptionalResult.Some<Signature>({ signature: sig, signee: payload }),
-                )
+                const signature =
+                    rawSignature === null
+                        ? OptionalResult.None
+                        : assertArrayBuffer(rawSignature, 'SignatureContainer[2]').andThen((sig) =>
+                              OptionalResult.Some<Signature>({ signature: sig, signee: payload }),
+                          )
                 return Ok({ payload, signature })
             })
         })
@@ -61,7 +64,11 @@ function parsePayload37(payload: ArrayBuffer, signature: PayloadParseResult.Payl
     })
 }
 
-function parseAuthor(network: unknown, id: string): PayloadParseResult.Payload['author'] {
+function parseAuthor(network: unknown, id: unknown): PayloadParseResult.Payload['author'] {
+    if (network === null) return OptionalResult.None
+    if (id === '' || id === null) return OptionalResult.None
+    if (typeof id !== 'string') return err('Invalid user id')
+
     let net = ''
     if (network === SocialNetworkEnum.Facebook) net = 'facebook.com'
     else if (network === SocialNetworkEnum.Twitter) net = 'twitter.com'
@@ -71,10 +78,8 @@ function parseAuthor(network: unknown, id: string): PayloadParseResult.Payload['
     else if (typeof network !== 'number') return err('Invalid network')
     else return err('Invalid network', EKinds.UnknownEnumMember)
 
-    if (typeof id !== 'string') return err('Invalid user id')
     if (net.includes('/')) return err('Invalid network')
 
-    if (id === '') return OptionalResult.None
     return OptionalResult.Some(new ProfileIdentifier(net, id))
 }
 

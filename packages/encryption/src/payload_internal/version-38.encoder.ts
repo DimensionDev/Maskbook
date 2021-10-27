@@ -8,6 +8,11 @@ import { encryptWithAES, exportCryptoKeyToJWK } from '../utils'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import secp256k1 from 'tiny-secp256k1'
 
+const enum Index {
+    authorPublicKey = 5,
+    publicShared = 6,
+    authorIdentifier = 7,
+}
 // ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
 export async function encode38(payload: PayloadWellFormed.Payload) {
     if (payload.version !== -38) {
@@ -22,20 +27,17 @@ export async function encode38(payload: PayloadWellFormed.Payload) {
 
     const fields: string[] = ['🎼4/4', AESKeyEncrypted.val, iv, encrypted, signature]
 
-    // field 5: authorPublicKey
     if (payload.authorPublicKey.some) {
         const compressed = await compressSecp256k1Key(payload.authorPublicKey.val.key)
         if (compressed.err) {
             console.error(`[@masknet/encryption] An error happened when compressing a secp256k1 key.`, compressed.err)
         }
-        fields[5] = `|${compressed.unwrapOr('_')}`
+        fields[Index.authorPublicKey] = `|${compressed.unwrapOr('_')}`
     }
-    // field 6: publicShared
-    fields[6] = String(payload.encryption.type === 'public' ? 1 : 0)
-    // field 7: authorIdentifier
+    fields[Index.publicShared] = String(payload.encryption.type === 'public' ? 1 : 0)
     if (payload.author.some) {
         const id = payload.author.val.userId
-        fields[7] = id
+        fields[Index.authorIdentifier] = id
     }
     return Ok(fields.join('|') + ':||')
 }

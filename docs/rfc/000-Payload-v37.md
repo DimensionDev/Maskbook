@@ -40,7 +40,7 @@ All Tuple in this specification MUST be treated as non-fixed length. This means 
 This is the top-most data type.
 
 ```typescript
-type SignatureContainer = [version: Integer, payload: Binary, signature: Binary]
+type SignatureContainer = [version: Integer, payload: Binary, signature: Binary | null]
 ```
 
 #### `version` field
@@ -60,15 +60,17 @@ The implementation MUST fail when the payload is not a `Payload37` after decodin
 
 This field represents the EC signature of the payload. The implementation MUST use SHA-256 algorithm.
 
+When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
+
 ### `Payload37`
 
 ```typescript
 type PayloadAlpha37 = [
   version: Integer,
-  authorNetwork: String | SocialNetworkEnum,
-  authorID: String,
+  authorNetwork: String | SocialNetworkEnum | null,
+  authorID: String | null,
   authorPublicKeyAlgorithm: String | PublicKeyAlgorithmEnum,
-  authorPublicKey: Binary,
+  authorPublicKey: Binary | null,
   encryption: Encryption,
   data: Binary,
 ]
@@ -100,9 +102,13 @@ When it is `SocialNetworkEnum`, it represents a SocialNetwork that is supported 
 
 When it is `String`, it represents a SocialNetwork cannot be expressed within the enum. e.g. A decentralized SNS like Mastodon.
 
+When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
+
 #### `authorID` field
 
 This field represents the identifiable ID of the author of this payload belongs to. In the case of an anonymous post, this field should be an empty string.
+
+When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
 
 #### `authorPublicKeyAlgorithm` field
 
@@ -121,6 +127,8 @@ This field represents the public key of the author.
 The value is in the DER encoding of the SubjectPublicKeyInfo (`spki`) structure from [RFC 5280][rfc5280].
 
 [rfc5280]: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.7
+
+When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
 
 #### `encryption` field
 
