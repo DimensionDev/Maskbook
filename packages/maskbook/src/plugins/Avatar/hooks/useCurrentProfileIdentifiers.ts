@@ -3,14 +3,12 @@ import type { Persona } from '../../../database'
 import type { ProfileIdentifier } from '../../../database/type'
 import { getProfileIdentifierFromPersona } from '../utils/getProfileIdentifierFromPersona'
 
-export function useCurrentProfileIdentifier(): { userId?: string; identifier?: ProfileIdentifier } | undefined {
+export function useCurrentProfileIdentifiers(): ({ userId?: string; identifier?: ProfileIdentifier } | undefined)[] {
     const personas = useMyPersonas()
-    if (personas.length === 0) return
-    const userInfo = personas
+    if (personas.length === 0) return []
+    return personas
         .map((persona: Persona) => {
             return getProfileIdentifierFromPersona(persona)
         })
         .filter((x: any) => x)
-
-    return userInfo?.[0]
 }
