@@ -142,12 +142,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             const promiEvent = (ITO_Contract as ITO2).methods.fill_pool(...params).send(config as NonPayableTx)
 
             promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setFillState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                })
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setFillState({
                         type: TransactionStateType.CONFIRMED,
