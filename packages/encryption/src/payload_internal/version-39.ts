@@ -1,5 +1,5 @@
 import { parse40 } from './version-40'
-import { Exception, ExceptionKinds } from '../types'
+import { EKindsError as Err, EKinds } from '../types'
 import type { PayloadParserResult } from '.'
 
 // -39 payload is exactally the same as -40.
@@ -13,9 +13,10 @@ import type { PayloadParserResult } from '.'
 // ? Version 40:🎼2/4|ownersAESKeyEncrypted|iv|encryptedText:||
 // ? Version 39:🎼3/4|ownersAESKeyEncrypted|iv|encryptedText:||
 export async function parse39(payload: string): PayloadParserResult {
-    const _40 = '🎼2/4'
-    const _39 = '🎼3/4'
-    if (!payload.startsWith(_39)) return new Exception(ExceptionKinds.DecodeFailed, 'Unknown version').toErr()
+    const v_40 = '🎼2/4'
+    const v_39 = '🎼3/4'
+    if (!payload.startsWith(v_39)) return new Err(EKinds.DecodeFailed, 'Unknown version').toErr()
 
-    return (await parse40(payload.replace(_39, _40))).map((x) => ({ ...x, version: -39 }))
+    const result = await parse40(payload.replace(v_39, v_40))
+    return result.map((x) => ({ ...x, version: -39 }))
 }

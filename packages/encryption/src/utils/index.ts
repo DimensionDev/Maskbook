@@ -1,4 +1,4 @@
-import { ExceptionKinds, Exception } from '../types'
+import { EKinds, EKindsError as Err } from '../types'
 import { Result } from 'ts-results'
 import { encodeArrayBuffer, decodeArrayBuffer, encodeText, decodeText } from '@dimensiondev/kit'
 import { decode as decodeMessagePack, encode as _encodeMessagePack } from '@msgpack/msgpack'
@@ -17,11 +17,11 @@ export function encodeMessagePack(x: unknown) {
 }
 
 function wrap<P extends any[], T>(f: (...args: P) => T, valid: (...args: P) => boolean) {
-    return <E extends ExceptionKinds>(invalidE: E, throwsE: E) =>
+    return <E extends EKinds>(invalidE: E, throwsE: E) =>
         (...args: P) => {
             const isValid = valid(...args)
-            if (!isValid) return new Exception(invalidE, null).toErr()
-            return Result.wrap(() => f(...args)).mapErr(Exception.mapErr(throwsE))
+            if (!isValid) return new Err(invalidE, null).toErr()
+            return Result.wrap(() => f(...args)).mapErr(Err.mapErr(throwsE))
         }
 }
 export async function andThenAsync<T, E, Q, E2>(

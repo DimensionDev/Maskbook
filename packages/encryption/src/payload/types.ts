@@ -2,56 +2,50 @@
 // Internal payload should not be exported
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { Result, Option } from 'ts-results'
-import type { DecodeExceptions, Exception, ExceptionKinds, OptionalResult } from '../types'
+import type { DecodeExceptions, EKindsError as Err, EKinds, OptionalResult } from '../types'
 
 /** A parse result, that try to preserve as many info as possible. */
 export declare namespace PayloadParseResult {
-    export type OptionalField<T, E extends ExceptionKinds = DecodeExceptions> = OptionalResult<T, DecodeExceptions | E>
-    export type RequiredField<T, E extends ExceptionKinds = DecodeExceptions> = Result<
-        T,
-        Exception<DecodeExceptions | E>
-    >
-    export type CryptoKeyException =
-        | DecodeExceptions
-        | ExceptionKinds.UnsupportedAlgorithm
-        | ExceptionKinds.InvalidCryptoKey
+    export type OptionalField<T, E extends EKinds = DecodeExceptions> = OptionalResult<T, DecodeExceptions | E>
+    export type RequiredField<T, E extends EKinds = DecodeExceptions> = Result<T, Err<DecodeExceptions | E>>
+    export type CryptoKeyException = DecodeExceptions | EKinds.UnsupportedAlgorithm | EKinds.InvalidCryptoKey
     export interface Payload {
         /**
          * Version starts from -42 but -42 and -41 are dropped.
          *
          * The latest version is -37.
          */
-        version: -40 | -39 | -38 | -37
-        signature: OptionalField<Signature>
+        readonly version: -40 | -39 | -38 | -37
+        readonly signature: OptionalField<Signature>
         /**
          * The claimed author of this payload.
          */
-        author: OptionalField<ProfileIdentifier, ExceptionKinds.UnknownEnumMember>
+        readonly author: OptionalField<ProfileIdentifier, EKinds.UnknownEnumMember>
         /**
          * The claimed public key of author.
          */
-        authorPublicKey: OptionalField<AsymmetryCryptoKey, CryptoKeyException>
+        readonly authorPublicKey: OptionalField<AsymmetryCryptoKey, CryptoKeyException>
         /** The encryption method this payload used. */
-        encryption: RequiredField<PublicEncryption | EndToEndEncryption>
+        readonly encryption: RequiredField<PublicEncryption | EndToEndEncryption>
         /** The encrypted content. */
-        encrypted: RequiredField<ArrayBuffer>
+        readonly encrypted: RequiredField<ArrayBuffer>
     }
     /**
      * A publicly encrypted payload.
      */
     export interface PublicEncryption {
-        type: 'public'
-        AESKey: RequiredField<AESKey, CryptoKeyException>
-        iv: RequiredField<ArrayBuffer>
+        readonly type: 'public'
+        readonly AESKey: RequiredField<AESKey, CryptoKeyException>
+        readonly iv: RequiredField<ArrayBuffer>
     }
     /**
      * An E2E encrypted payload.
      */
     export interface EndToEndEncryption {
-        type: 'E2E'
-        ownersAESKeyEncrypted: RequiredField<ArrayBuffer>
-        iv: RequiredField<ArrayBuffer>
-        ephemeralPublicKey: Record<string, RequiredField<AsymmetryCryptoKey, CryptoKeyException>>
+        readonly type: 'E2E'
+        readonly ownersAESKeyEncrypted: RequiredField<ArrayBuffer>
+        readonly iv: RequiredField<ArrayBuffer>
+        readonly ephemeralPublicKey: Record<string, RequiredField<AsymmetryCryptoKey, CryptoKeyException>>
     }
 }
 /** Well formed payload that can be encoded into the latest version */
@@ -62,47 +56,53 @@ export declare namespace PayloadWellFormed {
          *
          * The latest version is -37.
          */
-        version: -40 | -39 | -38 | -37
-        signature: Option<Signature>
+        readonly version: -40 | -39 | -38 | -37
+        readonly signature: Option<Signature>
         /**
          * The claimed author of this payload.
          */
-        author: Option<ProfileIdentifier>
+        readonly author: Option<ProfileIdentifier>
         /**
          * The claimed public key of author.
          */
-        authorPublicKey: Option<AsymmetryCryptoKey>
+        readonly authorPublicKey: Option<AsymmetryCryptoKey>
         /** The encryption method this payload used. */
-        encryption: PublicEncryption | EndToEndEncryption
+        readonly encryption: PublicEncryption | EndToEndEncryption
         /** The encrypted content. */
-        encrypted: ArrayBuffer
+        readonly encrypted: ArrayBuffer
     }
     /**
      * A publicly encrypted payload.
      */
     export interface PublicEncryption {
-        type: 'public'
-        AESKey: AESKey
-        iv: ArrayBuffer
+        readonly type: 'public'
+        readonly AESKey: AESKey
+        readonly iv: ArrayBuffer
     }
     /**
      * An E2E encrypted payload.
      */
     export interface EndToEndEncryption {
-        type: 'E2E'
-        ownersAESKeyEncrypted: ArrayBuffer
-        iv: ArrayBuffer
-        ephemeralPublicKey: Map<PublicKeyAlgorithmEnum, CryptoKey>
+        readonly type: 'E2E'
+        readonly ownersAESKeyEncrypted: ArrayBuffer
+        readonly iv: ArrayBuffer
+        readonly ephemeralPublicKey: Map<PublicKeyAlgorithmEnum, CryptoKey>
     }
 }
-export type Signature = readonly [signee: ArrayBuffer, signature: ArrayBuffer]
+export interface Signature {
+    readonly signee: ArrayBuffer
+    readonly signature: ArrayBuffer
+}
 export type AsymmetryCryptoKey = readonly [algr: PublicKeyAlgorithmEnum, key: CryptoKey]
-export type AESKey = readonly [param: AESKeyParameterEnum, key: CryptoKey]
+export interface AESKey {
+    readonly algr: AESAlgorithmEnum
+    readonly key: CryptoKey
+}
 export enum PublicKeyAlgorithmEnum {
     ed25519 = 0,
     secp256p1 = 1, // P-256
     secp256k1 = 2, // K-256
 }
-export enum AESKeyParameterEnum {
-    AES_GCM_256,
+export enum AESAlgorithmEnum {
+    AES_GCM_256 = 'AES_GCM_256',
 }

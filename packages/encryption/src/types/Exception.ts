@@ -1,46 +1,38 @@
 import { Result, Err } from 'ts-results'
 
-export enum ExceptionKinds {
-    /** Failed while decode the payload */
-    DecodeFailed,
-    /** The payload succeed to decode, but violates the Payload schema. */
-    InvalidPayload,
-    /** The payload contains an unknown enum member. */
-    UnknownEnumMember,
-    /** The payload contains an invalid CryptoKey */
-    InvalidCryptoKey,
-    DecryptFailed,
-    UnsupportedAlgorithm,
+export enum EKinds {
+    DecodeFailed = '[@masknet/encryption] Failed to decode the payload.',
+    InvalidPayload = '[@masknet/encryption] Payload decoded, but it violates the schema.',
+    UnknownEnumMember = '[@masknet/encryption] Payload includes an unknown enum member.',
+    InvalidCryptoKey = '[@masknet/encryption] Payload contains an invalid CryptoKey.',
+    DecryptFailed = '[@masknet/encryption] Failed to decrypt.',
+    UnsupportedAlgorithm = '[@masknet/encryption] Unsupported crypto algorithm.',
 }
 
-export class Exception<T extends ExceptionKinds> extends Error {
-    public readonly kind: T
-    // @ts-ignore
-    constructor(readonly kind: T, reason: unknown) {
-        if (typeof reason === 'string') super(reason)
+export class EKindsError<T extends EKinds> extends Error {
+    constructor(kind: T, reason: unknown) {
         // @ts-expect-error error cause proposal
-        else super(ExceptionKinds[kind], { cause: reason })
-        this.kind = kind
+        super(kind, { cause: reason })
     }
-    static mapErr<E extends ExceptionKinds>(r: E) {
-        return (e: unknown) => new Exception(r, e)
+    static mapErr<E extends EKinds>(r: E) {
+        return (e: unknown) => new EKindsError(r, e)
     }
-    static withErr<P extends any[], T, E extends ExceptionKinds>(
+    static withErr<P extends any[], T, E extends EKinds>(
         f: (...args: P) => Result<T, unknown>,
         o: E,
-    ): (...args: P) => Result<T, Exception<E>>
-    static withErr<P extends any[], T, E extends ExceptionKinds>(
+    ): (...args: P) => Result<T, EKindsError<E>>
+    static withErr<P extends any[], T, E extends EKinds>(
         f: (...args: P) => Promise<Result<T, unknown>>,
         o: E,
-    ): (...args: P) => Promise<Result<T, Exception<E>>>
-    static withErr<P extends any[], T, E extends ExceptionKinds>(
+    ): (...args: P) => Promise<Result<T, EKindsError<E>>>
+    static withErr<P extends any[], T, E extends EKinds>(
         f: (...args: P) => Result<T, unknown> | Promise<Result<T, unknown>>,
         o: E,
-    ): (...args: P) => Result<T, Exception<E>> | Promise<Result<T, Exception<E>>> {
+    ): (...args: P) => Result<T, EKindsError<E>> | Promise<Result<T, EKindsError<E>>> {
         return (...args: P) => {
             const r = f(...args)
-            if (r instanceof Promise) return r.then((r) => r.mapErr(Exception.mapErr(o)))
-            return r.mapErr(Exception.mapErr(o))
+            if (r instanceof Promise) return r.then((r) => r.mapErr(EKindsError.mapErr(o)))
+            return r.mapErr(EKindsError.mapErr(o))
         }
     }
     toErr() {
