@@ -1,8 +1,7 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
+import { NFTContractImage } from '../../../../plugins/Avatar/SNSAdaptor/NFTContractImage'
 import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
 import { postAvatarsContentSelector } from '../../utils/selector'
-import { getAvatarId } from '../../utils/user'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
@@ -16,27 +15,17 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 ) as HTMLSpanElement
                 if (!twitterIdNode) return
                 const twitterId = twitterIdNode.innerText.trim().replace('@', '')
-                const avatarIdNode = ele.querySelector(
-                    'div > :nth-child(2) > div > div > div > a > div > :last-child > div > img',
-                ) as HTMLImageElement
-                if (!avatarIdNode) return
-                const avatarId = getAvatarId(avatarIdNode.getAttribute('src') ?? '')
-                const nftDom = ele.firstChild?.firstChild?.firstChild?.nextSibling?.firstChild?.firstChild?.firstChild
-                    ?.firstChild as HTMLElement
+
+                const nftDom = ele.querySelector(
+                    'div > :nth-child(2) > :nth-child(2) > div > div > div > div > div > a > div > div',
+                ) as HTMLSpanElement as HTMLElement
                 if (!nftDom) return
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = nftDom
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
-                    <div
-                        style={{
-                            position: 'absolute',
-                            left: -2,
-                            right: 0,
-                            top: -2,
-                            zIndex: -1,
-                        }}>
-                        <NFTBadgeTimeline userId={twitterId} avatarId={avatarId} />
+                    <div>
+                        <NFTContractImage userId={twitterId} />
                     </div>,
                 )
                 remover = root.destory
@@ -53,6 +42,6 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     )
 }
 
-export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
+export async function injectNFTContractAtTwitter(signal: AbortSignal) {
     _(postAvatarsContentSelector, signal)
 }

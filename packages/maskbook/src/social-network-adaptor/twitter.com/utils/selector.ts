@@ -205,8 +205,10 @@ export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="P
 
 //#region avatar selector
 
-export const searchTwitterAvatarSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > div > :nth-child(2) > div > a')
+export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
+
+export const searchTwitterAvatarSelector = () => searchTwitterAvatarLinkSelector().querySelector<E>('div')
 //#endregion
 
 //#region twitter avatar
@@ -215,3 +217,6 @@ export const searchAccountSwitherButtonSelector = () =>
 
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
 //#endregion
+
+export const searchTweetAvatarSelector = () =>
+    querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
