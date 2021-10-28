@@ -7,7 +7,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {},
     image: {
         width: 24,
-        heigth: 24,
+        height: 24,
     },
 }))
 
