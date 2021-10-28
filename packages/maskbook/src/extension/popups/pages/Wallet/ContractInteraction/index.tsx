@@ -115,6 +115,11 @@ const useStyles = makeStyles()(() => ({
         alignItems: 'center',
         color: '#15181B',
     },
+    bottom: {
+        position: 'fixed',
+        bottom: 0,
+        width: '100%',
+    },
 }))
 
 const ContractInteraction = memo(() => {
@@ -300,85 +305,101 @@ const ContractInteraction = memo(() => {
     return requestLoading ? (
         <LoadingPlaceholder />
     ) : (
-        <main className={classes.container}>
-            <div className={classes.info}>
-                <Typography className={classes.title}>{typeName}</Typography>
-                <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
-                    {to}
-                </Typography>
-            </div>
-            <div className={classes.content}>
-                <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
-                    <TokenIcon
-                        address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
-                        classes={{ icon: classes.tokenIcon }}
-                    />
-                    {tokenDecimals !== undefined ? (
-                        <>
-                            <Typography className={classes.amount}>
-                                {new BigNumber(formatBalance(tokenAmount, tokenDecimals)).isGreaterThan(10 ** 9) ? (
-                                    new BigNumber(formatBalance(tokenAmount, tokenDecimals)).toPrecision(3)
-                                ) : (
-                                    <FormattedBalance value={tokenAmount} decimals={tokenDecimals} significant={4} />
-                                )}
-                            </Typography>
-                            <Typography>
-                                {new BigNumber(tokenValueUSD).isGreaterThan(10 ** 9) ? (
-                                    new BigNumber(tokenValueUSD).toPrecision(3)
-                                ) : (
-                                    <FormattedCurrency value={tokenValueUSD} sign="$" />
-                                )}
-                            </Typography>
-                        </>
-                    ) : null}
+        <>
+            <main className={classes.container}>
+                <div className={classes.info}>
+                    <Typography className={classes.title}>{typeName}</Typography>
+                    <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
+                        {to}
+                    </Typography>
                 </div>
-
-                <div className={classes.item}>
-                    <Typography className={classes.label}>{t('popups_wallet_contract_interaction_gas_fee')}</Typography>
-                    <Typography className={classes.gasPrice}>
-                        <FormattedBalance
-                            value={gasFee}
-                            decimals={nativeToken?.decimals}
-                            significant={4}
-                            symbol={nativeToken?.symbol}
+                <div className={classes.content}>
+                    <div className={classes.item} style={{ marginTop: 20, marginBottom: 30 }}>
+                        <TokenIcon
+                            address={(isNativeTokenInteraction ? nativeToken?.address : token?.address) ?? ''}
+                            classes={{ icon: classes.tokenIcon }}
                         />
-                        <Link
-                            component="button"
-                            onClick={() => history.push(PopupRoutes.GasSetting)}
-                            style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}>
-                            {t('popups_wallet_contract_interaction_edit')}
-                        </Link>
-                    </Typography>
-                </div>
+                        {tokenDecimals !== undefined ? (
+                            <>
+                                <Typography className={classes.amount}>
+                                    {new BigNumber(formatBalance(tokenAmount, tokenDecimals)).isGreaterThan(10 ** 9) ? (
+                                        'infinite'
+                                    ) : (
+                                        <FormattedBalance
+                                            value={tokenAmount}
+                                            decimals={tokenDecimals}
+                                            significant={4}
+                                        />
+                                    )}
+                                </Typography>
+                                <Typography>
+                                    {new BigNumber(tokenValueUSD).isGreaterThan(10 ** 9) ? (
+                                        'infinite'
+                                    ) : (
+                                        <FormattedCurrency value={tokenValueUSD} sign="$" />
+                                    )}
+                                </Typography>
+                            </>
+                        ) : null}
+                    </div>
 
-                <div className={classes.item} style={{ marginTop: 10 }}>
-                    <Typography className={classes.label}>{t('popups_wallet_contract_interaction_total')}</Typography>
-                    <Typography className={classes.gasPrice}>
-                        {new BigNumber(totalUSD).isGreaterThan(10 ** 9) ? (
-                            new BigNumber(totalUSD).toPrecision(3)
-                        ) : (
-                            <FormattedCurrency value={totalUSD} sign="$" />
-                        )}
-                    </Typography>
+                    <div className={classes.item}>
+                        <Typography className={classes.label}>
+                            {t('popups_wallet_contract_interaction_gas_fee')}
+                        </Typography>
+                        <Typography className={classes.gasPrice}>
+                            <FormattedBalance
+                                value={gasFee}
+                                decimals={nativeToken?.decimals}
+                                significant={4}
+                                symbol={nativeToken?.symbol}
+                            />
+                            <Link
+                                component="button"
+                                onClick={() => history.push(PopupRoutes.GasSetting)}
+                                style={{ marginLeft: 10, fontSize: 'inherit', lineHeight: 'inherit' }}>
+                                {t('popups_wallet_contract_interaction_edit')}
+                            </Link>
+                        </Typography>
+                    </div>
+
+                    <div className={classes.item} style={{ marginTop: 10 }}>
+                        <Typography className={classes.label}>
+                            {t('popups_wallet_contract_interaction_total')}
+                        </Typography>
+                        <Typography className={classes.gasPrice}>
+                            {new BigNumber(totalUSD).isGreaterThan(10 ** 9) ? (
+                                'infinite'
+                            ) : (
+                                <FormattedCurrency value={totalUSD} sign="$" />
+                            )}
+                        </Typography>
+                    </div>
+                </div>
+            </main>
+            <div className={classes.bottom}>
+                {transferError ? (
+                    <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
+                ) : null}
+                <div className={classes.controller}>
+                    <LoadingButton
+                        loading={rejectLoading}
+                        variant="contained"
+                        className={classes.button}
+                        style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
+                        onClick={handleReject}>
+                        {t('cancel')}
+                    </LoadingButton>
+                    <LoadingButton
+                        loading={loading}
+                        variant="contained"
+                        className={classes.button}
+                        onClick={handleConfirm}>
+                        {transferError ? t('popups_wallet_re_send') : t('confirm')}
+                    </LoadingButton>
                 </div>
             </div>
-            {transferError ? (
-                <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
-            ) : null}
-            <div className={classes.controller}>
-                <LoadingButton
-                    loading={rejectLoading}
-                    variant="contained"
-                    className={classes.button}
-                    style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
-                    onClick={handleReject}>
-                    {t('cancel')}
-                </LoadingButton>
-                <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
-                    {transferError ? t('popups_wallet_re_send') : t('confirm')}
-                </LoadingButton>
-            </div>
-        </main>
+        </>
     )
 })
 

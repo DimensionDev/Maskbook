@@ -128,38 +128,42 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 call: { address, calldata, value },
             } = bestCallOption
 
-            try {
-                const { transactionHash } = await web3.eth.sendTransaction({
+            web3.eth.sendTransaction(
+                {
                     from: account,
                     to: address,
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                })
-                setTradeState({
-                    type: TransactionStateType.HASH,
-                    hash: transactionHash,
-                })
-                resolve(transactionHash)
-            } catch (error) {
-                if ((error as any)?.code) {
-                    const error_ = new Error(
-                        (error as any)?.message === 'Unable to add more requests.'
-                            ? 'Unable to add more requests.'
-                            : 'Transaction rejected.',
-                    )
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error: error_,
-                    })
-                    reject(error_)
-                } else {
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
-                    })
-                }
-            }
+                },
+                async (error, hash) => {
+                    if (error) {
+                        if ((error as any)?.code) {
+                            const error_ = new Error(
+                                (error as any)?.message === 'Unable to add more requests.'
+                                    ? 'Unable to add more requests.'
+                                    : 'Transaction rejected.',
+                            )
+                            setTradeState({
+                                type: TransactionStateType.FAILED,
+                                error: error_,
+                            })
+                            reject(error_)
+                        } else {
+                            setTradeState({
+                                type: TransactionStateType.FAILED,
+                                error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
+                            })
+                        }
+                    } else {
+                        setTradeState({
+                            type: TransactionStateType.HASH,
+                            hash: hash,
+                        })
+                        resolve(hash)
+                    }
+                },
+            )
         })
     }, [web3, account, tradeParameters])
 

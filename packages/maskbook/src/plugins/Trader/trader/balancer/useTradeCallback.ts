@@ -109,14 +109,14 @@ export function useTradeCallback(
 
         // send transaction and wait for hash
         return new Promise<void>((resolve, reject) => {
-            const promiEvent = tx.send(config as PayableTx)
-            promiEvent
+            tx.send(config as PayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setTradeState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setTradeState({

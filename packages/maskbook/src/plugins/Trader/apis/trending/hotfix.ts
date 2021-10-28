@@ -100,6 +100,7 @@ const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
         '1027': NetworkType.Ethereum,
         '1839': NetworkType.Binance,
         '3890': NetworkType.Polygon,
+        '11841': NetworkType.Arbitrum,
         '5601': NetworkType.xDai,
     },
     [DataProvider.UNISWAP_INFO]: {},

@@ -94,6 +94,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             PopupRoutes.GasSetting,
             PopupRoutes.SelectWallet,
             PopupRoutes.WalletRecovered,
+            PopupRoutes.Unlock,
         ],
         exact: true,
     })
@@ -126,11 +127,11 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                             activeClassName={classes.active}>
                             {t('wallets')}
                         </NavLink>
-                        {!excludePersonaPath ? (
+                        {!!excludePersonaPath ? null : (
                             <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
                                 {t('personas')}
                             </NavLink>
-                        ) : null}
+                        )}
                     </Box>
                 </Box>
                 <Box className={classes.container}>

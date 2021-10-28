@@ -95,39 +95,32 @@ export function useCreateNftRedpacketCallback(
             }
 
             return new Promise<void>(async (resolve, reject) => {
-                const promiEvent = nftRedPacketContract.methods
+                nftRedPacketContract.methods
                     .create_red_packet(...params)
                     .send(config as NonPayableTx)
-                promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                    setCreateState({
-                        type: TransactionStateType.WAIT_FOR_CONFIRMING,
-                        hash,
+                    .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                        setCreateState({
+                            type: TransactionStateType.CONFIRMED,
+                            no: 0,
+                            receipt,
+                        })
+                        resolve()
                     })
-                })
-                promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                    setCreateState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
+                    .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                        setCreateState({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
+                        })
+                        resolve()
                     })
-                })
-
-                promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                    setCreateState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
+                    .on(TransactionEventType.ERROR, (error: Error) => {
+                        setCreateState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
                     })
-                    resolve()
-                })
-
-                promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                    setCreateState({
-                        type: TransactionStateType.FAILED,
-                        error,
-                    })
-                    reject(error)
-                })
             })
         },
         [duration, message, name, contractAddress, tokenIdList, nftRedPacketContract, setCreateState, account, chainId],

@@ -1,13 +1,15 @@
-import { ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
-import { makeStyles } from '@masknet/theme'
+import BigNumber from 'bignumber.js'
+import { omit } from 'lodash-es'
+import { useCallback, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
+import type { TransactionReceipt } from 'web3-core'
+import Web3Utils from 'web3-utils'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
-    formatBalance,
     FungibleTokenDetailed,
     isLessThan,
-    resolveTransactionLinkOnExplorer,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
@@ -16,23 +18,7 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
-import { Link } from '@mui/material'
-import LaunchIcon from '@mui/icons-material/Launch'
-import BigNumber from 'bignumber.js'
-import { omit } from 'lodash-es'
-import React, { FC, memo, useCallback, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
-import type { TransactionReceipt } from 'web3-core'
-import Web3Utils from 'web3-utils'
-import { useI18N } from '../../../../utils/i18n-next-ui'
 import { useRedPacketContract } from './useRedPacketContract'
-
-const useStyles = makeStyles()({
-    link: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-})
 
 export interface RedPacketSettings {
     publicKey: string
@@ -60,10 +46,7 @@ type paramsObjType = {
     token?: FungibleTokenDetailed
 }
 
-function checkParams(
-    paramsObj: paramsObjType,
-    setCreateState?: (value: React.SetStateAction<TransactionState>) => void,
-) {
+function checkParams(paramsObj: paramsObjType, setCreateState?: (value: TransactionState) => void) {
     if (isLessThan(paramsObj.total, paramsObj.shares)) {
         setCreateState?.({
             type: TransactionStateType.FAILED,
@@ -136,42 +119,13 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     }, [redPacketSettings, account, redPacketContract]).value
 }
 
-const TransactionLink: FC<{ txHash?: string }> = memo(({ children, txHash }) => {
-    const { classes } = useStyles()
-    const chainId = useChainId()
-    if (!txHash) {
-        return null
-    }
-    const link = resolveTransactionLinkOnExplorer(chainId, txHash)
-    return (
-        <Link className={classes.link} color="inherit" href={link} target="_blank" rel="noopener noreferrer">
-            {children}
-            <LaunchIcon fontSize="inherit" />
-        </Link>
-    )
-})
-
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
     const account = useAccount()
     const chainId = useChainId()
-    const { t } = useI18N()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
     const paramResult = useCreateParams(redPacketSettings, version)
-
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
-    const snackbarKeyRef = useRef<SnackbarKey>()
-    const showSingletonSnackbar = useCallback(
-        (title: SnackbarMessage, options: ShowSnackbarOptions) => {
-            if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
-            snackbarKeyRef.current = showSnackbar(title, options)
-            return () => {
-                closeSnackbar(snackbarKeyRef.current)
-            }
-        },
-        [showSnackbar, closeSnackbar],
-    )
 
     const transactionHashRef = useRef<string>()
 
@@ -206,10 +160,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // estimate gas and compose transaction
         const value = new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0').toFixed()
-        const formattedValue = formatBalance(
-            new BigNumber(token.type === EthereumTokenType.Native ? paramsObj.total : '0'),
-            token.decimals,
-        )
         const config = {
             from: account,
             value,
@@ -218,77 +168,43 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
-            const snackbarTitle = t('plugin_red_packet_create_title')
-            promiEvent.once(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                setCreateState({
-                    type: TransactionStateType.WAIT_FOR_CONFIRMING,
-                    hash,
+            redPacketContract.methods
+                .create_red_packet(...params)
+                .send(config as PayableTx)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+                    setCreateState({
+                        type: TransactionStateType.WAIT_FOR_CONFIRMING,
+                        hash,
+                    })
+                    transactionHashRef.current = hash
                 })
-                transactionHashRef.current = hash
-                showSingletonSnackbar(snackbarTitle, {
-                    processing: true,
-                    persist: true,
-                    message: (
-                        <TransactionLink txHash={hash}>{t('plugin_red_packet_transaction_submitted')}</TransactionLink>
-                    ),
+                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                    setCreateState({
+                        type: TransactionStateType.CONFIRMED,
+                        no: 0,
+                        receipt,
+                    })
+                    transactionHashRef.current = receipt.transactionHash
+                    resolve()
                 })
-            })
-            promiEvent.once(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setCreateState({
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setCreateState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    transactionHashRef.current = receipt.transactionHash
+                    resolve()
                 })
-                transactionHashRef.current = receipt.transactionHash
-                showSingletonSnackbar(snackbarTitle, {
-                    variant: 'success',
-                    message: (
-                        <TransactionLink txHash={receipt.transactionHash}>
-                            {t('plugin_red_packet_transaction_submitted')}
-                        </TransactionLink>
-                    ),
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setCreateState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
-            })
-
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setCreateState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
-                })
-                transactionHashRef.current = receipt.transactionHash
-                resolve()
-                showSingletonSnackbar(snackbarTitle, {
-                    variant: 'success',
-                    message: (
-                        <TransactionLink txHash={receipt.transactionHash}>
-                            {t('plugin_red_packet_success', {
-                                value: formattedValue,
-                                symbol: token.symbol,
-                            })}
-                        </TransactionLink>
-                    ),
-                })
-            })
-
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setCreateState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                reject(error)
-                showSingletonSnackbar(snackbarTitle, {
-                    variant: 'error',
-                    message: (
-                        <TransactionLink txHash={transactionHashRef.current}>
-                            {t('plugin_red_packet_transaction_rejected')}
-                        </TransactionLink>
-                    ),
-                })
-            })
         })
-    }, [account, redPacketContract, redPacketSettings, chainId, paramResult, showSingletonSnackbar])
+    }, [account, redPacketContract, redPacketSettings, chainId, paramResult])
 
     const resetCallback = useCallback(() => {
         setCreateState({

@@ -19,7 +19,6 @@ import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
-import { RecentTransactionList } from './RecentTransactionList'
 import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -53,9 +52,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         borderTop: `1px solid ${theme.palette.divider}`,
         justifyContent: 'flex-start',
-    },
-    transactionList: {
-        alignItems: 'center',
     },
     actions: {},
     actionButton: {
@@ -212,9 +208,6 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                             {t('wallet_status_button_change')}
                         </Button>
                     </section>
-                </section>
-                <section className={classes.transactionList}>
-                    <RecentTransactionList />
                 </section>
             </DialogContent>
             {!chainIdValid ? (

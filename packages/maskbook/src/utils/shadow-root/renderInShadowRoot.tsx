@@ -1,11 +1,9 @@
-import { ErrorBoundary } from '../../components/shared/ErrorBoundary'
-import { applyMaskColorVars } from '@masknet/theme'
-import { appearanceSettings } from '../../settings/settings'
-import { getMaskTheme } from '../theme'
 import { createReactRootShadowedPartial, setupPortalShadowRoot } from '@masknet/theme'
 import { untilDomLoaded } from '../dom'
 import { Flags } from '../flags'
-import { MaskInShadow } from './MaskInShadow'
+import { MaskUIRoot } from '../../UIRoot'
+import { CSSVariableInjector } from './CSSVariableInjector'
+import { useClassicMaskSNSTheme } from '..'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [
     'paste',
@@ -27,20 +25,12 @@ untilDomLoaded().then(() => {
 // https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
 const createReactRootShadowed_raw = createReactRootShadowedPartial({
     preventEventPropagationList: captureEvents,
-    onHeadCreate(head) {
-        const themeCSSVars = head.appendChild(document.createElement('style'))
-        function updateThemeVars() {
-            applyMaskColorVars(themeCSSVars, getMaskTheme().palette.mode)
-        }
-        updateThemeVars()
-        appearanceSettings.addListener(updateThemeVars)
-        matchMedia('(prefers-color-scheme: dark)').addEventListener('change', updateThemeVars)
-    },
     wrapJSX(jsx) {
         return (
-            <ErrorBoundary>
-                <MaskInShadow>{jsx}</MaskInShadow>
-            </ErrorBoundary>
+            <MaskUIRoot useTheme={useClassicMaskSNSTheme} kind="sns">
+                <CSSVariableInjector />
+                {jsx}
+            </MaskUIRoot>
         )
     },
 })

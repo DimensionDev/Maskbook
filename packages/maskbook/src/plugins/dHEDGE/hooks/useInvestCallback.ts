@@ -61,11 +61,11 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
-            const promiEvent = deposit().send({
-                ...config,
-                gas: estimatedGas,
-            })
-            promiEvent
+            deposit()
+                .send({
+                    ...config,
+                    gas: estimatedGas,
+                })
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setInvestState({
                         type: TransactionStateType.HASH,

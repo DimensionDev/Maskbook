@@ -36,12 +36,3 @@ declare class ClipboardItem {
 interface Permissions {
     request(permission: { name: PermissionName }): Promise<PermissionStatus>
 }
-
-declare module 'react-middle-ellipsis' {
-    import React from 'react'
-    interface ComponentProps {
-        children?: React.ReactNode
-    }
-    const component: (props: ComponentProps) => JSX.Element
-    export default component
-}

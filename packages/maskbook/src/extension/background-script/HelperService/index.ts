@@ -2,6 +2,7 @@ import { memoizePromise } from '../../../utils'
 import { PopupRoutes } from '../../popups'
 import urlcat from 'urlcat'
 import { currentPopupWindowId } from '../../../settings/settings'
+import { isLocked } from '../../../plugins/Wallet/services'
 
 export { __deprecated__getStorage, __deprecated__setStorage } from './storage'
 
@@ -44,7 +45,13 @@ export async function openPopupWindow(route?: PopupRoutes, params?: Record<strin
     if (popup) {
         await browser.windows.update(currentPopupWindowId.value, { focused: true })
     } else {
-        const url = urlcat('popups.html#', route ?? PopupRoutes.Wallet, { toBeClose: 1, ...params })
+        const locked = await isLocked()
+
+        const url = urlcat('popups.html#', locked ? PopupRoutes.Unlock : route ?? PopupRoutes.Wallet, {
+            toBeClose: 1,
+            from: locked && route ? route : null,
+            ...params,
+        })
 
         let left: number
         let top: number

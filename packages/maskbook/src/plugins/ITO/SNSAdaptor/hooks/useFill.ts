@@ -139,21 +139,16 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = (ITO_Contract as ITO2).methods.fill_pool(...params).send(config as NonPayableTx)
-
-            promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setFillState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                })
+            ;(ITO_Contract as ITO2).methods
+                .fill_pool(...params)
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setFillState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setFillState({
@@ -282,7 +277,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
     }, [poolSettings]).value
 }
 
-function checkParams(paramsObj: paramsObjType, setFillState?: (value: React.SetStateAction<TransactionState>) => void) {
+function checkParams(paramsObj: paramsObjType, setFillState?: (value: TransactionState) => void) {
     // error: the start time before BASE TIMESTAMP
     if (paramsObj.startTime < 0) {
         setFillState?.({
