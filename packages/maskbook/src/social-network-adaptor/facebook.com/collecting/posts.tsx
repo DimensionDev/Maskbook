@@ -149,10 +149,13 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
         } else {
             // In timeline
             const postTimeNode = root.querySelector('[href*="permalink"]')
-            const id = postTimeNode
+            const postIdMode1 = postTimeNode
                 ? postTimeNode.getAttribute('href')?.match(/(?<=story_fbid=)(\d+)/g)?.[0] ?? null
                 : null
-            if (id) return id
+            if (postIdMode1) return postIdMode1
+
+            const postIdMode2 = postTimeNode ? postTimeNode.getAttribute('href')?.split('/').at(-1) ?? null : null
+            if (postIdMode2 && /^-?\d+$/.test(postIdMode2)) return postIdMode2
 
             const parent = node.current.parentElement
             if (!parent) return null
