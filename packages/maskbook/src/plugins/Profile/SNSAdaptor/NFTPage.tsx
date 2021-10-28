@@ -85,7 +85,6 @@ export function NFTPage(props: NFTPageProps) {
                                       )
                                     : name}
                             </Link>
-                            )
                         </Typography>
                         <Typography
                             sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
