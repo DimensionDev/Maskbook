@@ -4,7 +4,7 @@ import { IconButton } from '@mui/material'
 import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { DashboardRoutes, useStylesExtends } from '@masknet/shared'
+import { DashboardRoutes, useStylesExtends, useValueRef } from '@masknet/shared'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
@@ -55,6 +55,7 @@ export function Banner(props: BannerProps) {
     const networkIdentifier = activatedSocialNetworkUI?.networkIdentifier
     const identities = useMyIdentities()
     const [value, onChange] = useState('')
+    const userGuideVal = useValueRef(userGuideStatus[networkIdentifier])
     const defaultNextStep = useCallback(() => {
         if (nextStep === 'hidden') return
         if (!networkIdentifier) {
@@ -77,9 +78,7 @@ export function Banner(props: BannerProps) {
     const [mounted, setMounted] = useState(false)
     useMount(() => setMounted(true))
 
-    return ((userGuideStatus[networkIdentifier].value && userGuideStatus[networkIdentifier].value !== 'completed') ||
-        identities.length === 0) &&
-        mounted ? (
+    return ((userGuideVal && userGuideVal !== 'completed') || identities.length === 0) && mounted ? (
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}
