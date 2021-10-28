@@ -58,19 +58,17 @@ export function RedPacket(props: RedPacketProps) {
     const postLink = usePostLink()
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            canClaim
-                ? t(
-                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                          ? 'plugin_red_packet_share_message_official_account'
-                          : 'plugin_red_packet_share_message_not_twitter',
-                      {
-                          sender: payload.sender.name,
-                          payload: postLink,
-                          network: resolveNetworkName(networkType),
-                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
-                      },
-                  ).trim()
-                : '',
+            t(
+                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? 'plugin_red_packet_share_message_official_account'
+                    : 'plugin_red_packet_share_message_not_twitter',
+                {
+                    sender: payload.sender.name,
+                    payload: postLink,
+                    network: resolveNetworkName(networkType),
+                    account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                },
+            ).trim(),
         )
         .toString()
 
