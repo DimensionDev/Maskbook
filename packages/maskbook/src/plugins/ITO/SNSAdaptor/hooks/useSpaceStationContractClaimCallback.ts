@@ -73,15 +73,11 @@ ${campaignInfo.description}`,
                 }),
         }
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = contract.methods.claim(...params).send(config as NonPayableTx)
+            contract.methods
+                .claim(...params)
+                .send(config as NonPayableTx)
 
-            promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, async (hash) => {
-                    setClaimState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-
                     const participated = await mutationParticipate(
                         useSignature,
                         account,

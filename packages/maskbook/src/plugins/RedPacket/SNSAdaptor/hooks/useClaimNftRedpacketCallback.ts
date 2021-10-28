@@ -49,36 +49,32 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
 
         return new Promise<void>(async (resolve, reject) => {
             const promiEvent = nftRedPacketContract.methods.claim(...params).send(config as NonPayableTx)
-            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                setClaimState({
-                    type: TransactionStateType.WAIT_FOR_CONFIRMING,
-                    hash,
-                })
-            })
-            promiEvent.on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setClaimState({
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
-                })
-            })
 
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setClaimState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
+            promiEvent
+                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                    setClaimState({
+                        type: TransactionStateType.CONFIRMED,
+                        no: 0,
+                        receipt,
+                    })
                 })
-                resolve()
-            })
 
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setClaimState({
-                    type: TransactionStateType.FAILED,
-                    error,
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setClaimState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
                 })
-                reject(error)
-            })
+
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
+                })
         })
     }, [id, signedMsg, account, chainId, totalAmount])
 

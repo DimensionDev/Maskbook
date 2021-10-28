@@ -12,6 +12,7 @@ export interface RecentTransaction {
     hash: string
     hashReplacement?: string
     payload: JsonRpcPayload
+    payloadReplacement?: JsonRpcPayload
 }
 
 export interface RecentTransactionChunk {
@@ -24,18 +25,18 @@ export interface RecentTransactionChunk {
     updatedAt: Date
 }
 
-function getRecordId(address: string) {
-    return `${currentChainIdSettings.value}_${formatEthereumAddress(address)}`
+function getRecordId(chainId: ChainId, address: string) {
+    return `${chainId}_${formatEthereumAddress(address)}`
 }
 
-export async function addRecentTransaction(address: string, hash: string, payload: JsonRpcPayload) {
+export async function addRecentTransaction(chainId: ChainId, address: string, hash: string, payload: JsonRpcPayload) {
     const now = new Date()
-    const recordId = getRecordId(address)
+    const recordId = getRecordId(chainId, address)
     const chunk = await PluginDB.get('recent-transactions', recordId)
     await PluginDB.add({
         type: 'recent-transactions',
-        id: getRecordId(address),
-        chainId: currentChainIdSettings.value,
+        id: recordId,
+        chainId,
         address: formatEthereumAddress(address),
         transactions: uniqBy(
             [
@@ -52,53 +53,60 @@ export async function addRecentTransaction(address: string, hash: string, payloa
         createdAt: chunk?.createdAt ?? now,
         updatedAt: now,
     })
-    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+    WalletMessages.events.transactionsUpdated.sendToAll()
 }
 
-export async function replaceRecentTransaction(address: string, oldHash: string, newHash: string) {
+export async function replaceRecentTransaction(
+    chainId: ChainId,
+    address: string,
+    oldHash: string,
+    newHash: string,
+    payload?: JsonRpcPayload,
+) {
     const now = new Date()
-    const recordId = getRecordId(address)
+    const recordId = getRecordId(chainId, address)
     const chunk = await PluginDB.get('recent-transactions', recordId)
     const transaction = chunk?.transactions.find((x) => x.hash === oldHash)
     if (!transaction) throw new Error('Failed to find the old transaction.')
     transaction.hashReplacement = newHash
+    transaction.payloadReplacement = payload
     await PluginDB.add({
         type: 'recent-transactions',
-        id: getRecordId(address),
-        chainId: currentChainIdSettings.value,
+        id: recordId,
+        chainId,
         address: formatEthereumAddress(address),
         transactions: chunk?.transactions ?? [],
         createdAt: chunk?.createdAt ?? now,
         updatedAt: now,
     })
-    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+    WalletMessages.events.transactionsUpdated.sendToAll()
 }
 
-export async function removeRecentTransaction(address: string, hash: string) {
+export async function removeRecentTransaction(chainId: ChainId, address: string, hash: string) {
     const now = new Date()
-    const recordId = getRecordId(address)
+    const recordId = getRecordId(chainId, address)
     const chunk = await PluginDB.get('recent-transactions', recordId)
     if (!chunk) return
     await PluginDB.add({
         type: 'recent-transactions',
-        id: getRecordId(address),
+        id: recordId,
         chainId: currentChainIdSettings.value,
         address: formatEthereumAddress(address),
         transactions: chunk.transactions.filter((x) => x.hash !== hash),
         createdAt: chunk.createdAt,
         updatedAt: now,
     })
-    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+    WalletMessages.events.transactionsUpdated.sendToAll()
 }
 
-export async function getRecentTransactions(address: string) {
-    const recordId = getRecordId(address)
+export async function getRecentTransactions(chainId: ChainId, address: string) {
+    const recordId = getRecordId(chainId, address)
     const chunk = await PluginDB.get('recent-transactions', recordId)
     return chunk?.transactions ?? []
 }
 
-export async function clearRecentTransactions(address: string) {
-    const recordId = getRecordId(address)
+export async function clearRecentTransactions(chainId: ChainId, address: string) {
+    const recordId = getRecordId(chainId, address)
     await PluginDB.remove('recent-transactions', recordId)
-    WalletMessages.events.recentTransactionsUpdated.sendToAll()
+    WalletMessages.events.transactionsUpdated.sendToAll()
 }

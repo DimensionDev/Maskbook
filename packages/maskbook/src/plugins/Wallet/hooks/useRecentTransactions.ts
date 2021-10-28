@@ -10,12 +10,12 @@ export function useRecentTransactions(status?: TransactionStatusType) {
 
     const result = useAsyncRetry(async () => {
         if (!account) return []
-        const transactions = await WalletRPC.getRecentTransactionList(account)
+        const transactions = await WalletRPC.getRecentTransactions(chainId, account)
         return transactions.filter((x) => (typeof status !== 'undefined' ? x.status === status : true))
-    }, [account, status, chainId])
+    }, [chainId, account, status])
 
-    useEffect(() => WalletMessages.events.receiptUpdated.on(result.retry), [result.retry])
-    useEffect(() => WalletMessages.events.recentTransactionsUpdated.on(result.retry), [result.retry])
+    useEffect(() => WalletMessages.events.transactionStateUpdated.on(result.retry), [result.retry])
+    useEffect(() => WalletMessages.events.transactionsUpdated.on(result.retry), [result.retry])
 
     return result
 }

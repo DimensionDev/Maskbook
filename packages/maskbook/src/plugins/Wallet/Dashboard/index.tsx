@@ -13,6 +13,7 @@ import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 import { WalletRiskWarningDialog } from '../SNSAdaptor/RiskWarningDialog'
 import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog'
 import { ERC20TokenListDialog } from '../SNSAdaptor/RRC20TokenListDialog'
+import { TransactionSnackbar } from '../SNSAdaptor/TransactionSnackbar'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
@@ -33,6 +34,7 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <WalletRiskWarningDialog />
                 <ERC20TokenListDialog />
                 <GasSettingDialog />
+                <TransactionSnackbar />
             </>
         )
     },

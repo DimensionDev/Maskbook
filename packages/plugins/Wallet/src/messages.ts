@@ -1,4 +1,5 @@
 import type BigNumber from 'bignumber.js'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import type {
     FungibleTokenDetailed,
     ERC721ContractDetailed,
@@ -9,7 +10,6 @@ import type {
     Wallet,
     GasOption,
 } from '@masknet/web3-shared-evm'
-import type { TransactionReceipt } from 'web3-core'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
 
@@ -212,8 +212,12 @@ export interface WalletMessage {
     walletsUpdated: void
     phrasesUpdated: void
     addressBookUpdated: void
-    recentTransactionsUpdated: void
-    receiptUpdated: TransactionReceipt
+    transactionsUpdated: void
+    transactionStateUpdated: TransactionState
+    transactionProgressUpdated: {
+        state: TransactionState
+        payload: JsonRpcPayload
+    }
     requestsUpdated: { hasRequest: boolean }
     erc20TokensUpdated: void
     erc721TokensUpdated: void

@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
+import { isNextStateAvailable } from '..'
 
 export enum TransactionStateType {
     UNKNOWN = 0,
@@ -13,8 +14,6 @@ export enum TransactionStateType {
     CONFIRMED = 4,
     /** Fail to send */
     FAILED = 5,
-    /** Reject by external provider */
-    REJECTED = 6,
 }
 
 export type TransactionState =
@@ -23,6 +22,8 @@ export type TransactionState =
       }
     | {
           type: TransactionStateType.WAIT_FOR_CONFIRMING
+
+          // @deprecated don't depend on this property will be removed in the future
           hash?: string
       }
     | {
@@ -42,10 +43,19 @@ export type TransactionState =
     | {
           type: TransactionStateType.FAILED
           error: Error & { code?: number }
+          receipt?: TransactionReceipt
       }
 
 export function useTransactionState() {
-    return useState<TransactionState>({
+    const [state, setState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
+    const setStateWithConfirmation = useCallback(
+        (nextState: TransactionState) => {
+            if (!isNextStateAvailable(state.type, nextState.type)) return
+            setState(nextState)
+        },
+        [state],
+    )
+    return [state, setStateWithConfirmation] as const
 }
