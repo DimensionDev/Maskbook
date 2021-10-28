@@ -48,17 +48,17 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
         }
 
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = nftRedPacketContract.methods.claim(...params).send(config as NonPayableTx)
-
-            promiEvent
+            nftRedPacketContract.methods
+                .claim(...params)
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
-
                 .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
@@ -67,7 +67,6 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
                     })
                     resolve()
                 })
-
                 .on(TransactionEventType.ERROR, (error: Error) => {
                     setClaimState({
                         type: TransactionStateType.FAILED,

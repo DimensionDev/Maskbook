@@ -95,19 +95,17 @@ export function useCreateNftRedpacketCallback(
             }
 
             return new Promise<void>(async (resolve, reject) => {
-                const promiEvent = nftRedPacketContract.methods
+                nftRedPacketContract.methods
                     .create_red_packet(...params)
                     .send(config as NonPayableTx)
-
-                promiEvent
                     .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                         setCreateState({
                             type: TransactionStateType.CONFIRMED,
                             no: 0,
                             receipt,
                         })
+                        resolve()
                     })
-
                     .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                         setCreateState({
                             type: TransactionStateType.CONFIRMED,
@@ -116,7 +114,6 @@ export function useCreateNftRedpacketCallback(
                         })
                         resolve()
                     })
-
                     .on(TransactionEventType.ERROR, (error: Error) => {
                         setCreateState({
                             type: TransactionStateType.FAILED,

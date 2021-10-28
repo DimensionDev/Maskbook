@@ -83,12 +83,12 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 })
                 reject(error)
             }
-            const promiEvent = AirdropContract.methods.claim(...claimParams).send(config as NonPayableTx)
-
-            promiEvent
-                .on(TransactionEventType.ERROR, onFailed)
+            AirdropContract.methods
+                .claim(...claimParams)
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
+                .on(TransactionEventType.ERROR, onFailed)
         })
     }, [AirdropContract, account, packet])
 
