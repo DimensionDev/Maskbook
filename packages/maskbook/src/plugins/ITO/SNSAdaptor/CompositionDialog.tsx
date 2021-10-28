@@ -31,6 +31,7 @@ const useStyles = makeStyles()(() => ({
         left: 0,
         right: 0,
         position: 'sticky',
+        marginBottom: 24,
     },
 }))
 
