@@ -12,7 +12,7 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { getAvatarId } from '../../utils/user'
 import { toPNG } from '../../../../plugins/Avatar/utils'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { useCurrentProfileIdentifier } from '../../../../plugins/Avatar/hooks/useCurrentUserInfo'
+import { useCurrentProfileIdentifiers } from '../../../../plugins/Avatar/hooks/useCurrentProfileIdentifiers'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 
@@ -36,7 +36,7 @@ async function changeImageToActiveElements(image: File | Blob): Promise<void> {
 
 function NFTAvatarInTwitter() {
     const { classes } = useStyles()
-    const currentIdentifier = useCurrentProfileIdentifier()
+    const myIdentities = useCurrentProfileIdentifiers()
     const identity = useCurrentVisitingIdentity()
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 
@@ -73,6 +73,7 @@ function NFTAvatarInTwitter() {
         return () => profileSave.removeEventListener('click', handler)
     }, [handler])
 
-    if (identity.identifier.userId !== currentIdentifier?.userId) return null
-    return <NFTAvatar onChange={onChange} classes={classes} />
+    if (myIdentities.some((x) => x && x.userId === identity.identifier.userId))
+        return <NFTAvatar onChange={onChange} classes={classes} />
+    return null
 }

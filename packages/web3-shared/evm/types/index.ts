@@ -262,6 +262,8 @@ export enum EthereumMethodType {
     ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
     ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
     ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
+    ETH_GET_FILTER_CHANGES = 'eth_getFilterChanges',
+    ETH_NEW_PENDING_TRANSACTION_FILTER = 'eth_newPendingTransactionFilter',
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
     ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
@@ -270,6 +272,10 @@ export enum EthereumMethodType {
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+
+    // only for mask
+    MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
+    MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {
@@ -307,11 +313,6 @@ export enum EthereumRpcType {
 export type EthereumRpcComputed =
     | {
           type: EthereumRpcType.CANCEL | EthereumRpcType.RETRY
-
-          /**
-           * The replacement transaction
-           */
-          tx: EthereumTransactionConfig
 
           /**
            * The original transaction config

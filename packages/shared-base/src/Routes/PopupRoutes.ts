@@ -19,6 +19,7 @@ export enum PopupRoutes {
     Unlock = '/wallet/unlock',
     Transfer = '/wallet/transfer',
     SetPaymentPassword = '/wallet/password',
+    ReplaceTransaction = '/wallet/replace',
     Personas = '/personas',
     Logout = '/personas/logout',
     PersonaRename = '/personas/rename',
