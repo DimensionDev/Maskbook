@@ -5,6 +5,7 @@ import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@mui/material/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useDashboardI18N } from '../../locales'
+import links from '../../components/FooterLine/links.json'
 
 const Content = styled('div')(({ theme }) => ({
     padding: `${theme.spacing(1)} ${theme.spacing(4)}`,
@@ -71,7 +72,7 @@ export default function Welcome() {
     }
 
     const handleLinkClick = () => {
-        window.open(`dashboard.html#${RoutePaths.PrivacyPolicy}`)
+        window.open(links.MASK_PRIVACY_POLICY)
     }
 
     return (
