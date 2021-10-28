@@ -35,7 +35,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             UI.current?.startPlugin(plugin)
         })
 
-        MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
+        return MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
     }, [])
 
     const { onQueryClipboardPermission, hasClipboardPermission, onRequestClipboardPermission } =
