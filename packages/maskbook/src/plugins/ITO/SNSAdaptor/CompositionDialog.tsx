@@ -12,6 +12,7 @@ import AbstractTab, { AbstractTabProps } from '../../../components/shared/Abstra
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import Services from '../../../extension/service'
 import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
@@ -142,6 +143,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
     //#region tabs
     const state = useState<DialogTabs>(DialogTabs.create)
 
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
+
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
@@ -153,6 +157,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 return
             }
 
+            senderName && (payload.seller.name = senderName)
             // To meet the max allowance of the data size of image steganography, we need to
             //  cut off and simplify some properties, such as save the token address string only.
             const payloadDetail = omit(
@@ -181,7 +186,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             const [, setValue] = state
             setValue(DialogTabs.create)
         },
-        [account, chainId, props.onConfirm, state],
+        [account, chainId, props.onConfirm, state, senderName],
     )
 
     const onClose = useCallback(() => {
