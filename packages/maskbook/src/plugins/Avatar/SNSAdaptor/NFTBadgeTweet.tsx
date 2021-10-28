@@ -11,11 +11,22 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTBadgeTweetProps {}
+interface NFTBadgeTweetProps {
+    width: number
+    height: number
+}
 
 export function NFTBadgeTweet(props: NFTBadgeTweetProps) {
+    const { width, height } = props
     const identity = useCurrentIdentity()
 
     if (!identity?.identifier.userId) return null
-    return <NFTBadgeTimeline userId={identity?.identifier.userId} avatarId={getAvatarId(identity?.avatar ?? '')} />
+    return (
+        <NFTBadgeTimeline
+            width={width}
+            height={height}
+            userId={identity?.identifier.userId}
+            avatarId={getAvatarId(identity?.avatar ?? '')}
+        />
+    )
 }

@@ -7,10 +7,12 @@ import { RainbowBox } from './RainbowBox'
 interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
     avatarId: string
+    width: number
+    height: number
 }
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
-    const { userId, avatarId } = props
+    const { userId, avatarId, width, height } = props
     const _avatar = useNFTAvatar(userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
@@ -37,5 +39,5 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     if (!avatar) return null
     if (avatarId_ && avatar.avatarId !== avatarId_) return null
 
-    return <RainbowBox width={47} height={47} radius="100%" />
+    return <RainbowBox width={width} height={height} radius="100%" />
 }
