@@ -52,7 +52,7 @@ export interface BannerProps extends Partial<BannerUIProps> {}
 export function Banner(props: BannerProps) {
     const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { nextStep } = props
-    const networkIdentifier = activatedSocialNetworkUI?.networkIdentifier
+    const networkIdentifier = activatedSocialNetworkUI.networkIdentifier
     const identities = useMyIdentities()
     const [value, onChange] = useState('')
     const userGuideVal = useValueRef(userGuideStatus[networkIdentifier])
