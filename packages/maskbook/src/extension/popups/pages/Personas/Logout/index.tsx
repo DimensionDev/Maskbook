@@ -111,7 +111,7 @@ const Logout = memo(() => {
     return (
         <LogoutUI
             deletingPersona={deletingPersona}
-            backupPassword={(backupPassword && atob(backupPassword)) ?? ''}
+            backupPassword={backupPassword ?? ''}
             loading={loading}
             onLogout={onLogout}
             onCancel={() => history.goBack()}
