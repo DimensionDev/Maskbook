@@ -95,6 +95,7 @@
     "react-highlight-words": "^0.17.0",
     "react-hook-form": "7.15.3",
     "react-router-dom": "^5.3.0",
+    "react-transition-group": "^4.4.2",
     "react-use": "^17.3.1",
     "react-virtualized-auto-sizer": "^1.0.6",
     "react-window": "^1.8.6",

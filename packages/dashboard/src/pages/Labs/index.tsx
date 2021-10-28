@@ -15,6 +15,7 @@ import {
     GitcoinIcon,
     ValuablesIcon,
     DhedgeIcon,
+    PetIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -177,6 +178,14 @@ export default function Plugins() {
                             icon={<TransakIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.TRANSAK]}
                             onExplore={onExplore}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.PETS}
+                            title={t.labs_pets()}
+                            desc={t.labs_pets_desc()}
+                            icon={<PetIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.PETS]}
                             onSwitch={onSwitch}
                         />
                         <PluginItemPlaceholder />
