@@ -148,13 +148,18 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
             return url.searchParams.get('id')
         } else {
             // In timeline
-            const postTimeNode = root.querySelector('[href*="permalink"]')
-            const postIdMode1 = postTimeNode
-                ? postTimeNode.getAttribute('href')?.match(/(?<=story_fbid=)(\d+)/g)?.[0] ?? null
+            const postTimeNode1 = root.querySelector('[href*="permalink"]')
+            const postIdMode1 = postTimeNode1
+                ? postTimeNode1.getAttribute('href')?.match(/(?<=story_fbid=)(\d+)/g)?.[0] ?? null
                 : null
+
             if (postIdMode1) return postIdMode1
 
-            const postIdMode2 = postTimeNode ? postTimeNode.getAttribute('href')?.split('/').at(-1) ?? null : null
+            const postTimeNode2 = root.querySelector('[href*="posts"]')
+            const postIdMode2 = postTimeNode2
+                ? postTimeNode2.getAttribute('href')?.match(/(?<=posts\/)(\d+)/g)?.[0] ?? null
+                : null
+
             if (postIdMode2 && /^-?\d+$/.test(postIdMode2)) return postIdMode2
 
             const parent = node.current.parentElement
