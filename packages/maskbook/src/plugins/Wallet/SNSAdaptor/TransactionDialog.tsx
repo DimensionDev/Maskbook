@@ -14,16 +14,9 @@ import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
-import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
-interface StyleProps {
-    snsId: string
-}
-
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
-        ...(snsId === MINDS_ID ? { minWidth: 600 } : {}),
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
@@ -51,7 +44,7 @@ interface TransactionDialogUIProps extends withClasses<never> {}
 
 function TransactionDialogUI(props: TransactionDialogUIProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
+    const classes = useStylesExtends(useStyles(), props)
 
     const chainId = useChainId()
 

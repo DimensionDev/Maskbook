@@ -150,6 +150,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     actionButton: {
+        color: '#fff',
         minHeight: 'auto',
         width: '100%',
     },
@@ -746,7 +747,7 @@ export function ITO(props: ITO_Props) {
                     </Grid>
                 ) : listOfStatus.includes(ITO_Status.started) ? (
                     <ActionButton onClick={onClaim} variant="contained" size="large" className={classes.actionButton}>
-                        {t('plugin_ito_enter')}
+                        <Typography>{t('plugin_ito_enter')}</Typography>
                     </ActionButton>
                 ) : null}
             </Box>
