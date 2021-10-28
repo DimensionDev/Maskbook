@@ -10,21 +10,30 @@ import { useUserOwnerAddress } from '../hooks/useUserOwnerAddress'
 import type { AvatarMetaDB } from '../types'
 import { NFTAvatarRingIcon } from './NFTAvatarRing'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles<number>()((theme, size) => ({
     root: {
         position: 'absolute',
-        left: -18,
-        top: -116,
+        left: -17,
+        top: -114,
+        width: size - 4,
+        height: size - 4,
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            left: -22,
+            top: -67,
+        },
+        borderRadius: '100%',
+        boxShadow: '4px 4px 4px rgba(105, 228, 255, 0.25)',
     },
     image: {
         position: 'absolute',
         bottom: 0,
     },
-})
+}))
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     avatar: AvatarMetaDB
     size?: number
+    width?: number
 }
 
 function formatPrice(amount: string) {
@@ -41,8 +50,8 @@ function formatText(symbol: string, length: number) {
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const classes = useStylesExtends(useStyles(), props)
-    const { avatar, size = 18 } = props
+    const { avatar, size = 140, width = 15 } = props
+    const classes = useStylesExtends(useStyles(size + width * 2), props)
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
         avatar.userId,
@@ -62,7 +71,8 @@ export function NFTBadge(props: NFTBadgeProps) {
         <div className={classes.root}>
             <Link href={resolveOpenSeaLink(avatar.address, avatar.tokenId)} target="_blank" rel="noopener noreferrer">
                 <NFTAvatarRingIcon
-                    size={170}
+                    size={size - 2}
+                    width={15}
                     text={loading || loadingNFTVerified ? 'loading...' : `${name} ${amount} ${symbol}`}
                 />
             </Link>

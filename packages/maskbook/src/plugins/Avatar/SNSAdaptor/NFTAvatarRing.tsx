@@ -1,20 +1,13 @@
-export const NFTAvatarRingIcon = ({
-    width = 15,
-    size = 24,
-    text = '',
-}: {
-    width?: number
-    size?: number
-    text: string
-}) => {
-    const r = size / 2 - width
-    const x1 = size / 2 - r / 2
-    const y1 = size / 2 + Math.sqrt(Math.pow(r, 2) - Math.pow(r / 2, 2))
-    const x2 = size / 2 + r / 2
+export const NFTAvatarRingIcon = ({ width = 15, size = 24, text }: { width?: number; size?: number; text: string }) => {
+    const R = size + 2 * width
+    const r = R / 2 - width
+    const x1 = R / 2 - r / 2
+    const y1 = R / 2 + Math.sqrt(Math.pow(r, 2) - Math.pow(r / 2, 2))
+    const x2 = R / 2 + r / 2
     const y2 = y1
 
     return (
-        <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+        <svg width={R} height={R} viewBox={`0 0 ${R} ${R}`}>
             <defs>
                 <path
                     id="path"
@@ -22,7 +15,6 @@ export const NFTAvatarRingIcon = ({
                     stroke="none"
                     strokeMiterlimit="10"
                     strokeWidth="0"
-                    //d="M55 150 A70 70 0 1 1 125 150"
                     d={`M${x1} ${y1} A${r} ${r} 0 1 1 ${x2} ${y2}`}
                 />
                 <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0">
@@ -39,7 +31,7 @@ export const NFTAvatarRingIcon = ({
                 </linearGradient>
             </defs>
 
-            <circle cx={size / 2} cy={size / 2} r={r + width / 2 - 2} fill="none" stroke="black" strokeWidth={width} />
+            <circle cx={R / 2} cy={R / 2} r={r + width / 2 - 2} fill="none" stroke="black" strokeWidth={width} />
             <pattern id="pattern" x="0" y="0" width="300%" height="100%" patternUnits="userSpaceOnUse">
                 <rect x="0" y="0" width="150%" height="100%" fill="url(#gradient)">
                     <animate
