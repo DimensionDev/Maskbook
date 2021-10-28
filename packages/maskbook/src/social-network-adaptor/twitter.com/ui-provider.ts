@@ -33,6 +33,7 @@ import { injectProfileNFTAvatarInTwitter } from './injection/NFT/profileNFTAvata
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 import { injectUserNFTAvatarAtTweet } from './injection/NFT/tweetNFTAvatar'
+import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -173,6 +174,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         profileAvatar: injectNFTAvatarInTwitter,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         tweetNFTAvatar: injectUserNFTAvatarAtTweet,
+        NFTContract: injectNFTContractAtTwitter,
     },
     configuration: {
         steganography: {
