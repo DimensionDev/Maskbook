@@ -147,6 +147,12 @@ export type RelationTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSaf
     Mode
 >
 
+export async function createRelationsTransaction(storeNames?: string[]) {
+    const database = await db()
+    return createTransaction(database, 'readwrite')('relations')
+}
+
+// @deprecated Please create a transaction directly
 export async function consistentPersonaDBWriteAccess(
     action: (t: FullPersonaDBTransaction<'readwrite'>) => Promise<void>,
     tryToAutoFix = true,
