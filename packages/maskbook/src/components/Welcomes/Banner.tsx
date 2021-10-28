@@ -9,6 +9,7 @@ import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import GuideStep from '../GuideStep'
+import { userGuideStatus } from '../../settings/settings'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'button'> {
     description?: string
@@ -76,7 +77,9 @@ export function Banner(props: BannerProps) {
     const [mounted, setMounted] = useState(false)
     useMount(() => setMounted(true))
 
-    return identities.length === 0 && mounted ? (
+    return ((userGuideStatus[networkIdentifier].value && userGuideStatus[networkIdentifier].value !== 'completed') ||
+        identities.length === 0) &&
+        mounted ? (
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}
