@@ -1,8 +1,7 @@
 import React from 'react'
 import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
 import { Tooltip, Typography, Box } from '@mui/material'
-import { getAssetAsBlobURL } from '../../../utils'
+import { getAssetAsBlobURL, useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -38,20 +37,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Tip = (props: any) => {
-    const classes = useStylesExtends(useStyles(), props)
+const Tip = () => {
+    const { t } = useI18N()
+    const { classes } = useStyles()
     const Info = getAssetAsBlobURL(new URL('../assets/info.png', import.meta.url))
     const click = () => window.open('https://twitter.com/MintTeamNFT')
-    const loots = [
-        'Falchion',
-        'Chain Mail',
-        'Hood',
-        'Leather Belt',
-        'Chain Boots',
-        'Chain Gloves',
-        'Amulet of the Twins',
-        'Gold Ring',
-    ]
+    //@ts-ignore
+    const loots = Array.from({ length: 8 }, (_v, k) => t(`plugin_pets_loot_info_${k}`))
     const titleRender = (
         <div style={{ backgroundColor: '#FFFFFF', padding: 12, borderRadius: 4, fontFamily: 'TwitterChirp' }}>
             <Typography style={{ fontSize: '12px', color: '#737373', fontWeight: 600, fontFamily: 'TwitterChirp' }}>

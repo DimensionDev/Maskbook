@@ -1,9 +1,9 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { getAssetAsBlobURL } from '../../../utils'
-import Comp from './comp'
-import Group from './group'
+import Drag from './drag'
+import AnimatedMessage from './animatedMsg'
 import Tip from './tooltip'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 
@@ -17,28 +17,28 @@ const useStyles = makeStyles()(() => ({
         zIndex: 999,
         width: '100%',
         height: '100%',
-        backgroundRepeat: 'round',
+        backgroundSize: 'contain',
     },
     close: {
         width: 25,
         height: 25,
         cursor: 'pointer',
-        backgroundRepeat: 'round',
+        backgroundSize: 'contain',
         position: 'absolute',
         top: 20,
         right: 0,
     },
 }))
 
-export function AnimatePic(props: any) {
-    const classes = useStylesExtends(useStyles(), props)
+const AnimatePic = () => {
+    const classes = useStylesExtends(useStyles(), {})
     const Background = getAssetAsBlobURL(new URL('../assets/loot.gif', import.meta.url))
     const Close = getAssetAsBlobURL(new URL('../assets/close.png', import.meta.url))
 
-    const [show, setShow] = React.useState(false)
+    const [show, setShow] = useState(false)
 
     const identity = useCurrentVisitingIdentity()
-    React.useEffect(() => {
+    useEffect(() => {
         const userId = identity.identifier.userId
         const maskId = 'realMaskNetwork'
         setShow(userId === maskId)
@@ -49,13 +49,15 @@ export function AnimatePic(props: any) {
     return (
         <div className={classes.root}>
             {show ? (
-                <Comp>
-                    <Group />
+                <Drag>
+                    <AnimatedMessage />
                     <div className={classes.img} style={{ backgroundImage: `url(${Background})` }} />
                     <Tip />
                     <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${Close})` }} />
-                </Comp>
+                </Drag>
             ) : null}
         </div>
     )
 }
+
+export default AnimatePic

@@ -11,8 +11,10 @@ interface StateProps {
 
 const contentWidth = 128
 const contentHeight = 200
-class Comp extends React.PureComponent {
-    ref: any = React.createRef()
+class Draggable extends React.PureComponent {
+    ref = React.createRef()
+    mouseMoveFuc = this.onMouseMove.bind(this)
+    mouseUpFuc = this.onMouseUp.bind(this)
 
     override state: StateProps = {
         pos: {
@@ -25,9 +27,10 @@ class Comp extends React.PureComponent {
 
     onMouseDown(e: React.MouseEvent) {
         if (e.button !== 0) return
-        if (!this.ref.current) return
-        const left = this.ref.current.offsetLeft
-        const top = this.ref.current.offsetTop
+        if (!this.ref || !this.ref.current) return
+        const divDom: HTMLDivElement = this.ref.current as HTMLDivElement
+        const left = divDom.offsetLeft
+        const top = divDom.offsetTop
         this.setState({
             dragging: true,
             rel: {
@@ -59,21 +62,22 @@ class Comp extends React.PureComponent {
 
     override componentDidUpdate(_props: any, state: StateProps) {
         if (this.state.dragging && !state.dragging) {
-            document.addEventListener('mousemove', this.onMouseMove.bind(this))
-            document.addEventListener('mouseup', this.onMouseUp.bind(this))
+            document.addEventListener('mousemove', this.mouseMoveFuc)
+            document.addEventListener('mouseup', this.mouseUpFuc)
         } else if (!this.state.dragging && state.dragging) {
-            document.removeEventListener('mousemove', this.onMouseMove.bind(this))
-            document.removeEventListener('mouseup', this.onMouseUp.bind(this))
+            document.removeEventListener('mousemove', this.mouseMoveFuc)
+            document.removeEventListener('mouseup', this.mouseUpFuc)
         }
     }
     override componentWillUnmount() {
-        document.removeEventListener('mousemove', this.onMouseMove.bind(this))
-        document.removeEventListener('mouseup', this.onMouseUp.bind(this))
+        document.removeEventListener('mousemove', this.mouseMoveFuc)
+        document.removeEventListener('mouseup', this.mouseUpFuc)
     }
 
     override render() {
         return (
             <div
+                //@ts-ignore
                 ref={this.ref}
                 onMouseDown={this.onMouseDown.bind(this)}
                 style={{
@@ -89,4 +93,4 @@ class Comp extends React.PureComponent {
     }
 }
 
-export default Comp
+export default Draggable

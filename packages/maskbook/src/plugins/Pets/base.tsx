@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { CurrentSNSNetwork, Plugin } from '@masknet/plugin-infra'
 import { PetsPluginID } from './constants'
 import { PETSIcon } from '../../resources/PETSIcon'
 
@@ -13,7 +13,7 @@ export const base: Plugin.Shared.Definition = {
     publisher: { name: { fallback: 'etouyang' }, link: 'https://github.com/etouyang/' },
     enableRequirement: {
         architecture: { app: false, web: true },
-        networks: { type: 'opt-out', networks: {} },
+        networks: { type: 'opt-in', networks: { [CurrentSNSNetwork.Twitter]: true } },
         target: 'stable',
     },
 }
