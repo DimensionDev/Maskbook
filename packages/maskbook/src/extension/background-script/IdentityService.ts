@@ -1,6 +1,7 @@
 import * as bip39 from 'bip39'
+import { validateMnemonic } from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
-import { blobToArrayBuffer, decodeArrayBuffer, encodeArrayBuffer, decodeText } from '@dimensiondev/kit'
+import { blobToArrayBuffer, decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     createPersonaByJsonWebKey,
     loginPersona,
@@ -27,6 +28,7 @@ import {
     createOrUpdateProfileDB,
     createProfileDB,
     createRelationDB,
+    createRelationsTransaction,
     deleteProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
@@ -47,11 +49,10 @@ import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileI
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
+import { RelationFavor } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-es'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { validateMnemonic } from 'bip39'
-import { RelationFavor } from '@masknet/shared-base'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -294,7 +295,11 @@ export async function createNewRelation(
     linked: PersonaIdentifier,
     favor = RelationFavor.UNCOLLECTED,
 ) {
-    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor }, t))
+    const t = await createRelationsTransaction()
+    const relationInDB = await t.objectStore('relations').get([linked.toText(), profile.toText()])
+    if (relationInDB) return
+
+    await createRelationDB({ profile, linked, favor }, t)
 }
 
 export async function queryRelationPaged(
@@ -313,16 +318,8 @@ export async function queryRelationPaged(
 }
 
 export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: RelationFavor) {
-    await consistentPersonaDBWriteAccess((t) =>
-        updateRelationDB(
-            {
-                profile,
-                linked,
-                favor,
-            },
-            t,
-        ),
-    )
+    const t = await createRelationsTransaction()
+    await updateRelationDB({ profile, linked, favor }, t)
 }
 //#endregion
 /**
