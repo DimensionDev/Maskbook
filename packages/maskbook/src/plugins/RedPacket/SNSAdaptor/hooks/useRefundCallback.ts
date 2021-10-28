@@ -43,6 +43,14 @@ export function useRefundCallback(version: number, from: string, id?: string) {
             redPacketContract.methods
                 .refund(id)
                 .send(config as NonPayableTx)
+                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                    setRefundState({
+                        type: TransactionStateType.CONFIRMED,
+                        no: 0,
+                        receipt,
+                    })
+                    resolve()
+                })
                 .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                     setRefundState({
                         type: TransactionStateType.CONFIRMED,

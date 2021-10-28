@@ -168,40 +168,41 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = redPacketContract.methods.create_red_packet(...params).send(config as PayableTx)
-            promiEvent.once(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                setCreateState({
-                    type: TransactionStateType.WAIT_FOR_CONFIRMING,
-                    hash,
+            redPacketContract.methods
+                .create_red_packet(...params)
+                .send(config as PayableTx)
+                .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+                    setCreateState({
+                        type: TransactionStateType.WAIT_FOR_CONFIRMING,
+                        hash,
+                    })
+                    transactionHashRef.current = hash
                 })
-                transactionHashRef.current = hash
-            })
-            promiEvent.once(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
-                setCreateState({
-                    type: TransactionStateType.CONFIRMED,
-                    no: 0,
-                    receipt,
+                .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                    setCreateState({
+                        type: TransactionStateType.CONFIRMED,
+                        no: 0,
+                        receipt,
+                    })
+                    transactionHashRef.current = receipt.transactionHash
+                    resolve()
                 })
-                transactionHashRef.current = receipt.transactionHash
-            })
-
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setCreateState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setCreateState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    transactionHashRef.current = receipt.transactionHash
+                    resolve()
                 })
-                transactionHashRef.current = receipt.transactionHash
-                resolve()
-            })
-
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setCreateState({
-                    type: TransactionStateType.FAILED,
-                    error,
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setCreateState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
-                reject(error)
-            })
         })
     }, [account, redPacketContract, redPacketSettings, chainId, paramResult])
 

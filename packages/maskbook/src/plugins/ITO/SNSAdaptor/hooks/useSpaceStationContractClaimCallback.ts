@@ -76,7 +76,6 @@ ${campaignInfo.description}`,
             contract.methods
                 .claim(...params)
                 .send(config as NonPayableTx)
-
                 .on(TransactionEventType.TRANSACTION_HASH, async (hash) => {
                     const participated = await mutationParticipate(
                         useSignature,
@@ -100,6 +99,7 @@ ${campaignInfo.description}`,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setClaimState({

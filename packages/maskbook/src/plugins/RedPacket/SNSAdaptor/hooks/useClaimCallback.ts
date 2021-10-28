@@ -54,9 +54,8 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
 
         // step 2-1: blocking
         return new Promise<void>((resolve, reject) => {
-            const promiEvent = claim().send(config as NonPayableTx)
-
-            promiEvent
+            claim()
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,

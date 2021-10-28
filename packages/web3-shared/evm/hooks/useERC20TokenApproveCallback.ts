@@ -107,14 +107,13 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
 
             // send transaction and wait for hash
             return new Promise<void>(async (resolve, reject) => {
-                const promiEvent = erc20Contract.methods
-                    .approve(spender, useExact ? amount : MaxUint256)
-                    .send(config as NonPayableTx)
                 const revalidate = once(() => {
                     revalidateBalance()
                     revalidateAllowance()
                 })
-                promiEvent
+                erc20Contract.methods
+                    .approve(spender, useExact ? amount : MaxUint256)
+                    .send(config as NonPayableTx)
                     .on(TransactionEventType.RECEIPT, (receipt) => {
                         setTransactionState({
                             type: TransactionStateType.CONFIRMED,
@@ -122,6 +121,7 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                             receipt,
                         })
                         revalidate()
+                        resolve()
                     })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         setTransactionState({

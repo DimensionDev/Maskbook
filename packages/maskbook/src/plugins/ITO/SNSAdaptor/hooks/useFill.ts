@@ -139,15 +139,16 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = (ITO_Contract as ITO2).methods.fill_pool(...params).send(config as NonPayableTx)
-
-            promiEvent
+            ;(ITO_Contract as ITO2).methods
+                .fill_pool(...params)
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setFillState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setFillState({
