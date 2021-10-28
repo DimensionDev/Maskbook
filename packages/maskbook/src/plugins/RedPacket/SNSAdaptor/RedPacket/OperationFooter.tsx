@@ -65,6 +65,7 @@ export function OperationFooter({
                 }
                 variant="contained"
                 size="large"
+                className={classes.button}
                 onClick={onClaimOrRefund}>
                 {canClaim
                     ? claimState.type === TransactionStateType.HASH
@@ -83,7 +84,12 @@ export function OperationFooter({
                 connectWallet: classes.connectWallet,
             }}>
             <Box className={classes.footer}>
-                <ActionButton variant="contained" fullWidth size="large" onClick={handleShare}>
+                <ActionButton
+                    variant="contained"
+                    fullWidth
+                    size="large"
+                    onClick={handleShare}
+                    className={classes.button}>
                     {t('share')}
                 </ActionButton>
                 <ObtainButton />

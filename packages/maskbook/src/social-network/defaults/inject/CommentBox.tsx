@@ -51,7 +51,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
         if (!current.comment?.commentBoxSelector) return noop
         const commentBoxWatcher = new MutationObserverWatcher(
             current.comment.commentBoxSelector.clone(),
-            current.rootNode || void 0,
+            document.body,
         ).useForeach((node, key, meta) => {
             try {
                 mountPointCallback?.(meta)

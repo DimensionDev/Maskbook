@@ -80,6 +80,9 @@ const useStyles = makeStyles()((theme) => {
                 flexDirection: 'column',
             },
         },
+        actionButton: {
+            color: '#fff',
+        },
         button: {
             borderRadius: 50,
             [smallQuery]: {
@@ -196,7 +199,12 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
+                    <ActionButton
+                        fullWidth
+                        size="small"
+                        variant="contained"
+                        onClick={() => destructCallback(pool.pid)}
+                        className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
@@ -211,11 +219,17 @@ export function PoolInList(props: PoolInListProps) {
                                     'exchange_token_addresses',
                                 ]) as JSON_PayloadInMask,
                             )
-                        }>
+                        }
+                        className={classes.actionButton}>
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton fullWidth size="small" variant="contained" disabled={true}>
+                    <ActionButton
+                        fullWidth
+                        size="small"
+                        variant="contained"
+                        disabled={true}
+                        className={classes.actionButton}>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}
