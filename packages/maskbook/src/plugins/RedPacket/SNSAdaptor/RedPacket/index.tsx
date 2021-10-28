@@ -129,7 +129,11 @@ export function RedPacket(props: RedPacketProps) {
                 'plugin_red_packet_description_claimed',
                 (availability as RedPacketAvailability).claimed_amount
                     ? {
-                          amount: formatBalance((availability as RedPacketAvailability).claimed_amount, token.decimals),
+                          amount: formatBalance(
+                              (availability as RedPacketAvailability).claimed_amount,
+                              token.decimals,
+                              8,
+                          ),
                           symbol: token.symbol,
                       }
                     : { amount: '', symbol: '' },
