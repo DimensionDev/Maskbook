@@ -14,13 +14,8 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTBadgeTweetProps {}
 
 export function NFTBadgeTweet(props: NFTBadgeTweetProps) {
-    const { classes } = useStyles()
     const identity = useCurrentIdentity()
 
     if (!identity?.identifier.userId) return null
-    return (
-        <div className={classes.root}>
-            <NFTBadgeTimeline userId={identity?.identifier.userId} avatarId={getAvatarId(identity?.avatar ?? '')} />
-        </div>
-    )
+    return <NFTBadgeTimeline userId={identity?.identifier.userId} avatarId={getAvatarId(identity?.avatar ?? '')} />
 }
