@@ -27,19 +27,11 @@ const useStyles = makeStyles()(() => ({
         left: 0,
         opacity: 1,
     },
-    // exit: {
-    //     left: 0,
-    //     opacity: 1
-    // },
     exitActive: {
         left: 150,
         opacity: 0,
         transition: 'all 1500ms ease-out',
     },
-    // exitDone: {
-    //     left: 150,
-    //     opacity: 0
-    // }
 }))
 
 const AnimatedMessage = () => {
