@@ -3,24 +3,24 @@ import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import BigNumber from 'bignumber.js'
-import { searchTwitterAvatarSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
 import { useNFT } from '../hooks'
 import { useNFTVerified } from '../hooks/useNFTVerified'
 import { useUserOwnerAddress } from '../hooks/useUserOwnerAddress'
 import type { AvatarMetaDB } from '../types'
 import { NFTAvatarRingIcon } from './NFTAvatarRing'
 
-const useStyles = makeStyles<number>()((theme, size) => ({
+interface StyleProps {
+    width: number
+    size: number
+}
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         position: 'absolute',
-        left: -17,
-        top: -114,
-        width: size - 4,
-        height: size - 4,
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            left: -22,
-            top: -67,
-        },
+        left: -1 * props.width,
+        top: -1 * props.width,
+        width: props.size - 4,
+        height: props.size - 4,
+
         borderRadius: '100%',
         boxShadow: '4px 4px 4px rgba(105, 228, 255, 0.25)',
     },
@@ -51,7 +51,7 @@ function formatText(symbol: string, length: number) {
 
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, size = 140, width = 15 } = props
-    const classes = useStylesExtends(useStyles(size + width * 2), props)
+    const classes = useStylesExtends(useStyles({ size: size + width * 2, width }), props)
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
         avatar.userId,
@@ -62,10 +62,6 @@ export function NFTBadge(props: NFTBadgeProps) {
     const address = useUserOwnerAddress(avatar.userId)
     const { amount, symbol, name, owner } = value
     const { loading: loadingNFTVerified, value: NFTVerified } = useNFTVerified(avatar.address)
-    //  if (!isSameAddress(address, owner)) return null
-
-    const avatarDom = searchTwitterAvatarSelector().evaluate()
-    if (avatarDom) avatarDom.style.marginBottom = '10px'
 
     return (
         <div className={classes.root}>
@@ -73,7 +69,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                 <NFTAvatarRingIcon
                     size={size - 2}
                     width={15}
-                    text={loading || loadingNFTVerified ? 'loading...' : `${name} ${amount} ${symbol}`}
+                    text={loading || loadingNFTVerified ? 'loading...' : `${name} ${formatPrice(amount)} ${symbol}`}
                 />
             </Link>
         </div>

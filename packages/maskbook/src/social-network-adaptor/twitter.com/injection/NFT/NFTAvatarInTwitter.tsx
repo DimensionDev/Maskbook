@@ -1,5 +1,5 @@
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
-import { searchTwitterAvatarLinkSelector } from '../../utils/selector'
+import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
@@ -14,7 +14,7 @@ import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarLinkSelector())
+    const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
@@ -103,13 +103,31 @@ function NFTAvatarInTwitter() {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [onUpdate])
 
+    useEffect(() => {
+        if (!avatar || !avatar.avatarId) return
+        if (getAvatarId(identity.avatar ?? '') !== avatar.avatarId) return
+        const avatarDom = searchTwitterAvatarSelector().evaluate()?.parentElement
+        if (avatarDom) {
+            avatarDom.style.marginBottom = '10px'
+            avatarDom.style.overflow = 'unset'
+        }
+
+        const backgroundImgDom = searchTwitterAvatarSelector().evaluate()?.firstChild?.nextSibling?.firstChild
+            ?.firstChild as HTMLElement
+        if (backgroundImgDom) {
+            backgroundImgDom.style.borderRadius = '100%'
+        }
+    }, [identity, avatar, searchTwitterAvatarSelector, searchTwitterAvatarSelector])
+
     if (!avatar) return null
+
     return (
         <>
             {getAvatarId(identity.avatar ?? '') === avatar.avatarId && avatar.avatarId ? (
                 <NFTBadge
                     avatar={avatar}
                     size={size}
+                    width={15}
                     classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
                 />
             ) : null}
