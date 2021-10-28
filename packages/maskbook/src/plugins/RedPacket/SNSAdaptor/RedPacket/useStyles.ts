@@ -35,7 +35,13 @@ to {
             flex: 1,
             flexDirection: 'column',
             alignItems: 'flex-start',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-between',
+        },
+        bottomContent: {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
         },
         footer: {
             paddingTop: theme.spacing(2),
@@ -52,10 +58,7 @@ to {
             },
         },
         myStatus: {
-            position: 'absolute',
             fontSize: 14,
-            left: 26,
-            bottom: 20,
             color: '#FAD85A',
             fontWeight: 'bold',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
@@ -65,10 +68,7 @@ to {
             },
         },
         from: {
-            position: 'absolute',
             fontSize: '14px',
-            right: '26px',
-            bottom: '20px',
             color: '#FFFFFF',
             fontWeight: 'bold',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {

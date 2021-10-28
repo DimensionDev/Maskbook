@@ -199,16 +199,20 @@ export function RedPacket(props: RedPacketProps) {
                     ) : null}
                 </div>
                 <div className={classNames(classes.content)}>
-                    <Typography className={classes.words} variant="h6">
-                        {payload.sender.message}
-                    </Typography>
-                    <Typography variant="body2">{subtitle}</Typography>
-                    <Typography className={classes.myStatus} variant="body1">
-                        {myStatus}
-                    </Typography>
-                    <Typography className={classes.from} variant="body1">
-                        {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
-                    </Typography>
+                    <div>
+                        <Typography className={classes.words} variant="h6">
+                            {payload.sender.message}
+                        </Typography>
+                        <Typography variant="body2">{subtitle}</Typography>
+                    </div>
+                    <div className={classes.bottomContent}>
+                        <Typography className={classes.myStatus} variant="body1">
+                            {myStatus}
+                        </Typography>
+                        <Typography className={classes.from} variant="body1">
+                            {t('plugin_red_packet_from', { name: payload.sender.name ?? '-' })}
+                        </Typography>
+                    </div>
                 </div>
             </Card>
             <OperationFooter
