@@ -34,12 +34,12 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             setOpen(true)
             UI.current?.startPlugin(plugin)
         })
+
+        MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
     }, [])
 
     const { onQueryClipboardPermission, hasClipboardPermission, onRequestClipboardPermission } =
         useCompositionClipboardRequest(requireClipboardPermission || false)
-
-    MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
 
     useEffect(() => {
         return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
