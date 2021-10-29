@@ -39,12 +39,10 @@ export function VotingCard() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { message },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     const account = useAccount()
     const { value: power } = usePower(identifier)
-    const choices = message.payload.choices
+    const choices = proposal.choices
     const [choice, setChoice] = useState(0)
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -100,7 +98,8 @@ export function VotingCard() {
                 loading={loading}
                 onClose={() => setOpen(false)}
                 choiceText={choices[choice - 1]}
-                message={message}
+                snapshot={proposal.snapshot}
+                space={identifier.space}
                 power={power}
                 onVoteConfirm={onVoteConfirm}
             />

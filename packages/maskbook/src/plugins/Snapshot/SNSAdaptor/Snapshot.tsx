@@ -54,9 +54,7 @@ const useStyles = makeStyles()((theme) => {
 export function Snapshot() {
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal, message },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
 
     const [tabIndex, setTabIndex] = useState(0)
     const tabs = [
@@ -70,7 +68,7 @@ export function Snapshot() {
                     <Box display="flex" alignItems="center" justifyContent="space-between">
                         <Typography sx={{ marginRight: 1 }}>
                             <Typography component="span" sx={{ marginRight: 0.5 }}>
-                                {message.payload.name}
+                                {proposal.title}
                             </Typography>
                             <Typography color="textSecondary" component="span">
                                 #{identifier.id.slice(0, 7)}

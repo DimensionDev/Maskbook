@@ -13,7 +13,6 @@ import { makeStyles } from '@masknet/theme'
 import millify from 'millify'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 import { resolveBlockLinkOnExplorer, ChainId } from '@masknet/web3-shared-evm'
-import type { ProposalMessage } from '../types'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { InfoField } from './InformationCard'
@@ -51,7 +50,8 @@ const useStyles = makeStyles()((theme) => ({
 interface VoteConfirmDialogProps {
     open: boolean
     loading: boolean
-    message: ProposalMessage
+    snapshot: string
+    space: string
     onClose: () => void
     onVoteConfirm: () => void
     choiceText: string
@@ -59,7 +59,7 @@ interface VoteConfirmDialogProps {
 }
 
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
-    const { open, onClose, onVoteConfirm, choiceText, message, power = 0, loading } = props
+    const { open, onClose, onVoteConfirm, choiceText, snapshot, space, power = 0, loading } = props
     const { t } = useI18N()
 
     const { classes } = useStyles()
@@ -87,13 +87,13 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                                     className={classes.link}
                                     target="_blank"
                                     rel="noopener"
-                                    href={resolveBlockLinkOnExplorer(ChainId.Mainnet, message.payload.snapshot)}>
-                                    {message.payload.snapshot}
+                                    href={resolveBlockLinkOnExplorer(ChainId.Mainnet, snapshot)}>
+                                    {snapshot}
                                     <OpenInNew fontSize="small" />
                                 </Link>
                             </InfoField>
                             <InfoField title={t('plugin_snapshot_vote_power')}>
-                                {`${millify(power, { precision: 2, lowercase: true })} ${message.space.toUpperCase()}`}
+                                {`${millify(power, { precision: 2, lowercase: true })} ${space.toUpperCase()}`}
                             </InfoField>
                         </Box>
                     </CardContent>

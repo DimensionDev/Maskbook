@@ -67,12 +67,9 @@ export function InformationCard(props: InformationCardProps) {
     const chainId = useChainId()
 
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal, message },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
 
-    const { start, end, snapshot } = message.payload
-    const strategies = message.payload.metadata.strategies ?? proposal.strategies
+    const { start, end, snapshot, strategies } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
             <Typography component="div">
