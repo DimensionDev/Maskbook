@@ -39,7 +39,9 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     const { onQueryClipboardPermission, hasClipboardPermission, onRequestClipboardPermission } =
         useCompositionClipboardRequest(requireClipboardPermission || false)
 
-    MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
+    useEffect(() => {
+        return MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
+    }, [onQueryClipboardPermission])
 
     useEffect(() => {
         return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
