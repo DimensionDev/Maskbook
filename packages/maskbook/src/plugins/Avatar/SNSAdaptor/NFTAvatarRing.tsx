@@ -1,4 +1,14 @@
-export const NFTAvatarRingIcon = ({ width = 15, size = 24, text }: { width?: number; size?: number; text: string }) => {
+export const NFTAvatarRingIcon = ({
+    width = 15,
+    size = 24,
+    fontSize = 11,
+    text,
+}: {
+    fontSize?: number | string
+    width?: number
+    size?: number
+    text: string
+}) => {
     const R = size + 2 * width
     const r = R / 2 - width
     const x1 = R / 2 - r / 2
@@ -7,7 +17,7 @@ export const NFTAvatarRingIcon = ({ width = 15, size = 24, text }: { width?: num
     const y2 = y1
 
     return (
-        <svg width={R} height={R} viewBox={`0 0 ${R} ${R}`}>
+        <svg width={R} height={R} viewBox={`0 0 ${R} ${R}`} id="NFTAvatarRingIcon">
             <defs>
                 <path
                     id="path"
@@ -57,7 +67,9 @@ export const NFTAvatarRingIcon = ({ width = 15, size = 24, text }: { width?: num
 
             <text x="0%" textAnchor="middle" fill="url(#pattern)">
                 <textPath xlinkHref="#path" startOffset="50%" rotate="auto">
-                    <tspan fontWeight="bold">{text}</tspan>
+                    <tspan fontWeight="bold" fontSize={fontSize}>
+                        {text}
+                    </tspan>
                 </textPath>
             </text>
         </svg>

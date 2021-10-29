@@ -16,8 +16,8 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         position: 'absolute',
-        left: -1 * props.width,
-        top: -1 * props.width,
+        left: -1 * (props.width + 1),
+        top: -1 * (props.width + 1),
         width: props.size - 4,
         height: props.size - 4,
 
