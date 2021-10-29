@@ -17,7 +17,7 @@ export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDE
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-export const currentMaskWalletAccountWalletSettings = createGlobalSettings<string>(
+export const currentMaskWalletAccountSettings = createGlobalSettings<string>(
     `${PLUGIN_IDENTIFIER}+selectedMaskWalletAddress`,
     '',
     {

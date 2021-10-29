@@ -1,5 +1,6 @@
-import { DialogContent } from '@mui/material'
 import { useCallback, useEffect, useState, useRef } from 'react'
+import { DialogContent } from '@mui/material'
+import { DialogStackingProvider } from '@masknet/theme'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { MaskMessages, useI18N } from '../../utils'
 import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedUI'
@@ -7,7 +8,6 @@ import { InjectedDialog } from '../shared/InjectedDialog'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
 import { useSubmit } from './useSubmit'
-import { DialogStackingProvider } from '@masknet/theme'
 import Services from '../../extension/service'
 
 export interface PostDialogProps {
