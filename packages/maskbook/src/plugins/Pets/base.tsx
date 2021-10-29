@@ -10,7 +10,7 @@ export const base: Plugin.Shared.Definition = {
         fallback:
             'Explore the endless possibilities of NFTs. Link and display your NFTs on social media in a revolutionized way.',
     },
-    publisher: { name: { fallback: 'etouyang' }, link: 'https://github.com/etouyang/' },
+    publisher: { name: { fallback: '' }, link: 'https://github.com/etouyang/' },
     enableRequirement: {
         architecture: { app: false, web: true },
         networks: { type: 'opt-in', networks: { [CurrentSNSNetwork.Twitter]: true } },

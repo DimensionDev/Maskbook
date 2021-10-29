@@ -38,8 +38,24 @@ const AnimatedMessage = () => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [start, setStart] = React.useState(false)
-    //@ts-ignore
-    const txts = Array.from({ length: 9 }, (_v, k) => t(`plugin_pets_loot_des_${k}`))
+    const txts = [
+        t('plugin_pets_loot_des_0'),
+        t('plugin_pets_loot_des_1'),
+        t('plugin_pets_loot_des_2'),
+        t('plugin_pets_loot_des_3'),
+        t('plugin_pets_loot_des_4'),
+        t('plugin_pets_loot_des_5'),
+        t('plugin_pets_loot_des_6'),
+        t('plugin_pets_loot_des_7'),
+        t('plugin_pets_loot_des_8'),
+        t('plugin_pets_loot_des_9'),
+        t('plugin_pets_loot_des_10'),
+        t('plugin_pets_loot_des_11'),
+        t('plugin_pets_loot_des_12'),
+        t('plugin_pets_loot_des_13'),
+        t('plugin_pets_loot_des_14'),
+    ]
+
     const [show, setShow] = React.useState(txts[0])
 
     React.useEffect(() => {

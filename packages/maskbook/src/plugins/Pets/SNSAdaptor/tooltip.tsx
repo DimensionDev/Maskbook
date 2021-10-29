@@ -42,8 +42,17 @@ const Tip = () => {
     const { classes } = useStyles()
     const Info = getAssetAsBlobURL(new URL('../assets/info.png', import.meta.url))
     const click = () => window.open('https://twitter.com/MintTeamNFT')
-    //@ts-ignore
-    const loots = Array.from({ length: 8 }, (_v, k) => t(`plugin_pets_loot_info_${k}`))
+    const loots = [
+        t('plugin_pets_loot_info_0'),
+        t('plugin_pets_loot_info_1'),
+        t('plugin_pets_loot_info_2'),
+        t('plugin_pets_loot_info_3'),
+        t('plugin_pets_loot_info_4'),
+        t('plugin_pets_loot_info_5'),
+        t('plugin_pets_loot_info_6'),
+        t('plugin_pets_loot_info_7'),
+    ]
+
     const titleRender = (
         <div style={{ backgroundColor: '#FFFFFF', padding: 12, borderRadius: 4, fontFamily: 'TwitterChirp' }}>
             <Typography style={{ fontSize: '12px', color: '#737373', fontWeight: 600, fontFamily: 'TwitterChirp' }}>
