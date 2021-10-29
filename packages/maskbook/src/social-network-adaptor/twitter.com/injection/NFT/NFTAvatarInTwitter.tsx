@@ -1,5 +1,5 @@
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
-import { searchTwitterAvatarLinkSelector } from '../../utils/selector'
+import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
@@ -14,7 +14,7 @@ import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchTwitterAvatarLinkSelector())
+    const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
@@ -52,12 +52,6 @@ function NFTAvatarInTwitter() {
     const wallet = useWallet()
     const _avatar = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
-    const ele = searchTwitterAvatarLinkSelector().evaluate()
-    let size = 170
-    if (ele) {
-        const style = window.getComputedStyle(ele)
-        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0)
-    }
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const onUpdate = (data: NFTAvatarEvent) => {
@@ -109,7 +103,7 @@ function NFTAvatarInTwitter() {
             {getAvatarId(identity.avatar ?? '') === avatar.avatarId && avatar.avatarId ? (
                 <NFTBadge
                     avatar={avatar}
-                    size={size}
+                    size={14}
                     classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
                 />
             ) : null}

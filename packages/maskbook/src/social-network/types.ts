@@ -147,10 +147,6 @@ export namespace SocialNetworkUI {
             postAvatar?(signal: AbortSignal, current: PostInfo): void
             /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
-            /** @deprecated same reason as userAvatar */
-            tweetNFTAvatar?(signal: AbortSignal): void
-            /** @deprecated same reason as userAvatar */
-            NFTContract?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void

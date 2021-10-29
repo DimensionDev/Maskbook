@@ -1,39 +1,51 @@
+import { UnionIcon } from '@masknet/icons'
 import { useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
-import Link from '@mui/material/Link'
+import { CircularProgress, Link, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
-import { searchTwitterAvatarSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
+import classNames from 'classnames'
 import { useNFT } from '../hooks'
-import { useNFTVerified } from '../hooks/useNFTVerified'
-import { useUserOwnerAddress } from '../hooks/useUserOwnerAddress'
 import type { AvatarMetaDB } from '../types'
-import { NFTAvatarRingIcon } from './NFTAvatarRing'
 
-const useStyles = makeStyles<number>()((theme, size) => ({
+const useStyles = makeStyles()({
     root: {
-        position: 'absolute',
-        left: -17,
-        top: -114,
-        width: size - 4,
-        height: size - 4,
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            left: -22,
-            top: -67,
-        },
-        borderRadius: '100%',
-        boxShadow: '4px 4px 4px rgba(105, 228, 255, 0.25)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingTop: 8,
+        paddingBottom: 8,
     },
-    image: {
-        position: 'absolute',
-        bottom: 0,
+    wrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
     },
-}))
+    box: {
+        background:
+            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
+        borderRadius: 4,
+    },
+    link: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        AlignJustify: 'center',
+    },
+
+    loading: {
+        width: 64,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
+    },
+})
 
 interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
     avatar: AvatarMetaDB
     size?: number
-    width?: number
 }
 
 function formatPrice(amount: string) {
@@ -50,32 +62,124 @@ function formatText(symbol: string, length: number) {
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
-    const { avatar, size = 140, width = 15 } = props
-    const classes = useStylesExtends(useStyles(size + width * 2), props)
+    const classes = useStylesExtends(useStyles(), props)
+    const { avatar, size = 18 } = props
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
         avatar.userId,
         avatar.address,
         avatar.tokenId,
     )
-
-    const address = useUserOwnerAddress(avatar.userId)
     const { amount, symbol, name, owner } = value
-    const { loading: loadingNFTVerified, value: NFTVerified } = useNFTVerified(avatar.address)
-    //  if (!isSameAddress(address, owner)) return null
-
-    const avatarDom = searchTwitterAvatarSelector().evaluate()
-    if (avatarDom) avatarDom.style.marginBottom = '10px'
 
     return (
-        <div className={classes.root}>
-            <Link href={resolveOpenSeaLink(avatar.address, avatar.tokenId)} target="_blank" rel="noopener noreferrer">
-                <NFTAvatarRingIcon
-                    size={size - 2}
-                    width={15}
-                    text={loading || loadingNFTVerified ? 'loading...' : `${name} ${amount} ${symbol}`}
-                />
+        <div
+            className={classes.root}
+            onClick={(e) => {
+                e.preventDefault()
+                window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
+            }}>
+            <Link
+                underline="none"
+                className={classes.link}
+                title={resolveOpenSeaLink(avatar.address, avatar.tokenId)}
+                href={resolveOpenSeaLink(avatar.address, avatar.tokenId)}
+                target="_blank"
+                rel="noopener noreferrer">
+                <div className={classes.wrapper}>
+                    {loading ? (
+                        <div className={classNames(classes.loading, classes.box)}>
+                            <CircularProgress size={size} />
+                        </div>
+                    ) : (
+                        <ShowPrice
+                            name={formatText(name ?? '', 13)}
+                            price={formatPrice(amount)}
+                            symbol={formatText(symbol, 4)}
+                            tokenId={formatText(avatar.tokenId, 6)}
+                        />
+                    )}
+                </div>
             </Link>
         </div>
+    )
+}
+
+const useShowPriceStyles = makeStyles()((theme) => ({
+    root: {
+        borderRadius: 4,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: '100% 100%',
+        textAlign: 'center',
+    },
+    haveAmount: {
+        backgroundImage: `url(${new URL('./background/amount.png', import.meta.url)})`,
+    },
+    noName: {
+        backgroundImage: `url(${new URL('./background/noname.png', import.meta.url)})`,
+    },
+    noAmount: {
+        backgroundImage: `url(${new URL('./background/noamount.png', import.meta.url)})`,
+    },
+    icon: {
+        width: 12,
+        height: 12,
+        transform: 'translate(0px, 2px)',
+    },
+    text: {
+        paddingLeft: 4,
+        paddingRight: 4,
+        fontSize: 10,
+        whiteSpace: 'nowrap',
+        margin: 0,
+        color: 'white',
+        textShadow:
+            '1px 1px black, 1px 0px black, 0px 1px black, -1px 0px black, 0px -1px black, -1px -1px black, 1px -1px black, -1px 1px black',
+    },
+    nft: {
+        marginTop: 20,
+        background:
+            'linear-gradient(106.15deg, #FF0000 5.97%, #FF8A00 21.54%, #FFC700 42.35%, #52FF00 56.58%, #00FFFF 73.01%, #0038FF 87.8%, #AD00FF 101.49%, #FF0000 110.25%)',
+        borderRadius: 4,
+    },
+}))
+interface ShowPriceProps {
+    price: string
+    symbol: string
+    name: string
+    tokenId: string
+}
+
+function ShowPrice({ name, symbol, tokenId, price }: ShowPriceProps) {
+    const { classes } = useShowPriceStyles()
+    const text = (str: string, showIcon = false) => (
+        <Typography className={classes.text}>
+            {str}
+            {showIcon ? <UnionIcon className={classes.icon} /> : null}
+        </Typography>
+    )
+
+    return (
+        <>
+            {symbol && name && price !== '0' ? (
+                <div className={classNames(classes.root, classes.haveAmount)}>
+                    {text(`${name}`)} {text(`${price} ${symbol}`, true)}
+                </div>
+            ) : !symbol && !name && price !== '0' ? (
+                <div className={classNames(classes.root, classes.noName)}>
+                    {text('NFT', true)} {text(`${price} ${symbol}`)}
+                </div>
+            ) : symbol && name && price === '0' ? (
+                <div className={classNames(classes.root, classes.noAmount)}>
+                    {text(`${name}`)} {text('NFT', true)}
+                </div>
+            ) : symbol && !name && price !== '0' ? (
+                <div className={classNames(classes.root, classes.noName)}>
+                    {text('NFT', true)} {text(`${price} ${symbol}`)}
+                </div>
+            ) : (
+                <div className={classes.nft}> {text('NFT', true)}</div>
+            )}
+        </>
     )
 }
