@@ -66,7 +66,6 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, size = 18 } = props
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
-        avatar.userId,
         avatar.address,
         avatar.tokenId,
     )

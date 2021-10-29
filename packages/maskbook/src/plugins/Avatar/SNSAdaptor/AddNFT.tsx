@@ -51,13 +51,13 @@ export function AddNFT(props: AddNFTProps) {
         }
 
         createNFT(address, tokenId)
-            .then((value) => {
-                if (!isSameAddress(value.account, account)) {
+            .then((token) => {
+                if (!isSameAddress(token.info.owner, account)) {
                     setMessage(t('nft_owner_hint'))
                     return
                 }
 
-                onAddClick(value.token)
+                onAddClick(token)
                 handleClose()
             })
             .catch((error) => setMessage(t('nft_owner_hint')))
