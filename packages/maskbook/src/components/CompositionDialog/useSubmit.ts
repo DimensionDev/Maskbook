@@ -16,7 +16,7 @@ export function useSubmit(onClose: () => void) {
     const { t } = useI18N()
     const whoAmI = useLastRecognizedIdentity()
 
-    const onRequestPost = useCallback(
+    return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
 
@@ -56,9 +56,8 @@ export function useSubmit(onClose: () => void) {
             if (target !== 'Everyone') Services.Crypto.publishPostAESKey(token)
             onClose()
         },
-        [t, onClose],
+        [t, whoAmI, onClose],
     )
-    return onRequestPost
 }
 
 function pasteTextEncode(encrypted: string, text: string | null) {

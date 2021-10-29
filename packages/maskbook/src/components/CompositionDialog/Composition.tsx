@@ -7,8 +7,8 @@ import { useFriendsList as useRecipientsList } from '../DataSource/useActivatedU
 import { InjectedDialog } from '../shared/InjectedDialog'
 import { CompositionDialogUI, CompositionRef } from './CompositionUI'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest'
-import { useSubmit } from './useSubmit'
 import Services from '../../extension/service'
+import { useSubmit } from './useSubmit'
 
 export interface PostDialogProps {
     type?: 'popup' | 'timeline'
@@ -34,12 +34,14 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             setOpen(true)
             UI.current?.startPlugin(plugin)
         })
-
-        return MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
     }, [])
 
     const { onQueryClipboardPermission, hasClipboardPermission, onRequestClipboardPermission } =
         useCompositionClipboardRequest(requireClipboardPermission || false)
+
+    useEffect(() => {
+        return MaskMessages.events.requestExtensionPermission.on(() => onQueryClipboardPermission?.())
+    }, [onQueryClipboardPermission])
 
     useEffect(() => {
         return MaskMessages.events.requestComposition.on(({ reason, open, content, options }) => {
@@ -60,6 +62,10 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     }, [open])
     //#endregion
 
+    //#region submit
+    const onSubmit_ = useSubmit(onClose)
+    //#endregion
+
     const UI = useRef<CompositionRef>(null)
 
     const networkSupport = activatedSocialNetworkUI.injection.newPostComposition?.supportedOutputTypes
@@ -74,7 +80,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                         requireClipboardPermission={requireClipboardPermission}
                         recipients={useRecipientsList()}
                         maxLength={560}
-                        onSubmit={useSubmit(onClose)}
+                        onSubmit={onSubmit_}
                         supportImageEncoding={networkSupport?.text ?? false}
                         supportTextEncoding={networkSupport?.image ?? false}
                     />
