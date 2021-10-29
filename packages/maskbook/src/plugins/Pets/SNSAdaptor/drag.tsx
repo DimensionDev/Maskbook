@@ -16,7 +16,7 @@ const startPosition = {
     y: 150,
 }
 class Draggable extends React.PureComponent {
-    ref = React.createRef()
+    ref = React.createRef<HTMLDivElement | null>()
     mouseMoveFuc = this.onMouseMove.bind(this)
     mouseUpFuc = this.onMouseUp.bind(this)
 
@@ -31,8 +31,8 @@ class Draggable extends React.PureComponent {
 
     onMouseDown(e: React.MouseEvent) {
         if (e.button !== 0) return
-        if (!this.ref || !this.ref.current) return
-        const divDom: HTMLDivElement = this.ref.current as HTMLDivElement
+        if (!this.ref?.current) return
+        const divDom = this.ref.current
         const left = divDom.offsetLeft
         const top = divDom.offsetTop
         this.setState({
