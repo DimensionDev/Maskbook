@@ -1,31 +1,31 @@
 import { useEffect } from 'react'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { TransactionState, TransactionStateType } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { useRemoteControlledDialog } from '@masknet/shared'
 
 export function useTransactionDialog(
-    transactionDialogEvent: {
+    event: {
         shareLink?: string
         summary?: string
     } | null,
-    transactionState: TransactionState,
-    transactionStateType: TransactionStateType,
-    resetTransactionState: () => void,
+    state: TransactionState,
+    stateType: TransactionStateType.HASH | TransactionStateType.CONFIRMED,
+    resetCallback: () => void,
 ) {
     // close the transaction dialog
-    const { setDialog } = useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, (ev) => {
+    const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.transactionDialogUpdated, (ev) => {
         if (ev.open) return
-        if (transactionState.type !== transactionStateType) return
-        resetTransactionState()
+        if (state.type !== stateType) return
+        resetCallback()
     })
 
     // open the transaction dialog
     useEffect(() => {
-        if (transactionState.type === TransactionStateType.UNKNOWN) return
+        if (state.type === TransactionStateType.UNKNOWN) return
         setDialog({
-            open: true,
-            state: transactionState,
-            ...transactionDialogEvent,
+            open: open || state.type === TransactionStateType.WAIT_FOR_CONFIRMING,
+            state: state,
+            ...event,
         })
-    }, [transactionState /* update tx dialog only if state changed */])
+    }, [state /* update tx dialog only if state changed */])
 }
