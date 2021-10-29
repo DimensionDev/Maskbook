@@ -151,7 +151,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 target: encryptionKind === 'E2E' ? recipients : 'Everyone',
             })
             .finally(reset)
-    }, [encodingKind, encryptionKind, recipients])
+    }, [encodingKind, encryptionKind, recipients, props.onSubmit])
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>
