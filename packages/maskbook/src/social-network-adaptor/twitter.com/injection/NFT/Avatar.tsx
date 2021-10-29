@@ -17,26 +17,24 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 if (!twitterIdNode) return
                 const twitterId = twitterIdNode.innerText.trim().replace('@', '')
 
-                const avatarIdNodeParent = ele.querySelector(
-                    'div > :nth-child(2) > div > div > div > a > div > :last-child > div',
-                )
+                const avatarNodeParent = ele.querySelector('div > :nth-child(2) > div > div > div > a') as HTMLElement
+                if (!avatarNodeParent || !avatarNodeParent.firstChild) return
 
-                if (!avatarIdNodeParent) return
+                const avatarImageNodeParent = avatarNodeParent.querySelector('div > :last-child > div')
+                if (!avatarImageNodeParent) return
 
-                const avatarIdNode = avatarIdNodeParent.querySelector('img') as HTMLImageElement
+                const avatarIdNode = avatarImageNodeParent.querySelector('img') as HTMLImageElement
                 if (!avatarIdNode) return
                 const avatarId = getAvatarId(avatarIdNode.getAttribute('src') ?? '')
-                const nftDom = ele.firstChild?.firstChild?.firstChild?.nextSibling?.firstChild?.firstChild?.firstChild
-                    ?.firstChild?.firstChild as HTMLElement
-                if (!nftDom || !nftDom.parentElement) return
 
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-                proxy.realCurrent = nftDom
-                const width = Number(window.getComputedStyle(nftDom.parentElement).width.replace('px', '') ?? 0)
-                const height = Number(window.getComputedStyle(nftDom.parentElement).height.replace('px', '') ?? 0)
-                if (nftDom.parentElement) nftDom.parentElement.style.overflow = 'unset'
+                proxy.realCurrent = avatarNodeParent.firstChild as HTMLElement
 
-                const imgNode = avatarIdNodeParent.querySelector('div') as HTMLImageElement
+                const width = Number(window.getComputedStyle(avatarNodeParent).width.replace('px', '') ?? 0)
+                const height = Number(window.getComputedStyle(avatarNodeParent).height.replace('px', '') ?? 0)
+                avatarNodeParent.style.overflow = 'unset'
+
+                const imgNode = avatarImageNodeParent.querySelector('div') as HTMLImageElement
                 if (imgNode) imgNode.style.borderRadius = '100%'
 
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
