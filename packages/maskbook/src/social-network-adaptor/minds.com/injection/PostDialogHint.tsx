@@ -13,7 +13,7 @@ export function injectPostDialogHintAtMinds(signal: AbortSignal) {
 }
 
 function renderPostDialogHintTo<T>(ls: LiveSelector<T, true>, signal: AbortSignal, reason: 'popup' | 'timeline') {
-    const watcher = new MutationObserverWatcher(ls, document.querySelector('m-page')!)
+    const watcher = new MutationObserverWatcher(ls, document.querySelector('m-app')!)
     startWatch(watcher, signal)
 
     watcher.useForeach((node, key, meta) => {
