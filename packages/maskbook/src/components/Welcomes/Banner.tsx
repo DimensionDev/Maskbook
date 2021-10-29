@@ -39,7 +39,7 @@ export function BannerUI(props: BannerUIProps) {
     const { t } = useI18N()
 
     return props.nextStep === 'hidden' ? null : (
-        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')}>
+        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')} disabled={props.description === 'decryptPostFailed'}>
             <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
                 <MaskSharpIcon color="primary" />
             </IconButton>
