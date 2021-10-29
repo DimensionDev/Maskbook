@@ -11,6 +11,10 @@ interface StateProps {
 
 const contentWidth = 96
 const contentHeight = 150
+const startPosition = {
+    x: 50,
+    y: 150,
+}
 class Draggable extends React.PureComponent {
     ref = React.createRef()
     mouseMoveFuc = this.onMouseMove.bind(this)
@@ -18,8 +22,8 @@ class Draggable extends React.PureComponent {
 
     override state: StateProps = {
         pos: {
-            x: window.innerWidth - contentWidth - 50,
-            y: window.innerHeight - contentHeight - 200,
+            x: startPosition.x,
+            y: startPosition.y,
         },
         dragging: false,
         rel: null,
@@ -52,8 +56,8 @@ class Draggable extends React.PureComponent {
         if (!this.state.dragging) return
         this.setState({
             pos: {
-                x: e.pageX - this.state.rel.x,
-                y: e.pageY - this.state.rel.y,
+                x: window.innerWidth - contentWidth - (e.pageX - this.state.rel.x),
+                y: window.innerHeight - contentHeight - (e.pageY - this.state.rel.y),
             },
         })
         e.stopPropagation()
@@ -81,9 +85,9 @@ class Draggable extends React.PureComponent {
                 ref={this.ref}
                 onMouseDown={this.onMouseDown.bind(this)}
                 style={{
-                    position: 'absolute',
-                    left: this.state.pos.x,
-                    top: this.state.pos.y,
+                    position: 'fixed',
+                    right: this.state.pos.x,
+                    bottom: this.state.pos.y,
                     width: contentWidth,
                     height: contentHeight,
                 }}>
