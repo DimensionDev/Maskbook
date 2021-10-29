@@ -67,9 +67,7 @@ const StyledLinearProgress = styled(LinearProgress)`
 
 function Content() {
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     const { payload: votes } = useVotes(identifier)
     const {
         payload: { results },
@@ -174,9 +172,7 @@ function Content() {
 function Loading(props: React.PropsWithChildren<{}>) {
     const { t } = useI18N()
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     return (
         <LoadingCard
             title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
@@ -188,9 +184,7 @@ function Loading(props: React.PropsWithChildren<{}>) {
 function Fail(props: React.PropsWithChildren<{}>) {
     const { t } = useI18N()
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     const retry = useRetry()
     return (
         <LoadingFailCard

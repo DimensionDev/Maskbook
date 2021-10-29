@@ -22,12 +22,10 @@ export function useResults(identifier: ProposalIdentifier) {
 }
 
 async function Suspender(identifier: ProposalIdentifier) {
-    const {
-        payload: { message, proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     const { payload: votes } = useVotes(identifier)
-    const strategies = message.payload.metadata.strategies ?? proposal.strategies
-    const powerOfChoices = message.payload.choices.map((_choice, i) =>
+    const strategies = proposal.strategies
+    const powerOfChoices = proposal.choices.map((_choice, i) =>
         voteForChoice(votes, i).reduce((a, b) => {
             if (b.choiceIndex) {
                 return a + b.balance
@@ -37,13 +35,13 @@ async function Suspender(identifier: ProposalIdentifier) {
             }
         }, 0),
     )
-    const powerDetailOfChoices = message.payload.choices.map((_choice, i) =>
+    const powerDetailOfChoices = proposal.choices.map((_choice, i) =>
         strategies.map((_strategy, sI) => voteForChoice(votes, i).reduce((a, b) => a + b.scores[sI], 0)),
     )
     const totalPower = votes.reduce((a, b) => a + b.balance, 0)
 
     const results: ProposalResult[] = powerOfChoices.map((p, i) => ({
-        choice: message.payload.choices[i],
+        choice: proposal.choices[i],
         power: p,
         powerDetail: powerDetailOfChoices[i].map((inner_p, pI) => ({
             power: strategies.length === 1 ? p : inner_p,

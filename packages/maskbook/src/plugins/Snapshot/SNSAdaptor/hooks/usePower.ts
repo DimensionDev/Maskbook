@@ -6,9 +6,7 @@ import { useProposal } from './useProposal'
 import { mapKeys } from 'lodash-es'
 
 export function usePower(identifier: ProposalIdentifier) {
-    const {
-        payload: { message, proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
 
     const account = useAccount()
     const blockNumber = useBlockNumber()
@@ -16,7 +14,7 @@ export function usePower(identifier: ProposalIdentifier) {
         if (!account) return 0
         return (
             await PluginSnapshotRPC.getScores(
-                message,
+                proposal.snapshot,
                 [account],
                 blockNumber,
                 proposal.network,

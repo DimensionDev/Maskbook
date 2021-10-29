@@ -1,24 +1,14 @@
 import ss from '@dimensiondev/snapshot.js'
-import type {
-    Proposal,
-    Profile3Box,
-    ProposalMessage,
-    ProposalIdentifier,
-    VoteSuccess,
-    RawVote,
-    Strategy,
-} from '../../types'
+import type { Proposal, Profile3Box, ProposalIdentifier, VoteSuccess, RawVote, Strategy } from '../../types'
 import Services from '../../../../extension/service'
-import { resolveIPFSLink } from '@masknet/web3-shared-evm'
 import { transform } from 'lodash-es'
 
 export async function fetchProposal(id: string) {
-    const response = await fetch(resolveIPFSLink(id), {
-        method: 'GET',
-    })
-    const { network, votes, strategies } = await fetchProposalFromGraphql(id)
-    const result = await response.json()
-    return { ...result, network, strategies, votes } as Proposal
+    const { votes, proposal } = await fetchProposalFromGraphql(id)
+    const now = Date.now()
+    const isStart = proposal.start * 1000 < now
+    const isEnd = proposal.end * 1000 < now
+    return { ...proposal, address: proposal.author, isStart, isEnd, votes } as unknown as Proposal
 }
 
 async function fetchProposalFromGraphql(id: string) {
@@ -31,15 +21,33 @@ async function fetchProposalFromGraphql(id: string) {
         body: JSON.stringify({
             query: `query Proposal($id: String!) {
                 proposal(id: $id) {
+                    id
+                    ipfs
+                    title
+                    body
+                    choices
+                    start
+                    end
+                    snapshot
+                    state
+                    author
+                    created
+                    plugins
                     network
+                    type
                     strategies {
                       name
                       params
                       __typename
                     }
+                    space {
+                      id
+                      name
+                    }
                 }
                 votes(first: 10000, where: { proposal: $id }) {
                     id
+                    ipfs
                     voter
                     created
                     choice
@@ -53,6 +61,22 @@ async function fetchProposalFromGraphql(id: string) {
     interface Res {
         data: {
             proposal: {
+                author: string
+                body: string
+                choices: string[]
+                created: number
+                end: number
+                start: number
+                id: string
+                ipfs: string
+                snapshot: string
+                space: {
+                    id: string
+                    name: string
+                }
+                state: string
+                title: string
+                type: string
                 network: string
                 strategies: Strategy[]
             }
@@ -61,8 +85,8 @@ async function fetchProposalFromGraphql(id: string) {
     }
 
     const { data }: Res = await response.json()
-
-    return { votes: data.votes, network: data.proposal.network, strategies: data.proposal.strategies }
+    console.log({ data })
+    return data
 }
 
 export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Box[]> {
@@ -81,19 +105,15 @@ export async function fetch3BoxProfiles(addresses: string[]): Promise<Profile3Bo
 }
 
 export async function getScores(
-    message: ProposalMessage,
+    snapshot: string,
     voters: string[],
     blockNumber: number,
-    _network: string,
+    network: string,
     space: string,
-    _strategies: Strategy[],
+    strategies: Strategy[],
 ) {
-    const strategies = _strategies ?? message.payload.metadata.strategies
-    // Sometimes `message.payload.metadata.network` is absent, this is maybe a snapshot api issue.
-    const network = message.payload.metadata.network ?? _network
     const provider = ss.utils.getProvider(network)
-    const snapshot = Number(message.payload.snapshot)
-    const blockTag = snapshot > blockNumber ? 'latest' : snapshot
+    const blockTag = Number(snapshot) > blockNumber ? 'latest' : snapshot
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
         space,
         strategies,
