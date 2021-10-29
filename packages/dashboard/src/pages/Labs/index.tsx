@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
-import PluginItem, { PluginItemPlaceholder } from './components/PluginItem'
+import PluginItem from './components/PluginItem'
 import {
     FileServiceIcon,
     MarketsIcon,
@@ -188,7 +188,6 @@ export default function Plugins() {
                             enabled={pluginStatus[PLUGIN_IDS.PETS]}
                             onSwitch={onSwitch}
                         />
-                        <PluginItemPlaceholder />
                     </Box>
                     <Box className={classes.list}>
                         <PluginItem
