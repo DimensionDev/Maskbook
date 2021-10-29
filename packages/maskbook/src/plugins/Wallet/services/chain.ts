@@ -1,10 +1,11 @@
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { throttle } from 'lodash-es'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { pollingTask } from '@masknet/shared'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../utils'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import {
-    currentMaskWalletAccountWalletSettings,
+    currentMaskWalletAccountSettings,
     currentAccountSettings,
     currentBalanceSettings,
     currentBlockNumberSettings,
@@ -13,16 +14,11 @@ import {
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
 } from '../settings'
-import { getGasPriceDict } from '../apis/debank'
 
-const beats: true[] = []
-
-export function getGasPriceDictFromDeBank(chainId: ChainId) {
-    return getGasPriceDict(chainId)
-}
+let beats = 0
 
 export async function kickToUpdateChainState() {
-    beats.push(true)
+    beats += 1
 }
 
 export async function updateChainState() {
@@ -30,7 +26,7 @@ export async function updateChainState() {
     resetPoolTask()
 
     // forget those passed beats
-    beats.length = 0
+    beats = 0
 
     // update chain state
     try {
@@ -43,12 +39,12 @@ export async function updateChainState() {
                           providerType: currentProviderSettings.value,
                       })
                     : currentBalanceSettings.value,
-                currentMaskWalletAccountWalletSettings.value
-                    ? getBalance(currentMaskWalletAccountWalletSettings.value, {
+                currentMaskWalletAccountSettings.value
+                    ? getBalance(currentMaskWalletAccountSettings.value, {
                           chainId: currentMaskWalletChainIdSettings.value,
                           providerType: ProviderType.MaskWallet,
                       })
-                    : currentBalanceSettings.value,
+                    : currentMaskWalletBalanceSettings.value,
             ])
     } catch {
         // do nothing
@@ -58,6 +54,11 @@ export async function updateChainState() {
     }
 }
 
+export const updateChainStateThrottled = throttle(updateChainState, 300, {
+    leading: false,
+    trailing: true,
+})
+
 let resetPoolTask: () => void = () => {}
 
 const effect = startEffects(import.meta.webpackHot)
@@ -66,7 +67,7 @@ const effect = startEffects(import.meta.webpackHot)
 effect(() => {
     const { reset, cancel } = pollingTask(
         async () => {
-            if (beats.length <= 0) return false
+            if (beats <= 0) return false
             await updateChainState()
             return false
         },
@@ -79,15 +80,19 @@ effect(() => {
 })
 
 // revalidate chain state if the chainId of current provider was changed
-effect(() => {
-    const callback = () => {
-        updateChainState()
+effect(() =>
+    currentChainIdSettings.addListener(() => {
+        updateChainStateThrottled()
         if (currentProviderSettings.value === ProviderType.MaskWallet) resetAllNonce()
-    }
-    const a = currentChainIdSettings.addListener(callback)
-    const b = currentMaskWalletChainIdSettings.addListener(callback)
-    return () => void [a(), b()]
-})
+    }),
+)
+effect(() =>
+    currentMaskWalletChainIdSettings.addListener(() => {
+        updateChainStateThrottled()
+        resetAllNonce()
+    }),
+)
 
 // revalidate chain state if the current wallet was changed
-effect(() => currentAccountSettings.addListener(() => updateChainState()))
+effect(() => currentAccountSettings.addListener(() => updateChainStateThrottled()))
+effect(() => currentMaskWalletAccountSettings.addListener(() => updateChainStateThrottled()))

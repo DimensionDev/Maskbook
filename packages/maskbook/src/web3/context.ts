@@ -20,7 +20,7 @@ import {
     currentTokenPricesSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-    currentMaskWalletAccountWalletSettings,
+    currentMaskWalletAccountSettings,
     currentMaskWalletBalanceSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
@@ -33,7 +33,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         () => {
             return isMask
                 ? {
-                      account: currentMaskWalletAccountWalletSettings.value,
+                      account: currentMaskWalletAccountSettings.value,
                       chainId: currentMaskWalletChainIdSettings.value,
                       providerType: ProviderType.MaskWallet,
                   }
@@ -54,9 +54,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
-        account: createSubscriptionFromSettings(
-            isMask ? currentMaskWalletAccountWalletSettings : currentAccountSettings,
-        ),
+        account: createSubscriptionFromSettings(isMask ? currentMaskWalletAccountSettings : currentAccountSettings),
         balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),

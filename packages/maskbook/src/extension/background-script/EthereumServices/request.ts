@@ -2,7 +2,7 @@ import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { EthereumMethodType, ProviderType, TransactionStateType } from '@masknet/web3-shared-evm'
 import {
-    currentMaskWalletAccountWalletSettings,
+    currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
@@ -149,7 +149,7 @@ export async function confirmRequest(payload: JsonRpcPayload) {
             }
         },
         {
-            account: currentMaskWalletAccountWalletSettings.value,
+            account: currentMaskWalletAccountSettings.value,
             chainId: currentMaskWalletChainIdSettings.value,
             providerType: ProviderType.MaskWallet,
         },
