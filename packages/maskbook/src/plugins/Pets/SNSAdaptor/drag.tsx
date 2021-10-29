@@ -9,8 +9,8 @@ interface StateProps {
     rel: any
 }
 
-const contentWidth = 128
-const contentHeight = 200
+const contentWidth = 96
+const contentHeight = 150
 class Draggable extends React.PureComponent {
     ref = React.createRef()
     mouseMoveFuc = this.onMouseMove.bind(this)

@@ -25,7 +25,7 @@ const useStyles = makeStyles()(() => ({
         cursor: 'pointer',
         backgroundSize: 'contain',
         position: 'absolute',
-        top: 20,
+        top: 10,
         right: 0,
     },
 }))

@@ -11,7 +11,7 @@ const useStyles = makeStyles()(() => ({
         fontSize: '12px',
         color: '#737373',
         fontWeight: 600,
-        width: '100%',
+        width: '150%',
         fontFamily: 'TwitterChirp',
     },
     enter: {
