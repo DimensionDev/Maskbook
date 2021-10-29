@@ -52,8 +52,8 @@ export function useTransactionState() {
     })
     const setStateWithConfirmation = useCallback(
         (nextState: TransactionState) => {
-            if (!isNextStateAvailable(state.type, nextState.type)) return
-            setState(nextState)
+            if (nextState.type === TransactionStateType.UNKNOWN || isNextStateAvailable(state.type, nextState.type))
+                setState(nextState)
         },
         [state],
     )
