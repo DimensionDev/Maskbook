@@ -1,4 +1,4 @@
-import { NetworkType } from '@masknet/web3-shared'
+import { NetworkType } from '@masknet/web3-shared-evm'
 import { TagType } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
@@ -100,6 +100,7 @@ const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
         '1027': NetworkType.Ethereum,
         '1839': NetworkType.Binance,
         '3890': NetworkType.Polygon,
+        '11841': NetworkType.Arbitrum,
         '5601': NetworkType.xDai,
     },
     [DataProvider.UNISWAP_INFO]: {},

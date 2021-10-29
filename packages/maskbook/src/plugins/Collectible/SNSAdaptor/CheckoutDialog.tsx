@@ -9,11 +9,11 @@ import {
     FormControlLabel,
     Typography,
     Link,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCustomSnackbar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils'

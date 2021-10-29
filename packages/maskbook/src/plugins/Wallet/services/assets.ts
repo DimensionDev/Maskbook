@@ -18,7 +18,7 @@ import {
     pow10,
     getChainShortName,
     getChainIdFromNetworkType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-es'
 import { EthereumAddress } from 'wallet.ts'
@@ -79,35 +79,42 @@ export async function getAssetsListNFT(
 
 export async function getAssetsList(
     address: string,
-    network: NetworkType,
     provider: PortfolioProvider,
+    network?: NetworkType,
 ): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
         case PortfolioProvider.ZERION:
-            const scope = resolveZerionAssetsScopeName(network)
+            let result: Asset[] = []
+            //xdai-assets is not support
+            const scopes = network
+                ? [resolveZerionAssetsScopeName(network)]
+                : ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets']
+            for (const scope of scopes) {
+                const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
+                if (meta.status !== 'ok') throw new Error('Fail to load assets.')
 
-            const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
-            if (meta.status !== 'ok') throw new Error('Fail to load assets.')
+                const assets = Object.entries(payload).map(([key, value]) => {
+                    if (key === 'assets') {
+                        const assetsList = (values(value) as ZerionAddressAsset[]).filter(
+                            ({ asset }) =>
+                                asset.is_displayable &&
+                                !filterAssetType.some((type) => type === asset.type) &&
+                                asset.icon_url,
+                        )
+                        return formatAssetsFromZerion(assetsList, key)
+                    }
 
-            const assets = Object.entries(payload).map(([key, value]) => {
-                if (key === 'assets') {
-                    const assetsList = (values(value) as ZerionAddressAsset[]).filter(
-                        ({ asset }) =>
-                            asset.is_displayable &&
-                            !filterAssetType.some((type) => type === asset.type) &&
-                            asset.icon_url,
+                    return formatAssetsFromZerion(
+                        values(value) as ZerionAddressCovalentAsset[],
+                        key as SocketRequestAssetScope,
                     )
-                    return formatAssetsFromZerion(assetsList, key)
-                }
+                })
 
-                return formatAssetsFromZerion(
-                    values(value) as ZerionAddressCovalentAsset[],
-                    key as SocketRequestAssetScope,
-                )
-            })
+                result = [...result, ...assets.flat()]
+            }
 
-            return assets.flat()
+            return result
         case PortfolioProvider.DEBANK:
             const { data = [], error_code } = await DebankAPI.getAssetsList(address)
             if (error_code === 0) return formatAssetsFromDebank(data, network)
@@ -117,9 +124,10 @@ export async function getAssetsList(
     }
 }
 
-function formatAssetsFromDebank(data: BalanceRecord[], network: NetworkType) {
+function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
     return data
-        .filter((x) => getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
+        .filter((x) => !network || getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
+        .filter((x) => x.is_verified)
         .map((y): Asset => {
             const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet
             // the asset id is the token address or the name of the chain
@@ -153,7 +161,7 @@ function formatAssetsFromZerion(
     return data.map(({ asset, quantity }) => {
         const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
-        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC'].includes(symbol)
+        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
 
         return {
             token: {

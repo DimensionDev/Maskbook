@@ -1,6 +1,6 @@
 import type { BalanceListResponse, HistoryResponse, GasPriceDictResponse } from '../types'
 import urlcat from 'urlcat'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 const DEBANK_API = 'https://api.debank.com'
 

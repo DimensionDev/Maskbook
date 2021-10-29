@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { LinkIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'

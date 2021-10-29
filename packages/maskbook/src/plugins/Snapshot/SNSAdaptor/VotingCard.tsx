@@ -1,9 +1,9 @@
 import { useContext, useState, useEffect } from 'react'
 import classNames from 'classnames'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotContext } from '../context'
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { PluginSnapshotRPC } from '../messages'
@@ -39,12 +39,10 @@ export function VotingCard() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { message },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     const account = useAccount()
     const { value: power } = usePower(identifier)
-    const choices = message.payload.choices
+    const choices = proposal.choices
     const [choice, setChoice] = useState(0)
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -100,7 +98,8 @@ export function VotingCard() {
                 loading={loading}
                 onClose={() => setOpen(false)}
                 choiceText={choices[choice - 1]}
-                message={message}
+                snapshot={proposal.snapshot}
+                space={identifier.space}
                 power={power}
                 onVoteConfirm={onVoteConfirm}
             />

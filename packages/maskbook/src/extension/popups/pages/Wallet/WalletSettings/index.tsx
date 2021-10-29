@@ -1,6 +1,6 @@
 import { WalletHeader } from '../components/WalletHeader'
 import { WalletInfo } from '../components/WalletInfo'
-import { Link, List, ListItem, ListItemText } from '@material-ui/core'
+import { Link, List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { BackUpIcon, CloudLinkIcon, TrashIcon } from '@masknet/icons'
@@ -8,7 +8,7 @@ import { memo } from 'react'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { useI18N } from '../../../../../utils'
-import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared'
+import { resolveAddressLinkOnExplorer, useChainId, useWallet } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     content: {
@@ -54,10 +54,12 @@ const WalletSettings = memo(() => {
                         <BackUpIcon className={classes.icon} />
                         <ListItemText className={classes.text}>{t('popups_wallet_backup_wallet')}</ListItemText>
                     </ListItem>
-                    <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.DeleteWallet)}>
-                        <TrashIcon className={classes.icon} />
-                        <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
-                    </ListItem>
+                    {!wallet?.hasDerivationPath ? (
+                        <ListItem className={classes.item} onClick={() => history.push(PopupRoutes.DeleteWallet)}>
+                            <TrashIcon className={classes.icon} />
+                            <ListItemText className={classes.text}>{t('delete_wallet')}</ListItemText>
+                        </ListItem>
+                    ) : null}
                     <Link
                         href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}
                         target="_blank"

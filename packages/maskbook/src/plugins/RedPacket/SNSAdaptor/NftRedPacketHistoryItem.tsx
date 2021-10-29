@@ -1,7 +1,7 @@
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared'
-import { Box, ListItem, Typography } from '@material-ui/core'
+import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { Box, ListItem, Typography } from '@mui/material'
 import classNames from 'classnames'
 import { fill } from 'lodash-es'
 import { FC, memo, MouseEventHandler, useCallback } from 'react'
@@ -14,103 +14,124 @@ import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed'
 import { NftList } from './NftList'
 
-const useStyles = makeStyles()((theme) => ({
-    root: {
-        borderRadius: 10,
-        border: `solid 1px ${theme.palette.divider}`,
-        marginBottom: theme.spacing(1.5),
-        position: 'static !important' as any,
-        height: 'auto !important',
-        padding: theme.spacing(2),
-        backgroundColor: MaskColorVar.lightBackground,
-    },
-    primary: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    secondary: {
-        fontSize: 12,
-    },
-    message: {
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-    },
-    strong: {
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-    },
-    span: {
-        maxWidth: 350,
-        display: 'inline-flex',
-    },
-    time: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-    },
-    box: {
-        display: 'flex',
-        width: '100%',
-    },
-    content: {
-        transform: 'translateY(-4px)',
-        width: '100%',
-        padding: theme.spacing(0, '1rem'),
-    },
-    section: {
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: theme.spacing(2),
-    },
-    icon: {
-        width: 27,
-        height: 27,
-    },
-    title: {
-        whiteSpace: 'break-spaces',
-        fontWeight: 500,
-        fontSize: 16,
-    },
-    info: {
-        fontSize: 14,
-        color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
-    },
-    nftList: {
-        width: 390,
-    },
-    actionButton: {
-        height: 26,
-        minHeight: 'auto',
-        position: 'relative',
-    },
-    footer: {
-        width: '100%',
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        marginTop: theme.spacing(2),
-    },
-    footerInfo: {
-        fontSize: 15,
-        color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
-        '& strong': {
-            color: theme.palette.text.primary,
+const useStyles = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        root: {
+            borderRadius: 10,
+            border: `solid 1px ${theme.palette.divider}`,
+            marginBottom: theme.spacing(1.5),
+            position: 'static !important' as any,
+            height: 'auto !important',
+            padding: theme.spacing(2),
+            backgroundColor: MaskColorVar.lightBackground,
+            [smallQuery]: {
+                padding: theme.spacing(2, 1.5),
+            },
         },
-    },
-    disabledButton: {
-        color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
-        boxShadow: 'none',
-        backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
-        cursor: 'default',
-        '&:hover': {
-            backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
+        primary: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        },
+        secondary: {
+            fontSize: 12,
+        },
+        message: {
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            [smallQuery]: {
+                whiteSpace: 'normal',
+            },
+        },
+        strong: {
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+        },
+        span: {
+            maxWidth: 350,
+            display: 'inline-flex',
+        },
+        time: {
+            fontSize: 12,
+            color: theme.palette.text.secondary,
+        },
+        box: {
+            display: 'flex',
+            width: '100%',
+        },
+        content: {
+            transform: 'translateY(-4px)',
+            width: '100%',
+            paddingLeft: theme.spacing(1),
+        },
+        section: {
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: theme.spacing(2),
+            [smallQuery]: {
+                marginBottom: 0,
+            },
+        },
+        icon: {
+            width: 27,
+            height: 27,
+        },
+        title: {
+            whiteSpace: 'break-spaces',
+            fontWeight: 500,
+            fontSize: 16,
+        },
+        info: {
+            fontSize: 14,
+            color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
+            [smallQuery]: {
+                fontSize: 13,
+            },
+        },
+        nftList: {
+            width: 390,
+            [smallQuery]: {
+                width: '100%',
+            },
+        },
+        actionButton: {
+            height: 26,
+            minHeight: 'auto',
+            position: 'relative',
+        },
+        footer: {
+            width: '100%',
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            marginTop: theme.spacing(2),
+            [smallQuery]: {
+                marginTop: theme.spacing(1),
+            },
+        },
+        footerInfo: {
+            fontSize: 15,
+            color: theme.palette.mode === 'light' ? '#5B7083' : '#c3cbd2',
+            '& strong': {
+                color: theme.palette.text.primary,
+            },
+        },
+        disabledButton: {
             color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
+            boxShadow: 'none',
+            backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
+            cursor: 'default',
+            '&:hover': {
+                backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.12)' : 'rgba(255, 255, 255, 0.12)',
+                color: theme.palette.mode === 'light' ? 'rgba(0, 0, 0, 0.26)' : 'rgba(255, 255, 255, 0.3)',
+            },
         },
-    },
-}))
+    }
+})
 
 export interface NftRedPacketHistoryItemProps {
     history: NftRedPacketHistory

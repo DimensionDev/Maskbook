@@ -2,7 +2,7 @@ import { useDashboardI18N } from '../../../locales'
 import { memo, useCallback, useState } from 'react'
 import { PhoneNumberField } from '@masknet/theme'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { Label, ValidationCodeStep } from './common'
 import type { StepCommonProps } from '../../Stepper'
 import { AccountType } from '../../../pages/Settings/type'
@@ -42,6 +42,7 @@ export const PhoneField = memo(({ toStep }: StepCommonProps) => {
                 <Button
                     variant="rounded"
                     color="primary"
+                    size="large"
                     onClick={() => handleClick()}
                     disabled={!account || invalidPhone}>
                     {t.next()}

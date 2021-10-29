@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { DialogContent, Tab, Tabs } from '@material-ui/core'
+import { DialogContent, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { ListingByPriceCard } from './ListingByPriceCard'
 import { ListingByHighestBidCard } from './ListingByHighestBidCard'
 import type { useAsset } from '../hooks/useAsset'
-import { useChainId, useFungibleTokenWatched } from '@masknet/web3-shared'
+import { useChainId, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {

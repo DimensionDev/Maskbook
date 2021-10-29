@@ -20,7 +20,7 @@ import {
     useWallet,
     formatEthereumAddress,
     TransactionStatusType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import {
     useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
     useActivatedPluginsSNSAdaptor,
@@ -28,7 +28,7 @@ import {
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
 import { forwardRef, useRef, useCallback } from 'react'
-import { MaskMessage } from '../../utils/messages'
+import { MaskMessages } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
@@ -37,6 +37,7 @@ import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { Flags } from '../../utils/flags'
+import { activatedSocialNetworkUI } from '../../social-network'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { hasNativeAPI, nativeAPI, useI18N, useMenu } from '../../utils'
 import { safeUnreachable } from '@dimensiondev/kit'
@@ -47,7 +48,7 @@ import { WalletIcon } from '../shared/WalletIcon'
 import { MaskIcon, MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
 const useStyles = makeStyles()((theme) => ({
     font: {
@@ -118,7 +119,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
     return (
         <>
-            <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
+            <GuideStep step={1} total={3} tip={t('user_guide_tip_1', { sns: activatedSocialNetworkUI.name })}>
                 <Container>
                     <ListItemButton onClick={openMenu}>
                         <ListItemIcon>
@@ -180,7 +181,7 @@ function useToolbox() {
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
-            MaskMessage.events.requestComposition.sendToLocal({
+            MaskMessages.events.requestComposition.sendToLocal({
                 reason: 'timeline',
                 open: true,
                 options: {
@@ -208,7 +209,7 @@ function useToolbox() {
             open: true,
             address: account,
         })
-    }, [])
+    }, [account])
     //#endregion
 
     //#region Swap

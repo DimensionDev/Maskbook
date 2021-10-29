@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { MenuItem, Stack, Typography } from '@material-ui/core'
+import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -11,7 +11,7 @@ import {
     useAccount,
     useChainId,
     useWeb3StateContext,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { ChainIcon, useMenu, useRemoteControlledDialog } from '@masknet/shared'
 import { useAsync } from 'react-use'
 import { PluginMessages, PluginServices } from '../../../../API'
@@ -53,6 +53,10 @@ export const useNetworkSelector = () => {
                         chainId,
                         providerType: ProviderType.MaskWallet,
                     })
+                    await PluginServices.Wallet.updateMaskAccount({
+                        account,
+                        chainId,
+                    })
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
@@ -68,7 +72,7 @@ export const useNetworkSelector = () => {
                     throw new Error('Unreachable case:' + providerType)
             }
         },
-        [providerType],
+        [providerType, account],
     )
 
     const networkMenu = useMenu(

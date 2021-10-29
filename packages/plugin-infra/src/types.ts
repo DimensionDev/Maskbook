@@ -1,5 +1,5 @@
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Option, Result } from 'ts-results'
 
@@ -100,14 +100,14 @@ export namespace Plugin.Shared {
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionDeferred extends Definition, Utilities {
+    export interface DefinitionDeferred<Context = undefined> extends Definition, Utilities {
         /**
          * This function is called when the plugin is initialized.
          *
          * The plugin must clean up all side effects it creates when the `AbortSignal` provided aborts
          * to make sure the plugin can be reloaded safely.
          */
-        init(signal: AbortSignal): void | Promise<void>
+        init(signal: AbortSignal, context: Context): void | Promise<void>
     }
     export interface Utilities {
         /**
@@ -273,7 +273,10 @@ export namespace Plugin.Dashboard {
 
 /** This part runs in the background page */
 export namespace Plugin.Worker {
-    export interface Definition extends Shared.DefinitionDeferred {
+    export interface WorkerContext {
+        getStorage<T extends IndexableTaggedUnion>(): Storage<T>
+    }
+    export interface Definition extends Shared.DefinitionDeferred<WorkerContext> {
         backup?: BackupHandler
     }
     export interface BackupHandler {
@@ -294,6 +297,84 @@ export namespace Plugin.Worker {
          * You MUST treat the data as untrustful content because it can be modified by the user.
          */
         onRestore(data: unknown): Promise<Result<void, Error>>
+    }
+    /**
+     * @typeParameter Data It should be a [tagged union](https://en.wikipedia.org/wiki/Tagged_union) with an extra `id` field
+     * @example
+     *
+     * type File = { type: 'file'; name: string; id: string }
+     * type Folder = { type: 'folder'; file: string[]; id: string }
+     * const Storage: Plugin.Worker.Storage<File | Folder> = context.storage
+     * const file: File = { type: 'file', name: 'file.txt', id: uuid() }
+     * const folder: Folder = { type: 'folder', file: [file.id], id: uuid() }
+     * // Add new data
+     * await Storage.add(file)
+     * await Storage.add(folder)
+     * // Remove
+     * await Storage.remove('file', file.id)
+     * // Query
+     * const result: File | undefined = await Storage.get('file', file.id)
+     * const has: boolean = await Storage.has('file', file.id)
+     * // iterate
+     * for await (const { value } of Storage.iterate('file')) {
+     *     // read only during the for...await loop
+     *     // !! NO: await Storage.remove('file', file.id)
+     *     console.log(value.name)
+     * }
+     * for await (const cursor of Storage.iterate_mutate('folder')) {
+     *     cursor.value // Folder
+     *     await cursor.update({ ...cursor.value, file: [] })
+     *     await cursor.delete()
+     * }
+     */
+    export interface Storage<Data extends IndexableTaggedUnion = IndexableTaggedUnion> {
+        /**
+         * Query an object from the database
+         * @param type "type" field on the object
+         * @param id "id" field on the object
+         */
+        get<T extends Data['type']>(type: T, id: Data['id']): Promise<(Data & { type: T }) | undefined>
+        has<T extends Data['type']>(type: T, id: Data['id']): Promise<boolean>
+        /**
+         * Store a data into the database.
+         * @param data Must be an object with "type" and "id"
+         */
+        add(data: Data): Promise<void>
+        /**
+         * Remove an object from the database
+         * @param type "type" field on the object
+         * @param id "id" field on the object
+         */
+        remove<T extends Data['type']>(type: T, id: Data['id']): Promise<void>
+        /**
+         * Iterate over the database of given type (readonly!)
+         *
+         * !!! During the iterate, you MUST NOT do anything that writes to the store (use iterate_mutate instead)
+         *
+         * !!! You MUST NOT do anything asynchronous before the iterate ends
+         *
+         * !!! Otherwise the transaction will be inactivate
+         * @param type "type" field on the object
+         */
+        iterate<T extends Data['type']>(type: T): AsyncIterableIterator<StorageReadonlyCursor<Data, T>>
+        /**
+         * Iterate over the database of given type (read-write).
+         *
+         * !!! You MUST NOT do anything asynchronous before the iterate ends
+         *
+         * !!! Otherwise the transaction will be inactivate
+         * @param type "type" field on the object
+         */
+        iterate_mutate<T extends Data['type']>(type: T): AsyncIterableIterator<StorageMutableCursor<Data, T>>
+    }
+    export interface StorageReadonlyCursor<Data extends IndexableTaggedUnion, T extends Data['type']> {
+        value: Data & { type: T }
+        // continueTo(id: Data['id']): Promise<void>
+    }
+    export interface StorageMutableCursor<Data extends IndexableTaggedUnion, T extends Data['type']>
+        extends StorageReadonlyCursor<Data, T> {
+        delete: () => Promise<void>
+        update: (data: Data & { type: T }) => Promise<void>
     }
 }
 
@@ -329,6 +410,11 @@ export namespace Plugin {
     }
     export type InjectUIReact<Props> = React.ComponentType<Props>
 }
+
+export type IndexableTaggedUnion = {
+    type: string | number
+    id: string | number
+}
 // TODO: Plugin i18n is not read today.
 export interface I18NStringField {
     /** The i18n key of the string content. */
@@ -353,9 +439,10 @@ export enum CurrentSNSNetwork {
  */
 // ---------------------------------------------------
 export namespace Plugin.__Host {
-    export interface Host {
+    export interface Host<Context = undefined> {
         enabled: EnabledStatusReporter
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
+        createContext(id: string, signal: AbortSignal): Context
         signal?: AbortSignal
     }
     export interface EnabledStatusReporter {

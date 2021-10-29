@@ -1,29 +1,22 @@
 import { useCallback, useState } from 'react'
-import { Typography, DialogContent, DialogActions, Button, CircularProgress, Link } from '@material-ui/core'
+import { Typography, DialogContent, DialogActions, Button, CircularProgress, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import WarningIcon from '@material-ui/icons/Warning'
-import DoneIcon from '@material-ui/icons/Done'
+import WarningIcon from '@mui/icons-material/Warning'
+import DoneIcon from '@mui/icons-material/Done'
 import {
     useChainId,
     TransactionState,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { JSON_RPC_ErrorCode } from '../constants'
-import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
-interface StyleProps {
-    snsId: string
-}
-
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
-        ...(snsId === MINDS_ID ? { minWidth: 600 } : {}),
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
@@ -51,7 +44,7 @@ interface TransactionDialogUIProps extends withClasses<never> {}
 
 function TransactionDialogUI(props: TransactionDialogUIProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
+    const classes = useStylesExtends(useStyles(), props)
 
     const chainId = useChainId()
 

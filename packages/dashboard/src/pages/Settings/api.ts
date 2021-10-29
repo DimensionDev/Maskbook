@@ -80,7 +80,7 @@ export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) =
     return fetchBackupInstance('v1/backup/send_code', {
         method: 'POST',
         body: JSON.stringify({
-            account,
+            account: account.replace(' ', ''),
             account_type: type,
             scenario,
             locale,
@@ -94,7 +94,7 @@ export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkReq
         body: JSON.stringify({
             code,
             account_type: type,
-            account,
+            account: account.replace(' ', ''),
             abstract,
         }),
     }).then<string>((res) => res.upload_url)
@@ -106,7 +106,7 @@ export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) =>
         body: JSON.stringify({
             code,
             account_type: type,
-            account,
+            account: account.replace(' ', ''),
         }),
     }).then<BackupFileInfo>(({ abstract, download_url, size, uploaded_at }) => {
         return {
@@ -122,7 +122,7 @@ export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
     return fetchBackupInstance('v1/backup/validate_code', {
         method: 'POST',
         body: JSON.stringify({
-            account,
+            account: account.replace(' ', ''),
             account_type: type,
             code,
         }),

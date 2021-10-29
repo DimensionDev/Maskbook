@@ -1,25 +1,30 @@
-import { Typography, List } from '@material-ui/core'
+import { Typography, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { RedPacketJSONPayload } from '../types'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory'
 import { useEffect } from 'react'
 
-const useStyles = makeStyles()({
-    root: {
-        display: 'flex',
-        width: 568,
-        padding: '0 12px',
-        boxSizing: 'border-box',
-        height: '100%',
-        flexDirection: 'column',
-        margin: '0 auto',
-        overflow: 'auto',
-    },
-    placeholder: {
-        textAlign: 'center',
-    },
+const useStyles = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        root: {
+            display: 'flex',
+            padding: '0 12px',
+            boxSizing: 'border-box',
+            height: '100%',
+            flexDirection: 'column',
+            margin: '0 auto',
+            overflow: 'auto',
+            [smallQuery]: {
+                padding: 0,
+            },
+        },
+        placeholder: {
+            textAlign: 'center',
+        },
+    }
 })
 
 interface RedPacketHistoryListProps {

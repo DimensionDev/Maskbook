@@ -1,6 +1,7 @@
 import * as bip39 from 'bip39'
+import { validateMnemonic } from 'bip39'
 import { decode, encode } from '@msgpack/msgpack'
-import { blobToArrayBuffer, decodeArrayBuffer, encodeArrayBuffer, decodeText } from '@dimensiondev/kit'
+import { blobToArrayBuffer, decodeArrayBuffer, decodeText, encodeArrayBuffer } from '@dimensiondev/kit'
 import {
     createPersonaByJsonWebKey,
     loginPersona,
@@ -27,6 +28,7 @@ import {
     createOrUpdateProfileDB,
     createProfileDB,
     createRelationDB,
+    createRelationsTransaction,
     deleteProfileDB,
     LinkedProfileDetails,
     ProfileRecord,
@@ -45,17 +47,16 @@ import { decompressBackupFile } from '../../utils/type-transform/BackupFileShort
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
 import { getCurrentPersonaIdentifier } from './SettingsService'
-import { MaskMessage } from '../../utils'
+import { MaskMessages } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
+import { RelationFavor } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-es'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { validateMnemonic } from 'bip39'
 
 assertEnvironment(Environment.ManifestBackground)
 
 export { validateMnemonic } from '../../utils/mnemonic-code'
-export { storeAvatar, queryAvatarDataURL } from '../../database'
 
 //#region Profile
 export { queryProfile, queryProfilePaged } from '../../database'
@@ -245,8 +246,60 @@ export async function queryPagedPostHistory(
 //#endregion
 
 //#region Relation
-export async function createNewRelation(profile: ProfileIdentifier, linked: PersonaIdentifier) {
-    await consistentPersonaDBWriteAccess(async (t) => createRelationDB({ profile, linked, favor: 0 }, t))
+export async function patchCreateOrUpdateRelation(
+    profiles: ProfileIdentifier[],
+    personas: PersonaIdentifier[],
+    defaultFavor = RelationFavor.UNCOLLECTED,
+) {
+    await consistentPersonaDBWriteAccess(async (t) => {
+        for (const persona of personas) {
+            for (const profile of profiles) {
+                const relationInDB = await t.objectStore('relations').get([persona.toText(), profile.toText()])
+                if (relationInDB) {
+                    await updateRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+                    continue
+                }
+                await createRelationDB({ profile: profile, linked: persona, favor: defaultFavor }, t, true)
+            }
+        }
+    })
+    return
+}
+
+export async function patchCreateNewRelation(relations: Omit<RelationRecord, 'network'>[]) {
+    await consistentPersonaDBWriteAccess(async (t) => {
+        for (const relation of relations) {
+            const relationInDB = await t
+                .objectStore('relations')
+                .get([relation.linked.toText(), relation.profile.toText()])
+
+            if (relationInDB) {
+                await updateRelationDB(relation, t, true)
+                continue
+            }
+
+            await createRelationDB(
+                {
+                    ...relation,
+                    favor: relation.favor === RelationFavor.DEPRECATED ? RelationFavor.UNCOLLECTED : relation.favor,
+                },
+                t,
+            )
+        }
+    })
+    return
+}
+
+export async function createNewRelation(
+    profile: ProfileIdentifier,
+    linked: PersonaIdentifier,
+    favor = RelationFavor.UNCOLLECTED,
+) {
+    const t = await createRelationsTransaction()
+    const relationInDB = await t.objectStore('relations').get([linked.toText(), profile.toText()])
+    if (relationInDB) return
+
+    await createRelationDB({ profile, linked, favor }, t)
 }
 
 export async function queryRelationPaged(
@@ -264,17 +317,9 @@ export async function queryRelationPaged(
     return []
 }
 
-export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: 0 | 1) {
-    await consistentPersonaDBWriteAccess((t) =>
-        updateRelationDB(
-            {
-                profile,
-                linked,
-                favor,
-            },
-            t,
-        ),
-    )
+export async function updateRelation(profile: ProfileIdentifier, linked: PersonaIdentifier, favor: RelationFavor) {
+    const t = await createRelationsTransaction()
+    await updateRelationDB({ profile, linked, favor }, t)
 }
 //#endregion
 /**
@@ -309,7 +354,7 @@ export const updateCurrentPersonaAvatar = async (avatar: Blob) => {
 
     if (identifier) {
         await storeAvatar(identifier, await blobToArrayBuffer(avatar))
-        MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
+        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 }
 

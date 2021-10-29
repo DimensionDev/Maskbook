@@ -1,5 +1,5 @@
 import React from 'react'
-import { ThemeProvider, StyledEngineProvider } from '@material-ui/core'
+import { ThemeProvider, StyledEngineProvider } from '@mui/material'
 import { MaskLightTheme, applyMaskColorVars, CustomSnackbarProvider } from '@masknet/theme'
 // import { addMaskSharedI18N, fallbackLng } from '@masknet/shared'
 import { fallbackLng } from '../../shared-base/src/i18n/fallbackRule'

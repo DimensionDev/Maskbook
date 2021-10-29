@@ -1,5 +1,5 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
-import { MaskMessage, CompositionRequest } from '../../../utils/messages'
+import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { i18n } from '../../../utils/i18n-next'
 import { delay } from '../../../utils/utils'
 import { untilDocumentReady } from '../../../utils/dom'
@@ -57,7 +57,7 @@ export async function taskOpenComposeBoxFacebook(
     }
 
     await delay(200)
-    MaskMessage.events.requestComposition.sendToLocal({
+    MaskMessages.events.requestComposition.sendToLocal({
         reason: 'popup',
         open: true,
         content: typeof content === 'string' ? makeTypedMessageText(content) : content,

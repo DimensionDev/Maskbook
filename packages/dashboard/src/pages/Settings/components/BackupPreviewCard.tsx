@@ -1,5 +1,5 @@
 import { MaskColorVar } from '@masknet/theme'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useDashboardI18N } from '../../../locales'

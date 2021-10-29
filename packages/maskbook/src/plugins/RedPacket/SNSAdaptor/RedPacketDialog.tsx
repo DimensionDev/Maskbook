@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
@@ -21,8 +21,9 @@ import {
     useChainId,
     useNetworkType,
     useRedPacketConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit } from 'lodash-es'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
@@ -81,6 +82,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onClose()
     }, [props, state])
 
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
+
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
@@ -97,11 +101,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 }
             }
 
-            if (payload) attachMetadata(RedPacketMetaKey, payload)
-            else dropMetadata(RedPacketMetaKey)
+            if (payload) {
+                senderName && (payload.sender.name = senderName)
+                attachMetadata(RedPacketMetaKey, payload)
+            } else dropMetadata(RedPacketMetaKey)
             onClose()
         },
-        [onClose, chainId],
+        [onClose, chainId, senderName],
     )
 
     //#region blocking

@@ -1,37 +1,30 @@
-import { memo, useEffect, useMemo, useState } from 'react'
-import { Tab, Tabs, TextField, Typography } from '@material-ui/core'
+import { memo, useMemo, useState } from 'react'
+import { Tab, Tabs, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useForm, Controller } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { NetworkSelector } from '../../../components/NetworkSelector'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { LoadingButton, TabContext, TabPanel } from '@material-ui/lab'
-import { useHistory } from 'react-router-dom'
+import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
+import { useHistory, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
-import { WalletMessages, WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useAsyncFn, useAsyncRetry } from 'react-use'
-import { useCustomSnackbar } from '@masknet/theme'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useAsyncFn } from 'react-use'
 import { query } from 'urlcat'
 import { useI18N } from '../../../../../utils'
-import { useLocation } from 'react-router-dom'
+import Services from '../../../../service'
+import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
+import { PageHeader } from '../components/PageHeader'
+import { PasswordField } from '../../../components/PasswordField'
 
 const useStyles = makeStyles()({
     container: {
-        padding: '16px 10px',
-    },
-    header: {
+        flex: 1,
         display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    title: {
-        fontSize: 12,
-        color: '#151818',
-        lineHeight: 1.5,
-        fontWeight: 500,
+        flexDirection: 'column',
+        padding: '16px 10px',
     },
     textField: {
         marginTop: 10,
@@ -77,6 +70,7 @@ const useStyles = makeStyles()({
     },
     multilineInput: {
         padding: 6,
+        borderRadius: 6,
         backgroundColor: '#F7F9FA',
     },
     textArea: {
@@ -84,9 +78,24 @@ const useStyles = makeStyles()({
         fontSize: 12,
     },
     button: {
-        marginTop: 20,
+        fontWeight: 600,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    error: {
+        color: '#FF5F5F',
+        fontSize: 12,
+        marginTop: 8,
+        lineHeight: '16px',
+        wordBreak: 'break-all',
+    },
+    controller: {
+        padding: '20px 10px',
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 })
 
@@ -98,7 +107,6 @@ enum ImportWalletTab {
 
 const ImportWallet = memo(() => {
     const { t } = useI18N()
-    const { showSnackbar } = useCustomSnackbar()
     const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
@@ -107,36 +115,12 @@ const ImportWallet = memo(() => {
     const [keyStoreContent, setKeyStoreContent] = useState('')
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
-
-    const {
-        value: hasEncryptedWallet,
-        retry,
-        loading: getHasEncryptedWalletLoading,
-    } = useAsyncRetry(async () => WalletRPC.hasEncryptedWalletStore(), [])
-
-    useEffect(() => {
-        return WalletMessages.events.walletLockStatusUpdated.on(retry)
-    }, [retry])
+    const [errorMessage, setErrorMessage] = useState('')
 
     const schema = useMemo(() => {
-        // const passwordRule = zod
-        //     .string()
-        //     .min(8)
-        //     .max(20)
-        //     .refine((input) => /[A-Z]/.test(input), t('popups_wallet_password_uppercase_tip'))
-        //     .refine((input) => /[a-z]/.test(input), t('popups_wallet_password_lowercase_tip'))
-        //     .refine((input) => /\d/.test(input), t('popups_wallet_password_number_tip'))
-        //     .refine((input) => /[^\dA-Za-z]/.test(input), t('popups_wallet_password_special_character_tip'))
-        const confirmRule = zod.string().min(8).max(20)
         return zod.object({
             name: zod.string().min(1).max(12),
-            // password: hasEncryptedWallet ? passwordRule.optional() : passwordRule,
-            // confirm: hasEncryptedWallet ? confirmRule.optional() : confirmRule,
         })
-        // .refine((data) => hasEncryptedWallet ?? data.password === data.confirm, {
-        //     message: t('popups_wallet_password_dont_match'),
-        //     path: ['confirm'],
-        // })
     }, [])
 
     const {
@@ -148,8 +132,6 @@ const ImportWallet = memo(() => {
         resolver: zodResolver(schema),
         defaultValues: {
             name: '',
-            // password: '',
-            // confirm: '',
         },
     })
 
@@ -170,53 +152,35 @@ const ImportWallet = memo(() => {
     const [{ loading }, onDerivedWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (!disabled) {
-                switch (currentTab) {
-                    case ImportWalletTab.Mnemonic:
-                        const params = query({ mnemonic, name: data.name })
-                        history.replace({
-                            pathname: PopupRoutes.AddDeriveWallet,
-                            search: `?${params}`,
-                        })
-                        break
-                    case ImportWalletTab.JsonFile:
-                        const { address, privateKey: _private_key_ } = await WalletRPC.fromKeyStore(
-                            keyStoreContent,
-                            Buffer.from(keyStorePassword, 'utf-8'),
-                        )
-                        await WalletRPC.importNewWallet(
-                            {
-                                name: data.name,
-                                address,
-                                _private_key_,
-                            },
-                            true,
-                        )
-                        history.replace(PopupRoutes.Wallet)
-                        break
-                    case ImportWalletTab.PrivateKey:
-                        const { address: walletAddress, privateKeyValid } = await WalletRPC.recoverWalletFromPrivateKey(
-                            privateKey,
-                        )
-                        if (!privateKeyValid) {
-                            showSnackbar(t('import_failed'), { variant: 'error' })
-                            return
-                        }
-                        await WalletRPC.importNewWallet(
-                            {
-                                name: data.name,
-                                address: walletAddress,
-                                _private_key_: privateKey,
-                            },
-                            true,
-                        )
+                try {
+                    switch (currentTab) {
+                        case ImportWalletTab.Mnemonic:
+                            // valid the mnemonic
+                            await getDerivableAccounts(mnemonic, 0, 1)
 
-                        await WalletRPC.updateMaskAccount({
-                            account: walletAddress,
-                        })
-                        history.replace(PopupRoutes.Wallet)
-                        break
-                    default:
-                        break
+                            const params = query({ mnemonic, name: data.name })
+                            history.replace({
+                                pathname: PopupRoutes.AddDeriveWallet,
+                                search: `?${params}`,
+                            })
+                            break
+                        case ImportWalletTab.JsonFile:
+                            await WalletRPC.recoverWalletFromKeyStoreJSON(data.name, keyStoreContent, keyStorePassword)
+                            history.replace(PopupRoutes.Wallet)
+                            await Services.Helper.removePopupWindow()
+                            break
+                        case ImportWalletTab.PrivateKey:
+                            await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
+                            await Services.Helper.removePopupWindow()
+                            history.replace(PopupRoutes.Wallet)
+                            break
+                        default:
+                            break
+                    }
+                } catch (error) {
+                    if (error instanceof Error) {
+                        setErrorMessage(error.message)
+                    }
                 }
             }
         },
@@ -226,131 +190,106 @@ const ImportWallet = memo(() => {
     const onSubmit = handleSubmit(onDerivedWallet)
 
     return (
-        <div className={classes.container}>
-            <div className={classes.header}>
-                <Typography className={classes.title}>{t('plugin_wallet_import_wallet')}</Typography>
-                <NetworkSelector />
-            </div>
-            <form className={classes.form} onSubmit={onSubmit}>
-                <div>
-                    <Typography className={classes.label}>{t('wallet_name')}</Typography>
-                    <Controller
-                        render={({ field }) => (
-                            <StyledInput
-                                {...field}
-                                classes={{ root: classes.textField }}
-                                error={!!errors.name?.message}
-                                helperText={errors.name?.message}
-                                variant="filled"
-                                placeholder={t('popups_wallet_name_placeholder')}
-                            />
-                        )}
-                        control={control}
-                        name="name"
-                    />
-                </div>
-                {/*{!getHasEncryptedWalletLoading && !hasEncryptedWallet ? (*/}
-                {/*    <>*/}
-                {/*        <div style={{ marginTop: 16 }}>*/}
-                {/*            <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>*/}
-                {/*            <Controller*/}
-                {/*                control={control}*/}
-                {/*                render={({ field }) => (*/}
-                {/*                    <StyledInput*/}
-                {/*                        {...field}*/}
-                {/*                        classes={{ root: classes.textField }}*/}
-                {/*                        type="password"*/}
-                {/*                        variant="filled"*/}
-                {/*                        placeholder={t('popups_wallet_payment_password')}*/}
-                {/*                        error={!isValid && !!errors.password?.message}*/}
-                {/*                        helperText={!isValid ? errors.password?.message : ''}*/}
-                {/*                    />*/}
-                {/*                )}*/}
-                {/*                name="password"*/}
-                {/*            />*/}
-                {/*            <Controller*/}
-                {/*                render={({ field }) => (*/}
-                {/*                    <StyledInput*/}
-                {/*                        classes={{ root: classes.textField }}*/}
-                {/*                        {...field}*/}
-                {/*                        error={!isValid && !!errors.confirm?.message}*/}
-                {/*                        helperText={!isValid ? errors.confirm?.message : ''}*/}
-                {/*                        type="password"*/}
-                {/*                        variant="filled"*/}
-                {/*                        placeholder="Re-enter the payment password"*/}
-                {/*                    />*/}
-                {/*                )}*/}
-                {/*                name="confirm"*/}
-                {/*                control={control}*/}
-                {/*            />*/}
-                {/*        </div>*/}
-                {/*        <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>*/}
-                {/*    </>*/}
-                {/*) : null}*/}
-            </form>
-            <TabContext value={currentTab}>
-                <Tabs
-                    value={currentTab}
-                    variant="fullWidth"
-                    className={classes.tabs}
-                    classes={{ indicator: classes.indicator }}
-                    onChange={(event, tab) => setCurrentTab(tab)}>
-                    {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
-                        <Tab
-                            key={key}
-                            label={key}
-                            value={value}
-                            classes={{ root: classes.tab, selected: classes.selected }}
+        <>
+            <div className={classes.container}>
+                <PageHeader title={t('plugin_wallet_import_wallet')} />
+                <form className={classes.form} onSubmit={onSubmit}>
+                    <div>
+                        <Typography className={classes.label}>{t('wallet_name')}</Typography>
+                        <Controller
+                            render={({ field }) => (
+                                <StyledInput
+                                    {...field}
+                                    classes={{ root: classes.textField }}
+                                    error={!!errors.name?.message}
+                                    helperText={errors.name?.message}
+                                    variant="filled"
+                                    placeholder={t('popups_wallet_name_placeholder')}
+                                />
+                            )}
+                            control={control}
+                            name="name"
                         />
-                    ))}
-                </Tabs>
-                <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>
-                    <TextField
-                        variant="filled"
-                        multiline
-                        value={mnemonic}
-                        onChange={(e) => setMnemonic(e.target.value)}
-                        rows={4}
-                        placeholder="Please enter 12 mnemonic words separated by spaces"
-                        InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
-                        className={classes.multiline}
-                        inputProps={{ className: classes.textArea }}
-                    />
-                </TabPanel>
-                <TabPanel value={ImportWalletTab.JsonFile} className={classes.tabPanel}>
-                    <JsonFileBox onChange={(content: string) => setKeyStoreContent(content)} />
-                    <StyledInput
-                        type="password"
-                        classes={{ root: classes.textField }}
-                        placeholder="Original Password"
-                        onChange={(e) => setKeyStorePassword(e.target.value)}
-                        value={keyStorePassword}
-                    />
-                </TabPanel>
-                <TabPanel value={ImportWalletTab.PrivateKey} className={classes.tabPanel}>
-                    <TextField
-                        variant="filled"
-                        multiline
-                        value={privateKey}
-                        onChange={(e) => setPrivateKey(e.target.value)}
-                        rows={4}
-                        placeholder="Private Key"
-                        InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
-                        className={classes.multiline}
-                        inputProps={{ className: classes.textArea }}
-                    />
-                </TabPanel>
-            </TabContext>
-            <LoadingButton
-                loading={loading}
-                variant="contained"
-                fullWidth
-                className={classes.button}
-                disabled={disabled}
-                onClick={onSubmit}>
-                Import
-            </LoadingButton>
-        </div>
+                    </div>
+                </form>
+                <TabContext value={currentTab}>
+                    <Tabs
+                        value={currentTab}
+                        variant="fullWidth"
+                        className={classes.tabs}
+                        classes={{ indicator: classes.indicator }}
+                        onChange={(event, tab) => {
+                            if (errorMessage) setErrorMessage('')
+                            setCurrentTab(tab)
+                        }}>
+                        {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
+                            <Tab
+                                key={key}
+                                label={key}
+                                value={value}
+                                classes={{ root: classes.tab, selected: classes.selected }}
+                            />
+                        ))}
+                    </Tabs>
+                    <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>
+                        <TextField
+                            variant="filled"
+                            multiline
+                            value={mnemonic}
+                            onChange={(e) => {
+                                if (errorMessage) setErrorMessage('')
+                                setMnemonic(e.target.value)
+                            }}
+                            rows={4}
+                            placeholder="Please enter 12 mnemonic words separated by spaces"
+                            InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
+                            className={classes.multiline}
+                            inputProps={{ className: classes.textArea }}
+                        />
+                    </TabPanel>
+                    <TabPanel value={ImportWalletTab.JsonFile} className={classes.tabPanel}>
+                        <JsonFileBox onChange={(content: string) => setKeyStoreContent(content)} />
+                        <PasswordField
+                            classes={{ root: classes.textField }}
+                            placeholder="Original Password"
+                            onChange={(e) => {
+                                if (errorMessage) setErrorMessage('')
+                                setKeyStorePassword(e.target.value)
+                            }}
+                            value={keyStorePassword}
+                        />
+                    </TabPanel>
+                    <TabPanel value={ImportWalletTab.PrivateKey} className={classes.tabPanel}>
+                        <TextField
+                            variant="filled"
+                            multiline
+                            value={privateKey}
+                            onChange={(e) => {
+                                if (errorMessage) setErrorMessage('')
+                                setPrivateKey(e.target.value)
+                            }}
+                            rows={4}
+                            placeholder="Private Key"
+                            InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
+                            className={classes.multiline}
+                            inputProps={{ className: classes.textArea }}
+                        />
+                    </TabPanel>
+                </TabContext>
+                <Typography className={classes.error}>{errorMessage}</Typography>
+            </div>
+            <div className={classes.controller}>
+                <LoadingButton
+                    loading={loading}
+                    variant="contained"
+                    fullWidth
+                    classes={{ root: classes.button, disabled: classes.disabled }}
+                    disabled={disabled}
+                    onClick={onSubmit}>
+                    {t('import')}
+                </LoadingButton>
+            </div>
+        </>
     )
 })
 

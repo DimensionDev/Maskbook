@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EmptyIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'

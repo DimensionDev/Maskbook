@@ -16,20 +16,20 @@ import {
     useGasLimit,
     useTokenTransferCallback,
     useWallet,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@material-ui/core'
+import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-es'
 import { makeStyles } from '@masknet/theme'
-import { ExpandMore } from '@material-ui/icons'
+import { ExpandMore } from '@mui/icons-material'
 import { useHistory } from 'react-router-dom'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
 
@@ -41,6 +41,7 @@ const useStyles = makeStyles()({
     label: {
         color: '#1C68F3',
         fontSize: 12,
+        fontWeight: 600,
         lineHeight: '16px',
         margin: '10px 0',
         display: 'flex',
@@ -48,10 +49,10 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
     accountName: {
-        fontSize: 12,
+        fontSize: 16,
+        fontWeight: 600,
         linHeight: '16px',
         color: '#15181B',
-        padding: '10px 0 20px 10px',
     },
     user: {
         stroke: '#15181B',
@@ -112,6 +113,7 @@ const useStyles = makeStyles()({
         padding: 16,
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,
@@ -185,10 +187,10 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     //#region Set default gas price
     useAsync(async () => {
-        const gasNow = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+        const gasOptions = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         const gasPrice = methods.getValues('gasPrice')
-        if (gasNow && !gasPrice) {
-            const gasPrice = new BigNumber(gasNow.data.fast.price)
+        if (gasOptions && !gasPrice) {
+            const gasPrice = new BigNumber(gasOptions.data.fast.price)
             methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
         }
     }, [methods.setValue, methods.getValues, chainId])

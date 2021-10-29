@@ -8,7 +8,7 @@ import {
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import BigNumber from 'bignumber.js'
@@ -16,9 +16,9 @@ import { useI18N } from '../../../../../utils'
 import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-es'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useHistory } from 'react-router-dom'
@@ -78,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     button: {
+        fontWeight: 600,
         marginTop: 10,
         padding: '9px 10px',
         borderRadius: 20,
@@ -94,6 +95,11 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '16px',
         color: '#15181B',
     },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
+    },
 }))
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
@@ -105,34 +111,35 @@ export const GasSetting1559 = memo(() => {
     const chainId = useChainId()
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
+    const [getGasLimitError, setGetGasLimitError] = useState(false)
     const { value: nativeToken } = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
 
-    //#region Get suggest gas now data from meta swap api
-    const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
+    //#region Get suggest gas options data from meta swap api
+    const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
         return WalletRPC.getEstimateGasFees(chainId)
     }, [chainId])
     //#endregion
 
-    //#region Gas now options
+    //#region Gas options
     const options = useMemo(
         () => [
             {
                 title: t('popups_wallet_gas_fee_settings_low'),
-                content: gasNow?.low,
+                content: gasOptions?.low,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_medium'),
-                content: gasNow?.medium,
+                content: gasOptions?.medium,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_high'),
-                content: gasNow?.high,
+                content: gasOptions?.high,
             },
         ],
-        [gasNow],
+        [gasOptions],
     )
     //#endregion
 
@@ -156,11 +163,17 @@ export const GasSetting1559 = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
-            return web3.eth.estimateGas({
-                data: value.computedPayload._tx.data,
-                from: value.computedPayload._tx.from,
-                to: value.computedPayload._tx.to,
-            })
+            try {
+                return web3.eth.estimateGas({
+                    data: value.computedPayload._tx.data,
+                    from: value.computedPayload._tx.from,
+                    to: value.computedPayload._tx.to,
+                    value: value.computedPayload._tx.value,
+                })
+            } catch {
+                setGetGasLimitError(true)
+                return 0
+            }
         }
 
         return 0
@@ -191,13 +204,14 @@ export const GasSetting1559 = memo(() => {
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
-    }, [minGasLimit, gasNow])
+    }, [minGasLimit, gasOptions])
     //#endregion
 
     const {
         control,
         handleSubmit,
         setValue,
+        setError,
         watch,
         formState: { errors },
     } = useForm<zod.infer<typeof schema>>({
@@ -210,7 +224,7 @@ export const GasSetting1559 = memo(() => {
         },
         context: {
             minGasLimit,
-            gasNow,
+            gasOptions,
         },
     })
 
@@ -279,36 +293,36 @@ export const GasSetting1559 = memo(() => {
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
 
-    const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
+    const [maxPriorityFeePerGas, maxFeePerGas, gasLimit] = watch(['maxPriorityFeePerGas', 'maxFeePerGas', 'gasLimit'])
 
     //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
-        if (getGasNowLoading) return undefined
-        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasNow?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (getGasOptionsLoading) return undefined
+        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
             new BigNumber(maxPriorityFeePerGas).isGreaterThan(
-                new BigNumber(gasNow?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
+                new BigNumber(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
                     HIGH_FEE_WARNING_MULTIPLIER,
                 ),
             )
         )
             return t('wallet_transfer_error_max_priority_gas_fee_too_high')
         return undefined
-    }, [maxPriorityFeePerGas, gasNow, getGasNowLoading])
+    }, [maxPriorityFeePerGas, gasOptions, getGasOptionsLoading])
 
     const maxFeeGasHelperText = useMemo(() => {
-        if (getGasNowLoading) return undefined
-        if (new BigNumber(maxFeePerGas).isLessThan(gasNow?.estimatedBaseFee ?? 0))
+        if (getGasOptionsLoading) return undefined
+        if (new BigNumber(maxFeePerGas).isLessThan(gasOptions?.estimatedBaseFee ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
             new BigNumber(maxFeePerGas).isGreaterThan(
-                new BigNumber(gasNow?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
+                new BigNumber(gasOptions?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
             return t('wallet_transfer_error_max_fee_too_high')
         return undefined
-    }, [maxFeePerGas, gasNow, getGasNowLoading])
+    }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
     //endregion
 
     //#region If the payload is consumed it needs to be redirected
@@ -318,6 +332,11 @@ export const GasSetting1559 = memo(() => {
         }
     }, [value, getValueLoading])
     //#endregion
+
+    //#region If the estimate gas be 0, Set error
+    useUpdateEffect(() => {
+        if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
+    }, [getGasLimitError])
 
     return (
         <>
@@ -336,6 +355,7 @@ export const GasSetting1559 = memo(() => {
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatGweiToEther(content?.suggestedMaxFeePerGas ?? 0)
                                     .times(nativeTokenPrice)
+                                    .times(21000)
                                     .toPrecision(3),
                             })}
                         </Typography>
@@ -373,6 +393,7 @@ export const GasSetting1559 = memo(() => {
                         {t('popups_wallet_gas_fee_settings_usd', {
                             usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                 .times(nativeTokenPrice)
+                                .times(gasLimit)
                                 .toPrecision(3),
                         })}
                     </Typography>
@@ -404,6 +425,7 @@ export const GasSetting1559 = memo(() => {
                         {t('popups_wallet_gas_fee_settings_usd', {
                             usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                 .times(nativeTokenPrice)
+                                .times(gasLimit)
                                 .toPrecision(3),
                         })}
                     </Typography>
@@ -431,7 +453,7 @@ export const GasSetting1559 = memo(() => {
                 loading={loading}
                 variant="contained"
                 fullWidth
-                className={classes.button}
+                classes={{ root: classes.button, disabled: classes.disabled }}
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
                 {t('confirm')}

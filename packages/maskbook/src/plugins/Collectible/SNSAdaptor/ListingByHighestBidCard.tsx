@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
-import { Card, CardActions, CardContent } from '@material-ui/core'
+import { Card, CardActions, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
@@ -10,7 +10,7 @@ import {
     isZero,
     FungibleTokenWatched,
     useAccount,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'

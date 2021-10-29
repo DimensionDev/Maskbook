@@ -1,13 +1,13 @@
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useDashboardI18N } from '../../locales'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { MaskAlert } from '../MaskAlert'
 import { CodeValidation } from './CodeValidation'
 import { fetchBackupValue } from '../../pages/Settings/api'
-import { Services } from '../../API'
+import { PluginServices, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
@@ -20,11 +20,13 @@ import { AccountType } from '../../pages/Settings/type'
 import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
 import { LoadingButton } from '../LoadingButton'
+import type { BackupPreview } from '../../../../maskbook/src/utils'
+import { PopupRoutes } from '@masknet/shared'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = useContext(UserContext)
     const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
 
@@ -52,7 +54,7 @@ export const RestoreFromCloud = memo(() => {
 
     useEffect(() => {
         if (!fetchBackupValueError) return
-        enqueueSnackbar(t.sign_in_account_cloud_backup_download_failed(), { variant: 'error' })
+        showSnackbar(t.sign_in_account_cloud_backup_download_failed(), { variant: 'error' })
     }, [fetchBackupValueError])
 
     const onValidated = useCallback(
@@ -72,7 +74,7 @@ export const RestoreFromCloud = memo(() => {
                     name: 'restore',
                     params: {
                         backupJson: backupInfo.info,
-                        handleRestore: () => onRestore(backupInfo.id, { type, value: accountValue, password }),
+                        handleRestore: () => onRestore(backupInfo, { type, value: accountValue, password }),
                     },
                 })
                 return null
@@ -83,9 +85,20 @@ export const RestoreFromCloud = memo(() => {
     )
 
     const onRestore = useCallback(
-        async (backupId: string, account: any) => {
+        async (backupInfo: { info: BackupPreview; id: string }, account: any) => {
             try {
-                await Services.Welcome.checkPermissionsAndRestore(backupId)
+                if (
+                    backupInfo.info?.wallets &&
+                    (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
+                ) {
+                    await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId: backupInfo.id })
+                    return
+                }
+
+                await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)
+
+                // Set default wallet
+                if (backupInfo.info?.wallets) PluginServices.Wallet.setDefaultWallet()
 
                 if (!currentPersona) {
                     const lastedPersona = await Services.Identity.queryLastPersonaCreated()
@@ -103,7 +116,7 @@ export const RestoreFromCloud = memo(() => {
                 }
                 toggleSynchronizePasswordDialog(true)
             } catch {
-                enqueueSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
+                showSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
             }
         },
         [user],
@@ -153,7 +166,7 @@ export const RestoreFromCloud = memo(() => {
                                 <BackupPreviewCard json={backupBasicInfoJson} />
                             </Box>
                             <ButtonContainer>
-                                <LoadingButton variant="rounded" color="primary" onClick={handleRestore}>
+                                <LoadingButton size="large" variant="rounded" color="primary" onClick={handleRestore}>
                                     {t.restore()}
                                 </LoadingButton>
                             </ButtonContainer>

@@ -1,13 +1,12 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '../../../../service'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useHistory, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
@@ -56,10 +55,18 @@ const useStyles = makeStyles()(() => ({
         padding: 16,
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,
         lineHeight: '20px',
+    },
+    error: {
+        color: '#FF5F5F',
+        fontSize: 12,
+        lineHeight: '16px',
+        padding: '0px 16px 20px 16px',
+        wordBreak: 'break-all',
     },
 }))
 
@@ -70,12 +77,13 @@ const SignRequest = memo(() => {
     const { classes } = useStyles()
     const { value, loading: requestLoading } = useUnconfirmedRequest()
     const wallet = useWallet()
+    const [transferError, setTransferError] = useState(false)
 
     const { data, address } = useMemo(() => {
         if (value?.computedPayload?.type === EthereumRpcType.SIGN) {
             let message = value.computedPayload.data
             try {
-                message = toUtf8(data)
+                message = toUtf8(message)
             } catch (error) {
                 console.log(error)
             }
@@ -92,9 +100,11 @@ const SignRequest = memo(() => {
 
     const [{ loading }, handleConfirm] = useAsyncFn(async () => {
         if (value) {
-            await WalletRPC.deleteUnconfirmedRequest(value.payload)
-            await Services.Ethereum.confirmRequest(value.payload)
-            history.replace(PopupRoutes.Wallet)
+            try {
+                await Services.Ethereum.confirmRequest(value.payload)
+            } catch (error_) {
+                setTransferError(true)
+            }
         }
     }, [value, location.search, history])
 
@@ -124,6 +134,9 @@ const SignRequest = memo(() => {
                 {t('popups_wallet_signature_request_message')}:
             </Typography>
             <Typography className={classes.message}>{data}</Typography>
+            {transferError ? (
+                <Typography className={classes.error}>{t('popups_wallet_transfer_error_tip')}</Typography>
+            ) : null}
             <div className={classes.controller}>
                 <LoadingButton
                     loading={rejectLoading}

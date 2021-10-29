@@ -6,7 +6,7 @@ import {
     useTransactionState,
     useAccount,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useMaskITO_Contract } from './useMaskITO_Contract'
 
 export function useMaskClaimCallback() {
@@ -47,14 +47,16 @@ export function useMaskClaimCallback() {
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = MaskITO_Contract.methods.claim().send(config as NonPayableTx)
-            promiEvent
+            MaskITO_Contract.methods
+                .claim()
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setClaimState({

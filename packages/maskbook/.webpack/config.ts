@@ -74,8 +74,11 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
-                    '@masknet/web3-shared': join(__dirname, '../../web3-shared/src/'),
+                    '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
+                    '@masknet/web3-shared-solana': join(__dirname, '../../web3-shared/solana/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
+                    '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
+                    '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
@@ -243,20 +246,15 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     const plugins = baseConfig.plugins!
     const entries: Record<string, EntryDescription> = (baseConfig.entry = {
         dashboard: normalizeEntryDescription(join(__dirname, '../src/extension/dashboard/index.tsx')),
-        browserAction: normalizeEntryDescription(join(__dirname, '../src/extension/browser-action/index.tsx')),
         popups: normalizeEntryDescription(join(__dirname, '../src/extension/popups/render.tsx')),
         contentScript: normalizeEntryDescription(join(__dirname, '../src/content-script.ts')),
         debug: normalizeEntryDescription(join(__dirname, '../src/extension/debug-page/index.tsx')),
-        /** @deprecated */
-        optionsPage: normalizeEntryDescription(join(__dirname, '../src/extension/options-page/index.tsx')),
     })
     baseConfig.plugins!.push(
-        addHTMLEntry({ chunks: ['dashboard'], filename: 'next.html' }),
-        addHTMLEntry({ chunks: ['browserAction'], filename: 'browser-action.html' }),
+        addHTMLEntry({ chunks: ['dashboard'], filename: 'dashboard.html' }),
         addHTMLEntry({ chunks: ['popups'], filename: 'popups.html' }),
         addHTMLEntry({ chunks: ['contentScript'], filename: 'generated__content__script.html' }),
         addHTMLEntry({ chunks: ['debug'], filename: 'debug.html' }),
-        addHTMLEntry({ chunks: ['optionsPage'], filename: 'index.html' }),
     )
     // background
     if (runtime.manifest === 3) {

@@ -1,7 +1,20 @@
 import { memo } from 'react'
-import { Table, TableCell, TableHead, TableRow, Typography, TableBody, Button, Skeleton } from '@material-ui/core'
+import {
+    Table,
+    TableCell,
+    TableHead,
+    TableRow,
+    Typography,
+    TableBody,
+    Skeleton,
+    CircularProgress,
+    Checkbox,
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
+import { useAsync } from 'react-use'
+import Services from '../../../../../service'
+import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()({
     header: {
@@ -19,6 +32,7 @@ const useStyles = makeStyles()({
         borderBottom: 'none',
     },
     button: {
+        fontWeight: 600,
         minWidth: 0,
         padding: '0 5px',
     },
@@ -26,14 +40,16 @@ const useStyles = makeStyles()({
 
 export interface DeriveWalletTableProps {
     loading: boolean
-    dataSource?: { address: string; added: boolean; balance: string }[]
-    onAdd: (index: number) => void
+    dataSource?: { address: string; added: boolean }[]
+    onCheck: (checked: boolean, index: number) => void
+    confirmLoading: boolean
 }
 
-export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSource, onAdd }) => {
+export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSource, onCheck, confirmLoading }) => {
     const { classes } = useStyles()
+
     return (
-        <Table size="small" padding="none">
+        <Table size="small" padding="none" stickyHeader>
             <TableHead>
                 <TableRow>
                     <TableCell key="address" align="center" variant="head" className={classes.header}>
@@ -50,28 +66,13 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
             <TableBody>
                 {dataSource?.length && !loading
                     ? dataSource.map((item, index) => (
-                          <TableRow key={item.address}>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Typography className={classes.title}>
-                                      <FormattedAddress address={item.address} size={4} />
-                                  </Typography>
-                              </TableCell>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Typography className={classes.title}>
-                                      <FormattedBalance
-                                          value={item.balance}
-                                          decimals={18}
-                                          significant={4}
-                                          symbol="ETH"
-                                      />
-                                  </Typography>
-                              </TableCell>
-                              <TableCell align="center" variant="body" className={classes.cell}>
-                                  <Button disabled={item.added} className={classes.button} onClick={() => onAdd(index)}>
-                                      {item.added ? 'added' : 'add'}
-                                  </Button>
-                              </TableCell>
-                          </TableRow>
+                          <DeriveWalletTableRow
+                              address={item.address}
+                              key={index}
+                              added={item.added}
+                              onCheck={(checked) => onCheck(checked, index)}
+                              confirmLoading={confirmLoading}
+                          />
                       ))
                     : Array.from({ length: 10 })
                           .fill(0)
@@ -90,5 +91,54 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
                           ))}
             </TableBody>
         </Table>
+    )
+})
+export interface DeriveWalletTableRowProps {
+    address: string
+    added: boolean
+    onCheck: (checked: boolean) => void
+    confirmLoading: boolean
+}
+export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, added, onCheck }) => {
+    const { classes } = useStyles()
+
+    const { loading, value: balance } = useAsync(async () => Services.Ethereum.getBalance(address))
+
+    return (
+        <TableRow key={address}>
+            <TableCell align="center" variant="body" className={classes.cell}>
+                <Typography className={classes.title}>
+                    <FormattedAddress address={address} size={4} />
+                </Typography>
+            </TableCell>
+            <TableCell align="center" variant="body" className={classes.cell}>
+                {loading ? (
+                    <CircularProgress sx={{ color: '#15181B' }} size={12} />
+                ) : (
+                    <Typography className={classes.title}>
+                        <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
+                    </Typography>
+                )}
+            </TableCell>
+            <TableCell align="center" variant="body" className={classes.cell}>
+                <Checkbox
+                    disabled={added}
+                    defaultChecked={added}
+                    icon={<CheckedBorderIcon sx={{ fontSize: '16px', stroke: '#1C68F3' }} />}
+                    checkedIcon={<CheckedIcon sx={{ fontSize: '16px' }} />}
+                    sx={{
+                        color: '#1C68F3',
+                        padding: 0,
+                        width: 16,
+                        height: 16,
+                        borderRadius: 1,
+                        '&.Mui-checked': {
+                            color: '#1C68F3',
+                        },
+                    }}
+                    onChange={(e) => onCheck(e.target.checked)}
+                />
+            </TableCell>
+        </TableRow>
     )
 })

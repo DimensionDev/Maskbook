@@ -1,6 +1,6 @@
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { IconButton, InputBase, InputBaseProps, Paper, Typography } from '@material-ui/core'
+import { IconButton, InputBase, InputBaseProps, Paper, Typography } from '@mui/material'
 import { useState, useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({

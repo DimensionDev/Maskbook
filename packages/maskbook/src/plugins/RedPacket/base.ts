@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketPluginID } from './constants'
 
 export const base: Plugin.Shared.Definition = {

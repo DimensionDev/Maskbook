@@ -10,12 +10,13 @@ const PluginHost: Plugin.__Host.Host = {
     enabled: {
         events: new Emitter(),
         isEnabled: (id) => {
-            return Services.Settings.isPluginEnabled(id)
+            return Services.Settings.getPluginEnabled(id)
         },
     },
     addI18NResource(plugin, resource) {
         createI18NBundle(plugin, resource)(i18n)
     },
+    createContext: () => undefined,
 }
 setTimeout(() => {
     Messages.events.pluginEnabled.on((id) => PluginHost.enabled.events.emit('enabled', id))

@@ -1,9 +1,9 @@
-import { Fab, styled } from '@material-ui/core'
-import { Create } from '@material-ui/icons'
+import { Fab, styled } from '@mui/material'
+import { Create } from '@mui/icons-material'
 import { Composition } from '../../../components/CompositionDialog/Composition'
 import { useState, useEffect } from 'react'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { MaskMessage } from '../../../utils'
+import { MaskMessages } from '../../../utils'
 
 const Container = styled('div')`
     position: fixed;
@@ -30,7 +30,7 @@ export function Entry() {
             <Fab
                 variant="extended"
                 onClick={() => {
-                    MaskMessage.events.requestComposition.sendToLocal({ open: true, reason: 'timeline' })
+                    MaskMessages.events.requestComposition.sendToLocal({ open: true, reason: 'timeline' })
                 }}>
                 <Create />
                 Create with Mask

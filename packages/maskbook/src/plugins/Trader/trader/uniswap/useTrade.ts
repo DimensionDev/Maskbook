@@ -1,4 +1,4 @@
-import { isZero, useChainId, FungibleTokenDetailed } from '@masknet/web3-shared'
+import { isZero, useChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { TradeStrategy } from '../../types'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade'

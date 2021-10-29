@@ -12,14 +12,14 @@ import {
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-es'
 import { useHistory } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
@@ -75,9 +75,15 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     button: {
+        fontWeight: 600,
         marginTop: 10,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 }))
 
@@ -87,14 +93,15 @@ export const Prior1559GasSetting = memo(() => {
     const { t } = useI18N()
     const chainId = useChainId()
     const { value, loading: getValueLoading } = useUnconfirmedRequest()
+    const [getGasLimitError, setGetGasLimitError] = useState(false)
     const history = useHistory()
     const [selected, setOption] = useState<number | null>(null)
     const { value: nativeToken } = useNativeTokenDetailed()
 
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-    //#region Get gas now from debank
-    const { value: gasNow } = useAsync(async () => {
+    //#region Get gas options from debank
+    const { value: gasOptions } = useAsync(async () => {
         const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
         if (!response) return { slow: 0, standard: 0, fast: 0 }
 
@@ -110,18 +117,18 @@ export const Prior1559GasSetting = memo(() => {
         () => [
             {
                 title: t('popups_wallet_gas_fee_settings_low'),
-                gasPrice: gasNow?.slow ?? 0,
+                gasPrice: gasOptions?.slow ?? 0,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_medium'),
-                gasPrice: gasNow?.standard ?? 0,
+                gasPrice: gasOptions?.standard ?? 0,
             },
             {
                 title: t('popups_wallet_gas_fee_settings_high'),
-                gasPrice: gasNow?.fast ?? 0,
+                gasPrice: gasOptions?.fast ?? 0,
             },
         ],
-        [gasNow],
+        [gasOptions],
     )
 
     const gas = useMemo(() => {
@@ -141,7 +148,11 @@ export const Prior1559GasSetting = memo(() => {
             (value?.computedPayload?.type === EthereumRpcType.SEND_ETHER ||
                 value?.computedPayload?.type === EthereumRpcType.CONTRACT_INTERACTION)
         ) {
-            return web3.eth.estimateGas(value.computedPayload._tx)
+            try {
+                return web3.eth.estimateGas(value.computedPayload._tx)
+            } catch {
+                return 0
+            }
         }
 
         return 0
@@ -163,6 +174,7 @@ export const Prior1559GasSetting = memo(() => {
     const {
         control,
         handleSubmit,
+        setError,
         setValue,
         formState: { errors },
     } = useForm<zod.infer<typeof schema>>({
@@ -226,6 +238,11 @@ export const Prior1559GasSetting = memo(() => {
         }
     }, [value, getValueLoading])
 
+    //#region If the estimate gas be 0, Set error
+    useUpdateEffect(() => {
+        if (!getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
+    }, [getGasLimitError])
+
     return (
         <>
             <div className={classes.options}>
@@ -238,7 +255,7 @@ export const Prior1559GasSetting = memo(() => {
                         <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).toPrecision(3),
+                                usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
                             })}
                         </Typography>
                     </div>
@@ -290,7 +307,7 @@ export const Prior1559GasSetting = memo(() => {
                 loading={loading}
                 variant="contained"
                 fullWidth
-                className={classes.button}
+                classes={{ root: classes.button, disabled: classes.disabled }}
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
                 {t('confirm')}

@@ -15,7 +15,7 @@ import {
     useChainId,
     useChainIdValid,
     useFungibleTokenBalance,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
@@ -30,12 +30,14 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 import { isNativeTokenWrapper } from '../../helpers'
 import { TradeContext } from '../../trader/useTradeContext'
 import { PluginTraderRPC } from '../../messages'
 import { delay } from '../../../../utils'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -69,6 +71,7 @@ export function Trader(props: TraderProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
 
     const context = useContext(TradeContext)
     const provider = context?.TYPE ?? TradeProvider.UNISWAP_V2
@@ -230,7 +233,15 @@ export function Trader(props: TraderProps) {
                           inputToken.symbol
                       } for ${formatBalance(tradeComputed.outputAmount, outputToken.decimals, 6)} ${cashTag}${
                           outputToken.symbol
-                      }. Follow @realMaskNetwork (mask.io) to swap cryptocurrencies on Twitter.`,
+                      }.${
+                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                              ? `Follow @${
+                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                                } (mask.io) to swap cryptocurrencies on ${
+                                    isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
+                                }.`
+                              : ''
+                      }`,
                       '#mask_io',
                   ].join('\n')
                 : '',

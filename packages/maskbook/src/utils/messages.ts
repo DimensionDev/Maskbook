@@ -1,4 +1,6 @@
 // This file should be free of side effects
+import type { RelationFavor } from '@masknet/shared-base'
+
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
 
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
@@ -37,9 +39,13 @@ export interface ProfileNFTsPageEvent {
 
 export interface NFTAvatarEvent {
     userId: string
-    tokenId: string
-    address: string
     avatarId: string
+    address?: string
+    tokenId?: string
+}
+
+export interface RequestExtensionPermissionEvent {
+    permissions?: browser.permissions.Permission[]
 }
 
 export interface MaskMessages extends SettingsEvents {
@@ -59,10 +65,11 @@ export interface MaskMessages extends SettingsEvents {
     replaceComposition: TypedMessage
     ownPersonaChanged: void
     profilesChanged: UpdateEvent<ProfileIdentifier>[]
-    relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor: 0 | 1 })[]
+    relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor: RelationFavor })[]
     pluginEnabled: string
     pluginDisabled: string
 
+    requestExtensionPermission: RequestExtensionPermissionEvent
     // TODO: move to plugin message
     profileNFTsPageUpdated: ProfileNFTsPageEvent
     // TODO: move to plugin message
@@ -73,8 +80,9 @@ export interface MaskMessages extends SettingsEvents {
     }
 
     NFTAvatarUpdated: NFTAvatarEvent
+    NFTAvatarTimelineUpdated: NFTAvatarEvent
     maskSDKHotModuleReload: void
 }
-export const MaskMessage = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
-Object.assign(globalThis, { MaskMessage })
-MaskMessage.serialization = Serialization
+export const MaskMessages = new WebExtensionMessage<MaskMessages>({ domain: 'mask' })
+Object.assign(globalThis, { MaskMessage: MaskMessages })
+MaskMessages.serialization = Serialization

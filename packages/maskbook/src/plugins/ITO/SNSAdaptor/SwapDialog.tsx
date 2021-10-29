@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { v4 as uuid } from 'uuid'
-import { CircularProgress, Slider, Typography } from '@material-ui/core'
+import { CircularProgress, Slider, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
@@ -22,7 +22,7 @@ import {
     useFungibleTokenDetailed,
     isSameAddress,
     useTokenConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useSwapCallback } from './hooks/useSwapCallback'
@@ -216,8 +216,8 @@ export function SwapDialog(props: SwapDialogProps) {
     const onSwap = useCallback(async () => {
         await swapCallback()
         if (payload.token.type !== EthereumTokenType.ERC20) return
-        await WalletRPC.addERC20Token(payload.token)
-        await WalletRPC.trustERC20Token(account, payload.token)
+        await WalletRPC.addToken(payload.token)
+        await WalletRPC.updateWalletToken(account, payload.token, { strategy: 'trust' })
     }, [swapCallback, payload.token.address])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(

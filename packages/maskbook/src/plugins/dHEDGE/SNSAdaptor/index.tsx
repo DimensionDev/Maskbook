@@ -1,7 +1,7 @@
 import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
-import { SnackbarContent } from '@material-ui/core'
+import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PoolView } from '../UI/PoolView'

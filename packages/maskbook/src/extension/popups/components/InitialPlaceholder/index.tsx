@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Box, Button, Typography } from '@material-ui/core'
+import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'
 import { useRouteMatch } from 'react-router-dom'
@@ -23,6 +23,7 @@ const useStyles = makeStyles()({
         padding: '0 10px',
     },
     button: {
+        fontWeight: 600,
         paddingTop: 10,
         paddingBottom: 10,
         fontSize: 14,

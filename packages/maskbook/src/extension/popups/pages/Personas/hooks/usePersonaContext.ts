@@ -5,7 +5,7 @@ import { useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
 import { head } from 'lodash-es'
 import { useEffect, useState } from 'react'
-import { MaskMessage } from '../../../../../utils'
+import { MaskMessages } from '../../../../../utils'
 
 function usePersonaContext() {
     const [deletingPersona, setDeletingPersona] = useState<PersonaInformation>()
@@ -13,7 +13,7 @@ function usePersonaContext() {
     const currentIdentifier = useValueRef(currentPersonaIdentifier)
     const { value: personas, retry } = useAsyncRetry(async () => Services.Identity.queryOwnedPersonaInformation())
     useEffect(() => {
-        return MaskMessage.events.ownPersonaChanged.on(retry)
+        return MaskMessages.events.ownPersonaChanged.on(retry)
     }, [retry])
 
     const currentPersona = personas?.find((x) =>

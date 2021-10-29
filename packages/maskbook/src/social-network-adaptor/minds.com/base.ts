@@ -1,15 +1,14 @@
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
-import { Flags } from '../../utils'
 
 export const MINDS_ID = 'minds.com'
 const origins = ['https://www.minds.com/*', 'https://minds.com/*']
 export const mindsBase: SocialNetwork.Base = {
     networkIdentifier: MINDS_ID,
+    name: 'minds',
     declarativePermissions: { origins },
     shouldActivate(location) {
         return location.hostname.endsWith('minds.com')
     },
-    notReadyForProduction: !Flags.v2_enabled,
 }
 
 export function isMinds(ui: SocialNetwork.Base) {

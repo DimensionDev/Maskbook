@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { ChainId, getChainDetailed, getNetworkTypeFromChainId, resolveChainColor } from '@masknet/web3-shared'
+import { ChainId, getChainDetailed, getNetworkTypeFromChainId, resolveChainColor } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { NetworkIcon } from '../NetworkIcon'
 

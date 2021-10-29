@@ -1,6 +1,6 @@
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
-import { styled } from '@material-ui/core/styles'
-import { Box, Container, Stack, Typography } from '@material-ui/core'
+import { styled } from '@mui/material/styles'
+import { Box, Container, Stack, Typography } from '@mui/material'
 import { RestoreIcon, SignUpAccountIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { RoutePaths } from '../../type'

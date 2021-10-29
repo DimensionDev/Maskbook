@@ -1,4 +1,4 @@
-import { SvgIcon, SvgIconProps } from '@material-ui/core'
+import { SvgIcon, SvgIconProps } from '@mui/material'
 import type { FC } from 'react'
 
 export const PoolTogetherIcon: FC<SvgIconProps> = (props) => (

@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
 import { useMemo, Suspense } from 'react'
-import { Skeleton } from '@material-ui/core'
+import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PostInspector } from './PostInspector'
@@ -57,10 +57,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     PostInspector: function Component(): JSX.Element | null {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isSnapshotURL)
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+
+        const link = links.find(isSnapshotURL)
         if (!link) return null
         return <Renderer url={link} />
     },

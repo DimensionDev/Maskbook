@@ -2,9 +2,6 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { SelectTokenDialog } from '../SNSAdaptor/SelectTokenDialog'
 import { SelectNftContractDialog } from '../SNSAdaptor/SelectNftContractDialog'
-import { CreateWalletDialog } from '../SNSAdaptor/CreateWalletDialog'
-import { CreateImportChooseDialog } from '../SNSAdaptor/CreateImportChooseDialog'
-import { ImportWalletDialog } from '../SNSAdaptor/ImportWalletDialog'
 import { SelectProviderDialog } from '../SNSAdaptor/SelectProviderDialog'
 import { SelectWalletDialog } from '../SNSAdaptor/SelectWalletDialog'
 import { WalletConnectQRCodeDialog } from '../SNSAdaptor/WalletConnectQRCodeDialog'
@@ -16,6 +13,7 @@ import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 import { WalletRiskWarningDialog } from '../SNSAdaptor/RiskWarningDialog'
 import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog'
 import { ERC20TokenListDialog } from '../SNSAdaptor/RRC20TokenListDialog'
+import { TransactionSnackbar } from '../SNSAdaptor/TransactionSnackbar'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
@@ -29,9 +27,6 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <SelectProviderDialog />
                 <SelectTokenDialog />
                 <SelectNftContractDialog />
-                <CreateWalletDialog />
-                <CreateImportChooseDialog />
-                <ImportWalletDialog />
                 <WalletStatusDialog />
                 <ConnectWalletDialog />
                 <WalletConnectQRCodeDialog />
@@ -39,6 +34,7 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <WalletRiskWarningDialog />
                 <ERC20TokenListDialog />
                 <GasSettingDialog />
+                <TransactionSnackbar />
             </>
         )
     },

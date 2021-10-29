@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isDarkTheme } from '../../../utils/theme-tools'
 import { ETHIcon } from '../icons/ETH'

@@ -1,11 +1,11 @@
 import type { TypedMessage } from '../../../protocols/typed-message'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { paywallUrl } from '../constants'
 import { renderWithUnlockProtocolMetadata, UnlockProtocolMetadataReader } from '../helpers'
-import { useAccount, useChainId } from '@masknet/web3-shared'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { PluginUnlockProtocolRPC } from '../messages'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 

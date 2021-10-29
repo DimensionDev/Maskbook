@@ -7,7 +7,7 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-} from '@material-ui/core'
+} from '@mui/material'
 
 export interface RequestPermissionProps extends browser.permissions.Permissions {
     onRequestApprove(): void

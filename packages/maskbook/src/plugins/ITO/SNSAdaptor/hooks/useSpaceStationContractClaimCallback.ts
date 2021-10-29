@@ -5,7 +5,7 @@ import {
     useTransactionState,
     TransactionStateType,
     TransactionEventType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useCallback } from 'react'
 import type { CampaignInfo } from '../../types'
 import type { SpaceStationGalaxy } from '@masknet/web3-contracts/types/SpaceStationGalaxy'
@@ -73,15 +73,10 @@ ${campaignInfo.description}`,
                 }),
         }
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = contract.methods.claim(...params).send(config as NonPayableTx)
-
-            promiEvent
+            contract.methods
+                .claim(...params)
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.TRANSACTION_HASH, async (hash) => {
-                    setClaimState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-
                     const participated = await mutationParticipate(
                         useSignature,
                         account,
@@ -104,6 +99,7 @@ ${campaignInfo.description}`,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setClaimState({

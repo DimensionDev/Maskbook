@@ -1,4 +1,4 @@
-import { MenuItem } from '@material-ui/core'
+import { MenuItem } from '@mui/material'
 import { useLanguage } from '../api'
 import { Services } from '../../../API'
 import SettingSelect from './SettingSelect'

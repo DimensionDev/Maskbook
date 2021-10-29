@@ -1,6 +1,6 @@
 import { SettingsIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
-import { Avatar, Box, ListItem, ListItemAvatar, ListItemText, styled, listItemTextClasses } from '@material-ui/core'
+import { Avatar, Box, ListItem, ListItemAvatar, ListItemText, styled, listItemTextClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { ReactNode } from 'react'
 import SettingSwitch from '../../Settings/components/SettingSwitch'

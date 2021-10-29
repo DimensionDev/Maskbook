@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { useI18N } from '../../../../utils'
 import { makeStyles } from '@masknet/theme'
 

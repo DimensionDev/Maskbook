@@ -12,7 +12,7 @@ let migrationDone = false
 async function migrationV1_V2() {
     if (migrationDone) return
     for await (const x of Database.iterate_mutate('arweave')) {
-        await Database.add(FileInfoV1ToV2(x.data))
+        await Database.add(FileInfoV1ToV2(x.value))
         await x.delete()
     }
     migrationDone = true
@@ -20,7 +20,7 @@ async function migrationV1_V2() {
 
 export async function getAllFiles() {
     await migrationV1_V2()
-    const files: FileInfo[] = await asyncIteratorToArray(Database.iterate('file'))
+    const files: FileInfo[] = (await asyncIteratorToArray(Database.iterate('file'))).map((x) => x.value)
     return files.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 }
 

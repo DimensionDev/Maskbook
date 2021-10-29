@@ -1,4 +1,4 @@
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { RedPacketRecord } from '../types'
 import * as subgraph from './apis'
 import * as database from './database'

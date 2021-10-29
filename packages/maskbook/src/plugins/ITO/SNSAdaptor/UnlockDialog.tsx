@@ -1,4 +1,4 @@
-import { Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
@@ -16,7 +16,7 @@ import {
     resolveAddressLinkOnExplorer,
     useChainId,
     useFungibleTokenBalance,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'

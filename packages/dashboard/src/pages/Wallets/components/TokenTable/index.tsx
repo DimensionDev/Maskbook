@@ -1,5 +1,5 @@
-import { memo, useCallback } from 'react'
-import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@material-ui/core'
+import { memo, useCallback, useMemo } from 'react'
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
@@ -7,24 +7,37 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { TokenTableRow } from '../TokenTableRow'
 import {
     Asset,
+    ChainId,
+    createNativeToken,
+    EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
+    getChainDetailed,
+    getChainIdFromNetworkType,
+    makeSortAssertWithoutChainFn,
     useAssets,
-    useChainId,
-    useTrustedERC20Tokens,
-} from '@masknet/web3-shared'
+    useWeb3State,
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages } from '../../../../API'
+import { PluginMessages, PluginServices } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        height: 'calc(100% - 58px)',
         display: 'flex',
         flexDirection: 'column',
-        maxHeight: 'calc(100% - 58px)',
+        height: '100%',
+    },
+    table: {
+        paddingLeft: theme.spacing(5),
+        paddingRight: theme.spacing(5),
+        [theme.breakpoints.down('lg')]: {
+            paddingLeft: theme.spacing(2),
+            paddingRight: theme.spacing(2),
+        },
     },
     header: {
         color: MaskColorVar.normalText,
@@ -54,18 +67,48 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const TokenTable = memo(() => {
-    const navigate = useNavigate()
-    const chainId = useChainId()
+interface TokenTableProps {
+    selectedChainId: ChainId | null
+}
 
-    const trustedERC20Tokens = useTrustedERC20Tokens()
+export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
+    const navigate = useNavigate()
+
+    const trustedERC20Tokens = useWeb3State().erc20Tokens
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+
+    const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
+    const supportedNetworkNativeTokenAssets = useMemo(() => {
+        if (selectedChainId || !networks) return []
+        return networks.map((x) => {
+            const chainId = getChainIdFromNetworkType(x)
+            return {
+                chain: getChainDetailed(chainId)?.shortName.toLowerCase() ?? 'unknown',
+                token: createNativeToken(chainId),
+                balance: '0',
+            }
+        })
+    }, [selectedChainId, networks])
 
     const {
         error: detailedTokensError,
         loading: detailedTokensLoading,
         value: detailedTokens,
-    } = useAssets(trustedERC20Tokens || [])
+    } = useAssets(
+        trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
+        selectedChainId === null ? 'all' : selectedChainId,
+    )
+
+    const assetsWithNativeToken = useMemo(() => {
+        if (selectedChainId) return detailedTokens
+        const assets = supportedNetworkNativeTokenAssets.filter(
+            (x) =>
+                !detailedTokens.find(
+                    (t) => t.token.chainId === x.token.chainId && t.token.type === EthereumTokenType.Native,
+                ),
+        )
+        return [...detailedTokens, ...assets].sort(makeSortAssertWithoutChainFn())
+    }, [selectedChainId, supportedNetworkNativeTokenAssets, detailedTokens])
 
     const onSwap = useCallback((token: FungibleTokenDetailed) => {
         openSwapDialog({
@@ -91,7 +134,7 @@ export const TokenTable = memo(() => {
         <TokenTableUI
             isLoading={detailedTokensLoading}
             isEmpty={!!detailedTokensError || !detailedTokens.length}
-            dataSource={detailedTokens}
+            dataSource={assetsWithNativeToken}
             onSwap={onSwap}
             onSend={onSend}
         />
@@ -112,12 +155,12 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
     return (
         <TableContainer className={classes.container}>
             {isLoading || isEmpty ? (
-                <Box flex={1}>
+                <>
                     {isLoading ? <LoadingPlaceholder /> : null}
                     {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
-                </Box>
+                </>
             ) : (
-                <Table stickyHeader sx={{ padding: '0 44px' }}>
+                <Table stickyHeader className={classes.table}>
                     <TableHead>
                         <TableRow>
                             <TableCell key="Asset" align="center" variant="head" className={classes.header}>

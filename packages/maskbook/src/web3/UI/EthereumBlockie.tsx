@@ -1,5 +1,5 @@
-import { useBlockie } from '@masknet/web3-shared'
-import { Avatar, AvatarProps } from '@material-ui/core'
+import { useBlockie } from '@masknet/web3-shared-evm'
+import { Avatar, AvatarProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 

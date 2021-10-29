@@ -4,7 +4,7 @@ import parseColor from 'tinycolor2'
 export const LightColor = {
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
-
+    background: '#FFFFFF',
     secondary: '#e8f0fe',
     secondaryContrastText: '#1c68f3',
 
@@ -50,11 +50,14 @@ export const LightColor = {
     twitter: '#2CA4EF',
     facebook: '#4267B2',
     white: '#ffffff',
+    bottom: '#F9FAFA',
+    main: '#1C68F3',
+    errorBackground: 'rgba(255, 95, 95, 0.15)',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
-
+    background: '#15171A',
     secondary: '#242e57',
     secondaryContrastText: '#ffffff',
 
@@ -102,6 +105,9 @@ export const DarkColor: typeof LightColor = {
     twitter: '#2CA4EF',
     facebook: '#4267B2',
     white: '#ffffff',
+    bottom: '#000000',
+    main: '#D4D4D4',
+    errorBackground: 'rgba(255, 95, 95, 0.1)',
 }
 
 export type Color = typeof LightColor

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'

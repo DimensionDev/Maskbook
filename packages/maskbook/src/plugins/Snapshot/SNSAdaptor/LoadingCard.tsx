@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { Skeleton } from '@material-ui/core'
+import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotCard } from './SnapshotCard'
 

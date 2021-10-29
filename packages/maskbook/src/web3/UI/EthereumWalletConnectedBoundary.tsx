@@ -1,11 +1,11 @@
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { isZero, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared'
+import { isZero, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
 const useStyles = makeStyles()((theme) => ({
@@ -61,7 +61,7 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
         return (
             <Grid container>
                 <ActionButton
-                    className={classNames(classes.connectWallet)}
+                    className={classNames(classes.button, classes.connectWallet)}
                     fullWidth
                     variant="contained"
                     size="large"
@@ -102,5 +102,6 @@ export function EthereumWalletConnectedBoundary(props: EthereumWalletConnectedBo
                 </ActionButton>
             </Grid>
         )
+
     return <Grid container>{children}</Grid>
 }

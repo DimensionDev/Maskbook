@@ -1,5 +1,5 @@
 import { HashRouter } from 'react-router-dom'
-import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@material-ui/core'
+import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@mui/material'
 import {
     CustomSnackbarProvider,
     MaskLightTheme,
@@ -17,7 +17,7 @@ import './PluginHost'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { Pages } from '../pages/routes'
 import { useAppearance } from '../pages/Personas/api'
-import { Web3Provider } from '@masknet/web3-shared'
+import { Web3Provider } from '@masknet/web3-shared-evm'
 import { Web3Context } from '../web3/context'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
 

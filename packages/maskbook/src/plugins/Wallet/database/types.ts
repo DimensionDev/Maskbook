@@ -1,4 +1,4 @@
-import type { ChainId, TransactionStatusType } from '@masknet/web3-shared'
+import type { ChainId, TransactionStatusType } from '@masknet/web3-shared-evm'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 
 export interface ERC20TokenRecord {
@@ -33,7 +33,7 @@ export interface ERC1155TokenRecord {
     assetImage?: string
 }
 
-export interface WalletRecord {
+export interface LegacyWalletRecord {
     /** ethereum hex address */
     address: string
     /** User define wallet name. Default address.prefix(6) */
@@ -57,18 +57,6 @@ export interface WalletRecord {
     _public_key_?: string
     /** Wallet recover from private key */
     _private_key_?: string
-    createdAt: Date
-    updatedAt: Date
-}
-
-export interface PhraseRecord {
-    id: string
-    /** HD wallet path address index */
-    index: number
-    /** HD wallet path w/o address index */
-    path: string
-    mnemonic: string[]
-    passphrase: string
     createdAt: Date
     updatedAt: Date
 }
@@ -104,9 +92,7 @@ export interface ERC1155TokenRecordInDatabase extends ERC1155TokenRecord {
     record_id: string
 }
 
-export interface WalletRecordInDatabase extends WalletRecord {}
-
-export interface PhraseRecordInDatabase extends PhraseRecord {}
+export interface LegacyWalletRecordInDatabase extends LegacyWalletRecord {}
 
 export interface TransactionChunkRecordInDatabase extends TransactionChunkRecord {
     record_id: string
@@ -114,17 +100,4 @@ export interface TransactionChunkRecordInDatabase extends TransactionChunkRecord
 
 export interface UnconfirmedRequestChunkRecordInDatabase extends UnconfirmedRequestChunkRecord {
     record_id: string
-}
-
-export interface EncryptedWallet {
-    type: 'wallet'
-    id: 'wallet'
-    encrypted: ArrayBuffer
-    iv: ArrayBuffer
-}
-export interface EncryptedWalletPrimaryKey {
-    type: 'primary-key'
-    id: 'wallet'
-    wrappedKey: ArrayBuffer
-    iv: ArrayBuffer
 }

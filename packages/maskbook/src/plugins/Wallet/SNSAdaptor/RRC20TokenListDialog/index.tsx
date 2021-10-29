@@ -1,7 +1,7 @@
 import { ERC20TokenList, useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../../utils'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { MaskDialog } from '@masknet/theme'
 import { useState } from 'react'
 

@@ -1,6 +1,6 @@
-import { Box, Card, CircularProgress, Typography, Paper } from '@material-ui/core'
+import { Box, Card, CircularProgress, Typography, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { resolveProviderName, ProviderType } from '@masknet/web3-shared'
+import { resolveProviderName, ProviderType } from '@masknet/web3-shared-evm'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { ProviderIcon, useStylesExtends } from '@masknet/shared'

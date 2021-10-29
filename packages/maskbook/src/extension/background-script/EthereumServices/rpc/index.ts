@@ -1,5 +1,13 @@
+import BigNumber from 'bignumber.js'
 import * as ABICoder from 'web3-eth-abi'
-import { EthereumRpcComputed, EthereumRpcType, EthereumMethodType, getChainDetailedCAIP } from '@masknet/web3-shared'
+import {
+    isSameAddress,
+    EthereumRpcComputed,
+    EthereumRpcType,
+    EthereumMethodType,
+    getChainDetailedCAIP,
+    getTokenConstants,
+} from '@masknet/web3-shared-evm'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getCode } from '../network'
@@ -16,7 +24,7 @@ type AbiItem = {
 // fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder
 
-const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
+const { ZERO_ADDRESS = '' } = getTokenConstants()
 
 const ABI_LIST_WITH_SIGNATURE = (ABI_LIST as AbiItem[]).map((x) => ({
     ...x,
@@ -37,8 +45,8 @@ function getData(tx: TransactionConfig) {
 
 function getTo(tx: TransactionConfig) {
     const { to } = tx
-    if (!to) return ADDRESS_ZERO
-    if (isEmptyHex(to)) return ADDRESS_ZERO
+    if (!to) return ZERO_ADDRESS
+    if (isEmptyHex(to)) return ZERO_ADDRESS
     return to
 }
 
@@ -112,7 +120,10 @@ export async function getComputedPayload(payload: JsonRpcPayload): Promise<Ether
 }
 
 export async function getSendTransactionComputedPayload(payload: JsonRpcPayload) {
-    const [config] = payload.params as [TransactionConfig]
+    const config =
+        payload.method === EthereumMethodType.MASK_REPLACE_TRANSACTION ? payload.params[1] : payload.params[0]
+    const from = (config.from as string | undefined) ?? ''
+    const value = (config.value as string | undefined) ?? '0x0'
     const data = getData(config)
     const to = getTo(config)
     const signature = getFunctionSignature(config)
@@ -136,7 +147,7 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
         }
 
         // contract deployment
-        if (to === ADDRESS_ZERO) {
+        if (isSameAddress(to, ZERO_ADDRESS)) {
             return {
                 type: EthereumRpcType.CONTRACT_DEPLOYMENT,
                 code: data,
@@ -151,6 +162,14 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
             code = await getCode(to)
         } catch {
             code = ''
+        }
+
+        // cancel tx
+        if (isSameAddress(from, to) && new BigNumber(value).isZero()) {
+            return {
+                type: EthereumRpcType.CANCEL,
+                _tx: config,
+            }
         }
 
         // send ether

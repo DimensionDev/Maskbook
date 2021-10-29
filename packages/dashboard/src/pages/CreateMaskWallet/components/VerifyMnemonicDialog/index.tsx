@@ -1,8 +1,8 @@
-import { memo } from 'react'
-import { Box, Typography, styled, Button } from '@material-ui/core'
+import { memo, useState } from 'react'
+import { Box, Typography, styled, Button, Dialog, DialogTitle, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { LoadingButton } from '@material-ui/lab'
-import { MaskColorVar, MaskDialog } from '@masknet/theme'
+import { LoadingButton } from '@mui/lab'
+import { MaskColorVar } from '@masknet/theme'
 import { useSnackbarCallback } from '@masknet/shared'
 import { SuccessIcon, CopyIcon } from '@masknet/icons'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
@@ -11,12 +11,16 @@ import { useCopyToClipboard } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
+    dialogTitle: {
+        backgroundColor: theme.palette.mode === 'dark' ? '#000000' : '#ffffff',
+    },
     container: {
         padding: '40px 60px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        backgroundColor: theme.palette.mode === 'dark' ? '#000000' : '#ffffff',
     },
     title: {
         fontSize: 24,
@@ -25,11 +29,18 @@ const useStyles = makeStyles()({
     confirm: {
         marginTop: 24,
     },
+    tips: {
+        marginTop: 40,
+        color: MaskColorVar.redMain,
+        fontSize: 18,
+        lineHeight: '24px',
+        alignSelf: 'flex-start',
+    },
     button: {
         height: 48,
         borderRadius: 24,
         fontSize: 18,
-        marginTop: 50,
+        marginTop: 24,
     },
     addressTitle: {
         color: MaskColorVar.normalText,
@@ -49,7 +60,7 @@ const useStyles = makeStyles()({
         cursor: 'pointer',
         stroke: MaskColorVar.textPrimary,
     },
-})
+}))
 
 const SuccessTitle = styled(Typography)(({ theme }) => ({
     fontSize: theme.typography.h5.fontSize,
@@ -121,49 +132,62 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
     }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
-        return (
-            <MaskDialog title="Verification" open={open} onClose={!address ? onClose : undefined} maxWidth="md">
-                <div className={classes.container}>
-                    {address ? (
-                        <>
-                            <SuccessIcon sx={{ fontSize: 54 }} />
-                            <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
-                            <Box style={{ width: '100%' }}>
-                                <Typography className={classes.addressTitle}>
-                                    {t.create_wallet_your_wallet_address()}
-                                </Typography>
-                            </Box>
-                            <Typography className={classes.address}>
-                                {address}
-                                <CopyIcon className={classes.copy} onClick={() => onCopy(address)} />
-                            </Typography>
-                            <Button fullWidth className={classes.button} onClick={onDoneClick}>
-                                {t.create_wallet_done()}
-                            </Button>
-                        </>
-                    ) : (
-                        <>
-                            <Typography className={classes.title}>{t.create_wallet_verify_words()}</Typography>
-                            <Box className={classes.confirm}>
-                                <DesktopMnemonicConfirm
-                                    indexes={indexes}
-                                    puzzleWords={puzzleWords}
-                                    onChange={onUpdateAnswerWords}
-                                />
-                            </Box>
+        const [verified, setVerified] = useState(false)
 
-                            <LoadingButton
-                                loading={loading}
-                                fullWidth
-                                className={classes.button}
-                                disabled={!matched}
-                                onClick={onSubmit}>
-                                {!matched ? t.create_wallet_mnemonic_word_not_match() : t.verify()}
-                            </LoadingButton>
-                        </>
-                    )}
-                </div>
-            </MaskDialog>
+        return (
+            <Dialog open={open} onClose={!address ? onClose : undefined} maxWidth="md">
+                <DialogTitle className={classes.dialogTitle}>{t.wallets_create_wallet_verification()}</DialogTitle>
+                <DialogContent style={{ padding: 0 }}>
+                    <div className={classes.container}>
+                        {address ? (
+                            <>
+                                <SuccessIcon sx={{ fontSize: 54 }} />
+                                <SuccessTitle>{t.wallets_create_successfully_title()}</SuccessTitle>
+                                <Box style={{ width: '100%' }}>
+                                    <Typography className={classes.addressTitle}>
+                                        {t.create_wallet_your_wallet_address()}
+                                    </Typography>
+                                </Box>
+                                <Typography className={classes.address}>
+                                    {address}
+                                    <CopyIcon className={classes.copy} onClick={() => onCopy(address)} />
+                                </Typography>
+                                <Button fullWidth className={classes.button} onClick={onDoneClick}>
+                                    {t.create_wallet_done()}
+                                </Button>
+                            </>
+                        ) : (
+                            <>
+                                <Typography className={classes.title}>{t.create_wallet_verify_words()}</Typography>
+                                <Box className={classes.confirm}>
+                                    <DesktopMnemonicConfirm
+                                        indexes={indexes}
+                                        puzzleWords={puzzleWords}
+                                        onChange={onUpdateAnswerWords}
+                                    />
+                                </Box>
+
+                                {!matched && verified ? (
+                                    <Typography className={classes.tips}>
+                                        {t.create_wallet_mnemonic_word_not_match()}
+                                    </Typography>
+                                ) : null}
+
+                                <LoadingButton
+                                    loading={loading}
+                                    fullWidth
+                                    className={classes.button}
+                                    onClick={() => {
+                                        if (!verified) setVerified(true)
+                                        if (matched) onSubmit()
+                                    }}>
+                                    {t.verify()}
+                                </LoadingButton>
+                            </>
+                        )}
+                    </div>
+                </DialogContent>
+            </Dialog>
         )
     },
 )

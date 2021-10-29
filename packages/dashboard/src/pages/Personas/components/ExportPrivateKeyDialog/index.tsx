@@ -1,4 +1,4 @@
-import { Box, Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'

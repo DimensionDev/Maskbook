@@ -7,13 +7,14 @@ import type {
     ReadonlyIdentifierMap,
     ObservableWeakMap,
 } from '@masknet/shared'
-import type { PaletteMode, Theme } from '@material-ui/core'
+import type { PaletteMode, Theme } from '@mui/material'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
+import type { Subscription } from 'use-subscription'
 
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
@@ -53,6 +54,7 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
+        name: string
         /**
          * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
@@ -143,6 +145,8 @@ export namespace SocialNetworkUI {
             profileAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             postAvatar?(signal: AbortSignal, current: PostInfo): void
+            /** @deprecated same reason as userAvatar */
+            openNFTAvatar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
@@ -246,14 +250,14 @@ export namespace SocialNetworkUI {
              *
              * Should follow the color scheme of the website.
              */
-            useTheme?(): Theme
+            useTheme?(baseTheme: Theme): Theme
             /** Provide the ability to detect the current color scheme (light or dark) in the current SNS */
             paletteMode?: PaletteModeProvider
             i18nOverwrite?: I18NOverwrite
             componentOverwrite?: ComponentOverwrite
         }
         export interface PaletteModeProvider {
-            current: ValueRef<PaletteMode>
+            current: Subscription<PaletteMode>
             start(signal: AbortSignal): void
         }
         export interface ComponentOverwrite {

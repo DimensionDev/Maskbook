@@ -1,4 +1,4 @@
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { I18NFunction } from '../../utils'
 import { ONE_DAY_SECONDS, ONE_SECOND, ONE_WEEK_SECONDS } from './constants'
 import type { Pool } from './types'

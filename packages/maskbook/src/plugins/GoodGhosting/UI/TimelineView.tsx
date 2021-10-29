@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { GoodGhostingInfo } from '../types'
 import formatDateTime from 'date-fns/format'

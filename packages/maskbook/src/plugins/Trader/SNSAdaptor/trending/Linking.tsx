@@ -1,4 +1,4 @@
-import { Link, LinkProps, Typography, TypographyProps } from '@material-ui/core'
+import { Link, LinkProps, Typography, TypographyProps } from '@mui/material'
 
 export interface LinkingProps {
     href?: string

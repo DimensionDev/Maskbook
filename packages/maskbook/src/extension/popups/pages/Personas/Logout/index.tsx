@@ -1,12 +1,12 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { MasksIcon, TipIcon } from '@masknet/icons'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import type { PersonaInformation } from '@masknet/shared-base'
@@ -44,6 +44,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: 20,
     },
     button: {
+        fontWeight: 600,
         padding: '10px 0',
         borderRadius: 20,
         fontSize: 14,
@@ -76,15 +77,23 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: '#F7F9FA',
         borderRadius: 8,
         padding: '8px 16px',
-        alignSelf: 'normal',
         margin: '20px 0',
+        width: '100%',
     },
 }))
 
 const Logout = memo(() => {
     const { deletingPersona } = PersonaContext.useContainer()
     const history = useHistory()
-    const backupPassword = localStorage.getItem('backupPassword')
+    const backupPassword = useMemo(() => {
+        try {
+            const password = localStorage.getItem('backupPassword')
+            if (!password) return ''
+            return atob(password)
+        } catch {
+            return ''
+        }
+    }, [])
 
     const [{ loading }, onLogout] = useAsyncFn(async () => {
         if (deletingPersona) {

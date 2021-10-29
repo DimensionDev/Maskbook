@@ -1,4 +1,4 @@
-import { Box, Checkbox, Typography, experimentalStyled as styled } from '@material-ui/core'
+import { Box, Checkbox, Typography, experimentalStyled as styled } from '@mui/material'
 import { useDashboardI18N } from '../../../locales'
 import type { BackupPreview } from './BackupPreviewCard'
 import { MaskColorVar } from '@masknet/theme'

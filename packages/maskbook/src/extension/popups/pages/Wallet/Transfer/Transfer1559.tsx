@@ -4,8 +4,8 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
+    formatGweiToEther,
     formatGweiToWei,
-    formatWeiToGwei,
     isGreaterThan,
     isZero,
     pow10,
@@ -14,7 +14,7 @@ import {
     useNativeTokenDetailed,
     useTokenTransferCallback,
     useWallet,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import BigNumber from 'bignumber.js'
@@ -23,15 +23,15 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@material-ui/core'
+import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-es'
-import { ExpandMore } from '@material-ui/icons'
+import { ExpandMore } from '@mui/icons-material'
 import { useHistory } from 'react-router-dom'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'
 
@@ -43,6 +43,7 @@ const useStyles = makeStyles()({
     label: {
         color: '#1C68F3',
         fontSize: 12,
+        fontWeight: 600,
         lineHeight: '16px',
         margin: '10px 0',
         display: 'flex',
@@ -50,10 +51,10 @@ const useStyles = makeStyles()({
         alignItems: 'center',
     },
     accountName: {
-        fontSize: 12,
+        fontSize: 16,
+        fontWeight: 600,
         linHeight: '16px',
         color: '#15181B',
-        padding: '10px 0 20px 10px',
     },
     user: {
         stroke: '#15181B',
@@ -101,6 +102,7 @@ const useStyles = makeStyles()({
     unit: {
         color: '#7B8192',
         fontSize: 12,
+        fontWeight: 600,
         lineHeight: '16px',
         flex: 1,
     },
@@ -125,6 +127,7 @@ const useStyles = makeStyles()({
         padding: 16,
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,
@@ -392,7 +395,11 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
             formState: { errors },
         } = useFormContext<TransferFormData>()
 
-        const [maxPriorityFeePerGas, maxFeePerGas] = watch(['maxPriorityFeePerGas', 'maxFeePerGas'])
+        const [maxPriorityFeePerGas, maxFeePerGas, gasLimit] = watch([
+            'maxPriorityFeePerGas',
+            'maxFeePerGas',
+            'gasLimit',
+        ])
 
         return (
             <>
@@ -517,8 +524,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToGwei(Number(maxPriorityFeePerGas) ?? 0)
+                                usd: formatGweiToEther(Number(maxPriorityFeePerGas) ?? 0)
                                     .times(etherPrice)
+                                    .times(gasLimit)
                                     .toPrecision(3),
                             })}
                         </Typography>
@@ -543,8 +551,9 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         </Typography>
                         <Typography component="span" className={classes.price}>
                             {t('popups_wallet_gas_fee_settings_usd', {
-                                usd: formatWeiToGwei(Number(maxFeePerGas) ?? 0)
+                                usd: formatGweiToEther(Number(maxFeePerGas) ?? 0)
                                     .times(etherPrice)
+                                    .times(gasLimit)
                                     .toPrecision(3),
                             })}
                         </Typography>

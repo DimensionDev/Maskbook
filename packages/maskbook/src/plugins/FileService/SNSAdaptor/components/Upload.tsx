@@ -1,6 +1,6 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
-import { Checkbox, FormControlLabel, Link, Typography } from '@material-ui/core'
+import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-es'
 import { useState } from 'react'

@@ -1,12 +1,12 @@
-import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '@material-ui/core'
+import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import classNames from 'classnames'
 import { TypedMessage, makeTypedMessageText } from '../../protocols/typed-message'
 import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedMessageRenderer'
-import CheckIcon from '@material-ui/icons/Check'
-import CloseIcon from '@material-ui/icons/Close'
-import green from '@material-ui/core/colors/green'
+import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
+import green from '@mui/material/colors/green'
 import { MaskIcon } from '../../resources/MaskIcon'
 import { memo, useCallback, useMemo } from 'react'
 
@@ -29,7 +29,7 @@ export interface AdditionalContentProps
 const useStyles = makeStyles()((theme) => ({
     root: { boxSizing: 'border-box', width: '100%', backgroundColor: 'transparent', borderColor: 'transparent' },
     title: { display: 'flex', alignItems: 'center' },
-    icon: { paddingRight: theme.spacing(0.75), display: 'flex', width: 20, height: 20 },
+    icon: { marginRight: theme.spacing(1), display: 'flex', width: 24, height: 24 },
     content: { margin: theme.spacing(1, 0), padding: 0, overflowWrap: 'break-word' },
     rightIcon: { paddingLeft: theme.spacing(0.75) },
 }))

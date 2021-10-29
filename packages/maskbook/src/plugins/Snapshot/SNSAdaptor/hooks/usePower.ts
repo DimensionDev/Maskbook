@@ -1,14 +1,12 @@
 import { useAsyncRetry } from 'react-use'
-import { useAccount, useBlockNumber } from '@masknet/web3-shared'
+import { useAccount, useBlockNumber } from '@masknet/web3-shared-evm'
 import { PluginSnapshotRPC } from '../../messages'
 import type { ProposalIdentifier } from '../../types'
 import { useProposal } from './useProposal'
 import { mapKeys } from 'lodash-es'
 
 export function usePower(identifier: ProposalIdentifier) {
-    const {
-        payload: { message, proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
 
     const account = useAccount()
     const blockNumber = useBlockNumber()
@@ -16,7 +14,11 @@ export function usePower(identifier: ProposalIdentifier) {
         if (!account) return 0
         return (
             await PluginSnapshotRPC.getScores(
+<<<<<<< HEAD
                 message,
+=======
+                proposal.snapshot,
+>>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
                 [account],
                 blockNumber,
                 proposal.network,

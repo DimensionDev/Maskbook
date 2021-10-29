@@ -1,12 +1,12 @@
 import { useState } from 'react'
-import { DialogContent, Typography } from '@material-ui/core'
+import { DialogContent, Typography } from '@mui/material'
 import { InjectedDialog, InjectedDialogProps } from '../shared/InjectedDialog'
 import { makeStyles } from '@masknet/theme'
 import { MaskIcon } from '../../resources/MaskIcon'
 import { FormattedBalance, useStylesExtends } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
 import { ITO_Card } from '../../plugins/ITO/SNSAdaptor/ITO_Card'
-import type { ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     dialogPaper: {

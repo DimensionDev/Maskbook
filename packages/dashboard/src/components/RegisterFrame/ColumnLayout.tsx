@@ -1,9 +1,8 @@
-import { styled } from '@material-ui/core/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import { FooterLine } from '../FooterLine'
-import { Paper, Typography } from '@material-ui/core'
+import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
-import { useAppearance } from '../../pages/Personas/api'
 
 const Container = styled('div')(
     ({ theme }) => `
@@ -35,7 +34,7 @@ interface ColumnLayoutProps extends React.PropsWithChildren<{}> {
 
 export const ColumnLayout = ({ haveFooter = true, children }: ColumnLayoutProps) => {
     const { classes } = useStyles()
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
 
     return (
         <Container>

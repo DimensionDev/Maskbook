@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Typography, MenuItem, Link } from '@material-ui/core'
+=======
+import { Typography, MenuItem, Link } from '@mui/material'
+>>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
 import { makeStyles } from '@masknet/theme'
 import { useMenu } from '../../../../utils'
 

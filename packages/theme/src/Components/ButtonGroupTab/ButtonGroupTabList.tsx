@@ -8,10 +8,10 @@ export interface ButtonGroupTabListProps
     'aria-label': string
 }
 /**
- * This component is like TabList + Tabs in the @material-ui.
+ * This component is like TabList + Tabs in the @mui/material.
  * It should be used with <ButtonGroupTab>.
  *
- * Warning: Only a few "value" and "label" props on the @material-ui <Tab> component will work.
+ * Warning: Only a few "value" and "label" props on the @mui/material <Tab> component will work.
  *
  * @example
  *  const [currentTab, onChange, tabs, setTab] = useTab('tab1', 'tab2', 'tab3')

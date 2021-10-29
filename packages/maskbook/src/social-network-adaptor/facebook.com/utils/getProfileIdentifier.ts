@@ -1,6 +1,7 @@
 import { ProfileIdentifier } from '../../../database/type'
 import Services from '../../../extension/service'
 import type { Profile } from '../../../database'
+import { getCurrentIdentifier } from '../../utils'
 
 type link = HTMLAnchorElement | null | undefined
 
@@ -27,17 +28,21 @@ export function getProfileIdentifierAtFacebook(
         if (!Array.isArray(links)) links = [links]
         const result = links
             .filter((x) => x)
-            .map((x) => ({ nickname: x!.innerText, id: getUserID(x!.href), dom: x }))
+            .map((x) => ({ nickname: x!.ariaLabel, id: getUserID(x!.href), dom: x }))
             .filter((x) => x.id)
         const { dom, id, nickname } = result[0] || {}
         if (id) {
             const result = new ProfileIdentifier('facebook.com', id)
+            const currentProfile = getCurrentIdentifier()
             let avatar: string | null = null
             try {
                 const image = dom!.closest('.clearfix')!.parentElement!.querySelector('img')!
                 avatar = image.src
                 if (allowCollectInfo && image.getAttribute('aria-label') === nickname && nickname) {
                     Services.Identity.updateProfileInfo(result, { nickname, avatarURL: image.src })
+                    if (currentProfile?.linkedPersona) {
+                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                    }
                 }
             } catch {}
             try {
@@ -45,11 +50,20 @@ export function getProfileIdentifierAtFacebook(
                 avatar = image.src
                 if (allowCollectInfo && avatar) {
                     Services.Identity.updateProfileInfo(result, { nickname, avatarURL: image.src })
+                    if (currentProfile?.linkedPersona) {
+                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                    }
                 }
             } catch {}
             try {
                 const image = dom!.querySelector('image')!
                 avatar = image.getAttribute('xlink:href')
+                if (allowCollectInfo && avatar) {
+                    Services.Identity.updateProfileInfo(result, { nickname, avatarURL: avatar })
+                    if (currentProfile?.linkedPersona) {
+                        Services.Identity.createNewRelation(result, currentProfile.linkedPersona.identifier)
+                    }
+                }
             } catch {}
             return {
                 identifier: result,

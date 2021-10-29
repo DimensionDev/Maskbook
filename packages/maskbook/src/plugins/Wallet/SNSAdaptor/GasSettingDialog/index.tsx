@@ -1,9 +1,9 @@
 import { FC, useState } from 'react'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { GasOption } from '@masknet/web3-shared'
+import { GasOption } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../../utils'
 import { GasSetting } from './GasSetting'
@@ -18,13 +18,15 @@ export const GasSettingDialog: FC = () => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const [gasOption, setGasOption] = useState<GasOption>(GasOption.Medium)
-    const [gasLimit, setGasLimit] = useState<string>('0')
+    const [gasLimit, setGasLimit] = useState(0)
+    const [minGasLimit, setMinGasLimit] = useState(0)
     const { open, closeDialog, setDialog } = useRemoteControlledDialog(
         WalletMessages.events.gasSettingDialogUpdated,
         (evt) => {
             if (!evt.open) return
             if (evt.gasOption) setGasOption(evt.gasOption)
             if (evt.gasLimit) setGasLimit(evt.gasLimit)
+            if (evt.minGasLimit !== undefined) setMinGasLimit(evt.minGasLimit)
         },
     )
 
@@ -33,10 +35,11 @@ export const GasSettingDialog: FC = () => {
             <DialogContent className={classes.content}>
                 <GasSetting
                     gasLimit={gasLimit}
+                    minGasLimit={minGasLimit}
                     onGasLimitChange={setGasLimit}
                     gasOption={gasOption}
                     onGasOptionChange={setGasOption}
-                    onConfirm={({ gasPrice, gasLimit, maxFee }) => {
+                    onConfirm={({ gasPrice, gasLimit, maxFee, gasOption }) => {
                         setDialog({
                             open: false,
                             gasOption,

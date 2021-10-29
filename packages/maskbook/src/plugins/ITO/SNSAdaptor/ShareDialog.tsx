@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { getAssetAsBlobURL, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatBalance, isZero, FungibleTokenDetailed } from '@masknet/web3-shared'
+import { formatBalance, isZero, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useStylesExtends } from '@masknet/shared'
 import type { BigNumber } from 'bignumber.js'
 

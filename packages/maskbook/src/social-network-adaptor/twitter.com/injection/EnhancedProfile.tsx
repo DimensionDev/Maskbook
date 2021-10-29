@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { EnhancedProfilePage } from '../../../components/InjectedComponents/EnhancedProfile'
+import { EnhancedProfilePage } from '../../../plugins/Profile/SNSAdaptor/EnhancedProfile'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchNewTweetButtonSelector,
@@ -62,12 +62,5 @@ export function EnhancedProfilePageAtTwitter() {
     const { classes } = useStyles({ backgroundColor: style.backgroundColor, fontFamily: fontStyle.fontFamily })
     const identity = useCurrentVisitingIdentity()
 
-    return (
-        <EnhancedProfilePage
-            classes={classes}
-            bioDescription={identity.bio ?? ''}
-            nickname={identity.nickname ?? ''}
-            twitterId={identity.identifier.userId}
-        />
-    )
+    return <EnhancedProfilePage classes={classes} />
 }

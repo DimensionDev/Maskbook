@@ -1,12 +1,15 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { Controller } from 'react-hook-form'
+import type { z as zod } from 'zod'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { StyledInput } from '../../../components/StyledInput'
 import { useHistory } from 'react-router-dom'
-import { useWalletHD } from '../../../../../plugins/Wallet/hooks/useWalletHD'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
+
+import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
 
 const useStyles = makeStyles()({
     header: {
@@ -34,6 +37,7 @@ const useStyles = makeStyles()({
         marginBottom: 10,
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
     },
@@ -43,32 +47,51 @@ const CreateWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const { classes } = useStyles()
-    const [name, setName] = useState('')
-    const hdWallet = useWalletHD()
+    const [errorMessage, setErrorMessage] = useState('')
 
-    const onCreate = useCallback(async () => {
-        if (hdWallet) {
-            await WalletRPC.deriveWalletFromPhrase(name, hdWallet.mnemonic, hdWallet.passphrase)
+    const {
+        control,
+        handleSubmit,
+        formState: { errors, isValid },
+        schema,
+    } = useSetWalletNameForm()
+
+    const onCreate = useCallback(async ({ name }: zod.infer<typeof schema>) => {
+        try {
+            await WalletRPC.deriveWallet(name)
             history.goBack()
+        } catch (error) {
+            if (error instanceof Error) {
+                setErrorMessage(errorMessage)
+            }
         }
-    }, [hdWallet, name])
+    }, [])
+
+    const onSubmit = handleSubmit(onCreate)
 
     return (
         <>
             <div className={classes.header}>
-                <Typography className={classes.title}>New Wallet</Typography>
+                <Typography className={classes.title}>{t('wallet_new')}</Typography>
                 <NetworkSelector />
             </div>
             <div className={classes.content}>
                 <div>
-                    <Typography className={classes.label}>Wallet Name</Typography>
-                    <StyledInput
-                        placeholder={t('popups_wallet_enter_your_wallet_name')}
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
+                    <Typography className={classes.label}>{t('wallet_name')}</Typography>
+                    <Controller
+                        name="name"
+                        control={control}
+                        render={({ field }) => (
+                            <StyledInput
+                                {...field}
+                                placeholder={t('popups_wallet_enter_your_wallet_name')}
+                                error={!!errorMessage || !!errors.name?.message}
+                                helperText={errorMessage || errors.name?.message}
+                            />
+                        )}
                     />
                 </div>
-                <Button variant="contained" className={classes.button} disabled={!name} onClick={onCreate}>
+                <Button variant="contained" className={classes.button} disabled={!isValid} onClick={onSubmit}>
                     {t('confirm')}
                 </Button>
             </div>

@@ -1,5 +1,6 @@
-import { EthereumAddress } from 'wallet.ts'
 import { first } from 'lodash-es'
+import { EthereumAddress } from 'wallet.ts'
+import { toHex } from 'web3-utils'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
@@ -8,9 +9,11 @@ import {
     EthereumMethodType,
     EthereumRpcType,
     EthereumTransactionConfig,
+    getTokenConstants,
     isEIP1559Supported,
+    isSameAddress,
     ProviderType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'
@@ -55,7 +58,30 @@ function isReadOnlyMethod(payload: JsonRpcPayload) {
     ].includes(payload.method as EthereumMethodType)
 }
 
-function getChainIdFromPayload(payload: JsonRpcPayload) {
+function isSignableMethod(payload: JsonRpcPayload) {
+    return [
+        EthereumMethodType.ETH_SIGN,
+        EthereumMethodType.PERSONAL_SIGN,
+        EthereumMethodType.ETH_SIGN_TRANSACTION,
+        EthereumMethodType.MASK_REPLACE_TRANSACTION,
+        EthereumMethodType.ETH_SIGN_TYPED_DATA,
+        EthereumMethodType.ETH_SEND_TRANSACTION,
+    ].includes(payload.method as EthereumMethodType)
+}
+
+function getTo(computedPayload: UnboxPromise<ReturnType<typeof getSendTransactionComputedPayload>>) {
+    if (!computedPayload) return ''
+    switch (computedPayload.type) {
+        case EthereumRpcType.SEND_ETHER:
+            return (computedPayload._tx.to as string) ?? ''
+        case EthereumRpcType.CONTRACT_INTERACTION:
+            if (['transfer', 'transferFrom'].includes(computedPayload.name ?? ''))
+                return (computedPayload.parameters?.to as string) ?? ''
+    }
+    return ''
+}
+
+function getPayloadChainId(payload: JsonRpcPayload) {
     switch (payload.method) {
         // here are methods that contracts may emit
         case EthereumMethodType.ETH_CALL:
@@ -64,33 +90,91 @@ function getChainIdFromPayload(payload: JsonRpcPayload) {
             const config = first(payload.params) as { chainId?: string } | undefined
             return typeof config?.chainId === 'string' ? Number.parseInt(config.chainId, 16) || undefined : undefined
         default:
-            return undefined
+            return
     }
 }
 
-async function handleTransferTransaction(payload: JsonRpcPayload) {
+function getPayloadConfig(payload: JsonRpcPayload) {
+    switch (payload.method) {
+        case EthereumMethodType.ETH_SEND_TRANSACTION: {
+            const [config] = payload.params as [EthereumTransactionConfig]
+            return config
+        }
+        case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
+            const [, config] = payload.params as [string, EthereumTransactionConfig]
+            return config
+        }
+        default:
+            return
+    }
+}
+
+function getPayloadHash(payload: JsonRpcPayload) {
+    switch (payload.method) {
+        case EthereumMethodType.ETH_SEND_TRANSACTION: {
+            return ''
+        }
+        case EthereumMethodType.MASK_REPLACE_TRANSACTION: {
+            const [hash] = payload.params as [string]
+            return hash
+        }
+        default:
+            return ''
+    }
+}
+
+function getTransactionHash(response?: JsonRpcResponse) {
+    if (!response) return ''
+    const hash = response?.result as string | undefined
+    if (typeof hash !== 'string') return ''
+    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return ''
+    return hash
+}
+
+async function handleTransferTransaction(chainId: ChainId, payload: JsonRpcPayload) {
     if (payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
     const computedPayload = await getSendTransactionComputedPayload(payload)
     if (!computedPayload) return
-    switch (computedPayload.type) {
-        case EthereumRpcType.SEND_ETHER:
-            if (computedPayload._tx.to) await WalletRPC.addAddress(computedPayload._tx.to)
-            break
-        case EthereumRpcType.CONTRACT_INTERACTION:
-            if (['transfer', 'transferFrom'].includes(computedPayload.name ?? '') && computedPayload.parameters?.to)
-                await WalletRPC.addAddress(computedPayload.parameters.to)
-            break
-    }
+
+    const from = (computedPayload._tx.from as string) ?? ''
+    const to = getTo(computedPayload)
+
+    if (!isSameAddress(from, to) && !isSameAddress(to, getTokenConstants(ChainId.Mainnet).ZERO_ADDRESS))
+        await WalletRPC.addAddress(chainId, to)
 }
 
-function handleRecentTransaction(account: string, payload: JsonRpcPayload, response: JsonRpcResponse | undefined) {
-    const hash = response?.result as string | undefined
-    if (typeof hash !== 'string') return
-    if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return
-    WalletRPC.addRecentTransaction(account, hash, payload)
+function handleRecentTransaction(
+    chainId: ChainId,
+    account: string,
+    payload: JsonRpcPayload,
+    response: JsonRpcResponse | undefined,
+) {
+    const hash = getTransactionHash(response)
+    if (!hash) return
+    WalletRPC.watchTransaction(chainId, hash)
+    WalletRPC.addRecentTransaction(chainId, account, hash, payload)
 }
 
-async function handleNonce(account: string, error: Error | null, response: JsonRpcResponse | undefined) {
+function handleReplaceRecentTransaction(
+    chainId: ChainId,
+    previousHash: string,
+    account: string,
+    payload: JsonRpcPayload,
+    response: JsonRpcResponse | undefined,
+) {
+    const hash = getTransactionHash(response)
+    if (!hash) return
+    WalletRPC.watchTransaction(chainId, hash)
+    WalletRPC.replaceRecentTransaction(chainId, account, previousHash, hash, payload)
+}
+
+async function handleNonce(
+    chainId: ChainId,
+    account: string,
+    error: Error | null,
+    response: JsonRpcResponse | undefined,
+) {
+    if (chainId !== currentChainIdSettings.value) return
     const error_ = (error ?? response?.error) as { message: string } | undefined
     const message = error_?.message ?? ''
     if (!EthereumAddress.isValid(account)) return
@@ -98,7 +182,7 @@ async function handleNonce(account: string, error: Error | null, response: JsonR
     // nonce too high
     // transaction too old
     if (/\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)) resetNonce(account)
-    else commitNonce(account)
+    else if (!error_) commitNonce(account)
 }
 
 /**
@@ -121,10 +205,12 @@ export async function INTERNAL_send(
         console.debug(new Error().stack)
     }
 
+    const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
+    const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined
     const web3 = await createWeb3({
-        chainId: getChainIdFromPayload(payload) ?? chainId,
-        privKeys: wallet?._private_key_ ? [wallet._private_key_] : [],
+        chainId: chainIdFinally,
+        privKeys: privKey ? [privKey] : [],
         providerType: isReadOnlyMethod(payload) ? ProviderType.MaskWallet : providerType,
     })
     const provider = web3.currentProvider as HttpProvider | undefined
@@ -145,11 +231,16 @@ export async function INTERNAL_send(
         const [data, address] = payload.params as [string, string]
         switch (providerType) {
             case ProviderType.MaskWallet:
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result: await web3.eth.sign(data, address),
-                })
+                try {
+                    const signed = await web3.eth.sign(data, address)
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: signed,
+                    })
+                } catch (error: unknown) {
+                    callback(error instanceof Error ? error : new Error('Failed to sign message.'))
+                }
                 break
             case ProviderType.MetaMask:
                 try {
@@ -181,21 +272,28 @@ export async function INTERNAL_send(
     }
 
     async function sendTransaction() {
-        const [config] = payload.params as [EthereumTransactionConfig]
+        const hash = getPayloadHash(payload)
+        const config = getPayloadConfig(payload)
+
+        if (!config) throw new Error('Failed to send transaction.')
 
         // add nonce
-        if (providerType === ProviderType.MaskWallet && config.from)
+        if (providerType === ProviderType.MaskWallet && config.from && !config.nonce)
             config.nonce = await getNonce(config.from as string)
 
         // add gas margin
-        if (config.gas && !Flags.v2_enabled) config.gas = `0x${addGasMargin(config.gas).toString(16)}`
+        if (config.gas) config.gas = addGasMargin(config.gas).toString()
+        config.gas = toHex(config.gas ?? '0')
+
+        // add chain id
+        if (!config.chainId) config.chainId = chainIdFinally
 
         // pricing transaction
         const isGasPriceValid = parseGasPrice(config.gasPrice as string) > 0
         const isEIP1559Valid =
             parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
 
-        if (Flags.EIP1559_enabled && isEIP1559Supported(chainId) && !isEIP1559Valid) {
+        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally) && !isEIP1559Valid) {
             throw new Error('To be implemented.')
         } else if (!isGasPriceValid) {
             config.gasPrice = await getGasPrice()
@@ -204,48 +302,63 @@ export async function INTERNAL_send(
         // if the transaction is eip-1559, need to remove gasPrice from the config
         if (Flags.EIP1559_enabled && isEIP1559Valid) {
             config.gasPrice = undefined
+        } else {
+            config.maxFeePerGas = undefined
+            config.maxPriorityFeePerGas = undefined
         }
 
         // send the transaction
         switch (providerType) {
             case ProviderType.MaskWallet:
-                const _private_key_ = wallet?._private_key_
-                if (!wallet || !_private_key_) throw new Error('Unable to sign transaction.')
+                if (!wallet?.storedKeyInfo || !privKey) throw new Error('Unable to sign transaction.')
 
                 // send the signed transaction
-                const signedTransaction = await web3.eth.accounts.signTransaction(config, _private_key_)
+                const signed = await web3.eth.accounts.signTransaction(config, privKey)
+                if (!signed.rawTransaction) throw new Error('Failed to sign transaction.')
+
                 provider?.send(
                     {
                         ...payload,
                         method: EthereumMethodType.ETH_SEND_RAW_TRANSACTION,
-                        params: [signedTransaction.rawTransaction],
+                        params: [signed.rawTransaction],
                     },
                     (error, response) => {
                         callback(error, response)
-                        handleNonce(account, error, response)
-                        handleTransferTransaction(payload)
-                        handleRecentTransaction(account, payload, response)
+                        switch (payload.method) {
+                            case EthereumMethodType.ETH_SEND_TRANSACTION:
+                                handleNonce(chainIdFinally, account, error, response)
+                                handleTransferTransaction(chainIdFinally, payload)
+                                handleRecentTransaction(chainIdFinally, account, payload, response)
+                                break
+                            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                                handleReplaceRecentTransaction(chainIdFinally, hash, account, payload, response)
+                                break
+                        }
                     },
                 )
                 break
             case ProviderType.MetaMask:
                 try {
                     await MetaMask.ensureConnectedAndUnlocked()
-                } catch (error: any) {
-                    callback(error)
+                    provider?.send(payload, (error, response) => {
+                        callback(error, response)
+                        handleTransferTransaction(chainIdFinally, payload)
+                        handleRecentTransaction(chainIdFinally, account, payload, response)
+                    })
+                } catch (error) {
+                    if (error instanceof Error) callback(error)
                     break
                 }
-                provider?.send(payload, (error, response) => {
-                    callback(error, response)
-                    handleTransferTransaction(payload)
-                    handleRecentTransaction(account, payload, response)
-                })
                 break
             case ProviderType.WalletConnect:
-                const response = await WalletConnect.sendCustomRequest(payload as IJsonRpcRequest)
-                callback(null, response)
-                handleTransferTransaction(payload)
-                handleRecentTransaction(account, payload, response)
+                try {
+                    const response = await WalletConnect.sendCustomRequest(payload as IJsonRpcRequest)
+                    callback(null, response)
+                    handleTransferTransaction(chainIdFinally, payload)
+                    handleRecentTransaction(chainIdFinally, account, payload, response)
+                } catch (error) {
+                    if (error instanceof Error) callback(error)
+                }
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
@@ -254,12 +367,48 @@ export async function INTERNAL_send(
         }
     }
 
+    async function getTransactionReceipt() {
+        const [hash] = payload.params as [string]
+
+        try {
+            callback(null, {
+                id: payload.id,
+                jsonrpc: payload.jsonrpc,
+                // redirect receipt queries to tx watcher
+                result: await WalletRPC.getReceipt(chainIdFinally, hash),
+            } as JsonRpcResponse)
+        } catch {
+            callback(null, {
+                id: payload.id,
+                jsonrpc: payload.jsonrpc,
+                result: null,
+            } as JsonRpcResponse)
+        }
+    }
+
     try {
         switch (payload.method) {
+            case EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT:
+                await getTransactionReceipt()
+                break
             case EthereumMethodType.PERSONAL_SIGN:
                 await personalSign()
                 break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
+                await sendTransaction()
+                break
+            case EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT:
+                provider.send(
+                    {
+                        ...payload,
+                        method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+                    },
+                    callback,
+                )
+                break
+            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
+                if (providerType !== ProviderType.MaskWallet)
+                    throw new Error(`Cannot replace transaction for ${providerType}.`)
                 await sendTransaction()
                 break
             default:
@@ -280,21 +429,24 @@ export async function INTERNAL_send(
 export async function INTERNAL_nativeSend(
     payload: JsonRpcPayload,
     callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    { account = currentAccountSettings.value }: SendOverrides = {},
+    { account = currentAccountSettings.value, chainId = currentChainIdSettings.value }: SendOverrides = {},
 ) {
+    const chainIdFinally = getPayloadChainId(payload) ?? chainId
+    const config = getPayloadConfig(payload)
+    if (config && !config.chainId) config.chainId = chainIdFinally
     try {
         const response = await nativeAPI?.api.send(payload)
         callback(null, response)
         if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
-            handleNonce(account, null, response)
-            handleTransferTransaction(payload)
-            handleRecentTransaction(account, payload, response)
+            handleNonce(chainIdFinally, account, null, response)
+            handleTransferTransaction(chainIdFinally, payload)
+            handleRecentTransaction(chainIdFinally, account, payload, response)
         }
     } catch (error) {
-        if (error instanceof Error) {
-            callback(error, undefined)
-            handleNonce(account, error, undefined)
+        if (!(error instanceof Error)) return
+        callback(error, undefined)
+        if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
+            handleNonce(chainIdFinally, account, error, undefined)
         }
-        console.error('internal native send error', error)
     }
 }

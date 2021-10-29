@@ -1,4 +1,4 @@
-import { Avatar } from '@material-ui/core'
+import { Avatar, Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { MenuPersonasActiveIcon } from '@masknet/icons'
 import { memo } from 'react'
@@ -26,7 +26,11 @@ export const MaskAvatar = memo<MaskAvatarProps>(({ size = 36, onClick }) => {
     }
 
     if (!avatar) {
-        return <MenuPersonasActiveIcon {...commonProps} />
+        return (
+            <Box borderRadius="50%" sx={{ background: MaskColorVar.lightBackground }} height={size}>
+                <MenuPersonasActiveIcon {...commonProps} />
+            </Box>
+        )
     }
 
     return <Avatar src={avatar} {...commonProps} />

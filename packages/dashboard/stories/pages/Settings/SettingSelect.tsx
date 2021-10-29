@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import C from '../../../src/pages/Settings/components/SettingSelect'
-import { MenuItem } from '@material-ui/core'
+import { MenuItem } from '@mui/material'
 
 const { meta, of } = story(C)
 

@@ -1,5 +1,5 @@
 import { WalletStartUp } from './components/StartUp'
-import { EthereumRpcType, useWallet } from '@masknet/web3-shared'
+import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/web3-shared-evm'
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
@@ -11,6 +11,10 @@ import { useAsyncRetry } from 'react-use'
 import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
 import SelectWallet from './SelectWallet'
+import { useWalletLockStatus } from './hooks/useWalletLockStatus'
+import { first } from 'lodash-es'
+import { currentAccountSettings } from '../../../../plugins/Wallet/settings'
+import urlcat from 'urlcat'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
 const AddDeriveWallet = lazy(() => import('./AddDeriveWallet'))
@@ -27,19 +31,26 @@ const GasSetting = lazy(() => import('./GasSetting'))
 const Transfer = lazy(() => import('./Transfer'))
 const ContractInteraction = lazy(() => import('./ContractInteraction'))
 const Unlock = lazy(() => import('./Unlock'))
+const SetPaymentPassword = lazy(() => import('./SetPaymentPassword'))
+const WalletRecovery = lazy(() => import('./WalletRecovery'))
+const ReplaceTransaction = lazy(() => import('./ReplaceTransaction'))
 
 export default function Wallet() {
     const wallet = useWallet()
     const location = useLocation()
     const history = useHistory()
+    const wallets = useWallets(ProviderType.MaskWallet)
 
-    // const lockStatus = useValueRef(currentIsMaskWalletLockedSettings)
+    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
-    const { loading: getRequestLoading, retry } = useAsyncRetry(async () => {
+    const { loading, retry } = useAsyncRetry(async () => {
         if (
-            [PopupRoutes.ContractInteraction, PopupRoutes.WalletSignRequest, PopupRoutes.GasSetting].some(
-                (item) => item === location.pathname,
-            )
+            [
+                PopupRoutes.ContractInteraction,
+                PopupRoutes.WalletSignRequest,
+                PopupRoutes.GasSetting,
+                PopupRoutes.Unlock,
+            ].some((item) => item === location.pathname)
         )
             return
 
@@ -65,25 +76,47 @@ export default function Wallet() {
                     break
             }
         }
-    }, [location])
+    }, [location.search, location.pathname])
 
     useEffect(() => {
-        return WalletMessages.events.requestsUpdated.on(retry)
+        if (
+            isLocked &&
+            !getLockStatusLoading &&
+            ![PopupRoutes.WalletRecovered, PopupRoutes.Unlock].some((item) => item === location.pathname)
+        ) {
+            history.replace(urlcat(PopupRoutes.Unlock, { from: location.pathname }))
+            return
+        }
+    }, [isLocked, location.pathname, getLockStatusLoading])
+
+    useEffect(() => {
+        return WalletMessages.events.requestsUpdated.on(({ hasRequest }) => {
+            if (hasRequest) retry()
+        })
     }, [retry])
 
-    // useEffect(() => {
-    //     if (lockStatus) {
-    //         history.push(PopupRoutes.Unlock)
-    //     }
-    // }, [lockStatus])
+    useEffect(() => {
+        if (!wallet && wallets.length) {
+            WalletRPC.updateMaskAccount({
+                account: first(wallets)?.address,
+            })
+
+            if (!currentAccountSettings.value)
+                WalletRPC.updateAccount({
+                    account: first(wallets)?.address,
+                    providerType: ProviderType.MaskWallet,
+                })
+        }
+    }, [wallets, wallet])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <WalletContext.Provider>
-                {getRequestLoading ? (
+                {loading ? (
                     <LoadingPlaceholder />
                 ) : (
                     <Switch>
+                        <Route path={PopupRoutes.WalletRecovered} children={<WalletRecovery />} exact />
                         <Route path={PopupRoutes.Wallet} exact>
                             {!wallet ? <WalletStartUp /> : <WalletAssets />}
                         </Route>
@@ -102,7 +135,9 @@ export default function Wallet() {
                         <Route path={PopupRoutes.Transfer} children={<Transfer />} exact />
                         <Route path={PopupRoutes.ContractInteraction} children={<ContractInteraction />} />
                         <Route path={PopupRoutes.SelectWallet} children={<SelectWallet />} />
-                        {/*<Route path={PopupRoutes.Unlock} children={<Unlock />} />*/}
+                        <Route path={PopupRoutes.Unlock} children={<Unlock />} />
+                        <Route path={PopupRoutes.SetPaymentPassword} children={<SetPaymentPassword />} exact />
+                        <Route path={PopupRoutes.ReplaceTransaction} children={<ReplaceTransaction />} exact />
                     </Switch>
                 )}
             </WalletContext.Provider>

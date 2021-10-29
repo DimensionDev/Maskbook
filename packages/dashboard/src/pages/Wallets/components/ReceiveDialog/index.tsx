@@ -2,12 +2,12 @@ import { memo } from 'react'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
 import { QRCode, useSnackbarCallback } from '@masknet/shared'
-import { DialogContent, Typography, DialogActions, Button } from '@material-ui/core'
+import { DialogContent, Typography, DialogActions, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
-import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared'
+import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

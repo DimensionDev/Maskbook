@@ -1,5 +1,5 @@
 import { Trash2 as TrashIcon } from 'react-feather'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ERC20TokenDetailed,
@@ -7,17 +7,21 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
     isNative,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../utils'
 import { DebounceButton } from '../../DashboardComponents/ActionButton'
-import SpacedButtonGroup from '../../DashboardComponents/SpacedButtonGroup'
+// eslint-disable-next-line import/no-deprecated
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
-import type { WalletProps } from './types'
+import type { Wallet } from '@masknet/web3-shared-evm'
+import { Box, BoxProps } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
+import classNames from 'classnames'
 
 export function DashboardWalletHideTokenConfirmDialog(
-    props: WrappedDialogProps<WalletProps & { token: FungibleTokenDetailed | ERC721TokenDetailed }>,
+    // eslint-disable-next-line import/no-deprecated
+    props: WrappedDialogProps<{ wallet: Wallet; token: FungibleTokenDetailed | ERC721TokenDetailed }>,
 ) {
     const { wallet, token } = props.ComponentProps!
     const { t } = useI18N()
@@ -35,9 +39,11 @@ export function DashboardWalletHideTokenConfirmDialog(
                 case EthereumTokenType.Native:
                     throw new Error('Unable to hide the native token.')
                 case EthereumTokenType.ERC20:
-                    return WalletRPC.blockERC20Token(wallet.address, token as ERC20TokenDetailed)
+                    return WalletRPC.updateWalletToken(wallet.address, token as ERC20TokenDetailed, {
+                        strategy: 'block',
+                    })
                 case EthereumTokenType.ERC721:
-                    return WalletRPC.removeERC721Token(token as ERC721TokenDetailed)
+                    return WalletRPC.removeToken(token as ERC721TokenDetailed)
                 default:
                     unreachable(type)
             }
@@ -68,4 +74,20 @@ export function DashboardWalletHideTokenConfirmDialog(
             />
         </DashboardDialogCore>
     )
+}
+
+const useStyles = makeStyles()((theme) => ({
+    buttonGroup: {
+        flexGrow: 0,
+        flexShrink: 0,
+        '& > *:not(:last-child)': {
+            marginRight: theme.spacing(2),
+        },
+    },
+}))
+
+function SpacedButtonGroup(_props: BoxProps) {
+    const { classes } = useStyles()
+    const { className, ...props } = _props
+    return <Box className={classNames(className, classes.buttonGroup)} {...props} />
 }

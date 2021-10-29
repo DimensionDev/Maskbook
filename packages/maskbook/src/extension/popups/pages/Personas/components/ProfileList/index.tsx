@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Avatar, Link, List, ListItem, ListItemText } from '@material-ui/core'
+import { Avatar, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { definedSocialNetworkUIs } from '../../../../../../social-network'
 import { ProfileIdentifier, ProfileInformation, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { compact } from 'lodash-es'
@@ -12,7 +12,9 @@ import { GrayMasks } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
-        padding: 0,
+        padding: '0 0 70px 0',
+        height: 487,
+        overflow: 'auto',
     },
     item: {
         padding: '14px 16px',
@@ -29,6 +31,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     link: {
         cursor: 'pointer',
+        fontWeight: 600,
+        fontSize: 12,
     },
     avatarContainer: {
         marginRight: 15,
@@ -110,7 +114,7 @@ export const ProfileListUI = memo<ProfileListUIProps>(
     ({ networks, profiles, onConnect, onDisconnect, openProfilePage }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-        console.log(profiles)
+
         return (
             <List dense className={classes.list}>
                 {profiles.map(({ nickname, identifier, avatar }) => {
@@ -141,7 +145,9 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                                 className={classes.text}
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => openProfilePage(identifier.network, identifier.userId)}>
-                                @{identifier.userId}
+                                <Typography fontSize={12} fontWeight={600}>
+                                    @{identifier.userId}
+                                </Typography>
                             </ListItemText>
                         </ListItem>
                     )
@@ -155,7 +161,9 @@ export const ProfileListUI = memo<ProfileListUIProps>(
                             onClick={() => onConnect(networkIdentifier)}>
                             {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
                             <ListItemText className={classes.text}>
-                                {t('popups_persona_connect_to', { type: networkIdentifier })}
+                                <Typography fontSize={12} fontWeight={600}>
+                                    {t('popups_persona_connect_to', { type: networkIdentifier })}
+                                </Typography>
                             </ListItemText>
                         </ListItem>
                     )

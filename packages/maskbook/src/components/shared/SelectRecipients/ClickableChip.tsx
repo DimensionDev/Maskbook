@@ -1,27 +1,33 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
-import DoneIcon from '@material-ui/icons/Done'
-import Chip, { ChipProps } from '@material-ui/core/Chip'
+import DoneIcon from '@mui/icons-material/Done'
+import Chip, { ChipProps } from '@mui/material/Chip'
 
 export interface ClickableChipProps extends ChipProps {
     checked?: boolean
 }
-const useStyles = makeStyles()({
+
+interface StyleProps {
+    checked: boolean
+}
+const useStyles = makeStyles<StyleProps>()((theme, { checked }) => ({
     root: {
         marginRight: 6,
         marginBottom: 6,
         cursor: 'pointer',
+        ...(checked ? { color: '#fff' } : {}),
     },
     icon: {
         backgroundColor: 'transparent !important',
+        ...(checked ? { color: '#fff !important' } : {}),
     },
     label: {
         display: 'flex',
     },
-})
+}))
 
 export function ClickableChip(props: ClickableChipProps) {
-    const { classes } = useStyles()
+    const { classes } = useStyles({ checked: Boolean(props.checked) })
     return (
         <Chip
             avatar={props.checked ? <DoneIcon className={classes.icon} /> : undefined}

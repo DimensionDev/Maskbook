@@ -1,9 +1,9 @@
 import { memo } from 'react'
-import { ListItemAvatar, ListItemText } from '@material-ui/core'
-import ListItemButton from '@material-ui/core/ListItemButton'
+import { ListItemAvatar, ListItemText } from '@mui/material'
+import ListItemButton from '@mui/material/ListItemButton'
 import { makeStyles } from '@masknet/theme'
-import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import type { ListItemTypeMap } from '@material-ui/core/ListItem'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
+import type { ListItemTypeMap } from '@mui/material/ListItem'
 import { Avatar } from '../../../utils'
 import type { Profile } from '../../../database'
 

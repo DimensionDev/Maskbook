@@ -1,4 +1,5 @@
-import { TextField, Grid } from '@material-ui/core'
+import { MaskTextField } from '@masknet/theme'
+import { Grid } from '@mui/material'
 import { memo } from 'react'
 
 export interface DesktopMnemonicConfirmProps {
@@ -13,11 +14,9 @@ export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) 
         <Grid container spacing={2}>
             {puzzleWords.map((word, i) => (
                 <Grid item xs={3} key={i}>
-                    <TextField
+                    <MaskTextField
                         sx={{ width: '100%', userSelect: 'none' }}
-                        label={i + 1 + '.'}
-                        variant="filled"
-                        size="small"
+                        placeholder={i + 1 + '.'}
                         value={word}
                         InputProps={{ disableUnderline: true }}
                         disabled={indexes && !indexes.includes(i)}

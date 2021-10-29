@@ -1,8 +1,8 @@
-import { Typography, ThemeProvider, SnackbarContent } from '@material-ui/core'
+import { Typography, SnackbarContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'
-import { Suspense, useRef } from 'react'
+import { Suspense } from 'react'
 import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
@@ -47,9 +47,6 @@ const useStyles = makeStyles()((theme) => {
 export default function MaskPluginWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
     const { pluginName, children } = props
-    const useStableTheme = useRef(activatedSocialNetworkUI.customization.useTheme).current
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const theme = useStableTheme?.()
 
     const inner = (
         <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
@@ -63,9 +60,5 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
             <div className={classes.body}>{children}</div>
         </div>
     )
-    return (
-        <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-            {theme ? <ThemeProvider theme={theme}>{inner}</ThemeProvider> : inner}
-        </Suspense>
-    )
+    return <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />} children={inner} />
 }

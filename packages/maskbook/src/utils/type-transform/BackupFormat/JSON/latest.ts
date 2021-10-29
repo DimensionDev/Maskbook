@@ -19,6 +19,7 @@ export interface BackupPreview {
     accounts: number
     posts: number
     contacts: number
+    relations: number
     files: number
     wallets: number
     createdAt: number
@@ -46,6 +47,7 @@ export function getBackupPreviewInfo(json: BackupJSONFileLatest): BackupPreview 
         accounts: json.personas.reduce((a, b) => a + b.linkedProfiles.length, 0),
         posts: json.posts.length,
         contacts: json.profiles.length,
+        relations: json.relations.length,
         files: json.plugin?.[FileServicePluginID]?.length || 0,
         wallets: json.wallets.length,
         createdAt: json._meta_.createdAt,

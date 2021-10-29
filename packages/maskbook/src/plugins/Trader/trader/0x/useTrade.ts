@@ -1,7 +1,13 @@
-import { NetworkType, FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared'
+import {
+    NetworkType,
+    FungibleTokenDetailed,
+    isNative,
+    useBlockNumber,
+    useTokenConstants,
+} from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { safeUnreachable } from '@dimensiondev/kit'
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { ZRX_AFFILIATE_ADDRESS } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'

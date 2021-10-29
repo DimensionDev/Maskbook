@@ -1,4 +1,4 @@
-import { Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '@material-ui/core'
+import { Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { File } from 'react-feather'

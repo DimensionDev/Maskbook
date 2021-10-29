@@ -11,7 +11,7 @@ import {
     PRICE_IMPACT_NON_EXPERT_BLOCKED,
     PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
-import { createLookupTableResolver, NetworkType } from '@masknet/web3-shared'
+import { createLookupTableResolver, NetworkType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 
 export function resolveCurrencyName(currency: Currency) {

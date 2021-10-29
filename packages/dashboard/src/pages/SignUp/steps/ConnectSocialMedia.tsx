@@ -11,7 +11,7 @@ import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { useDashboardI18N } from '../../../locales'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
 import { upperFirst } from 'lodash-es'
-import { Button, Stack } from '@material-ui/core'
+import { Button, Stack } from '@mui/material'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { ActionCard } from '../../../components/ActionCard'
 

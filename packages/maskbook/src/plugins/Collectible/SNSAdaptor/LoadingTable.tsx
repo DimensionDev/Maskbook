@@ -1,4 +1,4 @@
-import { Skeleton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@material-ui/core'
+import { Skeleton, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material'
 
 export function LoadingTable() {
     return (

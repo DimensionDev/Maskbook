@@ -1,6 +1,6 @@
 import { FormEvent, memo, useCallback } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
-import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'

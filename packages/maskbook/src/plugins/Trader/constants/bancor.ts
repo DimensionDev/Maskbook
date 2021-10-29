@@ -1,4 +1,4 @@
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export const BANCOR_API_BASE_URL: Record<ChainId.Mainnet | ChainId.Ropsten, string> = {
     [ChainId.Mainnet]: 'https://api-v2.bancor.network',

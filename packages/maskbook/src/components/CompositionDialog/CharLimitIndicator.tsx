@@ -1,4 +1,4 @@
-import { CircularProgressProps, CircularProgress, Typography } from '@material-ui/core'
+import { CircularProgressProps, CircularProgress, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 

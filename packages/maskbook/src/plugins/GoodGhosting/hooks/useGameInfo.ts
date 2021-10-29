@@ -1,4 +1,4 @@
-import { useAccount, useGoodGhostingConstants, useSingleContractMultipleData } from '@masknet/web3-shared'
+import { useAccount, useGoodGhostingConstants, useSingleContractMultipleData } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
@@ -18,7 +18,7 @@ export function useGameContractAddress(id: string) {
                 contractAddress: '',
             }
 
-        const gameData = await Services.Helper.fetchJson(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
+        const gameData: any = await Services.Helper.fetchJSON(GOOD_GHOSTING_CONTRACT_ADDRESS_FILE)
         return gameData?.[id] || gameData?.default || {}
     }, [id, GOOD_GHOSTING_CONTRACT_ADDRESS_FILE])
 

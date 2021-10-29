@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import { SnapshotCard } from './SnapshotCard'
-import { Typography, Button } from '@material-ui/core'
+import { Typography, Button } from '@mui/material'
 
 export class LoadingFailCard extends Component<{ title: string; retry: () => void; isFullPluginDown?: boolean }> {
     static getDerivedStateFromError(error: unknown) {

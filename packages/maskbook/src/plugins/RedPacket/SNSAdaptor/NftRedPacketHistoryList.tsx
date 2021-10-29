@@ -1,14 +1,15 @@
 import { useScrollBottomEvent } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared'
-import { List, Popper, Typography } from '@material-ui/core'
+import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { List, Popper, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
 
 const useStyles = makeStyles()((theme, _, createRef) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     const atBottom = {
         ref: createRef(),
     } as const
@@ -22,6 +23,10 @@ const useStyles = makeStyles()((theme, _, createRef) => {
             flexDirection: 'column',
             margin: '0 auto',
             overflow: 'auto',
+            [smallQuery]: {
+                width: '100%',
+                padding: 0,
+            },
         },
         placeholder: {
             textAlign: 'center',

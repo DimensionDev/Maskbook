@@ -2,10 +2,11 @@ import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
 import { first } from 'lodash-es'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
-import { ChainId, ProviderType } from '@masknet/web3-shared'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { delay } from '@masknet/shared-base'
 import { updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import { replaceRecentTransaction } from '../../../../plugins/Wallet/services/transaction/database'
 
 let provider: MetaMaskInpageProvider | null = null
 let web3: Web3 | null = null
@@ -30,6 +31,24 @@ async function onChainIdChanged(id: string) {
     })
 }
 
+async function onMessage(message: {
+    type: 'tx_replacement'
+    data: {
+        oldTx: string
+        newTx: string
+        nonce: string
+        from: string
+    }
+}) {
+    if (message.type !== 'tx_replacement') return
+    await replaceRecentTransaction(
+        currentChainIdSettings.value,
+        message.data.from,
+        message.data.oldTx,
+        message.data.newTx,
+    )
+}
+
 export async function createProvider() {
     // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
     if (provider && provider.chainId !== null) return provider
@@ -45,6 +64,7 @@ export async function createProvider() {
 
     provider.on('accountsChanged', onAccountsChanged as (...args: unknown[]) => void)
     provider.on('chainChanged', onChainIdChanged as (...args: unknown[]) => void)
+    provider.on('message', onMessage as (...args: unknown[]) => void)
     return provider
 }
 

@@ -11,9 +11,9 @@ import {
     MenuItem,
     Divider,
     CircularProgress,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import AddIcon from '@material-ui/icons/Add'
+import AddIcon from '@mui/icons-material/Add'
 import addDate from 'date-fns/add'
 import { usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'

@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from 'react'
-import { useChainIdValid } from '@masknet/web3-shared'
-import { DialogContent } from '@material-ui/core'
+import { useChainIdValid } from '@masknet/web3-shared-evm'
+import { DialogContent } from '@mui/material'
 import type { TradeProvider } from '@masknet/public-api'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'

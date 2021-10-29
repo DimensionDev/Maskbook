@@ -1,4 +1,4 @@
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { useI18N } from '../../../../utils'
 
 export const FirefoxPlatform: React.FC<{ uri: string }> = ({ uri }) => {

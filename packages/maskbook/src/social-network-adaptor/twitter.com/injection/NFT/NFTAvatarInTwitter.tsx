@@ -1,15 +1,17 @@
-import { createReactRootShadowed, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
+import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
 import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useState, useEffect, useCallback } from 'react'
-import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
+import { makeStyles } from '@masknet/theme'
+import { useState, useEffect } from 'react'
 
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
+import { useWallet } from '@masknet/web3-shared-evm'
+import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
+import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
-import { NFTBadge } from '../../../../components/InjectedComponents/NFT/NFTBadge'
-import { saveNFTAvatar } from '../../../../components/InjectedComponents/NFT/gun'
-import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
-import type { AvatarMetaDB } from '../../../../components/InjectedComponents/NFT/types'
+import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
+import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -17,14 +19,21 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     root: {
         position: 'absolute',
         bottom: '-10px !important',
         left: 0,
         textAlign: 'center',
         color: 'white',
-        transform: 'scale(1) !important',
+        minWidth: 134,
+    },
+    update: {
+        position: 'absolute',
+        bottom: '-10px !important',
+        left: 55,
+        textAlign: 'center',
+        color: 'white',
         minWidth: 134,
     },
     text: {
@@ -37,48 +46,61 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTAvatarInTwitterProps {}
-function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
+function NFTAvatarInTwitter() {
     const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
-    const _avatar = useNFTAvatar(identity.identifier.userId)
-    const { showSnackbar } = useCustomSnackbar()
-    const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>(_avatar)
+    const wallet = useWallet()
+    const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
+    const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
 
-    const [avatarId, setAvatarId] = useState('')
-
-    const onUpdate = useCallback(
-        (data: NFTAvatarEvent) => {
-            saveNFTAvatar(data.userId, data.avatarId, data.address, data.tokenId)
-                .then((avatar: AvatarMetaDB) => {
-                    setAvatar(avatar)
-                })
-                .catch((error: Error) => {
-                    showSnackbar(error.message, { variant: 'error' })
-                })
-        },
-        [showSnackbar],
-    )
+    const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
+    const onUpdate = (data: NFTAvatarEvent) => {
+        setNFTEvent(data)
+    }
 
     useEffect(() => {
-        return MaskMessage.events.NFTAvatarUpdated.on((data) => {
-            onUpdate(data)
+        if (!wallet || !NFTAvatar) return
+
+        if (!NFTEvent?.address || !NFTEvent?.tokenId) {
+            setAvatar(undefined)
+            MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll({
+                userId: identity.identifier.userId,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+                address: '',
+                tokenId: '',
+            })
+            return
+        }
+
+        PluginNFTAvatarRPC.saveNFTAvatar(wallet.address, {
+            ...NFTEvent,
+            avatarId: getAvatarId(identity.avatar ?? ''),
+        } as AvatarMetaDB).then((avatar: AvatarMetaDB | undefined) => {
+            setAvatar(avatar)
+            MaskMessages.events.NFTAvatarTimelineUpdated.sendToAll(
+                avatar ?? {
+                    userId: identity.identifier.userId,
+                    avatarId: getAvatarId(identity.avatar ?? ''),
+                    address: '',
+                    tokenId: '',
+                },
+            )
         })
-    }, [onUpdate])
-
-    useEffect(() => {
-        const _avatarId = getAvatarId(identity.avatar ?? '')
-        setAvatarId(_avatarId)
-    }, [identity, identity.avatar])
+        setNFTEvent(undefined)
+    }, [identity.avatar])
 
     useEffect(() => {
         setAvatar(_avatar)
     }, [_avatar])
 
+    useEffect(() => {
+        return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
+    }, [onUpdate])
+
     if (!avatar) return null
     return (
         <>
-            {avatarId === avatar.avatarId ? (
+            {getAvatarId(identity.avatar ?? '') === avatar.avatarId && avatar.avatarId ? (
                 <NFTBadge
                     avatar={avatar}
                     size={14}

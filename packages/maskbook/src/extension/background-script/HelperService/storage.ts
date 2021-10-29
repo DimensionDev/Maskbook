@@ -63,13 +63,17 @@ class MutexStorage<T extends browser.storage.StorageValue> {
 
 const storage = new MutexStorage<browser.storage.StorageValue>()
 
-export async function getStorage<T extends browser.storage.StorageValue>(key: string): Promise<T | undefined> {
+/** Avoid using this. */
+export async function __deprecated__getStorage<T extends browser.storage.StorageValue>(
+    key: string,
+): Promise<T | undefined> {
     if (typeof browser === 'undefined' || !browser.storage) return
     const value = await storage.getStorage(key)
     return value as T
 }
 
-export async function setStorage<T extends browser.storage.StorageValue>(
+/** Avoid using this. */
+export async function __deprecated__setStorage<T extends browser.storage.StorageValue>(
     key: string,
     value: T,
     options: { howToUpdate: 'merge' | 'replace' } = { howToUpdate: 'replace' },

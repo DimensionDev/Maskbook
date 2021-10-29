@@ -1,8 +1,8 @@
 import { memo, useCallback, useState } from 'react'
-import { Alert, alertClasses, Collapse, styled, IconButton } from '@material-ui/core'
-import { Close as CloseIcon } from '@material-ui/icons'
+import { Alert, alertClasses, Collapse, styled, IconButton } from '@mui/material'
+import { Close as CloseIcon } from '@mui/icons-material'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
-import { InfoIcon } from '@masknet/icons'
+import { InfoIcon, RiskIcon, SuccessIcon } from '@masknet/icons'
 
 const InfoAlert = styled(Alert)(({ theme }) => ({
     [`&  > .${alertClasses.message}`]: {
@@ -30,10 +30,16 @@ const InfoAlert = styled(Alert)(({ theme }) => ({
     },
     // error
     [`&.${alertClasses.standardError}`]: {
-        backgroundColor: `${MaskColorVar.redMain.alpha(0.15)}`,
+        backgroundColor: `${MaskColorVar.redMain.alpha(0.1)}`,
     },
     [`&.${alertClasses.standardError} .${alertClasses.icon}`]: {
         color: `${getMaskColor(theme).redMain}`,
+        'path:first-child': {
+            fill: `${MaskColorVar.redMain.alpha(0.5)}`,
+        },
+        path: {
+            fill: `${getMaskColor(theme).redMain}`,
+        },
     },
     [`&.${alertClasses.standardError} .${alertClasses.action}`]: {
         color: `${getMaskColor(theme).redMain}`,
@@ -58,7 +64,14 @@ const InfoAlert = styled(Alert)(({ theme }) => ({
 
 export interface MaskAlertProps {
     description: string
-    type?: 'error' | 'info' | 'success'
+    type?: 'error' | 'info' | 'success' | 'warning'
+}
+
+const AlertIconMapping = {
+    error: <RiskIcon />,
+    info: <InfoIcon />,
+    success: <SuccessIcon />,
+    warning: <InfoIcon />,
 }
 
 export const MaskAlert = memo(({ description, type = 'info' }: MaskAlertProps) => {
@@ -67,7 +80,7 @@ export const MaskAlert = memo(({ description, type = 'info' }: MaskAlertProps) =
     return (
         <Collapse in={openAlert}>
             <InfoAlert
-                icon={<InfoIcon />}
+                icon={AlertIconMapping[type]}
                 severity={type}
                 action={
                     <IconButton

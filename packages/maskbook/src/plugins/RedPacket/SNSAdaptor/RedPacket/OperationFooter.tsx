@@ -1,7 +1,7 @@
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared'
-import { Box } from '@material-ui/core'
+import { TransactionState, TransactionStateType, useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
+import { Box } from '@mui/material'
 import { useCallback } from 'react'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
@@ -65,6 +65,7 @@ export function OperationFooter({
                 }
                 variant="contained"
                 size="large"
+                className={classes.button}
                 onClick={onClaimOrRefund}>
                 {canClaim
                     ? claimState.type === TransactionStateType.HASH
@@ -83,7 +84,12 @@ export function OperationFooter({
                 connectWallet: classes.connectWallet,
             }}>
             <Box className={classes.footer}>
-                <ActionButton variant="contained" fullWidth onClick={handleShare}>
+                <ActionButton
+                    variant="contained"
+                    fullWidth
+                    size="large"
+                    onClick={handleShare}
+                    className={classes.button}>
                     {t('share')}
                 </ActionButton>
                 <ObtainButton />

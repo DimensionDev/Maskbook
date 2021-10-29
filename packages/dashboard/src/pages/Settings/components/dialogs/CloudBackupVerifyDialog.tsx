@@ -1,11 +1,11 @@
 import { MaskDialog, CountdownButton, useCustomSnackbar, MaskTextField, MaskColorVar } from '@masknet/theme'
-import { MenuItem, Select, Box } from '@material-ui/core'
+import { MenuItem, Select, Box } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { useState, useContext, useMemo, useEffect } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { fetchDownloadLink, sendCode, useLanguage, VerifyCodeRequest } from '../../api'
 import { BackupFileInfo, AccountType, Scenario, Locale } from '../../type'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { useAsyncFn } from 'react-use'
 
 export interface VerifyNextData {

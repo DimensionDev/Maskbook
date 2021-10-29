@@ -9,11 +9,11 @@ import {
     resolveTokenLinkOnExplorer,
     useChainId,
     useITOConstants,
-} from '@masknet/web3-shared'
-import { Card, Grid, IconButton, Link, Paper, Typography } from '@material-ui/core'
+} from '@masknet/web3-shared-evm'
+import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import LaunchIcon from '@material-ui/icons/Launch'
-import RepeatIcon from '@material-ui/icons/Repeat'
+import LaunchIcon from '@mui/icons-material/Launch'
+import RepeatIcon from '@mui/icons-material/Repeat'
 import formatDateTime from 'date-fns/format'
 import { Fragment, useCallback, useState, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -85,7 +85,14 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.secondary,
     },
     button: {
+        color: '#fff',
         padding: theme.spacing(2),
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            padding: theme.spacing(0, 0, 1, 0),
+        },
+    },
+    buttonText: {
+        color: '#fff',
     },
     link: {
         padding: 0,
@@ -293,13 +300,13 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         {t('plugin_ito_send_tip')}
                     </Typography>
                 </Grid>
-                <Grid item xs={6} className={classes.button}>
+                <Grid item lg={6} xs={12} className={classes.button}>
                     <ActionButton fullWidth variant="outlined" onClick={onBack}>
                         {t('plugin_ito_back')}
                     </ActionButton>
                 </Grid>
-                <Grid item xs={6} className={classes.button}>
-                    <ActionButton fullWidth variant="contained" onClick={onDone}>
+                <Grid item lg={6} xs={12} className={classes.button}>
+                    <ActionButton className={classes.buttonText} fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
                             total: formatAmountPrecision(poolSettings?.total, poolSettings?.token?.decimals),
                             symbol: poolSettings?.token?.symbol,

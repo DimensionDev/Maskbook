@@ -11,15 +11,15 @@ import {
     Box,
     useMediaQuery,
     Theme,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowRight } from 'react-feather'
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
-import CloseIcon from '@material-ui/icons/Close'
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
+import CloseIcon from '@mui/icons-material/Close'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
 import { useValueRef } from '@masknet/shared'
-import { useI18N, MaskMessage, useMatchXS, extendsTheme } from '../../utils'
+import { useI18N, MaskMessages, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
@@ -488,7 +488,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         )
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_.identifier)
-        MaskMessage.events.ownPersonaChanged.sendToAll(undefined)
+        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 
     const onClose = () => {

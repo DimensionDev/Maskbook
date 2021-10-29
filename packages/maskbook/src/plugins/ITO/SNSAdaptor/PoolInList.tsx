@@ -1,18 +1,18 @@
-import { FormattedBalance } from '@masknet/shared'
+import { FormattedBalance, TokenIcon } from '@masknet/shared'
 import {
+    EthereumTokenType,
     formatBalance,
-    isZero,
-    pow10,
+    FungibleToken,
     getChainDetailed,
     isSameAddress,
-    useAccount,
-    FungibleToken,
-    useTokenConstants,
+    isZero,
+    pow10,
     TransactionStateType,
+    useAccount,
     useFungibleTokenDetailed,
     useFungibleTokensDetailed,
-    EthereumTokenType,
-} from '@masknet/web3-shared'
+    useTokenConstants,
+} from '@masknet/web3-shared-evm'
 import {
     Box,
     Card,
@@ -25,92 +25,108 @@ import {
     TableHead,
     TableRow,
     Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import formatDateTime from 'date-fns/format'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenIcon } from '@masknet/shared'
 import { debugModeSetting } from '../../../settings/settings'
 import { useI18N } from '../../../utils'
 import { MSG_DELIMITER } from '../constants'
 import { useAvailabilityComputed } from './hooks/useAvailabilityComputed'
 import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
-import { ITO_Status, JSON_PayloadInMask, PoolFromNetwork, JSON_PayloadFromChain } from '../types'
+import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
 import { omit } from 'lodash-es'
 
-const useStyles = makeStyles()((theme) => ({
-    top: {
-        width: '100%',
-        boxSizing: 'border-box',
-        padding: theme.spacing(1, 2, 1),
-    },
-    root: {
-        borderRadius: 10,
-        display: 'flex',
-        padding: theme.spacing(2),
-    },
-    iconbar: {
-        display: 'flex',
-        justifyContent: 'center',
-        paddingTop: theme.spacing(0.5),
-        paddingRight: theme.spacing(1),
-    },
-    icon: {
-        width: 32,
-        height: 32,
-    },
-    content: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    header: {
-        display: 'flex',
-        alignItems: 'center',
-        paddingBottom: theme.spacing(1),
-    },
-    button: {
-        borderRadius: 50,
-    },
-    title: {
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        paddingBottom: theme.spacing(1),
-    },
-    date: {
-        fontSize: 12,
-    },
-    progress: {
-        paddingBottom: theme.spacing(1),
-    },
-    price: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        paddingBottom: theme.spacing(1),
-    },
-    details: {
-        '& > *': {
+const useStyles = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        top: {
+            width: '100%',
+            boxSizing: 'border-box',
+            padding: theme.spacing(1, 2, 1),
+            [smallQuery]: {
+                padding: theme.spacing(1, 0, 1),
+            },
+        },
+        root: {
+            borderRadius: 10,
+            display: 'flex',
+            padding: theme.spacing(2),
+        },
+        iconbar: {
+            display: 'flex',
+            justifyContent: 'center',
+            paddingTop: theme.spacing(0.5),
+            paddingRight: theme.spacing(1),
+        },
+        icon: {
+            width: 32,
+            height: 32,
+        },
+        content: {
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            overflowX: 'hidden',
+        },
+        header: {
+            display: 'flex',
+            alignItems: 'center',
+            paddingBottom: theme.spacing(1),
+            [smallQuery]: {
+                flexDirection: 'column',
+            },
+        },
+        actionButton: {
+            color: '#fff',
+        },
+        button: {
+            borderRadius: 50,
+            [smallQuery]: {
+                width: '100%',
+            },
+        },
+        title: {
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            paddingBottom: theme.spacing(1),
+            width: '100%',
+        },
+        date: {
+            fontSize: 12,
+        },
+        progress: {
             paddingBottom: theme.spacing(1),
         },
-    },
-    table: {
-        paddingBottom: theme.spacing(1),
-        borderRadius: 0,
-    },
-    cell: {
-        border: '1px solid rgba(224, 224, 224, 1)',
-        color: theme.palette.text.primary,
-        wordBreak: 'break-word',
-    },
-    head: {
-        border: '1px solid rgba(224, 224, 224, 1)',
-        color: theme.palette.text.secondary,
-    },
-}))
+        price: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingBottom: theme.spacing(1),
+        },
+        details: {
+            '& > *': {
+                paddingBottom: theme.spacing(1),
+            },
+        },
+        table: {
+            padding: theme.spacing(0, 0, 1, 0),
+            borderRadius: 0,
+        },
+        cell: {
+            border: '1px solid rgba(224, 224, 224, 1)',
+            color: theme.palette.text.primary,
+            wordBreak: 'break-word',
+        },
+        head: {
+            border: '1px solid rgba(224, 224, 224, 1)',
+            color: theme.palette.text.secondary,
+        },
+    }
+})
 
 export interface PoolInListProps extends PoolFromNetwork {
     onSend?: (pool: JSON_PayloadInMask) => void
@@ -183,11 +199,17 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
+                    <ActionButton
+                        fullWidth
+                        size="small"
+                        variant="contained"
+                        onClick={() => destructCallback(pool.pid)}
+                        className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
                     <ActionButton
+                        fullWidth
                         size="small"
                         variant="contained"
                         onClick={() =>
@@ -197,11 +219,17 @@ export function PoolInList(props: PoolInListProps) {
                                     'exchange_token_addresses',
                                 ]) as JSON_PayloadInMask,
                             )
-                        }>
+                        }
+                        className={classes.actionButton}>
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton size="small" variant="contained" disabled={true}>
+                    <ActionButton
+                        fullWidth
+                        size="small"
+                        variant="contained"
+                        disabled={true}
+                        className={classes.actionButton}>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}
@@ -273,7 +301,7 @@ export function PoolInList(props: PoolInListProps) {
 
                     <Box className={classes.details}>
                         <TableContainer component={Paper} className={classes.table}>
-                            <Table size="small">
+                            <Table size="small" stickyHeader>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell className={classes.head} align="center" size="small">

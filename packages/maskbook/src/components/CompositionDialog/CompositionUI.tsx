@@ -1,10 +1,10 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
-import { Typography, Chip, Button } from '@material-ui/core'
-import { LoadingButton } from '@material-ui/lab'
+import { Typography, Chip, Button } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import type { TypedMessage } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Send } from '@material-ui/icons'
+import { Send } from '@mui/icons-material'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
@@ -51,6 +51,7 @@ export interface CompositionProps {
     requireClipboardPermission?: boolean
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
+    onQueryClipboardPermission?(): void
 }
 export interface SubmitComposition {
     target: 'Everyone' | Profile[]

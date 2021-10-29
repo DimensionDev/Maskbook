@@ -1,8 +1,8 @@
 import { memo, useState } from 'react'
 import { ButtonGroupTabList } from '@masknet/theme'
-import { Box, Tab } from '@material-ui/core'
+import { Box, Tab } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { TabContext, TabPanel } from '@material-ui/lab'
+import { TabContext, TabPanel } from '@mui/lab'
 import { ContactsTable } from '../ContactsTable'
 import { PostHistory } from '../PostHistory'
 const useStyles = makeStyles()({

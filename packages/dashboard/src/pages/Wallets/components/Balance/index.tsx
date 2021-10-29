@@ -1,16 +1,23 @@
 import { memo } from 'react'
-import { styled, Typography, Box, Button, buttonClasses } from '@material-ui/core'
+import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@masknet/theme'
-import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@masknet/icons'
+import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
+import type { NetworkType } from '@masknet/web3-shared-evm'
+import { ChainId, getChainName } from '@masknet/web3-shared-evm'
+import { MiniNetworkSelector } from '@masknet/shared'
+import { useMatch } from 'react-router-dom'
+import { RoutePaths } from '../../../../type'
 
 export interface BalanceCardProps {
     balance: number
-    chainName: string
     onSend(): void
     onBuy(): void
     onSwap(): void
     onReceive(): void
+    selectedChainId: ChainId | null
+    networks: NetworkType[]
+    onSelectNetwork(id: ChainId | null): void
 }
 
 const BalanceContainer = styled('div')(
@@ -72,46 +79,63 @@ const ButtonGroup = styled('div')`
     }
 `
 
-export const Balance = memo<BalanceCardProps>(({ balance, chainName, onSend, onBuy, onSwap, onReceive }) => {
-    const t = useDashboardI18N()
+export const Balance = memo<BalanceCardProps>(
+    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedChainId }) => {
+        const t = useDashboardI18N()
 
-    return (
-        <BalanceContainer>
-            <Box display="flex">
-                <IconContainer>
-                    <MaskWalletIcon fontSize="inherit" />
-                </IconContainer>
-                <BalanceDisplayContainer>
-                    <BalanceTitle>
-                        {t.wallets_balance()} {chainName}
-                    </BalanceTitle>
-                    <BalanceContent>
-                        {isNaN(balance)
-                            ? '-'
-                            : balance.toLocaleString('en', {
-                                  style: 'currency',
-                                  currency: 'USD',
-                              })}
-                    </BalanceContent>
-                </BalanceDisplayContainer>
-            </Box>
-            <ButtonGroup>
-                <Button onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
-                    {t.wallets_balance_Send()}
-                </Button>
-                <Button onClick={onBuy} endIcon={<CardIcon fill="none" fontSize="inherit" />}>
-                    {t.wallets_balance_Buy()}
-                </Button>
-                <Button onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
-                    {t.wallets_balance_Swap()}
-                </Button>
-                <Button
-                    color="secondary"
-                    onClick={onReceive}
-                    endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
-                    {t.wallets_balance_Receive()}
-                </Button>
-            </ButtonGroup>
-        </BalanceContainer>
-    )
-})
+        const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
+        const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
+
+        const isDisabledNonCurrentChainSelect = !!isWalletTransferPath
+        const isHiddenAllButton = !!isWalletHistoryPath || !!isWalletTransferPath
+
+        return (
+            <BalanceContainer>
+                <Box display="flex" alignItems="center">
+                    <IconContainer sx={{ width: 48, height: 48 }}>
+                        <MaskWalletIcon viewBox="0 0 48 48" fontSize="inherit" />
+                    </IconContainer>
+                    <BalanceDisplayContainer>
+                        <BalanceTitle>
+                            {t.wallets_balance()}{' '}
+                            {selectedChainId ? getChainName(selectedChainId) : t.wallets_balance_all_chain()}
+                        </BalanceTitle>
+                        <BalanceContent sx={{ py: 0.5 }}>
+                            {isNaN(balance)
+                                ? '-'
+                                : balance.toLocaleString('en', {
+                                      style: 'currency',
+                                      currency: 'USD',
+                                  })}
+                        </BalanceContent>
+                        <MiniNetworkSelector
+                            hideAllNetworkButton={isHiddenAllButton}
+                            disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
+                            onSelect={onSelectNetwork}
+                            selectedChainId={selectedChainId}
+                            networks={networks}
+                        />
+                    </BalanceDisplayContainer>
+                </Box>
+                <ButtonGroup>
+                    <Button size="small" onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
+                        {t.wallets_balance_Send()}
+                    </Button>
+                    <Button size="small" onClick={onBuy} endIcon={<CardIcon fill="none" fontSize="inherit" />}>
+                        {t.wallets_balance_Buy()}
+                    </Button>
+                    <Button size="small" onClick={onSwap} endIcon={<SwapIcon fontSize="inherit" />}>
+                        {t.wallets_balance_Swap()}
+                    </Button>
+                    <Button
+                        size="small"
+                        color="secondary"
+                        onClick={onReceive}
+                        endIcon={<DownloadIcon fontSize="inherit" style={{ stroke: MaskColorVar.textLink }} />}>
+                        {t.wallets_balance_Receive()}
+                    </Button>
+                </ButtonGroup>
+            </BalanceContainer>
+        )
+    },
+)

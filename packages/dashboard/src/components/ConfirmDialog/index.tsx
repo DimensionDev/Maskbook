@@ -1,6 +1,6 @@
 import { MaskDialog } from '@masknet/theme'
 import type { PropsWithChildren, ReactNode } from 'react'
-import { DialogContent, DialogActions, Button, styled, buttonClasses } from '@material-ui/core'
+import { DialogContent, DialogActions, Button, styled, buttonClasses } from '@mui/material'
 import { useDashboardI18N } from '../../locales'
 
 const StyledButton: typeof Button = styled(Button)(() => ({

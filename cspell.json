@@ -5,6 +5,7 @@
         "Adai",
         "Amountstate",
         "Ampleforth",
+        "ARETH",
         "Bolivarian",
         "Bouvet",
         "Burkina",
@@ -109,7 +110,6 @@
         "ittr",
         "jsbi",
         "jsonml",
-        "jsqr",
         "kdfparams",
         "keccak",
         "kred",
@@ -225,7 +225,10 @@
         "majeure",
         "Swither",
         "nftscan",
-        "apikey"
+        "apikey",
+        "tokenid",
+        "NFTRSS",
+        "solana"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -299,18 +302,30 @@
         "Defi",
         "powah",
         "Switcher",
+<<<<<<< HEAD
         "drawed",
         "DRAWED"
+=======
+        "maskwallet",
+        "drawed",
+        "DRAWED",
+        "devnet",
+        "fbclid",
+        "noamount"
+>>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
         "**/__tests__/**",
+        "patches/**",
         "*generated*",
         "**/dist/**",
         "**/*.json",
         "**/node_modules/**",
         "pnpm-lock.yaml",
-        "tsconfig.tsbuildinfo"
+        "tsconfig.tsbuildinfo",
+        ".prettierignore",
+        ".github"
     ],
     "overrides": [
         {

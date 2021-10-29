@@ -1,18 +1,19 @@
 import { MaskTextField, MaskTextFieldProps } from '@masknet/theme'
-import { IconButton, InputAdornment } from '@material-ui/core'
-import Visibility from '@material-ui/icons/Visibility'
-import VisibilityOff from '@material-ui/icons/VisibilityOff'
-import { useState } from 'react'
+import { IconButton, InputAdornment } from '@mui/material'
+import { ForwardedRef, useState, forwardRef } from 'react'
+import { EyeIcon, EyeOffIcon } from '@masknet/icons'
 
 export type PasswordFieldProps = Exclude<MaskTextFieldProps, 'type'>
 
-export default function PasswordField(props: PasswordFieldProps) {
+const PasswordField = forwardRef((props: PasswordFieldProps, ref: ForwardedRef<any>) => {
     const [showPassword, setShowPassword] = useState(false)
     return (
         <MaskTextField
             {...props}
+            ref={ref}
             type={showPassword ? 'text' : 'password'}
             InputProps={{
+                ...props.InputProps,
                 endAdornment: (
                     <InputAdornment position="end">
                         <IconButton
@@ -21,11 +22,13 @@ export default function PasswordField(props: PasswordFieldProps) {
                             onMouseDown={(event) => event.preventDefault()}
                             edge="end"
                             size="small">
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                            {showPassword ? <EyeOffIcon /> : <EyeIcon />}
                         </IconButton>
                     </InputAdornment>
                 ),
             }}
         />
     )
-}
+})
+
+export default PasswordField

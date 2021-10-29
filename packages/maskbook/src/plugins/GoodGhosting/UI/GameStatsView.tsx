@@ -1,5 +1,5 @@
-import { formatBalance } from '@masknet/web3-shared'
-import { Grid, Typography, Box, Button } from '@material-ui/core'
+import { formatBalance } from '@masknet/web3-shared-evm'
+import { Grid, Typography, Box, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { GameAssets, GoodGhostingInfo, LendingPoolData, Player } from '../types'

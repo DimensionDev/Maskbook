@@ -1,7 +1,6 @@
-import { memo, useCallback, useState } from 'react'
-import { useI18N } from '../../../../../utils'
+import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
+import { ChainIcon, FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useLocation } from 'react-router-dom'
 import {
     ChainId,
     getNetworkName,
@@ -10,19 +9,20 @@ import {
     useAccount,
     useChainIdValid,
     useWallets,
-} from '@masknet/web3-shared'
-import { ChainIcon, FormattedAddress } from '@masknet/shared'
-import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
-import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
+} from '@masknet/web3-shared-evm'
+import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { first } from 'lodash-es'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { useCopyToClipboard } from 'react-use'
-import { SuccessIcon } from '@masknet/icons'
-import Services from '../../../../service'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { parseInt } from 'lodash-es'
+import { CopyIconButton } from '../../../components/CopyIconButton'
+import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
+import { useI18N } from '../../../../../utils'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()({
     content: {
-        flex: 1,
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
@@ -63,6 +63,8 @@ const useStyles = makeStyles()({
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
+        height: 'calc(100vh - 168px)',
+        overflow: 'auto',
     },
     item: {
         padding: 10,
@@ -99,8 +101,14 @@ const useStyles = makeStyles()({
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
         padding: 16,
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        backgroundColor: '#ffffff',
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,
@@ -113,14 +121,18 @@ const SelectWallet = memo(() => {
     const { classes } = useStyles()
     const location = useLocation()
     const wallet = useAccount()
-    const wallets = useWallets()
+    const wallets = useWallets(ProviderType.MaskWallet)
 
     const [selected, setSelected] = useState(wallet)
     const [, copyToClipboard] = useCopyToClipboard()
 
     const search = new URLSearchParams(location.search)
 
-    const chainId = parseInt(search.get('chainId') ?? '0', 10) as ChainId
+    const chainId = Number.parseInt(search.get('chainId') ?? '0', 10) as ChainId
+    // Swap page also uses SelectWallet, but changing wallet in Swap page
+    // should not affect other pages, for example, dashboard.
+    // So we make Swap page 'internal' for popups
+    const isInternal = search.get('internal')
 
     const chainIdValid = useChainIdValid()
 
@@ -134,18 +146,24 @@ const SelectWallet = memo(() => {
     const handleCancel = useCallback(() => Services.Helper.removePopupWindow(), [])
 
     const handleConfirm = useCallback(async () => {
-        await WalletRPC.updateAccount({
-            chainId,
-            account: selected,
-            providerType: ProviderType.MaskWallet,
-        })
         await WalletRPC.updateMaskAccount({
             chainId,
             account: selected,
         })
+        if (currentProviderSettings.value === ProviderType.MaskWallet || !isInternal) {
+            await WalletRPC.updateAccount({
+                chainId,
+                account: selected,
+                providerType: ProviderType.MaskWallet,
+            })
+        }
 
         return Services.Helper.removePopupWindow()
-    }, [chainId, selected])
+    }, [chainId, selected, isInternal])
+
+    useEffect(() => {
+        if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
+    }, [selected, wallets])
 
     return chainIdValid ? (
         <>
@@ -168,7 +186,7 @@ const SelectWallet = memo(() => {
                                         <Typography className={classes.name}>{item.name}</Typography>
                                         <Typography className={classes.address}>
                                             <FormattedAddress address={item.address} size={12} />
-                                            <CopyIcon className={classes.copy} onClick={() => onCopy(item.address)} />
+                                            <CopyIconButton className={classes.copy} text={item.address} />
                                         </Typography>
                                     </div>
                                     {isSameAddress(item.address, selected) ? <SuccessIcon /> : null}

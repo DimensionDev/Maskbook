@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react'
-import { Button, CircularProgress } from '@material-ui/core'
+import { Button, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { ButtonProps } from '@material-ui/core/Button'
-import CheckIcon from '@material-ui/icons/Check'
-import ErrorIcon from '@material-ui/icons/Error'
-import { red, green } from '@material-ui/core/colors'
+import type { ButtonProps } from '@mui/material/Button'
+import CheckIcon from '@mui/icons-material/Check'
+import ErrorIcon from '@mui/icons-material/Error'
+import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn } from 'react-use'
 import { useErrorStyles } from '../../../utils/theme'
@@ -160,6 +160,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
 }
 const useStyles = makeStyles()({
     success: {
+        color: '#fff',
         backgroundColor: green[500],
         '&:hover': {
             backgroundColor: green[700],

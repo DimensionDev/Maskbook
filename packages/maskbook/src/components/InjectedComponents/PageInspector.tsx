@@ -1,10 +1,8 @@
-import { useCustomSnackbar } from '@masknet/theme'
 import { useEffect } from 'react'
-import Button from '@material-ui/core/Button'
-import Close from '@material-ui/icons/Close'
-import IconButton from '@material-ui/core/IconButton'
+import { useCustomSnackbar } from '@masknet/theme'
+import { Button, Box, Typography } from '@mui/material'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
-import { useMatchXS, MaskMessage, useI18N } from '../../utils'
+import { useMatchXS, MaskMessages, useI18N } from '../../utils'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.GlobalInjection)
@@ -16,35 +14,40 @@ export function PageInspector(props: PageInspectorProps) {
     const xsMatched = useMatchXS()
     useEffect(
         () =>
-            MaskMessage.events.autoPasteFailed.on((data) => {
+            MaskMessages.events.autoPasteFailed.on((data) => {
                 const key = data.image ? Math.random() : data.text
                 const close = () => closeSnackbar(key)
                 const timeout = setTimeout(() => {
                     closeSnackbar(key)
                 }, 15 * 1000 /** 15 seconds */)
-                showSnackbar(t('auto_paste_failed_snackbar'), {
-                    variant: 'info',
-                    preventDuplicate: true,
-                    anchorOrigin: xsMatched
-                        ? {
-                              vertical: 'bottom',
-                              horizontal: 'center',
-                          }
-                        : { horizontal: 'left', vertical: 'bottom' },
-                    key,
-                    action: (
-                        <>
+                showSnackbar(
+                    <>
+                        <Typography color="textPrimary">{t('auto_paste_failed_snackbar')}</Typography>
+                        <Box display="flex" justifyContent="flex-end" sx={{ marginTop: 0.5 }}>
                             <Button
                                 color="inherit"
+                                variant="text"
                                 onClick={() => [clearTimeout(timeout), close(), autoPasteFailed(data)]}>
                                 {t('auto_paste_failed_snackbar_action')}
                             </Button>
-                            <IconButton size="large" aria-label="Close" onClick={close}>
-                                <Close />
-                            </IconButton>
-                        </>
-                    ),
-                })
+                            <Button color="inherit" variant="text" aria-label="Close" onClick={close}>
+                                {t('auto_paste_failed_snackbar_action_close')}
+                            </Button>
+                        </Box>
+                    </>,
+                    {
+                        variant: 'info',
+                        preventDuplicate: true,
+                        anchorOrigin: xsMatched
+                            ? {
+                                  vertical: 'bottom',
+                                  horizontal: 'center',
+                              }
+                            : { horizontal: 'left', vertical: 'bottom' },
+                        key: Math.random(),
+                        action: <></>,
+                    },
+                )
             }),
         [],
     )

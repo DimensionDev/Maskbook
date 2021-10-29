@@ -1,4 +1,4 @@
-import { MenuItem } from '@material-ui/core'
+import { MenuItem } from '@mui/material'
 import { Services } from '../../../API'
 import { useAppearance } from '../../Personas/api'
 import { Appearance } from '@masknet/theme'

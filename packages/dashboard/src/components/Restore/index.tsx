@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Tab } from '@material-ui/core'
+import { Tab } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ButtonGroupTabList, useTabs } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
@@ -8,7 +8,7 @@ import { RestoreFromMnemonic } from './RestoreFromMnemonic'
 import { RestoreFromCloud } from './RestoreFromCloud'
 import { RestoreFromPrivateKey } from './RestoreFromPrivateKey'
 import { RestoreBlueLogo, SignUpAccountLogo } from '../RegisterFrame/ColumnContentLayout'
-import { TabContext, TabPanel } from '@material-ui/lab'
+import { TabContext, TabPanel } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {

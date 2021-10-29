@@ -12,9 +12,9 @@ import {
     ERC721ContractDetailed,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import LaunchIcon from '@material-ui/icons/Launch'
+} from '@masknet/web3-shared-evm'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import LaunchIcon from '@mui/icons-material/Launch'
 import {
     Grid,
     Card,
@@ -27,7 +27,7 @@ import {
     Box,
     Skeleton,
     CircularProgress,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useCallback, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
@@ -39,6 +39,7 @@ import classNames from 'classnames'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -349,23 +350,25 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         .getShareLinkURL?.(
             availability?.isClaimed
                 ? t(
-                      isTwitter(activatedSocialNetworkUI)
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                           ? 'plugin_red_packet_nft_share_claimed_message'
                           : 'plugin_red_packet_nft_share_claimed_message_not_twitter',
                       {
                           sender: payload.senderName,
                           payload: postLink,
                           network: resolveNetworkName(networkType),
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
                       },
                   ).trim()
                 : t(
-                      isTwitter(activatedSocialNetworkUI)
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                           ? 'plugin_red_packet_nft_share_foreshow_message'
                           : 'plugin_red_packet_nft_share_foreshow_message_not_twitter',
                       {
                           sender: payload.senderName,
                           payload: postLink,
                           network: resolveNetworkName(networkType),
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
                       },
                   ).trim(),
         )

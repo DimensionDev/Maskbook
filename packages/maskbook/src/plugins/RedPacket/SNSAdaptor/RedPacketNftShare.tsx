@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils'
 

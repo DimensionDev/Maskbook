@@ -1,5 +1,5 @@
-import { useAccount } from '@masknet/web3-shared'
-import { Box, CircularProgress, Typography } from '@material-ui/core'
+import { useAccount } from '@masknet/web3-shared-evm'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useAllPoolsAsSeller } from './hooks/useAllPoolsAsSeller'
 import { useScrollBottomEvent } from '@masknet/shared'

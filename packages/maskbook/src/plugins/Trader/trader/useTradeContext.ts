@@ -1,7 +1,7 @@
+import { createContext, useMemo } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import { TradeProvider } from '@masknet/public-api'
-import { getTraderConstants, useChainId } from '@masknet/web3-shared'
-import { createContext, useMemo } from 'react'
+import { getTraderConstants, useChainId } from '@masknet/web3-shared-evm'
 import {
     PANCAKESWAP_BASE_AGAINST_TOKENS,
     PANCAKESWAP_CUSTOM_BASES,

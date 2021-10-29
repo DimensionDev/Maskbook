@@ -1,4 +1,4 @@
-import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-es'
 import { useCustomSnackbar } from '@masknet/theme'

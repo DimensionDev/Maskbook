@@ -1,4 +1,4 @@
-import { Chip, DialogContent } from '@material-ui/core'
+import { Chip, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'

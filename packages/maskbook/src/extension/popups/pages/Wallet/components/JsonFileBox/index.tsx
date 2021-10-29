@@ -1,5 +1,5 @@
 import { memo, useEffect, useRef, useState } from 'react'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useDropArea } from 'react-use'
 import { File as FileIcon } from '@masknet/icons'

@@ -6,8 +6,7 @@ import {
 } from '../../../../database/avatar'
 import { createTransaction } from '../../../../database/helpers/openDB'
 import { consistentPersonaDBWriteAccess } from '../../../../database/Persona/Persona.db'
-import { Identifier, ProfileIdentifier } from '../../../../database/type'
-import { IdentifierMap } from '../../../../database/IdentifierMap'
+import { IdentifierMap, Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { untilDocumentReady } from '../../../../utils'
 
 async function cleanAvatarDB(anotherList: IdentifierMap<IdentityWithAvatar, undefined>) {
@@ -17,6 +16,15 @@ async function cleanAvatarDB(anotherList: IdentifierMap<IdentityWithAvatar, unde
         anotherList.set(each, undefined)
     }
     await deleteAvatarsDB(Array.from(anotherList.keys()), t)
+}
+
+async function cleanRelationDB(anotherList: IdentifierMap<ProfileIdentifier, undefined>) {
+    await consistentPersonaDBWriteAccess(async (t) => {
+        for await (const x of t.objectStore('relations')) {
+            const profileIdentifier = Identifier.fromString(x.value.profile, ProfileIdentifier).unwrap()
+            if (anotherList.has(profileIdentifier)) x.delete()
+        }
+    })
 }
 
 export default async function cleanProfileWithNoLinkedPersona(signal: AbortSignal) {
@@ -37,6 +45,7 @@ export default async function cleanProfileWithNoLinkedPersona(signal: AbortSigna
         }
     }, false)
     await cleanAvatarDB(cleanedList)
+    await cleanRelationDB(cleanedList)
 }
 
 export {}

@@ -1,4 +1,4 @@
-import { ListItem, ListItemText, ListItemIcon, styled, listItemTextClasses } from '@material-ui/core'
+import { ListItem, ListItemText, ListItemIcon, styled, listItemTextClasses } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 
 export interface SettingItemProps extends React.PropsWithChildren<{}> {
@@ -22,6 +22,7 @@ const IconWrapper = styled(ListItemIcon)(({ theme }) => ({
 const TextWrapper = styled(ListItemText)(({ theme }) => ({
     [`& .${listItemTextClasses.primary}`]: {
         fontWeight: '600',
+        fontSize: 18,
         paddingBottom: theme.spacing(2),
     },
     [`&.${listItemTextClasses.root}.error .${listItemTextClasses.secondary}`]: {

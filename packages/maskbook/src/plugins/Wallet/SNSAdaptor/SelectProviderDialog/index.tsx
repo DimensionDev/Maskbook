@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { useAsync } from 'react-use'
+import { getMaskColor, makeStyles } from '@masknet/theme'
+import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
-import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared'
+import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared-evm'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -15,10 +16,9 @@ import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
-import { Flags } from '../../../../utils'
-import { getMaskColor } from '@masknet/theme'
-import { useAsync } from 'react-use'
+import { Flags, hasNativeAPI, nativeAPI } from '../../../../utils'
 import Services from '../../../../extension/service'
+import { PopupRoutes } from '../../../../extension/popups'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -105,6 +105,13 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
     //#endregion
 
+    //#region native app
+    useEffect(() => {
+        if (!open) return
+        if (hasNativeAPI) nativeAPI?.api.misc_openCreateWalletView()
+    }, [open])
+    //#endregion
+
     //#region wallet status dialog
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
@@ -114,12 +121,6 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     //#region select wallet dialog
     const { setDialog: setSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectWalletDialogUpdated,
-    )
-    //#endregion
-
-    //#region create or import wallet dialog
-    const { openDialog: openCreateImportDialog } = useRemoteControlledDialog(
-        WalletMessages.events.createImportWalletDialogUpdated,
     )
     //#endregion
 
@@ -155,10 +156,9 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
             switch (providerType) {
                 case ProviderType.MaskWallet:
-                    await Services.Helper.openPopupsWindow(wallets.length > 0 ? '/wallet/select' : '', {
+                    await Services.Helper.openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
                         chainId: getChainIdFromNetworkType(undeterminedNetworkType),
                     })
-
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
@@ -193,6 +193,9 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             setWalletConnectDialog,
         ],
     )
+
+    // not available for the native app
+    if (hasNativeAPI) return null
 
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>

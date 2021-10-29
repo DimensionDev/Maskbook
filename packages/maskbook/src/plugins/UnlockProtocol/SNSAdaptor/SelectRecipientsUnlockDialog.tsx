@@ -10,7 +10,7 @@ import {
     Button,
     Typography,
     Link,
-} from '@material-ui/core'
+} from '@mui/material'
 import { useState, useMemo } from 'react'
 import type { UnlockLocks } from '../types'
 import { LockInList } from './LockInList'

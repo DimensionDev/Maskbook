@@ -5,10 +5,10 @@ import {
     useChainId,
     useChainIdValid,
     useWallet,
-} from '@masknet/web3-shared'
-import { Button, DialogActions, DialogContent, Link, Typography } from '@material-ui/core'
+} from '@masknet/web3-shared-evm'
+import { Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import ErrorIcon from '@material-ui/icons/Error'
+import ErrorIcon from '@mui/icons-material/Error'
 import classNames from 'classnames'
 import { useCallback } from 'react'
 import { Copy, Edit3, ExternalLink } from 'react-feather'
@@ -19,7 +19,6 @@ import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
-import { RecentTransactionList } from './RecentTransactionList'
 import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -53,9 +52,6 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         borderTop: `1px solid ${theme.palette.divider}`,
         justifyContent: 'flex-start',
-    },
-    transactionList: {
-        alignItems: 'center',
     },
     actions: {},
     actionButton: {
@@ -153,7 +149,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     return (
         <InjectedDialog title={t('wallet_status_title')} open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
-                <section className={classes.currentAccount}>
+                <section className={`${classes.currentAccount} dashboard-style`}>
                     <WalletIcon size={48} badgeSize={18} />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
@@ -212,9 +208,6 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                             {t('wallet_status_button_change')}
                         </Button>
                     </section>
-                </section>
-                <section className={classes.transactionList}>
-                    <RecentTransactionList />
                 </section>
             </DialogContent>
             {!chainIdValid ? (

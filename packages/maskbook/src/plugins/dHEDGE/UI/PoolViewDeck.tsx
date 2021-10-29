@@ -1,5 +1,5 @@
-import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared'
-import { Avatar, Button, Grid, Link, Typography } from '@material-ui/core'
+import { resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { Avatar, Button, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'

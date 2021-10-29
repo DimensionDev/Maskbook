@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import { StartupActionList as C, StartupActionListItem } from '../src/components/StartupActionList'
-import { CloudUpload, CloudDownload, Restore } from '@material-ui/icons'
+import { CloudUpload, CloudDownload, Restore } from '@mui/icons-material'
 const { meta, of } = story(C)
 
 export default meta({ title: 'Components/Startup Action List' })

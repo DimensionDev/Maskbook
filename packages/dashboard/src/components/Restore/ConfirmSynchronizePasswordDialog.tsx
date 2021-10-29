@@ -1,7 +1,7 @@
 import { useDashboardI18N } from '../../locales'
 import { memo } from 'react'
 import { getMaskColor, MaskDialog } from '@masknet/theme'
-import { Button, DialogActions, DialogContent, Stack, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { SuccessIcon } from '@masknet/icons'
 
 export interface ConfirmSynchronizePasswordDialogProps {
@@ -15,7 +15,7 @@ export const ConfirmSynchronizePasswordDialog = memo<ConfirmSynchronizePasswordD
         const t = useDashboardI18N()
 
         return (
-            <MaskDialog open={open} title={t.personas_delete_dialog_title()} onClose={onClose} maxWidth="xs">
+            <MaskDialog open={open} title={t.cloud_backup()} onClose={onClose} maxWidth="xs">
                 <DialogContent>
                     <Stack alignItems="center" py={2}>
                         <SuccessIcon sx={{ fontSize: 54 }} />

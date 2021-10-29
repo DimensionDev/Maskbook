@@ -1,6 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import { useCustomSnackbar } from '@masknet/theme'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { isNil } from 'lodash-es'

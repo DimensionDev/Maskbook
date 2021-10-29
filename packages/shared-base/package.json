@@ -5,10 +5,6 @@
   "types": "./dist/index.d.ts",
   "sideEffect": false,
   "dependencies": {
-    "@material-ui/core": "../empty",
-    "@material-ui/icons": "../empty",
-    "@material-ui/lab": "../empty",
-    "@material-ui/system": "../empty",
     "@mui/icons-material": "link:..\\empty",
     "@mui/lab": "link:..\\empty",
     "@mui/material": "link:..\\empty",

@@ -1,4 +1,4 @@
-import { Button, TextField } from '@material-ui/core'
+import { Button, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
@@ -7,13 +7,14 @@ import {
     formatEthereumAddress,
     TransactionStateType,
     useTokenTransferCallback,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { MaskIconOutlined } from '../../../../resources/MaskIcon'
 import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
+// eslint-disable-next-line import/no-deprecated
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 
 const useTransferDialogStylesNFT = makeStyles()((theme) => ({
@@ -30,6 +31,7 @@ const useTransferDialogStylesNFT = makeStyles()((theme) => ({
     },
 }))
 
+// eslint-disable-next-line import/no-deprecated
 export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ token: ERC721TokenDetailed }>) {
     const { token } = props.ComponentProps!
     const { onClose } = props

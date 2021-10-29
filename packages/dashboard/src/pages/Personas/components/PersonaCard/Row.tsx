@@ -1,7 +1,7 @@
 import { memo, useContext, useState } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
-import { Box, IconButton, MenuItem, Stack, Typography } from '@material-ui/core'
+import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
@@ -16,6 +16,7 @@ import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
 import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
 import { UserContext } from '../../../Settings/hooks/UserContext'
+import { styled } from '@mui/material/styles'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -41,6 +42,10 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
+
+const MenuText = styled('span')(`
+    font-size: 14px;
+`)
 
 export const PersonaRowCard = memo(() => {
     const { currentPersona, connectPersona, disconnectPersona, renamePersona, definedSocialNetworks } =
@@ -101,13 +106,17 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
         })
 
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_rename()}</MenuItem>,
-        <MenuItem onClick={exportPrivateKeyConfirmedPasswordCallback}>{t.personas_export_private()}</MenuItem>,
+        <MenuItem onClick={() => setRenameDialogOpen(true)}>
+            <MenuText>{t.personas_rename()}</MenuText>
+        </MenuItem>,
+        <MenuItem onClick={exportPrivateKeyConfirmedPasswordCallback}>
+            <MenuText>{t.personas_export_private()}</MenuText>
+        </MenuItem>,
         <MenuItem onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
-            {t.settings_global_backup_title()}
+            <MenuText>{t.settings_global_backup_title()}</MenuText>
         </MenuItem>,
         <MenuItem onClick={logoutConfirmedPasswordCallback} style={{ color: MaskColorVar.redMain }}>
-            {t.personas_logout()}
+            <MenuText>{t.personas_logout()}</MenuText>
         </MenuItem>,
     )
 

@@ -19,7 +19,7 @@ import {
     TableRow,
     Paper,
     IconButton,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import {
     FirstPage as FirstPageIcon,

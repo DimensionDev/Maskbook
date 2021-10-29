@@ -1,15 +1,16 @@
 import { memo, useState } from 'react'
+import { useAsync, useAsyncFn } from 'react-use'
+import { useHistory, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
-import { EnterDashboard } from '../../../components/EnterDashboard'
 import { MaskWalletIcon } from '@masknet/icons'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
+import { EnterDashboard } from '../../../components/EnterDashboard'
 import { useI18N } from '../../../../../utils'
-import { StyledInput } from '../../../components/StyledInput'
-import { LoadingButton } from '@material-ui/lab'
-import { useAsyncFn } from 'react-use'
+import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
+import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 
 const useStyles = makeStyles()((theme) => ({
     contain: {
@@ -40,25 +41,38 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
     },
     button: {
+        fontWeight: 600,
         marginTop: 50,
         padding: '9px 0',
         borderRadius: 20,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 }))
 
 const Unlock = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const location = useLocation()
     const [password, setPassword] = useState('')
 
     const history = useHistory()
-    const [{ loading, value }, handleUnlock] = useAsyncFn(async () => {
-        const result = await WalletRPC.decryptWallet(password)
-        if (result.ok) {
-            history.replace(PopupRoutes.Wallet)
-        }
-        return result
+
+    const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
+        return WalletRPC.unlockWallet(password)
     }, [password])
+
+    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
+
+    useAsync(async () => {
+        if (isLocked === false && !getLockStatusLoading) {
+            const from = new URLSearchParams(location.search).get('from')
+            history.replace(from ?? PopupRoutes.Wallet)
+        }
+    }, [isLocked, getLockStatusLoading, location.search])
 
     return (
         <>
@@ -69,19 +83,19 @@ const Unlock = memo(() => {
                 </div>
                 <div>
                     <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
-                    <StyledInput
+                    <PasswordField
                         value={password}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
-                        error={value?.err}
-                        helperText={value?.err ? t('popups_wallet_unlock_error_password') : ''}
+                        error={verified === false}
+                        helperText={verified === false ? t('popups_wallet_unlock_error_password') : ''}
                     />
                 </div>
                 <LoadingButton
                     loading={loading}
                     fullWidth
                     variant="contained"
-                    className={classes.button}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
                     disabled={!password}
                     onClick={handleUnlock}>
                     {t('unlock')}

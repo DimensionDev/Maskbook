@@ -11,8 +11,9 @@ import {
     listItemIconClasses,
     ListItemProps,
     listItemTextClasses,
-} from '@material-ui/core'
-import { ExpandLess, ExpandMore } from '@material-ui/icons'
+    useTheme,
+} from '@mui/material'
+import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useContext } from 'react'
 import { useMatch, useNavigate } from 'react-router-dom'
 import { DashboardContext } from './context'
@@ -31,7 +32,6 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
-import { useAppearance } from '../../pages/Personas/api'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -108,8 +108,10 @@ const ListSubTextItem = styled(ListItemText)(({ theme }) => ({
     },
 }))
 
-export interface NavigationProps {}
-export function Navigation({}: NavigationProps) {
+export interface NavigationProps {
+    onClose?: () => void
+}
+export function Navigation({ onClose }: NavigationProps) {
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
     const isWalletPath = useMatch(RoutePaths.Wallets)
     const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
@@ -117,16 +119,21 @@ export function Navigation({}: NavigationProps) {
 
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
+
+    const onExpand = (e: React.MouseEvent<HTMLElement>) => {
+        e.stopPropagation()
+        toggleNavigationExpand()
+    }
 
     return (
-        <List>
+        <List onClick={() => onClose?.()}>
             {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</LogoItem>}
             <ListItemLink to={RoutePaths.Personas}>
                 <ItemIcon>{useMatch(RoutePaths.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}</ItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItemLink to="" selected={!!useMatch(RoutePaths.Wallets)} onClick={toggleNavigationExpand}>
+            <ListItemLink to="" selected={!!useMatch(RoutePaths.Wallets)} onClick={onExpand}>
                 <ItemIcon>
                     {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
                         <MenuWalletsActiveIcon />

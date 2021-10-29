@@ -7,7 +7,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { makeStyles } from '@masknet/theme'
 import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../components/DataSource/usePostInfo'
 import { noop } from 'lodash-es'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 
@@ -16,7 +16,7 @@ const defaultOnPasteToCommentBox = async (
     _current: PostInfo,
     _realCurrent: HTMLElement | null,
 ) => {
-    MaskMessage.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
+    MaskMessages.events.autoPasteFailed.sendToLocal({ text: encryptedComment })
 }
 
 // TODO: should not rely on onPasteToCommentBoxFacebook.
@@ -44,14 +44,14 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
             [payload, postContent, info, dom, iv],
         )
 
-        if (!(payload && postContent)) return null
+        if (!postContent.items.length) return null
         return <CommentBox onSubmit={onCallback} {...props} />
     })
     return (signal: AbortSignal, current: PostInfo) => {
-        if (!current.commentBoxSelector) return noop
+        if (!current.comment?.commentBoxSelector) return noop
         const commentBoxWatcher = new MutationObserverWatcher(
-            current.commentBoxSelector.clone(),
-            current.rootNode || void 0,
+            current.comment.commentBoxSelector.clone(),
+            document.body,
         ).useForeach((node, key, meta) => {
             try {
                 mountPointCallback?.(meta)

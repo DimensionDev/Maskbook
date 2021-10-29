@@ -1,14 +1,15 @@
 {
     "name": "Mask Network",
-    "version": "1.37.0",
+    "version": "2.0.0",
     "manifest_version": 2,
     "permissions": ["storage", "downloads", "webNavigation", "activeTab"],
     "optional_permissions": ["<all_urls>", "notifications", "clipboardRead"],
     "background": { "page": "background.html" },
-    "options_ui": { "page": "index.html", "open_in_tab": true },
+    "options_ui": { "page": "dashboard.html", "open_in_tab": true },
     "icons": { "16": "16x16.png", "48": "48x48.png", "128": "128x128.png", "256": "256x256.png" },
-    "browser_action": { "default_popup": "browser-action.html" },
+    "browser_action": { "default_popup": "popups.html" },
     "homepage_url": "https://mask.io",
     "description": "The portal to the new & open Internet. Send encrypted message and decentralized Apps right on top of social networks.",
-    "web_accessible_resources": ["js/*", "*.png"]
+    "web_accessible_resources": ["js/*", "*.png"],
+    "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self';"
 }

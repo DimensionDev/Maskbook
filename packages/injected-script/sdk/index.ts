@@ -16,6 +16,9 @@ export function pasteInstagram(url: string) {
 export function inputText(text: string) {
     sendEvent('input', text)
 }
+export function hookInputUploadOnce(format: string, fileName: string, image: Uint8Array) {
+    sendEvent('hookInputUploadOnce', format, fileName, Array.from(image))
+}
 
 document.addEventListener(CustomEventId, (e) => {
     const r = decodeEvent((e as CustomEvent).detail)
@@ -38,6 +41,7 @@ document.addEventListener(CustomEventId, (e) => {
         case 'pasteImage':
         case 'instagramUpload':
         case 'untilEthBridgeOnline':
+        case 'hookInputUploadOnce':
             break
         default:
             const neverEvent: never = r[0]

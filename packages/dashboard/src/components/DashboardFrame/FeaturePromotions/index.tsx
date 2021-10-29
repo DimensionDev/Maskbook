@@ -1,12 +1,12 @@
 import { memo, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages, Services } from '../../../API'
 import { PLUGIN_IDS } from '../../../pages/Labs/constants'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
-import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../type'
-import { useAccount } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -15,6 +15,9 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         '& > *': {
             marginBottom: theme.spacing(2),
+        },
+        [theme.breakpoints.down('md')]: {
+            display: 'none',
         },
     },
     img: {
@@ -58,13 +61,13 @@ export const FeaturePromotions = memo(() => {
             return
         }
         if (isConnectedTwitter) {
-            await Services.Settings.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/home`, pluginId)
+            await Services.SocialNetwork.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/home`, pluginId)
             return
         }
         connectPersona(currentPersona.identifier, TWITTER_NETWORK)
     }
 
-    const openMaskNetwork = () => Services.Settings.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/realMaskNetwork`, '')
+    const openMaskNetwork = () => window.open(`${TWITTER_ADDRESS}/realMaskNetwork`)
 
     return (
         <div className={classes.container}>

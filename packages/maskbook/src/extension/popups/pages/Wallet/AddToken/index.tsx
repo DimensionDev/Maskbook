@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { Button, Stack, Typography } from '@material-ui/core'
+import { Button, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useWallet } from '@masknet/web3-shared'
+import { useWallet } from '@masknet/web3-shared-evm'
 import { ERC20TokenList } from '@masknet/shared'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
@@ -27,6 +27,7 @@ const useStyles = makeStyles()({
         marginBottom: 10,
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,
@@ -49,9 +50,9 @@ const AddToken = memo(() => {
             <div className={classes.header}>{t('add_token')}</div>
             <div className={classes.content}>
                 <Typography className={classes.label}>{t('popups_wallet_token')}</Typography>
-                <ERC20TokenList FixedSizeListProps={{ height: 290, itemSize: 54 }} blacklist={excludeTokens} />
+                <ERC20TokenList FixedSizeListProps={{ height: 340, itemSize: 54 }} blacklist={excludeTokens} />
             </div>
-            <Stack height="100%" sx={{ px: 2 }} justifyContent="center" alignItems="center">
+            <Stack height="100%" sx={{ px: 2, pb: 2 }} justifyContent="center" alignItems="center">
                 <Button fullWidth className={classes.button} onClick={history.goBack}>
                     {t('popups_wallet_go_back')}
                 </Button>

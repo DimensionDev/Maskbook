@@ -1,10 +1,10 @@
-import { ListItem, ListItemText, Checkbox } from '@material-ui/core'
+import { ListItem, ListItemText, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import { ChangeEvent, useCallback } from 'react'
-import type { DefaultComponentProps } from '@material-ui/core/OverridableComponent'
-import type { CheckboxProps } from '@material-ui/core/Checkbox'
-import type { ListItemTypeMap } from '@material-ui/core/ListItem'
+import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
+import type { CheckboxProps } from '@mui/material/Checkbox'
+import type { ListItemTypeMap } from '@mui/material/ListItem'
 import type { UnlockLocks } from '../types'
 
 const useStyle = makeStyles()({

@@ -1,4 +1,4 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'

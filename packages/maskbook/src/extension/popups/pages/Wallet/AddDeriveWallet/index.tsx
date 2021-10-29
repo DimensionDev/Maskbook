@@ -1,18 +1,21 @@
-import { memo, useCallback, useState } from 'react'
-import { Button, Typography } from '@material-ui/core'
+import { memo, useCallback, useRef, useState } from 'react'
+import { useHistory, useLocation } from 'react-router-dom'
+import { Typography, TablePagination, tablePaginationClasses, TableContainer } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
-import { useLocation } from 'react-router-dom'
-import { useAsync } from 'react-use'
+import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
-import { currySameAddress, useWallets } from '@masknet/web3-shared'
+import { currySameAddress, useWallets } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
+import { LoadingButton } from '@mui/lab'
+import { PopupRoutes } from '../../../index'
 
 const useStyles = makeStyles()({
     container: {
         padding: '16px 10px',
+        backgroundColor: '#ffffff',
     },
     header: {
         display: 'flex',
@@ -33,22 +36,43 @@ const useStyles = makeStyles()({
         lineHeight: '16px',
         fontWeight: 600,
     },
-    controller: {
-        display: 'grid',
-        marginTop: 24,
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 20,
-    },
     button: {
+        fontWeight: 600,
         padding: '10px 0',
         borderRadius: 20,
         fontSize: 14,
         lineHeight: '20px',
+        marginTop: 10,
+    },
+    pagination: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 4,
+    },
+    paginationIcon: {
+        border: '1px solid #E4E8F1',
+        borderRadius: 4,
+        fontSize: 20,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 4,
+    },
+    toolbar: {
+        padding: 0,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 })
 
 const AddDeriveWallet = memo(() => {
+    const indexes = useRef(new Set())
     const { t } = useI18N()
+    const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
     const wallets = useWallets()
@@ -59,29 +83,45 @@ const AddDeriveWallet = memo(() => {
 
     const { loading, value: dataSource } = useAsync(async () => {
         if (mnemonic) {
-            const derivedWallets = await WalletRPC.queryDerivableWalletFromPhrase(mnemonic.split(' '), '', page + 1)
+            const derivableAccounts = await WalletRPC.getDerivableAccounts(mnemonic, page)
 
-            return derivedWallets.map((derivedWallet) => {
+            return derivableAccounts.map((derivedWallet) => {
                 const added = !!wallets.find(currySameAddress(derivedWallet.address))
 
                 return {
                     added,
                     address: derivedWallet.address,
-                    balance: derivedWallet.balance ?? '0',
                 }
             })
         }
         return []
     }, [mnemonic, wallets, page])
 
-    const onAdd = useCallback(
-        async (index) => {
-            if (mnemonic) {
-                await WalletRPC.deriveWalletFromIndex(mnemonic.split(' '), '', index, walletName ?? 'Account')
+    const onCheck = useCallback(
+        async (checked, index) => {
+            if (checked) {
+                indexes.current.add(page + index)
+            } else {
+                indexes.current.delete(page + index)
             }
         },
-        [mnemonic],
+        [page],
     )
+
+    const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
+        const unDeriveWallets = Array.from(indexes.current)
+        if (!mnemonic) return
+        await Promise.all(
+            unDeriveWallets.map(async (pathIndex) =>
+                WalletRPC.recoverWalletFromMnemonic(
+                    `${walletName}${pathIndex}` ?? '',
+                    mnemonic,
+                    `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
+                ),
+            ),
+        )
+        history.replace(PopupRoutes.Wallet)
+    }, [mnemonic, walletName])
 
     return (
         <div className={classes.container}>
@@ -94,23 +134,50 @@ const AddDeriveWallet = memo(() => {
                     path: HD_PATH_WITHOUT_INDEX_ETHEREUM,
                 })}
             </Typography>
-            <DeriveWalletTable loading={loading} dataSource={dataSource} onAdd={onAdd} />
-            <div className={classes.controller}>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    disabled={page === 0 || loading}
-                    onClick={() => setPage((prev) => prev - 1)}>
-                    {t('popups_wallet_previous')}
-                </Button>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    onClick={() => setPage((prev) => prev + 1)}
-                    disabled={loading}>
-                    {t('popups_wallet_next')}
-                </Button>
-            </div>
+            <TableContainer sx={{ maxHeight: 320 }}>
+                <DeriveWalletTable
+                    loading={loading}
+                    dataSource={dataSource}
+                    onCheck={onCheck}
+                    confirmLoading={confirmLoading}
+                />
+            </TableContainer>
+            {!loading ? (
+                <TablePagination
+                    count={-1}
+                    component="div"
+                    onPageChange={() => {}}
+                    page={page}
+                    rowsPerPage={10}
+                    rowsPerPageOptions={[10]}
+                    labelDisplayedRows={() => null}
+                    sx={{
+                        [`& .${tablePaginationClasses.actions}`]: {
+                            marginLeft: 0,
+                        },
+                    }}
+                    backIconButtonProps={{
+                        onClick: () => setPage((prev) => prev - 1),
+                        size: 'small',
+                        disabled: page === 0 || confirmLoading,
+                    }}
+                    nextIconButtonProps={{
+                        onClick: () => setPage((prev) => prev + 1),
+                        size: 'small',
+                        disabled: confirmLoading,
+                    }}
+                    classes={{ root: classes.pagination, toolbar: classes.toolbar }}
+                />
+            ) : null}
+            <LoadingButton
+                loading={confirmLoading}
+                disabled={confirmLoading || loading}
+                variant="contained"
+                classes={{ root: classes.button, disabled: classes.disabled }}
+                onClick={onConfirm}
+                fullWidth>
+                {t('popups_wallet_done')}
+            </LoadingButton>
         </div>
     )
 })

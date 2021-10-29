@@ -1,11 +1,10 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { TransactionState, TransactionStateType, useAccount } from '@masknet/web3-shared'
+import { TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
-import Services from '../../../../extension/service'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 
 interface FailedCall {
@@ -28,6 +27,7 @@ interface FailedCall extends SwapCallEstimate {
 }
 
 export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlippage = SLIPPAGE_DEFAULT) {
+    const web3 = useWeb3()
     const account = useAccount()
     const tradeParameters = useTradeParameters(trade, allowedSlippage)
 
@@ -61,7 +61,8 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                         : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
                 }
 
-                return Services.Ethereum.estimateGas(config)
+                return web3.eth
+                    .estimateGas(config)
                     .then((gasEstimate) => {
                         return {
                             call: x,
@@ -69,7 +70,8 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                         }
                     })
                     .catch((error) => {
-                        return Services.Ethereum.call(config)
+                        return web3.eth
+                            .call(config)
                             .then(() => {
                                 return {
                                     call: x,
@@ -126,40 +128,44 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 call: { address, calldata, value },
             } = bestCallOption
 
-            try {
-                const hash = await Services.Ethereum.sendTransaction({
+            web3.eth.sendTransaction(
+                {
                     from: account,
                     to: address,
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
-                })
-                setTradeState({
-                    type: TransactionStateType.HASH,
-                    hash,
-                })
-                resolve(hash)
-            } catch (error) {
-                if ((error as any)?.code) {
-                    const error_ = new Error(
-                        (error as any)?.message === 'Unable to add more requests.'
-                            ? 'Unable to add more requests.'
-                            : 'Transaction rejected.',
-                    )
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error: error_,
-                    })
-                    reject(error_)
-                } else {
-                    setTradeState({
-                        type: TransactionStateType.FAILED,
-                        error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
-                    })
-                }
-            }
+                },
+                async (error, hash) => {
+                    if (error) {
+                        if ((error as any)?.code) {
+                            const error_ = new Error(
+                                (error as any)?.message === 'Unable to add more requests.'
+                                    ? 'Unable to add more requests.'
+                                    : 'Transaction rejected.',
+                            )
+                            setTradeState({
+                                type: TransactionStateType.FAILED,
+                                error: error_,
+                            })
+                            reject(error_)
+                        } else {
+                            setTradeState({
+                                type: TransactionStateType.FAILED,
+                                error: new Error(`Swap failed: ${swapErrorToUserReadableMessage(error)}`),
+                            })
+                        }
+                    } else {
+                        setTradeState({
+                            type: TransactionStateType.HASH,
+                            hash: hash,
+                        })
+                        resolve(hash)
+                    }
+                },
+            )
         })
-    }, [account, tradeParameters])
+    }, [web3, account, tradeParameters])
 
     const resetCallback = useCallback(() => {
         setTradeState({

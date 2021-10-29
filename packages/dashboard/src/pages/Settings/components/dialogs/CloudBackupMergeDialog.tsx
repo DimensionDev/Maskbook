@@ -1,24 +1,17 @@
 import { useEffect, useState } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
-import {
-    Box,
-    FormControlLabel,
-    formControlLabelClasses,
-    Radio,
-    RadioGroup,
-    styled,
-    Typography,
-} from '@material-ui/core'
-import LoadingButton from '@material-ui/lab/LoadingButton'
+import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styled, Typography } from '@mui/material'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
 import type { BackupFileInfo } from '../../type'
 import { useDashboardI18N } from '../../../../locales'
-import { Services } from '../../../../API'
+import { PluginServices, Services } from '../../../../API'
 import { fetchBackupValue } from '../../api'
 import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import PasswordField from '../../../../components/PasswordField'
+import { PopupRoutes } from '@masknet/shared'
 
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
@@ -54,9 +47,20 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
             const backupText = JSON.stringify(decode(decrypted))
             const data = await Services.Welcome.parseBackupStr(backupText)
 
+            if (
+                data?.info.wallets &&
+                (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
+            ) {
+                await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId: data.id })
+                return
+            }
+
             if (data?.id) {
                 await Services.Welcome.checkPermissionsAndRestore(data.id)
             }
+
+            // Set default wallet
+            if (data?.info?.wallets) await PluginServices.Wallet.setDefaultWallet()
 
             onMerged(true)
             showSnackbar(t.settings_alert_merge_success(), { variant: 'success' })

@@ -8,7 +8,7 @@ import {
     useAccount,
     useChainId,
     useTraderConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useCallback, useState } from 'react'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
@@ -109,14 +109,14 @@ export function useTradeCallback(
 
         // send transaction and wait for hash
         return new Promise<void>((resolve, reject) => {
-            const promiEvent = tx.send(config as PayableTx)
-            promiEvent
+            tx.send(config as PayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setTradeState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setTradeState({

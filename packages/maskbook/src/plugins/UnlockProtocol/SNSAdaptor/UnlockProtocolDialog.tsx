@@ -1,5 +1,5 @@
-import { useAccount, useChainId } from '@masknet/web3-shared'
-import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@material-ui/core'
+import { useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { DialogActions, DialogContent, DialogProps, Chip, Button, InputBase } from '@mui/material'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'

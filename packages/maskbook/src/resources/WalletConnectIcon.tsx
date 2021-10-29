@@ -1,4 +1,4 @@
-import { SvgIcon, SvgIconProps } from '@material-ui/core'
+import { SvgIcon, SvgIconProps } from '@mui/material'
 
 export function WalletConnectIcon(props: SvgIconProps) {
     return (

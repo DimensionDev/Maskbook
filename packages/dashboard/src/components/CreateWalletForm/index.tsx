@@ -1,4 +1,4 @@
-import { FormControl, ListItemIcon, MenuItem, Select, styled, Typography, FilledInput } from '@material-ui/core'
+import { FormControl, ListItemIcon, MenuItem, Select, styled, Typography, FilledInput } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import { useDashboardI18N } from '../../locales'

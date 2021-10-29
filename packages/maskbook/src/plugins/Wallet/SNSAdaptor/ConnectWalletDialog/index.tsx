@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { safeUnreachable } from '@dimensiondev/kit'
 import {
@@ -11,7 +11,7 @@ import {
     ProviderType,
     resolveNetworkName,
     resolveProviderName,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { delay } from '../../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'

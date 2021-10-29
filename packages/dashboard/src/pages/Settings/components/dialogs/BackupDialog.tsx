@@ -4,9 +4,9 @@ import { useAsync, useAsyncFn } from 'react-use'
 import BackupContentSelector, { BackupContentCheckedStatus } from '../BackupContentSelector'
 import { useDashboardI18N } from '../../../../locales'
 import { MaskDialog, useCustomSnackbar } from '@masknet/theme'
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { UserContext } from '../../hooks/UserContext'
-import LoadingButton from '@material-ui/lab/LoadingButton'
+import LoadingButton from '@mui/lab/LoadingButton'
 import { fetchUploadLink, uploadBackupValue, VerifyCodeRequest } from '../../api'
 import formatDateTime from 'date-fns/format'
 import { LoadingCard } from '../../../../components/Restore/steps/LoadingCard'
@@ -45,17 +45,15 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
             return
         }
 
-        if (showPassword.wallet) {
-            // for test
-            // await PluginServices.Wallet.createEncryptedWalletStore(paymentPassword)
-            const result = await PluginServices.Wallet.decryptWallet(paymentPassword)
-            if (!result.ok) {
-                setIncorrectPaymentPassword(true)
-                return
-            }
-        }
-
         try {
+            if (showPassword.wallet) {
+                const verified = await PluginServices.Wallet.verifyPassword(paymentPassword)
+                if (!verified) {
+                    setIncorrectPaymentPassword(true)
+                    return
+                }
+            }
+
             const fileJson = await Services.Welcome.createBackupFile({
                 noPosts: !showPassword.base,
                 noPersonas: !showPassword.base,

@@ -21,5 +21,5 @@ const useStyles = makeStyles()((theme) => ({
 
 export const LoadingAnimation = (props: SvgIconProps) => {
     const { classes } = useStyles()
-    return <LoadingIcon className={classNames(classes.animated, props.className)} {...props} />
+    return <LoadingIcon {...props} className={classNames(classes.animated, props.className)} />
 }

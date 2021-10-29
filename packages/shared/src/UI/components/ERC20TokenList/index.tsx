@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useEffect, useMemo, useState } from 'react'
 import { getERC20TokenListItem } from './ERC20TokenListItem'
 import { uniqBy } from 'lodash-es'
 import {
@@ -17,7 +17,7 @@ import {
     useEthereumConstants,
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { MaskFixedSizeListProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'

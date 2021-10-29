@@ -1,6 +1,6 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { useEffect, useState, useContext } from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import { passwordRegexp } from '../../regexp'
@@ -79,7 +79,7 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
             open={open}
             onClose={handleClose}
             onConfirm={handleConfirm}>
-            <Box sx={{ minHeight: '160px' }}>
+            <Box sx={{ minHeight: '160px' }} py={1}>
                 {user.backupPassword ? (
                     <PasswordField
                         fullWidth

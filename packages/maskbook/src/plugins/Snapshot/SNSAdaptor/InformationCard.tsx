@@ -4,10 +4,10 @@ import {
     resolveBlockLinkOnExplorer,
     resolveIPFSLink,
     useChainId,
-} from '@masknet/web3-shared'
-import { Avatar, Box, Link, Typography } from '@material-ui/core'
+} from '@masknet/web3-shared-evm'
+import { Avatar, Box, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import OpenInNew from '@material-ui/icons/OpenInNew'
+import OpenInNew from '@mui/icons-material/OpenInNew'
 import formatDateTime from 'date-fns/format'
 import { useContext } from 'react'
 import { TokenIcon } from '@masknet/shared'
@@ -67,12 +67,9 @@ export function InformationCard(props: InformationCardProps) {
     const chainId = useChainId()
 
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal, message },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
 
-    const { start, end, snapshot } = message.payload
-    const strategies = message.payload.metadata.strategies ?? proposal.strategies
+    const { start, end, snapshot, strategies } = proposal
     return (
         <SnapshotCard title={t('plugin_snapshot_info_title')}>
             <Typography component="div">

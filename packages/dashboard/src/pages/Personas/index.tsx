@@ -1,9 +1,9 @@
-import { Paper, Stack, Tab, Tabs } from '@material-ui/core'
-import { makeStyles, MaskColorVar, useSnackbar } from '@masknet/theme'
+import { Paper, Stack, Tab, Tabs } from '@mui/material'
+import { makeStyles, MaskColorVar, useCustomSnackbar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
 import { useEffect, useState } from 'react'
 import { capitalize } from 'lodash-es'
-import { TabContext, TabPanel } from '@material-ui/lab'
+import { TabContext, TabPanel } from '@mui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
@@ -48,13 +48,13 @@ function Personas() {
     const { classes } = useStyles()
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const { drawerOpen, toggleDrawer, personas, currentPersona, connectPersona, definedSocialNetworks } =
         PersonaContext.useContainer()
 
     useEffect(() => {
         if (personas?.length === 0) {
-            enqueueSnackbar(t.personas_setup_tip(), { variant: 'warning' })
+            showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
             navigate(RoutePaths.Setup)
         }
     }, [personas])

@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionEventType, TransactionStateType, useAccount, useTransactionState } from '@masknet/web3-shared'
+import { TransactionEventType, TransactionStateType, useAccount, useTransactionState } from '@masknet/web3-shared-evm'
 import type { AirdropPacket } from '../apis'
 import { useAirdropContract } from '../contracts/useAirdropContract'
 
@@ -83,12 +83,12 @@ export function useClaimCallback(packet?: AirdropPacket) {
                 })
                 reject(error)
             }
-            const promiEvent = AirdropContract.methods.claim(...claimParams).send(config as NonPayableTx)
-
-            promiEvent
-                .on(TransactionEventType.ERROR, onFailed)
+            AirdropContract.methods
+                .claim(...claimParams)
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
+                .on(TransactionEventType.ERROR, onFailed)
         })
     }, [AirdropContract, account, packet])
 

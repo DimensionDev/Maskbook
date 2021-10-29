@@ -1,6 +1,6 @@
-import { Button, DialogActions, DialogContent, Typography } from '@material-ui/core'
+import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { MaskColorVar, MaskDialog, useSnackbar } from '@masknet/theme'
+import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { DashboardTrans, useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
 import type { PersonaIdentifier } from '@masknet/shared'
@@ -19,7 +19,7 @@ export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClo
     const t = useDashboardI18N()
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const handleDelete = useCallback(async () => {
         await Services.Identity.deletePersona(identifier, 'delete even with private')
@@ -28,7 +28,7 @@ export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClo
         if (lastedPersona) {
             await changeCurrentPersona(lastedPersona.identifier)
         } else {
-            enqueueSnackbar(t.personas_setup_tip(), { variant: 'warning' })
+            showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
             navigate(RoutePaths.Setup)
         }
     }, [nickname, identifier])

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { MaskTextField, useSnackbar } from '@masknet/theme'
+import { MaskTextField, useCustomSnackbar } from '@masknet/theme'
 import {
     Body,
     ColumnContentLayout,
@@ -9,7 +9,7 @@ import {
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
 import { delay } from '@masknet/shared'
@@ -32,7 +32,7 @@ export const PersonaCreate = () => {
     const navigate = useNavigate()
     const createPersona = useCreatePersonaV2()
     const createPersonaByPrivateKey = useCreatePersonaByPrivateKey()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const { state } = useLocation() as { state: { mnemonic: string[]; privateKey: string } }
 
@@ -55,7 +55,7 @@ export const PersonaCreate = () => {
                 : await createPersonaByPrivateKey(state?.privateKey, personaName)
 
             await changeCurrentPersona(identifier)
-            enqueueSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
+            showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
 
             await delay(300)
             navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
@@ -84,7 +84,12 @@ export const PersonaCreate = () => {
                         helperText={error}
                     />
                     <ButtonContainer>
-                        <LoadingButton variant="rounded" color="primary" onClick={create} disabled={!personaName}>
+                        <LoadingButton
+                            size="large"
+                            variant="rounded"
+                            color="primary"
+                            onClick={create}
+                            disabled={!personaName}>
                             {t.next()}
                         </LoadingButton>
                     </ButtonContainer>

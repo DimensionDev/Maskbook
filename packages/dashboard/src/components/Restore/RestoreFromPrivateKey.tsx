@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { MaskTextField } from '@masknet/theme'
-import { Box, Button } from '@material-ui/core'
+import { Box, Button } from '@mui/material'
 import { useDashboardI18N } from '../../locales'
 import { MaskAlert } from '../MaskAlert'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
@@ -30,7 +30,7 @@ export const RestoreFromPrivateKey = memo(() => {
         control,
         handleSubmit,
         setError,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isDirty },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
         defaultValues: {
@@ -77,7 +77,12 @@ export const RestoreFromPrivateKey = memo(() => {
                         />
                     </Box>
                     <ButtonContainer>
-                        <Button variant="rounded" color="primary" type="submit" disabled={isSubmitting}>
+                        <Button
+                            size="large"
+                            variant="rounded"
+                            color="primary"
+                            type="submit"
+                            disabled={isSubmitting || !isDirty}>
                             {t.confirm()}
                         </Button>
                     </ButtonContainer>

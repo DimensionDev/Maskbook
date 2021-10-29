@@ -1,9 +1,9 @@
-import { Alert, AlertTitle, Box, Button, Link, Paper } from '@material-ui/core'
+import { Alert, AlertTitle, Box, Button, Link, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import type { Coin } from '../../types'
 import { useApprovedTokens } from '../../trending/useApprovedTokens'
-import { resolveTokenLinkOnExplorer, ChainId, EthereumTokenType } from '@masknet/web3-shared'
+import { resolveTokenLinkOnExplorer, ChainId, EthereumTokenType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {

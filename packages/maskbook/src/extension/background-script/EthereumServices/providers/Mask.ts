@@ -1,6 +1,6 @@
 import MaskWallet from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { ChainId, getChainRPC } from '@masknet/web3-shared'
+import { ChainId, getChainRPC } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
 import { getWallets } from '../../../../plugins/Wallet/services'
 
@@ -66,7 +66,7 @@ export function createWeb3({
 
 export async function requestAccounts() {
     const wallets = await getWallets()
-    const accounts = wallets.filter((x) => x._private_key_ || x.mnemonic.length).map((y) => y.address)
+    const accounts = wallets.filter((x) => x.storedKeyInfo).map((y) => y.address)
     return {
         accounts,
         chainId: currentChainIdSettings.value,

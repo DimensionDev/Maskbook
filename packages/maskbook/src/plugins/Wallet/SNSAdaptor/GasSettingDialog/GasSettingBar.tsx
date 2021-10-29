@@ -7,16 +7,28 @@ import {
     useChainId,
     useGasPrice,
     useNativeTokenDetailed,
+<<<<<<< HEAD
 } from '@masknet/web3-shared'
 import { Tune } from '@mui/icons-material'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { Box, IconButton, Typography } from '@material-ui/core'
+=======
+} from '@masknet/web3-shared-evm'
+import { Tune } from '@mui/icons-material'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
+import { Box, IconButton, Typography } from '@mui/material'
+>>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
 import { WalletMessages } from '../../messages'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 
 export interface GasSettingBarProps {
+<<<<<<< HEAD
     gasLimit: string
+=======
+    gasLimit: number
+>>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value

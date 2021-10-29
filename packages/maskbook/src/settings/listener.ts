@@ -8,7 +8,7 @@ import {
 } from './settings'
 import {
     currentAccountSettings,
-    currentAccountMaskWalletSettings,
+    currentMaskWalletAccountWalletSettings,
     currentBalanceSettings,
     currentEtherPriceSettings,
     currentBlockNumberSettings,
@@ -19,7 +19,7 @@ import {
     currentNetworkSettings,
     currentPortfolioDataProviderSettings,
     currentProviderSettings,
-    currentIsMaskWalletLockedSettings,
+    currentMaskWalletLockStatusSettings,
     currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
 import {
@@ -46,7 +46,7 @@ export function ToBeListened() {
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,
-        currentAccountMaskWalletSettings,
+        currentAccountMaskWalletSettings: currentMaskWalletAccountWalletSettings,
         currentMaskWalletChainIdSettings,
         currentMaskWalletNetworkSettings,
         currentPortfolioDataProviderSettings,
@@ -57,7 +57,7 @@ export function ToBeListened() {
         binanceNetworkTradeProviderSettings,
         arbitrumNetworkTradeProviderSettings,
         xdaiNetworkTradeProviderSettings,
-        currentIsMaskWalletLockedSettings,
+        currentMaskWalletLockedSettings: currentMaskWalletLockStatusSettings,
     }
 }
 export type SettingsEventName = ReturnType<typeof ToBeListened>

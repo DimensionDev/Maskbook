@@ -1,5 +1,5 @@
 import { memo, useCallback } from 'react'
-import { Box, MenuItem, Typography } from '@material-ui/core'
+import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../utils'
 import {
@@ -11,7 +11,7 @@ import {
     ProviderType,
     resolveNetworkName,
     useAccount,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { currentMaskWalletChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenu, useValueRef } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'

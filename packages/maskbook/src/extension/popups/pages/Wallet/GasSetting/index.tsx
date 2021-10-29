@@ -1,14 +1,14 @@
 import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { useValueRef } from '@masknet/shared'
-import { NetworkType } from '@masknet/web3-shared'
+import { NetworkType } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import { GasSetting1559 } from './GasSetting1559'
 import { Prior1559GasSetting } from './Prior1559GasSetting'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     container: {
         padding: 16,
         '& > *': {

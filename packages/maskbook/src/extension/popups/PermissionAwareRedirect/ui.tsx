@@ -1,4 +1,4 @@
-import { Typography, Card, CardContent, Button, CardActions } from '@material-ui/core'
+import { Typography, Card, CardContent, Button, CardActions } from '@mui/material'
 
 export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {
     if (props.granted) {

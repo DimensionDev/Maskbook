@@ -1,5 +1,5 @@
 import { FC, memo } from 'react'
-import { Box, Button, Stack, Typography } from '@material-ui/core'
+import { Box, Button, Stack, Typography } from '@mui/material'
 import {
     getNetworkName,
     ProviderType,
@@ -8,11 +8,10 @@ import {
     useChainId,
     useWallet,
     useWeb3StateContext,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { FormattedAddress, ProviderIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { FormattedAddress, LoadingAnimation, ProviderIcon, useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
-import { LoadingIcon } from '@masknet/icons'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
 import { useNetworkSelector } from './useNetworkSelector'
@@ -47,6 +46,10 @@ export const WalletStateBar = memo(() => {
 
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
 
+    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
+        PluginMessages.Wallet.events.walletStatusDialogUpdated,
+    )
+
     const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.selectProviderDialogUpdated,
     )
@@ -61,7 +64,7 @@ export const WalletStateBar = memo(() => {
             networkName={getNetworkName(chainId)}
             chainColor={chainColor}
             providerType={providerType}
-            openConnectWalletDialog={openConnectWalletDialog}
+            openConnectWalletDialog={openWalletStatusDialog}
             openMenu={openMenu}
             walletName={wallet.name ?? ''}
             walletAddress={wallet.address}>
@@ -117,7 +120,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     justifyContent="center"
                     sx={{ px: 2, background: MaskColorVar.orangeMain.alpha(0.1), color: MaskColorVar.orangeMain }}
                     className={classes.bar}>
-                    <LoadingIcon sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
+                    <LoadingAnimation sx={{ fontSize: 12, mr: 0.8, color: MaskColorVar.orangeMain }} />
                     <Typography component="span" fontSize={12} display="inline-block">
                         {t.wallet_transactions_pending()}
                     </Typography>

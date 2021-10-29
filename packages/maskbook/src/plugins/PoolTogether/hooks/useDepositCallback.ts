@@ -7,7 +7,7 @@ import {
     useTransactionState,
     TransactionStateType,
     TransactionEventType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { usePoolTogetherPoolContract } from '../contracts/usePoolTogetherPool'
 
 /**
@@ -61,11 +61,12 @@ export function useDepositCallback(
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
-            const promiEvent = poolContract.methods.depositTo(account, amount, controlledToken, referrer).send({
-                ...config,
-                gas: estimatedGas,
-            })
-            promiEvent
+            poolContract.methods
+                .depositTo(account, amount, controlledToken, referrer)
+                .send({
+                    ...config,
+                    gas: estimatedGas,
+                })
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setDepositState({
                         type: TransactionStateType.HASH,

@@ -1,15 +1,6 @@
 import { useContext, useRef, useEffect, useState, useMemo } from 'react'
 import classNames from 'classnames'
-import {
-    Box,
-    List,
-    ListItem,
-    Typography,
-    LinearProgress,
-    styled,
-    Button,
-    linearProgressClasses,
-} from '@material-ui/core'
+import { Box, List, ListItem, Typography, LinearProgress, styled, Button, linearProgressClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ShadowRootTooltip, useI18N } from '../../../utils'
 import millify from 'millify'
@@ -76,9 +67,7 @@ const StyledLinearProgress = styled(LinearProgress)`
 
 function Content() {
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     const { payload: votes } = useVotes(identifier)
     const {
         payload: { results },
@@ -183,9 +172,7 @@ function Content() {
 function Loading(props: React.PropsWithChildren<{}>) {
     const { t } = useI18N()
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     return (
         <LoadingCard
             title={proposal.isEnd ? t('plugin_snapshot_result_title') : t('plugin_snapshot_current_result_title')}>
@@ -197,9 +184,7 @@ function Loading(props: React.PropsWithChildren<{}>) {
 function Fail(props: React.PropsWithChildren<{}>) {
     const { t } = useI18N()
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { proposal },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
     const retry = useRetry()
     return (
         <LoadingFailCard

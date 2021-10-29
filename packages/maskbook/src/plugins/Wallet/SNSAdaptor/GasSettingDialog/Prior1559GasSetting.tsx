@@ -1,7 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { formatWeiToEther, formatWeiToGwei, GasOption, useChainId, useNativeTokenDetailed } from '@masknet/web3-shared'
-import { Typography } from '@material-ui/core'
-import { LoadingButton } from '@material-ui/lab'
+import {
+    formatWeiToEther,
+    formatWeiToGwei,
+    GasOption,
+    useChainId,
+    useNativeTokenDetailed,
+} from '@masknet/web3-shared-evm'
+import { Typography } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-es'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
@@ -17,7 +23,7 @@ import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
-    ({ gasLimit, gasOption = GasOption.Medium, onConfirm = noop }) => {
+    ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
         const { classes } = useGasSettingStyles()
         const { t } = useI18N()
         const chainId = useChainId()
@@ -26,8 +32,8 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
 
         const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
-        //#region Get gas now from debank
-        const { value: gasNow, loading: getGasNowLoading } = useAsync(async () => {
+        //#region Get gas options from debank
+        const { value: gasOptions, loading: getGasOptionsLoading } = useAsync(async () => {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
             if (!response) return { slow: 0, standard: 0, fast: 0 }
             return {
@@ -43,32 +49,30 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                 {
                     title: t('popups_wallet_gas_fee_settings_low'),
                     gasOption: GasOption.Low,
-                    gasPrice: gasNow?.slow ?? 0,
+                    gasPrice: gasOptions?.slow ?? 0,
                 },
                 {
                     title: t('popups_wallet_gas_fee_settings_medium'),
                     gasOption: GasOption.Medium,
-                    gasPrice: gasNow?.standard ?? 0,
+                    gasPrice: gasOptions?.standard ?? 0,
                 },
                 {
                     title: t('popups_wallet_gas_fee_settings_high'),
                     gasOption: GasOption.High,
-                    gasPrice: gasNow?.fast ?? 0,
+                    gasPrice: gasOptions?.fast ?? 0,
                 },
             ],
-            [gasNow],
+            [gasOptions],
         )
         const currentGasOption = options.find((opt) => opt.gasOption === selectedGasOption)
-
-        const minGasLimit = gasLimit
 
         const schema = useMemo(() => {
             return zod.object({
                 gasLimit: zod
-                    .string()
+                    .number()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
-                        (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
+                        (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit),
                         t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                     ),
                 gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
@@ -85,7 +89,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             mode: 'onChange',
             resolver: zodResolver(schema),
             defaultValues: {
-                gasLimit: gasLimit ?? '',
+                gasLimit: gasLimit ?? 0,
                 gasPrice: '',
             },
             context: {
@@ -96,7 +100,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const [inputGasLimit] = watch(['gasLimit'])
 
         useUpdateEffect(() => {
-            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+            if (gasLimit) setValue('gasLimit', gasLimit)
         }, [gasLimit, setValue])
 
         useEffect(() => {
@@ -105,12 +109,16 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             }
         }, [currentGasOption, setValue])
 
-        const handleConfirm = useCallback((data: zod.infer<typeof schema>) => {
-            onConfirm({
-                gasLimit: data.gasLimit,
-                gasPrice: toWei(data.gasPrice, 'gwei'),
-            })
-        }, [])
+        const handleConfirm = useCallback(
+            (data: zod.infer<typeof schema>) => {
+                onConfirm({
+                    gasLimit: data.gasLimit,
+                    gasPrice: toWei(data.gasPrice, 'gwei'),
+                    gasOption: selectedGasOption,
+                })
+            },
+            [selectedGasOption],
+        )
 
         const onSubmit = handleSubmit(handleConfirm)
 
@@ -178,7 +186,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     />
                 </form>
                 <LoadingButton
-                    loading={getGasNowLoading}
+                    loading={getGasOptionsLoading}
                     variant="contained"
                     fullWidth
                     className={classes.button}

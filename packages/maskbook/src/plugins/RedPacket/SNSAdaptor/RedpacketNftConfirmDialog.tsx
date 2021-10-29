@@ -11,13 +11,13 @@ import {
     useWeb3,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@material-ui/core'
+import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import LaunchIcon from '@material-ui/icons/Launch'
+import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../../../utils'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -25,7 +25,7 @@ import { useMemo, useCallback, useEffect, useState } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { RedPacketNftMetaKey } from '../constants'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { RedPacketRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({

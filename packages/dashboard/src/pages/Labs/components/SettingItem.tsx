@@ -1,5 +1,5 @@
 import { MaskColorVar } from '@masknet/theme'
-import { formControlLabelClasses } from '@material-ui/core'
+import { formControlLabelClasses } from '@mui/material'
 import {
     FormControl,
     FormControlLabel,
@@ -9,7 +9,7 @@ import {
     RadioGroup,
     useRadioGroup,
     styled,
-} from '@material-ui/core'
+} from '@mui/material'
 
 interface option {
     label: string

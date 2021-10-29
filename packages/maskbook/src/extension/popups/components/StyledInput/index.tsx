@@ -1,5 +1,5 @@
 import { forwardRef, memo } from 'react'
-import { TextFieldProps, TextField } from '@material-ui/core'
+import { TextFieldProps, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 
@@ -31,6 +31,7 @@ export const StyledInput = memo(
                 autoComplete="off"
                 inputProps={{ className: classes.input, 'aria-autocomplete': 'none' }}
                 InputProps={{ ...props.InputProps, disableUnderline: true, classes: { root: classes.textFieldInput } }}
+                FormHelperTextProps={{ ...props.FormHelperTextProps, style: { marginLeft: 0 } }}
             />
         )
     }),

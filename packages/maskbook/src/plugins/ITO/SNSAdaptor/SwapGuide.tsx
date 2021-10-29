@@ -5,8 +5,8 @@ import {
     ZERO,
     isSameAddress,
     useTokenConstants,
-} from '@masknet/web3-shared'
-import { DialogContent } from '@material-ui/core'
+} from '@masknet/web3-shared-evm'
+import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'

@@ -1,13 +1,13 @@
 import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
-import { ERC721ContractDetailed, useERC721ContractBalance, useAccount, isSameAddress } from '@masknet/web3-shared'
+import { ERC721ContractDetailed, useERC721ContractBalance, useAccount, isSameAddress } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
-import { Box, Typography, CircularProgress } from '@material-ui/core'
+import { Box, Typography, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { useI18N } from '../../utils'
 import { useNFTscanFindAssets } from '../../plugins/Wallet/hooks/useNFTscanFindAssets'
 
@@ -19,7 +19,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
     return {
         root: {
             height: 52,
-            width: 524,
             border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
             borderRadius: 12,
             padding: theme.spacing(0.8, 1.2, 1),

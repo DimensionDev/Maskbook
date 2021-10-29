@@ -61,13 +61,7 @@ export interface PostContext extends PostContextAuthor {
     // TODO: rename to suggestedInjectionPoint
     readonly postContentNode: HTMLElement
     //#endregion
-    //#region Comments
     readonly comment: undefined | PostContextComment
-    /** @deprecated Use comment.commentBoxSelector instead */
-    readonly commentBoxSelector?: LiveSelector<HTMLElement, false>
-    /** @deprecated Use comment.commentsSelector instead */
-    readonly commentsSelector?: LiveSelector<HTMLElement, false>
-    //#endregion
     //#region Metadata of a post (author, mentioned items, ...)
     /** Auto computed */
     // TODO: rename to identifier

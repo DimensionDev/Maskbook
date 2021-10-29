@@ -1,6 +1,6 @@
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { useLanguage } from '../Settings/api'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 
 const IFrame = styled('iframe')(
     ({ theme }) => `

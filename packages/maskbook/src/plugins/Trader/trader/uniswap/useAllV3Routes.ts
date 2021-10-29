@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import type { Currency } from '@uniswap/sdk-core'
 import { Pool, Route } from '@uniswap/v3-sdk'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { useV3SwapPools } from './useV3SwapPools'
 import { useSingleHopOnly } from './useSingleHopOnly'
 

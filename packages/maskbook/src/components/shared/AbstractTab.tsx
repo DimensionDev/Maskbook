@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
+import { Tabs, Tab, Box, BoxProps, Paper } from '@mui/material'
 import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -8,7 +8,7 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 'unset',
     },
     tabPanel: {
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(1),
     },
 }))
 

@@ -8,11 +8,11 @@ import {
     ERC20TokenDetailed,
     FungibleTokenDetailed,
     pow10,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type Services from '../../../../extension/service'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
-    return `${negative ? '-' : ''}${
+    return `${negative ? '- ' : ''}${
         pow10(9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
             ? formatBalance(amount, tokenDetailed?.decimals ?? 0, 4)
             : 'infinite'

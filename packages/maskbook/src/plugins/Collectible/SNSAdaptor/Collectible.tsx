@@ -11,15 +11,15 @@ import {
     Tab,
     Tabs,
     Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { findIndex } from 'lodash-es'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'
-import VerifiedUserIcon from '@material-ui/icons/VerifiedUser'
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { useI18N, useSettingsSwitcher } from '../../../utils'
 import { ArticleTab } from './ArticleTab'
 import { TokenTab } from './TokenTab'
@@ -36,7 +36,7 @@ import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 

@@ -1,112 +1,109 @@
-import { noop, pick } from 'lodash-es'
+import { noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
-import { ERC20TokenDetailed, EthereumTokenType, ProviderType, Wallet, Web3ProviderType } from '@masknet/web3-shared'
+import {
+    ERC20TokenDetailed,
+    ERC721TokenDetailed,
+    ERC1155TokenDetailed,
+    EthereumTokenType,
+    ProviderType,
+    Web3ProviderType,
+} from '@masknet/web3-shared-evm'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
     currentBlockNumberSettings,
     currentBalanceSettings,
-    currentNonceSettings,
     currentAccountSettings,
-    currentGasPriceSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
-    currentEtherPriceSettings,
     currentTokenPricesSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
-    currentAccountMaskWalletSettings,
+    currentMaskWalletAccountWalletSettings,
+    currentMaskWalletBalanceSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
 import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
 
-function createWeb3Context(disablePopup = false): Web3ProviderType {
-    const Web3Provider = createExternalProvider(disablePopup)
+function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
+    const Web3Provider = createExternalProvider(
+        () => {
+            return isMask
+                ? {
+                      account: currentMaskWalletAccountWalletSettings.value,
+                      chainId: currentMaskWalletChainIdSettings.value,
+                      providerType: ProviderType.MaskWallet,
+                  }
+                : {
+                      account: currentAccountSettings.value,
+                      chainId: currentChainIdSettings.value,
+                      providerType: currentProviderSettings.value,
+                  }
+        },
+        () => {
+            return {
+                popupsWindow: !disablePopup,
+            }
+        },
+    )
+
     return {
         provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
-        chainId: createSubscriptionFromSettings(
-            disablePopup ? currentMaskWalletChainIdSettings : currentChainIdSettings,
-        ),
+        chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
         account: createSubscriptionFromSettings(
-            disablePopup ? currentAccountMaskWalletSettings : currentAccountSettings,
+            isMask ? currentMaskWalletAccountWalletSettings : currentAccountSettings,
         ),
-        balance: createSubscriptionFromSettings(currentBalanceSettings),
-        gasPrice: createSubscriptionFromSettings(currentGasPriceSettings),
+        balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
-        nonce: createSubscriptionFromSettings(currentNonceSettings),
-        etherPrice: createSubscriptionFromSettings(currentEtherPriceSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
-        wallets: createSubscriptionFromAsync(getWallets, [], WalletMessages.events.walletsUpdated.on),
-        providerType: disablePopup
+        walletPrimary: createSubscriptionFromAsync(
+            WalletRPC.getWalletPrimary,
+            null,
+            WalletMessages.events.walletsUpdated.on,
+        ),
+        wallets: createSubscriptionFromAsync(WalletRPC.getWallets, [], WalletMessages.events.walletsUpdated.on),
+        providerType: isMask
             ? createStaticSubscription(() => ProviderType.MaskWallet)
             : createSubscriptionFromSettings(currentProviderSettings),
-        networkType: createSubscriptionFromSettings(
-            disablePopup ? currentMaskWalletNetworkSettings : currentNetworkSettings,
-        ),
-        erc20Tokens: createSubscriptionFromAsync(getERC20Tokens, [], WalletMessages.events.erc20TokensUpdated.on),
-        erc20TokensCount: createSubscriptionFromAsync(
-            WalletRPC.getERC20TokensCount,
-            0,
+        networkType: createSubscriptionFromSettings(isMask ? currentMaskWalletNetworkSettings : currentNetworkSettings),
+        erc20Tokens: createSubscriptionFromAsync(
+            () => WalletRPC.getTokens<ERC20TokenDetailed>(EthereumTokenType.ERC20),
+            [],
             WalletMessages.events.erc20TokensUpdated.on,
         ),
-        addERC20Token: WalletRPC.addERC20Token,
-        trustERC20Token: WalletRPC.trustERC20Token,
-        getERC20TokensPaged,
+        erc721Tokens: createSubscriptionFromAsync(
+            () => WalletRPC.getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721),
+            [],
+            WalletMessages.events.erc721TokensUpdated.on,
+        ),
+        erc1155Tokens: createSubscriptionFromAsync(
+            () => WalletRPC.getTokens<ERC1155TokenDetailed>(EthereumTokenType.ERC1155),
+            [],
+            WalletMessages.events.erc1155TokensUpdated.on,
+        ),
         portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
+
+        addToken: WalletRPC.addToken,
+        removeToken: WalletRPC.removeToken,
+        trustToken: WalletRPC.trustToken,
+        blockToken: WalletRPC.blockToken,
+
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
         getAddressNamesList: WalletRPC.getAddressNames,
-        getERC721TokensPaged,
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
         getTransactionList: WalletRPC.getTransactionList,
         createMnemonicWords: WalletRPC.createMnemonicWords,
-        getNonce: Services.Ethereum.getNonce,
     }
 }
 
 export const Web3Context = createWeb3Context()
-export const Web3ContextWithoutConfirm = createWeb3Context(true)
-
-async function getWallets() {
-    const raw = await WalletRPC.getWallets()
-    return raw.map<Wallet>((record) => ({
-        ...pick(record, [
-            'address',
-            'name',
-            'erc1155_token_whitelist',
-            'erc1155_token_blacklist',
-            'erc20_token_whitelist',
-            'erc20_token_blacklist',
-            'erc721_token_whitelist',
-            'erc721_token_blacklist',
-        ] as (keyof typeof record)[]),
-        hasPrivateKey: Boolean(record._private_key_ || record.mnemonic.length),
-    }))
-}
-
-async function getERC20Tokens() {
-    const raw = await WalletRPC.getERC20Tokens()
-    return raw.map<ERC20TokenDetailed>((x) => ({
-        type: EthereumTokenType.ERC20,
-        ...x,
-    }))
-}
-
-async function getERC20TokensPaged(index: number, count: number, query?: string) {
-    const raw = await WalletRPC.getERC20TokensPaged(index, count, query)
-    return raw.map<ERC20TokenDetailed>((x) => ({
-        type: EthereumTokenType.ERC20,
-        ...x,
-    }))
-}
-
-async function getERC721TokensPaged(index: number, count: number, query?: string) {
-    return WalletRPC.getERC721TokensPaged(index, count, query)
-}
+export const PopupWeb3Context = createWeb3Context(true, true)
+export const SwapWeb3Context = createWeb3Context(false, true)
 
 // utils
 function createSubscriptionFromSettings<T>(settings: InternalSettings<T>): Subscription<T> {
@@ -131,6 +128,7 @@ function createStaticSubscription<T>(getter: () => T) {
         subscribe: () => noop,
     }
 }
+
 function createSubscriptionFromAsync<T>(
     f: () => Promise<T>,
     defaultValue: T,

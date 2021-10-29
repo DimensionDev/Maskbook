@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ApproveStateType,
@@ -8,7 +8,7 @@ import {
     formatBalance,
     TransactionStateType,
     useERC20TokenApproveCallback,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import { useI18N } from '../../utils'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'

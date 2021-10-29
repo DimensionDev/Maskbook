@@ -1,12 +1,12 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@material-ui/core'
+import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { FormattedBalance, useStylesExtends } from '@masknet/shared'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { formatBalance } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../utils'
 
 const MIN_AMOUNT_LENGTH = 1

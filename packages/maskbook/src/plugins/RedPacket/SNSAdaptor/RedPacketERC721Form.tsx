@@ -1,4 +1,4 @@
-import { Box, Typography, List, ListItem } from '@material-ui/core'
+import { Box, Typography, List, ListItem } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../../../utils'
@@ -14,9 +14,9 @@ import {
     useAccount,
     useChainId,
     useNftRedPacketConstants,
-} from '@masknet/web3-shared'
-import CloseIcon from '@material-ui/icons/Close'
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline'
+} from '@masknet/web3-shared-evm'
+import CloseIcon from '@mui/icons-material/Close'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
@@ -25,12 +25,12 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'flex',
-            alignItems: 'center',
+            alignItems: 'stretch',
             flexDirection: 'column',
         },
         line: {
             display: 'flex',
-            margin: theme.spacing(1, 1, 2, 1),
+            margin: theme.spacing(1, 0, 2, 0),
         },
         nftNameWrapper: {
             width: '100%',
@@ -91,7 +91,6 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
         },
         tokenSelectorParent: {
-            width: 544,
             background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
             borderRadius: 12,
             paddingBottom: 5,

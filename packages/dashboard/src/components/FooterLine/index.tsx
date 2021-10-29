@@ -1,15 +1,14 @@
-import { styled } from '@material-ui/core'
+import { styled } from '@mui/material'
 import { useHref, useNavigate } from 'react-router-dom'
-import { Breadcrumbs, Dialog, IconButton, Link, Typography } from '@material-ui/core'
+import { Breadcrumbs, Dialog, IconButton, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { memo, useState } from 'react'
 import { About } from './About'
-import { Close } from '@material-ui/icons'
+import { Close } from '@mui/icons-material'
 import { Version } from './Version'
 import { getMaskColor } from '@masknet/theme'
 import links from './links.json'
-import { RoutePaths } from '../../type'
 
 const useStyles = makeStyles()((theme) => ({
     navRoot: {
@@ -127,7 +126,7 @@ export const FooterLine = memo(() => {
                 <FooterLinkExternal href={links.MOBILE_DOWNLOAD_LINK}>{t.dashboard_mobile_test()}</FooterLinkExternal>
                 <FooterLinkExternal href={links.MASK_GITHUB}>{t.dashboard_source_code()}</FooterLinkExternal>
                 <FooterLinkExternal href={links.BOUNTY_LIST}>{t.footer_bounty_list()}</FooterLinkExternal>
-                <FooterLinkTo to={RoutePaths.PrivacyPolicy}>{t.privacy_policy()}</FooterLinkTo>
+                <FooterLinkExternal href={links.MASK_PRIVACY_POLICY}>{t.privacy_policy()}</FooterLinkExternal>
             </Breadcrumbs>
             <AboutDialog open={isOpen} title="" onClose={() => setOpen(false)}>
                 <About />

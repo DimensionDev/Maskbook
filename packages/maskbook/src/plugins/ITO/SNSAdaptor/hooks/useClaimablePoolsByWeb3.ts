@@ -10,7 +10,7 @@ import {
     EthereumTokenType,
     useGetPastLogsParams,
     ChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { ClaimablePool } from '../../types'
 import { useBlockNumberOfChain } from './useBlockNumberOfChain'
 import Services from '../../../../extension/service'

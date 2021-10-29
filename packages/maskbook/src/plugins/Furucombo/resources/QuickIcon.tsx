@@ -1,4 +1,4 @@
-import { Icon } from '@material-ui/core'
+import { Icon } from '@mui/material'
 import type { FC } from 'react'
 
 export const QuickIcon: FC<any> = (props) => (

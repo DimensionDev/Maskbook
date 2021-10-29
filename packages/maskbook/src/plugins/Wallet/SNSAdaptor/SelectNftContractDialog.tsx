@@ -1,24 +1,26 @@
 import { useCallback, useState, useMemo } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { DialogContent, List, ListItem, Typography, Box, Link } from '@material-ui/core'
+import { DialogContent, List, ListItem, Typography, Box, Link } from '@mui/material'
 import {
     ChainId,
     ERC721ContractDetailed,
     resolveAddressLinkOnExplorer,
     useChainId,
     useAccount,
-} from '@masknet/web3-shared'
+    useERC721Tokens,
+} from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { EthereumAddress } from 'wallet.ts'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import Fuse from 'fuse.js'
-import { useERC721ContractDetailed } from '@masknet/web3-shared'
+import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { useNFTscanFindAssets } from '../hooks/useNFTscanFindAssets'
+import { unionBy } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -75,6 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         left: 59,
         bottom: 10,
         cursor: 'pointer',
+        fontSize: 12,
         '&:hover': {
             textDecoration: 'none',
         },
@@ -119,7 +122,17 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const [keyword, setKeyword] = useState('')
     const account = useAccount()
     const { value: assets } = useNFTscanFindAssets(account)
-    const contractList = chainId === ChainId.Mainnet && assets ? assets : []
+
+    const erc721InDb = useERC721Tokens()
+    const allContractsInDb = unionBy(
+        erc721InDb.map((x) => x.contractDetailed),
+        'address',
+    ).map((x) => ({ contractDetailed: x, balance: undefined }))
+
+    const contractList =
+        chainId === ChainId.Mainnet && assets
+            ? unionBy([...assets, ...allContractsInDb], 'contractDetailed.address')
+            : allContractsInDb
 
     //#region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(

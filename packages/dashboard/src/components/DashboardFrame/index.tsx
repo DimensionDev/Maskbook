@@ -10,9 +10,10 @@ import {
     Toolbar,
     Typography,
     useMediaQuery,
-} from '@material-ui/core'
+    useTheme,
+} from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Close as CloseIcon, Menu as MenuIcon } from '@material-ui/icons'
+import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
 import { ErrorBoundary } from '@masknet/shared'
 import { memo, Suspense, useContext, useMemo, useState } from 'react'
@@ -22,7 +23,6 @@ import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
 import { useLocation } from 'react-router-dom'
 import { RoutePaths } from '../../type'
-import { useAppearance } from '../../pages/Personas/api'
 
 const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
 
@@ -89,17 +89,19 @@ const PageTitle = styled(Grid)(({ theme }) => ({
     minHeight: 40,
     alignItems: 'center',
     paddingLeft: theme.spacing(4.25),
+    '& > h6': {
+        fontSize: '1.5rem',
+    },
     [theme.breakpoints.down('lg')]: {
         flex: 1,
     },
 }))
 
 const Containment = styled(Grid)(({ theme }) => ({
-    contain: 'strict',
+    maxWidth: '100%',
     display: 'flex',
-    [theme.breakpoints.down('lg')]: {
-        minHeight: `calc(100vh - 64px)`,
-    },
+    height: `calc(100vh - 64px)`,
+    overflow: 'hidden',
 }))
 
 const NavigationDrawer = styled(Drawer)(({ theme }) => ({
@@ -115,23 +117,29 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
 }))
 
 const ShapeHelper = styled('div')(({ theme }) => ({
-    height: '100%',
     padding: theme.spacing(3),
+    paddingBottom: 0,
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
     backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : MaskColorVar.secondaryBackground,
-    overflow: 'auto',
-    flex: 1,
     display: 'flex',
     flexDirection: 'column',
+    flex: 1,
+    overflow: 'auto',
 }))
 
 const ContentContainer = styled('div')(({ theme }) => ({
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
-    borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
+    borderRadius: Number(theme.shape.borderRadius) * 5,
+    backgroundColor: 'transparent',
+    minHeight: '100%',
+    position: 'relative',
+    '&:after': {
+        content: '""',
+        display: 'block',
+        paddingTop: theme.spacing(3),
+    },
 }))
 
 const useStyle = makeStyles()((theme) => ({
@@ -162,7 +170,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
     const { classes } = useStyle()
 
     return (
@@ -184,7 +192,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     </PageTitle>
                 </Toolbar>
             </AppBar>
-            <Containment item xs>
+            <Containment>
                 {!isLargeScreen && (
                     <NavigationDrawer
                         open={drawerOpen}
@@ -197,12 +205,11 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         transitionDuration={300}
                         variant="temporary"
                         elevation={0}>
-                        <Navigation />
+                        <Navigation onClose={toggleDrawer} />
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
-                    <ContentContainer
-                        className={props.noBackgroundFill ? undefined : classes.shapeContainerWithBackground}>
+                    <ContentContainer>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </ContentContainer>
                 </ShapeHelper>

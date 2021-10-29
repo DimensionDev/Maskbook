@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import type { PersonaIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared'
 import { formatFingerprint } from '@masknet/shared'

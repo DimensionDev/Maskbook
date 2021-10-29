@@ -1,4 +1,4 @@
-import { Typography, CardContent, Box } from '@material-ui/core'
+import { Typography, CardContent, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { AlertCircle } from 'react-feather'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'

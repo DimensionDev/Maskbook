@@ -1,15 +1,20 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import type { ProfileIdentifier } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import type { ERC721TokenDetailed } from '@masknet/web3-shared'
-import { useCallback, useEffect, useState } from 'react'
-import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
-import { useNFTAvatar } from '../../../../components/InjectedComponents/NFT/hooks'
-import { NFTAvatar } from '../../../../components/InjectedComponents/NFT/NFTAvatar'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { createReactRootShadowed, Flags, MaskMessage, NFTAvatarEvent, startWatch } from '../../../../utils'
-import { searchProfileAvatarSelector, searchProfileSaveSelector } from '../../utils/selector'
-import { getAvatar, getAvatarId, getTwitterId } from '../../utils/user'
+import { useEffect, useState } from 'react'
+import { blobToArrayBuffer } from '@dimensiondev/kit'
+import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
+import {
+    searchAvatarOpenFileSelector,
+    searchProfileAvatarSelector,
+    searchProfileSaveSelector,
+} from '../../utils/selector'
+import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
+import { getAvatarId } from '../../utils/user'
+import { toPNG } from '../../../../plugins/Avatar/utils'
+import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { useCurrentProfileIdentifiers } from '../../../../plugins/Avatar/hooks/useCurrentProfileIdentifiers'
+import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { hookInputUploadOnce } from '@masknet/injected-script'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -23,62 +28,52 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function useCurrentUserInfo(): { userId?: string; identifier?: ProfileIdentifier } | undefined {
-    const personas = useMyPersonas()
-    if (personas.length === 0) return undefined
-    const userInfo = personas
-        .map((persona) => {
-            const profiles = persona ? [...persona.linkedProfiles] : []
-            const profile = profiles.find(([key, value]) => key.network === activatedSocialNetworkUI.networkIdentifier)
-            return {
-                userId: profile?.[0].userId,
-                identifier: profile?.[0],
-            }
-        })
-        .filter((x) => x)
-
-    return userInfo?.[0]
+async function changeImageToActiveElements(image: File | Blob): Promise<void> {
+    const imageBuffer = await blobToArrayBuffer(image)
+    hookInputUploadOnce('image/png', 'avatar.png', new Uint8Array(imageBuffer))
+    ;(searchAvatarOpenFileSelector().evaluate()[0]?.parentElement?.children[0] as HTMLElement)?.click()
 }
 
-interface NFTAvatarInTwitterProps {}
-
-function NFTAvatarInTwitter(props: NFTAvatarInTwitterProps) {
+function NFTAvatarInTwitter() {
     const { classes } = useStyles()
-    const useInfo = useCurrentUserInfo()
+    const myIdentities = useCurrentProfileIdentifiers()
+    const identity = useCurrentVisitingIdentity()
+    const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 
-    const [twitterId, setTwitterId] = useState(getTwitterId())
-    const avatar = useNFTAvatar(twitterId)
-    const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent>({} as NFTAvatarEvent)
+    const onChange = async (token: ERC721TokenDetailed) => {
+        if (!token.info.image) return
+        const image = await toPNG(token.info.image)
+        if (!image) return
+        changeImageToActiveElements(image)
 
-    const onChange = useCallback(async (token: ERC721TokenDetailed) => {
-        const avatarId = getAvatarId(getAvatar())
         setAvatarEvent({
-            userId: twitterId,
-            tokenId: token.tokenId,
+            userId: identity.identifier.userId,
+            avatarId: getAvatarId(identity.avatar ?? ''),
             address: token.contractDetailed.address,
-            avatarId,
+            tokenId: token.tokenId,
         })
-    }, [])
+    }
 
     const handler = () => {
-        if (!avatarEvent) return
-        MaskMessage.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
+        MaskMessages.events.NFTAvatarUpdated.sendToLocal(
+            avatarEvent ?? {
+                userId: identity.identifier.userId,
+                avatarId: getAvatarId(identity.avatar ?? ''),
+                address: '',
+                tokenId: '',
+            },
+        )
+        setAvatarEvent(undefined)
     }
 
     useEffect(() => {
-        if (!Flags.nft_avatar_enabled) return
-        setTwitterId(getTwitterId())
-    }, [avatar])
-
-    useEffect(() => {
-        if (!Flags.nft_avatar_enabled) return
         const profileSave = searchProfileSaveSelector().evaluate()
         if (!profileSave) return
         profileSave.addEventListener('click', handler)
         return () => profileSave.removeEventListener('click', handler)
     }, [handler])
 
-    if (twitterId !== useInfo?.userId) return null
-    if (!Flags.nft_avatar_enabled) return null
-    return <NFTAvatar onChange={onChange} classes={classes} />
+    if (myIdentities.some((x) => x && x.userId === identity.identifier.userId))
+        return <NFTAvatar onChange={onChange} classes={classes} />
+    return null
 }

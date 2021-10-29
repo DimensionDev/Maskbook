@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { Box, Typography, Theme } from '@material-ui/core'
-import type { SxProps } from '@material-ui/system'
+import { Box, Typography, Theme } from '@mui/material'
+import type { SxProps } from '@mui/system'
 import {
     ChainId,
     getChainDetailedCAIP,
@@ -13,12 +13,12 @@ import {
     useAccount,
     useAllowTestnet,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
-import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
 
 export interface EthereumChainBoundaryProps {
@@ -105,9 +105,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     variant="contained"
                     size="small"
                     sx={{ marginTop: 1.5 }}
-                    onClick={() => {
-                        hasNativeAPI ? nativeAPI?.api.misc_openCreateWalletView() : openSelectProviderDialog()
-                    }}>
+                    onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_wallet')}
                 </ActionButton>
             </Box>

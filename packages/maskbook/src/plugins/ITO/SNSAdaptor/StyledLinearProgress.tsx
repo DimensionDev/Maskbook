@@ -1,4 +1,4 @@
-import { LinearProgress, LinearProgressProps } from '@material-ui/core'
+import { LinearProgress, LinearProgressProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 interface StyledLinearProgress extends LinearProgressProps {
     barColor?: string
@@ -13,7 +13,7 @@ const useStyles = makeStyles<StyledLinearProgress>()((_theme, props) => ({
     },
     bar: {
         borderRadius: 5,
-        backgroundColor: props.barColor ?? '#fff',
+        backgroundColor: props.barColor ?? 'rgb(44, 164, 239)',
     },
 }))
 

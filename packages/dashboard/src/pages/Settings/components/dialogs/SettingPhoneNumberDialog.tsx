@@ -1,6 +1,6 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'

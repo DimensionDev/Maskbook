@@ -2,7 +2,7 @@ import { useDashboardI18N } from '../../../locales'
 import { memo, useState } from 'react'
 import { MaskTextField } from '@masknet/theme'
 import { ButtonContainer } from '../../RegisterFrame/ButtonContainer'
-import { Button } from '@material-ui/core'
+import { Button } from '@mui/material'
 import { Label, ValidationCodeStep } from './common'
 import type { StepCommonProps } from '../../Stepper'
 import { AccountType } from '../../../pages/Settings/type'
@@ -36,6 +36,7 @@ export const EmailField = memo(({ toStep }: StepCommonProps) => {
                 <Button
                     variant="rounded"
                     color="primary"
+                    size="large"
                     onClick={() =>
                         toStep(ValidationCodeStep.AccountValidation, { account: account, type: AccountType.email })
                     }

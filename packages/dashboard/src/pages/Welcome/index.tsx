@@ -1,17 +1,18 @@
-import { Button } from '@material-ui/core'
+import { Button, useTheme } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
-import { useAppearance } from '../Personas/api'
 import { useDashboardI18N } from '../../locales'
+import links from '../../components/FooterLine/links.json'
 
-const Content = styled('div')(
-    ({ theme }) => `
-    padding: ${theme.spacing(1)} ${theme.spacing(8)};
-`,
-)
+const Content = styled('div')(({ theme }) => ({
+    padding: `${theme.spacing(1)} ${theme.spacing(4)}`,
+    [theme.breakpoints.down('md')]: {
+        padding: `${theme.spacing(1)} ${theme.spacing(0)}`,
+    },
+}))
 
 const ButtonGroup = styled('div')(
     ({ theme }) => `
@@ -22,17 +23,15 @@ const ButtonGroup = styled('div')(
 `,
 )
 
-const IFrame = styled('iframe')(
-    ({ theme }) => `
-    border: none;
-    width: 100%;
-    min-height: 500px;
-`,
-)
+const IFrame = styled('iframe')(({ theme }) => ({
+    border: 'none',
+    width: '100%',
+    minHeight: '500px',
+}))
 
 export default function Welcome() {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
     const navigate = useNavigate()
 
     const agreementContentPageURL = new URL(`./en.html`, import.meta.url).toString()
@@ -73,7 +72,7 @@ export default function Welcome() {
     }
 
     const handleLinkClick = () => {
-        window.open(`next.html#${RoutePaths.PrivacyPolicy}`)
+        window.open(links.MASK_PRIVACY_POLICY)
     }
 
     return (

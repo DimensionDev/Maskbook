@@ -3,7 +3,7 @@ import { delay, timeout } from '../../../utils/utils'
 import { isMobileFacebook } from '../utils/isMobile'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { untilDocumentReady } from '../../../utils/dom'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { inputText, pasteText } from '@masknet/injected-script'
 
 async function openPostDialogFacebook() {
@@ -74,15 +74,19 @@ export async function pasteTextToCompositionFacebook(
     )(scrolling.scrollTop)
 
     const activated = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
-        isMobileFacebook ? 'form textarea' : '.notranslate[aria-describedby]',
+        isMobileFacebook ? 'form textarea' : 'div[role=presentation] .notranslate[aria-describedby]',
     )
     if (isMobileFacebook) activated.filter((x) => x.getClientRects().length > 0)
-    // If page is just loaded
-    // if (shouldOpenPostDialog) {
-    //     await openPostDialogFacebook()
-    // }
+
+    // Select element with fb customize background image.
+    const activatedCustom = new LiveSelector().querySelectorAll<HTMLDivElement | HTMLTextAreaElement>(
+        '.notranslate[aria-label]',
+    )
+
+    activatedCustom.filter((x) => x.parentElement?.parentElement?.parentElement?.parentElement?.hasAttribute('style'))
+
+    const element = activated.evaluate()[0] ?? activatedCustom.evaluate()[0]
     try {
-        const [element] = activated.evaluate()
         element.focus()
         await delay(100)
         if ('value' in document.activeElement!) inputText(text)
@@ -101,6 +105,6 @@ export async function pasteTextToCompositionFacebook(
     scrollBack()
     function copyFailed(error: unknown) {
         console.warn('Text not pasted to the text area', error)
-        if (recover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
+        if (recover) MaskMessages.events.autoPasteFailed.sendToLocal({ text })
     }
 }

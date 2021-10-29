@@ -1,6 +1,6 @@
-import { Box, Divider } from '@material-ui/core'
+import { Box, Divider } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { AirdropClaimCard } from './AirdropClaimCard'
 import { AirdropCheckCard } from './AirdropCheckCard'
 

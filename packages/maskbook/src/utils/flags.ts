@@ -13,8 +13,6 @@ export const Flags = {
         target: process.env.engine,
         architecture: process.env.architecture,
     },
-    /** The Mask Network v2 main switch. */
-    v2_enabled: betaOrInsiderOnly,
     mask_SDK_ready: betaOrInsiderOnly,
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: appOnly,
@@ -46,12 +44,13 @@ export const Flags = {
     plugin_switch_enabled: betaOrInsiderOnly,
     //#endregion
 
-    EIP1559_enabled: betaOrInsiderOnly,
+    EIP1559_enabled: true,
 
     bsc_enabled: true,
     polygon_enabled: true,
     arbitrum_enabled: true,
     xdai_enabled: true,
+    nft_airdrop_enabled: false,
 
     //#region Functionality missing / broken
     /**
@@ -61,10 +60,6 @@ export const Flags = {
     has_no_WebRTC: process.env.engine === 'safari' || !globalThis?.navigator?.permissions?.query,
     //#endregion
     using_emoji_flag: true,
-
-    //#region add nft avatar
-    nft_avatar_enabled: betaOrInsiderOnly,
-    //#endregion
 } as const
 
 if (process.env.NODE_ENV === 'development') {

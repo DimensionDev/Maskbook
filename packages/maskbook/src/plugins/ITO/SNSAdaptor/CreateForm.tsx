@@ -8,11 +8,11 @@ import {
     useAccount,
     useITOConstants,
     useFungibleTokenBalance,
-} from '@masknet/web3-shared'
-import { Box, CircularProgress, TextField, Typography } from '@material-ui/core'
+} from '@masknet/web3-shared-evm'
+import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import CheckIcon from '@material-ui/icons/Check'
-import UnCheckIcon from '@material-ui/icons/Close'
+import CheckIcon from '@mui/icons-material/Check'
+import UnCheckIcon from '@mui/icons-material/Close'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
@@ -33,65 +33,89 @@ import { AdvanceSettingData, AdvanceSetting } from './AdvanceSetting'
 import { ExchangeTokenPanelGroup } from './ExchangeTokenPanelGroup'
 import { RegionSelect } from './RegionSelect'
 
-const useStyles = makeStyles()((theme) => ({
-    line: {
-        margin: theme.spacing(1),
-        paddingBottom: theme.spacing(2),
-        display: 'flex',
-    },
-    column: {
-        flexDirection: 'column',
-    },
-    flow: {
-        margin: theme.spacing(1),
-        textAlign: 'center',
-    },
-    input: {
-        padding: theme.spacing(1),
-        flex: 1,
-    },
-    label: {
-        paddingLeft: theme.spacing(2),
-    },
-    tip: {
-        fontSize: 12,
-        color: theme.palette.text.secondary,
-    },
-    button: {
-        marginTop: theme.spacing(1.5),
-    },
-    date: {
-        margin: theme.spacing(1),
-        display: 'flex',
-        '& > * ': {
+const useStyles = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        line: {
+            margin: theme.spacing(1),
+            paddingBottom: theme.spacing(2),
+            display: 'flex',
+            [smallQuery]: {
+                margin: theme.spacing(0),
+            },
+        },
+        column: {
+            flexDirection: 'column',
+        },
+        flow: {
+            margin: theme.spacing(1),
+            textAlign: 'center',
+        },
+        input: {
+            padding: theme.spacing(1),
+            flex: 1,
+        },
+        inputLabel: {
+            left: 8,
+            top: 8,
+        },
+        label: {
+            paddingLeft: theme.spacing(2),
+        },
+        tip: {
+            fontSize: 12,
+            color: theme.palette.text.secondary,
+        },
+        button: {
+            color: '#fff',
+            marginTop: theme.spacing(1.5),
+            [smallQuery]: {
+                lineHeight: 1.2,
+                marginTop: theme.spacing(0),
+            },
+        },
+        date: {
+            margin: theme.spacing(1),
+            display: 'flex',
+            '& > * ': {
+                flex: 1,
+                padding: theme.spacing(1),
+                [smallQuery]: {
+                    flexDirection: 'column',
+                    padding: theme.spacing(2, 0, 1, 0),
+                },
+            },
+            [smallQuery]: {
+                flexDirection: 'column',
+                paddingLeft: 0,
+                paddingRight: 0,
+            },
+        },
+        iconWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 26,
+            height: 24,
+            borderRadius: 500,
+        },
+        success: {
+            backgroundColor: 'rgba(119, 224, 181, 0.2)',
+        },
+        fail: {
+            backgroundColor: 'rgba(255, 78, 89, 0.2)',
+        },
+        qualStartTime: {
+            padding: '0 16px',
+            opacity: 0.8,
+        },
+        field: {
             flex: 1,
             padding: theme.spacing(1),
+            marginTop: theme.spacing(1),
         },
-    },
-    iconWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 26,
-        height: 24,
-        borderRadius: 500,
-    },
-    success: {
-        backgroundColor: 'rgba(119, 224, 181, 0.2)',
-    },
-    fail: {
-        backgroundColor: 'rgba(255, 78, 89, 0.2)',
-    },
-    qualStartTime: {
-        padding: '0 16px',
-        opacity: 0.8,
-    },
-    field: {
-        flex: 1,
-        padding: theme.spacing(1),
-        marginTop: theme.spacing(1),
-    },
-}))
+    }
+})
 
 export interface CreateFormProps extends withClasses<never> {
     onChangePoolSettings: (pollSettings: PoolSettings) => void
@@ -338,6 +362,9 @@ export function CreateForm(props: CreateFormProps) {
                     onChange={(e) => setMessage(sliceTextByUILength(e.target.value, 90))}
                     InputLabelProps={{
                         shrink: true,
+                        classes: {
+                            root: classes.inputLabel,
+                        },
                     }}
                 />
             </Box>
@@ -349,6 +376,9 @@ export function CreateForm(props: CreateFormProps) {
                     value={totalOfPerWallet}
                     InputLabelProps={{
                         shrink: true,
+                        classes: {
+                            root: classes.inputLabel,
+                        },
                     }}
                     InputProps={{
                         endAdornment: tokenAndAmount?.token?.symbol,
@@ -363,9 +393,9 @@ export function CreateForm(props: CreateFormProps) {
                     }}
                 />
             </Box>
-            <Box className={classes.date}>
+            <Stack className={classes.date} direction="row">
                 {StartTime} {EndTime}
-            </Box>
+            </Stack>
             <Box className={classes.line}>
                 <AdvanceSetting advanceSettingData={advanceSettingData} setAdvanceSettingData={setAdvanceSettingData} />
             </Box>
@@ -376,6 +406,9 @@ export function CreateForm(props: CreateFormProps) {
                         label={t('plugin_ito_region_label')}
                         InputLabelProps={{
                             shrink: true,
+                            classes: {
+                                root: classes.inputLabel,
+                            },
                         }}
                         InputProps={{
                             inputComponent: RegionSelect,
@@ -397,6 +430,9 @@ export function CreateForm(props: CreateFormProps) {
                         value={qualificationAddress}
                         InputLabelProps={{
                             shrink: true,
+                            classes: {
+                                root: classes.inputLabel,
+                            },
                         }}
                         InputProps={{
                             endAdornment: qualification?.isQualification ? (

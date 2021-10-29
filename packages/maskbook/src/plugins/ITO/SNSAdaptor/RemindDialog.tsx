@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import classNames from 'classnames'
-import { Checkbox, FormControlLabel, Link, Typography } from '@material-ui/core'
+import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, TokenIcon, useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../utils'
@@ -12,7 +12,7 @@ import {
     resolveNetworkName,
     useERC20TokenDetailedFromTokenLists,
     useNetworkType,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { SwapStatus } from './SwapGuide'
 import { getMaskColor } from '@masknet/theme'
 import urlcat from 'urlcat'
