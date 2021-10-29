@@ -1,4 +1,4 @@
-import { CardContent, Tabs, Tab, Paper } from '@material-ui/core'
+import { CardContent, Tabs, Tab, Paper } from '@mui/material'
 import React, { useState } from 'react'
 import { useI18N } from '../../../utils'
 import type { Nft, Metadata } from '../types'
@@ -7,7 +7,7 @@ import FoundationProvenances from './FoundationProvenances'
 import FoundationImage from './FoundationImage'
 import FoundationDescription from './FoundationDescription'
 import FoundationPlaceBid from './FoundationPlaceBid'
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 interface Props extends React.PropsWithChildren<{}> {
     nft: Nft

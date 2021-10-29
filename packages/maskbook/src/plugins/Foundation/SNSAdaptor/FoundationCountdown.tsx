@@ -1,4 +1,4 @@
-import { Typography, Box } from '@material-ui/core'
+import { Typography, Box } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'

@@ -1,6 +1,6 @@
 import { parseURL } from '../../utils/utils'
 import { foundationPathnameRegexMatcher } from './constants'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export function checkUrl(url: string): boolean {
     if (url.includes('foundation.app/@')) {

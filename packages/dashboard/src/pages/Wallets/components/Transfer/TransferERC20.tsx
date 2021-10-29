@@ -86,37 +86,6 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         selectedToken.address,
     )
 
-<<<<<<< HEAD
-    const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
-    const openGasSettingDialog = useCallback(() => {
-        setGasSettingDialog({
-            open: true,
-            gasLimit,
-            gasOption,
-        })
-    }, [gasLimit, gasOption])
-
-    useEffect(() => {
-        return WalletMessages.events.gasSettingDialogUpdated.on((evt) => {
-            if (evt.open) return
-            if (evt.gasPrice) setCustomGasPrice(evt.gasPrice)
-            if (evt.gasOption) setGasOption(evt.gasOption)
-            if (evt.gasLimit) setGasLimit(evt.gasLimit)
-            if (evt.maxFee) setMaxFee(new BigNumber(evt.maxFee).toFixed())
-            if (evt.priorityFee) setPriorityFee(new BigNumber(evt.priorityFee).toFixed())
-        })
-    }, [])
-    const gasConfig = useMemo(() => {
-        return is1559Supported
-            ? {
-                  gas: Number.parseInt(gasLimit, 10),
-                  maxFeePerGas: toHex(maxFee ?? '0'),
-                  maxPriorityFeePerGas: toHex(priorityFee ?? '0'),
-              }
-            : { gas: Number.parseInt(gasLimit, 10), gasPrice: new BigNumber(gasPrice).toNumber() }
-    }, [is1559Supported, gasLimit, maxFee, priorityFee, gasPrice])
-=======
->>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
     const onTransfer = useCallback(async () => {
         await transferCallback(transferAmount, address, gasConfig, memo)
     }, [transferAmount, address, memo, selectedToken.decimals, transferCallback, gasConfig])

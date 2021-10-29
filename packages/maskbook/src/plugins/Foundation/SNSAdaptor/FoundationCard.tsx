@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import { ChainId, useFoundationConstants } from '@masknet/web3-shared'
-import { Card, Typography, CardActions, Link } from '@material-ui/core'
+import { ChainId, useFoundationConstants } from '@masknet/web3-shared-evm'
+import { Card, Typography, CardActions, Link } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { useFetchApi } from '../hooks/useFetchApi'
 import FoundationHeader from './FoundationHeader'

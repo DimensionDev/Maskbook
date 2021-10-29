@@ -4,7 +4,7 @@ import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { checkUrl, getRelevantUrl } from '../utils'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import FoundationCard from './FoundationCard'
 

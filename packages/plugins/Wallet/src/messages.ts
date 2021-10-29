@@ -64,20 +64,12 @@ export type WalletStatusDialogEvent = {
 
 export type GasSettingDialogEvent = {
     open: boolean
-<<<<<<< HEAD
-    gasLimit: string
-    gasPrice?: BigNumber.Value
-    maxFee?: BigNumber.Value
-    priorityFee?: BigNumber.Value
-    gasOption?: GasOption
-=======
     gasLimit: number
     minGasLimit?: number
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
     gasOption?: GasOption | null
->>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
 }
 
 export type WalletRenameDialogEvent = {

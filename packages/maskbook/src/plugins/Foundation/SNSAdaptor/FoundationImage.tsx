@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { Link, Box } from '@material-ui/core'
+import { Link, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { NftContract, Metadata } from '../types'
 

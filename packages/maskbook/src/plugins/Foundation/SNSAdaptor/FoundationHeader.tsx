@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import type { Nft, Metadata } from '../types'
-import { CardHeader, Link, Typography } from '@material-ui/core'
+import { CardHeader, Link, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 
 interface Props extends React.PropsWithChildren<{}> {

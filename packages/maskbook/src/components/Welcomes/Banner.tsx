@@ -9,10 +9,7 @@ import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import GuideStep from '../GuideStep'
-<<<<<<< HEAD
-=======
 import { userGuideStatus } from '../../settings/settings'
->>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'button'> {
     description?: string

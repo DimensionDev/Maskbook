@@ -1,5 +1,5 @@
-import { Typography, Link, Box, Divider, Grid } from '@material-ui/core'
-import { useAccount } from '@masknet/web3-shared'
+import { Typography, Link, Box, Divider, Grid } from '@mui/material'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import type { NftHistory } from '../types'
 import { convertDate } from '../utils'

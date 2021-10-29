@@ -1,4 +1,4 @@
-import { useContract, useFoundationConstants } from '@masknet/web3-shared'
+import { useContract, useFoundationConstants } from '@masknet/web3-shared-evm'
 import FoundationAbi from '@masknet/web3-contracts/abis/Foundation.json'
 import type { Foundation } from '@masknet/web3-contracts/types/Foundation'
 import type { AbiItem } from 'web3-utils'

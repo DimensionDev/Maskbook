@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import BigNumber from 'bignumber.js'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
@@ -15,7 +15,7 @@ import {
     pow10,
     useNativeTokenDetailed,
     useFungibleTokenBalance,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'

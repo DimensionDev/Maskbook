@@ -99,11 +99,7 @@
     "react-virtualized-auto-sizer": "^1.0.6",
     "react-window": "^1.8.6",
     "remarkable": "^2.0.1",
-<<<<<<< HEAD
-    "rss3-next": "0.6.17",
-=======
     "rss3-next": "^0.6.17",
->>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
     "safari-14-idb-fix": "^2.0.3",
     "scrypt-js": "^3.0.1",
     "socket.io-client": "2.4.0",

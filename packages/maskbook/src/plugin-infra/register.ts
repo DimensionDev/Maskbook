@@ -21,10 +21,7 @@ import '../plugins/UnlockProtocol'
 import '../plugins/Avatar'
 import '../plugins/Furucombo'
 import '../plugins/MaskBox'
-<<<<<<< HEAD
 import '../plugins/Foundation'
-=======
 import '../plugins/Profile'
->>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
 // import '../plugins/NFT'
 // import '../plugins/Airdrop'

@@ -8,11 +8,7 @@ import {
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { useI18N } from '../../utils'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-<<<<<<< HEAD
-import { Typography, Link } from '@material-ui/core'
-=======
 import { Typography, Link } from '@mui/material'
->>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useMemo, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'

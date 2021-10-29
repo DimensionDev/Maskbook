@@ -5,10 +5,10 @@ import {
     useAccount,
     useTransactionState,
     useWeb3,
-} from '@masknet/web3-shared'
+    useFoundationConstants,
+} from '@masknet/web3-shared-evm'
 import { useCallback, useMemo } from 'react'
 import { useFoundationContract } from '../contracts/useFoundationContract'
-import { useFoundationConstants } from '@masknet/web3-shared'
 /**
  * A callback for place Bid
  * @param auctionId  id of nft in the market

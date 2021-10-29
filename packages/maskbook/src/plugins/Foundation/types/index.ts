@@ -1,4 +1,4 @@
-import type { ChainId } from '@masknet/web3-shared'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export interface Auction {
     id: string

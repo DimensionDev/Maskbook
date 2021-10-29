@@ -302,17 +302,12 @@
         "Defi",
         "powah",
         "Switcher",
-<<<<<<< HEAD
-        "drawed",
-        "DRAWED"
-=======
         "maskwallet",
         "drawed",
         "DRAWED",
         "devnet",
         "fbclid",
         "noamount"
->>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

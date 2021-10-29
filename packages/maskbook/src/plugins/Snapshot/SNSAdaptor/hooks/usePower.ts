@@ -14,11 +14,7 @@ export function usePower(identifier: ProposalIdentifier) {
         if (!account) return 0
         return (
             await PluginSnapshotRPC.getScores(
-<<<<<<< HEAD
-                message,
-=======
                 proposal.snapshot,
->>>>>>> b9a8e2e4b2b4e4a0981432073cd52ba780173bdc
                 [account],
                 blockNumber,
                 proposal.network,
