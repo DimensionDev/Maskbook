@@ -359,6 +359,7 @@ importers:
       react-hook-form: 7.15.3
       react-refresh: ^0.10.0
       react-router-dom: ^5.3.0
+      react-transition-group: ^4.4.2
       react-use: ^17.3.1
       react-virtualized-auto-sizer: ^1.0.6
       react-window: ^1.8.6
@@ -484,6 +485,7 @@ importers:
       react-highlight-words: 0.17.0_e5a92d5cc184686b99fd3572b48f64c8
       react-hook-form: 7.15.3_e5a92d5cc184686b99fd3572b48f64c8
       react-router-dom: 5.3.0_e5a92d5cc184686b99fd3572b48f64c8
+      react-transition-group: 4.4.2_809e898db569a1fe7ae9ea851da8594e
       react-use: 17.3.1_809e898db569a1fe7ae9ea851da8594e
       react-virtualized-auto-sizer: 1.0.6_809e898db569a1fe7ae9ea851da8594e
       react-window: 1.8.6_809e898db569a1fe7ae9ea851da8594e
