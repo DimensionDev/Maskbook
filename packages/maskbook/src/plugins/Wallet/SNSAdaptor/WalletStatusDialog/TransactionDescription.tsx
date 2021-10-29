@@ -12,7 +12,7 @@ import {
 import type Services from '../../../../extension/service'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
-    return `${negative ? '-' : ''}${
+    return `${negative ? '- ' : ''}${
         pow10(9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
             ? formatBalance(amount, tokenDetailed?.decimals ?? 0, 4)
             : 'infinite'

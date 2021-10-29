@@ -51,6 +51,7 @@ export interface CompositionProps {
     requireClipboardPermission?: boolean
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
+    onQueryClipboardPermission?(): void
 }
 export interface SubmitComposition {
     target: 'Everyone' | Profile[]

@@ -12,6 +12,7 @@ import AbstractTab, { AbstractTabProps } from '../../../components/shared/Abstra
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import Services from '../../../extension/service'
 import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
@@ -19,24 +20,18 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-es'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
-import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
-import { activatedSocialNetworkUI } from '../../../social-network'
 
-interface StyleProps {
-    snsId: string
-}
-
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles()(() => ({
     content: {
-        ...(snsId === MINDS_ID ? { minWidth: 600 } : {}),
         position: 'relative',
-        paddingTop: 50,
+        paddingTop: 0,
     },
     tabs: {
         top: 0,
         left: 0,
         right: 0,
-        position: 'absolute',
+        position: 'sticky',
+        marginBottom: 24,
     },
 }))
 
@@ -55,7 +50,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
 
     const account = useAccount()
     const chainId = useChainId()
-    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
+    const { classes } = useStyles()
     const { attachMetadata, dropMetadata } = useCompositionContext()
 
     const { ITO2_CONTRACT_ADDRESS } = useITOConstants()
@@ -142,6 +137,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
     //#region tabs
     const state = useState<DialogTabs>(DialogTabs.create)
 
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
+
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
@@ -153,6 +151,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 return
             }
 
+            senderName && (payload.seller.name = senderName)
             // To meet the max allowance of the data size of image steganography, we need to
             //  cut off and simplify some properties, such as save the token address string only.
             const payloadDetail = omit(
@@ -181,7 +180,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             const [, setValue] = state
             setValue(DialogTabs.create)
         },
-        [account, chainId, props.onConfirm, state],
+        [account, chainId, props.onConfirm, state, senderName],
     )
 
     const onClose = useCallback(() => {

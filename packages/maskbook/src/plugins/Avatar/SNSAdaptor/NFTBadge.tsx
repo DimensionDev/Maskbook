@@ -54,7 +54,6 @@ export function NFTBadge(props: NFTBadgeProps) {
     const classes = useStylesExtends(useStyles({ size: size + width * 2, width }), props)
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
-        avatar.userId,
         avatar.address,
         avatar.tokenId,
     )

@@ -8,10 +8,11 @@ import {
     useEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Link, Typography, CircularProgress } from '@mui/material'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { CollectibleListAddress } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { useI18N } from '../../../utils'
+import { useUserOwnerAddress } from '../../Avatar/hooks/useUserOwnerAddress'
 
 const RULE_TIP = [
     '1. Twitter name or bio contains ENS (e.g. vitalik.eth);',
@@ -21,11 +22,7 @@ const RULE_TIP = [
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1,
+        position: 'relative',
     },
     note: {
         padding: theme.spacing(1),
@@ -46,12 +43,15 @@ export function NFTPage(props: NFTPageProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const identity = useCurrentVisitingIdentity()
-
-    const { value } = useEthereumAddress(identity.nickname ?? '', identity.identifier.userId, identity.bio ?? '')
-
+    const { loading: loadingENS, value } = useEthereumAddress(
+        identity.nickname ?? '',
+        identity.identifier.userId,
+        identity.bio ?? '',
+    )
     const { type, name, address } = value ?? {}
+    const { loading: loadingWalletGun, value: walletAddressGun } = useUserOwnerAddress(identity.identifier.userId)
 
-    if (!address)
+    if (!address && !walletAddressGun)
         return (
             <div className={classes.root}>
                 <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
@@ -59,27 +59,44 @@ export function NFTPage(props: NFTPageProps) {
                 </Box>
             </div>
         )
+
     return (
         <div className={classes.root}>
-            <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
-                <Typography color="textPrimary" component="span">
-                    Current display of {type}:{' '}
-                    <Link
-                        href={resolveAddressLinkOnExplorer(ChainId.Mainnet, address)}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        {type === EthereumNameType.DEFAULT ? formatEthereumAddress(address, 4) : name}
-                    </Link>
-                </Typography>
-                <Typography
-                    sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
-                    color="textPrimary"
-                    component="span"
-                    title={RULE_TIP}>
-                    <InfoOutlinedIcon color="inherit" fontSize="small" />
-                </Typography>
-            </Box>
-            <CollectibleListAddress address={address} />
+            {loadingWalletGun || loadingENS ? (
+                <Box className={classes.note} display="flex" alignItems="center" justifyContent="center">
+                    <CircularProgress />
+                </Box>
+            ) : (
+                <>
+                    <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
+                        <Typography color="textPrimary" component="span">
+                            Current display of {type}:{' '}
+                            <Link
+                                href={resolveAddressLinkOnExplorer(
+                                    ChainId.Mainnet,
+                                    (address?.length === 0 ? walletAddressGun : address) ?? '',
+                                )}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {type === EthereumNameType.DEFAULT
+                                    ? formatEthereumAddress(
+                                          (address?.length === 0 ? walletAddressGun : address) ?? '',
+                                          4,
+                                      )
+                                    : name}
+                            </Link>
+                        </Typography>
+                        <Typography
+                            sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
+                            color="textPrimary"
+                            component="span"
+                            title={RULE_TIP}>
+                            <InfoOutlinedIcon color="inherit" fontSize="small" />
+                        </Typography>
+                    </Box>
+                    <CollectibleListAddress address={(address?.length === 0 ? walletAddressGun : address) ?? ''} />
+                </>
+            )}
         </div>
     )
 }

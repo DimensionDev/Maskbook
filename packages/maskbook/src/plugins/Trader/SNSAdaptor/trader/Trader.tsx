@@ -237,7 +237,9 @@ export function Trader(props: TraderProps) {
                           isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                               ? `Follow @${
                                     isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to swap cryptocurrencies on Twitter.`
+                                } (mask.io) to swap cryptocurrencies on ${
+                                    isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
+                                }.`
                               : ''
                       }`,
                       '#mask_io',

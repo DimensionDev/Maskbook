@@ -1,3 +1,4 @@
+import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { MaskMessages } from '../../../utils'
 import { useNFTAvatar } from '../hooks'
@@ -13,7 +14,7 @@ interface NFTBadgeTimelineProps extends withClasses<'root'> {
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     const { userId, avatarId, width, height } = props
-    const _avatar = useNFTAvatar(userId)
+    const { loading, value: _avatar } = useNFTAvatar(userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
 
@@ -39,5 +40,7 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     if (!avatar) return null
     if (avatarId_ && avatar.avatarId !== avatarId_) return null
 
-    return <RainbowBox width={width} height={height} radius="100%" />
+    return (
+        <>{loading ? <CircularProgress size={width} /> : <RainbowBox width={width} height={height} radius="100%" />}</>
+    )
 }

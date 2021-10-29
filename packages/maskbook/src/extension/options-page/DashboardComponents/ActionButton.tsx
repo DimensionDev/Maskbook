@@ -160,6 +160,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
 }
 const useStyles = makeStyles()({
     success: {
+        color: '#fff',
         backgroundColor: green[500],
         '&:hover': {
             backgroundColor: green[700],

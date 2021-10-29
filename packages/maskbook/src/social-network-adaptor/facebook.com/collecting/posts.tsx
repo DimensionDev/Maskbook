@@ -88,7 +88,7 @@ function collectPostsFacebookInner(store: Next.CollectingCapabilities.PostsProvi
                 rootProxy.realCurrent = root.evaluate()[0]
                 const nextTypedMessage: TypedMessage[] = []
                 info.postBy.value = getPostBy(metadata, postInfo.postPayload.getCurrentValue() !== null).identifier
-                info.postID.value = getPostID(metadata)
+                info.postID.value = getPostID(metadata, rootProxy.realCurrent)
                 // parse text
                 const text = collectNodeText(node, {
                     onHTMLAnchorElement(node: HTMLAnchorElement): Option<string> {
@@ -132,7 +132,8 @@ function getPostBy(node: DOMProxy, allowCollectInfo: boolean) {
     // side effect: save to service
     return getProfileIdentifierAtFacebook(Array.from(dom), allowCollectInfo)
 }
-function getPostID(node: DOMProxy): null | string {
+
+function getPostID(node: DOMProxy, root: HTMLElement): null | string {
     if (isMobileFacebook) {
         const abbr = node.current.querySelector('abbr')
         if (!abbr) return null
@@ -147,6 +148,20 @@ function getPostID(node: DOMProxy): null | string {
             return url.searchParams.get('id')
         } else {
             // In timeline
+            const postTimeNode1 = root.querySelector('[href*="permalink"]')
+            const postIdMode1 = postTimeNode1
+                ? postTimeNode1.getAttribute('href')?.match(/(?<=story_fbid=)(\d+)/g)?.[0] ?? null
+                : null
+
+            if (postIdMode1) return postIdMode1
+
+            const postTimeNode2 = root.querySelector('[href*="posts"]')
+            const postIdMode2 = postTimeNode2
+                ? postTimeNode2.getAttribute('href')?.match(/(?<=posts\/)(\d+)/g)?.[0] ?? null
+                : null
+
+            if (postIdMode2 && /^-?\d+$/.test(postIdMode2)) return postIdMode2
+
             const parent = node.current.parentElement
             if (!parent) return null
             const idNode = Array.from(parent.querySelectorAll('[id]'))

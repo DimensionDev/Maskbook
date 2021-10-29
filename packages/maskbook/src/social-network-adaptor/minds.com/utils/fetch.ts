@@ -11,8 +11,9 @@ import {
 import { notNullable } from '../../../utils/assert'
 
 const parseNameArea = (nameArea: HTMLAnchorElement) => {
+    const displayNameNode = nameArea.querySelector('strong')
     return {
-        name: nameArea.innerText,
+        name: displayNameNode && notNullable(displayNameNode) ? displayNameNode.innerText : nameArea.innerText,
         handle: nameArea.href.substr(8).split('/')[1],
     }
 }

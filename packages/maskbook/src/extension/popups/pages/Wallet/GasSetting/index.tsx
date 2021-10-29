@@ -8,7 +8,7 @@ import { GasSetting1559 } from './GasSetting1559'
 import { Prior1559GasSetting } from './Prior1559GasSetting'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     container: {
         padding: 16,
         '& > *': {

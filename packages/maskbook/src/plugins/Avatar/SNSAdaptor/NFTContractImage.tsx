@@ -19,12 +19,12 @@ export function NFTContractImage(props: NFTContractImageProps) {
     const { userId } = props
     const { classes } = useStyles()
 
-    const NFTAvatar = useNFTAvatar(userId)
+    const { loading: loadingNFT, value: NFTAvatar } = useNFTAvatar(userId)
     const { loading, value: contract } = useNFTVerified(NFTAvatar?.address ?? '')
 
     return (
         <div className={classes.root}>
-            {loading ? (
+            {loading || loadingNFT ? (
                 <CircularProgress size="small" />
             ) : contract ? (
                 <img className={classes.image} src={contract?.icon} />

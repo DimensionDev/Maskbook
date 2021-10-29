@@ -44,6 +44,10 @@ export interface NFTAvatarEvent {
     tokenId?: string
 }
 
+export interface RequestExtensionPermissionEvent {
+    permissions?: browser.permissions.Permission[]
+}
+
 export interface MaskMessages extends SettingsEvents {
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
@@ -65,6 +69,7 @@ export interface MaskMessages extends SettingsEvents {
     pluginEnabled: string
     pluginDisabled: string
 
+    requestExtensionPermission: RequestExtensionPermissionEvent
     // TODO: move to plugin message
     profileNFTsPageUpdated: ProfileNFTsPageEvent
     // TODO: move to plugin message

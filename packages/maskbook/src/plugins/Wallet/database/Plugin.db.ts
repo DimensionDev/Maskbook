@@ -1,7 +1,7 @@
 import { PLUGIN_IDENTIFIER } from '../constants'
 import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
 import type { AddressBookChunk } from '../services/addressBook'
-import type { RecentTransactionChunk } from '../services/recentTransactions/database'
+import type { RecentTransactionChunk } from '../services/transaction/database'
 import type {
     ERC1155TokenRecord,
     ERC20TokenRecord,
