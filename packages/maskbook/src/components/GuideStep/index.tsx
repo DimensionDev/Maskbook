@@ -90,10 +90,19 @@ export interface GuideStepProps extends PropsWithChildren<{}> {
     step: number
     tip: string
     arrow?: boolean
+    disabled?: boolean
     onComplete?: () => void
 }
 
-export default function GuideStep({ total, step, tip, children, arrow = true, onComplete }: GuideStepProps) {
+export default function GuideStep({
+    total,
+    step,
+    tip,
+    children,
+    arrow = true,
+    disabled = false,
+    onComplete,
+}: GuideStepProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const childrenRef = useRef<HTMLElement>()
@@ -105,11 +114,13 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
     const lastStep = useValueRef(lastStepRef)
 
     useEffect(() => {
+        if (disabled) return
         const open = +lastStep === step
         setOpen(open)
     }, [lastStep])
 
     useEffect(() => {
+        if (disabled) return
         document.body.style.overflow = open ? 'hidden' : ''
     }, [open])
 
