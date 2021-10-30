@@ -2,9 +2,10 @@ import { makeStyles } from '@masknet/theme'
 import { RainbowBox } from './RainbowBox'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {},
+    root: {
+        overflow: 'unset',
+    },
 }))
-
 interface NFTAvatarRingProps {
     stroke: string
     strokeWidth: number
@@ -14,8 +15,8 @@ interface NFTAvatarRingProps {
 }
 
 export function NFTAvatarRing(props: NFTAvatarRingProps) {
-    const { stroke, strokeWidth, fontSize, text, width } = props
     const { classes } = useStyles()
+    const { stroke, strokeWidth, fontSize, text, width } = props
 
     const R = width + 2 * strokeWidth - 4
     const r = R / 2 - strokeWidth
@@ -26,8 +27,8 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const y2 = y1
 
     return (
-        <RainbowBox width={width} height={width}>
-            <svg width={R} height={R} viewBox={`0 0 ${R} ${R}`} id="NFTAvatarRingIcon">
+        <RainbowBox width={R} height={R}>
+            <svg className={classes.root} width={R} height={R} viewBox={`0 0 ${R} ${R}`} id="NFTAvatarRingIcon">
                 <defs>
                     <path
                         id="path"

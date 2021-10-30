@@ -24,6 +24,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            left: -27,
+            top: -1 * props.width,
+        },
     },
     image: {
         position: 'absolute',
