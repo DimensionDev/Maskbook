@@ -43,26 +43,16 @@ export const NFTAvatarRingIcon = ({
 
             <circle cx={R / 2} cy={R / 2} r={r + width / 2 - 2} fill="none" stroke="black" strokeWidth={width} />
             <pattern id="pattern" x="0" y="0" width="300%" height="100%" patternUnits="userSpaceOnUse">
-                <rect x="0" y="0" width="150%" height="100%" fill="url(#gradient)">
-                    <animate
-                        attributeType="XML"
-                        attributeName="x"
-                        from="0"
-                        to="150%"
-                        dur="7s"
+                <circle cx={R / 2} cy={R / 2} r={R / 2} fill="url(#gradient)">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        dur="10s"
                         repeatCount="indefinite"
+                        from={`0 ${R / 2} ${R / 2}`}
+                        to={`360 ${R / 2} ${R / 2}`}
                     />
-                </rect>
-                <rect x="-150%" y="0" width="150%" height="100%" fill="url(#gradient)">
-                    <animate
-                        attributeType="XML"
-                        attributeName="x"
-                        from="-150%"
-                        to="0"
-                        dur="7s"
-                        repeatCount="indefinite"
-                    />
-                </rect>
+                </circle>
             </pattern>
 
             <text x="0%" textAnchor="middle" fill="url(#pattern)">
