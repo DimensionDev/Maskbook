@@ -1,46 +1,8 @@
-import { keyframes, makeStyles } from '@masknet/theme'
-import { boxShadow } from '../constants'
-
-const rainbowBorderKeyFrames = keyframes`
-0%,to {
-    border-color: #00f8ff;
-    box-shadow: ${boxShadow}
-}
-
-20% {
-    border-color: #a4ff00;
-    box-shadow: ${boxShadow}
-}
-
-40% {
-    border-color: #f7275e;
-    box-shadow: ${boxShadow}
-}
-
-60% {
-    border-color: #ffd300;
-    box-shadow: ${boxShadow}
-}
-
-80% {
-    border-color: #ff8a00;
-    box-shadow: ${boxShadow}
-}
-`
+import { makeStyles } from '@masknet/theme'
+import { RainbowBox } from './RainbowBox'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        lineHeight: 0,
-        borderRadius: '100%',
-        animation: `${rainbowBorderKeyFrames}  6s linear infinite`,
-        border: '2px solid #00f8ff',
-        boxShadow: `${boxShadow}`,
-        transition: '.125s ease',
-        overflow: 'hidden',
-    },
+    root: {},
 }))
 
 interface NFTAvatarRingProps {
@@ -64,7 +26,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const y2 = y1
 
     return (
-        <div className={classes.root}>
+        <RainbowBox width={width} height={width}>
             <svg width={R} height={R} viewBox={`0 0 ${R} ${R}`} id="NFTAvatarRingIcon">
                 <defs>
                     <path
@@ -117,6 +79,6 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     </textPath>
                 </text>
             </svg>
-        </div>
+        </RainbowBox>
     )
 }

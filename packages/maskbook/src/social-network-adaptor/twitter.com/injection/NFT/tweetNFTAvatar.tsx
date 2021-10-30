@@ -27,7 +27,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
                     <div style={{ position: 'absolute', top: -2, left: -2, zIndex: -1 }}>
-                        <NFTBadgeTweet width={width + 4} height={height + 4} />
+                        <NFTBadgeTweet width={width} height={height} />
                     </div>,
                 )
                 remover = root.destory

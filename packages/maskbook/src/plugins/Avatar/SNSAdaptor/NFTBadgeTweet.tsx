@@ -4,11 +4,7 @@ import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/u
 import { NFTBadgeTimeline } from './NFTBadgeTimeline'
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        position: 'absolute',
-        top: 4,
-        left: 0,
-    },
+    root: {},
 }))
 
 interface NFTBadgeTweetProps {

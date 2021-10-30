@@ -8,5 +8,3 @@ export const PLUGIN_ID = 'com.maskbook.avatar'
 export const PLUGIN_NAME = 'Avatar'
 export const PLUGIN_DESCRIPTION = 'NFT Avatar'
 export const PLUGIN_IDENTIFIER = 'com.maskbook.avatar'
-
-export const boxShadow = '0 2px 4px rgb(0 248 255 / 40%), 0 4px 8px rgb(37 41 46 / 20%)'

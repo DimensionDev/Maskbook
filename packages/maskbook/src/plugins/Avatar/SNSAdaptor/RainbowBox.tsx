@@ -1,30 +1,30 @@
 import { useStylesExtends } from '@masknet/shared'
 import { keyframes, makeStyles } from '@masknet/theme'
-import { boxShadow } from '../constants'
 
-const rainbowBoxKeyFrames = keyframes`
+const boxShadow = '0 2px 4px rgb(0 248 255 / 40%), 0 4px 8px rgb(37 41 46 / 20%)'
+const rainbowBorderKeyFrames = keyframes`
 0%,to {
-    background-color: #00f8ff;
+    border-color: #00f8ff;
     box-shadow: ${boxShadow}
 }
 
 20% {
-    background-color: #a4ff00;
+    border-color: #a4ff00;
     box-shadow: ${boxShadow}
 }
 
 40% {
-    background-color: #f7275e;
+    border-color: #f7275e;
     box-shadow: ${boxShadow}
 }
 
 60% {
-    background-color: #ffd300;
+    border-color: #ffd300;
     box-shadow: ${boxShadow}
 }
 
 80% {
-    background-color: #ff8a00;
+    border-color: #ff8a00;
     box-shadow: ${boxShadow}
 }
 `
@@ -32,11 +32,11 @@ const rainbowBoxKeyFrames = keyframes`
 interface StyleProps {
     width: number
     height: number
-    radius: string
+    radius?: string
 }
-const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '100%' }) => ({
     root: {
-        animation: `${rainbowBoxKeyFrames} 6s linear infinite`,
+        animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
         width,
         height,
         boxShadow: `${boxShadow}`,
@@ -46,13 +46,14 @@ const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius }) =>
         justifyContent: 'center',
         alignItems: 'center',
         lineHeight: 0,
+        border: '2px solid #00f8ff',
     },
 }))
 
 interface RainbowBoxProps extends withClasses<'root'> {
     width: number
     height: number
-    radius: string
+    radius?: string
     children?: React.ReactNode
 }
 export function RainbowBox(props: RainbowBoxProps) {

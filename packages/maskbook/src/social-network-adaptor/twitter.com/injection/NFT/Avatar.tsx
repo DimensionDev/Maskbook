@@ -46,12 +46,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                             top: -2,
                             zIndex: -1,
                         }}>
-                        <NFTBadgeTimeline
-                            userId={twitterId}
-                            avatarId={avatarId}
-                            width={width + 4}
-                            height={height + 4}
-                        />
+                        <NFTBadgeTimeline userId={twitterId} avatarId={avatarId} width={width} height={height} />
                     </div>,
                 )
                 remover = root.destory
