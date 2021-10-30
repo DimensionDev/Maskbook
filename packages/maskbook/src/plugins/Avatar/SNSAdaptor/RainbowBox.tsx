@@ -1,7 +1,7 @@
 import { useStylesExtends } from '@masknet/shared'
 import { keyframes, makeStyles } from '@masknet/theme'
+import { boxShadow } from '../constants'
 
-const boxShadow = 'none' //'0 5px 10px rgb(0 248 255 / 40%), 0 10px 20px rgb(37 41 46 / 20%)'
 const rainbowBoxKeyFrames = keyframes`
 0%,to {
     background-color: #00f8ff;
@@ -42,6 +42,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius }) =>
         boxShadow: `${boxShadow}`,
         transition: '.125s ease',
         borderRadius: radius,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        lineHeight: 0,
     },
 }))
 
@@ -49,6 +53,7 @@ interface RainbowBoxProps extends withClasses<'root'> {
     width: number
     height: number
     radius: string
+    children?: React.ReactNode
 }
 export function RainbowBox(props: RainbowBoxProps) {
     const classes = useStylesExtends(
@@ -60,5 +65,5 @@ export function RainbowBox(props: RainbowBoxProps) {
         props,
     )
 
-    return <div className={classes.root} />
+    return <div className={classes.root}>{props.children}</div>
 }

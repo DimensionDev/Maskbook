@@ -7,7 +7,7 @@ import { useNFT } from '../hooks'
 import { useNFTVerified } from '../hooks/useNFTVerified'
 import { useUserOwnerAddress } from '../hooks/useUserOwnerAddress'
 import type { AvatarMetaDB } from '../types'
-import { NFTAvatarRingIcon } from './NFTAvatarRing'
+import { NFTAvatarRing } from './NFTAvatarRing'
 
 interface StyleProps {
     width: number
@@ -16,13 +16,14 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         position: 'absolute',
-        left: -1 * (props.width + 1),
-        top: -1 * (props.width + 1),
+        left: -1 * props.width,
+        top: -1 * props.width,
         width: props.size - 4,
         height: props.size - 4,
 
-        borderRadius: '100%',
-        boxShadow: '4px 4px 4px rgba(105, 228, 255, 0.25)',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     image: {
         position: 'absolute',
@@ -65,9 +66,11 @@ export function NFTBadge(props: NFTBadgeProps) {
     return (
         <div className={classes.root}>
             <Link href={resolveOpenSeaLink(avatar.address, avatar.tokenId)} target="_blank" rel="noopener noreferrer">
-                <NFTAvatarRingIcon
-                    size={size - 2}
-                    width={15}
+                <NFTAvatarRing
+                    width={size}
+                    strokeWidth={14}
+                    stroke="black"
+                    fontSize={9}
                     text={loading || loadingNFTVerified ? 'loading...' : `${name} ${formatPrice(amount)} ${symbol}`}
                 />
             </Link>
