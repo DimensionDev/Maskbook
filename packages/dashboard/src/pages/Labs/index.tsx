@@ -16,6 +16,7 @@ import {
     ValuablesIcon,
     DhedgeIcon,
     PetIcon,
+    RealityCardsIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -62,6 +63,7 @@ export default function Plugins() {
         [PLUGIN_IDS.MARKETS]: true,
         [PLUGIN_IDS.VALUABLES]: true,
         [PLUGIN_IDS.MARKET_TREND]: true,
+        [PLUGIN_IDS.REALITYCARDS]: true,
     })
 
     const account = useAccount()
@@ -239,6 +241,14 @@ export default function Plugins() {
                             desc={t.labs_dhedge_desc()}
                             icon={<DhedgeIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.DHEDGE]}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.REALITYCARDS}
+                            title={t.labs_realitycards()}
+                            desc={t.labs_realitycards_desc()}
+                            icon={<RealityCardsIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.REALITYCARDS]}
                             onSwitch={onSwitch}
                         />
                     </Box>

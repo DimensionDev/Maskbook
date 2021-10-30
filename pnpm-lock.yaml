@@ -570,7 +570,11 @@ importers:
       '@masknet/theme': link:../../theme
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.1
+<<<<<<< HEAD
       react-use: 17.3.1_9a9fcfd9691ee39f83ac00f4a3221da4
+=======
+      react-use: 17.3.1_809e898db569a1fe7ae9ea851da8594e
+>>>>>>> feat: detect and fetch reality cards event
       web3-core-helpers: 1.5.2
 
   packages/plugins/example:
@@ -19846,7 +19850,11 @@ packages:
     resolution: {integrity: sha1-ulSMh578+5DaHE2eCX20pGySVe8=}
     dev: false
 
+<<<<<<< HEAD
   /nano-css/5.3.1_9a9fcfd9691ee39f83ac00f4a3221da4:
+=======
+  /nano-css/5.3.1_809e898db569a1fe7ae9ea851da8594e:
+>>>>>>> feat: detect and fetch reality cards event
     resolution: {integrity: sha512-ENPIyNzANQRyYVvb62ajDd7PAyIgS2LIUnT9ewih4yrXSZX4hKoUwssy8WjUH++kEOA5wUTMgNnV7ko5n34kUA==}
     peerDependencies:
       react: '*'
@@ -21842,6 +21850,7 @@ packages:
       react-dom: 18.0.0-alpha-00ced1e2b-20211102_c9c210d65bdac3c3f586a38a4275dd8c
     dev: false
 
+<<<<<<< HEAD
   /react-universal-interface/0.6.2_946f04496fafbe35779ae73653d62189:
     resolution: {integrity: sha512-dg8yXdcQmvgR13RIlZbTRQOoUrDciFVoSBZILwjE2LFISxZZ8loVJKAkuzswl5js8BHda79bIb2b84ehU8IjXw==}
     peerDependencies:
@@ -21853,6 +21862,9 @@ packages:
     dev: false
 
   /react-use/15.3.8_9a9fcfd9691ee39f83ac00f4a3221da4:
+=======
+  /react-use/15.3.8_809e898db569a1fe7ae9ea851da8594e:
+>>>>>>> feat: detect and fetch reality cards event
     resolution: {integrity: sha512-GeGcrmGuUvZrY5wER3Lnph9DSYhZt5nEjped4eKDq8BRGr2CnLf9bDQWG9RFc7oCPphnscUUdOovzq0E5F2c6Q==}
     peerDependencies:
       react: ^16.8.0  || ^17.0.0
@@ -21876,7 +21888,11 @@ packages:
       tslib: 2.3.1
     dev: false
 
+<<<<<<< HEAD
   /react-use/17.3.1_9a9fcfd9691ee39f83ac00f4a3221da4:
+=======
+  /react-use/17.3.1_809e898db569a1fe7ae9ea851da8594e:
+>>>>>>> feat: detect and fetch reality cards event
     resolution: {integrity: sha512-hs7+tS4rRm1QLHPfanLCqXIi632tP4V7Sai1ENUP2WTufU6am++tU9uSw9YrNCFqbABiEv0ndKU1XCUcfu2tXA==}
     peerDependencies:
       react: ^16.8.0  || ^17.0.0

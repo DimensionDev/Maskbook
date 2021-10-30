@@ -1,10 +1,10 @@
-# Plugin: Reality Card
+# Plugin: Reality Cards
 
-This plugin fetch and show [Reality Card](https://realitycards.io) events and allow user to rent a card.
+This plugin fetch and show [Reality Cards](https://realitycards.io) events and allow user to rent a card.
 
 ## Feature Set
 
-- [] Detect Reality Card event url
+- [x] Detect RealityCards event url
 - [] Show event cards and info
 - [] Rent a card
 
