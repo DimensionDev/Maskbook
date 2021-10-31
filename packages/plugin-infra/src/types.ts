@@ -1,7 +1,8 @@
+import type React from 'react'
+import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
-import type { Option, Result } from 'ts-results'
 
 export namespace Plugin {
     /**
@@ -181,6 +182,8 @@ export namespace Plugin.SNSAdaptor {
         GlobalInjection?: InjectUI<{}>
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
+        /** This UI will be an entry of network in the Select Provider Dialog. */
+        SelectProviderDialogEntry?: SelectProviderDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
@@ -194,6 +197,7 @@ export namespace Plugin.SNSAdaptor {
      * - Custom type: Fallback choice if the dialog type cannot do what you want to do.
      */
     export type CompositionDialogEntry = CompositionDialogEntryCustom | CompositionDialogEntryDialog
+
     export interface CompositionDialogEntryCustom {
         /**
          * A label that will be rendered in the CompositionDialog as a chip.
@@ -217,6 +221,12 @@ export namespace Plugin.SNSAdaptor {
          * @default false
          */
         keepMounted?: boolean
+    }
+
+    export interface SelectProviderDialogEntry {
+        name: React.ReactNode
+        icon: React.ReactNode
+        panel: React.ReactNode
     }
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
@@ -268,6 +278,8 @@ export namespace Plugin.Dashboard {
     export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
+        /** This UI will be an entry of network in the Select Provider Dialog. */
+        SelectProviderDialogEntry?: Plugin.SNSAdaptor.SelectProviderDialogEntry
     }
 }
 

@@ -1,0 +1,5 @@
+export const PLUGIN_META_KEY = 'com.maskbook.flow'
+export const PLUGIN_ID = 'com.maskbook.flow'
+export const PLUGIN_NAME = 'Flow Chain'
+export const PLUGIN_ICON = 'F'
+export const PLUGIN_DESCRIPTION = ''

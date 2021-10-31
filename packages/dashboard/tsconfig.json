@@ -14,6 +14,7 @@
     { "path": "../icons/" },
     { "path": "../plugin-infra" },
     { "path": "../plugins/Wallet/" },
+    { "path": "../plugins/Flow/" },
     { "path": "../backup-format/" }
   ]
 }

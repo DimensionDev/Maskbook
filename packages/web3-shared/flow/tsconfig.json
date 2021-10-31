@@ -1,0 +1,9 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/flow",
+    "tsBuildInfoFile": "../dist/flow.tsbuildinfo"
+  },
+  "include": ["./", "./**/*.json"]
+}

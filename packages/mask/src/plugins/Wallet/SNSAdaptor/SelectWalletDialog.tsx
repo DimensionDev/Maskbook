@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -10,7 +10,6 @@ import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useState } from 'react'
 
 const useStyles = makeStyles()({
     content: {
