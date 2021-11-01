@@ -1,3 +1,6 @@
+import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     formatBalance,
@@ -9,26 +12,21 @@ import {
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { v4 as uuid } from 'uuid'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useI18N } from '../../../utils/i18n-next-ui'
+import { useI18N } from '../../../utils'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
-import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
+import { v4 as uuid } from 'uuid'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -153,13 +151,7 @@ export function InvestDialog() {
                 ? [
                       `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
                           pool?.name
-                      }. ${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to invest dHEDGE pools.`
-                              : ''
-                      }`,
+                      }. Follow @realMaskNetwork (mask.io) to invest dHEDGE pools.`,
                       '#mask_io',
                   ].join('\n')
                 : '',

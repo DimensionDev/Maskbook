@@ -1,15 +1,15 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-} from '@masknet/web3-shared-evm'
 import { useDHedgePoolV1Contract, useDHedgePoolV2Contract } from '../contracts/useDHedgePool'
 import { Pool, PoolType } from '../types'
+import {
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    TransactionEventType,
+    TransactionStateType,
+    useAccount,
+    useTransactionState,
+} from '@masknet/web3-shared-evm'
 
 /**
  * A callback for invest dhedge pool
@@ -61,11 +61,11 @@ export function useInvestCallback(pool: Pool | undefined, amount: string, token?
 
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
-            deposit()
-                .send({
-                    ...config,
-                    gas: estimatedGas,
-                })
+            const promiEvent = deposit().send({
+                ...config,
+                gas: estimatedGas,
+            })
+            promiEvent
                 .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setInvestState({
                         type: TransactionStateType.HASH,

@@ -33,6 +33,10 @@ export interface Fund {
     fund: Pool
 }
 
+export interface Funds {
+    content: Pool[]
+}
+
 export enum Period {
     D1 = '1d',
     W1 = '1w',
@@ -48,6 +52,11 @@ export interface PoolHistory {
 
 export interface PerformanceHistory {
     history: PoolHistory[]
+}
+
+export interface Investor {}
+export interface FundsByInvestor {
+    allFundsByInvestor: Investor[]
 }
 
 //#endregion dhedge types

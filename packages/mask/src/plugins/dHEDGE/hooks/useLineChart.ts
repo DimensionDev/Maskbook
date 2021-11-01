@@ -1,0 +1,165 @@
+import * as d3 from 'd3'
+import { useEffect, RefObject } from 'react'
+import stringify from 'json-stable-stringify'
+import type { Dimension } from '../../hooks/useDimension'
+
+export function useLineChart(
+    svgRef: RefObject<SVGSVGElement>,
+    data: { date: Date; value: number }[],
+    dimension: Dimension,
+    id: string,
+    opts: { color?: string; tickFormat?: string; formatTooltip?: Function },
+) {
+    const { color = 'steelblue', tickFormat = ',.2s', formatTooltip = (value: number) => value } = opts
+    const { top, right, bottom, left, width, height } = dimension
+    const contentWidth = width - left - right
+    const contentHeight = height - top - bottom
+    useEffect(() => {
+        if (!svgRef.current) return
+
+        // remove old graph
+        d3.select(svgRef.current).select(`#${id}`).remove()
+
+        // not necessary
+        if (data.length === 0) return
+
+        // create new graph
+        const graph = d3
+            .select(svgRef.current)
+            .append('g')
+            .attr('id', id)
+            .attr('transform', `translate(${left}, ${top})`)
+
+        const gradient = graph
+            .append('defs')
+            .append('linearGradient')
+            .attr('id', 'gradient')
+            .attr('x1', '0')
+            .attr('y1', '0')
+            .attr('x2', '0')
+            .attr('y2', '1')
+
+        gradient.append('stop').attr('offset', '3.87%').attr('stop-color', 'rgba(44, 164, 239, 0.34)')
+
+        gradient.append('stop').attr('offset', '100%').attr('stop-color', 'rgba(44, 164, 239, 0)')
+
+        // create X axis
+        const x = d3
+            .scaleTime()
+            .domain(d3.extent(data, (d) => d.date) as [Date, Date])
+            .range([0, contentWidth])
+
+        // create Y axis
+        const min = d3.min(data, (d) => d.value) as number
+        const max = d3.max(data, (d) => d.value) as number
+        const dist = Math.abs(max - min)
+        const y = d3
+            .scaleLinear()
+            .domain([min - dist * 0.05, max + dist * 0.05])
+            .range([contentHeight, 0])
+
+        // Add the area
+        graph
+            .append('path')
+            .datum(data)
+            .attr('fill', 'url(#gradient)')
+            .attr('fill-opacity', 0.3)
+            .attr('stroke', 'none')
+            .attr(
+                'd',
+                //@ts-ignore
+                d3
+                    .area()
+                    .x((d) => x((d as any).date))
+                    .y0(contentHeight)
+                    .y1((d) => y((d as any).value)),
+            )
+
+        // Add the line
+        graph
+            .append('path')
+            .datum(data)
+            .attr('fill', 'none')
+            .attr('stroke', color)
+            .attr('stroke-width', 2)
+            .attr(
+                'd',
+                //@ts-ignore
+                d3
+                    .line()
+                    .x((d) => x((d as any).date))
+                    .y((d) => y((d as any).value)),
+            )
+
+        // create tooltip
+        const tooltip = graph.append('g')
+        const callout = (g: d3.Selection<SVGGElement, unknown, null, undefined>, value: any) => {
+            if (!value) {
+                g.style('display', 'none')
+                return
+            }
+
+            g.style('display', null).style('pointer-events', 'none').style('font', '10px sans-serif')
+
+            const path = g.selectAll('path').data([null]).join('path').attr('fill', 'white').attr('stroke', 'black')
+
+            const text = g
+                .selectAll('text')
+                .data([null])
+                .join('text')
+                .call((text) =>
+                    text
+                        .selectAll('tspan')
+                        .data((value + '').split(/\n/))
+                        .join('tspan')
+                        .attr('x', 0)
+                        .attr('y', (d, i) => `${i * 1.1}em`)
+                        .style('font-weight', (_, i) => (i ? null : 'bold'))
+                        .text((d) => d),
+                )
+
+            const textBBox = (text.node() as SVGTextElement)?.getBBox()
+
+            if (textBBox) {
+                const { x, y, width: w, height: h } = textBBox
+
+                text.attr('transform', `translate(${-w / 2},${15 - y})`)
+                path.attr('d', `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`)
+            }
+        }
+
+        const hide = () => tooltip.call(callout, null)
+
+        // add tooltip
+        d3.select(svgRef.current).on('mousemove', function () {
+            // eslint-disable-next-line @typescript-eslint/no-invalid-this
+            const mx = d3.mouse(this)[0]
+            if (mx < left || mx > left + contentWidth) {
+                // mouse not in the content view
+                hide()
+                return
+            }
+            const fixedX = mx - left
+            const bisect = (mx: number) => {
+                const date = x.invert(mx)
+                const index = d3.bisector<{ date: Date; value: number }, Date>((d) => d.date).left(data, date, 1)
+                return data[index]
+            }
+
+            const { date, value } = bisect(fixedX)
+
+            tooltip.attr('transform', `translate(${Number(x(date))},${y(value)})`).call(
+                callout,
+                `${formatTooltip(value)}
+                ${date.toLocaleString('en', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    timeZone: 'UTC',
+                })}`,
+            )
+        })
+
+        d3.select(svgRef.current).on('mouseleave', hide)
+    }, [svgRef, data.length, stringify(dimension), tickFormat, formatTooltip])
+}

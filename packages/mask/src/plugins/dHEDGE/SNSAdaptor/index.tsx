@@ -1,13 +1,13 @@
 import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
-import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
-import { PoolView } from '../UI/PoolView'
 import { InvestDialog } from '../UI/InvestDialog'
 import { escapeRegExp } from 'lodash-es'
 import { BASE_URL, STAGING_URL } from '../constants'
+import { PoolView } from '../UI/PoolView'
+import { SnackbarContent } from '@mui/material'
 
 function createMatchLink() {
     return new RegExp(`(${escapeRegExp(BASE_URL)}|${escapeRegExp(STAGING_URL)})/pool/(\\w+)`)

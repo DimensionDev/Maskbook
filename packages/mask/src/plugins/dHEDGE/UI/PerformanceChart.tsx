@@ -3,26 +3,25 @@ import { useWindowSize } from 'react-use'
 import { CircularProgress, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import RefreshIcon from '@mui/icons-material/Refresh'
-import { useLineChart } from '../../hooks/useLineChart'
 import { Period, Pool } from '../types'
 import { useFetchPoolHistory } from '../hooks/usePool'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import type { Stat } from '../../Trader/types'
 import { useDimension, Dimension } from '../../hooks/useDimension'
-import { PriceChartPeriodControl } from './ChartControl'
+import { useLineChart } from '../hooks/useLineChart'
 
 const DEFAULT_DIMENSION: Dimension = {
-    top: 32,
-    right: 16,
-    bottom: 32,
-    left: 16,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
     width: 598,
-    height: 200,
+    height: 100,
 }
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
-        padding: theme.spacing(2),
+        padding: theme.spacing(0),
     },
     svg: {
         display: 'block',
@@ -58,7 +57,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
-    const [period, setPeriod] = useState(Period.D1)
+    const [period, setPeriod] = useState(Period.W1)
 
     //#region fetch pool history
     const { value: perfHistory, error, loading, retry } = useFetchPoolHistory(pool.address, period)
@@ -106,17 +105,14 @@ export function PerformanceChart(props: PerformanceChartProps) {
                 <RefreshIcon className={classes.refresh} color="primary" onClick={retry} />
             )}
             {stats.length && !error ? (
-                <>
-                    <PriceChartPeriodControl period={period} onPeriodChange={setPeriod} />
-                    <svg
-                        className={classes.svg}
-                        ref={svgRef}
-                        width={dimension.width}
-                        height={dimension.height}
-                        viewBox={`0 0 ${dimension.width} ${dimension.height}`}
-                        preserveAspectRatio="xMidYMid meet"
-                    />
-                </>
+                <svg
+                    className={classes.svg}
+                    ref={svgRef}
+                    width={dimension.width}
+                    height={dimension.height}
+                    viewBox={`0 0 ${dimension.width} ${dimension.height}`}
+                    preserveAspectRatio="xMidYMid meet"
+                />
             ) : (
                 <Typography className={classes.placeholder} align="center" color="textSecondary">
                     {loading
