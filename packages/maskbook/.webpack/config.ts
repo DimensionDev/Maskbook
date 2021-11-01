@@ -188,8 +188,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         ].filter(nonNullable),
         optimization: {
             minimize: false,
-            // HMR must have single runtime chunks
-            runtimeChunk: 'single',
+            runtimeChunk: false,
             splitChunks: {
                 maxInitialRequests: Infinity,
                 chunks: 'all',

@@ -1,4 +1,4 @@
 import './polyfill/web-apis/worker'
-import { printEnvironment } from '@dimensiondev/holoflows-kit'
-console.log('Hello from Manifest V3', printEnvironment())
-export {}
+import './polyfill/web-apis/secp256k1'
+
+import './extension/service' // setup Services.*

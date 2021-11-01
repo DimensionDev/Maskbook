@@ -6,6 +6,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "dev",
+    "start:mv3": "dev --mv3",
     "codegen": "gulp codegen-watch",
     "build": "build",
     "build-ios": "build --preset iOS",
