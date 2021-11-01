@@ -53,7 +53,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 const chainDetailed = getChainDetailed(chainId)
                 const tokenDetailed =
                     payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token
-                return `🧧 A Lucky Packet with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
+                return `🧧 A Lucky Drop with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
                     tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
                 } from ${payload.sender.name}`
             },
