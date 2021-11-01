@@ -1,9 +1,6 @@
 //#region Polyfills
 import './polyfill'
-// @ts-ignore WebCrypto
-import { crypto } from 'webcrypto-liner/build/index.es'
-Object.defineProperty(globalThis, 'crypto', { configurable: true, enumerable: true, get: () => crypto })
-//#endregion
+import './polyfill/web-apis/secp256k1'
 
 import './extension/service' // setup Services.*
 import './utils/native-rpc' // setup Android and iOS API server
