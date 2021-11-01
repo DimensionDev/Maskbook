@@ -150,7 +150,7 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
-            CollectionAvatar?(signal: AbortSignal): void
+            collectionAvatar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void

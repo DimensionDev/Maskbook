@@ -174,7 +174,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         profileAvatar: injectNFTAvatarInTwitter,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
         postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
-        CollectionAvatar: injectNFTContractAtTwitter,
+        collectionAvatar: injectNFTContractAtTwitter,
     },
     configuration: {
         steganography: {
