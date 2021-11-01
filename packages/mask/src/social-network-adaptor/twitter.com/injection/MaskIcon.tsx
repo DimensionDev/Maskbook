@@ -28,13 +28,14 @@ function _(main: () => LiveSelector<HTMLElement, true>, size: number, signal: Ab
             let remover = () => {}
             const remove = () => remover()
             const check = () => {
-                ifUsingMaskbook(
-                    new ProfileIdentifier('twitter.com', bioPageUserIDSelector(main).evaluate() || ''),
-                ).then(() => {
-                    const root = createReactRootShadowed(meta.afterShadow, { signal })
-                    root.render(<Icon size={size} />)
-                    remover = root.destory
-                }, remove)
+                ifUsingMask(new ProfileIdentifier('twitter.com', bioPageUserIDSelector(main).evaluate() || '')).then(
+                    () => {
+                        const root = createReactRootShadowed(meta.afterShadow, { signal })
+                        root.render(<Icon size={size} />)
+                        remover = root.destory
+                    },
+                    remove,
+                )
             }
             check()
             return {
@@ -61,8 +62,8 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
             ),
         )
         .enableSingleMode()
-    ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove)
-    post.postBy.subscribe(() => ifUsingMaskbook(post.postBy.getCurrentValue()).then(add, remove))
+    ifUsingMask(post.postBy.getCurrentValue()).then(add, remove)
+    post.postBy.subscribe(() => ifUsingMask(post.postBy.getCurrentValue()).then(add, remove))
     let remover = () => {}
     function add() {
         if (signal?.aborted) return
@@ -78,7 +79,7 @@ export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal)
         remover()
     }
 }
-export const ifUsingMaskbook = memoizePromise(
+export const ifUsingMask = memoizePromise(
     (pid: ProfileIdentifier) =>
         Services.Identity.queryProfile(pid).then((x) => (!!x.linkedPersona ? Promise.resolve() : Promise.reject())),
     (pid: ProfileIdentifier) => pid.toText(),

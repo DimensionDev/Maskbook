@@ -255,7 +255,7 @@ importers:
       rollup: 2.56.3
       rollup-plugin-terser: 7.0.2_rollup@2.56.3
 
-  packages/maskbook:
+  packages/mask:
     specifiers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20201027083702-d0ae6e2

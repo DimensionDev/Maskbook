@@ -7,8 +7,8 @@
     "emitDeclarationOnly": true
   },
   "include": ["./src", "./src/**/*.json"],
-  // ! Note: maskbook/ depends dashboard/ on source-code level
-  // !       but dashboard/ depends maskbook/ on type level
+  // ! Note: mask/ depends dashboard/ on source-code level
+  // !       but dashboard/ depends mask/ on type level
   // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
   "references": [
     { "path": "../public-api" },

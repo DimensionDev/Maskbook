@@ -20,7 +20,7 @@ import { AccountType } from '../../pages/Settings/type'
 import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
 import { LoadingButton } from '../LoadingButton'
-import type { BackupPreview } from '../../../../maskbook/src/utils'
+import type { BackupPreview } from '../../../../mask/src/utils'
 import { PopupRoutes } from '@masknet/shared'
 
 export const RestoreFromCloud = memo(() => {

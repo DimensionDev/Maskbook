@@ -46,9 +46,9 @@ export const languageSettings = createGlobalSettings<LanguageOptions>('language'
  *      https://github.com/microsoft/TypeScript/issues/30858
  *
  * References:
- *      PluginGitcoinMessages: packages/maskbook/src/plugins/Gitcoin/messages.ts
- *      PluginTraderMessages: packages/maskbook/src/plugins/Trader/messages.ts
- *      PluginTransakMessages: packages/maskbook/src/plugins/Transak/messages.ts
+ *      PluginGitcoinMessages: packages/mask/src/plugins/Gitcoin/messages.ts
+ *      PluginTraderMessages: packages/mask/src/plugins/Trader/messages.ts
+ *      PluginTransakMessages: packages/mask/src/plugins/Transak/messages.ts
  */
 export const currentImagePayloadStatus: NetworkSettings<string> = createNetworkSettings('currentImagePayloadStatus', '')
 export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSettings('currentSelectedIdentity', '')

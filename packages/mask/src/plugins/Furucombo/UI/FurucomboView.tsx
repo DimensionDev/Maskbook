@@ -62,7 +62,7 @@ const useStyles = makeStyles()((theme) => ({
     footName: {
         marginLeft: theme.spacing(0.5),
     },
-    maskbook: {
+    mask: {
         width: 40,
         height: 10,
     },
@@ -138,7 +138,7 @@ export function FurucomboView(props: PoolViewProps) {
                         rel="noopener noreferrer"
                         title="Mask"
                         href="https://mask.io">
-                        <MaskTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                        <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
                     </Link>
                 </Typography>
                 <Typography className={classes.footnote} variant="subtitle2">

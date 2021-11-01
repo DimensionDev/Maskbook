@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { Flags } from '../../utils/flags'
 
 export const base: Plugin.Shared.Definition = {
-    ID: 'io.maskbook.external',
+    ID: 'io.mask.external',
     icon: '🧩',
     name: { fallback: 'Mask External Plugin Loader' },
     description: { fallback: 'Able to load external plugins.' },

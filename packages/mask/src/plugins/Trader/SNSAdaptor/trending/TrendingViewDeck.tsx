@@ -88,10 +88,6 @@ const useStyles = makeStyles()((theme) => {
             width: 40,
             height: 40,
         },
-        maskbook: {
-            width: 40,
-            height: 10,
-        },
     }
 })
 

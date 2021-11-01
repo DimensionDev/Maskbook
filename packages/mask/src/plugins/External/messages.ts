@@ -17,4 +17,4 @@ export interface ExternalPluginMessage {
     }
 }
 
-export const ExternalPluginMessages = createPluginMessage<ExternalPluginMessage>('io.maskbook.external', Serialization)
+export const ExternalPluginMessages = createPluginMessage<ExternalPluginMessage>('io.mask.external', Serialization)
