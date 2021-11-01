@@ -22,7 +22,7 @@
     { "path": "../external-plugin-previewer" },
     { "path": "../injected-script/sdk" },
     { "path": "../mask-sdk/server" },
-    { "path": "./tsconfig.worker.json" }
+    { "path": "./web-workers" }
   ],
   "ts-node": {
     "transpileOnly": true,
