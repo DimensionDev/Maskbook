@@ -1,5 +1,6 @@
 /* spell-checker: disable */
 import emitFile from '@nice-labs/emit-file-webpack-plugin'
+import { cloneDeep } from 'lodash-es'
 import { NormalizedFlags } from './flags'
 
 type Manifest = typeof import('../src/manifest.json') & Record<string, any>
@@ -7,7 +8,7 @@ export function emitManifestFile(flags: NormalizedFlags) {
     return emitFile({
         name: 'manifest.json',
         content() {
-            const manifest: Manifest = { ...require('../src/manifest.json') }
+            const manifest: Manifest = cloneDeep(require('../src/manifest.json'))
             modify(manifest, flags)
             return JSON.stringify(manifest, null, 4)
         },
