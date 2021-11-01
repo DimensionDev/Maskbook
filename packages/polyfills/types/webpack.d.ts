@@ -1,5 +1,6 @@
-// Copied from @types/webpack-env
+/// <reference path="./env.d.ts" />
 
+// Copied from @types/webpack-env
 /**
  * Webpack module API - variables and global functions available inside modules
  */
@@ -206,24 +207,9 @@ declare namespace __WebpackModuleApi {
         autoApply?: boolean | undefined
     }
 }
-
 interface ImportMeta {
     /**
      * `import.meta.webpackHot` is an alias for` module.hot` which is also available in strict ESM
      */
     webpackHot?: __WebpackModuleApi.Hot | undefined
-    /**
-     * `import.meta.url` is the `file:` url of the current file (similar to `__filename` but as file url)
-     */
-    url: string
 }
-
-declare namespace NodeJS {
-    interface Process {
-        env: ProcessEnv
-    }
-    interface ProcessEnv {
-        NODE_ENV: 'production' | 'development'
-    }
-}
-declare var process: NodeJS.Process
