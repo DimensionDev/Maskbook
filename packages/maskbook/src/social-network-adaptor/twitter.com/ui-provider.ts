@@ -173,7 +173,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
-        tweetNFTAvatar: injectUserNFTAvatarAtTweet,
+        postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
         CollectionAvatar: injectNFTContractAtTwitter,
     },
     configuration: {

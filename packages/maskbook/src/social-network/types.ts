@@ -148,7 +148,7 @@ export namespace SocialNetworkUI {
             /** @deprecated same reason as userAvatar */
             openNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
-            tweetNFTAvatar?(signal: AbortSignal): void
+            postAndReplyNFTAvatar?(signal: AbortSignal): void
             /** @deprecated same reason as userAvatar */
             CollectionAvatar?(signal: AbortSignal): void
         }

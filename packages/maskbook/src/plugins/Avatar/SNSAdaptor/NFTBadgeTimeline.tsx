@@ -40,7 +40,5 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     if (!avatar) return null
     if (avatarId_ && avatar.avatarId !== avatarId_) return null
 
-    return (
-        <>{loading ? <CircularProgress size={width} /> : <RainbowBox width={width} height={height} radius="100%" />}</>
-    )
+    return loading ? <CircularProgress size={width} /> : <RainbowBox width={width} height={height} radius="100%" />
 }
