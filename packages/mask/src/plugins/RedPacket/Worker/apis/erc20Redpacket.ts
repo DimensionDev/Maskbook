@@ -96,7 +96,7 @@ export async function getRedPacketTxid(rpid: string) {
     const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
     {
         redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
-            ${RED_PACKET_FIELDS}
+            txid
         }
     }
     `)
