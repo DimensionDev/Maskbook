@@ -83,6 +83,7 @@ export interface MaskAppEntry {
     img: string
     onClick: any
     supportedChains?: ChainId[]
+    hidden: boolean
 }
 
 interface MaskApplicationBoxProps {
@@ -132,27 +133,31 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
     } = useControlledDialog()
 
     const [secondLevelEntryDialogTitle, setSecondLevelEntryDialogTitle] = useState('')
-    const [secondLevelEntryChains, setSecondLevelEntryChains] = useState<ChainId[]>([])
+    const [secondLevelEntryChains, setSecondLevelEntryChains] = useState<ChainId[] | undefined>([])
     const [secondLevelEntries, setSecondLevelEntries] = useState<MaskAppEntry[]>([])
 
     const [chainId, setChainId] = useState(
         secondEntryChainTabs?.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
 
-    const openSecondEntryDir = useCallback((title: string, maskAppEntries: MaskAppEntry[], chains: ChainId[]) => {
-        setSecondLevelEntryDialogTitle(title)
-        setSecondLevelEntries(maskAppEntries)
-        setSecondLevelEntryChains(chains)
-        onSecondLevelEntryDialogOpen()
-    }, [])
+    const openSecondEntryDir = useCallback(
+        (title: string, maskAppEntries: MaskAppEntry[], chains: ChainId[] | undefined) => {
+            setSecondLevelEntryDialogTitle(title)
+            setSecondLevelEntries(maskAppEntries)
+            setSecondLevelEntryChains(chains)
+            onSecondLevelEntryDialogOpen()
+        },
+        [],
+    )
     //#endregion
 
-    function createEntry(title: string, img: string, onClick: any, supportedChains?: ChainId[]) {
+    function createEntry(title: string, img: string, onClick: any, supportedChains?: ChainId[], hidden = false) {
         return {
             title,
             img,
             onClick,
             supportedChains,
+            hidden,
         }
     }
 
@@ -170,7 +175,9 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
         createEntry('Mask Bridge', new URL('./assets/bridge.png', import.meta.url).toString(), () =>
             window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
         ),
-        createEntry('Mask Box', new URL('./assets/mask_box.png', import.meta.url).toString(), undefined),
+        createEntry('Mask Box', new URL('./assets/mask_box.png', import.meta.url).toString(), () =>
+            window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
+        ),
         createEntry('Swap', new URL('./assets/swap.png', import.meta.url).toString(), openSwapDialog),
         createEntry('Fiat on/off ramp', new URL('./assets/fiat_ramp.png', import.meta.url).toString(), () =>
             setBuyDialog({ open: true, address: account }),
@@ -179,52 +186,59 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
             openSecondEntryDir(
                 'NFTs',
                 [
-                    {
-                        title: 'MaskBox',
-                        img: new URL('./assets/mask_box.png', import.meta.url).toString(),
-                        onClick: () => {},
-                    },
-                    {
-                        title: 'Valuables',
-                        img: new URL('./assets/valuables.png', import.meta.url).toString(),
-                        onClick: () => {},
-                    },
+                    createEntry(
+                        'MaskBox',
+                        new URL('./assets/mask_box.png', import.meta.url).toString(),
+                        () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
+                        undefined,
+                        false,
+                    ),
+                    createEntry(
+                        'Valuables',
+                        new URL('./assets/valuables.png', import.meta.url).toString(),
+                        () => {},
+                        undefined,
+                        true,
+                    ),
                 ],
-                [ChainId.Mainnet, ChainId.BSC],
+                undefined,
             ),
         ),
-        createEntry('Investment', new URL('./assets/investment.png', import.meta.url).toString(), () =>
-            openSecondEntryDir(
-                'Investment',
-                [
-                    {
-                        title: 'Zerion',
-                        img: new URL('./assets/zerion.png', import.meta.url).toString(),
-                        onClick: () => {},
-                        supportedChains: [ChainId.Mainnet],
-                    },
-                    {
-                        title: 'dHEDGE',
-                        img: new URL('./assets/dHEDGE.png', import.meta.url).toString(),
-                        onClick: () => {},
-                    },
-                ],
-                [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
-            ),
+        createEntry(
+            'Investment',
+            new URL('./assets/investment.png', import.meta.url).toString(),
+            () =>
+                openSecondEntryDir(
+                    'Investment',
+                    [
+                        createEntry('Zerion', new URL('./assets/zerion.png', import.meta.url).toString(), () => {}, [
+                            ChainId.Mainnet,
+                        ]),
+                        createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
+                    ],
+                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
+                ),
+            undefined,
+            true,
         ),
-        createEntry('Saving', new URL('./assets/saving.png', import.meta.url).toString(), undefined),
-        createEntry('Alternative', new URL('./assets/more.png', import.meta.url).toString(), () =>
-            openSecondEntryDir(
-                'Alternative',
-                [
-                    {
-                        title: 'PoolTogether',
-                        img: new URL('./assets/pool_together.png', import.meta.url).toString(),
-                        onClick: () => {},
-                    },
-                ],
-                [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
-            ),
+        createEntry('Saving', new URL('./assets/saving.png', import.meta.url).toString(), undefined, undefined, true),
+        createEntry(
+            'Alternative',
+            new URL('./assets/more.png', import.meta.url).toString(),
+            () =>
+                openSecondEntryDir(
+                    'Alternative',
+                    [
+                        createEntry(
+                            'PoolTogether',
+                            new URL('./assets/pool_together.png', import.meta.url).toString(),
+                            () => {},
+                        ),
+                    ],
+                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
+                ),
+            undefined,
+            true,
         ),
     ]
 
@@ -241,8 +255,8 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
                 </div>
             ) : null}
             <section className={classes.applicationWrapper}>
-                {(secondEntries ?? firstLevelEntries).map(({ title, img, onClick, supportedChains }, i) =>
-                    !supportedChains || supportedChains?.includes(chainId) ? (
+                {(secondEntries ?? firstLevelEntries).map(({ title, img, onClick, supportedChains, hidden }, i) =>
+                    (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
                         <div className={classes.applicationBox} onClick={onClick} key={i.toString()}>
                             <img src={img} className={classes.applicationImg} />
                             <Typography color="textPrimary">{title}</Typography>
