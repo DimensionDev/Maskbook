@@ -1,11 +1,11 @@
 import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { OnDemandWorker } from '../../../../../web-workers/OnDemandWorker'
-import type { Input, Output } from '../../../../../../src-workers/wallet'
+import type { Input, Output } from '../../../../../../web-workers/wallet'
 
 type Request = InstanceType<typeof api.MWRequest>
 type Response = InstanceType<typeof api.MWResponse>
 
-const Worker = new OnDemandWorker(new URL('../../../../../../src-workers/wallet.ts', import.meta.url), {
+const Worker = new OnDemandWorker(new URL('../../../../../../web-workers/wallet.ts', import.meta.url), {
     name: 'MaskWallet',
 })
 
