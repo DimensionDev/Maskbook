@@ -6,6 +6,7 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "dev",
+    "start:mv3": "dev --mv3",
     "codegen": "gulp codegen-watch",
     "build": "build",
     "build-ios": "build --preset iOS",
@@ -19,7 +20,7 @@
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
     "packages/**/*.{ts,tsx,js,jsx}": "eslint -c packages/.eslintrc.json --fix",
-    "packages/maskbook/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
+    "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
   },
   "dependencies": {
     "@emotion/cache": "^11.4.0",
