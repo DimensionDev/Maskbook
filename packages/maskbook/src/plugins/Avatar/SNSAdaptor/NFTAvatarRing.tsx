@@ -38,16 +38,12 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                         d={`M${x1} ${y1} A${path_r} ${path_r} 0 1 1 ${x2} ${y2}`}
                     />
                     <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0">
-                        <stop offset="0%" stopColor="#EDE604" />
-                        <stop offset="10%" stopColor="#FFCC00" />
-                        <stop offset="20%" stopColor="#FEAC00" />
-                        <stop offset="30%" stopColor="#FF8100" />
-                        <stop offset="40%" stopColor="#FF5800" />
-                        <stop offset="50%" stopColor="#FF3BA7" />
-                        <stop offset="60%" stopColor="#CC42A2" />
-                        <stop offset="70%" stopColor="#9ED110" />
-                        <stop offset="80%" stopColor="#50B517" />
-                        <stop offset="90%" stopColor="#179067" />
+                        <stop offset="0%" stopColor="#00f8ff" />
+                        <stop offset="20%" stopColor="#a4ff00" />
+                        <stop offset="40%" stopColor="#f7275e" />
+                        <stop offset="60%" stopColor="#ffd300" />
+                        <stop offset="80%" stopColor="#ff8a00" />
+                        <stop offset="100%" stopColor="#00f8ff" />
                     </linearGradient>
                 </defs>
 
