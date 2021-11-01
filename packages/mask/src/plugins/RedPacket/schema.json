@@ -62,11 +62,6 @@
             "type": "string",
             "title": "network"
         },
-        "token_type": {
-            "enum": [0, 1, 2],
-            "type": "number",
-            "title": "token_type"
-        },
         "token": {
             "type": "object",
             "additionalProperties": true,
@@ -105,7 +100,6 @@
         "rpid",
         "sender",
         "shares",
-        "token_type",
         "total"
     ]
 }

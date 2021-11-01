@@ -5,16 +5,16 @@ import { omit } from 'lodash-es'
 
 export const PoolDatabase = createPluginDatabase<PoolRecordInDatabase>(ITO_PluginID)
 
-export async function getAllPoolsAsSeller(rpids: string[]) {
+export async function getAllPoolsAsSeller(ids: string[]) {
     const records: PoolRecord[] = []
     for await (const { value: record } of PoolDatabase.iterate('ito-pool')) {
-        if (rpids.includes(record.payload.pid)) records.push(PoolRecordOutDB(record))
+        if (ids.includes(record.payload.pid)) records.push(PoolRecordOutDB(record))
     }
     return records
 }
 
-export async function getPoolFromDB(rpid: string) {
-    const record = await PoolDatabase.get('ito-pool', rpid)
+export async function getPoolFromDB(id: string) {
+    const record = await PoolDatabase.get('ito-pool', id)
     return record ? PoolRecordOutDB(record) : undefined
 }
 
@@ -23,8 +23,8 @@ export async function addPoolIntoDB(record: PoolRecord) {
     return PoolDatabase.add(PoolRecordIntoDB(record))
 }
 
-export function removePoolFromDB(rpid: string) {
-    return PoolDatabase.remove('ito-pool', rpid)
+export function removePoolFromDB(id: string) {
+    return PoolDatabase.remove('ito-pool', id)
 }
 
 function PoolRecordIntoDB(x: PoolRecord) {
