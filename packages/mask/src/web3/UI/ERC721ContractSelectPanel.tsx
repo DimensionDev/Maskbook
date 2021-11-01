@@ -72,7 +72,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
-    const { value: assets, loading: loadingFromNFTscan } = useNFTscanFindAssets(account)
+    const { value: assets, loading: loadingFromNFTscan } = useNFTscanFindAssets(account, !Boolean(contract))
 
     const { t } = useI18N()
 
