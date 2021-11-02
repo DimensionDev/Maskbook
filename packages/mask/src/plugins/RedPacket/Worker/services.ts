@@ -1,6 +1,7 @@
-import type { ChainId } from '@masknet/web3-shared-evm'
-import type { RedPacketRecord } from '../types'
-import * as subgraph from './apis'
+import { ChainId, getRedPacketConstants } from '@masknet/web3-shared-evm'
+import type { RedPacketRecord, RedPacketJSONPayload, RedPacketJSONPayloadFromChain } from '../types'
+import * as subgraph from './apis/subgraph'
+import * as chain from './apis/chain'
 import * as database from './database'
 import * as nftDb from './databaseForNft'
 
@@ -15,20 +16,37 @@ export async function discoverRedPacket(record: RedPacketRecord) {
     database.addRedPacket(record)
 }
 
-export async function getRedPacketHistoryWithPassword(address: string, chainId: ChainId) {
-    const histories = await subgraph.getRedPacketHistory(address, chainId)
-    const historiesWithPassword = []
-    for (const history of histories) {
-        await database.updateV1ToV2(history)
-        const record = await database.getRedPacket(history.txid)
-        if (history.chain_id === chainId && record) {
-            history.payload.password = history.password = record.password
-        } else {
-            history.payload.password = history.password = ''
+export async function getRedPacketHistory(address: string, chainId: ChainId, endBlock: number) {
+    const { HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT } = getRedPacketConstants(chainId)
+
+    //#region Get data from thegraph
+    const redpacketsFromSubgraph = await subgraph.getRedPacketHistory(address, chainId)
+    //#endregion
+
+    //#region Get data from chain which has not been synced by thegraph.
+    const latestPoolFromSubgraph = redpacketsFromSubgraph[0]
+    const startBlockNumberFromChain = getLatestBlockNumberFromSubgraph(
+        latestPoolFromSubgraph,
+        HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT,
+    )
+    const redpacketsFromChain = await chain.getRedPacketHistory(chainId, startBlockNumberFromChain, endBlock, address)
+    //#endregion
+
+    const redpacketsFromNetwork = (
+        redpacketsFromChain as (RedPacketJSONPayloadFromChain | RedPacketJSONPayload)[]
+    ).concat(redpacketsFromSubgraph)
+
+    //#region Inject password from database
+    const redpacketsFromDatabase = await database.getAllRedpackets(redpacketsFromNetwork.map((x) => x.txid))
+    return redpacketsFromNetwork.map((x) => {
+        const record = redpacketsFromDatabase.find((y) => y.id === x.txid)
+        if (!record) return x
+        return {
+            ...x,
+            password: record.password,
         }
-        historiesWithPassword.push(history)
-    }
-    return historiesWithPassword
+    })
+    //#endregion
 }
 
 export async function getNftRedPacketHistory(address: string, chainId: ChainId, page: number) {
@@ -46,4 +64,12 @@ export async function getNftRedPacketHistory(address: string, chainId: ChainId, 
         historiesWithPassword.push(history)
     }
     return historiesWithPassword
+}
+
+function getLatestBlockNumberFromSubgraph(
+    redpacketFromSubgraph: RedPacketJSONPayload | undefined,
+
+    creationBlockNumber: number | undefined,
+) {
+    return redpacketFromSubgraph ? redpacketFromSubgraph.block_number! + 1 : creationBlockNumber
 }

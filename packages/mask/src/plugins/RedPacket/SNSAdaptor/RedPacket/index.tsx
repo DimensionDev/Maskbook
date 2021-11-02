@@ -12,6 +12,7 @@ import {
     useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
+    EthereumTokenType,
 } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -48,7 +49,11 @@ export function RedPacket(props: RedPacketProps) {
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
-    const { value: tokenDetailed } = useFungibleTokenDetailed(payload.token_type, payload.token?.address ?? '')
+
+    const { value: tokenDetailed } = useFungibleTokenDetailed(
+        payload.token?.type ?? payload.token_type ?? EthereumTokenType.Native,
+        payload.token?.address ?? '',
+    )
     const token = payload.token ?? tokenDetailed
     //#endregion
 
