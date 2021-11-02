@@ -4,7 +4,7 @@ import { useI18N } from '../../../../../utils'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-export function usePasswordForm() {
+export function usePasswordForm(refine: boolean = true) {
     const { t } = useI18N()
 
     const schema = useMemo(() => {
@@ -21,7 +21,7 @@ export function usePasswordForm() {
                     ),
                 confirm: zod.string().optional(),
             })
-            .refine((data) => data.password === data.confirm, {
+            .refine((data) => !refine || data.password === data.confirm, {
                 message: t('popups_wallet_password_dont_match'),
                 path: ['confirm'],
             })
