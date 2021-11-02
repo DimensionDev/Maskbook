@@ -54,6 +54,7 @@ const useStyles = makeStyles()({
         position: 'fixed',
         bottom: 0,
         width: '100%',
+        backgroundColor: '#ffffff',
     },
     button: {
         fontWeight: 600,
