@@ -80,7 +80,7 @@ const WalletRecovery = memo(() => {
         setError,
         formState: { errors, isValid },
         schema,
-    } = usePasswordForm(false)
+    } = usePasswordForm(!hasPassword)
 
     const { value: legacyWallets = [], loading: getLegacyWalletsLoading } = useAsyncRetry(async () => {
         const now = new Date()

@@ -4,7 +4,7 @@ import { useI18N } from '../../../../../utils'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 
-export function usePasswordForm(refine: boolean = true) {
+export function usePasswordForm(refine = true) {
     const { t } = useI18N()
 
     const schema = useMemo(() => {

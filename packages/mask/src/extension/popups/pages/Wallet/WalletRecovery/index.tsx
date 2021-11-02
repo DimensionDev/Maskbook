@@ -115,7 +115,7 @@ const WalletRecovery = memo(() => {
                 }
             }
         },
-        [backupId, history, setError],
+        [history, setError],
     )
 
     const onSubmit = handleSubmit(handleSetPassword)
