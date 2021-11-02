@@ -280,11 +280,13 @@ export async function exportKeyStoreJSON(address: string, unverifiedPassword?: s
               coin: api.Coin.Ethereum,
               derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
               password: password_,
+              newPassword: unverifiedPassword,
               StoredKeyData: wallet.storedKeyInfo.data,
           })
         : await sdk.exportKeyStoreJSONOfAddress({
               coin: api.Coin.Ethereum,
               password: password_,
+              newPassword: unverifiedPassword,
               StoredKeyData: wallet.storedKeyInfo.data,
           })
     if (!exported?.json) throw new Error(`Failed to export keystore JSON of ${address}.`)
