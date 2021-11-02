@@ -8,6 +8,7 @@ import {
     useChainId,
     useAccount,
     useERC721Tokens,
+    formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
@@ -154,7 +155,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(
-        erc721InDb.map((x) => x.contractDetailed),
+        erc721InDb.map((x) => ({ ...x.contractDetailed, address: formatEthereumAddress(x.contractDetailed.address) })),
         'address',
     ).map((x) => ({ contractDetailed: x, balance: undefined }))
 
