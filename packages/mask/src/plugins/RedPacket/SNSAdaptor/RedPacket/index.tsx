@@ -49,8 +49,11 @@ export function RedPacket(props: RedPacketProps) {
         computed: availabilityComputed,
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
-    const tokenType = payload.token ? EthereumTokenType.Native : EthereumTokenType.ERC20
-    const { value: tokenDetailed } = useFungibleTokenDetailed(tokenType, payload.token?.address ?? '')
+
+    const { value: tokenDetailed } = useFungibleTokenDetailed(
+        payload.token?.type ?? payload.token_type ?? EthereumTokenType.Native,
+        payload.token?.address ?? '',
+    )
     const token = payload.token ?? tokenDetailed
     //#endregion
 
