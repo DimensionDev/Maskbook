@@ -8,7 +8,7 @@ export interface Event {
     artistLink: string
     cardAffiliateAddresses: any[]
     cardAffiliateCut: string
-    cards: Factory[]
+    cards: Card[]
     category: string
     creatorCut: string
     description: string
@@ -46,6 +46,12 @@ export interface Event {
 export interface Factory {
     __typename: FactoryTypename
     id: string
+}
+
+export interface Card extends Factory {
+    image: string
+    price: string
+    outcomeName: string
 }
 
 export enum FactoryTypename {

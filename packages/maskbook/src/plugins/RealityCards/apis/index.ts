@@ -21,6 +21,9 @@ export async function fetchEvent(graph_url: string, slug: string): Promise<Event
             cardAffiliateCut
             cards {
               id
+              image
+              outcomeName
+              price
               __typename
             }
             category
