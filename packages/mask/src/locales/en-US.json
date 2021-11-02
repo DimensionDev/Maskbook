@@ -719,6 +719,7 @@
     "plugin_pets_loot_info_7": "Gold Ring",
     "popups_welcome": "Welcome",
     "popups_wallet_token": "Token",
+    "popups_wallet_dialog_legacy_wallet_tip": "Detected legacy wallets, please click confirm to restore them all.",
     "popups_wallet_set_payment_password": "Set the payment password",
     "popups_wallet_payment_password": "Payment Password",
     "popups_wallet_set_up_payment_password": "Set up payment password",

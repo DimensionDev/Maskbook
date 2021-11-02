@@ -9,9 +9,9 @@ import { Button, DialogContent, Typography } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
-    content: {},
     button: {
         display: 'flex',
         alignItems: 'flex-start',
@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface RestoreLegacyWalletDialogProps {}
 
 export function RestoreLegacyWalletDialog(props: RestoreLegacyWalletDialogProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const history = useHistory()
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.restoreLegacyWalletDialogUpdated)
@@ -54,9 +55,9 @@ export function RestoreLegacyWalletDialog(props: RestoreLegacyWalletDialogProps)
 
     return (
         <InjectedDialog open={open} maxWidth="xs" onClose={onClose}>
-            <DialogContent className={classes.content}>
+            <DialogContent>
                 <Typography className={classes.title} color="textPrimary" variant="body2" component="div">
-                    Detected legacy wallets, please click confirm to restore them all.
+                    {t('popups_wallet_dialog_legacy_wallet_tip')}
                 </Typography>
                 <Box display="flex" justifyContent="center">
                     <Button variant="contained" onClick={onRestore} sx={{ marginTop: 2 }}>
