@@ -10,8 +10,11 @@ import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupF
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
 import { Identifier, PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
-import { exportMnemonic, exportPrivateKey, getWallets } from '../../../plugins/Wallet/services'
-import { WalletRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
+import { exportMnemonic, exportPrivateKey, getLegacyWallets, getWallets } from '../../../plugins/Wallet/services'
+import {
+    LegacyWalletRecordToJSONFormat,
+    WalletRecordToJSONFormat,
+} from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { activatedPluginsWorker } from '@masknet/plugin-infra'
 import { timeout } from '@masknet/shared'
 import { RelationRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
@@ -51,7 +54,10 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
     }
     if (!opts.noPosts) await backupAllPosts()
     if (!opts.noRelations) await backupAllRelations()
-    if (!opts.noWallets) await backupAllWallets()
+    if (!opts.noWallets) {
+        await backupAllWallets()
+        await backupAllLegacyWallets()
+    }
     if (!opts.noPlugins) await backupAllPlugins()
 
     const file: BackupJSONFileLatest = {
@@ -126,6 +132,11 @@ export async function generateBackupJSON(opts: Partial<BackupOptions> = {}): Pro
         const wallets_ = allSettled.map((x) => (x.status === 'fulfilled' ? WalletRecordToJSONFormat(x.value) : null))
         if (wallets_.some((x) => !x)) throw new Error('Failed to backup wallets.')
         wallets.push(...(wallets_ as BackupJSONFileLatest['wallets']))
+    }
+
+    async function backupAllLegacyWallets() {
+        const wallets_ = (await getLegacyWallets(ProviderType.MaskWallet)).map(LegacyWalletRecordToJSONFormat)
+        wallets.push(...wallets_)
     }
 
     async function backupAllPlugins() {
