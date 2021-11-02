@@ -135,7 +135,7 @@ export async function fetchReward(url: string) {
     return `${(res.apy * 100).toFixed(2)}%`
 }
 
-export async function fetchInvestor(address: string, url: string) {
+export async function fetchFunds(address: string, url: string) {
     const body = {
         operationName: 'AllFundsByInvestor',
         variables: {
