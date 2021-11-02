@@ -1,7 +1,7 @@
 {
   "references": [
     // Only list top-level projects here
-    { "path": "./packages/maskbook/" },
+    { "path": "./packages/mask/" },
     { "path": "./packages/injected-script/main" },
     { "path": "./packages/mask-sdk/main" },
     { "path": "./packages/mask-sdk/public-api" },
