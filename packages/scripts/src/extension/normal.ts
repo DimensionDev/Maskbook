@@ -42,7 +42,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
         mode === 'dev' ? 'development' : 'production',
         args.progress && '--progress',
         args.profile && '--profile',
-        // this command runs in the /packages/maskbook folder.
+        // this command runs in the /packages/mask folder.
         args.profile && '--json=../../compilation-stats.json',
     ]
     const flags: BuildFlags = {
@@ -79,7 +79,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
 
     command.push('--env', 'flags=' + Buffer.from(JSON.stringify(flags), 'utf-8').toString('hex'))
     return spawn('npx', compact(command), {
-        cwd: resolve(PKG_PATH, 'maskbook'),
+        cwd: resolve(PKG_PATH, 'mask'),
         stdio: 'inherit',
         shell: true,
     })

@@ -9,7 +9,7 @@
   "references": [
     { "path": "../public-api" },
     { "path": "../theme/" },
-    { "path": "../maskbook/" },
+    { "path": "../mask/" },
     { "path": "../web3-shared/evm/" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" },
