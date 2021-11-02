@@ -66,10 +66,15 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1C68F3',
     },
     networkIcon: {
-        backgroundColor: '#fff !important',
+        backgroundColor: '#F6F8F8 !important',
+        border: '1px solid #ffffff',
+        borderRadius: '50%',
+        position: 'absolute',
+        right: -6,
+        bottom: -4,
     },
     providerIcon: {
-        backgroundColor: '#F7F9FA !important',
+        backgroundColor: '#fff !important',
     },
 }))
 
@@ -123,8 +128,8 @@ export function WalletStatusBox() {
     return selectedWallet ? (
         <section className={classes.currentAccount}>
             <WalletIcon
-                size={48}
-                badgeSize={18}
+                size={18}
+                badgeSize={48}
                 classes={{
                     networkIcon: classes.networkIcon,
                     providerIcon: classes.providerIcon,
