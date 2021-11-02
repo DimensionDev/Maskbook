@@ -162,17 +162,11 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
-                    if (
-                        !account ||
-                        providerType !== selectedProviderType ||
-                        getChainIdFromNetworkType(undeterminedNetworkType) !== chainId
-                    ) {
-                        setConnectWalletDialog({
-                            open: true,
-                            providerType,
-                            networkType: undeterminedNetworkType,
-                        })
-                    }
+                    setConnectWalletDialog({
+                        open: true,
+                        providerType,
+                        networkType: undeterminedNetworkType,
+                    })
                     break
                 case ProviderType.CustomNetwork:
                     throw new Error('To be implemented.')
