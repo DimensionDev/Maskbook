@@ -332,7 +332,7 @@ export async function recoverWalletFromPrivateKey(name: string, privateKey: stri
         coin: api.Coin.Ethereum,
         name,
         password: password_,
-        privateKey: privateKey.replace(/^0x/, ''),
+        privateKey: privateKey.replace(/^0x/, '').trim(),
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
     const created = await sdk.createAccountOfCoinAtPath({

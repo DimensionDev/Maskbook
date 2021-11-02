@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { Controller } from 'react-hook-form'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -128,11 +128,6 @@ const WalletRecovery = memo(() => {
         await onSubmit()
     }, [onSubmit])
 
-    console.log({
-        isValid,
-        errors,
-    })
-
     return getHasPasswordLoading || getLegacyWalletsLoading ? (
         <LoadingPlaceholder />
     ) : (
@@ -150,7 +145,6 @@ const WalletRecovery = memo(() => {
                             </div>
                         )
                     })}
-
                     {!hasPassword ? (
                         <form className={classes.form}>
                             <div style={{ marginTop: 16 }}>
