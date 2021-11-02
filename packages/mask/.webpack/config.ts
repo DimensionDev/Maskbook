@@ -31,6 +31,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
         return join(__dirname, '../../../', mode === 'development' ? 'dist' : 'build')
     })()
+    const polyfillFolder = join(distFolder, './polyfill')
 
     const baseConfig: Configuration = {
         name: 'mask',
@@ -180,7 +181,8 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     { from: join(__dirname, '../public/'), to: distFolder },
                     { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: distFolder },
                     { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: distFolder },
-                    { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: distFolder },
+                    { from: join(__dirname, '../../polyfills/dist/'), to: polyfillFolder },
+                    { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
                 ],
             }),
             emitManifestFile(normalizedFlags),
@@ -288,7 +290,10 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     }
 }
 function addHTMLEntry(options: HTMLPlugin.Options = {}) {
-    const templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
+    let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
+    if (options.chunks?.includes('background')) {
+        templateContent.replace(`<!-- background -->`, '<script src="/polyfill/secp256k1.js"></script>')
+    }
     return new HTMLPlugin({
         templateContent,
         inject: 'body',

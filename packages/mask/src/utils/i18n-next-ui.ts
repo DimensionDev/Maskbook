@@ -1,4 +1,3 @@
-/// <reference path="../polyfill/global.d.ts" />
 import type { i18n } from 'i18next'
 import { initReactI18next, useTranslation as useTranslation_, UseTranslationOptions } from 'react-i18next'
 import type { TOptions } from 'i18next'

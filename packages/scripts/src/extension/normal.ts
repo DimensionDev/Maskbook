@@ -6,17 +6,20 @@ import { resolve } from 'path'
 import { awaitChildProcess, PKG_PATH, watchTask } from '../utils'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts'
 import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk'
+import { buildPolyfill } from '../projects/polyfill'
 
 const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'mv3', 'readonlyCache', 'progress'] as const
 
 export async function extension(f?: Function | ExtensionBuildArgs) {
+    await buildPolyfill()
     await buildInjectedScript()
     await buildMaskSDK()
     if (typeof f === 'function') return awaitChildProcess(webpack('build'))
     return awaitChildProcess(webpack('build', f))
 }
 export async function extensionWatch(f?: Function | ExtensionBuildArgs) {
+    buildPolyfill()
     watchInjectedScript()
     watchMaskSDK()
     if (typeof f === 'function') return awaitChildProcess(webpack('dev'))
