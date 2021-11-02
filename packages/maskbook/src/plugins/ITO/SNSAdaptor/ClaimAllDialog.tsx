@@ -294,6 +294,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     )
 
     useEffect(() => {
+        resetClaimCallback()
+        resetClaimCallbackOld()
+    }, [chainId])
+
+    useEffect(() => {
         if (claimStateOld.type === TransactionStateType.UNKNOWN) return
 
         if (claimStateOld.type === TransactionStateType.HASH) {
@@ -303,12 +308,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }, 2000)
             return
         }
-        const claimableTokens = swappedTokensOld!.filter((t) => t.isClaimable)
-        const summary =
-            'Claim ' +
-            new Intl.ListFormat('en').format(
-                claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-            )
+        const claimableTokens = swappedTokensOld?.filter((t) => t.isClaimable)
+        const summary = claimableTokens
+            ? 'Claim ' +
+              new Intl.ListFormat('en').format(
+                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
+              )
+            : ''
         setClaimTransactionDialog({
             open: true,
             state: claimStateOld,
@@ -327,12 +333,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }, 2000)
             return
         }
-        const claimableTokens = swappedTokens!.filter((t) => t.isClaimable)
-        const summary =
-            'Claim ' +
-            new Intl.ListFormat('en').format(
-                claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-            )
+        const claimableTokens = swappedTokens?.filter((t) => t.isClaimable)
+        const summary = claimableTokens
+            ? 'Claim ' +
+              new Intl.ListFormat('en').format(
+                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
+              )
+            : ''
         setClaimTransactionDialog({
             open: true,
             state: claimState,
