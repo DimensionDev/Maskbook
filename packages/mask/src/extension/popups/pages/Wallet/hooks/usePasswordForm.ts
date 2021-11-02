@@ -25,7 +25,7 @@ export function usePasswordForm(refine = true) {
                 message: t('popups_wallet_password_dont_match'),
                 path: ['confirm'],
             })
-    }, [])
+    }, [refine])
 
     const formValue = useForm<zod.infer<typeof schema>>({
         mode: 'onBlur',
