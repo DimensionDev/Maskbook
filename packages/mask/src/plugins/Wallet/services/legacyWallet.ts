@@ -123,7 +123,7 @@ async function recoverWalletFromMnemonicWords(
 
 async function recoverWalletFromPrivateKey(privateKey: string) {
     const ec = new EC('secp256k1')
-    const privateKey_ = privateKey.replace(/^0x/, '') // strip 0x
+    const privateKey_ = privateKey.replace(/^0x/, '').trim() // strip 0x
     const key = ec.keyFromPrivate(privateKey_)
     return {
         address: EthereumAddress.from(key.getPublic(false, 'array') as any).address,
