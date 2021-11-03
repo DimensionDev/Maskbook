@@ -8,6 +8,7 @@ import {
     useChainId,
     useAccount,
     useERC721Tokens,
+    formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../messages'
@@ -121,18 +122,6 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
     const account = useAccount()
-    const { value: assets } = useNFTscanFindAssets(account)
-
-    const erc721InDb = useERC721Tokens()
-    const allContractsInDb = unionBy(
-        erc721InDb.map((x) => x.contractDetailed),
-        'address',
-    ).map((x) => ({ contractDetailed: x, balance: undefined }))
-
-    const contractList =
-        chainId === ChainId.Mainnet && assets
-            ? unionBy([...assets, ...allContractsInDb], 'contractDetailed.address')
-            : allContractsInDb
 
     //#region remote controlled dialog
     const { open, setDialog } = useRemoteControlledDialog(
@@ -161,6 +150,19 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
         })
     }, [id, setDialog])
     //#endregion
+
+    const { value: assets } = useNFTscanFindAssets(account, !open)
+
+    const erc721InDb = useERC721Tokens()
+    const allContractsInDb = unionBy(
+        erc721InDb.map((x) => ({ ...x.contractDetailed, address: formatEthereumAddress(x.contractDetailed.address) })),
+        'address',
+    ).map((x) => ({ contractDetailed: x, balance: undefined }))
+
+    const contractList =
+        chainId === ChainId.Mainnet && assets
+            ? unionBy([...assets, ...allContractsInDb], 'contractDetailed.address')
+            : allContractsInDb
 
     //#region fuse
     const fuse = useMemo(
