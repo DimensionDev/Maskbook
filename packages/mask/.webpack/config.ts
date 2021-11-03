@@ -181,7 +181,11 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     { from: join(__dirname, '../public/'), to: distFolder },
                     { from: join(__dirname, '../../injected-script/dist/injected-script.js'), to: distFolder },
                     { from: join(__dirname, '../../mask-sdk/dist/mask-sdk.js'), to: distFolder },
-                    { from: join(__dirname, '../../polyfills/dist/*.js'), to: polyfillFolder },
+                    {
+                        context: join(__dirname, '../../polyfills/dist/'),
+                        from: '*.js',
+                        to: polyfillFolder,
+                    },
                     { from: require.resolve('webextension-polyfill/dist/browser-polyfill.js'), to: polyfillFolder },
                 ],
             }),
