@@ -1,7 +1,9 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
+import { useState, useEffect } from 'react'
 import { NFTAvatarButton } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatarButton'
 import { startWatch, createReactRootShadowed } from '../../../../utils'
+import { useLocationChange } from '../../../../utils/hooks/useLocationChange'
 import { searchEditProfileSelector } from '../../utils/selector'
 
 export function injectOpenNFTAvatarEditProfileButton(signal: AbortSignal) {
@@ -28,23 +30,27 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 }))
 
 function OpenNFTAvatarEditProfileButtonInTwitter() {
-    const editDom = searchEditProfileSelector().evaluate()
+    const [style, setStyle] = useState<StyleProps>({ minHeight: 32, fontSize: 14, marginBottom: 11 })
     const onClick = () => {
+        const editDom = searchEditProfileSelector().evaluate()
         editDom?.click()
     }
 
-    const styles: StyleProps = {
-        minHeight: 32,
-        fontSize: 14,
-        marginBottom: 11,
-    }
-    if (editDom) {
+    const setStyleFromEditProfileSelector = () => {
+        const editDom = searchEditProfileSelector().evaluate()
+        if (!editDom) return
         const css = window.getComputedStyle(editDom)
-        styles.minHeight = Number(css.minHeight.replace('px', ''))
-        styles.fontSize = Number(css.fontSize.replace('px', ''))
-        styles.marginBottom = Number(css.marginBottom.replace('px', ''))
+        setStyle({
+            minHeight: Number(css.minHeight.replace('px', '')),
+            fontSize: Number(css.fontSize.replace('px', '')),
+            marginBottom: Number(css.marginBottom.replace('px', '')),
+        })
     }
-    console.log(styles)
-    const { classes } = useStyles(styles)
+
+    useEffect(() => setStyleFromEditProfileSelector(), [])
+
+    useLocationChange(() => setStyleFromEditProfileSelector())
+
+    const { classes } = useStyles(style)
     return <NFTAvatarButton classes={{ root: classes.root }} onClick={onClick} />
 }
