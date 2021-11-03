@@ -13,7 +13,7 @@ import 'core-js/proposals/array-grouping'
 
 // ? Need use case & type
 // import 'core-js/proposals/number-from-string'
-// import 'core-js/proposals/math-signbit'
+// import 'core-js/proposals/math-signBit'
 // import 'core-js/proposals/set-methods'
 // import 'core-js/proposals/collection-methods'
 // import 'core-js/proposals/collection-of-from'

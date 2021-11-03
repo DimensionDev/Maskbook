@@ -1,4 +1,4 @@
-/// <reference path="./lib.esnext.RAII.d.ts" />
+/// <reference path="./lib.esnext.disposable.d.ts" />
 
 /// <reference path="./lib.esnext.iterator.helper.d.ts" />
 
