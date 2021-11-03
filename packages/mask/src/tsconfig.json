@@ -2,9 +2,10 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./",
-    "outDir": "./dist/",
-    "tsBuildInfoFile": "./dist/legacy.tsbuildinfo",
-    "emitDeclarationOnly": true
+    "outDir": "../dist/src/",
+    "tsBuildInfoFile": "../dist/legacy.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    "lib": ["ES2021"]
   },
   "include": ["./", "./**/*.json"],
   // ! Note: mask/ depends dashboard/ on source-code level

@@ -16,7 +16,7 @@ export async function fromKeyStore(input: string, password: Uint8Array) {
     return { address: `0x${address}`, privateKey: `0x${seed}` } as const
 }
 
-async function decrypt(cipher: string, derivedKey: Uint8Array, cipherText: Uint8Array, iv: Uint8Array) {
+async function decrypt(cipher: string, derivedKey: Uint8Array, cipherText: Buffer, iv: Buffer) {
     const name = cipher === 'aes-128-ctr' ? 'AES-CTR' : 'AES-CBC'
     derivedKey = derivedKey.slice(0, 16)
     const length = 128
