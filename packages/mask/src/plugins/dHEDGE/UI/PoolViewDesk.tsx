@@ -1,8 +1,8 @@
-import { UnknowIcon } from '@masknet/icons'
+import { UnknownIcon } from '@masknet/icons'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { formatBalance } from '@masknet/web3-shared-evm'
-import { Avatar, Button, Link, Paper, Typography } from '@mui/material'
+import { Avatar, Button, CircularProgress, Link, Paper, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
@@ -38,7 +38,7 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: 'auto',
     },
     avatar: {
-        boardeRadius: '100%',
+        borderRadius: '100%',
         width: '100%',
         height: '100%',
     },
@@ -87,7 +87,7 @@ export function PoolViewDesk(props: PoolViewDeskProps) {
         .multipliedBy(100)
         .toFixed(2)
     const riskFactor = pool && pool?.riskFactor !== -1 ? pool?.riskFactor : '-'
-    const reward = useRewards()
+    const { loading: loadingRewards, value: rewards } = useRewards()
 
     //#region the invest dialog
     const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated)
@@ -99,6 +99,7 @@ export function PoolViewDesk(props: PoolViewDeskProps) {
             tokens: tokens,
         })
     }, [pool, tokens, openInvestDialog])
+    //#endregion
 
     return (
         <Paper elevation={0} className={classes.root}>
@@ -136,7 +137,12 @@ export function PoolViewDesk(props: PoolViewDeskProps) {
                         value={`${riskFactor}/5`}
                         tip="tips"
                     />
-                    <DeskItem name={<Trans i18nKey="plugin_dhedge_rewards" />} value={reward ?? '0%'} tip="tips" />
+                    <DeskItem
+                        name={<Trans i18nKey="plugin_dhedge_rewards" />}
+                        value={rewards ?? '0%'}
+                        tip="tips"
+                        loading={loadingRewards}
+                    />
                 </div>
             </div>
             <PerformanceChart pool={pool} />
@@ -171,10 +177,11 @@ interface DeskItemProps {
     value: string
     color?: string
     tip?: string
+    loading?: boolean
 }
 function DeskItem(props: DeskItemProps) {
     const { classes } = useItemStyles()
-    const { name, value, color, tip } = props
+    const { name, value, color, tip, loading } = props
     return (
         <div className={classes.item}>
             <Typography className={classes.title} variant="body2" color="textSecondary">
@@ -183,13 +190,17 @@ function DeskItem(props: DeskItemProps) {
 
             {tip ? (
                 <Typography sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }} color="textPrimary" title={tip}>
-                    <UnknowIcon className={classes.icon} />
+                    <UnknownIcon className={classes.icon} />
                 </Typography>
             ) : null}
 
-            <Typography className={classes.value} variant="body2" color={color ?? 'textPrimary'}>
-                {value}
-            </Typography>
+            {loading ? (
+                <CircularProgress size="small" />
+            ) : (
+                <Typography className={classes.value} variant="body2" color={color ?? 'textPrimary'}>
+                    {value}
+                </Typography>
+            )}
         </div>
     )
 }

@@ -27,6 +27,7 @@ import { useInvestCallback } from '../hooks/useInvestCallback'
 import { PluginDHedgeMessages } from '../messages'
 import type { Pool } from '../types'
 import { v4 as uuid } from 'uuid'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -151,13 +152,18 @@ export function InvestDialog() {
                 ? [
                       `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
                           pool?.name
-                      }. Follow @realMaskNetwork (mask.io) to invest dHEDGE pools.`,
+                      }. ${
+                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                              ? `Follow @${
+                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                                } (mask.io) to invest dHEDGE pools.`
+                              : ''
+                      }`,
                       '#mask_io',
                   ].join('\n')
                 : '',
         )
         .toString()
-
     // on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,

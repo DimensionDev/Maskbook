@@ -308,7 +308,9 @@
         "devnet",
         "fbclid",
         "noamount",
-        "txts"
+        "txts",
+        "leaderboard",
+        "halfyear"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

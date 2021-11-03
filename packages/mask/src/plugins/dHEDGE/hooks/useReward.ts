@@ -6,5 +6,5 @@ export function useRewards() {
     return useAsync(async () => {
         const reward = await PluginDHedgeRPC.fetchReward(API_URL)
         return reward
-    }).value
+    })
 }
