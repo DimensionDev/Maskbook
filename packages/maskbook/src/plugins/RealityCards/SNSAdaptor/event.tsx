@@ -1,7 +1,7 @@
 import { Box, Card, Typography, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useEvent } from '../hooks/useEvent'
+import { useEventBySlug } from '../hooks/useEvent'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -27,7 +27,7 @@ interface EventProps {
 export function EventView(props: EventProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { value: event, error, loading, retry } = useEvent(props.slug)
+    const { value: event, error, loading, retry } = useEventBySlug(props.slug)
     console.log(event, error, loading)
     if (loading) return <Typography color="textPrimary">Loading...</Typography>
     if (error)

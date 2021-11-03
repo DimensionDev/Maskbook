@@ -7,6 +7,8 @@ import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { escapeRegExp } from 'lodash-es'
 import { BASE_URL } from '../constants'
 import { EventView } from './event'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 function createMatchLink() {
     return new RegExp(`https:\/\/${escapeRegExp(BASE_URL)}\/cards\/(.+)`)
@@ -40,7 +42,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
         const event = getEventFromLinks(links)
         if (!event?.slug) return null
-        console.log('event', event)
         return <Renderer link={event.link} slug={event.slug} />
     },
     // GlobalInjection: function Component() {
@@ -54,7 +55,11 @@ function Renderer(props: React.PropsWithChildren<{ link: string; slug: string }>
     return (
         <MaskPluginWrapper pluginName="RealityCards">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <EventView slug={props.slug} link={props.link} />
+                <EthereumChainBoundary
+                    chainId={ChainId.Matic}
+                    isValidChainId={(chainId) => [ChainId.Matic].includes(chainId)}>
+                    <EventView slug={props.slug} link={props.link} />
+                </EthereumChainBoundary>
             </Suspense>
         </MaskPluginWrapper>
     )

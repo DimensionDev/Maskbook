@@ -1,0 +1,30 @@
+{
+    "SUBGRAPH": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "https://api.thegraph.com/subgraphs/name/realitycards/rc-beta-v9",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "REALITY_CARD_ADDRESS": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "0xca7d554781a0d3aa06e9bdb41e9274122fddc595",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    }
+}

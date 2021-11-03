@@ -1,6 +1,8 @@
 import type { Event } from '../types'
 
-export async function fetchEvent(graph_url: string, slug: string): Promise<Event> {
+export async function fetchEventBySlug(graph_url: string | undefined, slug: string): Promise<Event | undefined> {
+    if (!graph_url) return
+
     const body = {
         operationName: 'MarketBySlug',
         query: `query MarketBySlug($slug: String) {
