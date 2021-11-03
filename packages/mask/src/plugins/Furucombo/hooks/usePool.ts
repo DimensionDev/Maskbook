@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
-import { fetchPools } from '../apis'
+import { PluginFurucomboRPC } from '../messages'
 
 export function useFetchPools() {
-    return useAsyncRetry(() => fetchPools())
+    return useAsyncRetry(async () => PluginFurucomboRPC.fetchPools())
 }

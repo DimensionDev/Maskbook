@@ -1,4 +1,4 @@
-import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
+import { createPluginMessage, createPluginRPC, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_ID } from './constants'
 
 interface FurucomboMessages {
