@@ -1,29 +1,19 @@
 import type { ERC20TokenRecord } from '../Wallet/database/types'
 import type {
     EthereumTokenType,
-    NativeTokenDetailed,
-    ERC20TokenDetailed,
+    FungibleTokenDetailed,
     ChainId,
     ERC721TokenDetailed,
+    ERC721TokenOutMask,
 } from '@masknet/web3-shared-evm'
-
-/**
- * @see https://github.com/DimensionDev/Tessercube-iOS/wiki/Red-Packet-Data-Dictionary
- */
 
 //#region erc20 red packet
 export interface RedPacketRecord {
-    /** The red packet ID */
     id: string
     /** From twitter/facebook url */
     from: string
     password: string
     contract_version: number
-    /** backward compatible V1 */
-    payload?: {
-        contract_version: number
-        password: string
-    }
 }
 
 export interface RedPacketRecordInDatabase extends RedPacketRecord {
@@ -51,13 +41,14 @@ export interface RedPacketAvailability {
 interface RedPacketBasic {
     contract_address: string
     rpid: string
+    txid: string
     password: string
     shares: number
     is_random: boolean
     total: string
     creation_time: number
     duration: number
-    message: string
+    block_number?: number
 }
 
 export interface RedPacketJSONPayload extends RedPacketBasic {
@@ -66,119 +57,25 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
         name: string
         message: string
     }
-    txid?: string
     contract_version: number
     network?: string
-    token_type: EthereumTokenType.Native | EthereumTokenType.ERC20
-    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
+    token_type?: EthereumTokenType.Native | EthereumTokenType.ERC20
+    token?: FungibleTokenDetailed
+    claimers?: { address: string; name: string }[]
+    total_remaining?: string
 }
 
-export interface NftRedPacketJSONPayload extends RedPacketBasic {
-    sender: {
-        address: string
-        name: string
-        message: string
-    }
-    txid?: string
-    contract_version: number
-    network?: string
-    token_type: EthereumTokenType.ERC721
-    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
+export interface RedPacketJSONPayloadFromChain extends Omit<RedPacketJSONPayload, 'token'> {
+    token_address: string
 }
 
-export interface RedPacketRecordWithHistory {
-    history: RedPacketHistoryInMask
-    record: RedPacketRecord
-}
-
-//#region TokenOutMask
-export type TokenOutMask = Omit<NativeTokenDetailed | ERC20TokenDetailed, 'chainId'> & {
-    chain_id: ChainId
-}
-export type NftTokenOutMask = Omit<ERC721TokenDetailed, 'chainId'> & {
-    chain_id: ChainId
-}
-//#endregion
-
-export interface RedPacketHistoryInMask {
-    rpid: string
-    contract_address: string
-    password: string
-    shares: number
-}
-interface RedPacketCreator {
-    name: string
-    is_random: boolean
-    total: string
-    total_remaining: string
-    creation_time: number
-    last_updated_time: number
-    duration: number
-    chain_id: number
-    token: NativeTokenDetailed | ERC20TokenDetailed
-    creator: {
-        name: string
-        address: string
-    }
-    claimers: {
-        name: string
-        address: string
-    }[]
-    address: string
-}
-
-interface NFTRedPacketCreator extends Omit<RedPacketCreator, 'token' | 'is_random'> {
-    token: ERC721TokenDetailed
-}
-
-export interface RedPacketSubgraphInMask extends RedPacketBasic {
-    message: string
-    name: string
-    txid: string
-    total_remaining: string
-    last_updated_time: number
-    chain_id: number
-    token: NativeTokenDetailed | ERC20TokenDetailed
-    creator: RedPacketCreator
-    claimers: {
-        name: string
-        address: string
-    }[]
-}
-
-interface ERC721TokenContract {
-    address: string
-    name: string
-    symbol: string
-    chain_id: number
-}
-
-export interface NftRedPacketSubgraphInMask extends Omit<RedPacketSubgraphInMask, 'is_random' | 'token' | 'creator'> {
-    token: ERC721TokenDetailed
-    token_contract: ERC721TokenContract
-    creator: NFTRedPacketCreator
-    address: string
-    token_ids: string[]
-    claimers: {
-        name: string
-        address: string
-    }[]
-}
-
-export interface RedPacketSubgraphOutMask extends Omit<RedPacketSubgraphInMask, 'token'> {
-    token: TokenOutMask
-}
-
-export interface NftRedPacketSubgraphOutMask extends Omit<NftRedPacketSubgraphInMask, 'token'> {
-    token: NftTokenOutMask
-}
-
-export interface RedPacketHistory extends RedPacketSubgraphInMask {
-    payload: RedPacketJSONPayload
-    contract_version: number
-}
-export interface NftRedPacketHistory extends NftRedPacketSubgraphInMask {
-    payload: NftRedPacketJSONPayload
+export interface RedpacketAvailability {
+    token_address: string
+    balance: string
+    total: number
+    claimed: number
+    expired: boolean
+    claimed_amount: string
 }
 //#endregion
 
@@ -195,6 +92,51 @@ export interface RedPacketNftJSONPayload {
     contractTokenURI: string
     privateKey: string
     chainId: ChainId
+}
+
+export interface NftRedPacketJSONPayload extends RedPacketBasic {
+    sender: {
+        address: string
+        name: string
+        message: string
+    }
+    contract_version: number
+    network?: string
+    token_type: EthereumTokenType.ERC721
+    token?: Pick<ERC20TokenRecord, 'address' | 'name' | 'decimals' | 'symbol'>
+}
+
+interface ERC721TokenContract {
+    address: string
+    name: string
+    symbol: string
+    chain_id: number
+}
+
+export interface NftRedPacketSubgraphInMask extends Omit<RedPacketBasic, 'is_random'> {
+    token: ERC721TokenDetailed
+    token_contract: ERC721TokenContract
+    address: string
+    chain_id: number
+    message: string
+    token_ids: string[]
+    claimers: {
+        name: string
+        address: string
+    }[]
+    creator: {
+        name: string
+        address: string
+    }
+    total_remaining: string
+}
+
+export interface NftRedPacketSubgraphOutMask extends Omit<NftRedPacketSubgraphInMask, 'token'> {
+    token: ERC721TokenOutMask
+}
+
+export interface NftRedPacketHistory extends NftRedPacketSubgraphInMask {
+    payload: NftRedPacketJSONPayload
 }
 
 export interface RedPacketNftRecord {

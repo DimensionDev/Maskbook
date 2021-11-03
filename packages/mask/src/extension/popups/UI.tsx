@@ -52,11 +52,9 @@ export default function Popups() {
                             <Route children={<Redirect to={PopupRoutes.Wallet} />} />
                         </Switch>
                     </Suspense>
+                    {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                    <PluginRender />
                 </HashRouter>
-                {/*
-// TODO: Should only load plugins when the page is plugin-aware.
-                 */}
-                <PluginRender />
             </Web3Provider>
         </MaskUIRoot>
     )

@@ -1,1 +1,1 @@
-importScripts('./patches.js', './browser-polyfill.js', './js/background.js')
+importScripts('./worker_env.js', './polyfill/browser-polyfill.js', './js/background.js')

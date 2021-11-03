@@ -185,6 +185,16 @@ export type NonFungibleToken = ERC721Token | ERC1155Token
 export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
 //#endregion
 
+//#region token out of mask
+export type FungibleTokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
+    chain_id: ChainId
+}
+
+export type ERC721TokenOutMask = Omit<ERC721TokenDetailed, 'chainId'> & {
+    chain_id: ChainId
+}
+//#endregion
+
 interface TokenDetailedMap {
     [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
