@@ -4,7 +4,8 @@
     "rootDir": "./",
     "outDir": "../dist/src/",
     "tsBuildInfoFile": "../dist/legacy.tsbuildinfo",
-    "emitDeclarationOnly": true
+    "emitDeclarationOnly": true,
+    "lib": ["ES2021"]
   },
   "include": ["./", "./**/*.json"],
   // ! Note: mask/ depends dashboard/ on source-code level

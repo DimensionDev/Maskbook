@@ -19,7 +19,7 @@ export function loadKeyStore(input: string): KeyStore {
 }
 
 export function assertKeyDerivation(keystore: CryptoKeyStore, derivedKey: Uint8Array) {
-    const payload = Buffer.concat([derivedKey.slice(16, 32), Buffer.from(keystore.ciphertext, 'hex')])
+    const payload = Buffer.concat([derivedKey.slice(16, 32), Buffer.from(keystore.ciphertext, 'hex') as any])
     const valid = sha3(`0x${payload.toString('hex')}`) === `0x${keystore.mac}`
     if (!valid) {
         throw new Error('Password is incorrect')

@@ -1,5 +1,5 @@
 {
   "name": "@types/masknet__global-types",
   "private": true,
-  "types": "./env.d.ts"
+  "types": "./__all.d.ts"
 }
