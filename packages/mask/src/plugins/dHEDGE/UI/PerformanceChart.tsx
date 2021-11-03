@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     svg: {
         display: 'block',
-        color: '#fff',
+        color: theme.palette.text.primary,
     },
     progress: {
         bottom: theme.spacing(1),

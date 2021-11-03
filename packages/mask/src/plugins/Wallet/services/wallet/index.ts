@@ -280,11 +280,13 @@ export async function exportKeyStoreJSON(address: string, unverifiedPassword?: s
               coin: api.Coin.Ethereum,
               derivationPath: wallet.derivationPath ?? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/0`,
               password: password_,
+              newPassword: unverifiedPassword,
               StoredKeyData: wallet.storedKeyInfo.data,
           })
         : await sdk.exportKeyStoreJSONOfAddress({
               coin: api.Coin.Ethereum,
               password: password_,
+              newPassword: unverifiedPassword,
               StoredKeyData: wallet.storedKeyInfo.data,
           })
     if (!exported?.json) throw new Error(`Failed to export keystore JSON of ${address}.`)
@@ -330,7 +332,7 @@ export async function recoverWalletFromPrivateKey(name: string, privateKey: stri
         coin: api.Coin.Ethereum,
         name,
         password: password_,
-        privateKey: privateKey.replace(/^0x/, ''),
+        privateKey: privateKey.replace(/^0x/, '').trim(),
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
     const created = await sdk.createAccountOfCoinAtPath({

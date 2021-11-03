@@ -310,7 +310,8 @@
         "noamount",
         "txts",
         "leaderboard",
-        "halfyear"
+        "halfyear",
+        "redpackets"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

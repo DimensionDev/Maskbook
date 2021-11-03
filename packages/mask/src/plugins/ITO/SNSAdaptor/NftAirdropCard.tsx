@@ -176,7 +176,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
     const [checkAddress, setCheckAddress] = useState('')
     const now = Date.now()
     const { campaignInfos, loading, retry } = props
-    console.log({ campaignInfos })
+
     const [
         spaceStationClaimableCount,
         setSpaceStationClaimableCount,

@@ -87,6 +87,10 @@ export type WalletRiskWarningDialogEvent =
           type: 'cancel' | 'confirm'
       }
 
+export type RestoreLegacyWalletDialogEvent = {
+    open: boolean
+}
+
 export type WalletConnectQRCodeDialogEvent =
     | {
           open: true
@@ -204,6 +208,12 @@ export interface WalletMessage {
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
+
+    /**
+     * Restore Legacy Wallet Dialog
+     */
+    restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
+
     /**
      * Select token dialog
      */
