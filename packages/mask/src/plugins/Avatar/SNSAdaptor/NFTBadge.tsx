@@ -68,9 +68,15 @@ export function NFTBadge(props: NFTBadgeProps) {
     const { loading: loadingNFTVerified, value: NFTVerified } = useNFTVerified(avatar.address)
 
     return (
-        <div className={classes.root}>
+        <div
+            className={classes.root}
+            onClick={(e) => {
+                e.preventDefault()
+                window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
+            }}>
             <Link href={resolveOpenSeaLink(avatar.address, avatar.tokenId)} target="_blank" rel="noopener noreferrer">
                 <NFTAvatarRing
+                    id="NFTAvatarRing"
                     width={size}
                     strokeWidth={14}
                     stroke="black"
