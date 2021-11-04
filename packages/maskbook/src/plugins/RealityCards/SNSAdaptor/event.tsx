@@ -1,4 +1,4 @@
-import { Box, Card, Typography, Button } from '@mui/material'
+import { Box, Card, CardHeader, CardContent, Typography, Button, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useEventBySlug } from '../hooks/useEvent'
@@ -7,21 +7,22 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         padding: theme.spacing(2),
     },
-    title: {
-        paddingTop: theme.spacing(1),
-        paddingBottom: theme.spacing(1),
+    content: {
+        width: '100%',
+        height: 'var(--contentHeight)',
         display: 'flex',
-        alignItems: 'center',
-        '& > :last-child': {
-            marginTop: 4,
-            marginLeft: 4,
-        },
+        flexDirection: 'column',
+        padding: '0 !important',
     },
 }))
 
 interface EventProps {
     link: string
     slug: string
+}
+
+interface EventDetailsProps {
+    event: object
 }
 
 export function EventView(props: EventProps) {
@@ -43,11 +44,38 @@ export function EventView(props: EventProps) {
 
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
-            <div className={classes.title}>
-                <Typography variant="h6" color="textPrimary">
-                    {event.name}
-                </Typography>
-            </div>
+            <CardHeader
+                title={event.name}
+                titleTypographyProps={{ variant: 'h6', color: 'textPrimary' }}
+                subheader={<EventDetails event={event} />}
+            />
+            <CardContent className={classes.content} />
         </Card>
+    )
+}
+
+function EventDetails(props: EventDetailsProps) {
+    const { event } = props
+
+    return (
+        <Grid container wrap="nowrap" justifyContent="space-between" alignItems="center">
+            <Grid item container justifyContent="space-between" alignItems="center" flex="1" wrap="nowrap">
+                <Grid item container direction="column">
+                    <Grid item>pot size</Grid>
+                    <Grid item>12545</Grid>
+                </Grid>
+                <Grid item container direction="column">
+                    <Grid item>average rentals</Grid>
+                    <Grid item>12545</Grid>
+                </Grid>
+                <Grid item container direction="column">
+                    <Grid item>closes in</Grid>
+                    <Grid item>12545</Grid>
+                </Grid>
+            </Grid>
+            <Grid item sx={{ textAlign: 'right' }}>
+                open/ended
+            </Grid>
+        </Grid>
     )
 }
