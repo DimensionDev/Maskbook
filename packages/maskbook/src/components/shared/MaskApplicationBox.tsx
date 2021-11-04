@@ -12,8 +12,9 @@ import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
-import { ChainId, useChainId, useAccount } from '@masknet/web3-shared-evm'
+import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -76,6 +77,10 @@ const useStyles = makeStyles()((theme) => ({
         height: 36,
         marginBottom: 10,
     },
+    disabled: {
+        pointerEvents: 'none',
+        opacity: 0.5,
+    },
 }))
 
 export interface MaskAppEntry {
@@ -84,6 +89,7 @@ export interface MaskAppEntry {
     onClick: any
     supportedChains?: ChainId[]
     hidden: boolean
+    walletRequired: boolean
 }
 
 interface MaskApplicationBoxProps {
@@ -95,6 +101,7 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
     const { classes } = useStyles()
     const currentChainId = useChainId()
     const account = useAccount()
+    const selectedWallet = useWallet()
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
@@ -151,13 +158,21 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
     )
     //#endregion
 
-    function createEntry(title: string, img: string, onClick: any, supportedChains?: ChainId[], hidden = false) {
+    function createEntry(
+        title: string,
+        img: string,
+        onClick: any,
+        supportedChains?: ChainId[],
+        hidden = false,
+        walletRequired = true,
+    ) {
         return {
             title,
             img,
             onClick,
             supportedChains,
             hidden,
+            walletRequired,
         }
     }
 
@@ -165,22 +180,42 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
         createEntry('Lucky Drop', new URL('./assets/lucky_drop.png', import.meta.url).toString(), () =>
             openEncryptedMessage(RedPacketPluginID),
         ),
-        createEntry('File service', new URL('./assets/files.png', import.meta.url).toString(), () =>
-            openEncryptedMessage(FileServicePluginID),
+        createEntry(
+            'File service',
+            new URL('./assets/files.png', import.meta.url).toString(),
+            () => openEncryptedMessage(FileServicePluginID),
+            undefined,
+            false,
+            false,
         ),
         createEntry('ITO', new URL('./assets/token.png', import.meta.url).toString(), () =>
             openEncryptedMessage(ITO_PluginID),
         ),
         createEntry('Claim', new URL('./assets/gift.png', import.meta.url).toString(), onClaimAllDialogOpen),
-        createEntry('Mask Bridge', new URL('./assets/bridge.png', import.meta.url).toString(), () =>
-            window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
+        createEntry(
+            'Mask Bridge',
+            new URL('./assets/bridge.png', import.meta.url).toString(),
+            () => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
+            undefined,
+            false,
+            false,
         ),
-        createEntry('Mask Box', new URL('./assets/mask_box.png', import.meta.url).toString(), () =>
-            window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
+        createEntry(
+            'Mask Box',
+            new URL('./assets/mask_box.png', import.meta.url).toString(),
+            () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
+            undefined,
+            false,
+            false,
         ),
         createEntry('Swap', new URL('./assets/swap.png', import.meta.url).toString(), openSwapDialog),
-        createEntry('Fiat on/off ramp', new URL('./assets/fiat_ramp.png', import.meta.url).toString(), () =>
-            setBuyDialog({ open: true, address: account }),
+        createEntry(
+            'Fiat on/off ramp',
+            new URL('./assets/fiat_ramp.png', import.meta.url).toString(),
+            () => setBuyDialog({ open: true, address: account }),
+            undefined,
+            false,
+            false,
         ),
         createEntry('NFTs', new URL('./assets/nft.png', import.meta.url).toString(), () =>
             openSecondEntryDir(
@@ -191,6 +226,7 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
                         new URL('./assets/mask_box.png', import.meta.url).toString(),
                         () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
                         undefined,
+                        false,
                         false,
                     ),
                     createEntry(
@@ -255,13 +291,20 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
                 </div>
             ) : null}
             <section className={classes.applicationWrapper}>
-                {(secondEntries ?? firstLevelEntries).map(({ title, img, onClick, supportedChains, hidden }, i) =>
-                    (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
-                        <div className={classes.applicationBox} onClick={onClick} key={i.toString()}>
-                            <img src={img} className={classes.applicationImg} />
-                            <Typography color="textPrimary">{title}</Typography>
-                        </div>
-                    ) : null,
+                {(secondEntries ?? firstLevelEntries).map(
+                    ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
+                        (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
+                            <div
+                                className={classNames(
+                                    classes.applicationBox,
+                                    walletRequired && !selectedWallet ? classes.disabled : '',
+                                )}
+                                onClick={onClick}
+                                key={i.toString()}>
+                                <img src={img} className={classes.applicationImg} />
+                                <Typography color="textPrimary">{title}</Typography>
+                            </div>
+                        ) : null,
                 )}
             </section>
             {isClaimAllDialogOpen ? (
