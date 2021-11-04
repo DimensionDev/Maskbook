@@ -21,7 +21,6 @@ import { Web3Context } from '../web3/context'
 import { useAppearance } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
 
-
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function DashboardRoot() {

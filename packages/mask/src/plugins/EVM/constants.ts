@@ -1,4 +1,4 @@
-import { NetworkType, ProviderType } from "@masknet/web3-shared-evm"
+import { NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_META_KEY = 'com.maskbook.evm'
 export const PLUGIN_ID = 'com.maskbook.evm'

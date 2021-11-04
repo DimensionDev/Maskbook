@@ -1,14 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
+import { ProviderIconClickBait } from '../components/ProviderIconClickBait'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    SelectNetworkDialogEntry: {
-        async onSelect(network, provider) {
-            console.log(`EVM: ${network.ID} ${provider.ID}`)
-        },
-    },
+    ProviderIconClickBait,
 }
 
 export default sns

@@ -5,7 +5,7 @@
     "outDir": "./dist/",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src", "./src/**/*.json", "../mask/src/plugins/Wallet/SNSAdaptor/SelectProviderDialog"],
+  "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../web3-shared/evm" },
     { "path": "../theme" },

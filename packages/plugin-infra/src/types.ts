@@ -206,10 +206,16 @@ export namespace Plugin.SNSAdaptor {
         SearchBoxComponent?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
+        /** This Ui will receve network icon as children component, and the plugin may hook click handle on it. */
+        NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
+        /** This Ui will receve provider icon as children component, and the plugin may hook click handle on it. */
+        ProviderIconClickBait?: React.ComponentType<{
+            network: Shared.Network
+            provider: Shared.Provider
+            children?: React.ReactNode
+        }>
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
-        /** This UI will be an entry of network in the Select Provider Dialog. */
-        SelectNetworkDialogEntry?: SelectNetworkDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
@@ -247,17 +253,6 @@ export namespace Plugin.SNSAdaptor {
          * @default false
          */
         keepMounted?: boolean
-    }
-
-    export interface SelectNetworkDialogEntry {
-        /**
-         * This function will be called when the user chooses a new network with a specific wallet provider.
-         * The plugin must provide a data persistence solution. And that data should only alter in this callback.
-         * The infra will take its duty to track which network is used at the current stage.
-         * @param network
-         * @param provider
-         */
-        onSelect(network: Shared.Network, provider: Shared.Provider): Promise<void>
     }
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
@@ -309,8 +304,14 @@ export namespace Plugin.Dashboard {
     export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
-        /** This UI will be an entry of network in the Select Provider Dialog. */
-        SelectNetworkDialogEntry?: Plugin.SNSAdaptor.SelectNetworkDialogEntry
+        /** This Ui will receve network icon as children component, and the plugin may hook click handle on it. */
+        NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
+        /** This Ui will receve provider icon as children component, and the plugin may hook click handle on it. */
+        ProviderIconClickBait?: React.ComponentType<{
+            network: Shared.Network
+            provider: Shared.Provider
+            children?: React.ReactNode
+        }>
     }
 }
 

@@ -1,4 +1,4 @@
-import { NetworkType, ProviderType} from '@masknet/web3-shared-flow'
+import { NetworkType, ProviderType } from '@masknet/web3-shared-flow/types'
 
 export const PLUGIN_META_KEY = 'com.maskbook.flow'
 export const PLUGIN_ID = 'com.maskbook.flow'

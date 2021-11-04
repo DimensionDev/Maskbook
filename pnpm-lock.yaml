@@ -567,7 +567,6 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-flow': workspace:*
-      '@onflow/fcl': ^0.0.77
       bignumber.js: ^9.0.1
       react-use: ^17.3.1
     dependencies:
@@ -577,7 +576,6 @@ importers:
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
-      '@onflow/fcl': 0.0.77
       bignumber.js: 9.0.1
       react-use: 17.3.1_9a9fcfd9691ee39f83ac00f4a3221da4
 

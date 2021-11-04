@@ -5,9 +5,11 @@ const __registered = new Map<string, Plugin.DeferredDefinition>()
 
 export const registeredPlugins: Iterable<Plugin.DeferredDefinition> = { [Symbol.iterator]: () => __registered.values() }
 export const registeredPluginIDs: Iterable<string> = { [Symbol.iterator]: () => __registered.keys() }
+
 export function getPluginDefine(id: string) {
     return __registered.get(id)
 }
+
 export function registerPlugin(def: Plugin.DeferredDefinition) {
     if (__registered.has(def.ID)) return
     if (!__meetRegisterRequirement(def)) return

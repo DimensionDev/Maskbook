@@ -22,7 +22,7 @@ interface SelectProviderDialogUIProps extends withClasses<never> {}
 
 function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     const { t } = useI18N()
-    const classes = useStyles()
+    const { classes } = useStyles()
 
     //#region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
@@ -41,7 +41,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <PluginProviderRender />
+                <PluginProviderRender onClose={closeDialog} />
             </DialogContent>
         </InjectedDialog>
     )
