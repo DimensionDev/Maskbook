@@ -3,7 +3,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "=0.9.0-20210726055325-dfbe7fd",
+    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@masknet/icons": "workspace:*",
     "@masknet/shared-base": "workspace:*",
@@ -15,6 +15,7 @@
     "lodash-es": "^4.17.21",
     "qrcode": "^1.4.4",
     "react-use": "^17.3.1",
+    "ts-results": "^3.3.0",
     "use-subscription": "^1.5.1",
     "uuid": "^8.3.2"
   }
