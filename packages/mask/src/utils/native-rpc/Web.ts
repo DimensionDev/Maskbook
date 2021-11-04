@@ -10,6 +10,7 @@ import type { Persona, Profile } from '../../database'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
+import { MaskMessages } from '..'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
@@ -58,6 +59,12 @@ const profileRelationFormatter = (
 }
 
 export const MaskNetworkAPI: MaskNetworkAPIs = {
+    async app_resume() {
+        MaskMessages.events.mobile_app_resumed.sendToAll()
+    },
+    async app_suspended() {
+        MaskMessages.events.mobile_app_suspended.sendToAll()
+    },
     web_echo: async (arg) => arg.echo,
     getDashboardURL: async () => browser.runtime.getURL('/dashboard.html'),
     getConnectedPersonas: async () => {
