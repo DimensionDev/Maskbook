@@ -96,24 +96,10 @@ export function PluginPanel(props: PluginPanelProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const account = useAccount()
     const chainId = useChainId()
-    const history = useHistory()
 
     //#region remote controlled dialog logic
     const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.selectProviderDialogUpdated)
-    //#endregion
-
-    //#region wallet status dialog
-    const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
-        WalletMessages.events.walletStatusDialogUpdated,
-    )
-    //#endregion
-
-    //#region select wallet dialog
-    const { setDialog: setSelectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectWalletDialogUpdated,
-    )
     //#endregion
 
     //#region connect wallet dialog
@@ -130,7 +116,6 @@ export function PluginPanel(props: PluginPanelProps) {
 
     const wallets = useWallets(ProviderType.MaskWallet)
     const selectedNetworkType = useValueRef(currentNetworkSettings)
-    const selectedProviderType = useValueRef(currentProviderSettings)
 
     //#region undetermined network type
     const [undeterminedNetworkType, setUndeterminedNetworkType] = useState(selectedNetworkType)
@@ -167,15 +152,10 @@ export function PluginPanel(props: PluginPanelProps) {
             }
         },
         [
-            account,
             chainId,
             wallets,
-            history,
             closeDialog,
             undeterminedNetworkType,
-            selectedProviderType,
-            openWalletStatusDialog,
-            setSelectWalletDialog,
             setWalletConnectDialog,
         ],
     )

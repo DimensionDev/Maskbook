@@ -3,6 +3,10 @@ export enum ChainId {
     Testnet = 2,
 }
 
+export enum NetworkType {
+    Flow = 'Flow',
+}
+
 export enum ProviderType {
     Blocto = 'Blocto',
     Dapper = 'Dapper',

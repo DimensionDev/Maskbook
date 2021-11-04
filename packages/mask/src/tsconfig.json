@@ -7,7 +7,7 @@
     "emitDeclarationOnly": true,
     "lib": ["ES2021"]
   },
-  "include": ["./", "./**/*.json"],
+  "include": ["./", "./**/*.json", "plugins/Wallet/SNSAdaptor/SelectProviderDialog"],
   // ! Note: mask/ depends dashboard/ on source-code level
   // !       but dashboard/ depends mask/ on type level
   // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
@@ -16,10 +16,12 @@
     { "path": "../../shared" },
     { "path": "../../shared-base" },
     { "path": "../../web3-shared/evm" },
+    { "path": "../../web3-shared/flow" },
     { "path": "../../theme" },
     { "path": "../../icons" },
     { "path": "../../plugin-infra" },
     { "path": "../../plugins/Wallet" },
+    { "path": "../../plugins/Flow" },
     { "path": "../../external-plugin-previewer" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },

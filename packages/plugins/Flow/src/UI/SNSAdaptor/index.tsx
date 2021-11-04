@@ -6,10 +6,10 @@ import { PluginPanel } from '../components/PluginPanel'
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    SelectProviderDialogEntry: {
-        name: 'Flow',
-        icon: <PluginIcon />,
-        panel: <PluginPanel />,
+    SelectNetworkDialogEntry: {
+        async onSelect(network, provider) {
+            console.log(`FLOW: ${network.ID} ${provider.ID}`)
+        },
     },
 }
 

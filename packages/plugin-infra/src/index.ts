@@ -5,5 +5,12 @@ export * from './manager/worker'
 export * from './utils'
 export * from './PostContext'
 export * from 'ts-results'
-export { registerPlugin, registeredPlugins, registeredPluginIDs, useRegisteredPlugins } from './manager/store'
+export {
+    registerPlugin,
+    registeredPlugins,
+    registeredPluginIDs,
+    useRegisteredPlugins,
+    useRegisteredNetworks,
+    useRegisteredProviders,
+} from './manager/store'
 export { activatedPluginsWorker } from './manager/worker'

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import type { Plugin } from '../types'
 
 const __registered = new Map<string, Plugin.DeferredDefinition>()
@@ -14,7 +15,35 @@ export function registerPlugin(def: Plugin.DeferredDefinition) {
 }
 
 export function useRegisteredPlugins() {
-    return [...__registered.values()]
+    return [...__registered.values()].sort((a, b) => {
+        if (a.ID.includes('evm')) return -1
+        if (b.ID.includes('evm')) return 1
+        return 0
+    })
+}
+
+export function useRegisteredNetworks() {
+    const plugins = useRegisteredPlugins()
+    return useMemo(() => {
+        return plugins.flatMap((x) =>
+            (x.networks ?? []).map((y) => ({
+                ...y,
+                pluginID: x.ID,
+            })),
+        )
+    }, [plugins.map((x) => x.ID).join()])
+}
+
+export function useRegisteredProviders() {
+    const plugins = useRegisteredPlugins()
+    return useMemo(() => {
+        return plugins.flatMap((x) =>
+            (x.providers ?? []).map((y) => ({
+                ...y,
+                pluginID: x.ID,
+            })),
+        )
+    }, [plugins.map((x) => x.ID).join()])
 }
 
 function __meetRegisterRequirement(def: Plugin.Shared.Definition) {

@@ -1,7 +1,7 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, Web3ProviderType } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 
 export namespace Plugin {
@@ -96,6 +96,10 @@ export namespace Plugin.Shared {
         management?: ManagementProperty
         /** i18n resources of this plugin */
         i18n?: I18NResource
+        /** Introduce networks information. */
+        networks?: Network[]
+        /** Introduce wallet providers information. */
+        providers?: Provider[]
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -167,6 +171,28 @@ export namespace Plugin.Shared {
     export type I18NKey = string
     export type I18NValue = string
     export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
+
+    export interface Network {
+        /** An unique ID for each network */
+        ID: string
+        /** The network type */
+        type: string
+        /** The network icon */
+        icon: string
+        /** The network name */
+        name: string
+    }
+
+    export interface Provider {
+        /** An unique ID for each wallet provider */
+        ID: string
+        /** The provider type */
+        type: string
+        /** The provider icon */
+        icon: string
+        /** The provider name */
+        name: string
+    }
 }
 
 /** This part runs in the SNSAdaptor */
@@ -183,7 +209,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be an entry of network in the Select Provider Dialog. */
-        SelectProviderDialogEntry?: SelectProviderDialogEntry
+        SelectNetworkDialogEntry?: SelectNetworkDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
@@ -223,10 +249,15 @@ export namespace Plugin.SNSAdaptor {
         keepMounted?: boolean
     }
 
-    export interface SelectProviderDialogEntry {
-        name: React.ReactNode
-        icon: React.ReactNode
-        panel: React.ReactNode
+    export interface SelectNetworkDialogEntry {
+        /**
+         * This function will be called when the user chooses a new network with a specific wallet provider.
+         * The plugin must provide a data persistence solution. And that data should only alter in this callback.
+         * The infra will take its duty to track which network is used at the current stage.
+         * @param network
+         * @param provider
+         */
+        onSelect(network: Shared.Network, provider: Shared.Provider): Promise<void>
     }
     export interface CompositionDialogEntry_DialogProps {
         open: boolean
@@ -279,7 +310,7 @@ export namespace Plugin.Dashboard {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
         /** This UI will be an entry of network in the Select Provider Dialog. */
-        SelectProviderDialogEntry?: Plugin.SNSAdaptor.SelectProviderDialogEntry
+        SelectNetworkDialogEntry?: Plugin.SNSAdaptor.SelectNetworkDialogEntry
     }
 }
 
