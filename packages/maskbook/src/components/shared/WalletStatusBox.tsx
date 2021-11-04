@@ -74,7 +74,13 @@ const useStyles = makeStyles()((theme) => ({
         bottom: -4,
     },
     providerIcon: {
-        backgroundColor: '#fff !important',
+        backgroundColor: 'none !important',
+    },
+    connectButtonWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: theme.spacing(2, 0),
     },
 }))
 
@@ -192,5 +198,16 @@ export function WalletStatusBox() {
                 </Button>
             </section>
         </section>
-    ) : null
+    ) : (
+        <section className={classes.connectButtonWrapper}>
+            <Button
+                className={classNames(classes.actionButton)}
+                color="primary"
+                variant="contained"
+                size="small"
+                onClick={onChange}>
+                {t('plugin_wallet_on_connect')}
+            </Button>
+        </section>
+    )
 }
