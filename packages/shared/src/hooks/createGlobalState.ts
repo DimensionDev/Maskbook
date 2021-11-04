@@ -1,8 +1,6 @@
 import type {} from 'react/next'
-import {
-    unstable_createMutableSource as createMutableSource,
-    unstable_useMutableSource as useMutableSource,
-} from 'react'
+// @ts-ignore
+import { useSyncExternalStore } from 'react'
 /**
  * Create a new global state.
  *
@@ -27,7 +25,6 @@ import {
  */
 export function createGlobalState<T>(f: () => Promise<T>, subscribe: (callback: () => void) => () => void) {
     const data: { version: number; data: T; error: unknown } = { version: -1, data: null!, error: null }
-    const source = createMutableSource(data, () => data.version)
     function snap(x: typeof data) {
         return { ...x }
     }
@@ -59,7 +56,7 @@ export function createGlobalState<T>(f: () => Promise<T>, subscribe: (callback: 
     function useData(checked: true): Result<T>
     function useData(checked?: false): T
     function useData(checked = false): T | Result<T> {
-        const val = useMutableSource(source, snap, subscriber) as typeof data
+        const val = useSyncExternalStore(subscriber, snap) as typeof data
         if (val.version === -1) throw revalidate()
         // there is no any stale data available. considered as not recoverable.
         if (checked) return { error: val.error, data: val.data }

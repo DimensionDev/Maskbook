@@ -3,7 +3,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "=0.9.0-20210726055325-dfbe7fd",
+    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@masknet/icons": "workspace:*",
     "@masknet/shared-base": "workspace:*",
