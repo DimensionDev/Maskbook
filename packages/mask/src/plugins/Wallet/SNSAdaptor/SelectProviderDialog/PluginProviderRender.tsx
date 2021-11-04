@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import { SuccessIcon } from '@masknet/icons'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
@@ -7,7 +7,6 @@ import {
     useRegisteredNetworks,
     useActivatedPluginsSNSAdaptor,
     useActivatedPluginsDashboard,
-    Plugin,
 } from '@masknet/plugin-infra'
 import { ProviderIcon } from './ProviderIcon'
 import { NetworkIcon } from './NetworkIcon'
@@ -73,29 +72,28 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface PluginProviderRenderProps {}
+export interface PluginProviderRenderProps {
+    onClose: () => void
+}
 
-export function PluginProviderRender(props: PluginProviderRenderProps) {
+export function PluginProviderRender({ onClose }: PluginProviderRenderProps) {
     const { classes } = useStyles()
+
+    const networks = useRegisteredNetworks()
+    const providers = useRegisteredProviders()
 
     const pluginsSNSAdaptor = useActivatedPluginsSNSAdaptor()
     const pluginsDashboard = useActivatedPluginsDashboard()
-    const networks = useRegisteredNetworks()
-    const providers = useRegisteredProviders()
+
     const [undeterminedPluginID, setUndeterminedPluginID] = useState('')
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState('')
 
-    const onSwtich = useMemo(() => {
-        return (network?: Plugin.Shared.Network, provider?: Plugin.Shared.Provider) => {
-            if (!network || !provider) return
-            pluginsSNSAdaptor
-                .find((x) => x.ID === undeterminedPluginID)
-                ?.SelectNetworkDialogEntry?.onSelect(network, provider)
-            pluginsDashboard
-                .find((x) => x.ID === undeterminedPluginID)
-                ?.SelectNetworkDialogEntry?.onSelect(network, provider)
-        }
-    }, [undeterminedPluginID, pluginsSNSAdaptor, pluginsDashboard])
+    const NetworkIconClickBait = [...pluginsSNSAdaptor, ...pluginsDashboard].find(
+        (x) => x.ID === undeterminedPluginID,
+    )?.NetworkIconClickBait
+    const ProviderIconClickBait = [...pluginsSNSAdaptor, ...pluginsDashboard].find(
+        (x) => x.ID === undeterminedPluginID,
+    )?.ProviderIconClickBait
 
     return (
         <Box className={classes.root}>
@@ -113,7 +111,13 @@ export function PluginProviderRender(props: PluginProviderRenderProps) {
                                 setUndeterminedNetworkID(network.ID)
                             }}>
                             <div className={classes.iconWrapper}>
-                                <NetworkIcon icon={network.icon} />
+                                {NetworkIconClickBait ? (
+                                    <NetworkIconClickBait network={network}>
+                                        <NetworkIcon icon={network.icon} />
+                                    </NetworkIconClickBait>
+                                ) : (
+                                    <NetworkIcon icon={network.icon} />
+                                )}
                                 {undeterminedNetworkID === network.ID && (
                                     <SuccessIcon className={classes.checkedBadge} />
                                 )}
@@ -126,21 +130,20 @@ export function PluginProviderRender(props: PluginProviderRenderProps) {
                 <Typography className={classes.title} variant="h2" component="h2">
                     2. Choose Wallet
                 </Typography>
-                <ImageList className={classes.grid} gap={16} cols={3} rowHeight={151}>
+                <ImageList className={classes.grid} gap={16} cols={3} rowHeight={151} onClick={onClose}>
                     {providers
                         .filter((x) => x.pluginID === undeterminedPluginID)
                         .map((provider) => (
                             <ImageListItem key={provider.ID}>
-                                <ProviderIcon
-                                    icon={provider.icon}
-                                    name={provider.name}
-                                    onClick={() =>
-                                        onSwtich(
-                                            networks.find((x) => x.ID === undeterminedNetworkID),
-                                            provider,
-                                        )
-                                    }
-                                />
+                                {ProviderIconClickBait ? (
+                                    <ProviderIconClickBait
+                                        network={networks.find((x) => x.ID === undeterminedNetworkID)!}
+                                        provider={provider}>
+                                        <ProviderIcon icon={provider.icon} name={provider.name} />
+                                    </ProviderIconClickBait>
+                                ) : (
+                                    <ProviderIcon icon={provider.icon} name={provider.name} />
+                                )}
                             </ImageListItem>
                         ))}
                 </ImageList>
