@@ -84,9 +84,9 @@ export type RoleRevoked = ContractEventLog<{
     2: string
 }>
 
-export interface RealityCards extends BaseContract {
-    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): RealityCards
-    clone(): RealityCards
+export interface RealityCardsTreasury extends BaseContract {
+    constructor(jsonInterface: any[], address?: string, options?: ContractOptions): RealityCardsTreasury
+    clone(): RealityCardsTreasury
     methods: {
         AFFILIATE(): NonPayableTransactionObject<string>
 

@@ -1,0 +1,678 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": true, "internalType": "bool", "name": "didTheEventFinish", "type": "bool" }],
+        "name": "LogContractLocked",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": false, "internalType": "uint256", "name": "cardId", "type": "uint256" },
+            { "indexed": false, "internalType": "address", "name": "longestOwner", "type": "address" }
+        ],
+        "name": "LogLongestOwner",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "uint256", "name": "cardId", "type": "uint256" },
+            { "indexed": true, "internalType": "address", "name": "newOwner", "type": "address" }
+        ],
+        "name": "LogNewOwner",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "artistAddress", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "marketCreatorAddress", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "affiliateAddress", "type": "address" },
+            { "indexed": false, "internalType": "address[]", "name": "cardAffiliateAddresses", "type": "address[]" },
+            { "indexed": true, "internalType": "uint256", "name": "artistCut", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "winnerCut", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "creatorCut", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "affiliateCut", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "cardAffiliateCut", "type": "uint256" }
+        ],
+        "name": "LogPayoutDetails",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "marketAddress", "type": "address" },
+            { "indexed": true, "internalType": "bytes32", "name": "questionId", "type": "bytes32" }
+        ],
+        "name": "LogQuestionPostedToOracle",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": false, "internalType": "uint256", "name": "rentCollected", "type": "uint256" },
+            { "indexed": true, "internalType": "uint256", "name": "newTimeHeld", "type": "uint256" },
+            { "indexed": true, "internalType": "uint256", "name": "cardId", "type": "uint256" },
+            { "indexed": true, "internalType": "address", "name": "owner", "type": "address" }
+        ],
+        "name": "LogRentCollection",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "returnedTo", "type": "address" },
+            { "indexed": true, "internalType": "uint256", "name": "amountReturned", "type": "uint256" }
+        ],
+        "name": "LogRentReturned",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": false, "internalType": "uint256", "name": "minRentalDayDivisor", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "minimumPriceIncreasePercent", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "nftsToAward", "type": "uint256" },
+            { "indexed": false, "internalType": "bool", "name": "nftsToWinningOutcomeOnly", "type": "bool" }
+        ],
+        "name": "LogSettings",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "sponsor", "type": "address" },
+            { "indexed": true, "internalType": "uint256", "name": "amount", "type": "uint256" }
+        ],
+        "name": "LogSponsor",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "paidTo", "type": "address" },
+            { "indexed": true, "internalType": "uint256", "name": "amountPaid", "type": "uint256" }
+        ],
+        "name": "LogStakeholderPaid",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": true, "internalType": "uint256", "name": "newState", "type": "uint256" }],
+        "name": "LogStateChange",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "owner", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "newLimit", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "cardId", "type": "uint256" }
+        ],
+        "name": "LogUpdateTimeHeldLimit",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": true, "internalType": "uint256", "name": "winningOutcome", "type": "uint256" }],
+        "name": "LogWinnerKnown",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "paidTo", "type": "address" },
+            { "indexed": true, "internalType": "uint256", "name": "amountPaid", "type": "uint256" }
+        ],
+        "name": "LogWinningsPaid",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": false, "internalType": "address", "name": "userAddress", "type": "address" },
+            { "indexed": false, "internalType": "address", "name": "relayerAddress", "type": "address" },
+            { "indexed": false, "internalType": "bytes", "name": "functionSignature", "type": "bytes" }
+        ],
+        "name": "MetaTransactionExecuted",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "MIN_RENTAL_VALUE",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "PER_MILLE",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "accountingComplete",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "affiliateAddress",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "affiliateCut",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "affiliatePaid",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "arbitrator",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "artistAddress",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "artistCut",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "artistPaid",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "card",
+        "outputs": [
+            { "internalType": "uint256", "name": "totalTimeHeld", "type": "uint256" },
+            { "internalType": "uint256", "name": "timeLastCollected", "type": "uint256" },
+            { "internalType": "address", "name": "longestOwner", "type": "address" },
+            { "internalType": "uint256", "name": "cardTimeLimit", "type": "uint256" },
+            { "internalType": "uint256", "name": "cardPrice", "type": "uint256" },
+            { "internalType": "uint256", "name": "rentCollectedPerCard", "type": "uint256" },
+            { "internalType": "bool", "name": "cardAffiliatePaid", "type": "bool" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "cardAccountingIndex",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "cardAffiliateAddresses",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "cardAffiliateCut",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_card", "type": "uint256" }],
+        "name": "claimCard",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_cardId", "type": "uint256" }],
+        "name": "collectRent",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "creatorCut",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "creatorPaid",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "userAddress", "type": "address" },
+            { "internalType": "bytes", "name": "functionSignature", "type": "bytes" },
+            { "internalType": "bytes32", "name": "sigR", "type": "bytes32" },
+            { "internalType": "bytes32", "name": "sigS", "type": "bytes32" },
+            { "internalType": "uint8", "name": "sigV", "type": "uint8" }
+        ],
+        "name": "executeMetaTransaction",
+        "outputs": [{ "internalType": "bytes", "name": "", "type": "bytes" }],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_card", "type": "uint256" }],
+        "name": "exit",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    { "inputs": [], "name": "exitAll", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "exitedTimestamp",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "factory",
+        "outputs": [{ "internalType": "contract IRCFactory", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getChainId",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getDomainSeperator",
+        "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getMarketInfo",
+        "outputs": [
+            { "internalType": "enum IRCMarket.States", "name": "", "type": "uint8" },
+            { "internalType": "string", "name": "", "type": "string" },
+            { "internalType": "uint256", "name": "", "type": "uint256" },
+            { "internalType": "uint256", "name": "", "type": "uint256" },
+            { "internalType": "address[]", "name": "", "type": "address[]" },
+            { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "user", "type": "address" }],
+        "name": "getNonce",
+        "outputs": [{ "internalType": "uint256", "name": "nonce", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_card", "type": "uint256" }],
+        "name": "getTokenId",
+        "outputs": [{ "internalType": "uint256", "name": "_tokenId", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    { "inputs": [], "name": "getWinnerFromOracle", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    {
+        "inputs": [
+            { "internalType": "enum IRCMarket.Mode", "name": "_mode", "type": "uint8" },
+            { "internalType": "uint32[]", "name": "_timestamps", "type": "uint32[]" },
+            { "internalType": "uint256", "name": "_numberOfCards", "type": "uint256" },
+            { "internalType": "address", "name": "_artistAddress", "type": "address" },
+            { "internalType": "address", "name": "_affiliateAddress", "type": "address" },
+            { "internalType": "address[]", "name": "_cardAffiliateAddresses", "type": "address[]" },
+            { "internalType": "address", "name": "_marketCreatorAddress", "type": "address" },
+            { "internalType": "string", "name": "_realitioQuestion", "type": "string" },
+            { "internalType": "uint256", "name": "_nftsToAward", "type": "uint256" }
+        ],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "isFinalized",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "isMarket",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "leaderboard",
+        "outputs": [{ "internalType": "contract IRCLeaderboard", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    { "inputs": [], "name": "lockMarket", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_card", "type": "uint256" }],
+        "name": "longestOwner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "marketCreatorAddress",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "marketLockingTime",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "marketOpeningTime",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "maxRentIterations",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "maxRentIterationsToLockMarket",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "minRentalDayDivisor",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "minimumPriceIncreasePercent",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "mode",
+        "outputs": [{ "internalType": "enum IRCMarket.Mode", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "_newPrice", "type": "uint256" },
+            { "internalType": "uint256", "name": "_timeHeldLimit", "type": "uint256" },
+            { "internalType": "address", "name": "_startingPosition", "type": "address" },
+            { "internalType": "uint256", "name": "_card", "type": "uint256" }
+        ],
+        "name": "newRental",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nfthub",
+        "outputs": [{ "internalType": "contract IRCNftHubL2", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "nftsToAward",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "numberOfCards",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "oracleResolutionTime",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "orderbook",
+        "outputs": [{ "internalType": "contract IRCOrderbook", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_cardId", "type": "uint256" }],
+        "name": "ownerOf",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    { "inputs": [], "name": "payAffiliate", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    { "inputs": [], "name": "payArtist", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_card", "type": "uint256" }],
+        "name": "payCardAffiliate",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    { "inputs": [], "name": "payMarketCreator", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    {
+        "inputs": [],
+        "name": "questionId",
+        "outputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "realitio",
+        "outputs": [{ "internalType": "contract IRealitio", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_maxSumOfPrices", "type": "uint256" }],
+        "name": "rentAllCards",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "rentCollectedPerUser",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "", "type": "address" },
+            { "internalType": "uint256", "name": "", "type": "uint256" }
+        ],
+        "name": "rentCollectedPerUserPerCard",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_winningOutcome", "type": "uint256" }],
+        "name": "setAmicableResolution",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "_sponsorAddress", "type": "address" },
+            { "internalType": "uint256", "name": "_amount", "type": "uint256" }
+        ],
+        "name": "sponsor",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_amount", "type": "uint256" }],
+        "name": "sponsor",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "state",
+        "outputs": [{ "internalType": "enum IRCMarket.States", "name": "", "type": "uint8" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "_card", "type": "uint256" },
+            { "internalType": "address", "name": "_user", "type": "address" }
+        ],
+        "name": "timeHeld",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "_card", "type": "uint256" }],
+        "name": "timeLastCollected",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "timeout",
+        "outputs": [{ "internalType": "uint32", "name": "", "type": "uint32" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "tokenIds",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "totalRentCollected",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "address", "name": "_from", "type": "address" },
+            { "internalType": "address", "name": "_to", "type": "address" },
+            { "internalType": "uint256", "name": "_cardId", "type": "uint256" },
+            { "internalType": "uint256", "name": "_price", "type": "uint256" },
+            { "internalType": "uint256", "name": "_timeLimit", "type": "uint256" }
+        ],
+        "name": "transferCard",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "treasury",
+        "outputs": [{ "internalType": "contract IRCTreasury", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "_timeHeldLimit", "type": "uint256" },
+            { "internalType": "uint256", "name": "_card", "type": "uint256" }
+        ],
+        "name": "updateTimeHeldLimit",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "userAlreadyWithdrawn",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "winnerCut",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "winningOutcome",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    { "inputs": [], "name": "withdraw", "outputs": [], "stateMutability": "nonpayable", "type": "function" }
+]
