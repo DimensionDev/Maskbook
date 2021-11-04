@@ -209,6 +209,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 535,
         margin: '24px auto',
     },
+    claimAllButton: {
+        background: `${theme.palette.mode === 'light' ? '#111418' : '#EFF3F4'} !important`,
+        color: `${theme.palette.mode === 'light' ? '#FFFFFF' : '#0F1419'} !important`,
+    },
 }))
 
 interface ClaimAllDialogProps {
@@ -294,6 +298,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     )
 
     useEffect(() => {
+        resetClaimCallback()
+        resetClaimCallbackOld()
+    }, [chainId])
+
+    useEffect(() => {
         if (claimStateOld.type === TransactionStateType.UNKNOWN) return
 
         if (claimStateOld.type === TransactionStateType.HASH) {
@@ -303,12 +312,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }, 2000)
             return
         }
-        const claimableTokens = swappedTokensOld!.filter((t) => t.isClaimable)
-        const summary =
-            'Claim ' +
-            new Intl.ListFormat('en').format(
-                claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-            )
+        const claimableTokens = swappedTokensOld?.filter((t) => t.isClaimable)
+        const summary = claimableTokens
+            ? 'Claim ' +
+              new Intl.ListFormat('en').format(
+                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
+              )
+            : ''
         setClaimTransactionDialog({
             open: true,
             state: claimStateOld,
@@ -327,12 +337,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }, 2000)
             return
         }
-        const claimableTokens = swappedTokens!.filter((t) => t.isClaimable)
-        const summary =
-            'Claim ' +
-            new Intl.ListFormat('en').format(
-                claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-            )
+        const claimableTokens = swappedTokens?.filter((t) => t.isClaimable)
+        const summary = claimableTokens
+            ? 'Claim ' +
+              new Intl.ListFormat('en').format(
+                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
+              )
+            : ''
         setClaimTransactionDialog({
             open: true,
             state: claimState,
@@ -407,6 +418,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                         chainId === ChainId.Matic ? (
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
+                                    classes={{ switchButton: classes.claimAllButton }}
                                     chainId={chainId}
                                     noSwitchNetworkTip={true}
                                     switchButtonStyle={{
@@ -416,9 +428,12 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         fontWeight: 400,
                                     }}>
                                     {swappedTokens?.length || swappedTokensOld?.length ? (
-                                        <EthereumWalletConnectedBoundary>
+                                        <EthereumWalletConnectedBoundary
+                                            classes={{
+                                                connectWallet: classes.claimAllButton,
+                                            }}>
                                             <ActionButton
-                                                className={classes.actionButton}
+                                                className={classNames(classes.actionButton, classes.claimAllButton)}
                                                 variant="contained"
                                                 disabled={claimablePids!.length === 0}
                                                 size="large"

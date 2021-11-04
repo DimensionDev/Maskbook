@@ -66,10 +66,21 @@ const useStyles = makeStyles()((theme) => ({
         color: '#1C68F3',
     },
     networkIcon: {
-        backgroundColor: '#fff !important',
+        backgroundColor: '#F6F8F8 !important',
+        border: '1px solid #ffffff',
+        borderRadius: '50%',
+        position: 'absolute',
+        right: -6,
+        bottom: -4,
     },
     providerIcon: {
-        backgroundColor: '#F7F9FA !important',
+        backgroundColor: 'none !important',
+    },
+    connectButtonWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        margin: theme.spacing(2, 0),
     },
 }))
 
@@ -123,8 +134,8 @@ export function WalletStatusBox() {
     return selectedWallet ? (
         <section className={classes.currentAccount}>
             <WalletIcon
-                size={48}
-                badgeSize={18}
+                size={18}
+                badgeSize={48}
                 classes={{
                     networkIcon: classes.networkIcon,
                     providerIcon: classes.providerIcon,
@@ -187,5 +198,16 @@ export function WalletStatusBox() {
                 </Button>
             </section>
         </section>
-    ) : null
+    ) : (
+        <section className={classes.connectButtonWrapper}>
+            <Button
+                className={classNames(classes.actionButton)}
+                color="primary"
+                variant="contained"
+                size="small"
+                onClick={onChange}>
+                {t('plugin_wallet_on_connect')}
+            </Button>
+        </section>
+    )
 }

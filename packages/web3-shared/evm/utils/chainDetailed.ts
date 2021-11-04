@@ -93,7 +93,7 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
     const map: Record<NetworkType, string> = {
         [NetworkType.Ethereum]: 'ETH',
         [NetworkType.Binance]: 'BSC',
-        [NetworkType.Polygon]: 'Matic',
+        [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
     }
