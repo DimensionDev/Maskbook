@@ -6,6 +6,8 @@
 type ProfileIdentifier_string = string
 type PersonaIdentifier_string = string
 export interface MaskNetworkAPIs {
+    app_suspended(): Promise<void>
+    app_resume(): Promise<void>
     /**
      * Echo the message back.
      */

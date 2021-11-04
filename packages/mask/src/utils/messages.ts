@@ -49,6 +49,8 @@ export interface RequestExtensionPermissionEvent {
 }
 
 export interface MaskMessages extends SettingsEvents {
+    mobile_app_suspended: void
+    mobile_app_resumed: void
     // TODO: Maybe in-page UI related messages should use Context instead of messages?
     autoPasteFailed: { text: string; image?: Blob }
     /**
