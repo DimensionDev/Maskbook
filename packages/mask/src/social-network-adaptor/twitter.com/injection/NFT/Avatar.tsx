@@ -37,11 +37,6 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 const imgNode = avatarImageNodeParent.querySelector('div') as HTMLImageElement
                 if (imgNode) imgNode.style.borderRadius = '100%'
 
-                const onClick = () => {
-                    window.open(`https://twitter.com/${twitterId}`, '_blank')
-                }
-                avatarNodeParent.firstChild.addEventListener('click', onClick)
-
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
                     <div
@@ -54,10 +49,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                         <NFTBadgeTimeline userId={twitterId} avatarId={avatarId} width={width} height={height} />
                     </div>,
                 )
-                remover = () => {
-                    root.destory()
-                    avatarNodeParent.firstChild?.removeEventListener('click', onClick)
-                }
+                remover = root.destory
             }
 
             run()
