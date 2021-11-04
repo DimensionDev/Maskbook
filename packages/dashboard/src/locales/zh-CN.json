@@ -209,7 +209,7 @@
     "settings_button_sync": "同步",
     "settings_button_backup": "备份",
     "settings_button_recovery": "恢复",
-    "settings_button_setting": "设置",
+    "settings_button_setup": "设置",
     "settings_button_change": "修改",
     "settings_dialogs_bind_email_or_phone": "请绑定您的电子邮箱或手机号码",
     "settings_dialogs_verify_backup_password": "验证备份密码",
