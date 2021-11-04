@@ -1,10 +1,10 @@
 import { useAccount } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
-import { useRealityCardsContract } from '../contracts/usePoolTogetherPool'
+import { useTreasuryContract } from '../contracts/useTreasuryContract'
 
 export function useUserDeposit() {
     const account = useAccount()
-    const contract = useRealityCardsContract()
+    const contract = useTreasuryContract()
 
     return useAsyncRetry(async () => {
         if (!contract || !account) return undefined

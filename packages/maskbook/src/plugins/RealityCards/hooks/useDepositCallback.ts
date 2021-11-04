@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount, useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useRealityCardsContract } from '../contracts/usePoolTogetherPool'
+import { useTreasuryContract } from '../contracts/useTreasuryContract'
 
 /**
  * A callback for deposit into reality cards
@@ -9,7 +9,7 @@ import { useRealityCardsContract } from '../contracts/usePoolTogetherPool'
  */
 export function useDepositCallback(amount: string) {
     const account = useAccount()
-    const contract = useRealityCardsContract()
+    const contract = useTreasuryContract()
     const [depositState, setDepositState] = useTransactionState()
 
     const depositCallback = useCallback(async () => {
