@@ -104,7 +104,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         loading,
         retry,
         error,
-    } = useCollectibles(account, ChainId.Mainnet, provider, page, 50)
+    } = useCollectibles('0x790116d0685eB197B886DAcAD9C247f785987A4a', ChainId.Mainnet, provider, page, 50)
     const { collectibles, hasNextPage } = value
 
     const onClick = useCallback(async () => {

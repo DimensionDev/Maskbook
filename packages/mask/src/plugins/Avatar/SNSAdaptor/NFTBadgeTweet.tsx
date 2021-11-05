@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { getAvatarId } from '../../../social-network-adaptor/twitter.com/utils/user'
 import { NFTBadgeTimeline } from './NFTBadgeTimeline'
 
 const useStyles = makeStyles()((theme) => ({
@@ -8,21 +7,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NFTBadgeTweetProps {
+    avatarId: string
     width: number
     height: number
 }
 
 export function NFTBadgeTweet(props: NFTBadgeTweetProps) {
-    const { width, height } = props
+    const { avatarId, width, height } = props
     const identity = useCurrentIdentity()
 
+    console.log(identity)
     if (!identity?.identifier.userId) return null
-    return (
-        <NFTBadgeTimeline
-            width={width}
-            height={height}
-            userId={identity?.identifier.userId}
-            avatarId={getAvatarId(identity?.avatar ?? '')}
-        />
-    )
+    return <NFTBadgeTimeline width={width} height={height} userId={identity?.identifier.userId} avatarId={avatarId} />
 }
