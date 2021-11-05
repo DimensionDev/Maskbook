@@ -12,5 +12,5 @@ export function useAvailability(version: number, from: string, id: string, redpa
             // check availability is ok w/o account
             from,
         })
-    }, [id, from, redPacketContract])
+    }, [id, from, redpacketChainId, currentChainId, redPacketContract])
 }
