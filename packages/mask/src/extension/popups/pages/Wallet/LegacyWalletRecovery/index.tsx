@@ -189,7 +189,7 @@ const WalletRecovery = memo(() => {
                 <LoadingButton
                     loading={restoreLegacyWalletLoading}
                     fullWidth
-                    disabled={!isValid}
+                    disabled={!hasPassword ? !isValid : false}
                     classes={{ root: classes.button, disabled: classes.disabled }}
                     variant="contained"
                     onClick={onConfirm}>
