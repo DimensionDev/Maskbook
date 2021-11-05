@@ -7,7 +7,7 @@ import { PageHeader } from '../components/PageHeader'
 import { useI18N } from '../../../../../utils'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
-import { FormattedAddress } from '@masknet/shared'
+import { FormattedAddress, PopupRoutes } from '@masknet/shared'
 import { useHasPassword } from '../../../hook/useHasPassword'
 import type { z as zod } from 'zod'
 import { usePasswordForm } from '../hooks/usePasswordForm'
@@ -15,6 +15,7 @@ import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
 import Services from '../../../../service'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles()({
     container: {
@@ -72,7 +73,7 @@ const useStyles = makeStyles()({
 const WalletRecovery = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-
+    const history = useHistory()
     const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
 
     const {
@@ -127,7 +128,8 @@ const WalletRecovery = memo(() => {
         )
 
         await Services.Helper.removePopupWindow()
-    }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join()])
+        history.push(PopupRoutes.Wallet)
+    }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join(), history])
 
     return getHasPasswordLoading || getLegacyWalletsLoading ? (
         <LoadingPlaceholder />
