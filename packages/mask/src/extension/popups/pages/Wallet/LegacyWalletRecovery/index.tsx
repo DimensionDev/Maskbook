@@ -128,7 +128,7 @@ const WalletRecovery = memo(() => {
         )
 
         await Services.Helper.removePopupWindow()
-        history.push(PopupRoutes.Wallet)
+        history.replace(PopupRoutes.Wallet)
     }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join(), history])
 
     return getHasPasswordLoading || getLegacyWalletsLoading ? (
