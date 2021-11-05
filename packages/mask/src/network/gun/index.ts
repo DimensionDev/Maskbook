@@ -2,6 +2,7 @@ import { AsyncCall, AsyncCallOptions, AsyncGeneratorCall } from 'async-call-rpc/
 import { WorkerChannel } from 'async-call-rpc/utils/web/worker'
 import { serializer } from '@masknet/shared-base'
 import { OnDemandWorker } from '../../web-workers/OnDemandWorker'
+import type { _AsyncVersionOf, _AsyncGeneratorVersionOf } from 'async-call-rpc/full'
 
 export let GunWorker: OnDemandWorker | undefined
 if (process.env.architecture) {
@@ -12,5 +13,6 @@ const options: AsyncCallOptions = {
     channel: new WorkerChannel(GunWorker),
     serializer,
 }
-export const GunAPI = AsyncCall<typeof import('./worker-implementation')>({}, options)
-export const GunAPISubscribe = AsyncGeneratorCall<typeof import('./worker-implementation-subscribe')>({}, options)
+export const GunAPI: _AsyncVersionOf<typeof import('./worker-implementation')> = AsyncCall({}, options)
+export const GunAPISubscribe: _AsyncGeneratorVersionOf<typeof import('./worker-implementation-subscribe')> =
+    AsyncGeneratorCall({}, options)

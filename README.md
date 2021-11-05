@@ -48,8 +48,6 @@ Please check out [docs](docs)
 
 Please submit your **resume** to `jobs (at) mask.io`
 
-
-
 [badge-chrome]: https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store
 [badge-ci]: https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci
 [badge-crowdin]: https://badges.crowdin.net/mask-network/localized.svg
