@@ -1,7 +1,7 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTBadgeTweet } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTweet'
 import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
-import { searchTweetAvatarSelector } from '../../utils/selector'
+import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector'
 import { getAvatarId } from '../../utils/user'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
@@ -11,7 +11,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
-                const nftDom = ele.querySelector('a')
+                const nftDom = ele.firstChild?.firstChild?.firstChild as HTMLElement
                 if (!nftDom || !nftDom.firstChild) return
                 nftDom.style.overflow = 'unset'
                 const width = Number(window.getComputedStyle(nftDom).width.replace('px', '') ?? 0)
@@ -48,4 +48,5 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
 
 export async function injectUserNFTAvatarAtTweet(signal: AbortSignal) {
     _(searchTweetAvatarSelector, signal)
+    _(searchRetweetAvatarSelector, signal)
 }

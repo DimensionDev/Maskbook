@@ -220,3 +220,5 @@ export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserC
 
 export const searchTweetAvatarSelector = () =>
     querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
+
+export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(7)
