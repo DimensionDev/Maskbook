@@ -1,9 +1,9 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Card } from '@mui/material'
 import type { BackupPreview } from '@masknet/public-api'
 import { useDashboardI18N } from '../../locales'
-import { PluginServices, Services } from '../../API'
+import { Messages, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { MaskAlert } from '../MaskAlert'
 import FileUpload from '../FileUpload'
@@ -92,32 +92,35 @@ export const RestoreFromLocal = memo(() => {
         }
     }, [file, password])
 
+    const restoreCallback = useCallback(async () => {
+        if (!currentPersona) {
+            const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+            if (lastedPersona) {
+                await changeCurrentPersona(lastedPersona.identifier)
+            }
+        }
+        navigate(RoutePaths.Personas, { replace: true })
+    }, [currentPersona, changeCurrentPersona])
+
     const restoreDB = useCallback(async () => {
         try {
-            if (
-                json?.wallets &&
-                (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
-            ) {
+            // If json has wallets, restore in popup.
+            if (json?.wallets) {
                 await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId })
                 return
+            } else {
+                await Services.Welcome.checkPermissionsAndRestore(backupId)
+
+                await restoreCallback()
             }
-
-            await Services.Welcome.checkPermissionsAndRestore(backupId)
-
-            // Set default wallet
-            if (json?.wallets) await PluginServices.Wallet.setDefaultWallet()
-
-            if (!currentPersona) {
-                const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-                if (lastedPersona) {
-                    await changeCurrentPersona(lastedPersona.identifier)
-                }
-            }
-            navigate(RoutePaths.Personas, { replace: true })
         } catch {
             showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
         }
     }, [backupId, json])
+
+    useEffect(() => {
+        return Messages.events.restoreSuccess.on(restoreCallback)
+    }, [restoreCallback])
 
     return (
         <>

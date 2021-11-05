@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styled, Typography } from '@mui/material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
 import type { BackupFileInfo } from '../../type'
 import { useDashboardI18N } from '../../../../locales'
-import { PluginServices, Services } from '../../../../API'
+import { Messages, Services } from '../../../../API'
 import { fetchBackupValue } from '../../api'
 import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
@@ -40,6 +40,11 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
 
+    const restoreCallback = useCallback(() => {
+        onMerged(true)
+        showSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
+    }, [onMerged, showSnackbar])
+
     const [{ loading }, handleMerge] = useAsyncFn(async () => {
         try {
             const encrypted = await fetchBackupValue(info.downloadURL)
@@ -47,23 +52,16 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
             const backupText = JSON.stringify(decode(decrypted))
             const data = await Services.Welcome.parseBackupStr(backupText)
 
-            if (
-                data?.info.wallets &&
-                (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
-            ) {
+            if (data?.info.wallets) {
                 await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId: data.id })
                 return
+            } else {
+                if (data?.id) {
+                    await Services.Welcome.checkPermissionsAndRestore(data.id)
+                }
+
+                restoreCallback()
             }
-
-            if (data?.id) {
-                await Services.Welcome.checkPermissionsAndRestore(data.id)
-            }
-
-            // Set default wallet
-            if (data?.info?.wallets) await PluginServices.Wallet.setDefaultWallet()
-
-            onMerged(true)
-            showSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
         } catch (error) {
             setIncorrectBackupPassword(true)
         }
@@ -80,6 +78,10 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
     useEffect(() => {
         setIncorrectBackupPassword(false)
     }, [backupPassword])
+
+    useEffect(() => {
+        return Messages.events.restoreSuccess.on(restoreCallback)
+    }, [restoreCallback])
 
     return (
         <MaskDialog maxWidth="xs" title={t.settings_cloud_backup()} open={open} onClose={onClose}>

@@ -70,7 +70,7 @@ export interface MaskMessages extends SettingsEvents {
     relationsChanged: (UpdateEvent<ProfileIdentifier> & { favor: RelationFavor })[]
     pluginEnabled: string
     pluginDisabled: string
-
+    restoreSuccess: void
     requestExtensionPermission: RequestExtensionPermissionEvent
     // TODO: move to plugin message
     profileNFTsPageUpdated: ProfileNFTsPageEvent

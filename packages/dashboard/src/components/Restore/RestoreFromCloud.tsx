@@ -4,7 +4,7 @@ import { Box } from '@mui/material'
 import { MaskAlert } from '../MaskAlert'
 import { CodeValidation } from './CodeValidation'
 import { fetchBackupValue } from '../../pages/Settings/api'
-import { PluginServices, Services } from '../../API'
+import { Messages, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { useCustomSnackbar } from '@masknet/theme'
@@ -84,37 +84,35 @@ export const RestoreFromCloud = memo(() => {
         [],
     )
 
+    const restoreCallback = useCallback(async () => {
+        if (!currentPersona) {
+            const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+            if (lastedPersona) {
+                await changeCurrentPersona(lastedPersona.identifier)
+            }
+        }
+        if (account) {
+            if (!user.email && account.type === AccountType.email) {
+                updateUser({ email: account.value })
+            }
+            if (!user.phone && account.type === AccountType.phone) {
+                updateUser({ phone: account.value })
+            }
+        }
+        toggleSynchronizePasswordDialog(true)
+    }, [currentPersona, account, user, toggleSynchronizePasswordDialog])
+
     const onRestore = useCallback(
         async (backupInfo: { info: BackupPreview; id: string }, account: any) => {
             try {
-                if (
-                    backupInfo.info?.wallets &&
-                    (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
-                ) {
+                if (backupInfo.info?.wallets) {
                     await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId: backupInfo.id })
                     return
-                }
+                } else {
+                    await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)
 
-                await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)
-
-                // Set default wallet
-                if (backupInfo.info?.wallets) PluginServices.Wallet.setDefaultWallet()
-
-                if (!currentPersona) {
-                    const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-                    if (lastedPersona) {
-                        await changeCurrentPersona(lastedPersona.identifier)
-                    }
+                    await restoreCallback()
                 }
-                if (account) {
-                    if (!user.email && account.type === AccountType.email) {
-                        updateUser({ email: account.value })
-                    }
-                    if (!user.phone && account.type === AccountType.phone) {
-                        updateUser({ phone: account.value })
-                    }
-                }
-                toggleSynchronizePasswordDialog(true)
             } catch {
                 showSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
             }
@@ -148,6 +146,10 @@ export const RestoreFromCloud = memo(() => {
         toggleSynchronizePasswordDialog(false)
         navigate(RoutePaths.Personas, { replace: true })
     }
+
+    useEffect(() => {
+        return Messages.events.restoreSuccess.on(restoreCallback)
+    }, [restoreCallback])
 
     return (
         <>

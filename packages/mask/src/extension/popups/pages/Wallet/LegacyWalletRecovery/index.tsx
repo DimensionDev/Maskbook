@@ -14,6 +14,7 @@ import { usePasswordForm } from '../hooks/usePasswordForm'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()({
     container: {
@@ -92,11 +93,7 @@ const WalletRecovery = memo(() => {
     const [{ loading: restoreLegacyWalletLoading }, handleRestoreLegacyWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                if (hasPassword) {
-                    const unlocked = await WalletRPC.unlockWallet(data.password)
-                    if (!unlocked) throw new Error(t('popups_wallet_unlock_error_password'))
-                } else await WalletRPC.setPassword(data.password)
-
+                if (!hasPassword) await WalletRPC.setPassword(data.password)
                 // restore wallet and ignore the result
                 await Promise.allSettled(
                     legacyWallets.map(async (x) => {
@@ -113,7 +110,7 @@ const WalletRecovery = memo(() => {
                     }),
                 )
 
-                window.close()
+                await Services.Helper.removePopupWindow()
             } catch (error) {
                 if (error instanceof Error) {
                     setError('password', { message: error.message })
@@ -185,28 +182,7 @@ const WalletRecovery = memo(() => {
                             </div>
                             <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
                         </form>
-                    ) : (
-                        <form className={classes.form}>
-                            <div style={{ marginTop: 16 }}>
-                                <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
-                                <Controller
-                                    control={control}
-                                    render={({ field }) => (
-                                        <PasswordField
-                                            {...field}
-                                            classes={{ root: classes.textField }}
-                                            type="password"
-                                            variant="filled"
-                                            placeholder={t('popups_wallet_payment_password')}
-                                            error={!isValid && !!errors.password?.message}
-                                            helperText={!isValid ? errors.password?.message : ''}
-                                        />
-                                    )}
-                                    name="password"
-                                />
-                            </div>
-                        </form>
-                    )}
+                    ) : null}
                 </div>
             </div>
             <div className={classes.controller}>
