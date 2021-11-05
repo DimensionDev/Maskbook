@@ -17,7 +17,9 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 if (!twitterIdNode) return
                 const twitterId = twitterIdNode.innerText.trim().replace('@', '')
 
-                const avatarNodeParent = ele.querySelector('div > :nth-child(2) > div > div > div > a') as HTMLElement
+                const avatarNodeParent = (
+                    ele.firstChild?.firstChild?.firstChild?.nextSibling as HTMLElement
+                ).querySelector('a') as HTMLElement
                 if (!avatarNodeParent || !avatarNodeParent.firstChild) return
 
                 const avatarImageNodeParent = avatarNodeParent.querySelector('div > :last-child > div')
