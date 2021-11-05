@@ -1,7 +1,7 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId, Web3ProviderType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 
 export namespace Plugin {
@@ -206,9 +206,9 @@ export namespace Plugin.SNSAdaptor {
         SearchBoxComponent?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
-        /** This Ui will receve network icon as children component, and the plugin may hook click handle on it. */
+        /** This Ui will receive network icon as children component, and the plugin may hook click handle on it. */
         NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
-        /** This Ui will receve provider icon as children component, and the plugin may hook click handle on it. */
+        /** This Ui will receive provider icon as children component, and the plugin may hook click handle on it. */
         ProviderIconClickBait?: React.ComponentType<{
             network: Shared.Network
             provider: Shared.Provider
@@ -304,9 +304,9 @@ export namespace Plugin.Dashboard {
     export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
-        /** This Ui will receve network icon as children component, and the plugin may hook click handle on it. */
+        /** This Ui will receive network icon as children component, and the plugin may hook click handle on it. */
         NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
-        /** This Ui will receve provider icon as children component, and the plugin may hook click handle on it. */
+        /** This Ui will receive provider icon as children component, and the plugin may hook click handle on it. */
         ProviderIconClickBait?: React.ComponentType<{
             network: Shared.Network
             provider: Shared.Provider

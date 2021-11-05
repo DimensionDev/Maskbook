@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
         stroke: theme.palette.text.secondary,
     },
-    lable: {
+    label: {
         fontSize: 18,
     },
     balance: {
@@ -59,7 +59,7 @@ export function PluginPanel(props: PluginPanelProps) {
             <Box className={classes.root}>
                 <Box className={classes.main}>
                     <Box sx={{ marginBottom: 3 }}>
-                        <Typography className={classes.lable} color="textPrimary">
+                        <Typography className={classes.label} color="textPrimary">
                             Profile Information
                         </Typography>
                     </Box>
