@@ -93,38 +93,41 @@ const WalletRecovery = memo(() => {
     const [{ loading: restoreLegacyWalletLoading }, handleRestoreLegacyWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                if (!hasPassword) await WalletRPC.setPassword(data.password)
-                // restore wallet and ignore the result
-                await Promise.allSettled(
-                    legacyWallets.map(async (x) => {
-                        const name = x.name ?? 'Mask Wallet'
-                        if (x._private_key_) await WalletRPC.recoverWalletFromPrivateKey(name, x._private_key_)
-                        else await WalletRPC.recoverWalletFromMnemonic(name, x.mnemonic.join(' '))
-                    }),
-                )
-
-                // double check the restoring result
-                await Promise.allSettled(
-                    legacyWallets.map(async (x) => {
-                        if (await WalletRPC.hasWallet(x.address)) await WalletRPC.freezeLegacyWallet(x.address)
-                    }),
-                )
-
-                await Services.Helper.removePopupWindow()
+                await WalletRPC.setPassword(data.password)
             } catch (error) {
                 if (error instanceof Error) {
                     setError('password', { message: error.message })
                 }
             }
         },
-        [hasPassword, legacyWallets.map((x) => x.address).join(), setError],
+        [setError],
     )
 
     const onSubmit = handleSubmit(handleRestoreLegacyWallet)
 
     const onConfirm = useCallback(async () => {
-        await onSubmit()
-    }, [onSubmit])
+        if (!hasPassword) {
+            await onSubmit()
+        }
+
+        // restore wallet and ignore the result
+        await Promise.allSettled(
+            legacyWallets.map(async (x) => {
+                const name = x.name ?? 'Mask Wallet'
+                if (x._private_key_) await WalletRPC.recoverWalletFromPrivateKey(name, x._private_key_)
+                else await WalletRPC.recoverWalletFromMnemonic(name, x.mnemonic.join(' '))
+            }),
+        )
+
+        // double check the restoring result
+        await Promise.allSettled(
+            legacyWallets.map(async (x) => {
+                if (await WalletRPC.hasWallet(x.address)) await WalletRPC.freezeLegacyWallet(x.address)
+            }),
+        )
+
+        await Services.Helper.removePopupWindow()
+    }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join()])
 
     return getHasPasswordLoading || getLegacyWalletsLoading ? (
         <LoadingPlaceholder />

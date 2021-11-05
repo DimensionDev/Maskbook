@@ -1,11 +1,12 @@
 import { useCallback, useEffect } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useHistory, useLocation } from 'react-router-dom'
-import { PopupRoutes, useRemoteControlledDialog } from '@masknet/shared'
+import { useHistory } from 'react-router-dom'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { Box } from '@mui/system'
 import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, DialogContent, Typography } from '@mui/material'
+import { PopupRoutes } from '@masknet/shared-base'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { useI18N } from '../../../../utils'
@@ -26,7 +27,6 @@ export interface RestoreLegacyWalletDialogProps {}
 export function RestoreLegacyWalletDialog(props: RestoreLegacyWalletDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const routerLocation = useLocation()
     const history = useHistory()
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.restoreLegacyWalletDialogUpdated)
 
@@ -44,10 +44,10 @@ export function RestoreLegacyWalletDialog(props: RestoreLegacyWalletDialogProps)
     useEffect(() => {
         if (!legacyWallets.length) return
         if (!location.href.includes('popups.html')) return
-        if ([PopupRoutes.LegacyWalletRecovered, PopupRoutes.Unlock].some((item) => item === routerLocation.pathname))
+        if (location.hash.includes(PopupRoutes.LegacyWalletRecovered) || location.hash.includes(PopupRoutes.Unlock))
             return
         setDialog({ open: true })
-    }, [legacyWallets.map((x) => x.address).join(), routerLocation])
+    }, [legacyWallets.map((x) => x.address).join()])
 
     const onRestore = useCallback(async () => {
         history.push(PopupRoutes.LegacyWalletRecovered)
