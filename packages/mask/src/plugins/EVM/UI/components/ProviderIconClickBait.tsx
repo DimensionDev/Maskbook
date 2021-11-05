@@ -1,11 +1,11 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
+import { unreachable } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra/src'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { getChainIdFromNetworkType, NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
 import Services from '../../../../extension/service'
 import { WalletMessages } from '../../../Wallet/messages'
-import { unreachable } from '@dimensiondev/kit'
 
 export interface ProviderIconClickBaitProps {
     network: Plugin.Shared.Network

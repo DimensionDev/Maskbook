@@ -15,6 +15,7 @@ export interface NetworkIconProps {
     size?: number
     icon: string
 }
+
 export function NetworkIcon({ size = 48, icon }: NetworkIconProps) {
     const { classes } = useStyles()
     return <img height={size} width={size} src={icon} className={classes.icon} />

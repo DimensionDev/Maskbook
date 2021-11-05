@@ -6,11 +6,12 @@ import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/
 import {
     useRegisteredProviders,
     useRegisteredNetworks,
-    useActivatedPluginsSNSAdaptor,
-    useActivatedPluginsDashboard,
+    useActivatedPluginSNSAdaptor,
+    useActivatedPluginDashboard,
 } from '@masknet/plugin-infra'
 import { ProviderIcon } from './ProviderIcon'
 import { NetworkIcon } from './NetworkIcon'
+import { PluginProviderWatcher } from './PluginProviderWatcher'
 import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
 
 const useStyles = makeStyles()((theme) => ({
@@ -84,74 +85,78 @@ export function PluginProviderRender({ onClose }: PluginProviderRenderProps) {
     const networks = useRegisteredNetworks()
     const providers = useRegisteredProviders()
 
-    const pluginsSNSAdaptor = useActivatedPluginsSNSAdaptor()
-    const pluginsDashboard = useActivatedPluginsDashboard()
-
     const pluginID = useValueRef(pluginIDSettings)
     const networkID = useValueRef(networkIDSettings)
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(networkID)
 
-    const NetworkIconClickBait = [...pluginsSNSAdaptor, ...pluginsDashboard].find(
-        (x) => x.ID === undeterminedPluginID,
-    )?.NetworkIconClickBait
-    const ProviderIconClickBait = [...pluginsSNSAdaptor, ...pluginsDashboard].find(
-        (x) => x.ID === undeterminedPluginID,
-    )?.ProviderIconClickBait
+    const pluginSNSAdaptor = useActivatedPluginSNSAdaptor(undeterminedPluginID)
+    const pluginDashboard = useActivatedPluginDashboard(undeterminedPluginID)
+
+    const { useNetwork, useProvider, NetworkIconClickBait, ProviderIconClickBait } =
+        (pluginSNSAdaptor ?? pluginDashboard)?.Web3Provider?.SelectProviderDialog ?? {}
 
     return (
-        <Box className={classes.root}>
-            <section className={classes.section}>
-                <Typography className={classes.title} variant="h2" component="h2">
-                    1. Choose Network
-                </Typography>
-                <List className={classes.list}>
-                    {networks?.map((network) => (
-                        <ListItem
-                            className={classes.networkItem}
-                            key={network.ID}
-                            onClick={() => {
-                                setUndeterminedPluginID(network.pluginID)
-                                setUndeterminedNetworkID(network.ID)
-                            }}>
-                            <div className={classes.iconWrapper}>
-                                {NetworkIconClickBait ? (
-                                    <NetworkIconClickBait network={network}>
+        <>
+            <PluginProviderWatcher
+                useNetwork={useNetwork}
+                useProvider={useProvider}
+                expectedPluginID={pluginID}
+                expectedNetworkID={networkID}
+            />
+            <Box className={classes.root}>
+                <section className={classes.section}>
+                    <Typography className={classes.title} variant="h2" component="h2">
+                        1. Choose Network
+                    </Typography>
+                    <List className={classes.list}>
+                        {networks?.map((network) => (
+                            <ListItem
+                                className={classes.networkItem}
+                                key={network.ID}
+                                onClick={() => {
+                                    setUndeterminedPluginID(network.pluginID)
+                                    setUndeterminedNetworkID(network.ID)
+                                }}>
+                                <div className={classes.iconWrapper}>
+                                    {NetworkIconClickBait ? (
+                                        <NetworkIconClickBait network={network}>
+                                            <NetworkIcon icon={network.icon} />
+                                        </NetworkIconClickBait>
+                                    ) : (
                                         <NetworkIcon icon={network.icon} />
-                                    </NetworkIconClickBait>
-                                ) : (
-                                    <NetworkIcon icon={network.icon} />
-                                )}
-                                {undeterminedNetworkID === network.ID && (
-                                    <SuccessIcon className={classes.checkedBadge} />
-                                )}
-                            </div>
-                        </ListItem>
-                    ))}
-                </List>
-            </section>
-            <section className={classes.section}>
-                <Typography className={classes.title} variant="h2" component="h2">
-                    2. Choose Wallet
-                </Typography>
-                <ImageList className={classes.grid} gap={16} cols={3} rowHeight={151} onClick={onClose}>
-                    {providers
-                        .filter((x) => x.pluginID === undeterminedPluginID)
-                        .map((provider) => (
-                            <ImageListItem key={provider.ID}>
-                                {ProviderIconClickBait ? (
-                                    <ProviderIconClickBait
-                                        network={networks.find((x) => x.ID === undeterminedNetworkID)!}
-                                        provider={provider}>
-                                        <ProviderIcon icon={provider.icon} name={provider.name} />
-                                    </ProviderIconClickBait>
-                                ) : (
-                                    <ProviderIcon icon={provider.icon} name={provider.name} />
-                                )}
-                            </ImageListItem>
+                                    )}
+                                    {undeterminedNetworkID === network.ID && (
+                                        <SuccessIcon className={classes.checkedBadge} />
+                                    )}
+                                </div>
+                            </ListItem>
                         ))}
-                </ImageList>
-            </section>
-        </Box>
+                    </List>
+                </section>
+                <section className={classes.section}>
+                    <Typography className={classes.title} variant="h2" component="h2">
+                        2. Choose Wallet
+                    </Typography>
+                    <ImageList className={classes.grid} gap={16} cols={3} rowHeight={151} onClick={onClose}>
+                        {providers
+                            .filter((x) => x.pluginID === undeterminedPluginID)
+                            .map((provider) => (
+                                <ImageListItem key={provider.ID}>
+                                    {ProviderIconClickBait ? (
+                                        <ProviderIconClickBait
+                                            network={networks.find((x) => x.ID === undeterminedNetworkID)!}
+                                            provider={provider}>
+                                            <ProviderIcon icon={provider.icon} name={provider.name} />
+                                        </ProviderIconClickBait>
+                                    ) : (
+                                        <ProviderIcon icon={provider.icon} name={provider.name} />
+                                    )}
+                                </ImageListItem>
+                            ))}
+                    </ImageList>
+                </section>
+            </Box>
+        </>
     )
 }

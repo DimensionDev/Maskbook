@@ -1,7 +1,7 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId, Web3ProviderType } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 
 export namespace Plugin {
@@ -193,6 +193,30 @@ export namespace Plugin.Shared {
         /** The provider name */
         name: string
     }
+
+    export interface Web3Provider {
+        SelectProviderDialog?: {
+            /** A react hook returns the currently selected provider. */
+            useProvider?: () => Shared.Provider | null
+            /** A react hook returns the currently selected network. */
+            useNetwork?: () => Shared.Network | null
+            /** This UI will receve network icon as children component, and the plugin may hook click handle on it. */
+            NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
+            /** This UI will receve provider icon as children component, and the plugin may hook click handle on it. */
+            ProviderIconClickBait?: React.ComponentType<{
+                network: Shared.Network
+                provider: Shared.Provider
+                children?: React.ReactNode
+            }>
+        }
+        Dashboard?: {
+            /** There UIs will be injected into the wallet table of Dashboard. */
+            OverviewComponent?: React.ComponentType<{}>
+            AssetsTableComponent?: React.ComponentType<{}>
+            TransferTableComponent?: React.ComponentType<{}>
+            HistoryTableComponent?: React.ComponentType<{}>
+        }
+    }
 }
 
 /** This part runs in the SNSAdaptor */
@@ -206,14 +230,8 @@ export namespace Plugin.SNSAdaptor {
         SearchBoxComponent?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
-        /** This Ui will receve network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
-        /** This Ui will receve provider icon as children component, and the plugin may hook click handle on it. */
-        ProviderIconClickBait?: React.ComponentType<{
-            network: Shared.Network
-            provider: Shared.Provider
-            children?: React.ReactNode
-        }>
+        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        Web3Provider?: Shared.Web3Provider
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -304,14 +322,9 @@ export namespace Plugin.Dashboard {
     export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
-        /** This Ui will receve network icon as children component, and the plugin may hook click handle on it. */
-        NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
-        /** This Ui will receve provider icon as children component, and the plugin may hook click handle on it. */
-        ProviderIconClickBait?: React.ComponentType<{
-            network: Shared.Network
-            provider: Shared.Provider
-            children?: React.ReactNode
-        }>
+
+        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        Web3Provider?: Shared.Web3Provider
     }
 }
 

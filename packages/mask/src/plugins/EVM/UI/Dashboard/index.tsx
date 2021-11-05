@@ -1,11 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
-import { ProviderIconClickBait } from '../components/ProviderIconClickBait'
+import { Web3Provider } from '../Web3Provider'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
-    ProviderIconClickBait,
+    Web3Provider,
 }
 
 export default sns

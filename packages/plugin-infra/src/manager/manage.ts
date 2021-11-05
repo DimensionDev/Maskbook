@@ -54,7 +54,6 @@ export function createManager<T extends Plugin.Shared.DefinitionDeferred<Context
         async function checkRequirementAndStartOrStop() {
             console.log('')
 
-
             for (const id of registeredPluginIDs) {
                 if (await meetRequirement(id)) activatePlugin(id).catch(console.error)
                 else stopPlugin(id)

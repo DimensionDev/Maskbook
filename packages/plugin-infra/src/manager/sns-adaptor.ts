@@ -15,6 +15,11 @@ export function useActivatedPluginsSNSAdaptor() {
     return useSubscription(subscription)
 }
 
+export function useActivatedPluginSNSAdaptor(pluginID: string) {
+    const plugins = useActivatedPluginsSNSAdaptor()
+    return plugins.find((x) => x.ID === pluginID)
+}
+
 export function useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet() {
     const chainId = useChainId()
     const plugins = useActivatedPluginsSNSAdaptor()

@@ -1,12 +1,12 @@
 import { useEffect } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { hasNativeAPI, nativeAPI } from '../../../../utils'
 import { PluginProviderRender } from './PluginProviderRender'
-import { useRemoteControlledDialog } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
