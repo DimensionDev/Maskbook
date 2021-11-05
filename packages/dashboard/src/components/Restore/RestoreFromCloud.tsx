@@ -21,7 +21,6 @@ import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
 import { LoadingButton } from '../LoadingButton'
 import type { BackupPreview } from '../../../../mask/src/utils'
-import { PopupRoutes } from '@masknet/shared'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
@@ -106,7 +105,7 @@ export const RestoreFromCloud = memo(() => {
         async (backupInfo: { info: BackupPreview; id: string }, account: any) => {
             try {
                 if (backupInfo.info?.wallets) {
-                    await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId: backupInfo.id })
+                    await Services.Welcome.checkPermissionAndOpenWalletRecovery(backupInfo.id)
                     return
                 } else {
                     await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)

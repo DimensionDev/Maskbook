@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PageHeader } from '../components/PageHeader'
 import { MaskMessages, useI18N } from '../../../../../utils'
@@ -109,7 +109,7 @@ const WalletRecovery = memo(() => {
 
     const onSubmit = handleSubmit(handleSetPassword)
 
-    const onConfirm = useCallback(async () => {
+    const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         // If the payment password does not exist, set it first
         if (!hasPassword) {
             await onSubmit()
@@ -117,15 +117,17 @@ const WalletRecovery = memo(() => {
 
         if (backupId) {
             const json = await Services.Welcome.getUnconfirmedBackup(backupId)
-            await Services.Welcome.checkPermissionsAndRestore(backupId)
+            if (json) {
+                await Services.Welcome.restoreBackup(json)
 
-            // Set default wallet
-            if (json?.wallets) await WalletRPC.setDefaultWallet()
+                // Set default wallet
+                if (json.wallets) await WalletRPC.setDefaultWallet()
 
-            // Send event after successful recovery
-            MaskMessages.events.restoreSuccess.sendToAll(undefined)
+                // Send event after successful recovery
+                MaskMessages.events.restoreSuccess.sendToAll(undefined)
 
-            await Services.Helper.removePopupWindow()
+                await Services.Helper.removePopupWindow()
+            }
         }
     }, [onSubmit, hasPassword, currentPersona, backupId])
 
@@ -191,7 +193,7 @@ const WalletRecovery = memo(() => {
             </div>
             <div className={classes.controller}>
                 <LoadingButton
-                    loading={setPasswordLoading}
+                    loading={setPasswordLoading || confirmLoading}
                     fullWidth
                     disabled={!hasPassword ? !isValid : false}
                     classes={{ root: classes.button, disabled: classes.disabled }}

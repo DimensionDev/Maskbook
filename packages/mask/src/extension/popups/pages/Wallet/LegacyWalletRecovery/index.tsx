@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { Controller } from 'react-hook-form'
 import { ProviderType } from '@masknet/web3-shared-evm'
@@ -106,7 +106,7 @@ const WalletRecovery = memo(() => {
 
     const onSubmit = handleSubmit(handleRestoreLegacyWallet)
 
-    const onConfirm = useCallback(async () => {
+    const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         if (!hasPassword) {
             await onSubmit()
         }
@@ -192,7 +192,7 @@ const WalletRecovery = memo(() => {
             </div>
             <div className={classes.controller}>
                 <LoadingButton
-                    loading={restoreLegacyWalletLoading}
+                    loading={restoreLegacyWalletLoading || confirmLoading}
                     fullWidth
                     disabled={!hasPassword ? !isValid : false}
                     classes={{ root: classes.button, disabled: classes.disabled }}

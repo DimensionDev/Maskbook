@@ -17,7 +17,6 @@ import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { LoadingButton } from '../LoadingButton'
 import PasswordField from '../PasswordField'
-import { PopupRoutes } from '@masknet/shared'
 import { useCustomSnackbar } from '@masknet/theme'
 
 enum RestoreStatus {
@@ -106,7 +105,7 @@ export const RestoreFromLocal = memo(() => {
         try {
             // If json has wallets, restore in popup.
             if (json?.wallets) {
-                await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId })
+                await Services.Welcome.checkPermissionAndOpenWalletRecovery(backupId)
                 return
             } else {
                 await Services.Welcome.checkPermissionsAndRestore(backupId)
