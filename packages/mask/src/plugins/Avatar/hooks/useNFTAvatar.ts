@@ -25,3 +25,7 @@ export function useNFTAvatar(userId: string) {
         return avatar
     }, [userId, cache])
 }
+
+export function useNFTAvatarNoCache(userId: string) {
+    return useAsync(async () => PluginNFTAvatarRPC.getNFTAvatar(userId))
+}
