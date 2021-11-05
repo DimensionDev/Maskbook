@@ -62,6 +62,28 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+interface CollectibleItemProps {
+    provider: CollectibleProvider
+    wallet?: Wallet
+    token: ERC721TokenDetailed
+    readonly?: boolean
+}
+
+function CollectibleItem(props: CollectibleItemProps) {
+    const { provider, wallet, token, readonly } = props
+    const { classes } = useStyles()
+    return (
+        <div className={classes.card}>
+            <CollectibleCard token={token} provider={provider} wallet={wallet} readonly={readonly} />
+            <div className={classes.description}>
+                <Typography className={classes.name} color="textSecondary" variant="body2">
+                    {token.info.name}
+                </Typography>
+            </div>
+        </div>
+    )
+}
+
 interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
     provider: CollectibleProvider
     wallet?: Wallet
@@ -73,6 +95,7 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
     readonly?: boolean
     page: number
     hasRetry?: boolean
+    collectionView?: boolean
     onNextPage: () => void
     onPrevPage: () => void
 }
@@ -88,6 +111,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
         readonly,
         page,
         hasRetry = true,
+        collectionView = false,
         onNextPage,
         onPrevPage,
     } = props
@@ -115,6 +139,15 @@ function CollectibleListUI(props: CollectibleListUIProps) {
             </Box>
         )
 
+    const collections: ERC721TokenDetailed[][] = []
+    for (let i = 0; i < collectibles.length; i = i + 1) {
+        if (i && collectibles[i].contractDetailed.address === collectibles[i - 1].contractDetailed.address) {
+            collections[collections.length - 1].push(collectibles[i])
+        } else {
+            collections.push([collectibles[i]])
+        }
+    }
+
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.container}>
@@ -127,17 +160,41 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                             </Button>
                         ) : null}
                     </Box>
+                ) : collectionView ? (
+                    <Box>
+                        {collections.map((x, i) => (
+                            <Box key={i}>
+                                <Typography
+                                    className={classes.name}
+                                    color="textPrimary"
+                                    variant="body2"
+                                    sx={{ fontSize: '16px', marginTop: '24px' }}>
+                                    {x[0].contractDetailed.name}
+                                </Typography>
+                                <Box sx={{ display: 'flex', overflow: 'auto' }}>
+                                    {x.map((y, j) => (
+                                        <CollectibleItem
+                                            token={y}
+                                            provider={provider}
+                                            wallet={wallet}
+                                            readonly={readonly}
+                                            key={j}
+                                        />
+                                    ))}
+                                </Box>
+                            </Box>
+                        ))}
+                    </Box>
                 ) : (
                     <Box className={classes.root}>
                         {collectibles.map((x, i) => (
-                            <div className={classes.card} key={i}>
-                                <CollectibleCard token={x} provider={provider} wallet={wallet} readonly={readonly} />
-                                <div className={classes.description}>
-                                    <Typography className={classes.name} color="textSecondary" variant="body2">
-                                        {x.info.name}
-                                    </Typography>
-                                </div>
-                            </div>
+                            <CollectibleItem
+                                token={x}
+                                provider={provider}
+                                wallet={wallet}
+                                readonly={readonly}
+                                key={i}
+                            />
                         ))}
                     </Box>
                 )}
@@ -169,10 +226,11 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 
 export interface CollectibleListAddressProps extends withClasses<'empty' | 'button'> {
     address: string
+    collectionView?: boolean
 }
 
 export function CollectibleListAddress(props: CollectibleListAddressProps) {
-    const { address } = props
+    const { address, collectionView } = props
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
@@ -201,6 +259,7 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             classes={classes}
             provider={provider}
             collectibles={collectibles}
+            collectionView={collectionView}
             loading={collectiblesLoading}
             collectiblesRetry={collectiblesRetry}
             error={collectiblesError}
