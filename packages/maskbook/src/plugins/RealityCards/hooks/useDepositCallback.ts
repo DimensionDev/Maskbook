@@ -7,7 +7,7 @@ import { useTreasuryContract } from '../contracts/useTreasuryContract'
  * A callback for deposit into reality cards
  * @param amount
  */
-export function useDepositCallback(amount: string) {
+export function useDepositCallback(amount: BigNumber) {
     const account = useAccount()
     const contract = useTreasuryContract()
     const [depositState, setDepositState] = useTransactionState()
@@ -31,7 +31,7 @@ export function useDepositCallback(amount: string) {
             value: new BigNumber(0).toFixed(),
         }
         const estimatedGas = await contract.methods
-            .deposit(amount, account)
+            .deposit(amount.toString(), account)
             .estimateGas(config)
             .catch((error) => {
                 setDepositState({
@@ -44,7 +44,7 @@ export function useDepositCallback(amount: string) {
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
             contract.methods
-                .deposit(amount, account)
+                .deposit(amount.toString(), account)
                 .send({
                     ...config,
                     gas: estimatedGas,

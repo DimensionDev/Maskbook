@@ -2,6 +2,7 @@ import { Box, Card, CardHeader, CardContent, Typography, Button, Grid } from '@m
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useEventBySlug } from '../hooks/useEvent'
+import { useState } from '.pnpm/@types+react@17.0.29/node_modules/@types/react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -28,6 +29,8 @@ interface EventDetailsProps {
 export function EventView(props: EventProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const [depositDialogOpen, depositDialogOpen] = useState(false)
+
     const { value: event, error, loading, retry } = useEventBySlug(props.slug)
     console.log(event, error, loading)
     if (loading) return <Typography color="textPrimary">Loading...</Typography>
@@ -76,6 +79,22 @@ function EventDetails(props: EventDetailsProps) {
             <Grid item sx={{ textAlign: 'right' }}>
                 open/ended
             </Grid>
+
+            <Button
+                variant="contained"
+                fullWidth
+                color="primary"
+                disabled={!!validationMessage}
+                onClick={isBuy ? () => setBuyDialogOpen(true) : () => setSellDialogOpen(true)}>
+                {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
+            </Button>
+            <BuyDialog
+                open={buyDialogOpen}
+                market={market}
+                outcome={selectedOutcome}
+                token={cashToken}
+                onClose={() => setBuyDialogOpen(false)}
+            />
         </Grid>
     )
 }
