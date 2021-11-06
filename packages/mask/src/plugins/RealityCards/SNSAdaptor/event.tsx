@@ -1,8 +1,8 @@
 import { Box, Card, CardHeader, CardContent, Typography, Button, Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useEventBySlug } from '../hooks/useEvent'
 import { useState } from 'react'
+import { useEventBySlug } from '../hooks/useEvent'
 // import { DepositDialog } from './deposit'
 
 const useStyles = makeStyles()((theme) => ({
