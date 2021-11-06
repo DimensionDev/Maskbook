@@ -9,12 +9,7 @@ import { hasNativeAPI, nativeAPI } from '../../../../utils'
 import { PluginProviderRender } from './PluginProviderRender'
 import { PluginNetworkWatcher } from './PluginNetworkWatcher'
 import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
-import {
-    useActivatedPluginSNSAdaptor,
-    useActivatedPluginDashboard,
-    useRegisteredNetworks,
-    useRegisteredProviders,
-} from '@masknet/plugin-infra'
+import { useRegisteredNetworks, useRegisteredProviders, useWeb3UIProvider } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -51,11 +46,9 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const networks = useRegisteredNetworks()
     const providers = useRegisteredProviders()
 
-    const pluginSNSAdaptor = useActivatedPluginSNSAdaptor(undeterminedPluginID)
-    const pluginDashboard = useActivatedPluginDashboard(undeterminedPluginID)
-
-    const { useNetwork, NetworkIconClickBait, ProviderIconClickBait } =
-        (pluginSNSAdaptor ?? pluginDashboard)?.Web3Provider?.SelectProviderDialog ?? {}
+    const Web3UIProvider = useWeb3UIProvider(pluginID)
+    const { useNetwork = () => null } = Web3UIProvider?.Shared ?? {}
+    const { NetworkIconClickBait, ProviderIconClickBait } = Web3UIProvider?.SelectProviderDialog ?? {}
 
     // not available for the native app
     if (hasNativeAPI) return null
@@ -64,7 +57,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     if (!open)
         return (
             <PluginNetworkWatcher
-                useNetwork={useNetwork ?? (() => null)}
+                useNetwork={useNetwork}
                 expectedPluginID={undeterminedPluginID}
                 expectedNetworkID={undeterminedNetworkID}
             />

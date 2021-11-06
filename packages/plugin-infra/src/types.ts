@@ -3,6 +3,7 @@ import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
+import type { Subscription } from 'use-subscription'
 
 export namespace Plugin {
     /**
@@ -198,15 +199,14 @@ export namespace Plugin.Shared {
         name: string
     }
 
-    export interface Web3Provider {
+    export interface Web3UIProvider {
         Shared?: {
-            WalletIcon: React.ComponentType<{ size?: number; badgeSize?: number }>
-        }
-        SelectProviderDialog?: {
             /** A react hook returns the currently selected provider. */
             useProvider?: () => Shared.Provider | null
             /** A react hook returns the currently selected network. */
             useNetwork?: () => Shared.Network | null
+        }
+        SelectProviderDialog?: {
             /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
             NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
             /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
@@ -224,6 +224,20 @@ export namespace Plugin.Shared {
             HistoryTableComponent?: React.ComponentType<{}>
         }
     }
+
+    export interface ContextProvider {
+        allowTestnet: Subscription<boolean>
+        chainId: Subscription<number>
+        account: Subscription<string>
+        balance: Subscription<string>
+        blockNumber: Subscription<number>
+        networkType: Subscription<string>
+        providerType: Subscription<string>
+    }
+
+    export interface Web3ContextProvider {
+        Context?: ContextProvider
+    }
 }
 
 /** This part runs in the SNSAdaptor */
@@ -238,7 +252,9 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3Provider?: Shared.Web3Provider
+        Web3UIProvider?: Shared.Web3UIProvider
+        /** This is the web3 context. */
+        Web3ContextProvider?: Shared.Web3ContextProvider
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -329,9 +345,10 @@ export namespace Plugin.Dashboard {
     export interface Definition extends Shared.DefinitionDeferred {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
-
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3Provider?: Shared.Web3Provider
+        Web3UIProvider?: Shared.Web3UIProvider
+        /** This is the web3 context. */
+        Web3ContextProvider?: Shared.Web3ContextProvider
     }
 }
 
