@@ -204,9 +204,9 @@ export namespace Plugin.Shared {
             useProvider?: () => Shared.Provider | null
             /** A react hook returns the currently selected network. */
             useNetwork?: () => Shared.Network | null
-            /** This UI will receve network icon as children component, and the plugin may hook click handle on it. */
+            /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
             NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
-            /** This UI will receve provider icon as children component, and the plugin may hook click handle on it. */
+            /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
             ProviderIconClickBait?: React.ComponentType<{
                 network: Shared.Network
                 provider: Shared.Provider
