@@ -32,7 +32,7 @@ import { MaskMessages } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -44,7 +44,6 @@ import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
-import { WalletIcon } from '../shared/WalletIcon'
 import { MaskIcon, MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
@@ -136,7 +135,11 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                 <Container>
                     <ListItemButton onClick={openWallet}>
                         <ListItemIcon>
-                            {isWalletValid ? <WalletIcon size={iconSize} /> : <WalletSharp size={iconSize} />}
+                            {isWalletValid ? (
+                                <WalletIcon size={iconSize} networkIcon="" providerIcon="" />
+                            ) : (
+                                <WalletSharp size={iconSize} />
+                            )}
                         </ListItemIcon>
                         {mini ? null : (
                             <ListItemText

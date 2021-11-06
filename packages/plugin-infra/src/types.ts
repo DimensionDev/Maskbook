@@ -199,6 +199,9 @@ export namespace Plugin.Shared {
     }
 
     export interface Web3Provider {
+        Shared?: {
+            WalletIcon: React.ComponentType<{ size?: number; badgeSize?: number }>
+        }
         SelectProviderDialog?: {
             /** A react hook returns the currently selected provider. */
             useProvider?: () => Shared.Provider | null

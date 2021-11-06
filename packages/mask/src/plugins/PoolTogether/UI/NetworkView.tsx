@@ -1,7 +1,7 @@
 import { ChainId, getChainDetailed, getNetworkTypeFromChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { NetworkIcon, useStylesExtends } from '@masknet/shared'
+import { ImageIcon, useStylesExtends } from '@masknet/shared'
 import { getNetworkColor } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,7 +31,7 @@ export const NetworkView = (props: NetworkViewProps) => {
 
     return (
         <Typography variant="subtitle2" color={color} className={classes.root}>
-            <NetworkIcon classes={{ icon: classes.icon }} networkType={selectedNetwork} />
+            <ImageIcon classes={{ icon: classes.icon }} icon="" />
             {chainDetail?.fullName}
         </Typography>
     )

@@ -1,4 +1,10 @@
-import { FormattedAddress, useRemoteControlledDialog, useValueRef, useSnackbarCallback } from '@masknet/shared'
+import {
+    WalletIcon,
+    FormattedAddress,
+    useRemoteControlledDialog,
+    useValueRef,
+    useSnackbarCallback,
+} from '@masknet/shared'
 import {
     ProviderType,
     resolveAddressLinkOnExplorer,
@@ -14,7 +20,6 @@ import { useCallback } from 'react'
 import { Copy, Edit3, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { WalletIcon } from '../../../../components/shared/WalletIcon'
 import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
@@ -150,7 +155,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         <InjectedDialog title={t('wallet_status_title')} open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <section className={`${classes.currentAccount} dashboard-style`}>
-                    <WalletIcon size={48} badgeSize={18} />
+                    <WalletIcon size={48} badgeSize={18} networkIcon="" providerIcon="" />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>

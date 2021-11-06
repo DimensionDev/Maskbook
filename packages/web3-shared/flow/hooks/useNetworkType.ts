@@ -1,5 +1,7 @@
+import { useCurrentUser } from '.'
 import { NetworkType } from '../types'
 
 export function useNetworkType() {
-    return NetworkType.Flow
+    const currentUser = useCurrentUser()
+    return currentUser ? NetworkType.Flow : null
 }

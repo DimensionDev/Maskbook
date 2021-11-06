@@ -1,9 +1,9 @@
 import { SuccessIcon } from '@masknet/icons'
+import { ImageIcon } from '@masknet/shared'
+import type { Plugin } from '@masknet/plugin-infra'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
-import type { Plugin } from '@masknet/plugin-infra'
 import { ProviderIcon } from './ProviderIcon'
-import { NetworkIcon } from './NetworkIcon'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -114,10 +114,10 @@ export function PluginProviderRender({
                                 <div className={classes.iconWrapper}>
                                     {NetworkIconClickBait ? (
                                         <NetworkIconClickBait network={network}>
-                                            <NetworkIcon icon={network.icon} />
+                                            <ImageIcon icon={network.icon} />
                                         </NetworkIconClickBait>
                                     ) : (
-                                        <NetworkIcon icon={network.icon} />
+                                        <ImageIcon icon={network.icon} />
                                     )}
                                     {undeterminedNetworkID === network.ID && (
                                         <SuccessIcon className={classes.checkedBadge} />

@@ -1,5 +1,5 @@
 import { LoadingIcon } from '@masknet/icons'
-import { FormattedAddress, ProviderIcon } from '@masknet/shared'
+import { FormattedAddress, ImageIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Stack, StackProps, Typography } from '@mui/material'
@@ -60,7 +60,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                 )}
                 <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                     <Stack mx={1} justifyContent="center">
-                        <ProviderIcon providerType={providerType} />
+                        <ImageIcon icon="" />
                     </Stack>
                     <Box sx={{ userSelect: 'none' }}>
                         <Box fontSize={16}>{walletName}</Box>

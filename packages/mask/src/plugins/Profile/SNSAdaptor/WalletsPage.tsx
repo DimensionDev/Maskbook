@@ -1,6 +1,6 @@
 import { RewardIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { NetworkIcon, useRemoteControlledDialog, useSnackbarCallback } from '@masknet/shared'
+import { ImageIcon, useRemoteControlledDialog, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
@@ -55,7 +55,6 @@ export function WalletsPage() {
 
     const chainId = useChainId()
     const { classes } = useStyles()
-    const chainColor = useChainColor()
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
@@ -75,7 +74,7 @@ export function WalletsPage() {
                 {wallets.map((wallet, i) => (
                     <ListItem key={i}>
                         <ListItemIcon className={classes.icon}>
-                            <NetworkIcon size={20} networkType={getNetworkTypeFromChainId(chainId)} />
+                            <ImageIcon size={20} icon="" />
                         </ListItemIcon>
                         <ListItemIcon className={classes.address}>
                             <Typography variant="body1" color="textPrimary">

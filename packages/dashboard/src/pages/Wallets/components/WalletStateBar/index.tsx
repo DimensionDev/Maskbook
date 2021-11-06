@@ -10,7 +10,7 @@ import {
     useWeb3StateContext,
 } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { FormattedAddress, LoadingAnimation, ProviderIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { FormattedAddress, LoadingAnimation, ImageIcon, useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
@@ -128,7 +128,8 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
             )}
             <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                 <Stack mx={1} justifyContent="center">
-                    <ProviderIcon providerType={providerType} />
+                    {/* <ImageIcon providerType={providerType} /> */}
+                    <ImageIcon icon="" />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
                     <Box fontSize={16}>{walletName}</Box>
