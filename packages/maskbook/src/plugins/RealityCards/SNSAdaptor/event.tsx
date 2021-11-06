@@ -2,7 +2,7 @@ import { Box, Card, CardHeader, CardContent, Typography, Button, Grid } from '@m
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useEventBySlug } from '../hooks/useEvent'
-import { useState } from '.pnpm/@types+react@17.0.29/node_modules/@types/react'
+import { useState } from 'react'
 // import { DepositDialog } from './deposit'
 
 const useStyles = makeStyles()((theme) => ({
