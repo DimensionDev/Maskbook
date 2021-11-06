@@ -1,12 +1,20 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { hasNativeAPI, nativeAPI } from '../../../../utils'
 import { PluginProviderRender } from './PluginProviderRender'
+import { PluginNetworkWatcher } from './PluginNetworkWatcher'
+import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
+import {
+    useActivatedPluginSNSAdaptor,
+    useActivatedPluginDashboard,
+    useRegisteredNetworks,
+    useRegisteredProviders,
+} from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -18,9 +26,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface SelectProviderDialogUIProps extends withClasses<never> {}
+export interface SelectProviderDialogProps {}
 
-function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
+export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -35,20 +43,48 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     }, [open])
     //#endregion
 
+    const pluginID = useValueRef(pluginIDSettings)
+    const networkID = useValueRef(networkIDSettings)
+    const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(networkID)
+
+    const networks = useRegisteredNetworks()
+    const providers = useRegisteredProviders()
+
+    const pluginSNSAdaptor = useActivatedPluginSNSAdaptor(undeterminedPluginID)
+    const pluginDashboard = useActivatedPluginDashboard(undeterminedPluginID)
+
+    const { useNetwork, NetworkIconClickBait, ProviderIconClickBait } =
+        (pluginSNSAdaptor ?? pluginDashboard)?.Web3Provider?.SelectProviderDialog ?? {}
+
     // not available for the native app
     if (hasNativeAPI) return null
+
+    // if the dialog closes then start capturing the currently selected network
+    if (!open)
+        return (
+            <PluginNetworkWatcher
+                useNetwork={useNetwork ?? (() => null)}
+                expectedPluginID={undeterminedPluginID}
+                expectedNetworkID={undeterminedNetworkID}
+            />
+        )
 
     return (
         <InjectedDialog title={t('plugin_wallet_select_provider_dialog_title')} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <PluginProviderRender onClose={closeDialog} />
+                <PluginProviderRender
+                    networks={networks}
+                    providers={providers}
+                    undeterminedPluginID={undeterminedPluginID}
+                    undeterminedNetworkID={undeterminedNetworkID}
+                    setUndeterminedPluginID={setUndeterminedPluginID}
+                    setUndeterminedNetworkID={setUndeterminedNetworkID}
+                    NetworkIconClickBait={NetworkIconClickBait}
+                    ProviderIconClickBait={ProviderIconClickBait}
+                    onSubmit={closeDialog}
+                />
             </DialogContent>
         </InjectedDialog>
     )
-}
-
-export interface SelectProviderDialogProps extends SelectProviderDialogUIProps {}
-
-export function SelectProviderDialog(props: SelectProviderDialogProps) {
-    return <SelectProviderDialogUI {...props} />
 }

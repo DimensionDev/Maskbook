@@ -26,26 +26,12 @@ export function useRegisteredPlugins() {
 
 export function useRegisteredNetworks() {
     const plugins = useRegisteredPlugins()
-    return useMemo(() => {
-        return plugins.flatMap((x) =>
-            (x.networks ?? []).map((y) => ({
-                ...y,
-                pluginID: x.ID,
-            })),
-        )
-    }, [plugins.map((x) => x.ID).join()])
+    return useMemo(() => plugins.flatMap((x) => x.networks ?? []), [plugins.map((x) => x.ID).join()])
 }
 
 export function useRegisteredProviders() {
     const plugins = useRegisteredPlugins()
-    return useMemo(() => {
-        return plugins.flatMap((x) =>
-            (x.providers ?? []).map((y) => ({
-                ...y,
-                pluginID: x.ID,
-            })),
-        )
-    }, [plugins.map((x) => x.ID).join()])
+    return useMemo(() => plugins.flatMap((x) => x.providers ?? []), [plugins.map((x) => x.ID).join()])
 }
 
 function __meetRegisterRequirement(def: Plugin.Shared.Definition) {

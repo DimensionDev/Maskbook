@@ -175,6 +175,8 @@ export namespace Plugin.Shared {
     export interface Network {
         /** An unique ID for each network */
         ID: string
+        /** The plugin ID */
+        pluginID: string
         /** The network type */
         type: string
         /** The network icon */
@@ -186,6 +188,8 @@ export namespace Plugin.Shared {
     export interface Provider {
         /** An unique ID for each wallet provider */
         ID: string
+        /** The plugin ID */
+        pluginID: string
         /** The provider type */
         type: string
         /** The provider icon */

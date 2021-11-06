@@ -9,6 +9,7 @@ export const PLUGIN_DESCRIPTION = ''
 export const PLUGIN_NETWORKS: Plugin.Shared.Network[] = [
     {
         ID: `${PLUGIN_ID}_flow`,
+        pluginID: PLUGIN_ID,
         type: NetworkType.Flow,
         name: 'Flow',
         icon: new URL('./assets/flow.png', import.meta.url).toString(),
@@ -17,6 +18,7 @@ export const PLUGIN_NETWORKS: Plugin.Shared.Network[] = [
 export const PLUGIN_PROVIDERS: Plugin.Shared.Provider[] = [
     {
         ID: `${PLUGIN_ID}_blocto`,
+        pluginID: PLUGIN_ID,
         type: ProviderType.Blocto,
         name: 'Blocto',
         icon: new URL('./assets/blocto.png', import.meta.url).toString(),

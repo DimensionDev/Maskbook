@@ -1,18 +1,9 @@
-import { useState } from 'react'
 import { SuccessIcon } from '@masknet/icons'
-import { useValueRef } from '@masknet/shared'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
-import {
-    useRegisteredProviders,
-    useRegisteredNetworks,
-    useActivatedPluginSNSAdaptor,
-    useActivatedPluginDashboard,
-} from '@masknet/plugin-infra'
+import type { Plugin } from '@masknet/plugin-infra'
 import { ProviderIcon } from './ProviderIcon'
 import { NetworkIcon } from './NetworkIcon'
-import { PluginProviderWatcher } from './PluginProviderWatcher'
-import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -76,34 +67,36 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PluginProviderRenderProps {
-    onClose: () => void
+    networks: Plugin.Shared.Network[]
+    providers: Plugin.Shared.Provider[]
+    undeterminedPluginID: string
+    undeterminedNetworkID: string
+    setUndeterminedPluginID: (id: string) => void
+    setUndeterminedNetworkID: (id: string) => void
+    NetworkIconClickBait?: React.ComponentType<{ network: Plugin.Shared.Network; children?: React.ReactNode }>
+    ProviderIconClickBait?: React.ComponentType<{
+        network: Plugin.Shared.Network
+        provider: Plugin.Shared.Provider
+        children?: React.ReactNode
+    }>
+    onSubmit: () => void
 }
 
-export function PluginProviderRender({ onClose }: PluginProviderRenderProps) {
+export function PluginProviderRender({
+    networks,
+    providers,
+    undeterminedPluginID,
+    undeterminedNetworkID,
+    setUndeterminedPluginID,
+    setUndeterminedNetworkID,
+    NetworkIconClickBait,
+    ProviderIconClickBait,
+    onSubmit,
+}: PluginProviderRenderProps) {
     const { classes } = useStyles()
-
-    const networks = useRegisteredNetworks()
-    const providers = useRegisteredProviders()
-
-    const pluginID = useValueRef(pluginIDSettings)
-    const networkID = useValueRef(networkIDSettings)
-    const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(networkID)
-
-    const pluginSNSAdaptor = useActivatedPluginSNSAdaptor(undeterminedPluginID)
-    const pluginDashboard = useActivatedPluginDashboard(undeterminedPluginID)
-
-    const { useNetwork, useProvider, NetworkIconClickBait, ProviderIconClickBait } =
-        (pluginSNSAdaptor ?? pluginDashboard)?.Web3Provider?.SelectProviderDialog ?? {}
 
     return (
         <>
-            <PluginProviderWatcher
-                useNetwork={useNetwork}
-                useProvider={useProvider}
-                expectedPluginID={pluginID}
-                expectedNetworkID={networkID}
-            />
             <Box className={classes.root}>
                 <section className={classes.section}>
                     <Typography className={classes.title} variant="h2" component="h2">
@@ -138,7 +131,7 @@ export function PluginProviderRender({ onClose }: PluginProviderRenderProps) {
                     <Typography className={classes.title} variant="h2" component="h2">
                         2. Choose Wallet
                     </Typography>
-                    <ImageList className={classes.grid} gap={16} cols={3} rowHeight={151} onClick={onClose}>
+                    <ImageList className={classes.grid} gap={16} cols={3} rowHeight={151} onClick={onSubmit}>
                         {providers
                             .filter((x) => x.pluginID === undeterminedPluginID)
                             .map((provider) => (
