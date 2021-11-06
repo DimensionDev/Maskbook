@@ -1,3 +1,5 @@
+import type { Event } from '../types'
+
 export async function fetchEventBySlug(graph_url: string | undefined, slug: string): Promise<Event | undefined> {
     if (!graph_url) return
 

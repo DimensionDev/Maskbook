@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useState } from 'react'
 import { useEventBySlug } from '../hooks/useEvent'
+import type { Event } from '../types'
 // import { DepositDialog } from './deposit'
 
 const useStyles = makeStyles()((theme) => ({
@@ -24,7 +25,7 @@ interface EventProps {
 }
 
 interface EventDetailsProps {
-    event: object
+    event: Event
 }
 
 export function EventView(props: EventProps) {
