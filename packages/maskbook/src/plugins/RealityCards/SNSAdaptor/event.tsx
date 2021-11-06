@@ -3,6 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useEventBySlug } from '../hooks/useEvent'
 import { useState } from '.pnpm/@types+react@17.0.29/node_modules/@types/react'
+// import { DepositDialog } from './deposit'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -29,7 +30,7 @@ interface EventDetailsProps {
 export function EventView(props: EventProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [depositDialogOpen, depositDialogOpen] = useState(false)
+    const [depositDialogOpen, setDepositDialogOpen] = useState(false)
 
     const { value: event, error, loading, retry } = useEventBySlug(props.slug)
     console.log(event, error, loading)
@@ -80,21 +81,21 @@ function EventDetails(props: EventDetailsProps) {
                 open/ended
             </Grid>
 
-            <Button
+            {/* <Button
                 variant="contained"
                 fullWidth
                 color="primary"
                 disabled={!!validationMessage}
-                onClick={isBuy ? () => setBuyDialogOpen(true) : () => setSellDialogOpen(true)}>
+                onClick={isBuy ? () => setDepositDialogOpen(true) : () => setDepositDialogOpen(true)}>
                 {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
             </Button>
-            <BuyDialog
-                open={buyDialogOpen}
+            <DepositDialog
+                open={depositDialogOpen}
                 market={market}
                 outcome={selectedOutcome}
                 token={cashToken}
-                onClose={() => setBuyDialogOpen(false)}
-            />
+                onClose={() => setDepositDialogOpen(false)}
+            /> */}
         </Grid>
     )
 }
