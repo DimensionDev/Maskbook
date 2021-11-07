@@ -8,7 +8,6 @@ export function useUserDeposit() {
 
     return useAsyncRetry(async () => {
         if (!contract || !account) return undefined
-        const userDeposit = await contract.methods.userDeposit(account).call()
-        return userDeposit
+        return contract.methods.userDeposit(account).call()
     }, [contract, account])
 }

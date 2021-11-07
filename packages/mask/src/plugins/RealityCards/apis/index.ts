@@ -27,6 +27,11 @@ export async function fetchEventBySlug(graph_url: string | undefined, slug: stri
               outcomeName
               price
               marketCardIndex
+              originalNft {
+                owner {
+                    id
+                }
+              }
               __typename
             }
             category

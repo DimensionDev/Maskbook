@@ -1,19 +1,17 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount, useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
-import { useTreasuryContract } from '../contracts/useTreasuryContract'
+import { useMarketContract } from '../contracts/useMarketContract'
+import type { Card, Event } from '../types'
+import { isAddress } from 'web3-utils'
 
-/**
- * A callback for deposit into reality cards
- * @param amount
- */
-export function useDepositCallback(amount: string) {
+export function useExitCallback(market: Event, card: Card) {
     const account = useAccount()
-    const contract = useTreasuryContract()
+    const contract = useMarketContract(market.id)
     const [state, setState] = useTransactionState()
 
     const callback = useCallback(async () => {
-        if (!contract) {
+        if (!contract || !isAddress(account)) {
             setState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -31,7 +29,7 @@ export function useDepositCallback(amount: string) {
             value: new BigNumber(0).toFixed(),
         }
         const estimatedGas = await contract.methods
-            .deposit(amount, account)
+            .exit(card.marketCardIndex)
             .estimateGas(config)
             .catch((error) => {
                 setState({
@@ -44,18 +42,17 @@ export function useDepositCallback(amount: string) {
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
             contract.methods
-                .deposit(amount, account)
+                .exit(card.marketCardIndex)
                 .send({
                     ...config,
                     gas: estimatedGas,
                 })
-                .on(TransactionEventType.CONFIRMATION, (confNumber, receipt) => {
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: confNumber,
-                        receipt,
+                        type: TransactionStateType.HASH,
+                        hash,
                     })
-                    resolve(receipt.transactionHash)
+                    resolve(hash)
                 })
                 .on(TransactionEventType.ERROR, (error) => {
                     setState({
@@ -65,7 +62,7 @@ export function useDepositCallback(amount: string) {
                     reject(error)
                 })
         })
-    }, [account, amount, contract])
+    }, [contract, account, card])
 
     const resetCallback = useCallback(() => {
         setState({

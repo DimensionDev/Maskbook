@@ -60,7 +60,7 @@ export function EventView(props: EventProps) {
             <CardDialog
                 open={rentDialogOpen}
                 market={event}
-                card={event.cards[0]}
+                card={event.cards[1]}
                 onClose={() => setRentDialogOpen(false)}
             />
             <CardContent className={classes.content} />

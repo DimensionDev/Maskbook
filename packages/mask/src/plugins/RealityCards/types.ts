@@ -53,12 +53,18 @@ export interface Card extends Factory {
     price: string
     outcomeName: string
     marketCardIndex: string
+    originalNft: OriginalNft
+}
+
+export interface OriginalNft extends Factory {
+    owner: Factory
 }
 
 export enum FactoryTypename {
     Card = 'Card',
     Factory = 'Factory',
     Rent = 'Rent',
+    Account = 'Account',
 }
 
 export interface Payout {
