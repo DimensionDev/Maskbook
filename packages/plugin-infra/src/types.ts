@@ -225,18 +225,44 @@ export namespace Plugin.Shared {
         }
     }
 
-    export interface ContextProvider {
-        allowTestnet: Subscription<boolean>
-        chainId: Subscription<number>
-        account: Subscription<string>
-        balance: Subscription<string>
-        blockNumber: Subscription<number>
-        networkType: Subscription<string>
-        providerType: Subscription<string>
+    export interface CryptoPrice {
+        [token: string]: {
+            [currency: string]: number
+        }
     }
 
+    export interface Wallet {
+        /** User define wallet name. Default address.prefix(6) */
+        name: string
+        /** The address of wallet */
+        address: string
+        /** yep: Mask Wallet, nope: External Wallet */
+        hasStoredKeyInfo: boolean
+        /** yep: Derivable Wallet. nope: UnDerivable Wallet */
+        hasDerivationPath: boolean
+    }
     export interface Web3ContextProvider {
-        Context?: ContextProvider
+        Shared?: {
+            allowTestnet: Subscription<boolean>
+            /** The ID of currently choosed sub-network. */
+            chainId: Subscription<number>
+            /** The address of the currently choosed wallet. */
+            account: Subscription<string>
+            /** The balance of the currently choose account. */
+            balance: Subscription<string>
+            /** The currently tracked block height. */
+            blockNumber: Subscription<number>
+            /** The network type. */
+            networkType: Subscription<string>
+            /** The wallet provider type. */
+            providerType: Subscription<string>
+            /** The tracked token prices which stored as address and price pairs. */
+            tokenPrices: Subscription<CryptoPrice>
+            /** The currently stored wallet by MaskWallet. */
+            wallets: Subscription<Wallet[]>
+            /** The default derivable wallet. */
+            walletPrimary: Subscription<Wallet | null>
+        }
     }
 }
 
