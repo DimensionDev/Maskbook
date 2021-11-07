@@ -2,21 +2,17 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount, useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useMarketContract } from '../contracts/useMarketContract'
+import type { Card, Event } from '../types'
+import { isAddress } from 'web3-utils'
+import { ZERO_ADDRESS } from '../constants'
 
-/**
- * A callback for rent a card
- * @param address
- * @param price
- * @param cardIndex
- * @param duration
- */
-export function useRentCallback(address: string, price: string, cardIndex: string, duration = '0') {
+export function useRentCallback(market: Event, price: string, card: Card, duration = '0') {
     const account = useAccount()
-    const contract = useMarketContract(address)
+    const contract = useMarketContract(market.id)
     const [rentState, setRentState] = useTransactionState()
 
     const rentCallback = useCallback(async () => {
-        if (!contract) {
+        if (!contract || !isAddress(account)) {
             setRentState({
                 type: TransactionStateType.UNKNOWN,
             })
@@ -34,7 +30,7 @@ export function useRentCallback(address: string, price: string, cardIndex: strin
             value: new BigNumber(0).toFixed(),
         }
         const estimatedGas = await contract.methods
-            .newRental(price, duration, '0', cardIndex)
+            .newRental(price, duration, ZERO_ADDRESS, card.marketCardIndex)
             .estimateGas(config)
             .catch((error) => {
                 setRentState({
@@ -47,7 +43,7 @@ export function useRentCallback(address: string, price: string, cardIndex: strin
         // step 2: blocking
         return new Promise<string>((resolve, reject) => {
             contract.methods
-                .newRental(price, duration, '0', cardIndex)
+                .newRental(price, duration, ZERO_ADDRESS, card.marketCardIndex)
                 .send({
                     ...config,
                     gas: estimatedGas,
@@ -67,7 +63,7 @@ export function useRentCallback(address: string, price: string, cardIndex: strin
                     reject(error)
                 })
         })
-    }, [contract, account, price, cardIndex, duration])
+    }, [contract, account, price, card, duration])
 
     const resetCallback = useCallback(() => {
         setRentState({

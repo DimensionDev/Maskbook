@@ -4,7 +4,7 @@ import { useI18N } from '../../../utils'
 import { useState } from 'react'
 import { useEventBySlug } from '../hooks/useEvent'
 import type { Event } from '../types'
-// import { DepositDialog } from './deposit'
+import { CardDialog } from './card'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -31,7 +31,7 @@ interface EventDetailsProps {
 export function EventView(props: EventProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [depositDialogOpen, setDepositDialogOpen] = useState(false)
+    const [rentDialogOpen, setRentDialogOpen] = useState(false)
 
     const { value: event, error, loading, retry } = useEventBySlug(props.slug)
     console.log(event, error, loading)
@@ -53,6 +53,15 @@ export function EventView(props: EventProps) {
                 title={event.name}
                 titleTypographyProps={{ variant: 'h6', color: 'textPrimary' }}
                 subheader={<EventDetails event={event} />}
+            />
+            <Button variant="contained" fullWidth color="primary" onClick={() => setRentDialogOpen(true)}>
+                rent
+            </Button>
+            <CardDialog
+                open={rentDialogOpen}
+                market={event}
+                card={event.cards[0]}
+                onClose={() => setRentDialogOpen(false)}
             />
             <CardContent className={classes.content} />
         </Card>
@@ -81,22 +90,6 @@ function EventDetails(props: EventDetailsProps) {
             <Grid item sx={{ textAlign: 'right' }}>
                 open/ended
             </Grid>
-
-            {/* <Button
-                variant="contained"
-                fullWidth
-                color="primary"
-                disabled={!!validationMessage}
-                onClick={isBuy ? () => setDepositDialogOpen(true) : () => setDepositDialogOpen(true)}>
-                {validationMessage ? validationMessage : isBuy ? t('buy') : t('sell')}
-            </Button>
-            <DepositDialog
-                open={depositDialogOpen}
-                market={market}
-                outcome={selectedOutcome}
-                token={cashToken}
-                onClose={() => setDepositDialogOpen(false)}
-            /> */}
         </Grid>
     )
 }

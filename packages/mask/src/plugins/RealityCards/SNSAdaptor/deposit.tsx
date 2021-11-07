@@ -37,7 +37,7 @@
 //         margin: theme.spacing(2, 0),
 //     },
 //     button: {
-//         margin: theme.spacing(1.5, 0, 0),
+//         margin: theme.spacing(1.5, 0, 0),1
 //         padding: 12,
 //     },
 //     label: {
@@ -95,7 +95,7 @@ export default function DepositDialog() {}
 //     //#endregion
 
 //     //#region blocking
-//     const [depositState, depositCallback, resetBuyCallback] = useDepositCallback(amount.toString())
+//     const [depositState, depositCallback, resetDepositCallback] = useDepositCallback(amount.toString())
 //     //#endregion
 
 //     //#region Swap
@@ -138,7 +138,7 @@ export default function DepositDialog() {}
 //                     if (depositState.type === TransactionStateType.HASH) onDialogClose()
 //                 }
 //                 if (depositState.type === TransactionStateType.HASH) setInputAmount('')
-//                 resetBuyCallback()
+//                 resetDepositCallback()
 //             },
 //             [depositState, openSwapDialog, tokenBalanceRetry, onDialogClose],
 //         ),
@@ -162,9 +162,9 @@ export default function DepositDialog() {}
 //     //#region submit button
 //     const validationMessage = useMemo(() => {
 //         if (!account) return t('plugin_wallet_connect_a_wallet')
-//         if (!amount || amount.isZero()) return t('plugin_dhedge_enter_an_amount')
+//         if (!amount || amount.isZero()) return t('wallet_transfer_error_amount_absence')
 //         if (amount.isGreaterThan(tokenBalance))
-//             return t('plugin_dhedge_insufficient_balance', {
+//             return t('wallet_transfer_error_insufficient_balance', {
 //                 symbol: token.symbol,
 //             })
 //         return ''
@@ -182,7 +182,7 @@ export default function DepositDialog() {}
 //             <DialogContent>
 //                 {errorTokenBalance ? (
 //                     <Typography className={classes.message} color="textPrimary">
-//                         {t('plugin_realitycards_smt_wrong')}
+//                         {t('plugin_dhedge_smt_wrong')}
 //                         <RefreshIcon className={classes.refresh} color="primary" onClick={tokenBalanceRetry} />
 //                     </Typography>
 //                 ) : (

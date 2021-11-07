@@ -52,6 +52,7 @@ export interface Card extends Factory {
     image: string
     price: string
     outcomeName: string
+    marketCardIndex: string
 }
 
 export enum FactoryTypename {

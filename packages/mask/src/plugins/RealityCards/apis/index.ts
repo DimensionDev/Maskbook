@@ -26,6 +26,7 @@ export async function fetchEventBySlug(graph_url: string | undefined, slug: stri
               image
               outcomeName
               price
+              marketCardIndex
               __typename
             }
             category
