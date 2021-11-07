@@ -28,7 +28,7 @@ function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
 
 const useStyles = makeStyles()({
     buttonText: {
-        margin: 0,
+        transform: 'translateX(160px) translateY(-81px)',
     },
     content: {
         marginRight: 5,
@@ -40,7 +40,7 @@ const MindsNotSetupYet = () => {
     return (
         <NotSetupYetPrompt
             classes={{
-                button: classes.buttonText,
+                buttonText: classes.buttonText,
                 content: classes.content,
             }}
         />
