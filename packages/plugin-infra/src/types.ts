@@ -1,7 +1,7 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, NonFungibleToken } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Subscription } from 'use-subscription'
 
@@ -225,9 +225,20 @@ export namespace Plugin.Shared {
         }
     }
 
+    export enum CurrencyType {
+        NATIVE = 'native',
+        BTC = 'btc',
+        USD = 'usd',
+    }
+
+    export enum TokenType {
+        Fungible = 'Fungible',
+        NonFungible = 'NonFungible',
+    }
+
     export interface CryptoPrice {
         [token: string]: {
-            [currency: string]: number
+            [key in CurrencyType]: number
         }
     }
 
@@ -241,14 +252,92 @@ export namespace Plugin.Shared {
         /** yep: Derivable Wallet. nope: UnDerivable Wallet */
         hasDerivationPath: boolean
     }
+
+    export interface Pagination {
+        /** The item size of each page. */
+        size?: number
+        /** The page index. */
+        page?: number
+    }
+
+    export interface Asset<T extends unknown> {
+        id: string
+        chain: string
+        balance: string
+        token: Token<T>
+        /** estimated price */
+        price?: {
+            [key in CurrencyType]: string
+        }
+        /** estimated value */
+        value?: {
+            [key in CurrencyType]: string
+        }
+        logoURI?: string
+    }
+
+    export interface AddressName {
+        id: string
+        /** eg. vitalik.eth */
+        label: string
+        /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
+        ownerAddress: string
+        /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
+        resolvedAddress?: string
+    }
+
+    export interface Transaction {
+        id: string
+        type: string
+        title: string
+        from: string
+        to: string
+        timestamp: string
+        /** 0: failed 1: succeed */
+        status: 0 | 1
+        /** estimated tx fee */
+        fee: {
+            [key in CurrencyType]: string
+        }
+    }
+
+    export interface Token<T extends unknown> {
+        id: string
+        type: TokenType
+        token: T
+    }
+
+    export interface FungibleTokenMetadata<T extends unknown> {
+        name: string
+        symbol: string
+        decimals: number
+        iconURL?: string
+        _token: T
+    }
+
+    export interface NonFungibleTokenMetadata<T extends unknown> {
+        name: string
+        description: string
+        mediaType: string
+        iconURL?: string
+        assetURL?: string
+        _token: T
+    }
+
+    export interface TokenList<T extends unknown> {
+        name: string
+        description?: string
+        tokens: Token<T>[]
+    }
+
     export interface Web3ContextProvider {
         Shared?: {
             allowTestnet: Subscription<boolean>
-            /** The ID of currently choosed sub-network. */
+            /** The ID of currently choosen sub-network. */
             chainId: Subscription<number>
-            /** The address of the currently choosed wallet. */
+            /** The address of the currently choosen wallet. */
             account: Subscription<string>
-            /** The balance of the currently choose account. */
+            /** The balance of the currently choosen account. */
             balance: Subscription<string>
             /** The currently tracked block height. */
             blockNumber: Subscription<number>
@@ -256,12 +345,69 @@ export namespace Plugin.Shared {
             networkType: Subscription<string>
             /** The wallet provider type. */
             providerType: Subscription<string>
+            /** The asset data provider. */
+            assetType: Subscription<string>
+            /** The address name data provider. */
+            nameType: Subscription<string>
+            /** The collectible data provider. */
+            collectibleType: Subscription<string>
+            /** The transaction data provider. */
+            transactionType: Subscription<string>
             /** The tracked token prices which stored as address and price pairs. */
             tokenPrices: Subscription<CryptoPrice>
             /** The currently stored wallet by MaskWallet. */
             wallets: Subscription<Wallet[]>
             /** The default derivable wallet. */
             walletPrimary: Subscription<Wallet | null>
+        }
+        Asset?: {
+            /** Get fungible assets of given account. */
+            getFungibleAssets<T extends unknown>(
+                address: string,
+                providerType: string,
+                networkType: string,
+                pagination?: Pagination,
+            ): Promise<Asset<T>[]>
+            /** Get non-fungible assets of given account. */
+            getNonFungibleAssets<T extends unknown>(
+                address: string,
+                providerType: string,
+                networkType: string,
+                pagination?: Pagination,
+            ): Promise<Asset<T>[]>
+        }
+        Token?: {
+            addToken<T extends unknown>(token: Token<T>): Promise<void>
+            removeToken<T extends unknown>(token: Token<T>): Promise<void>
+            trustToken<T extends unknown>(token: Token<T>): Promise<void>
+            blockToken<T extends unknown>(token: Token<T>): Promise<void>
+            getFungibleTokenMetadata<T extends unknown>(token: Token<T>): Promise<FungibleTokenMetadata<T>>
+            getNonFungibleTokenMetadata<T extends unknown>(token: Token<T>): Promise<NonFungibleTokenMetadata<T>>
+        }
+        Transaction?: {
+            /** Get latest transactions of given account. */
+            getTransactions(
+                address: string,
+                providerType: string,
+                networkType: string,
+                pagination?: Pagination,
+            ): Promise<Transaction[]>
+        }
+        TokenList?: {
+            /** Get the token lists of supported fungible tokens. */
+            getFungibleTokenLists<T extends unknown>(
+                address: string,
+                providerType: string,
+                networkType: string,
+                pagination?: Pagination,
+            ): Promise<TokenList<T>[]>
+            /** Get the token lists of supported non-fungible tokens. */
+            getNonFungibleTokenLists<T extends unknown>(
+                address: string,
+                providerType: string,
+                networkType: string,
+                pagination?: Pagination,
+            ): Promise<TokenList<T>[]>
         }
     }
 }
@@ -279,7 +425,7 @@ export namespace Plugin.SNSAdaptor {
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UIProvider?: Shared.Web3UIProvider
-        /** This is the web3 context. */
+        /** This is the context of the currently choosen network. */
         Web3ContextProvider?: Shared.Web3ContextProvider
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
@@ -373,7 +519,7 @@ export namespace Plugin.Dashboard {
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UIProvider?: Shared.Web3UIProvider
-        /** This is the web3 context. */
+        /** This is the context of the currently choosen network. */
         Web3ContextProvider?: Shared.Web3ContextProvider
     }
 }
