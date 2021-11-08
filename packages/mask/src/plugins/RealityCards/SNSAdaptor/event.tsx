@@ -1,4 +1,16 @@
-import { Box, Card, CardHeader, CardContent, CardMedia, Typography, Button, Grid } from '@mui/material'
+import {
+    Box,
+    Card,
+    CardHeader,
+    CardContent,
+    CardMedia,
+    CardActionArea,
+    Typography,
+    Button,
+    Grid,
+    Tooltip,
+    IconButton,
+} from '@mui/material'
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -19,12 +31,11 @@ const useStyles = makeStyles()((theme) => ({
         padding: '0 !important',
     },
     cards: {
-        margin: '5px 0',
+        margin: '10px 0',
         border: `solid 2px ${theme.palette.divider}`,
-        display: 'flex',
     },
     cardMedia: {
-        width: 150,
+        width: 140,
     },
     winnerCard: {
         borderColor: theme.palette.success.main,
@@ -40,6 +51,14 @@ const useStyles = makeStyles()((theme) => ({
         },
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'space-between',
+    },
+    background: {
+        backgroundColor: theme.palette.action.disabled,
+    },
+    flexBox: {
+        dispaly: 'flex',
+        alignItems: 'center',
         justifyContent: 'space-between',
     },
 }))
@@ -151,82 +170,111 @@ function EventContent(props: EventContentProps) {
                         className={`${classes.cards} ${
                             card.id === winner ? classes.winnerCard : winner ? classes.loserCard : ''
                         }`}>
-                        <CardMedia
-                            component="img"
-                            className={classes.cardMedia}
-                            image={card.image}
-                            alt={card.outcomeName}
-                        />
-                        <CardContent className={classes.cardContent}>
-                            <Box>
-                                <Typography variant="h6">{card.outcomeName}</Typography>
-                                <Typography variant="body1" component="strong" sx={{ fontSize: '1.2rem' }} gutterBottom>
-                                    1.21 USDC
-                                </Typography>
-                                <Typography variant="caption" component="span" gutterBottom>
-                                    {' '}
-                                    /hour
-                                </Typography>
-                            </Box>
+                        <CardActionArea sx={{ display: 'flex' }}>
+                            <CardMedia
+                                component="img"
+                                className={classes.cardMedia}
+                                image={card.image}
+                                alt={card.outcomeName}
+                            />
+                            <CardContent className={classes.cardContent}>
+                                <Box>
+                                    <Typography variant="h6">{card.outcomeName}</Typography>
+                                    <Typography
+                                        variant="body1"
+                                        component="strong"
+                                        sx={{ fontSize: '1.2rem' }}
+                                        gutterBottom>
+                                        1.21 USDC
+                                    </Typography>
+                                    <Typography variant="caption" component="span" gutterBottom>
+                                        {' '}
+                                        /hour
+                                    </Typography>
+                                </Box>
 
-                            <Grid container flexWrap="nowrap">
-                                <Grid item container direction="column" flex={3}>
-                                    <Grid item>
-                                        <Typography
-                                            variant="caption"
-                                            color="text.secondary"
-                                            sx={{ textTransform: 'uppercase', fontWeight: 500 }}>
-                                            currently owned by
-                                        </Typography>
-                                    </Grid>
-                                    <Grid item container direction="column">
+                                <Grid container flexWrap="nowrap">
+                                    <Grid item container direction="column" flex={3}>
                                         <Grid item>
-                                            <Typography>Address Hashtag</Typography>
+                                            <Typography
+                                                variant="caption"
+                                                color="text.secondary"
+                                                sx={{ textTransform: 'uppercase', fontWeight: 500 }}>
+                                                currently owned by
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item container direction="column">
+                                            <Grid item>
+                                                <Typography variant="body1">
+                                                    Address{' '}
+                                                    <Typography
+                                                        component="span"
+                                                        className={classes.background}
+                                                        sx={{ p: 0.3 }}>
+                                                        #10
+                                                    </Typography>
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item>
+                                                <Typography variant="body2">
+                                                    <Typography
+                                                        variant="caption"
+                                                        color="text.secondary"
+                                                        component="span">
+                                                        for
+                                                    </Typography>{' '}
+                                                    11 hours{' '}
+                                                    <Typography
+                                                        variant="caption"
+                                                        color="text.secondary"
+                                                        component="span">
+                                                        of
+                                                    </Typography>{' '}
+                                                    5 days{' '}
+                                                    <Typography
+                                                        component="span"
+                                                        sx={{ p: 0.3 }}
+                                                        className={classes.background}>
+                                                        0.1%
+                                                    </Typography>
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid item container direction="column" flex={2} alignItems="flex-end">
+                                        <Grid
+                                            item
+                                            container
+                                            alignItems="center"
+                                            justifyContent="flex-end"
+                                            flexWrap="nowrap">
+                                            <Typography
+                                                variant="caption"
+                                                color="text.secondary"
+                                                sx={{ textTransform: 'uppercase', fontWeight: 500 }}>
+                                                winning odds
+                                            </Typography>
+                                            <Tooltip
+                                                title="The odds of this outcome occurring, based on current market sentiment. Calculated as the rental price of this Card, divided by the sum of rental prices of all Cards, expressed as a percentage"
+                                                arrow
+                                                placement="top"
+                                                PopperProps={{
+                                                    disablePortal: true,
+                                                }}>
+                                                <IconButton size="small" sx={{ p: 0, ml: 0.5 }}>
+                                                    <HelpRoundedIcon sx={{ fontSize: '1rem' }} color="info" />
+                                                </IconButton>
+                                            </Tooltip>
                                         </Grid>
                                         <Grid item>
-                                            <Typography variant="body2" color="text.secondary" component="span">
-                                                for
-                                            </Typography>
-                                            <Typography variant="body2" component="span">
-                                                {' '}
-                                                11 hours{' '}
-                                            </Typography>
-                                            <Typography variant="body2" color="text.secondary" component="span">
-                                                of
-                                            </Typography>
-                                            <Typography variant="body2" component="span">
-                                                {' '}
-                                                5 days{' '}
-                                            </Typography>
-                                            <Typography variant="body2" component="span">
-                                                0.1%
+                                            <Typography variant="body1" component="strong" sx={{ fontSize: '1.2rem' }}>
+                                                92%
                                             </Typography>
                                         </Grid>
                                     </Grid>
                                 </Grid>
-                                <Grid item container direction="column" flex={2} alignItems="flex-end">
-                                    <Grid
-                                        item
-                                        container
-                                        alignItems="center"
-                                        justifyContent="flex-end"
-                                        flexWrap="nowrap">
-                                        <Typography
-                                            variant="caption"
-                                            color="text.secondary"
-                                            sx={{ textTransform: 'uppercase', fontWeight: 500 }}>
-                                            winning odds
-                                        </Typography>
-                                        <HelpRoundedIcon sx={{ fontSize: '1rem', marginLeft: 1 }} color="disabled" />
-                                    </Grid>
-                                    <Grid item>
-                                        <Typography variant="body1" component="strong" sx={{ fontSize: '1.2rem' }}>
-                                            92%
-                                        </Typography>
-                                    </Grid>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
+                            </CardContent>
+                        </CardActionArea>
                     </Card>
                 </Grid>
             ))}
