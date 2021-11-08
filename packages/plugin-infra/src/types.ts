@@ -1,7 +1,6 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId, NonFungibleToken } from '@masknet/web3-shared-evm'
 import type { Emitter } from '@servie/events'
 import type { Subscription } from 'use-subscription'
 
@@ -145,7 +144,7 @@ export namespace Plugin.Shared {
     }
     export interface Web3EnableRequirement {
         /** Plugin can declare what chain it supports. When the current chain is not supported, the composition entry will be hidden. */
-        operatingSupportedChains?: ChainId[]
+        operatingSupportedChains?: number[]
     }
 
     export interface ManagementProperty {
@@ -199,7 +198,7 @@ export namespace Plugin.Shared {
         name: string
     }
 
-    export interface Web3UIProvider {
+    export interface Web3UI {
         Shared?: {
             /** A react hook returns the currently selected provider. */
             useProvider?: () => Shared.Provider | null
@@ -217,7 +216,6 @@ export namespace Plugin.Shared {
             }>
         }
         Dashboard?: {
-            /** There UIs will be injected into the wallet table of Dashboard. */
             OverviewComponent?: React.ComponentType<{}>
             AssetsTableComponent?: React.ComponentType<{}>
             TransferTableComponent?: React.ComponentType<{}>
@@ -240,6 +238,15 @@ export namespace Plugin.Shared {
         [token: string]: {
             [key in CurrencyType]: number
         }
+    }
+
+    export interface ChainDetailed {
+        name: string
+        chainId: number
+        fullName: string
+        shortName: string
+        chainName: string
+        networkName: string
     }
 
     export interface Wallet {
@@ -330,7 +337,7 @@ export namespace Plugin.Shared {
         tokens: Token<T>[]
     }
 
-    export interface Web3ContextProvider {
+    export interface Web3Context {
         Shared?: {
             allowTestnet: Subscription<boolean>
             /** The ID of currently choosen sub-network. */
@@ -353,12 +360,18 @@ export namespace Plugin.Shared {
             collectibleType: Subscription<string>
             /** The transaction data provider. */
             transactionType: Subscription<string>
+            /** The currency of estimated values and prices. */
+            currencyType: Subscription<CurrencyType>
             /** The tracked token prices which stored as address and price pairs. */
-            tokenPrices: Subscription<CryptoPrice>
+            prices: Subscription<CryptoPrice>
             /** The currently stored wallet by MaskWallet. */
             wallets: Subscription<Wallet[]>
             /** The default derivable wallet. */
             walletPrimary: Subscription<Wallet | null>
+            /** The user added fungible tokens. */
+            fungibleTokens: Subscription<Token<unknown>[]>
+            /** The user added non-fungible tokens. */
+            nonFungibleTokens: Subscription<Token<unknown>[]>
         }
         Asset?: {
             /** Get fungible assets of given account. */
@@ -381,8 +394,6 @@ export namespace Plugin.Shared {
             removeToken<T extends unknown>(token: Token<T>): Promise<void>
             trustToken<T extends unknown>(token: Token<T>): Promise<void>
             blockToken<T extends unknown>(token: Token<T>): Promise<void>
-            getFungibleTokenMetadata<T extends unknown>(token: Token<T>): Promise<FungibleTokenMetadata<T>>
-            getNonFungibleTokenMetadata<T extends unknown>(token: Token<T>): Promise<NonFungibleTokenMetadata<T>>
         }
         Transaction?: {
             /** Get latest transactions of given account. */
@@ -409,6 +420,12 @@ export namespace Plugin.Shared {
                 pagination?: Pagination,
             ): Promise<TokenList<T>[]>
         }
+        Utils?: {
+            isChainIdValid(chainId: number, allowTestnet: boolean): boolean
+            getChainDetailed(chainId: number): ChainDetailed
+            getFungibleTokenMetadata<T extends unknown>(token: Token<T>): Promise<FungibleTokenMetadata<T>>
+            getNonFungibleTokenMetadata<T extends unknown>(token: Token<T>): Promise<NonFungibleTokenMetadata<T>>
+        }
     }
 }
 
@@ -424,9 +441,9 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UIProvider?: Shared.Web3UIProvider
+        Web3UI?: Shared.Web3UI
         /** This is the context of the currently choosen network. */
-        Web3ContextProvider?: Shared.Web3ContextProvider
+        Web3Context?: Shared.Web3Context
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -518,9 +535,9 @@ export namespace Plugin.Dashboard {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UIProvider?: Shared.Web3UIProvider
+        Web3UI?: Shared.Web3UI
         /** This is the context of the currently choosen network. */
-        Web3ContextProvider?: Shared.Web3ContextProvider
+        Web3Context?: Shared.Web3Context
     }
 }
 

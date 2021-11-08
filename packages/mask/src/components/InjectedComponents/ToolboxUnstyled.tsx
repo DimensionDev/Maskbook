@@ -20,6 +20,7 @@ import {
     useWallet,
     formatEthereumAddress,
     TransactionStatusType,
+    useChainId,
 } from '@masknet/web3-shared-evm'
 import {
     useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
@@ -171,11 +172,12 @@ function useToolbox() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const account = useAccount()
+    const chainId = useChainId()
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
-    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
+    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet(chainId)
 
     //#region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)

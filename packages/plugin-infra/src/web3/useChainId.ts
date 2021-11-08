@@ -1,19 +1,17 @@
-import type { ChainId } from '../types'
-import { useWeb3StateContext } from '../context'
-import { useChainDetailed } from './useChainDetailed'
+import { useWeb3StateContext, useChainDetailed } from '.'
 
 /**
  * Get the chain id which is using by the given (or default) wallet
  * It will always yield Mainnet in production mode
  */
-export function useChainId(): ChainId {
+export function useChainId() {
     return useWeb3StateContext().chainId
 }
 
 /**
  * Returns true if chain id is available
  */
-export function useChainIdValid(): boolean {
+export function useChainIdValid() {
     return useWeb3StateContext().chainIdValid
 }
 
@@ -22,7 +20,7 @@ export function useChainIdValid(): boolean {
  * @param chainId
  * @returns
  */
-export function useChainIdMatched(chainId?: ChainId) {
+export function useChainIdMatched(chainId?: number) {
     const chainDetailed = useChainDetailed()
     if (!chainId) return false
     return chainDetailed?.chainId === chainId

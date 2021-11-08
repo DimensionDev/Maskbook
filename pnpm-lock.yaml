@@ -542,21 +542,23 @@ importers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@masknet/shared': workspace:*
       '@masknet/theme': workspace:*
-      '@masknet/web3-shared-evm': workspace:*
       '@servie/events': ^3.0.0
       '@types/use-subscription': ^1.0.0
       async-call-rpc: ^6.0.0
+      lodash-es: ^4.17.21
       ts-results: ^3.3.0
+      unstated-next: ^1.1.0
       use-subscription: ^1.5.1
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@masknet/shared': link:../shared
       '@masknet/theme': link:../theme
-      '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@servie/events': 3.0.0
       '@types/use-subscription': 1.0.0
       async-call-rpc: 6.0.0
+      lodash-es: 4.17.21
       ts-results: 3.3.0
+      unstated-next: 1.1.0
       use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
 
   packages/plugins/Flow:

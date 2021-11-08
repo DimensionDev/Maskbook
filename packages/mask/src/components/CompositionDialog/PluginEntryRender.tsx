@@ -11,6 +11,7 @@ import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle } from 'react'
+import { useChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     sup: {
@@ -24,7 +25,8 @@ export const PluginEntryRender = memo(
     forwardRef<PluginEntryRenderRef, { readonly: boolean }>((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
-        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
+        const chainId = useChainId()
+        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet(chainId)
         const result = [...useActivatedPluginsSNSAdaptor()]
             .sort((plugin) => {
                 // TODO: support priority order
