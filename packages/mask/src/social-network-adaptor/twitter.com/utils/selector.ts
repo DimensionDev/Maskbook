@@ -161,7 +161,8 @@ export const postsContentSelector = () =>
         }), // timeline page for new twitter
     )
 
-export const postAvatarsContentSelector = () => querySelectorAll('[data-testid="tweet"] > div')
+export const postAvatarsContentSelector = () =>
+    querySelectorAll('[data-testid="tweet"] > div > div > div > :nth-child(2)')
 const base = querySelector<HTMLScriptElement>('#react-root + script')
 const handle = /"screen_name":"(.*?)"/
 const name = /"name":"(.*?)"/
@@ -221,4 +222,4 @@ export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserC
 export const searchTweetAvatarSelector = () =>
     querySelector<E, false>('[data-testid="tweetButtonInline"]').closest<E>(7)
 
-export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(7)
+export const searchRetweetAvatarSelector = () => querySelector<E, false>('[data-testid="tweetButton"]').closest<E>(6)

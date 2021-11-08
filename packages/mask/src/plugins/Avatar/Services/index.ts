@@ -31,3 +31,5 @@ export async function getAddress(userId: string) {
 }
 
 export { getNFTContractVerifiedFromJSON } from './verified'
+export { getUserAddresses } from './gun'
+export { getRSSNode } from './rss'

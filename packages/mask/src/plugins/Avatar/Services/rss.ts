@@ -53,3 +53,11 @@ export async function saveNFTAvatarFromRSS(address: string, nft: AvatarMetaDB, s
 
     return nft
 }
+
+export async function getRSSNode(address: string) {
+    const rss = await createRSS(address)
+    const file = await rss.files.get(rss.account.address)
+    const nft = Object.getOwnPropertyDescriptor(file, '_nft')
+    if (!nft?.value) return
+    return file
+}

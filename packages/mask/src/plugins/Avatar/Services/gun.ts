@@ -35,3 +35,11 @@ export async function setUserAddress(userId: string, address: string) {
         // @ts-expect-error
         .put(address).then!()
 }
+
+export async function getUserAddresses() {
+    const NFTAvatarKeys = Object.keys(await NFTAvatarGUN).filter((x) => x !== '_')
+    const resultPromise = NFTAvatarKeys.map((key) => getUserAddress(key))
+    const result = (await Promise.all(resultPromise)).filter((x) => x)
+
+    return result
+}

@@ -4,6 +4,15 @@ import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
 import { postAvatarsContentSelector } from '../../utils/selector'
 import { getAvatarId } from '../../utils/user'
 
+function getTwitterId(ele: HTMLElement) {
+    const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
+        '[dir="ltr"] > span',
+    ) as HTMLSpanElement
+    if (!twitterIdNode) return
+    const twitterId = twitterIdNode.innerText.trim().replace('@', '')
+    return twitterId
+}
+
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
         new MutationObserverWatcher(main()).useForeach((ele, _, meta) => {
@@ -11,15 +20,14 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
-                const twitterIdNode = ele.querySelector(
-                    'div > :nth-child(2) > :nth-child(2) > div > div > div > div > div > a > div > :last-child',
-                ) as HTMLSpanElement
-                if (!twitterIdNode) return
-                const twitterId = twitterIdNode.innerText.trim().replace('@', '')
+                const twitterId = getTwitterId(ele)
+                if (!twitterId) return
 
-                const avatarNodeParent = (
-                    ele.firstChild?.firstChild?.firstChild?.nextSibling as HTMLElement
-                ).querySelector('a') as HTMLElement
+                const imgEle = (ele.firstChild as HTMLElement).querySelector('img')
+                if (!imgEle) return
+
+                const avatarNodeParent = imgEle.parentNode?.parentNode?.parentNode?.parentNode
+                    ?.parentNode as HTMLElement
                 if (!avatarNodeParent || !avatarNodeParent.firstChild) return
 
                 const avatarImageNodeParent = avatarNodeParent.querySelector('div > :last-child > div')

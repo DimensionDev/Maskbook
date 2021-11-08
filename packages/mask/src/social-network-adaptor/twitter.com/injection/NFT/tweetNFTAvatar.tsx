@@ -11,7 +11,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
-                const nftDom = ele.firstChild?.firstChild?.firstChild as HTMLElement
+                const nftDom = ele.firstChild?.firstChild as HTMLElement
                 if (!nftDom || !nftDom.firstChild) return
                 nftDom.style.overflow = 'unset'
                 const width = Number(window.getComputedStyle(nftDom).width.replace('px', '') ?? 0)
