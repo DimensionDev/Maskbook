@@ -1,6 +1,6 @@
 import { ProfileIdentifier } from '../type'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentityWithAvatar } from '../avatar'
-import { memoizePromise } from '../../utils/memoize'
+import { memoizePromise } from '../../../utils-pure'
 import { MaskMessages } from '../../utils/messages'
 import { downloadUrl } from '../../utils/utils'
 import { blobToArrayBuffer, blobToDataURL } from '@dimensiondev/kit'

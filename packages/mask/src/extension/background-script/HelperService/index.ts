@@ -1,4 +1,4 @@
-import { memoizePromise } from '../../../utils'
+import { memoizePromise } from '../../../../utils-pure'
 import { PopupRoutes } from '../../popups'
 import urlcat from 'urlcat'
 import { currentPopupWindowId } from '../../../settings/settings'
