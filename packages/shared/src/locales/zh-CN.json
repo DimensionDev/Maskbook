@@ -7,5 +7,5 @@
     "import": "导入",
     "balance": "余额",
     "select_token": "选择代币",
-    "erc20_token_list_placeholder": "代币名称或合约地址"
+    "erc20_token_list_placeholder": "代币代号名称或合约地址"
 }
