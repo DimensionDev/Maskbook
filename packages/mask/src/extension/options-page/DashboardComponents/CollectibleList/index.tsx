@@ -1,7 +1,14 @@
-import { createContext, useState, useEffect } from 'react'
+import { createContext, useState, useEffect, useMemo } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useStylesExtends, useValueRef } from '@masknet/shared'
-import { ChainId, CollectibleProvider, ERC721TokenDetailed, useCollectibles, Wallet } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    CollectibleProvider,
+    ERC721TokenDetailed,
+    isSameAddress,
+    useCollectibles,
+    Wallet,
+} from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
@@ -117,6 +124,21 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     } = props
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
+    const collections: ERC721TokenDetailed[][] = useMemo(() => {
+        const collections = []
+        for (let i = 0; i < collectibles.length; i = i + 1) {
+            if (
+                i &&
+                isSameAddress(collectibles[i].contractDetailed.address, collectibles[i - 1].contractDetailed.address)
+            ) {
+                collections[collections.length - 1].push(collectibles[i])
+            } else {
+                collections.push([collectibles[i]])
+            }
+        }
+
+        return collections
+    }, [collectibles])
 
     WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry)
     if (loading)
@@ -138,15 +160,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     ))}
             </Box>
         )
-
-    const collections: ERC721TokenDetailed[][] = []
-    for (let i = 0; i < collectibles.length; i = i + 1) {
-        if (i && collectibles[i].contractDetailed.address === collectibles[i - 1].contractDetailed.address) {
-            collections[collections.length - 1].push(collectibles[i])
-        } else {
-            collections.push([collectibles[i]])
-        }
-    }
 
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
