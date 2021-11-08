@@ -28,7 +28,8 @@ function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
 
 const useStyles = makeStyles()({
     buttonText: {
-        transform: 'translateX(160px) translateY(-81px)',
+        margin: '-2px 0 !important',
+        transform: 'translateX(160px) translateY(-70px)',
     },
     content: {
         marginRight: 5,
