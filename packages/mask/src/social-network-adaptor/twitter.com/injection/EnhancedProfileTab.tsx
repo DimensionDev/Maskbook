@@ -118,7 +118,7 @@ function getStyle() {
     const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
     const eleBackButton = searchAppBarBackSelector().evaluate()
     const backButtonColorStyle = eleBackButton ? window.getComputedStyle(eleBackButton) : EMPTY_STYLE
-    console.log(backButtonColorStyle)
+
     return {
         color: style.color,
         font: style.font,

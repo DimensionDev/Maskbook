@@ -73,7 +73,7 @@ function NFTAvatarInTwitter() {
         return () => profileSave.removeEventListener('click', handler)
     }, [handler])
 
-    if (myIdentities.some((x) => x && x.userId === identity.identifier.userId))
-        return <NFTAvatar onChange={onChange} classes={classes} />
-    return null
+    //if (myIdentities.some((x) => x && x.userId === identity.identifier.userId))
+    return <NFTAvatar onChange={onChange} classes={classes} />
+    //return null
 }
