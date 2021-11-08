@@ -1,7 +1,11 @@
+/**
+ * TODO: use @packages/plugin-wallet instead
+ */
+
 import { shuffle } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { useWeb3Context } from '../context'
+import { WalletRPC } from '../../../mask/src/plugins/Wallet/messages'
 
 // How many fields should be filled by the user?
 const PUZZLE_SIZE = 5
@@ -11,12 +15,11 @@ const TOTAL_SIZE = 12
 
 export function useMnemonicWordsPuzzle() {
     const [answerWords, setAnswerWords] = useState<string[]>([])
-    const { createMnemonicWords } = useWeb3Context()
     const {
         value: words = [],
         loading: wordsLoading,
         retry: wordsRetry,
-    } = useAsyncRetry(() => createMnemonicWords(), [])
+    } = useAsyncRetry(() => WalletRPC.createMnemonicWords(), [])
 
     //#region generate some mask indexes randomly which should be filled by the user
     const [seed, setSeed] = useState(0)

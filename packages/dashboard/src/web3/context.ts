@@ -95,7 +95,6 @@ export const Web3Context: Web3ProviderType = {
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
-    createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
 }
 
 export function createExternalProvider() {
