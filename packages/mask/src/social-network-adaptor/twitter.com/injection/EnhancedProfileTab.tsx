@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
 import {
-    searchForegroundColorSelector,
+    searchAppBarBackSelector,
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
@@ -116,9 +116,9 @@ function getStyle() {
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const eleNewTweetButton = searchNewTweetButtonSelector().evaluate()
     const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
-    const eleBackButton = searchForegroundColorSelector().evaluate()
+    const eleBackButton = searchAppBarBackSelector().evaluate()
     const backButtonColorStyle = eleBackButton ? window.getComputedStyle(eleBackButton) : EMPTY_STYLE
-
+    console.log(backButtonColorStyle)
     return {
         color: style.color,
         font: style.font,

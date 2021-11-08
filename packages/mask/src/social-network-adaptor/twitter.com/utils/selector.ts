@@ -18,10 +18,19 @@ const querySelectorAll = <T extends E>(selector: string) => {
 //#region "Enhanced Profile"
 export const searchProfileSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]')
-export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
-        '[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > :nth-child(2) > div > :last-child',
+export const searchProfileTabListLastChildSelector: () => LiveSelector<E, true> = () => {
+    const q = querySelector<E>(
+        '[data-testid="primaryColumn"] > div > div >div >div >:nth-child(2)>div>div>:nth-child(2)>div>:nth-child(2)>div>:last-child',
     )
+
+    if (!q.evaluate()) {
+        return querySelector<E>(
+            '[data-testid="primaryColumn"] > div > :nth-child(2) > div > div > :nth-child(2) >div>:last-child',
+        )
+    }
+    return q
+}
+
 export const searchProfileTabPageSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] [role="region"] [aria-label]')
 export const searchProfileEmptySelector: () => LiveSelector<E, true> = () =>
@@ -30,6 +39,8 @@ export const searchProfileActiveTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="true"]')
 export const searchProfileTabSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="false"]')
+export const searchAppBarBackSelector: () => LiveSelector<E, true> = () =>
+    querySelector<E>('[data-testid="app-bar-back"] > div')
 export const searchProfileActiveTabStatusLineSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[aria-label][role="navigation"]  [role="tablist"] [role="tab"][aria-selected="true"] > div > div')
 export const searchProfileActiveTabLabelSelector: () => LiveSelector<E, true> = () =>
@@ -38,8 +49,12 @@ export const searchProfileTabListSelector = () =>
     querySelectorAll('[aria-label][role="navigation"]  [role="tablist"][data-testid="ScrollSnap-List"] a')
 export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] > div > div > div > div > div > div > div > div > div > div')
-export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
+    const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"')
+    if (q.evaluate()) return q
+    return querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
+}
+
 export const searchNickNameSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="UserProfileHeader_Items"]')
 export const searchAvatarSelector: () => LiveSelector<E, true> = () =>
