@@ -23,7 +23,9 @@
     { "path": "../../external-plugin-previewer" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },
-    { "path": "./../web-workers" },
-    { "path": "./../utils-pure" }
+    { "path": "../web-workers" },
+    { "path": "../utils-pure" },
+    { "path": "../background" },
+    { "path": "../shared" }
   ]
 }

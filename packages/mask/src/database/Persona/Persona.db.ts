@@ -5,7 +5,11 @@ import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
 import { PrototypeLess, restorePrototype } from '../../../utils-pure'
 import { MaskMessages } from '../../utils/messages'
-import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../helpers/openDB'
+import {
+    createDBAccessWithAsyncUpgrade,
+    createTransaction,
+    IDBPSafeTransaction,
+} from '../../../background/database/utils/openDB'
 import { assertPersonaDBConsistency } from './consistency'
 import type {
     AESJsonWebKey,

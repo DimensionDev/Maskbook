@@ -1,7 +1,7 @@
 /// <reference path="./global.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr-cjs'
 import { Identifier, PersonaIdentifier, ProfileIdentifier } from './type'
-import { createDBAccess, IDBPSafeTransaction, createTransaction } from './helpers/openDB'
+import { createDBAccess, IDBPSafeTransaction, createTransaction } from '../../background/database/utils/openDB'
 
 //#region Schema
 export type IdentityWithAvatar = ProfileIdentifier | PersonaIdentifier

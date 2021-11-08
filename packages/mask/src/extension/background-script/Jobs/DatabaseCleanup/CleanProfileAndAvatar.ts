@@ -4,7 +4,7 @@ import {
     deleteAvatarsDB,
     IdentityWithAvatar,
 } from '../../../../database/avatar'
-import { createTransaction } from '../../../../database/helpers/openDB'
+import { createTransaction } from '../../../../../background/database/utils/openDB'
 import { consistentPersonaDBWriteAccess } from '../../../../database/Persona/Persona.db'
 import { IdentifierMap, Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { untilDocumentReady } from '../../../../utils'

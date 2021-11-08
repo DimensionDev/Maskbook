@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/background/",
+    "tsBuildInfoFile": "../dist/background.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    // MV3 = WebWorker, MV2 = DOM
+    // but we cannot build the same code in two env
+    "lib": ["ES2021", "WebWorker"]
+  },
+  "include": ["./"],
+  "references": [{ "path": "../shared" }]
+}

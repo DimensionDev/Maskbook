@@ -3,7 +3,7 @@ import { GroupIdentifier, Identifier, PostIdentifier, PostIVIdentifier, ProfileI
 import { DBSchema, IDBPTransaction, openDB } from 'idb/with-async-ittr-cjs'
 import { PrototypeLess, restorePrototype, restorePrototypeArray } from '../../utils-pure'
 import { IdentifierMap } from './IdentifierMap'
-import { createDBAccessWithAsyncUpgrade, createTransaction } from './helpers/openDB'
+import { createDBAccessWithAsyncUpgrade, createTransaction } from '../../background/database/utils/openDB'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
 import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
 import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
