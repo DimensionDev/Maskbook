@@ -340,11 +340,11 @@ export namespace Plugin.Shared {
     export interface Web3Context {
         Shared?: {
             allowTestnet: Subscription<boolean>
-            /** The ID of currently choosen sub-network. */
+            /** The ID of currently chosen sub-network. */
             chainId: Subscription<number>
-            /** The address of the currently choosen wallet. */
+            /** The address of the currently chosen wallet. */
             account: Subscription<string>
-            /** The balance of the currently choosen account. */
+            /** The balance of the currently chosen account. */
             balance: Subscription<string>
             /** The currently tracked block height. */
             blockNumber: Subscription<number>
@@ -442,7 +442,7 @@ export namespace Plugin.SNSAdaptor {
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Shared.Web3UI
-        /** This is the context of the currently choosen network. */
+        /** This is the context of the currently chosen network. */
         Web3Context?: Shared.Web3Context
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
@@ -536,7 +536,7 @@ export namespace Plugin.Dashboard {
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Shared.Web3UI
-        /** This is the context of the currently choosen network. */
+        /** This is the context of the currently chosen network. */
         Web3Context?: Shared.Web3Context
     }
 }
