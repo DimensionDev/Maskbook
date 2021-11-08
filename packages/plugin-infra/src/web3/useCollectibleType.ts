@@ -1,5 +1,5 @@
-import { useWeb3StateContext } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 export function useCollectibleType() {
-    return useWeb3StateContext().collectibleType
+    return usePluginWeb3StateContext().collectibleType
 }

@@ -1,5 +1,5 @@
-import { useWeb3StateContext } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 export function useAllowTestnet() {
-    return useWeb3StateContext().allowTestnet
+    return usePluginWeb3StateContext().allowTestnet
 }

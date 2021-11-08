@@ -1,5 +1,5 @@
-import { useWeb3StateContext } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 export function useNetworkType() {
-    return useWeb3StateContext().networkType
+    return usePluginWeb3StateContext().networkType
 }

@@ -1,5 +1,5 @@
-import { useWeb3StateContext } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 export function useCurrencyType() {
-    return useWeb3StateContext().currencyType
+    return usePluginWeb3StateContext().currencyType
 }

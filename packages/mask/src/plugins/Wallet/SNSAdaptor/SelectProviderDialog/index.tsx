@@ -9,7 +9,7 @@ import { hasNativeAPI, nativeAPI } from '../../../../utils'
 import { PluginProviderRender } from './PluginProviderRender'
 import { PluginNetworkWatcher } from './PluginNetworkWatcher'
 import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
-import { useRegisteredNetworks, useRegisteredProviders, useWeb3UI } from '@masknet/plugin-infra'
+import { useRegisteredNetworks, useRegisteredProviders, useActivatedPluginWeb3UI } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -46,7 +46,8 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const networks = useRegisteredNetworks()
     const providers = useRegisteredProviders()
 
-    const Web3UI = useWeb3UI(pluginID)
+    const Web3UI = useActivatedPluginWeb3UI(pluginID)
+
     const { useNetwork = () => null } = Web3UI?.Shared ?? {}
     const { NetworkIconClickBait, ProviderIconClickBait } = Web3UI?.SelectProviderDialog ?? {}
 

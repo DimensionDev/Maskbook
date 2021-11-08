@@ -1,6 +1,6 @@
-import { useWeb3StateContext } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 export function useWallets(type?: string) {
-    const { wallets } = useWeb3StateContext()
+    const { wallets } = usePluginWeb3StateContext()
     return wallets
 }

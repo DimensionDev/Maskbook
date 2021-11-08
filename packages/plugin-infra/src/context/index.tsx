@@ -18,14 +18,14 @@ const EMPTY_ARRAY = createSubscription([])
 const FALSE = createSubscription(false)
 const NULL = createSubscription(null)
 
-function useWeb3Context() {
-    const context = useContext(Web3Context)
+function usePluginWeb3Context() {
+    const context = useContext(PluginWeb3Context)
     if (!context) throw new Error('This hook should be used in a provider.')
     return context
 }
 
-export function useWeb3State() {
-    const { Shared, Utils } = useWeb3Context()
+export function usePluginWeb3State() {
+    const { Shared, Utils } = usePluginWeb3Context()
     const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
     const chainId = useSubscription(Shared?.chainId ?? ZERO)
     const account = useSubscription(Shared?.account ?? EMPTY_STRING)
@@ -69,15 +69,15 @@ export function useWeb3State() {
     }
 }
 
-export const Web3Context = createContext<Plugin.Shared.Web3Context>(null!)
-export const Web3StateContext = createContainer(useWeb3State)
+export const PluginWeb3Context = createContext<Plugin.Shared.Web3Context>(null!)
+export const PluginWeb3StateContext = createContainer(usePluginWeb3State)
 
-export const useWeb3StateContext = Web3StateContext.useContainer
+export const usePluginWeb3StateContext = PluginWeb3StateContext.useContainer
 
-export function Web3ContextProvider({ value, children }: React.ProviderProps<Plugin.Shared.Web3Context>) {
+export function PluginWeb3ContextProvider({ value, children }: React.ProviderProps<Plugin.Shared.Web3Context>) {
     return (
-        <Web3Context.Provider value={value}>
-            <Web3StateContext.Provider>{children}</Web3StateContext.Provider>
-        </Web3Context.Provider>
+        <PluginWeb3Context.Provider value={value}>
+            <PluginWeb3StateContext.Provider>{children}</PluginWeb3StateContext.Provider>
+        </PluginWeb3Context.Provider>
     )
 }

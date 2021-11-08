@@ -14,6 +14,3 @@ export * from './useTransactionType'
 export * from './useWallet'
 export * from './useWalletPrimary'
 export * from './useWallets'
-
-// context & provider
-export * from './Web3ContextProvider'

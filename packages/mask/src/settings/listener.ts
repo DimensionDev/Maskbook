@@ -2,6 +2,8 @@ import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import {
     allPostReplacementSettings,
     appearanceSettings,
+    pluginIDSettings,
+    networkIDSettings,
     languageSettings,
     debugModeSetting,
     currentPersonaIdentifier,
@@ -35,6 +37,8 @@ export function ToBeListened() {
     return {
         allPostReplacementSettings,
         appearanceSettings,
+        pluginIDSettings,
+        networkIDSettings,
         languageSettings,
         debugModeSetting,
         currentChainIdSettings,

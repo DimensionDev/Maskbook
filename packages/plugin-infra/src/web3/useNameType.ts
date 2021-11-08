@@ -1,5 +1,5 @@
-import { useWeb3StateContext } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 export function useNameType() {
-    return useWeb3StateContext().nameType
+    return usePluginWeb3StateContext().nameType
 }

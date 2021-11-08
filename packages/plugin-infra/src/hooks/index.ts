@@ -1,7 +1,6 @@
 export * from './useActivatedPlugin'
+export * from './useActivatedPluginWeb3UI'
+export * from './useActivatedPluginWeb3Context'
 export * from './useRegisteredPlugin'
 export * from './useRegisteredPluginNetwork'
 export * from './useRegisteredPluginProvider'
-
-export * from './useWeb3UI'
-export * from './useWeb3Context'

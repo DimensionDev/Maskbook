@@ -1,5 +1,5 @@
-import { useWeb3StateContext } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 export function useTransactionType() {
-    return useWeb3StateContext().transactionType
+    return usePluginWeb3StateContext().transactionType
 }

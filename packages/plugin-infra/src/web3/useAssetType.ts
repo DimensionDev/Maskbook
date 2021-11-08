@@ -1,5 +1,5 @@
-import { useWeb3StateContext } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 export function useAssetType() {
-    return useWeb3StateContext().assetType
+    return usePluginWeb3StateContext().assetType
 }

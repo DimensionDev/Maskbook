@@ -1,18 +1,19 @@
-import { useWeb3StateContext, useChainDetailed } from '.'
+import { useChainDetailed } from '.'
+import { usePluginWeb3StateContext } from '../context'
 
 /**
  * Get the chain id which is using by the given (or default) wallet
  * It will always yield Mainnet in production mode
  */
 export function useChainId() {
-    return useWeb3StateContext().chainId
+    return usePluginWeb3StateContext().chainId
 }
 
 /**
  * Returns true if chain id is available
  */
 export function useChainIdValid() {
-    return useWeb3StateContext().chainIdValid
+    return usePluginWeb3StateContext().chainIdValid
 }
 
 /**
