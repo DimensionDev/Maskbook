@@ -29,12 +29,12 @@ import {
     Typography,
 } from '@mui/material'
 import { useUserDeposit } from '../hooks/useUserDeposit'
-import type { Card, Event } from '../types'
+import type { Card, Market } from '../types'
 import { useBaseToken } from '../hooks/useBaseToken'
 import { useRentCallback } from '../hooks/useRentCallback'
 import { useExitCallback } from '../hooks/useExitCallback'
 import { MINIMUM_ACCEPTED_PRICE } from '../constants'
-import { DepositDialog } from './deposit'
+import { DepositDialog } from './depositDialog'
 import { PricePanel } from './pricePanel'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
@@ -102,7 +102,7 @@ export function InputBox(props: InputBoxProps) {
 interface CardDialogProps {
     open: boolean
     onClose: () => void
-    market: Event
+    market: Market
     card: Card
 }
 
@@ -187,13 +187,7 @@ export function CardDialog(props: CardDialogProps) {
     //#endregion
 
     //#region blocking
-    const [rentState, rentCallback, resetRentCallback] = useRentCallback(
-        market,
-        pricePerDay.toString(),
-        card,
-        duration / 60,
-    )
-
+    const [rentState, rentCallback, resetRentCallback] = useRentCallback(market, pricePerDay.toString(), card, duration)
     const [exitState, exitCallback, resetExitCallback] = useExitCallback(market, card)
     //#endregion
 
@@ -229,7 +223,7 @@ export function CardDialog(props: CardDialogProps) {
                           isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                               ? `Follow @${
                                     isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to rent you favorite card!.`
+                                } (mask.io) to rent your favorite card!`
                               : ''
                       }`,
                       '#mask_io',

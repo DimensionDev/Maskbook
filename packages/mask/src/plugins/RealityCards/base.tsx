@@ -8,7 +8,7 @@ export const base: Plugin.Shared.Definition = {
     name: { fallback: 'RealityCards' },
     description: {
         fallback:
-            'Reality Cards turns real-world events into collectable NFTs by combining prediction market elements with an NFT marketplace.',
+            'Reality Cards turns real-world markets into collectable NFTs by combining prediction market elements with an NFT marketplace.',
     },
     publisher: { name: { fallback: 'iRhonin' }, link: 'https://github.com/iRhonin' },
     enableRequirement: {

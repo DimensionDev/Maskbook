@@ -2,10 +2,10 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount, useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useMarketContract } from '../contracts/useMarketContract'
-import type { Card, Event } from '../types'
+import type { Card, Market } from '../types'
 import { isAddress } from 'web3-utils'
 
-export function useExitCallback(market: Event, card: Card) {
+export function useExitCallback(market: Market, card: Card) {
     const account = useAccount()
     const contract = useMarketContract(market.id)
     const [state, setState] = useTransactionState()

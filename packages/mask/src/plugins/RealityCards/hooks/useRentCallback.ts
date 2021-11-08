@@ -2,11 +2,11 @@ import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
 import { useAccount, useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import { useMarketContract } from '../contracts/useMarketContract'
-import type { Card, Event } from '../types'
+import type { Card, Market } from '../types'
 import { isAddress } from 'web3-utils'
 import { ZERO_ADDRESS } from '../constants'
 
-export function useRentCallback(market: Event, price: string, card: Card, duration = 0) {
+export function useRentCallback(market: Market, price: string, card: Card, duration = 0) {
     const account = useAccount()
     const contract = useMarketContract(market.id)
     const [state, setState] = useTransactionState()

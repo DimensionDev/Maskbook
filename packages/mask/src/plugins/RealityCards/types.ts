@@ -1,4 +1,4 @@
-export interface Event {
+export interface Market {
     __typename: string
     affiliateAddress: string
     affiliateCut: string
@@ -34,13 +34,19 @@ export interface Event {
     slug: string
     sponsorAmount: string
     sponsors: any[]
-    state: string
+    state: MarketState
     sumOfAllPrices: string
     totalCollected: string
     totalCollectedTimestampSet: string
     version: string
     winnerCut: string
-    winningOutcome: null
+    winningOutcome: Factory | null
+}
+
+export enum MarketState {
+    Open = 'open',
+    Withdraw = 'withdraw',
+    Locked = 'locked',
 }
 
 export interface Factory {
@@ -54,6 +60,7 @@ export interface Card extends Factory {
     outcomeName: string
     marketCardIndex: string
     originalNft: OriginalNft
+    longestOwner: Factory
 }
 
 export interface OriginalNft extends Factory {

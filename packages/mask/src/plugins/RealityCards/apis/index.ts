@@ -1,6 +1,6 @@
-import type { Event } from '../types'
+import type { Market } from '../types'
 
-export async function fetchEventBySlug(graph_url: string | undefined, slug: string): Promise<Event | undefined> {
+export async function fetchMarketBySlug(graph_url: string | undefined, slug: string): Promise<Market | undefined> {
     if (!graph_url) return
 
     const body = {
@@ -27,6 +27,10 @@ export async function fetchEventBySlug(graph_url: string | undefined, slug: stri
               outcomeName
               price
               marketCardIndex
+              longestOwner {
+                id
+                __typename
+              }
               originalNft {
                 owner {
                     id

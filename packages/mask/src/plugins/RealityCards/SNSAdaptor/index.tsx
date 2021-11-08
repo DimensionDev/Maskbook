@@ -6,7 +6,7 @@ import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { escapeRegExp } from 'lodash-es'
 import { BASE_URL } from '../constants'
-import { EventView } from './event'
+import { MarketView } from './market'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ChainId } from '@masknet/web3-shared-evm'
 
@@ -14,7 +14,7 @@ function createMatchLink() {
     return new RegExp(`https:\/\/${escapeRegExp(BASE_URL)}\/cards\/(.+)`)
 }
 
-function getEventFromLink(link: string) {
+function getMarketFromLink(link: string) {
     const matchLink = createMatchLink()
     const [, slug] = matchLink ? link.match(matchLink) ?? [] : []
     return {
@@ -23,8 +23,8 @@ function getEventFromLink(link: string) {
     }
 }
 
-function getEventFromLinks(links: string[]) {
-    return links.map(getEventFromLink).find(({ slug }) => !!slug)
+function getMarketFromLinks(links: string[]) {
+    return links.map(getMarketFromLink).find(({ slug }) => !!slug)
 }
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -33,16 +33,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
     DecryptedInspector: function Component(props) {
         const text = useMemo(() => extractTextFromTypedMessage(props.message), [props.message])
         const links = useMemo(() => parseURL(text.val || ''), [text.val])
-        const event = getEventFromLinks(links)
+        const market = getMarketFromLinks(links)
         if (!text.ok) return null
-        if (!event?.slug) return null
-        return <Renderer link={event.link} slug={event.slug} />
+        if (!market?.slug) return null
+        return <Renderer link={market.link} slug={market.slug} />
     },
     PostInspector: function Component() {
         const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
-        const event = getEventFromLinks(links)
-        if (!event?.slug) return null
-        return <Renderer link={event.link} slug={event.slug} />
+        const market = getMarketFromLinks(links)
+        if (!market?.slug) return null
+        return <Renderer link={market.link} slug={market.slug} />
     },
     // GlobalInjection: function Component() {
     //     return <InvestDialog />
@@ -58,7 +58,7 @@ function Renderer(props: React.PropsWithChildren<{ link: string; slug: string }>
                 <EthereumChainBoundary
                     chainId={ChainId.Matic}
                     isValidChainId={(chainId) => [ChainId.Matic].includes(chainId)}>
-                    <EventView slug={props.slug} link={props.link} />
+                    <MarketView slug={props.slug} link={props.link} />
                 </EthereumChainBoundary>
             </Suspense>
         </MaskPluginWrapper>
