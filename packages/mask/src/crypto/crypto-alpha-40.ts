@@ -3,7 +3,7 @@
  * Please goto Crypto alpha v38
  */
 import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
-import { memoizePromise } from '../utils/memoize'
+import { memoizePromise } from '../../utils-pure'
 import { makeTypedMessageText } from '../protocols/typed-message'
 import { i18n } from '../utils/i18n-next'
 import { CryptoWorker } from '../modules/workers'

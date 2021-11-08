@@ -11,8 +11,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     info: {
         zIndex: 999,
-        width: 24,
-        height: 26,
+        width: 15,
+        height: 15,
+        right: -10,
+        bottom: 2,
         backgroundRepeat: 'round',
         position: 'absolute',
     },

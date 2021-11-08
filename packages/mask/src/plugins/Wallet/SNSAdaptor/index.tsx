@@ -14,6 +14,7 @@ import { WalletRiskWarningDialog } from './RiskWarningDialog'
 import { GasSettingDialog } from './GasSettingDialog'
 import { ERC20TokenListDialog } from './RRC20TokenListDialog'
 import { TransactionSnackbar } from './TransactionSnackbar'
+import { RestoreLegacyWalletDialog } from './RestoreLegacyWalletDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -32,6 +33,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
                 <WalletRiskWarningDialog />
+                <RestoreLegacyWalletDialog />
                 <GasSettingDialog />
                 <ERC20TokenListDialog />
                 <TransactionSnackbar />

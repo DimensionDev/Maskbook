@@ -42,7 +42,7 @@ const verifyHolder = async <verifyHolderResponse>(_lockAddress: String, _holder:
     return data
 }
 
-export const verifyActiveLock = (data: { lock: string; address: string; chain: number }) => {
+const verifyActiveLock = (data: { lock: string; address: string; chain: number }) => {
     verifyHolder(data.lock, data.address, data.chain).then((result) => {
         const response: verifyHolderResponse = result
         const keys = response.keyHolders[0].keys

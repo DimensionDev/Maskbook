@@ -1,7 +1,7 @@
 /// <reference path="./global.d.ts" />
 import { GroupIdentifier, Identifier, PostIdentifier, PostIVIdentifier, ProfileIdentifier } from './type'
 import { DBSchema, IDBPTransaction, openDB } from 'idb/with-async-ittr-cjs'
-import { PrototypeLess, restorePrototype, restorePrototypeArray } from '../utils/type'
+import { PrototypeLess, restorePrototype, restorePrototypeArray } from '../../utils-pure'
 import { IdentifierMap } from './IdentifierMap'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from './helpers/openDB'
 import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'

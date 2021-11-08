@@ -1,4 +1,3 @@
-// This file make EventTarget newable & extendable
 // Remove this file after iOS 14- is dropped.
 if (typeof globalThis.EventTarget?.call === 'function') {
     try {

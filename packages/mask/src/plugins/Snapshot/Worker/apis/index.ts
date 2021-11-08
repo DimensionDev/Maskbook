@@ -85,7 +85,6 @@ async function fetchProposalFromGraphql(id: string) {
     }
 
     const { data }: Res = await response.json()
-    console.log({ data })
     return data
 }
 

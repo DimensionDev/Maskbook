@@ -308,7 +308,8 @@
         "devnet",
         "fbclid",
         "noamount",
-        "txts"
+        "txts",
+        "redpackets"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

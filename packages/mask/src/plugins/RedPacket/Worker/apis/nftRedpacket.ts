@@ -45,7 +45,6 @@ const RED_PACKET_FIELDS = `
     name
     total
     creation_time
-    last_updated_time
     duration
     chain_id
     token: token_contract  {
@@ -110,7 +109,6 @@ export async function getNftRedPacketHistory(address: string, page: number) {
             token: tokenIntoMask(x.token),
             duration: x.duration * 1000,
             creation_time: x.creation_time * 1000,
-            last_updated_time: x.last_updated_time * 1000,
         } as NftRedPacketSubgraphInMask
         const redPacketBasic = pick(nftRedPacketSubgraphInMask, redPacketBasicKeys)
         const network = getChainName(nftRedPacketSubgraphInMask.chain_id)

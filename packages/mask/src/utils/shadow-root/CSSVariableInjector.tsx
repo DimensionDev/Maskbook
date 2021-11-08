@@ -1,10 +1,11 @@
 import { applyMaskColorVars } from '@masknet/theme'
-import { useTheme } from '@mui/material'
+import { Theme, useTheme } from '@mui/material'
 import { useLayoutEffect, useRef } from 'react'
 
-export function CSSVariableInjector(props: React.PropsWithChildren<{}>) {
+export function CSSVariableInjector(props: React.PropsWithChildren<{ useTheme?: () => Theme }>) {
     const ref = useRef<HTMLSpanElement | null>(null)
-    const colorScheme = useTheme().palette.mode
+    const { current: useConsistentTheme } = useRef(props.useTheme || useTheme)
+    const colorScheme = useConsistentTheme().palette.mode
 
     useLayoutEffect(() => {
         const host = ref.current!.closest('main')!.parentNode!.querySelector('head')!

@@ -127,25 +127,3 @@ export function defer<T, E = unknown>() {
     })
     return [p, a, b] as const
 }
-
-export function buf2hex(buffer: ArrayBuffer) {
-    return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
-}
-
-export function hex2buf(hex: string) {
-    let hex_ = hex
-    hex_ = hex.replace(/^0x/, '') // strip 0x
-    if (hex_.length % 2) hex_ = `0${hex_}` // pad even zero
-    const buf = []
-    for (let i = 0; i < hex_.length; i += 2) buf.push(Number.parseInt(hex_.substr(i, 2), 16))
-    return new Uint8Array(buf)
-}
-
-export function assert(x: any, ...args: any): asserts x {
-    console.assert(x, ...args)
-    if (!x) throw new Error('Assert failed!')
-}
-
-export function nonNullable<T>(x: undefined | null | T): x is T {
-    return x !== undefined && x !== null
-}

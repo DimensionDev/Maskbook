@@ -7,17 +7,19 @@ import type { PopperProps } from '@mui/material'
  *
  * You SHOULD NOT use this in React directly
  */
-let mountingPoint: HTMLDivElement | null = null
+let mountingPoint: HTMLDivElement
+let mountingShadowRoot: ShadowRoot
 export function setupPortalShadowRoot(
     init: ShadowRootInit,
     preventEventPropagationList: (keyof HTMLElementEventMap)[],
 ) {
-    if (mountingPoint) return
-    const shadow = document.body.appendChild(document.createElement('div')).attachShadow(init)
+    if (mountingPoint) return mountingShadowRoot!
+    mountingShadowRoot = document.body.appendChild(document.createElement('div')).attachShadow(init)
     for (const each of preventEventPropagationList) {
-        shadow.addEventListener(each, (e) => e.stopPropagation())
+        mountingShadowRoot.addEventListener(each, (e) => e.stopPropagation())
     }
-    mountingPoint = shadow.appendChild(document.createElement('div'))
+    mountingPoint = mountingShadowRoot.appendChild(document.createElement('div'))
+    return mountingShadowRoot!
 }
 
 /** usePortalShadowRoot under this context does not do anything. (And it will return an empty container). */
