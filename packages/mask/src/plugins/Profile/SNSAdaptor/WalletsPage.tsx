@@ -2,14 +2,7 @@ import { RewardIcon } from '@masknet/icons'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ImageIcon, useRemoteControlledDialog, useSnackbarCallback } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import {
-    formatEthereumAddress,
-    getNetworkTypeFromChainId,
-    resolveAddressLinkOnExplorer,
-    useChainColor,
-    useChainId,
-    useWallets,
-} from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, resolveAddressLinkOnExplorer, useChainId, useWallets } from '@masknet/web3-shared-evm'
 import { Button, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
