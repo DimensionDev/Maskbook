@@ -10,5 +10,5 @@
     "lib": ["ES2021", "WebWorker"]
   },
   "include": ["./"],
-  "references": [{ "path": "../shared" }]
+  "references": [{ "path": "../shared" }, { "path": "../utils-pure" }]
 }
