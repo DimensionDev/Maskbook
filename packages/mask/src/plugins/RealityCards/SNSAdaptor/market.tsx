@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
         border: `solid 2px ${theme.palette.divider}`,
     },
     cardMedia: {
-        width: 140,
+        width: 150,
     },
     winnerCard: {
         borderColor: theme.palette.success.main,
@@ -175,7 +175,7 @@ function CardView(props: CardViewProps) {
                 isWinner ? classes.winnerCard : market.state === MarketState.Withdraw ? classes.loserCard : ''
             }`}>
             <CardActionArea
-                sx={{ display: 'flex' }}
+                sx={{ display: 'flex', alignItems: 'stretch' }}
                 onClick={() => (market.state === MarketState.Open ? setCardDialogOpen(true) : null)}>
                 <CardMedia component="img" className={classes.cardMedia} image={card.image} alt={card.outcomeName} />
                 <CardContent className={classes.cardContent}>
