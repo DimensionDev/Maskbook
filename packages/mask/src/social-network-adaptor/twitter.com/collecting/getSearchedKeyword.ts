@@ -20,7 +20,8 @@ export default function getSearchedKeywordAtTwitter(): string {
     if (!isTwitter(activatedSocialNetworkUI)) return ''
     const params = new URLSearchParams(location.search)
     const hashTagMatched = location.pathname.match(/\/hashtag\/([A-Za-z]+)/)
-    if (location.pathname === '/search' && !params.get('f')) return decodeURIComponent(params.get('q') ?? '')
+    console.log(params.get('f'), 'trigger')
+    if (location.pathname === '/search') return params.get('q') ?? ''
     else if (hashTagMatched) return '#' + hashTagMatched[1]
     else if (!SAFE_PATHNAMES_ON_TWITTER.includes(location.pathname)) return ''
 
