@@ -18,13 +18,15 @@ const EMPTY_ARRAY = createSubscription([])
 const FALSE = createSubscription(false)
 const NULL = createSubscription(null)
 
+const PluginWeb3Context = createContext<Plugin.Shared.Web3Context>(null!)
+
 function usePluginWeb3Context() {
     const context = useContext(PluginWeb3Context)
     if (!context) throw new Error('This hook should be used in a provider.')
     return context
 }
 
-export function usePluginWeb3State() {
+function usePluginWeb3State() {
     const { Shared, Utils } = usePluginWeb3Context()
     const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
     const chainId = useSubscription(Shared?.chainId ?? ZERO)
@@ -37,9 +39,7 @@ export function usePluginWeb3State() {
     const nameType = useSubscription(Shared?.nameType ?? EMPTY_STRING)
     const collectibleType = useSubscription(Shared?.collectibleType ?? EMPTY_STRING)
     const transactionType = useSubscription(Shared?.transactionType ?? EMPTY_STRING)
-    const currencyType = useSubscription(
-        Shared?.currencyType ?? createSubscription('usd' as Plugin.Shared.CurrencyType),
-    )
+    const currencyType = useSubscription(Shared?.currencyType ?? EMPTY_STRING)
     const prices = useSubscription(Shared?.prices ?? NULL)
     const walletPrimary = useSubscription(Shared?.walletPrimary ?? NULL)
     const wallets = useSubscription(Shared?.wallets ?? EMPTY_ARRAY)
@@ -69,7 +69,6 @@ export function usePluginWeb3State() {
     }
 }
 
-export const PluginWeb3Context = createContext<Plugin.Shared.Web3Context>(null!)
 export const PluginWeb3StateContext = createContainer(usePluginWeb3State)
 
 export const usePluginWeb3StateContext = PluginWeb3StateContext.useContainer

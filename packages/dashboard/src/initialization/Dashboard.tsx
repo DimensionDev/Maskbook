@@ -50,7 +50,7 @@ export default function DashboardRoot() {
     return (
         <NoEffectUsePortalShadowRootContext.Provider value={true}>
             <Web3Provider value={Web3Context}>
-                <PluginWeb3ContextProvider value={PluginWeb3Context!}>
+                <PluginWeb3ContextProvider value={PluginWeb3Context}>
                     <I18nextProvider i18n={i18n}>
                         <StyledEngineProvider injectFirst>
                             <ThemeProvider theme={theme}>
