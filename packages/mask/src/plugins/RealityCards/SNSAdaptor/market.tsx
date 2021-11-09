@@ -23,7 +23,7 @@ import BigNumber from 'bignumber.js'
 import { GiveawayPopup } from './giveaway'
 import { CardView } from './card'
 import { MarketDescriptionIcon, MarketDescriptionPopup } from './marketDescription'
-import { ExplorerIcon, TokenGiveawayIcon } from './icons'
+import { ExplorerIcon, GiveawayIcon } from './icons'
 import { useInterval } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
@@ -64,7 +64,7 @@ const toFixed = (amount: string) => {
 }
 
 const toLocale = (amount: string) => {
-    return parseFloat(amount).toLocaleString()
+    return Number.parseFloat(amount).toLocaleString()
 }
 
 interface MarketProps {
@@ -239,7 +239,7 @@ function MarketDetails(props: MarketDetailsProps) {
                             }}
                             rel="noopener noreferrer"
                             target="_blank">
-                            <TokenGiveawayIcon />
+                            <GiveawayIcon />
                         </Link>
                     </Tooltip>
                 ) : null}

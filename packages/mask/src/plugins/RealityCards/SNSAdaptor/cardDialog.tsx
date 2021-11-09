@@ -192,7 +192,7 @@ export function CardDialog(props: CardDialogProps) {
     const [exitState, exitCallback, resetExitCallback] = useExitCallback(market, card)
     //#endregion
 
-    // on close transaction dialog
+    //#region on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
@@ -211,8 +211,8 @@ export function CardDialog(props: CardDialogProps) {
             [rentState, onDialogClose, exitState],
         ),
     )
+    //#endregion
 
-    // open the transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(

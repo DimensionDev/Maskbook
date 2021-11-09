@@ -120,7 +120,7 @@ export function DepositDialog(props: DepositDialogProps) {
     }, [token])
     //#endregion
 
-    // on close transaction dialog
+    //#region on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
@@ -140,8 +140,9 @@ export function DepositDialog(props: DepositDialogProps) {
             [depositState],
         ),
     )
+    //#endregion
 
-    // open the transaction dialog
+    //#region open the transaction dialog
     useEffect(() => {
         if (!token || !open) return
         if (depositState.type === TransactionStateType.UNKNOWN) {
