@@ -309,7 +309,12 @@
         "fbclid",
         "noamount",
         "txts",
-        "redpackets"
+        "redpackets",
+        "realitycards",
+        "leaderboard",
+        "topup",
+        "leaderboard",
+        "nfthub"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
@@ -328,6 +333,14 @@
         {
             "filename": "web3-contracts/types/GoodGhostingIncentives.d.ts",
             "ignoreWords": ["ditribution", "Adming"]
+        },
+        {
+            "filename": "packages/web3-contracts/types/RealityCardsMarket.d.ts",
+            "ignoreWords": ["Seperator", "realitio"]
+        },
+        {
+            "filename": "packages/web3-contracts/types/RealityCardsTreasury.d.ts",
+            "ignoreWords": ["Seperator", "realitio"]
         }
     ]
 }

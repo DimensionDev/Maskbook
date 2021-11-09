@@ -159,6 +159,7 @@ export function PricePanel(props: PricePanelProps) {
                                 clickable
                                 color="primary"
                                 variant="outlined"
+                                sx={{ textTransform: 'uppercase' }}
                                 onClick={() => {
                                     onAmountChange(
                                         new BigNumber(formatBalance(minAmount ?? 0, token.decimals))

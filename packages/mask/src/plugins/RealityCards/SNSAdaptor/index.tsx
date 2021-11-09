@@ -5,7 +5,7 @@ import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { escapeRegExp } from 'lodash-es'
-import { BASE_URL } from '../constants'
+import { BASE_URL, VALID_CHAINS_ID } from '../constants'
 import { MarketView } from './market'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -44,9 +44,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!market?.slug) return null
         return <Renderer link={market.link} slug={market.slug} />
     },
-    // GlobalInjection: function Component() {
-    //     return <InvestDialog />
-    // },
 }
 
 export default sns
@@ -57,7 +54,7 @@ function Renderer(props: React.PropsWithChildren<{ link: string; slug: string }>
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary
                     chainId={ChainId.Matic}
-                    isValidChainId={(chainId) => [ChainId.Matic].includes(chainId)}>
+                    isValidChainId={(chainId) => VALID_CHAINS_ID.includes(chainId)}>
                     <MarketView slug={props.slug} link={props.link} />
                 </EthereumChainBoundary>
             </Suspense>

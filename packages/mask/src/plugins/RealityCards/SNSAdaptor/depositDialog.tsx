@@ -1,5 +1,4 @@
 import {
-    ChainId,
     EthereumTokenType,
     formatAmount,
     isZero,
@@ -23,8 +22,8 @@ import type { Coin } from '../../Trader/types'
 import { WalletMessages } from '../../Wallet/messages'
 import { RefreshIcon } from '@masknet/icons'
 import { DialogContent, Typography } from '@mui/material'
-import { USDC } from '../../Trader/constants'
 import { useDepositCallback } from '../hooks/useDepositCallback'
+import { useBaseToken } from '../hooks/useBaseToken'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -64,6 +63,7 @@ export function DepositDialog(props: DepositDialogProps) {
     const { classes } = useStyles()
     const [_inputAmount, setInputAmount] = useState('')
     const { REALITY_CARD_ADDRESS } = useRealityCardsConstants()
+
     const onDialogClose = () => {
         setInputAmount('')
         onClose()
@@ -73,7 +73,7 @@ export function DepositDialog(props: DepositDialogProps) {
     const account = useAccount()
     //#endregion
 
-    const token = USDC[ChainId.Matic]
+    const token = useBaseToken()
     //#region balance
     const {
         value: tokenBalance = '0',
@@ -151,9 +151,9 @@ export function DepositDialog(props: DepositDialogProps) {
         setTransactionDialogOpen({
             open: true,
             state: depositState,
-            summary: `Depositing ${_inputAmount} ${token.symbol} into Reality Cards.`,
+            summary: t('plugin_realitycards_deposit_summary', { amount: _inputAmount, symbol: token.symbol }),
         })
-    }, [depositState, token, _inputAmount /* update tx dialog only if state changed */])
+    }, [depositState, token, _inputAmount])
     //#endregion
 
     //#region submit button
@@ -175,7 +175,8 @@ export function DepositDialog(props: DepositDialogProps) {
             open={open}
             onClose={onDialogClose}
             title={t('plugin_realitycards_deposit')}
-            maxWidth="xs">
+            maxWidth="xs"
+            sx={{ textTransform: 'uppercase' }}>
             <DialogContent>
                 {errorTokenBalance ? (
                     <Typography className={classes.message} color="textPrimary">
@@ -214,7 +215,8 @@ export function DepositDialog(props: DepositDialogProps) {
                                         disabled={!!validationMessage}
                                         onClick={depositCallback}
                                         variant="contained"
-                                        loading={loadingTokenBalance}>
+                                        loading={loadingTokenBalance}
+                                        sx={{ textTransform: 'uppercase' }}>
                                         {validationMessage || t('plugin_realitycards_deposit')}
                                     </ActionButton>
                                 </EthereumERC20TokenApprovedBoundary>

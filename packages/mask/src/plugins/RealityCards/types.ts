@@ -24,6 +24,7 @@ export interface Market {
     name: string
     nftMintCount: string
     numberOfTokens: string
+    giveawayText?: string
     openingTime: string
     oracleResolutionTime: string
     payouts: Payout[]

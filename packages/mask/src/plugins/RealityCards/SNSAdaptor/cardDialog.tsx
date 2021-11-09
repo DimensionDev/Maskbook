@@ -33,7 +33,7 @@ import type { Card, Market } from '../types'
 import { useBaseToken } from '../hooks/useBaseToken'
 import { useRentCallback } from '../hooks/useRentCallback'
 import { useExitCallback } from '../hooks/useExitCallback'
-import { MINIMUM_ACCEPTED_PRICE } from '../constants'
+import { MINIMUM_ACCEPTED_PRICE, MINIMUM_DURATION } from '../constants'
 import { DepositDialog } from './depositDialog'
 import { PricePanel } from './pricePanel'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -73,7 +73,7 @@ interface InputBoxProps {
     onChange: (value: string) => void
 }
 
-export function InputBox(props: InputBoxProps) {
+function InputBox(props: InputBoxProps) {
     const { label, value, onChange } = props
 
     return (
@@ -87,6 +87,7 @@ export function InputBox(props: InputBoxProps) {
                 }}
                 endAdornment={<InputAdornment position="end">{label}</InputAdornment>}
                 aria-describedby="outlined-weight-helper-text"
+                placeholder="0"
                 inputProps={{
                     'aria-label': 'weight',
                     autoComplete: 'off',
@@ -119,7 +120,7 @@ export function CardDialog(props: CardDialogProps) {
     const [inputPrice, setInputPrice] = useState('')
     const [duration, setDuration] = useState(0)
     const [limitedOwnership, setLimitedOwnership] = useState(false)
-    const [minuts, setMinuts] = useState('')
+    const [minutes, setMinutes] = useState('')
     const [hours, setHours] = useState('')
     const [days, setDays] = useState('')
 
@@ -131,12 +132,12 @@ export function CardDialog(props: CardDialogProps) {
     useEffect(() => {
         setDuration(
             limitedOwnership
-                ? Number.parseInt(minuts || '0', 10) * 60 +
+                ? Number.parseInt(minutes || '0', 10) * 60 +
                       Number.parseInt(hours || '0', 10) * 60 * 60 +
                       Number.parseInt(days || '0', 10) * 60 * 60 * 24
                 : 0,
         )
-    }, [days, hours, minuts, limitedOwnership])
+    }, [days, hours, minutes, limitedOwnership])
 
     const onDialogClose = () => {
         setInputPrice('')
@@ -217,15 +218,19 @@ export function CardDialog(props: CardDialogProps) {
         .getShareLinkURL?.(
             token
                 ? [
-                      `I just rented "${card.outcomeName}" card for ${inputPrice} ${token.symbol}/hour ${cashTag}${
-                          token.symbol
-                      }. ${
-                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
-                              ? `Follow @${
-                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to rent your favorite card!`
-                              : ''
-                      }`,
+                      t('plugin_realitycards_share_message', {
+                          outcome: card.outcomeName,
+                          amount: inputPrice,
+                          symbol: token.symbol,
+                          cashTag,
+                      }),
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? t('plugin_realitycards_follow_message', {
+                                handle: isTwitter(activatedSocialNetworkUI)
+                                    ? t('twitter_account')
+                                    : t('facebook_account'),
+                            })
+                          : '',
                       '#mask_io',
                   ].join('\n')
                 : '',
@@ -244,9 +249,13 @@ export function CardDialog(props: CardDialogProps) {
             open: true,
             state: rentState,
             shareLink,
-            summary: `Renting "${card.outcomeName}" for ${inputPrice} ${token.symbol}/hour.`,
+            summary: t('plugin_realitycards_rent_summary', {
+                outcome: card.outcomeName,
+                amount: inputPrice,
+                symbol: token.symbol,
+            }),
         })
-    }, [rentState /* update tx dialog only if state changed */])
+    }, [rentState, card.outcomeName, inputPrice, token.symbol])
 
     useEffect(() => {
         if (!token) return
@@ -259,9 +268,11 @@ export function CardDialog(props: CardDialogProps) {
         setTransactionDialogOpen({
             open: true,
             state: exitState,
-            summary: `Exiting your position for the card "${card.outcomeName}".`,
+            summary: t('plugin_realitycards_exit_summary', {
+                outcome: card.outcomeName,
+            }),
         })
-    }, [exitState /* update tx dialog only if state changed */])
+    }, [exitState, card.outcomeName])
     //#endregion
 
     //#region validation
@@ -283,21 +294,14 @@ export function CardDialog(props: CardDialogProps) {
 
     const durationValidationMessage = useMemo(() => {
         if (!limitedOwnership) return ''
-        if (duration < 60) return t('plugin_realitycards_error_minimum_duration')
+        if (duration < MINIMUM_DURATION) return t('plugin_realitycards_error_minimum_duration')
         if (maxOwnershipSeconds.isLessThan(duration))
             return t('plugin_realitycards_error_maximum_ownership_time', {
-                minuts: maxOwnershipSeconds.dividedBy(60).toFixed(0, BigNumber.ROUND_DOWN),
+                minutes: maxOwnershipSeconds.dividedBy(60).toFixed(0, BigNumber.ROUND_DOWN),
             })
         return ''
     }, [account, priceHourly, token, tokenBalance])
-
     //#endregion
-    console.log('validationMessage', priceValidationMessage)
-    console.log('durationValidationMessage', durationValidationMessage)
-    console.log('duration', duration)
-    console.log('pricePerMinute', pricePerMinute)
-    console.log('tokenBalance', tokenBalance)
-    console.log('maxRentalAmount', maxRentalAmount.toString())
 
     if (!token) return null
     return (
@@ -366,8 +370,8 @@ export function CardDialog(props: CardDialogProps) {
                                 <Grid item xs={4}>
                                     <InputBox
                                         label={t('plugin_realitycards_length_minutes')}
-                                        value={minuts}
-                                        onChange={setMinuts}
+                                        value={minutes}
+                                        onChange={setMinutes}
                                     />
                                 </Grid>
                             </Grid>
@@ -389,7 +393,8 @@ export function CardDialog(props: CardDialogProps) {
                                     disabled={!!priceValidationMessage || !!durationValidationMessage}
                                     onClick={rentCallback}
                                     variant="contained"
-                                    loading={loadingTokenBalance}>
+                                    loading={loadingTokenBalance}
+                                    sx={{ textTransform: 'uppercase' }}>
                                     {isOwner
                                         ? t('plugin_realitycards_increase_price')
                                         : priceHourly.isGreaterThanOrEqualTo(minHourlyPrice)
@@ -422,7 +427,10 @@ export function CardDialog(props: CardDialogProps) {
                                 </Typography>
                             </Grid>
                             <Grid item xs={12}>
-                                <Button variant="text" onClick={() => setDepositDialogOpen(true)}>
+                                <Button
+                                    variant="text"
+                                    onClick={() => setDepositDialogOpen(true)}
+                                    sx={{ textTransform: 'uppercase' }}>
                                     {t('plugin_realitycards_deposit')}
                                 </Button>
                             </Grid>

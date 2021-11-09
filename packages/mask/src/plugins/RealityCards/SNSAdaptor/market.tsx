@@ -9,7 +9,8 @@ import {
     Button,
     Grid,
     Tooltip,
-    IconButton,
+    CircularProgress,
+    Link,
 } from '@mui/material'
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded'
 import { makeStyles } from '@masknet/theme'
@@ -18,10 +19,19 @@ import { useState } from 'react'
 import { useMarketBySlug } from '../hooks/useMarket'
 import { Card as RCCard, Market, MarketState } from '../types'
 import { CardDialog } from './cardDialog'
-import { formatBalance, formatPercentage, isSameAddress } from '@masknet/web3-shared-evm'
+import {
+    formatBalance,
+    formatPercentage,
+    isSameAddress,
+    resolveAddressLinkOnExplorer,
+    useChainId,
+} from '@masknet/web3-shared-evm'
 import { useBaseToken } from '../hooks/useBaseToken'
 import BigNumber from 'bignumber.js'
 import { FormattedAddress } from '@masknet/shared'
+import { GiveawayPopup } from './giveaway'
+import { MarketDescriptionIcon, MarketDescreptionPopup } from './marketDescription'
+import { ExplorerIcon, TokenGiveawayIcon } from './icons'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -61,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.action.disabled,
     },
     flexBox: {
-        dispaly: 'flex',
+        display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
@@ -85,15 +95,21 @@ export function MarketView(props: MarketProps) {
     const { classes } = useStyles()
 
     const { value: market, error, loading, retry } = useMarketBySlug(props.slug)
-    console.log(market)
 
-    if (loading) return <Typography color="textPrimary">Loading...</Typography>
+    if (loading)
+        return (
+            <Typography color="textPrimary" textAlign="center">
+                {t('loading')}
+                <CircularProgress sx={{ mx: 1 }} color="primary" size={13} />
+            </Typography>
+        )
+
     if (error)
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Typography color="textPrimary">{t('plugin_realitycards_error_something_went_wrong')}</Typography>
                 <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
-                    Retry
+                    {t('retry')}
                 </Button>
             </Box>
         )
@@ -104,6 +120,7 @@ export function MarketView(props: MarketProps) {
             <CardHeader
                 title={market.name}
                 titleTypographyProps={{ variant: 'h5', color: 'textPrimary' }}
+                href={props.link}
                 subheader={<MarketDetails market={market} />}
                 subheaderTypographyProps={{ variant: 'body2' }}
             />
@@ -123,11 +140,42 @@ export function MarketView(props: MarketProps) {
 
 function MarketDetails(props: MarketDetailsProps) {
     const { market } = props
+    const [descriptionDialogOpen, setDescriptionDialogOpen] = useState(false)
+    const [giveawayDialogOpen, setGiveawayDialogOpen] = useState(false)
+    const chainId = useChainId()
 
     return (
         <Grid container wrap="nowrap" justifyContent="space-between" alignItems="center">
             <Grid item container justifyContent="space-between" alignItems="center" flex="1" wrap="nowrap">
                 <Grid item container direction="column">
+                    <Grid
+                        item
+                        onClick={() => {
+                            setDescriptionDialogOpen(true)
+                        }}>
+                        <Link>
+                            <MarketDescriptionIcon />
+                        </Link>
+                    </Grid>
+                    <Grid item>
+                        <Link
+                            href={resolveAddressLinkOnExplorer(chainId, market.id)}
+                            rel="noopener noreferrer"
+                            target="_blank">
+                            <ExplorerIcon />
+                        </Link>
+                    </Grid>
+                    {!!market.giveawayText ? (
+                        <Grid
+                            item
+                            onClick={() => {
+                                setGiveawayDialogOpen(true)
+                            }}>
+                            <Link rel="noopener noreferrer" target="_blank">
+                                <TokenGiveawayIcon />
+                            </Link>
+                        </Grid>
+                    ) : null}
                     <Grid item>pot size</Grid>
                     <Grid item>
                         <Typography variant="body1" color="text.primary" component="span">
@@ -148,6 +196,12 @@ function MarketDetails(props: MarketDetailsProps) {
             <Grid item sx={{ textAlign: 'right' }}>
                 open/ended
             </Grid>
+            <MarketDescreptionPopup
+                open={descriptionDialogOpen}
+                market={market}
+                onClose={() => setDescriptionDialogOpen(false)}
+            />
+            <GiveawayPopup open={giveawayDialogOpen} market={market} onClose={() => setGiveawayDialogOpen(false)} />
         </Grid>
     )
 }
@@ -220,15 +274,13 @@ function CardView(props: CardViewProps) {
                                         {t('plugin_realitycards_winning_odds')}
                                     </Typography>
                                     <Tooltip
-                                        title="The odds of this outcome occurring, based on current market sentiment. Calculated as the rental price of this Card, divided by the sum of rental prices of all Cards, expressed as a percentage"
+                                        title={t('plugin_realitycards_winning_odds_message')}
                                         arrow
                                         placement="top"
                                         PopperProps={{
                                             disablePortal: true,
                                         }}>
-                                        <IconButton size="small" sx={{ p: 0, ml: 0.5 }}>
-                                            <HelpRoundedIcon sx={{ fontSize: '1rem' }} color="info" />
-                                        </IconButton>
+                                        <HelpRoundedIcon sx={{ p: 0, ml: 0.5, fontSize: '1rem' }} color="info" />
                                     </Tooltip>
                                 </Grid>
                                 <Grid item>

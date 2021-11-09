@@ -55,6 +55,7 @@ export async function fetchMarketBySlug(graph_url: string | undefined, slug: str
             name
             nftMintCount
             numberOfTokens
+            giveawayText
             lockingTime
             oracleResolutionTime
             openingTime
