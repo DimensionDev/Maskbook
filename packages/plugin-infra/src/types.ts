@@ -199,12 +199,6 @@ export namespace Plugin.Shared {
     }
 
     export interface Web3UI {
-        Shared?: {
-            /** A react hook returns the currently selected provider. */
-            useProvider?: () => Shared.Provider | null
-            /** A react hook returns the currently selected network. */
-            useNetwork?: () => Shared.Network | null
-        }
         SelectProviderDialog?: {
             /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
             NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
@@ -337,94 +331,94 @@ export namespace Plugin.Shared {
         tokens: Token<T>[]
     }
 
-    export interface Web3Context {
+    export interface Web3State {
         Shared?: {
-            allowTestnet: Subscription<boolean>
+            allowTestnet?: Subscription<boolean>
             /** The ID of currently chosen sub-network. */
-            chainId: Subscription<number>
+            chainId?: Subscription<number>
             /** The address of the currently chosen wallet. */
-            account: Subscription<string>
+            account?: Subscription<string>
             /** The balance of the currently chosen account. */
-            balance: Subscription<string>
+            balance?: Subscription<string>
             /** The currently tracked block height. */
-            blockNumber: Subscription<number>
+            blockNumber?: Subscription<number>
             /** The network type. */
-            networkType: Subscription<string>
+            networkType?: Subscription<string | undefined>
             /** The wallet provider type. */
-            providerType: Subscription<string>
+            providerType?: Subscription<string | undefined>
             /** The asset data provider. */
-            assetType: Subscription<string>
+            assetType?: Subscription<string | undefined>
             /** The address name data provider. */
-            nameType: Subscription<string>
+            nameType?: Subscription<string | undefined>
             /** The collectible data provider. */
-            collectibleType: Subscription<string>
+            collectibleType?: Subscription<string | undefined>
             /** The transaction data provider. */
-            transactionType: Subscription<string>
+            transactionType?: Subscription<string | undefined>
             /** The currency of estimated values and prices. */
-            currencyType: Subscription<CurrencyType>
+            currencyType?: Subscription<CurrencyType>
             /** The tracked token prices which stored as address and price pairs. */
-            prices: Subscription<CryptoPrice>
+            prices?: Subscription<CryptoPrice>
             /** The currently stored wallet by MaskWallet. */
-            wallets: Subscription<Wallet[]>
+            wallets?: Subscription<Wallet[]>
             /** The default derivable wallet. */
-            walletPrimary: Subscription<Wallet | null>
+            walletPrimary?: Subscription<Wallet | null>
             /** The user added fungible tokens. */
-            fungibleTokens: Subscription<Token<unknown>[]>
+            fungibleTokens?: Subscription<Token<unknown>[]>
             /** The user added non-fungible tokens. */
-            nonFungibleTokens: Subscription<Token<unknown>[]>
+            nonFungibleTokens?: Subscription<Token<unknown>[]>
         }
         Asset?: {
             /** Get fungible assets of given account. */
-            getFungibleAssets<T extends unknown>(
+            getFungibleAssets?: <T extends unknown>(
                 address: string,
                 providerType: string,
                 networkType: string,
                 pagination?: Pagination,
-            ): Promise<Asset<T>[]>
+            ) => Promise<Asset<T>[]>
             /** Get non-fungible assets of given account. */
-            getNonFungibleAssets<T extends unknown>(
+            getNonFungibleAssets: <T extends unknown>(
                 address: string,
                 providerType: string,
                 networkType: string,
                 pagination?: Pagination,
-            ): Promise<Asset<T>[]>
+            ) => Promise<Asset<T>[]>
         }
         Token?: {
-            addToken<T extends unknown>(token: Token<T>): Promise<void>
-            removeToken<T extends unknown>(token: Token<T>): Promise<void>
-            trustToken<T extends unknown>(token: Token<T>): Promise<void>
-            blockToken<T extends unknown>(token: Token<T>): Promise<void>
+            addToken: <T extends unknown>(token: Token<T>) => Promise<void>
+            removeToken: <T extends unknown>(token: Token<T>) => Promise<void>
+            trustToken: <T extends unknown>(token: Token<T>) => Promise<void>
+            blockToken: <T extends unknown>(token: Token<T>) => Promise<void>
         }
         Transaction?: {
             /** Get latest transactions of given account. */
-            getTransactions(
+            getTransactions: (
                 address: string,
                 providerType: string,
                 networkType: string,
                 pagination?: Pagination,
-            ): Promise<Transaction[]>
+            ) => Promise<Transaction[]>
         }
         TokenList?: {
             /** Get the token lists of supported fungible tokens. */
-            getFungibleTokenLists<T extends unknown>(
+            getFungibleTokenLists: <T extends unknown>(
                 address: string,
                 providerType: string,
                 networkType: string,
                 pagination?: Pagination,
-            ): Promise<TokenList<T>[]>
+            ) => Promise<TokenList<T>[]>
             /** Get the token lists of supported non-fungible tokens. */
-            getNonFungibleTokenLists<T extends unknown>(
+            getNonFungibleTokenLists: <T extends unknown>(
                 address: string,
                 providerType: string,
                 networkType: string,
                 pagination?: Pagination,
-            ): Promise<TokenList<T>[]>
+            ) => Promise<TokenList<T>[]>
         }
         Utils?: {
-            isChainIdValid(chainId: number, allowTestnet: boolean): boolean
-            getChainDetailed(chainId: number): ChainDetailed
-            getFungibleTokenMetadata<T extends unknown>(token: Token<T>): Promise<FungibleTokenMetadata<T>>
-            getNonFungibleTokenMetadata<T extends unknown>(token: Token<T>): Promise<NonFungibleTokenMetadata<T>>
+            isChainIdValid: (chainId: number, allowTestnet: boolean) => boolean
+            getChainDetailed: (chainId: number) => ChainDetailed
+            getFungibleTokenMetadata: <T extends unknown>(token: Token<T>) => Promise<FungibleTokenMetadata<T>>
+            getNonFungibleTokenMetadata: <T extends unknown>(token: Token<T>) => Promise<NonFungibleTokenMetadata<T>>
         }
     }
 }
@@ -443,7 +437,7 @@ export namespace Plugin.SNSAdaptor {
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Shared.Web3UI
         /** This is the context of the currently chosen network. */
-        Web3Context?: Shared.Web3Context
+        Web3State?: Shared.Web3State
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -537,7 +531,7 @@ export namespace Plugin.Dashboard {
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Shared.Web3UI
         /** This is the context of the currently chosen network. */
-        Web3Context?: Shared.Web3Context
+        Web3State?: Shared.Web3State
     }
 }
 

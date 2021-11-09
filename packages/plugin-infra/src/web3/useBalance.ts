@@ -3,6 +3,6 @@ import { usePluginWeb3StateContext } from '../context'
 /**
  * Get the current block number
  */
-export function useBalance() {
-    return usePluginWeb3StateContext().balance
+export function useBalance(pluginID?: string) {
+    return usePluginWeb3StateContext(pluginID).balance
 }

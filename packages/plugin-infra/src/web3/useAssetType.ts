@@ -1,5 +1,5 @@
 import { usePluginWeb3StateContext } from '../context'
 
-export function useAssetType() {
-    return usePluginWeb3StateContext().assetType
+export function useAssetType(pluginID?: string) {
+    return usePluginWeb3StateContext(pluginID).assetType
 }

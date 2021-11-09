@@ -11,9 +11,9 @@ import {
 import { ErrorBoundary } from '@masknet/shared'
 import {
     createInjectHooksRenderer,
-    PluginWeb3ContextProvider,
+    PluginsWeb3ContextProvider,
     useActivatedPluginsDashboard,
-    useActivatedPluginWeb3Context,
+    useAllPluginsWeb3State,
 } from '@masknet/plugin-infra'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 
@@ -30,7 +30,7 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 
 export default function DashboardRoot() {
     const pluginID = usePluginID()
-    const PluginWeb3Context = useActivatedPluginWeb3Context(pluginID)
+    const PluginsWeb3State = useAllPluginsWeb3State()
 
     //#region theme
     const appearance = useAppearance()
@@ -45,12 +45,12 @@ export default function DashboardRoot() {
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
     //#endregion
 
-    if (!PluginWeb3Context) return null
+    if (!PluginsWeb3State) return null
 
     return (
         <NoEffectUsePortalShadowRootContext.Provider value={true}>
             <Web3Provider value={Web3Context}>
-                <PluginWeb3ContextProvider value={PluginWeb3Context}>
+                <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
                     <I18nextProvider i18n={i18n}>
                         <StyledEngineProvider injectFirst>
                             <ThemeProvider theme={theme}>
@@ -68,7 +68,7 @@ export default function DashboardRoot() {
                             </ThemeProvider>
                         </StyledEngineProvider>
                     </I18nextProvider>
-                </PluginWeb3ContextProvider>
+                </PluginsWeb3ContextProvider>
             </Web3Provider>
         </NoEffectUsePortalShadowRootContext.Provider>
     )

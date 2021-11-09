@@ -1,13 +1,13 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
 import { Web3UI } from '../Web3UI'
-import { Web3Context } from '../Web3Context'
+import { Web3State } from '../Web3State'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     Web3UI,
-    Web3Context,
+    Web3State,
 }
 
 export default sns

@@ -1,6 +1,5 @@
 import { usePluginWeb3StateContext } from '../context'
 
-export function useWallets(type?: string) {
-    const { wallets } = usePluginWeb3StateContext()
-    return wallets
+export function useWallets(type?: string, pluginID?: string) {
+    return usePluginWeb3StateContext(pluginID).wallets
 }

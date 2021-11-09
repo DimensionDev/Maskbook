@@ -5,15 +5,15 @@ import { usePluginWeb3StateContext } from '../context'
  * Get the chain id which is using by the given (or default) wallet
  * It will always yield Mainnet in production mode
  */
-export function useChainId() {
-    return usePluginWeb3StateContext().chainId
+export function useChainId(pluginID?: string) {
+    return usePluginWeb3StateContext(pluginID).chainId
 }
 
 /**
  * Returns true if chain id is available
  */
-export function useChainIdValid() {
-    return usePluginWeb3StateContext().chainIdValid
+export function useChainIdValid(pluginID?: string) {
+    return usePluginWeb3StateContext(pluginID).chainIdValid
 }
 
 /**
@@ -21,8 +21,8 @@ export function useChainIdValid() {
  * @param chainId
  * @returns
  */
-export function useChainIdMatched(chainId?: number) {
-    const chainDetailed = useChainDetailed()
+export function useChainIdMatched(pluginID?: string, chainId?: number) {
+    const chainDetailed = useChainDetailed(pluginID)
     if (!chainId) return false
     return chainDetailed?.chainId === chainId
 }

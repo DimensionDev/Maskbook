@@ -1,5 +1,5 @@
 import { usePluginWeb3StateContext } from '../context'
 
-export function useCollectibleType() {
-    return usePluginWeb3StateContext().collectibleType
+export function useCollectibleType(pluginID?: string) {
+    return usePluginWeb3StateContext(pluginID).collectibleType
 }

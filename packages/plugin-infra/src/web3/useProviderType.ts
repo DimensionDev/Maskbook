@@ -1,5 +1,5 @@
 import { usePluginWeb3StateContext } from '../context'
 
-export function useProviderType() {
-    return usePluginWeb3StateContext().providerType
+export function useProviderType(pluginID?: string) {
+    return usePluginWeb3StateContext(pluginID).providerType
 }

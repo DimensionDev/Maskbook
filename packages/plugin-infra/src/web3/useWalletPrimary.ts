@@ -1,6 +1,5 @@
 import { usePluginWeb3StateContext } from '../context'
 
-export function useWalletPrimary() {
-    const { walletPrimary } = usePluginWeb3StateContext()
-    return walletPrimary
+export function useWalletPrimary(pluginID?: string) {
+    return usePluginWeb3StateContext(pluginID).walletPrimary
 }

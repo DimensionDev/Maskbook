@@ -9,7 +9,13 @@ import { hasNativeAPI, nativeAPI } from '../../../../utils'
 import { PluginProviderRender } from './PluginProviderRender'
 import { PluginNetworkWatcher } from './PluginNetworkWatcher'
 import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
-import { useRegisteredNetworks, useRegisteredProviders, useActivatedPluginWeb3UI } from '@masknet/plugin-infra'
+import {
+    useRegisteredNetworks,
+    useRegisteredProviders,
+    useActivatedPluginWeb3UI,
+    useNetworkType,
+    useRegisteredPluginNetwork,
+} from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -43,13 +49,23 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(networkID)
 
+    const undeterminedWeb3UI = useActivatedPluginWeb3UI(undeterminedPluginID)
+    const undeterminedNetworkType = useNetworkType(undeterminedPluginID)
+    const undeterminedNetwork = useRegisteredPluginNetwork(undeterminedPluginID, undeterminedNetworkType)
+
     const networks = useRegisteredNetworks()
     const providers = useRegisteredProviders()
 
-    const Web3UI = useActivatedPluginWeb3UI(pluginID)
+    console.log({
+        pluginID,
+        networkID,
+        undeterminedPluginID,
+        undeterminedNetworkID,
+        undeterminedNetwork,
+        undeterminedNetworkType,
+    })
 
-    const { useNetwork = () => null } = Web3UI?.Shared ?? {}
-    const { NetworkIconClickBait, ProviderIconClickBait } = Web3UI?.SelectProviderDialog ?? {}
+    const { NetworkIconClickBait, ProviderIconClickBait } = undeterminedWeb3UI?.SelectProviderDialog ?? {}
 
     // not available for the native app
     if (hasNativeAPI) return null
@@ -58,7 +74,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     if (!open)
         return (
             <PluginNetworkWatcher
-                useNetwork={useNetwork}
+                network={undeterminedNetwork}
                 expectedPluginID={undeterminedPluginID}
                 expectedNetworkID={undeterminedNetworkID}
             />

@@ -3,14 +3,12 @@ import { useEffect } from 'react'
 import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
 
 export interface PluginNetworkWatcherProps {
-    useNetwork: () => Plugin.Shared.Network | null
+    network?: Plugin.Shared.Network
     expectedPluginID: string
     expectedNetworkID: string
 }
 
-export function PluginNetworkWatcher({ useNetwork, expectedPluginID, expectedNetworkID }: PluginNetworkWatcherProps) {
-    const network = useNetwork()
-
+export function PluginNetworkWatcher({ network, expectedPluginID, expectedNetworkID }: PluginNetworkWatcherProps) {
     useEffect(() => {
         const matched = network && network.pluginID === expectedPluginID && network.ID === expectedNetworkID
         if (!matched) return
