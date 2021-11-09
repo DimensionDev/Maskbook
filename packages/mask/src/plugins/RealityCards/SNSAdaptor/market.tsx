@@ -119,7 +119,11 @@ export function MarketView(props: MarketProps) {
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
             <CardHeader
-                title={market.name}
+                title={
+                    <Link target="_blank" href={props.link}>
+                        {market.name}
+                    </Link>
+                }
                 titleTypographyProps={{ variant: 'h5', color: 'textPrimary' }}
                 href={props.link}
                 subheader={<MarketDetails market={market} />}
@@ -165,36 +169,9 @@ function MarketDetails(props: MarketDetailsProps) {
     }, [market.lockingTime])
 
     return (
-        <Grid container justifyContent="space-between">
-            <Grid item sx={{ my: 2 }}>
-                <Chip label={state.label} color={state.color} />
-            </Grid>
-            <Grid
-                item
-                onClick={() => {
-                    setDescriptionDialogOpen(true)
-                }}>
-                <Link>
-                    <MarketDescriptionIcon />
-                </Link>
-            </Grid>
-            <Grid item>
-                <Link href={resolveAddressLinkOnExplorer(chainId, market.id)} rel="noopener noreferrer" target="_blank">
-                    <ExplorerIcon />
-                </Link>
-            </Grid>
-            {!!market.giveawayText ? (
-                <Grid
-                    item
-                    onClick={() => {
-                        setGiveawayDialogOpen(true)
-                    }}>
-                    <Link rel="noopener noreferrer" target="_blank">
-                        <TokenGiveawayIcon />
-                    </Link>
-                </Grid>
-            ) : null}
-            <Grid item container justifyContent="space-between" alignItems="center" sx={{ width: 'auto' }}>
+        <Grid container direction="column">
+            <Grid item container alignItems="center">
+                <Chip sx={{ my: 1, mr: 1 }} label={state.label} color={state.color} />
                 <Tooltip
                     title="hello"
                     arrow
@@ -202,7 +179,59 @@ function MarketDetails(props: MarketDetailsProps) {
                     PopperProps={{
                         disablePortal: true,
                     }}>
-                    <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                    <Link
+                        sx={{ mx: 1, display: 'flex', alignItems: 'center' }}
+                        href={resolveAddressLinkOnExplorer(chainId, market.id)}
+                        rel="noopener noreferrer"
+                        target="_blank">
+                        <ExplorerIcon />
+                    </Link>
+                </Tooltip>
+                <Tooltip
+                    title="Event description"
+                    arrow
+                    placement="top"
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Link
+                        sx={{ cursor: 'pointer', mx: 1, display: 'flex', alignItems: 'center' }}
+                        onClick={() => {
+                            setDescriptionDialogOpen(true)
+                        }}>
+                        <MarketDescriptionIcon />
+                    </Link>
+                </Tooltip>
+                {!!market.giveawayText ? (
+                    <Tooltip
+                        title="Token Giveaway"
+                        arrow
+                        placement="top"
+                        PopperProps={{
+                            disablePortal: true,
+                        }}>
+                        <Link
+                            sx={{ cursor: 'pointer', mx: 1, display: 'flex', alignItems: 'center' }}
+                            onClick={() => {
+                                setGiveawayDialogOpen(true)
+                            }}
+                            rel="noopener noreferrer"
+                            target="_blank">
+                            <TokenGiveawayIcon />
+                        </Link>
+                    </Tooltip>
+                ) : null}
+            </Grid>
+
+            <Grid item container justifyContent="space-between" alignItems="center">
+                <Tooltip
+                    title="hello"
+                    arrow
+                    placement="top"
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Grid item container direction="column" sx={{ width: 'auto' }}>
                         <Grid item>{state.potSize}</Grid>
                         <Grid item>
                             <Typography variant="body1" color="text.primary" component="span">
@@ -212,7 +241,7 @@ function MarketDetails(props: MarketDetailsProps) {
                         </Grid>
                     </Grid>
                 </Tooltip>
-                <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                <Grid item container direction="column" sx={{ width: 'auto' }}>
                     <Grid item>
                         <Tooltip
                             title="The average sum of rental prices of all outcomes, calculated as the pot divided by the number of hours since the event begun. This is helpful to understand whether Cards are over or underpriced."
@@ -232,7 +261,7 @@ function MarketDetails(props: MarketDetailsProps) {
                     </Grid>
                 </Grid>
                 {market.state === MarketState.Open ? (
-                    <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                    <Grid item container direction="column" sx={{ width: 'auto' }}>
                         <Grid item>CLOSES IN</Grid>
                         <Grid item>
                             <Tooltip
