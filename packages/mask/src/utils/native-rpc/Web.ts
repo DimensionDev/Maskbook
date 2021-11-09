@@ -60,11 +60,11 @@ const profileRelationFormatter = (
 }
 
 const personaInformationFormatter = (p: PersonaInformation | undefined) => {
-    const profiles = p.linkedProfiles.map((profileInformaiton) => {
+    const profiles = p.linkedProfiles.map((profileInformation) => {
         return {
-            nickname: profileInformaiton.nickname,
-            identifier: profileInformaiton.identifier.toText(),
-            avatar: profileInformaiton.avatar,
+            nickname: profileInformation.nickname,
+            identifier: profileInformation.identifier.toText(),
+            avatar: profileInformation.avatar,
         }
     })
 
