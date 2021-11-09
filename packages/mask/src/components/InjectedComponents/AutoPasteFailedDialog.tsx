@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N, MaskMessages, useMatchXS, useQueryNavigatorPermission } from '../../utils'
+import { useI18N, useMatchXS, useQueryNavigatorPermission } from '../../utils'
 import formatDateTime from 'date-fns/format'
 import { makeStyles } from '@masknet/theme'
 import {
