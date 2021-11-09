@@ -1,10 +1,12 @@
 import { CryptoPrice, CurrencyType } from '@masknet/web3-shared-evm'
 import { pollingTask } from '@masknet/shared'
 import { getTokenPrices, getNativeTokenPrice } from '../../../extension/background-script/EthereumService'
-import { startEffects } from '../../../utils'
+import { startEffects } from '../../../../utils-pure'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { currentTokenPricesSettings } from '../settings'
 import { uniq } from 'lodash-es'
+
+const { run } = startEffects(import.meta.webpackHot)
 
 function updateCurrentPrices(data: CryptoPrice) {
     const currentPrices: CryptoPrice = { ...currentTokenPricesSettings.value }
@@ -82,10 +84,8 @@ export async function updateNativeTokenPrices() {
 
 let resetPoolTask: () => void = () => {}
 
-const effect = startEffects(import.meta.webpackHot)
-
 // poll the newest chain state
-effect(() => {
+run(() => {
     const { reset, cancel } = pollingTask(
         async () => {
             if (tokenTrackingCount > 0) {
@@ -104,7 +104,7 @@ effect(() => {
     return cancel
 })
 const ETH_PRICE_POLLING_DELAY = 30 /* seconds */ * 1000 /* milliseconds */
-effect(() => {
+run(() => {
     trackNativeToken('ethereum')
     const { cancel } = pollingTask(
         async () => {
