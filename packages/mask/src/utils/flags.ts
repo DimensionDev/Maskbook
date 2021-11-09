@@ -32,6 +32,7 @@ export const Flags = {
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
     metamask_support_enabled: webOnly,
+    fortmatic_support_enabled: webOnly,
     toolbox_enabled: webOnly,
     /** Prohibit the use of test networks in production */
     wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',

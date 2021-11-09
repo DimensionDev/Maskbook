@@ -17,6 +17,7 @@ import {
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'
+import * as FortMatic from './providers/FortMatic'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
 import { getWallet } from '../../../plugins/Wallet/services'
@@ -243,8 +244,13 @@ export async function INTERNAL_send(
                 }
                 break
             case ProviderType.MetaMask:
+            case ProviderType.FortMatic:
                 try {
-                    await MetaMask.ensureConnectedAndUnlocked()
+                    if (providerType === ProviderType.MetaMask) {
+                        await MetaMask.ensureConnectedAndUnlocked()
+                    } else {
+                        await FortMatic.requestAccounts(chainId)
+                    }
                 } catch (error: any) {
                     callback(error)
                     break
@@ -338,8 +344,13 @@ export async function INTERNAL_send(
                 )
                 break
             case ProviderType.MetaMask:
+            case ProviderType.FortMatic:
                 try {
-                    await MetaMask.ensureConnectedAndUnlocked()
+                    if (providerType === ProviderType.MetaMask) {
+                        await MetaMask.ensureConnectedAndUnlocked()
+                    } else {
+                        await FortMatic.requestAccounts(chainId)
+                    }
                     provider?.send(payload, (error, response) => {
                         callback(error, response)
                         handleTransferTransaction(chainIdFinally, payload)

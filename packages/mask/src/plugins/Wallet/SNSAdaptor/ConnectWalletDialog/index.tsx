@@ -68,6 +68,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.MetaMask:
                 ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
                 break
+            case ProviderType.FortMatic:
+                ;({ account, chainId } = await Services.Ethereum.connectFortMatic(expectedChainId))
+                break
             case ProviderType.WalletConnect:
                 // create wallet connect QR code URI
                 const uri = await Services.Ethereum.createConnectionURI()

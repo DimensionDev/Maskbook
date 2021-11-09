@@ -3,6 +3,7 @@ import { unreachable } from '@dimensiondev/kit'
 import * as MaskWallet from './providers/Mask'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
+import * as FortMatic from './providers/FortMatic'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 
 export async function createWeb3({
@@ -22,6 +23,8 @@ export async function createWeb3({
             return WalletConnect.createWeb3({
                 chainId,
             })
+        case ProviderType.FortMatic:
+            return FortMatic.createWeb3(chainId)
         case ProviderType.CustomNetwork:
             throw new Error('To be implemented.')
         default:

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
-import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon, ProviderIcon } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
 import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared-evm'
@@ -86,6 +86,9 @@ const useStyles = makeStyles()((theme) => ({
     providerIcon: {
         fontSize: 45,
     },
+    fortMaticProviderIcon: {
+        transform: 'translateY(8px)',
+    },
     tip: {
         fontSize: 12,
     },
@@ -161,6 +164,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     })
                     break
                 case ProviderType.MetaMask:
+                case ProviderType.FortMatic:
                 case ProviderType.WalletConnect:
                     setConnectWalletDialog({
                         open: true,
@@ -238,6 +242,21 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                     logo={<MetaMaskIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
                                     name="MetaMask"
                                     onClick={() => onConnectProvider(ProviderType.MetaMask)}
+                                />
+                            </ImageListItem>
+                        ) : null}
+                        {Flags.fortmatic_support_enabled ? (
+                            <ImageListItem>
+                                <Provider
+                                    logo={
+                                        <ProviderIcon
+                                            providerType={ProviderType.FortMatic}
+                                            classes={{ icon: classes.fortMaticProviderIcon }}
+                                            size={36}
+                                        />
+                                    }
+                                    name="FortMatic"
+                                    onClick={() => onConnectProvider(ProviderType.FortMatic)}
                                 />
                             </ImageListItem>
                         ) : null}

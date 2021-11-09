@@ -60,6 +60,7 @@ export const useNetworkSelector = () => {
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
+                case ProviderType.FortMatic:
                     setConnectWalletDialog({
                         open: true,
                         providerType,

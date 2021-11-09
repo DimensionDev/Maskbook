@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
-import { MaskBlueIcon, MetaMaskIcon, WalletConnectIcon } from '@masknet/icons'
+import { MaskBlueIcon, MetaMaskIcon, WalletConnectIcon, FortMaticIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()({
     icon: {},
@@ -23,6 +23,8 @@ export function ProviderIcon(props: ProviderIconProps) {
             return <MetaMaskIcon classes={{ root: classes.icon }} sx={{ fontSize: size }} />
         case ProviderType.WalletConnect:
             return <WalletConnectIcon classes={{ root: classes.icon }} sx={{ fontSize: size }} />
+        case ProviderType.FortMatic:
+            return <FortMaticIcon classes={{ root: classes.icon }} sx={{ fontSize: size }} />
         default:
             return null
     }
