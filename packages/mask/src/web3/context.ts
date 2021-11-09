@@ -7,6 +7,7 @@ import {
     EthereumTokenType,
     ProviderType,
     Web3ProviderType,
+    FortMatic,
 } from '@masknet/web3-shared-evm'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import {
@@ -51,7 +52,15 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
     )
 
     return {
-        provider: createStaticSubscription(() => Web3Provider),
+        provider: createStaticSubscription(() =>
+            currentProviderSettings.value === ProviderType.FortMatic
+                ? FortMatic.createProvider(
+                      (isMask
+                          ? currentMaskWalletChainIdSettings.value
+                          : currentChainIdSettings.value) as FortMatic.FortmaticSupportedChainId,
+                  )
+                : Web3Provider,
+        ),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
         account: createSubscriptionFromSettings(isMask ? currentMaskWalletAccountSettings : currentAccountSettings),

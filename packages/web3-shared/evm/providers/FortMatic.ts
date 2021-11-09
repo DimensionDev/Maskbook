@@ -22,7 +22,7 @@ const providerPool = new Map<FortmaticSupportedChainId, Provider>()
 
 let web3: Web3 | null = null
 
-function createProvider(chainId: FortmaticSupportedChainId) {
+export function createProvider(chainId: FortmaticSupportedChainId) {
     let provider = providerPool.get(chainId)
     if (provider) return provider
     const rpcUrl = first(getRPCConstants(chainId).RPC)!
