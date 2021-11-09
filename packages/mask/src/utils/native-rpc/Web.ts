@@ -59,7 +59,7 @@ const profileRelationFormatter = (
     }
 }
 
-const personaInformationFormatter = (p: PersonaInformation | undefined) => {
+const personaInformationFormatter = (p: PersonaInformation) => {
     const profiles = p.linkedProfiles.map((profileInformation) => {
         return {
             nickname: profileInformation.nickname,
@@ -236,7 +236,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const personas = await Services.Identity.queryOwnedPersonaInformation()
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         const currentPersona = personas.find((x) => x.identifier.equals(currentPersonaIdentifier))
-        return personaInformationFormatter(currentPersona)
+        return personaInformationFormatter(!!currentPersona)
     },
     persona_logout: async ({ identifier }) => {
         await Services.Identity.logoutPersona(stringToPersonaIdentifier(identifier))
