@@ -314,7 +314,8 @@
         "leaderboard",
         "topup",
         "leaderboard",
-        "nfthub"
+        "nfthub",
+        "orderbook"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

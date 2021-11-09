@@ -22,7 +22,7 @@ import { useBaseToken } from '../hooks/useBaseToken'
 import BigNumber from 'bignumber.js'
 import { GiveawayPopup } from './giveaway'
 import { CardView } from './card'
-import { MarketDescriptionIcon, MarketDescreptionPopup } from './marketDescription'
+import { MarketDescriptionIcon, MarketDescriptionPopup } from './marketDescription'
 import { ExplorerIcon, TokenGiveawayIcon } from './icons'
 import { useInterval } from 'react-use'
 
@@ -344,7 +344,7 @@ function MarketDetails(props: MarketDetailsProps) {
                     ''
                 )}
             </Grid>
-            <MarketDescreptionPopup
+            <MarketDescriptionPopup
                 open={descriptionDialogOpen}
                 market={market}
                 onClose={() => setDescriptionDialogOpen(false)}

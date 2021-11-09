@@ -20,7 +20,7 @@ interface MarketDetailsProps {
     market: Market
 }
 
-export function MarketDescreptionPopup(props: MarketDetailsProps) {
+export function MarketDescriptionPopup(props: MarketDetailsProps) {
     const { open, onClose, market } = props
     const { classes } = useStyles()
     const { t } = useI18N()
