@@ -236,7 +236,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         const personas = await Services.Identity.queryOwnedPersonaInformation()
         const currentPersonaIdentifier = await Services.Settings.getCurrentPersonaIdentifier()
         const currentPersona = personas.find((x) => x.identifier.equals(currentPersonaIdentifier))
-        return personaInformationFormatter(!!currentPersona)
+        if (!currentPersona) {
+            throw new Error('invalid currentPersonaIdentifier')
+        }
+        return personaInformationFormatter(currentPersona)
     },
     persona_logout: async ({ identifier }) => {
         await Services.Identity.logoutPersona(stringToPersonaIdentifier(identifier))
