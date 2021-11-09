@@ -59,7 +59,7 @@ const profileRelationFormatter = (
     }
 }
 
-const personaInformationFormatter = (p: PersonaInformation) => {
+const personaInformationFormatter = (p: PersonaInformation | undefined) => {
     const profiles = p.linkedProfiles.map((profileInformaiton) => {
         return {
             nickname: profileInformaiton.nickname,
