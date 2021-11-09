@@ -10,6 +10,7 @@ import {
     Grid,
     Tooltip,
     IconButton,
+    Chip,
 } from '@mui/material'
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded'
 import { makeStyles } from '@masknet/theme'
@@ -123,10 +124,19 @@ export function MarketView(props: MarketProps) {
 
 function MarketDetails(props: MarketDetailsProps) {
     const { market } = props
+    const state =
+        market.state === MarketState.Open
+            ? { label: 'OPEN', color: 'success' }
+            : market.state === MarketState.Withdraw
+            ? { label: 'ENDED', color: 'default' }
+            : { label: 'WAITING FOR RESOLUTION', color: 'warning' }
 
     return (
-        <Grid container wrap="nowrap" justifyContent="space-between" alignItems="center">
-            <Grid item container justifyContent="space-between" alignItems="center" flex="1" wrap="nowrap">
+        <Grid container justifyContent="space-between" direction="column">
+            <Grid item sx={{ my: 2 }}>
+                <Chip label={state.label} color={state.color} />
+            </Grid>
+            <Grid item container justifyContent="space-between" alignItems="center" wrap="nowrap">
                 <Grid item container direction="column">
                     <Grid item>pot size</Grid>
                     <Grid item>
@@ -137,16 +147,27 @@ function MarketDetails(props: MarketDetailsProps) {
                     </Grid>
                 </Grid>
                 <Grid item container direction="column">
+                    <Grid item>Card pot size</Grid>
+                    <Grid item>
+                        <Typography variant="body1" color="text.primary" component="span">
+                            {toLocale(2554)}
+                        </Typography>{' '}
+                        USDC
+                    </Grid>
+                </Grid>
+                <Grid item container direction="column">
                     <Grid item>average rentals</Grid>
-                    <Grid item>12545</Grid>
+                    <Grid item>
+                        <Typography variant="body1" color="text.primary" component="span">
+                            {toLocale(2554)}
+                        </Typography>{' '}
+                        USDC
+                    </Grid>
                 </Grid>
                 <Grid item container direction="column">
                     <Grid item>closes in</Grid>
                     <Grid item>12545</Grid>
                 </Grid>
-            </Grid>
-            <Grid item sx={{ textAlign: 'right' }}>
-                open/ended
             </Grid>
         </Grid>
     )
