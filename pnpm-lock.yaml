@@ -317,7 +317,6 @@ importers:
       elliptic: ^6.5.3
       ethereumjs-util: ^7.1.0
       event-iterator: ^2.0.0
-      fortmatic: ^2.2.1
       fuse.js: ^6.4.3
       graphql: ^15.5.1
       graphql-request: ^3.4.0
@@ -447,7 +446,6 @@ importers:
       elliptic: 6.5.4
       ethereumjs-util: 7.1.0
       event-iterator: 2.0.0
-      fortmatic: 2.2.1
       fuse.js: 6.4.6
       graphql: 15.5.3
       graphql-request: 3.5.0_graphql@15.5.3
@@ -798,6 +796,7 @@ importers:
       '@unstoppabledomains/resolution': ^5.0.1
       bignumber.js: 9.0.1
       ethereum-blockies: ^0.1.1
+      fortmatic: ^2.2.1
       fuse.js: ^6.4.6
       lodash-es: ^4.17.21
       react-use: ^17.3.1
@@ -815,6 +814,7 @@ importers:
       '@unstoppabledomains/resolution': 5.0.1
       bignumber.js: 9.0.1
       ethereum-blockies: 0.1.1
+      fortmatic: 2.2.1
       fuse.js: 6.4.6
       lodash-es: 4.17.21
       react-use: 17.3.1

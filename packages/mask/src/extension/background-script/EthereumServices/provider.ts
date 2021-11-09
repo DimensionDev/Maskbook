@@ -3,8 +3,6 @@ import * as MaskWallet from './providers/Mask'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
-import * as FortMatic from './providers/FortMatic'
-import type { ChainId } from '@masknet/web3-shared-evm'
 
 //#region connect WalletConnect
 // step 1:
@@ -40,14 +38,6 @@ export async function connectMetaMask() {
 
 export async function connectMask() {
     const { accounts, chainId } = await MaskWallet.requestAccounts()
-    return {
-        account: first(accounts),
-        chainId,
-    }
-}
-
-export async function connectFortMatic(chainId: ChainId) {
-    const { accounts } = await FortMatic.requestAccounts(chainId)
     return {
         account: first(accounts),
         chainId,

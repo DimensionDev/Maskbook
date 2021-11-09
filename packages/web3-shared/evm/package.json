@@ -11,6 +11,7 @@
     "@unstoppabledomains/resolution": "^5.0.1",
     "bignumber.js": "9.0.1",
     "ethereum-blockies": "^0.1.1",
+    "fortmatic": "^2.2.1",
     "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.21",
     "react-use": "^17.3.1",

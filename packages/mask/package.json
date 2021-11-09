@@ -71,7 +71,6 @@
     "ethereumjs-util": "^7.1.0",
     "event-iterator": "^2.0.0",
     "fuse.js": "^6.4.3",
-    "fortmatic": "^2.2.1",
     "graphql": "^15.5.1",
     "graphql-request": "^3.4.0",
     "gun": "^0.2020.1234",

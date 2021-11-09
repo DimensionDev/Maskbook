@@ -13,11 +13,11 @@ import {
     isEIP1559Supported,
     isSameAddress,
     ProviderType,
+    FortMatic,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'
-import * as FortMatic from './providers/FortMatic'
 import { createWeb3 } from './web3'
 import * as WalletConnect from './providers/WalletConnect'
 import { getWallet } from '../../../plugins/Wallet/services'

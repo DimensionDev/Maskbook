@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
-import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
+import { ChainId, getRPCConstants } from '..'
 import Fortmatic from 'fortmatic'
 import { first } from 'lodash-es'
 
@@ -32,8 +32,8 @@ function createProvider(chainId: FortmaticSupportedChainId) {
     return provider
 }
 
-export async function createWeb3(chainId: FortmaticSupportedChainId) {
-    const provider = createProvider(chainId) as Provider
+export async function createWeb3(chainId: ChainId) {
+    const provider = createProvider(chainId as FortmaticSupportedChainId) as Provider
     if (web3) {
         const currentChainId = await web3.eth.getChainId()
         if (currentChainId === chainId) return web3
@@ -51,6 +51,14 @@ export async function requestAccounts(chainId: ChainId) {
     const accounts = await web3.eth.getAccounts()
     return {
         accounts,
+        chainId,
+    }
+}
+
+export async function connect(chainId: ChainId) {
+    const { accounts } = await requestAccounts(chainId)
+    return {
+        account: first(accounts),
         chainId,
     }
 }
