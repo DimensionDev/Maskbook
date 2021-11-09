@@ -15,7 +15,7 @@ import {
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useMarketBySlug } from '../hooks/useMarket'
 import { Card as RCCard, Market, MarketState } from '../types'
 import { CardDialog } from './cardDialog'
@@ -124,21 +124,61 @@ export function MarketView(props: MarketProps) {
 
 function MarketDetails(props: MarketDetailsProps) {
     const { market } = props
+
+    const [day, setDay] = useState(0)
+    const [hour, setHour] = useState(0)
+    const [minute, setMinute] = useState(0)
     const state =
         market.state === MarketState.Open
-            ? { label: 'OPEN', color: 'success' }
+            ? { label: 'OPEN', color: 'success', potSize: 'POT SIZE' }
             : market.state === MarketState.Withdraw
-            ? { label: 'ENDED', color: 'default' }
-            : { label: 'WAITING FOR RESOLUTION', color: 'warning' }
+            ? { label: 'ENDED', color: 'default', potSize: 'FINAL POT SIZE' }
+            : { label: 'WAITING FOR RESOLUTION', color: 'warning', potSize: 'FINAL POT SIZE' }
+
+    useEffect(() => {
+        const date1 = Date.now()
+        const date2 = Number.parseInt(market.lockingTime, 10) * 1000
+        const diff = date2 - date1
+        setDay(new Date(diff).getUTCDate() - 1)
+        setHour(new Date(diff).getUTCHours())
+        setMinute(new Date(diff).getUTCMinutes())
+    }, [market.lockingTime])
 
     return (
-        <Grid container justifyContent="space-between" direction="column">
+        <Grid container justifyContent="space-between">
             <Grid item sx={{ my: 2 }}>
                 <Chip label={state.label} color={state.color} />
             </Grid>
-            <Grid item container justifyContent="space-between" alignItems="center" wrap="nowrap">
-                <Grid item container direction="column">
-                    <Grid item>pot size</Grid>
+            <Grid item container justifyContent="space-between" alignItems="center" sx={{ width: 'auto' }}>
+                <Tooltip
+                    title="hello"
+                    arrow
+                    placement="top"
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                        <Grid item>{state.potSize}</Grid>
+                        <Grid item>
+                            <Typography variant="body1" color="text.primary" component="span">
+                                {toLocale(2554)}
+                            </Typography>{' '}
+                            USDC
+                        </Grid>
+                    </Grid>
+                </Tooltip>
+                <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                    <Grid item>
+                        <Tooltip
+                            title="The average sum of rental prices of all outcomes, calculated as the pot divided by the number of hours since the event begun. This is helpful to understand whether Cards are over or underpriced."
+                            arrow
+                            placement="top"
+                            PopperProps={{
+                                disablePortal: true,
+                            }}>
+                            <span>AVERAGE RENTALS</span>
+                        </Tooltip>
+                    </Grid>
                     <Grid item>
                         <Typography variant="body1" color="text.primary" component="span">
                             {toLocale(2554)}
@@ -146,28 +186,49 @@ function MarketDetails(props: MarketDetailsProps) {
                         USDC
                     </Grid>
                 </Grid>
-                <Grid item container direction="column">
-                    <Grid item>Card pot size</Grid>
-                    <Grid item>
-                        <Typography variant="body1" color="text.primary" component="span">
-                            {toLocale(2554)}
-                        </Typography>{' '}
-                        USDC
+                {market.state === MarketState.Open ? (
+                    <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                        <Grid item>CLOSES IN</Grid>
+                        <Grid item>
+                            <Tooltip
+                                title="hello"
+                                arrow
+                                placement="top"
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}>
+                                <Grid container>
+                                    <Grid item container sx={{ width: 'auto', mr: 0.5 }} alignItems="flex-end">
+                                        <Box>
+                                            <Typography variant="body1" color="text.primary" component="span">
+                                                {day}
+                                            </Typography>
+                                        </Box>
+                                        <Box>d</Box>
+                                    </Grid>
+                                    <Grid item container sx={{ width: 'auto', mr: 0.5 }} alignItems="flex-end">
+                                        <Box>
+                                            <Typography variant="body1" color="text.primary" component="span">
+                                                {hour}
+                                            </Typography>
+                                        </Box>
+                                        <Box>h</Box>
+                                    </Grid>
+                                    <Grid item container sx={{ width: 'auto' }} alignItems="flex-end">
+                                        <Box>
+                                            <Typography variant="body1" color="text.primary" component="span">
+                                                {minute}
+                                            </Typography>
+                                        </Box>
+                                        <Box>m</Box>
+                                    </Grid>
+                                </Grid>
+                            </Tooltip>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid item container direction="column">
-                    <Grid item>average rentals</Grid>
-                    <Grid item>
-                        <Typography variant="body1" color="text.primary" component="span">
-                            {toLocale(2554)}
-                        </Typography>{' '}
-                        USDC
-                    </Grid>
-                </Grid>
-                <Grid item container direction="column">
-                    <Grid item>closes in</Grid>
-                    <Grid item>12545</Grid>
-                </Grid>
+                ) : (
+                    ''
+                )}
             </Grid>
         </Grid>
     )
