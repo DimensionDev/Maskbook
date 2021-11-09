@@ -3,8 +3,6 @@ import {
     Card,
     CardHeader,
     CardContent,
-    CardMedia,
-    CardActionArea,
     Typography,
     Button,
     Grid,
@@ -14,24 +12,16 @@ import {
     Chip,
 } from '@mui/material'
 import { useMemo } from 'react'
-import HelpRoundedIcon from '@mui/icons-material/HelpRounded'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useState } from 'react'
 import { useMarketBySlug } from '../hooks/useMarket'
 import { Card as RCCard, Market, MarketState } from '../types'
-import { CardDialog } from './cardDialog'
-import {
-    formatBalance,
-    formatPercentage,
-    isSameAddress,
-    resolveAddressLinkOnExplorer,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { formatBalance, resolveAddressLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import { useBaseToken } from '../hooks/useBaseToken'
 import BigNumber from 'bignumber.js'
-import { FormattedAddress } from '@masknet/shared'
 import { GiveawayPopup } from './giveaway'
+import { CardView } from './card'
 import { MarketDescriptionIcon, MarketDescreptionPopup } from './marketDescription'
 import { ExplorerIcon, TokenGiveawayIcon } from './icons'
 import { useInterval } from 'react-use'
@@ -54,12 +44,6 @@ const useStyles = makeStyles()((theme) => ({
     cardMedia: {
         width: 150,
     },
-    winnerCard: {
-        borderColor: theme.palette.success.main,
-    },
-    loserCard: {
-        borderColor: theme.palette.error.main,
-    },
     cardContent: {
         width: '100%',
         padding: 8,
@@ -72,11 +56,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     background: {
         backgroundColor: theme.palette.action.disabled,
-    },
-    flexBox: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
     },
 }))
 
@@ -121,7 +100,11 @@ export function MarketView(props: MarketProps) {
     return (
         <Card variant="outlined" className={classes.root} elevation={0}>
             <CardHeader
-                title={market.name}
+                title={
+                    <Link target="_blank" href={props.link}>
+                        {market.name}
+                    </Link>
+                }
                 titleTypographyProps={{ variant: 'h5', color: 'textPrimary' }}
                 href={props.link}
                 subheader={<MarketDetails market={market} />}
@@ -190,6 +173,10 @@ function MarketDetails(props: MarketDetailsProps) {
         )
     }, [market.openingTime, market.totalCollected, market.sponsorAmount, token.decimals])
 
+    const amountFromRent = useMemo(() => {
+        return new BigNumber(market.totalCollected).minus(market.sponsorAmount)
+    }, [market.totalCollected, market.sponsorAmount])
+
     useInterval(() => {
         const date1 = Date.now()
         const date2 = Number.parseInt(market.lockingTime, 10) * 1000
@@ -200,44 +187,76 @@ function MarketDetails(props: MarketDetailsProps) {
     }, 10)
 
     return (
-        <Grid container justifyContent="space-between">
-            <Grid item sx={{ my: 2 }}>
-                <Chip label={state.label} color={state.color} sx={{ textTransform: 'uppercase' }} />
-            </Grid>
-            <Grid
-                item
-                onClick={() => {
-                    setDescriptionDialogOpen(true)
-                }}>
-                <Link>
-                    <MarketDescriptionIcon />
-                </Link>
-            </Grid>
-            <Grid item>
-                <Link href={resolveAddressLinkOnExplorer(chainId, market.id)} rel="noopener noreferrer" target="_blank">
-                    <ExplorerIcon />
-                </Link>
-            </Grid>
-            {!!market.giveawayText ? (
-                <Grid
-                    item
-                    onClick={() => {
-                        setGiveawayDialogOpen(true)
-                    }}>
-                    <Link rel="noopener noreferrer" target="_blank">
-                        <TokenGiveawayIcon />
-                    </Link>
-                </Grid>
-            ) : null}
-            <Grid item container justifyContent="space-between" alignItems="center" sx={{ width: 'auto' }}>
+        <Grid container direction="column">
+            <Grid item container alignItems="center">
+                <Chip sx={{ my: 1, mr: 1, textTransform: 'uppercase' }} label={state.label} color={state.color} />
                 <Tooltip
-                    title="hello"
+                    title={market.id}
                     arrow
                     placement="top"
                     PopperProps={{
                         disablePortal: true,
                     }}>
-                    <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                    <Link
+                        sx={{ mx: 1, display: 'flex', alignItems: 'center' }}
+                        href={resolveAddressLinkOnExplorer(chainId, market.id)}
+                        rel="noopener noreferrer"
+                        target="_blank">
+                        <ExplorerIcon />
+                    </Link>
+                </Tooltip>
+                <Tooltip
+                    title={t('plugin_realitycards_event_description_tooltip')}
+                    arrow
+                    placement="top"
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Link
+                        sx={{ cursor: 'pointer', mx: 1, display: 'flex', alignItems: 'center' }}
+                        onClick={() => {
+                            setDescriptionDialogOpen(true)
+                        }}>
+                        <MarketDescriptionIcon />
+                    </Link>
+                </Tooltip>
+                {!!market.giveawayText ? (
+                    <Tooltip
+                        title="Token Giveaway"
+                        arrow
+                        placement="top"
+                        PopperProps={{
+                            disablePortal: true,
+                        }}>
+                        <Link
+                            sx={{ cursor: 'pointer', mx: 1, display: 'flex', alignItems: 'center' }}
+                            onClick={() => {
+                                setGiveawayDialogOpen(true)
+                            }}
+                            rel="noopener noreferrer"
+                            target="_blank">
+                            <TokenGiveawayIcon />
+                        </Link>
+                    </Tooltip>
+                ) : null}
+            </Grid>
+
+            <Grid item container justifyContent="space-between" alignItems="center">
+                <Tooltip
+                    title={
+                        t('plugin_realitycards_event_initial_pot_size') +
+                        ': ' +
+                        formatBalance(market.sponsorAmount, token.decimals, 0) +
+                        t('plugin_realitycards_event_amount_from_rent') +
+                        ': ' +
+                        formatBalance(amountFromRent, token.decimals, 0)
+                    }
+                    arrow
+                    placement="top"
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Grid item container direction="column" sx={{ width: 'auto' }}>
                         <Grid item>
                             <Typography sx={{ textTransform: 'uppercase' }}>{state.potSize}</Typography>
                         </Grid>
@@ -248,7 +267,7 @@ function MarketDetails(props: MarketDetailsProps) {
                         </Grid>
                     </Grid>
                 </Tooltip>
-                <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                <Grid item container direction="column" sx={{ width: 'auto' }}>
                     <Grid item>
                         <Tooltip
                             title={t('plugin_realitycards_event_average_rentals_tooltip')}
@@ -269,7 +288,7 @@ function MarketDetails(props: MarketDetailsProps) {
                     </Grid>
                 </Grid>
                 {market.state === MarketState.Open ? (
-                    <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                    <Grid item container direction="column" sx={{ width: 'auto' }}>
                         <Grid item>
                             <Typography sx={{ textTransform: 'uppercase' }}>
                                 {t('plugin_realitycards_event_closes_in')}
@@ -323,97 +342,5 @@ function MarketDetails(props: MarketDetailsProps) {
             />
             <GiveawayPopup open={giveawayDialogOpen} market={market} onClose={() => setGiveawayDialogOpen(false)} />
         </Grid>
-    )
-}
-
-interface CardViewProps {
-    card: RCCard
-    market: Market
-}
-
-function CardView(props: CardViewProps) {
-    const { card, market } = props
-    const { t } = useI18N()
-    const { classes } = useStyles()
-
-    const [cardDialogOpen, setCardDialogOpen] = useState(false)
-    const isWinner = isSameAddress(card.id, market.winningOutcome?.id ?? '')
-    const token = useBaseToken()
-    const priceHourly = new BigNumber(card.price).div(24).toFixed(2)
-    const share = new BigNumber(card.price).div(market.sumOfAllPrices).toFixed(2)
-    const ownerAddress = market.state === MarketState.Open ? card.originalNft.owner.id : card.longestOwner.id
-
-    return (
-        <Card
-            className={`${classes.cards} ${
-                isWinner ? classes.winnerCard : market.state === MarketState.Withdraw ? classes.loserCard : ''
-            }`}>
-            <CardActionArea
-                sx={{ display: 'flex', alignItems: 'stretch' }}
-                onClick={() => (market.state === MarketState.Open ? setCardDialogOpen(true) : null)}>
-                <CardMedia component="img" className={classes.cardMedia} image={card.image} alt={card.outcomeName} />
-                <CardContent className={classes.cardContent}>
-                    <Box>
-                        <Typography variant="h6">{card.outcomeName}</Typography>
-                        <Typography variant="body1" component="strong" sx={{ fontSize: '1.2rem' }} gutterBottom>
-                            {formatBalance(priceHourly, token.decimals)}
-                        </Typography>
-                        <Typography variant="caption" component="span" gutterBottom>
-                            {' '}
-                            /{t('plugin_realitycards_hour')}
-                        </Typography>
-                    </Box>
-
-                    <Grid container flexWrap="nowrap">
-                        <Grid item container direction="column" flex={3}>
-                            <Grid item>
-                                <Typography
-                                    variant="caption"
-                                    color="text.secondary"
-                                    sx={{ textTransform: 'uppercase', fontWeight: 500 }}>
-                                    {market.state === MarketState.Open
-                                        ? t('plugin_realitycards_currently_owned_by')
-                                        : t('plugin_realitycards_owned_by')}
-                                </Typography>
-                            </Grid>
-                            <Grid item container direction="column">
-                                <Grid item>
-                                    <Typography variant="body1">
-                                        <FormattedAddress address={ownerAddress} size={4} />
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        </Grid>
-                        {market.state !== MarketState.Withdraw ? (
-                            <Grid item container direction="column" flex={2} alignItems="flex-end">
-                                <Grid item container alignItems="center" justifyContent="flex-end" flexWrap="nowrap">
-                                    <Typography
-                                        variant="caption"
-                                        color="text.secondary"
-                                        sx={{ textTransform: 'uppercase', fontWeight: 500 }}>
-                                        {t('plugin_realitycards_winning_odds')}
-                                    </Typography>
-                                    <Tooltip
-                                        title={t('plugin_realitycards_winning_odds_message')}
-                                        arrow
-                                        placement="top"
-                                        PopperProps={{
-                                            disablePortal: true,
-                                        }}>
-                                        <HelpRoundedIcon sx={{ p: 0, ml: 0.5, fontSize: '1rem' }} color="info" />
-                                    </Tooltip>
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant="body1" component="strong" sx={{ fontSize: '1.2rem' }}>
-                                        {formatPercentage(share)}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                        ) : null}
-                    </Grid>
-                </CardContent>
-            </CardActionArea>
-            <CardDialog open={cardDialogOpen} market={market} card={card} onClose={() => setCardDialogOpen(false)} />
-        </Card>
     )
 }
