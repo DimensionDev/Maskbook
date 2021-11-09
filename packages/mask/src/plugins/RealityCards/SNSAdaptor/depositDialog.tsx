@@ -81,10 +81,6 @@ export function DepositDialog(props: DepositDialogProps) {
         error: errorTokenBalance,
         retry: tokenBalanceRetry,
     } = useFungibleTokenBalance(token.type, token.address)
-
-    useEffect(() => {
-        tokenBalanceRetry()
-    }, [open])
     //#endregion
 
     //#region amount
@@ -121,7 +117,7 @@ export function DepositDialog(props: DepositDialogProps) {
                 } as Coin,
             },
         })
-    }, [token, openSwapDialog])
+    }, [token])
     //#endregion
 
     // on close transaction dialog
@@ -132,19 +128,23 @@ export function DepositDialog(props: DepositDialogProps) {
                 if (!ev.open) {
                     tokenBalanceRetry()
                     openSwapDialog({ open: false })
-                    if (depositState.type === TransactionStateType.CONFIRMED) onDialogClose()
+                    if (
+                        depositState.type === TransactionStateType.HASH ||
+                        depositState.type === TransactionStateType.CONFIRMED
+                    )
+                        onDialogClose()
                 }
-                if (depositState.type === TransactionStateType.CONFIRMED) setInputAmount('')
+                if (depositState.type === TransactionStateType.CONFIRMED) onDialogClose()
                 resetDepositCallback()
             },
-            [depositState, openSwapDialog, tokenBalanceRetry, onDialogClose],
+            [depositState],
         ),
     )
 
     // open the transaction dialog
     useEffect(() => {
-        if (!token) return
-        if (depositState.type === TransactionStateType.UNKNOWN || depositState.type === TransactionStateType.FAILED) {
+        if (!token || !open) return
+        if (depositState.type === TransactionStateType.UNKNOWN) {
             return
         }
 
@@ -201,7 +201,8 @@ export function DepositDialog(props: DepositDialogProps) {
                                     fullWidth
                                     onClick={openSwap}
                                     variant="contained"
-                                    loading={loadingTokenBalance}>
+                                    loading={loadingTokenBalance}
+                                    sx={{ textTransform: 'uppercase' }}>
                                     {t('plugin_realitycards_buy_token', { symbol: token.symbol })}
                                 </ActionButton>
                             ) : (

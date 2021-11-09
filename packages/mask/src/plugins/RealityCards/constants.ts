@@ -7,4 +7,3 @@ export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const VALID_CHAINS_ID = [ChainId.Matic]
 export const MINIMUM_ACCEPTED_PRICE = 1 * 10 ** 6 // 1 USDC
-export const MINIMUM_DURATION = 60 // Seconds

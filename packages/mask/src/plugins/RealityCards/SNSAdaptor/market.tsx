@@ -11,7 +11,9 @@ import {
     Tooltip,
     CircularProgress,
     Link,
+    Chip,
 } from '@mui/material'
+import { useMemo } from 'react'
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -32,6 +34,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { GiveawayPopup } from './giveaway'
 import { MarketDescriptionIcon, MarketDescreptionPopup } from './marketDescription'
 import { ExplorerIcon, TokenGiveawayIcon } from './icons'
+import { useInterval } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -49,7 +52,7 @@ const useStyles = makeStyles()((theme) => ({
         border: `solid 2px ${theme.palette.divider}`,
     },
     cardMedia: {
-        width: 140,
+        width: 150,
     },
     winnerCard: {
         borderColor: theme.palette.success.main,
@@ -77,8 +80,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const toLocale = (no: number) => {
-    return no.toLocaleString()
+const toFixed = (amount: string) => {
+    return new BigNumber(amount, 10).toFixed(0, BigNumber.ROUND_HALF_CEIL)
 }
 
 interface MarketProps {
@@ -140,61 +143,178 @@ export function MarketView(props: MarketProps) {
 
 function MarketDetails(props: MarketDetailsProps) {
     const { market } = props
+    const { t } = useI18N()
+
     const [descriptionDialogOpen, setDescriptionDialogOpen] = useState(false)
     const [giveawayDialogOpen, setGiveawayDialogOpen] = useState(false)
     const chainId = useChainId()
+    const token = useBaseToken()
+
+    const [day, setDay] = useState(0)
+    const [hour, setHour] = useState(0)
+    const [minute, setMinute] = useState(0)
+    const state: {
+        label: string
+        color: 'default' | 'error' | 'success' | 'warning' | 'primary' | 'secondary' | 'info' | undefined
+        potSize: string
+    } = useMemo(() => {
+        return market.state === MarketState.Open
+            ? {
+                  label: t('plugin_realitycards_event_state_open'),
+                  color: 'success',
+                  potSize: t('plugin_realitycards_event_pot_size'),
+              }
+            : market.state === MarketState.Withdraw
+            ? {
+                  label: t('plugin_realitycards_event_state_ended'),
+                  color: 'default',
+                  potSize: t('plugin_realitycards_event_final_pot_size'),
+              }
+            : {
+                  label: t('plugin_realitycards_event_state_locked'),
+                  color: 'warning',
+                  potSize: t('plugin_realitycards_event_final_pot_size'),
+              }
+    }, [market.state])
+
+    const avgRental = useMemo(() => {
+        const utcTimestamp = new Date(Date.now() + new Date().getTimezoneOffset() * 60 * 1000).getTime() / 1000
+        const elapsedTime = utcTimestamp - Number.parseInt(market.openingTime, 10)
+        return formatBalance(
+            new BigNumber(market.totalCollected)
+                .minus(market.sponsorAmount)
+                .div(elapsedTime)
+                .multipliedBy(60 * 60),
+            token.decimals,
+            1,
+        )
+    }, [market.openingTime, market.totalCollected, market.sponsorAmount, token.decimals])
+
+    useInterval(() => {
+        const date1 = Date.now()
+        const date2 = Number.parseInt(market.lockingTime, 10) * 1000
+        const diff = date2 - date1
+        setDay(new Date(diff).getUTCDate() - 1)
+        setHour(new Date(diff).getUTCHours())
+        setMinute(new Date(diff).getUTCMinutes())
+    }, 10)
 
     return (
-        <Grid container wrap="nowrap" justifyContent="space-between" alignItems="center">
-            <Grid item container justifyContent="space-between" alignItems="center" flex="1" wrap="nowrap">
-                <Grid item container direction="column">
-                    <Grid
-                        item
-                        onClick={() => {
-                            setDescriptionDialogOpen(true)
-                        }}>
-                        <Link>
-                            <MarketDescriptionIcon />
-                        </Link>
-                    </Grid>
-                    <Grid item>
-                        <Link
-                            href={resolveAddressLinkOnExplorer(chainId, market.id)}
-                            rel="noopener noreferrer"
-                            target="_blank">
-                            <ExplorerIcon />
-                        </Link>
-                    </Grid>
-                    {!!market.giveawayText ? (
-                        <Grid
-                            item
-                            onClick={() => {
-                                setGiveawayDialogOpen(true)
-                            }}>
-                            <Link rel="noopener noreferrer" target="_blank">
-                                <TokenGiveawayIcon />
-                            </Link>
+        <Grid container justifyContent="space-between">
+            <Grid item sx={{ my: 2 }}>
+                <Chip label={state.label} color={state.color} sx={{ textTransform: 'uppercase' }} />
+            </Grid>
+            <Grid
+                item
+                onClick={() => {
+                    setDescriptionDialogOpen(true)
+                }}>
+                <Link>
+                    <MarketDescriptionIcon />
+                </Link>
+            </Grid>
+            <Grid item>
+                <Link href={resolveAddressLinkOnExplorer(chainId, market.id)} rel="noopener noreferrer" target="_blank">
+                    <ExplorerIcon />
+                </Link>
+            </Grid>
+            {!!market.giveawayText ? (
+                <Grid
+                    item
+                    onClick={() => {
+                        setGiveawayDialogOpen(true)
+                    }}>
+                    <Link rel="noopener noreferrer" target="_blank">
+                        <TokenGiveawayIcon />
+                    </Link>
+                </Grid>
+            ) : null}
+            <Grid item container justifyContent="space-between" alignItems="center" sx={{ width: 'auto' }}>
+                <Tooltip
+                    title="hello"
+                    arrow
+                    placement="top"
+                    PopperProps={{
+                        disablePortal: true,
+                    }}>
+                    <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                        <Grid item>
+                            <Typography sx={{ textTransform: 'uppercase' }}>{state.potSize}</Typography>
                         </Grid>
-                    ) : null}
-                    <Grid item>pot size</Grid>
+                        <Grid item>
+                            <Typography variant="body1" color="text.primary" component="span">
+                                {toFixed(formatBalance(market.totalCollected, token.decimals, 0))} {token.symbol}
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </Tooltip>
+                <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                    <Grid item>
+                        <Tooltip
+                            title={t('plugin_realitycards_event_average_rentals_tooltip')}
+                            arrow
+                            placement="top"
+                            PopperProps={{
+                                disablePortal: true,
+                            }}>
+                            <Typography sx={{ textTransform: 'uppercase' }}>
+                                {t('plugin_realitycards_event_average_rentals')}
+                            </Typography>
+                        </Tooltip>
+                    </Grid>
                     <Grid item>
                         <Typography variant="body1" color="text.primary" component="span">
-                            {toLocale(2554)}
-                        </Typography>{' '}
-                        USDC
+                            {avgRental} {token.symbol}
+                        </Typography>
                     </Grid>
                 </Grid>
-                <Grid item container direction="column">
-                    <Grid item>average rentals</Grid>
-                    <Grid item>12545</Grid>
-                </Grid>
-                <Grid item container direction="column">
-                    <Grid item>closes in</Grid>
-                    <Grid item>12545</Grid>
-                </Grid>
-            </Grid>
-            <Grid item sx={{ textAlign: 'right' }}>
-                open/ended
+                {market.state === MarketState.Open ? (
+                    <Grid item container direction="column" sx={{ width: 'auto', mx: 1 }}>
+                        <Grid item>
+                            <Typography sx={{ textTransform: 'uppercase' }}>
+                                {t('plugin_realitycards_event_closes_in')}
+                            </Typography>
+                        </Grid>
+                        <Grid item>
+                            <Tooltip
+                                title={new Date(Number.parseInt(market.lockingTime, 10) * 1000).toString()}
+                                arrow
+                                placement="top"
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}>
+                                <Grid container>
+                                    <Grid item container sx={{ width: 'auto', mr: 0.5 }} alignItems="flex-end">
+                                        <Box>
+                                            <Typography variant="body1" color="text.primary" component="span">
+                                                {day}
+                                            </Typography>
+                                        </Box>
+                                        <Box>d</Box>
+                                    </Grid>
+                                    <Grid item container sx={{ width: 'auto', mr: 0.5 }} alignItems="flex-end">
+                                        <Box>
+                                            <Typography variant="body1" color="text.primary" component="span">
+                                                {hour}
+                                            </Typography>
+                                        </Box>
+                                        <Box>h</Box>
+                                    </Grid>
+                                    <Grid item container sx={{ width: 'auto' }} alignItems="flex-end">
+                                        <Box>
+                                            <Typography variant="body1" color="text.primary" component="span">
+                                                {minute}
+                                            </Typography>
+                                        </Box>
+                                        <Box>m</Box>
+                                    </Grid>
+                                </Grid>
+                            </Tooltip>
+                        </Grid>
+                    </Grid>
+                ) : (
+                    ''
+                )}
             </Grid>
             <MarketDescreptionPopup
                 open={descriptionDialogOpen}
@@ -229,7 +349,7 @@ function CardView(props: CardViewProps) {
                 isWinner ? classes.winnerCard : market.state === MarketState.Withdraw ? classes.loserCard : ''
             }`}>
             <CardActionArea
-                sx={{ display: 'flex' }}
+                sx={{ display: 'flex', alignItems: 'stretch' }}
                 onClick={() => (market.state === MarketState.Open ? setCardDialogOpen(true) : null)}>
                 <CardMedia component="img" className={classes.cardMedia} image={card.image} alt={card.outcomeName} />
                 <CardContent className={classes.cardContent}>

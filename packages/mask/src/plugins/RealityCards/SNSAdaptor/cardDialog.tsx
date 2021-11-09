@@ -33,7 +33,7 @@ import type { Card, Market } from '../types'
 import { useBaseToken } from '../hooks/useBaseToken'
 import { useRentCallback } from '../hooks/useRentCallback'
 import { useExitCallback } from '../hooks/useExitCallback'
-import { MINIMUM_ACCEPTED_PRICE, MINIMUM_DURATION } from '../constants'
+import { MINIMUM_ACCEPTED_PRICE } from '../constants'
 import { DepositDialog } from './depositDialog'
 import { PricePanel } from './pricePanel'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -151,10 +151,6 @@ export function CardDialog(props: CardDialogProps) {
         error: errorTokenBalance,
         retry: tokenBalanceRetry,
     } = useUserDeposit()
-
-    useEffect(() => {
-        tokenBalanceRetry()
-    }, [open])
     //#endregion
 
     //#region priceHourly
@@ -185,6 +181,10 @@ export function CardDialog(props: CardDialogProps) {
             return tokenBalance
         }
     }, [limitedOwnership, tokenBalance, pricePerMinute, duration])
+
+    const minRentalDurationSecond = useMemo(() => {
+        return new BigNumber(market.minRentalDayDivisor).dividedBy(24)
+    }, [market.minRentalDayDivisor])
     //#endregion
 
     //#region blocking
@@ -238,12 +238,8 @@ export function CardDialog(props: CardDialogProps) {
         .toString()
 
     useEffect(() => {
-        if (!token) return
+        if (!token || !open) return
         if (rentState.type === TransactionStateType.UNKNOWN) return
-        if (rentState.type === TransactionStateType.FAILED) {
-            setTransactionDialogOpen({ open: false })
-            return
-        }
 
         setTransactionDialogOpen({
             open: true,
@@ -294,7 +290,7 @@ export function CardDialog(props: CardDialogProps) {
 
     const durationValidationMessage = useMemo(() => {
         if (!limitedOwnership) return ''
-        if (duration < MINIMUM_DURATION) return t('plugin_realitycards_error_minimum_duration')
+        if (minRentalDurationSecond.isGreaterThan(duration)) return t('plugin_realitycards_error_minimum_duration')
         if (maxOwnershipSeconds.isLessThan(duration))
             return t('plugin_realitycards_error_maximum_ownership_time', {
                 minutes: maxOwnershipSeconds.dividedBy(60).toFixed(0, BigNumber.ROUND_DOWN),
@@ -434,10 +430,10 @@ export function CardDialog(props: CardDialogProps) {
                                     {t('plugin_realitycards_deposit')}
                                 </Button>
                             </Grid>
-                            <DepositDialog open={depositDialogOpen} onClose={() => setDepositDialogOpen(false)} />
                         </Grid>
                     </>
                 )}
+                <DepositDialog open={depositDialogOpen} onClose={() => setDepositDialogOpen(false)} />
             </DialogContent>
         </InjectedDialog>
     )
