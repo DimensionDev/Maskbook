@@ -63,6 +63,10 @@ const toFixed = (amount: string) => {
     return new BigNumber(amount, 10).toFixed(0, BigNumber.ROUND_HALF_CEIL)
 }
 
+const toLocale = (amount: string) => {
+    return parseFloat(amount).toLocaleString()
+}
+
 interface MarketProps {
     link: string
     slug: string
@@ -244,12 +248,16 @@ function MarketDetails(props: MarketDetailsProps) {
             <Grid item container justifyContent="space-between" alignItems="center">
                 <Tooltip
                     title={
-                        t('plugin_realitycards_event_initial_pot_size') +
-                        ': ' +
-                        formatBalance(market.sponsorAmount, token.decimals, 0) +
-                        t('plugin_realitycards_event_amount_from_rent') +
-                        ': ' +
-                        formatBalance(amountFromRent, token.decimals, 0)
+                        <Grid container direction="column">
+                            <span>{t('plugin_realitycards_event_initial_pot_size')}:</span>
+                            <Typography variant="caption">
+                                {toLocale(formatBalance(market.sponsorAmount, token.decimals, 0))} {token.symbol}
+                            </Typography>
+                            <span>{t('plugin_realitycards_event_amount_from_rent')}:</span>
+                            <Typography variant="caption">
+                                {toLocale(formatBalance(amountFromRent, token.decimals, 0))} {token.symbol}
+                            </Typography>
+                        </Grid>
                     }
                     arrow
                     placement="top"
@@ -262,7 +270,8 @@ function MarketDetails(props: MarketDetailsProps) {
                         </Grid>
                         <Grid item>
                             <Typography variant="body1" color="text.primary" component="span">
-                                {toFixed(formatBalance(market.totalCollected, token.decimals, 0))} {token.symbol}
+                                {toLocale(toFixed(formatBalance(market.totalCollected, token.decimals, 0)))}{' '}
+                                {token.symbol}
                             </Typography>
                         </Grid>
                     </Grid>
@@ -283,7 +292,7 @@ function MarketDetails(props: MarketDetailsProps) {
                     </Grid>
                     <Grid item>
                         <Typography variant="body1" color="text.primary" component="span">
-                            {avgRental} {token.symbol}
+                            {toLocale(avgRental)} {token.symbol}
                         </Typography>
                     </Grid>
                 </Grid>
