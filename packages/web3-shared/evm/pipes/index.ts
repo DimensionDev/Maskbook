@@ -17,7 +17,7 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
         [ProviderType.MaskWallet]: 'Mask',
         [ProviderType.MetaMask]: 'MetaMask',
         [ProviderType.WalletConnect]: 'WalletConnect',
-        [ProviderType.FortMatic]: 'FortMatic',
+        [ProviderType.Fortmatic]: 'Fortmatic',
         [ProviderType.CustomNetwork]: 'CustomNetwork',
     },
     'Unknown Network',

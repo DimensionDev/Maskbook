@@ -22,7 +22,7 @@ const useStyles = makeStyles<StyleProps>()((_theme, props) => ({
         bottom: -2,
         backgroundColor: '#ffffff',
         borderRadius: '50%',
-        ...(props.selectedWalletProvider === ProviderType.FortMatic ? { transform: 'scale(0.9)' } : {}),
+        ...(props.selectedWalletProvider === ProviderType.Fortmatic ? { transform: 'scale(0.9)' } : {}),
     },
 }))
 

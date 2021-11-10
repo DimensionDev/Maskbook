@@ -11,7 +11,7 @@ import {
     ProviderType,
     resolveNetworkName,
     resolveProviderName,
-    FortMatic,
+    Fortmatic,
 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { delay } from '../../../../utils'
@@ -69,8 +69,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.MetaMask:
                 ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
                 break
-            case ProviderType.FortMatic:
-                ;({ account, chainId } = await FortMatic.connect(expectedChainId))
+            case ProviderType.Fortmatic:
+                ;({ account, chainId } = await Fortmatic.connect(expectedChainId))
                 break
             case ProviderType.WalletConnect:
                 // create wallet connect QR code URI

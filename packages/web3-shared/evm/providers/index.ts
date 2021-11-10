@@ -1,1 +1,1 @@
-export * as FortMatic from './FortMatic'
+export * as Fortmatic from './Fortmatic'

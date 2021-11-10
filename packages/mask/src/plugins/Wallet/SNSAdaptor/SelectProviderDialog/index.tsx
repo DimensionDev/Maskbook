@@ -11,7 +11,7 @@ import {
     useAccount,
     useChainId,
     useWallets,
-    FortMatic,
+    Fortmatic,
 } from '@masknet/web3-shared-evm'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
@@ -171,7 +171,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     })
                     break
                 case ProviderType.MetaMask:
-                case ProviderType.FortMatic:
+                case ProviderType.Fortmatic:
                 case ProviderType.WalletConnect:
                     setConnectWalletDialog({
                         open: true,
@@ -253,20 +253,20 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             </ImageListItem>
                         ) : null}
                         {Flags.fortmatic_support_enabled &&
-                        Object.keys(FortMatic.API_KEY_CHAIN_MAPPINGS).includes(
+                        Object.keys(Fortmatic.API_KEY_CHAIN_MAPPINGS).includes(
                             getChainIdFromNetworkType(undeterminedNetworkType).toString(),
                         ) ? (
                             <ImageListItem>
                                 <Provider
                                     logo={
                                         <ProviderIcon
-                                            providerType={ProviderType.FortMatic}
+                                            providerType={ProviderType.Fortmatic}
                                             classes={{ icon: classes.fortMaticProviderIcon }}
                                             size={36}
                                         />
                                     }
-                                    name="FortMatic"
-                                    onClick={() => onConnectProvider(ProviderType.FortMatic)}
+                                    name="Fortmatic"
+                                    onClick={() => onConnectProvider(ProviderType.Fortmatic)}
                                 />
                             </ImageListItem>
                         ) : null}

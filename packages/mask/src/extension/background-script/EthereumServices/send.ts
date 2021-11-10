@@ -13,7 +13,7 @@ import {
     isEIP1559Supported,
     isSameAddress,
     ProviderType,
-    FortMatic,
+    Fortmatic,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { safeUnreachable } from '@dimensiondev/kit'
@@ -244,12 +244,12 @@ export async function INTERNAL_send(
                 }
                 break
             case ProviderType.MetaMask:
-            case ProviderType.FortMatic:
+            case ProviderType.Fortmatic:
                 try {
                     if (providerType === ProviderType.MetaMask) {
                         await MetaMask.ensureConnectedAndUnlocked()
                     } else {
-                        await FortMatic.requestAccounts(chainId)
+                        await Fortmatic.requestAccounts(chainId)
                     }
                 } catch (error: any) {
                     callback(error)
@@ -344,12 +344,12 @@ export async function INTERNAL_send(
                 )
                 break
             case ProviderType.MetaMask:
-            case ProviderType.FortMatic:
+            case ProviderType.Fortmatic:
                 try {
                     if (providerType === ProviderType.MetaMask) {
                         await MetaMask.ensureConnectedAndUnlocked()
                     } else {
-                        await FortMatic.requestAccounts(chainId)
+                        await Fortmatic.requestAccounts(chainId)
                     }
                     provider?.send(payload, (error, response) => {
                         callback(error, response)

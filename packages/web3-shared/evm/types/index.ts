@@ -47,7 +47,7 @@ export enum ProviderType {
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
     CustomNetwork = 'CustomNetwork',
-    FortMatic = 'FortMatic',
+    Fortmatic = 'Fortmatic',
 }
 
 export enum LockStatus {

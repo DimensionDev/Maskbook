@@ -1,8 +1,8 @@
 import { createIcon } from '../utils'
 import type { SvgIcon } from '@mui/material'
 
-export const FortMaticIcon: typeof SvgIcon = createIcon(
-    'FortMatic',
+export const FortmaticIcon: typeof SvgIcon = createIcon(
+    'Fortmatic',
     <g>
         <path
             fillRule="evenodd"
