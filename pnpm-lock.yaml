@@ -124,6 +124,7 @@ importers:
       '@masknet/plugin-wallet': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-evm': workspace:*
@@ -173,6 +174,7 @@ importers:
       '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/public-api': link:../public-api
       '@masknet/shared': link:../shared
+      '@masknet/shared-base': link:../shared-base
       '@masknet/storybook-shared': link:../storybook-shared
       '@masknet/theme': link:../theme
       '@masknet/web3-shared-evm': link:../web3-shared/evm

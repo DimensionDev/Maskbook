@@ -4,11 +4,12 @@
 
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import type { Services as ServiceType } from '../../mask/dist/src/extension/service'
-import type { MaskMessages } from '../../mask/dist/src/utils/messages'
+import type { MaskEvents } from '@masknet/shared-base'
+import type { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
 import type { WalletMessages } from '@masknet/plugin-wallet'
 
 export let Services: typeof ServiceType = null!
-export let Messages: typeof MaskMessages = null!
+export let Messages: WebExtensionMessage<MaskEvents> = null!
 export let PluginServices: PluginServices = null!
 export let PluginMessages: PluginMessages = null!
 export interface PluginServices extends DashboardPluginServices {
