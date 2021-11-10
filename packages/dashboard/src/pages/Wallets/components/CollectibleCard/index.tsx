@@ -28,10 +28,12 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.mode === 'dark' ? MaskColorVar.lineLight : MaskColorVar.lightestBackground,
         display: 'flex',
         flexDirection: 'column',
+        overflow: 'hidden',
     },
     imgContainer: {
         width: '100%',
         height: 186,
+        backgroundColor: theme.palette.mode === 'dark' ? MaskColorVar.lineLight : '#f6f6f7',
     },
     description: {
         flex: 1,

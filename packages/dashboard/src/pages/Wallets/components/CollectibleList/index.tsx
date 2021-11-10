@@ -27,11 +27,13 @@ import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
 const useStyles = makeStyles()({
     root: {
         padding: '24px 26px 0px',
-        display: 'flex',
-        flexWrap: 'wrap',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, 140px)',
+        gridGap: '20px',
+        justifyContent: 'space-between',
     },
     card: {
-        padding: '10px 14px',
+        // padding: '10px 14px',
     },
     footer: {
         flex: 1,
