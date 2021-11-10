@@ -18,6 +18,7 @@ export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddr
             },
             fromBlock: MASK_BOX_CONTRACT_FROM_BLOCK,
         })
-        return first(events as unknown as CreationSuccess[])
+        const filtered = (events as unknown as CreationSuccess[]).filter((evt) => evt.returnValues.box_id === boxId)
+        return first(filtered)
     }, [boxId, creatorAddress, tokenAddress, maskBoxContract, MASK_BOX_CONTRACT_FROM_BLOCK])
 }

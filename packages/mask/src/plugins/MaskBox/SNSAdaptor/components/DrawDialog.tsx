@@ -112,6 +112,8 @@ export function DrawDialog(props: DrawDialogProps) {
     const chainId = useChainId()
     const providerType = useProviderType()
 
+    const balanceInsufficient = new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).gt(paymentTokenBalance)
+
     const onCount = useCallback(
         (step: number) => {
             setPaymentCount(paymentCount + step)
@@ -258,8 +260,9 @@ export function DrawDialog(props: DrawDialogProps) {
                             fullWidth
                             variant="contained"
                             sx={{ marginTop: 2 }}
+                            disabled={balanceInsufficient}
                             onClick={onSubmit}>
-                            Draw
+                            {balanceInsufficient ? 'Insufficient balance' : 'Draw'}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>
