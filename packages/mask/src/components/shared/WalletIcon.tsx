@@ -1,15 +1,24 @@
-import { NetworkIcon, ProviderIcon, useValueRef } from '@masknet/shared'
+import { NetworkIcon, ProviderIcon, useValueRef, useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { currentNetworkSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
+import { currentProviderSettings } from '../../plugins/Wallet/settings'
+import classNames from 'classnames'
+import { useChainId, getNetworkTypeFromChainId } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles()({
+interface StyleProps {
+    size: number
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         position: 'relative',
         display: 'flex',
+        height: props.size,
+        width: props.size,
     },
     mainIcon: {
         width: '100%',
         height: '100%',
+        borderRadius: '50%',
     },
     badgeIcon: {
         position: 'absolute',
@@ -18,27 +27,32 @@ const useStyles = makeStyles()({
         backgroundColor: '#ffffff',
         borderRadius: '50%',
     },
-})
+}))
 
-interface WalletIconProps {
+interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
     size?: number
     badgeSize?: number
 }
 
-export const WalletIcon = ({ size = 24, badgeSize = 14 }: WalletIconProps) => {
-    const { classes } = useStyles()
-    const selectedNetwork = useValueRef(currentNetworkSettings)
+export const WalletIcon = (props: WalletIconProps) => {
+    const { size = 24, badgeSize = 14 } = props
+    const chainId = useChainId()
+    const classes = useStylesExtends(useStyles({ size: badgeSize > size ? badgeSize : size }), props)
+    const selectedNetwork = getNetworkTypeFromChainId(chainId)
     const selectedWalletProvider = useValueRef(currentProviderSettings)
     return (
-        <div
-            className={classes.root}
-            style={{
-                height: size,
-                width: size,
-            }}>
-            <NetworkIcon classes={{ icon: classes.mainIcon }} size={size} networkType={selectedNetwork} />
+        <div className={classes.root}>
+            <NetworkIcon
+                classes={{
+                    icon: classNames(badgeSize > size ? classes.badgeIcon : classes.mainIcon, classes.networkIcon),
+                }}
+                size={size}
+                networkType={selectedNetwork}
+            />
             <ProviderIcon
-                classes={{ icon: classes.badgeIcon }}
+                classes={{
+                    icon: classNames(badgeSize > size ? classes.mainIcon : classes.badgeIcon, classes.providerIcon),
+                }}
                 size={badgeSize}
                 providerType={selectedWalletProvider}
             />

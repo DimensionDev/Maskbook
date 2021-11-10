@@ -147,7 +147,6 @@
     "wallet_balance": "余额",
     "wallet_new": "新建钱包",
     "wallets": "钱包",
-    "wallet_status_title": "账户",
     "wallet_status_button_change": "修改",
     "wallet_status_button_disconnect": "断开连接",
     "wallet_status_button_copy_address": "复制地址",
