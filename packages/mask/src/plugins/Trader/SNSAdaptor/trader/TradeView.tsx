@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
-import { Trader, TraderProps } from './Trade'
+import { Trader, TraderProps } from './Trader'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles()((theme) => {

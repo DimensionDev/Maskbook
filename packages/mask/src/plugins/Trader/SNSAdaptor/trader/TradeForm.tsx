@@ -5,7 +5,14 @@ import { InputTokenPanel } from './InputTokenPanel'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import { Box, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, formatBalance, formatPercentage, isLessThan, pow10 } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    EthereumTokenType,
+    formatBalance,
+    formatPercentage,
+    isLessThan,
+    pow10,
+} from '@masknet/web3-shared-evm'
 import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-es'
@@ -25,6 +32,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/Ethereum
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline } from '@mui/icons-material'
+import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -60,7 +68,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            margin: '24px 0 16px 0',
+            margin: '20px 0 16px 0',
             color: MaskColorVar.blue,
         },
         chevron: {
@@ -129,6 +137,7 @@ export interface AllTradeFormProps {
     focusedTrade?: TradeInfo
     onFocusedTradeChange: (trade: TradeInfo) => void
     onSwap: () => void
+    chainId: ChainId
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -145,6 +154,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         focusedTrade,
         onFocusedTradeChange,
         onSwap,
+        chainId,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
@@ -307,48 +317,60 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </div>
                 </Box>
                 <Box className={classes.section}>
-                    <EthereumWalletConnectedBoundary classes={{ connectWallet: classes.button }}>
-                        <EthereumERC20TokenApprovedBoundary
-                            amount={approveAmount.toFixed()}
-                            token={
-                                !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                approveToken?.type === EthereumTokenType.ERC20
-                                    ? approveToken
-                                    : undefined
-                            }
-                            spender={approveAddress}
-                            onlyInfiniteUnlock
-                            withChildren
-                            ActionButtonProps={{ classes: { root: classes.button, disabled: classes.disabledButton } }}
-                            infiniteUnlockContent={
-                                <Box component="span" display="flex" alignItems="center">
-                                    {t('plugin_trader_unlock_symbol', {
-                                        symbol: approveToken?.symbol,
-                                    })}
-                                    <Tooltip
-                                        title={t('plugin_trader_unlock_tips', {
-                                            provider: focusedTrade?.provider
-                                                ? resolveTradeProviderName(focusedTrade.provider)
-                                                : '',
+                    <EthereumChainBoundary
+                        chainId={chainId}
+                        noSwitchNetworkTip
+                        noChainIcon={false}
+                        ChainIconProps={{ size: 24 }}
+                        ActionButtonPromiseProps={{
+                            fullWidth: true,
+                            classes: { root: classes.button, disabled: classes.disabledButton },
+                        }}>
+                        <EthereumWalletConnectedBoundary classes={{ connectWallet: classes.button }}>
+                            <EthereumERC20TokenApprovedBoundary
+                                amount={approveAmount.toFixed()}
+                                token={
+                                    !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                                    approveToken?.type === EthereumTokenType.ERC20
+                                        ? approveToken
+                                        : undefined
+                                }
+                                spender={approveAddress}
+                                onlyInfiniteUnlock
+                                withChildren
+                                ActionButtonProps={{
+                                    classes: { root: classes.button, disabled: classes.disabledButton },
+                                }}
+                                infiniteUnlockContent={
+                                    <Box component="span" display="flex" alignItems="center">
+                                        {t('plugin_trader_unlock_symbol', {
                                             symbol: approveToken?.symbol,
                                         })}
-                                        arrow
-                                        disableFocusListener
-                                        disableTouchListener>
-                                        <HelpOutline style={{ marginLeft: 10 }} />
-                                    </Tooltip>
-                                </Box>
-                            }>
-                            <ActionButton
-                                fullWidth
-                                variant="contained"
-                                disabled={focusedTrade?.loading || !focusedTrade?.value || !!validationMessage}
-                                classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                onClick={onSwap}>
-                                {validationMessage || nativeWrapMessage}
-                            </ActionButton>
-                        </EthereumERC20TokenApprovedBoundary>
-                    </EthereumWalletConnectedBoundary>
+                                        <Tooltip
+                                            title={t('plugin_trader_unlock_tips', {
+                                                provider: focusedTrade?.provider
+                                                    ? resolveTradeProviderName(focusedTrade.provider)
+                                                    : '',
+                                                symbol: approveToken?.symbol,
+                                            })}
+                                            arrow
+                                            disableFocusListener
+                                            disableTouchListener>
+                                            <HelpOutline style={{ marginLeft: 10 }} />
+                                        </Tooltip>
+                                    </Box>
+                                }>
+                                <ActionButton
+                                    fullWidth
+                                    variant="contained"
+                                    disabled={focusedTrade?.loading || !focusedTrade?.value || !!validationMessage}
+                                    classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                    onClick={onSwap}>
+                                    {validationMessage || nativeWrapMessage}
+                                </ActionButton>
+                            </EthereumERC20TokenApprovedBoundary>
+                        </EthereumWalletConnectedBoundary>
+                    </EthereumChainBoundary>
                 </Box>
             </Box>
         )

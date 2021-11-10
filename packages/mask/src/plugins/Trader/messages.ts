@@ -2,7 +2,7 @@ import type { TagType } from './types'
 import type { DataProvider, TradeProvider } from '@masknet/public-api'
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
-import type { TraderProps } from './SNSAdaptor/trader/Trade'
+import type { TraderProps } from './SNSAdaptor/trader/Trader'
 
 interface CashTagEvent {
     name: string

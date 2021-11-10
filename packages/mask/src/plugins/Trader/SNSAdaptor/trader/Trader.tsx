@@ -53,14 +53,16 @@ const useStyles = makeStyles()((theme) => {
 export interface TraderProps extends withClasses<never> {
     coin?: Coin
     tokenDetailed?: FungibleTokenDetailed
+    chainId?: ChainId
 }
 
 export function Trader(props: TraderProps) {
-    const { coin, tokenDetailed } = props
+    const { coin, tokenDetailed, chainId: targetChainId } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
     const wallet = useWallet()
-    const chainId = useChainId()
+    const currentChainId = useChainId()
+    const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid()
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
@@ -290,6 +292,7 @@ export function Trader(props: TraderProps) {
                 focusedTrade={focusedTrade}
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
                 onSwap={onSwap}
+                chainId={chainId}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <ConfirmDialog

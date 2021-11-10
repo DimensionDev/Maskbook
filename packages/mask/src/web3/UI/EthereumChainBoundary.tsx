@@ -15,8 +15,18 @@ import {
     useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared-evm'
-import { useValueRef, delay, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
-import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import {
+    useValueRef,
+    delay,
+    useRemoteControlledDialog,
+    useStylesExtends,
+    ChainIcon,
+    ChainIconProps,
+} from '@masknet/shared'
+import ActionButton, {
+    ActionButtonPromise,
+    ActionButtonPromiseProps,
+} from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import Services from '../../extension/service'
 import { useI18N } from '../../utils'
@@ -26,10 +36,13 @@ const useStyles = makeStyles()(() => ({}))
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
     chainId: ChainId
+    noChainIcon?: boolean
     noSwitchNetworkTip?: boolean
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
+    ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
+    ChainIconProps?: Partial<ChainIconProps>
 }
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
@@ -39,7 +52,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const allowTestnet = useAllowTestnet()
     const providerType = useValueRef(currentProviderSettings)
 
-    const { noSwitchNetworkTip = false } = props
+    const { noSwitchNetworkTip = false, noChainIcon = true } = props
     const classes = useStylesExtends(useStyles(), props)
     const expectedChainId = props.chainId
     const expectedNetwork = expectedChainId === ChainId.BSC ? 'BSC' : getChainName(expectedChainId)
@@ -147,19 +160,59 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     size="small"
                     className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
-                    init={t('plugin_wallet_switch_network', {
-                        network: expectedNetwork,
-                    })}
-                    waiting={t('plugin_wallet_switch_network_under_going', {
-                        network: expectedNetwork,
-                    })}
-                    complete={t('plugin_wallet_switch_network', {
-                        network: expectedNetwork,
-                    })}
+                    init={
+                        noChainIcon ? (
+                            t('plugin_wallet_switch_network', {
+                                network: expectedNetwork,
+                            })
+                        ) : (
+                            <>
+                                <Box mr={1}>
+                                    <ChainIcon chainId={props.chainId} {...props.ChainIconProps} />
+                                </Box>
+                                {t('plugin_wallet_switch_network', {
+                                    network: expectedNetwork,
+                                })}
+                            </>
+                        )
+                    }
+                    waiting={
+                        noChainIcon ? (
+                            t('plugin_wallet_switch_network_under_going', {
+                                network: expectedNetwork,
+                            })
+                        ) : (
+                            <>
+                                <Box mr={1}>
+                                    <ChainIcon chainId={props.chainId} {...props.ChainIconProps} />
+                                </Box>
+                                {t('plugin_wallet_switch_network_under_going', {
+                                    network: expectedNetwork,
+                                })}
+                            </>
+                        )
+                    }
+                    complete={
+                        noChainIcon ? (
+                            t('plugin_wallet_switch_network', {
+                                network: expectedNetwork,
+                            })
+                        ) : (
+                            <>
+                                <Box mr={1}>
+                                    <ChainIcon chainId={props.chainId} {...props.ChainIconProps} />
+                                </Box>
+                                {t('plugin_wallet_switch_network', {
+                                    network: expectedNetwork,
+                                })}
+                            </>
+                        )
+                    }
                     failed={t('retry')}
                     executor={onSwitch}
                     completeOnClick={onSwitch}
                     failedOnClick="use executor"
+                    {...props.ActionButtonPromiseProps}
                 />
             ) : null}
         </Box>
