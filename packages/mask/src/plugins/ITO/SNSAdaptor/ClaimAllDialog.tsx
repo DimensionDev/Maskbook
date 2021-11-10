@@ -15,7 +15,8 @@ import {
     useAccount,
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
-import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
+import { NetworkTab } from '../../../components/shared/NetworkTab'
+import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { useI18N, Flags } from '../../../utils'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
@@ -200,9 +201,17 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         top: 0,
         width: '100%',
         zIndex: 2,
-        paddingTop: theme.spacing(4),
+        paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
         backgroundColor: theme.palette.background.paper,
+    },
+    walletStatusBox: {
+        width: 535,
+        margin: '24px auto',
+    },
+    claimAllButton: {
+        background: `${theme.palette.mode === 'light' ? '#111418' : '#EFF3F4'} !important`,
+        color: `${theme.palette.mode === 'light' ? '#FFFFFF' : '#0F1419'} !important`,
     },
 }))
 
@@ -292,6 +301,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     )
 
     useEffect(() => {
+        resetClaimCallback()
+        resetClaimCallbackOld()
+    }, [chainId])
+
+    useEffect(() => {
         if (claimStateOld.type === TransactionStateType.UNKNOWN) return
 
         if (claimStateOld.type === TransactionStateType.HASH) {
@@ -301,12 +315,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }, 2000)
             return
         }
-        const claimableTokens = swappedTokensOld!.filter((t) => t.isClaimable)
-        const summary =
-            'Claim ' +
-            new Intl.ListFormat('en').format(
-                claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-            )
+        const claimableTokens = swappedTokensOld?.filter((t) => t.isClaimable)
+        const summary = claimableTokens
+            ? 'Claim ' +
+              new Intl.ListFormat('en').format(
+                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
+              )
+            : ''
         setClaimTransactionDialog({
             open: true,
             state: claimStateOld,
@@ -325,12 +340,13 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }, 2000)
             return
         }
-        const claimableTokens = swappedTokens!.filter((t) => t.isClaimable)
-        const summary =
-            'Claim ' +
-            new Intl.ListFormat('en').format(
-                claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
-            )
+        const claimableTokens = swappedTokens?.filter((t) => t.isClaimable)
+        const summary = claimableTokens
+            ? 'Claim ' +
+              new Intl.ListFormat('en').format(
+                  claimableTokens.map((t) => formatBalance(t.amount, t.token.decimals) + ' ' + t.token.symbol),
+              )
+            : ''
         setClaimTransactionDialog({
             open: true,
             state: claimState,
@@ -339,24 +355,6 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
         })
     }, [claimState, swappedTokens /* update tx dialog only if state changed */])
 
-    const createTabItem = (name: string, chainId: ChainId) => ({
-        label: <span>{name}</span>,
-        sx: { p: 0 },
-        cb: () => setChainId(chainId),
-    })
-
-    const tabProps: AbstractTabProps = {
-        tabs: [
-            createTabItem('ETH', ChainId.Mainnet),
-            createTabItem('BSC', ChainId.BSC),
-            createTabItem('Polygon/Matic', ChainId.Matic),
-            createTabItem('Arbitrum', ChainId.Arbitrum),
-            createTabItem('xDai', ChainId.xDai),
-        ],
-        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].indexOf(chainId),
-        classes,
-        hasOnlyOneChild: true,
-    }
     return (
         <SnackbarProvider
             domRoot={DialogRef.current as HTMLElement}
@@ -366,8 +364,16 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             }}>
             <InjectedDialog open={open} onClose={onClose} title={t('plugin_ito_claim_all_dialog_title')}>
                 <DialogContent className={classes.wrapper}>
+                    <div className={classes.walletStatusBox}>
+                        <WalletStatusBox />
+                    </div>
                     <div className={classes.abstractTabWrapper}>
-                        <AbstractTab {...tabProps} />
+                        <NetworkTab
+                            chainId={chainId}
+                            setChainId={setChainId}
+                            classes={classes}
+                            chains={[ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai]}
+                        />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
                         {(showNftAirdrop || loadingAirdrop) &&
@@ -418,6 +424,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             <div className={classes.actionButtonWrapper}>
                                 <EthereumChainBoundary
                                     chainId={chainId}
+                                    classes={{ switchButton: classes.claimAllButton }}
                                     noSwitchNetworkTip={true}
                                     switchButtonStyle={{
                                         minHeight: 'auto',
@@ -426,9 +433,12 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                         fontWeight: 400,
                                     }}>
                                     {swappedTokens?.length || swappedTokensOld?.length ? (
-                                        <EthereumWalletConnectedBoundary>
+                                        <EthereumWalletConnectedBoundary
+                                            classes={{
+                                                connectWallet: classes.claimAllButton,
+                                            }}>
                                             <ActionButton
-                                                className={classes.actionButton}
+                                                className={classNames(classes.actionButton, classes.claimAllButton)}
                                                 variant="contained"
                                                 disabled={claimablePids!.length === 0}
                                                 size="large"
