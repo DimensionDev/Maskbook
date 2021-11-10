@@ -5,7 +5,14 @@ import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typograph
 import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon, ProviderIcon } from '@masknet/shared'
 import { unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
-import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared-evm'
+import {
+    getChainIdFromNetworkType,
+    ProviderType,
+    useAccount,
+    useChainId,
+    useWallets,
+    FortMatic,
+} from '@masknet/web3-shared-evm'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { useI18N } from '../../../../utils/i18n-next-ui'
@@ -245,7 +252,10 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 />
                             </ImageListItem>
                         ) : null}
-                        {Flags.fortmatic_support_enabled ? (
+                        {Flags.fortmatic_support_enabled &&
+                        Object.keys(FortMatic.API_KEY_CHAIN_MAPPINGS).includes(
+                            getChainIdFromNetworkType(undeterminedNetworkType).toString(),
+                        ) ? (
                             <ImageListItem>
                                 <Provider
                                     logo={

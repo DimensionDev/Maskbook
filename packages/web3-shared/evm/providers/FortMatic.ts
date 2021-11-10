@@ -6,7 +6,7 @@ import { first } from 'lodash-es'
 
 const TEST_KEY = 'pk_test_D3D403709D9F8A73'
 const LIVE_KEY = 'pk_live_EDC387083BCC4787'
-const API_KEY_MAPPINGS = {
+export const API_KEY_CHAIN_MAPPINGS = {
     [ChainId.Mainnet]: LIVE_KEY,
     [ChainId.BSC]: LIVE_KEY,
     [ChainId.Matic]: LIVE_KEY,
@@ -15,7 +15,7 @@ const API_KEY_MAPPINGS = {
     [ChainId.Kovan]: TEST_KEY,
 }
 
-export type FortmaticSupportedChainId = keyof typeof API_KEY_MAPPINGS
+export type FortmaticSupportedChainId = keyof typeof API_KEY_CHAIN_MAPPINGS
 
 //#region providers
 const providerPool = new Map<FortmaticSupportedChainId, Provider>()
@@ -26,7 +26,7 @@ export function createProvider(chainId: FortmaticSupportedChainId) {
     let provider = providerPool.get(chainId)
     if (provider) return provider
     const rpcUrl = first(getRPCConstants(chainId).RPC)!
-    const fm = new Fortmatic(API_KEY_MAPPINGS[chainId], { chainId, rpcUrl })
+    const fm = new Fortmatic(API_KEY_CHAIN_MAPPINGS[chainId], { chainId, rpcUrl })
     provider = fm.getProvider() as Provider
     providerPool.set(chainId, provider)
     return provider

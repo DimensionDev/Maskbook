@@ -1,8 +1,13 @@
 import { NetworkIcon, ProviderIcon, useValueRef } from '@masknet/shared'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { currentNetworkSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 
-const useStyles = makeStyles()({
+interface StyleProps {
+    selectedWalletProvider: ProviderType
+}
+
+const useStyles = makeStyles<StyleProps>()((_theme, props) => ({
     root: {
         position: 'relative',
         display: 'flex',
@@ -17,8 +22,9 @@ const useStyles = makeStyles()({
         bottom: -2,
         backgroundColor: '#ffffff',
         borderRadius: '50%',
+        ...(props.selectedWalletProvider === ProviderType.FortMatic ? { transform: 'scale(0.9)' } : {}),
     },
-})
+}))
 
 interface WalletIconProps {
     size?: number
@@ -26,9 +32,9 @@ interface WalletIconProps {
 }
 
 export const WalletIcon = ({ size = 24, badgeSize = 14 }: WalletIconProps) => {
-    const { classes } = useStyles()
     const selectedNetwork = useValueRef(currentNetworkSettings)
     const selectedWalletProvider = useValueRef(currentProviderSettings)
+    const { classes } = useStyles({ selectedWalletProvider })
     return (
         <div
             className={classes.root}
