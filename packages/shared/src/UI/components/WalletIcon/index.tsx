@@ -1,15 +1,26 @@
+import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { ImageIcon } from '..'
+import { useStylesExtends } from '../..'
 
-const useStyles = makeStyles()({
+interface StyleProps {
+    size: number
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         position: 'relative',
         display: 'flex',
+        height: props.size,
+        width: props.size,
     },
     mainIcon: {
         width: '100%',
         height: '100%',
+        borderRadius: '50%',
     },
+    networkIcon: {},
+    providerIcon: {},
     badgeIcon: {
         position: 'absolute',
         right: -2,
@@ -17,17 +28,19 @@ const useStyles = makeStyles()({
         backgroundColor: '#ffffff',
         borderRadius: '50%',
     },
-})
+}))
 
-interface WalletIconProps {
+interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
     size?: number
     badgeSize?: number
     networkIcon?: string
     providerIcon?: string
 }
 
-export const WalletIcon = ({ size = 24, badgeSize = 14, networkIcon, providerIcon }: WalletIconProps) => {
-    const { classes } = useStyles()
+export const WalletIcon = (props: WalletIconProps) => {
+    const { size = 24, badgeSize = 14, networkIcon, providerIcon } = props
+    const classes = useStylesExtends(useStyles({ size: badgeSize > size ? badgeSize : size }), props)
+
     return (
         <div
             className={classes.root}
@@ -35,9 +48,23 @@ export const WalletIcon = ({ size = 24, badgeSize = 14, networkIcon, providerIco
                 height: size,
                 width: size,
             }}>
-            {networkIcon ? <ImageIcon classes={{ icon: classes.mainIcon }} size={size} icon={networkIcon} /> : null}
+            {networkIcon ? (
+                <ImageIcon
+                    classes={{
+                        icon: classNames(badgeSize > size ? classes.badgeIcon : classes.mainIcon, classes.networkIcon),
+                    }}
+                    size={size}
+                    icon={networkIcon}
+                />
+            ) : null}
             {providerIcon ? (
-                <ImageIcon classes={{ icon: classes.badgeIcon }} size={badgeSize} icon={providerIcon} />
+                <ImageIcon
+                    classes={{
+                        icon: classNames(badgeSize > size ? classes.mainIcon : classes.badgeIcon, classes.providerIcon),
+                    }}
+                    size={badgeSize}
+                    icon={providerIcon}
+                />
             ) : null}
         </div>
     )

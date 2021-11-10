@@ -112,7 +112,7 @@ export async function getScores(
     strategies: Strategy[],
 ) {
     const provider = ss.utils.getProvider(network)
-    const blockTag = Number(snapshot) > blockNumber ? 'latest' : snapshot
+    const blockTag = Number(snapshot) > blockNumber ? 'latest' : Number(snapshot)
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
         space,
         strategies,
