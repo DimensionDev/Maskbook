@@ -7,6 +7,7 @@ import { noop } from 'lodash-es'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales'
 import { TokenIcon } from '../TokenIcon'
+import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -28,10 +29,11 @@ const useStyles = makeStyles()((theme) => {
             width: 16,
             height: 16,
         },
+        noToken: {},
     }
 })
 
-export interface SelectTokenChipProps {
+export interface SelectTokenChipProps extends withClasses<'chip' | 'tokenIcon' | 'noToken'> {
     token?: FungibleTokenDetailed | null
     error?: Error
     loading?: boolean
@@ -43,7 +45,7 @@ export interface SelectTokenChipProps {
 export function SelectTokenChip(props: SelectTokenChipProps) {
     const t = useSharedI18N()
     const { token, error, loading = false, readonly = false, ChipProps } = props
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     if (loading)
         return (
             <Chip
@@ -56,7 +58,13 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         )
     if (!token)
         return (
-            <Chip className={classes.chip} label={t.select_token()} size="small" clickable={!readonly} {...ChipProps} />
+            <Chip
+                className={classNames(classes.chip, classes.noToken)}
+                label={t.select_token()}
+                size="small"
+                clickable={!readonly}
+                {...ChipProps}
+            />
         )
 
     if (token && error)

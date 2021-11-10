@@ -21,7 +21,7 @@ import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { DODO_BASE_URL, UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import { useAsync, useTimeoutFn } from 'react-use'
+import { useAsync, useTimeoutFn, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
@@ -276,6 +276,11 @@ export function Trader(props: TraderProps) {
         }
     }, [])
     //#endregion
+
+    //#region reset focused trade when chainId, inputToken, outputToken, inputAmount be changed
+    useUpdateEffect(() => {
+        setFocusTrade(undefined)
+    }, [targetChainId, inputToken, outputToken, inputAmount])
 
     return (
         <div className={classes.root}>

@@ -18,6 +18,7 @@ function updateCurrentPrices(data: CryptoPrice) {
             }
         })
     })
+    console.log('update', currentPrices)
     currentTokenPricesSettings.value = currentPrices
 }
 

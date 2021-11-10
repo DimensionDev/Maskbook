@@ -3,7 +3,7 @@ import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import { Box, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import {
     ChainId,
@@ -121,6 +121,35 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: '#88898B!important',
             color: `${MaskColorVar.twitterButtonText}!important`,
         },
+        selectedTokenChip: {
+            borderRadius: `22px!important`,
+            height: 'auto',
+            backgroundColor: MaskColorVar.twitterInput,
+            [`& .${chipClasses.label}`]: {
+                paddingTop: 13,
+                paddingBottom: 13,
+                fontSize: 13,
+                lineHeight: '18px',
+            },
+        },
+        chipTokenIcon: {
+            width: 36,
+            height: 36,
+        },
+        noToken: {
+            borderRadius: `18px !important`,
+            backgroundColor: MaskColorVar.blue,
+            '&:hover': {
+                backgroundColor: MaskColorVar.blue.alpha(0.4),
+            },
+            [`& .${chipClasses.label}`]: {
+                paddingTop: 9,
+                paddingBottom: 9,
+                fontSize: 13,
+                lineHeight: '18px',
+                color: MaskColorVar.white,
+            },
+        },
     }
 })
 
@@ -164,6 +193,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         //#region approve token
         const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
             focusedTrade?.value ?? null,
+            focusedTrade?.provider,
             inputToken,
         )
 
@@ -234,6 +264,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         return (
             <Box className={classes.root}>
                 <InputTokenPanel
+                    chainId={chainId}
                     amount={inputAmount}
                     balance={inputTokenBalanceAmount.toFixed()}
                     token={inputToken}
@@ -268,6 +299,11 @@ export const TradeForm = memo<AllTradeFormProps>(
 
                     <Box className={classes.card}>
                         <SelectTokenChip
+                            classes={{
+                                chip: classes.selectedTokenChip,
+                                tokenIcon: classes.chipTokenIcon,
+                                noToken: classes.noToken,
+                            }}
                             token={outputToken}
                             ChipProps={{ onClick: () => onTokenChipClick(TokenPanelType.Output) }}
                         />
@@ -331,7 +367,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 amount={approveAmount.toFixed()}
                                 token={
                                     !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                    approveToken?.type === EthereumTokenType.ERC20
+                                    approveToken?.type === EthereumTokenType.ERC20 &&
+                                    !!approveAmount.toNumber()
                                         ? approveToken
                                         : undefined
                                 }
