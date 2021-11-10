@@ -22,8 +22,8 @@ const useStyles = makeStyles()({
 interface WalletIconProps {
     size?: number
     badgeSize?: number
-    networkIcon: string
-    providerIcon: string
+    networkIcon?: string
+    providerIcon?: string
 }
 
 export const WalletIcon = ({ size = 24, badgeSize = 14, networkIcon, providerIcon }: WalletIconProps) => {
@@ -35,8 +35,10 @@ export const WalletIcon = ({ size = 24, badgeSize = 14, networkIcon, providerIco
                 height: size,
                 width: size,
             }}>
-            <ImageIcon classes={{ icon: classes.mainIcon }} size={size} icon={networkIcon} />
-            <ImageIcon classes={{ icon: classes.badgeIcon }} size={badgeSize} icon={providerIcon} />
+            {networkIcon ? <ImageIcon classes={{ icon: classes.mainIcon }} size={size} icon={networkIcon} /> : null}
+            {providerIcon ? (
+                <ImageIcon classes={{ icon: classes.badgeIcon }} size={badgeSize} icon={providerIcon} />
+            ) : null}
         </div>
     )
 }

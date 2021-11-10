@@ -217,17 +217,6 @@ export namespace Plugin.Shared {
         }
     }
 
-    export enum CurrencyType {
-        NATIVE = 'native',
-        BTC = 'btc',
-        USD = 'usd',
-    }
-
-    export enum TokenType {
-        Fungible = 'Fungible',
-        NonFungible = 'NonFungible',
-    }
-
     export interface CryptoPrice {
         [token: string]: {
             [key in CurrencyType]: number
@@ -696,6 +685,25 @@ export enum CurrentSNSNetwork {
     Facebook = 1,
     Twitter = 2,
     Instagram = 3,
+}
+
+/**
+ * A network plugin defines the way to connect to a single chain.
+ */
+export enum NetworkPluginID {
+    PLUGIN_EVM = 'com.maskbook.evm',
+    PLUGIN_FLOW = 'com.maskbook.flow',
+}
+
+export enum CurrencyType {
+    NATIVE = 'native',
+    BTC = 'btc',
+    USD = 'usd',
+}
+
+export enum TokenType {
+    Fungible = 'Fungible',
+    NonFungible = 'NonFungible',
 }
 
 /**

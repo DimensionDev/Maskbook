@@ -19,12 +19,19 @@ import classNames from 'classnames'
 import { useCallback } from 'react'
 import { Copy, Edit3, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
+import { getMaskColor } from '@masknet/theme'
+import {
+    useNetworkType,
+    useProviderType,
+    useRegisteredPluginNetwork,
+    useRegisteredPluginProvider,
+} from '@masknet/plugin-infra'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import Services from '../../../../extension/service'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { currentProviderSettings } from '../../settings'
-import { getMaskColor } from '@masknet/theme'
+import { pluginIDSettings } from '../../../../settings/settings'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -103,6 +110,12 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const selectedWallet = useWallet()
     const selectedProviderType = useValueRef(currentProviderSettings)
 
+    const pluginID = useValueRef(pluginIDSettings)
+    const networkType = useNetworkType()
+    const providerType = useProviderType()
+    const network = useRegisteredPluginNetwork(pluginID, networkType)
+    const provider = useRegisteredPluginProvider(pluginID, providerType)
+
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
@@ -155,7 +168,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
         <InjectedDialog title={t('wallet_status_title')} open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <section className={`${classes.currentAccount} dashboard-style`}>
-                    <WalletIcon size={48} badgeSize={18} networkIcon="" providerIcon="" />
+                    <WalletIcon size={48} badgeSize={18} networkIcon={network?.icon} providerIcon={provider?.icon} />
                     <div className={classes.accountInfo}>
                         <div className={classes.infoRow}>
                             <Typography className={classes.accountName}>{selectedWallet.name}</Typography>

@@ -2,21 +2,19 @@ import React, { createContext, useContext } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import type { Plugin } from '..'
+import { CurrencyType, NetworkPluginID } from '../types'
 import { createConstantSubscription } from '../utils'
-
-// network plugins
-const PLUGIN_EVM_ID = 'com.maskbook.evm'
-const PLUGIN_FLOW_ID = 'com.maskbook.flow'
 
 // constant subscriptions
 const ZERO = createConstantSubscription(0)
 const ZERO_STRING = createConstantSubscription('0')
+const USD_CURRENCY = createConstantSubscription(CurrencyType.USD)
 const EMPTY_STRING = createConstantSubscription('')
 const EMPTY_ARRAY = createConstantSubscription([])
 const FALSE = createConstantSubscription(false)
 const NULL = createConstantSubscription(null)
 
-const PluginIDContext = createContext(PLUGIN_EVM_ID)
+const PluginIDContext = createContext(NetworkPluginID.PLUGIN_EVM)
 
 const PluginsWeb3Context = createContext<Record<string, Plugin.Shared.Web3State>>(null!)
 
@@ -42,7 +40,7 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Plugin.Sha
     const nameType = useSubscription(Shared?.nameType ?? EMPTY_STRING)
     const collectibleType = useSubscription(Shared?.collectibleType ?? EMPTY_STRING)
     const transactionType = useSubscription(Shared?.transactionType ?? EMPTY_STRING)
-    const currencyType = useSubscription(Shared?.currencyType ?? EMPTY_STRING)
+    const currencyType = useSubscription(Shared?.currencyType ?? USD_CURRENCY)
     const prices = useSubscription(Shared?.prices ?? NULL)
     const walletPrimary = useSubscription(Shared?.walletPrimary ?? NULL)
     const wallets = useSubscription(Shared?.wallets ?? EMPTY_ARRAY)
@@ -75,8 +73,8 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Plugin.Sha
 function usePluginsWeb3State() {
     const context = usePluginsWeb3Context()
     return {
-        [PLUGIN_EVM_ID]: usePluginWeb3State(PLUGIN_EVM_ID, context),
-        [PLUGIN_FLOW_ID]: usePluginWeb3State(PLUGIN_FLOW_ID, context),
+        [NetworkPluginID.PLUGIN_EVM]: usePluginWeb3State(NetworkPluginID.PLUGIN_EVM, context),
+        [NetworkPluginID.PLUGIN_FLOW]: usePluginWeb3State(NetworkPluginID.PLUGIN_FLOW, context),
     }
 }
 
@@ -97,7 +95,7 @@ export function PluginsWeb3ContextProvider({
     children,
 }: { pluginID: string } & React.ProviderProps<Record<string, Plugin.Shared.Web3State>>) {
     return (
-        <PluginIDContext.Provider value={pluginID}>
+        <PluginIDContext.Provider value={pluginID as NetworkPluginID}>
             <PluginsWeb3Context.Provider value={value}>
                 <PluginsWeb3StateContext.Provider>{children}</PluginsWeb3StateContext.Provider>
             </PluginsWeb3Context.Provider>
