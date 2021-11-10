@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
@@ -14,7 +14,6 @@ import { DetailsTab } from './DetailsTab'
 import { DrawResultDialog } from './DrawResultDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../../Wallet/messages'
-import { CountdownText } from './CountdownText'
 
 const useTabsStyles = makeStyles()((theme) => ({
     tab: {
@@ -135,19 +134,6 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [openBoxState.type])
     //#endregion
 
-    const actionButtonLabel = useMemo(() => {
-        if (!paymentTokenAddress) return boxStateMessage
-        switch (boxState) {
-            case BoxState.READY:
-                const formatted = formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)
-                return `${boxStateMessage} (${formatted}) ${paymentTokenDetailed?.symbol}`
-            case BoxState.NOT_READY:
-                return <CountdownText finishTime={boxInfo?.startAt.getTime() ?? 0} />
-            default:
-                return boxStateMessage
-        }
-    }, [paymentTokenAddress, boxStateMessage, boxInfo?.startAt])
-
     if (boxState === BoxState.UNKNOWN)
         return (
             <Box>
@@ -201,7 +187,14 @@ export function PreviewCard(props: PreviewCardProps) {
                     variant="contained"
                     disabled={boxState !== BoxState.READY}
                     onClick={() => setOpenDrawDialog(true)}>
-                    {actionButtonLabel}
+                    {boxState === BoxState.READY && paymentTokenAddress ? (
+                        <>
+                            {boxStateMessage} ({formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
+                            {paymentTokenDetailed?.symbol} each box)
+                        </>
+                    ) : (
+                        boxStateMessage
+                    )}
                 </ActionButton>
             </EthereumWalletConnectedBoundary>
             <DrawDialog

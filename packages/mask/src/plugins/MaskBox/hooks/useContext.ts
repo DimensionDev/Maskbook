@@ -26,10 +26,12 @@ import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
+import { useHeartBit } from './useHeartBit'
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 function useContext(initialState?: { boxId: string }) {
+    const heartBit = useHeartBit()
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
@@ -119,7 +121,7 @@ function useContext(initialState?: { boxId: string }) {
         if (boxInfo.startAt > now) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxInfo?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo])
+    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBit])
 
     const boxStateMessage = useMemo(() => {
         switch (boxState) {
@@ -146,7 +148,7 @@ function useContext(initialState?: { boxId: string }) {
             default:
                 unreachable(boxState)
         }
-    }, [boxState])
+    }, [boxState, heartBit])
     //#endregion
 
     //#region the box metadata
@@ -188,6 +190,7 @@ function useContext(initialState?: { boxId: string }) {
         ? paymentNativeTokenBalance
         : paymentERC20TokenBalance
     const paymentTokenDetailed = paymentTokenInfo?.token ?? null
+    const isBalanceInsufficient = new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).gt(paymentTokenBalance)
 
     useEffect(() => {
         const firstPaymentTokenAddress = first(boxInfo?.payments)?.token.address
@@ -251,6 +254,7 @@ function useContext(initialState?: { boxId: string }) {
         paymentTokenIndex,
         paymentTokenBalance,
         paymentTokenDetailed,
+        isBalanceInsufficient,
 
         // transactions
         openBoxTransaction,
