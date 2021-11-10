@@ -7,7 +7,7 @@ import type {
     IDBPCursorWithValueIteratorValue,
 } from 'idb/with-async-ittr-cjs'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { MaskMessages } from '../../utils/messages'
+import { MaskMessages } from '../../../shared'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined

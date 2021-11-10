@@ -2,7 +2,13 @@
  * @deprecated This version of payload is not in use.
  * Please goto Crypto alpha v38
  */
-import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
+import {
+    encodeText,
+    encodeArrayBuffer,
+    decodeArrayBuffer,
+    decodeText,
+    concatArrayBufferSync as addUint8Array,
+} from '@dimensiondev/kit'
 import { memoizePromise } from '../../utils-pure'
 import { makeTypedMessageText } from '../protocols/typed-message'
 import { i18n } from '../utils/i18n-next'
@@ -16,7 +22,6 @@ import {
     derive_AES_GCM_256_Key_From_PBKDF2,
     derive_AES_GCM_256_Key_From_ECDH_256k1_Keys,
 } from '../modules/CryptoAlgorithm/helper'
-import { addUint8Array } from '../utils/utils'
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecordV40 = {
     key: PublishedAESKey

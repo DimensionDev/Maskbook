@@ -106,24 +106,3 @@ export function batchReplace(source: string, group: Array<[string | RegExp, stri
     }
     return storage
 }
-
-export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
-    const x = new Uint8Array(a)
-    const y = new Uint8Array(b)
-    const c = new Uint8Array(x.length + y.length)
-    c.set(x)
-    c.set(y, x.length)
-    return c
-}
-/**
- * !!!! Please use the Promise constructor if possible
- * If you don't understand https://groups.google.com/forum/#!topic/bluebird-js/mUiX2-vXW2s
- */
-export function defer<T, E = unknown>() {
-    let a!: (val: T) => void, b!: (err: E) => void
-    const p = new Promise<T>((x, y) => {
-        a = x
-        b = y
-    })
-    return [p, a, b] as const
-}
