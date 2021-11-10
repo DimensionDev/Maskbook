@@ -24,5 +24,7 @@ export async function requestExtensionPermission(permission: browser.permissions
     })
 }
 export function queryExtensionPermission(permission: browser.permissions.Permissions) {
+    browser.permissions.getAll().then((res) => console.log(res))
+
     return browser.permissions.contains(permission)
 }

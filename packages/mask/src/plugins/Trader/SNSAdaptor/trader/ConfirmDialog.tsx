@@ -1,62 +1,80 @@
 import { useEffect, useState } from 'react'
-import { Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type BigNumber from 'bignumber.js'
-import { useStylesExtends } from '@masknet/shared'
-import { TradeSummary, TradeSummaryProps } from './TradeSummary'
-import { TokenPanel } from './TokenPanel'
-import { PriceStaleWarning } from './PriceStaleWarning'
+import { FormattedAddress, FormattedBalance, useStylesExtends } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { formatBalance } from '@masknet/web3-shared-evm'
-import type { TradeProvider } from '@masknet/public-api'
+import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
+import { ChainId, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../../utils'
+import { InfoIcon, RetweetIcon } from '@masknet/icons'
+import { ExternalLink } from 'react-feather'
+import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
-    reverseIcon: {
-        width: 16,
-        height: 16,
-        marginLeft: 5,
+    section: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        ['& > p']: {
+            fontSize: 16,
+            lineHeight: '22px',
+            color: MaskColorVar.twitterMain,
+            display: 'flex',
+            alignItems: 'center',
+            margin: '12px 0',
+        },
     },
-    tip: {
-        fontSize: 11,
-        margin: theme.spacing(1, 0, 2),
+    tokenIcon: {
+        width: 24,
+        height: 24,
+        marginRight: 4,
     },
-    summary: {
-        marginTop: theme.spacing(1),
-        marginBottom: 0,
+    alert: {
+        backgroundColor: MaskColorVar.twitterInfoBackground.alpha(0.1),
+        color: MaskColorVar.twitterInfo,
+        marginTop: 12,
+        fontSize: 12,
+        lineHeight: '16px',
+    },
+    alertIcon: {
+        color: MaskColorVar.twitterInfo,
     },
     button: {
-        paddingTop: 12,
-        paddingBottom: 12,
+        backgroundColor: MaskColorVar.twitterButton,
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 600,
+        padding: '13px 0',
+        borderRadius: 24,
+        height: 'auto',
+        color: MaskColorVar.twitterButtonText,
+        ['&:hover']: {
+            backgroundColor: MaskColorVar.twitterButton,
+            boxShadow: `0 0 5px ${MaskColorVar.twitterButton}`,
+        },
     },
 }))
 
 export interface ConfirmDialogUIProps extends withClasses<never> {
     open: boolean
     trade: TradeComputed
-    provider: TradeProvider
     inputToken: FungibleTokenDetailed
     outputToken: FungibleTokenDetailed
     onConfirm: () => void
     onClose?: () => void
-    TradeSummaryProps?: Partial<TradeSummaryProps>
+    wallet?: Wallet
+    chainId: ChainId
 }
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
+    const { t } = useI18N()
+
     const classes = useStylesExtends(useStyles(), props)
-    const {
-        open,
-        trade,
-        provider,
-        inputToken,
-        outputToken,
-        onConfirm,
-        onClose,
-        TradeSummaryProps: UniswapTradeSummaryProps,
-    } = props
-    const { inputAmount, outputAmount, minimumReceived } = trade
+    const { open, trade, wallet, chainId, inputToken, outputToken, onConfirm, onClose } = props
+    const { inputAmount, outputAmount } = trade
+
+    const [priceReversed, setPriceReversed] = useState(false)
 
     //#region detect price changing
     const [executionPrice, setExecutionPrice] = useState<BigNumber | undefined>(trade.executionPrice)
@@ -74,34 +92,119 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
         <>
             <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" maxWidth="xs">
                 <DialogContent>
-                    {inputToken && outputToken ? (
-                        <>
-                            <TokenPanel amount={inputAmount.toFixed() ?? '0'} token={inputToken} />
-                            <ArrowDownwardIcon className={classes.reverseIcon} />
-                            <TokenPanel amount={outputAmount.toFixed() ?? '0'} token={outputToken} />
-                        </>
-                    ) : null}
-                    {staled ? (
-                        <PriceStaleWarning
-                            onAccept={() => {
-                                setExecutionPrice(trade.executionPrice)
-                            }}
-                        />
-                    ) : null}
-                    <Typography
-                        className={classes.tip}
-                        color="textSecondary">{`Output is estimated. You will receive at least ${formatBalance(
-                        minimumReceived,
-                        outputToken.decimals,
-                    )} ${outputToken.symbol ?? 'Token'} or the transaction will revert.`}</Typography>
-                    <TradeSummary
-                        classes={{ root: classes.summary }}
-                        provider={provider}
-                        trade={trade}
-                        inputToken={inputToken}
-                        outputToken={outputToken}
-                        {...UniswapTradeSummaryProps}
-                    />
+                    <Box className={classes.section}>
+                        <Typography>{t('plugin_red_packet_nft_account_name')}</Typography>
+                        <Typography>
+                            ({wallet?.name})
+                            <FormattedAddress address={wallet?.address ?? ''} size={4} />
+                            <Link
+                                style={{ color: 'inherit' }}
+                                href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}>
+                                <ExternalLink style={{ marginLeft: 5 }} size={20} />
+                            </Link>
+                        </Typography>
+                    </Box>
+                    <Box className={classes.section}>
+                        <Typography>{t('plugin_trader_confirm_from')}</Typography>
+                        <Typography>
+                            <TokenIcon
+                                classes={{ icon: classes.tokenIcon }}
+                                address={inputToken.address}
+                                logoURI={inputToken.logoURI}
+                                name={inputToken.name}
+                            />
+                            <FormattedBalance
+                                value={inputAmount.toFixed() ?? '0'}
+                                decimals={inputToken.decimals}
+                                symbol={inputToken.symbol}
+                                significant={4}
+                            />
+                        </Typography>
+                    </Box>
+                    <Box className={classes.section}>
+                        <Typography>{t('plugin_trader_confirm_to')}</Typography>
+                        <Typography>
+                            <TokenIcon
+                                classes={{ icon: classes.tokenIcon }}
+                                address={outputToken.address}
+                                logoURI={outputToken.logoURI}
+                                name={outputToken.name}
+                            />
+                            <FormattedBalance
+                                value={outputAmount.toFixed() ?? '0'}
+                                decimals={outputToken.decimals}
+                                symbol={outputToken.symbol}
+                                significant={4}
+                            />
+                        </Typography>
+                    </Box>
+                    <Box className={classes.section}>
+                        <Typography>{t('plugin_trader_tab_price')}</Typography>
+                        <Typography>
+                            {priceReversed ? (
+                                <FormattedBalance
+                                    value={inputAmount.toFixed() ?? '0'}
+                                    decimals={inputToken.decimals}
+                                    symbol={inputToken.symbol}
+                                    significant={4}
+                                />
+                            ) : (
+                                <FormattedBalance
+                                    value={outputAmount.toFixed() ?? '0'}
+                                    decimals={outputToken.decimals}
+                                    symbol={outputToken.symbol}
+                                    significant={4}
+                                />
+                            )}
+                            <Box component="span" mx={0.5}>
+                                =
+                            </Box>
+                            {priceReversed ? (
+                                <FormattedBalance
+                                    value={outputAmount.toFixed() ?? '0'}
+                                    decimals={outputToken.decimals}
+                                    symbol={outputToken.symbol}
+                                    significant={4}
+                                />
+                            ) : (
+                                <FormattedBalance
+                                    value={inputAmount.toFixed() ?? '0'}
+                                    decimals={inputToken.decimals}
+                                    symbol={inputToken.symbol}
+                                    significant={4}
+                                />
+                            )}
+                            <RetweetIcon
+                                style={{ marginLeft: 4, cursor: 'pointer' }}
+                                onClick={() => setPriceReversed((x) => !x)}
+                            />
+                        </Typography>
+                    </Box>
+                    <Box className={classes.section}>
+                        <Typography>{t('plugin_trader_confirm_maximum_sold')}</Typography>
+                        <Typography>
+                            <FormattedBalance
+                                value={trade.maximumSold}
+                                decimals={inputToken.decimals}
+                                significant={6}
+                                symbol={inputToken.symbol}
+                            />
+                        </Typography>
+                    </Box>
+                    <Box className={classes.section}>
+                        <Typography>{t('plugin_trader_confirm_minimum_received')}</Typography>
+                        <Typography>
+                            <FormattedBalance
+                                value={trade.minimumReceived}
+                                decimals={outputToken.decimals}
+                                significant={6}
+                                symbol={outputToken.symbol}
+                            />
+                        </Typography>
+                    </Box>
+                    <Alert className={classes.alert} icon={<InfoIcon className={classes.alertIcon} />} severity="info">
+                        {t('plugin_trader_confirm_tips')}
+                    </Alert>
                 </DialogContent>
                 <DialogActions>
                     <Button

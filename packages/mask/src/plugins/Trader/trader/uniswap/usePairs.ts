@@ -1,11 +1,12 @@
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Pair } from '@uniswap/v2-sdk'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import { useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { getPairAddress } from '../../helpers'
-import { TradeContext } from '../useTradeContext'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'
+import type { TradeProvider } from '@masknet/public-api'
+import { useGetTradeContext } from '../useGetTradeContext'
 
 export enum PairState {
     NOT_EXISTS = 0,
@@ -15,8 +16,8 @@ export enum PairState {
 
 export type TokenPair = [Token, Token]
 
-export function usePairs(tokenPairs: readonly TokenPair[]) {
-    const context = useContext(TradeContext)
+export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly TokenPair[]) {
+    const context = useGetTradeContext(tradeProvider)
 
     const listOfPairAddress = useMemo(() => {
         if (!context) return []

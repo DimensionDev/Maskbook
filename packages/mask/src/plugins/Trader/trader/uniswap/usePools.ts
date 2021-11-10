@@ -1,11 +1,12 @@
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
 import { MulticallStateType, useChainId, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
-import { TradeContext } from '../useTradeContext'
+import type { TradeProvider } from '@masknet/public-api'
+import { useGetTradeContext } from '../useGetTradeContext'
 
 export enum PoolState {
     LOADING = 0,
@@ -15,10 +16,11 @@ export enum PoolState {
 }
 
 export function usePools(
+    tradeProvider: TradeProvider,
     poolKeys: [Currency | undefined, Currency | undefined, FeeAmount | undefined][],
 ): [PoolState, Pool | null][] {
     const chainId = useChainId()
-    const context = useContext(TradeContext)
+    const context = useGetTradeContext(tradeProvider)
 
     const transformed: ([Token, Token, FeeAmount] | null)[] = useMemo(() => {
         return poolKeys.map(([currencyA, currencyB, feeAmount]) => {
@@ -92,6 +94,7 @@ export function usePools(
 }
 
 export function usePool(
+    tradeProvider: TradeProvider,
     currencyA: Currency | undefined,
     currencyB: Currency | undefined,
     feeAmount: FeeAmount | undefined,
@@ -101,5 +104,5 @@ export function usePool(
         [currencyA, currencyB, feeAmount],
     )
 
-    return usePools(poolKeys)[0]
+    return usePools(tradeProvider, poolKeys)[0]
 }

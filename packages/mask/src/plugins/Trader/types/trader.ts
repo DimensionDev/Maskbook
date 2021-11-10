@@ -111,3 +111,11 @@ export interface TradeContext {
         [key in ChainId]?: Record<string, ERC20TokenDetailed[]>
     }
 }
+
+export interface TradeInfo {
+    loading: boolean
+    retry: () => void
+    value: TradeComputed | null
+    provider: TradeProvider
+    error?: Error
+}

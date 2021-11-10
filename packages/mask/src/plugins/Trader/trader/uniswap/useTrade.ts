@@ -3,6 +3,7 @@ import { TradeStrategy } from '../../types'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade'
 import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade'
+import type { TradeProvider } from '@masknet/public-api'
 
 function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
@@ -38,6 +39,7 @@ function useTrade(
 }
 
 export function useV2Trade(
+    tradeProvider: TradeProvider,
     strategy: TradeStrategy = TradeStrategy.ExactIn,
     inputAmount: string,
     outputAmount: string,
@@ -53,8 +55,12 @@ export function useV2Trade(
     )
 
     //#region v2
-    const v2BestTradeExactIn = useV2BestTradeExactIn(isExactIn ? tradeAmount : undefined, outputCurrency)
-    const v2BestTradeExactOut = useV2BestTradeExactOut(inputCurrency, !isExactIn ? tradeAmount : undefined)
+    const v2BestTradeExactIn = useV2BestTradeExactIn(tradeProvider, isExactIn ? tradeAmount : undefined, outputCurrency)
+    const v2BestTradeExactOut = useV2BestTradeExactOut(
+        tradeProvider,
+        inputCurrency,
+        !isExactIn ? tradeAmount : undefined,
+    )
     //#endregion
 
     const v2Trade = isExactIn ? v2BestTradeExactIn : v2BestTradeExactOut

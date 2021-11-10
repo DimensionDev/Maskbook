@@ -1,41 +1,77 @@
-import { useMemo } from 'react'
-import classNames from 'classnames'
-import { noop } from 'lodash-es'
-import BigNumber from 'bignumber.js'
-import { IconButton, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import TuneIcon from '@mui/icons-material/Tune'
-import RefreshOutlined from '@mui/icons-material/RefreshOutlined'
-import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
-import { TokenPanelType, TradeComputed, TradeStrategy, WarningLevel } from '../../types'
-import { TokenAmountPanel } from '../../../../web3/UI/TokenAmountPanel'
+import { memo, useMemo, useState } from 'react'
 import { useI18N } from '../../../../utils'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
-import { EthereumTokenType, formatPercentage, FungibleTokenDetailed, isLessThan, pow10 } from '@masknet/web3-shared-evm'
-import { currentSlippageSettings } from '../../settings'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { InputTokenPanel } from './InputTokenPanel'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import { Box, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, formatBalance, formatPercentage, isLessThan, pow10 } from '@masknet/web3-shared-evm'
+import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
+import BigNumber from 'bignumber.js'
+import { first, noop } from 'lodash-es'
+import { FormattedBalance, SelectTokenChip, useRemoteControlledDialog } from '@masknet/shared'
+import { ChevronUpIcon } from '@masknet/icons'
+import classnames from 'classnames'
+import { TraderInfo } from './TraderInfo'
 import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'
-import { resolveUniswapWarningLevel } from '../../pipes'
+import { currentSlippageSettings } from '../../settings'
+import RefreshOutlined from '@mui/icons-material/RefreshOutlined'
+import TuneIcon from '@mui/icons-material/Tune'
+import { MINIMUM_AMOUNT } from '../../constants'
+import { resolveTradeProviderName, resolveUniswapWarningLevel } from '../../pipes'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
-import { MINIMUM_AMOUNT } from '../../constants'
-import type { TradeProvider } from '@masknet/public-api'
+import { HelpOutline } from '@mui/icons-material'
 
 const useStyles = makeStyles()((theme) => {
     return {
-        form: {
-            marginTop: theme.spacing(2),
-            marginBottom: theme.spacing(2),
+        root: {
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
         },
-        section: {
-            textAlign: 'center',
-            margin: `${theme.spacing(1)}px auto`,
+        reverseIcon: {
+            cursor: 'pointer',
         },
-        divider: {
-            marginTop: theme.spacing(1.5),
-            marginBottom: theme.spacing(1),
+        card: {
+            backgroundColor: MaskColorVar.twitterInputBackground,
+            border: `1px solid ${MaskColorVar.twitterBorderLine}`,
+            borderRadius: 12,
+            padding: 12,
+        },
+        balance: {
+            fontSize: 14,
+            lineHeight: '20px',
+            color: MaskColorVar.twitterButton,
+        },
+        amount: {
+            color: MaskColorVar.twitterBlue,
+            marginLeft: 10,
+        },
+
+        reverse: {
+            backgroundColor: MaskColorVar.twitterInputBackground,
+            width: 32,
+            height: 32,
+            borderRadius: 16,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: '24px 0 16px 0',
+            color: MaskColorVar.blue,
+        },
+        chevron: {
+            fill: 'none',
+            stroke: MaskColorVar.twitterMain,
+            transition: 'all 300ms',
+            cursor: 'pointer',
+        },
+        reverseChevron: {
+            transform: `rotate(-180deg)`,
+            transition: 'all 300ms',
         },
         status: {
             marginTop: theme.spacing(0.5),
@@ -50,215 +86,271 @@ const useStyles = makeStyles()((theme) => {
         icon: {
             marginLeft: theme.spacing(0.5),
         },
-        reverseIcon: {
-            cursor: 'pointer',
+        section: {
+            width: '100%',
         },
         button: {
-            marginTop: theme.spacing(1.5),
-            paddingTop: 12,
-            paddingBottom: 12,
+            backgroundColor: MaskColorVar.twitterButton,
+            fontSize: 18,
+            lineHeight: '22px',
+            fontWeight: 600,
+            padding: '13px 0',
+            borderRadius: 24,
+            height: 'auto',
+            color: MaskColorVar.twitterButtonText,
+            ['&:hover']: {
+                backgroundColor: MaskColorVar.twitterButton,
+                boxShadow: `0 0 5px ${MaskColorVar.twitterButton}`,
+            },
+        },
+        disabledButton: {
+            fontSize: 18,
+            lineHeight: '22px',
+            fontWeight: 600,
+            padding: '13px 0',
+            borderRadius: 24,
+            height: 'auto',
+            backgroundColor: '#88898B!important',
+            color: `${MaskColorVar.twitterButtonText}!important`,
         },
     }
 })
 
-export interface TradeFormProps extends withClasses<never> {
-    trade: TradeComputed | null
-    strategy: TradeStrategy
-    provider: TradeProvider
-    loading: boolean
+export interface AllTradeFormProps {
+    inputAmount: string
     inputToken?: FungibleTokenDetailed
     outputToken?: FungibleTokenDetailed
-    inputAmount: string
-    outputAmount: string
     inputTokenBalance?: string
     outputTokenBalance?: string
     onInputAmountChange: (amount: string) => void
-    onOutputAmountChange: (amount: string) => void
-    onReverseClick?: () => void
-    onRefreshClick?: () => void
     onTokenChipClick?: (token: TokenPanelType) => void
+    onRefreshClick?: () => void
+    trades: TradeInfo[]
+    focusedTrade?: TradeInfo
+    onFocusedTradeChange: (trade: TradeInfo) => void
     onSwap: () => void
 }
 
-export function TradeForm(props: TradeFormProps) {
-    const { t } = useI18N()
-    const {
-        trade,
-        loading,
-        strategy,
+export const TradeForm = memo<AllTradeFormProps>(
+    ({
+        trades,
+        inputAmount,
         inputToken,
         outputToken,
+        onTokenChipClick = noop,
+        onInputAmountChange,
         inputTokenBalance,
         outputTokenBalance,
-        inputAmount,
-        outputAmount,
-        onInputAmountChange,
-        onOutputAmountChange,
-        onReverseClick = noop,
-        onRefreshClick = noop,
-        onTokenChipClick = noop,
+        onRefreshClick,
+        focusedTrade,
+        onFocusedTradeChange,
         onSwap,
-    } = props
-    const classes = useStylesExtends(useStyles(), props)
+    }) => {
+        const { t } = useI18N()
+        const { classes } = useStyles()
 
-    //#region approve token
-    const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(trade, inputToken)
-    //#endregion
+        const [isExpand, setIsExpand] = useState(false)
 
-    //#region token balance
-    const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
-    const outputTokenBalanceAmount = new BigNumber(outputTokenBalance || '0')
-    //#endregion
+        //#region approve token
+        const { approveToken, approveAmount, approveAddress } = useTradeApproveComputed(
+            focusedTrade?.value ?? null,
+            inputToken,
+        )
 
-    //#region remote controlled swap settings dialog
-    const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
-    //#endregion
+        //#region token balance
+        const inputTokenBalanceAmount = new BigNumber(inputTokenBalance || '0')
+        //#endregion
 
-    //#region form controls
-    const isExactIn = strategy === TradeStrategy.ExactIn
-    const inputTokenTradeAmount = new BigNumber(inputAmount || '0').multipliedBy(pow10(inputToken?.decimals ?? 0))
-    const outputTokenTradeAmount = new BigNumber(outputAmount || '0').multipliedBy(pow10(outputToken?.decimals ?? 0))
-    const inputPanelLabel =
-        loading && !isExactIn
-            ? t('plugin_trader_finding_price')
-            : 'From' + (!isExactIn && inputTokenTradeAmount.isGreaterThan(0) ? ' (estimated)' : '')
-    const outputPanelLabel =
-        loading && isExactIn
-            ? t('plugin_trader_finding_price')
-            : 'To' + (isExactIn && outputTokenTradeAmount.isGreaterThan(0) ? ' (estimated)' : '')
-    const sections = [
-        {
-            key: 'input',
-            children: (
-                <TokenAmountPanel
-                    label={inputPanelLabel}
+        //#region get the best trade
+        const bestTrade = useMemo(() => first(trades), [trades])
+        //#endregion
+
+        //#region remote controlled swap settings dialog
+        const { openDialog: openSwapSettingDialog } = useRemoteControlledDialog(
+            PluginTraderMessages.swapSettingsUpdated,
+        )
+        //#endregion
+
+        //#region form controls
+        const inputTokenTradeAmount = new BigNumber(inputAmount || '0').multipliedBy(pow10(inputToken?.decimals ?? 0))
+        //#endregion
+
+        //#region UI logic
+        // validate form return a message if an error exists
+        const validationMessage = useMemo(() => {
+            if (inputTokenTradeAmount.isZero()) return t('plugin_trader_error_amount_absence')
+            if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
+            if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
+            if (!trades.length) return t('plugin_trader_error_insufficient_lp')
+            if (inputTokenBalanceAmount.isLessThan(inputTokenBalanceAmount))
+                return t('plugin_trader_error_insufficient_balance', {
+                    symbol: inputToken?.symbol,
+                })
+            if (
+                focusedTrade?.value &&
+                resolveUniswapWarningLevel(focusedTrade.value.priceImpact) === WarningLevel.BLOCKED
+            )
+                return t('plugin_trader_error_price_impact_too_high')
+
+            return ''
+        }, [
+            inputAmount,
+            focusedTrade,
+            trades,
+            inputToken,
+            outputToken,
+            inputTokenBalanceAmount.toFixed(),
+            inputTokenTradeAmount.toFixed(),
+        ])
+        //#endregion
+
+        //#region native wrap message
+        const nativeWrapMessage = useMemo(() => {
+            if (focusedTrade?.value && isNativeTokenWrapper(focusedTrade.value)) {
+                return focusedTrade.value.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
+            }
+
+            return t('plugin_trader_swap_amount_symbol', {
+                amount: formatBalance(
+                    focusedTrade?.value?.outputAmount ?? 0,
+                    focusedTrade?.value?.outputToken?.decimals,
+                    2,
+                ),
+                symbol: outputToken?.symbol,
+            })
+        }, [focusedTrade, outputToken])
+        //#endregion
+
+        return (
+            <Box className={classes.root}>
+                <InputTokenPanel
                     amount={inputAmount}
                     balance={inputTokenBalanceAmount.toFixed()}
                     token={inputToken}
                     onAmountChange={onInputAmountChange}
-                    TextFieldProps={{
-                        disabled: !inputToken,
-                    }}
                     SelectTokenChip={{
                         ChipProps: {
                             onClick: () => onTokenChipClick(TokenPanelType.Input),
                         },
                     }}
                 />
-            ),
-        },
-        {
-            key: 'divider',
-            children: (
-                <Typography color="primary">
-                    <ArrowDownwardIcon className={classes.reverseIcon} onClick={onReverseClick} />
-                </Typography>
-            ),
-        },
-        {
-            key: 'output',
-            children: (
-                <TokenAmountPanel
-                    label={outputPanelLabel}
-                    amount={outputAmount}
-                    balance={outputTokenBalanceAmount.toFixed()}
-                    token={outputToken}
-                    onAmountChange={onOutputAmountChange}
-                    MaxChipProps={{ style: { display: 'none' } }}
-                    TextFieldProps={{
-                        disabled: !outputToken,
-                    }}
-                    SelectTokenChip={{
-                        ChipProps: {
-                            onClick: () => onTokenChipClick(TokenPanelType.Output),
-                        },
-                    }}
-                />
-            ),
-        },
-    ] as {
-        key: 'input' | 'output' | 'divider'
-        children?: React.ReactNode
-    }[]
-    //#endregion
+                <Box className={classes.reverse}>
+                    <ArrowDownwardIcon className={classes.reverseIcon} />
+                </Box>
+                <Box className={classes.section}>
+                    <Box display="flex" justifyContent="space-between" mb={1}>
+                        {outputToken && outputTokenBalance !== undefined ? (
+                            <>
+                                <Typography>{t('plugin_trader_swap_to')}</Typography>
+                                <Typography className={classes.balance}>
+                                    {t('plugin_ito_list_table_got')}:
+                                    <Typography component="span" className={classes.amount}>
+                                        <FormattedBalance
+                                            value={outputTokenBalance}
+                                            decimals={outputToken?.decimals}
+                                            significant={6}
+                                        />
+                                    </Typography>
+                                </Typography>
+                            </>
+                        ) : null}
+                    </Box>
 
-    //#region UI logic
-    // validate form return a message if an error exists
-    const validationMessage = useMemo(() => {
-        if (inputTokenTradeAmount.isZero() && outputTokenTradeAmount.isZero())
-            return t('plugin_trader_error_amount_absence')
-        if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
-        if (isLessThan(outputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_output_amount_less_minimum_amount')
-        if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
-        if (loading) return t('plugin_trader_finding_price')
-        if (!trade) return t('plugin_trader_error_insufficient_lp')
-        if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
-            return t('plugin_trader_error_insufficient_balance', {
-                symbol: inputToken?.symbol,
-            })
-        if (resolveUniswapWarningLevel(trade.priceImpact) === WarningLevel.BLOCKED)
-            return t('plugin_trader_error_price_impact_too_high')
-        return ''
-    }, [
-        trade,
-        loading,
-        inputToken,
-        outputToken,
-        inputTokenBalanceAmount.toFixed(),
-        inputTokenTradeAmount.toFixed(),
-        outputTokenTradeAmount.toFixed(),
-        trade?.priceImpact,
-    ])
-    //#endregion
+                    <Box className={classes.card}>
+                        <SelectTokenChip
+                            token={outputToken}
+                            ChipProps={{ onClick: () => onTokenChipClick(TokenPanelType.Output) }}
+                        />
 
-    return (
-        <div className={classes.form}>
-            {sections.map(({ key, children }) => (
-                <div className={classNames(classes.section, key === 'divider' ? classes.divider : '')} key={key}>
-                    {children}
-                </div>
-            ))}
-            <div className={classes.section}>
-                <div className={classes.status}>
-                    <Typography className={classes.label} color="textSecondary" variant="body2">
-                        {t('plugin_trader_slippage_tolerance')}{' '}
-                        {formatPercentage(toBips(currentSlippageSettings.value))}
-                    </Typography>
-                    <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
-                        <RefreshOutlined fontSize="small" />
-                    </IconButton>
-                    <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
-                        <TuneIcon fontSize="small" />
-                    </IconButton>
-                </div>
-            </div>
-            <div className={classes.section}>
-                <EthereumWalletConnectedBoundary>
-                    <EthereumERC20TokenApprovedBoundary
-                        amount={approveAmount.toFixed()}
-                        token={
-                            !isNativeTokenWrapper(trade) && approveToken?.type === EthereumTokenType.ERC20
-                                ? approveToken
-                                : undefined
-                        }
-                        spender={approveAddress}>
-                        <ActionButton
-                            className={classes.button}
-                            fullWidth
-                            variant="contained"
-                            size="large"
-                            disabled={loading || !!validationMessage}
-                            onClick={onSwap}>
-                            {validationMessage ||
-                                (isNativeTokenWrapper(trade)
-                                    ? trade?.trade_?.isWrap
-                                        ? t('plugin_trader_wrap')
-                                        : t('plugin_trader_unwrap')
-                                    : t('plugin_trader_swap'))}
-                        </ActionButton>
-                    </EthereumERC20TokenApprovedBoundary>
-                </EthereumWalletConnectedBoundary>
-            </div>
-        </div>
-    )
-}
+                        <Box marginTop="10px">
+                            {bestTrade ? (
+                                <TraderInfo
+                                    trade={bestTrade}
+                                    onClick={() => onFocusedTradeChange(bestTrade)}
+                                    isFocus={bestTrade.provider === focusedTrade?.provider}
+                                    isBest
+                                />
+                            ) : null}
+                            <Collapse in={isExpand}>
+                                {trades.slice(1).map((trade) => (
+                                    <TraderInfo
+                                        key={trade.provider}
+                                        trade={trade}
+                                        onClick={() => onFocusedTradeChange(trade)}
+                                        isFocus={trade.provider === focusedTrade?.provider}
+                                    />
+                                ))}
+                            </Collapse>
+                        </Box>
+                        {trades.filter((item) => !!item.value).length > 1 ? (
+                            <Box width="100%" display="flex" justifyContent="center" marginTop={2.5}>
+                                <ChevronUpIcon
+                                    className={classnames(classes.chevron, isExpand ? classes.reverseChevron : null)}
+                                    onClick={() => setIsExpand(!isExpand)}
+                                />
+                            </Box>
+                        ) : null}
+                    </Box>
+                </Box>
+                <Box className={classes.section} my={1}>
+                    <div className={classes.status}>
+                        <Typography className={classes.label} color="textSecondary" variant="body2">
+                            {t('plugin_trader_slippage_tolerance')}{' '}
+                            {formatPercentage(toBips(currentSlippageSettings.value))}
+                        </Typography>
+                        <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
+                            <RefreshOutlined fontSize="small" />
+                        </IconButton>
+                        <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
+                            <TuneIcon fontSize="small" />
+                        </IconButton>
+                    </div>
+                </Box>
+                <Box className={classes.section}>
+                    <EthereumWalletConnectedBoundary classes={{ connectWallet: classes.button }}>
+                        <EthereumERC20TokenApprovedBoundary
+                            amount={approveAmount.toFixed()}
+                            token={
+                                !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                                approveToken?.type === EthereumTokenType.ERC20
+                                    ? approveToken
+                                    : undefined
+                            }
+                            spender={approveAddress}
+                            onlyInfiniteUnlock
+                            withChildren
+                            ActionButtonProps={{ classes: { root: classes.button, disabled: classes.disabledButton } }}
+                            infiniteUnlockContent={
+                                <Box component="span" display="flex" alignItems="center">
+                                    {t('plugin_trader_unlock_symbol', {
+                                        symbol: approveToken?.symbol,
+                                    })}
+                                    <Tooltip
+                                        title={t('plugin_trader_unlock_tips', {
+                                            provider: focusedTrade?.provider
+                                                ? resolveTradeProviderName(focusedTrade.provider)
+                                                : '',
+                                            symbol: approveToken?.symbol,
+                                        })}
+                                        arrow
+                                        disableFocusListener
+                                        disableTouchListener>
+                                        <HelpOutline style={{ marginLeft: 10 }} />
+                                    </Tooltip>
+                                </Box>
+                            }>
+                            <ActionButton
+                                fullWidth
+                                variant="contained"
+                                disabled={focusedTrade?.loading || !focusedTrade?.value || !!validationMessage}
+                                classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                onClick={onSwap}>
+                                {validationMessage || nativeWrapMessage}
+                            </ActionButton>
+                        </EthereumERC20TokenApprovedBoundary>
+                    </EthereumWalletConnectedBoundary>
+                </Box>
+            </Box>
+        )
+    },
+)

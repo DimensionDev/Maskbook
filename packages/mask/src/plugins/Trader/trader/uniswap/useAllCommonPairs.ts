@@ -1,16 +1,17 @@
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import { flatMap } from 'lodash-es'
 import type { Pair } from '@uniswap/v2-sdk'
 import type { Currency, Token } from '@uniswap/sdk-core'
 import { useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
 import { toUniswapToken } from '../../helpers'
-import { TradeContext } from '../useTradeContext'
 import { PairState, usePairs } from './usePairs'
+import type { TradeProvider } from '@masknet/public-api'
+import { useGetTradeContext } from '../useGetTradeContext'
 
-export function useAllCurrencyCombinations(currencyA?: Currency, currencyB?: Currency) {
+export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
-    const context = useContext(TradeContext)
+    const context = useGetTradeContext(tradeProvider)
 
     const [tokenA, tokenB] = chainIdValid ? [currencyA?.wrapped, currencyB?.wrapped] : [undefined, undefined]
 
@@ -63,9 +64,10 @@ export function useAllCurrencyCombinations(currencyA?: Currency, currencyB?: Cur
     }, [tokenA?.address, tokenB?.address, bases, basePairs, chainId, chainIdValid])
 }
 
-export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency) {
-    const allCurrencyCombinations = useAllCurrencyCombinations(currencyA, currencyB)
-    const { value: allPairs, ...asyncResult } = usePairs(allCurrencyCombinations)
+export function useAllCommonPairs(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
+    const allCurrencyCombinations = useAllCurrencyCombinations(tradeProvider, currencyA, currencyB)
+
+    const { value: allPairs, ...asyncResult } = usePairs(tradeProvider, allCurrencyCombinations)
 
     // only pass along valid pairs, non-duplicated pairs
     const allPairs_ = useMemo(

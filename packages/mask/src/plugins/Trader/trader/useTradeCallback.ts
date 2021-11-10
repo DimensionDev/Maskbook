@@ -1,4 +1,3 @@
-import { useContext } from 'react'
 import type { Trade as V2Trade } from '@uniswap/v2-sdk'
 import type { Trade as V3Trade } from '@uniswap/v3-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
@@ -20,14 +19,14 @@ import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
-import { TradeContext } from './useTradeContext'
+import { useGetTradeContext } from './useGetTradeContext'
 
-export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
+export function useTradeCallback(provider?: TradeProvider, tradeComputed?: TradeComputed<unknown> | null) {
     // trade context
-    const context = useContext(TradeContext)
+    const context = useGetTradeContext(provider)
 
     // create trade computed
-    const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed)
+    const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =
         context?.IS_UNISWAP_V2_LIKE && !isNativeTokenWrapper_
             ? (tradeComputed as TradeComputed<V2Trade<Currency, Currency, TradeType>>)
@@ -86,6 +85,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         case TradeProvider.BANCOR:
             return bancor
         default:
-            unreachable(provider)
+            if (provider) unreachable(provider)
+            return []
     }
 }

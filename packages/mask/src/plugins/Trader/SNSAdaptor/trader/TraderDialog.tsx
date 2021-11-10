@@ -4,15 +4,15 @@ import { DialogContent } from '@mui/material'
 import type { TradeProvider } from '@masknet/public-api'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { TradeFooter } from './TradeFooter'
 import type { FootnoteMenuOption } from './FootnoteMenu'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { useCurrentTradeProvider } from '../../trending/useCurrentTradeProvider'
 import { useAvailableTraderProviders } from '../../trending/useAvailableTraderProviders'
 import { currentTradeProviderSettings } from '../../settings'
 import { TagType } from '../../types'
 import { PluginTraderMessages } from '../../messages'
-import { Trader, TraderProps } from './Trader'
+import { Trader, TraderProps } from './Trade'
 import { useI18N } from '../../../../utils'
 
 export function TraderDialog() {
@@ -27,7 +27,6 @@ export function TraderDialog() {
     const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK')
     const tradeProvider = useCurrentTradeProvider()
     const tradeContext = useTradeContext(tradeProvider)
-
     const onTradeProviderChange = useCallback((option: FootnoteMenuOption) => {
         currentTradeProviderSettings.value = option.value as TradeProvider
     }, [])
@@ -38,18 +37,13 @@ export function TraderDialog() {
 
     return (
         <TradeContext.Provider value={tradeContext}>
-            <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap')}>
-                <DialogContent>
-                    <Trader {...traderProps} />
-                    <TradeFooter
-                        showDataProviderIcon={false}
-                        showTradeProviderIcon
-                        tradeProvider={tradeProvider}
-                        tradeProviders={tradeProviders}
-                        onTradeProviderChange={onTradeProviderChange}
-                    />
-                </DialogContent>
-            </InjectedDialog>
+            <AllProviderTradeContext.Provider>
+                <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap')}>
+                    <DialogContent>
+                        <Trader {...traderProps} />
+                    </DialogContent>
+                </InjectedDialog>
+            </AllProviderTradeContext.Provider>
         </TradeContext.Provider>
     )
 }
