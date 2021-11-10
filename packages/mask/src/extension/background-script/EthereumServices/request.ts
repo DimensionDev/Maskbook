@@ -8,7 +8,7 @@ import {
 } from '../../../plugins/Wallet/settings'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { INTERNAL_nativeSend, INTERNAL_send, SendOverrides } from './send'
-import { defer } from '../../../utils'
+import { defer } from '../../../../utils-pure'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { openPopupWindow } from '../HelperService'
 import Services from '../../service'

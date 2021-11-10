@@ -1,6 +1,5 @@
 import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
 import { i18n } from '../utils/i18n-next'
-import { startEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
@@ -98,7 +97,7 @@ export const currentPopupWindowId = createGlobalSettings<number>('currentPopupWi
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-startEffect(import.meta.webpackHot, () => {
+try {
     // Migrate language settings
     const lng: string = languageSettings.value
     if (lng === 'en') languageSettings.value = LanguageOptions.enUS
@@ -106,4 +105,4 @@ startEffect(import.meta.webpackHot, () => {
     else if (lng === 'ja') languageSettings.value = LanguageOptions.jaJP
     else if (lng === 'ko') languageSettings.value = LanguageOptions.koKR
     else languageSettings.value = LanguageOptions.__auto__
-})
+} catch {}

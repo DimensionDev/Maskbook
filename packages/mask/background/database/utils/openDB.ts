@@ -7,9 +7,16 @@ import type {
     IDBPCursorWithValueIteratorValue,
 } from 'idb/with-async-ittr-cjs'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
+import { MaskMessages } from '../../../shared'
 
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
+    MaskMessages.events.mobile_app_suspended.on(() => {
+        if (db) {
+            db.close()
+            db.addEventListener('close', () => (db = undefined))
+        }
+    })
     function clean() {
         db = undefined
     }
@@ -38,6 +45,12 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     asyncUpgradePrepare: (db: IDBPDatabase<DBSchema>) => Promise<AsyncUpgradePreparedData | undefined>,
 ) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
+    MaskMessages.events.mobile_app_suspended.on(() => {
+        if (db) {
+            db.close()
+            db.addEventListener('close', () => (db = undefined))
+        }
+    })
     let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined = undefined
     async function open(): Promise<IDBPDatabase<DBSchema>> {
         assertEnvironment(Environment.ManifestBackground)

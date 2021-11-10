@@ -16,6 +16,7 @@
     { "path": "../plugin-infra" },
     { "path": "../plugins/Flow/" },
     { "path": "../plugins/Wallet/" },
-    { "path": "../backup-format/" }
+    { "path": "../backup-format/" },
+    { "path": "../shared-base" }
   ]
 }
