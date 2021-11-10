@@ -6,7 +6,7 @@ import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { escapeRegExp } from 'lodash-es'
 import { BASE_URL, VALID_CHAINS_ID } from '../constants'
-import { MarketView } from './market'
+import { MarketView } from './MarketView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ChainId } from '@masknet/web3-shared-evm'
 

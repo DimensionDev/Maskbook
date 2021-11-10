@@ -34,8 +34,8 @@ import { useBaseToken } from '../hooks/useBaseToken'
 import { useRentCallback } from '../hooks/useRentCallback'
 import { useExitCallback } from '../hooks/useExitCallback'
 import { MINIMUM_ACCEPTED_PRICE } from '../constants'
-import { DepositDialog } from './depositDialog'
-import { PricePanel } from './pricePanel'
+import { DepositDialog } from './DepositDialog'
+import { PricePanel } from './PricePanel'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
@@ -310,7 +310,7 @@ export function CardDialog(props: CardDialogProps) {
             <DialogContent>
                 {errorTokenBalance ? (
                     <Typography className={classes.message} color="textPrimary">
-                        {t('plugin_dhedge_smt_wrong')}
+                        {t('plugin_realitycards_error_something_went_wrong')}
                         <RefreshIcon className={classes.refresh} color="primary" onClick={tokenBalanceRetry} />
                     </Typography>
                 ) : (

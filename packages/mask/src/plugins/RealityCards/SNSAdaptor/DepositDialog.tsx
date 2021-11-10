@@ -181,7 +181,7 @@ export function DepositDialog(props: DepositDialogProps) {
             <DialogContent>
                 {errorTokenBalance ? (
                     <Typography className={classes.message} color="textPrimary">
-                        {t('plugin_dhedge_smt_wrong')}
+                        {t('plugin_realitycards_error_something_went_wrong')}
                         <RefreshIcon className={classes.refresh} color="primary" onClick={tokenBalanceRetry} />
                     </Typography>
                 ) : (
