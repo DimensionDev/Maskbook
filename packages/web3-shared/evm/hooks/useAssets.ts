@@ -21,7 +21,9 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
-    } = useAssetsFromChain(nativeTokenDetailed ? [nativeTokenDetailed, ...tokens] : tokens)
+    } = useAssetsFromChain(
+        nativeTokenDetailed && !nativeTokenDetailedLoading ? [nativeTokenDetailed, ...tokens] : tokens,
+    )
 
     const {
         value: assetsDetailedProvider = [],
