@@ -79,15 +79,17 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
 
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const supportedNetworkNativeTokenAssets = useMemo(() => {
-        if (selectedChainId || !networks) return []
-        return networks.map((x) => {
-            const chainId = getChainIdFromNetworkType(x)
-            return {
-                chain: getChainDetailed(chainId)?.shortName.toLowerCase() ?? 'unknown',
-                token: createNativeToken(chainId),
-                balance: '0',
-            }
-        })
+        if (!networks) return []
+        return networks
+            .map((x) => {
+                const chainId = getChainIdFromNetworkType(x)
+                return {
+                    chain: getChainDetailed(chainId)?.shortName.toLowerCase() ?? 'unknown',
+                    token: createNativeToken(chainId),
+                    balance: '0',
+                }
+            })
+            .filter((x) => !selectedChainId || x.token.chainId === selectedChainId)
     }, [selectedChainId, networks])
 
     const {
@@ -96,17 +98,25 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         value: detailedTokens,
     } = useAssets(
         trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
-        selectedChainId === null ? 'all' : selectedChainId,
+        selectedChainId ?? 'all',
     )
 
     const assetsWithNativeToken = useMemo(() => {
-        if (selectedChainId) return detailedTokens
-        const assets = supportedNetworkNativeTokenAssets.filter(
-            (x) =>
-                !detailedTokens.find(
-                    (t) => t.token.chainId === x.token.chainId && t.token.type === EthereumTokenType.Native,
-                ),
-        )
+        let assets = []
+        if (selectedChainId) {
+            assets = detailedTokens.find(
+                (t) => t.token.chainId === selectedChainId && t.token.type === EthereumTokenType.Native,
+            )
+                ? []
+                : supportedNetworkNativeTokenAssets
+        } else {
+            assets = supportedNetworkNativeTokenAssets.filter(
+                (x) =>
+                    !detailedTokens.find(
+                        (t) => t.token.chainId === x.token.chainId && t.token.type === EthereumTokenType.Native,
+                    ),
+            )
+        }
         return [...detailedTokens, ...assets].sort(makeSortAssertWithoutChainFn())
     }, [selectedChainId, supportedNetworkNativeTokenAssets, detailedTokens])
 
@@ -133,7 +143,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     return (
         <TokenTableUI
             isLoading={detailedTokensLoading}
-            isEmpty={!!detailedTokensError || !detailedTokens.length}
+            isEmpty={!!detailedTokensError || !assetsWithNativeToken.length}
             dataSource={assetsWithNativeToken}
             onSwap={onSwap}
             onSend={onSend}

@@ -1,29 +1,23 @@
 import type { ChainId, FungibleTokenDetailed } from '../types'
 import { useWallet } from './useWallet'
-import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback } from 'react'
 import { useAssetsMerged } from './useAssetsMerged'
-import { formatEthereumAddress } from '../utils'
+import { createNativeToken, formatEthereumAddress } from '../utils'
+import { useChainId } from './useChainId'
 
 export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | 'all') {
     const wallet = useWallet()
-    const {
-        value: nativeTokenDetailed,
-        loading: nativeTokenDetailedLoading,
-        error: nativeTokenDetailedError,
-        retry: retryNativeTokenDetailed,
-    } = useNativeTokenDetailed(chainId === 'all' ? undefined : chainId)
+    const currentChainId = useChainId()
+    const nativeTokenDetailed = chainId === 'all' ? null : createNativeToken(chainId ?? currentChainId)
 
     const {
         value: assetsDetailedChain = [],
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
-    } = useAssetsFromChain(
-        nativeTokenDetailed && !nativeTokenDetailedLoading ? [nativeTokenDetailed, ...tokens] : tokens,
-    )
+    } = useAssetsFromChain(nativeTokenDetailed ? [nativeTokenDetailed, ...tokens] : tokens)
 
     const {
         value: assetsDetailedProvider = [],
@@ -33,10 +27,9 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
     } = useAssetsFromProvider(chainId)
 
     const detailedTokensRetry = useCallback(() => {
-        retryNativeTokenDetailed()
         retryAssetsDetailedChain()
         retryAssetsDetailedDebank()
-    }, [retryNativeTokenDetailed, retryAssetsDetailedChain, retryAssetsDetailedDebank])
+    }, [retryAssetsDetailedChain, retryAssetsDetailedDebank])
 
     const assetsDetailed = useAssetsMerged(
         assetsDetailedProvider,
@@ -45,8 +38,8 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
 
     return {
         value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatEthereumAddress(x.token.address))),
-        error: nativeTokenDetailedError || assetsDetailedChainError || assetsDetailedProviderError,
-        loading: nativeTokenDetailedLoading || assetsDetailedChainLoading || assetsDetailedProviderLoading,
+        error: assetsDetailedChainError || assetsDetailedProviderError,
+        loading: assetsDetailedChainLoading || assetsDetailedProviderLoading,
         retry: detailedTokensRetry,
     }
 }

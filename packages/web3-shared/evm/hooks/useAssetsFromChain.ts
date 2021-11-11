@@ -4,8 +4,10 @@ import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
 import { useBalance } from './useBalance'
 import { getChainDetailed } from '../utils'
+import { useChainId } from './useChainId'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
+    const currentChainId = useChainId()
     const balance = useBalance()
     const chainDetailed = useChainDetailed()
     const passedChainDetailed = getChainDetailed(chainId)
@@ -18,7 +20,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
 
     return {
         value: [
-            ...(nativeToken
+            ...(nativeToken && currentChainId === nativeToken.chainId
                 ? [
                       {
                           chain,

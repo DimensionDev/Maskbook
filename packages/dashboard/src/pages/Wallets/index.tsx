@@ -46,7 +46,7 @@ function Wallets() {
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const { value: detailedTokens } = useAssets(
         trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
-        selectedChainId === null ? 'all' : selectedChainId,
+        selectedChainId ?? 'all',
     )
 
     useEffect(() => {
@@ -63,6 +63,7 @@ function Wallets() {
     }, [pathname])
 
     const balance = useMemo(() => {
+        if (detailedTokens.length === 0) return 0
         return BigNumber.sum
             .apply(
                 null,
