@@ -26,6 +26,7 @@ import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { useChainBalance } from '../../hooks/useChainBalance'
+import { useChainBalanceList } from '../../hooks/useChainBalanceList'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -80,6 +81,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
     const account = useAccount()
     const { value: selectedChainBalance } = useChainBalance(account, selectedChainId, providerType)
+    const { value: chainBalanceList } = useChainBalanceList(account, providerType)
 
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const supportedNetworkNativeTokenAssets = useMemo(() => {
@@ -115,9 +117,11 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     }, [selectedChainId, supportedNetworkNativeTokenAssets, detailedTokens])
 
     const assetsWithNativeToken = _assetsWithNativeToken.map((x) => {
-        const _selectedChainBalance =
-            x.token.type === EthereumTokenType.Native && selectedChainBalance ? selectedChainBalance : null
-        if (_selectedChainBalance) x.balance = _selectedChainBalance
+        const balance =
+            x.token.type === EthereumTokenType.Native
+                ? selectedChainBalance ?? chainBalanceList?.find((y) => y.chainId === x.token.chainId)?.balance
+                : null
+        if (balance) x.balance = balance
         return x
     })
 
