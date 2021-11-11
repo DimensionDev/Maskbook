@@ -77,7 +77,7 @@ export function ArticlesTab(props: ArticlesTabProps) {
                     {boxInfo.name}
                 </Typography>
                 <Typography color="textPrimary">
-                    {Number.parseInt(boxInfo.total, 10) - boxInfo.remaining}/{boxInfo.total}
+                    {boxInfo.sold}/{boxInfo.total}
                 </Typography>
             </Box>
         </Box>
