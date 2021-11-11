@@ -1,6 +1,6 @@
 import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { EthereumMethodType, ProviderType, TransactionStateType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, ProviderType, TransactionStateType, getRPCConstants } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
@@ -12,6 +12,7 @@ import { defer } from '../../../../utils-pure'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { openPopupWindow } from '../HelperService'
 import Services from '../../service'
+import { first } from 'lodash-es'
 
 let id = 0
 
@@ -77,11 +78,12 @@ export async function requestSend(
 ) {
     id += 1
     const notifyProgress = isSendMethod(payload.method as EthereumMethodType)
-    const { providerType = currentProviderSettings.value } = overrides ?? {}
+    const { providerType = currentProviderSettings.value, chainId } = overrides ?? {}
     const { popupsWindow = true } = options ?? {}
     const payload_ = {
         ...payload,
         id,
+        ...(chainId ? { jsonrpc: first(getRPCConstants(chainId).RPC) ?? payload.jsonrpc } : {}),
     }
     const hijackedCallback = (error: Error | null, response?: JsonRpcResponse) => {
         if (error && notifyProgress)

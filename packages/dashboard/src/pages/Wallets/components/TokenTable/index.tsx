@@ -15,6 +15,7 @@ import {
     getChainDetailed,
     getChainIdFromNetworkType,
     makeSortAssertWithoutChainFn,
+    useAccount,
     useAssets,
     useWeb3State,
 } from '@masknet/web3-shared-evm'
@@ -24,6 +25,7 @@ import { PluginMessages, PluginServices } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
+import { useChainBalance } from '../../hooks/useChainBalance'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -74,8 +76,10 @@ interface TokenTableProps {
 export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
 
-    const trustedERC20Tokens = useWeb3State().erc20Tokens
+    const { erc20Tokens: trustedERC20Tokens, providerType } = useWeb3State()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    const account = useAccount()
+    const { value: selectedChainBalance } = useChainBalance(account, selectedChainId, providerType)
 
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const supportedNetworkNativeTokenAssets = useMemo(() => {
@@ -99,7 +103,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         selectedChainId === null ? 'all' : selectedChainId,
     )
 
-    const assetsWithNativeToken = useMemo(() => {
+    const _assetsWithNativeToken = useMemo(() => {
         if (selectedChainId) return detailedTokens
         const assets = supportedNetworkNativeTokenAssets.filter(
             (x) =>
@@ -109,6 +113,13 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         )
         return [...detailedTokens, ...assets].sort(makeSortAssertWithoutChainFn())
     }, [selectedChainId, supportedNetworkNativeTokenAssets, detailedTokens])
+
+    const assetsWithNativeToken = _assetsWithNativeToken.map((x) => {
+        const _selectedChainBalance =
+            x.token.type === EthereumTokenType.Native && selectedChainBalance ? selectedChainBalance : null
+        if (_selectedChainBalance) x.balance = _selectedChainBalance
+        return x
+    })
 
     const onSwap = useCallback((token: FungibleTokenDetailed) => {
         openSwapDialog({
