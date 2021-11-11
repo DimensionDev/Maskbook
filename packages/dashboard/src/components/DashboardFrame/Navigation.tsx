@@ -80,7 +80,6 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
 const LogoItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.root}`]: {
         justifyContent: 'center',
-        paddingLeft: theme.spacing(7),
         marginBottom: theme.spacing(3.5),
     },
 })) as any as typeof MuiListItem
