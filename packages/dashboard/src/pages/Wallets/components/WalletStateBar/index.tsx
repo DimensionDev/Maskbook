@@ -34,6 +34,10 @@ const useStyles = makeStyles()((theme) => ({
         height: 10,
         borderRadius: 5,
     },
+    fortmaticProviderIcon: {
+        backgroundColor: '#fff',
+        borderRadius: 999,
+    },
 }))
 
 export const WalletStateBar = memo(() => {
@@ -128,7 +132,10 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
             )}
             <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                 <Stack mx={1} justifyContent="center">
-                    <ProviderIcon providerType={providerType} />
+                    <ProviderIcon
+                        providerType={providerType}
+                        classes={{ icon: providerType === ProviderType.Fortmatic ? classes.fortmaticProviderIcon : '' }}
+                    />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
                     <Box fontSize={16}>{walletName}</Box>

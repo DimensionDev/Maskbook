@@ -76,6 +76,9 @@ const useStyles = makeStyles()((theme) => ({
     providerIcon: {
         backgroundColor: 'none !important',
     },
+    fortmaticProviderIcon: {
+        backgroundColor: '#fff !important',
+    },
     connectButtonWrapper: {
         display: 'flex',
         justifyContent: 'center',
@@ -138,7 +141,10 @@ export function WalletStatusBox() {
                 badgeSize={48}
                 classes={{
                     networkIcon: classes.networkIcon,
-                    providerIcon: classes.providerIcon,
+                    providerIcon:
+                        selectedProviderType === ProviderType.Fortmatic
+                            ? classes.fortmaticProviderIcon
+                            : classes.providerIcon,
                 }}
             />
             <div className={classes.accountInfo}>
