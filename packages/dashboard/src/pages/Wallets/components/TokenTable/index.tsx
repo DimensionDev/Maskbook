@@ -81,7 +81,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
     const account = useAccount()
     const { value: selectedChainBalance } = useChainBalance(account, selectedChainId, providerType)
-    const { value: chainBalanceList } = useChainBalanceList(account, providerType)
+    const { value: chainBalanceList } = useChainBalanceList(account, providerType, selectedChainId !== null)
 
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const supportedNetworkNativeTokenAssets = useMemo(() => {
