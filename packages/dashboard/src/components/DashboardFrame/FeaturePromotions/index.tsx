@@ -74,13 +74,13 @@ export const FeaturePromotions = memo(() => {
             <img
                 className={classes.img}
                 onClick={openTwitter(PLUGIN_IDS.RED_PACKET)}
-                src={new URL('./SendRedPacket.png', import.meta.url).toString()}
+                src={new URL('./SendLuckyDrop.png', import.meta.url).toString()}
             />
-            <img
+            {/* <img
                 className={classes.img}
                 onClick={openTwitter(PLUGIN_IDS.MARKETS)}
                 src={new URL('./ITO.png', import.meta.url).toString()}
-            />
+            /> */}
             <img
                 className={classes.img}
                 onClick={openTransakDialog}
