@@ -1,7 +1,8 @@
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { BoxInfo, BoxMetadata } from '../../type'
+import { BoxInfo, BoxMetadata, MediaType } from '../../type'
 import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
+import { Video } from '../../../../components/shared/Video'
 
 const useStyles = makeStyles()((theme) => ({
     main: {},
@@ -51,20 +52,32 @@ export function ArticlesTab(props: ArticlesTabProps) {
     return (
         <Box className={classes.main}>
             <Box className={classes.body}>
-                {boxMetadata?.cover ? (
-                    <img className={classes.hero} src={boxMetadata?.cover} />
-                ) : (
-                    <Box className={classes.hero}>
-                        <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
-                    </Box>
-                )}
+                {(() => {
+                    if (!boxMetadata?.mediaType)
+                        return (
+                            <Box className={classes.hero}>
+                                <MaskSharpIconOfSize classes={{ root: classes.icon }} size={22} />
+                            </Box>
+                        )
+                    switch (boxMetadata.mediaType) {
+                        case MediaType.Video:
+                            return (
+                                <Video
+                                    VideoProps={{ className: classes.hero, controls: true }}
+                                    src={boxMetadata.mediaUrl}
+                                />
+                            )
+                        default:
+                            return <img className={classes.hero} src={boxMetadata.mediaUrl} />
+                    }
+                })()}
             </Box>
             <Box className={classes.footer} display="flex" alignItems="center" justifyContent="space-between">
                 <Typography className={classes.name} color="textPrimary">
                     {boxInfo.name}
                 </Typography>
                 <Typography color="textPrimary">
-                    {boxInfo.remaining}/{boxInfo.total}
+                    {boxInfo.sold}/{boxInfo.total}
                 </Typography>
             </Box>
         </Box>
