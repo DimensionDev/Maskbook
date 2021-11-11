@@ -4,7 +4,7 @@ import * as MaskWallet from './providers/Mask'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
-import { defer } from '../../../utils'
+import { defer } from '../../../../utils-pure'
 
 //#region connect WalletConnect
 // step 1:
