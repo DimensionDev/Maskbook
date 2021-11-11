@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { createContainer } from 'unstated-next'
 import { OrderSide } from 'opensea-js/lib/types'
@@ -6,8 +6,8 @@ import { useValueRef } from '@masknet/shared'
 import { currentCollectibleProviderSettings } from '../settings'
 import { CollectibleTab, CollectibleToken } from '../types'
 import { useAsset } from './useAsset'
-import { useOrders } from './useOrders'
 import { useEvents } from './useEvents'
+import { useAssetOrder } from './useAssetOrder'
 
 function useCollectibleState(token?: CollectibleToken) {
     const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
@@ -15,19 +15,28 @@ function useCollectibleState(token?: CollectibleToken) {
     const provider = useValueRef(currentCollectibleProviderSettings)
     const asset = useAsset(provider, token)
 
+    //#region asset order
+    const assetOrder = useAssetOrder(provider, token)
+    //#endregion
+
     //#region offers
     const [offerPage, setOfferPage] = useState(0)
-    const offers = useOrders(provider, tabIndex === CollectibleTab.OFFER ? token : undefined, OrderSide.Buy, offerPage)
+    const offers = useMemo(() => {
+        if (!asset.value?.orders) return []
+        const _orders = asset.value?.orders?.filter((x) => x.side === OrderSide.Buy)
+
+        return _orders.slice(offerPage * 10, (offerPage + 1) * 10)
+    }, [asset.value?.orders, offerPage])
     //#endregion
 
     //#region orders
     const [orderPage, setOrderPage] = useState(0)
-    const orders = useOrders(
-        provider,
-        tabIndex === CollectibleTab.LISTING ? token : undefined,
-        OrderSide.Sell,
-        orderPage,
-    )
+    const orders = useMemo(() => {
+        if (!asset.value?.orders) return []
+        const _orders = asset.value?.orders?.filter((x) => x.side === OrderSide.Sell)
+
+        return _orders.slice(orderPage * 10, (orderPage + 1) * 10)
+    }, [asset.value?.orders, orderPage])
     //#endregion
 
     //#region events
@@ -53,6 +62,8 @@ function useCollectibleState(token?: CollectibleToken) {
         token,
         asset,
         provider,
+
+        assetOrder,
 
         tabIndex,
         setTabIndex,

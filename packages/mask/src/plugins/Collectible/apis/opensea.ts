@@ -1,15 +1,15 @@
 import { head } from 'lodash-es'
 import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
-import stringify from 'json-stable-stringify'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
-import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
-import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
-import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
+import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaGraphQLURL, OpenSeaRinkebyBaseURL, ReferrerAddress } from '../constants'
 import { currentChainIdSettings } from '../../Wallet/settings'
 import urlcat from 'urlcat'
+import type { OpenSeaAssetEventResponse, OpenSeaResponse } from '../types'
+import { OpenSeaEventHistoryQuery } from '../queries/OpenSea'
+import stringify from 'json-stable-stringify'
 
 function createExternalProvider() {
     return {
@@ -43,10 +43,15 @@ async function createOpenSeaAPI(chainId: ChainId) {
     return OpenSeaBaseURL
 }
 
-export async function getAsset(tokenAddress: string, tokenId: string, chainId?: ChainId) {
+export async function getAssetFromSDK(tokenAddress: string, tokenId: string, chainId?: ChainId) {
     const _chainId = chainId ?? currentChainIdSettings.value
     const sdkResponse = await (await createOpenSeaPort(_chainId)).api.getAsset({ tokenAddress, tokenId })
 
+    return sdkResponse
+}
+
+export async function getAsset(tokenAddress: string, tokenId: string, chainId?: ChainId) {
+    const _chainId = chainId ?? currentChainIdSettings.value
     const fetchResponse = await (
         await fetch(
             urlcat(await createOpenSeaAPI(_chainId), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }),
@@ -64,11 +69,7 @@ export async function getAsset(tokenAddress: string, tokenId: string, chainId?: 
     )?.closing_date
 
     return {
-        ...sdkResponse,
         ...fetchResponse,
-        owner: fetchResponse.owner,
-        orders: sdkResponse.orders,
-        assetContract: sdkResponse.assetContract,
         endTime,
     } as OpenSeaResponse
 }

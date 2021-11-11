@@ -23,10 +23,23 @@ export function useOrders(provider: CollectibleProvider, token?: CollectibleToke
                         count: 10,
                     },
                 )
+
                 return openseaResponse.orders
                     .map((order) => {
-                        const unitPrice = new BigNumber(getOrderUnitPrice(order) ?? 0).toNumber()
-                        const usdPrice = new BigNumber(getOrderUSDPrice(order) ?? 0).toNumber()
+                        const unitPrice = new BigNumber(
+                            getOrderUnitPrice(
+                                order.currentPrice?.toFixed(),
+                                order.paymentTokenContract?.decimals,
+                                order.quantity.toFixed(),
+                            ) ?? 0,
+                        ).toNumber()
+                        const usdPrice = new BigNumber(
+                            getOrderUSDPrice(
+                                order.currentPrice?.toFixed(),
+                                order.paymentTokenContract?.usdPrice,
+                                order.paymentTokenContract?.decimals,
+                            ) ?? 0,
+                        ).toNumber()
                         return {
                             quantity: new BigNumber(order.quantity).toNumber(),
                             expirationTime: order.side === OrderSide.Sell ? order.listingTime : order.expirationTime,

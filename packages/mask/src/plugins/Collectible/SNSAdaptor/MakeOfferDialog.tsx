@@ -99,7 +99,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                 asset: toAsset({
                     tokenId: asset.value.token_id,
                     tokenAddress: asset.value.token_address,
-                    schemaName: asset.value.asset_contract.schemaName,
+                    schemaName: asset.value.asset_contract.schema_name,
                 }),
                 accountAddress: account,
                 startAmount: Number.parseFloat(amount),
