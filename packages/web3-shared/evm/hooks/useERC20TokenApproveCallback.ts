@@ -9,6 +9,7 @@ import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { isLessThan } from '../utils'
+import { useGasPrice } from './useGasPrice'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -23,6 +24,7 @@ export enum ApproveStateType {
 
 export function useERC20TokenApproveCallback(address?: string, amount?: string, spender?: string) {
     const account = useAccount()
+    const { value: gasPrice } = useGasPrice()
     const erc20Contract = useERC20TokenContract(address)
     const [transactionState, setTransactionState] = useTransactionState()
 
@@ -103,8 +105,9 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                         })
                         throw error
                     }),
+                gasPrice: gasPrice ?? '0',
             }
-
+            console.log({ config })
             // send transaction and wait for hash
             return new Promise<void>(async (resolve, reject) => {
                 const revalidate = once(() => {
@@ -142,7 +145,17 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                     })
             })
         },
-        [account, amount, balance, spender, loadingAllowance, loadingBalance, erc20Contract, approveStateType],
+        [
+            account,
+            amount,
+            balance,
+            spender,
+            loadingAllowance,
+            gasPrice,
+            loadingBalance,
+            erc20Contract,
+            approveStateType,
+        ],
     )
 
     const resetCallback = useCallback(() => {

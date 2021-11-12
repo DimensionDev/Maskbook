@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import { TransactionState, TransactionStateType, useAccount, useWeb3, useGasPrice } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
@@ -29,6 +29,7 @@ interface FailedCall extends SwapCallEstimate {
 export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlippage = SLIPPAGE_DEFAULT) {
     const web3 = useWeb3()
     const account = useAccount()
+    const { value: gasPrice } = useGasPrice()
     const tradeParameters = useTradeParameters(trade, allowedSlippage)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
@@ -59,6 +60,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                     ...(!value || /^0x0*$/.test(value)
                         ? {}
                         : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
+                    gasPrice,
                 }
 
                 return web3.eth
@@ -135,6 +137,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                    gasPrice,
                 },
                 async (error, hash) => {
                     if (error) {
@@ -165,7 +168,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 },
             )
         })
-    }, [web3, account, tradeParameters])
+    }, [web3, account, tradeParameters, gasPrice])
 
     const resetCallback = useCallback(() => {
         setTradeState({

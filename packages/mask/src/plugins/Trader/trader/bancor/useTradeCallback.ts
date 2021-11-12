@@ -1,6 +1,13 @@
 import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
-import { TransactionState, TransactionStateType, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
+import {
+    TransactionState,
+    TransactionStateType,
+    useAccount,
+    useChainId,
+    useWeb3,
+    useGasPrice,
+} from '@masknet/web3-shared-evm'
 import type { SwapBancorRequest } from '../../types/bancor'
 import type { TradeComputed } from '../../types'
 import { PluginTraderRPC } from '../../messages'
@@ -10,6 +17,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
     const web3 = useWeb3()
     const account = useAccount()
     const chainId = useChainId()
+    const { value: gasPrice } = useGasPrice()
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
@@ -54,7 +62,9 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
                 })
                 throw error
             }),
+            gasPrice: gasPrice ?? '0',
         }
+        console.log({ config_ })
 
         // send transaction and wait for hash
         return new Promise<string>((resolve, reject) => {
@@ -74,7 +84,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest>
                 }
             })
         })
-    }, [web3, account, chainId, stringify(trade)])
+    }, [web3, account, chainId, gasPrice, stringify(trade)])
 
     const resetCallback = useCallback(() => {
         setTradeState({

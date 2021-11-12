@@ -2,13 +2,14 @@ import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
+import { useTransactionState, TransactionStateType, TransactionEventType, useGasPrice } from '@masknet/web3-shared-evm'
 import type { TransactionReceipt } from 'web3-core'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 
 export function useClaimCallback(version: number, from: string, id?: string, password?: string) {
     const [claimState, setClaimState] = useTransactionState()
+    const { value: gasPrice } = useGasPrice()
     const redPacketContract = useRedPacketContract(version)
     const claimCallback = useCallback(async () => {
         if (!redPacketContract || !id || !password) {
@@ -50,6 +51,7 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                     })
                     throw error
                 }),
+            gasPrice,
         }
 
         // step 2-1: blocking

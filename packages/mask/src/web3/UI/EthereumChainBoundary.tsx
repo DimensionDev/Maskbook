@@ -14,6 +14,7 @@ import {
     useAccount,
     useAllowTestnet,
     useChainId,
+    Fortmatic,
 } from '@masknet/web3-shared-evm'
 import { useValueRef, delay, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
@@ -74,6 +75,16 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
             const overrides = {
                 chainId: expectedChainId,
                 providerType,
+            }
+            if (providerType === ProviderType.Fortmatic) {
+                await Fortmatic.connect(expectedChainId)
+                await WalletRPC.updateAccount({
+                    account,
+                    chainId: expectedChainId,
+                    providerType,
+                    networkType,
+                })
+                return
             }
             await Promise.race([
                 (async () => {

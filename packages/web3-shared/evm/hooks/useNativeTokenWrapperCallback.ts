@@ -5,11 +5,13 @@ import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
 import { TransactionEventType } from '../types'
 import { isLessThan, isZero } from '../utils'
+import { useGasPrice } from './useGasPrice'
 
 export function useNativeTokenWrapperCallback() {
     const account = useAccount()
     const wrapperContract = useNativeTokenWrapperContract()
     const [transactionState, setTransactionState] = useTransactionState()
+    const { value: gasPrice } = useGasPrice()
 
     const wrapCallback = useCallback(
         async (amount: string) => {
@@ -128,6 +130,7 @@ export function useNativeTokenWrapperCallback() {
                         })
                         throw error
                     }),
+                gasPrice,
             }
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {
@@ -150,7 +153,7 @@ export function useNativeTokenWrapperCallback() {
                     })
             })
         },
-        [account, wrapperContract],
+        [account, wrapperContract, gasPrice],
     )
 
     const resetCallback = useCallback(() => {

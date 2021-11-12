@@ -9,6 +9,7 @@ import {
     useAccount,
     useChainId,
     useWeb3,
+    useGasPrice,
 } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
 
@@ -16,6 +17,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
     const web3 = useWeb3()
     const account = useAccount()
     const chainId = useChainId()
+    const { value: gasPrice } = useGasPrice()
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
@@ -27,8 +29,9 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         return {
             from: account,
             ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas', 'gasPrice']),
+            gasPrice,
         } as TransactionConfig
-    }, [account, tradeComputed])
+    }, [account, tradeComputed, gasPrice])
 
     const tradeCallback = useCallback(async () => {
         // validate config

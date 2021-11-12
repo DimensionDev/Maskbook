@@ -8,6 +8,7 @@ import {
     useAccount,
     useChainId,
     useTraderConstants,
+    useGasPrice,
 } from '@masknet/web3-shared-evm'
 import { useCallback, useState } from 'react'
 import { SLIPPAGE_DEFAULT } from '../../constants'
@@ -21,6 +22,7 @@ export function useTradeCallback(
 ) {
     const account = useAccount()
     const chainId = useChainId()
+    const { value: gasPrice } = useGasPrice()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants()
 
     const [tradeState, setTradeState] = useState<TransactionState>({
@@ -105,6 +107,7 @@ export function useTradeCallback(
                     throw error
                 }),
             value: transactionValue,
+            gasPrice,
         }
 
         // send transaction and wait for hash
@@ -134,7 +137,7 @@ export function useTradeCallback(
                     reject(error)
                 })
         })
-    }, [chainId, trade, tradeAmount, exchangeProxyContract, BALANCER_ETH_ADDRESS])
+    }, [chainId, trade, tradeAmount, exchangeProxyContract, gasPrice, BALANCER_ETH_ADDRESS])
 
     const resetCallback = useCallback(() => {
         setTradeState({
