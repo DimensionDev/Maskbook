@@ -20,7 +20,7 @@ function FoundationHeader(props: Props) {
             return `${t('plugin_foundation_reserve')} ${props.nft.mostRecentAuction.reservePriceInETH}`
         }
         return null
-    }, [])
+    }, [props.nft.mostRecentAuction])
 
     return (
         <CardHeader
