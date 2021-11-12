@@ -49,7 +49,7 @@ function FoundationCountdown(props: Props) {
         }
         setEnded(true)
         return
-    }, [currentCount])
+    }, [currentCount, nftDateEnding])
 
     return (
         <Box className={classes.body}>
