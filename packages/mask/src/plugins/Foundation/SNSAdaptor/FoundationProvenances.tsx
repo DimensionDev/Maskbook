@@ -4,17 +4,16 @@ import { useI18N } from '../../../utils'
 import type { NftHistory } from '../types'
 import { convertDate } from '../utils'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 
 interface Props extends React.PropsWithChildren<{}> {
     histories: NftHistory[]
 }
 
-const formatAddress = (address: string) => `${address.slice(0, 6)}...${address.slice(-4)}`
-
 function FoundationProvenances(props: Props) {
     const { t } = useI18N()
     const account = useAccount()
-    props.histories.sort((first: NftHistory, second: NftHistory) => {
+    const histories = props.histories.sort((first: NftHistory, second: NftHistory) => {
         if (first.date < second.date) {
             return 1
         }
@@ -25,7 +24,7 @@ function FoundationProvenances(props: Props) {
     })
     return (
         <Box>
-            {props.histories.map((history: NftHistory) => (
+            {histories.map((history: NftHistory) => (
                 <Box>
                     <Grid container spacing={2}>
                         <Grid item xs={8}>
@@ -39,7 +38,7 @@ function FoundationProvenances(props: Props) {
                                         {account === history.txOrigin.id ? (
                                             <span>{t('plugin_foundation_you_address')}</span>
                                         ) : (
-                                            <span>{formatAddress(history.txOrigin.id)}</span>
+                                            <span>{formatEthereumAddress(history.txOrigin.id, 4)}</span>
                                         )}
                                     </Link>
                                 </Typography>

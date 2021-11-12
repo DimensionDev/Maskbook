@@ -67,6 +67,7 @@ function FoundationPlaceBid(props: Props) {
     const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
+    const testNet = chainId === 5 ? true : false
     const nativeTokenDetailed = useNativeTokenDetailed()
     const classes = useStylesExtends(useStyles(), props)
     const auctionId = props.nft.mostRecentAuction.id.split('-')[1]
@@ -153,7 +154,7 @@ function FoundationPlaceBid(props: Props) {
 
     return (
         <Grid item xs={12} className={classes.body}>
-            <EthereumWalletConnectedBoundary>
+            <EthereumWalletConnectedBoundary offChain={testNet}>
                 <HasCountdown date={dateEnding} />
                 {props.nft.mostRecentAuction.status === 'Open' && (
                     <form className={classes.form} noValidate autoComplete="off">
