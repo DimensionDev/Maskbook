@@ -85,7 +85,7 @@ export async function getEvents(asset_contract_address: string, token_id: string
     ).json()
 
     const { asset_events }: { asset_events: OpenSeaAssetEvent[] } = fetchResponse
-    console.log(asset_events)
+
     return asset_events
 }
 
