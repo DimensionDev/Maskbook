@@ -24,7 +24,8 @@ export function startWatchThemeColor(signal: AbortSignal) {
         const backgroundColor = getBackgroundColor(document.body)
         currentTheme.value = contrastColor === 'rgb(255,255,255)' ? 'dark' : 'light'
         if (contrastColor) primaryColorContrastColorRef.value = contrastColor
-        if (backgroundColor) backgroundColorRef.value = backgroundColor
+        if (backgroundColor)
+            backgroundColorRef.value = currentTheme.value === 'light' ? 'rgb(244, 244 ,245)' : 'rgb(26, 32, 37)'
     }
 
     const watcher = new MutationObserverWatcher(themeListItemSelector())
