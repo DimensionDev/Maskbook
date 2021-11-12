@@ -141,7 +141,6 @@ export function EnhancedProfileTabAtTwitter() {
         setStyle(getStyle())
     })
 
-    console.log(style)
     return (
         <EnhancedProfileTab
             title="Web3"

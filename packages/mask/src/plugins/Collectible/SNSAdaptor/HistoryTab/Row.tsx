@@ -9,7 +9,6 @@ import { CollectibleProvider, NFTHistory, OpenSeaAssetEventType, RaribleEventTyp
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
 import { Account } from '../Account'
-import { getOrderUnitPrice } from '../../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,12 +48,14 @@ export function Row({ event, isDifferenceToken }: Props) {
     const { classes } = useStyles()
     const { provider } = CollectibleState.useContainer()
 
+    console.log(event)
     const unitPrice = useMemo(() => {
         if (provider === CollectibleProvider.RARIBLE || !isDifferenceToken || !event.price) return null
 
-        return getOrderUnitPrice(event.price.price, event.price.paymentToken?.decimals, event.price.quantity)
+        return formatBalance(event.price.paymentToken?.usd_price, 0)
     }, [event, isDifferenceToken, provider])
 
+    console.log(unitPrice)
     return (
         <TableRow>
             <TableCell>
@@ -80,8 +81,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                                     />
                                 </Link>
                             )}
-                            {unitPrice}
-                            {event.price?.paymentToken?.symbol}
+                            {`$${unitPrice}`}
                         </Typography>
                     </TableCell>
                     <TableCell>

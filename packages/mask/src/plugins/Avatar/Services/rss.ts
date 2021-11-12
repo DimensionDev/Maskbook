@@ -21,7 +21,19 @@ export async function createRSS(address: string) {
     })
 }
 
+const cache = new Map<string, Promise<AvatarMetaDB | undefined>>()
+
 export async function getNFTAvatarFromRSS(address: string) {
+    let f = cache.get(address)
+    if (!f) {
+        f = _getNFTAvatarFromRSS(address)
+        cache.set(address, f)
+    }
+    const nft = await f
+    return nft
+}
+
+async function _getNFTAvatarFromRSS(address: string) {
     const rss = await createRSS(address)
     const file = await rss.files.get(rss.account.address)
     const nft = Object.getOwnPropertyDescriptor(file, '_nft')
@@ -50,6 +62,9 @@ export async function saveNFTAvatarFromRSS(address: string, nft: AvatarMetaDB, s
         }),
     )
     await rss.files.sync()
+
+    // clear cache
+    cache.delete(address)
 
     return nft
 }

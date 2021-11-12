@@ -18,6 +18,16 @@ export interface OpenSeaCustomAccount extends OpenSeaAccount {
     profile_img_url: string
 }
 
+export interface OpenSeaFungibleToken {
+    image_url?: string
+    eth_price?: string
+    usd_price?: string
+    name: string
+    symbol: string
+    decimals: number
+    address: string
+}
+
 export interface OpenSeaCustomCollection extends OpenSeaCollection {
     safelist_request_status: string
     payment_tokens: OpenSeaFungibleToken[]
@@ -124,16 +134,6 @@ export interface Asset {
     version?: TokenStandardVersion
     name?: string
     decimals?: number
-}
-
-export interface OpenSeaFungibleToken {
-    image_url?: string
-    eth_price?: string
-    usd_price?: string
-    name: string
-    symbol: string
-    decimals: number
-    address: string
 }
 
 export interface OpenSeaAssetContract extends OpenSeaFees {

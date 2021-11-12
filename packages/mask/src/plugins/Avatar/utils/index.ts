@@ -45,7 +45,7 @@ export async function getNFT(address: string, tokenId: string) {
             : getLastSalePrice(asset.last_sale) ?? '0',
         name: asset.name,
         symbol: order?.payment_token_contract?.symbol ?? asset.last_sale?.payment_token?.symbol ?? 'ETH',
-        image: asset.image_url ?? asset.image_preview_url ?? '',
+        image: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
         owner: asset.owner.address,
     }
 }
@@ -63,7 +63,7 @@ export async function createNFT(address: string, tokenId: string) {
         {
             name: asset.name,
             description: asset.description,
-            image: asset.image_url ?? asset.image_preview_url ?? '',
+            image: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
             owner: asset.top_ownerships[0].owner.address,
         },
         tokenId,
