@@ -52,7 +52,11 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
                     // it's an IOS string as my inspection
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
-                    image_url: openSeaResponse.image_url,
+                    image_url:
+                        openSeaResponse.image_url_original ??
+                        openSeaResponse.image_url ??
+                        openSeaResponse.image_preview_url ??
+                        '',
                     asset_contract: openSeaResponse.asset_contract,
                     current_price: desktopOrder
                         ? new BigNumber(
