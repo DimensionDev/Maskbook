@@ -20,6 +20,8 @@ import { decompressBackupFile, extraPermissions } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 import type { DashboardRoutes } from '@masknet/shared-base'
+import { openPopupWindow } from './HelperService'
+import { PopupRoutes } from '@masknet/shared-base'
 
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
@@ -140,5 +142,18 @@ export async function checkPermissionsAndRestore(id: string) {
         }
 
         await restoreBackup(json)
+    }
+}
+
+export async function checkPermissionAndOpenWalletRecovery(id: string) {
+    const json = await getUnconfirmedBackup(id)
+    if (json) {
+        const permissions = await extraPermissions(json.grantedHostPermissions)
+        if (permissions.length) {
+            const granted = await requestExtensionPermission({ origins: permissions })
+            if (!granted) return
+        }
+
+        await openPopupWindow(PopupRoutes.WalletRecovered, { backupId: id })
     }
 }

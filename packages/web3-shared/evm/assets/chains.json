@@ -174,7 +174,7 @@
         "chainId": 137,
         "fullName": "Polygon",
         "shortName": "matic",
-        "chain": "Matic",
+        "chain": "Polygon",
         "network": "mainnet",
         "networkId": 137,
         "nativeCurrency": {

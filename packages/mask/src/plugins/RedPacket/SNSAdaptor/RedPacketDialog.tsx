@@ -82,7 +82,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
-
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
@@ -104,6 +106,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 attachMetadata(RedPacketMetaKey, payload)
             } else dropMetadata(RedPacketMetaKey)
             onClose()
+            closeWalletStatusDialog()
         },
         [onClose, chainId, senderName],
     )

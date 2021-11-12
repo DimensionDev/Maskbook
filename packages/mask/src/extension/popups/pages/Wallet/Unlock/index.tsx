@@ -70,7 +70,10 @@ const Unlock = memo(() => {
     useAsync(async () => {
         if (isLocked === false && !getLockStatusLoading) {
             const from = new URLSearchParams(location.search).get('from')
-            history.replace(from ?? PopupRoutes.Wallet)
+            history.replace({
+                pathname: from ?? PopupRoutes.Wallet,
+                search: location.search,
+            })
         }
     }, [isLocked, getLockStatusLoading, location.search])
 

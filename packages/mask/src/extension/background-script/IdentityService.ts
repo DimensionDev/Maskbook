@@ -82,7 +82,6 @@ export async function updateProfileInfo(
     data: {
         nickname?: string | null
         avatarURL?: string | null
-        forceUpdateAvatar?: boolean
     },
 ): Promise<void> {
     if (data.nickname) {
@@ -94,7 +93,7 @@ export async function updateProfileInfo(
         }
         await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
     }
-    if (data.avatarURL) await storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
+    if (data.avatarURL) await storeAvatar(identifier, data.avatarURL)
 }
 export function removeProfile(id: ProfileIdentifier): Promise<void> {
     return consistentPersonaDBWriteAccess((t) => deleteProfileDB(id, t))

@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/utils-pure/",
+    "tsBuildInfoFile": "../dist/utils-pure.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    "lib": ["ES2021"]
+  },
+  "include": ["./"],
+  "references": []
+}

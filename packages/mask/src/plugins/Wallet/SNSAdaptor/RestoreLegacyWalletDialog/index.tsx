@@ -44,7 +44,8 @@ export function RestoreLegacyWalletDialog(props: RestoreLegacyWalletDialogProps)
     useEffect(() => {
         if (!legacyWallets.length) return
         if (!location.href.includes('popups.html')) return
-        if (location.hash.includes('wallet/legacy-recovered')) return
+        if (location.hash.includes(PopupRoutes.LegacyWalletRecovered) || location.hash.includes(PopupRoutes.Unlock))
+            return
         setDialog({ open: true })
     }, [legacyWallets.map((x) => x.address).join()])
 
