@@ -183,7 +183,7 @@ export function WalletStatusBox() {
                         className={classes.actionButton}
                         color="primary"
                         size="small"
-                        variant="outlined"
+                        variant="contained"
                         onClick={onDisconnect}>
                         {t('wallet_status_button_disconnect')}
                     </Button>
