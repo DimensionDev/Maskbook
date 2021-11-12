@@ -1,7 +1,7 @@
 # https://github.com/probot/stale
 
 daysUntilStale: 60
-daysUntilClose: 7
+daysUntilClose: false
 
 exemptLabels:
   - "Blocked: Local"
