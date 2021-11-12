@@ -42,7 +42,6 @@ function FoundationCountdown(props: Props) {
                     minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
                     seconds: Math.floor((distance % (1000 * 60)) / 1000),
                 })
-                console.log(currentCount)
             }, 1000)
             return () => {
                 clearTimeout(timer)
