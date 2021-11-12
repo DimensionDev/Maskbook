@@ -1,12 +1,13 @@
 import { UnknownIcon } from '@masknet/icons'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { formatBalance } from '@masknet/web3-shared-evm'
+import { formatBalance, useChainId } from '@masknet/web3-shared-evm'
 import { Avatar, Button, CircularProgress, Link, Paper, Typography } from '@mui/material'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import { Trans } from 'react-i18next'
 import { useI18N } from '../../../utils'
+import { WalletMessages } from '../../Wallet/messages'
 import { useAvatar } from '../hooks/useManager'
 import { useRewards } from '../hooks/useReward'
 import { PluginDHedgeMessages } from '../messages'
@@ -17,9 +18,7 @@ import { PerformanceChart } from './PerformanceChart'
 const DIGIT_LENGTH = 18
 
 const useStyles = makeStyles()((theme) => ({
-    root: {
-        backgroundColor: '#F6F8F8',
-    },
+    root: {},
     header: {
         display: 'flex',
         flexDirection: 'row',
@@ -78,6 +77,7 @@ export function PoolViewDesk(props: PoolViewDeskProps) {
     const { pool, tokens, link } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
+    const chainId = useChainId()
 
     //avatar
     const blockie = useAvatar(pool?.managerAddress ?? '')
@@ -91,14 +91,22 @@ export function PoolViewDesk(props: PoolViewDeskProps) {
 
     //#region the invest dialog
     const { setDialog: openInvestDialog } = useRemoteControlledDialog(PluginDHedgeMessages.InvestDialogUpdated)
+    const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.selectProviderDialogUpdated,
+    )
+
     const onInvest = useCallback(() => {
         if (!pool || !tokens) return
+        if (pool.chainId !== chainId) {
+            openSelectWalletDialog()
+            return
+        }
         openInvestDialog({
             open: true,
             pool: pool,
             tokens: tokens,
         })
-    }, [pool, tokens, openInvestDialog])
+    }, [pool, tokens, openInvestDialog, chainId, openSelectWalletDialog])
     //#endregion
 
     return (
@@ -114,10 +122,10 @@ export function PoolViewDesk(props: PoolViewDeskProps) {
                     <Typography variant="body2" color="textSecondary" />
                 </div>
                 <div className={classes.buttons}>
-                    <Button variant="contained" size="small" onClick={onInvest}>
+                    <Button variant="contained" size="small" onClick={onInvest} disabled={!tokens}>
                         {t('plugin_dhedge_invest')}
                     </Button>
-                    <Button variant="contained" size="small">
+                    <Button variant="contained" size="small" style={{ display: 'none' }}>
                         Exit
                     </Button>
                 </div>
