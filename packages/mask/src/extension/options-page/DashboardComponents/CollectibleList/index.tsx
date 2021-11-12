@@ -1,14 +1,7 @@
 import { createContext, useState, useEffect, useMemo } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useStylesExtends, useValueRef } from '@masknet/shared'
-import {
-    ChainId,
-    CollectibleProvider,
-    ERC721TokenDetailed,
-    isSameAddress,
-    useCollectibles,
-    Wallet,
-} from '@masknet/web3-shared-evm'
+import { ChainId, CollectibleProvider, ERC721TokenDetailed, useCollectibles, Wallet } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
@@ -16,6 +9,7 @@ import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { searchProfileTabSelector } from '../../../../social-network-adaptor/twitter.com/utils/selector'
+import { Image } from '../../../../components/shared/Image'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -66,6 +60,19 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
+    },
+    collectionWrap: {
+        width: '36px',
+        height: '36px',
+        borderRadius: '50%',
+        marginRight: '8px',
+        background: 'rgba(229,232,235,1)',
+    },
+    collectionImg: {
+        objectFit: 'contain',
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
     },
 }))
 
@@ -125,17 +132,18 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const collections: ERC721TokenDetailed[][] = useMemo(() => {
-        const collections = []
-        for (let i = 0; i < collectibles.length; i = i + 1) {
-            if (
-                i &&
-                isSameAddress(collectibles[i].contractDetailed.address, collectibles[i - 1].contractDetailed.address)
-            ) {
-                collections[collections.length - 1].push(collectibles[i])
+        const collections: ERC721TokenDetailed[][] = []
+        const addresses: string[] = []
+        collectibles.forEach((item) => {
+            const address = item.contractDetailed.address
+            const index = addresses.indexOf(address)
+            if (index !== -1) {
+                collections[index].push(item)
             } else {
-                collections.push([collectibles[i]])
+                addresses.push(address)
+                collections.push([item])
             }
-        }
+        })
 
         return collections
     }, [collectibles])
@@ -177,13 +185,24 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     <Box>
                         {collections.map((x, i) => (
                             <Box key={i}>
-                                <Typography
-                                    className={classes.name}
-                                    color="textPrimary"
-                                    variant="body2"
-                                    sx={{ fontSize: '16px', marginTop: '24px' }}>
-                                    {x[0].contractDetailed.name}
-                                </Typography>
+                                <Box display="flex" alignItems="center" sx={{ marginTop: '24px' }}>
+                                    <Box className={classes.collectionWrap}>
+                                        {x[0].info.collection?.image ? (
+                                            <Image
+                                                component="img"
+                                                className={classes.collectionImg}
+                                                src={x[0].info.collection?.image}
+                                            />
+                                        ) : null}
+                                    </Box>
+                                    <Typography
+                                        className={classes.name}
+                                        color="textPrimary"
+                                        variant="body2"
+                                        sx={{ fontSize: '16px' }}>
+                                        {x[0].info.collection?.name}
+                                    </Typography>
+                                </Box>
                                 <Box sx={{ display: 'flex', overflow: 'auto' }}>
                                     {x.map((y, j) => (
                                         <CollectibleItem

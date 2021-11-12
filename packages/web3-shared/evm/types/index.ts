@@ -137,6 +137,10 @@ export interface ERC721TokenInfo {
     description?: string
     image?: string
     owner?: string
+    collection?: {
+        name: string
+        image: string
+    }
 }
 
 export interface ERC721TokenDetailed {
