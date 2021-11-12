@@ -32,7 +32,7 @@ export function usePlaceBidCallback(auctionId: string, amount: string) {
         ]
     }, [auctionId, amount])
 
-    const PlaceBidCallback = useCallback(async () => {
+    const placeBidCallback = useCallback(async () => {
         if (!auctionId || !amount || !foundationContract || !bids.length) {
             setPlaceBidState({
                 type: TransactionStateType.UNKNOWN,
