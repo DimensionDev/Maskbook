@@ -156,7 +156,6 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            console.log({ params, config })
             redPacketContract.methods
                 .create_red_packet(...params)
                 .send(config as PayableTx)
