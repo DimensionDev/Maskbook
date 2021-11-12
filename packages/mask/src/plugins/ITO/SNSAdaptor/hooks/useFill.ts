@@ -16,6 +16,7 @@ import {
     useTransactionState,
     useWeb3,
     FungibleTokenDetailed,
+    useGasPrice,
     ERC20TokenDetailed,
     TransactionState,
     FAKE_SIGN_PASSWORD,
@@ -72,7 +73,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
     const [fillState, setFillState] = useTransactionState()
     const [fillSettings, setFillSettings] = useState(poolSettings)
     const paramResult = useFillParams(poolSettings)
-
+    const { value: gasPrice } = useGasPrice()
     const fillCallback = useCallback(async () => {
         if (!poolSettings) {
             setFillState({
@@ -90,15 +91,8 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             return
         }
 
-        const { gas, params, paramsObj, gasError } = paramResult
+        const { params, paramsObj } = paramResult
 
-        if (gasError) {
-            setFillState({
-                type: TransactionStateType.FAILED,
-                error: gasError,
-            })
-            return
-        }
         if (!checkParams(paramsObj, setFillState)) return
 
         // error: unable to sign password
@@ -134,7 +128,16 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         const config = {
             from: account,
-            gas,
+            gas: await (ITO_Contract as ITO2).methods
+                .fill_pool(...params)
+                .estimateGas({
+                    from: account,
+                })
+                .catch((error: Error) => {
+                    setFillState({ type: TransactionStateType.FAILED, error })
+                    throw error
+                }),
+            gasPrice,
         }
 
         // send transaction and wait for hash
@@ -166,7 +169,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     reject(error)
                 })
         })
-    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult, setFillState])
+    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult, gasPrice, setFillState])
 
     const resetCallback = useCallback(() => {
         setFillState({
@@ -263,17 +266,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
             ]),
         ) as Parameters<ITO2['methods']['fill_pool']>
 
-        let gasError = null as Error | null
-        const gas = (await (ITO_Contract as ITO2).methods
-            .fill_pool(...params)
-            .estimateGas({
-                from: account,
-            })
-            .catch((error: Error) => {
-                gasError = error
-            })) as number | undefined
-
-        return { gas, params, paramsObj, gasError }
+        return { params, paramsObj }
     }, [poolSettings]).value
 }
 

@@ -228,7 +228,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             open: true,
             state: fillState,
             summary: t('plugin_ito_transaction_dialog_summary', {
-                amount: formatBalance(poolSettings?.total, poolSettings?.token.decimals),
+                amount: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
                 symbol: poolSettings.token.symbol,
             }),
         })
