@@ -12,6 +12,8 @@ import {
 import Color from 'color'
 import { makeStyles } from '@masknet/theme'
 import { EnhancedProfileTab } from '../../../plugins/Profile/SNSAdaptor/EnhancedProfileTab'
+import { useLocationChange } from '../../../utils/hooks/useLocationChange'
+import { useState } from 'react'
 
 export function injectEnhancedProfileTabAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
@@ -131,8 +133,15 @@ function getStyle() {
 }
 
 export function EnhancedProfileTabAtTwitter() {
-    const style = getStyle()
+    const [style, setStyle] = useState<StyleProps>(getStyle())
+
     const { classes } = useStyles(style)
+
+    useLocationChange(() => {
+        setStyle(getStyle())
+    })
+
+    console.log(style)
     return (
         <EnhancedProfileTab
             title="Web3"
