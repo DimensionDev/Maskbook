@@ -7,7 +7,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { FormattedCurrency } from '../../../../../../shared/src'
+import { FormattedCurrency } from '@masknet/shared'
 import { ZERO_ADDRESS } from '../../../GoodGhosting/constants'
 
 const useStyles = makeStyles()(() => ({
