@@ -81,6 +81,9 @@ const useStyles = makeStyles()((theme) => ({
         pointerEvents: 'none',
         opacity: 0.5,
     },
+    title: {
+        fontSize: 15,
+    },
 }))
 
 export interface MaskAppEntry {
@@ -302,7 +305,9 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
                                 onClick={onClick}
                                 key={i.toString()}>
                                 <img src={img} className={classes.applicationImg} />
-                                <Typography color="textPrimary">{title}</Typography>
+                                <Typography className={classes.title} color="textPrimary">
+                                    {title}
+                                </Typography>
                             </div>
                         ) : null,
                 )}
