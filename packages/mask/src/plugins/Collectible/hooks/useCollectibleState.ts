@@ -1,5 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { useMemo, useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { OrderSide } from 'opensea-js/lib/types'
 import { useValueRef } from '@masknet/shared'
@@ -41,21 +40,8 @@ function useCollectibleState(token?: CollectibleToken) {
 
     //#region events
     const [eventPage, setEventPage] = useState(0)
-    const cursors = useRef<string[]>([])
-    const events = useEvents(
-        provider,
-        tabIndex === CollectibleTab.HISTORY ? token : undefined,
-        cursors.current[eventPage - 1],
-    )
+    const events = useEvents(provider, tabIndex === CollectibleTab.HISTORY ? token : undefined, eventPage, 10)
 
-    useUpdateEffect(() => {
-        if (
-            events.value?.pageInfo.endCursor &&
-            !cursors.current.some((item) => events.value && item === events.value.pageInfo.endCursor)
-        ) {
-            cursors.current.push(events.value.pageInfo.endCursor)
-        }
-    }, [events, cursors])
     //#endregion
 
     return {

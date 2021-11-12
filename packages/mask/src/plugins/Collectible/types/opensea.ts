@@ -35,20 +35,6 @@ interface AssetToken {
     usd_price: string
 }
 
-export interface OpenSeaAssetEventAccount {
-    address: string
-    chain: {
-        identifier: string
-        id: string
-    }
-    user: {
-        publicUsername: string
-        id: string
-    }
-    imageUrl: string
-    id: string
-}
-
 export enum OpenSeaAssetEventType {
     CREATED = 'CREATED',
     SUCCESSFUL = 'SUCCESSFUL',
@@ -64,14 +50,27 @@ export enum OpenSeaAssetEventType {
 }
 
 export interface OpenSeaAssetEvent {
-    cursor: string
-    node: {
+    id: string
+    event_type: OpenSeaAssetEventType
+    from_account?: OpenSeaCustomAccount
+    to_account?: OpenSeaCustomAccount
+    seller?: OpenSeaCustomAccount
+    winner_account?: OpenSeaCustomAccount
+    asset: {
         id: string
-        eventType: OpenSeaAssetEventType
-        fromAccount?: OpenSeaAssetEventAccount
-        toAccount?: OpenSeaAssetEventAccount
-        seller?: OpenSeaAssetEventAccount
-        winnerAccount?: OpenSeaAssetEventAccount
+        decimals: number
+        image_url: string
+        image_original_url: string
+        image_preview_url: string
+        asset_contract: {
+            symbol: string
+        }
+        permalink: string
+    }
+    payment_token: OpenSeaFungibleToken
+    quantity: string
+    ending_price: string
+    /*
         price?: {
             quantity: string
             id: string
@@ -86,20 +85,20 @@ export interface OpenSeaAssetEvent {
                 }
             }
         }
-        transaction?: {
-            blockExplorerLink: string
-            id: string
-        }
-        assetQuantity: {
-            asset: {
-                decimals?: number
-                id: string
-            }
-            quantity: string
-            id: string
-        }
-        eventTimestamp: string
+        */
+    transaction: {
+        blockExplorerLink: string
+        id: string
     }
+    assetQuantity: {
+        asset: {
+            decimals?: number
+            id: string
+        }
+        quantity: string
+        id: string
+    }
+    created_date: string
 }
 
 export interface OpenSeaAssetEventResponse {
@@ -211,7 +210,7 @@ export interface OpenSeaResponse extends Asset {
     collection: OpenSeaCollection
     name: string
     description: string
-    owner: OpenSeaAccount
+    owner: OpenSeaCustomAccount
     orders: AssetOrder[] | null
     buy_orders: AssetOrder[] | null
     sell_orders: AssetOrder[] | null
@@ -246,8 +245,8 @@ export interface AssetEvent {
 }
 
 export interface Transaction {
-    from_account: OpenSeaAccount
-    to_account: OpenSeaAccount
+    from_account: OpenSeaCustomAccount
+    to_account: OpenSeaCustomAccount
     created_date: string
     modified_date: string
     transaction_hash: string
