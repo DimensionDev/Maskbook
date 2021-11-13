@@ -23,6 +23,7 @@ export function useEvents(provider: CollectibleProvider, token?: CollectibleToke
                     size,
                 )
 
+                console.log(openseaEvents)
                 return {
                     data: openseaEvents.map((event) => {
                         const accountPair =
@@ -70,7 +71,7 @@ export function useEvents(provider: CollectibleProvider, token?: CollectibleToke
                                 quantity: event.quantity,
                                 asset: event.asset,
                                 paymentToken: event.payment_token,
-                                price: event.ending_price,
+                                price: event.bid_amount ?? event.ending_price ?? event.starting_price,
                             },
                             eventType: event.event_type,
                             transactionBlockExplorerLink: event.transaction?.blockExplorerLink,

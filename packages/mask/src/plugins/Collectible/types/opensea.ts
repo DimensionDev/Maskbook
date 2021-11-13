@@ -80,22 +80,8 @@ export interface OpenSeaAssetEvent {
     payment_token: OpenSeaFungibleToken
     quantity: string
     ending_price: string
-    /*
-        price?: {
-            quantity: string
-            id: string
-            asset: {
-                decimals: number
-                imageUrl: string
-                symbol: string
-                usdSpotPrice: number
-                assetContract: {
-                    blockExplorerLink: string
-                    id: string
-                }
-            }
-        }
-        */
+    bid_amount: string
+    starting_price: string
     transaction: {
         blockExplorerLink: string
         id: string
