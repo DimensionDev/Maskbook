@@ -3,6 +3,7 @@ import { unreachable } from '@dimensiondev/kit'
 import * as MaskWallet from './providers/Mask'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
+import * as Injected from './providers/Injected'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 
 export async function createWeb3({
@@ -22,9 +23,9 @@ export async function createWeb3({
             return WalletConnect.createWeb3({
                 chainId,
             })
-        case ProviderType.CustomNetwork:
-            throw new Error('To be implemented.')
         case ProviderType.Injected:
+            return Injected.createWeb3()
+        case ProviderType.CustomNetwork:
             throw new Error('To be implemented.')
         default:
             unreachable(providerType)

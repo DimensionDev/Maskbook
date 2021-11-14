@@ -42,7 +42,6 @@ document.addEventListener(CustomEventId, (e) => {
             return apply(ethBridgePrimitiveAccess, null, r[1])
         case 'untilEthBridgeOnline':
             return apply(untilEthereumOnline, null, r[1])
-
         case 'ethBridgeOnEvent':
         case 'rejectPromise':
         case 'resolvePromise':

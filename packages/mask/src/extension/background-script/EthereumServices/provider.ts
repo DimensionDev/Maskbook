@@ -4,6 +4,7 @@ import * as MaskWallet from './providers/Mask'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
+import * as Injected from './providers/Injected'
 import { defer } from '../../../../utils-pure'
 
 //#region connect WalletConnect
@@ -44,7 +45,7 @@ export async function createWalletConnect() {
 }
 
 export async function cancelWalletConnect() {
-    rejectConnect?.(new Error('Failed to connect.'))
+    rejectConnect?.(new Error('Failed to connect to WalletConnect.'))
 }
 //#endregion
 
@@ -71,3 +72,26 @@ export async function connectCustomNetwork() {
         chainId,
     }
 }
+
+//#region connect injected provider
+export async function connectInjected() {
+    const { accounts, chainId } = await Injected.requestAccounts()
+    return {
+        account: first(accounts),
+        chainId,
+    }
+}
+
+export async function notifyInjectedEvent(name: string, event: unknown) {
+    switch (name) {
+        case 'accountsChanged':
+            await Injected.onAccountsChanged(event as string[])
+            break
+        case 'chainChanged':
+            await Injected.onChainIdChanged(event as string)
+            break
+        default:
+            throw new Error(`Unknown event name: ${name}.`)
+    }
+}
+//#endregion

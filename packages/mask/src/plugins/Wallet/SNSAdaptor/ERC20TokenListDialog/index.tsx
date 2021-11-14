@@ -1,9 +1,9 @@
+import { useState } from 'react'
 import { ERC20TokenList, useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useI18N } from '../../../../utils'
 import { DialogContent } from '@mui/material'
 import { MaskDialog } from '@masknet/theme'
-import { useState } from 'react'
+import { useI18N } from '../../../../utils'
 
 export const ERC20TokenListDialog = () => {
     const { t } = useI18N()

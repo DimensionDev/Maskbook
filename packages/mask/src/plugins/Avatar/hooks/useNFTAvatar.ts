@@ -3,6 +3,7 @@ import { PluginNFTAvatarRPC } from '../messages'
 import type { AvatarMetaDB } from '../types'
 
 const cache = new Map<string, Promise<AvatarMetaDB | undefined>>()
+
 export function useNFTAvatar(userId: string) {
     return useAsync(async () => {
         if (!userId) return

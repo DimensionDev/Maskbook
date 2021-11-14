@@ -9,15 +9,16 @@ import {
     getChainIdFromNetworkType,
     NetworkType,
     ProviderType,
+    resolveCalculatedProviderName,
     resolveNetworkName,
-    resolveProviderName,
 } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { delay } from '../../../../utils'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
+import { useInjectedProviderType } from '../../../EVM/hooks'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -29,6 +30,7 @@ export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
+    const injectedProviderType = useInjectedProviderType()
 
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
@@ -82,9 +84,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 // wait for walletconnect to be connected
                 ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
                 break
-            case ProviderType.CustomNetwork:
-                throw new Error('To be implemented.')
             case ProviderType.Injected:
+                ;({ account, chainId } = await Services.Ethereum.connectInjected())
+                break
+            case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
             default:
                 safeUnreachable(providerType)
@@ -92,7 +95,10 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         }
 
         // connection failed
-        if (!account || !networkType) throw new Error(`Failed to connect ${resolveProviderName(providerType)}.`)
+        if (!account || !networkType)
+            throw new Error(
+                `Failed to connect to ${resolveCalculatedProviderName(providerType, injectedProviderType)}.`,
+            )
 
         // need to switch chain
         if (chainId !== expectedChainId) {
@@ -112,8 +118,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 ])
 
                 // recheck
-                ;({ chainId } = await Services.Ethereum.connectMetaMask())
-                if (chainId !== expectedChainId) throw new Error('Failed to switch chain.')
+                const chainIdHex = await Services.Ethereum.getChainId(overrides)
+                if (Number.parseInt(chainIdHex, 16) !== expectedChainId) throw new Error('Failed to switch chain.')
             } catch {
                 throw new Error(`Make sure your wallet is on the ${resolveNetworkName(networkType)} network.`)
             }
@@ -127,7 +133,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             networkType,
         })
         return true as const
-    }, [networkType, providerType])
+    }, [networkType, providerType, injectedProviderType])
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
@@ -144,9 +150,16 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     if (!providerType) return null
 
     return (
-        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={closeDialog}>
+        <InjectedDialog
+            title={`Connect to ${resolveCalculatedProviderName(providerType, injectedProviderType)}`}
+            open={open}
+            onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <ConnectionProgress providerType={providerType} connection={connection} />
+                <ConnectionProgress
+                    providerType={providerType}
+                    injectedProviderType={injectedProviderType}
+                    connection={connection}
+                />
             </DialogContent>
         </InjectedDialog>
     )

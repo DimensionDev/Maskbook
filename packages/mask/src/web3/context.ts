@@ -30,8 +30,8 @@ import Services from '../extension/service'
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(
-        () => {
-            return isMask
+        () =>
+            isMask
                 ? {
                       account: currentMaskWalletAccountSettings.value,
                       chainId: currentMaskWalletChainIdSettings.value,
@@ -41,13 +41,10 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                       account: currentAccountSettings.value,
                       chainId: currentChainIdSettings.value,
                       providerType: currentProviderSettings.value,
-                  }
-        },
-        () => {
-            return {
-                popupsWindow: !disablePopup,
-            }
-        },
+                  },
+        () => ({
+            popupsWindow: !disablePopup,
+        }),
     )
 
     return {

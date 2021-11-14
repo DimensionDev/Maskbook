@@ -15,11 +15,11 @@ export interface NetworkIconProps extends withClasses<'icon'> {
 }
 
 const icons: Record<NetworkType, string> = {
-    [NetworkType.Ethereum]: new URL('./wallet-network-icon/ethereum.png', import.meta.url).toString(),
-    [NetworkType.Binance]: new URL('./wallet-network-icon/binance.png', import.meta.url).toString(),
-    [NetworkType.Polygon]: new URL('./wallet-network-icon/polygon.png', import.meta.url).toString(),
-    [NetworkType.Arbitrum]: new URL('./wallet-network-icon/arbitrum.png', import.meta.url).toString(),
-    [NetworkType.xDai]: new URL('./wallet-network-icon/xdai.png', import.meta.url).toString(),
+    [NetworkType.Ethereum]: new URL('../../../../assets/ethereum.png', import.meta.url).toString(),
+    [NetworkType.Binance]: new URL('../../../../assets/binance.png', import.meta.url).toString(),
+    [NetworkType.Polygon]: new URL('../../../../assets/polygon.png', import.meta.url).toString(),
+    [NetworkType.Arbitrum]: new URL('../../../../assets/arbitrum.png', import.meta.url).toString(),
+    [NetworkType.xDai]: new URL('../../../../assets/xdai.png', import.meta.url).toString(),
 }
 
 export function NetworkIcon(props: NetworkIconProps) {
