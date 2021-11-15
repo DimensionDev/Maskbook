@@ -10,11 +10,11 @@ import { PluginProviderRender } from './PluginProviderRender'
 import { PluginNetworkWatcher } from './PluginNetworkWatcher'
 import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
 import {
-    useRegisteredNetworks,
-    useRegisteredProviders,
+    getRegisteredWeb3Networks,
+    getRegisteredWeb3Providers,
     useActivatedPluginWeb3UI,
     useNetworkType,
-    useRegisteredPluginNetwork,
+    getRegisteredPluginNetwork,
 } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -51,10 +51,10 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     const undeterminedWeb3UI = useActivatedPluginWeb3UI(undeterminedPluginID)
     const undeterminedNetworkType = useNetworkType(undeterminedPluginID)
-    const undeterminedNetwork = useRegisteredPluginNetwork(undeterminedPluginID, undeterminedNetworkType)
+    const undeterminedNetwork = getRegisteredPluginNetwork(undeterminedPluginID, undeterminedNetworkType)
 
-    const networks = useRegisteredNetworks()
-    const providers = useRegisteredProviders()
+    const networks = getRegisteredWeb3Networks()
+    const providers = getRegisteredWeb3Providers()
 
     console.log({
         pluginID,

@@ -43,9 +43,10 @@ export function createManager<T extends Plugin.Shared.DefinitionDeferred<Context
     function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: string) => boolean) {
         _host = host
         const { enabled, signal, addI18NResource } = _host
+        const removeListener = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
 
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
-        signal?.addEventListener('abort', enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop))
+        signal?.addEventListener('abort', removeListener)
 
         for (const plugin of registeredPlugins) {
             plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)

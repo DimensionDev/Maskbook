@@ -1,5 +1,5 @@
 import {
-    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
+    useActivatedPluginSNSAdaptor_withSupportOperateChain,
     useActivatedPluginsSNSAdaptor,
     Plugin,
 } from '@masknet/plugin-infra'
@@ -26,7 +26,7 @@ export const PluginEntryRender = memo(
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
         const chainId = useChainId()
-        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet(chainId)
+        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_withSupportOperateChain(chainId)
         const result = [...useActivatedPluginsSNSAdaptor()]
             .sort((plugin) => {
                 // TODO: support priority order

@@ -23,7 +23,7 @@ import {
     useChainId,
 } from '@masknet/web3-shared-evm'
 import {
-    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
+    useActivatedPluginSNSAdaptor_withSupportOperateChain,
     useActivatedPluginsSNSAdaptor,
 } from '@masknet/plugin-infra'
 import { ToolIconURLs } from '../../resources/tool-icon'
@@ -177,7 +177,7 @@ function useToolbox() {
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
-    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet(chainId)
+    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_withSupportOperateChain(chainId)
 
     //#region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)

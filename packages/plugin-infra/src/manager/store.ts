@@ -1,5 +1,6 @@
-import { useMemo } from 'react'
+// DO NOT import React in this file. This file is also used by worker.
 import type { Plugin } from '../types'
+import { memoize } from 'lodash-es'
 
 const __registered = new Map<string, Plugin.DeferredDefinition>()
 
@@ -14,24 +15,30 @@ export function registerPlugin(def: Plugin.DeferredDefinition) {
     if (__registered.has(def.ID)) return
     if (!__meetRegisterRequirement(def)) return
     __registered.set(def.ID, def)
+    getRegisteredWeb3Networks_memo.cache.clear?.()
+    getRegisteredWeb3Providers_memo.cache.clear?.()
 }
 
-export function useRegisteredPlugins() {
-    return [...__registered.values()].sort((a, b) => {
-        if (a.ID.includes('evm')) return -1
-        if (b.ID.includes('evm')) return 1
-        return 0
-    })
+export function getRegisteredPluginsSort_EVM_Ahead() {
+    return [...__registered.values()].sort(sort_EVM_ahead)
 }
 
-export function useRegisteredNetworks() {
-    const plugins = useRegisteredPlugins()
-    return useMemo(() => plugins.flatMap((x) => x.declareWeb3Networks ?? []), [plugins.map((x) => x.ID).join()])
+function sort_EVM_ahead(a: Plugin.DeferredDefinition, b: Plugin.DeferredDefinition) {
+    if (a.ID.includes('evm')) return -1
+    if (b.ID.includes('evm')) return 1
+    return 0
 }
-
-export function useRegisteredProviders() {
-    const plugins = useRegisteredPlugins()
-    return useMemo(() => plugins.flatMap((x) => x.declareWeb3Providers ?? []), [plugins.map((x) => x.ID).join()])
+const getRegisteredWeb3Networks_memo = memoize(() => {
+    return getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Networks || [])
+})
+const getRegisteredWeb3Providers_memo = memoize(() => {
+    return getRegisteredPluginsSort_EVM_Ahead().flatMap((x) => x.declareWeb3Providers || [])
+})
+export function getRegisteredWeb3Networks() {
+    return getRegisteredWeb3Networks_memo()
+}
+export function getRegisteredWeb3Providers() {
+    return getRegisteredWeb3Providers_memo()
 }
 
 function __meetRegisterRequirement(def: Plugin.Shared.Definition) {

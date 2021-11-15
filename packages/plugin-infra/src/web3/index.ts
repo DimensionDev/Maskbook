@@ -1,3 +1,5 @@
+export * from './getRegisteredPluginNetwork'
+export * from './getRegisteredPluginProvider'
 export * from './useAccount'
 export * from './useAllowTestnet'
 export * from './useAssetType'

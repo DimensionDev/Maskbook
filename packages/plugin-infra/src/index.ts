@@ -10,11 +10,12 @@ export * from './utils'
 export * from './PostContext'
 export * from 'ts-results'
 export {
+    getPluginDefine,
     registerPlugin,
     registeredPlugins,
     registeredPluginIDs,
-    useRegisteredPlugins,
-    useRegisteredNetworks,
-    useRegisteredProviders,
+    getRegisteredPluginsSort_EVM_Ahead,
+    getRegisteredWeb3Networks,
+    getRegisteredWeb3Providers,
 } from './manager/store'
 export { activatedPluginsWorker } from './manager/worker'

@@ -19,7 +19,7 @@ export function useActivatedPluginSNSAdaptor(pluginID: string) {
     return plugins.find((x) => x.ID === pluginID)
 }
 
-export function useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet(chainId: number) {
+export function useActivatedPluginSNSAdaptor_withSupportOperateChain(chainId: number) {
     const plugins = useActivatedPluginsSNSAdaptor()
     return plugins.reduce<Record<string, boolean>>((acc, cur) => {
         const operatingSupportedChains = cur.enableRequirement.web3?.supportedOperationalChains
