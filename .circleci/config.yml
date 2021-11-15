@@ -45,6 +45,9 @@ jobs:
     steps:
       - restore_workspace
       - run:
+          name: Install PNPM
+          command: sudo npm install -g pnpm@6.4.0
+      - run:
           name: Build Mask Network
           command: npx gulp build-ci
       - store_artifacts:
