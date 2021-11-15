@@ -1,6 +1,6 @@
 import { SuccessIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import type { Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { ProviderIcon } from './ProviderIcon'
@@ -67,16 +67,19 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PluginProviderRenderProps {
-    networks: Plugin.Shared.Network[]
-    providers: Plugin.Shared.Provider[]
+    networks: Web3Plugin.NetworkDescriptor[]
+    providers: Web3Plugin.ProviderDescriptor[]
     undeterminedPluginID: string
     undeterminedNetworkID: string
     setUndeterminedPluginID: (id: string) => void
     setUndeterminedNetworkID: (id: string) => void
-    NetworkIconClickBait?: React.ComponentType<{ network: Plugin.Shared.Network; children?: React.ReactNode }>
+    NetworkIconClickBait?: React.ComponentType<{
+        network: Web3Plugin.NetworkDescriptor
+        children?: React.ReactNode
+    }>
     ProviderIconClickBait?: React.ComponentType<{
-        network: Plugin.Shared.Network
-        provider: Plugin.Shared.Provider
+        network: Web3Plugin.NetworkDescriptor
+        provider: Web3Plugin.ProviderDescriptor
         children?: React.ReactNode
     }>
     onSubmit: () => void
@@ -108,16 +111,16 @@ export function PluginProviderRender({
                                 className={classes.networkItem}
                                 key={network.ID}
                                 onClick={() => {
-                                    setUndeterminedPluginID(network.pluginID)
+                                    setUndeterminedPluginID(network.networkSupporterPluginID)
                                     setUndeterminedNetworkID(network.ID)
                                 }}>
                                 <div className={classes.iconWrapper}>
                                     {NetworkIconClickBait ? (
                                         <NetworkIconClickBait network={network}>
-                                            <ImageIcon icon={network.icon} />
+                                            <ImageIcon icon={network.icon.toString()} />
                                         </NetworkIconClickBait>
                                     ) : (
-                                        <ImageIcon icon={network.icon} />
+                                        <ImageIcon icon={network.icon.toString()} />
                                     )}
                                     {undeterminedNetworkID === network.ID && (
                                         <SuccessIcon className={classes.checkedBadge} />
@@ -133,17 +136,17 @@ export function PluginProviderRender({
                     </Typography>
                     <ImageList className={classes.grid} gap={16} cols={3} rowHeight={151} onClick={onSubmit}>
                         {providers
-                            .filter((x) => x.pluginID === undeterminedPluginID)
+                            .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
                             .map((provider) => (
                                 <ImageListItem key={provider.ID}>
                                     {ProviderIconClickBait ? (
                                         <ProviderIconClickBait
                                             network={networks.find((x) => x.ID === undeterminedNetworkID)!}
                                             provider={provider}>
-                                            <ProviderIcon icon={provider.icon} name={provider.name} />
+                                            <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
                                         </ProviderIconClickBait>
                                     ) : (
-                                        <ProviderIcon icon={provider.icon} name={provider.name} />
+                                        <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
                                     )}
                                 </ImageListItem>
                             ))}

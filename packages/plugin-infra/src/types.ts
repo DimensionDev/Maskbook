@@ -2,9 +2,9 @@ import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
 import type { Emitter } from '@servie/events'
-import type { Subscription } from 'use-subscription'
+import type { Web3Plugin } from './web3-types'
 
-export namespace Plugin {
+export declare namespace Plugin {
     /**
      * A code loader interface of the plugin API.
      *
@@ -97,9 +97,9 @@ export namespace Plugin.Shared {
         /** i18n resources of this plugin */
         i18n?: I18NResource
         /** Introduce networks information. */
-        networks?: Network[]
+        declareWeb3Networks?: Web3Plugin.NetworkDescriptor[]
         /** Introduce wallet providers information. */
-        providers?: Provider[]
+        declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -140,13 +140,8 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
-        web3?: Web3EnableRequirement
+        web3?: Web3Plugin.EnableRequirement
     }
-    export interface Web3EnableRequirement {
-        /** Plugin can declare what chain it supports. When the current chain is not supported, the composition entry will be hidden. */
-        operatingSupportedChains?: number[]
-    }
-
     export interface ManagementProperty {
         /** This plugin should not displayed in the plugin management page. */
         internal?: boolean
@@ -171,245 +166,6 @@ export namespace Plugin.Shared {
     export type I18NKey = string
     export type I18NValue = string
     export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
-
-    export interface Network {
-        /** An unique ID for each network */
-        ID: string
-        /** The plugin ID */
-        pluginID: string
-        /** The network type */
-        type: string
-        /** The network icon */
-        icon: string
-        /** The network name */
-        name: string
-    }
-
-    export interface Provider {
-        /** An unique ID for each wallet provider */
-        ID: string
-        /** The plugin ID */
-        pluginID: string
-        /** The provider type */
-        type: string
-        /** The provider icon */
-        icon: string
-        /** The provider name */
-        name: string
-    }
-
-    export interface Web3UI {
-        SelectProviderDialog?: {
-            /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-            NetworkIconClickBait?: React.ComponentType<{ network: Shared.Network; children?: React.ReactNode }>
-            /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-            ProviderIconClickBait?: React.ComponentType<{
-                network: Shared.Network
-                provider: Shared.Provider
-                children?: React.ReactNode
-            }>
-        }
-        Dashboard?: {
-            OverviewComponent?: React.ComponentType<{}>
-            AssetsTableComponent?: React.ComponentType<{}>
-            TransferTableComponent?: React.ComponentType<{}>
-            HistoryTableComponent?: React.ComponentType<{}>
-        }
-    }
-
-    export interface CryptoPrice {
-        [token: string]: {
-            [key in CurrencyType]: number
-        }
-    }
-
-    export interface ChainDetailed {
-        name: string
-        chainId: number
-        fullName: string
-        shortName: string
-        chainName: string
-        networkName: string
-    }
-
-    export interface Wallet {
-        /** User define wallet name. Default address.prefix(6) */
-        name: string
-        /** The address of wallet */
-        address: string
-        /** yep: Mask Wallet, nope: External Wallet */
-        hasStoredKeyInfo: boolean
-        /** yep: Derivable Wallet. nope: UnDerivable Wallet */
-        hasDerivationPath: boolean
-    }
-
-    export interface Pagination {
-        /** The item size of each page. */
-        size?: number
-        /** The page index. */
-        page?: number
-    }
-
-    export interface Asset<T extends unknown> {
-        id: string
-        chain: string
-        balance: string
-        token: Token<T>
-        /** estimated price */
-        price?: {
-            [key in CurrencyType]: string
-        }
-        /** estimated value */
-        value?: {
-            [key in CurrencyType]: string
-        }
-        logoURI?: string
-    }
-
-    export interface AddressName {
-        id: string
-        /** eg. vitalik.eth */
-        label: string
-        /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
-        ownerAddress: string
-        /** eg. 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045 */
-        resolvedAddress?: string
-    }
-
-    export interface Transaction {
-        id: string
-        type: string
-        title: string
-        from: string
-        to: string
-        timestamp: string
-        /** 0: failed 1: succeed */
-        status: 0 | 1
-        /** estimated tx fee */
-        fee: {
-            [key in CurrencyType]: string
-        }
-    }
-
-    export interface Token<T extends unknown> {
-        id: string
-        type: TokenType
-        token: T
-    }
-
-    export interface FungibleTokenMetadata<T extends unknown> {
-        name: string
-        symbol: string
-        decimals: number
-        iconURL?: string
-        _token: T
-    }
-
-    export interface NonFungibleTokenMetadata<T extends unknown> {
-        name: string
-        description: string
-        mediaType: string
-        iconURL?: string
-        assetURL?: string
-        _token: T
-    }
-
-    export interface TokenList<T extends unknown> {
-        name: string
-        description?: string
-        tokens: Token<T>[]
-    }
-
-    export interface Web3State {
-        Shared?: {
-            allowTestnet?: Subscription<boolean>
-            /** The ID of currently chosen sub-network. */
-            chainId?: Subscription<number>
-            /** The address of the currently chosen wallet. */
-            account?: Subscription<string>
-            /** The balance of the currently chosen account. */
-            balance?: Subscription<string>
-            /** The currently tracked block height. */
-            blockNumber?: Subscription<number>
-            /** The network type. */
-            networkType?: Subscription<string | undefined>
-            /** The wallet provider type. */
-            providerType?: Subscription<string | undefined>
-            /** The asset data provider. */
-            assetType?: Subscription<string | undefined>
-            /** The address name data provider. */
-            nameType?: Subscription<string | undefined>
-            /** The collectible data provider. */
-            collectibleType?: Subscription<string | undefined>
-            /** The transaction data provider. */
-            transactionType?: Subscription<string | undefined>
-            /** The currency of estimated values and prices. */
-            currencyType?: Subscription<CurrencyType>
-            /** The tracked token prices which stored as address and price pairs. */
-            prices?: Subscription<CryptoPrice>
-            /** The currently stored wallet by MaskWallet. */
-            wallets?: Subscription<Wallet[]>
-            /** The default derivable wallet. */
-            walletPrimary?: Subscription<Wallet | null>
-            /** The user added fungible tokens. */
-            fungibleTokens?: Subscription<Token<unknown>[]>
-            /** The user added non-fungible tokens. */
-            nonFungibleTokens?: Subscription<Token<unknown>[]>
-        }
-        Asset?: {
-            /** Get fungible assets of given account. */
-            getFungibleAssets?: <T extends unknown>(
-                address: string,
-                providerType: string,
-                networkType: string,
-                pagination?: Pagination,
-            ) => Promise<Asset<T>[]>
-            /** Get non-fungible assets of given account. */
-            getNonFungibleAssets: <T extends unknown>(
-                address: string,
-                providerType: string,
-                networkType: string,
-                pagination?: Pagination,
-            ) => Promise<Asset<T>[]>
-        }
-        Token?: {
-            addToken: <T extends unknown>(token: Token<T>) => Promise<void>
-            removeToken: <T extends unknown>(token: Token<T>) => Promise<void>
-            trustToken: <T extends unknown>(token: Token<T>) => Promise<void>
-            blockToken: <T extends unknown>(token: Token<T>) => Promise<void>
-        }
-        Transaction?: {
-            /** Get latest transactions of given account. */
-            getTransactions: (
-                address: string,
-                providerType: string,
-                networkType: string,
-                pagination?: Pagination,
-            ) => Promise<Transaction[]>
-        }
-        TokenList?: {
-            /** Get the token lists of supported fungible tokens. */
-            getFungibleTokenLists: <T extends unknown>(
-                address: string,
-                providerType: string,
-                networkType: string,
-                pagination?: Pagination,
-            ) => Promise<TokenList<T>[]>
-            /** Get the token lists of supported non-fungible tokens. */
-            getNonFungibleTokenLists: <T extends unknown>(
-                address: string,
-                providerType: string,
-                networkType: string,
-                pagination?: Pagination,
-            ) => Promise<TokenList<T>[]>
-        }
-        Utils?: {
-            isChainIdValid: (chainId: number, allowTestnet: boolean) => boolean
-            getChainDetailed: (chainId: number) => ChainDetailed
-            getFungibleTokenMetadata: <T extends unknown>(token: Token<T>) => Promise<FungibleTokenMetadata<T>>
-            getNonFungibleTokenMetadata: <T extends unknown>(token: Token<T>) => Promise<NonFungibleTokenMetadata<T>>
-        }
-    }
 }
 
 /** This part runs in the SNSAdaptor */
@@ -424,9 +180,9 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Shared.Web3UI
+        Web3UI?: Web3Plugin.Web3UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Shared.Web3State
+        Web3State?: Web3Plugin.Web3State
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -518,9 +274,9 @@ export namespace Plugin.Dashboard {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Shared.Web3UI
+        Web3UI?: Web3Plugin.Web3UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Shared.Web3State
+        Web3State?: Web3Plugin.Web3State
     }
 }
 
@@ -668,7 +424,6 @@ export type IndexableTaggedUnion = {
     type: string | number
     id: string | number
 }
-// TODO: Plugin i18n is not read today.
 export interface I18NStringField {
     /** The i18n key of the string content. */
     i18nKey?: string
@@ -687,25 +442,12 @@ export enum CurrentSNSNetwork {
     Instagram = 3,
 }
 
-/**
- * A network plugin defines the way to connect to a single chain.
- */
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.maskbook.evm',
-    PLUGIN_FLOW = 'com.maskbook.flow',
+export interface Pagination {
+    /** The item size of each page. */
+    size?: number
+    /** The page index. */
+    page?: number
 }
-
-export enum CurrencyType {
-    NATIVE = 'native',
-    BTC = 'btc',
-    USD = 'usd',
-}
-
-export enum TokenType {
-    Fungible = 'Fungible',
-    NonFungible = 'NonFungible',
-}
-
 /**
  * This namespace is not related to the plugin authors
  */

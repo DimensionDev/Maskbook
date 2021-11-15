@@ -1,6 +1,6 @@
 import { remove } from 'lodash-es'
 import * as fcl from '@onflow/fcl'
-import { createConstantSubscription, createSubscriptionFromAsync, Plugin } from '@masknet/plugin-infra'
+import { createConstantSubscription, createSubscriptionFromAsync, Web3Plugin } from '@masknet/plugin-infra'
 import { getAuthConstants } from '@masknet/web3-shared-flow/constants'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow'
 
@@ -50,4 +50,4 @@ function createWeb3State() {
     }
 }
 
-export const Web3State: Plugin.Shared.Web3State = createWeb3State()
+export const Web3State: Web3Plugin.Web3State = createWeb3State()

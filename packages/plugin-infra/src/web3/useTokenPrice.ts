@@ -1,4 +1,4 @@
-import type { CurrencyType } from '../types'
+import type { CurrencyType } from '../web3-types'
 import { usePluginWeb3StateContext } from '../context'
 
 export function useTokenPrice(id: string, currencyType: string, pluginID?: string) {

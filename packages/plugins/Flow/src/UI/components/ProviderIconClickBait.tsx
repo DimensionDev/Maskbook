@@ -1,10 +1,10 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
-import type { Plugin } from '@masknet/plugin-infra/src'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { NetworkType, ProviderType, useFCL } from '@masknet/web3-shared-flow'
 
 export interface ProviderIconClickBaitProps {
-    network: Plugin.Shared.Network
-    provider: Plugin.Shared.Provider
+    network: Web3Plugin.NetworkDescriptor
+    provider: Web3Plugin.ProviderDescriptor
     children?: React.ReactNode
 }
 

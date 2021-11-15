@@ -1,8 +1,7 @@
 import React, { createContext, useContext } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
-import type { Plugin } from '..'
-import { CurrencyType, NetworkPluginID } from '../types'
+import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
 import { createConstantSubscription } from '../utils'
 
 // constant subscriptions
@@ -16,7 +15,7 @@ const NULL = createConstantSubscription(null)
 
 const PluginIDContext = createContext(NetworkPluginID.PLUGIN_EVM)
 
-const PluginsWeb3Context = createContext<Record<string, Plugin.Shared.Web3State>>(null!)
+const PluginsWeb3Context = createContext<Record<string, Web3Plugin.Web3State>>(null!)
 
 function usePluginsWeb3Context() {
     const context = useContext(PluginsWeb3Context)
@@ -24,7 +23,7 @@ function usePluginsWeb3Context() {
     return context
 }
 
-function usePluginWeb3State(pluginID: string, context: Record<string, Plugin.Shared.Web3State>) {
+function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin.Web3State>) {
     const pluginContext = context[pluginID]
     if (!pluginContext) throw new Error(`The context of ${pluginID} is undefined.`)
 
@@ -93,7 +92,7 @@ export function PluginsWeb3ContextProvider({
     pluginID,
     value,
     children,
-}: { pluginID: string } & React.ProviderProps<Record<string, Plugin.Shared.Web3State>>) {
+}: { pluginID: string } & React.ProviderProps<Record<string, Web3Plugin.Web3State>>) {
     return (
         <PluginIDContext.Provider value={pluginID as NetworkPluginID}>
             <PluginsWeb3Context.Provider value={value}>

@@ -1,16 +1,17 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useEffect } from 'react'
 import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
 
 export interface PluginNetworkWatcherProps {
-    network?: Plugin.Shared.Network
+    network?: Web3Plugin.NetworkDescriptor
     expectedPluginID: string
     expectedNetworkID: string
 }
 
 export function PluginNetworkWatcher({ network, expectedPluginID, expectedNetworkID }: PluginNetworkWatcherProps) {
     useEffect(() => {
-        const matched = network && network.pluginID === expectedPluginID && network.ID === expectedNetworkID
+        const matched =
+            network && network.networkSupporterPluginID === expectedPluginID && network.ID === expectedNetworkID
         if (!matched) return
         pluginIDSettings.value = expectedPluginID
         networkIDSettings.value = expectedNetworkID

@@ -22,7 +22,7 @@ export function useActivatedPluginSNSAdaptor(pluginID: string) {
 export function useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet(chainId: number) {
     const plugins = useActivatedPluginsSNSAdaptor()
     return plugins.reduce<Record<string, boolean>>((acc, cur) => {
-        const operatingSupportedChains = cur.enableRequirement.web3?.operatingSupportedChains
+        const operatingSupportedChains = cur.enableRequirement.web3?.supportedOperationalChains
         acc[cur.ID] = !Boolean(operatingSupportedChains) || Boolean(operatingSupportedChains?.includes(chainId))
         return acc
     }, {})
