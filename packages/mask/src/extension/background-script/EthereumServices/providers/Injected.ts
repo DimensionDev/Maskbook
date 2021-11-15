@@ -2,10 +2,10 @@ import { first } from 'lodash-es'
 import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../../../plugins/EVM/messages'
 import { defer } from '../../../../../utils-pure'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { updateAccount } from '../../../../plugins/Wallet/services'
 
 //#region redirect requests to the content page
@@ -15,9 +15,6 @@ async function request(requestArguments: RequestArguments) {
     id += 1
     const requestId = id
     const [deferred, resolve, reject] = defer<any, Error | null>()
-
-    // timeout
-    setTimeout(() => reject(new Error('Timeout!')), 30 * 1000)
 
     function onResponse({ payload, result, error }: EVM_Messages['INJECTED_PROVIDER_RPC_RESPONSE']) {
         if (payload.id !== requestId) return

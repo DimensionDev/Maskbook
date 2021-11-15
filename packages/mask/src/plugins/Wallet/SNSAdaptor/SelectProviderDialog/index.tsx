@@ -4,8 +4,9 @@ import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
-import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon, ProviderIcon } from '@masknet/shared'
 import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
+import { bridgedEthereumProvider } from '@masknet/injected-script'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon, ProviderIcon } from '@masknet/shared'
 import { SuccessIcon } from '@masknet/icons'
 import {
     getChainIdFromNetworkType,
@@ -166,6 +167,21 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         async (providerType: ProviderType) => {
             closeDialog()
 
+            // detect whether metamask installed
+            if (providerType === ProviderType.MetaMask) {
+                try {
+                    const isMetaMask = await bridgedEthereumProvider.getProperty('isMetaMask')
+                    if (!isMetaMask) throw new Error('Not installed.')
+                } catch {
+                    window.open(
+                        resolveInjectedProviderDownloadLink(InjectedProviderType.MetaMask),
+                        '_blank',
+                        'noopener noreferrer',
+                    )
+                    return
+                }
+            }
+
             switch (providerType) {
                 case ProviderType.MaskWallet:
                     await Services.Helper.openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
@@ -203,15 +219,14 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
 
     const onConnectInjectedProvider = useCallback(
         (expectedType: InjectedProviderType) => {
-            if (!injectedProviderReady) return
-            if (expectedType === injectedProviderType) {
+            if (injectedProviderReady && expectedType === injectedProviderType) {
                 onConnectProvider(ProviderType.Injected)
                 return
             }
             const downloadLink = resolveInjectedProviderDownloadLink(expectedType)
             if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
         },
-        [injectedProviderType, injectedProviderReady],
+        [injectedProviderReady, injectedProviderType],
     )
 
     // not available for the native app
@@ -286,7 +301,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                                 onClick={() => onConnectProvider(ProviderType.WalletConnect)}
                             />
                         </ImageListItem>
-                        {Flags.injected_web3_enabled && injectedProviderReady ? (
+                        {Flags.injected_web3_enabled ? (
                             <>
                                 {getEnumAsArray(InjectedProviderType)
                                     .filter(

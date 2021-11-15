@@ -46,6 +46,20 @@ export const resolveInjectedProviderDownloadLink = createLookupTableResolver<Inj
     '',
 )
 
+export const resolveInjectedProviderIdentityKey = createLookupTableResolver<
+    InjectedProviderType,
+    'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
+>(
+    {
+        [InjectedProviderType.MetaMask]: 'isMetaMask',
+        [InjectedProviderType.MathWallet]: 'isMathWallet',
+        [InjectedProviderType.Coin98]: 'isCoin98',
+        [InjectedProviderType.WalletLink]: 'isWalletLink',
+        [InjectedProviderType.Unknown]: '',
+    },
+    '',
+)
+
 export const resolveCalculatedProviderName = (
     providerType: ProviderType,
     injectedProviderType?: InjectedProviderType,

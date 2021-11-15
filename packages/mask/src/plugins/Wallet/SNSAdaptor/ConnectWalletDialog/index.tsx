@@ -129,8 +129,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         await WalletRPC.updateAccount({
             account,
             chainId: expectedChainId,
-            providerType,
             networkType,
+            providerType,
+            injectedProviderType,
         })
         return true as const
     }, [networkType, providerType, injectedProviderType])

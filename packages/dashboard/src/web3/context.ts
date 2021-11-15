@@ -13,6 +13,7 @@ import {
     Web3ProviderType,
     SendOverrides,
     RequestOptions,
+    InjectedProviderType,
 } from '@masknet/web3-shared-evm'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 
@@ -65,6 +66,10 @@ export const Web3Context: Web3ProviderType = {
         NetworkType.Ethereum,
         Messages.events.currentNetworkSettings.on,
     ),
+    injectedProviderType: {
+        getCurrentValue: () => InjectedProviderType.Unknown,
+        subscribe: () => noop,
+    },
     walletPrimary: createSubscriptionFromAsync(
         PluginServices.Wallet.getWalletPrimary,
         null,

@@ -7,8 +7,7 @@ async function createRSS(address: string) {
         endpoint: RSS3_ENDPOINT,
         address,
         sign: async (message: string) => {
-            // a readonly rss3 instance
-            return ''
+            throw new Error('Not supported.')
         },
     })
 }

@@ -2,8 +2,7 @@ import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { NetworkIcon, ProviderIcon, useValueRef, useStylesExtends } from '@masknet/shared'
 import { useChainId, getNetworkTypeFromChainId } from '@masknet/web3-shared-evm'
-import { currentProviderSettings } from '../../plugins/Wallet/settings'
-import { useInjectedProviderType } from '../../plugins/EVM/hooks'
+import { currentInjectedProviderSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
 
 interface StyleProps {
     size: number
@@ -42,7 +41,8 @@ export const WalletIcon = (props: WalletIconProps) => {
     const classes = useStylesExtends(useStyles({ size: badgeSize > size ? badgeSize : size }), props)
     const selectedNetwork = getNetworkTypeFromChainId(chainId)
     const selectedWalletProvider = useValueRef(currentProviderSettings)
-    const injectedProviderType = useInjectedProviderType()
+    const selectedWalletInjectedProvider = useValueRef(currentInjectedProviderSettings)
+
     return (
         <div className={classes.root}>
             <NetworkIcon
@@ -58,7 +58,7 @@ export const WalletIcon = (props: WalletIconProps) => {
                 }}
                 size={badgeSize}
                 providerType={selectedWalletProvider}
-                injectedProviderType={injectedProviderType}
+                injectedProviderType={selectedWalletInjectedProvider}
             />
         </div>
     )
