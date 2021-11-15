@@ -74,7 +74,7 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                     reject(error)
                 })
         })
-    }, [id, password, from, redPacketContract])
+    }, [id, password, from, redPacketContract, gasPrice])
 
     const resetCallback = useCallback(() => {
         setClaimState({
