@@ -80,8 +80,12 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const { erc20Tokens: trustedERC20Tokens, providerType } = useWeb3State()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
     const account = useAccount()
-    const { value: selectedChainBalance } = useChainBalance(account, selectedChainId, providerType)
-    const { value: chainBalanceList } = useChainBalanceList(account, providerType, selectedChainId !== null)
+    const { value: selectedChainBalance } = useChainBalance(
+        selectedChainId === null ? '' : account,
+        selectedChainId ?? ChainId.Mainnet,
+        providerType,
+    )
+    const { value: chainBalanceList } = useChainBalanceList(selectedChainId === null ? account : '', providerType)
 
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const supportedNetworkNativeTokenAssets = useMemo(() => {
