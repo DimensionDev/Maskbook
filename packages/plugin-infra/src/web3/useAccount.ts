@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { usePluginWeb3StateContext } from '../context'
+import { usePluginWeb3StateContext } from './Context'
 
 /**
  * Get the address of the default wallet

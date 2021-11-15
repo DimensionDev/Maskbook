@@ -1,4 +1,4 @@
-import { usePluginWeb3StateContext } from '../context'
+import { usePluginWeb3StateContext } from './Context'
 
 /**
  * Get the current block number

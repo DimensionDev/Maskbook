@@ -1,5 +1,4 @@
 export * from './web3'
-export * from './context'
 export * from './types'
 export * from './web3-types'
 export * from './hooks'
@@ -14,7 +13,6 @@ export {
     registerPlugin,
     registeredPlugins,
     registeredPluginIDs,
-    getRegisteredPluginsSort_EVM_Ahead,
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
 } from './manager/store'

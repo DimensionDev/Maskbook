@@ -19,7 +19,7 @@ export function registerPlugin(def: Plugin.DeferredDefinition) {
     getRegisteredWeb3Providers_memo.cache.clear?.()
 }
 
-export function getRegisteredPluginsSort_EVM_Ahead() {
+function getRegisteredPluginsSort_EVM_Ahead() {
     return [...__registered.values()].sort(sort_EVM_ahead)
 }
 

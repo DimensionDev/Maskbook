@@ -1,5 +1,5 @@
 import { useChainDetailed } from '.'
-import { usePluginWeb3StateContext } from '../context'
+import { usePluginWeb3StateContext } from './Context'
 
 /**
  * Get the chain id which is using by the given (or default) wallet
