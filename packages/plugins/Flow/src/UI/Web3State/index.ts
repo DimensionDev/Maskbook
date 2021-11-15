@@ -50,4 +50,4 @@ function createWeb3State() {
     }
 }
 
-export const Web3State: Web3Plugin.Web3State = createWeb3State()
+export const Web3State: Web3Plugin.ObjectCapabilities.Capabilities = createWeb3State()

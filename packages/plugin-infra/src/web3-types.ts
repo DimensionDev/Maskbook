@@ -1,5 +1,7 @@
 import type { Subscription } from 'use-subscription'
 import type { Pagination } from './types'
+import type { Plugin } from '.'
+
 export declare namespace Web3Plugin {
     export interface EnableRequirement {
         /**
@@ -124,8 +126,8 @@ export declare namespace Web3Plugin {
         description?: string
         tokens: Token<T>[]
     }
-    export interface Web3State {
-        Shared?: {
+    export namespace ObjectCapabilities {
+        export interface SharedState {
             allowTestnet?: Subscription<boolean>
             /** The ID of currently chosen sub-network. */
             chainId?: Subscription<number>
@@ -160,7 +162,7 @@ export declare namespace Web3Plugin {
             /** The user added non-fungible tokens. */
             nonFungibleTokens?: Subscription<Token<unknown>[]>
         }
-        Asset?: {
+        export interface AssetState {
             /** Get fungible assets of given account. */
             getFungibleAssets?: <T extends unknown>(
                 address: string,
@@ -176,13 +178,13 @@ export declare namespace Web3Plugin {
                 pagination?: Pagination,
             ) => Promise<Asset<T>[]>
         }
-        Token?: {
+        export interface TokenManage {
             addToken: <T extends unknown>(token: Token<T>) => Promise<void>
             removeToken: <T extends unknown>(token: Token<T>) => Promise<void>
             trustToken: <T extends unknown>(token: Token<T>) => Promise<void>
             blockToken: <T extends unknown>(token: Token<T>) => Promise<void>
         }
-        Transaction?: {
+        export interface TransactionState {
             /** Get latest transactions of given account. */
             getTransactions: (
                 address: string,
@@ -191,7 +193,7 @@ export declare namespace Web3Plugin {
                 pagination?: Pagination,
             ) => Promise<Transaction[]>
         }
-        TokenList?: {
+        export interface TokenListState {
             /** Get the token lists of supported fungible tokens. */
             getFungibleTokenLists: <T extends unknown>(
                 address: string,
@@ -207,33 +209,39 @@ export declare namespace Web3Plugin {
                 pagination?: Pagination,
             ) => Promise<TokenList<T>[]>
         }
-        Utils?: {
+        export interface Others {
             isChainIdValid: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed: (chainId: number) => ChainDetailed
             getFungibleTokenMetadata: <T extends unknown>(token: Token<T>) => Promise<FungibleTokenMetadata<T>>
             getNonFungibleTokenMetadata: <T extends unknown>(token: Token<T>) => Promise<NonFungibleTokenMetadata<T>>
         }
-    }
-
-    export interface Web3UI {
-        SelectProviderDialog?: {
-            /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-            NetworkIconClickBait?: React.ComponentType<{
-                network: NetworkDescriptor
-                children?: React.ReactNode
-            }>
-            /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-            ProviderIconClickBait?: React.ComponentType<{
-                network: NetworkDescriptor
-                provider: ProviderDescriptor
-                children?: React.ReactNode
-            }>
+        export interface Capabilities {
+            Shared?: SharedState
+            Asset?: AssetState
+            Token?: TokenManage
+            Transaction?: TransactionState
+            TokenList?: TokenListState
+            Utils?: Others
         }
-        Dashboard?: {
-            OverviewComponent?: React.ComponentType<{}>
-            AssetsTableComponent?: React.ComponentType<{}>
-            TransferTableComponent?: React.ComponentType<{}>
-            HistoryTableComponent?: React.ComponentType<{}>
+    }
+    export namespace UI {
+        export interface NetworkIconClickBaitProps {
+            network: NetworkDescriptor
+            children?: React.ReactNode
+        }
+        export interface ProviderIconClickBaitProps {
+            network: NetworkDescriptor
+            provider: ProviderDescriptor
+            children?: React.ReactNode
+        }
+        export interface SelectProviderDialogBait {
+            /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+            NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+            /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
+            ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
+        }
+        export interface UI {
+            SelectProviderDialog?: SelectProviderDialogBait
         }
     }
 }

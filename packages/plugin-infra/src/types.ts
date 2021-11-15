@@ -180,9 +180,9 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.Web3UI
+        Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.Web3State
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -274,9 +274,9 @@ export namespace Plugin.Dashboard {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
-        Web3UI?: Web3Plugin.Web3UI
+        Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
-        Web3State?: Web3Plugin.Web3State
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
     }
 }
 

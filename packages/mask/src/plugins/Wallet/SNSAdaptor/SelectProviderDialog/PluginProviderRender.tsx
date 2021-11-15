@@ -73,15 +73,8 @@ export interface PluginProviderRenderProps {
     undeterminedNetworkID: string
     setUndeterminedPluginID: (id: string) => void
     setUndeterminedNetworkID: (id: string) => void
-    NetworkIconClickBait?: React.ComponentType<{
-        network: Web3Plugin.NetworkDescriptor
-        children?: React.ReactNode
-    }>
-    ProviderIconClickBait?: React.ComponentType<{
-        network: Web3Plugin.NetworkDescriptor
-        provider: Web3Plugin.ProviderDescriptor
-        children?: React.ReactNode
-    }>
+    NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
+    ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps>
     onSubmit: () => void
 }
 
