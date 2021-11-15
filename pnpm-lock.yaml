@@ -14973,6 +14973,7 @@ packages:
 
   /eth-sig-util/1.4.2:
     resolution: {integrity: sha1-jZWCAsftuq6Dlwf7pvCf8ydgYhA=}
+    deprecated: Deprecated in favor of '@metamask/eth-sig-util'
     dependencies:
       ethereumjs-abi: github.com/ethereumjs/ethereumjs-abi/ee3994657fa7a427238e6ba92a84d0b529bbcde0
       ethereumjs-util: 5.2.1
