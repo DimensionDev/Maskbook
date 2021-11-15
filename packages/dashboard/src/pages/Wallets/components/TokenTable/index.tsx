@@ -18,6 +18,8 @@ import {
     useAccount,
     useAssets,
     useWeb3State,
+    useChainBalanceList,
+    useChainBalance,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -25,8 +27,6 @@ import { PluginMessages, PluginServices } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import { useChainBalance } from '../../hooks/useChainBalance'
-import { useChainBalanceList } from '../../hooks/useChainBalanceList'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
