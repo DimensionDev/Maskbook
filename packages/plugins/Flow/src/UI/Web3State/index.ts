@@ -1,8 +1,9 @@
 import { remove } from 'lodash-es'
 import * as fcl from '@onflow/fcl'
-import { createConstantSubscription, createSubscriptionFromAsync, Web3Plugin } from '@masknet/plugin-infra'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { getAuthConstants } from '@masknet/web3-shared-flow/constants'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow'
+import { createConstantSubscription, createSubscriptionFromAsync } from '@masknet/shared-base'
 
 function createClient(chainId: ChainId) {
     const authConstants = getAuthConstants(chainId)

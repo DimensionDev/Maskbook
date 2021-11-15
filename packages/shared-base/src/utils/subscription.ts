@@ -1,13 +1,6 @@
 import { noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 
-export function createStaticSubscription<T>(getter: () => T) {
-    return {
-        getCurrentValue: getter,
-        subscribe: () => noop,
-    }
-}
-
 export function createConstantSubscription<T>(value: T) {
     return {
         getCurrentValue: () => value,

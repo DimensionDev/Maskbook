@@ -2,7 +2,7 @@ import React, { createContext, useContext } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
-import { createConstantSubscription } from '../utils'
+import { createConstantSubscription } from '@masknet/shared'
 
 // constant subscriptions
 const ZERO = createConstantSubscription(0)
