@@ -11,7 +11,7 @@ import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import GuideStep from '../GuideStep'
 import { userGuideStatus } from '../../settings/settings'
 
-interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'button'> {
+interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
     nextStep: 'hidden' | { onClick(): void }
     username?:
