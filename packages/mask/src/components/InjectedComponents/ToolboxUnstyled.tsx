@@ -1,7 +1,5 @@
 import {
     CircularProgress,
-    MenuItem,
-    MenuItemProps,
     ListItemButtonProps,
     ListItemIconProps,
     ListItemTextProps,
@@ -21,33 +19,15 @@ import {
     formatEthereumAddress,
     TransactionStatusType,
 } from '@masknet/web3-shared-evm'
-import {
-    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
-    useActivatedPluginsSNSAdaptor,
-} from '@masknet/plugin-infra'
-import { ToolIconURLs } from '../../resources/tool-icon'
-import { Image } from '../shared/Image'
-import { forwardRef, useRef, useCallback } from 'react'
-import { MaskMessages } from '../../utils/messages'
-import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
-import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
-import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
+import { useCallback } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginTransakMessages } from '../../plugins/Transak/messages'
-import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { Flags } from '../../utils/flags'
-import { activatedSocialNetworkUI } from '../../social-network'
-import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
-import { hasNativeAPI, nativeAPI, useI18N, useMenu } from '../../utils'
-import { safeUnreachable } from '@dimensiondev/kit'
-import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
+import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
 import { WalletIcon } from '../shared/WalletIcon'
-import { MaskIcon, MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
+import { WalletSharp } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
 const useStyles = makeStyles()((theme) => ({
@@ -61,10 +41,6 @@ const useStyles = makeStyles()((theme) => ({
                 ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
                 : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
         backgroundImage: 'none',
-    },
-    menu: {
-        paddingTop: 0,
-        paddingBottom: 0,
     },
     menuItem: {
         paddingTop: theme.spacing(2),
@@ -89,7 +65,6 @@ export interface ToolboxHintProps {
     ListItemText?: React.ComponentType<Pick<ListItemTextProps, 'primary'>>
     ListItemIcon?: React.ComponentType<Pick<ListItemIconProps, 'children'>>
     Typography?: React.ComponentType<Pick<TypographyProps, 'children' | 'className'>>
-    icon?: 'mono' | 'colorful'
     iconSize?: number
     mini?: boolean
 }
@@ -101,38 +76,15 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         ListItemIcon = MuiListItemIcon,
         Container = 'div',
         Typography = MuiTypography,
-        icon = 'mono',
         iconSize = 24,
         mini,
     } = props
     const { classes } = useStyles()
-    const {
-        openWallet,
-        isWalletValid,
-        ClaimDialogJSX,
-        walletTitle,
-        menu,
-        openMenu,
-        chainColor,
-        shouldDisplayChainIndicator,
-    } = useToolbox()
+    const { openWallet, isWalletValid, walletTitle, chainColor, shouldDisplayChainIndicator } = useToolbox()
 
     return (
         <>
-            <GuideStep step={1} total={3} tip={t('user_guide_tip_1', { sns: activatedSocialNetworkUI.name })}>
-                <Container>
-                    <ListItemButton onClick={openMenu}>
-                        <ListItemIcon>
-                            {icon === 'mono' ? <MaskSharpIconOfSize size={iconSize} /> : <MaskIcon size={iconSize} />}
-                        </ListItemIcon>
-                        {mini ? null : (
-                            <ListItemText primary={<Typography className={classes.font}>Mask Network</Typography>} />
-                        )}
-                    </ListItemButton>
-                </Container>
-            </GuideStep>
-            {menu}
-            <GuideStep step={2} total={3} tip={t('user_guide_tip_2')}>
+            <GuideStep step={1} total={2} tip={t('user_guide_tip_1')}>
                 <Container>
                     <ListItemButton onClick={openWallet}>
                         <ListItemIcon>
@@ -159,37 +111,20 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                     </ListItemButton>
                 </Container>
             </GuideStep>
-            {ClaimDialogJSX}
         </>
     )
 }
 
 function useToolbox() {
-    const { classes } = useStyles()
     const { t } = useI18N()
     const account = useAccount()
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
-    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
 
     //#region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
-    //#endregion
-
-    //#region Encrypted message
-    const openEncryptedMessage = useCallback(
-        (id?: string) =>
-            MaskMessages.events.requestComposition.sendToLocal({
-                reason: 'timeline',
-                open: true,
-                options: {
-                    startupPlugin: id,
-                },
-            }),
-        [],
-    )
     //#endregion
 
     //#region Wallet
@@ -200,88 +135,6 @@ function useToolbox() {
         WalletMessages.events.selectProviderDialogUpdated,
     )
     //#endregion
-
-    //#region Buy currency
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TransakPluginID)
-    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
-    const openBuyCurrency = useCallback(() => {
-        setBuyDialog({
-            open: true,
-            address: account,
-        })
-    }, [account])
-    //#endregion
-
-    //#region Swap
-    const swapPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TraderPluginID)
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
-    //#endregion
-
-    //#region Claim All ITO
-    const {
-        open: isClaimAllDialogOpen,
-        onOpen: onClaimAllDialogOpen,
-        onClose: onClaimAllDialogClose,
-    } = useControlledDialog()
-    //#endregion
-
-    const items: ToolboxItemDescriptor[] = [
-        { ...ToolIconURLs.encryptedmsg, onClick: () => openEncryptedMessage() },
-        {
-            ...ToolIconURLs.token,
-            onClick: openBuyCurrency,
-            hide: !(account && Flags.transak_enabled && transakPluginEnabled),
-        },
-        {
-            ...ToolIconURLs.swap,
-            onClick: openSwapDialog,
-            hide: !(chainIdValid && swapPluginEnabled),
-        },
-        {
-            ...ToolIconURLs.claim,
-            onClick: onClaimAllDialogOpen,
-            hide: !account,
-        },
-    ]
-
-    const pluginI18N = usePluginI18NField()
-    useActivatedPluginsSNSAdaptor().forEach((plugin) => {
-        if (!plugin.ToolbarEntry) return
-        const { image, label, onClick: onClickRaw, priority, useShouldDisplay } = plugin.ToolbarEntry
-
-        let onClick: () => void
-        if (onClickRaw === 'openCompositionEntry') {
-            onClick = () => openEncryptedMessage(plugin.ID)
-        } else {
-            safeUnreachable(onClickRaw)
-            onClick = () => {}
-        }
-
-        items.push({
-            onClick,
-            image,
-            label: typeof label === 'string' ? label : pluginI18N(plugin.ID, label),
-            priority,
-            useShouldDisplay,
-            hide: !operatingSupportedChainMapping[plugin.ID],
-        })
-    })
-
-    const [menu, openMenu] = useMenu(
-        items
-            .filter((x) => x.hide !== true)
-            .sort((a, b) => b.priority - a.priority)
-            .map((desc) => <ToolboxItem {...desc} />),
-        false,
-        {
-            paperProps: {
-                className: classNames(classes.paper),
-            },
-            menuListProps: {
-                className: classNames(classes.menu),
-            },
-        },
-    )
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
@@ -309,41 +162,12 @@ function useToolbox() {
 
     const walletTitle = renderButtonText()
 
-    const ClaimDialogJSX = isClaimAllDialogOpen ? (
-        <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
-    ) : null
     const shouldDisplayChainIndicator = account && chainIdValid && chainDetailed?.network !== 'mainnet'
     return {
         openWallet,
         isWalletValid,
-        ClaimDialogJSX,
         walletTitle,
-        menu,
-        openMenu,
         shouldDisplayChainIndicator,
         chainColor,
     }
 }
-
-interface ToolboxItemDescriptor {
-    onClick: () => void
-    image: string
-    label: string
-    hide?: boolean
-    priority: number
-    useShouldDisplay?(): boolean
-}
-// TODO: this should be rendered in the ErrorBoundary
-const ToolboxItem = forwardRef<any, MenuItemProps & ToolboxItemDescriptor>((props, ref) => {
-    const { image, label, hide, priority, useShouldDisplay, ...rest } = props
-    const shouldDisplay = useRef(useShouldDisplay || (() => true)).current() && !hide
-    const { classes } = useStyles()
-    if (!shouldDisplay) return null
-
-    return (
-        <MenuItem className={classes.menuItem} ref={ref} {...rest}>
-            <Image src={image} width={19} height={19} />
-            <MuiTypography className={classes.menuText}>{label}</MuiTypography>
-        </MenuItem>
-    )
-})
