@@ -46,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         [theme.breakpoints.down('md')]: {
             marginRight: theme.spacing(3),
         },
-        flexShrink: 0,
     },
 }))
 

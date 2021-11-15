@@ -60,7 +60,7 @@ const BalanceTitle = styled(Typography)(
 
 const BalanceContent = styled(Typography)(
     ({ theme }) => `
-    font-size: ${theme.typography.h6.fontSize};
+    font-size: ${theme.typography.h5.fontSize};
     color: ${MaskColorVar.textPrimary};
     line-height: ${theme.typography.h2.lineHeight};
 `,
@@ -100,7 +100,7 @@ export const Balance = memo<BalanceCardProps>(
                             {t.wallets_balance()}{' '}
                             {selectedChainId ? getChainName(selectedChainId) : t.wallets_balance_all_chain()}
                         </BalanceTitle>
-                        <BalanceContent sx={{ py: 0.5 }}>
+                        <BalanceContent sx={{ py: 1.5 }}>
                             {isNaN(balance)
                                 ? '-'
                                 : balance.toLocaleString('en', {

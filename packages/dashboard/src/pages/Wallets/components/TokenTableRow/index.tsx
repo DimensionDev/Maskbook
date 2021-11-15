@@ -29,6 +29,11 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
+    row: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
     cell: {
         padding: theme.spacing(2),
         border: 'none',
@@ -69,7 +74,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
     const isOnCurrentChain = useMemo(() => currentChainId === asset.token.chainId, [asset, currentChainId])
 
     return (
-        <TableRow>
+        <TableRow className={classes.row}>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box position="relative">

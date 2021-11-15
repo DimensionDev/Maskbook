@@ -1,17 +1,18 @@
 import { makeStyles } from '@masknet/theme'
 import { NetworkType } from '@masknet/web3-shared-evm'
 import { useStylesExtends } from '../..'
-
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     icon: {
         borderRadius: '50%',
         backgroundColor: '#F7F9FA',
+        border: `1px solid ${theme.palette.background.default}`,
     },
-})
+}))
 
 export interface NetworkIconProps extends withClasses<'icon'> {
     size?: number
     networkType?: NetworkType
+    border?: boolean // todo
 }
 
 const icons: Record<NetworkType, string> = {

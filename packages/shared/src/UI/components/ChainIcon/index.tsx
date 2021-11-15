@@ -3,14 +3,15 @@ import { ChainId, getChainDetailed, getNetworkTypeFromChainId, resolveChainColor
 import { makeStyles } from '@masknet/theme'
 import { NetworkIcon } from '../NetworkIcon'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     point: {
         width: 12.5,
         height: 12.5,
         borderRadius: 6.25,
         margin: 3.75,
+        border: `1px solid ${theme.palette.background.default}`,
     },
-})
+}))
 export interface ChainIconProps {
     chainId: ChainId
     size?: number
