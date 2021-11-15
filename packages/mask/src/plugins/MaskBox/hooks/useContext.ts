@@ -23,16 +23,15 @@ import { useMaskBoxInfo } from './useMaskBoxInfo'
 import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent'
 import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale'
 import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
-import { useHeartBit } from './useHeartBit'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
+import { useHeartBit } from './useHeartBit'
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 function useContext(initialState?: { boxId: string }) {
     const heartBit = useHeartBit()
-
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
@@ -77,6 +76,8 @@ function useContext(initialState?: { boxId: string }) {
         )
             return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
+        const remaining = Number.parseInt(maskBoxInfo.remaining, 10)
+        const sold = Number.parseInt(maskBoxInfo.total, 10) - remaining
         const info: BoxInfo = {
             boxId,
             creator: maskBoxInfo.creator,
@@ -84,10 +85,11 @@ function useContext(initialState?: { boxId: string }) {
             sellAll: maskBoxCreationSuccessEvent.returnValues.sell_all,
             personalLimit: personalLimit,
             personalRemaining: Math.max(0, personalLimit - purchasedTokens.length),
-            remaining: Number.parseInt(maskBoxInfo.remaining, 10),
+            remaining,
             startAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.start_time, 10) * 1000),
             endAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.end_time, 10) * 1000),
             total: maskBoxInfo.total,
+            sold,
             tokenIds: allTokens,
             tokenIdsPurchased: purchasedTokens,
             payments: paymentTokens.map((token, i) => {
@@ -191,6 +193,7 @@ function useContext(initialState?: { boxId: string }) {
         ? paymentNativeTokenBalance
         : paymentERC20TokenBalance
     const paymentTokenDetailed = paymentTokenInfo?.token ?? null
+    const isBalanceInsufficient = new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).gt(paymentTokenBalance)
 
     useEffect(() => {
         const firstPaymentTokenAddress = first(boxInfo?.payments)?.token.address
@@ -254,6 +257,7 @@ function useContext(initialState?: { boxId: string }) {
         paymentTokenIndex,
         paymentTokenBalance,
         paymentTokenDetailed,
+        isBalanceInsufficient,
 
         // transactions
         openBoxTransaction,

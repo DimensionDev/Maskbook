@@ -114,7 +114,7 @@ async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
 export async function openOptionsPage(route?: DashboardRoutes, search?: string) {
     return browser.tabs.create({
         active: true,
-        url: browser.runtime.getURL(`/dashboard.html#/${route}${search ? `?${search}` : ''}`),
+        url: browser.runtime.getURL(`/dashboard.html#${route}${search ? `?${search}` : ''}`),
     })
 }
 
