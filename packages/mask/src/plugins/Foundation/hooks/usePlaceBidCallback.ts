@@ -92,5 +92,5 @@ export function usePlaceBidCallback(auctionId: string, amount: string) {
         })
     }, [])
 
-    return [placeBidState, PlaceBidCallback, resetCallback] as const
+    return [placeBidState, placeBidCallback, resetCallback] as const
 }
