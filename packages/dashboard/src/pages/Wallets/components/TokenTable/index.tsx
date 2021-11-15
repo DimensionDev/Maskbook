@@ -15,8 +15,11 @@ import {
     getChainDetailed,
     getChainIdFromNetworkType,
     makeSortAssertWithoutChainFn,
+    useAccount,
     useAssets,
     useWeb3State,
+    useChainBalanceList,
+    useChainBalance,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -74,8 +77,15 @@ interface TokenTableProps {
 export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
 
-    const trustedERC20Tokens = useWeb3State().erc20Tokens
+    const { erc20Tokens: trustedERC20Tokens, providerType } = useWeb3State()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    const account = useAccount()
+    const { value: selectedChainBalance } = useChainBalance(
+        selectedChainId === null ? '' : account,
+        selectedChainId ?? ChainId.Mainnet,
+        providerType,
+    )
+    const { value: chainBalanceList } = useChainBalanceList(selectedChainId === null ? account : '', providerType)
 
     const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const supportedNetworkNativeTokenAssets = useMemo(() => {
@@ -99,7 +109,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         selectedChainId === null ? 'all' : selectedChainId,
     )
 
-    const assetsWithNativeToken = useMemo(() => {
+    const _assetsWithNativeToken = useMemo(() => {
         if (selectedChainId) return detailedTokens
         const assets = supportedNetworkNativeTokenAssets.filter(
             (x) =>
@@ -109,6 +119,15 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         )
         return [...detailedTokens, ...assets].sort(makeSortAssertWithoutChainFn())
     }, [selectedChainId, supportedNetworkNativeTokenAssets, detailedTokens])
+
+    const assetsWithNativeToken = _assetsWithNativeToken.map((x) => {
+        const balance =
+            x.token.type === EthereumTokenType.Native
+                ? selectedChainBalance ?? chainBalanceList?.find((y) => y.chainId === x.token.chainId)?.balance
+                : null
+        if (balance) x.balance = balance
+        return x
+    })
 
     const onSwap = useCallback((token: FungibleTokenDetailed) => {
         openSwapDialog({

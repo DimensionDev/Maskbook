@@ -1,5 +1,6 @@
 export * from './useAccount'
 export * from './useAllowTestnet'
+export * from './useBalance'
 export * from './useBlockie'
 export * from './useBlockNumber'
 export * from './useChainId'
