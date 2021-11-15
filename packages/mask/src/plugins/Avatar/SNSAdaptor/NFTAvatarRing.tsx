@@ -69,7 +69,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     </circle>
                 </pattern>
 
-                <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`}>
+                <text x="0%" textAnchor="middle" fill={`url(#${id}-pattern)`} fontFamily="sans-serif">
                     <textPath xlinkHref={`#${id}-path`} startOffset="50%" rotate="auto">
                         <tspan fontWeight="bold" fontSize={fontSize}>
                             {text}
