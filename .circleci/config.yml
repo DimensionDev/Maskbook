@@ -26,8 +26,11 @@ jobs:
           keys:
             - v3-mask-cache-pnpm
       - run:
+          name: Install PNPM
+          command: npm install -g pnpm@6.4.0
+      - run:
           name: Install Dependencies
-          command: npx pnpm@6.4.0 install --frozen-lockfile --store-dir ~/.pnpm/
+          command: pnpm@6.4.0 install --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
           key: v3-mask-cache-npm
