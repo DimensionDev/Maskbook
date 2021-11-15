@@ -5,11 +5,13 @@ import classnames from 'classnames'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon, ProviderIcon } from '@masknet/shared'
-import { unreachable } from '@dimensiondev/kit'
+import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
 import { SuccessIcon } from '@masknet/icons'
 import {
     getChainIdFromNetworkType,
+    InjectedProviderType,
     ProviderType,
+    resolveInjectedProviderDownloadLink,
     resolveInjectedProviderName,
     useAccount,
     useChainId,
@@ -199,6 +201,19 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
         ],
     )
 
+    const onConnectInjectedProvider = useCallback(
+        (expectedType: InjectedProviderType) => {
+            if (!injectedProviderReady) return
+            if (expectedType === injectedProviderType) {
+                onConnectProvider(ProviderType.Injected)
+                return
+            }
+            const downloadLink = resolveInjectedProviderDownloadLink(expectedType)
+            if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
+        },
+        [injectedProviderType, injectedProviderReady],
+    )
+
     // not available for the native app
     if (hasNativeAPI) return null
 
@@ -272,20 +287,31 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                             />
                         </ImageListItem>
                         {Flags.injected_web3_enabled && injectedProviderReady ? (
-                            <ImageListItem>
-                                <Provider
-                                    logo={
-                                        <ProviderIcon
-                                            classes={{ icon: classes.providerIcon }}
-                                            providerType={ProviderType.Injected}
-                                            injectedProviderType={injectedProviderType}
-                                            size={45}
-                                        />
-                                    }
-                                    name={resolveInjectedProviderName(injectedProviderType)}
-                                    onClick={() => onConnectProvider(ProviderType.Injected)}
-                                />
-                            </ImageListItem>
+                            <>
+                                {getEnumAsArray(InjectedProviderType)
+                                    .filter(
+                                        (x) =>
+                                            ![InjectedProviderType.Unknown, InjectedProviderType.MetaMask].includes(
+                                                x.value,
+                                            ),
+                                    )
+                                    .map(({ value: injectedProviderType }) => (
+                                        <ImageListItem key={injectedProviderType}>
+                                            <Provider
+                                                logo={
+                                                    <ProviderIcon
+                                                        classes={{ icon: classes.providerIcon }}
+                                                        providerType={ProviderType.Injected}
+                                                        injectedProviderType={injectedProviderType}
+                                                        size={45}
+                                                    />
+                                                }
+                                                name={resolveInjectedProviderName(injectedProviderType)}
+                                                onClick={() => onConnectInjectedProvider(injectedProviderType)}
+                                            />
+                                        </ImageListItem>
+                                    ))}
+                            </>
                         ) : null}
                     </ImageList>
                 </Box>

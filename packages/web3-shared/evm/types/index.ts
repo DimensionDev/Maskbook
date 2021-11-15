@@ -64,9 +64,9 @@ export enum ProviderType {
 export enum InjectedProviderType {
     Unknown = 'Unknown',
     MetaMask = 'MetaMask',
-    MathWallet = 'MathWallet',
-    WalletLink = 'WalletLink',
     Coin98 = 'Coin98',
+    WalletLink = 'WalletLink',
+    MathWallet = 'MathWallet',
 }
 
 export enum LockStatus {

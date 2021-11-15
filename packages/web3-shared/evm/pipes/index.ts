@@ -35,6 +35,17 @@ export const resolveInjectedProviderName = createLookupTableResolver<InjectedPro
     'Injected Web3',
 )
 
+export const resolveInjectedProviderDownloadLink = createLookupTableResolver<InjectedProviderType, string>(
+    {
+        [InjectedProviderType.MetaMask]: 'https://metamask.io/download.html',
+        [InjectedProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
+        [InjectedProviderType.Coin98]: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
+        [InjectedProviderType.WalletLink]: 'https://wallet.coinbase.com/',
+        [InjectedProviderType.Unknown]: '',
+    },
+    '',
+)
+
 export const resolveCalculatedProviderName = (
     providerType: ProviderType,
     injectedProviderType?: InjectedProviderType,
