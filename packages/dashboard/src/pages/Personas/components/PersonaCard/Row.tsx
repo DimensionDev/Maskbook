@@ -42,10 +42,11 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     avatar: {
-        marginRight: theme.spacing(4),
+        marginRight: theme.spacing(6),
         [theme.breakpoints.down('md')]: {
-            marginRight: theme.spacing(2),
+            marginRight: theme.spacing(3),
         },
+        flexShrink: 0,
     },
 }))
 
@@ -137,13 +138,7 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 className={classes.setting}>
                 <SettingsIcon fontSize="inherit" style={{ fill: MaskColorVar.textPrimary }} />
             </IconButton>
-            <Stack
-                direction="row"
-                alignItems="center"
-                justifyContent="center"
-                flex={1}
-                maxWidth={200}
-                className={classes.avatar}>
+            <Stack direction="row" alignItems="center" justifyContent="center" width="240px" className={classes.avatar}>
                 <Box textAlign="center" className={classes.icon} onClick={() => toggleAvatar(true)}>
                     <MaskAvatar size={96} />
                     <Typography variant="body1" sx={{ cursor: 'pointer' }}>
