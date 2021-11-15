@@ -27,7 +27,7 @@ jobs:
             - v3-mask-cache-pnpm
       - run:
           name: Install PNPM
-          command: npm install -g pnpm@6.4.0
+          command: sudo npm install -g pnpm@6.4.0
       - run:
           name: Install Dependencies
           command: pnpm@6.4.0 install --frozen-lockfile --store-dir ~/.pnpm/
