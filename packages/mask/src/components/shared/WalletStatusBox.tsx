@@ -1,16 +1,21 @@
-import { FormattedAddress, useRemoteControlledDialog, useValueRef, useSnackbarCallback } from '@masknet/shared'
-import { WalletMessages } from '../../plugins/Wallet/messages'
-import classNames from 'classnames'
-import { currentProviderSettings } from '../../plugins/Wallet/settings'
+import { useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Copy, ExternalLink } from 'react-feather'
-import { useI18N } from '../../utils'
-import Services from '../../extension/service'
+import classNames from 'classnames'
 import { ProviderType, resolveAddressLinkOnExplorer, useWallet, useChainId } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { WalletIcon } from './WalletIcon'
-import { useCallback } from 'react'
+import {
+    FormattedAddress,
+    useRemoteControlledDialog,
+    useValueRef,
+    useSnackbarCallback,
+    WalletIcon,
+} from '@masknet/shared'
+import { WalletMessages } from '../../plugins/Wallet/messages'
+import { currentProviderSettings } from '../../plugins/Wallet/settings'
+import { useI18N } from '../../utils'
+import Services from '../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
