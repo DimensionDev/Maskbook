@@ -72,7 +72,6 @@ export function WalletStatusBox() {
 
     const chainId = useChainId()
     const selectedWallet = useWallet()
-    const { setDialog: setRenameDialog } = useRemoteControlledDialog(WalletMessages.events.walletRenameDialogUpdated)
 
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
@@ -137,16 +136,6 @@ export function WalletStatusBox() {
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
-                    <Link
-                        className={classes.link}
-                        component="button"
-                        onClick={() => {
-                            setRenameDialog({
-                                open: true,
-                                wallet: selectedWallet,
-                            })
-                        }}
-                    />
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2">
