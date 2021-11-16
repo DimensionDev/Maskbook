@@ -11,7 +11,7 @@ interface NFTRSSNode {
     nft: AvatarMetaDB
 }
 
-export async function createRSS(address: string) {
+export async function createRSS3(address: string) {
     return new RSS3({
         endpoint: RSS3_APP,
         address,
@@ -21,8 +21,8 @@ export async function createRSS(address: string) {
     })
 }
 
-export async function getNFTAvatarFromRSS(address: string) {
-    const rss = await createRSS(address)
+export async function getNFTAvatarFromRSS3(address: string) {
+    const rss = await createRSS3(address)
     const file = await rss.files.get(rss.account.address)
     const nft = Object.getOwnPropertyDescriptor(file, '_nft')
     if (!nft?.value) return
@@ -34,8 +34,8 @@ export async function getNFTAvatarFromRSS(address: string) {
     return data.nft
 }
 
-export async function saveNFTAvatarFromRSS(address: string, nft: AvatarMetaDB, signature: string) {
-    const rss = await createRSS(address)
+export async function saveNFTAvatarToRSS3(address: string, nft: AvatarMetaDB, signature: string) {
+    const rss = await createRSS3(address)
     if (!rss) return
 
     const file = await rss.files.get(rss.account.address)

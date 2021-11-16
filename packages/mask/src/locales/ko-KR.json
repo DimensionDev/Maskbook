@@ -606,7 +606,7 @@
     "plugin_pooltogether_apr": "{{token}} 로 {{apr}}% APR 받습니다",
     "plugin_pooltogether_view_pool": "View pool",
     "plugin_pooltogether_prize": "{{period}} 가격",
-    "plugin_pooltogether_share": "I just deposit {{amount}} {{cashTag}}{{symbol}} into the {{pool}}, can I win the lottery this week?\nFollow @PoolTogether_ and @realMaskbook (mask.io) to deposit in PoolTogether's pools.\n#pooltogether #mask_io",
+    "plugin_pooltogether_share": "I just deposit {{amount}} {{cashTag}}{{symbol}} into the {{pool}}, can I win the lottery this week?\nFollow @PoolTogether_ and @realMaskNetwork (mask.io) to deposit in PoolTogether's pools.\n#pooltogether #mask_io",
     "plugin_pooltogether_share_no_official_account": "{{pool}} 에서 {{amount}} {{cashTag}}{{symbol}} 예금했습니다, 이번 주 당첨될 수 있을까요?",
     "plugin_pooltogether_buy": "{{symbol}} 획득",
     "plugin_pooltogether_enter_an_amount": "금액 입력",

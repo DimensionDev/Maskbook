@@ -1,6 +1,16 @@
 import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
+export interface SendOverrides {
+    chainId?: ChainId
+    account?: string
+    providerType?: ProviderType
+}
+
+export interface RequestOptions {
+    popupsWindow?: boolean
+}
+
 export enum CurrencyType {
     USD = 'usd',
 }
@@ -8,6 +18,7 @@ export enum CurrencyType {
 export interface PriceRecord {
     [currency: string]: number
 }
+
 /** Base on response of coingecko's token price API */
 export interface CryptoPrice {
     [token: string]: PriceRecord
@@ -43,10 +54,19 @@ export enum ChainId {
 }
 
 export enum ProviderType {
+    Injected = 'Injected',
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
     CustomNetwork = 'CustomNetwork',
+}
+
+export enum InjectedProviderType {
+    Unknown = 'Unknown',
+    MetaMask = 'MetaMask',
+    Coin98 = 'Coin98',
+    WalletLink = 'WalletLink',
+    MathWallet = 'MathWallet',
 }
 
 export enum LockStatus {
@@ -262,6 +282,7 @@ export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+    ETH_CHAIN_ID = 'eth_chainId',
     ETH_ACCOUNTS = 'eth_accounts',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',

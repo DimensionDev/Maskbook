@@ -15,12 +15,12 @@ import Services from '../../../../extension/service'
 
 export function useSpaceStationContractClaimCallback(campaignInfo: CampaignInfo) {
     const account = useAccount()
-    const contract = useSpaceStationContract()
+    const spaceStationContract = useSpaceStationContract()
     const { CONTRACT_ADDRESS } = useSpaceStationGalaxyConstants()
     const [claimState, setClaimState] = useTransactionState()
 
     const claimCallback = useCallback(async () => {
-        if (!CONTRACT_ADDRESS || !contract || !campaignInfo) {
+        if (!CONTRACT_ADDRESS || !spaceStationContract || !campaignInfo) {
             setClaimState({ type: TransactionStateType.UNKNOWN })
             return
         }
@@ -64,7 +64,7 @@ ${campaignInfo.description}`,
         // estimate gas and compose transaction
         const config = {
             from: account,
-            gas: await contract.methods
+            gas: await spaceStationContract.methods
                 .claim(...params)
                 .estimateGas({ from: account })
                 .catch((error) => {
@@ -73,7 +73,7 @@ ${campaignInfo.description}`,
                 }),
         }
         return new Promise<void>(async (resolve, reject) => {
-            contract.methods
+            spaceStationContract.methods
                 .claim(...params)
                 .send(config as NonPayableTx)
                 .on(TransactionEventType.TRANSACTION_HASH, async (hash) => {
@@ -117,7 +117,7 @@ ${campaignInfo.description}`,
                     reject(error)
                 })
         })
-    }, [account, campaignInfo, setClaimState, Services, CONTRACT_ADDRESS, contract, campaignInfo.id])
+    }, [account, campaignInfo, CONTRACT_ADDRESS, spaceStationContract])
 
     const resetCallback = useCallback(() => {}, [setClaimState])
 
