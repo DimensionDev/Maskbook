@@ -182,7 +182,6 @@ function useToolbox() {
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_withSupportOperateChain(chainId)
-
     const { Utils } = useWeb3State()
 
     //#region recent pending transactions
