@@ -71,6 +71,8 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     requestExtensionPermission: RequestExtensionPermissionEvent
     signRequestApproved: PersonaSignApprovedEvent
     maskSDKHotModuleReload: void
+    __kv_backend_presistent__: unknown
+    __kv_backend_in_memory__: unknown
 }
 
 export interface UpdateEvent<Data> {

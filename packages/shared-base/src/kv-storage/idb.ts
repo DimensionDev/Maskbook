@@ -1,5 +1,6 @@
 import type { KVStorageBackend } from '.'
 import { IDBPDatabase, openDB } from 'idb'
+import { None, Some } from 'ts-results'
 export function createIndexedDB_KVStorageBackend(dbName: string, beforeAutoSync = Promise.resolve()): KVStorageBackend {
     let db: IDBPDatabase | undefined
 
@@ -25,7 +26,9 @@ export function createIndexedDB_KVStorageBackend(dbName: string, beforeAutoSync 
         beforeAutoSync,
         async getValue(key) {
             const db = await ensureDB()
-            return db.transaction('store', 'readonly').store.get(key)
+            const t = db.transaction('store', 'readonly')
+            if ((await t.store.count(key)) === 0) return None
+            return Some(t.store.get(key))
         },
         async setValue(key, value) {
             const db = await ensureDB()

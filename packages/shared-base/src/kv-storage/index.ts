@@ -1,12 +1,15 @@
 import type { UnboundedRegistry as MessageChannel } from '@dimensiondev/holoflows-kit'
+import type { Option } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 
 export { createInMemoryKVStorageBackend } from './in-memory'
 export { createIndexedDB_KVStorageBackend } from './idb'
+export { createProxyKVStorageBackend } from './proxy'
+export type { ProxiedKVStorageBackend } from './proxy'
 export const removed = Symbol.for('removed')
 export interface KVStorageBackend {
-    setValue(key: string, value: any): Promise<void>
-    getValue(key: string): Promise<any>
+    setValue(key: string, value: unknown): Promise<void>
+    getValue(key: string): Promise<Option<unknown>>
     beforeAutoSync: Promise<void>
 }
 
@@ -19,7 +22,7 @@ export interface KVStorageBackend {
 export function createKVStorage(
     backend: KVStorageBackend,
     message: MessageChannel<any>,
-    signal?: AbortSignal,
+    signal = new AbortController().signal,
 ): StateScope<never>['createSubscope'] {
     return (name, defaultValues) => {
         return createScope(signal, backend, message, null, name, defaultValues)
@@ -30,6 +33,7 @@ export interface StateScope<StorageState extends object> {
     createSubscope<StorageState extends object>(
         subScopeName: string,
         defaultValue: StorageState,
+        signal?: AbortSignal,
     ): StateScope<StorageState>
     storage: StateObject<StorageState>
 }
@@ -49,7 +53,7 @@ const alwaysThrowHandler = () => {
     throw new TypeError('Invalid operation')
 }
 function createScope(
-    signal: AbortSignal | undefined,
+    signal: AbortSignal,
     backend: KVStorageBackend,
     message: MessageChannel<any>,
     parentScope: string | null,
@@ -58,7 +62,7 @@ function createScope(
 ): StateScope<any> {
     if (scope.includes('/')) throw new TypeError('scope name cannot contains "/"')
     if (scope.includes(':')) throw new TypeError('scope name cannot contains ":"')
-    const currentScope = `${parentScope}/${scope}`
+    const currentScope = parentScope === null ? scope : `${parentScope}/${scope}`
     const storage: StateObject<any> = new Proxy({ __proto__: null } as any, {
         defineProperty: alwaysThrowHandler,
         deleteProperty: alwaysThrowHandler,
@@ -82,15 +86,23 @@ function createScope(
     })
 
     return {
-        createSubscope(subscope, defaultValues) {
-            return createScope(signal, backend, message, currentScope, subscope, defaultValues)
+        createSubscope(subscope, defaultValues, scopeSignal) {
+            let aggregatedSignal = signal
+            if (scopeSignal) {
+                const aggregatedAbortController = new AbortController()
+                const abort = () => aggregatedAbortController.abort()
+                signal.addEventListener('abort', abort, { once: true })
+                scopeSignal.addEventListener('abort', abort, { once: true })
+                aggregatedSignal = aggregatedAbortController.signal
+            }
+            return createScope(aggregatedSignal, backend, message, currentScope, subscope, defaultValues)
         },
         storage,
     }
 }
 
 function createState(
-    signal: AbortSignal | undefined,
+    signal: AbortSignal,
     backend: KVStorageBackend,
     message: MessageChannel<any>,
     scope: string,
@@ -100,8 +112,13 @@ function createState(
     const propKey = `${scope}:${prop}`
 
     let initialized = false
+    let usingDefaultValue = true
     const initializedPromise: Promise<void> = backend.beforeAutoSync
         .then(() => backend.getValue(propKey))
+        .then((val) => {
+            if (val.some) usingDefaultValue = false
+            val.unwrapOr(defaultValue)
+        })
         .then((val) => {
             state = val
             initialized = true
@@ -123,6 +140,7 @@ function createState(
 
     function setter(val: any) {
         if (isEqual(state, val)) return
+        usingDefaultValue = false
         state = val
         for (const f of listeners) f()
     }
@@ -137,11 +155,13 @@ function createState(
             return initializedPromise!
         },
         get state() {
+            if (!initialized) throw new Error('Try to access K/V state before initialization finished.')
             return state
         },
         async setState(value) {
-            if (signal?.aborted) throw new TypeError('Invalid state.')
-            if (!isEqual(state, value)) await backend.setValue(propKey, value)
+            if (signal.aborted) throw new TypeError('Aborted storage.')
+            // force trigger store when set state with default value to make it persistent.
+            if (usingDefaultValue || !isEqual(state, value)) await backend.setValue(propKey, value)
             setter(value)
         },
         subscription,
