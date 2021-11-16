@@ -26,7 +26,7 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
             } catch (error: unknown) {
                 EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                     payload,
-                    error: error instanceof Error ? error : new Error('Failed to send request.'),
+                    error: error instanceof Error ? error : new Error(),
                 })
             }
         })
