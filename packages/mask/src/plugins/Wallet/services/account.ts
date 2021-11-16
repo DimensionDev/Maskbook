@@ -97,6 +97,18 @@ export async function resetAccount(
     if (providerType) currentProviderSettings.value = providerType
 }
 
+//#region select wallet with popups
+let callbackMemorized: (accounts: string[], chainId: ChainId) => void | undefined
+
+export async function selectAccountPrepare(callback: (accounts: string[], chainId: ChainId) => void) {
+    callbackMemorized = callback
+}
+
+export async function selectAccount(accounts: string[], chainId: ChainId) {
+    callbackMemorized?.(accounts, chainId)
+}
+//#endregion
+
 export async function setDefaultWallet() {
     if (currentAccountSettings.value) return
     const wallets = await getWallets()

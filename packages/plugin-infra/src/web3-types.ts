@@ -229,11 +229,13 @@ export declare namespace Web3Plugin {
         export interface NetworkIconClickBaitProps {
             network: NetworkDescriptor
             children?: React.ReactNode
+            onClick?: () => void
         }
         export interface ProviderIconClickBaitProps {
             network: NetworkDescriptor
             provider: ProviderDescriptor
             children?: React.ReactNode
+            onClick?: () => void
         }
         export interface SelectProviderDialogBait {
             /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */

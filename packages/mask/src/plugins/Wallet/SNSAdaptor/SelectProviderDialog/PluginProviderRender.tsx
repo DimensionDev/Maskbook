@@ -131,11 +131,12 @@ export function PluginProviderRender({
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
                             .map((provider) => (
-                                <ImageListItem key={provider.ID} onClick={onSubmit}>
+                                <ImageListItem key={provider.ID}>
                                     {ProviderIconClickBait ? (
                                         <ProviderIconClickBait
                                             network={networks.find((x) => x.ID === undeterminedNetworkID)!}
-                                            provider={provider}>
+                                            provider={provider}
+                                            onClick={onSubmit}>
                                             <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
                                         </ProviderIconClickBait>
                                     ) : (

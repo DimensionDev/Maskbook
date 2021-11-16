@@ -6,17 +6,19 @@ export interface ProviderIconClickBaitProps {
     network: Web3Plugin.NetworkDescriptor
     provider: Web3Plugin.ProviderDescriptor
     children?: React.ReactNode
+    onClick?: () => void
 }
 
-export function ProviderIconClickBait({ network, provider, children }: ProviderIconClickBaitProps) {
+export function ProviderIconClickBait({ network, provider, children, onClick }: ProviderIconClickBaitProps) {
     const networkType = network.type as NetworkType
     const providerType = network.type as ProviderType
 
     const fcl = useFCL()
     const onLogIn = useCallback(() => fcl.logIn(), [fcl])
-    const onClick = useCallback(() => {
+    const onClickProvider = useCallback(() => {
         onLogIn()
-    }, [networkType, providerType, onLogIn])
+        onClick?.()
+    }, [networkType, providerType, onLogIn, onClick])
 
     return (
         <>
@@ -24,7 +26,7 @@ export function ProviderIconClickBait({ network, provider, children }: ProviderI
                 ? cloneElement(children, {
                       ...children.props,
                       ...{
-                          onClick,
+                          onClick: onClickProvider,
                       },
                   })
                 : children}

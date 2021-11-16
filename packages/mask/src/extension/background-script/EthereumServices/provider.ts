@@ -1,6 +1,6 @@
 import { first } from 'lodash-es'
-import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
-import * as MaskWallet from './providers/Mask'
+import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
@@ -49,16 +49,16 @@ export async function cancelWalletConnect() {
 }
 //#endregion
 
-export async function connectMetaMask() {
-    const { accounts, chainId } = await MetaMask.requestAccounts()
+export async function connectMaskWallet(networkType: NetworkType) {
+    const { accounts, chainId } = await MaskWallet.requestAccounts(networkType)
     return {
         account: first(accounts),
         chainId,
     }
 }
 
-export async function connectMask() {
-    const { accounts, chainId } = await MaskWallet.requestAccounts()
+export async function connectMetaMask() {
+    const { accounts, chainId } = await MetaMask.requestAccounts()
     return {
         account: first(accounts),
         chainId,

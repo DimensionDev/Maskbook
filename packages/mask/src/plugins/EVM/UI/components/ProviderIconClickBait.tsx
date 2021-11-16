@@ -1,16 +1,8 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { PopupRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import {
-    getChainIdFromNetworkType,
-    NetworkType,
-    ProviderType,
-    resolveProviderDownloadLink,
-    useWallets,
-} from '@masknet/web3-shared-evm'
-import Services from '../../../../extension/service'
+import { NetworkType, ProviderType, resolveProviderDownloadLink, useWallets } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useInjectedProviderReady, useInjectedProviderType } from '../../hooks'
 
@@ -18,9 +10,10 @@ export interface ProviderIconClickBaitProps {
     network: Web3Plugin.NetworkDescriptor
     provider: Web3Plugin.ProviderDescriptor
     children?: React.ReactNode
+    onClick?: () => void
 }
 
-export function ProviderIconClickBait({ network, provider, children }: ProviderIconClickBaitProps) {
+export function ProviderIconClickBait({ network, provider, children, onClick }: ProviderIconClickBaitProps) {
     //#region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -34,9 +27,13 @@ export function ProviderIconClickBait({ network, provider, children }: ProviderI
     const injectedProviderType = useInjectedProviderType()
     const injectedProviderReady = useInjectedProviderReady()
 
-    const onClick = useCallback(async () => {
+    const onClickProvider = useCallback(async () => {
         // open the download page
-        if ([ProviderType.MetaMask, ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) {
+        if (
+            [ProviderType.MetaMask, ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(
+                providerType,
+            )
+        ) {
             if (!injectedProviderReady || providerType !== injectedProviderType) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
                 if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
@@ -46,10 +43,6 @@ export function ProviderIconClickBait({ network, provider, children }: ProviderI
 
         switch (providerType) {
             case ProviderType.MaskWallet:
-                await Services.Helper.openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
-                    chainId: getChainIdFromNetworkType(networkType),
-                })
-                break
             case ProviderType.MetaMask:
             case ProviderType.WalletConnect:
             case ProviderType.Coin98:
@@ -66,7 +59,9 @@ export function ProviderIconClickBait({ network, provider, children }: ProviderI
             default:
                 unreachable(providerType)
         }
-    }, [networkType, providerType, wallets, injectedProviderReady, injectedProviderType])
+
+        onClick?.()
+    }, [networkType, providerType, wallets, injectedProviderReady, injectedProviderType, onClick])
 
     return (
         <>
@@ -74,7 +69,7 @@ export function ProviderIconClickBait({ network, provider, children }: ProviderI
                 ? cloneElement(children, {
                       ...children.props,
                       ...{
-                          onClick,
+                          onClick: onClickProvider,
                       },
                   })
                 : children}

@@ -14,7 +14,7 @@ import { getChainDetailed, createLookupTableResolver } from '../utils'
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
     {
-        [ProviderType.MaskWallet]: 'Mask',
+        [ProviderType.MaskWallet]: 'Mask Network',
         [ProviderType.MetaMask]: 'MetaMask',
         [ProviderType.WalletConnect]: 'WalletConnect',
         [ProviderType.CustomNetwork]: 'CustomNetwork',

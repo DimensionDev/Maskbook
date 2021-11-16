@@ -27,7 +27,6 @@ import {
     useActivatedPluginsSNSAdaptor,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useProviderType,
 } from '@masknet/plugin-infra'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'

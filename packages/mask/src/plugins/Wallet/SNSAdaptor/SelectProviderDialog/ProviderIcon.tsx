@@ -1,5 +1,4 @@
-import { makeStyles } from '@masknet/theme'
-import { getMaskColor } from '@masknet/theme'
+import { makeStyles, getMaskColor } from '@masknet/theme'
 import { Typography, Card, ButtonBase, ButtonBaseProps } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({

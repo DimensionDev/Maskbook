@@ -1,8 +1,10 @@
 import MaskWallet from 'web3'
 import type { HttpProvider } from 'web3-core'
-import { ChainId, getChainRPC } from '@masknet/web3-shared-evm'
+import { PopupRoutes } from '@masknet/shared-base'
+import { ChainId, getChainIdFromNetworkType, getChainRPC, NetworkType } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
-import { getWallets } from '../../../../plugins/Wallet/services'
+import { getWallets, selectAccountPrepare } from '../../../../plugins/Wallet/services'
+import { openPopupWindow } from '../../HelperService'
 
 //#region providers
 const providerPool = new Map<string, HttpProvider>()
@@ -64,11 +66,24 @@ export function createWeb3({
 }
 //#endregion
 
-export async function requestAccounts() {
+export async function requestAccounts(networkType: NetworkType) {
     const wallets = await getWallets()
-    const accounts = wallets.filter((x) => x.storedKeyInfo).map((y) => y.address)
-    return {
-        accounts,
-        chainId: currentChainIdSettings.value,
-    }
+    return new Promise<{
+        chainId: ChainId
+        accounts: string[]
+    }>(async (resolve, reject) => {
+        try {
+            await selectAccountPrepare((accounts, chainId) => {
+                resolve({
+                    chainId,
+                    accounts,
+                })
+            })
+            await openPopupWindow(wallets.length > 0 ? PopupRoutes.SelectWallet : undefined, {
+                chainId: getChainIdFromNetworkType(networkType),
+            })
+        } catch {
+            reject(new Error('Failed to connect to Mask Network.'))
+        }
+    })
 }
