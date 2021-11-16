@@ -26,13 +26,14 @@ import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
 import { WalletIcon } from '../shared/WalletIcon'
-import { WalletSharp } from '../../resources/MaskIcon'
+import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 
 const useStyles = makeStyles()((theme) => ({
     font: {
         color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
+        margin: '0 8px',
     },
     paper: {
         borderRadius: 4,
@@ -57,6 +58,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 18,
         height: 18,
         marginLeft: theme.spacing(0.5),
+    },
+    iconWrapper: {
+        display: 'flex',
+        alignItems: 'baseline',
+    },
+    maskFilledIcon: {
+        marginRight: 6,
     },
 }))
 export interface ToolboxHintProps {
@@ -88,13 +96,26 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                 <Container>
                     <ListItemButton onClick={openWallet}>
                         <ListItemIcon>
-                            {isWalletValid ? <WalletIcon size={iconSize} /> : <WalletSharp size={iconSize} />}
+                            {isWalletValid ? (
+                                <div className={classes.iconWrapper}>
+                                    <div className={classes.maskFilledIcon}>
+                                        <MaskFilledIcon size={iconSize} />
+                                    </div>
+                                    {mini ? null : <WalletIcon size={iconSize} />}
+                                </div>
+                            ) : (
+                                <MaskFilledIcon size={iconSize} />
+                            )}
                         </ListItemIcon>
                         {mini ? null : (
                             <ListItemText
                                 primary={
                                     <Box
-                                        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        sx={{
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'center',
+                                        }}>
                                         <Typography className={classes.font}>{walletTitle}</Typography>
                                         {shouldDisplayChainIndicator ? (
                                             <FiberManualRecordIcon
