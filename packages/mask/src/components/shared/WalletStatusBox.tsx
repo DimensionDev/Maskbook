@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { ProviderType, resolveAddressLinkOnExplorer, useWallet, useChainId } from '@masknet/web3-shared-evm'
+import { ProviderType, resolveAddressLinkOnExplorer, useWallet, useChainId, resolveInjectedProviderName } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import {
@@ -16,6 +16,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
+import { useInjectedProviderType } from '../../plugins/EVM/hooks'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -45,14 +46,6 @@ const useStyles = makeStyles()((theme) => ({
     actionButton: {
         fontSize: 12,
         marginLeft: theme.spacing(1),
-        backgroundColor: theme.palette.mode === 'light' ? '#111418' : 'rgb(29, 155, 240)',
-        ...(theme.palette.mode === 'light'
-            ? {
-                  '&:hover': {
-                      backgroundColor: '#2f3640',
-                  },
-              }
-            : {}),
         padding: theme.spacing(1, 2),
     },
     address: {
@@ -91,11 +84,13 @@ const useStyles = makeStyles()((theme) => ({
 
 export function WalletStatusBox() {
     const { t } = useI18N()
+    const { classes } = useStyles()
+
     const chainId = useChainId()
     const selectedWallet = useWallet()
-    const { classes } = useStyles()
     const { setDialog: setRenameDialog } = useRemoteControlledDialog(WalletMessages.events.walletRenameDialogUpdated)
     const selectedProviderType = useValueRef(currentProviderSettings)
+    const injectedProviderType = useInjectedProviderType()
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
@@ -148,7 +143,11 @@ export function WalletStatusBox() {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{selectedWallet.name}</Typography>
+                    <Typography className={classes.accountName}>
+                        {selectedProviderType === ProviderType.Injected
+                            ? resolveInjectedProviderName(injectedProviderType)
+                            : selectedWallet.name}
+                    </Typography>
                     <Link
                         className={classes.link}
                         component="button"
@@ -188,7 +187,7 @@ export function WalletStatusBox() {
                         className={classes.actionButton}
                         color="primary"
                         size="small"
-                        variant="outlined"
+                        variant="contained"
                         onClick={onDisconnect}>
                         {t('wallet_status_button_disconnect')}
                     </Button>

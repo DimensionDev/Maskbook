@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { PLUGIN_ID, PLUGIN_ICON, PLUGIN_NAME, PLUGIN_DESCRIPTION, PLUGIN_PROVIDERS, PLUGIN_NETWORKS } from './constants'
+import { PLUGIN_ID, PLUGIN_ICON, PLUGIN_NAME, PLUGIN_DESCRIPTION, PLUGIN_PROVIDERS, PLUGIN_NETWORKS, PLUGIN_INJECTED_PROVIDERS } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -14,4 +14,5 @@ export const base: Plugin.Shared.Definition = {
     },
     declareWeb3Networks: PLUGIN_NETWORKS,
     declareWeb3Providers: PLUGIN_PROVIDERS,
+    declareWeb3InjectedProviders: PLUGIN_INJECTED_PROVIDERS,
 }

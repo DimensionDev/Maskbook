@@ -60,6 +60,7 @@ export function PreviewCard(props: PreviewCardProps) {
         paymentTokenAddress,
         setPaymentTokenAddress,
         paymentTokenPrice,
+        paymentTokenBalance,
         paymentTokenDetailed,
 
         // token ids

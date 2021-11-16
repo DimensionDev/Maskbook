@@ -312,7 +312,9 @@
         "redpackets",
         "blocto",
         "onflow",
-        "unauthenticate"
+        "unauthenticate",
+        "mathwallet",
+        "rpcs"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

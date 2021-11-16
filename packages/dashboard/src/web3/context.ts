@@ -1,5 +1,6 @@
 import { noop } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     ChainId,
     ERC1155TokenDetailed,
@@ -10,6 +11,9 @@ import {
     EthereumTokenType,
     NetworkType,
     Web3ProviderType,
+    SendOverrides,
+    RequestOptions,
+    InjectedProviderType,
 } from '@masknet/web3-shared-evm'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 
@@ -24,9 +28,17 @@ export const Web3Context: Web3ProviderType = {
         return () => {}
     }),
     account: createSubscriptionFromAsync(
-        Services.Settings.getSelectedWalletAddress,
+        async () => {
+            const providerType = await Services.Settings.getCurrentSelectedWalletProvider()
+            if (providerType === ProviderType.Injected) return ''
+            return Services.Settings.getSelectedWalletAddress()
+        },
         '',
-        Messages.events.currentAccountSettings.on,
+        (callback) => {
+            const a = Messages.events.currentAccountSettings.on(callback)
+            const b = Messages.events.currentProviderSettings.on(callback)
+            return () => void [a(), b()]
+        },
     ),
     tokenPrices: createSubscriptionFromAsync(
         Services.Settings.getTokenPrices,
@@ -54,6 +66,10 @@ export const Web3Context: Web3ProviderType = {
         NetworkType.Ethereum,
         Messages.events.currentNetworkSettings.on,
     ),
+    injectedProviderType: {
+        getCurrentValue: () => InjectedProviderType.Unknown,
+        subscribe: () => noop,
+    },
     walletPrimary: createSubscriptionFromAsync(
         PluginServices.Wallet.getWalletPrimary,
         null,
@@ -98,14 +114,40 @@ export const Web3Context: Web3ProviderType = {
 }
 
 export function createExternalProvider() {
+    const send = (
+        payload: JsonRpcPayload,
+        callback: (error: Error | null, response?: JsonRpcResponse) => void,
+        overrides?: SendOverrides,
+        options?: RequestOptions,
+    ) => {
+        Services.Ethereum.request(
+            {
+                method: payload.method,
+                params: payload.params,
+            },
+            overrides,
+            options,
+        ).then(
+            (result) => {
+                callback(null, {
+                    jsonrpc: '2.0',
+                    id: payload.id as number,
+                    result,
+                })
+            },
+            (error) => {
+                callback(error)
+            },
+        )
+    }
     return {
         isMetaMask: false,
         isStatus: true,
         host: '',
         path: '',
         request: Services.Ethereum.request,
-        send: Services.Ethereum.requestSend,
-        sendAsync: Services.Ethereum.requestSend,
+        send,
+        sendAsync: send,
     }
 }
 

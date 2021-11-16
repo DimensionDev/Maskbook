@@ -9,6 +9,7 @@ import {
     PortfolioProvider,
     ProviderType,
     LockStatus,
+    InjectedProviderType,
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-es'
@@ -73,6 +74,16 @@ export const currentProviderSettings = createGlobalSettings<ProviderType>(
     },
 )
 
+/**
+ * The injected provider type of the selected wallet
+ */
+export const currentInjectedProviderSettings = createGlobalSettings<InjectedProviderType>(
+    `${PLUGIN_IDENTIFIER}+selectedWalletInjectedProvider`,
+    InjectedProviderType.Unknown,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
 /**
  * The default portfolio data provider
  */

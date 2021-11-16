@@ -2,13 +2,6 @@ import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
-import { useI18N } from '../../../../utils/i18n-next-ui'
-import { WalletMessages } from '../../messages'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { hasNativeAPI, nativeAPI } from '../../../../utils'
-import { PluginProviderRender } from './PluginProviderRender'
-import { PluginNetworkWatcher } from './PluginNetworkWatcher'
-import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
@@ -16,6 +9,13 @@ import {
     useNetworkType,
     getRegisteredPluginNetwork,
 } from '@masknet/plugin-infra'
+import { useI18N } from '../../../../utils/i18n-next-ui'
+import { WalletMessages } from '../../messages'
+import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { hasNativeAPI, nativeAPI } from '../../../../utils'
+import { PluginProviderRender } from './PluginProviderRender'
+import { PluginNetworkWatcher } from './PluginNetworkWatcher'
+import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -55,15 +55,6 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
-
-    console.log({
-        pluginID,
-        networkID,
-        undeterminedPluginID,
-        undeterminedNetworkID,
-        undeterminedNetwork,
-        undeterminedNetworkType,
-    })
 
     const { NetworkIconClickBait, ProviderIconClickBait } = undeterminedWeb3UI?.SelectProviderDialog ?? {}
 

@@ -1,14 +1,30 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import type { RequestOptions } from '../extension/background-script/EthereumService'
-import type { SendOverrides } from '../extension/background-script/EthereumServices/send'
+import type { RequestOptions, SendOverrides } from '@masknet/web3-shared-evm'
 import Services from '../extension/service'
 
 export function createExternalProvider(getOverrides?: () => SendOverrides, getOptions?: () => RequestOptions) {
-    const requestSend = (
-        payload: JsonRpcPayload,
-        callback: (error: Error | null, response?: JsonRpcResponse) => void,
-    ) => Services.Ethereum.requestSend(payload, callback, getOverrides?.(), getOptions?.())
+    const send = (payload: JsonRpcPayload, callback: (error: Error | null, response?: JsonRpcResponse) => void) => {
+        Services.Ethereum.request(
+            {
+                method: payload.method,
+                params: payload.params,
+            },
+            getOverrides?.(),
+            getOptions?.(),
+        ).then(
+            (result) => {
+                callback(null, {
+                    jsonrpc: '2.0',
+                    id: payload.id as number,
+                    result,
+                })
+            },
+            (error: unknown) => {
+                if (error instanceof Error) callback(error)
+            },
+        )
+    }
     const request = (requestArguments: RequestArguments) =>
         Services.Ethereum.request(requestArguments, getOverrides?.(), getOptions?.())
 
@@ -18,8 +34,8 @@ export function createExternalProvider(getOverrides?: () => SendOverrides, getOp
         isStatus: true,
         host: '',
         path: '',
-        sendAsync: requestSend,
-        send: requestSend,
         request: request,
+        send,
+        sendAsync: send,
     }
 }

@@ -65,4 +65,25 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         name: 'WalletConnect',
         icon: new URL('./assets/walletconnect.png', import.meta.url),
     },
+    {
+        ID: `${PLUGIN_ID}_coin98`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Injected,
+        name: 'Coin98',
+        icon: new URL('./assets/coin98.png', import.meta.url),
+    },
+    {
+        ID: `${PLUGIN_ID}_walletlink`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Injected,
+        name: 'Coinbase',
+        icon: new URL('./assets/coinbase.png', import.meta.url),
+    },
+    {
+        ID: `${PLUGIN_ID}_mathwallet`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Injected,
+        name: 'MathWallet',
+        icon: new URL('./assets/mathwallet.png', import.meta.url),
+    },
 ]

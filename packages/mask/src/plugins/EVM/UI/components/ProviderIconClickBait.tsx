@@ -33,6 +33,7 @@ export function ProviderIconClickBait({ network, provider, children }: ProviderI
                 break
             case ProviderType.MetaMask:
             case ProviderType.WalletConnect:
+            case ProviderType.Injected:
                 setConnectWalletDialog({
                     open: true,
                     providerType,
@@ -45,6 +46,18 @@ export function ProviderIconClickBait({ network, provider, children }: ProviderI
                 unreachable(providerType)
         }
     }, [networkType, providerType, wallets])
+
+    // const onConnectInjectedProvider = useCallback(
+    //     (expectedType: InjectedProviderType) => {
+    //         if (injectedProviderReady && expectedType === injectedProviderType) {
+    //             onConnectProvider(ProviderType.Injected)
+    //             return
+    //         }
+    //         const downloadLink = resolveInjectedProviderDownloadLink(expectedType)
+    //         if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
+    //     },
+    //     [injectedProviderReady, injectedProviderType],
+    // )
 
     return (
         <>

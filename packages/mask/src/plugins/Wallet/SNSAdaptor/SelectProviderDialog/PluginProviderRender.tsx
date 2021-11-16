@@ -127,7 +127,7 @@ export function PluginProviderRender({
                     <Typography className={classes.title} variant="h2" component="h2">
                         2. Choose Wallet
                     </Typography>
-                    <ImageList className={classes.grid} gap={16} cols={3} rowHeight={151} onClick={onSubmit}>
+                    <ImageList className={classes.grid} gap={8} cols={3} rowHeight={130} onClick={onSubmit}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
                             .map((provider) => (
@@ -142,7 +142,8 @@ export function PluginProviderRender({
                                         <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
                                     )}
                                 </ImageListItem>
-                            ))}
+                            )
+                        )}
                     </ImageList>
                 </section>
             </Box>

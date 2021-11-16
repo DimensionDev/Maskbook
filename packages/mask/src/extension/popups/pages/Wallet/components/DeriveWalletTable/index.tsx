@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useAsync } from 'react-use'
 import {
     Table,
     TableCell,
@@ -12,9 +13,8 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
-import { useAsync } from 'react-use'
-import Services from '../../../../../service'
 import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
+import { useWeb3 } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     header: {
@@ -101,8 +101,8 @@ export interface DeriveWalletTableRowProps {
 }
 export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, added, onCheck }) => {
     const { classes } = useStyles()
-
-    const { loading, value: balance } = useAsync(async () => Services.Ethereum.getBalance(address))
+    const web3 = useWeb3()
+    const { loading, value: balance } = useAsync(async () => web3.eth.getBalance(address), [web3, address])
 
     return (
         <TableRow key={address}>

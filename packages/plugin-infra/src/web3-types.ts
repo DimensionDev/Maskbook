@@ -34,6 +34,7 @@ export declare namespace Web3Plugin {
         /** The provider name */
         name: string
     }
+
     export interface CryptoPrice {
         [token: string]: {
             [key in CurrencyType]: number
