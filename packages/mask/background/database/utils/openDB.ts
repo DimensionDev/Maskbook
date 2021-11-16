@@ -16,7 +16,7 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
     if (process.env.engine === 'safari') {
         // iOS bug: indexedDB dies randomly
         MaskMessages.events.mobile_app_suspended.on(clean)
-        setInterval(clean, /** 1 mintue */ 1000 * 60)
+        setInterval(clean, /** 1 min */ 1000 * 60)
     }
     function clean() {
         if (db) {
@@ -53,7 +53,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     if (process.env.engine === 'safari') {
         // iOS bug: indexedDB dies randomly
         MaskMessages.events.mobile_app_suspended.on(clean)
-        setInterval(clean, /** 1 mintue */ 1000 * 60)
+        setInterval(clean, /** 1 min */ 1000 * 60)
     }
     function clean() {
         if (db) {
