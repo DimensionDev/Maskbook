@@ -58,11 +58,11 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     function clean() {
         if (db) {
             db.close()
-            db.addEventListener('close', () => (db = undefined), { once: true })
+            db.addEventListener('close', () => (pendingOpen = db = undefined), { once: true })
         }
-        db = undefined
+        pendingOpen = db = undefined
     }
-    let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined = undefined
+    let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined
     async function open(): Promise<IDBPDatabase<DBSchema>> {
         await iOSFix
         assertEnvironment(Environment.ManifestBackground)
