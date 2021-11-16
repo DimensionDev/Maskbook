@@ -6,11 +6,5 @@ import { usePluginWeb3StateContext } from './Context'
  */
 export function useAccount(pluginID?: string) {
     const { account, wallets } = usePluginWeb3StateContext(pluginID)
-
-    console.log({
-        account,
-        wallets,
-    })
-
     return process.env.architecture === 'app' ? first(wallets)?.address ?? '' : account
 }

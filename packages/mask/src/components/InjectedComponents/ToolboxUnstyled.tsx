@@ -12,20 +12,15 @@ import {
     ListItemText as MuiListItemText,
     Box,
 } from '@mui/material'
-import {
-    useAccount,
-    useChainColor,
-    useChainDetailed,
-    useChainIdValid,
-    useWallet,
-    TransactionStatusType,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { useChainColor, useChainDetailed, useWallet, TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
     useActivatedPluginSNSAdaptor_withSupportOperateChain,
     useActivatedPluginsSNSAdaptor,
     useNetworkDescriptor,
     useProviderDescriptor,
+    useAccount,
+    useChainId,
+    useChainIdValid,
     useWeb3State,
 } from '@masknet/plugin-infra'
 import { ToolIconURLs } from '../../resources/tool-icon'
