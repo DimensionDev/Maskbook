@@ -87,7 +87,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>
-                            <ChainIcon chainId={asset.token.chainId} size={16} />
+                            <ChainIcon chainId={asset.token.chainId} size={16} bordered />
                         </Box>
                     </Box>
                     <Typography className={classes.symbol}>{asset.token.symbol}</Typography>

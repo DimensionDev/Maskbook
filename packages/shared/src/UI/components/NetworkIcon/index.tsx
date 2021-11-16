@@ -5,6 +5,8 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         borderRadius: '50%',
         backgroundColor: '#F7F9FA',
+    },
+    border: {
         border: `1px solid ${theme.palette.background.default}`,
     },
 }))
@@ -12,7 +14,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface NetworkIconProps extends withClasses<'icon'> {
     size?: number
     networkType?: NetworkType
-    border?: boolean // todo
+    bordered?: boolean
 }
 
 const icons: Record<NetworkType, string> = {
@@ -26,10 +28,14 @@ const icons: Record<NetworkType, string> = {
 export function NetworkIcon(props: NetworkIconProps) {
     const { size = 48, networkType } = props
     const classes = useStylesExtends(useStyles(), props)
-
     if (!networkType) return null
 
     return icons[networkType] ? (
-        <img height={size} width={size} src={icons[networkType]} className={classes.icon} />
+        <img
+            height={size}
+            width={size}
+            src={icons[networkType]}
+            className={props.bordered ? `${classes.icon} ${classes.border}` : classes.icon}
+        />
     ) : null
 }

@@ -9,21 +9,29 @@ const useStyles = makeStyles()((theme) => ({
         height: 12.5,
         borderRadius: 6.25,
         margin: 3.75,
+    },
+    border: {
         border: `1px solid ${theme.palette.background.default}`,
     },
 }))
 export interface ChainIconProps {
     chainId: ChainId
     size?: number
+    bordered?: boolean
 }
 
-export const ChainIcon = memo<ChainIconProps>(({ chainId, size }) => {
+export const ChainIcon = memo<ChainIconProps>(({ chainId, size, bordered }) => {
     const { classes } = useStyles()
     const chainDetail = getChainDetailed(chainId)
 
     return chainDetail?.network === 'mainnet' ? (
-        <NetworkIcon size={size ?? 20} networkType={getNetworkTypeFromChainId(chainId)} />
+        <NetworkIcon size={size ?? 20} networkType={getNetworkTypeFromChainId(chainId)} bordered={bordered ?? false} />
     ) : (
-        <div style={{ backgroundColor: resolveChainColor(chainId) }} className={classes.point} />
+        <div
+            style={{
+                backgroundColor: resolveChainColor(chainId),
+            }}
+            className={bordered ? `${classes.point} ${classes.border}` : classes.point}
+        />
     )
 })
