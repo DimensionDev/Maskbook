@@ -25,6 +25,9 @@ import {
 import {
     useActivatedPluginSNSAdaptor_withSupportOperateChain,
     useActivatedPluginsSNSAdaptor,
+    useNetworkDescriptor,
+    useProviderDescriptor,
+    useProviderType,
 } from '@masknet/plugin-infra'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
@@ -117,6 +120,9 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         shouldDisplayChainIndicator,
     } = useToolbox()
 
+    const networkDescriptor = useNetworkDescriptor()
+    const providerDescriptor = useProviderDescriptor()
+
     return (
         <>
             <GuideStep step={1} total={3} tip={t('user_guide_tip_1', { sns: activatedSocialNetworkUI.name })}>
@@ -137,7 +143,11 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                     <ListItemButton onClick={openWallet}>
                         <ListItemIcon>
                             {isWalletValid ? (
-                                <WalletIcon size={iconSize} networkIcon="" providerIcon="" />
+                                <WalletIcon
+                                    size={iconSize}
+                                    networkIcon={networkDescriptor?.icon}
+                                    providerIcon={providerDescriptor?.icon}
+                                />
                             ) : (
                                 <WalletSharp size={iconSize} />
                             )}

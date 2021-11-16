@@ -23,28 +23,26 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
                     result,
                     error: null,
                 })
-            } catch (error) {
-                if (error instanceof Error) {
-                    EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
-                        payload,
-                        error,
-                    })
-                }
+            } catch (error: unknown) {
+                EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
+                    payload,
+                    error: error instanceof Error ? error : new Error(),
+                })
             }
         })
     }, [])
 
     useEffect(() => {
         return bridgedEthereumProvider.on('accountsChanged', async (event) => {
-            if (providerType !== ProviderType.Injected) return
-            Services.Ethereum.notifyInjectedEvent('accountsChanged', event)
+            if (![ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return
+            Services.Ethereum.notifyInjectedEvent('accountsChanged', event, providerType)
         })
     }, [providerType])
 
     useEffect(() => {
         return bridgedEthereumProvider.on('chainChanged', (event) => {
-            if (providerType !== ProviderType.Injected) return
-            Services.Ethereum.notifyInjectedEvent('chainChanged', event)
+            if (![ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return
+            Services.Ethereum.notifyInjectedEvent('chainChanged', event, providerType)
         })
     }, [providerType])
 

@@ -15,12 +15,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: props.size,
     },
     mainIcon: {
+        display: 'block',
         width: '100%',
         height: '100%',
         borderRadius: '50%',
     },
-    networkIcon: {},
-    providerIcon: {},
     badgeIcon: {
         position: 'absolute',
         right: -2,
@@ -28,13 +27,15 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         backgroundColor: '#ffffff',
         borderRadius: '50%',
     },
+    networkIcon: {},
+    providerIcon: {},
 }))
 
 interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
     size?: number
     badgeSize?: number
-    networkIcon?: string
-    providerIcon?: string
+    networkIcon?: URL
+    providerIcon?: URL
 }
 
 export const WalletIcon = (props: WalletIconProps) => {
@@ -51,7 +52,7 @@ export const WalletIcon = (props: WalletIconProps) => {
             {networkIcon ? (
                 <ImageIcon
                     classes={{
-                        icon: classNames(badgeSize > size ? classes.badgeIcon : classes.mainIcon, classes.networkIcon),
+                        icon: classNames(classes.mainIcon, classes.networkIcon),
                     }}
                     size={size}
                     icon={networkIcon}
@@ -60,7 +61,7 @@ export const WalletIcon = (props: WalletIconProps) => {
             {providerIcon ? (
                 <ImageIcon
                     classes={{
-                        icon: classNames(badgeSize > size ? classes.mainIcon : classes.badgeIcon, classes.providerIcon),
+                        icon: classNames(classes.badgeIcon, classes.providerIcon),
                     }}
                     size={badgeSize}
                     icon={providerIcon}

@@ -60,7 +60,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                 )}
                 <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                     <Stack mx={1} justifyContent="center">
-                        <ImageIcon icon="" />
+                        <ImageIcon />
                     </Stack>
                     <Box sx={{ userSelect: 'none' }}>
                         <Box fontSize={16}>{walletName}</Box>

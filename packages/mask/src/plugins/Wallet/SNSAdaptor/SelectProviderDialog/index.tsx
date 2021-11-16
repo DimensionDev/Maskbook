@@ -6,8 +6,8 @@ import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
     useActivatedPluginWeb3UI,
+    useNetworkDescriptor,
     useNetworkType,
-    getRegisteredPluginNetwork,
 } from '@masknet/plugin-infra'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
@@ -51,7 +51,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     const undeterminedWeb3UI = useActivatedPluginWeb3UI(undeterminedPluginID)
     const undeterminedNetworkType = useNetworkType(undeterminedPluginID)
-    const undeterminedNetwork = getRegisteredPluginNetwork(undeterminedPluginID, undeterminedNetworkType)
+    const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkType, undeterminedPluginID)
 
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()

@@ -2,21 +2,20 @@ import { useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { ProviderType, resolveAddressLinkOnExplorer, useWallet, useChainId, resolveInjectedProviderName } from '@masknet/web3-shared-evm'
+import {
+    ProviderType,
+    resolveAddressLinkOnExplorer,
+    useWallet,
+    useChainId,
+    resolveProviderName,
+} from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import {
-    FormattedAddress,
-    useRemoteControlledDialog,
-    useValueRef,
-    useSnackbarCallback,
-    WalletIcon,
-} from '@masknet/shared'
+import { useNetworkDescriptor, useProviderDescriptor, useProviderType } from '@masknet/plugin-infra'
+import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
-import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
-import { useInjectedProviderType } from '../../plugins/EVM/hooks'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -63,17 +62,8 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(1),
         color: '#1C68F3',
     },
-    networkIcon: {
-        backgroundColor: '#F6F8F8 !important',
-        border: '1px solid #ffffff',
-        borderRadius: '50%',
-        position: 'absolute',
-        right: -6,
-        bottom: -4,
-    },
-    providerIcon: {
-        backgroundColor: 'none !important',
-    },
+    networkIcon: {},
+    providerIcon: {},
     connectButtonWrapper: {
         display: 'flex',
         justifyContent: 'center',
@@ -89,8 +79,10 @@ export function WalletStatusBox() {
     const chainId = useChainId()
     const selectedWallet = useWallet()
     const { setDialog: setRenameDialog } = useRemoteControlledDialog(WalletMessages.events.walletRenameDialogUpdated)
-    const selectedProviderType = useValueRef(currentProviderSettings)
-    const injectedProviderType = useInjectedProviderType()
+
+    const providerType = useProviderType()
+    const providerDescriptor = useProviderDescriptor()
+    const networkDescriptor = useNetworkDescriptor()
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
@@ -120,22 +112,29 @@ export function WalletStatusBox() {
     //#endregion
 
     const onDisconnect = useCallback(async () => {
-        if (selectedProviderType !== ProviderType.WalletConnect) return
+        if (providerType !== ProviderType.WalletConnect) return
         setWalletConnectDialog({
             open: true,
             uri: await Services.Ethereum.createConnectionURI(),
         })
-    }, [selectedProviderType, setWalletConnectDialog])
+    }, [providerType, setWalletConnectDialog])
 
     const onChange = useCallback(() => {
         openSelectProviderDialog()
     }, [openSelectProviderDialog])
 
+    console.log({
+        networkDescriptor,
+        providerDescriptor,
+    })
+
     return selectedWallet ? (
         <section className={classes.currentAccount}>
             <WalletIcon
-                size={18}
-                badgeSize={48}
+                size={40}
+                badgeSize={18}
+                networkIcon={networkDescriptor?.icon}
+                providerIcon={providerDescriptor?.icon}
                 classes={{
                     networkIcon: classes.networkIcon,
                     providerIcon: classes.providerIcon,
@@ -143,11 +142,7 @@ export function WalletStatusBox() {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>
-                        {selectedProviderType === ProviderType.Injected
-                            ? resolveInjectedProviderName(injectedProviderType)
-                            : selectedWallet.name}
-                    </Typography>
+                    <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
                     <Link
                         className={classes.link}
                         component="button"
@@ -182,7 +177,7 @@ export function WalletStatusBox() {
                 </div>
             </div>
             <section>
-                {selectedProviderType === ProviderType.WalletConnect ? (
+                {providerType === ProviderType.WalletConnect ? (
                     <Button
                         className={classes.actionButton}
                         color="primary"

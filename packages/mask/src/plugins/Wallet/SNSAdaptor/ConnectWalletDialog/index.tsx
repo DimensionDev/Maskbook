@@ -9,8 +9,8 @@ import {
     getChainIdFromNetworkType,
     NetworkType,
     ProviderType,
-    resolveCalculatedProviderName,
     resolveNetworkName,
+    resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -84,7 +84,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 // wait for walletconnect to be connected
                 ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
                 break
-            case ProviderType.Injected:
+            case ProviderType.Coin98:
+            case ProviderType.WalletLink:
+            case ProviderType.MathWallet:
                 ;({ account, chainId } = await Services.Ethereum.connectInjected())
                 break
             case ProviderType.CustomNetwork:
@@ -95,10 +97,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         }
 
         // connection failed
-        if (!account || !networkType)
-            throw new Error(
-                `Failed to connect to ${resolveCalculatedProviderName(providerType, injectedProviderType)}.`,
-            )
+        if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
         // need to switch chain
         if (chainId !== expectedChainId) {
@@ -131,7 +130,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             chainId: expectedChainId,
             networkType,
             providerType,
-            injectedProviderType,
         })
         return true as const
     }, [networkType, providerType, injectedProviderType])
@@ -151,16 +149,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     if (!providerType) return null
 
     return (
-        <InjectedDialog
-            title={`Connect to ${resolveCalculatedProviderName(providerType, injectedProviderType)}`}
-            open={open}
-            onClose={closeDialog}>
+        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={closeDialog}>
             <DialogContent className={classes.content}>
-                <ConnectionProgress
-                    providerType={providerType}
-                    injectedProviderType={injectedProviderType}
-                    connection={connection}
-                />
+                <ConnectionProgress providerType={providerType} connection={connection} />
             </DialogContent>
         </InjectedDialog>
     )

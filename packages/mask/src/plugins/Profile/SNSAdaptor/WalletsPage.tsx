@@ -67,7 +67,7 @@ export function WalletsPage() {
                 {wallets.map((wallet, i) => (
                     <ListItem key={i}>
                         <ListItemIcon className={classes.icon}>
-                            <ImageIcon size={20} icon="" />
+                            <ImageIcon size={20} />
                         </ListItemIcon>
                         <ListItemIcon className={classes.address}>
                             <Typography variant="body1" color="textPrimary">

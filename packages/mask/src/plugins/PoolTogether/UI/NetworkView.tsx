@@ -31,7 +31,7 @@ export const NetworkView = (props: NetworkViewProps) => {
 
     return (
         <Typography variant="subtitle2" color={color} className={classes.root}>
-            <ImageIcon classes={{ icon: classes.icon }} icon="" />
+            <ImageIcon classes={{ icon: classes.icon }} />
             {chainDetail?.fullName}
         </Typography>
     )

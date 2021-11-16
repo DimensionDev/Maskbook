@@ -24,7 +24,6 @@ export function useWeb3State() {
     const tokenPrices = useSubscription(_.tokenPrices)
     const networkType = useSubscription(_.networkType)
     const providerType = useSubscription(_.providerType)
-    const injectedProviderType = useSubscription(_.injectedProviderType)
     const walletPrimary = useSubscription(_.walletPrimary)
     const wallets = useSubscription(_.wallets)
     const chainId = useSubscription(_.chainId)
@@ -41,7 +40,6 @@ export function useWeb3State() {
         blockNumber,
         networkType,
         providerType,
-        injectedProviderType,
         walletPrimary,
         wallets,
         chainId,

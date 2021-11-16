@@ -129,7 +129,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
             <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                 <Stack mx={1} justifyContent="center">
                     {/* <ImageIcon providerType={providerType} /> */}
-                    <ImageIcon icon="" />
+                    <ImageIcon />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
                     <Box fontSize={16}>{walletName}</Box>

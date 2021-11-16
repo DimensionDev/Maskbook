@@ -4,7 +4,6 @@ import {
     ChainId,
     getChainIdFromNetworkType,
     getNetworkTypeFromChainId,
-    InjectedProviderType,
     NetworkType,
     ProviderType,
     resolveProviderName,
@@ -17,7 +16,6 @@ import {
     currentMaskWalletNetworkSettings,
     currentNetworkSettings,
     currentProviderSettings,
-    currentInjectedProviderSettings,
 } from '../settings'
 import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
 import { getWallets, hasWallet, updateWallet } from '.'
@@ -29,7 +27,6 @@ export async function updateAccount(
         chainId?: ChainId
         networkType?: NetworkType
         providerType?: ProviderType
-        injectedProviderType?: InjectedProviderType
     } = {},
 ) {
     if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
@@ -39,7 +36,7 @@ export async function updateAccount(
     if ((options.account && !options.providerType) || (options.account === undefined && options.providerType))
         throw new Error('Account and provider type must be updating both')
 
-    const { name, account, chainId, providerType, networkType, injectedProviderType } = options
+    const { name, account, chainId, providerType, networkType } = options
 
     // update wallet in the DB
     if (
@@ -64,7 +61,6 @@ export async function updateAccount(
     if (networkType) currentNetworkSettings.value = networkType
     if (account !== undefined) currentAccountSettings.value = account
     if (providerType) currentProviderSettings.value = providerType
-    if (injectedProviderType) currentInjectedProviderSettings.value = injectedProviderType
     if (currentProviderSettings.value === ProviderType.MaskWallet) {
         await updateMaskAccount({
             account,
@@ -91,16 +87,14 @@ export async function resetAccount(
         chainId?: ChainId
         networkType?: NetworkType
         providerType?: ProviderType
-        injectedProviderType?: InjectedProviderType
     } = {},
 ) {
-    const { account = '', chainId, networkType, providerType, injectedProviderType } = options
+    const { account = '', chainId, networkType, providerType } = options
     currentAccountSettings.value = account
     if (providerType === ProviderType.MaskWallet) currentMaskWalletAccountSettings.value = account
     if (chainId) currentChainIdSettings.value = chainId
     if (networkType) currentNetworkSettings.value = networkType
     if (providerType) currentProviderSettings.value = providerType
-    if (injectedProviderType) currentInjectedProviderSettings.value = injectedProviderType
 }
 
 export async function setDefaultWallet() {

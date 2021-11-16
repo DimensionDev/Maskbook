@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import * as MaskWallet from './providers/Mask'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
@@ -82,13 +82,13 @@ export async function connectInjected() {
     }
 }
 
-export async function notifyInjectedEvent(name: string, event: unknown) {
+export async function notifyInjectedEvent(name: string, event: unknown, providerType: ProviderType) {
     switch (name) {
         case 'accountsChanged':
-            await Injected.onAccountsChanged(event as string[])
+            await Injected.onAccountsChanged(event as string[], providerType)
             break
         case 'chainChanged':
-            await Injected.onChainIdChanged(event as string)
+            await Injected.onChainIdChanged(event as string, providerType)
             break
         default:
             throw new Error(`Unknown event name: ${name}.`)

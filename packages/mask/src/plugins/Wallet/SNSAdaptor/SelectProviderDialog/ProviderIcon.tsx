@@ -38,6 +38,7 @@ export interface ProviderIconProps {
     onClick?: () => void
     ButtonBaseProps?: Partial<ButtonBaseProps>
 }
+
 export function ProviderIcon({ icon, name, onClick, ButtonBaseProps }: ProviderIconProps) {
     const { classes } = useStyles()
     return (

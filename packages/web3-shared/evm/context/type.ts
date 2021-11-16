@@ -8,7 +8,6 @@ import type {
     NonFungibleTokenDetailed,
     NetworkType,
     ProviderType,
-    InjectedProviderType,
     Asset,
     Wallet,
     PortfolioProvider,
@@ -28,7 +27,6 @@ export interface Web3ProviderType {
     provider: Subscription<Provider>
     networkType: Subscription<NetworkType>
     providerType: Subscription<ProviderType>
-    injectedProviderType: Subscription<InjectedProviderType>
     tokenPrices: Subscription<CryptoPrice>
     wallets: Subscription<Wallet[]>
     walletPrimary: Subscription<Wallet | null>

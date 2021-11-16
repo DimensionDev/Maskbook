@@ -21,7 +21,7 @@ export const ChainIcon = memo<ChainIconProps>(({ chainId, size }) => {
     const chainDetail = getChainDetailed(chainId)
 
     return chainDetail?.network === 'mainnet' ? (
-        <ImageIcon size={size ?? 20} icon="" />
+        <ImageIcon size={size ?? 20} />
     ) : (
         <div style={{ backgroundColor: resolveChainColor(chainId) }} className={classes.point} />
     )

@@ -77,12 +77,16 @@ function usePluginsWeb3State() {
     }
 }
 
+export function usePluginIDContext() {
+    return useContext(PluginIDContext)
+}
+
 const PluginsWeb3StateContext = createContainer(usePluginsWeb3State)
 
 export const usePluginsWeb3StateContext = PluginsWeb3StateContext.useContainer
 
 export function usePluginWeb3StateContext(expectedPluginID?: string) {
-    const pluginID = useContext(PluginIDContext)
+    const pluginID = usePluginIDContext()
     const pluginsWeb3State = usePluginsWeb3StateContext()
     // @ts-ignore
     return pluginsWeb3State[expectedPluginID ?? pluginID] as ReturnType<typeof usePluginWeb3State>

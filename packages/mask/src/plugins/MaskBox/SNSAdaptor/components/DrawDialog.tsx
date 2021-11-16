@@ -216,7 +216,7 @@ export function DrawDialog(props: DrawDialogProps) {
                             </Typography>
                             <Box className={classes.content} display="flex" alignItems="center">
                                 {/* <ImageIcon size={16} providerType={providerType} /> */}
-                                <ImageIcon size={16} icon="" />
+                                <ImageIcon size={16} />
                                 <Typography color="textPrimary" sx={{ marginLeft: 1 }}>
                                     <FormattedAddress address={account} size={6} />
                                 </Typography>

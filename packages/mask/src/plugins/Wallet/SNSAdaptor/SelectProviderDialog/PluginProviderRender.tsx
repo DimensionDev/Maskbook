@@ -110,10 +110,10 @@ export function PluginProviderRender({
                                 <div className={classes.iconWrapper}>
                                     {NetworkIconClickBait ? (
                                         <NetworkIconClickBait network={network}>
-                                            <ImageIcon icon={network.icon.toString()} />
+                                            <ImageIcon icon={network.icon} />
                                         </NetworkIconClickBait>
                                     ) : (
-                                        <ImageIcon icon={network.icon.toString()} />
+                                        <ImageIcon icon={network.icon} />
                                     )}
                                     {undeterminedNetworkID === network.ID && (
                                         <SuccessIcon className={classes.checkedBadge} />
@@ -127,11 +127,11 @@ export function PluginProviderRender({
                     <Typography className={classes.title} variant="h2" component="h2">
                         2. Choose Wallet
                     </Typography>
-                    <ImageList className={classes.grid} gap={8} cols={3} rowHeight={130} onClick={onSubmit}>
+                    <ImageList className={classes.grid} gap={8} cols={3} rowHeight={130}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
                             .map((provider) => (
-                                <ImageListItem key={provider.ID}>
+                                <ImageListItem key={provider.ID} onClick={onSubmit}>
                                     {ProviderIconClickBait ? (
                                         <ProviderIconClickBait
                                             network={networks.find((x) => x.ID === undeterminedNetworkID)!}
@@ -139,11 +139,10 @@ export function PluginProviderRender({
                                             <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
                                         </ProviderIconClickBait>
                                     ) : (
-                                        <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
+                                        <ImageIcon icon={provider.icon} />
                                     )}
                                 </ImageListItem>
-                            )
-                        )}
+                            ))}
                     </ImageList>
                 </section>
             </Box>
