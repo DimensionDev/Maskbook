@@ -40,14 +40,14 @@ const useStyles = makeStyles()((theme) => ({
     actionButton: {
         fontSize: 12,
         marginLeft: theme.spacing(1),
-        backgroundColor: theme.palette.mode === 'light' ? '#111418' : 'rgb(29, 155, 240)',
-        ...(theme.palette.mode === 'light'
-            ? {
-                  '&:hover': {
-                      backgroundColor: '#2f3640',
-                  },
-              }
-            : {}),
+        // backgroundColor: theme.palette.mode === 'light' ? '#111418' : 'rgb(29, 155, 240)',
+        // ...(theme.palette.mode === 'light'
+        //     ? {
+        //           '&:hover': {
+        //               backgroundColor: '#2f3640',
+        //           },
+        //       }
+        //     : {}),
         padding: theme.spacing(1, 2),
     },
     address: {

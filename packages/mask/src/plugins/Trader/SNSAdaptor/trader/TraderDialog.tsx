@@ -25,12 +25,14 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 2,
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
-        backgroundColor: theme.palette.background.paper,
     },
     tab: {
         height: 36,
         minHeight: 36,
         fontWeight: 300,
+    },
+    tabPaper: {
+        backgroundColor: 'inherit',
     },
     tabs: {
         width: 536,
@@ -38,7 +40,6 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 36,
         margin: '0 auto',
         borderRadius: 4,
-        backgroundColor: theme.palette.background.default,
         '& .Mui-selected': {
             color: theme.palette.primary.contrastText,
             backgroundColor: theme.palette.primary.main,

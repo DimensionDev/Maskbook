@@ -98,18 +98,12 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
         },
         button: {
-            backgroundColor: MaskColorVar.twitterButton,
             fontSize: 18,
             lineHeight: '22px',
             fontWeight: 600,
             padding: '13px 0',
             borderRadius: 24,
             height: 'auto',
-            color: MaskColorVar.twitterButtonText,
-            ['&:hover']: {
-                backgroundColor: MaskColorVar.twitterButton,
-                boxShadow: `0 0 5px ${MaskColorVar.twitterButton}`,
-            },
         },
         disabledButton: {
             fontSize: 18,
@@ -118,8 +112,6 @@ const useStyles = makeStyles()((theme) => {
             padding: '13px 0',
             borderRadius: 24,
             height: 'auto',
-            backgroundColor: '#88898B!important',
-            color: `${MaskColorVar.twitterButtonText}!important`,
         },
         selectedTokenChip: {
             borderRadius: `22px!important`,
@@ -133,8 +125,8 @@ const useStyles = makeStyles()((theme) => {
             },
         },
         chipTokenIcon: {
-            width: 36,
-            height: 36,
+            width: '36px!important',
+            height: '36px!important',
         },
         noToken: {
             borderRadius: `18px !important`,
@@ -357,12 +349,16 @@ export const TradeForm = memo<AllTradeFormProps>(
                         chainId={chainId}
                         noSwitchNetworkTip
                         noChainIcon={false}
+                        disablePadding={true}
                         ChainIconProps={{ size: 24 }}
                         ActionButtonPromiseProps={{
                             fullWidth: true,
                             classes: { root: classes.button, disabled: classes.disabledButton },
+                            color: 'primary',
+                            style: { padding: '12px 0', marginTop: 0 },
                         }}>
-                        <EthereumWalletConnectedBoundary classes={{ connectWallet: classes.button }}>
+                        <EthereumWalletConnectedBoundary
+                            ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}>
                             <EthereumERC20TokenApprovedBoundary
                                 amount={approveAmount.toFixed()}
                                 token={
@@ -376,7 +372,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 onlyInfiniteUnlock
                                 withChildren
                                 ActionButtonProps={{
-                                    classes: { root: classes.button, disabled: classes.disabledButton },
+                                    color: 'primary',
                                 }}
                                 infiniteUnlockContent={
                                     <Box component="span" display="flex" alignItems="center">
@@ -402,6 +398,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     variant="contained"
                                     disabled={focusedTrade?.loading || !focusedTrade?.value || !!validationMessage}
                                     classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                    color="primary"
                                     onClick={onSwap}>
                                     {validationMessage || nativeWrapMessage}
                                 </ActionButton>

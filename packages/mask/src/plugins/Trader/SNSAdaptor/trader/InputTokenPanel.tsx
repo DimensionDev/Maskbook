@@ -64,8 +64,8 @@ const useStyles = makeStyles()(() => ({
         },
     },
     chipTokenIcon: {
-        width: 36,
-        height: 36,
+        width: '36px!important',
+        height: '36px!important',
     },
 }))
 

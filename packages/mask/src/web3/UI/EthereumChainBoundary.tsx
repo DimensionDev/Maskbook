@@ -38,6 +38,7 @@ export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> 
     chainId: ChainId
     noChainIcon?: boolean
     noSwitchNetworkTip?: boolean
+    disablePadding?: boolean
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
@@ -144,7 +145,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         )
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" sx={{ paddingTop: 1, paddingBottom: 1 }}>
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={!props.disablePadding ? { paddingTop: 1, paddingBottom: 1 } : null}>
             {!noSwitchNetworkTip ? (
                 <Typography color="textPrimary">
                     <span>
@@ -166,14 +171,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                 network: expectedNetwork,
                             })
                         ) : (
-                            <>
-                                <Box mr={1}>
+                            <Box display="flex" justifyContent="center" alignItems="center">
+                                <Box mr={1} height={24}>
                                     <ChainIcon chainId={props.chainId} {...props.ChainIconProps} />
                                 </Box>
                                 {t('plugin_wallet_switch_network', {
                                     network: expectedNetwork,
                                 })}
-                            </>
+                            </Box>
                         )
                     }
                     waiting={
@@ -182,14 +187,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                 network: expectedNetwork,
                             })
                         ) : (
-                            <>
-                                <Box mr={1}>
+                            <Box display="flex" justifyContent="center" alignItems="center">
+                                <Box mr={1} height={24}>
                                     <ChainIcon chainId={props.chainId} {...props.ChainIconProps} />
                                 </Box>
                                 {t('plugin_wallet_switch_network_under_going', {
                                     network: expectedNetwork,
                                 })}
-                            </>
+                            </Box>
                         )
                     }
                     complete={
@@ -198,14 +203,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                                 network: expectedNetwork,
                             })
                         ) : (
-                            <>
-                                <Box mr={1}>
+                            <Box display="flex" justifyContent="center" alignItems="center">
+                                <Box mr={1} height={24}>
                                     <ChainIcon chainId={props.chainId} {...props.ChainIconProps} />
                                 </Box>
                                 {t('plugin_wallet_switch_network', {
                                     network: expectedNetwork,
                                 })}
-                            </>
+                            </Box>
                         )
                     }
                     failed={t('retry')}
