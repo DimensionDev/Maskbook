@@ -226,7 +226,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             const downloadLink = resolveInjectedProviderDownloadLink(expectedType)
             if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
         },
-        [injectedProviderReady, injectedProviderType],
+        [injectedProviderReady, injectedProviderType, onConnectProvider],
     )
 
     // not available for the native app
