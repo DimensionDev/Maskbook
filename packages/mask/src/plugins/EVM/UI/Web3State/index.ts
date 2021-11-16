@@ -1,5 +1,5 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import type { Web3ProviderType } from '@masknet/web3-shared-evm'
+import { formatBalance, formatCurrency, formatEthereumAddress, Web3ProviderType } from '@masknet/web3-shared-evm'
 
 export const Web3State: Web3Plugin.ObjectCapabilities.Capabilities = {}
 
@@ -13,6 +13,11 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         chainId: context.chainId,
         networkType: context.networkType,
         providerType: context.providerType,
+    }
+    state.Utils = state.Utils ?? {
+        formatAddress: formatEthereumAddress,
+        formatCurrency,
+        formatBalance,
     }
     return state
 }

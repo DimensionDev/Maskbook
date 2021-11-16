@@ -18,7 +18,6 @@ import {
     useChainDetailed,
     useChainIdValid,
     useWallet,
-    formatEthereumAddress,
     TransactionStatusType,
     useChainId,
 } from '@masknet/web3-shared-evm'
@@ -27,6 +26,7 @@ import {
     useActivatedPluginsSNSAdaptor,
     useNetworkDescriptor,
     useProviderDescriptor,
+    useWeb3State,
 } from '@masknet/plugin-infra'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
@@ -188,6 +188,8 @@ function useToolbox() {
     const chainDetailed = useChainDetailed()
     const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_withSupportOperateChain(chainId)
 
+    const { Utils } = useWeb3State()
+
     //#region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     //#endregion
@@ -302,7 +304,7 @@ function useToolbox() {
     function renderButtonText() {
         if (!account) return t('plugin_wallet_on_connect')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
-        if (pendingTransactions.length <= 0) return formatEthereumAddress(account, 4)
+        if (pendingTransactions.length <= 0) return Utils?.formatAddress?.(account, 4) ?? account
         return (
             <>
                 <span>

@@ -1,4 +1,5 @@
 import type { Subscription } from 'use-subscription'
+import type { BigNumber } from 'bignumber.js'
 import type { Pagination } from './types'
 import type { Plugin } from '.'
 
@@ -211,10 +212,13 @@ export declare namespace Web3Plugin {
             ) => Promise<TokenList<T>[]>
         }
         export interface Others {
-            isChainIdValid: (chainId: number, allowTestnet: boolean) => boolean
-            getChainDetailed: (chainId: number) => ChainDetailed
-            getFungibleTokenMetadata: <T extends unknown>(token: Token<T>) => Promise<FungibleTokenMetadata<T>>
-            getNonFungibleTokenMetadata: <T extends unknown>(token: Token<T>) => Promise<NonFungibleTokenMetadata<T>>
+            formatAddress?: (address: string, size?: number) => string
+            formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
+            formatBalance?: (value: BigNumber.Value, decimals?: number, significant?: number) => string
+            isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
+            getChainDetailed?: (chainId: number) => ChainDetailed
+            getFungibleTokenMetadata?: <T extends unknown>(token: Token<T>) => Promise<FungibleTokenMetadata<T>>
+            getNonFungibleTokenMetadata?: <T extends unknown>(token: Token<T>) => Promise<NonFungibleTokenMetadata<T>>
         }
         export interface Capabilities {
             Shared?: SharedState
@@ -236,6 +240,10 @@ export declare namespace Web3Plugin {
             provider: ProviderDescriptor
             children?: React.ReactNode
             onClick?: () => void
+        }
+        export interface AddressFormatterProps {
+            address: string
+            size?: number
         }
         export interface SelectProviderDialogBait {
             /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */

@@ -5,9 +5,9 @@ import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
-    useActivatedPluginWeb3UI,
     useNetworkDescriptor,
     useNetworkType,
+    useWeb3UI,
 } from '@masknet/plugin-infra'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
@@ -48,7 +48,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(networkID)
 
-    const undeterminedWeb3UI = useActivatedPluginWeb3UI(undeterminedPluginID)
+    const undeterminedWeb3UI = useWeb3UI(undeterminedPluginID)
     const undeterminedNetworkType = useNetworkType(undeterminedPluginID)
     const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkType, undeterminedPluginID)
 

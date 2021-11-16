@@ -16,4 +16,7 @@ export * from './useTransactionType'
 export * from './useWallet'
 export * from './useWalletPrimary'
 export * from './useWallets'
+export * from './useWeb3UI'
+export * from './useWeb3State'
+
 export * from './Context'

@@ -2,10 +2,17 @@ import { useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { ProviderType, resolveAddressLinkOnExplorer, useWallet, useChainId } from '@masknet/web3-shared-evm'
+import { ProviderType, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { useNetworkDescriptor, useProviderDescriptor, useProviderType } from '@masknet/plugin-infra'
+import {
+    useAccount,
+    useWeb3State,
+    useChainId,
+    useNetworkDescriptor,
+    useProviderDescriptor,
+    useProviderType,
+} from '@masknet/plugin-infra'
 import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
@@ -71,18 +78,19 @@ export function WalletStatusBox() {
     const { classes } = useStyles()
 
     const chainId = useChainId()
-    const selectedWallet = useWallet()
+    const account = useAccount()
 
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
+    const { Utils } = useWeb3State() ?? {}
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
         async (ev: React.MouseEvent<HTMLAnchorElement>) => {
             ev.stopPropagation()
-            copyToClipboard(selectedWallet?.address ?? '')
+            copyToClipboard(account)
         },
         [],
         undefined,
@@ -121,7 +129,7 @@ export function WalletStatusBox() {
         providerDescriptor,
     })
 
-    return selectedWallet ? (
+    return account ? (
         <section className={classes.currentAccount}>
             <WalletIcon
                 size={40}
@@ -139,7 +147,7 @@ export function WalletStatusBox() {
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2">
-                        <FormattedAddress address={selectedWallet.address} size={9} />
+                        <FormattedAddress address={account} size={9} formatter={Utils?.formatAddress} />
                     </Typography>
                     <Link
                         className={classes.link}
@@ -151,7 +159,7 @@ export function WalletStatusBox() {
                     </Link>
                     <Link
                         className={classes.link}
-                        href={resolveAddressLinkOnExplorer(chainId, selectedWallet.address)}
+                        href={resolveAddressLinkOnExplorer(chainId, account)}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">
