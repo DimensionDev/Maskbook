@@ -43,6 +43,7 @@ export interface EthereumERC20TokenApprovedBoundaryProps {
     token?: ERC20TokenDetailed
     fallback?: React.ReactNode
     children?: React.ReactNode | ((allowance: string) => React.ReactNode)
+    render?: (disable: boolean) => React.ReactNode
     infiniteUnlockContent?: React.ReactNode
     ActionButtonProps?: ActionButtonProps
     onlyInfiniteUnlock?: boolean
@@ -55,6 +56,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         spender,
         token,
         children = null,
+        render,
         fallback,
         infiniteUnlockContent,
         onlyInfiniteUnlock = false,
@@ -82,7 +84,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
     }, [transactionState.type, showSnackbar])
 
     // not a valid erc20 token, please given token as undefined
-    if (!token) return <Grid container>{children}</Grid>
+    if (!token) return <Grid container>{render ? render(false) : children}</Grid>
 
     if (approveStateType === ApproveStateType.UNKNOWN)
         return (
@@ -96,7 +98,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     {...props.ActionButtonProps}>
                     {fallback ?? 'Enter an amount'}
                 </ActionButton>
-                {withChildren ? <Box className={classes.children}>{children}</Box> : null}
+                {withChildren ? <Box className={classes.children}>{render ? render(true) : children}</Box> : null}
             </Grid>
         )
     if (approveStateType === ApproveStateType.FAILED)
@@ -111,7 +113,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     {...props.ActionButtonProps}>
                     Failed to load {token.symbol ?? token.name ?? 'Token'}. Click to retry.
                 </ActionButton>
-                {withChildren ? <Box className={classes.children}>{children}</Box> : null}
+                {withChildren ? <Box className={classes.children}>{render ? render(true) : children}</Box> : null}
             </Grid>
         )
     if (approveStateType === ApproveStateType.NOT_APPROVED)
@@ -146,7 +148,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         </ActionButton>
                     </Grid>
                 </Grid>
-                {withChildren ? <Box className={classes.children}>{children}</Box> : null}
+                {withChildren ? <Box className={classes.children}>{render ? render(true) : children}</Box> : null}
             </Box>
         )
     if (approveStateType === ApproveStateType.PENDING || approveStateType === ApproveStateType.UPDATING)

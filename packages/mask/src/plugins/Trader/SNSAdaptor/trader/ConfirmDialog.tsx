@@ -6,11 +6,12 @@ import { FormattedAddress, FormattedBalance, useStylesExtends } from '@masknet/s
 import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
-import { ChainId, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon } from '@masknet/icons'
 import { ExternalLink } from 'react-feather'
 import { TokenIcon } from '@masknet/shared'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles()((theme) => ({
     section: {
@@ -64,16 +65,16 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
     onConfirm: () => void
     onClose?: () => void
     wallet?: Wallet
-    chainId: ChainId
 }
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
 
     const classes = useStylesExtends(useStyles(), props)
-    const { open, trade, wallet, chainId, inputToken, outputToken, onConfirm, onClose } = props
+    const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose } = props
     const { inputAmount, outputAmount } = trade
 
+    const { targetChainId: chainId } = AllProviderTradeContext.useContainer()
     const [priceReversed, setPriceReversed] = useState(false)
 
     //#region detect price changing

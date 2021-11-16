@@ -9,6 +9,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FormattedCurrency } from '@masknet/shared'
 import { ZERO_ADDRESS } from '../../../GoodGhosting/constants'
+import { formatBalance } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({
     filledInput: {
@@ -149,6 +150,14 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                                     color="primary"
                                     variant="filled"
                                     classes={{ root: classes.chip, label: classes.label }}
+                                    onClick={() => {
+                                        onAmountChange(
+                                            formatBalance(
+                                                new BigNumber(balance).dividedBy(1).decimalPlaces(0, 1),
+                                                token?.decimals,
+                                            ),
+                                        )
+                                    }}
                                 />
                             </Box>
                         </Box>

@@ -370,6 +370,7 @@
     "plugin_trader_gas_setting_standard": "Standard",
     "plugin_trader_gas_setting_fast": "Fast",
     "plugin_trader_gas_setting_custom": "Custom",
+    "plugin_trader_tx_cost_usd": "(~${{usd}})",
     "plugin_poll_display_name": "Plugin: Poll",
     "plugin_poll_question_hint": "Ask a question…",
     "plugin_poll_options_hint": "choice",

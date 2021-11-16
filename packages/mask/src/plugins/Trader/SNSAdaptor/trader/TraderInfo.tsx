@@ -1,7 +1,7 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { formatBalance } from '../../../../../../web3-shared/evm'
+import { createNativeToken, formatBalance } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
@@ -11,6 +11,9 @@ import { BestTradeIcon } from '@masknet/icons'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
+import BigNumber from 'bignumber.js'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 
 const useStyles = makeStyles()({
     trade: {
@@ -66,6 +69,7 @@ export interface TraderInfoProps {
 export const TraderInfo = memo<TraderInfoProps>(({ trade, isBest, onClick, isFocus }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const { targetChainId } = AllProviderTradeContext.useContainer()
 
     //#region refresh pools
     const { loading: updateBalancerPoolsLoading } = useAsyncRetry(async () => {
@@ -73,6 +77,20 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, isBest, onClick, isFoc
         if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true)
     }, [trade.provider])
     //#endregion
+
+    const nativeToken = createNativeToken(targetChainId)
+    const tokenPrice = useNativeTokenPrice(targetChainId)
+
+    const feeValueUSD = useMemo(
+        () =>
+            trade.value?.fee
+                ? new BigNumber(formatBalance(trade.value.fee, nativeToken.decimals))
+                      .times(tokenPrice)
+                      .toFixed(2)
+                      .toString()
+                : '0',
+        [trade.value?.fee, tokenPrice],
+    )
 
     if ((trade.loading && trade.value) || updateBalancerPoolsLoading)
         return (
@@ -109,10 +127,13 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, isBest, onClick, isFoc
                             <Typography component="span" marginLeft={0.5}>
                                 <FormattedBalance
                                     value={trade.value?.fee ?? 0}
-                                    decimals={trade.value?.inputToken?.decimals ?? 0}
+                                    decimals={nativeToken.decimals ?? 0}
                                     significant={4}
-                                    symbol={trade.value?.inputToken?.symbol}
+                                    symbol={nativeToken.symbol}
                                 />
+                            </Typography>
+                            <Typography component="span">
+                                {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
                             </Typography>
                         </Typography>
                     </Box>

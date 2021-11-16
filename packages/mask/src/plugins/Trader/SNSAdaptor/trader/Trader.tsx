@@ -13,7 +13,7 @@ import {
     useFungibleTokenBalance,
     useWallet,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
 import { delay, useI18N } from '../../../../utils'
@@ -29,6 +29,7 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import { isNativeTokenWrapper } from '../../helpers'
 import { ConfirmDialog } from './ConfirmDialog'
 import Services from '../../../../extension/service'
+import { currentAccountSettings, currentProviderSettings } from '../../../Wallet/settings'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -64,11 +65,14 @@ export function Trader(props: TraderProps) {
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid()
+    const currentAccount = useValueRef(currentAccountSettings)
+    const currentProvider = useValueRef(currentProviderSettings)
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     //#region trade state
     const {
+        setTargetChainId,
         tradeState: [
             { inputToken, outputToken, inputTokenBalance, outputTokenBalance, inputAmount },
             dispatchTradeStore,
@@ -129,6 +133,19 @@ export function Trader(props: TraderProps) {
                 balance: outputTokenBalance_,
             })
     }, [inputTokenBalance_, outputTokenBalance_, loadingInputTokenBalance, loadingOutputTokenBalance])
+
+    // Query the balance of native tokens on target chain
+    useAsync(async () => {
+        const balance = await Services.Ethereum.getBalance(currentAccount, {
+            chainId: targetChainId,
+            providerType: currentProvider,
+        })
+
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+            balance: balance,
+        })
+    }, [targetChainId, currentAccount, currentProvider])
     //#endregion
 
     //#region select token
@@ -147,6 +164,12 @@ export function Trader(props: TraderProps) {
                             : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
                     token: ev.token,
                 })
+                if (focusedTokenPanelType === TokenPanelType.Input) {
+                    dispatchTradeStore({
+                        type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
+                        amount: '',
+                    })
+                }
             },
             [dispatchTradeStore, focusedTokenPanelType],
         ),
@@ -282,6 +305,12 @@ export function Trader(props: TraderProps) {
         setFocusTrade(undefined)
     }, [targetChainId, inputToken, outputToken, inputAmount])
 
+    useUpdateEffect(() => {
+        if (targetChainId) {
+            setTargetChainId(targetChainId)
+        }
+    }, [targetChainId])
+
     return (
         <div className={classes.root}>
             <TradeForm
@@ -297,11 +326,9 @@ export function Trader(props: TraderProps) {
                 focusedTrade={focusedTrade}
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
                 onSwap={onSwap}
-                chainId={chainId}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <ConfirmDialog
-                    chainId={chainId}
                     wallet={wallet}
                     open={openConfirmDialog}
                     trade={focusedTrade.value}

@@ -5,14 +5,7 @@ import { InputTokenPanel } from './InputTokenPanel'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import {
-    ChainId,
-    EthereumTokenType,
-    formatBalance,
-    formatPercentage,
-    isLessThan,
-    pow10,
-} from '@masknet/web3-shared-evm'
+import { EthereumTokenType, formatBalance, formatPercentage, isLessThan, pow10 } from '@masknet/web3-shared-evm'
 import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-es'
@@ -33,6 +26,8 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
+import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -128,6 +123,12 @@ const useStyles = makeStyles()((theme) => {
             width: '36px!important',
             height: '36px!important',
         },
+        controller: {
+            width: '100%',
+            backgroundColor: theme.palette.background.paper,
+            position: 'sticky',
+            bottom: 0,
+        },
         noToken: {
             borderRadius: `18px !important`,
             backgroundColor: MaskColorVar.blue,
@@ -158,7 +159,6 @@ export interface AllTradeFormProps {
     focusedTrade?: TradeInfo
     onFocusedTradeChange: (trade: TradeInfo) => void
     onSwap: () => void
-    chainId: ChainId
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -175,11 +175,10 @@ export const TradeForm = memo<AllTradeFormProps>(
         focusedTrade,
         onFocusedTradeChange,
         onSwap,
-        chainId,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-
+        const { targetChainId: chainId } = AllProviderTradeContext.useContainer()
         const [isExpand, setIsExpand] = useState(false)
 
         //#region approve token
@@ -214,7 +213,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
             if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
             if (!trades.length) return t('plugin_trader_error_insufficient_lp')
-            if (inputTokenBalanceAmount.isLessThan(inputTokenBalanceAmount))
+            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount.plus(focusedTrade?.value?.fee ?? 0)))
                 return t('plugin_trader_error_insufficient_balance', {
                     symbol: inputToken?.symbol,
                 })
@@ -252,6 +251,16 @@ export const TradeForm = memo<AllTradeFormProps>(
             })
         }, [focusedTrade, outputToken])
         //#endregion
+
+        useUpdateEffect(() => {
+            setIsExpand(false)
+        }, [chainId, inputToken, inputAmount, outputToken])
+
+        useUpdateEffect(() => {
+            if (bestTrade && !focusedTrade) {
+                onFocusedTradeChange(bestTrade)
+            }
+        }, [bestTrade, focusedTrade])
 
         return (
             <Box className={classes.root}>
@@ -330,81 +339,93 @@ export const TradeForm = memo<AllTradeFormProps>(
                         ) : null}
                     </Box>
                 </Box>
-                <Box className={classes.section} my={1}>
-                    <div className={classes.status}>
-                        <Typography className={classes.label} color="textSecondary" variant="body2">
-                            {t('plugin_trader_slippage_tolerance')}{' '}
-                            {formatPercentage(toBips(currentSlippageSettings.value))}
-                        </Typography>
-                        <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
-                            <RefreshOutlined fontSize="small" />
-                        </IconButton>
-                        <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
-                            <TuneIcon fontSize="small" />
-                        </IconButton>
-                    </div>
-                </Box>
-                <Box className={classes.section}>
-                    <EthereumChainBoundary
-                        chainId={chainId}
-                        noSwitchNetworkTip
-                        noChainIcon={false}
-                        disablePadding={true}
-                        ChainIconProps={{ size: 24 }}
-                        ActionButtonPromiseProps={{
-                            fullWidth: true,
-                            classes: { root: classes.button, disabled: classes.disabledButton },
-                            color: 'primary',
-                            style: { padding: '12px 0', marginTop: 0 },
-                        }}>
-                        <EthereumWalletConnectedBoundary
-                            ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}>
-                            <EthereumERC20TokenApprovedBoundary
-                                amount={approveAmount.toFixed()}
-                                token={
-                                    !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
-                                    approveToken?.type === EthereumTokenType.ERC20 &&
-                                    !!approveAmount.toNumber()
-                                        ? approveToken
-                                        : undefined
-                                }
-                                spender={approveAddress}
-                                onlyInfiniteUnlock
-                                withChildren
-                                ActionButtonProps={{
-                                    color: 'primary',
-                                }}
-                                infiniteUnlockContent={
-                                    <Box component="span" display="flex" alignItems="center">
-                                        {t('plugin_trader_unlock_symbol', {
-                                            symbol: approveToken?.symbol,
-                                        })}
-                                        <Tooltip
-                                            title={t('plugin_trader_unlock_tips', {
-                                                provider: focusedTrade?.provider
-                                                    ? resolveTradeProviderName(focusedTrade.provider)
-                                                    : '',
+                <Box className={classes.controller}>
+                    <Box className={classes.section} my={1}>
+                        <div className={classes.status}>
+                            <Typography className={classes.label} color="textSecondary" variant="body2">
+                                {t('plugin_trader_slippage_tolerance')}{' '}
+                                {formatPercentage(toBips(currentSlippageSettings.value))}
+                            </Typography>
+                            <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
+                                <RefreshOutlined fontSize="small" />
+                            </IconButton>
+                            <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
+                                <TuneIcon fontSize="small" />
+                            </IconButton>
+                        </div>
+                    </Box>
+                    <Box className={classes.section}>
+                        <EthereumChainBoundary
+                            chainId={chainId}
+                            noSwitchNetworkTip
+                            noChainIcon={false}
+                            disablePadding={true}
+                            ChainIconProps={{ size: 24 }}
+                            ActionButtonPromiseProps={{
+                                fullWidth: true,
+                                classes: { root: classes.button, disabled: classes.disabledButton },
+                                color: 'primary',
+                                style: { padding: '12px 0', marginTop: 0 },
+                            }}>
+                            <EthereumWalletConnectedBoundary
+                                ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}>
+                                <EthereumERC20TokenApprovedBoundary
+                                    amount={approveAmount.toFixed()}
+                                    token={
+                                        !isNativeTokenWrapper(focusedTrade?.value ?? null) &&
+                                        approveToken?.type === EthereumTokenType.ERC20 &&
+                                        !!approveAmount.toNumber()
+                                            ? approveToken
+                                            : undefined
+                                    }
+                                    spender={approveAddress}
+                                    onlyInfiniteUnlock
+                                    withChildren
+                                    ActionButtonProps={{
+                                        color: 'primary',
+                                    }}
+                                    infiniteUnlockContent={
+                                        <Box component="span" display="flex" alignItems="center">
+                                            {t('plugin_trader_unlock_symbol', {
                                                 symbol: approveToken?.symbol,
                                             })}
-                                            arrow
-                                            disableFocusListener
-                                            disableTouchListener>
-                                            <HelpOutline style={{ marginLeft: 10 }} />
-                                        </Tooltip>
-                                    </Box>
-                                }>
-                                <ActionButton
-                                    fullWidth
-                                    variant="contained"
-                                    disabled={focusedTrade?.loading || !focusedTrade?.value || !!validationMessage}
-                                    classes={{ root: classes.button, disabled: classes.disabledButton }}
-                                    color="primary"
-                                    onClick={onSwap}>
-                                    {validationMessage || nativeWrapMessage}
-                                </ActionButton>
-                            </EthereumERC20TokenApprovedBoundary>
-                        </EthereumWalletConnectedBoundary>
-                    </EthereumChainBoundary>
+                                            <Tooltip
+                                                PopperProps={{
+                                                    disablePortal: true,
+                                                }}
+                                                title={t('plugin_trader_unlock_tips', {
+                                                    provider: focusedTrade?.provider
+                                                        ? resolveTradeProviderName(focusedTrade.provider)
+                                                        : '',
+                                                    symbol: approveToken?.symbol,
+                                                })}
+                                                arrow
+                                                disableFocusListener
+                                                disableTouchListener>
+                                                <HelpOutline style={{ marginLeft: 10 }} />
+                                            </Tooltip>
+                                        </Box>
+                                    }
+                                    render={(disable: boolean) => (
+                                        <ActionButton
+                                            fullWidth
+                                            variant="contained"
+                                            disabled={
+                                                focusedTrade?.loading ||
+                                                !focusedTrade?.value ||
+                                                !!validationMessage ||
+                                                disable
+                                            }
+                                            classes={{ root: classes.button, disabled: classes.disabledButton }}
+                                            color="primary"
+                                            onClick={onSwap}>
+                                            {validationMessage || nativeWrapMessage}
+                                        </ActionButton>
+                                    )}
+                                />
+                            </EthereumWalletConnectedBoundary>
+                        </EthereumChainBoundary>
+                    </Box>
                 </Box>
             </Box>
         )
