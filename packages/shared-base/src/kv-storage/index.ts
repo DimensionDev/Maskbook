@@ -6,6 +6,7 @@ export { createInMemoryKVStorageBackend } from './in-memory'
 export { createIndexedDB_KVStorageBackend } from './idb'
 export { createProxyKVStorageBackend } from './proxy'
 export type { ProxiedKVStorageBackend } from './proxy'
+
 export const removed = Symbol.for('removed')
 export interface KVStorageBackend {
     setValue(key: string, value: unknown): Promise<void>
@@ -19,35 +20,35 @@ export interface KVStorageBackend {
  * @param message The message channel to sync the latest value
  * @param signal The abort signal
  */
-export function createKVStorage(
+export function createKVStorageHost(
     backend: KVStorageBackend,
     message: MessageChannel<[string, unknown]>,
     signal = new AbortController().signal,
-): StateScope<never>['createSubscope'] {
+): ScopedStorage<never>['createSubscope'] {
     return (name, defaultValues) => {
         return createScope(signal, backend, message, null, name, defaultValues)
     }
 }
 
-export interface StateScope<StorageState extends object> {
+export interface ScopedStorage<StorageState extends object> {
     createSubscope<StorageState extends object>(
         subScopeName: string,
         defaultValue: StorageState,
         signal?: AbortSignal,
-    ): StateScope<StorageState>
-    storage: StateObject<StorageState>
+    ): ScopedStorage<StorageState>
+    storage: StorageObject<StorageState>
 }
-export type StateObject<T extends object> = {
-    [key in keyof T]: State<T[key]>
+export type StorageObject<T extends object> = {
+    [key in keyof T]: StorageItem<T[key]>
 }
-export interface State<T> {
+export interface StorageItem<T> {
     /** If this state is initialized */
     get initialized(): boolean
     /** A promise of initialization of this state. */
     readonly initializedPromise: Promise<void>
-    get state(): T
+    get value(): T
     readonly subscription: Subscription<T>
-    setState(value: T): Promise<void>
+    setValue(value: T): Promise<void>
 }
 const alwaysThrowHandler = () => {
     throw new TypeError('Invalid operation')
@@ -59,11 +60,11 @@ function createScope(
     parentScope: string | null,
     scope: string,
     defaultValues: any,
-): StateScope<any> {
+): ScopedStorage<any> {
     if (scope.includes('/')) throw new TypeError('scope name cannot contains "/"')
     if (scope.includes(':')) throw new TypeError('scope name cannot contains ":"')
     const currentScope = parentScope === null ? scope : `${parentScope}/${scope}`
-    const storage: StateObject<any> = new Proxy({ __proto__: null } as any, {
+    const storage: StorageObject<any> = new Proxy({ __proto__: null } as any, {
         defineProperty: alwaysThrowHandler,
         deleteProperty: alwaysThrowHandler,
         set: alwaysThrowHandler,
@@ -108,7 +109,7 @@ function createState(
     scope: string,
     prop: string,
     defaultValue: any,
-): State<any> {
+): StorageItem<any> {
     const propKey = `${scope}:${prop}`
 
     let initialized = false
@@ -154,11 +155,11 @@ function createState(
         get initializedPromise() {
             return initializedPromise!
         },
-        get state() {
+        get value() {
             if (!initialized) throw new Error('Try to access K/V state before initialization finished.')
             return state
         },
-        async setState(value) {
+        async setValue(value) {
             if (signal.aborted) throw new TypeError('Aborted storage.')
             // force trigger store when set state with default value to make it persistent.
             if (usingDefaultValue || !isEqual(state, value)) await backend.setValue(propKey, value)

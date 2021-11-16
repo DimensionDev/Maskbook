@@ -1,4 +1,4 @@
-import { createProxyKVStorageBackend, createKVStorage, KVStorageBackend } from '@masknet/shared-base'
+import { createProxyKVStorageBackend, createKVStorageHost, KVStorageBackend } from '@masknet/shared-base'
 import { MaskMessages } from './messages'
 
 const indexedDBProxy = createProxyKVStorageBackend()
@@ -7,7 +7,13 @@ export function setupMaskKVStorageBackend(indexedDB: KVStorageBackend, inMemory:
     indexedDBProxy.replaceBackend(indexedDB)
     inMemoryBackend.replaceBackend(inMemory)
 }
-export const createPersistentKVStorage = createKVStorage(indexedDBProxy, MaskMessages.events.__kv_backend_presistent__)
-export const createInMemoryKVStorage = createKVStorage(inMemoryBackend, MaskMessages.events.__kv_backend_in_memory__)
+export const createPersistentKVStorage = createKVStorageHost(
+    indexedDBProxy,
+    MaskMessages.events.__kv_backend_presistent__,
+)
+export const createInMemoryKVStorage = createKVStorageHost(
+    inMemoryBackend,
+    MaskMessages.events.__kv_backend_in_memory__,
+)
 
 Object.assign(globalThis, { createPersistentKVStorage, createInMemoryKVStorage })
