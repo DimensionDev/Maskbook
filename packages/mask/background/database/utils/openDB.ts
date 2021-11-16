@@ -9,19 +9,24 @@ import type {
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { MaskMessages } from '../../../shared'
 
+const iOSFix =
+    process.env.engine === 'safari' ? import('safari-14-idb-fix').then(({ default: ready }) => ready()) : undefined
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
-    MaskMessages.events.mobile_app_suspended.on(() => {
+    if (process.env.engine === 'safari') {
+        // iOS bug: indexedDB dies randomly
+        MaskMessages.events.mobile_app_suspended.on(clean)
+        setInterval(clean, /** 1 mintue */ 1000 * 60)
+    }
+    function clean() {
         if (db) {
             db.close()
-            db.addEventListener('close', () => (db = undefined))
+            db.addEventListener('close', () => (db = undefined), { once: true })
         }
-    })
-    function clean() {
         db = undefined
     }
     return async () => {
-        if (process.env.engine === 'safari') await import('safari-14-idb-fix').then(({ default: ready }) => ready())
+        await iOSFix
         assertEnvironment(Environment.ManifestBackground)
         if (db) {
             try {
@@ -33,8 +38,8 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
             }
         }
         db = await opener()
-        db.addEventListener('close', clean)
-        db.addEventListener('error', clean)
+        db.addEventListener('close', clean, { once: true })
+        db.addEventListener('error', clean, { once: true })
         return db
     }
 }
@@ -45,14 +50,21 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     asyncUpgradePrepare: (db: IDBPDatabase<DBSchema>) => Promise<AsyncUpgradePreparedData | undefined>,
 ) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
-    MaskMessages.events.mobile_app_suspended.on(() => {
+    if (process.env.engine === 'safari') {
+        // iOS bug: indexedDB dies randomly
+        MaskMessages.events.mobile_app_suspended.on(clean)
+        setInterval(clean, /** 1 mintue */ 1000 * 60)
+    }
+    function clean() {
         if (db) {
             db.close()
-            db.addEventListener('close', () => (db = undefined))
+            db.addEventListener('close', () => (db = undefined), { once: true })
         }
-    })
+        db = undefined
+    }
     let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined = undefined
     async function open(): Promise<IDBPDatabase<DBSchema>> {
+        await iOSFix
         assertEnvironment(Environment.ManifestBackground)
         if (db?.version === latestVersion) return db
         let currentVersion = firstVersionThatRequiresAsyncUpgrade
@@ -73,7 +85,7 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
             db = undefined
         }
         db = await opener(currentVersion, lastVersionData)
-        db.addEventListener('close', (e) => (db = undefined))
+        db.addEventListener('close', (e) => (db = undefined), { once: true })
         if (!db) throw new Error('Invalid state')
         return db
     }
