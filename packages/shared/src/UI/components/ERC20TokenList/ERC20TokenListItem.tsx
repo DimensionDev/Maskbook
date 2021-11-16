@@ -16,6 +16,7 @@ import { some } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
 import { useSharedI18N } from '../../../locales'
+import { LoadingAnimation } from '../LoadingAnimation'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -25,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         maxHeight: '100%',
         paddingLeft: theme.spacing(1),
+        borderRadius: theme.spacing(1),
     },
     text: {
         display: 'flex',
@@ -106,7 +108,7 @@ export const getERC20TokenListItem =
 
         const action = useMemo(() => {
             return !isNotAdded || isAdded || (info.inList && info.from === 'search') ? (
-                <span>{data.balance ? formatBalance(data.balance, token.decimals, 6) : ''}</span>
+                <span>{data.balance ? formatBalance(data.balance, token.decimals, 6) : <LoadingAnimation />}</span>
             ) : (
                 <MaskLoadingButton
                     variant="rounded"
