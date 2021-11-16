@@ -1,2 +1,2 @@
 export * from './messages'
-export { createInMemoryKVStorage, createPersistentKVStorage } from './kv-storage'
+export { InMemoryStorages, PersistentStorages } from './kv-storage'

@@ -12,6 +12,6 @@ const subscription: Subscription<Plugin.Dashboard.Definition[]> = {
 export function useActivatedPluginsDashboard() {
     return useSubscription(subscription)
 }
-export function startPluginDashboard(host: Plugin.__Host.Host) {
+export function startPluginDashboard(host: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext>) {
     startDaemon(host)
 }

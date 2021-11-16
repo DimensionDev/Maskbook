@@ -25,7 +25,10 @@ export function useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet() {
     }, {})
 }
 
-export function startPluginSNSAdaptor(currentNetwork: CurrentSNSNetwork, host: Plugin.__Host.Host) {
+export function startPluginSNSAdaptor(
+    currentNetwork: CurrentSNSNetwork,
+    host: Plugin.__Host.Host<Plugin.SNSAdaptor.SNSAdaptorContext>,
+) {
     startDaemon(host, (id) => {
         const def = getPluginDefine(id)
         if (!def) return false

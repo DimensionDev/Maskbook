@@ -19,6 +19,12 @@ const indexedDB: KVStorageBackend = {
         await Services.Settings.__kv_storage_write__('indexedDB', ...args)
     },
 }
-export const createPersistentKVStorage = createKVStorageHost(indexedDB, Messages.events.__kv_backend_presistent__)
-export const createInMemoryKVStorage = createKVStorageHost(memory, Messages.events.__kv_backend_in_memory__)
-Object.assign(globalThis, { createPersistentKVStorage, createInMemoryKVStorage })
+const createPersistentKVStorage = createKVStorageHost(indexedDB, Messages.events.__kv_backend_presistent__)
+const createInMemoryKVStorage = createKVStorageHost(memory, Messages.events.__kv_backend_in_memory__)
+
+export const InMemoryStorages = {
+    Plugin: createInMemoryKVStorage('plugin', {}),
+}
+export const PersistentStorages = {
+    Plugin: createPersistentKVStorage('plugin', {}),
+}
