@@ -124,11 +124,6 @@ export function WalletStatusBox() {
         openSelectProviderDialog()
     }, [openSelectProviderDialog])
 
-    console.log({
-        networkDescriptor,
-        providerDescriptor,
-    })
-
     return account ? (
         <section className={classes.currentAccount}>
             <WalletIcon
