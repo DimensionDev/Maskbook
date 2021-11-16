@@ -1,3 +1,4 @@
+import urlcat from 'urlcat'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -5,15 +6,16 @@ import {
     ERC721Token,
     NativeToken,
     NetworkType,
-    ERC721TokenDetailed,
     ProviderType,
+    InjectedProviderType,
     CollectibleProvider,
+    ERC721TokenDetailed,
 } from '../types'
 import { getChainDetailed, createLookupTableResolver } from '../utils'
-import urlcat from 'urlcat'
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
     {
+        [ProviderType.Injected]: 'Injected Web3',
         [ProviderType.MaskWallet]: 'Mask',
         [ProviderType.MetaMask]: 'MetaMask',
         [ProviderType.WalletConnect]: 'WalletConnect',
@@ -21,6 +23,51 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
     },
     'Unknown Network',
 )
+
+export const resolveInjectedProviderName = createLookupTableResolver<InjectedProviderType, string>(
+    {
+        [InjectedProviderType.MetaMask]: 'MetaMask (Injected)',
+        [InjectedProviderType.MathWallet]: 'MathWallet',
+        [InjectedProviderType.Coin98]: 'Coin98',
+        [InjectedProviderType.WalletLink]: 'Coinbase',
+        [InjectedProviderType.Unknown]: 'Injected Web3',
+    },
+    'Injected Web3',
+)
+
+export const resolveInjectedProviderDownloadLink = createLookupTableResolver<InjectedProviderType, string>(
+    {
+        [InjectedProviderType.MetaMask]: 'https://metamask.io/download.html',
+        [InjectedProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
+        [InjectedProviderType.Coin98]: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
+        [InjectedProviderType.WalletLink]: 'https://wallet.coinbase.com/',
+        [InjectedProviderType.Unknown]: '',
+    },
+    '',
+)
+
+export const resolveInjectedProviderIdentityKey = createLookupTableResolver<
+    InjectedProviderType,
+    'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
+>(
+    {
+        [InjectedProviderType.MetaMask]: 'isMetaMask',
+        [InjectedProviderType.MathWallet]: 'isMathWallet',
+        [InjectedProviderType.Coin98]: 'isCoin98',
+        [InjectedProviderType.WalletLink]: 'isWalletLink',
+        [InjectedProviderType.Unknown]: '',
+    },
+    '',
+)
+
+export const resolveCalculatedProviderName = (
+    providerType: ProviderType,
+    injectedProviderType?: InjectedProviderType,
+) => {
+    if (providerType === ProviderType.Injected && injectedProviderType)
+        return resolveInjectedProviderName(injectedProviderType)
+    return resolveProviderName(providerType)
+}
 
 export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType, string>(
     {
@@ -35,9 +82,9 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
 
 export const resolveNetworkName = createLookupTableResolver<NetworkType, string>(
     {
+        [NetworkType.Ethereum]: 'Ethereum',
         [NetworkType.Binance]: 'Binance Smart Chain',
         [NetworkType.Polygon]: 'Polygon',
-        [NetworkType.Ethereum]: 'Ethereum',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
     },

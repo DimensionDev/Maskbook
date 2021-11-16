@@ -12,5 +12,8 @@
   "scripts": {
     "start": "rollup -c -w",
     "build": "rollup -c"
+  },
+  "dependencies": {
+    "web3-core-helpers": "1.5.2"
   }
 }

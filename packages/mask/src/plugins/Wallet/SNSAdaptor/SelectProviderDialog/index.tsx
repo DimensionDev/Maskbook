@@ -1,24 +1,32 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
-import { getMaskColor, makeStyles } from '@masknet/theme'
-import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
-import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon } from '@masknet/shared'
-import { unreachable } from '@dimensiondev/kit'
-import { SuccessIcon } from '@masknet/icons'
-import { getChainIdFromNetworkType, ProviderType, useAccount, useChainId, useWallets } from '@masknet/web3-shared-evm'
 import { useHistory } from 'react-router-dom'
 import classnames from 'classnames'
+import { getMaskColor, makeStyles } from '@masknet/theme'
+import { Box, DialogContent, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
+import { getEnumAsArray, unreachable } from '@dimensiondev/kit'
+import { bridgedEthereumProvider } from '@masknet/injected-script'
+import { useValueRef, useRemoteControlledDialog, useStylesExtends, NetworkIcon, ProviderIcon } from '@masknet/shared'
+import { SuccessIcon } from '@masknet/icons'
+import {
+    getChainIdFromNetworkType,
+    InjectedProviderType,
+    ProviderType,
+    resolveInjectedProviderDownloadLink,
+    resolveInjectedProviderName,
+    useAccount,
+    useChainId,
+    useWallets,
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { Provider } from '../Provider'
-import { MetaMaskIcon } from '../../../../resources/MetaMaskIcon'
-import { MaskIcon } from '../../../../resources/MaskIcon'
-import { WalletConnectIcon } from '../../../../resources/WalletConnectIcon'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { currentNetworkSettings, currentProviderSettings } from '../../settings'
 import { Flags, hasNativeAPI, nativeAPI } from '../../../../utils'
 import Services from '../../../../extension/service'
 import { PopupRoutes } from '../../../../extension/popups'
+import { useInjectedProviderReady, useInjectedProviderType } from '../../../EVM/hooks'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -148,11 +156,31 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
     }, [open])
     //#endregion
 
+    //#region injected provider
+    const injectedProviderReady = useInjectedProviderReady()
+    const injectedProviderType = useInjectedProviderType()
+    //#endregion
+
     const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
 
     const onConnectProvider = useCallback(
         async (providerType: ProviderType) => {
             closeDialog()
+
+            // detect whether metamask installed
+            if (providerType === ProviderType.MetaMask) {
+                try {
+                    const isMetaMask = await bridgedEthereumProvider.getProperty('isMetaMask')
+                    if (!isMetaMask) throw new Error('Not installed.')
+                } catch {
+                    window.open(
+                        resolveInjectedProviderDownloadLink(InjectedProviderType.MetaMask),
+                        '_blank',
+                        'noopener noreferrer',
+                    )
+                    return
+                }
+            }
 
             switch (providerType) {
                 case ProviderType.MaskWallet:
@@ -162,6 +190,7 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
+                case ProviderType.Injected:
                     setConnectWalletDialog({
                         open: true,
                         providerType,
@@ -186,6 +215,18 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
             setSelectWalletDialog,
             setWalletConnectDialog,
         ],
+    )
+
+    const onConnectInjectedProvider = useCallback(
+        (expectedType: InjectedProviderType) => {
+            if (injectedProviderReady && expectedType === injectedProviderType) {
+                onConnectProvider(ProviderType.Injected)
+                return
+            }
+            const downloadLink = resolveInjectedProviderDownloadLink(expectedType)
+            if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
+        },
+        [injectedProviderReady, injectedProviderType],
     )
 
     // not available for the native app
@@ -222,20 +263,26 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                     </Typography>
                     <ImageList
                         className={classnames(classes.stepContent, classes.grid)}
-                        gap={16}
+                        gap={8}
                         cols={3}
-                        rowHeight={151}>
+                        rowHeight={130}>
                         <ImageListItem>
                             <Provider
-                                logo={<MaskIcon size={45} />}
+                                logo={<ProviderIcon providerType={ProviderType.MaskWallet} size={45} />}
                                 name="Mask Network"
                                 onClick={() => onConnectProvider(ProviderType.MaskWallet)}
                             />
                         </ImageListItem>
-                        {Flags.metamask_support_enabled ? (
+                        {Flags.metamask_enabled ? (
                             <ImageListItem>
                                 <Provider
-                                    logo={<MetaMaskIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
+                                    logo={
+                                        <ProviderIcon
+                                            classes={{ icon: classes.providerIcon }}
+                                            providerType={ProviderType.MetaMask}
+                                            size={45}
+                                        />
+                                    }
                                     name="MetaMask"
                                     onClick={() => onConnectProvider(ProviderType.MetaMask)}
                                 />
@@ -243,11 +290,44 @@ function SelectProviderDialogUI(props: SelectProviderDialogUIProps) {
                         ) : null}
                         <ImageListItem>
                             <Provider
-                                logo={<WalletConnectIcon className={classes.providerIcon} viewBox="0 0 45 45" />}
+                                logo={
+                                    <ProviderIcon
+                                        classes={{ icon: classes.providerIcon }}
+                                        providerType={ProviderType.WalletConnect}
+                                        size={45}
+                                    />
+                                }
                                 name="WalletConnect"
                                 onClick={() => onConnectProvider(ProviderType.WalletConnect)}
                             />
                         </ImageListItem>
+                        {Flags.injected_web3_enabled ? (
+                            <>
+                                {getEnumAsArray(InjectedProviderType)
+                                    .filter(
+                                        (x) =>
+                                            ![InjectedProviderType.Unknown, InjectedProviderType.MetaMask].includes(
+                                                x.value,
+                                            ),
+                                    )
+                                    .map(({ value: injectedProviderType }) => (
+                                        <ImageListItem key={injectedProviderType}>
+                                            <Provider
+                                                logo={
+                                                    <ProviderIcon
+                                                        classes={{ icon: classes.providerIcon }}
+                                                        providerType={ProviderType.Injected}
+                                                        injectedProviderType={injectedProviderType}
+                                                        size={45}
+                                                    />
+                                                }
+                                                name={resolveInjectedProviderName(injectedProviderType)}
+                                                onClick={() => onConnectInjectedProvider(injectedProviderType)}
+                                            />
+                                        </ImageListItem>
+                                    ))}
+                            </>
+                        ) : null}
                     </ImageList>
                 </Box>
             </DialogContent>

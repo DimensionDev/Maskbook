@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         marginTop: theme.spacing(2),
-        padding: theme.spacing(2.5, 0, 3.5, 2),
+        padding: theme.spacing(2.5, 0, 2.5, 2),
     },
     tokenIcon: {
         display: 'flex',
@@ -162,7 +162,6 @@ export function RemindDialog(props: RemindDialogProps) {
                     <Typography variant="h5" className={classes.tokenSymbol}>
                         {token.name}
                     </Typography>
-
                     <Link
                         target="_blank"
                         className={classes.tokenLink}
