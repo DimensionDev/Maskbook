@@ -34,6 +34,7 @@ import {
     currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
+import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {
@@ -126,4 +127,20 @@ export async function setPluginEnabled(id: string, enabled: boolean) {
 
 export async function openTab(url: string) {
     await browser.tabs.create({ active: true, url })
+}
+
+export async function __kv_storage_write__(kind: 'indexedDB' | 'memory', key: string, value: unknown) {
+    if (kind === 'memory') {
+        return inMemory_KVStorageBackend.setValue(key, value)
+    } else {
+        return indexedDB_KVStorageBackend.setValue(key, value)
+    }
+}
+
+export async function __kv_storage_read__(kind: 'indexedDB' | 'memory', key: string) {
+    if (kind === 'memory') {
+        return inMemory_KVStorageBackend.getValue(key)
+    } else {
+        return indexedDB_KVStorageBackend.getValue(key)
+    }
 }

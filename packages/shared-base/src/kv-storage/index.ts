@@ -21,7 +21,7 @@ export interface KVStorageBackend {
  */
 export function createKVStorage(
     backend: KVStorageBackend,
-    message: MessageChannel<any>,
+    message: MessageChannel<[string, unknown]>,
     signal = new AbortController().signal,
 ): StateScope<never>['createSubscope'] {
     return (name, defaultValues) => {
@@ -117,7 +117,7 @@ function createState(
         .then(() => backend.getValue(propKey))
         .then((val) => {
             if (val.some) usingDefaultValue = false
-            val.unwrapOr(defaultValue)
+            return val.unwrapOr(defaultValue)
         })
         .then((val) => {
             state = val

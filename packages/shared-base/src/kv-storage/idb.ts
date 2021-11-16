@@ -1,7 +1,12 @@
 import type { KVStorageBackend } from '.'
 import { IDBPDatabase, openDB } from 'idb'
 import { None, Some } from 'ts-results'
-export function createIndexedDB_KVStorageBackend(dbName: string, beforeAutoSync = Promise.resolve()): KVStorageBackend {
+
+export function createIndexedDB_KVStorageBackend(
+    dbName: string,
+    onChange: (key: string, value: unknown) => void,
+    beforeAutoSync = Promise.resolve(),
+): KVStorageBackend {
     let db: IDBPDatabase | undefined
 
     setInterval(() => {
@@ -34,6 +39,7 @@ export function createIndexedDB_KVStorageBackend(dbName: string, beforeAutoSync 
             const db = await ensureDB()
             const t = db.transaction('store', 'readwrite')
             await t.store.put(value, key)
+            onChange(key, value)
         },
     }
 }

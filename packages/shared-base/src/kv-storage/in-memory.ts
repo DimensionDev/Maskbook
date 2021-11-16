@@ -1,6 +1,9 @@
 import type { KVStorageBackend } from '.'
 import { Some, None } from 'ts-results'
-export function createInMemoryKVStorageBackend(beforeAutoSync = Promise.resolve()): KVStorageBackend {
+export function createInMemoryKVStorageBackend(
+    onChange: (key: string, value: unknown) => void,
+    beforeAutoSync = Promise.resolve(),
+): KVStorageBackend {
     const storage = new Map<string, any>()
     return {
         beforeAutoSync,
@@ -10,8 +13,9 @@ export function createInMemoryKVStorageBackend(beforeAutoSync = Promise.resolve(
             return None
         },
         async setValue(key, value) {
-            console.log(storage)
             storage.set(key, value)
+            onChange(key, value)
+            console.log(storage)
         },
     }
 }
