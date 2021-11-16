@@ -55,7 +55,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         ) : null}
                         {!loading && error ? (
                             <Typography className={classes.error} color="red" variant="body2">
-                                {error.message ??
+                                {error.message ||
                                     `Failed to connect to ${resolveCalculatedProviderName(
                                         providerType,
                                         injectedProviderType,

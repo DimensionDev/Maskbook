@@ -23,13 +23,11 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
                     result,
                     error: null,
                 })
-            } catch (error) {
-                if (error instanceof Error) {
-                    EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
-                        payload,
-                        error,
-                    })
-                }
+            } catch (error: unknown) {
+                EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
+                    payload,
+                    error: error instanceof Error ? error : new Error('Failed to send request.'),
+                })
             }
         })
     }, [])

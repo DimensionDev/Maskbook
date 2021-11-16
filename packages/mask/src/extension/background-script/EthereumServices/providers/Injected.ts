@@ -22,6 +22,7 @@ async function request(requestArguments: RequestArguments) {
         else resolve(result)
     }
 
+    setTimeout(() => reject(new Error('The request is timeout.')), 30 * 1000)
     EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.on(onResponse)
     EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.sendToVisiblePages({
         payload: {
