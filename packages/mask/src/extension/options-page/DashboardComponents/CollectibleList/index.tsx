@@ -1,14 +1,21 @@
-import { createContext, useState, useEffect, useMemo } from 'react'
+import { createContext, useState, useEffect } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useStylesExtends, useValueRef } from '@masknet/shared'
-import { ChainId, CollectibleProvider, ERC721TokenDetailed, useCollectibles, Wallet } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    CollectibleProvider,
+    ERC721TokenCollectionInfo,
+    ERC721TokenDetailed,
+    useCollectibles,
+    useCollections,
+    Wallet,
+} from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
-import { searchProfileTabSelector } from '../../../../social-network-adaptor/twitter.com/utils/selector'
 import { Image } from '../../../../components/shared/Image'
 
 export const CollectibleContext = createContext<{
@@ -19,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'grid',
         flexWrap: 'wrap',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
         gridGap: theme.spacing(1),
     },
     text: {
@@ -44,14 +51,15 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
     },
     description: {
-        textAlign: 'center',
-        marginTop: theme.spacing(0.5),
-        maxWidth: 160,
+        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        alignSelf: 'stretch',
     },
     name: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        lineHeight: '36px',
+        paddingLeft: '8px',
     },
     loading: {
         position: 'absolute',
@@ -62,8 +70,8 @@ const useStyles = makeStyles()((theme) => ({
         width: '100%',
     },
     collectionWrap: {
-        width: '36px',
-        height: '36px',
+        width: '24px',
+        height: '24px',
         borderRadius: '50%',
         marginRight: '8px',
         background: 'rgba(229,232,235,1)',
@@ -90,7 +98,7 @@ function CollectibleItem(props: CollectibleItemProps) {
         <div className={classes.card}>
             <CollectibleCard token={token} provider={provider} wallet={wallet} readonly={readonly} />
             <div className={classes.description}>
-                <Typography className={classes.name} color="textSecondary" variant="body2">
+                <Typography className={classes.name} color="textPrimary" variant="body2">
                     {token.info.name}
                 </Typography>
             </div>
@@ -125,42 +133,25 @@ function CollectibleListUI(props: CollectibleListUIProps) {
         readonly,
         page,
         hasRetry = true,
-        collectionView = false,
         onNextPage,
         onPrevPage,
     } = props
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
-    const collections: ERC721TokenDetailed[][] = useMemo(() => {
-        const collections: ERC721TokenDetailed[][] = []
-        const addresses: string[] = []
-        collectibles.forEach((item) => {
-            const address = item.contractDetailed.address
-            const index = addresses.indexOf(address)
-            if (index !== -1) {
-                collections[index].push(item)
-            } else {
-                addresses.push(address)
-                collections.push([item])
-            }
-        })
-
-        return collections
-    }, [collectibles])
 
     WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry)
     if (loading)
         return (
             <Box className={classes.root}>
-                {Array.from({ length: 12 })
+                {Array.from({ length: 3 })
                     .fill(0)
                     .map((_, i) => (
                         <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                            <Skeleton animation="wave" variant="rectangular" width={160} height={220} />
+                            <Skeleton animation="wave" variant="rectangular" width={180} height={180} />
                             <Skeleton
                                 animation="wave"
                                 variant="text"
-                                width={160}
+                                width={180}
                                 height={20}
                                 style={{ marginTop: 4 }}
                             />
@@ -181,42 +172,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                             </Button>
                         ) : null}
                     </Box>
-                ) : collectionView ? (
-                    <Box>
-                        {collections.map((x, i) => (
-                            <Box key={i}>
-                                <Box display="flex" alignItems="center" sx={{ marginTop: '24px' }}>
-                                    <Box className={classes.collectionWrap}>
-                                        {x[0].info.collection?.image ? (
-                                            <Image
-                                                component="img"
-                                                className={classes.collectionImg}
-                                                src={x[0].info.collection?.image}
-                                            />
-                                        ) : null}
-                                    </Box>
-                                    <Typography
-                                        className={classes.name}
-                                        color="textPrimary"
-                                        variant="body2"
-                                        sx={{ fontSize: '16px' }}>
-                                        {x[0].info.collection?.name}
-                                    </Typography>
-                                </Box>
-                                <Box sx={{ display: 'flex', overflow: 'auto' }}>
-                                    {x.map((y, j) => (
-                                        <CollectibleItem
-                                            token={y}
-                                            provider={provider}
-                                            wallet={wallet}
-                                            readonly={readonly}
-                                            key={j}
-                                        />
-                                    ))}
-                                </Box>
-                            </Box>
-                        ))}
-                    </Box>
                 ) : (
                     <Box className={classes.root}>
                         {collectibles.map((x, i) => (
@@ -231,7 +186,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     </Box>
                 )}
             </Box>
-            {!(page === 0 && collectibles.length === 0) ? (
+            {!(page === 0 && !hasNextPage) ? (
                 <TablePagination
                     count={-1}
                     component="div"
@@ -258,11 +213,12 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 
 export interface CollectibleListAddressProps extends withClasses<'empty' | 'button'> {
     address: string
-    collectionView?: boolean
+    collection?: string
+    setCount: (count: number) => void
 }
 
 export function CollectibleListAddress(props: CollectibleListAddressProps) {
-    const { address, collectionView } = props
+    const { address, collection, setCount } = props
     const provider = useValueRef(currentCollectibleDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
@@ -273,7 +229,7 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
         loading: collectiblesLoading,
         retry: collectiblesRetry,
         error: collectiblesError,
-    } = useCollectibles(address, chainId, provider, page, 50)
+    } = useCollectibles(address, chainId, provider, page, 50, collection)
     const { collectibles = [], hasNextPage } = value
 
     useUpdateEffect(() => {
@@ -281,17 +237,14 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
     }, [provider, address])
 
     useEffect(() => {
-        const tab = searchProfileTabSelector().evaluate()
-        if (!tab) return
-        tab.scrollIntoView()
-    }, [page])
+        setCount(collectibles.length)
+    }, [collectibles])
 
     return (
         <CollectibleListUI
             classes={classes}
             provider={provider}
             collectibles={collectibles}
-            collectionView={collectionView}
             loading={collectiblesLoading}
             collectiblesRetry={collectiblesRetry}
             error={collectiblesError}
@@ -302,5 +255,61 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             onPrevPage={() => setPage((prev) => prev - 1)}
             onNextPage={() => setPage((next) => next + 1)}
         />
+    )
+}
+
+export function CollectionList({ address }: { address: string }) {
+    const provider = useValueRef(currentCollectibleDataProviderSettings)
+    const chainId = ChainId.Mainnet
+    const [page, setPage] = useState(0)
+    const { classes } = useStyles()
+    const [counts, setCounts] = useState<number[]>([])
+    const [rendCollections, setRendCollections] = useState<ERC721TokenCollectionInfo[]>([])
+
+    const { value = { collections: [], hasNextPage: false } } = useCollections(address, chainId, provider, page, 3)
+    const { collections = [], hasNextPage } = value
+
+    useUpdateEffect(() => {
+        setPage(0)
+    }, [provider, address])
+
+    useEffect(() => {
+        if (collections.length) {
+            setRendCollections([...rendCollections, ...collections])
+            if (hasNextPage) {
+                setTimeout(() => {
+                    setPage(page + 1)
+                }, 3000)
+            }
+        }
+    }, [collections])
+
+    return (
+        <Box>
+            {rendCollections.map((x, i) => (
+                <Box key={i}>
+                    <Box display="flex" alignItems="center" sx={{ marginTop: '24px' }}>
+                        <Box className={classes.collectionWrap}>
+                            {x.image ? <Image component="img" className={classes.collectionImg} src={x.image} /> : null}
+                        </Box>
+                        <Typography
+                            className={classes.name}
+                            color="textPrimary"
+                            variant="body2"
+                            sx={{ fontSize: '16px' }}>
+                            {x.name}({counts[i]})
+                        </Typography>
+                    </Box>
+                    <CollectibleListAddress
+                        address={address}
+                        collection={x.slug}
+                        setCount={(count) => {
+                            counts[i] = count
+                            setCounts(counts)
+                        }}
+                    />
+                </Box>
+            ))}
+        </Box>
     )
 }

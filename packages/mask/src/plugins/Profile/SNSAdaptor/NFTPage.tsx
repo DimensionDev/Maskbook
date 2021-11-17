@@ -8,10 +8,9 @@ import {
     useEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import { Box, Link, Typography, CircularProgress, Switch } from '@mui/material'
-import { useState } from 'react'
+import { Box, Link, Typography, CircularProgress } from '@mui/material'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { CollectibleListAddress } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { useI18N } from '../../../utils'
 import { useUserOwnerAddress } from '../../Avatar/hooks/useUserOwnerAddress'
 
@@ -51,7 +50,6 @@ export function NFTPage(props: NFTPageProps) {
     )
     const { type, name, address } = value ?? {}
     const { loading: loadingWalletGun, value: walletAddressGun } = useUserOwnerAddress(identity.identifier.userId)
-    const [collectionView, setCollectionView] = useState(false)
 
     if (!address && !walletAddressGun)
         return (
@@ -76,13 +74,7 @@ export function NFTPage(props: NFTPageProps) {
                         alignItems="center"
                         justifyContent="space-between"
                         flexWrap="wrap">
-                        <Typography color="textPrimary">
-                            {t('view_in_collections')}
-                            <Switch
-                                checked={collectionView}
-                                onChange={(event) => setCollectionView(event.target.checked)}
-                            />
-                        </Typography>
+                        <Typography color="textPrimary">{t('view_in_collections')}</Typography>
                         <Box display="flex" alignItems="center">
                             <Typography color="textPrimary" component="span">
                                 Current display of {type}:{' '}
@@ -110,10 +102,7 @@ export function NFTPage(props: NFTPageProps) {
                             </Typography>
                         </Box>
                     </Box>
-                    <CollectibleListAddress
-                        collectionView={collectionView}
-                        address={(address?.length === 0 ? walletAddressGun : address) ?? ''}
-                    />
+                    <CollectionList address={(address?.length === 0 ? walletAddressGun : address) ?? ''} />
                 </>
             )}
         </div>

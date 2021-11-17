@@ -92,6 +92,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
 
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
+        getCollectionsNFT: WalletRPC.getCollectionsNFT,
         getAddressNamesList: WalletRPC.getAddressNames,
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
         getTransactionList: WalletRPC.getTransactionList,

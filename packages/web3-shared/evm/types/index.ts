@@ -137,10 +137,6 @@ export interface ERC721TokenInfo {
     description?: string
     image?: string
     owner?: string
-    collection?: {
-        name: string
-        image: string
-    }
 }
 
 export interface ERC721TokenDetailed {
@@ -151,6 +147,12 @@ export interface ERC721TokenDetailed {
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
     record_id: string
+}
+
+export interface ERC721TokenCollectionInfo {
+    name: string
+    image?: string
+    slug: string
 }
 
 //#endregion

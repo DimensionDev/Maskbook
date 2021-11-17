@@ -92,6 +92,7 @@ export const Web3Context: Web3ProviderType = {
 
     getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
+    getCollectionsNFT: PluginServices.Wallet.getCollectionsNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
