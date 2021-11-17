@@ -31,6 +31,24 @@ export interface InternalEvents {
     /** Wait until window.ethereum appears */
     untilEthBridgeOnline: [req_id: number]
     //#endregion
+
+    //#region Solana inpage provider bridge
+    /** Request the bridge to listen on an event. */
+    solanaBridgeRequestListen: [eventName: string]
+    /** When a event happened. */
+    solanaBridgeOnEvent: [eventName: string, data: unknown[]]
+    /** Send JSON RPC request. */
+    solanaBridgeSendRequest: [req_id: number, request: unknown]
+    /** Access primitive property on the window.solana object. */
+    solanaBridgePrimitiveAccess: [req_id: number, property: string]
+    /** Call window.solana.isConnected() */
+    solanaBridgeIsConnected: [req_id: number]
+    /** Call window.solana._metamask.isUnlocked() */
+    solanaBridgeMetaMaskIsUnlocked: [req_id: number]
+    /** Wait until window.solana appears */
+    untilSolanaBridgeOnline: [req_id: number]
+    //#endregion
+
     /** A simple RPC. */
     // Not using async-call-rpc because we need to make sure every intrinsics
     // we're using is captured.
