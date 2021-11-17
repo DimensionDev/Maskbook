@@ -231,7 +231,7 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(() => {
                                 className: classes.input,
                                 'aria-autocomplete': 'none',
                             }}
-                            InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
+                            InputProps={{ classes: { root: classes.textFieldInput } }}
                             FormHelperTextProps={{ style: { marginLeft: 0 } }}
                         />
                     )}
@@ -260,7 +260,7 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(() => {
                                 className: classes.input,
                                 'aria-autocomplete': 'none',
                             }}
-                            InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
+                            InputProps={{ classes: { root: classes.textFieldInput } }}
                             FormHelperTextProps={{ style: { marginLeft: 0 } }}
                         />
                     )}

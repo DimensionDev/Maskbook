@@ -3,9 +3,9 @@ import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
 import { TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import { SLIPPAGE_DEFAULT } from '../../constants'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { swapErrorToUserReadableMessage } from '../../helpers'
+import type { TradeProvider } from '@masknet/public-api'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -26,10 +26,10 @@ interface FailedCall extends SwapCallEstimate {
     error: Error
 }
 
-export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlippage = SLIPPAGE_DEFAULT) {
+export function useTradeCallback(trade: TradeComputed<Trade> | null, tradeProvider?: TradeProvider) {
     const web3 = useWeb3()
     const account = useAccount()
-    const tradeParameters = useTradeParameters(trade, allowedSlippage)
+    const tradeParameters = useTradeParameters(trade, tradeProvider)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,

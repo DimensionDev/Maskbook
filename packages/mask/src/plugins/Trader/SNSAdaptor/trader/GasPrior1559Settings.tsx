@@ -1,11 +1,18 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
-import { formatWeiToGwei, useChainId } from '@masknet/web3-shared-evm'
+import {
+    formatGweiToWei,
+    formatWeiToEther,
+    formatWeiToGwei,
+    useChainId,
+    useNativeTokenDetailed,
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import classnames from 'classnames'
+import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -52,6 +59,11 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         borderRadius: 6,
     },
+    cost: {
+        fontSize: 12,
+        lineHeight: '16px',
+        color: MaskColorVar.twitterSecond,
+    },
 }))
 
 interface GasPrior1559SettingsProps {}
@@ -61,6 +73,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(() => {
     const { classes } = useStyles()
     const { t } = useI18N()
     const [selected, setOption] = useState<number | null>(1)
+    const [customGasPrice, setCustomGasPrice] = useState('0')
 
     //#region Get gas options from debank
     const { value: gasOptions } = useAsync(async () => {
@@ -88,11 +101,14 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(() => {
             {
                 title: t('plugin_trader_gas_setting_custom'),
                 isCustom: true,
-                gasPrice: 0,
+                gasPrice: customGasPrice ? formatGweiToWei(customGasPrice) : 0,
             },
         ],
-        [gasOptions],
+        [gasOptions, customGasPrice],
     )
+
+    const { value: nativeToken } = useNativeTokenDetailed()
+    const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
 
     return (
         <Box className={classes.container}>
@@ -110,22 +126,29 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(() => {
                             )}
                         />
                     </Box>
-                    <Typography className={classes.gasPrice}>
+                    <Typography className={classes.gasPrice} component="div">
                         <Typography component="span" marginRight={1}>
                             {option.isCustom ? (
                                 <TextField
+                                    value={customGasPrice}
+                                    onChange={(e) => setCustomGasPrice(e.target.value)}
                                     inputProps={{
                                         pattern: '^[0-9]*[.,]?[0-9]*$',
                                         className: classes.input,
                                         'aria-autocomplete': 'none',
                                     }}
-                                    InputProps={{ disableUnderline: true, classes: { root: classes.textFieldInput } }}
+                                    InputProps={{ classes: { root: classes.textFieldInput } }}
                                 />
                             ) : (
                                 formatWeiToGwei(option.gasPrice ?? 0).toString()
                             )}
                         </Typography>
                         {t('wallet_transfer_gwei')}
+                    </Typography>
+                    <Typography className={classes.cost} marginTop={option.isCustom ? 4 : 6}>
+                        {t('popups_wallet_gas_fee_settings_usd', {
+                            usd: formatWeiToEther(option.gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
+                        })}
                     </Typography>
                 </Box>
             ))}

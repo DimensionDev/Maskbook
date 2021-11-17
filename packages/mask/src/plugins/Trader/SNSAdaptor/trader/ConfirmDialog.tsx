@@ -42,18 +42,12 @@ const useStyles = makeStyles()((theme) => ({
         color: MaskColorVar.twitterInfo,
     },
     button: {
-        backgroundColor: MaskColorVar.twitterButton,
         fontSize: 18,
         lineHeight: '22px',
         fontWeight: 600,
         padding: '13px 0',
         borderRadius: 24,
         height: 'auto',
-        color: MaskColorVar.twitterButtonText,
-        ['&:hover']: {
-            backgroundColor: MaskColorVar.twitterButton,
-            boxShadow: `0 0 5px ${MaskColorVar.twitterButton}`,
-        },
     },
 }))
 
@@ -107,7 +101,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                     </Box>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_trader_confirm_from')}</Typography>
-                        <Typography>
+                        <Typography component="div" display="flex">
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
                                 address={inputToken.address}
@@ -123,7 +117,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                     </Box>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_trader_confirm_to')}</Typography>
-                        <Typography>
+                        <Typography component="div" display="flex">
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
                                 address={outputToken.address}

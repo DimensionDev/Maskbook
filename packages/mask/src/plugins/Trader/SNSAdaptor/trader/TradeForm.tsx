@@ -29,7 +29,7 @@ import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
     return {
         root: {
             display: 'flex',
@@ -125,9 +125,11 @@ const useStyles = makeStyles()((theme) => {
         },
         controller: {
             width: '100%',
-            backgroundColor: theme.palette.background.paper,
+            paddingBottom: 16,
+            // Just for design
+            backgroundColor: isDashboard ? MaskColorVar.mainBackground : theme.palette.background.paper,
             position: 'sticky',
-            bottom: 0,
+            bottom: -20,
         },
         noToken: {
             borderRadius: `18px !important`,
@@ -176,8 +178,10 @@ export const TradeForm = memo<AllTradeFormProps>(
         onFocusedTradeChange,
         onSwap,
     }) => {
+        const isDashboard = location.href.includes('dashboard.html')
+
         const { t } = useI18N()
-        const { classes } = useStyles()
+        const { classes } = useStyles({ isDashboard })
         const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const [isExpand, setIsExpand] = useState(false)
 
@@ -279,7 +283,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 <Box className={classes.reverse}>
                     <ArrowDownwardIcon className={classes.reverseIcon} />
                 </Box>
-                <Box className={classes.section}>
+                <Box className={classes.section} marginBottom={2.5}>
                     <Box display="flex" justifyContent="space-between" mb={1}>
                         {outputToken && outputTokenBalance !== undefined ? (
                             <>

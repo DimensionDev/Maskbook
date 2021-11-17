@@ -43,8 +43,8 @@ export function useTradeCallback(provider?: TradeProvider, tradeComputed?: Trade
     const tradeComputedForBancor = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapBancorRequest>) : null
 
     // uniswap like providers
-    const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like)
-    const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like)
+    const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider)
+    const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider)
 
     // balancer
     const exchangeProxyContract = useExchangeProxyContract()

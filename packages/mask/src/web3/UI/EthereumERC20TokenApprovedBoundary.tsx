@@ -169,7 +169,11 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
             </Grid>
         )
     if (approveStateType === ApproveStateType.APPROVED)
-        return <Grid container>{typeof children === 'function' ? children(allowance) : children}</Grid>
+        return (
+            <Grid container>
+                {render ? render(false) : typeof children === 'function' ? children(allowance) : children}
+            </Grid>
+        )
 
     unreachable(approveStateType)
 }
