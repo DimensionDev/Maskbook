@@ -1,7 +1,9 @@
-import { Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { getMaskColor } from '@masknet/theme'
+import classNames from 'classnames'
+import { Typography } from '@mui/material'
+import { makeStyles, getMaskColor } from '@masknet/theme'
+import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
@@ -12,9 +14,6 @@ import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
-import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import classNames from 'classnames'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -100,7 +99,7 @@ interface MaskApplicationBoxProps {
     secondEntryChainTabs?: ChainId[]
 }
 
-export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: MaskApplicationBoxProps) {
+export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskApplicationBoxProps) {
     const { classes } = useStyles()
     const currentChainId = useChainId()
     const account = useAccount()
@@ -213,7 +212,7 @@ export function MaskApplicationBox({ secondEntries, secondEntryChainTabs }: Mask
         ),
         createEntry('Swap', new URL('./assets/swap.png', import.meta.url).toString(), openSwapDialog),
         createEntry(
-            'Fiat on/off ramp',
+            'Fiat on-ramp',
             new URL('./assets/fiat_ramp.png', import.meta.url).toString(),
             () => setBuyDialog({ open: true, address: account }),
             undefined,

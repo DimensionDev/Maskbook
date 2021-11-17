@@ -1,4 +1,3 @@
-import { useChainDetailed } from '.'
 import { usePluginWeb3StateContext } from './Context'
 
 /**
@@ -7,22 +6,4 @@ import { usePluginWeb3StateContext } from './Context'
  */
 export function useChainId(pluginID?: string) {
     return usePluginWeb3StateContext(pluginID).chainId
-}
-
-/**
- * Returns true if chain id is available
- */
-export function useChainIdValid(pluginID?: string) {
-    return usePluginWeb3StateContext(pluginID).chainIdValid
-}
-
-/**
- * Returns true if the current chain id is matched with the given one
- * @param chainId
- * @returns
- */
-export function useChainIdMatched(pluginID?: string, chainId?: number) {
-    const chainDetailed = useChainDetailed(pluginID)
-    if (!chainId) return false
-    return chainDetailed?.chainId === chainId
 }

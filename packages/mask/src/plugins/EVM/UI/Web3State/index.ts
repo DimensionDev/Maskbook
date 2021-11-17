@@ -3,9 +3,13 @@ import {
     formatBalance,
     formatCurrency,
     formatEthereumAddress,
+    getChainDetailed,
     isChainIdValid,
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
+    resolveChainColor,
+    resolveChainFullName,
+    resolveChainName,
     resolveTransactionLinkOnExplorer,
     Web3ProviderType,
 } from '@masknet/web3-shared-evm'
@@ -24,13 +28,20 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         providerType: context.providerType,
     }
     state.Utils = state.Utils ?? {
+        getChainDetailed,
+        isChainIdValid,
+
         formatAddress: formatEthereumAddress,
         formatCurrency,
         formatBalance,
+
+        resolveChainName,
+        resolveChainFullName,
+        resolveChainColor,
+
         resolveTransactionLink: resolveTransactionLinkOnExplorer,
         resolveAddressLink: resolveAddressLinkOnExplorer,
         resolveBlockLink: resolveBlockLinkOnExplorer,
-        isChainIdValid,
     }
     return state
 }

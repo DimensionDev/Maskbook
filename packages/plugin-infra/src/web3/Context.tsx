@@ -49,8 +49,6 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     return {
         allowTestnet,
         chainId,
-        chainIdValid: !account || (Utils?.isChainIdValid?.(chainId, allowTestnet) ?? false),
-        chainDetailed: Utils?.getChainDetailed?.(chainId) ?? null,
         account,
         balance,
         blockNumber,

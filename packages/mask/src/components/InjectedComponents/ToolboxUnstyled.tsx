@@ -12,7 +12,7 @@ import {
     ListItemText as MuiListItemText,
     Box,
 } from '@mui/material'
-import { useChainColor, useChainDetailed, useWallet, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { useWallet, TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
     useActivatedPluginSNSAdaptor_withSupportOperateChain,
     useActivatedPluginsSNSAdaptor,
@@ -20,7 +20,9 @@ import {
     useProviderDescriptor,
     useAccount,
     useChainId,
+    useChainColor,
     useChainIdValid,
+    useChainDetailed,
     useWeb3State,
 } from '@masknet/plugin-infra'
 import { ToolIconURLs } from '../../resources/tool-icon'
@@ -322,7 +324,8 @@ function useToolbox() {
     const ClaimDialogJSX = isClaimAllDialogOpen ? (
         <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
     ) : null
-    const shouldDisplayChainIndicator = account && chainIdValid && chainDetailed?.network !== 'mainnet'
+    const shouldDisplayChainIndicator =
+        account && chainIdValid && chainDetailed?.network && chainDetailed.network !== 'mainnet'
     return {
         openWallet,
         isWalletValid,

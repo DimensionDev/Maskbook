@@ -1,7 +1,7 @@
 import { useChainId, useWeb3State } from '.'
 
-export function useChainDetailed() {
+export function useChainColor() {
     const chainId = useChainId()
     const { Utils } = useWeb3State()
-    return Utils?.getChainDetailed?.(chainId) ?? null
+    return Utils?.resolveChainColor?.(chainId) ?? 'transparent'
 }
