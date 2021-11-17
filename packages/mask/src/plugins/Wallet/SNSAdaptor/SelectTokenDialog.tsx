@@ -1,7 +1,13 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { FungibleTokenDetailed, useNativeTokenDetailed, useChainDetailed } from '@masknet/web3-shared-evm'
+import {
+    FungibleTokenDetailed,
+    useNativeTokenDetailed,
+    useChainId,
+    ChainId,
+    getChainDetailed,
+} from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import { WalletMessages } from '../../Wallet/messages'
@@ -39,13 +45,15 @@ export interface SelectTokenDialogProps extends withClasses<never> {}
 export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
-
+    const chainId = useChainId()
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
-    const chainDetailed = useChainDetailed()
+    const [targetChainId, setChainId] = useState<ChainId | undefined>(chainId)
+
+    const chainDetailed = useMemo(() => getChainDetailed(targetChainId), [targetChainId])
 
     //#region the native token
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed()
+    const { value: nativeTokenDetailed } = useNativeTokenDetailed(targetChainId)
     //#endregion
 
     //#region remote controlled dialog
@@ -59,6 +67,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         setDisableNativeToken(ev.disableNativeToken ?? true)
         setDisableSearchBar(ev.disableSearchBar ?? false)
         setFixedTokenListProps(ev.FixedTokenListProps ?? null)
+        setChainId(ev.chainId ?? undefined)
     })
     const onSubmit = useCallback(
         async (token: FungibleTokenDetailed) => {
@@ -96,6 +105,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                     onSelect={onSubmit}
                     {...{
                         ...FixedTokenListProps,
+                        targetChainId,
                         tokens: [
                             ...(!disableNativeToken &&
                             nativeTokenDetailed &&

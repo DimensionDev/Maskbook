@@ -7,14 +7,17 @@ import { useWeb3Context } from '../context'
 import { useChainId } from './useChainId'
 import { currySameAddress } from '../utils'
 import type { ERC20TokenDetailed, NativeTokenDetailed } from '../types'
+import type { ChainId } from '../types'
 
 export function useERC20TokensDetailedFromTokenLists(
     lists?: string[],
     keyword: string = '',
     additionalTokens: (ERC20TokenDetailed | NativeTokenDetailed)[] = [],
+    targetChainId?: ChainId,
 ): AsyncStateRetry<(ERC20TokenDetailed | NativeTokenDetailed)[]> {
     //#region fetch token lists
-    const chainId = useChainId()
+    const currentChainId = useChainId()
+    const chainId = targetChainId ?? currentChainId
     const { fetchERC20TokensFromTokenLists } = useWeb3Context()
     const { value: tokensFromList = [], ...asyncResult } = useAsyncRetry(
         async () => (!lists || lists.length === 0 ? [] : fetchERC20TokensFromTokenLists(lists, chainId)),

@@ -4,6 +4,7 @@ import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { PluginTraderMessages } from '../../messages'
 import { Trader, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
@@ -75,18 +76,25 @@ export function TraderDialog() {
     }, [chainIdValid, closeDialog])
 
     return (
-        <AllProviderTradeContext.Provider>
-            <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap')}>
-                <DialogContent>
-                    <div className={classes.walletStatusBox}>
-                        <WalletStatusBox />
-                    </div>
-                    <div className={classes.abstractTabWrapper}>
-                        <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chains ?? []} />
-                    </div>
-                    <Trader {...traderProps} chainId={chainId} />
-                </DialogContent>
-            </InjectedDialog>
-        </AllProviderTradeContext.Provider>
+        <TargetChainIdContext.Provider>
+            <AllProviderTradeContext.Provider>
+                <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap')}>
+                    <DialogContent>
+                        <div className={classes.walletStatusBox}>
+                            <WalletStatusBox />
+                        </div>
+                        <div className={classes.abstractTabWrapper}>
+                            <NetworkTab
+                                chainId={chainId}
+                                setChainId={setChainId}
+                                classes={classes}
+                                chains={chains ?? []}
+                            />
+                        </div>
+                        <Trader {...traderProps} chainId={chainId} />
+                    </DialogContent>
+                </InjectedDialog>
+            </AllProviderTradeContext.Provider>
+        </TargetChainIdContext.Provider>
     )
 }

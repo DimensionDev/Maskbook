@@ -15,6 +15,7 @@ import {
     isSameAddress,
     resolveTokenLinkOnExplorer,
     useTokenConstants,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { uniqBy } from 'lodash-es'
@@ -34,6 +35,7 @@ export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'>
     blacklist?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
+    targetChainId?: ChainId
     onSelect?(token: FungibleTokenDetailed | null): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
@@ -41,7 +43,8 @@ export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'>
 export function FixedTokenList(props: FixedTokenListProps) {
     const classes = useStylesExtends({}, props)
     const account = useAccount()
-    const chainId = useChainId()
+    const currentChainId = useChainId()
+    const chainId = props.targetChainId ?? currentChainId
     const trustedERC20Tokens = useTrustedERC20Tokens()
     const { t } = useI18N()
 
@@ -56,10 +59,10 @@ export function FixedTokenList(props: FixedTokenListProps) {
     } = props
 
     const [address, setAddress] = useState('')
-    const { ERC20_TOKEN_LISTS } = useEthereumConstants()
+    const { ERC20_TOKEN_LISTS } = useEthereumConstants(chainId)
 
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
-        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword, trustedERC20Tokens)
+        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword, trustedERC20Tokens, chainId)
 
     //#region add token by address
     const matchedTokenAddress = useMemo(() => {
@@ -90,7 +93,10 @@ export function FixedTokenList(props: FixedTokenListProps) {
         value: assets,
         loading: assetsLoading,
         error: assetsError,
-    } = useAssetsByTokenList(renderTokens.filter((x) => EthereumAddress.isValid(x.address)))
+    } = useAssetsByTokenList(
+        renderTokens.filter((x) => EthereumAddress.isValid(x.address)),
+        chainId,
+    )
 
     const renderAssets =
         !account || assetsError || assetsLoading

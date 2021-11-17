@@ -26,8 +26,8 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { useUpdateEffect } from 'react-use'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -178,7 +178,7 @@ export const TradeForm = memo<AllTradeFormProps>(
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-        const { targetChainId: chainId } = AllProviderTradeContext.useContainer()
+        const { targetChainId: chainId } = TargetChainIdContext.useContainer()
         const [isExpand, setIsExpand] = useState(false)
 
         //#region approve token

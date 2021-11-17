@@ -19,7 +19,7 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { delay, useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { DODO_BASE_URL, UST } from '../../constants'
+import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useAsync, useTimeoutFn, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -30,6 +30,7 @@ import { isNativeTokenWrapper } from '../../helpers'
 import { ConfirmDialog } from './ConfirmDialog'
 import Services from '../../../../extension/service'
 import { currentAccountSettings, currentProviderSettings } from '../../../Wallet/settings'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -71,9 +72,10 @@ export function Trader(props: TraderProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
+    const { setTargetChainId } = TargetChainIdContext.useContainer()
+
     //#region trade state
     const {
-        setTargetChainId,
         tradeState: [
             { inputToken, outputToken, inputTokenBalance, outputTokenBalance, inputAmount },
             dispatchTradeStore,
@@ -123,41 +125,48 @@ export function Trader(props: TraderProps) {
     )
 
     useEffect(() => {
-        if (inputTokenBalance_ && !loadingInputTokenBalance)
+        if (inputToken?.type !== EthereumTokenType.Native && inputTokenBalance_ && !loadingInputTokenBalance)
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: inputTokenBalance_,
             })
-        if (outputTokenBalance_ && !loadingOutputTokenBalance)
+        if (outputToken?.type !== EthereumTokenType.Native && outputTokenBalance_ && !loadingOutputTokenBalance)
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
                 balance: outputTokenBalance_,
             })
-    }, [inputTokenBalance_, outputTokenBalance_, loadingInputTokenBalance, loadingOutputTokenBalance])
+    }, [
+        inputToken,
+        outputToken,
+        inputTokenBalance_,
+        outputTokenBalance_,
+        loadingInputTokenBalance,
+        loadingOutputTokenBalance,
+    ])
 
     // Query the balance of native tokens on target chain
     useAsync(async () => {
-        if (targetChainId) {
-            const cacheBalance = balanceOfChains.get(targetChainId)
-            if (cacheBalance) {
-                dispatchTradeStore({
-                    type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-                    balance: cacheBalance,
-                })
-            } else {
-                const balance = await Services.Ethereum.getBalance(currentAccount, {
-                    chainId: targetChainId,
+        if (chainId) {
+            const cacheBalance = balanceOfChains.get(chainId)
+
+            let balance: string
+
+            if (cacheBalance) balance = cacheBalance
+            else {
+                balance = await Services.Ethereum.getBalance(currentAccount, {
+                    chainId: chainId,
                     providerType: currentProvider,
                 })
-
-                balanceOfChains.set(targetChainId, balance)
-                dispatchTradeStore({
-                    type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-                    balance: balance,
-                })
+                balanceOfChains.set(chainId, balance)
             }
+
+            if (inputToken?.type === EthereumTokenType.Native)
+                dispatchTradeStore({ type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE, balance })
+
+            if (outputToken?.type === EthereumTokenType.Native)
+                dispatchTradeStore({ type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE, balance })
         }
-    }, [targetChainId, currentAccount, currentProvider])
+    }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId])
     //#endregion
 
     //#region select token
@@ -191,6 +200,7 @@ export function Trader(props: TraderProps) {
         (type: TokenPanelType) => {
             setFocusedTokenPanelType(type)
             setSelectTokenDialog({
+                chainId,
                 open: true,
                 uuid: String(type),
                 disableNativeToken: false,
@@ -199,7 +209,7 @@ export function Trader(props: TraderProps) {
                 },
             })
         },
-        [excludeTokens.join()],
+        [excludeTokens.join(), chainId],
     )
     //#endregion
 
@@ -296,20 +306,6 @@ export function Trader(props: TraderProps) {
         if (focusedTrade?.value && isNativeTokenWrapper(focusedTrade.value)) tradeCallback()
         else setOpenConfirmDialog(true)
     }, [focusedTrade, tradeCallback])
-    //#endregion
-
-    //#region dodo permission
-    useAsync(async () => {
-        const hasPermission = await Services.Helper.queryExtensionPermission({
-            origins: [`${DODO_BASE_URL}/`],
-        })
-        if (!hasPermission) {
-            await Services.Helper.requestExtensionPermission({
-                origins: [`${DODO_BASE_URL}/`],
-                permissions: ['webRequest'],
-            })
-        }
-    }, [])
     //#endregion
 
     //#region reset focused trade when chainId, inputToken, outputToken, inputAmount be changed

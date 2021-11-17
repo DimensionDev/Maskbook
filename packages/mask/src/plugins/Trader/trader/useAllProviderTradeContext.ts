@@ -1,6 +1,5 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { ChainId, useChainId } from '@masknet/web3-shared-evm'
-import { useReducer, useState } from 'react'
+import { useReducer } from 'react'
 import { useAllTradeComputed } from './useAllTradeComputed'
 import { createContainer } from 'unstated-next'
 
@@ -73,8 +72,6 @@ function reducer(state: AllProviderTradeState, action: AllProviderSwapAction): A
 }
 
 export function useAllProviderTradeContext() {
-    const chainId = useChainId()
-    const [targetChainId, setTargetChainId] = useState<ChainId>(chainId)
     const [tradeStore, dispatchTradeStore] = useReducer(reducer, {
         inputAmount: '',
         inputTokenBalance: '',
@@ -85,8 +82,6 @@ export function useAllProviderTradeContext() {
     const allTradeComputed = useAllTradeComputed(inputAmount, inputToken, outputToken)
 
     return {
-        targetChainId,
-        setTargetChainId,
         tradeState: [tradeStore, dispatchTradeStore] as const,
         allTradeComputed,
     }

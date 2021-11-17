@@ -11,7 +11,7 @@ import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon } from '@masknet/icons'
 import { ExternalLink } from 'react-feather'
 import { TokenIcon } from '@masknet/shared'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
 const useStyles = makeStyles()((theme) => ({
     section: {
@@ -74,7 +74,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose } = props
     const { inputAmount, outputAmount } = trade
 
-    const { targetChainId: chainId } = AllProviderTradeContext.useContainer()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const [priceReversed, setPriceReversed] = useState(false)
 
     //#region detect price changing

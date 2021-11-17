@@ -3,7 +3,6 @@ import {
     isNative,
     useAccount,
     useBlockNumber,
-    useChainId,
     useTokenConstants,
     useTraderConstants,
     pow10,
@@ -14,6 +13,7 @@ import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import BigNumber from 'bignumber.js'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -25,7 +25,7 @@ export function useTrade(
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
-    const chainId = useChainId() as ChainId.Mainnet | ChainId.Ropsten
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount()
 
@@ -55,7 +55,7 @@ export function useTrade(
             toAmount: isExactIn ? void 0 : outputAmount,
             slippage,
             user,
-            chainId,
+            chainId: chainId as ChainId.Mainnet | ChainId.Ropsten,
             minimumReceived: '',
         })
     }, [

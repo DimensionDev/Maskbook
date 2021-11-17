@@ -1,9 +1,10 @@
-import { isZero, useChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { isZero, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { TradeStrategy } from '../../types'
 import { toUniswapCurrencyAmount, toUniswapCurrency } from '../../helpers'
 import { useV2BestTradeExactIn, useV2BestTradeExactOut } from './useV2BestTrade'
 import { useV3BestTradeExactIn, useV3BestTradeExactOut } from './useV3BestTrade'
 import type { TradeProvider } from '@masknet/public-api'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 function useTrade(
     strategy: TradeStrategy = TradeStrategy.ExactIn,
@@ -21,7 +22,7 @@ function useTrade(
         (inputAmount === '0' && isExactIn) ||
         (outputAmount === '0' && !isExactIn)
 
-    const chainId = useChainId()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const inputCurrency = toUniswapCurrency(chainId, inputToken)
     const outputCurrency = toUniswapCurrency(chainId, outputToken)
     const tradeAmount = toUniswapCurrencyAmount(

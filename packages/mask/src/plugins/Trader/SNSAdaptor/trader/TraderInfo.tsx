@@ -12,8 +12,8 @@ import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeProvider } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
-import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
 const useStyles = makeStyles()({
     trade: {
@@ -69,7 +69,7 @@ export interface TraderInfoProps {
 export const TraderInfo = memo<TraderInfoProps>(({ trade, isBest, onClick, isFocus }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { targetChainId } = AllProviderTradeContext.useContainer()
+    const { targetChainId } = TargetChainIdContext.useContainer()
 
     //#region refresh pools
     const { loading: updateBalancerPoolsLoading } = useAsyncRetry(async () => {

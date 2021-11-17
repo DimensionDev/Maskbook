@@ -4,8 +4,9 @@ import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback, useEffect, useState } from 'react'
 import { isSameAddress } from '../utils'
 import { sortBy, uniqBy } from 'lodash-es'
+import type { ChainId } from '../types'
 
-export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
+export function useAssetsByTokenList(tokens: FungibleTokenDetailed[], targetChainId?: ChainId) {
     const [tokensForAsset, setTokensForAsset] = useState<FungibleTokenDetailed[]>([])
 
     // merge tokens to avoid fetch asset from chain all the time
@@ -20,14 +21,14 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
-    } = useAssetsFromChain(tokensForAsset)
+    } = useAssetsFromChain(tokensForAsset, targetChainId)
 
     const {
         value: assetsDetailedProvider = [],
         loading: assetsDetailedProviderLoading,
         error: assetsDetailedProviderError,
         retry: retryAssetsDetailedDebank,
-    } = useAssetsFromProvider()
+    } = useAssetsFromProvider(targetChainId)
 
     const detailedTokensRetry = useCallback(() => {
         retryAssetsDetailedChain()

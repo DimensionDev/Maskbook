@@ -1,4 +1,4 @@
-import { getTraderConstants, useChainId } from '../../../../../web3-shared/evm'
+import { getTraderConstants } from '../../../../../web3-shared/evm'
 import { useMemo } from 'react'
 import type { TradeContext as TradeContext_ } from '../types'
 import { TradeProvider } from '@masknet/public-api'
@@ -15,9 +15,10 @@ import {
     UNISWAP_CUSTOM_BASES,
 } from '../constants'
 import { unreachable } from '@dimensiondev/kit'
+import { TargetChainIdContext } from './useTargetChainIdContext'
 
 export function useGetTradeContext(tradeProvider?: TradeProvider) {
-    const chainId = useChainId()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
 
     return useMemo<TradeContext_ | null>(() => {
         switch (tradeProvider) {

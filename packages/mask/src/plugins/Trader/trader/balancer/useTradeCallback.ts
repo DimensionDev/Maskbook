@@ -6,13 +6,13 @@ import {
     TransactionState,
     TransactionStateType,
     useAccount,
-    useChainId,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
 import { useCallback, useState } from 'react'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { useTradeAmount } from './useTradeAmount'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
@@ -20,7 +20,7 @@ export function useTradeCallback(
     allowedSlippage = SLIPPAGE_DEFAULT,
 ) {
     const account = useAccount()
-    const chainId = useChainId()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { BALANCER_ETH_ADDRESS } = useTraderConstants()
 
     const [tradeState, setTradeState] = useState<TransactionState>({

@@ -3,7 +3,6 @@ import {
     isNative,
     useAccount,
     useBlockNumber,
-    useChainId,
     useRPCConstants,
     useTokenConstants,
     useTraderConstants,
@@ -13,6 +12,7 @@ import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { first } from 'lodash-es'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -24,7 +24,7 @@ export function useTrade(
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
-    const chainId = useChainId()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { RPC } = useRPCConstants(chainId)
     const providerURL = first(RPC)
     const { DODO_ETH_ADDRESS } = useTraderConstants(chainId)
