@@ -17,8 +17,8 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
+import { getWallets, hasWallet, updateWallet } from './wallet'
 import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
-import { getWallets, hasWallet, updateWallet } from '.'
 
 export async function updateAccount(
     options: {

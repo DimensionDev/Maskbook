@@ -1,4 +1,5 @@
-import { PopupRoutes, getRouteURLWithNoParam } from '..'
+import { PopupRoutes } from '@masknet/shared-base'
+import { getRouteURLWithNoParam } from '../utils'
 
 export function constructRequestPermissionURL(permission: browser.permissions.Permissions) {
     const { origins = [], permissions = [] } = permission

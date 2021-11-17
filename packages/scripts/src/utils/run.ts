@@ -1,5 +1,5 @@
 import { spawn } from 'child_process'
-import { ROOT_PATH } from '.'
+import { ROOT_PATH } from './paths'
 import { relative } from 'path'
 import { underline, greenBright, bold } from 'chalk'
 

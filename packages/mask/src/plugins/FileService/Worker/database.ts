@@ -1,4 +1,4 @@
-import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
+import { createPluginDatabase } from '../../../database/Plugin'
 import { asyncIteratorToArray } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { base } from '../base'
 import { FileInfoV1ToV2 } from '../helpers'
