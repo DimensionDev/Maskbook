@@ -33,7 +33,6 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
 const useStyles = makeStyles()((theme) => ({
     font: {
         color: theme.palette.mode === 'dark' ? theme.palette.text.primary : 'rgb(15, 20, 25)',
-        margin: '0 8px',
     },
     paper: {
         borderRadius: 4,
@@ -98,10 +97,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                         <ListItemIcon>
                             {isWalletValid ? (
                                 <div className={classes.iconWrapper}>
-                                    <div className={classes.maskFilledIcon}>
-                                        <MaskFilledIcon size={iconSize} />
-                                    </div>
-                                    {mini ? null : <WalletIcon size={iconSize} />}
+                                    <WalletIcon size={iconSize} />
                                 </div>
                             ) : (
                                 <MaskFilledIcon size={iconSize} />
