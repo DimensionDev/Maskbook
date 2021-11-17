@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: 3.75,
     },
     border: {
-        border: `1px solid ${theme.palette.background.default}`,
+        border: `1px solid ${theme.palette.background.paper}`,
     },
 }))
 export interface ChainIconProps {

@@ -7,7 +7,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: '#F7F9FA',
     },
     border: {
-        border: `1px solid ${theme.palette.background.default}`,
+        border: `1px solid ${theme.palette.background.paper}`,
     },
 }))
 
