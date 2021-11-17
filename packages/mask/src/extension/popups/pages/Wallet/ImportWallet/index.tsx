@@ -240,7 +240,8 @@ const ImportWallet = memo(() => {
                                 if (errorMessage) setErrorMessage('')
                                 setMnemonic(e.target.value)
                             }}
-                            rows={4}
+                            minRows={4}
+                            maxRows={10}
                             placeholder="Please enter 12 mnemonic words separated by spaces"
                             InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
                             className={classes.multiline}

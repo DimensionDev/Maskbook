@@ -48,6 +48,11 @@ const useStyles = makeStyles()((theme) => ({
     send: {
         color: MaskColorVar.redMain,
     },
+    hover: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
 }))
 
 export interface HistoryTableRowProps {
@@ -75,7 +80,7 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId, formattedType }) => {
     const { classes } = useStyles()
     return (
-        <TableRow>
+        <TableRow className={classes.hover}>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box style={{ display: 'flex', alignItems: 'center' }}>
                     <TransactionIcon
