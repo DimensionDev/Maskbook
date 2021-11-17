@@ -7,7 +7,7 @@ export function setupMaskKVStorageBackend(indexedDB: KVStorageBackend, inMemory:
     indexedDBProxy.replaceBackend(indexedDB)
     inMemoryBackend.replaceBackend(inMemory)
 }
-const createPersistentKVStorage = createKVStorageHost(indexedDBProxy, MaskMessages.events.__kv_backend_presistent__)
+const createPersistentKVStorage = createKVStorageHost(indexedDBProxy, MaskMessages.events.__kv_backend_persistent__)
 const createInMemoryKVStorage = createKVStorageHost(inMemoryBackend, MaskMessages.events.__kv_backend_in_memory__)
 
 export const InMemoryStorages = {

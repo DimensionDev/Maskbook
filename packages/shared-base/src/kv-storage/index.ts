@@ -24,14 +24,14 @@ export function createKVStorageHost(
     backend: KVStorageBackend,
     message: MessageChannel<[string, unknown]>,
     signal = new AbortController().signal,
-): ScopedStorage<never>['createSubscope'] {
+): ScopedStorage<never>['createSubScope'] {
     return (name, defaultValues) => {
         return createScope(signal, backend, message, null, name, defaultValues)
     }
 }
 
 export interface ScopedStorage<StorageState extends object> {
-    createSubscope<StorageState extends object>(
+    createSubScope<StorageState extends object>(
         subScopeName: string,
         defaultValue: StorageState,
         signal?: AbortSignal,
@@ -87,7 +87,7 @@ function createScope(
     })
 
     return {
-        createSubscope(subscope, defaultValues, scopeSignal) {
+        createSubScope(subscope, defaultValues, scopeSignal) {
             let aggregatedSignal = signal
             if (scopeSignal) {
                 const aggregatedAbortController = new AbortController()

@@ -95,8 +95,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             return {
                 createKVStorage(type, defaultValues) {
                     if (type === 'memory')
-                        return InMemoryStorages.Plugin.createSubscope(pluginID, defaultValues, signal)
-                    else return PersistentStorages.Plugin.createSubscope(pluginID, defaultValues, signal)
+                        return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                    else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
                 },
             }
         }),

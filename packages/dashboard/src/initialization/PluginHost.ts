@@ -20,8 +20,8 @@ const PluginHost: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext> = {
     createContext: (pluginID, signal) => {
         return {
             createKVStorage(type, defaultValues) {
-                if (type === 'memory') return InMemoryStorages.Plugin.createSubscope(pluginID, defaultValues, signal)
-                else return PersistentStorages.Plugin.createSubscope(pluginID, defaultValues, signal)
+                if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
             },
         }
     },
