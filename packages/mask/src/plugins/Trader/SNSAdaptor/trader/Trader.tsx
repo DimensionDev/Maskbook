@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -58,6 +58,7 @@ export interface TraderProps extends withClasses<never> {
 }
 
 export function Trader(props: TraderProps) {
+    const { current: balanceOfChains } = useRef<Map<ChainId, string>>(new Map())
     const { coin, tokenDetailed, chainId: targetChainId } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
@@ -136,15 +137,26 @@ export function Trader(props: TraderProps) {
 
     // Query the balance of native tokens on target chain
     useAsync(async () => {
-        const balance = await Services.Ethereum.getBalance(currentAccount, {
-            chainId: targetChainId,
-            providerType: currentProvider,
-        })
+        if (targetChainId) {
+            const cacheBalance = balanceOfChains.get(targetChainId)
+            if (cacheBalance) {
+                dispatchTradeStore({
+                    type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+                    balance: cacheBalance,
+                })
+            } else {
+                const balance = await Services.Ethereum.getBalance(currentAccount, {
+                    chainId: targetChainId,
+                    providerType: currentProvider,
+                })
 
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-            balance: balance,
-        })
+                balanceOfChains.set(targetChainId, balance)
+                dispatchTradeStore({
+                    type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+                    balance: balance,
+                })
+            }
+        }
     }, [targetChainId, currentAccount, currentProvider])
     //#endregion
 
