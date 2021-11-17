@@ -309,7 +309,9 @@
         "fbclid",
         "noamount",
         "txts",
-        "redpackets"
+        "redpackets",
+        "mathwallet",
+        "rpcs"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

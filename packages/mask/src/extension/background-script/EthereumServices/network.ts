@@ -7,9 +7,17 @@ import type {
     Log,
 } from 'web3-core'
 import { toHex } from 'web3-utils'
-import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumChainDetailed, EthereumMethodType, SendOverrides } from '@masknet/web3-shared-evm'
 import { request } from './request'
-import type { SendOverrides } from './send'
+
+export async function getChainId(overrides?: SendOverrides) {
+    return request<string>(
+        {
+            method: EthereumMethodType.ETH_CHAIN_ID,
+        },
+        overrides,
+    )
+}
 
 export async function getAccounts(overrides?: SendOverrides) {
     return request<string[]>(

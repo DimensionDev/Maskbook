@@ -7,8 +7,9 @@ import {
     EthereumTokenType,
     ProviderType,
     Web3ProviderType,
+    resolveInjectedProviderIdentityKey,
 } from '@masknet/web3-shared-evm'
-import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
+import { bridgedEthereumProvider } from '@masknet/injected-script'
 import {
     currentBlockNumberSettings,
     currentBalanceSettings,
@@ -22,16 +23,18 @@ import {
     currentMaskWalletNetworkSettings,
     currentMaskWalletAccountSettings,
     currentMaskWalletBalanceSettings,
+    currentInjectedProviderSettings,
 } from '../plugins/Wallet/settings'
-import { Flags } from '../utils'
+import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
+import { Flags } from '../utils'
 import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(
-        () => {
-            return isMask
+        () =>
+            isMask
                 ? {
                       account: currentMaskWalletAccountSettings.value,
                       chainId: currentMaskWalletChainIdSettings.value,
@@ -41,20 +44,53 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                       account: currentAccountSettings.value,
                       chainId: currentChainIdSettings.value,
                       providerType: currentProviderSettings.value,
-                  }
-        },
-        () => {
-            return {
-                popupsWindow: !disablePopup,
-            }
-        },
+                  },
+        () => ({
+            popupsWindow: !disablePopup,
+        }),
     )
 
     return {
         provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
-        account: createSubscriptionFromSettings(isMask ? currentMaskWalletAccountSettings : currentAccountSettings),
+        account: createSubscriptionFromAsync(
+            async () => {
+                try {
+                    await currentAccountSettings.readyPromise
+                    await currentMaskWalletAccountSettings.readyPromise
+                    await currentProviderSettings.readyPromise
+                    await currentInjectedProviderSettings.readyPromise
+                } catch (error) {
+                    // do nothing
+                }
+
+                const account = isMask ? currentMaskWalletAccountSettings.value : currentAccountSettings.value
+                const providerType = currentProviderSettings.value
+
+                if (location.href.includes('popups.html')) return account
+                if (providerType !== ProviderType.Injected) return account
+
+                try {
+                    const injectedProviderType = currentInjectedProviderSettings.value
+                    const propertyKey = resolveInjectedProviderIdentityKey(injectedProviderType)
+                    if (!propertyKey) return ''
+                    const propertyValue = await bridgedEthereumProvider.getProperty(propertyKey)
+                    if (propertyValue === true) return account
+                    return ''
+                } catch (error) {
+                    return ''
+                }
+            },
+            '',
+            (callback) => {
+                const a = currentAccountSettings.addListener(callback)
+                const b = currentMaskWalletAccountSettings.addListener(callback)
+                const c = currentProviderSettings.addListener(callback)
+                const d = currentInjectedProviderSettings.addListener(callback)
+                return () => void [a(), b(), c(), d()]
+            },
+        ),
         balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
@@ -68,6 +104,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             ? createStaticSubscription(() => ProviderType.MaskWallet)
             : createSubscriptionFromSettings(currentProviderSettings),
         networkType: createSubscriptionFromSettings(isMask ? currentMaskWalletNetworkSettings : currentNetworkSettings),
+        injectedProviderType: createSubscriptionFromSettings(currentInjectedProviderSettings),
         erc20Tokens: createSubscriptionFromAsync(
             () => WalletRPC.getTokens<ERC20TokenDetailed>(EthereumTokenType.ERC20),
             [],

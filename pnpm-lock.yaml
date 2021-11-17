@@ -160,6 +160,7 @@ importers:
       use-subscription: ^1.5.1
       uuid: ^8.3.2
       wallet.ts: ^1.0.1
+      web3-core-helpers: 1.5.2
       web3-utils: ^1.5.3
       webpack: ^5.61.0
       zod: ^3.11.6
@@ -201,6 +202,7 @@ importers:
       use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
       uuid: 8.3.2
       wallet.ts: 1.0.1
+      web3-core-helpers: 1.5.2
       web3-utils: 1.5.3
       zod: 3.11.6
     devDependencies:
@@ -236,12 +238,15 @@ importers:
   packages/injected-script:
     specifiers:
       '@rollup/plugin-sucrase': ^4.0.1
-      rollup: ^2.59.0
+      rollup: ^2.60.0
       rollup-plugin-terser: ^7.0.2
+      web3-core-helpers: 1.5.2
+    dependencies:
+      web3-core-helpers: 1.5.2
     devDependencies:
-      '@rollup/plugin-sucrase': 4.0.1_rollup@2.59.0
-      rollup: 2.59.0
-      rollup-plugin-terser: 7.0.2_rollup@2.59.0
+      '@rollup/plugin-sucrase': 4.0.1_rollup@2.60.0
+      rollup: 2.60.0
+      rollup-plugin-terser: 7.0.2_rollup@2.60.0
 
   packages/mask:
     specifiers:
@@ -525,15 +530,15 @@ importers:
       '@rollup/plugin-node-resolve': ^13.0.6
       '@rollup/plugin-sucrase': ^4.0.1
       async-call-rpc: ^6.0.0
-      rollup: ^2.59.0
+      rollup: ^2.60.0
       rollup-plugin-terser: ^7.0.2
     dependencies:
       async-call-rpc: 6.0.0
     devDependencies:
-      '@rollup/plugin-node-resolve': 13.0.6_rollup@2.59.0
-      '@rollup/plugin-sucrase': 4.0.1_rollup@2.59.0
-      rollup: 2.59.0
-      rollup-plugin-terser: 7.0.2_rollup@2.59.0
+      '@rollup/plugin-node-resolve': 13.0.6_rollup@2.60.0
+      '@rollup/plugin-sucrase': 4.0.1_rollup@2.60.0
+      rollup: 2.60.0
+      rollup-plugin-terser: 7.0.2_rollup@2.60.0
 
   packages/plugin-infra:
     specifiers:
@@ -592,7 +597,7 @@ importers:
       core-js: ^3.19.1
       core-js-builder: ^3.19.1
       elliptic: ^6.5.4
-      rollup: ^2.59.0
+      rollup: ^2.60.0
       rollup-plugin-terser: ^7.0.2
       webcrypto-liner: 1.2.4
     dependencies:
@@ -601,14 +606,14 @@ importers:
       elliptic: 6.5.4
       webcrypto-liner: 1.2.4
     devDependencies:
-      '@rollup/plugin-commonjs': 21.0.1_rollup@2.59.0
-      '@rollup/plugin-json': 4.1.0_rollup@2.59.0
-      '@rollup/plugin-node-resolve': 13.0.6_rollup@2.59.0
-      '@rollup/plugin-sucrase': 4.0.1_rollup@2.59.0
+      '@rollup/plugin-commonjs': 21.0.1_rollup@2.60.0
+      '@rollup/plugin-json': 4.1.0_rollup@2.60.0
+      '@rollup/plugin-node-resolve': 13.0.6_rollup@2.60.0
+      '@rollup/plugin-sucrase': 4.0.1_rollup@2.60.0
       '@types/node': 16.11.6
       core-js-builder: 3.19.1
-      rollup: 2.59.0
-      rollup-plugin-terser: 7.0.2_rollup@2.59.0
+      rollup: 2.60.0
+      rollup-plugin-terser: 7.0.2_rollup@2.60.0
 
   packages/polyfills/types:
     specifiers: {}
@@ -658,6 +663,7 @@ importers:
       classnames: ^2.3.1
       lodash-es: ^4.17.21
       qrcode: ^1.4.4
+      react-feather: ^2.0.9
       react-use: ^17.3.1
       ts-results: ^3.3.0
       use-subscription: ^1.5.1
@@ -674,6 +680,7 @@ importers:
       classnames: 2.3.1
       lodash-es: 4.17.21
       qrcode: 1.4.4
+      react-feather: 2.0.9_c9c210d65bdac3c3f586a38a4275dd8c
       react-use: 17.3.1_9a9fcfd9691ee39f83ac00f4a3221da4
       ts-results: 3.3.0
       use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
@@ -806,6 +813,7 @@ importers:
       use-subscription: ^1.5.1
       wallet.ts: ^1.0.1
       web3: 1.5.2
+      web3-core-helpers: 1.5.2
       web3-utils: 1.5.2
     dependencies:
       '@dimensiondev/kit': 0.0.0-20210913111737-84c17d7_9a9fcfd9691ee39f83ac00f4a3221da4
@@ -823,6 +831,7 @@ importers:
       use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
       wallet.ts: 1.0.1
       web3: 1.5.2
+      web3-core-helpers: 1.5.2
       web3-utils: 1.5.2
     devDependencies:
       '@types/use-subscription': 1.0.0
@@ -6420,58 +6429,58 @@ packages:
       react-lifecycles-compat: 3.0.4
     dev: true
 
-  /@rollup/plugin-commonjs/21.0.1_rollup@2.59.0:
+  /@rollup/plugin-commonjs/21.0.1_rollup@2.60.0:
     resolution: {integrity: sha512-EA+g22lbNJ8p5kuZJUYyhhDK7WgJckW5g4pNN7n4mAFUM96VuwUnNT3xr2Db2iCZPI1pJPbGyfT5mS9T1dHfMg==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
       rollup: ^2.38.3
     dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.59.0
+      '@rollup/pluginutils': 3.1.0_rollup@2.60.0
       commondir: 1.0.1
       estree-walker: 2.0.2
       glob: 7.2.0
       is-reference: 1.2.1
       magic-string: 0.25.7
       resolve: 1.20.0
-      rollup: 2.59.0
+      rollup: 2.60.0
     dev: true
 
-  /@rollup/plugin-json/4.1.0_rollup@2.59.0:
+  /@rollup/plugin-json/4.1.0_rollup@2.60.0:
     resolution: {integrity: sha512-yfLbTdNS6amI/2OpmbiBoW12vngr5NW2jCJVZSBEz+H5KfUJZ2M7sDjk0U6GOOdCWFVScShte29o9NezJ53TPw==}
     peerDependencies:
       rollup: ^1.20.0 || ^2.0.0
     dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.59.0
-      rollup: 2.59.0
+      '@rollup/pluginutils': 3.1.0_rollup@2.60.0
+      rollup: 2.60.0
     dev: true
 
-  /@rollup/plugin-node-resolve/13.0.6_rollup@2.59.0:
+  /@rollup/plugin-node-resolve/13.0.6_rollup@2.60.0:
     resolution: {integrity: sha512-sFsPDMPd4gMqnh2gS0uIxELnoRUp5kBl5knxD2EO0778G1oOJv4G1vyT2cpWz75OU2jDVcXhjVUuTAczGyFNKA==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       rollup: ^2.42.0
     dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.59.0
+      '@rollup/pluginutils': 3.1.0_rollup@2.60.0
       '@types/resolve': 1.17.1
       builtin-modules: 3.2.0
       deepmerge: 4.2.2
       is-module: 1.0.0
       resolve: 1.20.0
-      rollup: 2.59.0
+      rollup: 2.60.0
     dev: true
 
-  /@rollup/plugin-sucrase/4.0.1_rollup@2.59.0:
+  /@rollup/plugin-sucrase/4.0.1_rollup@2.60.0:
     resolution: {integrity: sha512-VDVLl+civWOw8eLBa6jOh1SeOBWCUKTyubmi4T+Ab1eFgxUG0OqdNPXVYJbsKAOqfS+Scj5oMHXvzyJmwoJAPQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
       rollup: ^2.53.1
     dependencies:
       '@rollup/pluginutils': 4.1.1
-      rollup: 2.59.0
+      rollup: 2.60.0
       sucrase: 3.20.3
     dev: true
 
-  /@rollup/pluginutils/3.1.0_rollup@2.59.0:
+  /@rollup/pluginutils/3.1.0_rollup@2.60.0:
     resolution: {integrity: sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
@@ -6480,7 +6489,7 @@ packages:
       '@types/estree': 0.0.39
       estree-walker: 1.0.1
       picomatch: 2.3.0
-      rollup: 2.59.0
+      rollup: 2.60.0
     dev: true
 
   /@rollup/pluginutils/4.1.1:
@@ -22563,20 +22572,20 @@ packages:
     dependencies:
       bn.js: 5.2.0
 
-  /rollup-plugin-terser/7.0.2_rollup@2.59.0:
+  /rollup-plugin-terser/7.0.2_rollup@2.60.0:
     resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
     peerDependencies:
       rollup: ^2.0.0
     dependencies:
       '@babel/code-frame': 7.15.8
       jest-worker: 26.6.2
-      rollup: 2.59.0
+      rollup: 2.60.0
       serialize-javascript: 4.0.0
       terser: 5.8.0
     dev: true
 
-  /rollup/2.59.0:
-    resolution: {integrity: sha512-l7s90JQhCQ6JyZjKgo7Lq1dKh2RxatOM+Jr6a9F7WbS9WgKbocyUSeLmZl8evAse7y96Ae98L2k1cBOwWD8nHw==}
+  /rollup/2.60.0:
+    resolution: {integrity: sha512-cHdv9GWd58v58rdseC8e8XIaPUo8a9cgZpnCMMDGZFDZKEODOiPPEQFXLriWr/TjXzhPPmG5bkAztPsOARIcGQ==}
     engines: {node: '>=10.0.0'}
     hasBin: true
     optionalDependencies:

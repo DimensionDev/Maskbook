@@ -1,13 +1,19 @@
 import type { RequestArguments, TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
-import { EthereumMethodType, ProviderType, TransactionStateType } from '@masknet/web3-shared-evm'
+import {
+    EthereumMethodType,
+    ProviderType,
+    RequestOptions,
+    SendOverrides,
+    TransactionStateType,
+} from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
-import { INTERNAL_nativeSend, INTERNAL_send, SendOverrides } from './send'
+import { INTERNAL_nativeSend, INTERNAL_send } from './send'
 import { defer } from '../../../../utils-pure'
 import { hasNativeAPI, nativeAPI } from '../../../utils/native-rpc'
 import { openPopupWindow } from '../HelperService'
@@ -24,10 +30,6 @@ const RISK_METHOD_LIST = [
     EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
     EthereumMethodType.ETH_SEND_TRANSACTION,
 ]
-
-export interface RequestOptions {
-    popupsWindow?: boolean
-}
 
 function getSendMethod() {
     if (hasNativeAPI && nativeAPI) return INTERNAL_nativeSend

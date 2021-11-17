@@ -8,9 +8,10 @@ import type {
     NonFungibleTokenDetailed,
     NetworkType,
     ProviderType,
+    InjectedProviderType,
+    Asset,
     Wallet,
     PortfolioProvider,
-    Asset,
     CollectibleProvider,
     Transaction,
     AddressName,
@@ -30,6 +31,7 @@ export interface Web3ProviderType {
     wallets: Subscription<Wallet[]>
     providerType: Subscription<ProviderType>
     networkType: Subscription<NetworkType>
+    injectedProviderType: Subscription<InjectedProviderType>
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     erc721Tokens: Subscription<ERC721TokenDetailed[]>
     erc1155Tokens: Subscription<ERC1155TokenDetailed[]>
