@@ -24,7 +24,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         position: 'absolute',
         right: -2,
         bottom: -2,
-        backgroundColor: '#ffffff',
         borderRadius: '50%',
     },
     networkIcon: {},

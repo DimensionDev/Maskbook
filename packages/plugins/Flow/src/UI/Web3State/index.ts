@@ -2,7 +2,14 @@ import { remove } from 'lodash-es'
 import * as fcl from '@onflow/fcl'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { getAuthConstants } from '@masknet/web3-shared-flow/constants'
-import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-flow'
+import {
+    ChainId,
+    NetworkType,
+    ProviderType,
+    resolveBlockLinkOnExplorer,
+    resolveTransactionLinkOnExplorer,
+    resolveAddressLinkOnExplorer,
+} from '@masknet/web3-shared-flow'
 import { createConstantSubscription, createSubscriptionFromAsync } from '@masknet/shared-base'
 import { formatAddress } from '../../helpers'
 
@@ -14,6 +21,7 @@ function createClient(chainId: ChainId) {
         'app.detail.title': authConstants.MASK_APP_TITLE,
         'app.detail.icon': authConstants.MASK_APP_ICON,
         'challenge.handshake': authConstants.CHALLENGE_HANDSHAKE,
+        'discovery.wallet.method': 'HTTP/POST',
     })
     return fcl
 }
@@ -56,6 +64,9 @@ function createWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
         Utils: {
             formatAddress,
             isChainIdValid: () => true,
+            resolveTransactionLink: resolveTransactionLinkOnExplorer,
+            resolveAddressLink: resolveAddressLinkOnExplorer,
+            resolveBlockLink: resolveBlockLinkOnExplorer,
         },
     }
 }

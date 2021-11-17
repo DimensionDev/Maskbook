@@ -154,7 +154,7 @@ export function WalletStatusBox() {
                     </Link>
                     <Link
                         className={classes.link}
-                        href={resolveAddressLinkOnExplorer(chainId, account)}
+                        href={Utils?.resolveAddressLink?.(chainId, account) ?? ''}
                         target="_blank"
                         title={t('plugin_wallet_view_on_explorer')}
                         rel="noopener noreferrer">

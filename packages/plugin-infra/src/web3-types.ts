@@ -219,6 +219,9 @@ export declare namespace Web3Plugin {
             getChainDetailed?: (chainId: number) => ChainDetailed
             getFungibleTokenMetadata?: <T extends unknown>(token: Token<T>) => Promise<FungibleTokenMetadata<T>>
             getNonFungibleTokenMetadata?: <T extends unknown>(token: Token<T>) => Promise<NonFungibleTokenMetadata<T>>
+            resolveTransactionLink?: (chainId: number, transactionId: string) => string
+            resolveAddressLink?: (chainId: number, address: string) => string
+            resolveBlockLink?: (chainId: number, blockNumber: string) => string
         }
         export interface Capabilities {
             Shared?: SharedState

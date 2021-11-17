@@ -1,3 +1,4 @@
+import urlcat from 'urlcat'
 import { createLookupTableResolver } from '@masknet/web3-kit'
 import { ChainId, ProviderType } from '../types'
 
@@ -26,12 +27,18 @@ export const resolveLinkOnExplorer = createLookupTableResolver<ChainId, string>(
     () => 'Unknown chain id',
 )
 
-// todo: https://flowscan.org/
 export function resolveTransactionLinkOnExplorer(chainId: ChainId, tx: string) {
-    return ''
+    return urlcat(resolveLinkOnExplorer(chainId), '/transaction/:tx', {
+        tx,
+    })
 }
 
-// todo: https://flowscan.org/
-export function resolveAccountLinkOnExplorer(chainId: ChainId, address: string) {
+export function resolveAddressLinkOnExplorer(chainId: ChainId, address: string) {
+    return urlcat(resolveLinkOnExplorer(chainId), '/account/:address', {
+        address,
+    })
+}
+
+export function resolveBlockLinkOnExplorer(chainId: ChainId, blockNumber: string) {
     return ''
 }

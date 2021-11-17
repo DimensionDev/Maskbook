@@ -6,6 +6,7 @@ import { useProviderDescriptor } from '@masknet/plugin-infra'
 import type { ProviderType } from '@masknet/web3-shared-evm'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
+import { PLUGIN_ID } from '../../../EVM/constants'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -32,7 +33,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const providerDescriptor = useProviderDescriptor(providerType)
+    const providerDescriptor = useProviderDescriptor(providerType, PLUGIN_ID)
 
     return (
         <Paper elevation={0}>
