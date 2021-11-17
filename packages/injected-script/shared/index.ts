@@ -43,8 +43,6 @@ export interface InternalEvents {
     solanaBridgePrimitiveAccess: [req_id: number, property: string]
     /** Call window.solana.isConnected() */
     solanaBridgeIsConnected: [req_id: number]
-    /** Call window.solana._metamask.isUnlocked() */
-    solanaBridgeMetaMaskIsUnlocked: [req_id: number]
     /** Wait until window.solana appears */
     untilSolanaBridgeOnline: [req_id: number]
     //#endregion
