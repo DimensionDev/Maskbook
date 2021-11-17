@@ -87,7 +87,7 @@ function createScope(
     })
 
     return {
-        createSubScope(subscope, defaultValues, scopeSignal) {
+        createSubScope(subScope, defaultValues, scopeSignal) {
             let aggregatedSignal = signal
             if (scopeSignal) {
                 const aggregatedAbortController = new AbortController()
@@ -96,7 +96,7 @@ function createScope(
                 scopeSignal.addEventListener('abort', abort, { once: true })
                 aggregatedSignal = aggregatedAbortController.signal
             }
-            return createScope(aggregatedSignal, backend, message, currentScope, subscope, defaultValues)
+            return createScope(aggregatedSignal, backend, message, currentScope, subScope, defaultValues)
         },
         storage,
     }
