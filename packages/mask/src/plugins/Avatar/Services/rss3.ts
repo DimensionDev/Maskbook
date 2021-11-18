@@ -46,7 +46,7 @@ async function _getNFTAvatarFromRSS(address: string) {
     return data.nft
 }
 
-export async function saveNFTAvatarToRSS3(address: string, nft: AvatarMetaDB, signature: string) {
+export async function saveNFTAvatarToRSS(address: string, nft: AvatarMetaDB, signature: string) {
     const rss = await createRSS3(address)
     if (!rss) return
 
@@ -64,7 +64,7 @@ export async function saveNFTAvatarToRSS3(address: string, nft: AvatarMetaDB, si
     await rss.files.sync()
 
     // clear cache
-    cache.delete(address)
+    if (cache.has(address)) cache.delete(address)
 
     return nft
 }
