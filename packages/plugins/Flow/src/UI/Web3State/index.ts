@@ -9,16 +9,16 @@ import {
 } from '@masknet/web3-shared-flow'
 import { createConstantSubscription, createSubscriptionFromScopedStorage } from '@masknet/shared-base'
 import { formatAddress } from '../../helpers'
-import { storage, StorageDefaultValue } from '../../storage'
+import { getStorage, StorageDefaultValue } from '../../storage'
 
 function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValue.user) => T) {
     return createSubscriptionFromScopedStorage(
-        storage,
+        getStorage(),
         (storage) => {
-            return getter(storage.storage.user.value)
+            return getter(storage.user.value)
         },
         (storage) => {
-            return storage.storage.user.subscription.subscribe
+            return storage.user.subscription.subscribe
         },
     )
 }
