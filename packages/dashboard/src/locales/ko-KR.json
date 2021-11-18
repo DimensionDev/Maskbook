@@ -249,7 +249,6 @@
     "settings_button_sync": "동기화",
     "settings_button_backup": "백업",
     "settings_button_recovery": "복구",
-    "settings_button_setting": "설정",
     "settings_button_change": "변경",
     "settings_dialogs_bind_email_or_phone": "이메일이나 전화번호를 연동해주세요.",
     "settings_dialogs_verify_backup_password": "백업 비밀번호 인증",

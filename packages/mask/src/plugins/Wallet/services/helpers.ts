@@ -1,5 +1,5 @@
 import { omit } from 'lodash-es'
-import type { IDBPSafeTransaction } from '../../../database/helpers/openDB'
+import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB'
 import type { WalletDB } from '../database/Wallet.db'
 import type {
     ERC1155TokenRecord,

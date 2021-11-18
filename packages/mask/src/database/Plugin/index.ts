@@ -1,6 +1,6 @@
 /// <reference path="../global.d.ts" />
 import { openDB, DBSchema } from 'idb/with-async-ittr-cjs'
-import { createDBAccess } from '../helpers/openDB'
+import { createDBAccess } from '../../../background/database/utils/openDB'
 
 type InStore = {
     plugin_id: string

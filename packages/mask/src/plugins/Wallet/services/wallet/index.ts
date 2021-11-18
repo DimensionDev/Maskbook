@@ -144,7 +144,6 @@ export async function signTransaction(
     const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     return sdk.signTransaction({
-        address,
         password: password_,
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,

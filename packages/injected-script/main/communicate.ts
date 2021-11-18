@@ -13,6 +13,13 @@ import {
     untilEthereumOnline,
 } from './EthBridge/methods'
 import { hookInputUploadOnce } from './EventListenerPatch/hookInputUploadOnce'
+import {
+    solanaBridgeIsConnected,
+    solanaBridgePrimitiveAccess,
+    solanaBridgeSendRequest,
+    solanaBridgeWatchEvent,
+    untilSolanaOnline,
+} from './SolanaBridge'
 
 document.addEventListener(CustomEventId, (e) => {
     const r = decodeEvent(getCustomEventDetail(e as CustomEvent))
@@ -30,6 +37,23 @@ document.addEventListener(CustomEventId, (e) => {
             return apply(dispatchPasteImage, null, r[1])
         case 'hookInputUploadOnce':
             return apply(hookInputUploadOnce, null, r[1])
+        case 'rejectPromise':
+        case 'resolvePromise':
+            return
+
+        case 'solanaBridgeRequestListen':
+            return apply(solanaBridgeWatchEvent, null, r[1])
+        case 'solanaBridgeSendRequest':
+            return apply(solanaBridgeSendRequest, null, r[1])
+        case 'solanaBridgeIsConnected':
+            return apply(solanaBridgeIsConnected, null, r[1])
+        case 'solanaBridgePrimitiveAccess':
+            return apply(solanaBridgePrimitiveAccess, null, r[1])
+        case 'untilSolanaBridgeOnline':
+            return apply(untilSolanaOnline, null, r[1])
+        case 'solanaBridgeOnEvent':
+            return
+
         case 'ethBridgeRequestListen':
             return apply(ethBridgeWatchEvent, null, r[1])
         case 'ethBridgeSendRequest':
@@ -42,10 +66,7 @@ document.addEventListener(CustomEventId, (e) => {
             return apply(ethBridgePrimitiveAccess, null, r[1])
         case 'untilEthBridgeOnline':
             return apply(untilEthereumOnline, null, r[1])
-
         case 'ethBridgeOnEvent':
-        case 'rejectPromise':
-        case 'resolvePromise':
             return
         default:
             const neverEvent: never = r[0]

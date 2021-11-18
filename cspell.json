@@ -311,7 +311,13 @@
         "txts",
         "leaderboard",
         "halfyear",
-        "redpackets"
+        "redpackets",
+        "blocto",
+        "onflow",
+        "unauthenticate",
+        "mathwallet",
+        "walletlink",
+        "rpcs"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

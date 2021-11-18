@@ -12,18 +12,18 @@ import {
     ListItemText as MuiListItemText,
     Box,
 } from '@mui/material'
+import { useWallet, TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
-    useAccount,
-    useChainColor,
-    useChainDetailed,
-    useChainIdValid,
-    useWallet,
-    formatEthereumAddress,
-    TransactionStatusType,
-} from '@masknet/web3-shared-evm'
-import {
-    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
+    useActivatedPluginSNSAdaptor_withSupportOperateChain,
     useActivatedPluginsSNSAdaptor,
+    useNetworkDescriptor,
+    useProviderDescriptor,
+    useAccount,
+    useChainId,
+    useChainColor,
+    useChainIdValid,
+    useChainDetailed,
+    useWeb3State,
 } from '@masknet/plugin-infra'
 import { ToolIconURLs } from '../../resources/tool-icon'
 import { Image } from '../shared/Image'
@@ -32,7 +32,7 @@ import { MaskMessages } from '../../utils/messages'
 import { PLUGIN_ID as TransakPluginID } from '../../plugins/Transak/constants'
 import { PLUGIN_IDENTIFIER as TraderPluginID } from '../../plugins/Trader/constants'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -44,7 +44,6 @@ import { safeUnreachable } from '@dimensiondev/kit'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
-import { WalletIcon } from '../shared/WalletIcon'
 import { MaskIcon, MaskSharpIconOfSize, WalletSharp } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
@@ -117,6 +116,9 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         shouldDisplayChainIndicator,
     } = useToolbox()
 
+    const networkDescriptor = useNetworkDescriptor()
+    const providerDescriptor = useProviderDescriptor()
+
     return (
         <>
             <GuideStep step={1} total={3} tip={t('user_guide_tip_1', { sns: activatedSocialNetworkUI.name })}>
@@ -136,7 +138,15 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                 <Container>
                     <ListItemButton onClick={openWallet}>
                         <ListItemIcon>
-                            {isWalletValid ? <WalletIcon size={iconSize} /> : <WalletSharp size={iconSize} />}
+                            {isWalletValid ? (
+                                <WalletIcon
+                                    size={iconSize}
+                                    networkIcon={networkDescriptor?.icon}
+                                    providerIcon={providerDescriptor?.icon}
+                                />
+                            ) : (
+                                <WalletSharp size={iconSize} />
+                            )}
                         </ListItemIcon>
                         {mini ? null : (
                             <ListItemText
@@ -168,11 +178,13 @@ function useToolbox() {
     const { classes } = useStyles()
     const { t } = useI18N()
     const account = useAccount()
+    const chainId = useChainId()
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
-    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
+    const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_withSupportOperateChain(chainId)
+    const { Utils } = useWeb3State()
 
     //#region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
@@ -288,7 +300,7 @@ function useToolbox() {
     function renderButtonText() {
         if (!account) return t('plugin_wallet_on_connect')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
-        if (pendingTransactions.length <= 0) return formatEthereumAddress(account, 4)
+        if (pendingTransactions.length <= 0) return Utils?.formatAddress?.(account, 4) ?? account
         return (
             <>
                 <span>
@@ -305,14 +317,15 @@ function useToolbox() {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
         if (isWalletValid) return openWalletStatusDialog()
         else return openSelectWalletDialog()
-    }, [openWalletStatusDialog, openSelectWalletDialog])
+    }, [openWalletStatusDialog, openSelectWalletDialog, hasNativeAPI, isWalletValid])
 
     const walletTitle = renderButtonText()
 
     const ClaimDialogJSX = isClaimAllDialogOpen ? (
         <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
     ) : null
-    const shouldDisplayChainIndicator = account && chainIdValid && chainDetailed?.network !== 'mainnet'
+    const shouldDisplayChainIndicator =
+        account && chainIdValid && chainDetailed?.network && chainDetailed.network !== 'mainnet'
     return {
         openWallet,
         isWalletValid,

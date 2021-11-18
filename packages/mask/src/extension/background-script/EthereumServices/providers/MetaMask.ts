@@ -99,7 +99,7 @@ export async function ensureConnectedAndUnlocked() {
             else if (accounts.length > 0) return // valid
         }
         // Any other error means failed to connect MetaMask
-        throw new Error('Failed to connect MetaMask.')
+        throw new Error('Failed to connect to MetaMask.')
     }
 }
 

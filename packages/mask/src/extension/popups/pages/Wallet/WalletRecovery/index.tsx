@@ -1,21 +1,21 @@
-import { memo, useCallback, useState } from 'react'
+import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { PageHeader } from '../components/PageHeader'
-import { useI18N } from '../../../../../utils'
-import { useHistory, useLocation } from 'react-router-dom'
+import { MaskMessages, useI18N } from '../../../../../utils'
+import { useLocation } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
 import Services from '../../../../service'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
-import { FormattedAddress } from '@masknet/shared'
+import { FormattedAddress, useValueRef } from '@masknet/shared'
 import { useHasPassword } from '../../../hook/useHasPassword'
-import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
 import { usePasswordForm } from '../hooks/usePasswordForm'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
+import { currentPersonaIdentifier } from '../../../../../settings/settings'
 
 const useStyles = makeStyles()({
     container: {
@@ -74,17 +74,8 @@ const WalletRecovery = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const location = useLocation()
-    const [password, setPassword] = useState('')
-    const history = useHistory()
-    const [{ value: hasError, loading: unlockLoading }, handleUnlock] = useAsyncFn(async () => {
-        const result = await WalletRPC.unlockWallet(password)
-        if (result) {
-            await Services.Helper.removePopupWindow()
-            return false
-        } else {
-            return true
-        }
-    }, [password])
+
+    const currentPersona = useValueRef(currentPersonaIdentifier)
 
     const backupId = new URLSearchParams(location.search).get('backupId')
 
@@ -94,7 +85,6 @@ const WalletRecovery = memo(() => {
     }, [backupId])
 
     const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
-    const { isLocked, loading: getLockStatusLoading } = useWalletLockStatus()
 
     const {
         control,
@@ -108,26 +98,40 @@ const WalletRecovery = memo(() => {
         async (data: zod.infer<typeof schema>) => {
             try {
                 await WalletRPC.setPassword(data.password)
-                await Services.Helper.removePopupWindow()
             } catch (error) {
                 if (error instanceof Error) {
                     setError('password', { message: error.message })
                 }
             }
         },
-        [history, setError],
+        [setError],
     )
 
     const onSubmit = handleSubmit(handleSetPassword)
 
-    const onConfirm = useCallback(async () => {
+    const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
+        // If the payment password does not exist, set it first
         if (!hasPassword) {
             await onSubmit()
         }
-        if (isLocked) await handleUnlock()
-    }, [onSubmit, isLocked, handleUnlock, hasPassword])
 
-    return loading || getHasPasswordLoading || getLockStatusLoading ? (
+        if (backupId) {
+            const json = await Services.Welcome.getUnconfirmedBackup(backupId)
+            if (json) {
+                await Services.Welcome.restoreBackup(json)
+
+                // Set default wallet
+                if (json.wallets) await WalletRPC.setDefaultWallet()
+
+                // Send event after successful recovery
+                MaskMessages.events.restoreSuccess.sendToAll(undefined)
+
+                await Services.Helper.removePopupWindow()
+            }
+        }
+    }, [onSubmit, hasPassword, currentPersona, backupId])
+
+    return loading || getHasPasswordLoading ? (
         <LoadingPlaceholder />
     ) : (
         <>
@@ -185,26 +189,13 @@ const WalletRecovery = memo(() => {
                             <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
                         </form>
                     ) : null}
-                    {hasPassword && isLocked ? (
-                        <div>
-                            <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
-                            <PasswordField
-                                value={password}
-                                type="password"
-                                onChange={(e) => setPassword(e.target.value)}
-                                error={hasError}
-                                placeholder={t('popups_wallet_payment_password')}
-                                helperText={hasError ? t('popups_wallet_unlock_error_password') : ''}
-                            />
-                        </div>
-                    ) : null}
                 </div>
             </div>
             <div className={classes.controller}>
                 <LoadingButton
-                    loading={unlockLoading || setPasswordLoading}
+                    loading={setPasswordLoading || confirmLoading}
                     fullWidth
-                    disabled={hasPassword ? !password : !isValid}
+                    disabled={!hasPassword ? !isValid : false}
                     classes={{ root: classes.button, disabled: classes.disabled }}
                     variant="contained"
                     onClick={onConfirm}>

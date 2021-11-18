@@ -6,12 +6,15 @@ import { useMatchXS, MaskMessages, useI18N } from '../../utils'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.GlobalInjection)
+
 export interface PageInspectorProps {}
+
 export function PageInspector(props: PageInspectorProps) {
-    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
+    const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const [autoPasteFailed, JSX] = useAutoPasteFailedDialog()
     const xsMatched = useMatchXS()
+
     useEffect(
         () =>
             MaskMessages.events.autoPasteFailed.on((data) => {

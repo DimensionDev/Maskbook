@@ -1,5 +1,5 @@
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
-import { createDBAccess } from '../../../database/helpers/openDB'
+import { createDBAccess } from '../../../../background/database/utils/openDB'
 import type {
     ERC1155TokenRecordInDatabase,
     ERC20TokenRecordInDatabase,

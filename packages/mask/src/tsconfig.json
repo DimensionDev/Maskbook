@@ -16,13 +16,18 @@
     { "path": "../../shared" },
     { "path": "../../shared-base" },
     { "path": "../../web3-shared/evm" },
+    { "path": "../../web3-shared/flow" },
     { "path": "../../theme" },
     { "path": "../../icons" },
     { "path": "../../plugin-infra" },
     { "path": "../../plugins/Wallet" },
+    { "path": "../../plugins/Flow" },
     { "path": "../../external-plugin-previewer" },
     { "path": "../../injected-script/sdk" },
     { "path": "../../mask-sdk/server" },
-    { "path": "./../web-workers" }
+    { "path": "../web-workers" },
+    { "path": "../utils-pure" },
+    { "path": "../background" },
+    { "path": "../shared" }
   ]
 }

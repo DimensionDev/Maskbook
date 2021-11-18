@@ -10,7 +10,7 @@ import {
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
 import { DialogContent, Grid, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { keyframes, makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -31,6 +31,15 @@ import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
 import { calculateOdds, getPrizePeriod } from '../utils'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+
+const rainbow_animation = keyframes`
+    0% {
+        background-position: '100% 0%';
+    }
+    100% {
+        background-position: '0 100%';
+    }
+`
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -65,17 +74,9 @@ const useStyles = makeStyles()((theme) => ({
             'linear-gradient(40deg,#ff9304,#ff04ea 10%,#9b4beb 20%,#0e8dd6 30%,#0bc6df 40%,#07d464 50%,#dfd105 60%,#ff04ab 78%,#8933eb 90%,#3b89ff)',
         webkitBackgroundClip: 'text',
         color: 'transparent',
-        animation: '$rainbow_animation 6s linear infinite',
+        animation: `${rainbow_animation} 6s linear infinite`,
         backgroundSize: '600% 600%',
         fontSize: '1.2rem',
-    },
-    '@keyframes rainbow_animation': {
-        '0%': {
-            backgroundPosition: '100% 0%',
-        },
-        '100%': {
-            backgroundPosition: '0 100%',
-        },
     },
 }))
 

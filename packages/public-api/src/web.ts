@@ -6,6 +6,8 @@
 type ProfileIdentifier_string = string
 type PersonaIdentifier_string = string
 export interface MaskNetworkAPIs {
+    app_suspended(): Promise<void>
+    app_resume(): Promise<void>
     /**
      * Echo the message back.
      */
@@ -57,6 +59,8 @@ export interface MaskNetworkAPIs {
     persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
     persona_getCurrentPersonaIdentifier(): Promise<string | undefined>
     persona_setCurrentPersonaIdentifier(params: { identifier: PersonaIdentifier_string }): Promise<void>
+    persona_getOwnedPersonaInformation(params: { identifier: PersonaIdentifier_string }): Promise<PersonaInformation>
+    persona_logout(params: { identifier: PersonaIdentifier_string }): Promise<void>
     profile_queryProfiles(params: { network: string }): Promise<Profile[]>
     profile_queryMyProfiles(params: { network: string }): Promise<Profile[]>
     profile_updateProfileInfo(params: {
@@ -137,6 +141,18 @@ export interface Persona {
     createdAt: number
     /** Unix timestamp */
     updatedAt: number
+}
+
+export interface PersonaInformation {
+    nickname?: string
+    identifier: string
+    linkedProfiles: ProfileInformation[]
+}
+
+export interface ProfileInformation {
+    nickname?: string
+    avatar?: string
+    identifier: string
 }
 
 export interface BackupOptions {

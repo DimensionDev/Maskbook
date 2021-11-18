@@ -260,7 +260,7 @@
     "settings_button_sync": "Sync",
     "settings_button_backup": "Backup",
     "settings_button_recovery": "Recovery",
-    "settings_button_setting": "Setting",
+    "settings_button_setup": "Setup",
     "settings_button_change": "Change",
     "settings_dialogs_bind_email_or_phone": "Please bind your email or phone number.",
     "settings_dialogs_verify_backup_password": "Verify Backup Password",

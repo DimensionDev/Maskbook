@@ -26,8 +26,11 @@ jobs:
           keys:
             - v3-mask-cache-pnpm
       - run:
+          name: Install PNPM
+          command: sudo npm install -g pnpm@6.4.0
+      - run:
           name: Install Dependencies
-          command: npx pnpm@6.4.0 install --frozen-lockfile --store-dir ~/.pnpm/
+          command: pnpm install --frozen-lockfile --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
           key: v3-mask-cache-npm
@@ -41,6 +44,9 @@ jobs:
     executor: mask_node
     steps:
       - restore_workspace
+      - run:
+          name: Install PNPM
+          command: sudo npm install -g pnpm@6.4.0
       - run:
           name: Build Mask Network
           command: npx gulp build-ci

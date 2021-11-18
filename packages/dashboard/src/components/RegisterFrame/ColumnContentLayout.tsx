@@ -1,8 +1,7 @@
 import { RestoreBlueIcon, SignUpAccountIcon } from '@masknet/icons'
 import { styled } from '@mui/material/styles'
 
-export const ColumnContentLayout = styled('div')(
-    ({ theme }) => `
+export const ColumnContentLayout = styled('div')`
     display: flex;
     flex-direction: column;
     flex: 1;
@@ -10,8 +9,7 @@ export const ColumnContentLayout = styled('div')(
     height: 100%;
     align-items: center;
     justify-content: center;
-`,
-)
+`
 
 export const Body = styled('main')(({ theme }) => ({
     flex: '1 5',
@@ -36,7 +34,7 @@ export const SignUpAccountLogo = styled(SignUpAccountIcon)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
         marginBottom: theme.spacing(2),
     },
-}))
+})) as any as typeof SignUpAccountIcon
 
 export const RestoreBlueLogo = styled(RestoreBlueIcon)(({ theme }) => ({
     width: '100%',
@@ -45,4 +43,4 @@ export const RestoreBlueLogo = styled(RestoreBlueIcon)(({ theme }) => ({
     [theme.breakpoints.down('md')]: {
         marginBottom: theme.spacing(2),
     },
-}))
+})) as any as typeof RestoreBlueIcon

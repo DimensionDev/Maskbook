@@ -65,7 +65,7 @@ const useStyles = makeStyles()((theme) => ({
 const SuccessTitle = styled(Typography)(({ theme }) => ({
     fontSize: theme.typography.h5.fontSize,
     color: theme.palette.success.main,
-    fontWeight: theme.typography.fontWeightMedium,
+    fontWeight: theme.typography.fontWeightMedium as any,
     margin: theme.spacing(2, 0),
 }))
 
