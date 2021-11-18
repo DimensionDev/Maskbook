@@ -13,7 +13,6 @@ export enum EKinds {
 
 export class EKindsError<T extends EKinds> extends Error {
     constructor(kind: T, reason: unknown) {
-        // @ts-expect-error error cause proposal
         super(kind, { cause: reason })
     }
     static mapErr<E extends EKinds>(r: E) {

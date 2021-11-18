@@ -4,7 +4,7 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
+    "@dimensiondev/kit": "^0.0.0-20211118134922-42648c0",
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
