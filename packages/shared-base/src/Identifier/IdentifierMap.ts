@@ -92,7 +92,7 @@ export class IdentifierMap<IdentifierType extends Identifier, T> implements Map<
     get size() {
         return [...this.keys()].length
     }
-    *values(): IterableIterator<T> {
+    *values() {
         for (const [k, v] of this.entries()) yield v
     }
     public [Symbol.toStringTag]: string;

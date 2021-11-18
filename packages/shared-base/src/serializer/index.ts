@@ -49,7 +49,7 @@ typeson.register([blob, file, fileList, imageBitMap, num])
 serialize('Ok')(Ok)
 serialize('Err')(Err)
 serialize('Some')(Some)
-typeson.register({ None: [(x) => x === None, () => ({}), () => None] })
+typeson.register({ None: [(x) => x === None, () => 'None', () => None] })
 serialize('BigNumber')(BigNumber)
 export const serializer: Serialization = {
     serialization(from: unknown) {

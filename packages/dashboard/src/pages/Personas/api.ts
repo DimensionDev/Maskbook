@@ -4,17 +4,26 @@ import { Services, Messages } from '../../API'
 export type SocialNetwork = {
     networkIdentifier: string
 }
-export const [useDefinedSocialNetworkUIs, revalidateSocialNetworkUIs, definedSocialNetworkUIs] = createGlobalState(
+
+export const [useDefinedSocialNetworkUIs, revalidateSocialNetworkUIs] = createGlobalState(
     Services.SocialNetwork.getDefinedSocialNetworkUIs,
     () => () => {},
 )
-export const [useOwnedPersonas, , currentPersonas] = createGlobalState(
-    Services.Identity.queryOwnedPersonaInformation,
-    (x) => Messages.events.ownPersonaChanged.on(x),
+
+export const [useOwnedPersonas] = createGlobalState(Services.Identity.queryOwnedPersonaInformation, (x) =>
+    Messages.events.ownPersonaChanged.on(x),
 )
 
 export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x) =>
     Messages.events.appearanceSettings.on(x),
+)
+
+export const [usePluginID] = createGlobalState(Services.Settings.getPluginID, (x) =>
+    Messages.events.pluginIDSettings.on(x),
+)
+
+export const [useNetworkID] = createGlobalState(Services.Settings.getNetworkID, (x) =>
+    Messages.events.networkIDSettings.on(x),
 )
 
 export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings.getCurrentPersonaIdentifier, (x) =>

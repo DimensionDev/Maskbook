@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef, useState } from 'react'
+import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
@@ -73,6 +73,10 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
     const isOnCurrentChain = useMemo(() => chainId === token.contractDetailed.chainId, [chainId, token])
+
+    useEffect(() => {
+        setHoveringTooltip(false)
+    }, [chainId])
 
     return (
         <Box className={`${classes.container} ${isHoveringTooltip || isHovering ? classes.hover : ''}`} ref={ref}>

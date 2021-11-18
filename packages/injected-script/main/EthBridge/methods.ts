@@ -1,11 +1,11 @@
 import { apply } from '../intrinsic'
-import { clone_into, handlePromise } from '../utils'
-import { sendEvent } from '../utils'
+import { clone_into, handlePromise, sendEvent } from '../utils'
 
 const hasListened: Record<string, boolean> = { __proto__: null! }
 const { has } = Reflect
 const { Promise, setTimeout, Boolean } = window
 const { resolve } = Promise
+
 export function ethBridgeSendRequest(id: number, request: unknown) {
     handlePromise(id, () => window.ethereum!.request(request))
 }
@@ -34,10 +34,10 @@ export function ethBridgeWatchEvent(event: string) {
 }
 
 function untilEthereumOnlineInner() {
-    if (has(window, 'ethereum')) return apply(resolve, Promise, [void 0])
-    return new Promise<void>((r) => {
+    if (has(window, 'ethereum')) return apply<(result: true) => Promise<true>>(resolve, Promise, [true])
+    return new Promise<true>((r) => {
         function check() {
-            if (has(window, 'ethereum')) return r()
+            if (has(window, 'ethereum')) return r(true)
             apply(setTimeout, window, [check, 200])
         }
         check()

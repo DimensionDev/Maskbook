@@ -307,7 +307,15 @@
         "DRAWED",
         "devnet",
         "fbclid",
-        "noamount"
+        "noamount",
+        "txts",
+        "redpackets",
+        "blocto",
+        "onflow",
+        "unauthenticate",
+        "mathwallet",
+        "walletlink",
+        "rpcs"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

@@ -1,4 +1,3 @@
-/// <reference types="web-ext-types" />
 /// <reference types="react/next" />
 /// <reference types="react-dom/next" />
 

@@ -1,0 +1,24 @@
+{
+  "name": "@masknet/polyfill",
+  "version": "0.0.0",
+  "private": true,
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^21.0.1",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-sucrase": "^4.0.1",
+    "@types/node": "^16.11.7",
+    "core-js-builder": "^3.19.1",
+    "rollup": "^2.60.0",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "scripts": {
+    "build": "node ./builder.mjs"
+  },
+  "dependencies": {
+    "clipboard-polyfill": "^3.0.3",
+    "core-js": "^3.19.1",
+    "elliptic": "^6.5.4",
+    "webcrypto-liner": "1.2.4"
+  }
+}

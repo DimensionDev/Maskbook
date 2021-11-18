@@ -49,7 +49,8 @@ jobs:
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
           restore-keys: ${{ runner.os }}-netlify-${{ hashFiles('pnpm-lock.yaml') }}
-      - run: npx pnpm install
+      - run: npm install -g pnpm
+      - run: pnpm install
       - run: npx gulp build-ci-netlify
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
