@@ -47,6 +47,7 @@ export type ConnectWalletDialogEvent =
       }
     | {
           open: false
+          result: boolean
       }
 
 export type SelectWalletDialogEvent =

@@ -9,8 +9,8 @@ import {
     getChainIdFromNetworkType,
     NetworkType,
     ProviderType,
-    resolveCalculatedProviderName,
     resolveNetworkName,
+    resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -36,11 +36,14 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.connectWalletDialogUpdated, (ev) => {
-        if (!ev.open) return
-        setProviderType(ev.providerType)
-        setNetworkType(ev.networkType)
-    })
+    const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.connectWalletDialogUpdated,
+        (ev) => {
+            if (!ev.open) return
+            setProviderType(ev.providerType)
+            setNetworkType(ev.networkType)
+        },
+    )
     //#endregion
 
     //#region walletconnect
@@ -66,7 +69,8 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         switch (providerType) {
             case ProviderType.MaskWallet:
-                throw new Error('Not necessary!')
+                ;({ account, chainId } = await Services.Ethereum.connectMaskWallet(networkType))
+                break
             case ProviderType.MetaMask:
                 ;({ account, chainId } = await Services.Ethereum.connectMetaMask())
                 break
@@ -84,7 +88,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 // wait for walletconnect to be connected
                 ;({ account, chainId } = await Services.Ethereum.connectWalletConnect())
                 break
-            case ProviderType.Injected:
+            case ProviderType.Coin98:
+            case ProviderType.WalletLink:
+            case ProviderType.MathWallet:
                 ;({ account, chainId } = await Services.Ethereum.connectInjected())
                 break
             case ProviderType.CustomNetwork:
@@ -95,10 +101,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         }
 
         // connection failed
-        if (!account || !networkType)
-            throw new Error(
-                `Failed to connect to ${resolveCalculatedProviderName(providerType, injectedProviderType)}.`,
-            )
+        if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
         // need to switch chain
         if (chainId !== expectedChainId) {
@@ -131,7 +134,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             chainId: expectedChainId,
             networkType,
             providerType,
-            injectedProviderType,
         })
         return true as const
     }, [networkType, providerType, injectedProviderType])
@@ -139,28 +141,31 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
 
-        // connect to the specific provider
-        await connectTo()
-
-        // switch to the wallet status dialog
-        closeDialog()
+        try {
+            await connectTo()
+            setConnectWalletDialog({
+                open: false,
+                result: true,
+            })
+        } catch {
+            setConnectWalletDialog({
+                open: false,
+                result: false,
+            })
+        }
 
         return true
-    }, [open, providerType, connectTo])
+    }, [open, connectTo, setConnectWalletDialog])
 
     if (!providerType) return null
 
     return (
         <InjectedDialog
-            title={`Connect to ${resolveCalculatedProviderName(providerType, injectedProviderType)}`}
+            title={`Connect to ${resolveProviderName(providerType)}`}
             open={open}
-            onClose={closeDialog}>
+            onClose={() => setConnectWalletDialog({ open: false, result: false })}>
             <DialogContent className={classes.content}>
-                <ConnectionProgress
-                    providerType={providerType}
-                    injectedProviderType={injectedProviderType}
-                    connection={connection}
-                />
+                <ConnectionProgress providerType={providerType} connection={connection} />
             </DialogContent>
         </InjectedDialog>
     )

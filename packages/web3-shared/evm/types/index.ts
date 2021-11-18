@@ -54,19 +54,13 @@ export enum ChainId {
 }
 
 export enum ProviderType {
-    Injected = 'Injected',
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
-    CustomNetwork = 'CustomNetwork',
-}
-
-export enum InjectedProviderType {
-    Unknown = 'Unknown',
-    MetaMask = 'MetaMask',
     Coin98 = 'Coin98',
-    WalletLink = 'WalletLink',
     MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
+    CustomNetwork = 'CustomNetwork',
 }
 
 export enum LockStatus {

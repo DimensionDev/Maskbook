@@ -260,7 +260,9 @@ export async function INTERNAL_send(
                     result: await WalletConnect.signPersonalMessage(data, address, ''),
                 })
                 break
-            case ProviderType.Injected:
+            case ProviderType.Coin98:
+            case ProviderType.WalletLink:
+            case ProviderType.MathWallet:
                 try {
                     callback(null, {
                         jsonrpc: '2.0',
@@ -370,7 +372,9 @@ export async function INTERNAL_send(
                     if (error instanceof Error) callback(error)
                 }
                 break
-            case ProviderType.Injected:
+            case ProviderType.Coin98:
+            case ProviderType.WalletLink:
+            case ProviderType.MathWallet:
                 await Injected.ensureConnectedAndUnlocked()
                 Injected.createProvider().send(payload, (error, response) => {
                     callback(error, response)

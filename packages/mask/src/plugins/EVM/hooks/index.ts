@@ -1,3 +1,5 @@
+export * from './useNetwork'
+export * from './useProvider'
 export * from './useInjectedProviderConnected'
 export * from './useInjectedProviderReady'
 export * from './useInjectedProviderType'
