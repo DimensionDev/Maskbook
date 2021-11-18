@@ -113,7 +113,9 @@ export function createShadowRootForwardedPopperComponent<T extends { PopperProps
     Component: React.ComponentType<T>,
 ) {
     return forwardRef((props: T, ref) => {
-        return usePortalShadowRoot((container) => <Component PopperProps={{ container }} {...props} ref={ref} />)
+        return usePortalShadowRoot((container) => {
+            return <Component {...props} PopperProps={{ container, ...props.PopperProps }} ref={ref} />
+        })
     }) as any as typeof Component
 }
 
