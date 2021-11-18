@@ -1,7 +1,7 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useFCL } from '@masknet/web3-shared-flow'
-import { getStorage } from '../../storage'
+import { storage } from '../../storage'
 
 export interface ProviderIconClickBaitProps {
     network: Web3Plugin.NetworkDescriptor
@@ -22,7 +22,7 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
         })
 
         if (user?.addr) {
-            await getStorage().user.setValue(user)
+            await storage.storage.user.setValue(user)
             onClick?.()
         }
     }, [fcl])
