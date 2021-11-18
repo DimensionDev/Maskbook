@@ -17,6 +17,7 @@ import {
     useAllPluginsWeb3State,
 } from '@masknet/plugin-infra'
 import { Web3Provider } from '@masknet/web3-shared-evm'
+import { compose } from '@masknet/shared-base'
 
 import i18n from 'i18next'
 import { I18nextProvider } from 'react-i18next'
@@ -55,29 +56,27 @@ export default function DashboardRoot() {
 
     if (!PluginsWeb3State) return null
 
-    return (
-        <NoEffectUsePortalShadowRootContext.Provider value={true}>
-            <Web3Provider value={Web3Context}>
-                <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
-                    <I18nextProvider i18n={i18n}>
-                        <StyledEngineProvider injectFirst>
-                            <ThemeProvider theme={theme}>
-                                <PersonaContext.Provider>
-                                    <ErrorBoundary>
-                                        <CssBaseline />
-                                        <CustomSnackbarProvider>
-                                            <HashRouter>
-                                                <Pages />
-                                            </HashRouter>
-                                            <PluginRender />
-                                        </CustomSnackbarProvider>
-                                    </ErrorBoundary>
-                                </PersonaContext.Provider>
-                            </ThemeProvider>
-                        </StyledEngineProvider>
-                    </I18nextProvider>
-                </PluginsWeb3ContextProvider>
-            </Web3Provider>
-        </NoEffectUsePortalShadowRootContext.Provider>
+    return compose(
+        <Pages />,
+        (jsx) => <NoEffectUsePortalShadowRootContext.Provider value={true} children={jsx} />,
+        (jsx) => <Web3Provider value={Web3Context} children={jsx} />,
+        (jsx) => <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State} children={jsx} />,
+        (jsx) => <I18nextProvider i18n={i18n} children={jsx} />,
+        (jsx) => <StyledEngineProvider injectFirst children={jsx} />,
+        (jsx) => <ThemeProvider theme={theme} children={jsx} />,
+        (jsx) => <PersonaContext.Provider children={jsx} />,
+        (jsx) => (
+            <ErrorBoundary>
+                <CssBaseline />
+                {jsx}
+            </ErrorBoundary>
+        ),
+        (jsx) => (
+            <CustomSnackbarProvider>
+                {jsx}
+                <PluginRender />
+            </CustomSnackbarProvider>
+        ),
+        (jsx) => <HashRouter children={jsx} />,
     )
 }

@@ -5,6 +5,7 @@ import { Web3Provider } from '@masknet/web3-shared-evm'
 import { CssBaseline, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material'
 import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared'
+import { compose } from '@masknet/shared-base'
 import i18nNextInstance from './utils/i18n-next'
 import { Web3Context } from './web3/context'
 import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
@@ -14,9 +15,6 @@ import { pluginIDSettings } from './settings/settings'
 import { fixWeb3State } from './plugins/EVM/UI/Web3State'
 
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
-function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
-    return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
-}
 
 type MaskThemeProvider = React.PropsWithChildren<{
     baseline: boolean
