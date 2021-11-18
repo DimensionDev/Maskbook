@@ -1,6 +1,7 @@
 import type { KVStorageBackend } from './types'
 import { IDBPDatabase, openDB } from 'idb'
 import { None, Some } from 'ts-results'
+import Safari14Fix from 'safari-14-idb-fix'
 
 export function createIndexedDB_KVStorageBackend(
     dbName: string,
@@ -9,13 +10,8 @@ export function createIndexedDB_KVStorageBackend(
 ): KVStorageBackend {
     let db: IDBPDatabase | undefined
 
-    setInterval(() => {
-        if (!db) return
-        db.close()
-        db = undefined
-    }, 1000 * 60)
-
     async function ensureDB() {
+        await Safari14Fix()
         if (!db) db = await initDB()
         return db
     }

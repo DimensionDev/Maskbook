@@ -7,17 +7,10 @@ import type {
     IDBPCursorWithValueIteratorValue,
 } from 'idb/with-async-ittr-cjs'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { MaskMessages } from '../../../shared'
+import Safari14Fix from 'safari-14-idb-fix'
 
-const iOSFix =
-    process.env.engine === 'safari' ? import('safari-14-idb-fix').then(({ default: ready }) => ready()) : undefined
 export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSchema>>) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
-    if (process.env.engine === 'safari') {
-        // iOS bug: indexedDB dies randomly
-        MaskMessages.events.mobile_app_suspended.on(clean)
-        setInterval(clean, /** 1 min */ 1000 * 60)
-    }
     function clean() {
         if (db) {
             db.close()
@@ -26,7 +19,7 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         db = undefined
     }
     return async () => {
-        await iOSFix
+        await Safari14Fix()
         assertEnvironment(Environment.ManifestBackground)
         if (db) {
             try {
@@ -50,23 +43,19 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
     asyncUpgradePrepare: (db: IDBPDatabase<DBSchema>) => Promise<AsyncUpgradePreparedData | undefined>,
 ) {
     let db: IDBPDatabase<DBSchema> | undefined = undefined
-    if (process.env.engine === 'safari') {
-        // iOS bug: indexedDB dies randomly
-        MaskMessages.events.mobile_app_suspended.on(clean)
-        setInterval(clean, /** 1 min */ 1000 * 60)
-    }
-    function clean() {
-        if (db) {
-            db.close()
-            db.addEventListener('close', () => (pendingOpen = db = undefined), { once: true })
-        }
-        pendingOpen = db = undefined
-    }
     let pendingOpen: Promise<IDBPDatabase<DBSchema>> | undefined
     async function open(): Promise<IDBPDatabase<DBSchema>> {
-        await iOSFix
+        await Safari14Fix()
         assertEnvironment(Environment.ManifestBackground)
-        if (db?.version === latestVersion) return db
+        if (db?.version === latestVersion) {
+            try {
+                // try if the db still open
+                db.transaction([], 'readonly', {})
+                return db
+            } catch {
+                db = pendingOpen = undefined
+            }
+        }
         let currentVersion = firstVersionThatRequiresAsyncUpgrade
         let lastVersionData: AsyncUpgradePreparedData | undefined = undefined
         while (currentVersion < latestVersion) {
@@ -82,11 +71,10 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
             }
             currentVersion += 1
             db?.close()
-            db = undefined
+            db = pendingOpen = undefined
         }
         db = await opener(currentVersion, lastVersionData)
-        db.addEventListener('close', (e) => (db = undefined), { once: true })
-        if (!db) throw new Error('Invalid state')
+        db.addEventListener('close', () => (db = pendingOpen = undefined), { once: true })
         return db
     }
     return () => {
