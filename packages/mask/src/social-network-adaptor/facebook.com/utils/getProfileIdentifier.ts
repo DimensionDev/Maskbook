@@ -68,7 +68,7 @@ export function getProfileIdentifierAtFacebook(
             return {
                 identifier: result,
                 avatar: avatar ?? undefined,
-                nickname: nickname || undefined,
+                nickname: nickname,
             }
         }
         return unknown

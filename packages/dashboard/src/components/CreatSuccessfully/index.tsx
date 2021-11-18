@@ -33,12 +33,13 @@ const Container = styled('div')`
     align-items: center;
 `
 
-const SuccessTitle = styled(Typography)`
-    font-size: ${({ theme }) => theme.typography.h5.fontSize};
-    color: ${({ theme }) => theme.palette.success.main};
-    font-weight: ${({ theme }) => theme.typography.fontWeightMedium};
-    margin: ${({ theme }) => theme.spacing(2, 0)};
-`
+const SuccessTitle = styled(Typography)(({ theme }) => ({
+    fontSize: theme.typography.h5.fontSize,
+    color: theme.palette.success.main,
+    fontWeight: theme.typography.fontWeightMedium,
+    margin: theme.spacing(2, 0),
+}))
+
 const SuccessTips = styled(Typography)(({ theme }) => ({
     fontSize: theme.typography.fontSize,
     color: MaskColorVar.normalText,

@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     header: {
         color: MaskColorVar.normalText,
-        fontWeight: theme.typography.fontWeightRegular as any,
+        fontWeight: theme.typography.fontWeightRegular,
         padding: '36px 0 12px',
         border: 'none',
         backgroundColor: MaskColorVar.primaryBackground,

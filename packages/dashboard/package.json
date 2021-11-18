@@ -38,7 +38,7 @@
     "json-stable-stringify": "^1.0.1",
     "lodash-es": "^4.17.21",
     "react-avatar-editor": "^12.0.0",
-    "react-hook-form": "^7.19.5",
+    "react-hook-form": "^7.18.1",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-use": "^17.3.1",
@@ -62,6 +62,6 @@
     "babel-loader": "^8.2.3",
     "buffer": "^6.0.3",
     "stream-browserify": "^3.0.0",
-    "webpack": "^5.64.1"
+    "webpack": "^5.61.0"
   }
 }
