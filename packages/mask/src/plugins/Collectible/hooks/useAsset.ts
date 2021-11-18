@@ -9,7 +9,7 @@ import {
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { first, head, uniqBy } from 'lodash-es'
+import { first, head, uniqBy } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import { OpenSeaAccountURL } from '../constants'
 import { toDate, toTokenDetailed, toTokenIdentifier } from '../helpers'

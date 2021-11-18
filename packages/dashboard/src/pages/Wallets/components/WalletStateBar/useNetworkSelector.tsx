@@ -16,7 +16,7 @@ import { ChainIcon, useMenu, useRemoteControlledDialog } from '@masknet/shared'
 import { useAsync } from 'react-use'
 import { PluginMessages, PluginServices } from '../../../../API'
 import { SuccessIcon } from '@masknet/icons'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     item: {

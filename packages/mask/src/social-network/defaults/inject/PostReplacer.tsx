@@ -5,7 +5,7 @@ import { PostReplacer, PostReplacerProps } from '../../../components/InjectedCom
 import type { PostInfo } from '../../PostInfo'
 import { makeStyles } from '@masknet/theme'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 
 export function injectPostReplacer<T extends string>(
     config: injectPostReplacerConfig = {},

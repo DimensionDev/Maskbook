@@ -1,6 +1,6 @@
 import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { isNil } from 'lodash-es'
+import { isNil } from 'lodash-unified'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
 import { resolveDebankChainName, resolveDebankTransactionType, resolveZerionTransactionsScopeName } from '../pipes'

@@ -1,7 +1,7 @@
 import { ReactNode, useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import Fuse from 'fuse.js'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
 import { Search } from '@mui/icons-material'

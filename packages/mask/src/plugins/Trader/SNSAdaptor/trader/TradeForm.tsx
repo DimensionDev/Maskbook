@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import classNames from 'classnames'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { IconButton, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

@@ -1,4 +1,4 @@
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 
 export function createConstantSubscription<T>(value: T) {
@@ -58,4 +58,13 @@ function getEventTarget() {
         return () => event.removeEventListener(EVENT, f)
     }
     return { trigger, subscribe }
+}
+
+export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => Q): Subscription<Q> {
+    return {
+        getCurrentValue() {
+            return mapper(sub.getCurrentValue())
+        },
+        subscribe: sub.subscribe,
+    }
 }

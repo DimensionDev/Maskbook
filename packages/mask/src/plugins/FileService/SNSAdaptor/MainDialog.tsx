@@ -1,7 +1,7 @@
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { isNil } from 'lodash-es'
+import { isNil } from 'lodash-unified'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'

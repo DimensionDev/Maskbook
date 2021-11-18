@@ -1,6 +1,6 @@
 // DO NOT import React in this file. This file is also used by worker.
 import type { Plugin } from '../types'
-import { memoize } from 'lodash-es'
+import { memoize } from 'lodash-unified'
 
 const __registered = new Map<string, Plugin.DeferredDefinition>()
 

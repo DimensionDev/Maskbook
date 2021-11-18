@@ -1,4 +1,4 @@
-import { upperFirst } from 'lodash-es'
+import { upperFirst } from 'lodash-unified'
 import { toHex } from 'web3-utils'
 import { createLookupTableResolver } from './enum'
 import CHAINS from '../assets/chains.json'

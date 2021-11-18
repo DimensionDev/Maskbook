@@ -7,7 +7,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

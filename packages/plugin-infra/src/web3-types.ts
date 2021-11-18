@@ -270,8 +270,8 @@ export declare namespace Web3Plugin {
  * A network plugin defines the way to connect to a single chain.
  */
 export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.maskbook.evm',
-    PLUGIN_FLOW = 'com.maskbook.flow',
+    PLUGIN_EVM = 'com.mask.evm',
+    PLUGIN_FLOW = 'com.mask.flow',
 }
 
 export enum CurrencyType {

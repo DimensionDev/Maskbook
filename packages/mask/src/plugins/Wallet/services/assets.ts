@@ -20,7 +20,7 @@ import {
     getChainIdFromNetworkType,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { values } from 'lodash-es'
+import { values } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'

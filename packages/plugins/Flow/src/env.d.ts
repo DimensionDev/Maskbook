@@ -25,7 +25,7 @@ declare module '@onflow/fcl' {
     export const snapshot: () => User
     export const authenticate: () => {}
     export const unauthenticate: () => {}
-    export const logIn: () => {}
+    export const logIn: () => Promise<User | null>
     export const logOut: () => {}
     export const signUp: () => {}
 

@@ -1,5 +1,5 @@
 import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared'
-import { head } from 'lodash-es'
+import { head } from 'lodash-unified'
 import type { InternalSettings } from '../../settings/createSettings'
 import {
     appearanceSettings,
