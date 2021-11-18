@@ -10,6 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^15.0.0
       '@commitlint/config-conventional': ^15.0.0
+      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.6.0
       '@emotion/react': ^11.6.0
@@ -55,6 +56,7 @@ importers:
       web3-core: 1.5.2
       web3-core-method: 1.5.2
     dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@emotion/cache': 11.6.0
       '@emotion/react': 11.6.0_1935fef70228eb84245268bf8b8f19fd
       '@emotion/serialize': 1.0.2
@@ -16116,7 +16118,7 @@ packages:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
-      mime-types: 2.1.33
+      mime-types: 2.1.34
     dev: false
 
   /form-data/3.0.1:
@@ -19019,7 +19021,7 @@ packages:
   /jsx-jsonml-devtools-renderer/1.4.3:
     resolution: {integrity: sha512-U1Ayx2VUF6plTLrQkNnJAg8UInToPseWqugxYTKEyaWG8G83Vqpx8BpyW9MObK1kPHdtMkevKfLi+PVwqp5Rtw==}
     dependencies:
-      csstype: 3.0.9
+      csstype: 3.0.10
     dev: false
 
   /junk/3.1.0:
@@ -22630,7 +22632,7 @@ packages:
       is-typedarray: 1.0.0
       isstream: 0.1.2
       json-stringify-safe: 5.0.1
-      mime-types: 2.1.33
+      mime-types: 2.1.34
       oauth-sign: 0.9.0
       performance-now: 2.1.0
       qs: 6.5.2
