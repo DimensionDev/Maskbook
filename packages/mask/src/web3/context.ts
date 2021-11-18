@@ -131,7 +131,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
     }
 }
 
-export const Web3Context = createWeb3Context()
+export const Web3Context = createWeb3Context(false, false)
 export const PopupWeb3Context = createWeb3Context(true, true)
 export const SwapWeb3Context = createWeb3Context(false, true)
 
