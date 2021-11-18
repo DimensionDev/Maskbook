@@ -315,7 +315,8 @@
         "unauthenticate",
         "mathwallet",
         "walletlink",
-        "rpcs"
+        "rpcs",
+        "FUSD"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
