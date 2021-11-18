@@ -669,7 +669,6 @@ importers:
       '@types/rimraf': ^3.0.2
       chalk: ^4.1.2
       gulp-zip: ^5.1.0
-      lodash: ^4.17.21
       proper-lockfile: ^4.1.1
       rimraf: ^3.0.2
       ts-node: ^10.4.0
@@ -678,7 +677,6 @@ importers:
       '@types/rimraf': 3.0.2
       chalk: 4.1.2
       gulp-zip: 5.1.0_gulp@4.0.2
-      lodash: 4.17.21
       proper-lockfile: 4.1.2
       rimraf: 3.0.2
       yargs: 17.2.1
