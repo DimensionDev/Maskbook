@@ -4,7 +4,7 @@ import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../../../plugins/EVM/messages'
-import { defer } from '../../../../../utils-pure'
+import { defer } from '@masknet/shared-base'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { updateAccount } from '../../../../plugins/Wallet/services'
 
