@@ -2,7 +2,7 @@ import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from './InjectedDialog'
 import { WalletStatusBox } from './WalletStatusBox'
-import { MaskApplicationBox, MaskAppEntry } from './MaskApplicationBox'
+import { ApplicationBoard, MaskAppEntry } from './ApplicationBoard'
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
@@ -46,7 +46,7 @@ export function EntrySecondLevelDialog(props: EntrySecondLevelDialogProps) {
         <InjectedDialog title={props.title} open={props.open} onClose={props.closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <WalletStatusBox />
-                <MaskApplicationBox secondEntries={props.entries} secondEntryChainTabs={props.chains} />
+                <ApplicationBoard secondEntries={props.entries} secondEntryChainTabs={props.chains} />
             </DialogContent>
         </InjectedDialog>
     )

@@ -22,6 +22,7 @@ async function request(requestArguments: RequestArguments) {
         else resolve(result)
     }
 
+    setTimeout(() => reject(new Error('The request is timeout.')), 30 * 1000)
     EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.on(onResponse)
     EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.sendToVisiblePages({
         payload: {
@@ -99,16 +100,16 @@ export async function ensureConnectedAndUnlocked() {
     }
 }
 
-export async function onAccountsChanged(accounts: string[]) {
-    if (currentProviderSettings.value !== ProviderType.Injected) return
+export async function onAccountsChanged(accounts: string[], providerType: ProviderType) {
+    if (currentProviderSettings.value !== providerType) return
     await updateAccount({
         account: first(accounts),
-        providerType: ProviderType.Injected,
+        providerType,
     })
 }
 
-export async function onChainIdChanged(id: string) {
-    if (currentProviderSettings.value !== ProviderType.Injected) return
+export async function onChainIdChanged(id: string, providerType: ProviderType) {
+    if (currentProviderSettings.value !== providerType) return
 
     // learn more: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids and https://chainid.network/
     const chainId = Number.parseInt(id, 16) || ChainId.Mainnet

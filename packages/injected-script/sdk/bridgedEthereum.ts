@@ -65,7 +65,9 @@ export interface BridgedEthereumProvider {
     /** Add event listener */
     on(event: string, callback: (...args: any) => void): () => void
     /** Access primitive property on the window.ethereum object. */
-    getProperty(key: 'isMetaMask' | 'isCoin98' | 'isMathWallet' | 'isWalletLink'): Promise<boolean | undefined>
+    getProperty(
+        key: 'isMaskWallet' | 'isMetaMask' | 'isCoin98' | 'isMathWallet' | 'isWalletLink',
+    ): Promise<boolean | undefined>
     /** MetaMask only, experimental API. */
     _metamaskIsUnlocked(): Promise<boolean>
     /** Call window.ethereum.isConnected() */
