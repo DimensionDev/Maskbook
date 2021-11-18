@@ -5,8 +5,12 @@ export const StorageDefaultValue = {
     user: null as User | null,
 }
 
-export let storage: ScopedStorage<typeof StorageDefaultValue> = null!
+let storage: ScopedStorage<typeof StorageDefaultValue> = null!
 
 export function setupStorage(_: typeof storage) {
     storage = _
+}
+
+export function getStorage() {
+    return storage.storage
 }
