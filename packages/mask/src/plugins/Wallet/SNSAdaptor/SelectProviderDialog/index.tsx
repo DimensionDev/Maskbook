@@ -18,7 +18,7 @@ import { networkIDSettings, pluginIDSettings } from '../../../../settings/settin
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(0),
+        padding: theme.spacing(0, 0, 1, 0),
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
