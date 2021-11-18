@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { ChainIcon, FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
 import {
     Asset,
     CurrencyType,
@@ -57,11 +57,12 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface TokenTableRowProps {
     asset: Asset
+    networkIcon?: URL
     onSwap(): void
     onSend(): void
 }
 
-export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
+export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap, networkIcon }) => {
     const t = useDashboardI18N()
     const currentChainId = useChainId()
     const { classes } = useStyles()
@@ -82,7 +83,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>
-                            <ChainIcon chainId={asset.token.chainId} size={16} />
+                            <WalletIcon size={16} networkIcon={networkIcon} />
                         </Box>
                     </Box>
                     <Typography className={classes.symbol}>{asset.token.symbol}</Typography>

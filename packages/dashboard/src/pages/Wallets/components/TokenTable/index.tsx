@@ -20,6 +20,7 @@ import {
     useWeb3State,
     useChainBalanceList,
     useChainBalance,
+    getNetworkTypeFromChainId,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -27,6 +28,8 @@ import { PluginMessages, PluginServices } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
+import type { Web3Plugin } from '@masknet/plugin-infra'
+import { useSupportedNetworks } from '../../../../hooks/useSupportedNetworks'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -76,6 +79,8 @@ interface TokenTableProps {
 
 export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
+
+    const supportedNetworks = useSupportedNetworks()
 
     const { erc20Tokens: trustedERC20Tokens, providerType } = useWeb3State()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
@@ -155,6 +160,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
             isEmpty={!!detailedTokensError || !detailedTokens.length}
             dataSource={assetsWithNativeToken}
             onSwap={onSwap}
+            supportedNetworks={supportedNetworks}
             onSend={onSend}
         />
     )
@@ -164,67 +170,77 @@ export interface TokenTableUIProps {
     isLoading: boolean
     isEmpty: boolean
     dataSource: Asset[]
+    supportedNetworks: Web3Plugin.NetworkDescriptor[]
     onSwap(token: FungibleTokenDetailed): void
     onSend(token: FungibleTokenDetailed): void
 }
 
-export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
-    const t = useDashboardI18N()
-    const { classes } = useStyles()
-    return (
-        <TableContainer className={classes.container}>
-            {isLoading || isEmpty ? (
-                <>
-                    {isLoading ? <LoadingPlaceholder /> : null}
-                    {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
-                </>
-            ) : (
-                <Table stickyHeader className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell key="Asset" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_asset()}
-                            </TableCell>
-                            <TableCell key="Balance" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_balance()}
-                            </TableCell>
-                            <TableCell key="Price" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_price()}
-                            </TableCell>
-                            <TableCell key="Value" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_value()}
-                            </TableCell>
-                            <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                                {t.wallets_assets_operation()}
-                            </TableCell>
-                        </TableRow>
-                    </TableHead>
+export const TokenTableUI = memo<TokenTableUIProps>(
+    ({ onSwap, onSend, isLoading, isEmpty, dataSource, supportedNetworks }) => {
+        const t = useDashboardI18N()
+        const { classes } = useStyles()
+        return (
+            <TableContainer className={classes.container}>
+                {isLoading || isEmpty ? (
+                    <>
+                        {isLoading ? <LoadingPlaceholder /> : null}
+                        {isEmpty ? <EmptyPlaceholder children={t.wallets_empty_tokens_tip()} /> : null}
+                    </>
+                ) : (
+                    <Table stickyHeader className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell key="Asset" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_asset()}
+                                </TableCell>
+                                <TableCell key="Balance" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_balance()}
+                                </TableCell>
+                                <TableCell key="Price" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_price()}
+                                </TableCell>
+                                <TableCell key="Value" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_value()}
+                                </TableCell>
+                                <TableCell key="Operation" align="center" variant="head" className={classes.header}>
+                                    {t.wallets_assets_operation()}
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
 
-                    {dataSource.length ? (
-                        <TableBody>
-                            {dataSource
-                                .sort((first, second) => {
-                                    const firstValue = new BigNumber(formatBalance(first.balance, first.token.decimals))
-                                    const secondValue = new BigNumber(
-                                        formatBalance(second.balance, second.token.decimals),
-                                    )
+                        {dataSource.length ? (
+                            <TableBody>
+                                {dataSource
+                                    .sort((first, second) => {
+                                        const firstValue = new BigNumber(
+                                            formatBalance(first.balance, first.token.decimals),
+                                        )
+                                        const secondValue = new BigNumber(
+                                            formatBalance(second.balance, second.token.decimals),
+                                        )
 
-                                    if (firstValue.eq(secondValue)) return 0
+                                        if (firstValue.eq(secondValue)) return 0
 
-                                    return Number(firstValue.lt(secondValue))
-                                })
-                                .map((asset, index) => (
-                                    <TokenTableRow
-                                        onSend={() => onSend(asset.token)}
-                                        onSwap={() => onSwap(asset.token)}
-                                        asset={asset}
-                                        key={index}
-                                    />
-                                ))}
-                        </TableBody>
-                    ) : null}
-                </Table>
-            )}
-        </TableContainer>
-    )
-})
+                                        return Number(firstValue.lt(secondValue))
+                                    })
+                                    .map((asset, index) => (
+                                        <TokenTableRow
+                                            onSend={() => onSend(asset.token)}
+                                            onSwap={() => onSwap(asset.token)}
+                                            asset={asset}
+                                            networkIcon={
+                                                supportedNetworks.find(
+                                                    (x) => x?.type === getNetworkTypeFromChainId(asset.token.chainId),
+                                                )?.icon
+                                            }
+                                            key={index}
+                                        />
+                                    ))}
+                            </TableBody>
+                        ) : null}
+                    </Table>
+                )}
+            </TableContainer>
+        )
+    },
+)

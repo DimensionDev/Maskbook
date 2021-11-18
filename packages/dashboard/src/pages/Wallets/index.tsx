@@ -19,10 +19,10 @@ import BigNumber from 'bignumber.js'
 import { ReceiveDialog } from './components/ReceiveDialog'
 import { RoutePaths } from '../../type'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages, PluginServices } from '../../API'
+import { PluginMessages } from '../../API'
 import { WalletStateBar } from './components/WalletStateBar'
 import { useDashboardI18N } from '../../locales'
-import { useAsync } from 'react-use'
+import { useSupportedNetworks } from '../../hooks/useSupportedNetworks'
 
 function Wallets() {
     const wallet = useWallet()
@@ -31,6 +31,7 @@ function Wallets() {
     const t = useDashboardI18N()
     const currentChainId = useChainId()
     const trustedERC20Tokens = useWeb3State().erc20Tokens
+    const networks = useSupportedNetworks()
 
     const { pathname } = useLocation()
     const isWalletPath = useMatch(RoutePaths.Wallets)
@@ -43,7 +44,6 @@ function Wallets() {
     const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const { value: detailedTokens } = useAssets(
         trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
         selectedChainId === null ? 'all' : selectedChainId,
