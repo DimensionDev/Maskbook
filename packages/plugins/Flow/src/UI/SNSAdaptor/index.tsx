@@ -1,8 +1,8 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
 import { Web3UI } from '../Web3UI'
+import { createWeb3State } from '../Web3State'
 import { setupStorage, StorageDefaultValue } from '../../storage'
-import { createWeb3State } from '../../state'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

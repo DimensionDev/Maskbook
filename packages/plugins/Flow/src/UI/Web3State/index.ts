@@ -15,7 +15,7 @@ function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValu
     return createSubscriptionFromScopedStorage(
         storage.storage,
         (storage) => {
-            return getter(storage.user.value)
+            return getter(storage.user.subscription.getCurrentValue())
         },
         (storage) => {
             return storage.user.subscription.subscribe
@@ -23,7 +23,7 @@ function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValu
     )
 }
 
-function createWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
+export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilities.Capabilities {
     const chainId = ChainId.Testnet
 
     return {
@@ -50,5 +50,3 @@ function createWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
         },
     }
 }
-
-export const Web3State = createWeb3State()
