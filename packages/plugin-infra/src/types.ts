@@ -1,9 +1,10 @@
-import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import type { Emitter } from '@servie/events'
+import type React from 'react'
 import type { Option, Result } from 'ts-results'
+import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared'
+import type { Emitter } from '@servie/events'
+import type { Web3Plugin } from './web3-types'
 
-export namespace Plugin {
+export declare namespace Plugin {
     /**
      * A code loader interface of the plugin API.
      *
@@ -53,6 +54,12 @@ export namespace Plugin {
  * Basic knowledge of the plugin (ID, name, publisher, ...).
  */
 export namespace Plugin.Shared {
+    export interface SharedContext {
+        /**
+         * A lightweight K/V storage used to store some simple data.
+         */
+        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+    }
     export interface Definition {
         /**
          * ID of the plugin. It should be unique.
@@ -95,6 +102,10 @@ export namespace Plugin.Shared {
         management?: ManagementProperty
         /** i18n resources of this plugin */
         i18n?: I18NResource
+        /** Introduce networks information. */
+        declareWeb3Networks?: Web3Plugin.NetworkDescriptor[]
+        /** Introduce wallet providers information. */
+        declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -135,13 +146,8 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
-        web3?: Web3EnableRequirement
+        web3?: Web3Plugin.EnableRequirement
     }
-    export interface Web3EnableRequirement {
-        /** Plugin can declare what chain it supports. When the current chain is not supported, the composition entry will be hidden. */
-        operatingSupportedChains?: ChainId[]
-    }
-
     export interface ManagementProperty {
         /** This plugin should not displayed in the plugin management page. */
         internal?: boolean
@@ -170,7 +176,8 @@ export namespace Plugin.Shared {
 
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface Definition extends Shared.DefinitionDeferred {
+    export interface SNSAdaptorContext extends Shared.SharedContext {}
+    export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
@@ -179,6 +186,10 @@ export namespace Plugin.SNSAdaptor {
         SearchBoxComponent?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
+        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        Web3UI?: Web3Plugin.UI.UI
+        /** This is the context of the currently chosen network. */
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -194,6 +205,7 @@ export namespace Plugin.SNSAdaptor {
      * - Custom type: Fallback choice if the dialog type cannot do what you want to do.
      */
     export type CompositionDialogEntry = CompositionDialogEntryCustom | CompositionDialogEntryDialog
+
     export interface CompositionDialogEntryCustom {
         /**
          * A label that will be rendered in the CompositionDialog as a chip.
@@ -264,17 +276,22 @@ export namespace Plugin.SNSAdaptor {
 
 /** This part runs in the dashboard */
 export namespace Plugin.Dashboard {
+    export interface DashboardContext extends Shared.SharedContext {}
     // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends Shared.DefinitionDeferred {
+    export interface Definition extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
+        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        Web3UI?: Web3Plugin.UI.UI
+        /** This is the context of the currently chosen network. */
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
     }
 }
 
 /** This part runs in the background page */
 export namespace Plugin.Worker {
-    export interface WorkerContext {
-        getStorage<T extends IndexableTaggedUnion>(): Storage<T>
+    export interface WorkerContext extends Shared.SharedContext {
+        getDatabaseStorage<T extends IndexableTaggedUnion>(): DatabaseStorage<T>
     }
     export interface Definition extends Shared.DefinitionDeferred<WorkerContext> {
         backup?: BackupHandler
@@ -327,7 +344,7 @@ export namespace Plugin.Worker {
      *     await cursor.delete()
      * }
      */
-    export interface Storage<Data extends IndexableTaggedUnion = IndexableTaggedUnion> {
+    export interface DatabaseStorage<Data extends IndexableTaggedUnion = IndexableTaggedUnion> {
         /**
          * Query an object from the database
          * @param type "type" field on the object
@@ -415,7 +432,6 @@ export type IndexableTaggedUnion = {
     type: string | number
     id: string | number
 }
-// TODO: Plugin i18n is not read today.
 export interface I18NStringField {
     /** The i18n key of the string content. */
     i18nKey?: string
@@ -434,6 +450,12 @@ export enum CurrentSNSNetwork {
     Instagram = 3,
 }
 
+export interface Pagination {
+    /** The item size of each page. */
+    size?: number
+    /** The page index. */
+    page?: number
+}
 /**
  * This namespace is not related to the plugin authors
  */

@@ -135,10 +135,13 @@ const useStyles = makeStyles()((theme) => ({
     apr: {
         color: '#bdb3d2',
         display: 'flex',
+        alignItems: 'center',
     },
     poolIcon: {
-        backgroundColor: 'transparent',
-        marginRight: theme.spacing(0.5),
+        backgroundColor: 'transparent !important',
+        marginRight: `${theme.spacing(0.5)} !important`,
+        width: 13,
+        height: 13,
     },
     viewPool: {
         cursor: 'pointer',

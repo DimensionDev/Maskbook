@@ -9,11 +9,14 @@
   "references": [
     { "path": "../public-api" },
     { "path": "../theme/" },
-    { "path": "../mask/" },
+    { "path": "../mask/src" },
     { "path": "../web3-shared/evm/" },
+    { "path": "../web3-shared/flow/" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" },
+    { "path": "../plugins/Flow/" },
     { "path": "../plugins/Wallet/" },
-    { "path": "../backup-format/" }
+    { "path": "../backup-format/" },
+    { "path": "../shared-base" }
   ]
 }

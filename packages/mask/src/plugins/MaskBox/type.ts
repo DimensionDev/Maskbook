@@ -41,6 +41,7 @@ export interface BoxInfo {
     payments: PaymentInfo[]
     remaining: number
     total: string
+    sold: number
     startAt: Date
     endAt: Date
     tokenIds: string[]
@@ -50,10 +51,18 @@ export interface BoxInfo {
     qualificationAddress: string
 }
 
+export enum MediaType {
+    Audio = 'audio',
+    Image = 'image',
+    Video = 'video',
+    Unknown = 'unknown',
+}
+
 export interface BoxMetadata {
     id: string
     name: string
-    cover: string
+    mediaType: MediaType
+    mediaUrl: string
     activities: {
         title: string
         body: string

@@ -47,6 +47,7 @@ export type ConnectWalletDialogEvent =
       }
     | {
           open: false
+          result: boolean
       }
 
 export type SelectWalletDialogEvent =
@@ -86,6 +87,10 @@ export type WalletRiskWarningDialogEvent =
           open: false
           type: 'cancel' | 'confirm'
       }
+
+export type RestoreLegacyWalletDialogEvent = {
+    open: boolean
+}
 
 export type WalletConnectQRCodeDialogEvent =
     | {
@@ -204,6 +209,12 @@ export interface WalletMessage {
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
+
+    /**
+     * Restore Legacy Wallet Dialog
+     */
+    restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
+
     /**
      * Select token dialog
      */
@@ -224,6 +235,7 @@ export interface WalletMessage {
     erc1155TokensUpdated: void
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
+
     rpc: unknown
 }
 

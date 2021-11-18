@@ -34,8 +34,8 @@ export default function Popups() {
                     {/* ! Don't remove this suspense. Otherwise react-router v5 doesn't work while changing routes.  */}
                     <Suspense fallback="">
                         <Switch>
-                            <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
                             <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
+                            <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
                             <Route path={PopupRoutes.Swap} children={<SwapPage />} />
                             <Route path={PopupRoutes.RequestPermission} exact>
                                 <RequestPermissionPage />
@@ -49,14 +49,12 @@ export default function Popups() {
                             <Route path={PopupRoutes.SignRequest} exact>
                                 <SignRequest />
                             </Route>
-                            <Route children={<Redirect to={PopupRoutes.Wallet} />} />
+                            <Route children={<Redirect to={PopupRoutes.Personas} />} />
                         </Switch>
                     </Suspense>
+                    {/* TODO: Should only load plugins when the page is plugin-aware. */}
+                    <PluginRender />
                 </HashRouter>
-                {/*
-// TODO: Should only load plugins when the page is plugin-aware.
-                 */}
-                <PluginRender />
             </Web3Provider>
         </MaskUIRoot>
     )

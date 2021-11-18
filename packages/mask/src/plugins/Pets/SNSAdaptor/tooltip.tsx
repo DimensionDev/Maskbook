@@ -1,7 +1,6 @@
-import React from 'react'
 import { makeStyles } from '@masknet/theme'
-import { Tooltip, Typography, Box } from '@mui/material'
-import { getAssetAsBlobURL, useI18N } from '../../../utils'
+import { Typography, Box } from '@mui/material'
+import { getAssetAsBlobURL, ShadowRootTooltip, useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -11,8 +10,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     info: {
         zIndex: 999,
-        width: 24,
-        height: 26,
+        width: 15,
+        height: 15,
+        right: -10,
+        bottom: 2,
         backgroundRepeat: 'round',
         position: 'absolute',
     },
@@ -91,13 +92,13 @@ const Tip = () => {
         </div>
     )
     return (
-        <Tooltip
+        <ShadowRootTooltip
             title={titleRender}
             arrow
             placement="left"
             classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}>
             <div className={classes.info} style={{ backgroundImage: `url(${Info})` }} />
-        </Tooltip>
+        </ShadowRootTooltip>
     )
 }
 

@@ -20,7 +20,7 @@ import {
     queryProfilesPagedDB,
 } from './Persona.db'
 import { IdentifierMap } from '../IdentifierMap'
-import { queryAvatarDataURL } from '../helpers/avatar'
+import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
 import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,

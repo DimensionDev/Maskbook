@@ -2,7 +2,6 @@ import { memo, useState } from 'react'
 import { some } from 'lodash-es'
 import { useNavigate } from 'react-router-dom'
 import { Button, Stack, Box } from '@mui/material'
-import { useMnemonicWordsPuzzle } from '@masknet/web3-shared-evm'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { useCustomSnackbar } from '@masknet/theme'
 import { RoutePaths } from '../../../type'
@@ -13,6 +12,7 @@ import { useDashboardI18N } from '../../../locales'
 import { DesktopMnemonicConfirm, MnemonicReveal } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
+import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle'
 
 enum CreateWalletStep {
     NameAndWords = 0,

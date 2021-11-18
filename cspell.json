@@ -308,7 +308,14 @@
         "devnet",
         "fbclid",
         "noamount",
-        "txts"
+        "txts",
+        "redpackets",
+        "blocto",
+        "onflow",
+        "unauthenticate",
+        "mathwallet",
+        "walletlink",
+        "rpcs"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

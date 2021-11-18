@@ -13,7 +13,6 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import Services from '../../../extension/service'
 import Web3Utils from 'web3-utils'
 import {
-    EthereumTokenType,
     formatBalance,
     getChainName,
     TransactionStateType,
@@ -25,7 +24,6 @@ import {
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { WalletMessages } from '../../Wallet/messages'
-import { omit } from 'lodash-es'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
@@ -84,7 +82,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
-
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
@@ -106,6 +106,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 attachMetadata(RedPacketMetaKey, payload)
             } else dropMetadata(RedPacketMetaKey)
             onClose()
+            closeWalletStatusDialog()
         },
         [onClose, chainId, senderName],
     )
@@ -169,18 +170,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             payload.current.is_random = createSettings.isRandom
             payload.current.shares = createSettings.shares
             payload.current.password = createSettings.privateKey
-            payload.current.token_type = createSettings.token.type
             payload.current.rpid = CreationSuccess.id
             payload.current.total = CreationSuccess.total
             payload.current.duration = createSettings.duration
             payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
-
-            if (createSettings.token.type === EthereumTokenType.ERC20)
-                payload.current.token = {
-                    name: '',
-                    symbol: '',
-                    ...omit(createSettings.token, ['type', 'chainId']),
-                }
+            payload.current.token = createSettings.token
 
             setSettings(undefined)
             // output the redpacket as JSON payload
@@ -195,7 +189,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         // storing the created red packet in DB, it helps retrieve red packet password later
         // save to the database early, otherwise red-packet would lose when close the tx dialog or
         //  web page before create successfully.
-        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING) {
+        if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
             payload.current.txid = createState.hash
             const record: RedPacketRecord = {
                 id: createState.hash!,

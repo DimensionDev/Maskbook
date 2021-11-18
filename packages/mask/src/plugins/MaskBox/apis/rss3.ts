@@ -1,6 +1,5 @@
 import RSS3 from 'rss3-next'
 import { RSS3_ENDPOINT } from '../constants'
-import { personalSign } from '../../../extension/background-script/EthereumService'
 import type { BoxMetadata } from '../type'
 
 async function createRSS(address: string) {
@@ -8,7 +7,7 @@ async function createRSS(address: string) {
         endpoint: RSS3_ENDPOINT,
         address,
         sign: async (message: string) => {
-            return personalSign(message, address)
+            throw new Error('Not supported.')
         },
     })
 }

@@ -13,10 +13,14 @@ import { usePostInfoDetails } from '../DataSource/usePostInfo'
 const useStyle = makeStyles()({
     root: {
         height: 'auto',
+        width: 'calc(98% - 10px)',
         padding: '6px',
     },
     label: {
-        whiteSpace: 'initial',
+        width: '90%',
+        overflowWrap: 'break-word',
+        whiteSpace: 'normal',
+        textOverflow: 'clip',
     },
 })
 export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>

@@ -6,7 +6,7 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src"],
-  "references": [{ "path": "../shared/" }, { "path": "../theme" }, { "path": "../web3-shared/evm/" }],
+  "references": [{ "path": "../shared/" }, { "path": "../theme" }],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": { "module": "CommonJS" }

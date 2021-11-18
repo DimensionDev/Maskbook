@@ -31,7 +31,8 @@ export const Flags = {
     transak_enabled: webOnly,
     trader_zrx_enabled: webOnly,
     trader_all_api_cached_enabled: devOnly,
-    metamask_support_enabled: webOnly,
+    metamask_enabled: webOnly,
+    injected_web3_enabled: webOnly,
     toolbox_enabled: webOnly,
     /** Prohibit the use of test networks in production */
     wallet_allow_testnet: betaOrInsiderOnly || process.env.NODE_ENV !== 'production',
@@ -50,6 +51,7 @@ export const Flags = {
     polygon_enabled: true,
     arbitrum_enabled: true,
     xdai_enabled: true,
+    flow_enabled: true,
     nft_airdrop_enabled: false,
 
     //#region Functionality missing / broken

@@ -11,7 +11,7 @@ export default function PhoneNumberSetting() {
     return (
         <>
             <SettingButton size="large" onClick={() => setOpen(true)}>
-                {user.phone ? t.settings_button_change() : t.settings_button_setting()}
+                {user.phone ? t.settings_button_change() : t.settings_button_setup()}
             </SettingButton>
             {open ? <SettingPhoneNumberDialog open={open} onClose={() => setOpen(false)} /> : null}
         </>

@@ -5,7 +5,7 @@ import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'
 import { TransformAlgorithm } from '@dimensiondev/stego-js/cjs/transform'
 import type { EncodeOptions, DecodeOptions } from '@dimensiondev/stego-js/cjs/stego'
 import { downloadUrl } from '../../../utils/utils'
-import { memoizePromise } from '../../../utils/memoize'
+import { memoizePromise } from '../../../../utils-pure'
 import { getDimension } from '../../../utils/image'
 import type { ImageTemplateTypes } from '../../../resources/image-payload'
 

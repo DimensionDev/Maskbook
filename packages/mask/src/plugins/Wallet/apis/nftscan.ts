@@ -1,4 +1,4 @@
-import { ERC721ContractDetailed, EthereumTokenType, ChainId } from '@masknet/web3-shared-evm'
+import { ERC721ContractDetailed, EthereumTokenType, ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 const NFTSCAN_TOKEN_ID = 'bcaa7c6850d2489e8cb0247e0abdce50'
 const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
 const BASE_API = 'https://api.nftscan.com/api/v1'
@@ -31,7 +31,7 @@ export async function findAssets(address: string) {
                   const contractDetailed: ERC721ContractDetailed = {
                       name: value.nft_platform_name,
                       symbol: '',
-                      address: value.nft_platform_contract,
+                      address: formatEthereumAddress(value.nft_platform_contract),
                       type: EthereumTokenType.ERC721,
                       chainId: ChainId.Mainnet,
                   }

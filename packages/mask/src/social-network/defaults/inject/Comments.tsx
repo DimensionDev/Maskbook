@@ -32,12 +32,7 @@ export function injectPostCommentsDefault<T extends string>(
         const commentWatcher = new MutationObserverWatcher(selector, document.body).useForeach(
             (commentNode, key, meta) => {
                 const commentRef = new ValueRef(collectNodeText(commentNode))
-                const needZipF =
-                    needZip ||
-                    (() => {
-                        commentNode.style.whiteSpace = 'nowrap'
-                        commentNode.style.overflow = 'hidden'
-                    })
+                const needZipF = needZip || (() => undefined)
                 const root = createReactRootShadowed(meta.afterShadow, { signal })
                 root.render(
                     <PostInfoProvider post={current}>
