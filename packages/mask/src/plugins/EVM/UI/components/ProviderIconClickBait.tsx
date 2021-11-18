@@ -2,7 +2,13 @@ import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { NetworkType, ProviderType, resolveProviderDownloadLink, useWallets } from '@masknet/web3-shared-evm'
+import {
+    isInjectedProvider,
+    NetworkType,
+    ProviderType,
+    resolveProviderDownloadLink,
+    useWallets,
+} from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'
 import { useInjectedProviderReady, useInjectedProviderType } from '../../hooks'
 
@@ -33,11 +39,7 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
 
     const onClickProvider = useCallback(async () => {
         // open the download page
-        if (
-            [ProviderType.MetaMask, ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(
-                providerType,
-            )
-        ) {
+        if (isInjectedProvider(providerType) || ProviderType.MetaMask === providerType) {
             if (!injectedProviderReady || providerType !== injectedProviderType) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
                 if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
