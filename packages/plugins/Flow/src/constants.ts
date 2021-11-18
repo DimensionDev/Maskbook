@@ -1,8 +1,8 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { NetworkType, ProviderType } from '@masknet/web3-shared-flow/types'
 
-export const PLUGIN_META_KEY = 'com.maskbook.flow'
-export const PLUGIN_ID = 'com.maskbook.flow'
+export const PLUGIN_META_KEY = 'com.mask.flow'
+export const PLUGIN_ID = 'com.mask.flow'
 export const PLUGIN_NAME = 'Flow Chain'
 export const PLUGIN_ICON = 'F'
 export const PLUGIN_DESCRIPTION = ''
