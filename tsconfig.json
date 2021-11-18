@@ -1,7 +1,8 @@
 {
   "references": [
     // Only list top-level projects here
-    { "path": "./packages/maskbook/" },
+    { "path": "./packages/polyfills/" },
+    { "path": "./packages/mask/" },
     { "path": "./packages/injected-script/main" },
     { "path": "./packages/mask-sdk/main" },
     { "path": "./packages/mask-sdk/public-api" },
@@ -10,7 +11,9 @@
     { "path": "./packages/dashboard/stories" },
     { "path": "./packages/theme/stories" },
     // Tests
-    { "path": "./packages/backup-format/tsconfig.tests.json" }
+    { "path": "./packages/backup-format/tsconfig.tests.json" },
+    // All plugins should be type checked too
+    { "path": "./packages/plugins" }
   ],
   "compilerOptions": {
     // Classification follows https://www.typescriptlang.org/tsconfig

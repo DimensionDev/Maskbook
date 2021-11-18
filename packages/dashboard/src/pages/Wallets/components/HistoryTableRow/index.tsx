@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import formatDateTime from 'date-fns/format'
 import type { Transaction } from '@masknet/web3-shared-evm'
 import { Box, TableCell, TableRow, Typography, Link, Stack } from '@mui/material'
@@ -8,6 +8,7 @@ import {
     DebankTransactionDirection,
     formatEthereumAddress,
     resolveTransactionLinkOnExplorer,
+    TransactionType,
     useChainId,
     ZerionTransactionDirection,
 } from '@masknet/web3-shared-evm'
@@ -55,14 +56,23 @@ export interface HistoryTableRowProps {
 
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction }) => {
     const chainId = useChainId()
-    return <HistoryTableRowUI transaction={transaction} chainId={chainId} />
+
+    const transactionType = useMemo(() => {
+        if (transaction.type === TransactionType.CREATE_RED_PACKET) {
+            return 'Create Luck Drop'
+        }
+        return (transaction.type ?? '').replace(/_/g, ' ')
+    }, [transaction.type])
+
+    return <HistoryTableRowUI transaction={transaction} formattedType={transactionType} chainId={chainId} />
 })
 
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
     chainId: ChainId
+    formattedType: string
 }
 
-export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId }) => {
+export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId, formattedType }) => {
     const { classes } = useStyles()
     return (
         <TableRow>
@@ -76,7 +86,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                     />
                     <Stack pl={2}>
                         <Typography textAlign="left" className={classes.type} variant="body2">
-                            {(transaction.type ?? '').replace(/_/g, ' ')}
+                            {formattedType}
                         </Typography>
                         <Typography fontSize={12} textAlign="left" color={MaskColorVar.textSecondary}>
                             {formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}

@@ -1,6 +1,16 @@
 import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
+export interface SendOverrides {
+    chainId?: ChainId
+    account?: string
+    providerType?: ProviderType
+}
+
+export interface RequestOptions {
+    popupsWindow?: boolean
+}
+
 export enum CurrencyType {
     USD = 'usd',
 }
@@ -8,6 +18,7 @@ export enum CurrencyType {
 export interface PriceRecord {
     [currency: string]: number
 }
+
 /** Base on response of coingecko's token price API */
 export interface CryptoPrice {
     [token: string]: PriceRecord
@@ -46,6 +57,9 @@ export enum ProviderType {
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
+    Coin98 = 'Coin98',
+    MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
     CustomNetwork = 'CustomNetwork',
 }
 
@@ -185,6 +199,16 @@ export type NonFungibleToken = ERC721Token | ERC1155Token
 export type NonFungibleTokenDetailed = ERC721TokenDetailed | ERC1155TokenDetailed
 //#endregion
 
+//#region token out of mask
+export type FungibleTokenOutMask = Omit<FungibleTokenDetailed, 'chainId'> & {
+    chain_id: ChainId
+}
+
+export type ERC721TokenOutMask = Omit<ERC721TokenDetailed, 'chainId'> & {
+    chain_id: ChainId
+}
+//#endregion
+
 interface TokenDetailedMap {
     [EthereumTokenType.Native]: NativeTokenDetailed
     [EthereumTokenType.ERC20]: ERC20TokenDetailed
@@ -252,6 +276,7 @@ export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+    ETH_CHAIN_ID = 'eth_chainId',
     ETH_ACCOUNTS = 'eth_accounts',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
@@ -262,6 +287,8 @@ export enum EthereumMethodType {
     ETH_GET_TRANSACTION_BY_HASH = 'eth_getTransactionByHash',
     ETH_GET_TRANSACTION_RECEIPT = 'eth_getTransactionReceipt',
     ETH_GET_TRANSACTION_COUNT = 'eth_getTransactionCount',
+    ETH_GET_FILTER_CHANGES = 'eth_getFilterChanges',
+    ETH_NEW_PENDING_TRANSACTION_FILTER = 'eth_newPendingTransactionFilter',
     ETH_ESTIMATE_GAS = 'eth_estimateGas',
     ETH_CALL = 'eth_call',
     ETH_SIGN = 'eth_sign',
@@ -270,6 +297,10 @@ export enum EthereumMethodType {
     ETH_SIGN_TRANSACTION = 'eth_signTransaction',
     ETH_GET_LOGS = 'eth_getLogs',
     ETH_GET_ENCRYPTION_PUBLIC_KEY = 'eth_getEncryptionPublicKey',
+
+    // only for mask
+    MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
+    MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {
@@ -307,11 +338,6 @@ export enum EthereumRpcType {
 export type EthereumRpcComputed =
     | {
           type: EthereumRpcType.CANCEL | EthereumRpcType.RETRY
-
-          /**
-           * The replacement transaction
-           */
-          tx: EthereumTransactionConfig
 
           /**
            * The original transaction config
@@ -438,7 +464,7 @@ export enum TransactionStatusType {
     CANCELLED = 3,
 }
 
-export type GasNow = {
+export type GasOptions = {
     rapid: number
     fast: number
     standard: number

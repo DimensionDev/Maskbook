@@ -15,13 +15,7 @@ export interface SharedNativeAPIs {
 /**
  * APIs that only implemented by iOS Mask Network
  */
-export interface iOSNativeAPIs extends SharedNativeAPIs {
-    /**
-     * Open a full screen QR Code scanner.
-     * @returns The scan result
-     */
-    scanQRCode(): Promise<string>
-}
+export interface iOSNativeAPIs extends SharedNativeAPIs {}
 /**
  * APIs that only implemented by Android Mask Network
  */

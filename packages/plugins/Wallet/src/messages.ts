@@ -1,15 +1,15 @@
 import type BigNumber from 'bignumber.js'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import type {
     FungibleTokenDetailed,
     ERC721ContractDetailed,
-    GasNow,
+    GasOptions,
     NetworkType,
     ProviderType,
     TransactionState,
     Wallet,
     GasOption,
 } from '@masknet/web3-shared-evm'
-import type { TransactionReceipt } from 'web3-core'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
 
@@ -27,7 +27,7 @@ export type TransactionDialogEvent =
 
 export type GasPriceDialogEvent = {
     open: boolean
-    type?: keyof GasNow
+    type?: keyof GasOptions
 }
 
 export type SelectProviderDialogEvent =
@@ -47,6 +47,7 @@ export type ConnectWalletDialogEvent =
       }
     | {
           open: false
+          result: boolean
       }
 
 export type SelectWalletDialogEvent =
@@ -64,7 +65,8 @@ export type WalletStatusDialogEvent = {
 
 export type GasSettingDialogEvent = {
     open: boolean
-    gasLimit: string
+    gasLimit: number
+    minGasLimit?: number
     gasPrice?: BigNumber.Value
     maxFee?: BigNumber.Value
     priorityFee?: BigNumber.Value
@@ -85,6 +87,10 @@ export type WalletRiskWarningDialogEvent =
           open: false
           type: 'cancel' | 'confirm'
       }
+
+export type RestoreLegacyWalletDialogEvent = {
+    open: boolean
+}
 
 export type WalletConnectQRCodeDialogEvent =
     | {
@@ -203,6 +209,12 @@ export interface WalletMessage {
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
+
+    /**
+     * Restore Legacy Wallet Dialog
+     */
+    restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
+
     /**
      * Select token dialog
      */
@@ -211,14 +223,19 @@ export interface WalletMessage {
     walletsUpdated: void
     phrasesUpdated: void
     addressBookUpdated: void
-    recentTransactionsUpdated: void
-    receiptUpdated: TransactionReceipt
+    transactionsUpdated: void
+    transactionStateUpdated: TransactionState
+    transactionProgressUpdated: {
+        state: TransactionState
+        payload: JsonRpcPayload
+    }
     requestsUpdated: { hasRequest: boolean }
     erc20TokensUpdated: void
     erc721TokensUpdated: void
     erc1155TokensUpdated: void
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
+
     rpc: unknown
 }
 

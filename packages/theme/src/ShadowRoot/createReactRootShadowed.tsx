@@ -12,7 +12,6 @@ export interface RenderInShadowRootConfig {
     signal?: AbortSignal
 }
 export interface CreateRenderInShadowRootConfig {
-    onHeadCreate?(head: HTMLHeadElement): void
     /**
      * A list of event that want to prevent to pop out to the ShadowRoot
      *
@@ -110,10 +109,6 @@ function mount(
         },
     }
     function getJSX(jsx: React.ReactChild) {
-        return (
-            <ShadowRootStyleProvider shadow={shadow} onHeadCreate={globalConfig.onHeadCreate}>
-                {wrap ? wrap(jsx) : jsx}
-            </ShadowRootStyleProvider>
-        )
+        return <ShadowRootStyleProvider shadow={shadow}>{wrap ? wrap(jsx) : jsx}</ShadowRootStyleProvider>
     }
 }

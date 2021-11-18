@@ -12,7 +12,7 @@ maintainer:
 `packages/plugins/example/src` is an example of this structure.
 
 ```plaintext
-packages/maskbook/src/plugins/{your-plugin-name}
+packages/mask/src/plugins/{your-plugin-name}
 ├── README.md           # see `README driven development`
 ├── index.ts            # Plugin registration
 ├── base.ts             # Basic definition of a plugin
@@ -36,20 +36,20 @@ The file need to provide this information:
 
 ## Registration
 
-Import your plugin definition at: `packages/maskbook/src/plugin-infra/register.ts`.
+Import your plugin definition at: `packages/mask/src/plugin-infra/register.ts`.
 
-If your plugin is defined at `packages/plugins/*` instead of `packages/maskbook/src/plugins/*`, please make sure you have set up the monorepo correctly.
+If your plugin is defined at `packages/plugins/*` instead of `packages/mask/src/plugins/*`, please make sure you have set up the monorepo correctly.
 
 Plugins defined at `packages/plugins/*` and compatible with the isolated dashboard should also be registered in `packages/dashboard/src/initialization/plugins.ts`
 
 ## Plugin APIs
 
 - Plugin definition: `packages/plugin-infra/src/types.ts`
-- Database: `createPluginDatabase` in `packages/maskbook/src/database/Plugin/wrap-plugin-database.ts`
+- Database: `context.getDatabaseStorage()` (2nd parameter of the `init` method of your `Worker` definition). See example in `packages/plugins/example/src/Worker/index.ts`.
 - Message emitter: `createPluginMessage` in `packages/plugin-infra/src/utils/message.ts`
 - RPC: `createPluginRPC` in `packages/plugin-infra/src/utils/rpc.ts`
-- Metadata reader: `createTypedMessageMetadataReader` in `packages/maskbook/src/protocols/typed-message/metadata.ts`
-- React renderer with metadata reader: `createRenderWithMetadata` in `packages/maskbook/src/protocols/typed-message/metadata.ts`
+- Metadata reader: `createTypedMessageMetadataReader` in `packages/mask/src/protocols/typed-message/metadata.ts`
+- React renderer with metadata reader: `createRenderWithMetadata` in `packages/mask/src/protocols/typed-message/metadata.ts`
 
 ## Architecture
 
@@ -85,7 +85,7 @@ you can insert your metadata into the post and it will be contained in the encry
 When you see metadata in the post payload,
 you should render some UI to reveal the information in the metadata and allow the user to interact with it.
 
-Notice please treat the metadata you received as untrustable data,
+Notice please treat the metadata you received as non trustable data,
 make sure you have validated the formats and the data range.
 We provided a utility to read the data from the post and validate it with JSON schema.
 

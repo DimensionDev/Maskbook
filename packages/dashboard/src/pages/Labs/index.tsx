@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/DashboardFrame'
-import PluginItem, { PluginItemPlaceholder } from './components/PluginItem'
+import PluginItem from './components/PluginItem'
 import {
     FileServiceIcon,
     MarketsIcon,
@@ -15,6 +15,7 @@ import {
     GitcoinIcon,
     ValuablesIcon,
     DhedgeIcon,
+    PetIcon,
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
@@ -65,13 +66,16 @@ export default function Plugins() {
 
     const account = useAccount()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
-    const openTransakDialog = useCallback((code?: string) => {
-        setBuyDialog({
-            open: true,
-            address: account,
-            code,
-        })
-    }, [])
+    const openTransakDialog = useCallback(
+        (code?: string) => {
+            setBuyDialog({
+                open: true,
+                address: account,
+                code,
+            })
+        },
+        [account],
+    )
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
@@ -179,7 +183,14 @@ export default function Plugins() {
                             onExplore={onExplore}
                             onSwitch={onSwitch}
                         />
-                        <PluginItemPlaceholder />
+                        <PluginItem
+                            id={PLUGIN_IDS.PETS}
+                            title={t.labs_pets()}
+                            desc={t.labs_pets_desc()}
+                            icon={<PetIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.PETS]}
+                            onSwitch={onSwitch}
+                        />
                     </Box>
                     <Box className={classes.list}>
                         <PluginItem

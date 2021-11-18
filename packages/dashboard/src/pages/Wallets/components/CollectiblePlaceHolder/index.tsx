@@ -3,9 +3,9 @@ import { MiniMaskIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
-import { Box } from '@mui/system'
 import { ChainIcon } from '@masknet/shared'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { Box } from '@mui/material'
 
 const useStyles = makeStyles()({
     container: {

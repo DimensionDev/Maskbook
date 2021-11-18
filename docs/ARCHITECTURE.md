@@ -18,7 +18,7 @@ maintainer:
 
 ### Background service
 
-The entry point is `packages/maskbook/src/background-service.ts`
+The entry point is `packages/mask/src/background-service.ts`
 
 Background service is like a "backend" or "server" in a normal web app.
 It is running on a web page that not visible to the user ([background page in Web Extensions][background-page]).
@@ -34,19 +34,19 @@ It is sending the request to the background service.
 
 ### Content scripts
 
-The entry point is `packages/maskbook/src/content-script.ts`.
+The entry point is `packages/mask/src/content-script.ts`.
 
 All UI on the Twitter/Facebook are rendered by the content scripts.
 
 ### Options page (or Dashboard)
 
-The entry point is `packages/maskbook/src/extension/options-page/index.tsx`.
+The entry point is `packages/mask/src/extension/options-page/index.tsx`.
 
 This is a normal web app that interacts with the background page.
 
 ### Injected scripts
 
-The entry point is `packages/maskbook/src/extension/injected-script/index.ts`.
+The entry point is `packages/mask/src/extension/injected-script/index.ts`.
 
 Generally, you don't need to modify this. It provides the ability to change the main Realm of the web page. (Thus we can emulate some DOM events).
 

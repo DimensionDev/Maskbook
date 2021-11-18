@@ -53,6 +53,8 @@ const CancelButton = styled(Button)(
 `,
 )
 
+const MASK_PRIVACY_POLICY = 'https://legal.mask.io/maskbook/privacy-policy-browser.html'
+
 const Welcome = memo(() => {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
     const mode = useTheme().palette.mode
@@ -95,7 +97,7 @@ const Welcome = memo(() => {
     }
 
     const handleLinkClick = () => {
-        window.open(`next.html#${RoutePaths.PrivacyPolicy}`)
+        window.open(MASK_PRIVACY_POLICY)
     }
 
     useEffect(

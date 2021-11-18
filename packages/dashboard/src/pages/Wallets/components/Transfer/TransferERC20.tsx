@@ -30,14 +30,14 @@ interface TransferERC20Props {
     token: FungibleTokenDetailed
 }
 
-const GAS_LIMIT = '30000'
+const GAS_LIMIT = 30000
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
 
-    const [gasLimit_, setGasLimit_] = useState('0')
+    const [gasLimit_, setGasLimit_] = useState(0)
 
     const { value: defaultGasPrice = '0' } = useGasPrice()
 
@@ -62,11 +62,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     // transfer amount
     const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(selectedToken.decimals)).toFixed()
     const erc20GasLimit = useGasLimit(selectedToken.type, selectedToken.address, transferAmount, address)
-    const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_)
+    const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
 
     useEffect(() => {
-        setGasLimit_(isNativeToken ? GAS_LIMIT : erc20GasLimit.value?.toFixed() ?? '0')
+        setGasLimit_(isNativeToken ? GAS_LIMIT : erc20GasLimit.value ?? 0)
     }, [isNativeToken, erc20GasLimit.value])
 
     const gasFee = useMemo(() => {

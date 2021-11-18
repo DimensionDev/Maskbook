@@ -1,11 +1,11 @@
 import { memo } from 'react'
-import { styled, Typography, Box, Button, buttonClasses, Stack } from '@mui/material'
+import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { MaskWalletIcon, SendIcon, CardIcon, SwapIcon, DownloadIcon } from '@masknet/icons'
+import { MaskColorVar } from '@masknet/theme'
+import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
 import type { NetworkType } from '@masknet/web3-shared-evm'
-import { ChainId, getChainIdFromNetworkType, getChainName } from '@masknet/web3-shared-evm'
-import { ChainIcon } from '@masknet/shared'
+import { ChainId, getChainName } from '@masknet/web3-shared-evm'
+import { MiniNetworkSelector } from '@masknet/shared'
 import { useMatch } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 
@@ -66,44 +66,6 @@ const BalanceContent = styled(Typography)(
 `,
 )
 
-const useStyles = makeStyles()((theme) => ({
-    networkSelected: {
-        opacity: 1,
-        '&:after': {
-            content: '""',
-            position: 'absolute',
-            bottom: -8,
-            right: 13,
-            display: 'inline-block',
-            width: 4,
-            height: 4,
-            background: MaskColorVar.primary,
-            borderRadius: '50%',
-        },
-    },
-    networkDisabled: {
-        cursor: 'not-allowed',
-        '&:hover': {
-            opacity: 0.6,
-        },
-    },
-}))
-
-const AllNetworkButton = styled(Button)(({ theme }) => ({
-    display: 'inline-block',
-    padding: 0,
-    lineHeight: '30px',
-    width: 30,
-    height: 30,
-    minWidth: 30,
-    borderRadius: '50%',
-    fontSize: 12,
-    '&:hover': {
-        boxShadow: 'none',
-    },
-    opacity: 0.5,
-}))
-
 const ButtonGroup = styled('div')`
     display: inline-grid;
     gap: 10px;
@@ -120,12 +82,12 @@ const ButtonGroup = styled('div')`
 export const Balance = memo<BalanceCardProps>(
     ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedChainId }) => {
         const t = useDashboardI18N()
-        const { classes } = useStyles()
 
         const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
         const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
-        const isDisabledChange = isWalletTransferPath
-        const isHiddenAllButton = isWalletHistoryPath || isWalletTransferPath
+
+        const isDisabledNonCurrentChainSelect = !!isWalletTransferPath
+        const isHiddenAllButton = !!isWalletHistoryPath || !!isWalletTransferPath
 
         return (
             <BalanceContainer>
@@ -146,36 +108,13 @@ export const Balance = memo<BalanceCardProps>(
                                       currency: 'USD',
                                   })}
                         </BalanceContent>
-                        <Stack direction="row">
-                            {!isHiddenAllButton && (
-                                <AllNetworkButton
-                                    className={selectedChainId === null ? classes.networkSelected : ''}
-                                    onClick={() => onSelectNetwork(null)}>
-                                    ALL
-                                </AllNetworkButton>
-                            )}
-                            {networks.map((network) => {
-                                const chainId = getChainIdFromNetworkType(network)
-                                return (
-                                    <Box
-                                        key={chainId}
-                                        position="relative"
-                                        ml={1}
-                                        height={30}
-                                        onClick={() => !isDisabledChange && onSelectNetwork(chainId)}
-                                        sx={{ cursor: 'pointer', opacity: '0.6', ':hover': { opacity: 1 } }}
-                                        className={
-                                            selectedChainId === chainId
-                                                ? classes.networkSelected
-                                                : isDisabledChange
-                                                ? classes.networkDisabled
-                                                : ''
-                                        }>
-                                        <ChainIcon chainId={chainId} size={30} />
-                                    </Box>
-                                )
-                            })}
-                        </Stack>
+                        <MiniNetworkSelector
+                            hideAllNetworkButton={isHiddenAllButton}
+                            disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
+                            onSelect={onSelectNetwork}
+                            selectedChainId={selectedChainId}
+                            networks={networks}
+                        />
                     </BalanceDisplayContainer>
                 </Box>
                 <ButtonGroup>

@@ -130,7 +130,9 @@ export const Dialog: Theme = (mode, colors): ThemeOptions => ({
         MuiDialog: {
             styleOverrides: {
                 root: {
-                    [`& .dashboard-style`]: { backgroundColor: 'initial' },
+                    [`& .dashboard-style`]: {
+                        backgroundColor: mode === 'dark' ? colors.primaryBackground : colors.secondaryBackground,
+                    },
                 },
                 paper: { minHeight: 200, minWidth: 440, background: colors.mainBackground },
             },

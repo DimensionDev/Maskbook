@@ -6,6 +6,8 @@
 type ProfileIdentifier_string = string
 type PersonaIdentifier_string = string
 export interface MaskNetworkAPIs {
+    app_suspended(): Promise<void>
+    app_resume(): Promise<void>
     /**
      * Echo the message back.
      */
@@ -55,6 +57,10 @@ export interface MaskNetworkAPIs {
     persona_backupBase64(params: { identifier: PersonaIdentifier_string }): Promise<string>
     persona_backupJson(params: { identifier: PersonaIdentifier_string }): Promise<unknown>
     persona_backupPrivateKey(params: { identifier: PersonaIdentifier_string }): Promise<string | undefined>
+    persona_getCurrentPersonaIdentifier(): Promise<string | undefined>
+    persona_setCurrentPersonaIdentifier(params: { identifier: PersonaIdentifier_string }): Promise<void>
+    persona_getOwnedPersonaInformation(params: { identifier: PersonaIdentifier_string }): Promise<PersonaInformation>
+    persona_logout(params: { identifier: PersonaIdentifier_string }): Promise<void>
     profile_queryProfiles(params: { network: string }): Promise<Profile[]>
     profile_queryMyProfiles(params: { network: string }): Promise<Profile[]>
     profile_updateProfileInfo(params: {
@@ -62,10 +68,29 @@ export interface MaskNetworkAPIs {
         data: { nickname?: string; avatarURL?: string }
     }): Promise<void>
     profile_removeProfile(params: { identifier: ProfileIdentifier_string }): Promise<void>
+    profile_updateRelation(params: {
+        profile: ProfileIdentifier_string
+        linked: PersonaIdentifier_string
+        favor: RelationFavor
+    }): Promise<void>
+    profile_queryRelationPaged(params: { network: string; after?: RelationRecord; count: number }): Promise<Profile[]>
     wallet_updateEthereumAccount(params: { account: string }): Promise<void>
     wallet_updateEthereumChainId(params: { chainId: number }): Promise<void>
     wallet_getLegacyWalletInfo(): Promise<WalletInfo[]>
     SNSAdaptor_getCurrentDetectedProfile(): Promise<ProfileIdentifier_string | undefined>
+}
+
+export interface RelationRecord {
+    profile: ProfileIdentifier_string
+    linked: PersonaIdentifier_string
+    network: string
+    favor: RelationFavor
+}
+
+export enum RelationFavor {
+    COLLECTED = -1,
+    UNCOLLECTED = 1,
+    DEPRECATED = 0,
 }
 
 export interface WalletInfo {
@@ -91,6 +116,18 @@ export interface Profile {
     updatedAt: number
 }
 
+export interface ProfileRelation {
+    identifier: string
+    nickname?: string
+    linkedPersona: boolean
+    /** Unix timestamp */
+    createdAt: number
+    /** Unix timestamp */
+    updatedAt: number
+    favor: RelationFavor
+    personaIdentifier?: string
+}
+
 export interface ProfileState {
     [key: string]: 'pending' | 'confirmed'
 }
@@ -104,6 +141,18 @@ export interface Persona {
     createdAt: number
     /** Unix timestamp */
     updatedAt: number
+}
+
+export interface PersonaInformation {
+    nickname?: string
+    identifier: string
+    linkedProfiles: ProfileInformation[]
+}
+
+export interface ProfileInformation {
+    nickname?: string
+    avatar?: string
+    identifier: string
 }
 
 export interface BackupOptions {
