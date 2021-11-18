@@ -12,7 +12,7 @@ import { createPluginDBAccess, PluginDatabase, pluginDataHasValidKeyPath, toStor
  * const worker: Plugin.Worker.Definition = {
  *     ...base,
  *     init(signal, context) {
- *         storage = context.getStorage()
+ *         storage = context.getDatabaseStorage()
  *         // get it here, instance of calling this function directly.
  *     },
  * }

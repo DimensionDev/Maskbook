@@ -1,15 +1,16 @@
 import type { KVStorageBackend } from '.'
-
+import { defer } from '../utils/defer'
 export interface ProxiedKVStorageBackend extends KVStorageBackend {
     replaceBackend(backend: KVStorageBackend): void
 }
 
 export function createProxyKVStorageBackend(): ProxiedKVStorageBackend {
     let target: KVStorageBackend
+    let [promise, resolve, reject] = defer<void>()
 
     return {
         get beforeAutoSync() {
-            return target!.beforeAutoSync
+            return promise
         },
         async getValue(...args) {
             return target!.getValue(...args)
@@ -19,6 +20,11 @@ export function createProxyKVStorageBackend(): ProxiedKVStorageBackend {
         },
         replaceBackend(backend: KVStorageBackend) {
             target = backend
+            // resolve old one
+            backend.beforeAutoSync.then(resolve, reject)
+            // setup new one
+            ;[promise, resolve, reject] = defer()
+            backend.beforeAutoSync.then(resolve, reject)
         },
     }
 }
