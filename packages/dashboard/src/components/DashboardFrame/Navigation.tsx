@@ -54,10 +54,13 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
             paddingLeft: theme.spacing(2),
             cursor: 'pointer',
+            '&:hover': {
+                background: theme.palette.background.default,
+            },
         },
         [`&.${listItemClasses.selected}`]: {
             color: MaskColorVar.textLink,
-            backgroundColor: 'transparent',
+            backgroundColor: theme.palette.background.default,
             position: 'relative',
             [`${listItemIconClasses.root}`]: {
                 color: MaskColorVar.textLink,
