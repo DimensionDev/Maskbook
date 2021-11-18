@@ -3,7 +3,8 @@ import { useCopyToClipboard } from 'react-use'
 import { CopyIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, IconButton, Typography } from '@mui/material'
-import { useAccount, useFCL } from '@masknet/web3-shared-flow'
+import { useAccount, useBalance } from '@masknet/plugin-infra'
+import { useFCL } from '../../hooks'
 import { useI18N } from '../../locales'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,7 +46,8 @@ export function PluginPanel(props: PluginPanelProps) {
     const { classes } = useStyles()
 
     const fcl = useFCL()
-    const { value: account } = useAccount()
+    const account = useAccount()
+    const balance = useBalance()
     const [, copyToClipboard] = useCopyToClipboard()
 
     const onLogIn = useCallback(() => fcl.logIn(), [fcl])
@@ -54,7 +56,7 @@ export function PluginPanel(props: PluginPanelProps) {
 
     console.log(account)
 
-    if (account?.address)
+    if (account)
         return (
             <Box className={classes.root}>
                 <Box className={classes.main}>
@@ -64,17 +66,14 @@ export function PluginPanel(props: PluginPanelProps) {
                         </Typography>
                     </Box>
                     <Box display="flex">
-                        <Typography color="textSecondary">{account.address}</Typography>
-                        <IconButton
-                            size="small"
-                            sx={{ marginLeft: 0.5 }}
-                            onClick={() => copyToClipboard(account.address)}>
+                        <Typography color="textSecondary">{account}</Typography>
+                        <IconButton size="small" sx={{ marginLeft: 0.5 }} onClick={() => copyToClipboard(account)}>
                             <CopyIcon className={classes.copy} />
                         </IconButton>
                     </Box>
                     <Box display="flex" sx={{ marginTop: 1, marginBottom: 1 }}>
                         <Typography className={classes.balance} variant="h4" color="textPrimary">
-                            {account.balance} FLOW
+                            {balance} FLOW
                         </Typography>
                     </Box>
                 </Box>

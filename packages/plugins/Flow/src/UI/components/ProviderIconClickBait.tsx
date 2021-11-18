@@ -1,6 +1,6 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { useFCL } from '@masknet/web3-shared-flow'
+import { useFCL } from '../../hooks'
 import { getStorage } from '../../storage'
 
 export interface ProviderIconClickBaitProps {

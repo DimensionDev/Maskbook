@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
-import * as SDK from '../sdk'
-import { useChainId } from './useChainId'
+import * as SDK from '@masknet/web3-shared-flow'
+import { useChainId } from '@masknet/plugin-infra'
 
 export function useFCL() {
     const chainId = useChainId()
