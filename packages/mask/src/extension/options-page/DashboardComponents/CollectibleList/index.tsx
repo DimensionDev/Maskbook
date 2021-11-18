@@ -77,7 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         background: 'rgba(229,232,235,1)',
     },
     collectionImg: {
-        objectFit: 'contain',
+        objectFit: 'cover',
         width: '100%',
         height: '100%',
         borderRadius: '50%',
@@ -288,7 +288,7 @@ export function CollectionList({ address }: { address: string }) {
         <Box>
             {rendCollections.map((x, i) => (
                 <Box key={i}>
-                    <Box display="flex" alignItems="center" sx={{ marginTop: '24px' }}>
+                    <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
                         <Box className={classes.collectionWrap}>
                             {x.image ? <Image component="img" className={classes.collectionImg} src={x.image} /> : null}
                         </Box>

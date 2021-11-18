@@ -72,9 +72,8 @@ export function NFTPage(props: NFTPageProps) {
                         className={classes.note}
                         display="flex"
                         alignItems="center"
-                        justifyContent="space-between"
+                        justifyContent="flex-end"
                         flexWrap="wrap">
-                        <Typography color="textPrimary">{t('view_in_collections')}</Typography>
                         <Box display="flex" alignItems="center">
                             <Typography color="textPrimary" component="span">
                                 Current display of {type}:{' '}
