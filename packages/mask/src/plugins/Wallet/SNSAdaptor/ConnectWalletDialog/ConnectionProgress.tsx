@@ -1,10 +1,12 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
-import { ProviderIcon, useStylesExtends } from '@masknet/shared'
-import { ProviderType, InjectedProviderType, resolveCalculatedProviderName } from '@masknet/web3-shared-evm'
+import { useStylesExtends, ImageIcon } from '@masknet/shared'
+import { useProviderDescriptor } from '@masknet/plugin-infra'
+import { ProviderType, resolveProviderName } from '@masknet/web3-shared-evm'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
+import { PLUGIN_ID } from '../../../EVM/constants'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -21,31 +23,28 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface ConnectionProgressProps extends withClasses<never> {
     providerType: ProviderType
-    injectedProviderType?: InjectedProviderType
     connection: AsyncStateRetry<true>
 }
 
 export function ConnectionProgress(props: ConnectionProgressProps) {
-    const { providerType, injectedProviderType, connection } = props
+    const { providerType, connection } = props
     const { value: connected, loading, error, retry } = connection
 
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const providerDescriptor = useProviderDescriptor(providerType, PLUGIN_ID)
+
     return (
         <Paper elevation={0}>
             <Card className={`${classes.content} dashboard-style`} elevation={0}>
                 <Box display="flex" alignItems="center">
-                    <ProviderIcon providerType={providerType} injectedProviderType={injectedProviderType} />
+                    <ImageIcon icon={providerDescriptor?.icon} />
                     <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
                         {connected ? (
-                            <Typography>
-                                Connected to {resolveCalculatedProviderName(providerType, injectedProviderType)}
-                            </Typography>
+                            <Typography>Connected to {resolveProviderName(providerType)}</Typography>
                         ) : (
-                            <Typography>
-                                Connect to {resolveCalculatedProviderName(providerType, injectedProviderType)}
-                            </Typography>
+                            <Typography>Connect to {resolveProviderName(providerType)}</Typography>
                         )}
                         {loading ? (
                             <Box display="flex" alignItems="center">
@@ -55,11 +54,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         ) : null}
                         {!loading && error ? (
                             <Typography className={classes.error} color="red" variant="body2">
-                                {error.message ??
-                                    `Failed to connect to ${resolveCalculatedProviderName(
-                                        providerType,
-                                        injectedProviderType,
-                                    )}.`}
+                                {error.message || `Failed to connect to ${resolveProviderName(providerType)}.`}
                             </Typography>
                         ) : null}
                     </Box>

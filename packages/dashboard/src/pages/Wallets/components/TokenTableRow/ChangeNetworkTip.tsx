@@ -43,7 +43,9 @@ export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
-                case ProviderType.Injected:
+                case ProviderType.Coin98:
+                case ProviderType.WalletLink:
+                case ProviderType.MathWallet:
                     setConnectWalletDialog({
                         open: true,
                         providerType,

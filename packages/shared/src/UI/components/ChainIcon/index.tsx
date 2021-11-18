@@ -1,7 +1,7 @@
 import { memo } from 'react'
-import { ChainId, getChainDetailed, getNetworkTypeFromChainId, resolveChainColor } from '@masknet/web3-shared-evm'
+import { ChainId, getChainDetailed, resolveChainColor } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { NetworkIcon } from '../NetworkIcon'
+import { ImageIcon } from '../ImageIcon'
 
 const useStyles = makeStyles()((theme) => ({
     point: {
@@ -25,7 +25,7 @@ export const ChainIcon = memo<ChainIconProps>(({ chainId, size, bordered }) => {
     const chainDetail = getChainDetailed(chainId)
 
     return chainDetail?.network === 'mainnet' ? (
-        <NetworkIcon size={size ?? 20} networkType={getNetworkTypeFromChainId(chainId)} bordered={bordered ?? false} />
+        <ImageIcon size={size ?? 20} />
     ) : (
         <div
             style={{

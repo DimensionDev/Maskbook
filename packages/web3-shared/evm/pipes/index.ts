@@ -7,7 +7,6 @@ import {
     NativeToken,
     NetworkType,
     ProviderType,
-    InjectedProviderType,
     CollectibleProvider,
     ERC721TokenDetailed,
 } from '../types'
@@ -15,59 +14,45 @@ import { getChainDetailed, createLookupTableResolver } from '../utils'
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
     {
-        [ProviderType.Injected]: 'Injected Web3',
-        [ProviderType.MaskWallet]: 'Mask',
+        [ProviderType.MaskWallet]: 'Mask Network',
         [ProviderType.MetaMask]: 'MetaMask',
         [ProviderType.WalletConnect]: 'WalletConnect',
         [ProviderType.CustomNetwork]: 'CustomNetwork',
+        [ProviderType.Coin98]: 'Coin98',
+        [ProviderType.WalletLink]: 'Coinbase',
+        [ProviderType.MathWallet]: 'MathWallet',
     },
     'Unknown Network',
 )
 
-export const resolveInjectedProviderName = createLookupTableResolver<InjectedProviderType, string>(
+export const resolveProviderDownloadLink = createLookupTableResolver<ProviderType, string>(
     {
-        [InjectedProviderType.MetaMask]: 'MetaMask (Injected)',
-        [InjectedProviderType.MathWallet]: 'MathWallet',
-        [InjectedProviderType.Coin98]: 'Coin98',
-        [InjectedProviderType.WalletLink]: 'Coinbase',
-        [InjectedProviderType.Unknown]: 'Injected Web3',
-    },
-    'Injected Web3',
-)
-
-export const resolveInjectedProviderDownloadLink = createLookupTableResolver<InjectedProviderType, string>(
-    {
-        [InjectedProviderType.MetaMask]: 'https://metamask.io/download.html',
-        [InjectedProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
-        [InjectedProviderType.Coin98]: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
-        [InjectedProviderType.WalletLink]: 'https://wallet.coinbase.com/',
-        [InjectedProviderType.Unknown]: '',
+        [ProviderType.MaskWallet]: 'https://mask.io/download-links',
+        [ProviderType.MetaMask]: 'https://metamask.io/download.html',
+        [ProviderType.WalletConnect]: '',
+        [ProviderType.Coin98]: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
+        [ProviderType.WalletLink]: 'https://wallet.coinbase.com/',
+        [ProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
+        [ProviderType.CustomNetwork]: '',
     },
     '',
 )
 
-export const resolveInjectedProviderIdentityKey = createLookupTableResolver<
-    InjectedProviderType,
-    'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
+export const resolveProviderIdentityKey = createLookupTableResolver<
+    ProviderType,
+    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
 >(
     {
-        [InjectedProviderType.MetaMask]: 'isMetaMask',
-        [InjectedProviderType.MathWallet]: 'isMathWallet',
-        [InjectedProviderType.Coin98]: 'isCoin98',
-        [InjectedProviderType.WalletLink]: 'isWalletLink',
-        [InjectedProviderType.Unknown]: '',
+        [ProviderType.MaskWallet]: 'isMaskWallet',
+        [ProviderType.MetaMask]: 'isMetaMask',
+        [ProviderType.WalletConnect]: '',
+        [ProviderType.MathWallet]: 'isMathWallet',
+        [ProviderType.Coin98]: 'isCoin98',
+        [ProviderType.WalletLink]: 'isWalletLink',
+        [ProviderType.CustomNetwork]: '',
     },
     '',
 )
-
-export const resolveCalculatedProviderName = (
-    providerType: ProviderType,
-    injectedProviderType?: InjectedProviderType,
-) => {
-    if (providerType === ProviderType.Injected && injectedProviderType)
-        return resolveInjectedProviderName(injectedProviderType)
-    return resolveProviderName(providerType)
-}
 
 export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType, string>(
     {

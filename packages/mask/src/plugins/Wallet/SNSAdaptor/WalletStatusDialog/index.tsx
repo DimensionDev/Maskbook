@@ -5,7 +5,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { useChainIdValid } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { MaskApplicationBox } from '../../../../components/shared/MaskApplicationBox'
+import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
@@ -62,7 +62,7 @@ export function WalletStatusDialog() {
                 <Typography className={classes.subTitle}>{t('wallets')}</Typography>
                 <WalletStatusBox />
                 <Typography className={classes.subTitle}>{t('applications')}</Typography>
-                <MaskApplicationBox />
+                <ApplicationBoard />
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>
