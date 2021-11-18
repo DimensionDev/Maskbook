@@ -1,5 +1,6 @@
 import { noop } from 'lodash-es'
-import type { Subscription } from 'use-subscription'
+import type { Subscription, Unsubscribe } from 'use-subscription'
+import type { ScopedStorage } from '..'
 
 export function createConstantSubscription<T>(value: T) {
     return {
@@ -58,4 +59,17 @@ function getEventTarget() {
         return () => event.removeEventListener(EVENT, f)
     }
     return { trigger, subscribe }
+}
+
+export function createSubscriptionFromScopedStorage<T, S extends object>(
+    storage: ScopedStorage<S>,
+    valueGetter: (storage: ScopedStorage<S>) => T,
+    subscribeGetter: (storage: ScopedStorage<S>) => (callback: () => void) => Unsubscribe,
+): Subscription<T> {
+    return {
+        getCurrentValue: () => {
+            return valueGetter(storage)
+        },
+        subscribe: subscribeGetter(storage),
+    }
 }
