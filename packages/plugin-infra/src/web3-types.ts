@@ -1,7 +1,6 @@
-import type { Subscription } from 'use-subscription'
 import type { BigNumber } from 'bignumber.js'
-import type { Pagination } from './types'
-import type { Plugin } from '.'
+import type { Subscription } from 'use-subscription'
+import type { Pagination, Plugin } from './types'
 
 export declare namespace Web3Plugin {
     export interface EnableRequirement {

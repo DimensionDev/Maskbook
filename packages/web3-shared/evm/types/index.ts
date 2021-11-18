@@ -592,3 +592,17 @@ export enum GasOption {
     Medium = 'medium',
     High = 'high',
 }
+
+export enum TransactionStateType {
+    UNKNOWN = 0,
+    /** Wait for external provider */
+    WAIT_FOR_CONFIRMING = 1,
+    /** Hash is available */
+    HASH = 2,
+    /** Receipt is available */
+    RECEIPT = 3,
+    /** Confirmed or Reverted */
+    CONFIRMED = 4,
+    /** Fail to send */
+    FAILED = 5,
+}

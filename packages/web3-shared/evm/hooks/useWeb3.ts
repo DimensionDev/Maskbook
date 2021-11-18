@@ -1,8 +1,10 @@
 import Web3 from 'web3'
 import { useMemo } from 'react'
 import { first } from 'lodash-unified'
-import { useChainId, useWeb3Provider } from '.'
-import { useRPCConstants, ChainId } from '..'
+import { useChainId } from './useChainId'
+import { useWeb3Provider } from './useWeb3Provider'
+import type { ChainId } from '../types'
+import { useRPCConstants } from '../constants'
 
 function useWeb3Instance() {
     const provider = useWeb3Provider()

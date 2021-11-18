@@ -1,4 +1,5 @@
-import { useChainId, useWeb3State } from '.'
+import { useChainId } from './useChainId'
+import { useWeb3State } from './useWeb3State'
 
 export function useChainDetailed() {
     const chainId = useChainId()

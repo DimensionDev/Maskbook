@@ -1,5 +1,6 @@
-import { useNetworkType, usePluginIDContext } from '.'
-import { getPluginDefine } from '..'
+import { useNetworkType } from './useNetworkType'
+import { usePluginIDContext } from './Context'
+import { getPluginDefine } from '../manager/store'
 
 export function useNetworkDescriptor(expectedNetworkTypeOrID?: string, expectedPluginID?: string) {
     const pluginID = usePluginIDContext()
