@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { head, isNull } from 'lodash-es'
+import { head, isNull } from 'lodash-unified'
 import { PluginCollectibleRPC } from '../../Collectible/messages'
 import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../Collectible/utils'
 import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared-evm'

@@ -1,4 +1,4 @@
-import { head, toString } from 'lodash-es'
+import { head, toString } from 'lodash-unified'
 import { OpenSeaPort } from 'opensea-js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { request, requestSend } from '../../../extension/background-script/EthereumService'

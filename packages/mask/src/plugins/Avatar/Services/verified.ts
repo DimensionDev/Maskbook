@@ -1,5 +1,5 @@
 import { isSameAddress } from '@masknet/web3-shared-evm'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { NFT_CONTRACT_JSON_VERIFIED_SERVER } from '../constants'
 import type { NFTVerified } from '../types'
 

@@ -1,6 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import { BigNumber } from 'bignumber.js'
-import { head } from 'lodash-es'
+import { head } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import { PluginCollectibleRPC } from '../messages'
 import { CollectibleProvider, CollectibleToken } from '../types'
