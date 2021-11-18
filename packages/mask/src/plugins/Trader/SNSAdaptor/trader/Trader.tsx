@@ -314,10 +314,10 @@ export function Trader(props: TraderProps) {
     }, [targetChainId, inputToken, outputToken, inputAmount])
 
     useUpdateEffect(() => {
-        if (targetChainId) {
-            setTargetChainId(targetChainId)
+        if (chainId) {
+            setTargetChainId(chainId)
         }
-    }, [targetChainId])
+    }, [chainId])
 
     return (
         <div className={classes.root}>

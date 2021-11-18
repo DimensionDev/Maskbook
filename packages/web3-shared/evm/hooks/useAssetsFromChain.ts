@@ -14,7 +14,15 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
     const nativeToken = first(tokens.filter((x) => x.type === EthereumTokenType.Native))
     const erc20Tokens = tokens.filter((x) => x.type === EthereumTokenType.ERC20)
 
-    const { value: listOfBalance = [], loading, error, retry } = useTokensBalance(erc20Tokens.map((x) => x.address))
+    const {
+        value: listOfBalance = [],
+        loading,
+        error,
+        retry,
+    } = useTokensBalance(
+        erc20Tokens.map((x) => x.address),
+        chainId,
+    )
 
     return {
         value: [
