@@ -10,7 +10,7 @@ import {
     useCollections,
     Wallet,
 } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
+import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
@@ -113,29 +113,11 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
     loading: boolean
     collectiblesRetry: () => void
     error: Error | undefined
-    hasNextPage: boolean
     readonly?: boolean
-    page: number
     hasRetry?: boolean
-    collectionView?: boolean
-    onNextPage: () => void
-    onPrevPage: () => void
 }
 function CollectibleListUI(props: CollectibleListUIProps) {
-    const {
-        provider,
-        wallet,
-        collectibles,
-        loading,
-        hasNextPage,
-        collectiblesRetry,
-        error,
-        readonly,
-        page,
-        hasRetry = true,
-        onNextPage,
-        onPrevPage,
-    } = props
+    const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
@@ -186,27 +168,6 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     </Box>
                 )}
             </Box>
-            {!(page === 0 && !hasNextPage) ? (
-                <TablePagination
-                    count={-1}
-                    component="div"
-                    onPageChange={() => {}}
-                    page={page}
-                    rowsPerPage={30}
-                    rowsPerPageOptions={[30]}
-                    labelDisplayedRows={() => null}
-                    backIconButtonProps={{
-                        onClick: () => onPrevPage(),
-                        size: 'small',
-                        disabled: page === 0,
-                    }}
-                    nextIconButtonProps={{
-                        onClick: () => onNextPage(),
-                        disabled: !hasNextPage,
-                        size: 'small',
-                    }}
-                />
-            ) : null}
         </CollectibleContext.Provider>
     )
 }
@@ -231,14 +192,26 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
         error: collectiblesError,
     } = useCollectibles(address, chainId, provider, page, 50, collection)
     const { collectibles = [], hasNextPage } = value
+    const [rendCollectibles, setRendCollectibles] = useState<ERC721TokenDetailed[]>([])
 
     useUpdateEffect(() => {
         setPage(0)
     }, [provider, address])
 
     useEffect(() => {
-        setCount(collectibles.length)
+        if (collectibles.length) {
+            setRendCollectibles([...rendCollectibles, ...collectibles])
+            if (hasNextPage) {
+                setTimeout(() => {
+                    setPage(page + 1)
+                }, 1000)
+            }
+        }
     }, [collectibles])
+
+    useEffect(() => {
+        setCount(rendCollectibles.length)
+    }, [rendCollectibles])
 
     return (
         <CollectibleListUI
@@ -249,11 +222,7 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             collectiblesRetry={collectiblesRetry}
             error={collectiblesError}
             readonly={true}
-            page={page}
-            hasNextPage={hasNextPage}
             hasRetry={!!address}
-            onPrevPage={() => setPage((prev) => prev - 1)}
-            onNextPage={() => setPage((next) => next + 1)}
         />
     )
 }
