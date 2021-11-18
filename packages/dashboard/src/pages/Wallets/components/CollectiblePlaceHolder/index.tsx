@@ -3,8 +3,7 @@ import { MiniMaskIcon } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
-import { ChainIcon } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { WalletIcon } from '@masknet/shared'
 import { Box } from '@mui/material'
 
 const useStyles = makeStyles()({
@@ -39,17 +38,17 @@ const useStyles = makeStyles()({
 })
 
 export interface CollectiblePlaceHolderProps {
-    chainId: ChainId
+    networkIcon?: URL
 }
 
-export const CollectiblePlaceholder = memo<CollectiblePlaceHolderProps>(({ chainId }) => {
+export const CollectiblePlaceholder = memo<CollectiblePlaceHolderProps>(({ networkIcon }) => {
     const { classes } = useStyles()
     const t = useDashboardI18N()
 
     return (
         <div className={classes.container}>
             <Box className={classes.chainIcon}>
-                <ChainIcon chainId={chainId} size={20} />
+                <WalletIcon size={20} networkIcon={networkIcon} />
             </Box>
             <div className={classes.placeholder}>
                 <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48, opacity: 0.5 }} />

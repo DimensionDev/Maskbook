@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Button, Stack, styled } from '@mui/material'
 import { ChainId, getChainIdFromNetworkType, NetworkType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { WalletIcon } from '..'
+import { WalletIcon } from '../WalletIcon'
 
 const AllNetworkButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -41,7 +41,7 @@ const useStyles = makeStyles<{ size: number }>()((theme, props) => ({
 
 export interface NetworkSelectorMinProps {
     selectedChainId: null | ChainId
-    networks: { ID: string; icon: URL; type: NetworkType }[]
+    networks: { ID: string; icon: URL; type: string }[]
     onSelect(chainId: null | ChainId): void
     hideAllNetworkButton?: boolean
     disabledNonCurrentNetwork?: boolean
@@ -75,7 +75,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                     </AllNetworkButton>
                 )}
                 {networks.map((network) => {
-                    const chainId = getChainIdFromNetworkType(network.type)
+                    const chainId = getChainIdFromNetworkType(network.type as NetworkType)
                     return (
                         <Box
                             key={network.ID}

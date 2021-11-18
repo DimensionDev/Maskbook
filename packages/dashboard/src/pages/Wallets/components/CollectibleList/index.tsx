@@ -7,6 +7,7 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
+    getNetworkTypeFromChainId,
     isSameAddress,
     useAccount,
     useChainId,
@@ -23,6 +24,8 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { TransferTab } from '../Transfer'
 import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
+import { useSupportedNetworks } from '../../../../hooks/useSupportedNetworks'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     root: {
@@ -53,6 +56,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId, pr
     const wallet = useWallet()
     const account = useAccount()
     const erc721Tokens = useWeb3State().erc721Tokens
+    const supportedNetworks = useSupportedNetworks()
     const { value: erc721TokensOwners = [], loading: loadingERC721Owners } = useCollectibleOwners(erc721Tokens)
 
     const onSend = useCallback(
@@ -113,6 +117,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId, pr
             dataSource={dataSource}
             chainId={chainId}
             provider={provider}
+            supportedNetworks={supportedNetworks}
             onSend={onSend}
         />
     )
@@ -128,6 +133,7 @@ export interface CollectibleListUIProps {
     chainId: ChainId
     provider: CollectibleProvider
     dataSource: ERC721TokenDetailed[]
+    supportedNetworks: Web3Plugin.NetworkDescriptor[]
     onSend(detail: ERC721TokenDetailed): void
 }
 
@@ -142,6 +148,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
         chainId,
         provider,
         dataSource,
+        supportedNetworks,
         onSend,
     }) => {
         const t = useDashboardI18N()
@@ -160,6 +167,13 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                                 {dataSource.map((x) => (
                                     <div className={classes.card} key={x.tokenId}>
                                         <CollectibleCard
+                                            networkIcon={
+                                                supportedNetworks.find(
+                                                    (network) =>
+                                                        network?.type ===
+                                                        getNetworkTypeFromChainId(x.contractDetailed?.chainId),
+                                                )?.icon
+                                            }
                                             chainId={chainId}
                                             provider={provider}
                                             token={x}

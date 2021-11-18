@@ -6,7 +6,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
-import { ChainIcon } from '@masknet/shared'
+import { WalletIcon } from '@masknet/shared'
 import { ChangeNetworkTip } from '../TokenTableRow/ChangeNetworkTip'
 
 const useStyles = makeStyles()((theme) => ({
@@ -63,10 +63,11 @@ export interface CollectibleCardProps {
     chainId: ChainId
     provider: CollectibleProvider
     token: ERC721TokenDetailed
+    networkIcon?: URL
     onSend(): void
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, token, onSend }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, token, onSend, networkIcon }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const ref = useRef(null)
@@ -82,7 +83,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
         <Box className={`${classes.container} ${isHoveringTooltip || isHovering ? classes.hover : ''}`} ref={ref}>
             <div className={classes.card}>
                 <Box className={classes.chainIcon}>
-                    <ChainIcon chainId={token.contractDetailed.chainId} size={20} />
+                    <WalletIcon size={20} networkIcon={networkIcon} />
                 </Box>
                 {token.info.image ? (
                     <Link
@@ -98,7 +99,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                     </Link>
                 ) : (
                     <Box>
-                        <CollectiblePlaceholder chainId={token.contractDetailed.chainId} />
+                        <CollectiblePlaceholder networkIcon={networkIcon} />
                     </Box>
                 )}
                 <Box className={classes.description} py={1} px={3}>

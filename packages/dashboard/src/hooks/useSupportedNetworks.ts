@@ -1,14 +1,12 @@
-import { NetworkPluginID, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 
+/** This is a temporary method that will be removed after support flow chain  */
 export const useSupportedNetworks = () => {
-    const plugins = useActivatedPluginsDashboard()
+    const plugins = getRegisteredWeb3Networks()
 
     return (
         plugins
-            .filter((x) => Object.values(NetworkPluginID).includes(x.ID as NetworkPluginID))
             // TODO: support flow chain
-            .filter((x) => x.ID !== 'com.maskbook.flow')
-            .map((x) => x.declareWeb3Networks ?? [])
-            .flat()
+            .filter((x) => x.networkSupporterPluginID !== 'com.maskbook.flow')
     )
 }
