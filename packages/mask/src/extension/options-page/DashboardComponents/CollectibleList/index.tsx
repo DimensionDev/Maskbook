@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'grid',
         flexWrap: 'wrap',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(172px, 1fr))',
         gridGap: theme.spacing(1),
     },
     text: {
@@ -129,11 +129,11 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     .fill(0)
                     .map((_, i) => (
                         <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                            <Skeleton animation="wave" variant="rectangular" width={180} height={180} />
+                            <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
                             <Skeleton
                                 animation="wave"
                                 variant="text"
-                                width={180}
+                                width={172}
                                 height={20}
                                 style={{ marginTop: 4 }}
                             />
