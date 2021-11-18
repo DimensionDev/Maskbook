@@ -36,11 +36,14 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(WalletMessages.events.connectWalletDialogUpdated, (ev) => {
-        if (!ev.open) return
-        setProviderType(ev.providerType)
-        setNetworkType(ev.networkType)
-    })
+    const { open, setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
+        WalletMessages.events.connectWalletDialogUpdated,
+        (ev) => {
+            if (!ev.open) return
+            setProviderType(ev.providerType)
+            setNetworkType(ev.networkType)
+        },
+    )
     //#endregion
 
     //#region walletconnect
@@ -138,19 +141,29 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
 
-        // connect to the specific provider
-        await connectTo()
-
-        // switch to the wallet status dialog
-        closeDialog()
+        try {
+            await connectTo()
+            setConnectWalletDialog({
+                open: false,
+                result: true,
+            })
+        } catch {
+            setConnectWalletDialog({
+                open: false,
+                result: false,
+            })
+        }
 
         return true
-    }, [open, providerType, connectTo])
+    }, [open, connectTo, setConnectWalletDialog])
 
     if (!providerType) return null
 
     return (
-        <InjectedDialog title={`Connect to ${resolveProviderName(providerType)}`} open={open} onClose={closeDialog}>
+        <InjectedDialog
+            title={`Connect to ${resolveProviderName(providerType)}`}
+            open={open}
+            onClose={() => setConnectWalletDialog({ open: false, result: false })}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress providerType={providerType} connection={connection} />
             </DialogContent>

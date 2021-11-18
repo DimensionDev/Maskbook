@@ -3,7 +3,7 @@ import { Box, Card, CircularProgress, Typography, Paper } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import { useStylesExtends, ImageIcon } from '@masknet/shared'
 import { useProviderDescriptor } from '@masknet/plugin-infra'
-import type { ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType, resolveProviderName } from '@masknet/web3-shared-evm'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { PLUGIN_ID } from '../../../EVM/constants'
@@ -42,9 +42,9 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     <ImageIcon icon={providerDescriptor?.icon} />
                     <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
                         {connected ? (
-                            <Typography>Connected to {providerDescriptor?.name}</Typography>
+                            <Typography>Connected to {resolveProviderName(providerType)}</Typography>
                         ) : (
-                            <Typography>Connect to {providerDescriptor?.name}</Typography>
+                            <Typography>Connect to {resolveProviderName(providerType)}</Typography>
                         )}
                         {loading ? (
                             <Box display="flex" alignItems="center">
@@ -54,7 +54,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         ) : null}
                         {!loading && error ? (
                             <Typography className={classes.error} color="red" variant="body2">
-                                {error.message || `Failed to connect to ${providerDescriptor?.name}.`}
+                                {error.message || `Failed to connect to ${resolveProviderName(providerType)}.`}
                             </Typography>
                         ) : null}
                     </Box>

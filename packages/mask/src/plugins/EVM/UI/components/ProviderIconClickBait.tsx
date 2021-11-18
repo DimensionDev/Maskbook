@@ -17,6 +17,10 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
     //#region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
+        (ev) => {
+            if (ev.open) return
+            if (ev.result) onClick?.()
+        },
     )
     //#endregion
 
@@ -59,8 +63,6 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
             default:
                 unreachable(providerType)
         }
-
-        onClick?.()
     }, [networkType, providerType, wallets, injectedProviderReady, injectedProviderType, onClick])
 
     return (
