@@ -33,7 +33,7 @@ export function createIndexedDB_KVStorageBackend(
             const db = await ensureDB()
             const t = db.transaction('store', 'readonly')
             if ((await t.store.count(key)) === 0) return None
-            return Some(t.store.get(key))
+            return Some(await t.store.get(key))
         },
         async setValue(key, value) {
             const db = await ensureDB()
