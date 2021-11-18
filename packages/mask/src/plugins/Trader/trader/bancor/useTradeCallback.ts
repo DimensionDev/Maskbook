@@ -4,7 +4,7 @@ import { TransactionState, TransactionStateType, useAccount, useChainId, useWeb3
 import type { SwapBancorRequest } from '../../types/bancor'
 import type { TradeComputed } from '../../types'
 import { PluginTraderRPC } from '../../messages'
-import { pick } from 'lodash-es'
+import { pick } from 'lodash-unified'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null) {
     const web3 = useWeb3()

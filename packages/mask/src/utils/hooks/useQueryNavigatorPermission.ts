@@ -1,6 +1,6 @@
 /** This file is published under MIT License */
 import { useEffect, useState } from 'react'
-import { hasIn } from 'lodash-es'
+import { hasIn } from 'lodash-unified'
 import { Flags } from '../flags'
 
 const q = ['query', 'request', 'revoke'] as const

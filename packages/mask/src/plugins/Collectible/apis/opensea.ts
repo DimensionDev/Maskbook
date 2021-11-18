@@ -1,4 +1,4 @@
-import { head } from 'lodash-es'
+import { head } from 'lodash-unified'
 import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'

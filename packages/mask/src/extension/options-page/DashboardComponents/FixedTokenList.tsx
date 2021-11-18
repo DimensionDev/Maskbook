@@ -17,7 +17,7 @@ import {
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-unified'
 import { useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
 import { useStylesExtends } from '@masknet/shared'

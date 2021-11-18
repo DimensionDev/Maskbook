@@ -1,4 +1,4 @@
-import { first, groupBy } from 'lodash-es'
+import { first, groupBy } from 'lodash-unified'
 import type { Coin, Currency, Stat, TagType, Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import * as coinGeckoAPI from '../coingecko'

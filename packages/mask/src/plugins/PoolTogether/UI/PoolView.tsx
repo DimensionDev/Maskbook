@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import type { Pool } from '../types'
 import { Typography, Grid, CircularProgress, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import type { HttpProvider } from 'web3-core'

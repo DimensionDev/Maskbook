@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { compact } from 'lodash-es'
+import { compact } from 'lodash-unified'
 import { isSameAddress, useChainId, getChainIdFromName, ChainId } from '@masknet/web3-shared-evm'
 import { NftRedPacketJSONPayload, RedPacketStatus } from '../../types'
 import { useAvailabilityNftRedPacket } from './useAvailabilityNftRedPacket'

@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import type { BackupJSONFileLatest } from '../latest'
 import type { WalletRecord } from '../../../../../plugins/Wallet/services/wallet/type'
 import { JWKToKey, keyToAddr, keyToJWK } from '../../..'

@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import type { provider as Provider } from 'web3-core'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import createMetaMaskProvider, { MetaMaskInpageProvider } from '@dimensiondev/metamask-extension-provider'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { delay } from '@masknet/shared-base'

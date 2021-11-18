@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import type { JsonRpcResponse } from 'web3-core-helpers'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'

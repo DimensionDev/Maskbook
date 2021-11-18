@@ -1,4 +1,4 @@
-import { merge } from 'lodash-es'
+import { merge } from 'lodash-unified'
 import { timeout } from '@masknet/shared-base'
 
 /**

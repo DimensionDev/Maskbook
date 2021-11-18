@@ -11,7 +11,7 @@ import {
     useWallets,
 } from '@masknet/web3-shared-evm'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useCopyToClipboard } from 'react-use'

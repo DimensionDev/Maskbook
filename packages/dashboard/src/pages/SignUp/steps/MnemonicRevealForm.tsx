@@ -1,5 +1,5 @@
 import { memo, useState } from 'react'
-import { some } from 'lodash-es'
+import { some } from 'lodash-unified'
 import { useNavigate } from 'react-router-dom'
 import { Button, Stack, Box } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'

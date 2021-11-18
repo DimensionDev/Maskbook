@@ -1,5 +1,5 @@
 import { regexMatch } from '../../../utils/utils'
-import { defaultTo, flattenDeep } from 'lodash-es'
+import { defaultTo, flattenDeep } from 'lodash-unified'
 import { nthChild } from '../../../utils/dom'
 import { canonifyImgUrl } from './url'
 import {
