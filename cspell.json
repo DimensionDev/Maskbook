@@ -309,7 +309,13 @@
         "fbclid",
         "noamount",
         "txts",
-        "redpackets"
+        "redpackets",
+        "blocto",
+        "onflow",
+        "unauthenticate",
+        "mathwallet",
+        "walletlink",
+        "rpcs"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

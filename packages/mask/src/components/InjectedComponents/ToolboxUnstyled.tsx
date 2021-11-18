@@ -10,22 +10,23 @@ import {
     ListItemText as MuiListItemText,
     Box,
 } from '@mui/material'
+import { useWallet, TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
+    useNetworkDescriptor,
+    useProviderDescriptor,
     useAccount,
+    useChainId,
     useChainColor,
-    useChainDetailed,
     useChainIdValid,
-    useWallet,
-    formatEthereumAddress,
-    TransactionStatusType,
-} from '@masknet/web3-shared-evm'
+    useChainDetailed,
+    useWeb3State,
+} from '@masknet/plugin-infra'
 import { useCallback } from 'react'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
 import GuideStep from '../GuideStep'
-import { WalletIcon } from '../shared/WalletIcon'
 import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
@@ -89,6 +90,9 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     const { classes } = useStyles()
     const { openWallet, isWalletValid, walletTitle, chainColor, shouldDisplayChainIndicator } = useToolbox()
 
+    const networkDescriptor = useNetworkDescriptor()
+    const providerDescriptor = useProviderDescriptor()
+
     return (
         <>
             <GuideStep step={1} total={2} tip={t('user_guide_tip_1')}>
@@ -96,9 +100,11 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                     <ListItemButton onClick={openWallet}>
                         <ListItemIcon>
                             {isWalletValid ? (
-                                <div className={classes.iconWrapper}>
-                                    <WalletIcon size={iconSize} />
-                                </div>
+                                <WalletIcon
+                                    size={iconSize}
+                                    networkIcon={networkDescriptor?.icon}
+                                    providerIcon={providerDescriptor?.icon}
+                                />
                             ) : (
                                 <MaskFilledIcon size={iconSize} />
                             )}
@@ -135,10 +141,12 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 function useToolbox() {
     const { t } = useI18N()
     const account = useAccount()
+    const chainId = useChainId()
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
+    const { Utils } = useWeb3State()
 
     //#region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
@@ -158,7 +166,7 @@ function useToolbox() {
     function renderButtonText() {
         if (!account) return t('plugin_wallet_on_connect')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
-        if (pendingTransactions.length <= 0) return formatEthereumAddress(account, 4)
+        if (pendingTransactions.length <= 0) return Utils?.formatAddress?.(account, 4) ?? account
         return (
             <>
                 <span>
@@ -179,7 +187,8 @@ function useToolbox() {
 
     const walletTitle = renderButtonText()
 
-    const shouldDisplayChainIndicator = account && chainIdValid && chainDetailed?.network !== 'mainnet'
+    const shouldDisplayChainIndicator =
+        account && chainIdValid && chainDetailed?.network && chainDetailed.network !== 'mainnet'
     return {
         openWallet,
         isWalletValid,

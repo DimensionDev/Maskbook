@@ -1,14 +1,11 @@
 import Web3 from 'web3'
 import { useMemo } from 'react'
 import { first } from 'lodash-es'
-import { useSubscription } from 'use-subscription'
-import { useWeb3Context } from '../context'
-import { useChainId } from '.'
+import { useChainId, useWeb3Provider } from '.'
 import { useRPCConstants, ChainId } from '..'
 
 function useWeb3Instance() {
-    const _ = useWeb3Context()
-    const provider = useSubscription(_.provider)
+    const provider = useWeb3Provider()
     return useMemo(() => new Web3(provider), [provider])
 }
 
