@@ -1,8 +1,8 @@
 import { useChainId } from './useChainId'
-import { useWeb3State } from './useWeb3State'
+import { usePluginWeb3Context } from './Context'
 
 export function useChainColor() {
     const chainId = useChainId()
-    const { Utils } = useWeb3State()
+    const { Utils } = usePluginWeb3Context()
     return Utils?.resolveChainColor?.(chainId) ?? 'transparent'
 }

@@ -1,10 +1,10 @@
 import { useChainId } from './useChainId'
-import { useWeb3State } from './useWeb3State'
+import { usePluginWeb3Context } from './Context'
 import { useAccount } from './useAccount'
 
 export function useChainIdValid() {
     const account = useAccount()
     const chainId = useChainId()
-    const { Utils } = useWeb3State()
+    const { Utils } = usePluginWeb3Context()
     return !account || (Utils?.isChainIdValid?.(chainId, process.env.NODE_ENV === 'development') ?? false)
 }

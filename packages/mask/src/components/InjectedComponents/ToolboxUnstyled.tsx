@@ -19,7 +19,7 @@ import {
     useChainColor,
     useChainIdValid,
     useChainDetailed,
-    useWeb3State,
+    usePluginWeb3Context,
 } from '@masknet/plugin-infra'
 import { useCallback } from 'react'
 import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
@@ -146,7 +146,7 @@ function useToolbox() {
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
     const chainDetailed = useChainDetailed()
-    const { Utils } = useWeb3State()
+    const { Utils } = usePluginWeb3Context()
 
     //#region recent pending transactions
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)

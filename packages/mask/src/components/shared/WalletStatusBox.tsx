@@ -7,7 +7,7 @@ import { Button, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import {
     useAccount,
-    useWeb3State,
+    usePluginWeb3Context,
     useChainId,
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -83,7 +83,7 @@ export function WalletStatusBox() {
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
-    const { Utils } = useWeb3State() ?? {}
+    const { Utils } = usePluginWeb3Context() ?? {}
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()

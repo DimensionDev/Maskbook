@@ -27,7 +27,7 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     const pluginContext = context[pluginID]
     if (!pluginContext) throw new Error(`The context of ${pluginID} is undefined.`)
 
-    const { Shared, Utils } = pluginContext
+    const { Shared } = pluginContext
     const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
     const chainId = useSubscription(Shared?.chainId ?? ZERO)
     const account = useSubscription(Shared?.account ?? EMPTY_STRING)
@@ -67,7 +67,7 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
     }
 }
 
-function usePluginsWeb3State() {
+export function usePluginsWeb3State() {
     const context = usePluginsWeb3Context()
     return {
         [NetworkPluginID.PLUGIN_EVM]: usePluginWeb3State(NetworkPluginID.PLUGIN_EVM, context),
@@ -81,11 +81,17 @@ export function usePluginIDContext() {
 
 const PluginsWeb3StateContext = createContainer(usePluginsWeb3State)
 
-export const usePluginsWeb3StateContext = PluginsWeb3StateContext.useContainer
+// usePluginWeb3Context is used to provide a set of API to interact with Web3.
+export function usePluginWeb3Context(expectedPluginID?: string) {
+    const pluginID = usePluginIDContext()
+    const context = usePluginsWeb3Context()
+    return context[pluginID ?? expectedPluginID]
+}
 
+// usePluginWeb3StateContext is used to provide a scoped shared state within this provider.
 export function usePluginWeb3StateContext(expectedPluginID?: string) {
     const pluginID = usePluginIDContext()
-    const pluginsWeb3State = usePluginsWeb3StateContext()
+    const pluginsWeb3State = usePluginsWeb3State()
     // @ts-ignore
     return pluginsWeb3State[expectedPluginID ?? pluginID] as ReturnType<typeof usePluginWeb3State>
 }
