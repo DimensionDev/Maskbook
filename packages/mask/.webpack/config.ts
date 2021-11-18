@@ -39,7 +39,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         devtool: sourceMapKind,
         target: ['web', 'es2019'],
         entry: {},
-        experiments: { asset: true },
+        experiments: { backCompat: false },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
