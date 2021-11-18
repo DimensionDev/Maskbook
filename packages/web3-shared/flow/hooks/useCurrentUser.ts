@@ -4,7 +4,7 @@ import { useFCL } from './'
 
 export function useCurrentUser() {
     const fcl = useFCL()
-    const [user, setUser] = useState<User>()
+    const [user, setUser] = useState<User | null>()
 
     useEffect(() => fcl.currentUser().subscribe(setUser), [])
 

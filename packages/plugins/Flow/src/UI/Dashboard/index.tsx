@@ -1,13 +1,16 @@
 import type { Plugin } from '@masknet/plugin-infra/src'
 import { base } from '../../base'
 import { Web3UI } from '../Web3UI'
-import { Web3State } from '../Web3State'
+import { createWeb3State } from '../Web3State'
+import { setupStorage, StorageDefaultValue } from '../../storage'
 
 const sns: Plugin.Dashboard.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupStorage(context.createKVStorage('persistent', StorageDefaultValue))
+        sns.Web3State = createWeb3State(signal)
+    },
     Web3UI,
-    Web3State,
 }
 
 export default sns
