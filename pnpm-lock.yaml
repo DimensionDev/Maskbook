@@ -720,6 +720,7 @@ importers:
 
   packages/shared-base:
     specifiers:
+      '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@mui/icons-material': link:..\empty
       '@mui/lab': link:..\empty
       '@mui/material': link:..\empty
@@ -735,7 +736,9 @@ importers:
       ts-results: ^3.3.0
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
+      use-subscription: ^1.5.1
     dependencies:
+      '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@mui/icons-material': link:../empty
       '@mui/lab': link:../empty
       '@mui/material': link:../empty
@@ -751,6 +754,7 @@ importers:
       ts-results: 3.3.0
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
+      use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
 
   packages/storybook-shared:
     specifiers:
@@ -18940,7 +18944,7 @@ packages:
   /jsx-jsonml-devtools-renderer/1.4.3:
     resolution: {integrity: sha512-U1Ayx2VUF6plTLrQkNnJAg8UInToPseWqugxYTKEyaWG8G83Vqpx8BpyW9MObK1kPHdtMkevKfLi+PVwqp5Rtw==}
     dependencies:
-      csstype: 3.0.8
+      csstype: 3.0.9
     dev: false
 
   /junk/3.1.0:

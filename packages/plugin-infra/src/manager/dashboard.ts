@@ -19,6 +19,6 @@ export function useActivatedPluginDashboard(pluginID: string) {
     return plugins.find((x) => x.ID === pluginID)
 }
 
-export function startPluginDashboard(host: Plugin.__Host.Host) {
+export function startPluginDashboard(host: Plugin.__Host.Host<Plugin.Dashboard.DashboardContext>) {
     startDaemon(host)
 }

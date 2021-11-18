@@ -21,6 +21,8 @@ import { Web3Provider } from '@masknet/web3-shared-evm'
 import i18n from 'i18next'
 import { I18nextProvider } from 'react-i18next'
 
+import '../utils/kv-storage'
+
 import './PluginHost'
 import { Pages } from '../pages/routes'
 import { Web3Context } from '../web3/context'

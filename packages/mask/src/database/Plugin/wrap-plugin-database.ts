@@ -21,7 +21,7 @@ import { createPluginDBAccess, PluginDatabase, pluginDataHasValidKeyPath, toStor
 export function createPluginDatabase<Data extends IndexableTaggedUnion>(
     plugin_id: string,
     signal?: AbortSignal,
-): Plugin.Worker.Storage<Data> {
+): Plugin.Worker.DatabaseStorage<Data> {
     let livingTransaction: IDBPTransaction<PluginDatabase, ['PluginStore']> | undefined = undefined
     let ended = false
     signal?.addEventListener('abort', () => {
