@@ -7,20 +7,12 @@ import {
     resolveTransactionLinkOnExplorer,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-flow'
-import { createConstantSubscription, createSubscriptionFromScopedStorage } from '@masknet/shared-base'
+import { createConstantSubscription, createSubscriptionFromStorageItem } from '@masknet/shared-base'
 import { formatAddress } from '../../helpers'
 import { storage, StorageDefaultValue } from '../../storage'
 
 function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValue.user) => T) {
-    return createSubscriptionFromScopedStorage(
-        storage.storage,
-        (storage) => {
-            return getter(storage.user.subscription.getCurrentValue())
-        },
-        (storage) => {
-            return storage.user.subscription.subscribe
-        },
-    )
+    return createSubscriptionFromStorageItem(storage.storage.user, getter)
 }
 
 export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilities.Capabilities {
@@ -30,6 +22,9 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         Shared: {
             allowTestnet: createConstantSubscription(false),
             account: createSubscriptionFromUser((user) => {
+                console.log('DEBUG: account')
+                console.log(user)
+
                 return user?.addr ?? ''
             }),
 
