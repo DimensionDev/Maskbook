@@ -59,3 +59,12 @@ function getEventTarget() {
     }
     return { trigger, subscribe }
 }
+
+export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => Q): Subscription<Q> {
+    return {
+        getCurrentValue() {
+            return mapper(sub.getCurrentValue())
+        },
+        subscribe: sub.subscribe,
+    }
+}

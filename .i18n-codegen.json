@@ -81,7 +81,7 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "com.maskbook.flow",
+                "namespace": "com.mask.flow",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
