@@ -24,6 +24,7 @@ importers:
       '@mui/material': 5.1.1
       '@mui/system': 5.1.1
       '@nice-labs/git-rev': ^3.5.0
+      '@types/lodash': ^4.14.177
       '@types/masknet__global-types': workspace:*
       '@types/react': ^17.0.35
       '@types/react-dom': ^17.0.11
@@ -44,6 +45,9 @@ importers:
       idb: 5.0.8
       jest: ^27.3.1
       lint-staged: ^12.0.2
+      lodash: ^4.17.21
+      lodash-es: ^4.17.21
+      lodash-unified: ^1.0.1
       only-allow: ^1.0.0
       prettier: ^2.4.1
       react: '=18.0.0-alpha-00ced1e2b-20211102'
@@ -70,6 +74,9 @@ importers:
       '@types/web': 0.0.47
       i18next: 21.4.0
       idb: 5.0.8
+      lodash: 4.17.21
+      lodash-es: 4.17.21
+      lodash-unified: 1.0.1_lodash-es@4.17.21+lodash@4.17.21
       react: 18.0.0-alpha-00ced1e2b-20211102
       react-dom: 18.0.0-alpha-00ced1e2b-20211102_c9c210d65bdac3c3f586a38a4275dd8c
       react-i18next: 11.14.2_ce296dfed05ef4ff385cad6a3faacdf6
@@ -83,6 +90,7 @@ importers:
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.5.2
       '@masknet/cli': link:packages/scripts
       '@nice-labs/git-rev': 3.5.0
+      '@types/lodash': 4.14.177
       cspell: 5.12.5
       eslint: 7.32.0
       eslint-config-prettier: 8.3.0_eslint@7.32.0
@@ -677,7 +685,6 @@ importers:
       '@types/rimraf': ^3.0.2
       chalk: ^4.1.2
       gulp-zip: ^5.1.0
-      lodash: ^4.17.21
       proper-lockfile: ^4.1.1
       rimraf: ^3.0.2
       ts-node: ^10.4.0
@@ -686,7 +693,6 @@ importers:
       '@types/rimraf': 3.0.2
       chalk: 4.1.2
       gulp-zip: 5.1.0_gulp@4.0.2
-      lodash: 4.17.21
       proper-lockfile: 4.1.2
       rimraf: 3.0.2
       yargs: 17.2.1
@@ -19373,6 +19379,17 @@ packages:
 
   /lodash-es/4.17.21:
     resolution: {integrity: sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==}
+    dev: false
+
+  /lodash-unified/1.0.1_lodash-es@4.17.21+lodash@4.17.21:
+    resolution: {integrity: sha512-Py+twfpWn+2dFQWCuGcp21WiQRwZwnm1cyE3piSt/VtBVKVyxlR58WgOVRzXtmdmDRGJKH8F8GPaA29WK/yK8g==}
+    peerDependencies:
+      '@types/lodash-es': '*'
+      lodash: '*'
+      lodash-es: '*'
+    dependencies:
+      lodash: 4.17.21
+      lodash-es: 4.17.21
     dev: false
 
   /lodash.assign/4.2.0:

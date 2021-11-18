@@ -12,7 +12,7 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { currentAccountSettings } from '../../../../plugins/Wallet/settings'
 import urlcat from 'urlcat'
 

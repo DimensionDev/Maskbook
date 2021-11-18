@@ -1,5 +1,5 @@
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
 import { JsonRpcProvider } from '@ethersproject/providers'

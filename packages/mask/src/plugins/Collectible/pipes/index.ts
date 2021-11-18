@@ -1,4 +1,4 @@
-import { identity } from 'lodash-es'
+import { identity } from 'lodash-unified'
 import { Network } from 'opensea-js'
 import { ChainId, createLookupTableResolver } from '@masknet/web3-shared-evm'
 import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'

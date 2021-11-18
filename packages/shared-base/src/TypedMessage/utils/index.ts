@@ -6,7 +6,7 @@ import type {
     SerializableTypedMessages,
     TypedMessage,
 } from '../base'
-import { eq } from 'lodash-es'
+import { eq } from 'lodash-unified'
 import { Err, Ok, Result } from 'ts-results'
 
 export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTypedMessages {

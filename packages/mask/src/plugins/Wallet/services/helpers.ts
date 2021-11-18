@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import type { IDBPSafeTransaction } from '../../../../background/database/utils/openDB'
 import type { WalletDB } from '../database/Wallet.db'
 import type {

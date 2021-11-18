@@ -1,4 +1,4 @@
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-unified'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'

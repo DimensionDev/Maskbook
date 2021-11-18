@@ -1,6 +1,6 @@
 import { getTrendingConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { chunk, first, flatten } from 'lodash-es'
+import { chunk, first, flatten } from 'lodash-unified'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 
 interface Block {

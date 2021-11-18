@@ -1,5 +1,5 @@
 import { FC, Fragment } from 'react'
-import { identity } from 'lodash-es'
+import { identity } from 'lodash-unified'
 
 export interface FormattedAddressProps {
     address?: string

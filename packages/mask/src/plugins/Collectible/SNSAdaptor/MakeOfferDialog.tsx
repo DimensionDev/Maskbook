@@ -11,7 +11,7 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { useCustomSnackbar } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import {
