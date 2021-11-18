@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { head, isNull } from 'lodash-es'
+import { head, isNull } from 'lodash-unified'
 import type { Order } from 'opensea-js/lib/types'
 import { PluginCollectibleRPC } from '../../Collectible/messages'
 import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../Collectible/utils'

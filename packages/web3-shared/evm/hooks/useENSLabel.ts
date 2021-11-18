@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
 import { ChainId } from '..'

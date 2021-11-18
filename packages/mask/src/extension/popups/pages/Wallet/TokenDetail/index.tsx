@@ -14,7 +14,7 @@ import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
 import { isSameAddress, useNativeTokenDetailed, useWallet } from '@masknet/web3-shared-evm'
 import { useAsync } from 'react-use'
 import Services from '../../../../service'
-import { compact, intersectionWith } from 'lodash-es'
+import { compact, intersectionWith } from 'lodash-unified'
 import urlcat from 'urlcat'
 import { ActivityList } from '../components/ActivityList'
 

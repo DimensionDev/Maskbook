@@ -57,7 +57,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 const alias = {
                     // We want to always use the full version.
                     'async-call-rpc$': require.resolve('async-call-rpc/full'),
-                    lodash: require.resolve('lodash-es'),
                     '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),

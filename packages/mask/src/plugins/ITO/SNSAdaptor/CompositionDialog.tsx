@@ -17,7 +17,7 @@ import { formatBalance, useChainId, useAccount, TransactionStateType, useITOCons
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
-import { omit, set } from 'lodash-es'
+import { omit, set } from 'lodash-unified'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'

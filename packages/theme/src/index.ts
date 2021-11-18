@@ -2,7 +2,7 @@
 import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@mui/material'
 import * as Changes from './changes'
 import * as Components from './component-changes'
-import { merge } from 'lodash-es'
+import { merge } from 'lodash-unified'
 import type { PaletteOptions } from '@mui/material/styles/createPalette'
 import { DarkColor, LightColor, Color } from './constants'
 

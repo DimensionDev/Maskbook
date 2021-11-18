@@ -1,4 +1,4 @@
-import { omit, pick } from 'lodash-es'
+import { omit, pick } from 'lodash-unified'
 import type { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import {

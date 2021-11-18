@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 import { useMemo } from 'react'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { useChainId, useWeb3Provider } from '.'
 import { useRPCConstants, ChainId } from '..'
 

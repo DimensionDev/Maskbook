@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import type { ERC721ContractDetailed, ERC721TokenInfo } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { safeNonPayableTransactionCall, createERC721Token } from '../utils'

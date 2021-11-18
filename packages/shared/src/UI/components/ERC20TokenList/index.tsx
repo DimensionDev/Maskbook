@@ -1,6 +1,6 @@
 import { memo, useEffect, useMemo, useState } from 'react'
 import { getERC20TokenListItem } from './ERC20TokenListItem'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-unified'
 import {
     Asset,
     currySameAddress,

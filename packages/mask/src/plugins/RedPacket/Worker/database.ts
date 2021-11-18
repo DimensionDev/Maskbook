@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDatabase } from '../types'
 import { RedPacketPluginID } from '../constants'
 import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
