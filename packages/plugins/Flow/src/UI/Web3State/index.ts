@@ -22,9 +22,6 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         Shared: {
             allowTestnet: createConstantSubscription(false),
             account: createSubscriptionFromUser((user) => {
-                console.log('DEBUG: account')
-                console.log(user)
-
                 return user?.addr ?? ''
             }),
 

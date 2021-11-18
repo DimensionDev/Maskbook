@@ -16,11 +16,6 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
     const onLogIn = useCallback(async () => {
         const user = await fcl.logIn()
 
-        console.log('DEBUG: login')
-        console.log({
-            user,
-        })
-
         if (user?.addr) {
             await storage.storage.user.setValue(user)
             onClick?.()
