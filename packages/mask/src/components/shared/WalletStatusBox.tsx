@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { ProviderType, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { makeStyles, getMaskColor } from '@masknet/theme'
 import {

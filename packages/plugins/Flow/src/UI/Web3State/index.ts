@@ -53,12 +53,13 @@ function createWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
             allowTestnet: createConstantSubscription(false),
             account: createCurrentUserSubscription(chainId, '', async (client) => {
                 const currentUser = await client.currentUser().snapshot()
-                return currentUser.addr ?? ''
+                return currentUser?.addr ?? ''
             }),
             chainId: createConstantSubscription(chainId),
             networkType: createConstantSubscription(NetworkType.Flow),
             providerType: createCurrentUserSubscription(chainId, undefined, async (client) => {
-                return client.currentUser().snapshot() ? ProviderType.Blocto : undefined
+                const user = await client.currentUser().snapshot()
+                return user ? ProviderType.Blocto : undefined
             }),
         },
         Utils: {

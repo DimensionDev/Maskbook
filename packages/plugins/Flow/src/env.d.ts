@@ -17,7 +17,7 @@ declare module '@onflow/fcl' {
     export const config: (setup: Record<string, any>) => {}
     export const currentUser: () => {
         subscribe: (callback: (user: User) => void) => void
-        snapshot: () => User
+        snapshot: () => Promise<User | null>
         authenticate: () => {}
         unauthenticate: () => {}
     }
