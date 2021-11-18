@@ -7,9 +7,10 @@ import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store
 // not-loaded => loaded
 // loaded => activated (activatePlugin)
 // activated => loaded (stopPlugin)
-export function createManager<T extends Plugin.Shared.DefinitionDeferred<Context>, Context>(
-    selectLoader: (plugin: Plugin.DeferredDefinition) => undefined | Plugin.Loader<T>,
-) {
+export function createManager<
+    T extends Plugin.Shared.DefinitionDeferred<Context>,
+    Context extends Plugin.Shared.SharedContext,
+>(selectLoader: (plugin: Plugin.DeferredDefinition) => undefined | Plugin.Loader<T>) {
     interface ActivatedPluginInstance {
         instance: T
         controller: AbortController

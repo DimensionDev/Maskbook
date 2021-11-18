@@ -23,9 +23,7 @@ function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValu
     )
 }
 
-let web3State: Web3Plugin.ObjectCapabilities.Capabilities = null!
-
-export function setupWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
+export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilities.Capabilities {
     const chainId = ChainId.Testnet
 
     return {
@@ -51,8 +49,4 @@ export function setupWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
             resolveBlockLink: resolveBlockLinkOnExplorer,
         },
     }
-}
-
-export function getWeb3State() {
-    return web3State
 }

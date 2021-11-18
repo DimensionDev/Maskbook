@@ -111,7 +111,9 @@ export namespace Plugin.Shared {
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionDeferred<Context = undefined> extends Definition, Utilities {
+    export interface DefinitionDeferred<Context extends Shared.SharedContext = Shared.SharedContext>
+        extends Definition,
+            Utilities {
         /**
          * This function is called when the plugin is initialized.
          *
@@ -188,6 +190,8 @@ export namespace Plugin.SNSAdaptor {
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
         Web3UI?: Web3Plugin.UI.UI
+        /** This is the context of the currently chosen network. */
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
@@ -279,7 +283,9 @@ export namespace Plugin.Dashboard {
     export interface Definition extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
-        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        /**
+         * This is a chunk of web3 UIs to be rendered into various places of Mask UI.
+         */
         Web3UI?: Web3Plugin.UI.UI
         /** This is the context of the currently chosen network. */
         Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
