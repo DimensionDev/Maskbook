@@ -32,6 +32,7 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
+    currentBalancesSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -50,6 +51,7 @@ export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
+export const [getBalances, setBalances] = create(currentBalancesSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)

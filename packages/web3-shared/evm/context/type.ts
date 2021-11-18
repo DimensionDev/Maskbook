@@ -16,6 +16,7 @@ import type {
     AddressName,
     AddressNameType,
     CryptoPrice,
+    BalanceOfChains,
 } from '../types'
 
 export interface Web3ProviderType {
@@ -25,6 +26,7 @@ export interface Web3ProviderType {
     tokenPrices: Subscription<CryptoPrice>
     chainId: Subscription<ChainId>
     balance: Subscription<string>
+    balances: Subscription<BalanceOfChains | null>
     blockNumber: Subscription<number>
     walletPrimary: Subscription<Wallet | null>
     wallets: Subscription<Wallet[]>

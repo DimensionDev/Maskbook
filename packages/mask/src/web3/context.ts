@@ -22,6 +22,7 @@ import {
     currentMaskWalletNetworkSettings,
     currentMaskWalletAccountSettings,
     currentMaskWalletBalanceSettings,
+    currentBalancesSettings,
 } from '../plugins/Wallet/settings'
 import { Flags } from '../utils'
 import type { InternalSettings } from '../settings/createSettings'
@@ -56,6 +57,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
         account: createSubscriptionFromSettings(isMask ? currentMaskWalletAccountSettings : currentAccountSettings),
         balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
+        balances: createSubscriptionFromSettings(currentBalancesSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         walletPrimary: createSubscriptionFromAsync(

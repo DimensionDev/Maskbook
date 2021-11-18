@@ -3,6 +3,7 @@ import { appearanceSettings, languageSettings, debugModeSetting, currentPersonaI
 import {
     currentAccountSettings,
     currentBalanceSettings,
+    currentBalancesSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
     currentCollectibleDataProviderSettings,
@@ -29,6 +30,7 @@ export function ToBeListened(): ToBeListedSettings {
         debugModeSetting,
         currentChainIdSettings,
         currentBalanceSettings,
+        currentBalancesSettings,
         currentBlockNumberSettings,
         currentTokenPricesSettings,
         currentDataProviderSettings,

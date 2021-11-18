@@ -9,6 +9,7 @@ import {
     PortfolioProvider,
     ProviderType,
     LockStatus,
+    BalanceOfChains,
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-es'
@@ -178,4 +179,15 @@ export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
     (a, b) => isEqual(a, b),
+)
+
+/**
+ *
+ */
+export const currentBalancesSettings = createGlobalSettings<BalanceOfChains | null>(
+    `${PLUGIN_IDENTIFIER}+balances`,
+    null,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
 )

@@ -78,15 +78,19 @@ export function FixedTokenList(props: FixedTokenListProps) {
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const renderTokens = uniqBy(
-        [
-            ...tokens,
-            ...filteredTokens,
-            ...(searchedToken && searchedToken.name !== 'Unknown Token' && searchedToken.symbol !== 'Unknown'
-                ? [searchedToken]
-                : []),
-        ],
-        (x) => x.address.toLowerCase(),
+    const renderTokens = useMemo(
+        () =>
+            uniqBy(
+                [
+                    ...tokens,
+                    ...filteredTokens,
+                    ...(searchedToken && searchedToken.name !== 'Unknown Token' && searchedToken.symbol !== 'Unknown'
+                        ? [searchedToken]
+                        : []),
+                ],
+                (x) => x.address.toLowerCase(),
+            ),
+        [tokens, filteredTokens, searchedToken],
     )
 
     const {

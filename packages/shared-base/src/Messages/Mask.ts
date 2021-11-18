@@ -8,6 +8,7 @@ import type {
     ProviderType,
     PortfolioProvider,
     CollectibleProvider,
+    BalanceOfChains,
 } from '../../../web3-shared/evm'
 
 export interface MaskSettingsEvents {
@@ -16,6 +17,7 @@ export interface MaskSettingsEvents {
     debugModeSetting: boolean
     currentChainIdSettings: number
     currentBalanceSettings: string
+    currentBalancesSettings: BalanceOfChains | null
     currentBlockNumberSettings: number
     currentTokenPricesSettings: CryptoPrice
     currentDataProviderSettings: DataProvider

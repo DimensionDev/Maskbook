@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -29,8 +29,9 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import { isNativeTokenWrapper } from '../../helpers'
 import { ConfirmDialog } from './ConfirmDialog'
 import Services from '../../../../extension/service'
-import { currentAccountSettings, currentProviderSettings } from '../../../Wallet/settings'
+import { currentAccountSettings, currentBalancesSettings, currentProviderSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { WalletRPC } from '../../../Wallet/messages'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -59,7 +60,6 @@ export interface TraderProps extends withClasses<never> {
 }
 
 export function Trader(props: TraderProps) {
-    const { current: balanceOfChains } = useRef<Map<ChainId, string>>(new Map())
     const { coin, tokenDetailed, chainId: targetChainId } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
@@ -69,6 +69,7 @@ export function Trader(props: TraderProps) {
     const chainIdValid = useChainIdValid()
     const currentAccount = useValueRef(currentAccountSettings)
     const currentProvider = useValueRef(currentProviderSettings)
+    const currentBalances = useValueRef(currentBalancesSettings)
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
@@ -147,7 +148,7 @@ export function Trader(props: TraderProps) {
     // Query the balance of native tokens on target chain
     useAsync(async () => {
         if (chainId) {
-            const cacheBalance = balanceOfChains.get(chainId)
+            const cacheBalance = currentBalancesSettings.value?.[currentProvider][chainId]
 
             let balance: string
 
@@ -157,7 +158,11 @@ export function Trader(props: TraderProps) {
                     chainId: chainId,
                     providerType: currentProvider,
                 })
-                balanceOfChains.set(chainId, balance)
+                await WalletRPC.updateBalances({
+                    [currentProvider]: {
+                        [chainId]: balance,
+                    },
+                })
             }
 
             if (inputToken?.type === EthereumTokenType.Native)

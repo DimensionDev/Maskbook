@@ -4,9 +4,16 @@ import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
 import { useBalance } from './useBalance'
 import { getChainDetailed } from '../utils'
+import { useProviderType } from './useProviderType'
+import { useBalances } from './useBalances'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
-    const balance = useBalance()
+    const providerType = useProviderType()
+    const balances = useBalances()
+    const currentBalance = useBalance()
+
+    const balance = chainId && balances ? balances[providerType][chainId] : currentBalance
+
     const chainDetailed = useChainDetailed()
     const passedChainDetailed = getChainDetailed(chainId)
 
