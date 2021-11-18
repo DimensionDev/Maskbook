@@ -8,8 +8,8 @@ import {
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-flow'
 import { createConstantSubscription, createSubscriptionFromScopedStorage } from '@masknet/shared-base'
-import { formatAddress } from '../../helpers'
-import { storage, StorageDefaultValue } from '../../storage'
+import { formatAddress } from '../helpers'
+import { storage, StorageDefaultValue } from '../storage'
 
 function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValue.user) => T) {
     return createSubscriptionFromScopedStorage(
@@ -23,7 +23,9 @@ function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValu
     )
 }
 
-function createWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
+let web3State: Web3Plugin.ObjectCapabilities.Capabilities = null!
+
+export function setupWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
     const chainId = ChainId.Testnet
 
     return {
@@ -51,4 +53,6 @@ function createWeb3State(): Web3Plugin.ObjectCapabilities.Capabilities {
     }
 }
 
-export const Web3State = createWeb3State()
+export function getWeb3State() {
+    return web3State
+}
