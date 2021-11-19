@@ -13,3 +13,10 @@ export interface NFT {
     image: string
     owner: string
 }
+
+export interface NFTVerified {
+    name: string
+    icon: string
+    slugs: { opensea: string }
+    contractAddress: string
+}

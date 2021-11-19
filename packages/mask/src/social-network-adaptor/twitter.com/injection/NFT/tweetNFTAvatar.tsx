@@ -1,17 +1,8 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
+import { NFTBadgeTweet } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTweet'
 import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
 import { getInjectNodeInfo } from '../../utils/avatar'
-import { postAvatarsContentSelector } from '../../utils/selector'
-
-function getTwitterId(ele: HTMLElement) {
-    const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
-        '[dir="ltr"] > span',
-    ) as HTMLSpanElement
-    if (!twitterIdNode) return
-    const twitterId = twitterIdNode.innerText.trim().replace('@', '')
-    return twitterId
-}
+import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector'
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
@@ -20,30 +11,15 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
-                const twitterId = getTwitterId(ele)
-                if (!twitterId) return
-
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
                 if (!info) return
 
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
                 proxy.realCurrent = info.element.firstChild as HTMLElement
-
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
-                    <div
-                        style={{
-                            position: 'absolute',
-                            left: -2,
-                            top: -2,
-                            zIndex: -1,
-                        }}>
-                        <NFTBadgeTimeline
-                            userId={twitterId}
-                            avatarId={info.avatarId}
-                            width={info.width}
-                            height={info.height}
-                        />
+                    <div style={{ position: 'absolute', top: -2, left: -2, zIndex: -1 }}>
+                        <NFTBadgeTweet width={info.width} height={info.height} avatarId={info.avatarId} />
                     </div>,
                 )
                 remover = root.destory
@@ -60,6 +36,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     )
 }
 
-export async function injectUserNFTAvatarAtTwitter(signal: AbortSignal) {
-    _(postAvatarsContentSelector, signal)
+export async function injectUserNFTAvatarAtTweet(signal: AbortSignal) {
+    _(searchTweetAvatarSelector, signal)
+    _(searchRetweetAvatarSelector, signal)
 }
