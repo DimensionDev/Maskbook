@@ -354,7 +354,7 @@
     "plugin_trader_settings_trade_provider_secondary": "Swap cryptocurrencies on different exchange networks.",
     "plugin_trader_slippage_tolerance": "Slippage Tolerance:",
     "plugin_trader_swap_to": "To(estimated)",
-    "plugin_trader_tx_cost": "Tx cost",
+    "plugin_trader_gas_fee": "Gas fee",
     "plugin_trader_unlock_symbol": "Unlock {{symbol}}",
     "plugin_trader_unlock_tips": "You must give the {{provider}} Smart contracts permission to use your {{symbol}}.You only have to do this once per token.",
     "plugin_trader_swap_amount_symbol": "Swap {{amount}} {{symbol}} ",

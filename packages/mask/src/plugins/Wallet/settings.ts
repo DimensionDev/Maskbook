@@ -184,10 +184,11 @@ export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
 /**
  *
  */
-export const currentBalancesSettings = createGlobalSettings<BalanceOfChains | null>(
+export const currentBalancesSettings = createGlobalSettings<BalanceOfChains>(
     `${PLUGIN_IDENTIFIER}+balances`,
-    null,
+    {},
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
+    (a, b) => isEqual(a, b),
 )

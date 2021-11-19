@@ -8,9 +8,9 @@ import { pick } from 'lodash-es'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null) {
-    const web3 = useWeb3()
-    const account = useAccount()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const web3 = useWeb3(false, chainId)
+    const account = useAccount()
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })

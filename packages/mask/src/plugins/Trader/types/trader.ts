@@ -118,4 +118,5 @@ export interface TradeInfo {
     value: TradeComputed | null
     provider: TradeProvider
     error?: Error
+    gas: { value?: number; loading: boolean }
 }

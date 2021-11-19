@@ -13,6 +13,10 @@ export interface CryptoPrice {
     [token: string]: PriceRecord
 }
 
+export interface BalanceOfChainRecord {
+    [chainId: number]: string
+}
+
 export interface BalanceOfChains {
     [provider: string]: {
         [chainId: number]: string

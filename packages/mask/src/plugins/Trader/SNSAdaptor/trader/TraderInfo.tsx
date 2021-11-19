@@ -1,7 +1,7 @@
 import { memo, useMemo } from 'react'
 import type { TradeInfo } from '../../types'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { createNativeToken, formatBalance } from '@masknet/web3-shared-evm'
+import { createNativeToken, formatBalance, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
@@ -63,10 +63,11 @@ export interface TraderInfoProps {
     trade: TradeInfo
     isBest?: boolean
     isFocus?: boolean
+    gasPrice?: number
     onClick: () => void
 }
 
-export const TraderInfo = memo<TraderInfoProps>(({ trade, isBest, onClick, isFocus }) => {
+export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const { targetChainId } = TargetChainIdContext.useContainer()
@@ -81,18 +82,18 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, isBest, onClick, isFoc
     const nativeToken = createNativeToken(targetChainId)
     const tokenPrice = useNativeTokenPrice(targetChainId)
 
+    const gasFee = useMemo(() => {
+        return trade.gas.value && gasPrice
+            ? new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
+            : 0
+    }, [trade.gas?.value, gasPrice])
+
     const feeValueUSD = useMemo(
-        () =>
-            trade.value?.fee
-                ? new BigNumber(formatBalance(trade.value.fee, nativeToken.decimals))
-                      .times(tokenPrice)
-                      .toFixed(2)
-                      .toString()
-                : '0',
-        [trade.value?.fee, tokenPrice],
+        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2).toString()) : '0'),
+        [gasFee, tokenPrice],
     )
 
-    if ((trade.loading && trade.value) || updateBalancerPoolsLoading)
+    if ((trade.loading && trade.value) || updateBalancerPoolsLoading || trade.gas.loading)
         return (
             <Box className={classes.trade} display="flex" justifyContent="center" style={{ padding: 24 }}>
                 <CircularProgress />
@@ -122,20 +123,22 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, isBest, onClick, isFoc
                             width: '100%',
                         }}>
                         <Typography className={classes.provider}>{resolveTradeProviderName(trade.provider)}</Typography>
-                        <Typography className={classes.cost}>
-                            {t('plugin_trader_tx_cost')}
-                            <Typography component="span" marginLeft={0.5}>
-                                <FormattedBalance
-                                    value={trade.value?.fee ?? 0}
-                                    decimals={nativeToken.decimals ?? 0}
-                                    significant={4}
-                                    symbol={nativeToken.symbol}
-                                />
+                        {gasFee ? (
+                            <Typography className={classes.cost}>
+                                {t('plugin_trader_gas_fee')}
+                                <Typography component="span" marginLeft={0.5}>
+                                    <FormattedBalance
+                                        value={gasFee}
+                                        decimals={nativeToken.decimals ?? 0}
+                                        significant={4}
+                                        symbol={nativeToken.symbol}
+                                    />
+                                </Typography>
+                                <Typography component="span">
+                                    {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
+                                </Typography>
                             </Typography>
-                            <Typography component="span">
-                                {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
-                            </Typography>
-                        </Typography>
+                        ) : null}
                     </Box>
                 ),
                 endAdornment: isBest ? <BestTradeIcon className={classes.best} /> : null,

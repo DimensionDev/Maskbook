@@ -69,10 +69,8 @@ export function Trader(props: TraderProps) {
     const chainIdValid = useChainIdValid()
     const currentAccount = useValueRef(currentAccountSettings)
     const currentProvider = useValueRef(currentProviderSettings)
-    const currentBalances = useValueRef(currentBalancesSettings)
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
-
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
     //#region trade state
@@ -148,7 +146,7 @@ export function Trader(props: TraderProps) {
     // Query the balance of native tokens on target chain
     useAsync(async () => {
         if (chainId) {
-            const cacheBalance = currentBalancesSettings.value?.[currentProvider][chainId]
+            const cacheBalance = currentBalancesSettings.value[currentProvider][chainId]
 
             let balance: string
 
@@ -172,9 +170,9 @@ export function Trader(props: TraderProps) {
                 dispatchTradeStore({ type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE, balance })
         }
     }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId])
-    //#endregion
+    // #endregion
 
-    //#region select token
+    // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
     const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
 

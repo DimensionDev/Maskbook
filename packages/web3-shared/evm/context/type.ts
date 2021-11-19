@@ -26,7 +26,7 @@ export interface Web3ProviderType {
     tokenPrices: Subscription<CryptoPrice>
     chainId: Subscription<ChainId>
     balance: Subscription<string>
-    balances: Subscription<BalanceOfChains | null>
+    balances: Subscription<BalanceOfChains>
     blockNumber: Subscription<number>
     walletPrimary: Subscription<Wallet | null>
     wallets: Subscription<Wallet[]>

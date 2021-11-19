@@ -17,7 +17,7 @@ export interface MaskSettingsEvents {
     debugModeSetting: boolean
     currentChainIdSettings: number
     currentBalanceSettings: string
-    currentBalancesSettings: BalanceOfChains | null
+    currentBalancesSettings: BalanceOfChains
     currentBlockNumberSettings: number
     currentTokenPricesSettings: CryptoPrice
     currentDataProviderSettings: DataProvider

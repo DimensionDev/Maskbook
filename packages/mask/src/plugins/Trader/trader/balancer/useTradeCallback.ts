@@ -21,7 +21,7 @@ export function useTradeCallback(
 ) {
     const account = useAccount()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { BALANCER_ETH_ADDRESS } = useTraderConstants()
+    const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,

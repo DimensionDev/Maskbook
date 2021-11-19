@@ -26,8 +26,9 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
 import { HelpOutline } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { useUpdateEffect } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { WalletRPC } from '../../../Wallet/messages'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
     return {
@@ -256,6 +257,13 @@ export const TradeForm = memo<AllTradeFormProps>(
         }, [focusedTrade, outputToken])
         //#endregion
 
+        //#region get gas price
+        const { value: gasPrice } = useAsync(async () => {
+            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+            if (!response) return 0
+            return response.data.normal.price
+        }, [chainId])
+
         useUpdateEffect(() => {
             setIsExpand(false)
         }, [chainId, inputToken, inputAmount, outputToken])
@@ -314,9 +322,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                         />
 
                         <Box marginTop="10px">
-                            {bestTrade ? (
+                            {bestTrade?.value ? (
                                 <TraderInfo
                                     trade={bestTrade}
+                                    gasPrice={gasPrice}
                                     onClick={() => onFocusedTradeChange(bestTrade)}
                                     isFocus={bestTrade.provider === focusedTrade?.provider}
                                     isBest
@@ -329,6 +338,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                         trade={trade}
                                         onClick={() => onFocusedTradeChange(trade)}
                                         isFocus={trade.provider === focusedTrade?.provider}
+                                        gasPrice={gasPrice}
                                     />
                                 ))}
                             </Collapse>
