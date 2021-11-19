@@ -21,7 +21,7 @@ import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@ma
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'

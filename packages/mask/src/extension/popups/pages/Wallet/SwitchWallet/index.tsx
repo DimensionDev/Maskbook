@@ -12,7 +12,7 @@ import {
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'

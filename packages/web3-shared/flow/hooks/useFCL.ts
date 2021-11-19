@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import * as SDK from '../sdk'
-import { useChainId } from '.'
+import { useChainId } from './useChainId'
 
 export function useFCL() {
     const chainId = useChainId()

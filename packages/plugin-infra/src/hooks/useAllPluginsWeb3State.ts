@@ -1,4 +1,6 @@
-import { useActivatedPluginsDashboard, useActivatedPluginsSNSAdaptor, Web3Plugin } from '..'
+import { useActivatedPluginsDashboard } from '../manager/dashboard'
+import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor'
+import type { Web3Plugin } from '../web3-types'
 
 export function useAllPluginsWeb3State() {
     const pluginsSNSAdaptor = useActivatedPluginsSNSAdaptor()

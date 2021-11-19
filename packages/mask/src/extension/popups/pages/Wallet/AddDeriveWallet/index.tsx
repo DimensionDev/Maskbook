@@ -10,7 +10,7 @@ import { DeriveWalletTable } from '../components/DeriveWalletTable'
 import { currySameAddress, useWallets } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import { LoadingButton } from '@mui/lab'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     container: {

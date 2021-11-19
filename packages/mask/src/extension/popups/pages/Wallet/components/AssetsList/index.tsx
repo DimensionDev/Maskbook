@@ -2,12 +2,12 @@ import { memo, useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useContainer } from 'unstated-next'
 import { Asset, formatBalance } from '@masknet/web3-shared-evm'
+import { PopupRoutes } from '@masknet/shared-base'
 import { List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { WalletContext } from '../../hooks/useWalletContext'
-import { PopupRoutes } from '../../../../index'
 
 const useStyles = makeStyles()({
     list: {

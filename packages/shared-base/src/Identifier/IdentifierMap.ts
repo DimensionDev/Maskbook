@@ -1,5 +1,5 @@
 import { Identifier } from './type'
-import { serialize } from '../serializer/index'
+import { serialize } from '../serializer'
 import { immerable } from 'immer'
 
 /**

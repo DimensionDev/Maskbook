@@ -1,4 +1,4 @@
-import { useAccount } from '.'
+import { useAccount } from './useAccount'
 import { usePluginWeb3StateContext } from './Context'
 
 export function useWallet(pluginID?: string) {

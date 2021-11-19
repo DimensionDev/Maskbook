@@ -1,6 +1,6 @@
 import { startPluginWorker, Plugin } from '@masknet/plugin-infra'
 import { InMemoryStorages, PersistentStorages } from '../../../../shared'
-import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
+import { createPluginDatabase } from '../../../database/Plugin'
 import { createPluginHost } from '../../../plugin-infra/host'
 export default function (signal: AbortSignal) {
     startPluginWorker(createPluginHost(signal, createWorkerContext))

@@ -1,4 +1,4 @@
-import { useActivatedPlugin } from '.'
+import { useActivatedPlugin } from './useActivatedPlugin'
 
 export function useActivatedPluginWeb3UI(pluginID: string) {
     const activatedPlugin = useActivatedPlugin(pluginID)

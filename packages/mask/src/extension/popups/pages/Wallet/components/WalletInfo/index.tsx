@@ -5,7 +5,7 @@ import { MoreHoriz } from '@mui/icons-material'
 import { EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory, useRouteMatch } from 'react-router-dom'
-import { PopupRoutes } from '../../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 

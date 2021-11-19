@@ -1,5 +1,5 @@
-import { usePluginIDContext } from '.'
-import { useActivatedPluginWeb3State } from '..'
+import { usePluginIDContext } from './Context'
+import { useActivatedPluginWeb3State } from '../hooks/useActivatedPluginWeb3State'
 
 export function useWeb3State(expectedPluginID?: string) {
     const pluginID = usePluginIDContext()
