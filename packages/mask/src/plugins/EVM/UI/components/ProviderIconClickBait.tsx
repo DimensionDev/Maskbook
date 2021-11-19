@@ -70,6 +70,9 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
     // hide injected provider in dashboard
     if (isInjectedProvider(providerType) && location.href.includes('dashboard.html')) return null
 
+    // coinbase and mathwallet are blocked by CSP
+    if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null
+
     return (
         <>
             {isValidElement<object>(children)
