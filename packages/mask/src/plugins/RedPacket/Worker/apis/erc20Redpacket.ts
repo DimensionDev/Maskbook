@@ -9,7 +9,7 @@ import {
     getChainDetailed,
 } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import type { RedPacketJSONPayload } from '../../types'

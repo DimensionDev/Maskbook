@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import {
     ChainId,
@@ -17,8 +17,8 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
+import { getWallets, hasWallet, updateWallet } from './wallet'
 import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
-import { getWallets, hasWallet, updateWallet } from '.'
 
 export async function updateAccount(
     options: {

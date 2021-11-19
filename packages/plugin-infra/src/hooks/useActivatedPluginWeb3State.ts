@@ -1,4 +1,4 @@
-import { useActivatedPlugin } from '.'
+import { useActivatedPlugin } from './useActivatedPlugin'
 
 export function useActivatedPluginWeb3State(pluginID: string) {
     const activatedPlugin = useActivatedPlugin(pluginID)

@@ -7,7 +7,7 @@ import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
 import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     list: {

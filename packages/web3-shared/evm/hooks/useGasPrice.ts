@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useWeb3 } from '.'
+import { useWeb3 } from './useWeb3'
 
 export function useGasPrice() {
     const web3 = useWeb3()

@@ -1,4 +1,5 @@
-import { useActivatedPluginDashboard, useActivatedPluginSNSAdaptor } from '..'
+import { useActivatedPluginDashboard } from '../manager/dashboard'
+import { useActivatedPluginSNSAdaptor } from '../manager/sns-adaptor'
 
 export function useActivatedPlugin(pluginID: string) {
     const pluginSNSAdaptor = useActivatedPluginSNSAdaptor(pluginID)

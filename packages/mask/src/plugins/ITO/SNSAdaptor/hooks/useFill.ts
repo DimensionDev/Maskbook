@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAsync } from 'react-use'
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import Web3Utils from 'web3-utils'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'

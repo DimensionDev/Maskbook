@@ -12,7 +12,7 @@ import {
 import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
 import { makeStyles, MaskLoadingButton } from '@masknet/theme'
-import { some } from 'lodash-es'
+import { some } from 'lodash-unified'
 import { useCallback, useMemo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
 import { useSharedI18N } from '../../../locales'

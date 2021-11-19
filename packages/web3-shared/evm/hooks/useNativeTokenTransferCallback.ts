@@ -3,10 +3,10 @@ import { toHex } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
-import { TransactionStateType, useTransactionState } from './useTransactionState'
+import { useTransactionState } from './useTransactionState'
 import { useWeb3 } from './useWeb3'
 import { isGreaterThan, isZero } from '../utils'
-import type { GasConfig } from '../types'
+import { TransactionStateType, GasConfig } from '../types'
 
 export function useNativeTransferCallback() {
     const web3 = useWeb3()

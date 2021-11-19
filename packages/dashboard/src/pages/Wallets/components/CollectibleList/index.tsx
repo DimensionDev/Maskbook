@@ -21,8 +21,8 @@ import { useDashboardI18N } from '../../../../locales'
 import { PluginMessages, PluginServices } from '../../../../API'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
-import { TransferTab } from '../Transfer'
 import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
+import { TransferTab } from '../Transfer'
 
 const useStyles = makeStyles()({
     root: {

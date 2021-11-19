@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { difference } from 'lodash-es'
+import { difference } from 'lodash-unified'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Box, DialogContent } from '@mui/material'

@@ -6,7 +6,7 @@ import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PoolView } from '../UI/PoolView'
 import { InvestDialog } from '../UI/InvestDialog'
-import { escapeRegExp } from 'lodash-es'
+import { escapeRegExp } from 'lodash-unified'
 import { BASE_URL, STAGING_URL } from '../constants'
 
 function createMatchLink() {

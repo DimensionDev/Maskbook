@@ -38,7 +38,7 @@ import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
 import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

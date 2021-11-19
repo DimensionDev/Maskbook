@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { useAsync } from 'react-use'
 import { useWeb3StateContext } from '../context'
 import { useWeb3 } from '../hooks'

@@ -1,4 +1,4 @@
-import type { KVStorageBackend } from '.'
+import type { KVStorageBackend } from './types'
 import { IDBPDatabase, openDB } from 'idb'
 import { None, Some } from 'ts-results'
 

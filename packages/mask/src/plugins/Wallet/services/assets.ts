@@ -20,7 +20,7 @@ import {
     getChainIdFromNetworkType,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { values } from 'lodash-es'
+import { values } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
@@ -63,7 +63,12 @@ export async function getAssetsListNFT(
                         {
                             name: x.name || x.asset_contract.name,
                             description: x.description || x.asset_contract.symbol,
-                            image: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
+                            image:
+                                x.image_original_url ||
+                                x.image_url ||
+                                x.image_preview_url ||
+                                x.asset_contract.image_url ||
+                                '',
                         },
                         x.token_id,
                     ),

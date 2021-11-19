@@ -1,4 +1,4 @@
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils'
 import { Flags } from '../../../utils/flags'
 

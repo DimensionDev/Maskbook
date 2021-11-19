@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import type BigNumber from 'bignumber.js'
 import type { Result } from 'ts-results'
 import { ChainId, isNative } from '@masknet/web3-shared-evm'

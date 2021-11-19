@@ -12,7 +12,7 @@ import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 
 export function useTrade(
     strategy: TradeStrategy,

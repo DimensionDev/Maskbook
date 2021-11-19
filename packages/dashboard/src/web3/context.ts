@@ -1,4 +1,4 @@
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {

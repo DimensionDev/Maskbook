@@ -51,7 +51,7 @@ import { MaskMessages } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
 import { RelationFavor } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
-import { first, orderBy } from 'lodash-es'
+import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 
 assertEnvironment(Environment.ManifestBackground)
