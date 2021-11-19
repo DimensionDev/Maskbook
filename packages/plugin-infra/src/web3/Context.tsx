@@ -25,9 +25,8 @@ function usePluginsWeb3Context() {
 
 function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin.ObjectCapabilities.Capabilities>) {
     const pluginContext = context[pluginID]
-    if (!pluginContext) throw new Error(`The context of ${pluginID} is undefined.`)
 
-    const { Shared, Utils } = pluginContext
+    const { Shared, Utils } = pluginContext ?? {}
     const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
     const chainId = useSubscription(Shared?.chainId ?? ZERO)
     const account = useSubscription(Shared?.account ?? EMPTY_STRING)
