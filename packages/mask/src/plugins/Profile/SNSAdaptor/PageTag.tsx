@@ -7,6 +7,9 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         '>:nth-child(2)': {
             marginLeft: theme.spacing(2),
+        },
+        '>:nth-child(3)': {
+            marginLeft: theme.spacing(2),
             marginRight: theme.spacing(2),
         },
     },
@@ -18,9 +21,6 @@ const useStyles = makeStyles()((theme) => ({
     selected: {
         border: `1px solid ${theme.palette.primary.main}`,
         color: theme.palette.primary.main,
-    },
-    hidden: {
-        display: 'none',
     },
 }))
 
@@ -36,11 +36,7 @@ export function PageTag(props: PageTagProps) {
         <div className={classes.root}>
             <Button
                 variant="outlined"
-                className={classNames(
-                    classes.hidden,
-                    classes.button,
-                    tag === PageTags.WalletTag ? classes.selected : '',
-                )}
+                className={classNames(classes.button, tag === PageTags.WalletTag ? classes.selected : '')}
                 onClick={() => onChange(PageTags.WalletTag)}
                 size="medium">
                 Wallets
@@ -54,14 +50,17 @@ export function PageTag(props: PageTagProps) {
             </Button>
             <Button
                 variant="outlined"
-                className={classNames(
-                    classes.hidden,
-                    classes.button,
-                    tag === PageTags.DonationTag ? classes.selected : '',
-                )}
+                className={classNames(classes.button, tag === PageTags.DonationTag ? classes.selected : '')}
                 onClick={() => onChange(PageTags.DonationTag)}
                 size="medium">
                 Donations
+            </Button>
+            <Button
+                variant="outlined"
+                className={classNames(classes.button, tag === PageTags.FootprintTag ? classes.selected : '')}
+                onClick={() => onChange(PageTags.FootprintTag)}
+                size="medium">
+                Footprints
             </Button>
         </div>
     )

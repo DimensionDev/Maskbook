@@ -7,6 +7,7 @@ import { useLocationChange } from '../../../utils/hooks/useLocationChange'
 import { WalletsPage } from './WalletsPage'
 import { NFTPage } from './NFTPage'
 import { DonationPage } from './DonationsPage'
+import { FootprintPage } from './FootprintPage'
 import { PageTags } from '../types'
 import { unreachable } from '@dimensiondev/kit'
 import { PageTag } from './PageTag'
@@ -53,6 +54,8 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                 return <NFTPage />
             case PageTags.DonationTag:
                 return <DonationPage />
+            case PageTags.FootprintTag:
+                return <FootprintPage />
             default:
                 unreachable(currentTag)
         }
