@@ -1,6 +1,7 @@
 import { useRef, useEffect, forwardRef, useState, createContext, useContext } from 'react'
 import { useCurrentShadowRootStyles } from './ShadowRootStyleProvider'
 import type { PopperProps } from '@mui/material'
+import { NoEffectUsePortalShadowRootContext } from './context'
 
 /**
  * ! Do not export !
@@ -21,9 +22,6 @@ export function setupPortalShadowRoot(
     mountingPoint = mountingShadowRoot.appendChild(document.createElement('div'))
     return mountingShadowRoot!
 }
-
-/** usePortalShadowRoot under this context does not do anything. (And it will return an empty container). */
-export const NoEffectUsePortalShadowRootContext = createContext(false)
 
 /**
  * Render to a React Portal in to the page needs this hook. It will provide a wrapped container that provides ShadowRoot isolation and CSS support for it.
@@ -77,7 +75,7 @@ type IsolatedRenderProps = React.PropsWithChildren<{
     style: HTMLStyleElement
     findMountingShadowRef: HTMLSpanElement | null
 }>
-const IsolatedRender = ({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) => {
+function IsolatedRender({ container, root, style, children, findMountingShadowRef }: IsolatedRenderProps) {
     const update = useUpdate()
     const css = useCurrentShadowRootStyles(findMountingShadowRef)
     const containerInUse = container.children.length !== 0

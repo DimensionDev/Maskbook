@@ -1,6 +1,7 @@
 import type { Plugin } from '../types'
 import { useEffect, useState, useRef } from 'react'
 import { ErrorBoundary } from '@masknet/shared'
+import { StyleIsolatePortal } from '@masknet/theme'
 type Inject<T> = Plugin.InjectUI<T>
 type Raw<T> = Plugin.InjectUIRaw<T>
 
@@ -20,7 +21,9 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
             .map(({ key, name, ui }) => (
                 // TODO: i18n
                 <ErrorBoundary key={key} subject={`Plugin ` + name.fallback}>
-                    <Main UI={ui!} data={props} />
+                    <StyleIsolatePortal data-plugin={key}>
+                        <Main UI={ui!} data={props} />
+                    </StyleIsolatePortal>
                 </ErrorBoundary>
             ))
         return <>{all}</>
