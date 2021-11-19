@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { SettingIcon } from '@masknet/icons'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
 import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     container: {

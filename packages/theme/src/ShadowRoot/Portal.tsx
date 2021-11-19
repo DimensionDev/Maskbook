@@ -1,5 +1,5 @@
 import { useRef, useEffect, forwardRef, useState, createContext, useContext } from 'react'
-import { useCurrentShadowRootStyles } from './index'
+import { useCurrentShadowRootStyles } from './ShadowRootStyleProvider'
 import type { PopperProps } from '@mui/material'
 
 /**

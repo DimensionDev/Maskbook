@@ -1,5 +1,6 @@
-import { useProviderType, usePluginIDContext } from '.'
-import { getPluginDefine } from '..'
+import { useProviderType } from './useProviderType'
+import { usePluginIDContext } from './Context'
+import { getPluginDefine } from '../manager/store'
 
 export function useProviderDescriptor(expectedProviderTypeOrID?: string, expectedPluginID?: string) {
     const pluginID = usePluginIDContext()

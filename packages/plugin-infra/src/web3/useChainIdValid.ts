@@ -1,4 +1,6 @@
-import { useAccount, useChainId, useWeb3State } from '.'
+import { useChainId } from './useChainId'
+import { useWeb3State } from './useWeb3State'
+import { useAccount } from './useAccount'
 
 export function useChainIdValid() {
     const account = useAccount()

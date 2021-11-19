@@ -1,7 +1,7 @@
 import { omit } from 'lodash-unified'
 import type { RedPacketRecord, RedPacketRecordInDatabase, RedPacketNftRecordInDatabase } from '../types'
 import { RedPacketPluginID } from '../constants'
-import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
+import { createPluginDatabase } from '../../../database/Plugin'
 
 export const RedPacketDatabase = createPluginDatabase<RedPacketRecordInDatabase | RedPacketNftRecordInDatabase>(
     RedPacketPluginID,

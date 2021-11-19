@@ -34,8 +34,8 @@ import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { useLocation } from 'react-router-dom'
-import { TransferTab } from './index'
 import { unionBy } from 'lodash-unified'
+import { TransferTab } from './types'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
