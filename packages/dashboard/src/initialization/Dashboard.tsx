@@ -53,8 +53,6 @@ export default function DashboardRoot() {
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
     //#endregion
 
-    if (!PluginsWeb3State) return null
-
     return (
         <NoEffectUsePortalShadowRootContext.Provider value={true}>
             <Web3Provider value={Web3Context}>

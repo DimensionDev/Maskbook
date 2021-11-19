@@ -18,6 +18,7 @@ export const Web3State: Web3Plugin.ObjectCapabilities.Capabilities = {}
 
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
     if (!state || !context) return
+
     state.Shared = state.Shared ?? {
         allowTestnet: context.allowTestnet,
         account: context.account,

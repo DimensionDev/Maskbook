@@ -130,20 +130,21 @@ export function PluginProviderRender({
                     <ImageList className={classes.grid} gap={8} cols={3} rowHeight={130}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
-                            .map((provider) => (
-                                <ImageListItem key={provider.ID}>
-                                    {ProviderIconClickBait ? (
-                                        <ProviderIconClickBait
-                                            network={networks.find((x) => x.ID === undeterminedNetworkID)!}
-                                            provider={provider}
-                                            onClick={onSubmit}>
+                            .map((provider) =>
+                                ProviderIconClickBait ? (
+                                    <ProviderIconClickBait
+                                        key={provider.ID}
+                                        network={networks.find((x) => x.ID === undeterminedNetworkID)!}
+                                        provider={provider}
+                                        onClick={onSubmit}>
+                                        <ImageListItem>
                                             <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
-                                        </ProviderIconClickBait>
-                                    ) : (
-                                        <ImageIcon icon={provider.icon} />
-                                    )}
-                                </ImageListItem>
-                            ))}
+                                        </ImageListItem>
+                                    </ProviderIconClickBait>
+                                ) : (
+                                    <ImageIcon icon={provider.icon} />
+                                ),
+                            )}
                     </ImageList>
                 </section>
             </Box>

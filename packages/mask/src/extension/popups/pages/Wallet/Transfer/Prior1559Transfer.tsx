@@ -9,6 +9,7 @@ import {
     formatBalance,
     formatGweiToWei,
     formatWeiToGwei,
+    formatEthereumAddress,
     isGreaterThan,
     isZero,
     pow10,
@@ -259,7 +260,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                     onClick={() => methods.setValue('address', account.address)}>
                     <Typography>{account.name}</Typography>
                     <Typography>
-                        <FormattedAddress address={account.address ?? ''} size={4} />
+                        <FormattedAddress address={account.address ?? ''} size={4} formatter={formatEthereumAddress} />
                     </Typography>
                 </MenuItem>
             ))}
@@ -362,6 +363,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                 decimals={selectedAsset?.token?.decimals}
                                 symbol={selectedAsset?.token?.symbol}
                                 significant={6}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </Typography>

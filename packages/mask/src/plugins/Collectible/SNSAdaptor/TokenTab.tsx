@@ -4,7 +4,13 @@ import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@masknet/shared'
-import { resolveAddressLinkOnExplorer, getChainName, ChainId, useChainId } from '@masknet/web3-shared-evm'
+import {
+    resolveAddressLinkOnExplorer,
+    getChainName,
+    ChainId,
+    useChainId,
+    formatEthereumAddress,
+} from '@masknet/web3-shared-evm'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveTraitLinkOnOpenSea } from '../pipes'
@@ -149,7 +155,11 @@ export function TokenTab(props: TokenTabProps) {
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
-                            <FormattedAddress address={token?.contractAddress ?? ''} size={4} />
+                            <FormattedAddress
+                                address={token?.contractAddress ?? ''}
+                                size={4}
+                                formatter={formatEthereumAddress}
+                            />
                         </Typography>
                     </Link>
                 </Box>

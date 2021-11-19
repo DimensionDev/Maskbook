@@ -8,6 +8,7 @@ import {
     ProviderType,
     Web3ProviderType,
     resolveProviderIdentityKey,
+    isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
 import {
@@ -67,8 +68,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const providerType = currentProviderSettings.value
 
                 if (location.href.includes('popups.html')) return account
-                if (![ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType))
-                    return account
+                if (!isInjectedProvider(providerType)) return account
 
                 try {
                     const propertyKey = resolveProviderIdentityKey(providerType)
@@ -131,7 +131,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
     }
 }
 
-export const Web3Context = createWeb3Context()
+export const Web3Context = createWeb3Context(false, false)
 export const PopupWeb3Context = createWeb3Context(true, true)
 export const SwapWeb3Context = createWeb3Context(false, true)
 

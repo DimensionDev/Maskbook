@@ -10,6 +10,7 @@ import {
     FungibleTokenDetailed,
     resolveLinkOnExplorer,
     resolveNetworkName,
+    formatEthereumAddress,
     useERC20TokenDetailedFromTokenLists,
     useNetworkType,
 } from '@masknet/web3-shared-evm'
@@ -168,7 +169,8 @@ export function RemindDialog(props: RemindDialogProps) {
                         rel="noopener noreferrer"
                         href={urlcat(resolveLinkOnExplorer(chainId), '/token/:address', { address: token.address })}>
                         <Typography variant="body2">
-                            <FormattedAddress address={token.address} size={4} /> ({t('plugin_ito_view_on_explorer')})
+                            <FormattedAddress address={token.address} size={4} formatter={formatEthereumAddress} /> (
+                            {t('plugin_ito_view_on_explorer')})
                         </Typography>
                     </Link>
                 </div>

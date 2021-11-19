@@ -6,7 +6,7 @@ import { EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useWallet } from '@masknet/web3-shared-evm'
+import { useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 
 const useStyles = makeStyles()({
@@ -106,7 +106,7 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingC
                         </Typography>
                     )}
                     <Typography className={classes.address}>
-                        <FormattedAddress address={address} size={12} />
+                        <FormattedAddress address={address} size={12} formatter={formatEthereumAddress} />
                         <CopyIconButton text={address ?? ''} className={classes.copy} />
                     </Typography>
                 </div>

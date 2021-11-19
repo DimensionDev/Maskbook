@@ -9,6 +9,7 @@ import {
     useAccount,
     useChainIdValid,
     useWallets,
+    formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { first } from 'lodash-unified'
@@ -191,7 +192,11 @@ const SelectWallet = memo(() => {
                                     <div>
                                         <Typography className={classes.name}>{item.name}</Typography>
                                         <Typography className={classes.address}>
-                                            <FormattedAddress address={item.address} size={12} />
+                                            <FormattedAddress
+                                                address={item.address}
+                                                size={12}
+                                                formatter={formatEthereumAddress}
+                                            />
                                             <CopyIconButton className={classes.copy} text={item.address} />
                                         </Typography>
                                     </div>

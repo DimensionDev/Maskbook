@@ -14,7 +14,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
-import { useWeb3 } from '@masknet/web3-shared-evm'
+import { formatBalance, formatEthereumAddress, useWeb3 } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
     header: {
@@ -108,7 +108,7 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
         <TableRow key={address}>
             <TableCell align="center" variant="body" className={classes.cell}>
                 <Typography className={classes.title}>
-                    <FormattedAddress address={address} size={4} />
+                    <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
                 </Typography>
             </TableCell>
             <TableCell align="center" variant="body" className={classes.cell}>
@@ -116,7 +116,13 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
                     <CircularProgress sx={{ color: '#15181B' }} size={12} />
                 ) : (
                     <Typography className={classes.title}>
-                        <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
+                        <FormattedBalance
+                            value={balance}
+                            decimals={18}
+                            significant={4}
+                            symbol="ETH"
+                            formatter={formatBalance}
+                        />
                     </Typography>
                 )}
             </TableCell>
