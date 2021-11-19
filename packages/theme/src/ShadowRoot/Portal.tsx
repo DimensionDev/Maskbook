@@ -1,4 +1,4 @@
-import { useRef, useEffect, forwardRef, useState, createContext, useContext } from 'react'
+import { useRef, useEffect, forwardRef, useState, useContext } from 'react'
 import { useCurrentShadowRootStyles } from './ShadowRootStyleProvider'
 import type { PopperProps } from '@mui/material'
 import { NoEffectUsePortalShadowRootContext } from './context'
