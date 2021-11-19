@@ -1,18 +1,24 @@
 import { memo, useCallback } from 'react'
+import { useAsync } from 'react-use'
+import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
+import { useHistory } from 'react-router-dom'
 import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { getTokenUSDValue } from '../../../../../plugins/Wallet/helpers'
-import { ArrowDownCircle, ArrowUpCircle } from 'react-feather'
 import { InteractionCircleIcon } from '@masknet/icons'
 import { useI18N } from '../../../../../utils'
-import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '../../../index'
 import { PluginTransakMessages } from '../../../../../plugins/Transak/messages'
-import { isSameAddress, useNativeTokenDetailed, useWallet } from '@masknet/web3-shared-evm'
-import { useAsync } from 'react-use'
+import {
+    formatBalance,
+    formatCurrency,
+    isSameAddress,
+    useNativeTokenDetailed,
+    useWallet,
+} from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
 import { compact, intersectionWith } from 'lodash-unified'
 import urlcat from 'urlcat'
@@ -60,8 +66,8 @@ const useStyles = makeStyles()({
 
 const TokenDetail = memo(() => {
     const { t } = useI18N()
-    const wallet = useWallet()
     const { classes } = useStyles()
+    const wallet = useWallet()
     const history = useHistory()
     const { currentToken } = useContainer(WalletContext)
     const { value: nativeToken } = useNativeTokenDetailed()
@@ -132,10 +138,11 @@ const TokenDetail = memo(() => {
                         decimals={currentToken.token.decimals}
                         symbol={currentToken.token.symbol}
                         significant={4}
+                        formatter={formatBalance}
                     />
                 </Typography>
                 <Typography className={classes.text}>
-                    <FormattedCurrency value={getTokenUSDValue(currentToken)} sign="$" />
+                    <FormattedCurrency value={getTokenUSDValue(currentToken)} sign="$" formatter={formatCurrency} />
                 </Typography>
                 <div className={classes.controller}>
                     <div onClick={openBuyDialog}>

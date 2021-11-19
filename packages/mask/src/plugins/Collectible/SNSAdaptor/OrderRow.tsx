@@ -1,13 +1,13 @@
+import { useMemo } from 'react'
+import BigNumber from 'bignumber.js'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { CollectibleProvider, NFTOrder } from '../types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import BigNumber from 'bignumber.js'
-import { ChainId, isZero, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, isZero, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
-import { useMemo } from 'react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -101,6 +101,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                             <FormattedBalance
                                 value={order.quantity ?? 0}
                                 decimals={new BigNumber(order.quantity ?? 0).toString() !== '1' ? 8 : 0}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </TableCell>

@@ -3,7 +3,7 @@ import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletIcon, WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
-import { ProviderType, useWallet } from '@masknet/web3-shared-evm'
+import { ProviderType, useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '../../../index'
@@ -140,7 +140,7 @@ const DeleteWallet = memo(() => {
                     <div>
                         <Typography className={classes.name}>{wallet?.name}</Typography>
                         <Typography className={classes.address}>
-                            <FormattedAddress address={wallet?.address} size={10} />
+                            <FormattedAddress address={wallet?.address} size={10} formatter={formatEthereumAddress} />
                         </Typography>
                     </div>
                 </div>

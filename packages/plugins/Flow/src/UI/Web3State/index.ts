@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import {
     ChainId,
@@ -37,6 +38,8 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         },
         Utils: {
             formatAddress,
+            formatBalance: (value) => new BigNumber(value).toFixed(),
+            formatCurrency: (value) => new BigNumber(value).toFixed(),
 
             isChainIdValid: () => true,
 

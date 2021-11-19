@@ -484,8 +484,8 @@ interface SwappedTokensProps {
 
 function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ shortITOwrapper: false })
     const theme = useTheme()
+    const { classes } = useStyles({ shortITOwrapper: false })
 
     return swappedToken.token ? (
         <ListItem key={i} className={classes.tokenCard}>
@@ -534,6 +534,7 @@ function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
                     value={swappedToken.amount}
                     decimals={swappedToken.token.decimals}
                     symbol={swappedToken.token.symbol}
+                    formatter={formatBalance}
                 />
             </Typography>
         </ListItem>

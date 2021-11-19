@@ -13,7 +13,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import {
@@ -233,6 +233,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                     : market.current_price) ?? 0
                                             }
                                             sign={currency.symbol}
+                                            formatter={formatCurrency}
                                         />
                                     </span>
                                 </>
