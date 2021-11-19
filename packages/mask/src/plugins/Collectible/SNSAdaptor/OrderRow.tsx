@@ -2,12 +2,13 @@ import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { CollectibleProvider, NFTOrder } from '../types'
+import { AssetOrder, CollectibleProvider } from '../types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import { ChainId, formatBalance, isZero, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
+import { getOrderUnitPrice } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -48,7 +49,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface IRowProps {
-    order: NFTOrder
+    order: AssetOrder
     isDifferenceToken?: boolean
     acceptable?: boolean
 }
@@ -56,21 +57,24 @@ interface IRowProps {
 export function OrderRow({ order, isDifferenceToken }: IRowProps) {
     const { classes } = useStyles()
     const { provider } = CollectibleState.useContainer()
-    const address = order.makerAccount?.user?.username || order.makerAccount?.address || ''
+    const address = order.maker_account?.user?.username || order.maker_account?.address || ''
 
     const link = useMemo(() => {
         return provider === CollectibleProvider.OPENSEA
             ? `https://opensea.io/accounts/${address}`
-            : order.makerAccount?.link
+            : order.maker_account?.address
     }, [order, provider])
 
     return (
         <TableRow>
             <TableCell>
                 <Link href={link} title={address} target="_blank" className={classes.account} rel="noopener noreferrer">
-                    <Avatar src={order.makerAccount?.profile_img_url} className={classes.avatar} />
+                    <Avatar src={order.maker_account?.profile_img_url} className={classes.avatar} />
                     <Typography className={classes.accountName}>
-                        <Account address={order.makerAccount?.address} username={order.makerAccount?.user?.username} />
+                        <Account
+                            address={order.maker_account?.address}
+                            username={order.maker_account?.user?.username}
+                        />
                     </Typography>
                 </Link>
             </TableCell>
@@ -80,20 +84,24 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                         <Typography className={classes.content}>
                             {provider === CollectibleProvider.OPENSEA ? (
                                 <Link
-                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.paymentToken!)}
+                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>
-                                    {order.paymentTokenContract?.imageUrl && (
+                                    {order.payment_token_contract?.image_url && (
                                         <img
-                                            src={order.paymentTokenContract.imageUrl}
+                                            src={order.payment_token_contract.image_url}
                                             className={classes.token}
-                                            alt={order.paymentTokenContract?.symbol}
+                                            alt={order.payment_token_contract?.symbol}
                                         />
                                     )}
                                 </Link>
                             ) : null}
-                            {`${order.unitPrice} ${order.paymentTokenContract?.symbol}`}
+                            {`${getOrderUnitPrice(
+                                order.current_price,
+                                order.payment_token_contract?.decimals,
+                                order.quantity,
+                            )} ${order.payment_token_contract?.symbol}`}
                         </Typography>
                     </TableCell>
                     <TableCell>
@@ -112,22 +120,26 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                         <Typography style={{ display: 'flex' }} className={classes.content}>
                             {provider === CollectibleProvider.OPENSEA ? (
                                 <Link
-                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.paymentToken!)}
+                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={classes.tokenLink}>
-                                    {order.paymentTokenContract?.imageUrl && (
+                                    {order.payment_token_contract?.image_url && (
                                         <img
-                                            src={order.paymentTokenContract.imageUrl}
+                                            src={order.payment_token_contract?.image_url}
                                             className={classes.token}
-                                            alt={order.paymentTokenContract?.symbol}
+                                            alt={order.payment_token_contract?.symbol}
                                         />
                                     )}
                                 </Link>
                             ) : null}
-                            {`${order.unitPrice} ${
+                            {`${getOrderUnitPrice(
+                                order.current_price,
+                                order.payment_token_contract?.decimals,
+                                order.quantity,
+                            )} ${
                                 provider === CollectibleProvider.OPENSEA
-                                    ? order.paymentTokenContract?.symbol ?? ''
+                                    ? order.payment_token_contract?.symbol ?? ''
                                     : 'ETH'
                             }`}
                         </Typography>
@@ -135,16 +147,11 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                     {provider === CollectibleProvider.OPENSEA ? (
                         <TableCell>
                             <Typography className={classes.content}>
-                                {order.expirationTime &&
-                                    !isZero(order.expirationTime) &&
-                                    formatDistanceToNow(
-                                        new Date(
-                                            new BigNumber(order.expirationTime ?? 0).multipliedBy(1000).toNumber(),
-                                        ),
-                                        {
-                                            addSuffix: true,
-                                        },
-                                    )}
+                                {order.expiration_time &&
+                                    !isZero(order.expiration_time) &&
+                                    formatDistanceToNow(new Date(order.expiration_time * 1000), {
+                                        addSuffix: true,
+                                    })}
                             </Typography>
                         </TableCell>
                     ) : null}

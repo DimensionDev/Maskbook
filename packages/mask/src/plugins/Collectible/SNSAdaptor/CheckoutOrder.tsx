@@ -6,6 +6,7 @@ import { useChainId } from '@masknet/web3-shared-evm'
 import type { useAsset } from '../hooks/useAsset'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
 import { useI18N } from '../../../utils'
+import type { useAssetOrder } from '../hooks/useAssetOrder'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {
@@ -19,12 +20,13 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CheckoutOrderProps {
     asset?: ReturnType<typeof useAsset>
+    assetOrder?: ReturnType<typeof useAssetOrder>
 }
 
 export function CheckoutOrder(props: CheckoutOrderProps) {
     const { t } = useI18N()
-    const { asset } = props
-    const order = asset?.value?.order_ as Order | undefined
+    const { asset, assetOrder } = props
+    const order = assetOrder?.value as Order | undefined
     const { classes } = useStyles()
     const chainId = useChainId()
 
