@@ -10,6 +10,7 @@ importers:
     specifiers:
       '@commitlint/cli': ^15.0.0
       '@commitlint/config-conventional': ^15.0.0
+      '@dimensiondev/kit': 0.0.0-20211118134922-42648c0
       '@dimensiondev/patch-package': ^6.5.0
       '@emotion/cache': ^11.6.0
       '@emotion/react': ^11.6.0
@@ -24,7 +25,7 @@ importers:
       '@mui/material': 5.1.1
       '@mui/system': 5.1.1
       '@nice-labs/git-rev': ^3.5.0
-      '@types/lodash': ^4.14.177
+      '@types/lodash-es': ^4.17.5
       '@types/masknet__global-types': workspace:*
       '@types/react': ^17.0.35
       '@types/react-dom': ^17.0.11
@@ -47,19 +48,20 @@ importers:
       lint-staged: ^12.0.2
       lodash: ^4.17.21
       lodash-es: ^4.17.21
-      lodash-unified: ^1.0.1
+      lodash-unified: 1.0.1
       only-allow: ^1.0.0
       prettier: ^2.4.1
       react: '=18.0.0-alpha-00ced1e2b-20211102'
       react-dom: '=18.0.0-alpha-00ced1e2b-20211102'
       react-i18next: ^11.14.2
       ts-jest: ^27.0.7
-      ts-node: 10.4.0
-      ts-results: ^3.3.0
+      ts-node: ^10.4.0
+      ts-results: 3.3.0
       typescript: 4.5.2
       web3-core: 1.5.2
       web3-core-method: 1.5.2
     dependencies:
+      '@dimensiondev/kit': 0.0.0-20211118134922-42648c0_4b645ab64c150713e4a35d009cde9358
       '@emotion/cache': 11.6.0
       '@emotion/react': 11.6.0_1935fef70228eb84245268bf8b8f19fd
       '@emotion/serialize': 1.0.2
@@ -77,7 +79,7 @@ importers:
       idb: 5.0.8
       lodash: 4.17.21
       lodash-es: 4.17.21
-      lodash-unified: 1.0.1_lodash-es@4.17.21+lodash@4.17.21
+      lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
       react: 18.0.0-alpha-00ced1e2b-20211102
       react-dom: 18.0.0-alpha-00ced1e2b-20211102_c9c210d65bdac3c3f586a38a4275dd8c
       react-i18next: 11.14.2_ce296dfed05ef4ff385cad6a3faacdf6
@@ -92,7 +94,7 @@ importers:
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.5.2
       '@masknet/cli': link:packages/scripts
       '@nice-labs/git-rev': 3.5.0
-      '@types/lodash': 4.14.177
+      '@types/lodash-es': 4.17.5
       cspell: 5.12.5
       eslint: 7.32.0
       eslint-config-prettier: 8.3.0_eslint@7.32.0
@@ -115,17 +117,14 @@ importers:
 
   packages/backup-format:
     specifiers:
-      '@dimensiondev/kit': ^0.0.0-20211118134922-42648c0
       '@msgpack/msgpack': ^2.7.1
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20211118134922-42648c0_c9c210d65bdac3c3f586a38a4275dd8c
       '@msgpack/msgpack': 2.7.1
 
   packages/dashboard:
     specifiers:
       '@babel/core': ^7.16.0
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
-      '@dimensiondev/kit': ^0.0.0-20211118134922-42648c0
       '@hookform/resolvers': ^2.8.3
       '@masknet/backup-format': workspace:*
       '@masknet/icons': workspace:*
@@ -177,7 +176,6 @@ importers:
       zod: ^3.11.6
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
-      '@dimensiondev/kit': 0.0.0-20211118134922-42648c0_3428bf52b91c080f6f7804a12b1cae68
       '@hookform/resolvers': 2.8.3_react-hook-form@7.19.5
       '@masknet/backup-format': link:../backup-format
       '@masknet/icons': link:../icons
@@ -235,13 +233,11 @@ importers:
 
   packages/encryption:
     specifiers:
-      '@dimensiondev/kit': ^0.0.0-20211118134922-42648c0
       '@masknet/shared-base': workspace:*
       '@msgpack/msgpack': ^2.7.0
       pvtsutils: ^1.2.0
       tiny-secp256k1: ^2.0.0
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20211118134922-42648c0_c9c210d65bdac3c3f586a38a4275dd8c
       '@masknet/shared-base': link:../shared-base
       '@msgpack/msgpack': 2.7.1
       pvtsutils: 1.2.0
@@ -279,7 +275,6 @@ importers:
       '@balancer-labs/sor': ^1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
-      '@dimensiondev/kit': ^0.0.0-20211118134922-42648c0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/snapshot.js': 0.2.0
@@ -416,7 +411,6 @@ importers:
       '@balancer-labs/sor': 1.0.0
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0_webextension-polyfill@0.8.0
-      '@dimensiondev/kit': 0.0.0-20211118134922-42648c0_4b645ab64c150713e4a35d009cde9358
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/snapshot.js': 0.2.0
@@ -701,7 +695,6 @@ importers:
   packages/shared:
     specifiers:
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
-      '@dimensiondev/kit': ^0.0.0-20211118134922-42648c0
       '@masknet/icons': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
@@ -717,7 +710,6 @@ importers:
       uuid: ^8.3.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
-      '@dimensiondev/kit': 0.0.0-20211118134922-42648c0_c9c210d65bdac3c3f586a38a4275dd8c
       '@masknet/icons': link:../icons
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
@@ -848,7 +840,6 @@ importers:
 
   packages/web3-shared/evm:
     specifiers:
-      '@dimensiondev/kit': ^0.0.0-20211118134922-42648c0
       '@ensdomains/address-encoder': ^0.2.6
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
@@ -867,7 +858,6 @@ importers:
       web3-core-helpers: 1.5.2
       web3-utils: 1.5.2
     dependencies:
-      '@dimensiondev/kit': 0.0.0-20211118134922-42648c0_c9c210d65bdac3c3f586a38a4275dd8c
       '@ensdomains/address-encoder': 0.2.6
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts
@@ -4790,21 +4780,6 @@ packages:
       webextension-polyfill: 0.8.0
     dev: false
 
-  /@dimensiondev/kit/0.0.0-20211118134922-42648c0_3428bf52b91c080f6f7804a12b1cae68:
-    resolution: {integrity: sha512-CHkD4N5oXUW1gc5Jmu+Yzyfy165PxKNwpmpDbRs7IFrcXJmK7xws2bMPvv51w74OfbNoaPkjpeqD4QwkB9/FPw==, tarball: download/@dimensiondev/kit/0.0.0-20211118134922-42648c0/f0868be8fb1fc9577c1ac0226bafc8be2acec7d1f47f56a29bf0ac56bddf6d06}
-    peerDependencies:
-      react: ^17 || ^18
-      react-router: ^5 || ^6
-    dependencies:
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      lodash-unified: 1.0.1_lodash-es@4.17.21+lodash@4.17.21
-      react: 18.0.0-alpha-00ced1e2b-20211102
-      react-router: 6.0.0-beta.4_63e1619e79ddca1f1ecc330403c2f112
-    transitivePeerDependencies:
-      - '@types/lodash-es'
-    dev: false
-
   /@dimensiondev/kit/0.0.0-20211118134922-42648c0_4b645ab64c150713e4a35d009cde9358:
     resolution: {integrity: sha512-CHkD4N5oXUW1gc5Jmu+Yzyfy165PxKNwpmpDbRs7IFrcXJmK7xws2bMPvv51w74OfbNoaPkjpeqD4QwkB9/FPw==, tarball: download/@dimensiondev/kit/0.0.0-20211118134922-42648c0/f0868be8fb1fc9577c1ac0226bafc8be2acec7d1f47f56a29bf0ac56bddf6d06}
     peerDependencies:
@@ -4814,20 +4789,6 @@ packages:
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
-      react: 18.0.0-alpha-00ced1e2b-20211102
-    transitivePeerDependencies:
-      - '@types/lodash-es'
-    dev: false
-
-  /@dimensiondev/kit/0.0.0-20211118134922-42648c0_c9c210d65bdac3c3f586a38a4275dd8c:
-    resolution: {integrity: sha512-CHkD4N5oXUW1gc5Jmu+Yzyfy165PxKNwpmpDbRs7IFrcXJmK7xws2bMPvv51w74OfbNoaPkjpeqD4QwkB9/FPw==, tarball: download/@dimensiondev/kit/0.0.0-20211118134922-42648c0/f0868be8fb1fc9577c1ac0226bafc8be2acec7d1f47f56a29bf0ac56bddf6d06}
-    peerDependencies:
-      react: ^17 || ^18
-      react-router: ^5 || ^6
-    dependencies:
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-      lodash-unified: 1.0.1_lodash-es@4.17.21+lodash@4.17.21
       react: 18.0.0-alpha-00ced1e2b-20211102
     transitivePeerDependencies:
       - '@types/lodash-es'
@@ -9484,12 +9445,7 @@ packages:
   /@types/lodash-es/4.17.5:
     resolution: {integrity: sha512-SHBoI8/0aoMQWAgUHMQ599VM6ZiSKg8sh/0cFqqlQQMyY9uEplc0ULU5yQNzcvdR4ZKa0ey8+vFmahuRbOCT1A==}
     dependencies:
-      '@types/lodash': 4.14.176
-    dev: false
-
-  /@types/lodash/4.14.176:
-    resolution: {integrity: sha512-xZmuPTa3rlZoIbtDUyJKZQimJV3bxCmzMIO2c9Pz9afyDro6kr7R79GwcB6mRhuoPmV2p1Vb66WOJH7F886WKQ==}
-    dev: false
+      '@types/lodash': 4.14.177
 
   /@types/lodash/4.14.177:
     resolution: {integrity: sha512-0fDwydE2clKe9MNfvXHBHF9WEahRuj+msTuQqOmAApNORFvhMYZKNGGJdCzuhheVjMps/ti0Ak/iJPACMaevvw==}
@@ -19387,17 +19343,6 @@ packages:
       lodash-es: '*'
     dependencies:
       '@types/lodash-es': 4.17.5
-      lodash: 4.17.21
-      lodash-es: 4.17.21
-    dev: false
-
-  /lodash-unified/1.0.1_lodash-es@4.17.21+lodash@4.17.21:
-    resolution: {integrity: sha512-Py+twfpWn+2dFQWCuGcp21WiQRwZwnm1cyE3piSt/VtBVKVyxlR58WgOVRzXtmdmDRGJKH8F8GPaA29WK/yK8g==}
-    peerDependencies:
-      '@types/lodash-es': '*'
-      lodash: '*'
-      lodash-es: '*'
-    dependencies:
       lodash: 4.17.21
       lodash-es: 4.17.21
     dev: false
