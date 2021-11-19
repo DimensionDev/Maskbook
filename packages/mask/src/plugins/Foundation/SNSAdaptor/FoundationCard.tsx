@@ -3,7 +3,6 @@ import { ChainId, useFoundationConstants } from '@masknet/web3-shared-evm'
 import { Card, Typography, CardActions, Link } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { useFetchApi } from '../hooks/useFetchApi'
-import FoundationHeader from './FoundationHeader'
 import FoundationContent from './FoundationContent'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 
@@ -16,8 +15,8 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             width: '100%',
-            border: `solid 1px ${theme.palette.divider}`,
             padding: 0,
+            background: theme.palette.divider,
         },
         PlaceInput: {
             maxWidth: '100%',
@@ -87,11 +86,6 @@ function FoundationCard(props: Props) {
                 </Typography>
             ) : (
                 <div>
-                    <FoundationHeader
-                        nft={nftData.subgraphResponse.data.nfts[0]}
-                        metadata={nftData.metadataResponse}
-                        link={props.link}
-                    />
                     <FoundationContent
                         nft={nftData.subgraphResponse.data.nfts[0]}
                         metadata={nftData.metadataResponse}
@@ -117,5 +111,6 @@ function FoundationCard(props: Props) {
         </Card>
     )
 }
+//
 
 export default FoundationCard

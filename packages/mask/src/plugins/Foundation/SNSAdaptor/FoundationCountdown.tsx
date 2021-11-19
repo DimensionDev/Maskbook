@@ -2,14 +2,22 @@ import { Typography, Box } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
-
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 const useStyles = makeStyles()((theme) => {
     return {
         body: {
+            background: '#FF5F5F',
             width: '100%',
+            marginTop: '-12px',
+            borderRadius: '0px 0px 4px 4px',
         },
         countdown: {
-            color: '#eb5757',
+            color: theme.palette.text.primary,
+        },
+        icons: {
+            width: '24px',
+            height: '24px',
+            margin: '0px 5px -4px 0px',
         },
     }
 })
@@ -60,6 +68,7 @@ function FoundationCountdown(props: Props) {
                     align="center"
                     gutterBottom
                     className={classes.countdown}>
+                    <AccessTimeIcon className={classes.icons} />
                     {t('plugin_foundation_auction_over')}
                 </Typography>
             ) : (
@@ -69,6 +78,7 @@ function FoundationCountdown(props: Props) {
                     align="center"
                     gutterBottom
                     className={classes.countdown}>
+                    <AccessTimeIcon className={classes.icons} />
                     {t('plugin_foundation_ending_in', {
                         days: currentCount?.days,
                         hours: currentCount?.hours,

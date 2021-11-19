@@ -3,18 +3,18 @@ import { Link, Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { NftContract, Metadata } from '../types'
 
-const useStyles = makeStyles()({
-    body: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    image: {
-        maxWidth: '100%',
-        maxHeight: '100%',
-        border: 'none',
-        boxShadow:
-            '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)',
-    },
+const useStyles = makeStyles()((theme) => {
+    return {
+        body: {
+            display: 'flex',
+            borderRadius: '4px 4px 4px 4px',
+            background: theme.palette.divider,
+        },
+        image: {
+            borderRadius: '4px 4px 4px 4px',
+            maxWidth: '100%',
+        },
+    }
 })
 
 interface Props extends React.PropsWithChildren<{}> {

@@ -30,8 +30,10 @@ query {
             }
         }
         nftContract{
+            id
             baseURI
         }
         tokenIPFSPath
+        tokenId
         }
   }`

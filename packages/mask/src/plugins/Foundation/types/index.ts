@@ -23,6 +23,7 @@ export interface MostRecentAuction {
 }
 
 export interface NftContract {
+    id: string
     baseURI: string
 }
 
@@ -47,6 +48,7 @@ export interface Nft {
     nftContract: NftContract
     nftHistory: NftHistory[]
     tokenIPFSPath: string
+    tokenId: string
 }
 
 export interface Data {
