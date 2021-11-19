@@ -6,7 +6,8 @@ import { AESAlgorithmEnum } from '../payload'
 import { EKinds, EKindsError, EKindsError as Err } from '../types'
 import { encryptWithAES, exportCryptoKeyToJWK } from '../utils'
 import { get_v38PublicSharedCryptoKey } from './shared'
-import secp256k1 from 'tiny-secp256k1'
+import * as secp256k1 from 'tiny-secp256k1'
+const { isPoint, pointCompress } = secp256k1
 
 const enum Index {
     authorPublicKey = 5,
@@ -88,8 +89,8 @@ function compressSecp256k1Point(x: string, y: string) {
         const xb = Convert.FromBase64Url(x)
         const yb = Convert.FromBase64Url(y)
         const point = new Uint8Array(combine(new Uint8Array([0x04]), xb, yb))
-        if (secp256k1.isPoint(point)) {
-            return secp256k1.pointCompress(point, true)
+        if (isPoint(point)) {
+            return pointCompress(point, true)
         } else {
             throw new EKindsError(EKinds.InvalidCryptoKey, 'invalid secp256k1 key')
         }
