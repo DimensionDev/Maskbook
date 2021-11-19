@@ -16,7 +16,6 @@
     "qrcode": "^1.4.4",
     "react-feather": "^2.0.9",
     "react-use": "^17.3.1",
-    "ts-results": "^3.3.0",
     "use-subscription": "^1.5.1",
     "uuid": "^8.3.2"
   }

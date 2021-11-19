@@ -44,6 +44,7 @@
     "react": "=18.0.0-alpha-00ced1e2b-20211102",
     "react-dom": "=18.0.0-alpha-00ced1e2b-20211102",
     "react-i18next": "^11.14.2",
+    "ts-results": "3.3.0",
     "web3-core": "1.5.2",
     "web3-core-method": "1.5.2"
   },

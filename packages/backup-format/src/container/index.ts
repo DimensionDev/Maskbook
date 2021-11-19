@@ -1,4 +1,4 @@
-import { unreachable, concatArrayBuffer } from '@dimensiondev/kit'
+import { unreachable, concatArrayBufferSync } from '@dimensiondev/kit'
 import { BackupErrors } from '../BackupErrors'
 
 const MAGIC_HEADER_Version0 = new TextEncoder().encode('MASK-BACKUP-V000')
@@ -16,7 +16,7 @@ function getMagicHeader(version: SupportedVersions) {
 /** @internal */
 export async function createContainer(version: SupportedVersions, data: ArrayBuffer) {
     const checksum = await crypto.subtle.digest({ name: 'SHA-256' }, data)
-    return concatArrayBuffer(getMagicHeader(version), data, checksum)
+    return concatArrayBufferSync(getMagicHeader(version), data, checksum)
 }
 
 /** @internal */

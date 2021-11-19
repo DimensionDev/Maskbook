@@ -54,7 +54,8 @@ importers:
       react-dom: '=18.0.0-alpha-00ced1e2b-20211102'
       react-i18next: ^11.14.2
       ts-jest: ^27.0.7
-      ts-node: ^10.4.0
+      ts-node: 10.4.0
+      ts-results: ^3.3.0
       typescript: 4.5.2
       web3-core: 1.5.2
       web3-core-method: 1.5.2
@@ -80,6 +81,7 @@ importers:
       react: 18.0.0-alpha-00ced1e2b-20211102
       react-dom: 18.0.0-alpha-00ced1e2b-20211102_c9c210d65bdac3c3f586a38a4275dd8c
       react-i18next: 11.14.2_ce296dfed05ef4ff385cad6a3faacdf6
+      ts-results: 3.3.0
       web3-core: 1.5.2
       web3-core-method: 1.5.2
     devDependencies:
@@ -238,14 +240,12 @@ importers:
       '@msgpack/msgpack': ^2.7.0
       pvtsutils: ^1.2.0
       tiny-secp256k1: ^2.0.0
-      ts-results: ^3.3.0
     dependencies:
       '@dimensiondev/kit': 0.0.0-20211118134922-42648c0_c9c210d65bdac3c3f586a38a4275dd8c
       '@masknet/shared-base': link:../shared-base
       '@msgpack/msgpack': 2.7.1
       pvtsutils: 1.2.0
       tiny-secp256k1: 2.0.0
-      ts-results: 3.3.0
 
   packages/external-plugin-previewer:
     specifiers:
@@ -393,7 +393,6 @@ importers:
       stream-http: ^2.8.3
       swc-loader: ^0.1.15
       tiny-secp256k1: ^1.1.5
-      ts-results: ^3.3.0
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
       use-subscription: ^1.5.1
@@ -518,7 +517,6 @@ importers:
       stream-browserify: 3.0.0
       stream-http: 2.8.3
       tiny-secp256k1: 1.1.6
-      ts-results: 3.3.0
       unstated-next: 1.1.0
       urlcat: 2.0.4
       use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
@@ -578,7 +576,6 @@ importers:
       async-call-rpc: ^6.0.0
       bignumber.js: ^9.0.1
       lodash-es: ^4.17.21
-      ts-results: ^3.3.0
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
     dependencies:
@@ -590,7 +587,6 @@ importers:
       async-call-rpc: 6.0.0
       bignumber.js: 9.0.1
       lodash-es: 4.17.21
-      ts-results: 3.3.0
       unstated-next: 1.1.0
       use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
 
@@ -717,7 +713,6 @@ importers:
       qrcode: ^1.4.4
       react-feather: ^2.0.9
       react-use: ^17.3.1
-      ts-results: ^3.3.0
       use-subscription: ^1.5.1
       uuid: ^8.3.2
     dependencies:
@@ -734,7 +729,6 @@ importers:
       qrcode: 1.4.4
       react-feather: 2.0.9_c9c210d65bdac3c3f586a38a4275dd8c
       react-use: 17.3.1_9a9fcfd9691ee39f83ac00f4a3221da4
-      ts-results: 3.3.0
       use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
       uuid: 8.3.2
 
@@ -753,7 +747,6 @@ importers:
       immer: ^9.0.6
       lodash-es: ^4.17.21
       react: ../empty
-      ts-results: ^3.3.0
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
       use-subscription: ^1.5.1
@@ -771,7 +764,6 @@ importers:
       immer: 9.0.6
       lodash-es: 4.17.21
       react: link:../empty
-      ts-results: 3.3.0
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
       use-subscription: 1.5.1_c9c210d65bdac3c3f586a38a4275dd8c
