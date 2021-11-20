@@ -1,4 +1,5 @@
-import { PageFrame } from '../../components/DashboardFrame'
+import { useEffect, useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
 import {
     ChainId,
     getTokenUSDValue,
@@ -14,8 +15,7 @@ import { Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-
 import { Balance } from './components/Balance'
 import { Transfer } from './components/Transfer'
 import { History } from './components/History'
-import { useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { PageFrame } from '../../components/PageFrame'
 import { ReceiveDialog } from './components/ReceiveDialog'
 import { RoutePaths } from '../../type'
 import { useRemoteControlledDialog } from '@masknet/shared'

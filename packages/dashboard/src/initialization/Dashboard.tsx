@@ -56,6 +56,7 @@ export default function DashboardRoot() {
     return (
         <NoEffectUsePortalShadowRootContext.Provider value={true}>
             <Web3Provider value={Web3Context}>
+                <h2>WEB3 PROVIDER</h2>
                 <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
                     <I18nextProvider i18n={i18n}>
                         <StyledEngineProvider injectFirst>

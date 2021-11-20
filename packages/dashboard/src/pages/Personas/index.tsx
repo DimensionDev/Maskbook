@@ -1,6 +1,6 @@
 import { Paper, Stack, Tab, Tabs } from '@mui/material'
 import { makeStyles, MaskColorVar, useCustomSnackbar } from '@masknet/theme'
-import { PageFrame } from '../../components/DashboardFrame'
+import { PageFrame } from '../../components/PageFrame'
 import { useEffect, useState } from 'react'
 import { capitalize } from 'lodash-unified'
 import { TabContext, TabPanel } from '@mui/lab'
