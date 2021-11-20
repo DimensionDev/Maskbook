@@ -1,6 +1,6 @@
 import { SuccessIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { ProviderIcon } from './ProviderIcon'
@@ -71,7 +71,7 @@ export interface PluginProviderRenderProps {
     providers: Web3Plugin.ProviderDescriptor[]
     undeterminedPluginID: string
     undeterminedNetworkID: string
-    setUndeterminedPluginID: (id: string) => void
+    setUndeterminedPluginID: (id: NetworkPluginID) => void
     setUndeterminedNetworkID: (id: string) => void
     NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
     ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps>
@@ -104,7 +104,7 @@ export function PluginProviderRender({
                                 className={classes.networkItem}
                                 key={network.ID}
                                 onClick={() => {
-                                    setUndeterminedPluginID(network.networkSupporterPluginID)
+                                    setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
                                     setUndeterminedNetworkID(network.ID)
                                 }}>
                                 <div className={classes.iconWrapper}>

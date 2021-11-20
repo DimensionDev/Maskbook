@@ -1,8 +1,9 @@
+import type { NetworkPluginID } from '..'
 import { useProviderType } from './useProviderType'
 import { usePluginIDContext } from './Context'
 import { getPluginDefine } from '../manager/store'
 
-export function useProviderDescriptor(expectedProviderTypeOrID?: string, expectedPluginID?: string) {
+export function useProviderDescriptor(expectedProviderTypeOrID?: string, expectedPluginID?: NetworkPluginID) {
     const pluginID = usePluginIDContext()
     const providerType = useProviderType()
 

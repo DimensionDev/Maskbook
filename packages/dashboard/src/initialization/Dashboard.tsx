@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@mui/material'
 import {
@@ -38,7 +39,9 @@ export default function DashboardRoot() {
 
     // TODO:
     // migrate EVM plugin
-    fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
+    useEffect(() => {
+        fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
+    }, [PluginsWeb3State, Web3Context])
 
     //#region theme
     const appearance = useAppearance()
@@ -56,7 +59,6 @@ export default function DashboardRoot() {
     return (
         <NoEffectUsePortalShadowRootContext.Provider value={true}>
             <Web3Provider value={Web3Context}>
-                <h2>WEB3 PROVIDER</h2>
                 <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
                     <I18nextProvider i18n={i18n}>
                         <StyledEngineProvider injectFirst>

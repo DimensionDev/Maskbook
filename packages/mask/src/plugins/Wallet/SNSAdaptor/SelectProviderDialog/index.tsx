@@ -5,6 +5,7 @@ import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
+    NetworkPluginID,
     useNetworkDescriptor,
     useNetworkType,
     useWeb3UI,
@@ -46,7 +47,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
 
-    const pluginID = useValueRef(pluginIDSettings)
+    const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const networkID = useValueRef(networkIDSettings)
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
     const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(networkID)
