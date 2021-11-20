@@ -20,11 +20,12 @@ import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxy
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
 import { useGetTradeContext } from './useGetTradeContext'
+import { TargetChainIdContext } from './useTargetChainIdContext'
 
 export function useTradeCallback(provider?: TradeProvider, tradeComputed?: TradeComputed<unknown> | null) {
     // trade context
     const context = useGetTradeContext(provider)
-
+    const { targetChainId } = TargetChainIdContext.useContainer()
     // create trade computed
     const isNativeTokenWrapper_ = isNativeTokenWrapper(tradeComputed ?? null)
     const tradeComputedForUniswapV2Like =
@@ -47,7 +48,7 @@ export function useTradeCallback(provider?: TradeProvider, tradeComputed?: Trade
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider)
 
     // balancer
-    const exchangeProxyContract = useExchangeProxyContract()
+    const exchangeProxyContract = useExchangeProxyContract(targetChainId)
     const balancer = useBalancerCallback(
         provider === TradeProvider.BALANCER ? tradeComputedForBalancer : null,
         exchangeProxyContract,

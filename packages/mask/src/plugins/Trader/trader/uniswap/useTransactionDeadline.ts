@@ -6,7 +6,7 @@ import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTransactionDeadline() {
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { value: timestamp } = useCurrentBlockTimestamp()
+    const { value: timestamp } = useCurrentBlockTimestamp(chainId)
 
     return useMemo(() => {
         if (!timestamp) return

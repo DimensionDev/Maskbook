@@ -7,6 +7,9 @@ import { getPairAddress } from '../../helpers'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { numberToHex } from 'web3-utils'
+import { useTargetBlockNumber } from '../useTargetBlockNumber'
 
 export enum PairState {
     NOT_EXISTS = 0,
@@ -19,6 +22,8 @@ export type TokenPair = [Token, Token]
 export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly TokenPair[]) {
     const context = useGetTradeContext(tradeProvider)
 
+    const { targetChainId } = TargetChainIdContext.useContainer()
+
     const listOfPairAddress = useMemo(() => {
         if (!context) return []
         const { FACTORY_CONTRACT_ADDRESS, INIT_CODE_HASH } = context
@@ -30,14 +35,24 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
         )
     }, [context, tokenPairs])
 
+    const { value: targetBlockNumber } = useTargetBlockNumber(targetChainId)
+
     // get reserves for each pair
-    const contracts = usePairContracts([...new Set(listOfPairAddress.filter(Boolean) as string[])])
+    const contracts = usePairContracts([...new Set(listOfPairAddress.filter(Boolean) as string[])], targetChainId)
+
     const [results, calls, _, callback] = useMultipleContractSingleData(
         contracts,
         Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves'),
         [],
+        1_000_000,
+        targetChainId,
+        targetBlockNumber,
     )
-    const asyncResults = useAsyncRetry(() => callback(calls), [calls])
+
+    const asyncResults = useAsyncRetry(
+        () => callback(calls, { chainId: numberToHex(targetChainId) }),
+        [calls, targetChainId],
+    )
 
     // compose reserves from multicall results
     const listOfReserves = useMemo(() => {

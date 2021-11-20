@@ -6,6 +6,7 @@ import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { swapErrorToUserReadableMessage } from '../../helpers'
 import type { TradeProvider } from '@masknet/public-api'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -27,7 +28,8 @@ interface FailedCall extends SwapCallEstimate {
 }
 
 export function useTradeCallback(trade: TradeComputed<Trade> | null, tradeProvider?: TradeProvider) {
-    const web3 = useWeb3()
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const web3 = useWeb3(false, targetChainId)
     const account = useAccount()
     const tradeParameters = useTradeParameters(trade, tradeProvider)
 

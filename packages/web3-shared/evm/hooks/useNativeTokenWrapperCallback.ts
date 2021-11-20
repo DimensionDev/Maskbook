@@ -3,12 +3,12 @@ import type { NonPayableTx, PayableTx } from '@masknet/web3-contracts/types/type
 import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
 import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { TransactionEventType } from '../types'
+import { ChainId, TransactionEventType } from '../types'
 import { isLessThan, isZero } from '../utils'
 
-export function useNativeTokenWrapperCallback() {
+export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const account = useAccount()
-    const wrapperContract = useNativeTokenWrapperContract()
+    const wrapperContract = useNativeTokenWrapperContract(chainId)
     const [transactionState, setTransactionState] = useTransactionState()
 
     const wrapCallback = useCallback(

@@ -73,6 +73,7 @@ export function useV2Trade(
             loading: false,
             value: null,
         }
+
     return {
         ...v2Trade,
         value: v2Trade.value,

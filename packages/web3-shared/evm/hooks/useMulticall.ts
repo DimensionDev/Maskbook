@@ -102,10 +102,12 @@ export type MulticallState =
  * The basic hook for fetching data from the Multicall contract
  * @param calls
  */
-export function useMulticallCallback() {
-    const chainId = useChainId()
-    const blockNumber = useBlockNumber()
-    const multicallContract = useMulticallContract()
+export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?: number) {
+    const currentChainId = useChainId()
+    const chainId = targetChainId ?? currentChainId
+    const currentBlockNumber = useBlockNumber()
+    const blockNumber = targetBlockNumber ?? currentBlockNumber
+    const multicallContract = useMulticallContract(chainId)
     const [multicallState, setMulticallState] = useState<MulticallState>({
         type: MulticallStateType.UNKNOWN,
     })
@@ -142,6 +144,7 @@ export function useMulticallCallback() {
                     results: calls.map((call) => getCallResult(call, chainId, blockNumber) ?? [false, '0x0', '0x0']),
                 })
             } catch (error) {
+                console.log(error)
                 if (error instanceof Error) {
                     setMulticallState({
                         type: MulticallStateType.FAILED,
@@ -162,8 +165,8 @@ export function useMulticallStateDecoded<
     T extends BaseContract,
     K extends keyof T['methods'],
     R extends UnboxTransactionObject<ReturnType<T['methods'][K]>>,
->(contracts: T[], names: K[], state: MulticallState) {
-    const web3 = useWeb3()
+>(contracts: T[], names: K[], state: MulticallState, chainId?: ChainId) {
+    const web3 = useWeb3(false, chainId)
     type Result = { succeed: boolean; gasUsed: string } & ({ error: any; value: null } | { error: null; value: R })
     return useMemo(() => {
         if (state.type !== MulticallStateType.SUCCEED) return []
@@ -192,6 +195,8 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
     names: K[],
     callDatas: Parameters<T['methods'][K]>[],
     gasLimit = DEFAULT_GAS_LIMIT,
+    chainId?: ChainId,
+    blockNumber?: number,
 ) {
     const calls = useMemo(() => {
         if (!contract) return []
@@ -201,8 +206,13 @@ export function useSingleContractMultipleData<T extends BaseContract, K extends 
             contract.methods[names[i]](...data).encodeABI() as string,
         ])
     }, [contract?.options.address, names.join(), callDatas.flatMap((x) => x).join()])
-    const [state, callback] = useMulticallCallback()
-    const results = useMulticallStateDecoded(Array.from({ length: calls.length }).fill(contract) as T[], names, state)
+    const [state, callback] = useMulticallCallback(chainId, blockNumber)
+    const results = useMulticallStateDecoded(
+        Array.from({ length: calls.length }).fill(contract) as T[],
+        names,
+        state,
+        chainId,
+    )
     return [results, calls, state, callback] as const
 }
 
@@ -211,6 +221,8 @@ export function useMultipleContractSingleData<T extends BaseContract, K extends 
     names: K[],
     callData: Parameters<T['methods'][K]>,
     gasLimit = DEFAULT_GAS_LIMIT,
+    chainId?: ChainId,
+    blockNumber?: number,
 ) {
     const calls = useMemo(
         () =>
@@ -221,8 +233,9 @@ export function useMultipleContractSingleData<T extends BaseContract, K extends 
             ]),
         [contracts.map((x) => x.options.address).join(), names.join(), callData.join()],
     )
-    const [state, callback] = useMulticallCallback()
-    const results = useMulticallStateDecoded(contracts, names, state)
+
+    const [state, callback] = useMulticallCallback(chainId, blockNumber)
+    const results = useMulticallStateDecoded(contracts, names, state, chainId)
     return [results, calls, state, callback] as const
 }
 
@@ -231,6 +244,7 @@ export function useMultipleContractMultipleData<T extends BaseContract, K extend
     names: K[],
     callDatas: Parameters<T['methods'][K]>[],
     gasLimit = DEFAULT_GAS_LIMIT,
+    chainId?: ChainId,
 ) {
     const calls = useMemo(
         () =>
@@ -241,7 +255,7 @@ export function useMultipleContractMultipleData<T extends BaseContract, K extend
             ]),
         [contracts.map((x) => x.options.address).join(), names.join(), callDatas.flatMap((x) => x).join(), gasLimit],
     )
-    const [state, callback] = useMulticallCallback()
-    const results = useMulticallStateDecoded(contracts, names, state)
+    const [state, callback] = useMulticallCallback(chainId)
+    const results = useMulticallStateDecoded(contracts, names, state, chainId)
     return [results, calls, state, callback] as const
 }

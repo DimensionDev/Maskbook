@@ -123,7 +123,8 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     variant="contained"
                     size="small"
                     sx={{ marginTop: 1.5 }}
-                    onClick={openSelectProviderDialog}>
+                    onClick={openSelectProviderDialog}
+                    {...props.ActionButtonPromiseProps}>
                     {t('plugin_wallet_connect_wallet')}
                 </ActionButton>
             </Box>

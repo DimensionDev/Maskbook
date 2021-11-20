@@ -7,9 +7,10 @@ import type { SwapQuoteResponse, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
-    const web3 = useWeb3()
     const account = useAccount()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+
+    const web3 = useWeb3(false, chainId)
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })

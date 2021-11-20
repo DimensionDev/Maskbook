@@ -75,8 +75,8 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     //#region refresh pools
     const { loading: updateBalancerPoolsLoading } = useAsyncRetry(async () => {
         // force update balancer's pools each time user enters into the swap tab
-        if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true)
-    }, [trade.provider])
+        if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true, targetChainId)
+    }, [trade.provider, targetChainId])
     //#endregion
 
     const nativeToken = createNativeToken(targetChainId)

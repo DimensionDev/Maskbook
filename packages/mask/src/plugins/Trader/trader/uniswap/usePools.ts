@@ -8,6 +8,7 @@ import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useTargetBlockNumber } from '../useTargetBlockNumber'
 
 export enum PoolState {
     LOADING = 0,
@@ -48,17 +49,25 @@ export function usePools(
         })
     }, [chainId, transformed, context?.FACTORY_CONTRACT_ADDRESS])
 
-    const poolContracts = usePoolContracts(poolAddresses)
+    const poolContracts = usePoolContracts(poolAddresses, chainId)
+
+    const { value: targetBlockNumber } = useTargetBlockNumber(chainId)
 
     const [slot0s, slot0sCalls, slot0sState, slot0sCallback] = useMultipleContractSingleData(
         poolContracts,
         Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
         [],
+        1_000_000,
+        chainId,
+        targetBlockNumber,
     )
     const [liquidities, liquiditiesCalls, liquiditiesState, liquiditiesCallback] = useMultipleContractSingleData(
         poolContracts,
         Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
         [],
+        1_000_000,
+        chainId,
+        targetBlockNumber,
     )
 
     useAsyncRetry(() => slot0sCallback(slot0sCalls), [slot0sCallback, slot0sCalls])

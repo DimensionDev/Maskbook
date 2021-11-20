@@ -11,6 +11,7 @@ import { useSwapRouterContract } from '../../contracts/uniswap/useSwapRouterCont
 import { useTransactionDeadline } from './useTransactionDeadline'
 import type { TradeProvider } from '@masknet/public-api'
 import { useGetTradeContext } from '../useGetTradeContext'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 const UNISWAP_BIPS_BASE = JSBI.BigInt(10_000)
 
@@ -25,9 +26,10 @@ export function useSwapParameters(
 ) {
     const account = useAccount()
     const context = useGetTradeContext(tradeProvider)
+    const { targetChainId } = TargetChainIdContext.useContainer()
     const deadline = useTransactionDeadline()
-    const routerV2Contract = useRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS)
-    const swapRouterContract = useSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS)
+    const routerV2Contract = useRouterV2Contract(context?.ROUTER_CONTRACT_ADDRESS, targetChainId)
+    const swapRouterContract = useSwapRouterContract(context?.ROUTER_CONTRACT_ADDRESS, targetChainId)
 
     return useMemo<SwapCall[]>(() => {
         if (!account || !trade?.trade_ || !deadline) return []

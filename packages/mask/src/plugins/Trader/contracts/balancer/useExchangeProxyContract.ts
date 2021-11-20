@@ -4,6 +4,6 @@ import { ChainId, useContract, useTraderConstants } from '@masknet/web3-shared-e
 import type { AbiItem } from 'web3-utils'
 
 export function useExchangeProxyContract(chainId?: ChainId) {
-    const { BALANCER_EXCHANGE_PROXY_ADDRESS } = useTraderConstants()
-    return useContract<ExchangeProxy>(BALANCER_EXCHANGE_PROXY_ADDRESS, ExchangeProxyABI as AbiItem[])
+    const { BALANCER_EXCHANGE_PROXY_ADDRESS } = useTraderConstants(chainId)
+    return useContract<ExchangeProxy>(BALANCER_EXCHANGE_PROXY_ADDRESS, ExchangeProxyABI as AbiItem[], false, chainId)
 }

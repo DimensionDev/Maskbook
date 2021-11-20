@@ -55,7 +55,6 @@ export function useAllTradeComputed(
         inputToken,
         outputToken,
     )
-
     const uniswapV2 = useUniswapTradeComputed(uniswapV2_.value, inputToken, outputToken)
 
     const uniswapEstimateGas = useUniswapTradeGasLimit(uniswapV2, TradeProvider.UNISWAP_V2)
@@ -94,7 +93,7 @@ export function useAllTradeComputed(
         outputToken,
     )
     const quickSwap = useUniswapTradeComputed(quickSwap_.value, inputToken, outputToken)
-    const quickSwapEstimateGas = useUniswapTradeGasLimit(sashimiSwap, TradeProvider.QUICKSWAP)
+    const quickSwapEstimateGas = useUniswapTradeGasLimit(quickSwap, TradeProvider.QUICKSWAP)
 
     // pancake swap
     const pancakeSwap_ = useUniswapV2Trade(
@@ -106,7 +105,7 @@ export function useAllTradeComputed(
         outputToken,
     )
     const pancakeSwap = useUniswapTradeComputed(pancakeSwap_.value, inputToken, outputToken)
-    const pancakeSwapEstimateGas = useUniswapTradeGasLimit(sashimiSwap, TradeProvider.PANCAKESWAP)
+    const pancakeSwapEstimateGas = useUniswapTradeGasLimit(pancakeSwap, TradeProvider.PANCAKESWAP)
 
     // uniswap-v3 like providers
     const uniswapV3_ = useUniswapV3Trade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)

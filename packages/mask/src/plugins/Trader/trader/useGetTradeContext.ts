@@ -1,4 +1,4 @@
-import { getTraderConstants } from '../../../../../web3-shared/evm'
+import { getTraderConstants } from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import type { TradeContext as TradeContext_ } from '../types'
 import { TradeProvider } from '@masknet/public-api'

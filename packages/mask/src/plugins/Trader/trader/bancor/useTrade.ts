@@ -22,10 +22,10 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount()
 
