@@ -72,8 +72,8 @@ function usePluginsWeb3State() {
     const pluginStateFlow = usePluginWeb3State(NetworkPluginID.PLUGIN_FLOW, context)
     return useMemo(
         () => ({
-            [NetworkPluginID.PLUGIN_EVM]: usePluginWeb3State(NetworkPluginID.PLUGIN_EVM, context),
-            [NetworkPluginID.PLUGIN_FLOW]: usePluginWeb3State(NetworkPluginID.PLUGIN_FLOW, context),
+            [NetworkPluginID.PLUGIN_EVM]: pluginStateEVM,
+            [NetworkPluginID.PLUGIN_FLOW]: pluginStateFlow,
         }),
         [pluginStateEVM, pluginStateFlow],
     )
@@ -90,9 +90,7 @@ export const usePluginsWeb3StateContext = PluginsWeb3StateContext.useContainer
 export function usePluginWeb3StateContext(expectedPluginID?: NetworkPluginID) {
     const pluginID = usePluginIDContext()
     const pluginsWeb3State = usePluginsWeb3StateContext()
-    return useMemo(() => {
-        return pluginsWeb3State[expectedPluginID ?? pluginID]
-    }, [expectedPluginID ?? pluginID])
+    return useMemo(() => pluginsWeb3State[expectedPluginID ?? pluginID], [expectedPluginID ?? pluginID])
 }
 
 export function PluginsWeb3ContextProvider({
