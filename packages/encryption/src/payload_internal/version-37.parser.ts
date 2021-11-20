@@ -1,6 +1,13 @@
 import type { PayloadParserResult } from '.'
 import type { PayloadParseResult } from '../payload'
-import { EKindsError as Err, EKinds, OptionalResult, assertArray, assertArrayBuffer } from '../types'
+import {
+    EKindsError as Err,
+    CryptoException,
+    PayloadException,
+    OptionalResult,
+    assertArray,
+    assertUint8Array,
+} from '../types'
 import { Ok, Result } from 'ts-results'
 import { AESKey, AESAlgorithmEnum, AsymmetryCryptoKey, PublicKeyAlgorithmEnum } from '../payload/types'
 import {
@@ -16,31 +23,33 @@ import { parseSignatureContainer } from './SignatureContainer'
 // ? Payload format: (binary format)
 // ? See: docs/rfc/000-Payload-37.md
 
-const decode = decodeMessagePackF(EKinds.InvalidPayload, EKinds.DecodeFailed)
-const err = (msg: string, kind = EKinds.InvalidPayload) => new Err(kind, msg).toErr()
-const importSpki = Err.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, EKinds.InvalidCryptoKey)
-const importAES256 = Err.withErr(importAESFromJWK, EKinds.InvalidCryptoKey)
-export async function parse37(input: ArrayBuffer): PayloadParserResult {
+const decode = decodeMessagePackF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
+const InvalidPayload = (msg?: string) => new Err(PayloadException.InvalidPayload, msg).toErr()
+const importSpki = Err.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
+const importAES256 = Err.withErr(importAESFromJWK, CryptoException.InvalidCryptoKey)
+export async function parse37(input: Uint8Array): PayloadParserResult {
     const signatureContainer = parseSignatureContainer(input)
     if (signatureContainer.err) return signatureContainer
     const { payload, signature } = signatureContainer.val
     return parsePayload37(payload, signature)
 }
 
-function parsePayload37(payload: ArrayBuffer, signature: PayloadParseResult.Payload['signature']) {
-    const _ = decode(payload).andThen(assertArray('Payload', EKinds.InvalidPayload))
+function parsePayload37(payload: Uint8Array, signature: PayloadParseResult.Payload['signature']) {
+    const _ = decode(payload).andThen(assertArray('Payload', PayloadException.InvalidPayload))
     return andThenAsync(_, async (item) => {
         const [version, authorNetwork, authorID, authorPublicKeyAlg, authorPublicKey, encryption, data] = item
-        if (version !== -37) return err('Unknown version')
+        if (version !== -37) return new Err(PayloadException.UnknownVersion, null).toErr()
 
         const normalized: PayloadParseResult.Payload = {
             version: -37,
             author: parseAuthor(authorNetwork, authorID),
-            authorPublicKey: OptionalResult.fromResult(
-                await importAsymmetryKey(authorPublicKeyAlg, authorPublicKey, 'authorPublicKey'),
-            ),
+            authorPublicKey: authorPublicKey
+                ? OptionalResult.fromResult(
+                      await importAsymmetryKey(authorPublicKeyAlg, authorPublicKey, 'authorPublicKey'),
+                  )
+                : OptionalResult.None,
             encryption: await parseEncryption(encryption),
-            encrypted: assertArrayBuffer(data, 'encrypted', EKinds.InvalidPayload),
+            encrypted: assertUint8Array(data, 'encrypted', PayloadException.InvalidPayload),
             signature,
         }
         return Ok(normalized)
@@ -50,7 +59,7 @@ function parsePayload37(payload: ArrayBuffer, signature: PayloadParseResult.Payl
 function parseAuthor(network: unknown, id: unknown): PayloadParseResult.Payload['author'] {
     if (network === null) return OptionalResult.None
     if (id === '' || id === null) return OptionalResult.None
-    if (typeof id !== 'string') return err('Invalid user id')
+    if (typeof id !== 'string') return InvalidPayload('Invalid user id')
 
     let net = ''
     if (network === SocialNetworkEnum.Facebook) net = 'facebook.com'
@@ -58,26 +67,26 @@ function parseAuthor(network: unknown, id: unknown): PayloadParseResult.Payload[
     else if (network === SocialNetworkEnum.Instagram) net = 'instagram.com'
     else if (network === SocialNetworkEnum.Minds) net = 'minds.com'
     else if (typeof network === 'string') net = network
-    else if (typeof network !== 'number') return err('Invalid network')
-    else return err('Invalid network', EKinds.UnknownEnumMember)
+    else if (typeof network !== 'number') return InvalidPayload('Invalid network')
+    else return new Err(PayloadException.UnknownEnumMember, 'unknown network').toErr()
 
-    if (net.includes('/')) return err('Invalid network')
+    if (net.includes('/')) return InvalidPayload('Invalid network')
 
     return OptionalResult.Some(new ProfileIdentifier(net, id))
 }
 
 async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.Payload['encryption']> {
-    if (!Array.isArray(encryption)) return err('Invalid encryption')
+    if (!Array.isArray(encryption)) return InvalidPayload('Invalid encryption')
     const kind: EncryptionKind = encryption[0]
     if (kind === EncryptionKind.PeerToPeer) {
         const [, ownersAESKeyEncrypted, iv, authorEphemeralPublicKeys] = encryption
         const e: PayloadParseResult.EndToEndEncryption = {
             type: 'E2E',
-            iv: assertArrayBuffer(iv, 'iv', EKinds.InvalidPayload).andThen(assertIVLengthEq16),
-            ownersAESKeyEncrypted: assertArrayBuffer(
+            iv: assertUint8Array(iv, 'iv', PayloadException.InvalidPayload).andThen(assertIVLengthEq16),
+            ownersAESKeyEncrypted: assertUint8Array(
                 ownersAESKeyEncrypted,
                 'ownersAESKeyEncrypted',
-                EKinds.InvalidPayload,
+                PayloadException.InvalidPayload,
             ),
             ephemeralPublicKey: await parseAuthorEphemeralPublicKeys(authorEphemeralPublicKeys),
         }
@@ -86,7 +95,7 @@ async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.
         const [, AESKey, iv] = encryption
         const e: PayloadParseResult.PublicEncryption = {
             type: 'public',
-            iv: assertArrayBuffer(iv, 'iv', EKinds.InvalidPayload).andThen(assertIVLengthEq16),
+            iv: assertUint8Array(iv, 'iv', PayloadException.InvalidPayload).andThen(assertIVLengthEq16),
             AESKey: await parseAES(AESKey),
         }
         return Ok(e)
@@ -94,7 +103,7 @@ async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.
         safeUnreachable(kind)
     }
 
-    return err('Invalid encryption')
+    return InvalidPayload('Invalid encryption')
 
     async function parseAuthorEphemeralPublicKeys(item: unknown) {
         if (typeof item !== 'object' || item === null) return {}
@@ -108,26 +117,22 @@ async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.
 function parseAES(aes: unknown) {
     type T = Promise<PayloadParseResult.PublicEncryption['AESKey']>
 
-    return andThenAsync(assertArray('aes', EKinds.InvalidPayload)(aes), async (aes): T => {
-        const [alg, k] = aes
+    return andThenAsync(assertArray('aes', CryptoException.InvalidCryptoKey)(aes), async (aes): T => {
+        const [algr, k] = aes
         if (typeof k === 'string') {
-            if (alg === 'A256GCM') {
-                const jwk: JsonWebKey = { ext: true, key_ops: ['encrypt', 'decrypt'], kty: 'oct', alg, k }
-                const key = await importAES256(jwk, AESAlgorithmEnum.AES_GCM_256)
+            if (algr === AESAlgorithmEnum.A256GCM) {
+                const jwk: JsonWebKey = { ext: true, key_ops: ['encrypt', 'decrypt'], kty: 'oct', alg: algr, k }
+                const key = await importAES256(jwk, algr)
                 if (key.err) return key
-                return Ok<AESKey>({ algr: AESAlgorithmEnum.AES_GCM_256, key: key.val })
+                return Ok<AESKey>({ algr, key: key.val })
             }
-            if (typeof alg !== 'string') return err('Invalid AES key algorithm')
-            return err('Invalid AES key algorithm', EKinds.UnsupportedAlgorithm)
         }
-        return err('Invalid AES key')
+        return new Err(CryptoException.UnsupportedAlgorithm, null).toErr()
     })
 }
 function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
-    type T = Promise<Result<AsymmetryCryptoKey, Err<PayloadParseResult.CryptoKeyException>>>
-    return andThenAsync(assertArrayBuffer(key, name, EKinds.InvalidPayload), async (pubKey): T => {
-        if (typeof algr !== 'string' && typeof algr !== 'number') return err('Invalid PublicKeyAlgorithm')
-
+    type T = Promise<Result<AsymmetryCryptoKey, Err<CryptoException>>>
+    return andThenAsync(assertUint8Array(key, name, CryptoException.InvalidCryptoKey), async (pubKey): T => {
         if (typeof algr === 'number') {
             if (algr in PublicKeyAlgorithmEnum) {
                 const key = await importSpki(pubKey, algr)
@@ -135,7 +140,7 @@ function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
                 return Ok<AsymmetryCryptoKey>({ algr, key: key.val })
             }
         }
-        return err('Invalid AES key algorithm', EKinds.UnsupportedAlgorithm)
+        return new Err(CryptoException.UnsupportedAlgorithm, null).toErr()
     })
 }
 enum SocialNetworkEnum {

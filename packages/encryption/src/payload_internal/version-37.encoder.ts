@@ -1,6 +1,6 @@
-import { encode } from '@msgpack/msgpack'
+import { Ok } from 'ts-results'
 import type { PayloadWellFormed } from '..'
-import { exportCryptoKeyToSPKI } from '../utils'
+import { encodeMessagePack, exportCryptoKeyToSPKI } from '../utils'
 
 const enum Index {
     version = 0,
@@ -37,14 +37,14 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
     }
     if (payload.encryption.type === 'E2E') {
         const { ephemeralPublicKey, iv, ownersAESKeyEncrypted } = payload.encryption
+        // TODO
         const subArr = [1, ownersAESKeyEncrypted, iv, Object.fromEntries(ephemeralPublicKey.entries())]
         payload_arr[Index.encryption] = subArr
     } else {
         const { AESKey, iv } = payload.encryption
-        const subArr = [0, AESKey, iv]
+        const subArr = [0, [AESKey.algr, (await crypto.subtle.exportKey('jwk', AESKey.key)).k], iv]
         payload_arr[Index.encryption] = subArr
     }
     payload_arr[Index.data] = payload.encrypted
-
-    return encode(payload_arr)
+    return Ok(encodeMessagePack(payload_arr))
 }

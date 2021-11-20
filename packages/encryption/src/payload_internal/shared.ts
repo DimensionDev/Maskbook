@@ -1,8 +1,8 @@
 import { Ok } from 'ts-results'
-import { EKinds, EKindsError } from '../types'
+import { CryptoException, EKindsError } from '../types'
 import { importAESFromJWK } from '../utils'
 
-const import_AES_GCM_256 = EKindsError.withErr(importAESFromJWK.AES_GCM_256, EKinds.InvalidCryptoKey)
+const import_AES_GCM_256 = EKindsError.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
 
 /**
  * @internal

@@ -7,11 +7,11 @@ import {
     PublicKeyAlgorithmEnum,
     Signature,
 } from '../payload'
-import { DecodeExceptions, EKinds, OptionalResult, EKindsError as Err } from '../types'
+import { CryptoException, PayloadException, OptionalResult, EKindsError as Err } from '../types'
 import { Result, Ok, Some } from 'ts-results'
 import {
     andThenAsync,
-    decodeArrayBufferF,
+    decodeUint8ArrayF,
     decodeTextF,
     decryptWithAES,
     assertIVLengthEq16,
@@ -25,16 +25,16 @@ import type { PayloadParserResult } from '.'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import { encodeText } from '@dimensiondev/kit'
 
-const decodeArrayBuffer = decodeArrayBufferF(EKinds.InvalidPayload, EKinds.DecodeFailed)
-const decodeText = decodeTextF(EKinds.InvalidPayload, EKinds.DecodeFailed)
-const JSONParse = JSONParseF(EKinds.InvalidPayload, EKinds.DecodeFailed)
-const importEC = Err.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, EKinds.InvalidCryptoKey)
+const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
+const decodeText = decodeTextF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
+const JSONParse = JSONParseF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
+const importEC = Err.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
 
 // ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
 export async function parse38(payload: string): PayloadParserResult {
     //#region Parse text
     const header = '🎼4/4'
-    if (!payload.startsWith(header)) return new Err(EKinds.InvalidPayload, 'Unknown version').toErr()
+    if (!payload.startsWith(header)) return new Err(PayloadException.InvalidPayload, 'Unknown version').toErr()
     let rest = payload.slice(header.length)
     // cut the tail
     rest = rest.slice(0, rest.lastIndexOf(':||'))
@@ -44,8 +44,8 @@ export async function parse38(payload: string): PayloadParserResult {
     //#endregion
 
     //#region Normalization
-    const raw_iv = decodeArrayBuffer(iv).andThen(assertIVLengthEq16)
-    const raw_aes = decodeArrayBuffer(AESKeyEncrypted)
+    const raw_iv = decodeUint8Array(iv).andThen(assertIVLengthEq16)
+    const raw_aes = decodeUint8Array(AESKeyEncrypted)
     const encryption: PayloadParseResult.EndToEndEncryption | PayloadParseResult.PublicEncryption = sharedPublic
         ? {
               type: 'public',
@@ -64,11 +64,11 @@ export async function parse38(payload: string): PayloadParserResult {
         authorPublicKey: OptionalResult.None,
         signature: OptionalResult.None,
         encryption: Ok(encryption),
-        encrypted: decodeArrayBuffer(encryptedText),
+        encrypted: decodeUint8Array(encryptedText),
     }
     if (authorUserID) {
         normalized.author = Identifier.fromString(authorUserID, ProfileIdentifier)
-            .mapErr(Err.mapErr(EKinds.DecodeFailed))
+            .mapErr(Err.mapErr(PayloadException.DecodeFailed))
             .map((e) => Some(e))
     }
     if (authorPublicKey) {
@@ -76,7 +76,7 @@ export async function parse38(payload: string): PayloadParserResult {
     }
     if (signature && raw_iv.ok && raw_aes.ok && normalized.encrypted.ok) {
         const message = encodeText(`4/4|${AESKeyEncrypted}|${iv}|${encryptedText}`)
-        const sig = decodeArrayBuffer(signature)
+        const sig = decodeUint8Array(signature)
         if (sig.ok) {
             normalized.signature = OptionalResult.Some<Signature>({ signee: message, signature: sig.val })
         } else {
@@ -103,29 +103,29 @@ function splitFields(raw: string) {
 }
 
 async function decodePublicSharedAESKey(
-    iv: Result<ArrayBuffer, Err<DecodeExceptions>>,
-    encryptedKey: Result<ArrayBuffer, Err<DecodeExceptions>>,
+    iv: Result<Uint8Array, Err<CryptoException>>,
+    encryptedKey: Result<Uint8Array, Err<CryptoException>>,
 ): Promise<PayloadParseResult.PublicEncryption['AESKey']> {
     if (iv.err) return iv
     if (encryptedKey.err) return encryptedKey
     const publicSharedKey = await get_v38PublicSharedCryptoKey()
     if (publicSharedKey.err) return publicSharedKey
 
-    const import_AES_GCM_256 = Err.withErr(importAESFromJWK.AES_GCM_256, EKinds.InvalidCryptoKey)
-    const decrypt = Err.withErr(decryptWithAES, EKinds.DecodeFailed)
+    const import_AES_GCM_256 = Err.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
+    const decrypt = Err.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
 
-    const jwk_in_ab = decrypt(AESAlgorithmEnum.AES_GCM_256, publicSharedKey.val, iv.val, encryptedKey.val)
+    const jwk_in_ab = decrypt(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv.val, encryptedKey.val)
     const jwk_in_text = andThenAsync(jwk_in_ab, decodeText)
     const jwk = andThenAsync(jwk_in_text, JSONParse)
     const aes = await andThenAsync(jwk, import_AES_GCM_256)
 
-    return aes.map<AESKey>((key) => ({ algr: AESAlgorithmEnum.AES_GCM_256, key }))
+    return aes.map<AESKey>((key) => ({ algr: AESAlgorithmEnum.A256GCM, key }))
 }
 
 async function decodeECDHPublicKey(
     compressedPublic: string,
-): Promise<OptionalResult<AsymmetryCryptoKey, PayloadParseResult.CryptoKeyException>> {
-    const key = decodeArrayBuffer(compressedPublic).andThen(decompressK256Point)
+): Promise<OptionalResult<AsymmetryCryptoKey, CryptoException>> {
+    const key = decodeUint8Array(compressedPublic).andThen(decompressK256Point)
 
     if (key.err) return key
     const [x, y] = key.val
@@ -145,10 +145,9 @@ async function decodeECDHPublicKey(
     })
 }
 
-function decompressK256Point(point: ArrayBuffer) {
-    const p = new Uint8Array(point)
-    if (!isPoint(p)) return new Err(EKinds.InvalidCryptoKey, null).toErr()
-    const uncompressed: Uint8Array = isPointCompressed(p) ? pointCompress(p, false) : p
+function decompressK256Point(point: Uint8Array) {
+    if (!isPoint(point)) return new Err(CryptoException.InvalidCryptoKey, null).toErr()
+    const uncompressed: Uint8Array = isPointCompressed(point) ? pointCompress(point, false) : point
     const len = (uncompressed.length - 1) / 2
     const x = uncompressed.slice(1, len + 1)
     const y = uncompressed.slice(len + 1)

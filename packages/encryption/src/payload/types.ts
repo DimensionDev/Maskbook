@@ -2,13 +2,18 @@
 // Internal payload should not be exported
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { Result, Option } from 'ts-results'
-import type { DecodeExceptions, EKindsError as Err, EKinds, OptionalResult } from '../types'
+import type { EKindsError as Err, CryptoException, PayloadException, OptionalResult } from '../types'
 
 /** A parse result, that try to preserve as many info as possible. */
 export declare namespace PayloadParseResult {
-    export type OptionalField<T, E extends EKinds = DecodeExceptions> = OptionalResult<T, DecodeExceptions | E>
-    export type RequiredField<T, E extends EKinds = DecodeExceptions> = Result<T, Err<DecodeExceptions | E>>
-    export type CryptoKeyException = DecodeExceptions | EKinds.UnsupportedAlgorithm | EKinds.InvalidCryptoKey
+    export type OptionalField<
+        T,
+        E extends CryptoException | PayloadException = CryptoException | PayloadException,
+    > = OptionalResult<T, E>
+    export type RequiredField<
+        T,
+        E extends CryptoException | PayloadException = CryptoException | PayloadException,
+    > = Result<T, Err<E>>
     export interface Payload {
         /**
          * Version starts from -42 but -42 and -41 are dropped.
@@ -20,32 +25,32 @@ export declare namespace PayloadParseResult {
         /**
          * The claimed author of this payload.
          */
-        readonly author: OptionalField<ProfileIdentifier, EKinds.UnknownEnumMember>
+        readonly author: OptionalField<ProfileIdentifier, PayloadException>
         /**
          * The claimed public key of author.
          */
-        readonly authorPublicKey: OptionalField<AsymmetryCryptoKey, CryptoKeyException>
+        readonly authorPublicKey: OptionalField<AsymmetryCryptoKey, CryptoException>
         /** The encryption method this payload used. */
         readonly encryption: RequiredField<PublicEncryption | EndToEndEncryption>
         /** The encrypted content. */
-        readonly encrypted: RequiredField<ArrayBuffer>
+        readonly encrypted: RequiredField<Uint8Array>
     }
     /**
      * A publicly encrypted payload.
      */
     export interface PublicEncryption {
         readonly type: 'public'
-        readonly AESKey: RequiredField<AESKey, CryptoKeyException>
-        readonly iv: RequiredField<ArrayBuffer>
+        readonly AESKey: RequiredField<AESKey, CryptoException>
+        readonly iv: RequiredField<Uint8Array>
     }
     /**
      * An E2E encrypted payload.
      */
     export interface EndToEndEncryption {
         readonly type: 'E2E'
-        readonly ownersAESKeyEncrypted: RequiredField<ArrayBuffer>
-        readonly iv: RequiredField<ArrayBuffer>
-        readonly ephemeralPublicKey: Record<string, RequiredField<AsymmetryCryptoKey, CryptoKeyException>>
+        readonly ownersAESKeyEncrypted: RequiredField<Uint8Array>
+        readonly iv: RequiredField<Uint8Array>
+        readonly ephemeralPublicKey: Record<string, RequiredField<AsymmetryCryptoKey, CryptoException>>
     }
 }
 /** Well formed payload that can be encoded into the latest version */
@@ -69,7 +74,7 @@ export declare namespace PayloadWellFormed {
         /** The encryption method this payload used. */
         readonly encryption: PublicEncryption | EndToEndEncryption
         /** The encrypted content. */
-        readonly encrypted: ArrayBuffer
+        readonly encrypted: Uint8Array
     }
     /**
      * A publicly encrypted payload.
@@ -78,21 +83,21 @@ export declare namespace PayloadWellFormed {
         readonly type: 'public'
         /** The key used to encrypt the payload. */
         readonly AESKey: AESKey
-        readonly iv: ArrayBuffer
+        readonly iv: Uint8Array
     }
     /**
      * An E2E encrypted payload.
      */
     export interface EndToEndEncryption {
         readonly type: 'E2E'
-        readonly ownersAESKeyEncrypted: ArrayBuffer
-        readonly iv: ArrayBuffer
+        readonly ownersAESKeyEncrypted: Uint8Array
+        readonly iv: Uint8Array
         readonly ephemeralPublicKey: Map<PublicKeyAlgorithmEnum, CryptoKey>
     }
 }
 export interface Signature {
-    readonly signee: ArrayBuffer
-    readonly signature: ArrayBuffer
+    readonly signee: Uint8Array
+    readonly signature: Uint8Array
 }
 export interface AsymmetryCryptoKey {
     readonly algr: PublicKeyAlgorithmEnum
@@ -108,5 +113,5 @@ export enum PublicKeyAlgorithmEnum {
     secp256k1 = 2, // K-256
 }
 export enum AESAlgorithmEnum {
-    AES_GCM_256 = 'AES_GCM_256',
+    A256GCM = 'A256GCM',
 }
