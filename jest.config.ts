@@ -24,6 +24,7 @@ const config: InitialOptionsTsJest = {
     moduleNameMapper: {
         '@masknet/shared-base': '<rootDir>/packages/shared-base/src/index.ts',
     },
+    snapshotSerializers: ['@masknet/serializer'],
 }
 
 export default config

@@ -1,6 +1,7 @@
 # If you need to speedup webpack build, please also add the new package builds into
 # webpack config.resolve.alias
 packages:
+  - 'packages/test-serializer'
   - 'packages/empty'
   - 'packages/polyfills'
   - 'packages/polyfills/types'

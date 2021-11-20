@@ -20,6 +20,7 @@ importers:
       '@jest/globals': ^27.3.1
       '@magic-works/i18n-codegen': ^0.0.6
       '@masknet/cli': workspace:*
+      '@masknet/serializer': workspace:^0.0.0
       '@mui/icons-material': 5.1.1
       '@mui/lab': 5.0.0-alpha.55
       '@mui/material': 5.1.1
@@ -93,6 +94,7 @@ importers:
       '@jest/globals': 27.3.1
       '@magic-works/i18n-codegen': 0.0.6_typescript@4.5.2
       '@masknet/cli': link:packages/scripts
+      '@masknet/serializer': link:packages/test-serializer
       '@nice-labs/git-rev': 3.5.0
       '@types/lodash-es': 4.17.5
       cspell: 5.12.5
