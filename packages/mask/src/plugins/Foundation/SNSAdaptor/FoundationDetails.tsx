@@ -6,25 +6,25 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const useStyles = makeStyles()((theme) => {
     return {
+        body: {
+            background: theme.palette.background.paper,
+            borderRadius: theme.spacing(0.5),
+        },
         accordion: {
             backgroundColor: 'none',
-            minWidth: '435px',
             boxShadow: 'none',
-            borderRadius: '4px',
+            borderRadius: theme.spacing(0.5),
             margin: theme.spacing(2, 0, 2, 0),
             '&.Mui-expanded': {
-                borderRadius: '4px',
+                borderRadius: theme.spacing(0.5),
             },
         },
         accordionHeader: {
             backgroundColor: theme.palette.action.selected,
-            minWidth: '435px',
-            minHeight: '64px',
-            borderRadius: '4px',
+            borderRadius: theme.spacing(0.5),
         },
         accordionBody: {
-            minWidth: '435px',
-            padding: 0,
+            padding: '1px',
         },
         description: {
             margin: theme.spacing(2, 0, 2, 0),
@@ -36,18 +36,18 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface Props extends React.PropsWithChildren<{}> {
-    description: string
     nft: Nft
     metadata: Metadata
 }
 
-function FoundationDescription() {
+function FoundationDetails(props: Props) {
     const { classes } = useStyles()
     return (
-        <Box p={3}>
+        <Box p={3} className={classes.body}>
             <Accordion className={classes.accordion} defaultExpanded={true}>
                 <AccordionSummary
                     className={classes.accordionHeader}
+                    sx={{ height: '44px' }}
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header">
@@ -56,22 +56,17 @@ function FoundationDescription() {
                 <AccordionDetails className={classes.accordionBody}>
                     <Typography className={classes.typography}>
                         Created by{' '}
-                        <Link
-                            href="https://etherscan.io/address/0x44458837ac4036337e5Ce46Ce28A744e05e02016"
-                            target="_blank">
-                            {formatEthereumAddress('0x44458837ac4036337e5Ce46Ce28A744e05e02016', 4)}
+                        <Link href={`https://etherscan.io/address/${props.nft.creator.id}`} target="_blank">
+                            {formatEthereumAddress(props.nft.creator.id, 4)}
                         </Link>
                     </Typography>
-                    <Typography className={classes.typography}>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Consequuntur esse corporis
-                        perspiciatis minima inventore, ducimus debitis saepe omnis repellat deleniti, dolorem veritatis
-                        veniam officia distinctio dolores adipisci architecto earum possimus.
-                    </Typography>
+                    <Typography className={classes.typography}>{props.metadata.description}</Typography>
                 </AccordionDetails>
             </Accordion>
             <Accordion className={classes.accordion} defaultExpanded={true}>
                 <AccordionSummary
                     className={classes.accordionHeader}
+                    sx={{ height: '44px' }}
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel2a-content"
                     id="panel2a-header">
@@ -85,11 +80,9 @@ function FoundationDescription() {
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
-                            <Link
-                                href="https://etherscan.io/address/0x44458837ac4036337e5Ce46Ce28A744e05e02016"
-                                target="_blank">
+                            <Link href={`https://etherscan.io/address/${props.nft.nftContract.id}`} target="_blank">
                                 <Typography className={classes.typography} align="right">
-                                    {formatEthereumAddress('0x44458837ac4036337e5Ce46Ce28A744e05e02016', 4)}
+                                    {formatEthereumAddress(props.nft.nftContract.id, 4)}
                                 </Typography>
                             </Link>
                         </Grid>
@@ -100,7 +93,7 @@ function FoundationDescription() {
                         </Grid>
                         <Grid item xs={6}>
                             <Typography className={classes.typography} align="right">
-                                450
+                                {props.nft.tokenId}
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
@@ -119,4 +112,4 @@ function FoundationDescription() {
         </Box>
     )
 }
-export default FoundationDescription
+export default FoundationDetails

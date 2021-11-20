@@ -9,6 +9,7 @@ import {
     TableRow,
     TableCell,
     TableBody,
+    useMediaQuery,
 } from '@mui/material'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
@@ -22,6 +23,10 @@ import { ETHIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => {
     return {
+        body: {
+            background: theme.palette.background.paper,
+            borderRadius: theme.spacing(0.5),
+        },
         icons: {
             width: '24px',
             height: '24px',
@@ -29,9 +34,13 @@ const useStyles = makeStyles()((theme) => {
         },
         table: {
             background: theme.palette.divider,
-            borderTopWidth: 2,
-            borderColor: theme.palette.background.paper,
-            borderStyle: 'solid',
+        },
+        subCurrency: {
+            margin: '1px',
+            color: theme.palette.text.disabled,
+        },
+        tableCell: {
+            padding: theme.spacing(0.5),
         },
     }
 })
@@ -45,6 +54,10 @@ function FoundationProvenances(props: Props) {
     const { classes } = useStyles()
     const account = useAccount()
     const { value: nativeToken } = useNativeTokenDetailed()
+    const isDarkModeEnabled = useMediaQuery('(prefers-color-scheme: dark)')
+        ? { padding: 1.5, color: '#121212' }
+        : { padding: 3, color: 'none' }
+    const tableType = useMediaQuery('(prefers-color-scheme: dark)') ? 'separate' : 'collapse'
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
     const histories = props.histories.sort((first: NftHistory, second: NftHistory) => {
         if (first.date < second.date) {
@@ -56,9 +69,12 @@ function FoundationProvenances(props: Props) {
         return 0
     })
     return (
-        <Box p={3}>
-            <TableContainer component={Paper}>
-                <Table size="small" aria-label="provenancestable">
+        <Box className={classes.body} px={3} py={isDarkModeEnabled.padding}>
+            <TableContainer component={Paper} sx={{ borderRadius: '4px' }}>
+                <Table
+                    sx={{ borderCollapse: tableType, borderSpacing: '0px 16px' }}
+                    size="small"
+                    aria-label="provenancestable">
                     <TableHead className={classes.table}>
                         <TableRow>
                             <TableCell>Event</TableCell>
@@ -68,14 +84,13 @@ function FoundationProvenances(props: Props) {
                     </TableHead>
                     <TableBody>
                         {histories.map((history: NftHistory) => (
-                            <TableRow className={classes.table}>
-                                <TableCell>
+                            <TableRow sx={{ background: isDarkModeEnabled.color }}>
+                                <TableCell className={classes.tableCell}>
                                     <Box>
                                         <Typography variant="subtitle1">
                                             {`${history.event} ${t('plugin_foundation_by')} `}
                                             <Link
                                                 href={`https://etherscan.io/address/${history.txOrigin.id}`}
-                                                color="inherit"
                                                 target="_blank">
                                                 {account === history.txOrigin.id ? (
                                                     <span>{t('plugin_foundation_you_address')}</span>
@@ -93,18 +108,25 @@ function FoundationProvenances(props: Props) {
                                         </Typography>
                                     </Box>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className={classes.tableCell}>
                                     {history.amountInETH !== null && (
                                         <Box>
                                             <Typography align="left" variant="subtitle1" m={1}>
                                                 <ETHIcon className={classes.icons} color="primary" fontSize="inherit" />{' '}
-                                                {history.amountInETH}(
-                                                {formatCurrency(nativeTokenPrice * Number(history.amountInETH), '$')})
+                                                {history.amountInETH}
+                                                <span className={classes.subCurrency}>
+                                                    (
+                                                    {formatCurrency(
+                                                        nativeTokenPrice * Number(history.amountInETH),
+                                                        '$',
+                                                    )}
+                                                    )
+                                                </span>
                                             </Typography>
                                         </Box>
                                     )}
                                 </TableCell>
-                                <TableCell>
+                                <TableCell sx={{ textAlign: 'right' }} className={classes.tableCell}>
                                     <Link
                                         href={`https://etherscan.io/tx/${history.id.split('-')[0]}`}
                                         color="inherit"

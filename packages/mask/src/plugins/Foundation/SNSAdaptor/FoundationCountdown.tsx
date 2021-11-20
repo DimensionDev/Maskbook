@@ -9,7 +9,7 @@ const useStyles = makeStyles()((theme) => {
             background: '#FF5F5F',
             width: '100%',
             marginTop: '-12px',
-            borderRadius: '0px 0px 4px 4px',
+            borderRadius: theme.spacing(0, 0, 0.5, 0.5),
         },
         countdown: {
             color: theme.palette.text.primary,

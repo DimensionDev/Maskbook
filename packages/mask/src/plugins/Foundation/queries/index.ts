@@ -1,5 +1,5 @@
-export const FoundationAddressIdQuery = (tokenId: string) => `
-query {
+export const FoundationAddressIdQuery = (tokenId: string) =>
+    `query {
     nfts(where: {tokenId: ${tokenId} })
         {
         id
@@ -33,6 +33,9 @@ query {
             id
             baseURI
         }
+          creator {
+            id
+          }
         tokenIPFSPath
         tokenId
         }

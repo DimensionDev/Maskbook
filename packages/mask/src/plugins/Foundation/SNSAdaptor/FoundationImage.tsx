@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { Link, Box } from '@mui/material'
+import { Grid, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { NftContract, Metadata } from '../types'
 
@@ -7,11 +7,10 @@ const useStyles = makeStyles()((theme) => {
     return {
         body: {
             display: 'flex',
-            borderRadius: '4px 4px 4px 4px',
-            background: theme.palette.divider,
+            borderRadius: theme.spacing(0.5),
         },
         image: {
-            borderRadius: '4px 4px 4px 4px',
+            borderRadius: theme.spacing(1),
             maxWidth: '100%',
         },
     }
@@ -70,11 +69,11 @@ function FoundationImage(props: Props) {
     const image = props.metadata.image.split('/')
     const src = `${props.nftContract.baseURI}${image.at(-2)}/${image.at(-1)}`
     return (
-        <Box className={classes.body}>
+        <Grid container justifyContent="center">
             <Link href={src} target="_blank" rel="noopener noreferrer">
                 <Asset src={src} alt={props.metadata.name} />
             </Link>
-        </Box>
+        </Grid>
     )
 }
 

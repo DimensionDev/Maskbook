@@ -1,8 +1,12 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
 
 export interface Auction {
-    id: string
     dateEnding: string
+    id: string
+}
+
+export interface Creator {
+    id: string
 }
 
 export interface Bidder {
@@ -23,8 +27,8 @@ export interface MostRecentAuction {
 }
 
 export interface NftContract {
-    id: string
     baseURI: string
+    id: string
 }
 
 export interface TxOrigin {
@@ -42,8 +46,8 @@ export interface NftHistory {
 
 export interface Nft {
     auctions: Auction[]
+    creator: Creator
     id: string
-    isFirstSale: boolean
     mostRecentAuction: MostRecentAuction
     nftContract: NftContract
     nftHistory: NftHistory[]

@@ -18,9 +18,6 @@ const useStyles = makeStyles()((theme) => {
             padding: 0,
             background: theme.palette.divider,
         },
-        PlaceInput: {
-            maxWidth: '100%',
-        },
         footer: {
             marginTop: -1, // merge duplicate borders
             zIndex: 1,
@@ -35,9 +32,6 @@ const useStyles = makeStyles()((theme) => {
             overflow: 'hidden',
             wordBreak: 'break-word',
         },
-        error: {
-            color: 'red',
-        },
         footnote: {
             fontSize: 10,
             marginRight: theme.spacing(1),
@@ -48,19 +42,6 @@ const useStyles = makeStyles()((theme) => {
             '&:last-child': {
                 marginRight: 0,
             },
-        },
-        footMenu: {
-            color: theme.palette.text.secondary,
-            fontSize: 10,
-            display: 'flex',
-            alignItems: 'center',
-        },
-        footName: {
-            marginLeft: theme.spacing(0.5),
-        },
-        mask: {
-            width: 40,
-            height: 10,
         },
     }
 })
@@ -77,11 +58,11 @@ function FoundationCard(props: Props) {
                     Loading...
                 </Typography>
             ) : error ? (
-                <Typography className={classes.error} variant="h6" align="center">
+                <Typography sx={{ color: 'red' }} variant="h6" align="center">
                     Error: {error.message}
                 </Typography>
             ) : typeof nftData === 'undefined' || nftData === null ? (
-                <Typography className={classes.error} variant="h6" align="center">
+                <Typography sx={{ color: 'red' }} variant="h6" align="center">
                     {t('plugin_foundation_error_metadata')}
                 </Typography>
             ) : (
@@ -102,7 +83,7 @@ function FoundationCard(props: Props) {
                                 rel="noopener noreferrer"
                                 title="Mask"
                                 href="https://mask.io">
-                                <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
+                                <MaskTextIcon sx={{ width: 40, height: 10 }} viewBox="0 0 80 20" />
                             </Link>
                         </Typography>
                     </CardActions>

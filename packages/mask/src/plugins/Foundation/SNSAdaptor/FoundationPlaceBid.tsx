@@ -37,9 +37,6 @@ const useStyles = makeStyles()((theme) => {
             },
             width: '100%',
         },
-        button: {
-            width: '100%',
-        },
     }
 })
 
@@ -72,9 +69,7 @@ function FoundationPlaceBid(props: Props) {
     const classes = useStylesExtends(useStyles(), props)
     const auctionId = props.nft.mostRecentAuction.id.split('-')[1]
     const dateEnding = props.nft.mostRecentAuction.dateEnding
-    const auctionStatus = props.nft.mostRecentAuction.status
     //#endregion
-
     //#region the selected token
     const [token = nativeTokenDetailed.value] = useState<FungibleTokenDetailed | undefined>(nativeTokenDetailed.value)
     const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
@@ -136,7 +131,8 @@ function FoundationPlaceBid(props: Props) {
 
     //#region submit button
     const validationMessage = useMemo(() => {
-        if (auctionStatus !== 'Open') return t('plugin_foundation_auction_over')
+        if (dateEnding !== null && Math.floor(Date.now() / 1000) > Number(dateEnding))
+            return t('plugin_foundation_auction_over')
         if (props.nft.mostRecentAuction.highestBid?.bidder.id.includes(account.toLocaleLowerCase()))
             return t('plugin_foundation_you_outstanding_bid')
         if (props.nft.mostRecentAuction.reservePriceInETH > rawAmount) return t('plugin_foundation_bid_least_reserve')
@@ -176,7 +172,7 @@ function FoundationPlaceBid(props: Props) {
                     disabled={!!validationMessage}
                     onClick={PlaceBidCallback}
                     variant="contained">
-                    {validationMessage || t('plugin_foundation_place_bid')}
+                    {validationMessage || t('plugin_foundation_make_offer')}
                 </ActionButton>
             </EthereumWalletConnectedBoundary>
         </Grid>
