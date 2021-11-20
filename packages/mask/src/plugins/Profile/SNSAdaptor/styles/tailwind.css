@@ -1488,34 +1488,6 @@ video {
     --tw-bg-opacity: 0.5;
 }
 
-.bg-EVM {
-    background-image: url(/chains/evm.png);
-}
-
-.bg-BSC {
-    background-image: url(/chains/BSC.png);
-}
-
-.bg-Ethereum {
-    background-image: url(/chains/Ethereum.png);
-}
-
-.bg-Ronin {
-    background-image: url(/chains/Ronin.png);
-}
-
-.bg-Misskey {
-    background-image: url(/chains/Misskey.png);
-}
-
-.bg-Twitter {
-    background-image: url(/chains/Twitter.png);
-}
-
-.bg-Polygon {
-    background-image: url(/chains/Polygon.png);
-}
-
 .bg-cover {
     background-size: cover;
 }
@@ -2018,6 +1990,10 @@ video {
         display: flex;
     }
 
+    .md\:w-64 {
+        width: 16rem;
+    }
+
     .md\:h-16 {
         height: 4rem;
     }
@@ -2028,6 +2004,10 @@ video {
 
     .md\:grid-cols-2 {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .md\:grid-cols-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     .md\:grid-cols-4 {

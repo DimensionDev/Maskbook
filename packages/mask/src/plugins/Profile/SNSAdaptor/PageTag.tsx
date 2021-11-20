@@ -5,13 +5,9 @@ import { PageTags } from '../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        '>:nth-child(2)': {
-            marginLeft: theme.spacing(2),
-        },
-        '>:nth-child(3)': {
-            marginLeft: theme.spacing(2),
-            marginRight: theme.spacing(2),
-        },
+        display: 'flex',
+        gap: '8px',
+        flexWrap: 'wrap',
     },
     button: {
         border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(237, 241, 242, 1)' : 'rgba(47, 51, 54, 1)'}`,
@@ -21,6 +17,22 @@ const useStyles = makeStyles()((theme) => ({
     selected: {
         border: `1px solid ${theme.palette.primary.main}`,
         color: theme.palette.primary.main,
+    },
+    connectRSS3: {
+        position: 'absolute',
+        right: '16px',
+        boxSizing: 'border-box',
+        height: 36,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 9999,
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        border: '1px solid',
+        backgroundColor: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
+        color: theme.palette.mode === 'dark' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)',
+        cursor: 'pointer',
     },
 }))
 
@@ -62,6 +74,9 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 Footprints
             </Button>
+            <div className={classes.connectRSS3} onClick={() => onChange(PageTags.ConnectRSS3)}>
+                Connect RSS3
+            </div>
         </div>
     )
 }
