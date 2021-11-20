@@ -26,8 +26,10 @@ import { get_v38PublicSharedCryptoKey } from './shared'
 import { encodeText } from '@dimensiondev/kit'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
+const decodeUint8ArrayCrypto = decodeUint8ArrayF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
 const decodeText = decodeTextF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
-const JSONParse = JSONParseF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
+const decodeTextCrypto = decodeTextF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
+const JSONParse = JSONParseF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
 const importEC = Err.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
 
 // ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
@@ -44,8 +46,8 @@ export async function parse38(payload: string): PayloadParserResult {
     //#endregion
 
     //#region Normalization
-    const raw_iv = decodeUint8Array(iv).andThen(assertIVLengthEq16)
-    const raw_aes = decodeUint8Array(AESKeyEncrypted)
+    const raw_iv = decodeUint8ArrayCrypto(iv).andThen(assertIVLengthEq16)
+    const raw_aes = decodeUint8ArrayCrypto(AESKeyEncrypted)
     const encryption: PayloadParseResult.EndToEndEncryption | PayloadParseResult.PublicEncryption = sharedPublic
         ? {
               type: 'public',
@@ -115,7 +117,7 @@ async function decodePublicSharedAESKey(
     const decrypt = Err.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
 
     const jwk_in_ab = decrypt(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv.val, encryptedKey.val)
-    const jwk_in_text = andThenAsync(jwk_in_ab, decodeText)
+    const jwk_in_text = andThenAsync(jwk_in_ab, decodeTextCrypto)
     const jwk = andThenAsync(jwk_in_text, JSONParse)
     const aes = await andThenAsync(jwk, import_AES_GCM_256)
 
@@ -125,7 +127,7 @@ async function decodePublicSharedAESKey(
 async function decodeECDHPublicKey(
     compressedPublic: string,
 ): Promise<OptionalResult<AsymmetryCryptoKey, CryptoException>> {
-    const key = decodeUint8Array(compressedPublic).andThen(decompressK256Point)
+    const key = decodeUint8ArrayCrypto(compressedPublic).andThen(decompressK256Point)
 
     if (key.err) return key
     const [x, y] = key.val
