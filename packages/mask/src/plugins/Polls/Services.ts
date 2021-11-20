@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import '../../network/gun/gun-worker.patch'
 import { gun2 } from '../../network/gun/version.2'
 import type { PollMetaData } from './types'

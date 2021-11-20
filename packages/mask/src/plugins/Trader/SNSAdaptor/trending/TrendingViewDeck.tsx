@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import stringify from 'json-stable-stringify'
-import { first, last } from 'lodash-es'
+import { first, last } from 'lodash-unified'
 import { FormattedCurrency, useValueRef, useRemoteControlledDialog, useStylesExtends, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat, Trending } from '../../types'
@@ -13,7 +13,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { useAccount, formatCurrency } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import {
@@ -233,6 +233,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                     : market.current_price) ?? 0
                                             }
                                             sign={currency.symbol}
+                                            formatter={formatCurrency}
                                         />
                                     </span>
                                 </>

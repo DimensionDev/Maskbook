@@ -12,6 +12,7 @@ import {
     pow10,
     useChainId,
 } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 
@@ -63,8 +64,9 @@ export interface TokenTableRowProps {
 
 export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
     const t = useDashboardI18N()
-    const currentChainId = useChainId()
     const { classes } = useStyles()
+    const currentChainId = useChainId()
+    const { Utils } = useWeb3State()
 
     const isOnCurrentChain = useMemo(() => currentChainId === asset.token.chainId, [asset, currentChainId])
 
@@ -105,7 +107,11 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                     {getTokenUSDValue(asset) < 0.01 ? (
                         '<0.01'
                     ) : (
-                        <FormattedCurrency value={getTokenUSDValue(asset).toFixed(2)} sign="$" />
+                        <FormattedCurrency
+                            value={getTokenUSDValue(asset).toFixed(2)}
+                            sign="$"
+                            formatter={Utils?.formatCurrency}
+                        />
                     )}
                 </Typography>
             </TableCell>

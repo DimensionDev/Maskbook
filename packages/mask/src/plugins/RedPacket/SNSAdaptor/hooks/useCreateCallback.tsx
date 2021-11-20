@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import { useCallback, useRef, useState } from 'react'
 import { useAsync } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'

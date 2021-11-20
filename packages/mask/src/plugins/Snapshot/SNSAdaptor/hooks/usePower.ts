@@ -3,7 +3,7 @@ import { useAccount, useBlockNumber } from '@masknet/web3-shared-evm'
 import { PluginSnapshotRPC } from '../../messages'
 import type { ProposalIdentifier } from '../../types'
 import { useProposal } from './useProposal'
-import { mapKeys } from 'lodash-es'
+import { mapKeys } from 'lodash-unified'
 
 export function usePower(identifier: ProposalIdentifier) {
     const { payload: proposal } = useProposal(identifier.id)

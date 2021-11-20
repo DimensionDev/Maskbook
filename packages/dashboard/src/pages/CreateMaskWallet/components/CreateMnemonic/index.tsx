@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { InfoIcon, RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
-import { ProviderType, useMnemonicWordsPuzzle } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
@@ -13,6 +13,7 @@ import { PluginServices, Services } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import type { Search } from 'history'
 import { WalletMessages } from '@masknet/plugin-wallet'
+import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle'
 
 // Private key at m/purpose'/coin_type'/account'/change
 export const HD_PATH_WITHOUT_INDEX_ETHEREUM = "m/44'/60'/0'/0"

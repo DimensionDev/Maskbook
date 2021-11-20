@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()({
     header: {

@@ -1,7 +1,7 @@
 import type { PoolRecord, PoolRecordInDatabase } from '../types'
 import { ITO_PluginID } from '../constants'
-import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
-import { omit } from 'lodash-es'
+import { createPluginDatabase } from '../../../database/Plugin'
+import { omit } from 'lodash-unified'
 
 export const PoolDatabase = createPluginDatabase<PoolRecordInDatabase>(ITO_PluginID)
 

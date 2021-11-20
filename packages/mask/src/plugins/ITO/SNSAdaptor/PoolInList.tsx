@@ -38,7 +38,7 @@ import { usePoolTradeInfo } from './hooks/usePoolTradeInfo'
 import { ITO_Status, JSON_PayloadFromChain, JSON_PayloadInMask, PoolFromNetwork } from '../types'
 import { useDestructCallback } from './hooks/useDestructCallback'
 import { useTransactionDialog } from '../../../web3/hooks/useTransactionDialog'
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -134,9 +134,9 @@ export interface PoolInListProps extends PoolFromNetwork {
 }
 
 export function PoolInList(props: PoolInListProps) {
+    const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     //#region Fetch tokens detailed
@@ -286,6 +286,7 @@ export function PoolInList(props: PoolInListProps) {
                                 <FormattedBalance
                                     value={BigNumber.sum(...exchangeOutVolumes)}
                                     decimals={poolToken.decimals}
+                                    formatter={formatBalance}
                                 />
                             </Typography>{' '}
                             {poolToken.symbol}
@@ -293,7 +294,11 @@ export function PoolInList(props: PoolInListProps) {
                         <Typography variant="body2" color="textSecondary" component="span">
                             {t('plugin_ito_list_total')}
                             <Typography variant="body2" color="textPrimary" component="span">
-                                <FormattedBalance value={pool.total} decimals={poolToken.decimals} />
+                                <FormattedBalance
+                                    value={pool.total}
+                                    decimals={poolToken.decimals}
+                                    formatter={formatBalance}
+                                />
                             </Typography>{' '}
                             {poolToken.symbol}
                         </Typography>
@@ -353,6 +358,7 @@ export function PoolInList(props: PoolInListProps) {
                                                     decimals={poolToken.decimals}
                                                     significant={6}
                                                     symbol={poolToken.symbol}
+                                                    formatter={formatBalance}
                                                 />
                                             </TableCell>
                                             <TableCell className={classes.cell} align="center" size="small">
@@ -361,6 +367,7 @@ export function PoolInList(props: PoolInListProps) {
                                                     decimals={token.decimals}
                                                     significant={6}
                                                     symbol={token.symbol}
+                                                    formatter={formatBalance}
                                                 />
                                             </TableCell>
                                         </TableRow>

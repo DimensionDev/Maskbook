@@ -9,7 +9,7 @@ import Services from '../../../../service'
 import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useHistory, useLocation } from 'react-router-dom'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {

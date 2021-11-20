@@ -6,6 +6,7 @@ import {
     formatBalance,
     formatGweiToEther,
     formatGweiToWei,
+    formatEthereumAddress,
     isGreaterThan,
     isZero,
     pow10,
@@ -28,7 +29,7 @@ import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import { ExpandMore } from '@mui/icons-material'
 import { useHistory } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
@@ -322,7 +323,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     onClick={() => methods.setValue('address', account.address)}>
                     <Typography>{account.name}</Typography>
                     <Typography>
-                        <FormattedAddress address={account.address ?? ''} size={4} />
+                        <FormattedAddress address={account.address ?? ''} size={4} formatter={formatEthereumAddress} />
                     </Typography>
                 </MenuItem>
             ))}
@@ -433,6 +434,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                 decimals={selectedAsset?.token?.decimals}
                                 symbol={selectedAsset?.token?.symbol}
                                 significant={6}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </Typography>

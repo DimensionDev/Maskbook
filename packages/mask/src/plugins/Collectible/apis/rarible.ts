@@ -1,5 +1,5 @@
 import { RaribleChainURL, RaribleMainnetURL } from '../constants'
-import { compact } from 'lodash-es'
+import { compact } from 'lodash-unified'
 import { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
 import {

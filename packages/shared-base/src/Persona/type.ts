@@ -1,4 +1,4 @@
-import type { PersonaIdentifier, ProfileIdentifier } from '..'
+import type { PersonaIdentifier, ProfileIdentifier } from '../Identifier/type'
 
 /**
  * This interface contains the minimal information for UI display

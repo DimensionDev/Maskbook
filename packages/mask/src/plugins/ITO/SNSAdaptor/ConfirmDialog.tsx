@@ -2,6 +2,7 @@ import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
     formatAmountPrecision,
     formatBalance,
+    formatEthereumAddress,
     FungibleTokenDetailed,
     isNative,
     ONE,
@@ -119,8 +120,8 @@ export interface ConfirmDialogProps {
 
 export function ConfirmDialog(props: ConfirmDialogProps) {
     const { poolSettings, onDone, onBack, onClose } = props
-    const { classes } = useStyles()
     const { t } = useI18N()
+    const { classes } = useStyles()
     const chainId = useChainId()
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
     const showQualification =
@@ -175,6 +176,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                 value={poolSettings?.total}
                                 decimals={poolSettings?.token?.decimals}
                                 symbol={poolSettings?.token?.symbol}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </Paper>
@@ -215,6 +217,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                 value={poolSettings?.limit}
                                 decimals={poolSettings?.token?.decimals}
                                 symbol={poolSettings?.token?.symbol}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </Paper>
@@ -256,7 +259,11 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                                     target="_blank"
                                     rel="noopener noreferrer">
                                     <Typography>
-                                        <FormattedAddress address={poolSettings?.qualificationAddress!} size={4} />
+                                        <FormattedAddress
+                                            address={poolSettings?.qualificationAddress!}
+                                            size={4}
+                                            formatter={formatEthereumAddress}
+                                        />
                                     </Typography>
                                 </Link>
                             </Paper>

@@ -1,4 +1,4 @@
-import { isNil } from 'lodash-es'
+import { isNil } from 'lodash-unified'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { selfInfoSelectors, searchAvatarSelector, searchAvatarMetaSelector } from '../utils/selector'
 import { ProfileIdentifier } from '../../../database/type'

@@ -3,7 +3,7 @@
  * in this file please.
  */
 import { pasteImage } from '@masknet/injected-script'
-import { isNull } from 'lodash-es'
+import { isNull } from 'lodash-unified'
 import Services from '../extension/service'
 import { blobToArrayBuffer } from '@dimensiondev/kit'
 export { parseURL } from '@masknet/shared'

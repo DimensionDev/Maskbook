@@ -3,7 +3,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useEnterDashboard } from '../../hook/useEnterDashboard'
 import { useRouteMatch } from 'react-router-dom'
-import { PopupRoutes } from '../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { MasksIcon, MaskWalletIcon } from '@masknet/icons'
 import { useI18N } from '../../../../utils'
 

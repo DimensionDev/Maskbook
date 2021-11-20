@@ -1,6 +1,7 @@
 import { EthereumTokenType } from '../types'
 import { useERC20TokenContract, useERC721TokenContract } from '../contracts'
-import { useAccount, useWeb3 } from '.'
+import { useAccount } from './useAccount'
+import { useWeb3 } from './useWeb3'
 import { useAsync } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
 

@@ -13,7 +13,7 @@ import Services from '../../../service'
 import { WalletStateBarUI } from '../../components/WalletStateBar'
 import { SwapBox } from './SwapBox'
 import { SwapWeb3Context } from '../../../../web3/context'
-import { PopupRoutes } from '../..'
+import { PopupRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
