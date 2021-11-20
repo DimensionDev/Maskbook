@@ -7,7 +7,6 @@ import {
     applyMaskColorVars,
     MaskDarkTheme,
     useSystemPreferencePalette,
-    NoEffectUsePortalShadowRootContext,
 } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
 import {

@@ -11,7 +11,5 @@ interface GuardRouteProps {
 export default function NoPersonaGuardRoute(props: GuardRouteProps) {
     const { redirectTo, ...rest } = props
     const { currentPersona } = PersonaContext.useContainer()
-
-    return null
-    // return currentPersona ? <Navigate to={redirectTo ?? '/'} replace /> : <Route {...rest} />
+    return currentPersona ? <Navigate to={redirectTo ?? '/'} replace /> : <Route {...rest} />
 }

@@ -1,4 +1,4 @@
-import { memo, Suspense, useState } from 'react'
+import { memo, Suspense, useMemo, useState } from 'react'
 import { Grid, styled, Theme, useMediaQuery } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
@@ -24,14 +24,18 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
     const [navigationExpanded, setNavigationExpanded] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)
 
+    const context = useMemo(
+        () => ({
+            drawerOpen,
+            expanded: navigationExpanded,
+            toggleNavigationExpand: () => setNavigationExpanded((e) => !e),
+            toggleDrawer: () => setDrawerOpen((e) => !e),
+        }),
+        [drawerOpen, navigationExpanded],
+    )
+
     return (
-        <DashboardContext.Provider
-            value={{
-                drawerOpen,
-                expanded: navigationExpanded,
-                toggleNavigationExpand: () => setNavigationExpanded((e) => !e),
-                toggleDrawer: () => setDrawerOpen((e) => !e),
-            }}>
+        <DashboardContext.Provider value={context}>
             <Root container>
                 {isLargeScreen && (
                     <LeftContainer item xs={2}>
