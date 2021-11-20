@@ -12,7 +12,7 @@ import {
     useFungibleTokenBalance,
     useWeb3,
 } from '@masknet/web3-shared-evm'
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'

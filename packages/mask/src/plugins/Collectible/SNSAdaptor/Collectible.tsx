@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { findIndex } from 'lodash-es'
+import { findIndex } from 'lodash-unified'
 import formatDateTime from 'date-fns/format'
 import isValidDate from 'date-fns/isValid'
 import isAfter from 'date-fns/isAfter'

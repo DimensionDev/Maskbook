@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Box, Button, Stack, styled } from '@mui/material'
 import { ChainId, getChainIdFromNetworkType, NetworkType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ChainIcon } from '..'
+import { ChainIcon } from '../ChainIcon'
 
 const AllNetworkButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',

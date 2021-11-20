@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { Controller } from 'react-hook-form'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { PageHeader } from '../components/PageHeader'
 import { useI18N } from '../../../../../utils'
@@ -143,7 +143,11 @@ const WalletRecovery = memo(() => {
                             <div className={classes.wallet} key={wallet.address}>
                                 <Typography className={classes.label}>{wallet.name}</Typography>
                                 <Typography className={classes.address}>
-                                    <FormattedAddress address={wallet.address} size={16} />
+                                    <FormattedAddress
+                                        address={wallet.address}
+                                        size={16}
+                                        formatter={formatEthereumAddress}
+                                    />
                                 </Typography>
                             </div>
                         )

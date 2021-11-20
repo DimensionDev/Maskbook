@@ -5,7 +5,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@masknet/theme'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import { collectNodeText } from '../../../utils'
 import { startWatch } from '../../../utils/watcher'
 

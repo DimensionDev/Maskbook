@@ -1,7 +1,7 @@
 /**
  * This icon should be sync with https://mask.io/img/MB--CircleCanvas--WhiteOverBlue.svg
  */
-import { SvgIcon, SvgIconProps } from '@mui/material'
+import { SvgIcon, SvgIconProps, useTheme } from '@mui/material'
 
 const MaskSmileFaceSVG = ({ size = 24 }: { size?: number }) => (
     <svg width={size} height={size} viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
@@ -38,6 +38,21 @@ const WalletSharpSVG = ({ size }: { size?: number }) => (
         <circle cx="12" cy="12" r="10" />
         <line x1="12" y1="8" x2="12" y2="14" />
         <line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+)
+
+const MaskFilledSVG = (
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+            d="M13 26C20.1797 26 26 20.1797 26 13C26 5.8203 20.1797 0 13 0C5.8203 0 0 5.8203 0 13C0 20.1797 5.8203 26 13 26Z"
+            fill="#0F1419"
+        />
+        <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M20.8466 9.8044V14.1215H7.68749L7.12132 14.1216C7.72056 16.7411 10.0987 18.6977 12.9412 18.6977C15.2911 18.6977 17.3237 17.3604 18.2961 15.4168L20.8466 15.4167V19.0431C20.8466 19.9014 20.1396 20.5973 19.2675 20.5973H6.63476C5.76265 20.5973 5.05566 19.9014 5.05566 19.0431V9.8044H20.8466ZM16.7816 15.4168C15.9442 16.6218 14.5365 17.4126 12.9412 17.4126C11.3458 17.4126 9.93816 16.6218 9.10072 15.4168H16.7816ZM9.57363 10.8405C8.33615 10.8405 7.3124 11.7411 7.14213 12.9128L8.48817 12.9128C8.63617 12.4618 9.0662 12.1357 9.57363 12.1357C10.0811 12.1357 10.5111 12.4618 10.6591 12.9128L12.0051 12.9128C11.8349 11.7411 10.8111 10.8405 9.57363 10.8405ZM16.3287 10.8405C15.0912 10.8405 14.0674 11.7411 13.8972 12.9128L15.2432 12.9128C15.3912 12.4618 15.8212 12.1357 16.3287 12.1357C16.8361 12.1357 17.2661 12.4618 17.4141 12.9128L18.7601 12.9128C18.5899 11.7411 17.5661 10.8405 16.3287 10.8405ZM19.2675 5.05554C20.1396 5.05554 20.8466 5.75137 20.8466 6.60971V8.50926H5.05566V6.60971C5.05566 5.75137 5.76265 5.05554 6.63476 5.05554H19.2675Z"
+            fill="white"
+        />
     </svg>
 )
 
@@ -101,6 +116,18 @@ export function WalletSharp(props: SvgIconPropsWithSize) {
         <SvgIcon {...props} style={{ width: size, height: size }}>
             <WalletSharpSVG size={size} />
         </SvgIcon>
+    )
+}
+
+export function MaskFilledIcon(props: { size: number }) {
+    const theme = useTheme()
+    const icon = new URL('./maskFilledIcon.png', import.meta.url).toString()
+    const icon_dark = new URL('./maskFilledIconDark.png', import.meta.url).toString()
+    return (
+        <img
+            src={theme.palette.mode === 'light' ? icon : icon_dark}
+            style={{ width: props.size, height: props.size }}
+        />
     )
 }
 

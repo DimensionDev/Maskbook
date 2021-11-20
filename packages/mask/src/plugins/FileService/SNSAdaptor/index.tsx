@@ -1,6 +1,6 @@
 import { formatFileSize } from '@dimensiondev/kit'
 import type { Plugin } from '@masknet/plugin-infra'
-import { truncate } from 'lodash-es'
+import { truncate } from 'lodash-unified'
 import { ToolIconURLs } from '../../../resources/tool-icon'
 import { base } from '../base'
 import { META_KEY_1, META_KEY_2 } from '../constants'

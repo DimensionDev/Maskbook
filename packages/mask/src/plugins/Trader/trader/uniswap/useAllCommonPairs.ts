@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react'
-import { flatMap } from 'lodash-es'
+import { flatMap } from 'lodash-unified'
 import type { Pair } from '@uniswap/v2-sdk'
 import type { Currency, Token } from '@uniswap/sdk-core'
 import { useChainId, useChainIdValid } from '@masknet/web3-shared-evm'

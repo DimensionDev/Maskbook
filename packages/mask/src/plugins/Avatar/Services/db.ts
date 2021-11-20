@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { NFT_AVATAR_JSON_SERVER } from '../constants'
 import type { AvatarMetaDB } from '../types'
 

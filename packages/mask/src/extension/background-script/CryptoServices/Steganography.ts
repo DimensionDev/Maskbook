@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { encode, decode } from '@dimensiondev/stego-js/cjs/dom'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/cjs/grayscale'

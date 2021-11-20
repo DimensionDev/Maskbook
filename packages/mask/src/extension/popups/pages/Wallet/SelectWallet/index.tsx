@@ -9,9 +9,10 @@ import {
     useAccount,
     useChainIdValid,
     useWallets,
+    formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useCopyToClipboard } from 'react-use'
@@ -128,7 +129,8 @@ const SelectWallet = memo(() => {
 
     const search = new URLSearchParams(location.search)
 
-    const chainId = Number.parseInt(search.get('chainId') ?? '0', 10) as ChainId
+    const chainIdSearched = search.get('chainId')
+    const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined
     // Swap page also uses SelectWallet, but changing wallet in Swap page
     // should not affect other pages, for example, dashboard.
     // So we make Swap page 'internal' for popups
@@ -143,7 +145,10 @@ const SelectWallet = memo(() => {
         [copyToClipboard],
     )
 
-    const handleCancel = useCallback(() => Services.Helper.removePopupWindow(), [])
+    const handleCancel = useCallback(async () => {
+        await WalletRPC.selectAccount([], ChainId.Mainnet)
+        await Services.Helper.removePopupWindow()
+    }, [])
 
     const handleConfirm = useCallback(async () => {
         await WalletRPC.updateMaskAccount({
@@ -157,7 +162,9 @@ const SelectWallet = memo(() => {
                 providerType: ProviderType.MaskWallet,
             })
         }
-
+        if (chainId) {
+            await WalletRPC.selectAccount([selected], chainId)
+        }
         return Services.Helper.removePopupWindow()
     }, [chainId, selected, isInternal])
 
@@ -165,7 +172,7 @@ const SelectWallet = memo(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
     }, [selected, wallets])
 
-    return chainIdValid ? (
+    return chainId && chainIdValid ? (
         <>
             <div className={classes.content}>
                 <div className={classes.header}>
@@ -185,7 +192,11 @@ const SelectWallet = memo(() => {
                                     <div>
                                         <Typography className={classes.name}>{item.name}</Typography>
                                         <Typography className={classes.address}>
-                                            <FormattedAddress address={item.address} size={12} />
+                                            <FormattedAddress
+                                                address={item.address}
+                                                size={12}
+                                                formatter={formatEthereumAddress}
+                                            />
                                             <CopyIconButton className={classes.copy} text={item.address} />
                                         </Typography>
                                     </div>

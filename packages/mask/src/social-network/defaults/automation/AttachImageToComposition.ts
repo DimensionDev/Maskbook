@@ -1,7 +1,6 @@
-import { activatedSocialNetworkUI, SocialNetworkUI } from '../../index'
-import { untilDocumentReady } from '../../../utils/dom'
-import { MaskMessages } from '../../../utils/messages'
-import { delay, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
+import { delay, downloadUrl, MaskMessages, pasteImageToActiveElements, untilDocumentReady } from '../../../utils'
+import type { SocialNetworkUI } from '../../types'
+import { activatedSocialNetworkUI } from '../../ui'
 
 export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean> | boolean) {
     return async function (

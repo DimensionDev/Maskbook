@@ -6,76 +6,81 @@ import { NullAddress, NullContractAddress, OpenSeaAccountURL } from '../constant
 import { toRaribleImage, toTokenIdentifier } from '../helpers'
 import { resolveRaribleUserNetwork } from '../pipes'
 
-export function useEvents(provider: CollectibleProvider, token?: CollectibleToken, cursor?: string) {
+export function useEvents(provider: CollectibleProvider, token?: CollectibleToken, page?: number, size?: number) {
     const chainId = useChainId()
-    return useAsyncRetry<{ data: NFTHistory[]; pageInfo: { hasNextPage: boolean; endCursor?: string } }>(async () => {
+    return useAsyncRetry<{ data: NFTHistory[]; hasNextPage: boolean }>(async () => {
         if (!token || (chainId !== ChainId.Mainnet && chainId !== ChainId.Ropsten))
             return {
                 data: [] as NFTHistory[],
-                pageInfo: {
-                    hasNextPage: false,
-                },
+                hasNextPage: false,
             } as UnboxPromise<typeof PluginCollectibleRPC.getEvents>
         switch (provider) {
             case CollectibleProvider.OPENSEA:
-                const openseaEvents = await PluginCollectibleRPC.getEvents(token.contractAddress, token.tokenId, cursor)
+                const openseaEvents = await PluginCollectibleRPC.getEvents(
+                    token.contractAddress,
+                    token.tokenId,
+                    page,
+                    size,
+                )
+
+                console.log(openseaEvents)
                 return {
-                    data: openseaEvents.edges.map((event) => {
+                    data: openseaEvents.map((event) => {
                         const accountPair =
-                            event.node.eventType === OpenSeaAssetEventType.SUCCESSFUL
+                            event.event_type === OpenSeaAssetEventType.SUCCESSFUL
                                 ? {
                                       from: {
-                                          username: event.node.seller?.user.publicUsername,
-                                          address: event.node.seller?.address,
-                                          imageUrl: event.node.seller?.imageUrl,
+                                          username: event.seller?.user?.username,
+                                          address: event.seller?.address,
+                                          imageUrl: event.seller?.profile_img_url,
                                           link: `${OpenSeaAccountURL}${
-                                              event.node.seller?.user.publicUsername ?? event.node.seller?.address
+                                              event.seller?.user?.username ?? event.seller?.address
                                           }`,
                                       },
                                       to: {
-                                          username: event.node.winnerAccount?.user.publicUsername,
-                                          address: event.node.winnerAccount?.address,
-                                          imageUrl: event.node.winnerAccount?.imageUrl,
+                                          username: event.winner_account?.user?.username,
+                                          address: event.winner_account?.address,
+                                          imageUrl: event.winner_account?.profile_img_url,
                                           link: `${OpenSeaAccountURL}${
-                                              event.node.winnerAccount?.user.publicUsername ??
-                                              event.node.winnerAccount?.address
+                                              event.winner_account?.user?.username ?? event.winner_account?.address
                                           }`,
                                       },
                                   }
                                 : {
                                       from: {
-                                          username: event.node.fromAccount?.user.publicUsername,
-                                          address: event.node.fromAccount?.address,
-                                          imageUrl: event.node.fromAccount?.imageUrl,
+                                          username: event.from_account?.user?.username,
+                                          address: event.from_account?.address,
+                                          imageUrl: event.from_account?.profile_img_url,
                                           link: `${OpenSeaAccountURL}${
-                                              event.node.fromAccount?.user.publicUsername ??
-                                              event.node.fromAccount?.address
+                                              event.from_account?.user?.username ?? event.from_account?.address
                                           }`,
                                       },
                                       to: {
-                                          username: event.node.toAccount?.user.publicUsername,
-                                          address: event.node.toAccount?.address,
-                                          imageUrl: event.node.toAccount?.imageUrl,
+                                          username: event.to_account?.user?.username,
+                                          address: event.to_account?.address,
+                                          imageUrl: event.to_account?.profile_img_url,
                                           link: `${OpenSeaAccountURL}${
-                                              event.node.toAccount?.user.publicUsername ?? event.node.toAccount?.address
+                                              event.to_account?.user?.username ?? event.to_account?.address
                                           }`,
                                       },
                                   }
                         return {
-                            id: event.node.id,
+                            id: event.id,
                             accountPair,
                             price: {
-                                quantity: event.node.price?.quantity,
-                                asset: event.node.price?.asset,
+                                quantity: event.quantity,
+                                asset: event.asset,
+                                paymentToken: event.payment_token,
+                                price: event.bid_amount ?? event.ending_price ?? event.starting_price,
                             },
-                            assetQuantity: event.node.assetQuantity,
-                            eventType: event.node.eventType,
-                            transactionBlockExplorerLink: event.node.transaction?.blockExplorerLink,
-                            timestamp: new Date(`${event.node.eventTimestamp}Z`).getTime(),
+                            eventType: event.event_type,
+                            transactionBlockExplorerLink: event.transaction?.blockExplorerLink,
+                            timestamp: new Date(`${event.created_date}Z`).getTime(),
                         } as NFTHistory
                     }),
-                    pageInfo: openseaEvents.pageInfo,
+                    hasNextPage: openseaEvents.length === size,
                 }
+
             case CollectibleProvider.RARIBLE:
                 const raribleEvents = await PluginCollectibleRPC.getHistoryFromRarible(
                     token.contractAddress,
@@ -115,10 +120,9 @@ export function useEvents(provider: CollectibleProvider, token?: CollectibleToke
                                 : null,
                         } as NFTHistory
                     }),
-                    pageInfo: {
-                        hasNextPage: false,
-                    },
+
+                    hasNextPage: false,
                 }
         }
-    }, [chainId, toTokenIdentifier(token), cursor, provider])
+    }, [chainId, toTokenIdentifier(token), page, size, provider])
 }

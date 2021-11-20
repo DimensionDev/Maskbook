@@ -1,10 +1,11 @@
-import { first } from 'lodash-es'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import * as MaskWallet from './providers/Mask'
+import { first } from 'lodash-unified'
+import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
-import { defer } from '../../../../utils-pure'
+import * as Injected from './providers/Injected'
+import { defer } from '@masknet/shared-base'
 
 //#region connect WalletConnect
 // step 1:
@@ -44,20 +45,20 @@ export async function createWalletConnect() {
 }
 
 export async function cancelWalletConnect() {
-    rejectConnect?.(new Error('Failed to connect.'))
+    rejectConnect?.(new Error('Failed to connect to WalletConnect.'))
 }
 //#endregion
 
-export async function connectMetaMask() {
-    const { accounts, chainId } = await MetaMask.requestAccounts()
+export async function connectMaskWallet(networkType: NetworkType) {
+    const { accounts, chainId } = await MaskWallet.requestAccounts(networkType)
     return {
         account: first(accounts),
         chainId,
     }
 }
 
-export async function connectMask() {
-    const { accounts, chainId } = await MaskWallet.requestAccounts()
+export async function connectMetaMask() {
+    const { accounts, chainId } = await MetaMask.requestAccounts()
     return {
         account: first(accounts),
         chainId,
@@ -71,3 +72,26 @@ export async function connectCustomNetwork() {
         chainId,
     }
 }
+
+//#region connect injected provider
+export async function connectInjected() {
+    const { accounts, chainId } = await Injected.requestAccounts()
+    return {
+        account: first(accounts),
+        chainId,
+    }
+}
+
+export async function notifyInjectedEvent(name: string, event: unknown, providerType: ProviderType) {
+    switch (name) {
+        case 'accountsChanged':
+            await Injected.onAccountsChanged(event as string[], providerType)
+            break
+        case 'chainChanged':
+            await Injected.onChainIdChanged(event as string, providerType)
+            break
+        default:
+            throw new Error(`Unknown event name: ${name}.`)
+    }
+}
+//#endregion
