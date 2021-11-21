@@ -1,19 +1,21 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import type BigNumber from 'bignumber.js'
-import { FormattedAddress, FormattedBalance, useStylesExtends } from '@masknet/shared'
+import BigNumber from 'bignumber.js'
+import { FormattedAddress, FormattedBalance, useStylesExtends, useValueRef } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
-import { resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { createNativeToken, formatWeiToEther, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon } from '@masknet/icons'
 import { ExternalLink } from 'react-feather'
 import { TokenIcon } from '@masknet/shared'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { currentSlippageSettings } from '../../settings'
+import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     section: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -56,6 +58,8 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
     trade: TradeComputed
     inputToken: FungibleTokenDetailed
     outputToken: FungibleTokenDetailed
+    gas?: number
+    gasPrice?: string
     onConfirm: () => void
     onClose?: () => void
     wallet?: Wallet
@@ -63,9 +67,9 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
 
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
-
+    const currentSlippage = useValueRef(currentSlippageSettings)
     const classes = useStylesExtends(useStyles(), props)
-    const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose } = props
+    const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice } = props
     const { inputAmount, outputAmount } = trade
 
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
@@ -81,19 +85,35 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     }, [trade, executionPrice])
     //#endregion
 
+    //#region gas price
+    const nativeToken = createNativeToken(chainId)
+    const tokenPrice = useNativeTokenPrice(chainId)
+
+    const gasFee = useMemo(() => {
+        return gas && gasPrice ? new BigNumber(gasPrice).multipliedBy(gas).integerValue().toFixed() : 0
+    }, [gas, gasPrice])
+
+    const feeValueUSD = useMemo(
+        () => (gasFee ? new BigNumber(formatWeiToEther(gasFee).times(tokenPrice).toFixed(2).toString()) : '0'),
+        [gasFee, tokenPrice],
+    )
+    //#endregion
+
     const staled = !!(executionPrice && !executionPrice.isEqualTo(trade.executionPrice))
 
     return (
         <>
-            <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" maxWidth="xs">
-                <DialogContent>
+            <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" maxWidth="md">
+                <DialogContent sx={{ marginLeft: 5, marginRight: 5 }}>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_red_packet_nft_account_name')}</Typography>
                         <Typography>
                             ({wallet?.name})
                             <FormattedAddress address={wallet?.address ?? ''} size={4} />
                             <Link
-                                style={{ color: 'inherit' }}
+                                style={{ color: 'inherit', height: 20 }}
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}>
                                 <ExternalLink style={{ marginLeft: 5 }} size={20} />
                             </Link>
@@ -174,15 +194,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         </Typography>
                     </Box>
                     <Box className={classes.section}>
-                        <Typography>{t('plugin_trader_confirm_maximum_sold')}</Typography>
-                        <Typography>
-                            <FormattedBalance
-                                value={trade.maximumSold}
-                                decimals={inputToken.decimals}
-                                significant={6}
-                                symbol={inputToken.symbol}
-                            />
-                        </Typography>
+                        <Typography>{t('plugin_trader_confirm_max_price_slippage')}</Typography>
+                        <Typography>{currentSlippage / 100}%</Typography>
                     </Box>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_trader_confirm_minimum_received')}</Typography>
@@ -195,11 +208,27 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                             />
                         </Typography>
                     </Box>
+                    {gasFee ? (
+                        <Box className={classes.section}>
+                            <Typography>{t('plugin_trader_gas')}</Typography>
+                            <Typography>
+                                <FormattedBalance
+                                    value={gasFee}
+                                    decimals={nativeToken.decimals ?? 0}
+                                    significant={4}
+                                    symbol={nativeToken.symbol}
+                                />
+                                <Typography component="span">
+                                    {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
+                                </Typography>
+                            </Typography>
+                        </Box>
+                    ) : null}
                     <Alert className={classes.alert} icon={<InfoIcon className={classes.alertIcon} />} severity="info">
                         {t('plugin_trader_confirm_tips')}
                     </Alert>
                 </DialogContent>
-                <DialogActions>
+                <DialogActions sx={{ marginLeft: 5, marginRight: 5 }}>
                     <Button
                         classes={{ root: classes.button }}
                         color="primary"

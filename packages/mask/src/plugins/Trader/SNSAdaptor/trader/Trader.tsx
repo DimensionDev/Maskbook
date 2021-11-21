@@ -6,8 +6,10 @@ import {
     createNativeToken,
     EthereumTokenType,
     formatBalance,
+    formatGweiToWei,
     FungibleTokenDetailed,
     GasOptionConfig,
+    getNetworkTypeFromChainId,
     TransactionStateType,
     useChainId,
     useChainIdValid,
@@ -34,23 +36,15 @@ import { currentAccountSettings, currentBalancesSettings, currentProviderSetting
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { WalletRPC } from '../../../Wallet/messages'
 import { PluginTraderMessages } from '../../messages'
+import { NetworkType } from '@masknet/public-api'
+import BigNumber from 'bignumber.js'
+import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles()(() => {
     return {
         root: {
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: 266,
-            position: 'relative',
-        },
-        progress: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-        },
-        summary: {},
-        router: {
-            marginTop: 0,
+            width: 535,
+            margin: 'auto',
         },
     }
 })
@@ -84,14 +78,6 @@ export function Trader(props: TraderProps) {
         ],
         allTradeComputed,
     } = AllProviderTradeContext.useContainer()
-
-    const sortedAllTradeComputed = useMemo(() => {
-        return allTradeComputed.sort(({ value: a }, { value: b }) => {
-            if (a?.outputAmount.isGreaterThan(b?.outputAmount ?? 0)) return -1
-            if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
-            return 0
-        })
-    }, [allTradeComputed])
     //endregion
 
     useEffect(() => {
@@ -296,6 +282,29 @@ export function Trader(props: TraderProps) {
     )
     //#endregion
 
+    //#region get gas price
+    const { value: gasPrice } = useAsync(async () => {
+        try {
+            const network = getNetworkTypeFromChainId(chainId)
+            if (gasConfig) {
+                return new BigNumber(
+                    (network === NetworkType.Ethereum ? gasConfig.maxFeePerGas : gasConfig.gasPrice) ?? 0,
+                ).toString()
+            } else {
+                if (network === NetworkType.Ethereum) {
+                    const response = await WalletRPC.getEstimateGasFees(chainId)
+                    return formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()
+                } else {
+                    const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+                    return new BigNumber(response?.data.normal.price ?? 0).toString()
+                }
+            }
+        } catch {
+            return '0'
+        }
+    }, [chainId, gasConfig])
+    //#endregion
+
     //#region open the transaction dialog
     useEffect(() => {
         if (tradeState?.type === TransactionStateType.UNKNOWN) return
@@ -315,6 +324,50 @@ export function Trader(props: TraderProps) {
     }, [focusedTrade, tradeCallback])
     //#endregion
 
+    //#region The trades sort by best price (Estimate received * price - Gas fee * native token price)
+    const nativeTokenPrice = useNativeTokenPrice(chainId)
+    const outputTokenPrice = useTokenPrice(chainId, outputToken?.address.toLowerCase())
+    const sortedAllTradeComputed = useMemo(() => {
+        if (outputToken && outputTokenPrice) {
+            return allTradeComputed
+                .map((trade) => {
+                    if (gasPrice && trade.value && trade.gas.value) {
+                        const gasFee = new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
+
+                        const gasFeeUSD = new BigNumber(formatBalance(gasFee ?? 0, outputToken.decimals)).times(
+                            nativeTokenPrice,
+                        )
+
+                        const finalPrice = new BigNumber(
+                            formatBalance(trade.value.outputAmount, outputToken.decimals, 2),
+                        )
+                            .times(outputToken.type !== EthereumTokenType.Native ? outputTokenPrice : nativeTokenPrice)
+                            .minus(gasFeeUSD)
+
+                        return {
+                            ...trade,
+                            finalPrice,
+                        }
+                    }
+                    return trade
+                })
+                .filter(({ finalPrice }) => !!finalPrice)
+                .sort(({ finalPrice: a }, { finalPrice: b }) => {
+                    if (a && b && new BigNumber(a).isGreaterThan(b)) return -1
+                    if (a && b && new BigNumber(a).isLessThan(b)) return 1
+                    return 0
+                })
+        }
+        return allTradeComputed
+            .filter(({ value }) => !!value)
+            .sort(({ value: a }, { value: b }) => {
+                if (a?.outputAmount.isGreaterThan(b?.outputAmount ?? 0)) return -1
+                if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
+                return 0
+            })
+    }, [allTradeComputed, outputToken, gasPrice, outputTokenPrice, nativeTokenPrice])
+    //#endregion
+
     //#region reset focused trade when chainId, inputToken, outputToken, inputAmount be changed
     useUpdateEffect(() => {
         setFocusTrade(undefined)
@@ -324,13 +377,9 @@ export function Trader(props: TraderProps) {
     useUpdateEffect(() => {
         if (chainId) {
             setTargetChainId(chainId)
+            setGasConfig(undefined)
         }
     }, [chainId])
-
-    // reset gas config when target chainId has been changed
-    useUpdateEffect(() => {
-        setGasConfig(undefined)
-    }, [targetChainId])
 
     useEffect(() => {
         return PluginTraderMessages.swapSettingsUpdated.on((event) => {
@@ -354,12 +403,15 @@ export function Trader(props: TraderProps) {
                 focusedTrade={focusedTrade}
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
                 onSwap={onSwap}
+                gasPrice={gasPrice}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <ConfirmDialog
                     wallet={wallet}
                     open={openConfirmDialog}
                     trade={focusedTrade.value}
+                    gas={focusedTrade.gas.value}
+                    gasPrice={gasPrice}
                     inputToken={inputToken}
                     outputToken={outputToken}
                     onConfirm={onConfirmDialogConfirm}

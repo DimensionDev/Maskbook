@@ -25,7 +25,6 @@ const useStyles = makeStyles()(() => ({
         color: MaskColorVar.twitterButton,
     },
     amount: {
-        color: MaskColorVar.twitterBlue,
         marginLeft: 10,
     },
     input: {
@@ -58,15 +57,16 @@ const useStyles = makeStyles()(() => ({
         height: 'auto',
         backgroundColor: MaskColorVar.twitterInput,
         [`& .${chipClasses.label}`]: {
-            paddingTop: 13,
-            paddingBottom: 13,
+            paddingTop: 10,
+            paddingBottom: 10,
             fontSize: 13,
             lineHeight: '18px',
+            marginRight: 13,
         },
     },
     chipTokenIcon: {
-        width: '36px!important',
-        height: '36px!important',
+        width: '28px!important',
+        height: '28px!important',
     },
 }))
 
@@ -109,7 +109,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
         )
 
         const tokenValueUSD = useMemo(
-            () => (amount ? new BigNumber(amount).times(tokenPrice).toString() : '0'),
+            () => (amount ? new BigNumber(amount).times(tokenPrice).toFixed(2).toString() : '0'),
             [amount, tokenPrice],
         )
 
@@ -139,7 +139,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                             <Box display="flex" mt={1} alignItems="center">
                                 <Typography className={classes.balance}>
                                     {t('plugin_ito_list_table_got')}:
-                                    <Typography component="span" className={classes.amount}>
+                                    <Typography component="span" className={classes.amount} color="primary">
                                         <FormattedBalance value={balance} decimals={token?.decimals} significant={6} />
                                     </Typography>
                                 </Typography>
@@ -151,12 +151,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                                     variant="filled"
                                     classes={{ root: classes.chip, label: classes.label }}
                                     onClick={() => {
-                                        onAmountChange(
-                                            formatBalance(
-                                                new BigNumber(balance).dividedBy(1).decimalPlaces(0, 1),
-                                                token?.decimals,
-                                            ),
-                                        )
+                                        onAmountChange(formatBalance(balance, token?.decimals, 6))
                                     }}
                                 />
                             </Box>

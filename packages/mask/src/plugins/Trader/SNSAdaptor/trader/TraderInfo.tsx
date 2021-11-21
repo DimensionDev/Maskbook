@@ -15,7 +15,7 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     trade: {
         marginTop: 8,
         padding: 10,
@@ -50,20 +50,20 @@ const useStyles = makeStyles()({
         padding: '25px 12px 8px 0',
     },
     focus: {
-        border: `1px solid ${MaskColorVar.blue}`,
+        border: `1px solid ${theme.palette.primary.main}`,
     },
     best: {
         position: 'absolute',
         top: -12,
         right: 12,
     },
-})
+}))
 
 export interface TraderInfoProps {
     trade: TradeInfo
     isBest?: boolean
     isFocus?: boolean
-    gasPrice?: number
+    gasPrice?: string
     onClick: () => void
 }
 

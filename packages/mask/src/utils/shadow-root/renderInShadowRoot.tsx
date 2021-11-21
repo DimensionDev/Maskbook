@@ -18,7 +18,7 @@ const captureEvents: (keyof HTMLElementEventMap)[] = [
     'dragstart',
     'change',
 ]
-export const createShadowRootPortal = () => {
+export const setupShadowRootPortal = () => {
     const shadow = setupPortalShadowRoot({ mode: Flags.using_ShadowDOM_attach_mode }, captureEvents)
     createRoot(shadow.appendChild(document.createElement('head'))).render(
         <main>

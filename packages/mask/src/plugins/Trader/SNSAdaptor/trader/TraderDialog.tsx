@@ -36,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: 'inherit',
     },
     tabs: {
-        width: 536,
+        width: 535,
         height: 36,
         minHeight: 36,
         margin: '0 auto',
@@ -51,6 +51,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     tabPanel: {
         marginTop: theme.spacing(3),
+    },
+    content: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -79,7 +84,7 @@ export function TraderDialog() {
         <TargetChainIdContext.Provider>
             <AllProviderTradeContext.Provider>
                 <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap')}>
-                    <DialogContent>
+                    <DialogContent className={classes.content}>
                         <div className={classes.walletStatusBox}>
                             <WalletStatusBox />
                         </div>

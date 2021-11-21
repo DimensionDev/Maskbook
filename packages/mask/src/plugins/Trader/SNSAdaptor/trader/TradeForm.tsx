@@ -2,7 +2,7 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage, isLessThan, pow10 } from '@masknet/web3-shared-evm'
@@ -24,11 +24,10 @@ import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWal
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useTradeApproveComputed } from '../../trader/useTradeApproveComputed'
-import { HelpOutline } from '@mui/icons-material'
+import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
-import { WalletRPC } from '../../../Wallet/messages'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
     return {
@@ -52,7 +51,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             color: MaskColorVar.twitterButton,
         },
         amount: {
-            color: MaskColorVar.twitterBlue,
             marginLeft: 10,
         },
 
@@ -65,7 +63,6 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             justifyContent: 'center',
             alignItems: 'center',
             margin: '20px 0 16px 0',
-            color: MaskColorVar.blue,
         },
         chevron: {
             fill: 'none',
@@ -134,17 +131,22 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
         noToken: {
             borderRadius: `18px !important`,
-            backgroundColor: MaskColorVar.blue,
-            '&:hover': {
-                backgroundColor: MaskColorVar.blue.alpha(0.4),
-            },
+            backgroundColor: theme.palette.primary.main,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 9,
                 paddingBottom: 9,
                 fontSize: 13,
                 lineHeight: '18px',
-                color: MaskColorVar.white,
+                color: theme.palette.primary.contrastText,
             },
+        },
+        tooltip: {
+            backgroundColor: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+            color: theme.palette.mode === 'dark' ? '#7B8192' : '#ffffff',
+            borderRadius: 8,
+        },
+        tooltipArrow: {
+            color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
         },
     }
 })
@@ -160,6 +162,7 @@ export interface AllTradeFormProps {
     onRefreshClick?: () => void
     trades: TradeInfo[]
     focusedTrade?: TradeInfo
+    gasPrice?: string
     onFocusedTradeChange: (trade: TradeInfo) => void
     onSwap: () => void
 }
@@ -178,6 +181,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         focusedTrade,
         onFocusedTradeChange,
         onSwap,
+        gasPrice,
     }) => {
         const userSelected = useRef(false)
         const isDashboard = location.href.includes('dashboard.html')
@@ -223,12 +227,12 @@ export const TradeForm = memo<AllTradeFormProps>(
                 return t('plugin_trader_error_insufficient_balance', {
                     symbol: inputToken?.symbol,
                 })
+            if (focusedTrade?.value && !focusedTrade.value.outputAmount) return t('plugin_trader_no_enough_liquidity')
             if (
                 focusedTrade?.value &&
                 resolveUniswapWarningLevel(focusedTrade.value.priceImpact) === WarningLevel.BLOCKED
             )
                 return t('plugin_trader_error_price_impact_too_high')
-
             return ''
         }, [
             inputAmount,
@@ -243,27 +247,23 @@ export const TradeForm = memo<AllTradeFormProps>(
 
         //#region native wrap message
         const nativeWrapMessage = useMemo(() => {
-            if (focusedTrade?.value && isNativeTokenWrapper(focusedTrade.value)) {
-                return focusedTrade.value.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
+            if (focusedTrade?.value) {
+                if (isNativeTokenWrapper(focusedTrade.value)) {
+                    return focusedTrade.value.trade_?.isWrap ? t('plugin_trader_wrap') : t('plugin_trader_unwrap')
+                }
+                return t('plugin_trader_swap_amount_symbol', {
+                    amount: formatBalance(
+                        focusedTrade?.value?.outputAmount ?? 0,
+                        focusedTrade?.value?.outputToken?.decimals,
+                        2,
+                    ),
+                    symbol: outputToken?.symbol,
+                })
+            } else {
+                return t('plugin_trader_no_trade')
             }
-
-            return t('plugin_trader_swap_amount_symbol', {
-                amount: formatBalance(
-                    focusedTrade?.value?.outputAmount ?? 0,
-                    focusedTrade?.value?.outputToken?.decimals,
-                    2,
-                ),
-                symbol: outputToken?.symbol,
-            })
         }, [focusedTrade, outputToken])
         //#endregion
-
-        //#region get gas price
-        const { value: gasPrice } = useAsync(async () => {
-            const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-            if (!response) return 0
-            return response.data.normal.price
-        }, [chainId])
 
         useUpdateEffect(() => {
             setIsExpand(false)
@@ -290,7 +290,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     }}
                 />
                 <Box className={classes.reverse}>
-                    <ArrowDownwardIcon className={classes.reverseIcon} />
+                    <ArrowDownward className={classes.reverseIcon} color="primary" />
                 </Box>
                 <Box className={classes.section} marginBottom={2.5}>
                     <Box display="flex" justifyContent="space-between" mb={1}>
@@ -299,7 +299,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 <Typography>{t('plugin_trader_swap_to')}</Typography>
                                 <Typography className={classes.balance}>
                                     {t('plugin_ito_list_table_got')}:
-                                    <Typography component="span" className={classes.amount}>
+                                    <Typography component="span" className={classes.amount} color="primary">
                                         <FormattedBalance
                                             value={outputTokenBalance}
                                             decimals={outputToken?.decimals}
@@ -407,10 +407,17 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     }}
                                     infiniteUnlockContent={
                                         <Box component="span" display="flex" alignItems="center">
-                                            {t('plugin_trader_unlock_symbol', {
-                                                symbol: approveToken?.symbol,
-                                            })}
+                                            <Typography fontSize={18} fontWeight={600} lineHeight="18px">
+                                                {t('plugin_trader_unlock_symbol', {
+                                                    symbol: approveToken?.symbol,
+                                                })}
+                                            </Typography>
                                             <Tooltip
+                                                open={true}
+                                                classes={{
+                                                    tooltip: classes.tooltip,
+                                                    arrow: classes.tooltipArrow,
+                                                }}
                                                 PopperProps={{
                                                     disablePortal: true,
                                                 }}

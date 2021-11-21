@@ -119,4 +119,5 @@ export interface TradeInfo {
     provider: TradeProvider
     error?: Error
     gas: { value?: number; loading: boolean }
+    finalPrice?: BigNumber.Value
 }

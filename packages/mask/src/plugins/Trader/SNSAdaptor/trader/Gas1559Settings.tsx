@@ -103,6 +103,15 @@ const useStyles = makeStyles()((theme) => ({
         padding: '13px 0',
         height: 48,
         borderRadius: 24,
+        backgroundColor: theme.palette.primary.main,
+        color: theme.palette.primary.contrastText,
+    },
+    cancelButton: {
+        backgroundColor: MaskColorVar.twitterBackground,
+        color: MaskColorVar.twitterButton,
+        '&:hover': {
+            backgroundColor: `${MaskColorVar.twitterBackground}!important`,
+        },
     },
 }))
 
@@ -352,10 +361,19 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
                 </AccordionDetails>
             </Accordion>
             <Box className={classes.controller}>
-                <Button color="secondary" className={classes.button} onClick={onCancel}>
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    className={classnames(classes.button, classes.cancelButton)}
+                    onClick={onCancel}>
                     {t('cancel')}
                 </Button>
-                <Button color="primary" className={classes.button} onClick={onSave} disabled={!isEmpty(errors)}>
+                <Button
+                    color="primary"
+                    variant="contained"
+                    className={classes.button}
+                    onClick={onSave}
+                    disabled={!isEmpty(errors)}>
                     {t('save')}
                 </Button>
             </Box>
