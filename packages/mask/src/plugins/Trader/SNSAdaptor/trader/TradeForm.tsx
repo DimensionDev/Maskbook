@@ -1,4 +1,4 @@
-import { memo, useMemo, useState } from 'react'
+import { memo, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
@@ -179,6 +179,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         onFocusedTradeChange,
         onSwap,
     }) => {
+        const userSelected = useRef(false)
         const isDashboard = location.href.includes('dashboard.html')
 
         const { t } = useI18N()
@@ -269,10 +270,10 @@ export const TradeForm = memo<AllTradeFormProps>(
         }, [chainId, inputToken, inputAmount, outputToken])
 
         useUpdateEffect(() => {
-            if (bestTrade && !focusedTrade) {
+            if (bestTrade?.value && !userSelected.current) {
                 onFocusedTradeChange(bestTrade)
             }
-        }, [bestTrade, focusedTrade])
+        }, [bestTrade])
 
         return (
             <Box className={classes.root}>
@@ -326,7 +327,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 <TraderInfo
                                     trade={bestTrade}
                                     gasPrice={gasPrice}
-                                    onClick={() => onFocusedTradeChange(bestTrade)}
+                                    onClick={() => {
+                                        if (!userSelected.current) userSelected.current = true
+                                        onFocusedTradeChange(bestTrade)
+                                    }}
                                     isFocus={bestTrade.provider === focusedTrade?.provider}
                                     isBest
                                 />
@@ -336,7 +340,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                                     <TraderInfo
                                         key={trade.provider}
                                         trade={trade}
-                                        onClick={() => onFocusedTradeChange(trade)}
+                                        onClick={() => {
+                                            if (!userSelected.current) userSelected.current = true
+                                            onFocusedTradeChange(trade)
+                                        }}
                                         isFocus={trade.provider === focusedTrade?.provider}
                                         gasPrice={gasPrice}
                                     />

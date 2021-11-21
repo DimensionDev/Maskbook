@@ -7,6 +7,7 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
+    GasOptionConfig,
     TransactionStateType,
     useChainId,
     useChainIdValid,
@@ -32,6 +33,7 @@ import Services from '../../../../extension/service'
 import { currentAccountSettings, currentBalancesSettings, currentProviderSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { WalletRPC } from '../../../Wallet/messages'
+import { PluginTraderMessages } from '../../messages'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -63,6 +65,7 @@ export function Trader(props: TraderProps) {
     const { coin, tokenDetailed, chainId: targetChainId } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
+    const [gasConfig, setGasConfig] = useState<GasOptionConfig | undefined>()
     const wallet = useWallet()
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
@@ -220,6 +223,7 @@ export function Trader(props: TraderProps) {
     const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(
         focusedTrade?.provider,
         focusedTrade?.value,
+        gasConfig,
     )
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const onConfirmDialogConfirm = useCallback(async () => {
@@ -315,12 +319,25 @@ export function Trader(props: TraderProps) {
     useUpdateEffect(() => {
         setFocusTrade(undefined)
     }, [targetChainId, inputToken, outputToken, inputAmount])
+    //#endregion
 
     useUpdateEffect(() => {
         if (chainId) {
             setTargetChainId(chainId)
         }
     }, [chainId])
+
+    // reset gas config when target chainId has been changed
+    useUpdateEffect(() => {
+        setGasConfig(undefined)
+    }, [targetChainId])
+
+    useEffect(() => {
+        return PluginTraderMessages.swapSettingsUpdated.on((event) => {
+            if (event.open) return
+            if (event.gasConfig) setGasConfig(event.gasConfig)
+        })
+    }, [])
 
     return (
         <div className={classes.root}>

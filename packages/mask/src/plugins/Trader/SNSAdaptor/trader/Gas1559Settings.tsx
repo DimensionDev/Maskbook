@@ -1,15 +1,18 @@
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
-import { useI18N } from '../../../../utils'
-import { Box, TextField, Typography } from '@mui/material'
+import { I18NFunction, useI18N } from '../../../../utils'
+import { Accordion, AccordionDetails, AccordionSummary, Box, Button, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, GasOptionConfig, useChainId } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ExpandMore } from '@mui/icons-material'
+import { fromWei, toHex } from 'web3-utils'
+import { isEmpty } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     option: {
@@ -72,13 +75,64 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         borderRadius: 6,
     },
+    heading: {
+        flex: 1,
+        fontWeight: 500,
+        fontSize: 16,
+        lineHeight: '22px',
+    },
+    summary: {
+        padding: 0,
+    },
+    accordion: {
+        backgroundColor: 'inherit',
+    },
+    accordingTitle: {
+        fontSize: 14,
+        lineHeight: '20px',
+    },
+    controller: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+        gap: 24,
+    },
+    button: {
+        fontSize: 18,
+        lineHeight: '22px',
+        fontWeight: 600,
+        padding: '13px 0',
+        height: 48,
+        borderRadius: 24,
+    },
 }))
 
-interface Gas1559SettingsProps {}
+function defineSchema(t: I18NFunction) {
+    return zod
+        .object({
+            maxPriorityFeePerGas: zod
+                .string()
+                .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
+                .refine(
+                    (value) => new BigNumber(value).isPositive(),
+                    t('wallet_transfer_error_max_priority_fee_absence'),
+                ),
+            maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
+        })
+        .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
+            message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
+            path: ['maxFeePerGas'],
+        })
+}
+
+interface Gas1559SettingsProps {
+    onCancel: () => void
+    gasConfig?: GasOptionConfig
+    onSave: (gasConfig: GasOptionConfig) => void
+}
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
-export const Gas1559Settings = memo<Gas1559SettingsProps>(() => {
+export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: onSave_, gasConfig }) => {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
@@ -108,29 +162,12 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(() => {
         [gasOptions],
     )
 
-    const schema = useMemo(() => {
-        return zod
-            .object({
-                maxPriorityFeePerGas: zod
-                    .string()
-                    .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                    .refine(
-                        (value) => new BigNumber(value).isPositive(),
-                        t('wallet_transfer_error_max_priority_fee_absence'),
-                    ),
-                maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
-            })
-            .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
-                message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
-                path: ['maxFeePerGas'],
-            })
-    }, [])
+    const schema = defineSchema(t)
 
     const {
         control,
         handleSubmit,
         setValue,
-        setError,
         watch,
         formState: { errors },
     } = useForm<zod.infer<typeof schema>>({
@@ -174,6 +211,20 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(() => {
     }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
     //endregion
 
+    //#region Confirm function
+    const handleConfirm = useCallback(
+        (data: zod.infer<typeof schema>) => {
+            onSave_({
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+            })
+        },
+        [onSave_],
+    )
+
+    const onSave = handleSubmit(handleConfirm)
+    //#endregion
+
     //#region If the selected changed, set the value on the option to the form data
     useEffect(() => {
         if (selected !== null) {
@@ -189,84 +240,125 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(() => {
     }, [selected, setValue, options])
     //#endregion
 
+    useEffect(() => {
+        if (gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas && gasConfig?.maxPriorityFeePerGas) {
+            setOption(null)
+            setValue('maxFeePerGas', fromWei(new BigNumber(gasConfig.maxFeePerGas).toString(), 'gwei').toString())
+            setValue(
+                'maxPriorityFeePerGas',
+                fromWei(new BigNumber(gasConfig.maxPriorityFeePerGas).toString(), 'gwei').toString(),
+            )
+        }
+    }, [gasConfig, setValue])
+
     return (
-        <Box>
-            <Box display="flex" justifyContent="space-around" alignItems="center">
-                {options.map((option, index) => (
-                    <Box
-                        className={classnames(classes.option, selected === index ? classes.selected : undefined)}
-                        key={index}
-                        onClick={() => setOption(index)}>
-                        <Box
-                            className={classnames(
-                                classes.pointer,
-                                selected === index ? classes.selectedPointer : undefined,
-                            )}
-                        />
-                        <Typography className={classes.optionTitle}>{option.title}</Typography>
+        <>
+            <Accordion className={classes.accordion} elevation={0}>
+                <AccordionSummary className={classes.summary} expandIcon={<ExpandMore />}>
+                    <Typography className={classes.heading}>{t('popups_wallet_gas_price')}</Typography>
+                    <Typography className={classes.accordingTitle}>
+                        {selected !== null
+                            ? t('plugin_trader_gas_option', {
+                                  option: options[selected].title,
+                                  value: new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toFixed(
+                                      2,
+                                  ),
+                              })
+                            : null}
+                    </Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{ paddingLeft: 0, paddingRight: 0 }}>
+                    <Box>
+                        <Box display="flex" justifyContent="space-around" alignItems="center">
+                            {options.map((option, index) => (
+                                <Box
+                                    className={classnames(
+                                        classes.option,
+                                        selected === index ? classes.selected : undefined,
+                                    )}
+                                    key={index}
+                                    onClick={() => setOption(index)}>
+                                    <Box
+                                        className={classnames(
+                                            classes.pointer,
+                                            selected === index ? classes.selectedPointer : undefined,
+                                        )}
+                                    />
+                                    <Typography className={classes.optionTitle}>{option.title}</Typography>
+                                </Box>
+                            ))}
+                        </Box>
+                        <form className={classes.form}>
+                            <Typography className={classes.label}>
+                                {t('popups_wallet_gas_fee_settings_max_priority_fee')}
+                                <Typography component="span" className={classes.unit}>
+                                    ({t('wallet_transfer_gwei')})
+                                </Typography>
+                            </Typography>
+                            <Controller
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        className={classes.textField}
+                                        onChange={(e) => {
+                                            setOption(null)
+                                            field.onChange(e)
+                                        }}
+                                        error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
+                                        helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
+                                        inputProps={{
+                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                            className: classes.input,
+                                            'aria-autocomplete': 'none',
+                                        }}
+                                        InputProps={{ classes: { root: classes.textFieldInput } }}
+                                        FormHelperTextProps={{ style: { marginLeft: 0 } }}
+                                    />
+                                )}
+                                name="maxPriorityFeePerGas"
+                            />
+                            <Typography className={classes.label}>
+                                {t('popups_wallet_gas_fee_settings_max_fee')}
+                                <Typography component="span" className={classes.unit}>
+                                    ({t('wallet_transfer_gwei')})
+                                </Typography>
+                            </Typography>
+                            <Controller
+                                control={control}
+                                render={({ field }) => (
+                                    <TextField
+                                        {...field}
+                                        error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
+                                        helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
+                                        className={classes.textField}
+                                        onChange={(e) => {
+                                            setOption(null)
+                                            field.onChange(e)
+                                        }}
+                                        inputProps={{
+                                            pattern: '^[0-9]*[.,]?[0-9]*$',
+                                            className: classes.input,
+                                            'aria-autocomplete': 'none',
+                                        }}
+                                        InputProps={{ classes: { root: classes.textFieldInput } }}
+                                        FormHelperTextProps={{ style: { marginLeft: 0 } }}
+                                    />
+                                )}
+                                name="maxFeePerGas"
+                            />
+                        </form>
                     </Box>
-                ))}
+                </AccordionDetails>
+            </Accordion>
+            <Box className={classes.controller}>
+                <Button color="secondary" className={classes.button} onClick={onCancel}>
+                    {t('cancel')}
+                </Button>
+                <Button color="primary" className={classes.button} onClick={onSave} disabled={!isEmpty(errors)}>
+                    {t('save')}
+                </Button>
             </Box>
-            <form className={classes.form}>
-                <Typography className={classes.label}>
-                    {t('popups_wallet_gas_fee_settings_max_priority_fee')}
-                    <Typography component="span" className={classes.unit}>
-                        ({t('wallet_transfer_gwei')})
-                    </Typography>
-                </Typography>
-                <Controller
-                    control={control}
-                    render={({ field }) => (
-                        <TextField
-                            {...field}
-                            className={classes.textField}
-                            onChange={(e) => {
-                                setOption(null)
-                                field.onChange(e)
-                            }}
-                            error={!!errors.maxPriorityFeePerGas?.message || !!maxPriorFeeHelperText}
-                            helperText={errors.maxPriorityFeePerGas?.message || maxPriorFeeHelperText}
-                            inputProps={{
-                                pattern: '^[0-9]*[.,]?[0-9]*$',
-                                className: classes.input,
-                                'aria-autocomplete': 'none',
-                            }}
-                            InputProps={{ classes: { root: classes.textFieldInput } }}
-                            FormHelperTextProps={{ style: { marginLeft: 0 } }}
-                        />
-                    )}
-                    name="maxPriorityFeePerGas"
-                />
-                <Typography className={classes.label}>
-                    {t('popups_wallet_gas_fee_settings_max_fee')}
-                    <Typography component="span" className={classes.unit}>
-                        ({t('wallet_transfer_gwei')})
-                    </Typography>
-                </Typography>
-                <Controller
-                    control={control}
-                    render={({ field }) => (
-                        <TextField
-                            {...field}
-                            error={!!errors.maxFeePerGas?.message || !!maxFeeGasHelperText}
-                            helperText={errors.maxFeePerGas?.message || maxFeeGasHelperText}
-                            className={classes.textField}
-                            onChange={(e) => {
-                                setOption(null)
-                                field.onChange(e)
-                            }}
-                            inputProps={{
-                                pattern: '^[0-9]*[.,]?[0-9]*$',
-                                className: classes.input,
-                                'aria-autocomplete': 'none',
-                            }}
-                            InputProps={{ classes: { root: classes.textFieldInput } }}
-                            FormHelperTextProps={{ style: { marginLeft: 0 } }}
-                        />
-                    )}
-                    name="maxFeePerGas"
-                />
-            </form>
-        </Box>
+        </>
     )
 })

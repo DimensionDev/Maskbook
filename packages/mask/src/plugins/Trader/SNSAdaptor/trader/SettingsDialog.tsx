@@ -11,7 +11,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { Gas1559Settings } from './Gas1559Settings'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 import { GasPrior1559Settings } from './GasPrior1559Settings'
-import { NetworkType } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, NetworkType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,20 +49,28 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const slippage = useValueRef(currentSlippageSettings)
     const networkType = useValueRef(currentNetworkSettings)
 
+    const [gasConfig, setGasConfig] = useState<GasOptionConfig>()
     const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)
 
     //#region remote controlled dialog
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
+    const { open, setDialog, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
 
     useEffect(() => {
         setUnconfirmedSlippage(slippage)
     }, [slippage])
 
-    const onSubmit = useCallback(() => {
-        currentSlippageSettings.value = unconfirmedSlippage
-        closeDialog()
-    }, [unconfirmedSlippage, closeDialog])
+    const onSubmit = useCallback(
+        (gasConfig?: GasOptionConfig) => {
+            currentSlippageSettings.value = unconfirmedSlippage
+            setGasConfig(gasConfig)
+            setDialog({
+                open: false,
+                gasConfig,
+            })
+        },
+        [unconfirmedSlippage, closeDialog],
+    )
 
     return (
         <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_slippage_tolerance')}>
@@ -76,14 +84,11 @@ export function SettingsDialog(props: SettingsDialogProps) {
                         <SlippageSlider value={unconfirmedSlippage} onChange={setUnconfirmedSlippage} />
                     </AccordionDetails>
                 </Accordion>
-                <Accordion className={classes.accordion} elevation={0}>
-                    <AccordionSummary className={classes.summary} expandIcon={<ExpandMore />}>
-                        <Typography className={classes.heading}>{t('popups_wallet_gas_price')}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails style={{ paddingLeft: 0, paddingRight: 0 }}>
-                        {networkType === NetworkType.Ethereum ? <Gas1559Settings /> : <GasPrior1559Settings />}
-                    </AccordionDetails>
-                </Accordion>
+                {networkType === NetworkType.Ethereum ? (
+                    <Gas1559Settings onCancel={closeDialog} onSave={onSubmit} gasConfig={gasConfig} />
+                ) : (
+                    <GasPrior1559Settings onCancel={closeDialog} onSave={onSubmit} gasConfig={gasConfig} />
+                )}
             </DialogContent>
         </InjectedDialog>
     )

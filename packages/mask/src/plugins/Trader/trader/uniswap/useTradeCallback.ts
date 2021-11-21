@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { swapErrorToUserReadableMessage } from '../../helpers'
@@ -27,7 +27,11 @@ interface FailedCall extends SwapCallEstimate {
     error: Error
 }
 
-export function useTradeCallback(trade: TradeComputed<Trade> | null, tradeProvider?: TradeProvider) {
+export function useTradeCallback(
+    trade: TradeComputed<Trade> | null,
+    tradeProvider?: TradeProvider,
+    gasConfig?: GasOptionConfig,
+) {
     const { targetChainId } = TargetChainIdContext.useContainer()
     const web3 = useWeb3(false, targetChainId)
     const account = useAccount()
@@ -137,6 +141,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, tradeProvid
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                    ...gasConfig,
                 },
                 async (error, hash) => {
                     if (error) {
@@ -167,7 +172,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, tradeProvid
                 },
             )
         })
-    }, [web3, account, tradeParameters])
+    }, [web3, account, tradeParameters, gasConfig])
 
     const resetCallback = useCallback(() => {
         setTradeState({

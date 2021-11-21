@@ -264,6 +264,12 @@ export type PriorEIP1559GasConfig = {
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
 
+export type GasOptionConfig = {
+    maxFeePerGas?: number | string
+    maxPriorityFeePerGas?: number | string
+    gasPrice?: number | string
+}
+
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods
 export enum EthereumMethodType {

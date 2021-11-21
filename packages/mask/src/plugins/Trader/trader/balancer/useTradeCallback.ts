@@ -2,6 +2,7 @@ import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
+    GasOptionConfig,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
@@ -18,6 +19,7 @@ export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
     exchangeProxyContract: ExchangeProxy | null,
     allowedSlippage = SLIPPAGE_DEFAULT,
+    gasConfig?: GasOptionConfig,
 ) {
     const account = useAccount()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
@@ -105,6 +107,7 @@ export function useTradeCallback(
                     throw error
                 }),
             value: transactionValue,
+            ...gasConfig,
         }
 
         // send transaction and wait for hash
