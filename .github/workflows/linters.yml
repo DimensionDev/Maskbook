@@ -56,12 +56,12 @@ jobs:
           path: packages/**/dist
           # actions/cache will not upload changes in cache if primary key hits
           # by adding date to the primary key, we can ensure the cache updates on the first build of the day
-          key: ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
           # because that might indicates a structural/flags changes in tsc emit.
           restore-keys: |
-            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}
+            ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}
       - run: npm install --global pnpm
       - run: pnpm install
       - run: npx gulp codegen
