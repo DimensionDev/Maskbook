@@ -1,14 +1,15 @@
 import { memo, useCallback, useState } from 'react'
 import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletIcon, WarningIcon } from '@masknet/icons'
+import { WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
 import { ProviderType, useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-unified'
-import { FormattedAddress } from '@masknet/shared'
+import { FormattedAddress, WalletIcon } from '@masknet/shared'
+import { NetworkPluginID, useNetworkDescriptor, useProviderDescriptor } from '@masknet/plugin-infra'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
 
@@ -100,6 +101,8 @@ const DeleteWallet = memo(() => {
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
+    const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM)
 
     const onConfirm = useCallback(async () => {
         if (wallet?.address) {
@@ -135,7 +138,7 @@ const DeleteWallet = memo(() => {
                 </div>
                 <div className={classes.info}>
                     <div className={classes.iconContainer}>
-                        <WalletIcon />
+                        <WalletIcon networkIcon={networkDescriptor?.icon} providerIcon={providerDescriptor?.icon} />
                     </div>
                     <div>
                         <Typography className={classes.name}>{wallet?.name}</Typography>

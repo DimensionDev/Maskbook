@@ -1,4 +1,4 @@
-import { PageFrame } from '../../components/DashboardFrame'
+import { PageFrame } from '../../components/PageFrame'
 import SettingCard from './components/SettingCard'
 import SettingItem from './components/SettingItem'
 

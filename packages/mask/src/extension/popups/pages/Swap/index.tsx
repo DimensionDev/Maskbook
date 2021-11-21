@@ -1,11 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import {
-    TransactionStatusType,
-    useChainId,
-    useWallet,
-    useWeb3StateContext,
-    Web3Provider,
-} from '@masknet/web3-shared-evm'
+import { TransactionStatusType, useChainId, useWallet, Web3Provider } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useRecentTransactions } from '../../../../plugins/Wallet/hooks/useRecentTransactions'
@@ -61,7 +55,6 @@ const useStyles = makeStyles()((theme) => {
 export default function SwapPage() {
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { providerType } = useWeb3StateContext()
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     const wallet = useWallet()
     const openPopupsWindow = useCallback(() => {
@@ -78,10 +71,9 @@ export default function SwapPage() {
                         <WalletStateBarUI
                             className={classes.walletStateBar}
                             isPending={pendingTransactions.length > 0}
-                            providerType={providerType}
                             openConnectWalletDialog={openPopupsWindow}
-                            walletName={wallet?.name ?? '-'}
-                            walletAddress={wallet?.address ?? '-'}
+                            walletName={wallet?.name}
+                            walletAddress={wallet?.address}
                         />
                     </header>
                     <main className={classes.main}>

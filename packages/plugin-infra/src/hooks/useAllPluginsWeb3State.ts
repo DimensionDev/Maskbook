@@ -9,7 +9,9 @@ export function useAllPluginsWeb3State() {
     return [...pluginsSNSAdaptor, ...pluginsDashboard].reduce<
         Record<string, Web3Plugin.ObjectCapabilities.Capabilities>
     >((accumulator, current) => {
-        accumulator[current.ID] = current.Web3State ?? {}
+        if (current.Web3State) {
+            accumulator[current.ID] = current.Web3State
+        }
         return accumulator
     }, {})
 }

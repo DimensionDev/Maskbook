@@ -1,8 +1,8 @@
 import { memo } from 'react'
 import { Box, Button, Stack, styled } from '@mui/material'
-import { ChainId, getChainIdFromNetworkType, NetworkType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainIcon } from '../ChainIcon'
+import { WalletIcon } from '../WalletIcon'
 
 const AllNetworkButton = styled(Button)(({ theme }) => ({
     display: 'inline-block',
@@ -40,9 +40,18 @@ const useStyles = makeStyles<{ size: number }>()((theme, props) => ({
 }))
 
 export interface NetworkSelectorMinProps {
-    selectedChainId: null | ChainId
-    networks: NetworkType[]
-    onSelect(chainId: null | ChainId): void
+    selectedNetwork: {
+        ID: string
+        chainId: number
+    } | null
+    networks: {
+        ID: string
+        isMainnet: boolean
+        chainId: number
+        icon: URL
+        iconColor: string
+    }[]
+    onSelect(network: { chainId: number } | null): void
     hideAllNetworkButton?: boolean
     disabledNonCurrentNetwork?: boolean
     size?: number
@@ -52,8 +61,8 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
     ({
         hideAllNetworkButton = false,
         onSelect,
-        selectedChainId,
         networks = [],
+        selectedNetwork,
         disabledNonCurrentNetwork = false,
         size = 30,
     }) => {
@@ -63,7 +72,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
             <Stack direction="row">
                 {!hideAllNetworkButton && (
                     <AllNetworkButton
-                        className={selectedChainId === null ? classes.networkSelected : ''}
+                        className={!selectedNetwork ? classes.networkSelected : ''}
                         sx={{
                             width: size,
                             height: size,
@@ -74,33 +83,39 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                         ALL
                     </AllNetworkButton>
                 )}
-                {networks.map((network) => {
-                    const chainId = getChainIdFromNetworkType(network)
-                    return (
-                        <Box
-                            key={chainId}
-                            position="relative"
-                            mr={1}
-                            height={size}
-                            onClick={() => !disabledNonCurrentNetwork && onSelect(chainId)}
-                            sx={{
-                                cursor: 'pointer',
-                                opacity: '0.6',
-                                ':hover': { opacity: 1 },
-                                userSelect: 'none',
-                                lineHeight: `${size}px`,
-                            }}
-                            className={
-                                selectedChainId === chainId
-                                    ? classes.networkSelected
-                                    : disabledNonCurrentNetwork
-                                    ? classes.networkDisabled
-                                    : ''
-                            }>
-                            <ChainIcon chainId={chainId} size={size} />
-                        </Box>
-                    )
-                })}
+                {networks
+                    .filter((x) => x.isMainnet)
+                    .map((network) => {
+                        const chainId = network.chainId
+                        return (
+                            <Box
+                                key={network.ID}
+                                position="relative"
+                                mr={1}
+                                height={size}
+                                onClick={() => !disabledNonCurrentNetwork && onSelect(network)}
+                                sx={{
+                                    cursor: 'pointer',
+                                    opacity: '0.6',
+                                    ':hover': { opacity: 1 },
+                                    userSelect: 'none',
+                                    lineHeight: `${size}px`,
+                                }}
+                                className={
+                                    selectedNetwork?.ID === network.ID
+                                        ? classes.networkSelected
+                                        : disabledNonCurrentNetwork
+                                        ? classes.networkDisabled
+                                        : ''
+                                }>
+                                {network.isMainnet ? (
+                                    <WalletIcon networkIcon={network.icon} size={size} />
+                                ) : (
+                                    <ChainIcon color={network.iconColor} size={size} />
+                                )}
+                            </Box>
+                        )
+                    })}
             </Stack>
         )
     },

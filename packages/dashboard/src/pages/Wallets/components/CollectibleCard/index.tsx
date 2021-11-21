@@ -1,13 +1,13 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared-evm'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
-import { ChainIcon } from '@masknet/shared'
+import { WalletIcon } from '@masknet/shared'
 import { ChangeNetworkTip } from '../TokenTableRow/ChangeNetworkTip'
+import { useNetworkDescriptor } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -72,6 +72,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
     const ref = useRef(null)
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
+    const networkDescriptor = useNetworkDescriptor(token.contractDetailed.chainId)
     const isOnCurrentChain = useMemo(() => chainId === token.contractDetailed.chainId, [chainId, token])
 
     useEffect(() => {
@@ -82,7 +83,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
         <Box className={`${classes.container} ${isHoveringTooltip || isHovering ? classes.hover : ''}`} ref={ref}>
             <div className={classes.card}>
                 <Box className={classes.chainIcon}>
-                    <ChainIcon chainId={token.contractDetailed.chainId} size={20} />
+                    <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
                 </Box>
                 {token.info.image ? (
                     <Link
