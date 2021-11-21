@@ -22,13 +22,12 @@ export function NetworkIconClickBait({
     )
     //#endregion
 
-    // no provider valid
-    if (!provider) return <>{children}</>
-
-    const providerType = provider?.type as ProviderType
+    const providerType = provider?.type as ProviderType | undefined
     const networkType = network.type as NetworkType
 
     const onClickNetwork = useCallback(async () => {
+        if (!providerType) return
+
         switch (providerType) {
             case ProviderType.MaskWallet:
             case ProviderType.MetaMask:
@@ -49,6 +48,8 @@ export function NetworkIconClickBait({
         }
         onClick?.(network, provider)
     }, [network, provider, onClick])
+
+    if (!providerType) return null
 
     return (
         <>

@@ -11,7 +11,7 @@ import { PageFrame } from '../../components/PageFrame'
 import { ReceiveDialog } from './components/ReceiveDialog'
 import { RoutePaths } from '../../type'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages, PluginServices } from '../../API'
+import { PluginMessages } from '../../API'
 import { WalletStateBar } from './components/WalletStateBar'
 import { useDashboardI18N } from '../../locales'
 import {

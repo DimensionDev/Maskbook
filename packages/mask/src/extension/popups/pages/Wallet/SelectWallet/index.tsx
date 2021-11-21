@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom'
 import { useCopyToClipboard } from 'react-use'
 import { first } from 'lodash-unified'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
-import { FormattedAddress, WalletIcon } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
