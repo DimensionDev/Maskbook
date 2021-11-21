@@ -1,22 +1,20 @@
 import { useCallback } from 'react'
+import { noop } from 'lodash-unified'
 import { MenuItem, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
-    getChainIdFromNetworkType,
     getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
-    resolveNetworkName,
     useAccount,
     useChainId,
     useWeb3StateContext,
 } from '@masknet/web3-shared-evm'
-import { ChainIcon, useMenu, useRemoteControlledDialog } from '@masknet/shared'
-import { useAsync } from 'react-use'
-import { PluginMessages, PluginServices } from '../../../../API'
 import { SuccessIcon } from '@masknet/icons'
-import { noop } from 'lodash-unified'
+import { WalletIcon, useMenu, useRemoteControlledDialog } from '@masknet/shared'
+import { PluginMessages, PluginServices } from '../../../../API'
+import { useNetworkDescriptors } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -37,8 +35,7 @@ export const useNetworkSelector = () => {
     const currentChainId = useChainId()
     const account = useAccount()
     const { providerType } = useWeb3StateContext()
-
-    const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
+    const networkDescriptors = useNetworkDescriptors()
 
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.connectWalletDialogUpdated,
@@ -76,27 +73,29 @@ export const useNetworkSelector = () => {
     )
 
     const networkMenu = useMenu(
-        ...(networks?.map((network) => {
-            const chainId = getChainIdFromNetworkType(network)
+        ...(networkDescriptors
+            ?.filter((x) => x.isMainnet)
+            .map((network) => {
+                const chainId = network.chainId
 
-            return (
-                <MenuItem
-                    sx={{ mx: 2, py: 1 }}
-                    classes={{ root: classes.item }}
-                    key={network}
-                    onClick={() => onChainChange(chainId)}>
-                    <Stack direction="row" gap={0.5} alignItems="center">
-                        <Stack justifyContent="center" width={18}>
-                            {chainId === currentChainId && <SuccessIcon sx={{ fontSize: 18 }} />}
+                return (
+                    <MenuItem
+                        sx={{ mx: 2, py: 1 }}
+                        classes={{ root: classes.item }}
+                        key={network.ID}
+                        onClick={() => onChainChange(chainId)}>
+                        <Stack direction="row" gap={0.5} alignItems="center">
+                            <Stack justifyContent="center" width={18}>
+                                {chainId === currentChainId && <SuccessIcon sx={{ fontSize: 18 }} />}
+                            </Stack>
+                            <Stack justifyContent="center" alignItems="center" width={30}>
+                                <WalletIcon networkIcon={network.icon} size={30} />
+                            </Stack>
+                            <Typography flex={1}>{network.name}</Typography>
                         </Stack>
-                        <Stack justifyContent="center" alignItems="center" width={30}>
-                            <ChainIcon chainId={chainId} size={30} />
-                        </Stack>
-                        <Typography flex={1}>{resolveNetworkName(network)}</Typography>
-                    </Stack>
-                </MenuItem>
-            )
-        }) ?? []),
+                    </MenuItem>
+                )
+            }) ?? []),
     )
 
     if ([ProviderType.WalletConnect || ProviderType.CustomNetwork].includes(providerType)) {

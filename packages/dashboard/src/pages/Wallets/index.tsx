@@ -22,7 +22,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages, PluginServices } from '../../API'
 import { WalletStateBar } from './components/WalletStateBar'
 import { useDashboardI18N } from '../../locales'
-import { useAsync } from 'react-use'
+import { getRegisteredWeb3Networks } from '@masknet/plugin-infra'
 
 function Wallets() {
     const wallet = useWallet()
@@ -43,7 +43,7 @@ function Wallets() {
     const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
+    const networks = getRegisteredWeb3Networks()
     const { value: detailedTokens } = useAssets(
         trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
         selectedChainId === null ? 'all' : selectedChainId,

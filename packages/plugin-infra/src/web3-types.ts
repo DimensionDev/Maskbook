@@ -15,12 +15,18 @@ export declare namespace Web3Plugin {
         ID: string
         /** The ID of a plugin that provides the functionality of this network. */
         networkSupporterPluginID: string
+        /** The chain id */
+        chainId: number
         /** The network type */
         type: string
         /** The network icon */
         icon: URL
+        /** The network icon in fixed color */
+        iconColor: string
         /** The network name */
         name: string
+        /** Is a mainnet network */
+        isMainnet: boolean
     }
     export interface ProviderDescriptor {
         /** An unique ID for each wallet provider */

@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 21,
         display: 'flex',
         gap: 32,
+        flexWrap: 'wrap',
     },
     networkItem: {
         width: 'auto',
@@ -99,28 +100,30 @@ export function PluginProviderRender({
                         1. Choose Network
                     </Typography>
                     <List className={classes.list}>
-                        {networks?.map((network) => (
-                            <ListItem
-                                className={classes.networkItem}
-                                key={network.ID}
-                                onClick={() => {
-                                    setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
-                                    setUndeterminedNetworkID(network.ID)
-                                }}>
-                                <div className={classes.iconWrapper}>
-                                    {NetworkIconClickBait ? (
-                                        <NetworkIconClickBait network={network}>
+                        {networks
+                            ?.filter((x) => x.isMainnet)
+                            .map((network) => (
+                                <ListItem
+                                    className={classes.networkItem}
+                                    key={network.ID}
+                                    onClick={() => {
+                                        setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
+                                        setUndeterminedNetworkID(network.ID)
+                                    }}>
+                                    <div className={classes.iconWrapper}>
+                                        {NetworkIconClickBait ? (
+                                            <NetworkIconClickBait network={network}>
+                                                <ImageIcon icon={network.icon} />
+                                            </NetworkIconClickBait>
+                                        ) : (
                                             <ImageIcon icon={network.icon} />
-                                        </NetworkIconClickBait>
-                                    ) : (
-                                        <ImageIcon icon={network.icon} />
-                                    )}
-                                    {undeterminedNetworkID === network.ID && (
-                                        <SuccessIcon className={classes.checkedBadge} />
-                                    )}
-                                </div>
-                            </ListItem>
-                        ))}
+                                        )}
+                                        {undeterminedNetworkID === network.ID && (
+                                            <SuccessIcon className={classes.checkedBadge} />
+                                        )}
+                                    </div>
+                                </ListItem>
+                            ))}
                     </List>
                 </section>
                 <section className={classes.section}>

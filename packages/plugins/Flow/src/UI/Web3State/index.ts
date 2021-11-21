@@ -26,7 +26,17 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             account: createSubscriptionFromUser((user) => {
                 return user?.addr ?? ''
             }),
-
+            wallets: createSubscriptionFromUser((user): Web3Plugin.Wallet[] => {
+                if (!user?.addr) return []
+                return [
+                    {
+                        name: 'Flow',
+                        address: user?.addr,
+                        hasDerivationPath: false,
+                        hasStoredKeyInfo: false,
+                    },
+                ]
+            }),
             chainId: createConstantSubscription(chainId),
             networkType: createConstantSubscription(NetworkType.Flow),
             providerType: createSubscriptionFromUser((user) => {

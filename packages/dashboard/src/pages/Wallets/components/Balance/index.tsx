@@ -1,12 +1,12 @@
 import { memo } from 'react'
+import { useMatch } from 'react-router-dom'
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
-import { useDashboardI18N } from '../../../../locales'
 import { MaskColorVar } from '@masknet/theme'
+import { useDashboardI18N } from '../../../../locales'
 import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
-import type { NetworkType } from '@masknet/web3-shared-evm'
 import { ChainId, getChainName } from '@masknet/web3-shared-evm'
 import { MiniNetworkSelector } from '@masknet/shared'
-import { useMatch } from 'react-router-dom'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { RoutePaths } from '../../../../type'
 
 export interface BalanceCardProps {
@@ -16,7 +16,7 @@ export interface BalanceCardProps {
     onSwap(): void
     onReceive(): void
     selectedChainId: ChainId | null
-    networks: NetworkType[]
+    networks: Web3Plugin.NetworkDescriptor[]
     onSelectNetwork(id: ChainId | null): void
 }
 
