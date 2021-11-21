@@ -107,13 +107,11 @@ export declare namespace Web3Plugin {
 
     export interface Token {
         id: string
-        type: TokenType
         chainId: number
     }
 
     export interface FungibleToken extends Token {
         id: string
-        type: TokenType.Fungible
         address: string
         decimal?: number
         name: string
@@ -122,7 +120,6 @@ export declare namespace Web3Plugin {
 
     export interface NonFungibleToken extends Token {
         id: string
-        type: TokenType.NonFungible
         name: string
         description?: string
     }

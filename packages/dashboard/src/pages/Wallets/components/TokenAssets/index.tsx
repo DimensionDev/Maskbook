@@ -9,7 +9,7 @@ import { CollectibleList } from '../CollectibleList'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useCurrentCollectibleDataProvider } from '../../api'
 
 const useStyles = makeStyles()((theme) => ({
@@ -40,10 +40,10 @@ export enum AssetTab {
 const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
 interface TokenAssetsProps {
-    selectedChainId: ChainId | null
+    network: Web3Plugin.NetworkDescriptor | null
 }
 
-export const TokenAssets = memo<TokenAssetsProps>(({ selectedChainId }) => {
+export const TokenAssets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
@@ -87,13 +87,13 @@ export const TokenAssets = memo<TokenAssetsProps>(({ selectedChainId }) => {
                         </Button>
                     </Box>
                     <TabPanel value={AssetTab.Token} key={AssetTab.Token} sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <TokenTable selectedChainId={selectedChainId} />
+                        <TokenTable selectedChainId={network?.chainId ?? null} />
                     </TabPanel>
                     <TabPanel
                         value={AssetTab.Collectibles}
                         key={AssetTab.Collectibles}
                         sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <CollectibleList selectedChainId={selectedChainId} provider={provider} />
+                        <CollectibleList selectedChainId={network?.chainId ?? null} provider={provider} />
                     </TabPanel>
                 </TabContext>
             </ContentContainer>

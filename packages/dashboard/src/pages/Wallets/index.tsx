@@ -101,7 +101,7 @@ function Wallets() {
                         onSelectNetwork={setSelectedNetwork}
                     />
                     <Routes>
-                        <Route path="/" element={<TokenAssets selectedChainId={selectedNetwork?.chainId ?? null} />} />
+                        <Route path="/" element={<TokenAssets network={selectedNetwork} />} />
                         <Route path="transfer" element={<Transfer />} />
                         <Route
                             path="history"
