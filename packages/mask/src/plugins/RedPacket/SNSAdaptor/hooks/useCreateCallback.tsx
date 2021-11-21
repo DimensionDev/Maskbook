@@ -1,7 +1,6 @@
 import BigNumber from 'bignumber.js'
 import { omit } from 'lodash-unified'
 import { useCallback, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
@@ -77,46 +76,34 @@ function checkParams(paramsObj: paramsObjType, setCreateState?: (value: Transact
 export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number) {
     const redPacketContract = useRedPacketContract(version)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const account = useAccount()
-    return useAsync(async () => {
-        if (!redPacketSettings || !redPacketContract) return null
-        const { duration, isRandom, message, name, shares, total, token, publicKey } = redPacketSettings
-        const seed = Math.random().toString()
-        const tokenType = token!.type === EthereumTokenType.Native ? 0 : 1
-        const tokenAddress = token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
-        if (!tokenAddress) return null
 
-        const paramsObj: paramsObjType = {
-            publicKey,
-            shares,
-            isRandom,
-            duration,
-            seed: Web3Utils.sha3(seed)!,
-            message,
-            name,
-            tokenType,
-            tokenAddress,
-            total,
-            token,
-        }
+    if (!redPacketSettings || !redPacketContract) return null
+    const { duration, isRandom, message, name, shares, total, token, publicKey } = redPacketSettings
+    const seed = Math.random().toString()
+    const tokenType = token!.type === EthereumTokenType.Native ? 0 : 1
+    const tokenAddress = token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
+    if (!tokenAddress) return null
 
-        if (!checkParams(paramsObj)) return null
+    const paramsObj: paramsObjType = {
+        publicKey,
+        shares,
+        isRandom,
+        duration,
+        seed: Web3Utils.sha3(seed)!,
+        message,
+        name,
+        tokenType,
+        tokenAddress,
+        total,
+        token,
+    }
 
-        type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
-        const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
+    if (!checkParams(paramsObj)) return null
 
-        let gasError = null as Error | null
-        const value = new BigNumber(paramsObj.token?.type === EthereumTokenType.Native ? total : '0').toFixed()
+    type MethodParameters = Parameters<HappyRedPacketV4['methods']['create_red_packet']>
+    const params = Object.values(omit(paramsObj, ['token'])) as MethodParameters
 
-        const gas = await (redPacketContract as HappyRedPacketV4).methods
-            .create_red_packet(...params)
-            .estimateGas({ from: account, value })
-            .catch((error: Error) => {
-                gasError = error
-            })
-
-        return { gas: gas as number | undefined, params, paramsObj, gasError }
-    }, [redPacketSettings, account, redPacketContract]).value
+    return { params, paramsObj }
 }
 
 export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
@@ -139,15 +126,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
             return
         }
 
-        const { gas, params, paramsObj, gasError } = paramResult
-
-        if (gasError) {
-            setCreateState({
-                type: TransactionStateType.FAILED,
-                error: gasError,
-            })
-            return
-        }
+        const { params, paramsObj } = paramResult
 
         if (!checkParams(paramsObj, setCreateState)) return
 
@@ -163,7 +142,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
         const config = {
             from: account,
             value,
-            gas,
+            gas: await (redPacketContract as HappyRedPacketV4).methods
+                .create_red_packet(...params)
+                .estimateGas({ from: account, value })
+                .catch((error: Error) => {
+                    setCreateState({ type: TransactionStateType.FAILED, error })
+                    throw error
+                }),
         }
 
         // send transaction and wait for hash
@@ -204,7 +189,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                     reject(error)
                 })
         })
-    }, [account, redPacketContract, redPacketSettings, chainId, paramResult])
+    }, [account, redPacketContract, redPacketSettings, createSettings, chainId, paramResult])
 
     const resetCallback = useCallback(() => {
         setCreateState({

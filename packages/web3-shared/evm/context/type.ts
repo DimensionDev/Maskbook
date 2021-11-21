@@ -1,4 +1,4 @@
-import type { provider as Provider } from 'web3-core'
+import type { provider as Provider, HttpProvider } from 'web3-core'
 import type { Subscription } from 'use-subscription'
 import type {
     ChainId,
@@ -25,6 +25,7 @@ export interface Web3ProviderType {
     balance: Subscription<string>
     blockNumber: Subscription<number>
     provider: Subscription<Provider>
+    fortmaticProvider: Subscription<HttpProvider | null>
     networkType: Subscription<NetworkType>
     providerType: Subscription<ProviderType>
     tokenPrices: Subscription<CryptoPrice>

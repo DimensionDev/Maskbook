@@ -30,7 +30,16 @@ import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../utils'
 import { createExternalProvider } from './helpers'
+import { createInjectedProvider } from '../extension/background-script/EthereumService'
 import Services from '../extension/service'
+
+function createFortmaticProvider(isMask: boolean) {
+    return Fortmatic.createProvider(
+        (isMask
+            ? currentMaskWalletChainIdSettings.value
+            : currentChainIdSettings.value) as Fortmatic.FortmaticSupportedChainId,
+    )
+}
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(
@@ -51,15 +60,35 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         }),
     )
 
+    const InjectedProvider = createInjectedProvider()
+
     return {
-        provider: createStaticSubscription(() =>
-            currentProviderSettings.value === ProviderType.Fortmatic
-                ? Fortmatic.createProvider(
-                      (isMask
-                          ? currentMaskWalletChainIdSettings.value
-                          : currentChainIdSettings.value) as Fortmatic.FortmaticSupportedChainId,
-                  )
-                : Web3Provider,
+        provider: createSubscriptionFromAsync(
+            async () => (isInjectedProvider(currentProviderSettings.value) ? InjectedProvider : Web3Provider),
+            Web3Provider,
+            (callback) => {
+                const a = currentProviderSettings.addListener(callback)
+                return () => void [a()]
+            },
+        ),
+        fortmaticProvider: createSubscriptionFromAsync(
+            async () => {
+                try {
+                    await currentChainIdSettings.readyPromise
+                    await currentMaskWalletChainIdSettings.readyPromise
+                    await currentProviderSettings.readyPromise
+                } catch (error) {
+                    // do nothing
+                }
+                return createFortmaticProvider(isMask)
+            },
+            createFortmaticProvider(isMask),
+            (callback) => {
+                const a = currentProviderSettings.addListener(callback)
+                const b = currentChainIdSettings.addListener(callback)
+                const c = currentMaskWalletChainIdSettings.addListener(callback)
+                return () => void [a(), b(), c()]
+            },
         ),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),

@@ -1,5 +1,5 @@
 import Web3 from 'web3'
-import type { provider as Provider } from 'web3-core'
+import type { provider as Provider, HttpProvider } from 'web3-core'
 import { ChainId, getRPCConstants } from '..'
 import Fortmatic from 'fortmatic'
 import { first } from 'lodash-unified'
@@ -24,12 +24,12 @@ let web3: Web3 | null = null
 
 export function createProvider(chainId: FortmaticSupportedChainId) {
     let provider = providerPool.get(chainId)
-    if (provider) return provider
+    if (provider) return provider as HttpProvider
     const rpcUrl = first(getRPCConstants(chainId).RPC)!
     const fm = new Fortmatic(API_KEY_CHAIN_MAPPINGS[chainId], { chainId, rpcUrl })
     provider = fm.getProvider() as Provider
     providerPool.set(chainId, provider)
-    return provider
+    return provider as HttpProvider
 }
 
 export async function createWeb3(props: { chainId: ChainId }) {

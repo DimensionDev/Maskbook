@@ -82,6 +82,10 @@ export async function connectInjected() {
     }
 }
 
+export function createInjectedProvider() {
+    return Injected.createProvider()
+}
+
 export async function notifyInjectedEvent(name: string, event: unknown, providerType: ProviderType) {
     switch (name) {
         case 'accountsChanged':

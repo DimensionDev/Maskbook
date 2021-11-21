@@ -24,6 +24,10 @@ export const Web3Context: Web3ProviderType = {
         getCurrentValue: () => Web3Provider,
         subscribe: () => noop,
     },
+    fortmaticProvider: {
+        getCurrentValue: () => null,
+        subscribe: () => noop,
+    },
     allowTestnet: createSubscriptionFromAsync(Services.Settings.getWalletAllowTestChain, false, () => {
         return () => {}
     }),
