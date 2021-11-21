@@ -14,28 +14,44 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
 
     useEffect(() => {
         return EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
-            try {
-                // scheme 1: fortmatic provider request
-                const result =
-                    ProviderType.Fortmatic === providerType
-                        ? fortmaticProvider.send(payload, () => undefined)
-                        : await bridgedEthereumProvider.request({
-                              method: payload.method,
-                              params: payload.params,
-                          })
-                EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
-                    payload,
-                    result,
-                    error: null,
-                })
-            } catch (error: unknown) {
-                EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
-                    payload,
-                    error: error instanceof Error ? error : new Error(),
-                })
+            // scheme 1: fortmatic provider request
+            let result
+            if (ProviderType.Fortmatic !== providerType) {
+                try {
+                    result = await bridgedEthereumProvider.request({
+                        method: payload.method,
+                        params: payload.params,
+                    })
+                } catch (error: unknown) {
+                    EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
+                        payload,
+                        error: error instanceof Error ? error : new Error(),
+                    })
+                }
+            } else {
+                await new Promise((resolve, reject) =>
+                    fortmaticProvider.send(payload, (error, txhash) => {
+                        if (error) {
+                            EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
+                                payload,
+                                error: error instanceof Error ? error : new Error(),
+                            })
+                            reject()
+                        } else {
+                            result = txhash
+                            resolve(txhash)
+                        }
+                    }),
+                )
             }
+
+            EVM_Messages.events.INJECTED_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
+                payload,
+                result,
+                error: null,
+            })
         })
-    }, [providerType])
+    }, [providerType, fortmaticProvider])
 
     useEffect(() => {
         return bridgedEthereumProvider.on('accountsChanged', async (event) => {
