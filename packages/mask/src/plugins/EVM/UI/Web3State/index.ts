@@ -27,6 +27,8 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         chainId: context.chainId,
         networkType: context.networkType,
         providerType: context.providerType,
+        walletPrimary: context.walletPrimary,
+        wallets: context.wallets,
     }
     state.Utils = state.Utils ?? {
         getChainDetailed,

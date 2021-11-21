@@ -70,8 +70,8 @@ const useStyles = makeStyles()((theme) => ({
 export interface PluginProviderRenderProps {
     networks: Web3Plugin.NetworkDescriptor[]
     providers: Web3Plugin.ProviderDescriptor[]
-    undeterminedPluginID: string
-    undeterminedNetworkID: string
+    undeterminedPluginID?: string
+    undeterminedNetworkID?: string
     setUndeterminedPluginID: (id: NetworkPluginID) => void
     setUndeterminedNetworkID: (id: string) => void
     NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
@@ -141,7 +141,7 @@ export function PluginProviderRender({
                                         provider={provider}
                                         onClick={onSubmit}>
                                         <ImageListItem>
-                                            <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
+                                            <ProviderIcon icon={provider.icon} name={provider.name} />
                                         </ImageListItem>
                                     </ProviderIconClickBait>
                                 ) : (

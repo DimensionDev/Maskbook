@@ -261,27 +261,33 @@ export declare namespace Web3Plugin {
     export namespace UI {
         export interface NetworkIconClickBaitProps {
             network: NetworkDescriptor
+            provider?: ProviderDescriptor
             children?: React.ReactNode
-            onClick?: () => void
+            onClick?: (network: NetworkDescriptor, provider?: ProviderDescriptor) => void
+            onSubmit?: (network: NetworkDescriptor, provider?: ProviderDescriptor) => void
         }
         export interface ProviderIconClickBaitProps {
             network: NetworkDescriptor
             provider: ProviderDescriptor
             children?: React.ReactNode
-            onClick?: () => void
+            onClick?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
+            onSubmit?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
         }
         export interface AddressFormatterProps {
             address: string
             size?: number
         }
-        export interface SelectProviderDialogBait {
-            /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-            NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
-            /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-            ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
-        }
         export interface UI {
-            SelectProviderDialog?: SelectProviderDialogBait
+            SelectNetworkMenu?: {
+                /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+                NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+            }
+            SelectProviderDialog?: {
+                /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+                NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+                /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
+                ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
+            }
         }
     }
 }

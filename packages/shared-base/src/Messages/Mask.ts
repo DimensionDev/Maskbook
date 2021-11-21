@@ -15,7 +15,6 @@ export interface MaskSettingsEvents {
     languageSettings: LanguageOptions
     debugModeSetting: boolean
     pluginIDSettings: string
-    networkIDSettings: string
     currentChainIdSettings: number
     currentBalanceSettings: string
     currentBlockNumberSettings: number

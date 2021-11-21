@@ -22,10 +22,6 @@ export const [usePluginID] = createGlobalState(Services.Settings.getPluginID, (x
     Messages.events.pluginIDSettings.on(x),
 )
 
-export const [useNetworkID] = createGlobalState(Services.Settings.getNetworkID, (x) =>
-    Messages.events.networkIDSettings.on(x),
-)
-
 export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings.getCurrentPersonaIdentifier, (x) =>
     Messages.events.currentPersonaIdentifier.on(x),
 )
