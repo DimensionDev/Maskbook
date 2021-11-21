@@ -4,13 +4,14 @@ import {
     Asset,
     EthereumTokenType,
     formatBalance,
+    formatEthereumAddress,
     formatGweiToEther,
     formatGweiToWei,
-    formatEthereumAddress,
     isGreaterThan,
     isZero,
     pow10,
     useChainId,
+    useFungibleTokenBalance,
     useGasLimit,
     useNativeTokenDetailed,
     useTokenTransferCallback,
@@ -135,7 +136,7 @@ const useStyles = makeStyles()({
         lineHeight: '20px',
     },
 })
-
+const MIN_GAS_LIMIT = 21000
 export interface Transfer1559Props {
     selectedAsset?: Asset
     otherWallets: { name: string; address: string }[]
@@ -243,7 +244,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         defaultValues: {
             address: '',
             amount: '',
-            gasLimit: '0',
+            gasLimit: selectedAsset?.token.type === EthereumTokenType.Native ? '21000' : '0',
             maxPriorityFeePerGas: '',
             maxFeePerGas: '',
         },
@@ -254,7 +255,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         },
     })
 
-    const [address, amount] = methods.watch(['address', 'amount'])
+    const [address, amount, maxFeePerGas] = methods.watch(['address', 'amount', 'maxFeePerGas'])
 
     //#region Get min gas limit with amount and recipient address
     const { value: minGasLimit } = useGasLimit(
@@ -264,6 +265,18 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         address,
     )
     //#endregion
+
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+        selectedAsset?.token?.type ?? EthereumTokenType.Native,
+        selectedAsset?.token?.address ?? '',
+    )
+
+    const maxAmount = useMemo(() => {
+        const gasFee = formatGweiToWei(maxFeePerGas ?? 0).multipliedBy(MIN_GAS_LIMIT)
+        let amount_ = new BigNumber(tokenBalance ?? 0)
+        amount_ = selectedAsset?.token.type === EthereumTokenType.Native ? amount_.minus(gasFee) : amount_
+        return formatBalance(amount_.toFixed(), selectedAsset?.token.decimals).toString()
+    }, [selectedAsset, maxFeePerGas, minGasLimit, tokenBalance])
 
     //#region set default gasLimit
     useUpdateEffect(() => {
@@ -292,8 +305,8 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
 
     const handleMaxClick = useCallback(() => {
-        methods.setValue('amount', formatBalance(selectedAsset?.balance, selectedAsset?.token.decimals))
-    }, [methods.setValue, selectedAsset])
+        methods.setValue('amount', maxAmount)
+    }, [methods.setValue, maxAmount])
 
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {

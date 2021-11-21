@@ -17,6 +17,7 @@ import {
     useGasLimit,
     useTokenTransferCallback,
     useWallet,
+    useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -206,15 +207,20 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     )
     //#endregion
 
+    const { value: tokenBalance = '0' } = useFungibleTokenBalance(
+        selectedAsset?.token?.type ?? EthereumTokenType.Native,
+        selectedAsset?.token?.address ?? '',
+    )
+
     const maxAmount = useMemo(() => {
-        let amount_ = new BigNumber(selectedAsset?.balance || '0')
+        let amount_ = new BigNumber(tokenBalance || '0')
         amount_ =
             selectedAsset?.token.type === EthereumTokenType.Native
                 ? amount_.minus(new BigNumber(30000).multipliedBy(gasPrice))
                 : amount_
 
         return amount_.toFixed()
-    }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type])
+    }, [selectedAsset?.balance, gasPrice, selectedAsset?.token.type, tokenBalance])
 
     //#region set default gasLimit
     useUpdateEffect(() => {
