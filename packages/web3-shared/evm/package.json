@@ -20,7 +20,8 @@
     "wallet.ts": "^1.0.1",
     "web3": "1.5.2",
     "web3-core-helpers": "1.5.2",
-    "web3-utils": "1.5.2"
+    "web3-utils": "1.5.2",
+    "fortmatic": "^2.2.1"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"

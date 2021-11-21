@@ -9,6 +9,7 @@ import {
     Web3ProviderType,
     resolveProviderIdentityKey,
     isInjectedProvider,
+    Fortmatic,
 } from '@masknet/web3-shared-evm'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
 import {
@@ -51,7 +52,15 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
     )
 
     return {
-        provider: createStaticSubscription(() => Web3Provider),
+        provider: createStaticSubscription(() =>
+            currentProviderSettings.value === ProviderType.Fortmatic
+                ? Fortmatic.createProvider(
+                      (isMask
+                          ? currentMaskWalletChainIdSettings.value
+                          : currentChainIdSettings.value) as Fortmatic.FortmaticSupportedChainId,
+                  )
+                : Web3Provider,
+        ),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
         account: createSubscriptionFromAsync(
@@ -68,7 +77,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const providerType = currentProviderSettings.value
 
                 if (location.href.includes('popups.html')) return account
-                if (!isInjectedProvider(providerType)) return account
+                if (!isInjectedProvider(providerType) || providerType === ProviderType.Fortmatic) return account
 
                 try {
                     const propertyKey = resolveProviderIdentityKey(providerType)

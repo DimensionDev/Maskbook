@@ -21,6 +21,7 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
         [ProviderType.Coin98]: 'Coin98',
         [ProviderType.WalletLink]: 'Coinbase',
         [ProviderType.MathWallet]: 'MathWallet',
+        [ProviderType.Fortmatic]: 'Fortmatic',
     },
     'Unknown Network',
 )
@@ -33,6 +34,7 @@ export const resolveProviderDownloadLink = createLookupTableResolver<ProviderTyp
         [ProviderType.Coin98]: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
         [ProviderType.WalletLink]: 'https://wallet.coinbase.com/',
         [ProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
+        [ProviderType.Fortmatic]: '',
         [ProviderType.CustomNetwork]: '',
     },
     '',
@@ -40,7 +42,7 @@ export const resolveProviderDownloadLink = createLookupTableResolver<ProviderTyp
 
 export const resolveProviderIdentityKey = createLookupTableResolver<
     ProviderType,
-    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
+    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | 'isFortmatic' | ''
 >(
     {
         [ProviderType.MaskWallet]: 'isMaskWallet',
@@ -49,6 +51,7 @@ export const resolveProviderIdentityKey = createLookupTableResolver<
         [ProviderType.MathWallet]: 'isMathWallet',
         [ProviderType.Coin98]: 'isCoin98',
         [ProviderType.WalletLink]: 'isWalletLink',
+        [ProviderType.Fortmatic]: 'isFortmatic',
         [ProviderType.CustomNetwork]: '',
     },
     '',

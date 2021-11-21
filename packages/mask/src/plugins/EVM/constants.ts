@@ -86,4 +86,11 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         name: 'MathWallet',
         icon: new URL('./assets/mathwallet.png', import.meta.url),
     },
+    {
+        ID: `${PLUGIN_ID}_fortmatic`,
+        providerAdaptorPluginID: PLUGIN_ID,
+        type: ProviderType.Fortmatic,
+        name: 'Fortmatic',
+        icon: new URL('./assets/fortmatic.png', import.meta.url),
+    },
 ]

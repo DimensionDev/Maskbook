@@ -39,7 +39,10 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
 
     const onClickProvider = useCallback(async () => {
         // open the download page
-        if (isInjectedProvider(providerType) || ProviderType.MetaMask === providerType) {
+        if (
+            (isInjectedProvider(providerType) && ProviderType.Fortmatic !== providerType) ||
+            ProviderType.MetaMask === providerType
+        ) {
             if (!injectedProviderReady || providerType !== injectedProviderType) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
                 if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
@@ -54,6 +57,7 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
+            case ProviderType.Fortmatic:
                 setConnectWalletDialog({
                     open: true,
                     providerType,

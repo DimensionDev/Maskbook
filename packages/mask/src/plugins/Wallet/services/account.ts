@@ -29,6 +29,7 @@ export async function updateAccount(
         providerType?: ProviderType
     } = {},
 ) {
+    console.log({ options })
     if (options.chainId && !options.networkType) options.networkType = getNetworkTypeFromChainId(options.chainId)
     if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
 

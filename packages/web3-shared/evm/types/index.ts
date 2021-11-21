@@ -57,6 +57,7 @@ export enum ProviderType {
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
     Coin98 = 'Coin98',
     MathWallet = 'MathWallet',
     WalletLink = 'WalletLink',

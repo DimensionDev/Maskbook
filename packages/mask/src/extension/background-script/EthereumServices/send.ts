@@ -200,7 +200,7 @@ export async function INTERNAL_send(
         console.table(payload)
         console.debug(new Error().stack)
     }
-
+    console.log({ payload })
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
     const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined
@@ -263,6 +263,7 @@ export async function INTERNAL_send(
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
+            case ProviderType.Fortmatic:
                 try {
                     callback(null, {
                         jsonrpc: '2.0',
@@ -286,7 +287,7 @@ export async function INTERNAL_send(
     async function sendTransaction() {
         const hash = getPayloadHash(payload)
         const config = getPayloadConfig(payload)
-
+        console.log({ config })
         if (!config) throw new Error('Failed to send transaction.')
 
         // add nonce
@@ -310,10 +311,10 @@ export async function INTERNAL_send(
         } else if (!isGasPriceValid) {
             config.gasPrice = await getGasPrice()
         }
-
+        console.log({ config })
         // if the transaction is eip-1559, need to remove gasPrice from the config
         if (Flags.EIP1559_enabled && isEIP1559Valid) {
-            config.gasPrice = undefined
+            // config.gasPrice = undefined
         } else {
             config.maxFeePerGas = undefined
             config.maxPriorityFeePerGas = undefined
@@ -375,6 +376,7 @@ export async function INTERNAL_send(
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
+            case ProviderType.Fortmatic:
                 await Injected.ensureConnectedAndUnlocked()
                 Injected.createProvider().send(payload, (error, response) => {
                     callback(error, response)

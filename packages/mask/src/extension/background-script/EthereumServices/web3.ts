@@ -1,4 +1,4 @@
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType, Fortmatic } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'
@@ -23,6 +23,8 @@ export async function createWeb3({
             return WalletConnect.createWeb3({
                 chainId,
             })
+        case ProviderType.Fortmatic:
+            return Fortmatic.createWeb3({ chainId })
         case ProviderType.Coin98:
         case ProviderType.WalletLink:
         case ProviderType.MathWallet:
