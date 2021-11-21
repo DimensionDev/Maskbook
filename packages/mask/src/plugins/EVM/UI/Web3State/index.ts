@@ -21,10 +21,10 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
 
     state.Shared = state.Shared ?? {
         allowTestnet: context.allowTestnet,
+        chainId: context.chainId,
         account: context.account,
         balance: context.balance,
         blockNumber: context.blockNumber,
-        chainId: context.chainId,
         networkType: context.networkType,
         providerType: context.providerType,
         walletPrimary: context.walletPrimary,

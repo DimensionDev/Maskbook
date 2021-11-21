@@ -4,7 +4,6 @@ import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
-import { ChainId, getChainName } from '@masknet/web3-shared-evm'
 import { MiniNetworkSelector } from '@masknet/shared'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { RoutePaths } from '../../../../type'
@@ -15,9 +14,9 @@ export interface BalanceCardProps {
     onBuy(): void
     onSwap(): void
     onReceive(): void
-    selectedChainId: ChainId | null
     networks: Web3Plugin.NetworkDescriptor[]
-    onSelectNetwork(id: ChainId | null): void
+    selectedNetwork: Web3Plugin.NetworkDescriptor | null
+    onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
 }
 
 const BalanceContainer = styled('div')(
@@ -80,7 +79,7 @@ const ButtonGroup = styled('div')`
 `
 
 export const Balance = memo<BalanceCardProps>(
-    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedChainId }) => {
+    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork }) => {
         const t = useDashboardI18N()
 
         const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
@@ -97,8 +96,7 @@ export const Balance = memo<BalanceCardProps>(
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>
-                            {t.wallets_balance()}{' '}
-                            {selectedChainId ? getChainName(selectedChainId) : t.wallets_balance_all_chain()}
+                            {t.wallets_balance()} {selectedNetwork?.name ?? t.wallets_balance_all_chain()}
                         </BalanceTitle>
                         <BalanceContent sx={{ py: 0.5 }}>
                             {isNaN(balance)
@@ -111,9 +109,9 @@ export const Balance = memo<BalanceCardProps>(
                         <MiniNetworkSelector
                             hideAllNetworkButton={isHiddenAllButton}
                             disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
-                            onSelect={onSelectNetwork}
-                            selectedChainId={selectedChainId}
+                            selectedNetwork={selectedNetwork}
                             networks={networks}
+                            onSelect={onSelectNetwork}
                         />
                     </BalanceDisplayContainer>
                 </Box>

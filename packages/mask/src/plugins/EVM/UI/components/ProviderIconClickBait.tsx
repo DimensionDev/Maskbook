@@ -38,7 +38,7 @@ export function ProviderIconClickBait({
 
     const onClickProvider = useCallback(async () => {
         // open the download page
-        if (isInjectedProvider(providerType) || ProviderType.MetaMask === providerType) {
+        if (isInjectedProvider(providerType)) {
             if (!injectedProviderReady || providerType !== injectedProviderType) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
                 if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')

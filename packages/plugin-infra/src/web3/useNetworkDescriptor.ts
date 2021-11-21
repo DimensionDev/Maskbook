@@ -8,7 +8,7 @@ export function useNetworkDescriptor(
     expectedPluginID?: NetworkPluginID,
 ) {
     const pluginID = usePluginIDContext()
-    const networkType = useNetworkType()
+    const networkType = useNetworkType(expectedPluginID ?? pluginID)
 
     return getPluginDefine(expectedPluginID ?? pluginID)?.declareWeb3Networks?.find((x) =>
         [x.chainId, x.type, x.ID].includes(expectedChainIdOrNetworkTypeOrID ?? networkType ?? ''),

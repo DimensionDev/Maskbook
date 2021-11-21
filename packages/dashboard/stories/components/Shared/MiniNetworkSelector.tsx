@@ -8,8 +8,8 @@ export default meta({
 
 export const MiniNetworkSelector = of({
     args: {
-        selectedChainId: 1,
         networks: [],
+        selectedNetwork: null,
         onSelect: () => {},
         hideAllNetworkButton: false,
         disabledNonCurrentNetwork: false,

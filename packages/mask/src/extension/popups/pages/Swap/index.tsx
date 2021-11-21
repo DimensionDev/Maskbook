@@ -61,7 +61,6 @@ const useStyles = makeStyles()((theme) => {
 export default function SwapPage() {
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { providerType } = useWeb3StateContext()
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
     const wallet = useWallet()
     const openPopupsWindow = useCallback(() => {
@@ -78,10 +77,9 @@ export default function SwapPage() {
                         <WalletStateBarUI
                             className={classes.walletStateBar}
                             isPending={pendingTransactions.length > 0}
-                            providerType={providerType}
                             openConnectWalletDialog={openPopupsWindow}
-                            walletName={wallet?.name ?? '-'}
-                            walletAddress={wallet?.address ?? '-'}
+                            walletName={wallet?.name}
+                            walletAddress={wallet?.address}
                         />
                     </header>
                     <main className={classes.main}>

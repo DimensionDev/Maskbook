@@ -3,7 +3,7 @@ import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../utils'
 import { ChainId, ProviderType, useAccount } from '@masknet/web3-shared-evm'
-import { getRegisteredWeb3Networks, Web3Plugin } from '@masknet/plugin-infra'
+import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { currentMaskWalletChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenu, useValueRef, WalletIcon } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
@@ -31,6 +31,7 @@ const useStyles = makeStyles()((theme) => ({
         color: '#ffffff',
         fontSize: 12,
         lineHeight: '16px',
+        marginLeft: 4,
     },
     arrow: {
         stroke: '#ffffff',
@@ -79,23 +80,25 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
     const { classes } = useStyles()
     const networks = getRegisteredWeb3Networks()
     const [menu, openMenu] = useMenu(
-        ...(networks?.map((network) => {
-            const chainId = network.chainId
+        ...(networks
+            ?.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+            .map((network) => {
+                const chainId = network.chainId
 
-            return (
-                <MenuItem
-                    key={chainId}
-                    onClick={() => onChainChange(chainId)}
-                    selected={chainId === currentNetwork.chainId}>
-                    {network.isMainnet ? (
-                        <WalletIcon size={16} networkIcon={network.icon} />
-                    ) : Flags.support_eth_network_switch ? (
-                        <ChainIcon color={network.iconColor} />
-                    ) : null}
-                    <Typography sx={{ marginLeft: 1 }}>{network.name}</Typography>
-                </MenuItem>
-            )
-        }) ?? []),
+                return (
+                    <MenuItem
+                        key={chainId}
+                        onClick={() => onChainChange(chainId)}
+                        selected={chainId === currentNetwork.chainId}>
+                        {network.isMainnet ? (
+                            <WalletIcon size={20} networkIcon={network.icon} />
+                        ) : Flags.support_eth_network_switch ? (
+                            <ChainIcon color={network.iconColor} />
+                        ) : null}
+                        <Typography sx={{ marginLeft: 1 }}>{network.name}</Typography>
+                    </MenuItem>
+                )
+            }) ?? []),
     )
 
     return (
@@ -103,7 +106,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
             <Box className={classes.root} onClick={openMenu}>
                 <div style={{ display: 'flex', alignItems: 'center' }}>
                     {currentNetwork.isMainnet ? (
-                        <WalletIcon size={16} networkIcon={currentNetwork.icon} />
+                        <WalletIcon size={20} networkIcon={currentNetwork.icon} />
                     ) : (
                         <div className={classes.iconWrapper}>
                             <ChainIcon color={currentNetwork.iconColor} />

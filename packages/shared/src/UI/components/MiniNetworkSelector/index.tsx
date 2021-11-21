@@ -1,6 +1,5 @@
 import { memo } from 'react'
 import { Box, Button, Stack, styled } from '@mui/material'
-import type { ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { ChainIcon } from '../ChainIcon'
 import { WalletIcon } from '../WalletIcon'
@@ -41,7 +40,10 @@ const useStyles = makeStyles<{ size: number }>()((theme, props) => ({
 }))
 
 export interface NetworkSelectorMinProps {
-    selectedChainId: null | ChainId
+    selectedNetwork: {
+        ID: string
+        chainId: number
+    } | null
     networks: {
         ID: string
         isMainnet: boolean
@@ -49,7 +51,7 @@ export interface NetworkSelectorMinProps {
         icon: URL
         iconColor: string
     }[]
-    onSelect(chainId: null | ChainId): void
+    onSelect(network: { chainId: number } | null): void
     hideAllNetworkButton?: boolean
     disabledNonCurrentNetwork?: boolean
     size?: number
@@ -59,8 +61,8 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
     ({
         hideAllNetworkButton = false,
         onSelect,
-        selectedChainId,
         networks = [],
+        selectedNetwork,
         disabledNonCurrentNetwork = false,
         size = 30,
     }) => {
@@ -70,7 +72,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
             <Stack direction="row">
                 {!hideAllNetworkButton && (
                     <AllNetworkButton
-                        className={selectedChainId === null ? classes.networkSelected : ''}
+                        className={!selectedNetwork ? classes.networkSelected : ''}
                         sx={{
                             width: size,
                             height: size,
@@ -91,7 +93,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                                 position="relative"
                                 mr={1}
                                 height={size}
-                                onClick={() => !disabledNonCurrentNetwork && onSelect(chainId)}
+                                onClick={() => !disabledNonCurrentNetwork && onSelect(network)}
                                 sx={{
                                     cursor: 'pointer',
                                     opacity: '0.6',
@@ -100,7 +102,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                                     lineHeight: `${size}px`,
                                 }}
                                 className={
-                                    selectedChainId === chainId
+                                    selectedNetwork?.ID === network.ID
                                         ? classes.networkSelected
                                         : disabledNonCurrentNetwork
                                         ? classes.networkDisabled

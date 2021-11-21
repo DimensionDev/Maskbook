@@ -90,8 +90,7 @@ export const usePluginsWeb3StateContext = PluginsWeb3StateContext.useContainer
 export function usePluginWeb3StateContext(expectedPluginID?: NetworkPluginID) {
     const pluginID = usePluginIDContext()
     const pluginsWeb3State = usePluginsWeb3StateContext()
-    const finalPluginID = expectedPluginID ?? pluginID
-    return useMemo(() => pluginsWeb3State[finalPluginID] ?? {}, [finalPluginID])
+    return pluginsWeb3State[expectedPluginID ?? pluginID] ?? {}
 }
 
 export function PluginsWeb3ContextProvider({

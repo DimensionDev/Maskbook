@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { HashRouter } from 'react-router-dom'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@mui/material'
 import {
@@ -38,9 +37,7 @@ export default function DashboardRoot() {
 
     // TODO:
     // migrate EVM plugin
-    useEffect(() => {
-        fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
-    }, [PluginsWeb3State, Web3Context])
+    fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
     //#region theme
     const appearance = useAppearance()
@@ -52,9 +49,7 @@ export default function DashboardRoot() {
     }
     const theme = themes[appearance]
 
-    useEffect(() => {
-        applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
-    }, [appearance, mode])
+    applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
     //#endregion
 
     return (
