@@ -37,6 +37,7 @@ function isDOMException(a) {
 }
 function isCryptoKey(a) {
     try {
-        return a.constructor.name === 'CryptoKey' || a.constructor.name === 'EcCryptoKey'
+        if (a.constructor.name === 'CryptoKey') return true
+        if (a.algorithm && a.data && a.type) return true
     } catch {}
 }
