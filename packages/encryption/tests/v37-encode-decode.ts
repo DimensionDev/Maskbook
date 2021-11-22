@@ -4,15 +4,7 @@ import { None } from 'ts-results'
 import { encodePayload, AESAlgorithmEnum, parsePayload, PayloadWellFormed } from '../src'
 import { importAESFromJWK } from '../src/utils'
 
-const testKey = {
-    alg: 'A256GCM',
-    ext: true,
-    /* cspell:disable-next-line */
-    k: 'JRhrRKykmnm3SbuNw6OcXF_jiw0gIlW3QiWNV01jeaE',
-    key_ops: ['encrypt', 'decrypt'],
-    kty: 'oct',
-}
-test('Simple payload', async () => {
+test('Encode v37 payload', async () => {
     const payload: PayloadWellFormed.Payload = {
         version: -37,
         signature: None,
@@ -42,4 +34,12 @@ async function getAESKey(): Promise<PayloadWellFormed.PublicEncryption['AESKey']
         algr: AESAlgorithmEnum.A256GCM,
         key: (await importAESFromJWK.AES_GCM_256(testKey)).unwrap(),
     }
+}
+const testKey = {
+    alg: 'A256GCM',
+    ext: true,
+    /* cspell:disable-next-line */
+    k: 'JRhrRKykmnm3SbuNw6OcXF_jiw0gIlW3QiWNV01jeaE',
+    key_ops: ['encrypt', 'decrypt'],
+    kty: 'oct',
 }

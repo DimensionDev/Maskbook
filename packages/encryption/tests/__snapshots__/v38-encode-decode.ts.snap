@@ -1,32 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Be able to parse current payload: Old infra output for message "test" 1`] = `
-Object {
-  "author": Ok(Some(ProfileIdentifier {
-    "network": "facebook.com",
-    "userId": "100027562249574",
-  })),
-  "authorPublicKey": Ok(Some(Object {
-    "algr": 2,
-    "key": CryptoKey { [opaque crypto key material] },
-  })),
-  "encrypted": Ok(Uint8Array [ 3a0d6ee692c6f46896b196f14301c01ad2fa26aa ]),
-  "encryption": Ok(Object {
-    "AESKey": Ok(Object {
-      "algr": "A256GCM",
-      "key": CryptoKey { [opaque crypto key material] },
-    }),
-    "iv": Ok(Uint8Array [ 0633db7e24805c2bdcff69ea2afda7cd ]),
-    "type": "public",
-  }),
-  "signature": Ok(None),
-  "version": -38,
-}
-`;
+exports[`Encode v38 payload: Encoded v38 message 1`] = `"🎼4/4|avkwBKqMpCKznGclvChuuh2AEExV0J14xI/KANhwiKJfVyfm2ObWb432E3aAOa7ImRoCd7/JK1dDQWk4rt9NqajTEaajARMc9hJ9GmR8lorBNRNHlgj/h1KJYk5th7Nsr04PWO0nJUKiDH2CJwieSxW2YqxCI1ceYKUYcZOsVJEZOrJ/IB8WUmU0|BjPbfiSAXCvc/2nqKv2nzQ==|Og1u5pLG9GiWsZbxQwHAGtL6Jqo=|_|Aq/bVWAKvodJuURGk3enjE1gUiu2SELM8IIKIlNGqOWM|1|ZmFjZWJvb2suY29tL3Rlc3Q=:||"`;
 
-exports[`Generate v38 payload: Generated -38 message 1`] = `"🎼4/4|avkwBKqMpCKznGclvChuuh2AEExV0J14xI/KANhwiKJfVyfm2ObWb432E3aAOa7ImRoCd7/JK1dDQWk4rt9NqajTEaajARMc9hJ9GmR8lorBNRNHlgj/h1KJYk5th7Nsr04PWO0nJUKiDH2CJwieSxW2YqxCI1ceYKUYcZOsVJEZOrJ/IB8WUmU0|BjPbfiSAXCvc/2nqKv2nzQ==|Og1u5pLG9GiWsZbxQwHAGtL6Jqo=|_|Aq/bVWAKvodJuURGk3enjE1gUiu2SELM8IIKIlNGqOWM|1|ZmFjZWJvb2suY29tL3Rlc3Q=:||"`;
-
-exports[`Generate v38 payload: Parse generated -38 message 1`] = `
+exports[`Encode v38 payload: Parse generated v38 message 1`] = `
 Ok(Object {
   "author": Ok(Some(ProfileIdentifier {
     "network": "facebook.com",
@@ -48,4 +24,44 @@ Ok(Object {
   "signature": Ok(None),
   "version": -38,
 })
+`;
+
+exports[`Parse older v38 payload that does not have newer field: Parse older v38 payload result 1`] = `
+Object {
+  "author": Ok(None),
+  "authorPublicKey": Ok(None),
+  "encrypted": Ok(Uint8Array [ 3a0d6ee692c6f46896b196f14301c01ad2fa26aa ]),
+  "encryption": Ok(Object {
+    "ephemeralPublicKey": Object {},
+    "iv": Ok(Uint8Array [ 0633db7e24805c2bdcff69ea2afda7cd ]),
+    "ownersAESKeyEncrypted": Ok(Uint8Array [ 6af93004aa8ca422b39c6725bc286eba1d80104c55d09d78c48fca00d87088a25f5727e6d8e6d66f8df613768039aec8991a0277bfc92b5743416938aedf4da9a8d311a6a301131cf6127d1a647c968ac13513479608ff875289624e6d87b36caf4e0f58ed272542a20c7d8227089e4b15b662ac4223571e60a5187193ac5491193ab27f201f16526534 ]),
+    "type": "E2E",
+  }),
+  "signature": Ok(None),
+  "version": -38,
+}
+`;
+
+exports[`Parse v38 encoded by old infra: Parse v38 payload result 1`] = `
+Object {
+  "author": Ok(Some(ProfileIdentifier {
+    "network": "facebook.com",
+    "userId": "100027562249574",
+  })),
+  "authorPublicKey": Ok(Some(Object {
+    "algr": 2,
+    "key": CryptoKey { [opaque crypto key material] },
+  })),
+  "encrypted": Ok(Uint8Array [ 3a0d6ee692c6f46896b196f14301c01ad2fa26aa ]),
+  "encryption": Ok(Object {
+    "AESKey": Ok(Object {
+      "algr": "A256GCM",
+      "key": CryptoKey { [opaque crypto key material] },
+    }),
+    "iv": Ok(Uint8Array [ 0633db7e24805c2bdcff69ea2afda7cd ]),
+    "type": "public",
+  }),
+  "signature": Ok(None),
+  "version": -38,
+}
 `;
