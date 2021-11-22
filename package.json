@@ -47,7 +47,7 @@
     "react-i18next": "^11.14.2",
     "ts-results": "3.3.0",
     "web3-core": "1.5.2",
-    "web3-core-method": "1.5.2"
+    "web3-core-method": "1.6.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^15.0.0",
