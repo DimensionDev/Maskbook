@@ -1,33 +1,18 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { TokenTableRow } from '../TokenTableRow'
-import {
-    Asset,
-    ChainId,
-    createNativeToken,
-    EthereumTokenType,
-    formatBalance,
-    FungibleTokenDetailed,
-    getChainDetailed,
-    getChainIdFromNetworkType,
-    makeSortAssertWithoutChainFn,
-    useAccount,
-    useAssets,
-    useWeb3State,
-    useChainBalanceList,
-    useChainBalance,
-    useTrustedERC20Tokens,
-} from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, useAccount, useWeb3State, useTrustedERC20Tokens  }  from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages, PluginServices } from '../../../../API'
+import { PluginMessages } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
+import { useWeb3State as useWeb3PluginState, Web3Plugin } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -77,69 +62,32 @@ interface TokenTableProps {
 
 export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
+    const { Asset } = useWeb3PluginState()
 
     const trustedERC20Tokens = useTrustedERC20Tokens()
-    const { providerType } = useWeb3State()
+    const { networkType, portfolioProvider } = useWeb3State()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
     const account = useAccount()
-    const { value: selectedChainBalance } = useChainBalance(
-        selectedChainId === null ? '' : account,
-        selectedChainId ?? ChainId.Mainnet,
-        providerType,
-    )
-    const { value: chainBalanceList } = useChainBalanceList(selectedChainId === null ? account : '', providerType)
-
-    const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
-    const supportedNetworkNativeTokenAssets = useMemo(() => {
-        if (selectedChainId || !networks) return []
-        return networks.map((x) => {
-            const chainId = getChainIdFromNetworkType(x)
-            return {
-                chain: getChainDetailed(chainId)?.shortName.toLowerCase() ?? 'unknown',
-                token: createNativeToken(chainId),
-                balance: '0',
-            }
-        })
-    }, [selectedChainId, networks])
-
     const {
         error: detailedTokensError,
         loading: detailedTokensLoading,
         value: detailedTokens,
-    } = useAssets(
-        trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
-        selectedChainId === null ? 'all' : selectedChainId,
+    } = useAsync(
+        async () => Asset?.getFungibleAssets?.(account, portfolioProvider, networkType),
+        [account, Asset, portfolioProvider, networkType],
     )
 
-    const _assetsWithNativeToken = useMemo(() => {
-        if (selectedChainId) return detailedTokens
-        const assets = supportedNetworkNativeTokenAssets.filter(
-            (x) =>
-                !detailedTokens.find(
-                    (t) => t.token.chainId === x.token.chainId && t.token.type === EthereumTokenType.Native,
-                ),
-        )
-        return [...detailedTokens, ...assets].sort(makeSortAssertWithoutChainFn())
-    }, [selectedChainId, supportedNetworkNativeTokenAssets, detailedTokens])
-
-    const assetsWithNativeToken = _assetsWithNativeToken.map((x) => {
-        const balance =
-            x.token.type === EthereumTokenType.Native
-                ? selectedChainBalance ?? chainBalanceList?.find((y) => y.chainId === x.token.chainId)?.balance
-                : null
-        if (balance) x.balance = balance
-        return x
-    })
-
-    const onSwap = useCallback((token: FungibleTokenDetailed) => {
+    const onSwap = useCallback((token: Web3Plugin.FungibleToken) => {
         openSwapDialog({
             open: true,
             traderProps: {
                 coin: {
-                    id: token.address,
+                    id: token.id,
                     name: token.name ?? '',
                     symbol: token.symbol ?? '',
                     contract_address: token.address,
+                    // TODO: remove
+                    // @ts-ignore
                     decimals: token.decimals,
                 },
             },
@@ -147,15 +95,15 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     }, [])
 
     const onSend = useCallback(
-        (token: FungibleTokenDetailed) => navigate(RoutePaths.WalletsTransfer, { state: { token } }),
+        (token: Web3Plugin.FungibleToken) => navigate(RoutePaths.WalletsTransfer, { state: { token } }),
         [],
     )
 
     return (
         <TokenTableUI
             isLoading={detailedTokensLoading}
-            isEmpty={!!detailedTokensError || !detailedTokens.length}
-            dataSource={assetsWithNativeToken}
+            isEmpty={!detailedTokensLoading && (!!detailedTokensError || !detailedTokens?.length)}
+            dataSource={(detailedTokens ?? []).filter((x) => !selectedChainId || x.chainId === selectedChainId)}
             onSwap={onSwap}
             onSend={onSend}
         />
@@ -165,9 +113,9 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
 export interface TokenTableUIProps {
     isLoading: boolean
     isEmpty: boolean
-    dataSource: Asset[]
-    onSwap(token: FungibleTokenDetailed): void
-    onSend(token: FungibleTokenDetailed): void
+    dataSource: Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
+    onSwap(token: Web3Plugin.FungibleToken): void
+    onSend(token: Web3Plugin.FungibleToken): void
 }
 
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
@@ -206,8 +154,10 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                         <TableBody>
                             {dataSource
                                 .sort((first, second) => {
+                                    // @ts-ignore
                                     const firstValue = new BigNumber(formatBalance(first.balance, first.token.decimals))
                                     const secondValue = new BigNumber(
+                                        // @ts-ignore
                                         formatBalance(second.balance, second.token.decimals),
                                     )
 

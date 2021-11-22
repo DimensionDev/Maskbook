@@ -11,6 +11,8 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useCurrentCollectibleDataProvider } from '../../api'
+import { usePluginID } from '../../../Personas/api'
+import { NetworkPluginID } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -45,6 +47,7 @@ interface TokenAssetsProps {
 
 export const TokenAssets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
+    const pluginId = usePluginID()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
@@ -67,24 +70,28 @@ export const TokenAssets = memo<TokenAssetsProps>(({ network }) => {
                 <TabContext value={currentTab}>
                     <Box className={classes.caption}>
                         <TabList onChange={onChange}>
-                            {assetTabs.map((key) => (
-                                <Tab key={key} value={key} label={assetTabsLabel[key]} />
-                            ))}
+                            {assetTabs
+                                .filter((x) => pluginId !== NetworkPluginID.PLUGIN_EVM && x !== AssetTab.Collectibles)
+                                .map((key) => (
+                                    <Tab key={key} value={key} label={assetTabsLabel[key]} />
+                                ))}
                         </TabList>
-                        <Button
-                            size="small"
-                            color="secondary"
-                            className={classes.addCustomTokenButton}
-                            onClick={() =>
-                                currentTab === AssetTab.Token
-                                    ? setSelectToken({ open: true, props: { whitelist: [] } })
-                                    : setAddCollectibleOpen(true)
-                            }>
-                            +{' '}
-                            {currentTab === AssetTab.Token
-                                ? t.wallets_add_token()
-                                : t.wallets_assets_custom_collectible()}
-                        </Button>
+                        {pluginId === NetworkPluginID.PLUGIN_EVM && (
+                            <Button
+                                size="small"
+                                color="secondary"
+                                className={classes.addCustomTokenButton}
+                                onClick={() =>
+                                    currentTab === AssetTab.Token
+                                        ? setSelectToken({ open: true, props: { whitelist: [] } })
+                                        : setAddCollectibleOpen(true)
+                                }>
+                                +{' '}
+                                {currentTab === AssetTab.Token
+                                    ? t.wallets_add_token()
+                                    : t.wallets_assets_custom_collectible()}
+                            </Button>
+                        )}
                     </Box>
                     <TabPanel value={AssetTab.Token} key={AssetTab.Token} sx={{ minHeight: 'calc(100% - 48px)' }}>
                         <TokenTable selectedChainId={network?.chainId ?? null} />

@@ -4,7 +4,6 @@ import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/mate
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
 import {
-    Asset,
     CurrencyType,
     formatBalance,
     formatCurrency,
@@ -12,7 +11,7 @@ import {
     pow10,
     useChainId,
 } from '@masknet/web3-shared-evm'
-import { useWeb3State, useNetworkDescriptors } from '@masknet/plugin-infra'
+import { useWeb3State, useNetworkDescriptors, Web3Plugin } from '@masknet/plugin-infra'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 
@@ -65,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface TokenTableRowProps {
-    asset: Asset
+    asset: Web3Plugin.Asset<Web3Plugin.FungibleToken>
     onSwap(): void
     onSend(): void
 }
@@ -108,23 +107,27 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
                     {asset.price?.[CurrencyType.USD]
-                        ? new BigNumber(asset.price[CurrencyType.USD]).gt(pow10(-6))
-                            ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD]), '$')
+                        ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(pow10(-6))
+                            ? formatCurrency(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''), '$')
                             : '<0.000001'
                         : '-'}
                 </Typography>
             </TableCell>
             <TableCell className={classes.cell} align="center">
                 <Typography>
-                    {getTokenUSDValue(asset) < 0.01 ? (
-                        '<0.01'
-                    ) : (
-                        <FormattedCurrency
-                            value={getTokenUSDValue(asset).toFixed(2)}
-                            sign="$"
-                            formatter={Utils?.formatCurrency}
-                        />
-                    )}
+                    {
+                        // @ts-ignore
+                        getTokenUSDValue(asset) < 0.01 ? (
+                            '<0.01'
+                        ) : (
+                            <FormattedCurrency
+                                // @ts-ignore
+                                value={getTokenUSDValue(asset).toFixed(2)}
+                                sign="$"
+                                formatter={Utils?.formatCurrency}
+                            />
+                        )
+                    }
                 </Typography>
             </TableCell>
             <TableCell sx={{ minWidth: '200px' }} className={classes.cell} align="center" variant="body">

@@ -98,7 +98,7 @@ export declare namespace Web3Plugin {
         /** true: Derivable Wallet. false: UnDerivable Wallet */
         hasDerivationPath: boolean
     }
-    export interface Asset {
+    export interface Asset<T extends Token = Token> {
         id: string
         chainId: number
         balance: string
@@ -111,7 +111,7 @@ export declare namespace Web3Plugin {
             [key in CurrencyType]?: string
         }
         logoURI?: string
-        token: Token
+        token: T
     }
 
     export interface AddressName {
@@ -151,6 +151,7 @@ export declare namespace Web3Plugin {
         decimals?: number
         name: string
         symbol: string
+        logoURI?: string | string[]
     }
 
     export interface NonFungibleToken extends Token {
@@ -229,7 +230,7 @@ export declare namespace Web3Plugin {
                 providerType: string,
                 network: NetworkDescriptor,
                 pagination?: Pagination,
-            ) => Promise<Asset[]>
+            ) => Promise<Asset<FungibleToken>[]>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
                 address: string,
