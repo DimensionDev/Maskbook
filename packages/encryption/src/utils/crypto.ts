@@ -20,10 +20,10 @@ export function exportCryptoKeyToJWK(key: CryptoKey) {
     return Result.wrapAsync(() => crypto.subtle.exportKey('jwk', key))
 }
 export function exportCryptoKeyToSPKI(key: CryptoKey) {
-    return Result.wrapAsync(() => crypto.subtle.exportKey('spki', key))
+    return Result.wrapAsync(() => crypto.subtle.exportKey('spki', key).then((x) => new Uint8Array(x)))
 }
 export function exportCryptoKeyToRaw(key: CryptoKey) {
-    return Result.wrapAsync(() => crypto.subtle.exportKey('raw', key))
+    return Result.wrapAsync(() => crypto.subtle.exportKey('raw', key).then((x) => new Uint8Array(x)))
 }
 
 export function importAsymmetryKeyFromJsonWebKeyOrSPKI(key: JsonWebKey | Uint8Array, kind: PublicKeyAlgorithmEnum) {

@@ -4,6 +4,7 @@ import { AESAlgorithmEnum, encodePayload, parsePayload, PayloadWellFormed, Publi
 import { None, Some } from 'ts-results'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { importAESFromJWK, importAsymmetryKeyFromJsonWebKeyOrSPKI } from '../src/utils'
+import { ECDH_K256_PublicKey } from './setup'
 
 test('Parse v38 encoded by old infra', async () => {
     const out = (await parsePayload(oldInfraOutput)).unwrap()
@@ -21,7 +22,7 @@ test('Encode v38 payload', async () => {
         authorPublicKey: Some({
             algr: PublicKeyAlgorithmEnum.secp256k1,
             key: (
-                await importAsymmetryKeyFromJsonWebKeyOrSPKI(ECDHPublicKey, PublicKeyAlgorithmEnum.secp256k1)
+                await importAsymmetryKeyFromJsonWebKeyOrSPKI(ECDH_K256_PublicKey, PublicKeyAlgorithmEnum.secp256k1)
             ).unwrap(),
         }),
         encrypted: new Uint8Array(Buffer.from('3a0d6ee692c6f46896b196f14301c01ad2fa26aa', 'hex')),
@@ -48,15 +49,6 @@ test('Encode v38 payload', async () => {
 const oldInfraOutput = `🎼4/4|avkwBKqMpCKznGclvChuuh2AEExV0J14xI/KANhwiKJfVyfm2ObWb432E3aAOa7ImRoCd7/JK1dDQWk4rt9NqajTEaajARMc9hJ9GmR8lorBNRNHlgj/h1KJYk5th7Nsr04PWO0nJUKiDH2CJwieSxW2YqxCI1ceYKUYcZOsVJEZOrJ/IB8WUmU0|BjPbfiSAXCvc/2nqKv2nzQ==|Og1u5pLG9GiWsZbxQwHAGtL6Jqo=|_|Aq/bVWAKvodJuURGk3enjE1gUiu2SELM8IIKIlNGqOWM|1|ZmFjZWJvb2suY29tLzEwMDAyNzU2MjI0OTU3NA==:||`
 /* cspell:disable-next-line */
 const oldInfraOutputShort = `🎼4/4|avkwBKqMpCKznGclvChuuh2AEExV0J14xI/KANhwiKJfVyfm2ObWb432E3aAOa7ImRoCd7/JK1dDQWk4rt9NqajTEaajARMc9hJ9GmR8lorBNRNHlgj/h1KJYk5th7Nsr04PWO0nJUKiDH2CJwieSxW2YqxCI1ceYKUYcZOsVJEZOrJ/IB8WUmU0|BjPbfiSAXCvc/2nqKv2nzQ==|Og1u5pLG9GiWsZbxQwHAGtL6Jqo=|_:||`
-const ECDHPublicKey = {
-    x: 'r9tVYAq-h0m5REaTd6eMTWBSK7ZIQszwggoiU0ao5Yw',
-    /* cspell:disable-next-line */
-    y: 'kx1ZdZAABlMcRqc_hLM6A3Vd--Vn7FBMRw3SREQN1j4',
-    ext: true,
-    key_ops: ['deriveKey', 'deriveBits'],
-    crv: 'K-256',
-    kty: 'EC',
-}
 const AESKey = {
     key_ops: ['encrypt', 'decrypt'],
     ext: true,

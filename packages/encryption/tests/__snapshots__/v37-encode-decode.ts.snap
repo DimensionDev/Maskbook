@@ -19,3 +19,32 @@ Object {
   "version": -37,
 }
 `;
+
+exports[`Encode v37 payload: Full payload 1`] = `Uint8Array [ 9300c4f097d0dba96c6f63616c686f7374a7756e6b6e6f776e02c4583056301006072a8648ce3d020106052b8104000a03420004afdb55600abe8749b944469377a78c4d60522bb64842ccf0820a225346a8e58c931d5975900006531c46a73f84b33a03755dfbe567ec504c470dd244440dd63e9401c40605060708090ac410000102030405060708090a0b0c0d0e0f81a132c4583056301006072a8648ce3d020106052b8104000a03420004afdb55600abe8749b944469377a78c4d60522bb64842ccf0820a225346a8e58c931d5975900006531c46a73f84b33a03755dfbe567ec504c470dd244440dd63ec4050001020304c0 ]`;
+
+exports[`Encode v37 payload: Full payload parsed 1`] = `
+Object {
+  "author": Ok(Some(ProfileIdentifier {
+    "network": "localhost",
+    "userId": "unknown",
+  })),
+  "authorPublicKey": Ok(Some(Object {
+    "algr": 2,
+    "key": CryptoKey { [opaque crypto key material] },
+  })),
+  "encrypted": Ok(Uint8Array [ 0001020304 ]),
+  "encryption": Ok(Object {
+    "ephemeralPublicKey": Object {
+      "2": Ok(Object {
+        "algr": 2,
+        "key": CryptoKey { [opaque crypto key material] },
+      }),
+    },
+    "iv": Ok(Uint8Array [ 000102030405060708090a0b0c0d0e0f ]),
+    "ownersAESKeyEncrypted": Ok(Uint8Array [ 05060708090a ]),
+    "type": "E2E",
+  }),
+  "signature": Ok(None),
+  "version": -37,
+}
+`;

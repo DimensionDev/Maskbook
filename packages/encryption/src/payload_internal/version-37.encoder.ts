@@ -27,18 +27,18 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
             payload_arr[Index.authorPublicKey] = spki.val
         } else {
             payload_arr[Index.authorPublicKey] = null
-            console.error(
-                `[@masknet/encryption] Failed to encode a public key object into spki format. key is`,
-                key,
-                'and the error is',
-                spki.err,
-            )
+            warn(key, spki.err)
         }
     }
     if (payload.encryption.type === 'E2E') {
         const { ephemeralPublicKey, iv, ownersAESKeyEncrypted } = payload.encryption
-        // TODO
-        const subArr = [1, ownersAESKeyEncrypted, iv, Object.fromEntries(ephemeralPublicKey.entries())]
+        const keyMaterials: any = {}
+        const subArr: any[] = [1, ownersAESKeyEncrypted, iv, keyMaterials]
+        for (const [alg, key] of ephemeralPublicKey.entries()) {
+            const k = await exportCryptoKeyToSPKI(key)
+            if (k.err) warn(key, k.err)
+            else keyMaterials[alg] = k.val
+        }
         payload_arr[Index.encryption] = subArr
     } else {
         const { AESKey, iv } = payload.encryption
@@ -47,4 +47,12 @@ export async function encode37(payload: PayloadWellFormed.Payload) {
     }
     payload_arr[Index.data] = payload.encrypted
     return Ok(encodeMessagePack(payload_arr))
+}
+function warn(key: CryptoKey, err: any) {
+    console.warn(
+        `[@masknet/encryption] Failed to encode a public key object into spki format. key is`,
+        key,
+        'and the error is',
+        err,
+    )
 }
