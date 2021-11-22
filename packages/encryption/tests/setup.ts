@@ -5,6 +5,7 @@ import { atob, btoa } from 'buffer'
 test('Setup env', () => {})
 
 export const ECDH_K256_PublicKey = {
+    /* cspell:disable-next-line */
     x: 'r9tVYAq-h0m5REaTd6eMTWBSK7ZIQszwggoiU0ao5Yw',
     /* cspell:disable-next-line */
     y: 'kx1ZdZAABlMcRqc_hLM6A3Vd--Vn7FBMRw3SREQN1j4',
