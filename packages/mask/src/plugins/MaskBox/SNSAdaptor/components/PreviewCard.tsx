@@ -51,6 +51,8 @@ export function PreviewCard(props: PreviewCardProps) {
     const {
         boxId,
         boxState,
+        isQualified,
+        holderToken,
         boxStateMessage,
         boxInfo,
         boxMetadata,
@@ -185,16 +187,24 @@ export function PreviewCard(props: PreviewCardProps) {
                     size="medium"
                     fullWidth
                     variant="contained"
-                    disabled={boxState !== BoxState.READY}
+                    disabled={boxState !== BoxState.READY || !isQualified}
                     onClick={() => setOpenDrawDialog(true)}>
-                    {boxState === BoxState.READY && paymentTokenAddress ? (
-                        <>
-                            {boxStateMessage} ({formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
-                            {paymentTokenDetailed?.symbol} each box)
-                        </>
-                    ) : (
-                        boxStateMessage
-                    )}
+                    {(() => {
+                        if (!isQualified) {
+                            const { symbol, decimals } = holderToken ?? {}
+                            const tokenPrice = `${formatBalance(boxInfo?.holderMinTokenAmount, decimals)}$${symbol}`
+                            return `You must hold at least ${tokenPrice}`
+                        }
+                        return boxState === BoxState.READY && paymentTokenAddress ? (
+                            <>
+                                {boxStateMessage} (
+                                {formatBalance(paymentTokenPrice, paymentTokenDetailed?.decimals ?? 0)}{' '}
+                                {paymentTokenDetailed?.symbol}/Time)
+                            </>
+                        ) : (
+                            boxStateMessage
+                        )
+                    })()}
                 </ActionButton>
             </EthereumWalletConnectedBoundary>
             <DrawDialog
