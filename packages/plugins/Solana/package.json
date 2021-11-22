@@ -1,0 +1,20 @@
+{
+  "name": "@masknet/plugin-solana",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/icons": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "@masknet/web3-shared-solana": "workspace:*",
+    "@solana/wallet-adapter-base": "^0.7.0",
+    "@solana/wallet-adapter-react": "^0.13.1",
+    "@solana/wallet-adapter-wallets": "^0.11.3",
+    "@solana/web3.js": "^1.30.2",
+    "bignumber.js": "^9.0.1",
+    "react-use": "^17.3.1"
+  }
+}
