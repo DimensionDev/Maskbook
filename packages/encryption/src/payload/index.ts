@@ -43,7 +43,7 @@ export async function encodePayload<E>(
         return Ok(encodeSignatureContainer(bin.val, sig.val.unwrapOr(null)))
     }
     const val = await encodePayloadWithoutSignatureContainer(payload)
-    if (typeof val !== 'string') throw new TypeError('This should always be a string for version < -37')
+    if (val.ok && typeof val.val !== 'string') throw new TypeError('This should always be a string for version < -37')
     return val
 }
 encodePayload.NoSign = ((payload: PayloadWellFormed.Payload) =>

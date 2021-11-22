@@ -23,3 +23,5 @@ Object {
   "version": -38,
 }
 `;
+
+exports[`Generate v38 payload: Generated -38 message 1`] = `Ok("🎼4/4|avk6DbTx8XCBjGhI2Q5N+0PbBUAD3oVo05ndVYpviMVRPzDx2Ii7UqDmTxX3HYLL9G5mSKjVcDYQBw57xPFLtuXpKq65XUMS6mRiAwke8rHQJDVll1aYxEHPcls3g6ZdnlVKO8FwAVP5UCvBFkOeGkOOcqNWC3cnYKWDJ67H9P3i2wOaU/FxZaHE|BjPbfiSAXCvc/2nqKv2nzQ==|Og1u5pLG9GiWsZbxQwHAGtL6Jqo=|_||1|ZmFjZWJvb2suY29tL3Rlc3Q=:||")`;

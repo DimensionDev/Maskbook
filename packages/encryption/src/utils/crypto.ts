@@ -46,7 +46,7 @@ export function importAsymmetryKeyFromJsonWebKeyOrSPKI(key: JsonWebKey | Uint8Ar
 
 export function encryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8Array, message: Uint8Array) {
     const param = {
-        [AESAlgorithmEnum.A256GCM]: { name: 'AES_GCM', iv } as AesGcmParams,
+        [AESAlgorithmEnum.A256GCM]: { name: 'AES-GCM', iv } as AesGcmParams,
     } as const
     return Result.wrapAsync(() => {
         return crypto.subtle.encrypt(param[kind], key, message) as Promise<Uint8Array>

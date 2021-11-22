@@ -1,19 +1,23 @@
 module.exports = {
     serialize(val, config, indentation, depth, refs, printer) {
+        const nextIndent = indentation + config.indent
         if (val instanceof Uint8Array) {
             return 'Uint8Array [ ' + Buffer.from(val).toString('hex') + ' ]'
         }
         if (val instanceof Error || isDOMException(val)) {
             let msg = `${val.constructor.name} {\n`
-            msg += indentation + config.indent + `"message": "${val.message}"\n`
+            msg += nextIndent + `"message": "${val.message}"\n`
             if (val.cause) {
-                const cause = printer(val.cause, config, indentation + config.indent, depth, refs)
-                msg += indentation + config.indent + `"cause": ${cause}\n`
+                const cause = printer(val.cause, config, nextIndent, depth, refs)
+                msg += nextIndent + `"cause": ${cause}\n`
             }
             msg += indentation + '}'
             return msg
         }
-        if (isCryptoKey(val)) return `CryptoKey { [opaque crypto key material] }`
+        if (isCryptoKey(val)) {
+            // crypto.subtle.exportKey('jwk', val).then(console.log)
+            return `CryptoKey { [opaque crypto key material] }`
+        }
         const inner = printer(val.val, config, indentation, depth, refs)
         if (val.ok) return `Ok(${inner})`
         if (val.err) return `Err(${inner})`

@@ -38,8 +38,8 @@ export async function encode38(payload: PayloadWellFormed.Payload) {
     }
     fields[Index.publicShared] = String(payload.encryption.type === 'public' ? 1 : 0)
     if (payload.author.some) {
-        const id = payload.author.val.userId
-        fields[Index.authorIdentifier] = id
+        const id = payload.author.val.toText().slice('people:'.length)
+        fields[Index.authorIdentifier] = btoa(id)
     }
     return Ok(fields.join('|') + ':||')
 }
