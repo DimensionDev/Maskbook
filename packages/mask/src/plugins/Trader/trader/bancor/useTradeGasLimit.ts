@@ -4,7 +4,7 @@ import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
-import { pick } from 'lodash-es'
+import { pick } from 'lodash-unified'
 
 export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null) {
     const { targetChainId } = TargetChainIdContext.useContainer()

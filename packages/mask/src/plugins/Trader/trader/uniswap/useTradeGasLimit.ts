@@ -2,7 +2,7 @@ import type { Trade, TradeComputed } from '../../types'
 import { useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { TradeProvider } from '@masknet/public-api'
-import { last } from 'lodash-es'
+import { last } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useAsync } from 'react-use'
 

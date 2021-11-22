@@ -12,7 +12,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ExpandMore } from '@mui/icons-material'
 import { fromWei, toHex } from 'web3-utils'
-import { isEmpty } from 'lodash-es'
+import { isEmpty } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     option: {

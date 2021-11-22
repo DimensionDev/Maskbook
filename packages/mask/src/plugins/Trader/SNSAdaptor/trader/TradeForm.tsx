@@ -2,7 +2,6 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
-
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage, isLessThan, pow10 } from '@masknet/web3-shared-evm'
@@ -413,7 +412,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                                 })}
                                             </Typography>
                                             <Tooltip
-                                                open={true}
                                                 classes={{
                                                     tooltip: classes.tooltip,
                                                     arrow: classes.tooltipArrow,
