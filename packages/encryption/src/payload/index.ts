@@ -2,8 +2,8 @@ import { Ok, Result } from 'ts-results'
 import type { PayloadWellFormed } from '..'
 import { encode37, encode38, parse37, parse38, parse39, parse40, PayloadParserResult } from '../payload_internal'
 import { encodeSignatureContainer } from '../payload_internal/SignatureContainer'
-import { EKindsError as Err, EKindsError, PayloadException, CryptoException, OptionalResult } from '../types'
-
+import { PayloadException, CryptoException } from '../types'
+import { CheckedError, OptionalResult } from '@masknet/shared-base'
 export * from './types'
 
 export async function parsePayload(payload: unknown): PayloadParserResult {
@@ -15,24 +15,24 @@ export async function parsePayload(payload: unknown): PayloadParserResult {
         if (payload.startsWith('🎼3/4')) return parse39(payload)
         if (payload.startsWith('🎼2/4')) return parse40(payload)
     }
-    return new Err(PayloadException.UnknownVersion, null).toErr()
+    return new CheckedError(PayloadException.UnknownVersion, null).toErr()
 }
 
 async function encodePayloadWithoutSignatureContainer(
     payload: PayloadWellFormed.Payload,
-): Promise<Result<string | Uint8Array, EKindsError<CryptoException | PayloadException>>> {
+): Promise<Result<string | Uint8Array, CheckedError<CryptoException | PayloadException>>> {
     if (payload.version === -38) return encode38(payload)
     else if (payload.version === -37) return encode37(payload)
 
     const decodeOnly = payload.version === -39 || payload.version === -40 || payload.version === -41
     const errorMessage = decodeOnly ? `version ${payload.version} only supports decode.` : null
-    return new EKindsError(PayloadException.UnknownVersion, errorMessage).toErr()
+    return new CheckedError(PayloadException.UnknownVersion, errorMessage).toErr()
 }
 
 export async function encodePayload<E>(
     payload: PayloadWellFormed.Payload,
     sign: (payload: PayloadWellFormed.Payload, payloadToBeSigned: Uint8Array) => Promise<OptionalResult<Uint8Array, E>>,
-): Promise<Result<string | Uint8Array, EKindsError<CryptoException | PayloadException | E>>> {
+): Promise<Result<string | Uint8Array, CheckedError<CryptoException | PayloadException | E>>> {
     if (payload.version === -37) {
         const bin = await encodePayloadWithoutSignatureContainer(payload)
         if (bin.err) return bin

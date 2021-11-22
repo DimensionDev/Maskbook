@@ -1,13 +1,7 @@
 import type { PayloadParserResult } from '.'
 import type { PayloadParseResult } from '../payload'
-import {
-    EKindsError as Err,
-    CryptoException,
-    PayloadException,
-    OptionalResult,
-    assertArray,
-    assertUint8Array,
-} from '../types'
+import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types'
+import { CheckedError as Err, OptionalResult } from '@masknet/shared-base'
 import { Ok, Result } from 'ts-results'
 import { AESKey, AESAlgorithmEnum, AsymmetryCryptoKey, PublicKeyAlgorithmEnum } from '../payload/types'
 import {

@@ -1,6 +1,7 @@
+import { CheckedError } from '@masknet/shared-base'
 import { Result, Ok } from 'ts-results'
 import { AESAlgorithmEnum, PublicKeyAlgorithmEnum } from '../payload'
-import { EKindsError, CryptoException } from '../types'
+import { CryptoException } from '../types'
 
 export function importAESFromJWK(key: JsonWebKey, kind: AESAlgorithmEnum) {
     return Result.wrapAsync(() => {
@@ -33,7 +34,7 @@ export function importAsymmetryKeyFromJsonWebKeyOrSPKI(key: JsonWebKey | Uint8Ar
     } as const
     return Result.wrapAsync(async () => {
         if (kind === PublicKeyAlgorithmEnum.ed25519) {
-            throw new EKindsError(CryptoException.UnsupportedAlgorithm, 'TODO: support ED25519')
+            throw new CheckedError(CryptoException.UnsupportedAlgorithm, 'TODO: support ED25519')
         }
         if (key instanceof Uint8Array) {
             return crypto.subtle.importKey('spki', key, ImportParamsMap[kind], true, DeriveKeyUsage)
@@ -61,5 +62,5 @@ export function decryptWithAES(kind: AESAlgorithmEnum, key: CryptoKey, iv: Uint8
 }
 export function assertIVLengthEq16(arrayBuffer: Uint8Array) {
     if (arrayBuffer.byteLength === 16) return Ok(arrayBuffer)
-    return new EKindsError(CryptoException.InvalidIVLength, null).toErr()
+    return new CheckedError(CryptoException.InvalidIVLength, null).toErr()
 }

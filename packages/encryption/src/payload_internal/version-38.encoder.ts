@@ -3,10 +3,11 @@ import { combine, Convert } from 'pvtsutils'
 import { Ok, Option, Result } from 'ts-results'
 import type { PayloadWellFormed, Signature } from '..'
 import { AESAlgorithmEnum } from '../payload'
-import { CryptoException, PayloadException, EKindsError, EKindsError as Err } from '../types'
+import { CryptoException, PayloadException } from '../types'
 import { encryptWithAES, exportCryptoKeyToJWK } from '../utils'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import * as secp256k1 from 'tiny-secp256k1'
+import { CheckedError } from '@masknet/shared-base'
 const { isPoint, pointCompress } = secp256k1
 
 const enum Index {
@@ -17,7 +18,7 @@ const enum Index {
 // ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
 export async function encode38(payload: PayloadWellFormed.Payload) {
     if (payload.version !== -38) {
-        return new Err(PayloadException.UnknownVersion, null).toErr()
+        return new CheckedError(PayloadException.UnknownVersion, null).toErr()
     }
 
     const AESKeyEncrypted = await encodeAESKeyEncrypted(payload.encryption)
@@ -54,7 +55,7 @@ async function encodeAESKeyEncrypted(
         if (publicSharedKey.err) return publicSharedKey
 
         const jwk = await exportCryptoKeyToJWK(AESKey.key)
-        if (jwk.err) return jwk.mapErr((e) => new EKindsError(CryptoException.InvalidCryptoKey, e))
+        if (jwk.err) return jwk.mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e))
 
         // There is no reason that these two steps will fail.
         // Use non-CE version so they're fatal error.
@@ -62,7 +63,7 @@ async function encodeAESKeyEncrypted(
         const ab = encodeText(text)
 
         const encryptedKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv, ab)
-        if (encryptedKey.err) return encryptedKey.mapErr((e) => new EKindsError(CryptoException.EncryptFailed, e))
+        if (encryptedKey.err) return encryptedKey.mapErr((e) => new CheckedError(CryptoException.EncryptFailed, e))
         return Ok(encodeArrayBuffer(encryptedKey.val.slice()))
     }
 }
@@ -75,7 +76,7 @@ function encodeSignature(sig: Option<Signature>) {
 
 async function compressSecp256k1Key(key: CryptoKey) {
     const jwk = await exportCryptoKeyToJWK(key)
-    if (jwk.err) return jwk.mapErr((e) => new EKindsError(CryptoException.InvalidCryptoKey, e))
+    if (jwk.err) return jwk.mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e))
     const arr = compressSecp256k1Point(jwk.val.x!, jwk.val.y!)
     if (arr.err) return arr
     return Ok(encodeArrayBuffer(arr.val.slice()))
@@ -85,14 +86,14 @@ async function compressSecp256k1Key(key: CryptoKey) {
  * Compress x & y into a single x
  */
 function compressSecp256k1Point(x: string, y: string) {
-    return Result.wrap<Uint8Array, EKindsError<CryptoException.InvalidCryptoKey>>(() => {
+    return Result.wrap<Uint8Array, CheckedError<CryptoException.InvalidCryptoKey>>(() => {
         const xb = Convert.FromBase64Url(x)
         const yb = Convert.FromBase64Url(y)
         const point = new Uint8Array(combine(new Uint8Array([0x04]), xb, yb))
         if (isPoint(point)) {
             return pointCompress(point, true)
         } else {
-            throw new EKindsError(CryptoException.InvalidCryptoKey, 'invalid secp256k1 key')
+            throw new CheckedError(CryptoException.InvalidCryptoKey, 'invalid secp256k1 key')
         }
     })
 }

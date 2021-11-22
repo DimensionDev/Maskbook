@@ -1,4 +1,5 @@
-import { Result, Err, Ok } from 'ts-results'
+import { CheckedError } from '@masknet/shared-base/src/Results/CheckedError'
+import { Ok } from 'ts-results'
 
 export enum CryptoException {
     InvalidCryptoKey = '[@masknet/encryption] Encountered an invalid CryptoKey.',
@@ -15,48 +16,14 @@ export enum PayloadException {
     UnknownVersion = '[@masknet/encryption] Unsupported payload version.',
 }
 
-export class EKindsError<T> extends Error {
-    constructor(private kind: T, private reason: unknown) {
-        super(kind + '', { cause: reason })
-    }
-    override toString() {
-        if (this.reason) return `${this.kind}\n${this.reason}`
-        return super.toString()
-    }
-    static mapErr<E>(r: E) {
-        return (e: unknown) => new EKindsError(r, e)
-    }
-    static withErr<P extends any[], T, E>(
-        f: (...args: P) => Result<T, unknown>,
-        o: E,
-    ): (...args: P) => Result<T, EKindsError<E>>
-    static withErr<P extends any[], T, E>(
-        f: (...args: P) => Promise<Result<T, unknown>>,
-        o: E,
-    ): (...args: P) => Promise<Result<T, EKindsError<E>>>
-    static withErr<P extends any[], T, E>(
-        f: (...args: P) => Result<T, unknown> | Promise<Result<T, unknown>>,
-        o: E,
-    ): (...args: P) => Result<T, EKindsError<E>> | Promise<Result<T, EKindsError<E>>> {
-        return (...args: P) => {
-            const r = f(...args)
-            if ('then' in r) return r.then((r) => r.mapErr(EKindsError.mapErr(o)))
-            return r.mapErr(EKindsError.mapErr(o))
-        }
-    }
-    toErr() {
-        return Err(this)
-    }
-}
-
 export function assertUint8Array<T>(x: unknown, name: string, kinds: T) {
     if (x instanceof Uint8Array) return Ok(x)
     if (x instanceof ArrayBuffer) return Ok(new Uint8Array(x))
-    return new EKindsError(kinds, `${name} is not a Binary`).toErr()
+    return new CheckedError(kinds, `${name} is not a Binary`).toErr()
 }
 export function assertArray<T>(name: string, kinds: T) {
     return (x: unknown) => {
         if (Array.isArray(x)) return Ok(x)
-        return new EKindsError(kinds, `${name} is no an Array`).toErr()
+        return new CheckedError(kinds, `${name} is no an Array`).toErr()
     }
 }

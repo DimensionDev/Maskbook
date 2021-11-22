@@ -6,7 +6,7 @@ import {
     PublicKeyAlgorithmEnum,
     Signature,
 } from '../payload'
-import { CryptoException, PayloadException, OptionalResult, EKindsError as Err } from '../types'
+import { CryptoException, PayloadException } from '../types'
 import { Result, Ok, Some } from 'ts-results'
 import {
     andThenAsync,
@@ -23,18 +23,18 @@ import { isPoint, isPointCompressed, pointCompress } from 'tiny-secp256k1'
 import type { PayloadParserResult } from '.'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import { encodeText } from '@dimensiondev/kit'
-import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import { CheckedError, Identifier, OptionalResult, ProfileIdentifier } from '@masknet/shared-base'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 const decodeUint8ArrayCrypto = decodeUint8ArrayF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
 const decodeTextCrypto = decodeTextF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
 const JSONParse = JSONParseF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
-const importEC = Err.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
+const importEC = CheckedError.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
 
 export async function parse38(payload: string): PayloadParserResult {
     //#region Parse text
     const header = '🎼4/4'
-    if (!payload.startsWith(header)) return new Err(PayloadException.InvalidPayload, 'Unknown version').toErr()
+    if (!payload.startsWith(header)) return new CheckedError(PayloadException.InvalidPayload, 'Unknown version').toErr()
     let rest = payload.slice(header.length)
     // cut the tail
     rest = rest.slice(0, rest.lastIndexOf(':||'))
@@ -66,11 +66,11 @@ export async function parse38(payload: string): PayloadParserResult {
         encrypted: decodeUint8Array(encryptedText),
     }
     if (authorUserID.err) {
-        normalized.author = authorUserID.mapErr(Err.mapErr(PayloadException.DecodeFailed))
+        normalized.author = authorUserID.mapErr(CheckedError.mapErr(PayloadException.DecodeFailed))
     } else if (authorUserID.val.some) {
         normalized.author = Identifier.fromString(`person:${authorUserID.val.val}`, ProfileIdentifier)
             .map((x) => Some(x))
-            .mapErr(Err.mapErr(PayloadException.DecodeFailed))
+            .mapErr(CheckedError.mapErr(PayloadException.DecodeFailed))
     }
     if (authorPublicKey) {
         normalized.authorPublicKey = await decodeECDHPublicKey(authorPublicKey)
@@ -108,16 +108,16 @@ function splitFields(raw: string) {
 }
 
 async function decodePublicSharedAESKey(
-    iv: Result<Uint8Array, Err<CryptoException>>,
-    encryptedKey: Result<Uint8Array, Err<CryptoException>>,
+    iv: Result<Uint8Array, CheckedError<CryptoException>>,
+    encryptedKey: Result<Uint8Array, CheckedError<CryptoException>>,
 ): Promise<PayloadParseResult.PublicEncryption['AESKey']> {
     if (iv.err) return iv
     if (encryptedKey.err) return encryptedKey
     const publicSharedKey = await get_v38PublicSharedCryptoKey()
     if (publicSharedKey.err) return publicSharedKey
 
-    const import_AES_GCM_256 = Err.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
-    const decrypt = Err.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
+    const import_AES_GCM_256 = CheckedError.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
+    const decrypt = CheckedError.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
 
     const jwk_in_u8arr = await decrypt(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv.val, encryptedKey.val)
     const jwk_in_text = await andThenAsync(jwk_in_u8arr, decodeTextCrypto)
@@ -151,7 +151,7 @@ async function decodeECDHPublicKey(
 }
 
 function decompressK256Point(point: Uint8Array) {
-    if (!isPoint(point)) return new Err(CryptoException.InvalidCryptoKey, null).toErr()
+    if (!isPoint(point)) return new CheckedError(CryptoException.InvalidCryptoKey, null).toErr()
     const uncompressed: Uint8Array = isPointCompressed(point) ? pointCompress(point, false) : point
     const len = (uncompressed.length - 1) / 2
     const x = uncompressed.slice(1, len + 1)

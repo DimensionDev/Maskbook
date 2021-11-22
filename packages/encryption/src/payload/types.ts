@@ -1,8 +1,8 @@
 // This file contains normalized Payload.
 // Internal payload should not be exported
-import type { ProfileIdentifier } from '@masknet/shared-base'
+import type { ProfileIdentifier, CheckedError, OptionalResult } from '@masknet/shared-base'
 import type { Result, Option } from 'ts-results'
-import type { EKindsError as Err, CryptoException, PayloadException, OptionalResult } from '../types'
+import type { CryptoException, PayloadException } from '../types'
 
 /** A parse result, that try to preserve as many info as possible. */
 export declare namespace PayloadParseResult {
@@ -13,7 +13,7 @@ export declare namespace PayloadParseResult {
     export type RequiredField<
         T,
         E extends CryptoException | PayloadException = CryptoException | PayloadException,
-    > = Result<T, Err<E>>
+    > = Result<T, CheckedError<E>>
     export interface Payload {
         /**
          * Version starts from -42 but -42 and -41 are dropped.

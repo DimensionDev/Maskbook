@@ -1,6 +1,7 @@
 import { Ok, Result } from 'ts-results'
 import type { Signature } from '..'
-import { assertArray, assertUint8Array, PayloadException, EKindsError, OptionalResult } from '../types'
+import { assertArray, assertUint8Array, PayloadException } from '../types'
+import { CheckedError, OptionalResult } from '@masknet/shared-base'
 import { decodeMessagePackF, encodeMessagePack } from '../utils'
 
 const decode = decodeMessagePackF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
@@ -15,12 +16,12 @@ export interface SignatureContainer {
 
 export function parseSignatureContainer(
     signatureContainer: Uint8Array,
-): Result<SignatureContainer, EKindsError<PayloadException>> {
+): Result<SignatureContainer, CheckedError<PayloadException>> {
     return decode(signatureContainer)
         .andThen(assertArray('SignatureContainer', PayloadException.InvalidPayload))
         .andThen(([version, rawPayload, rawSignature]) => {
             if (version !== 0)
-                return new EKindsError(PayloadException.UnknownVersion, 'Unknown Signature container version').toErr()
+                return new CheckedError(PayloadException.UnknownVersion, 'Unknown Signature container version').toErr()
             return assertUint8Array(rawPayload, 'SignatureContainer[1]', PayloadException.InvalidPayload).andThen(
                 (payload) => {
                     if (rawSignature === null) return Ok({ payload, signature: OptionalResult.None })

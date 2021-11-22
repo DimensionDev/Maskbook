@@ -1,10 +1,10 @@
-import { ProfileIdentifier } from '@masknet/shared-base'
+import { ProfileIdentifier, CheckedError, OptionalResult } from '@masknet/shared-base'
 import { Ok } from 'ts-results'
 import { PayloadParseResult, SocialNetworkEnum } from '../payload'
-import { CryptoException, EKindsError, OptionalResult, PayloadException } from '../types'
+import { CryptoException, PayloadException } from '../types'
 import { importAESFromJWK } from '../utils'
 
-const import_AES_GCM_256 = EKindsError.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
+const import_AES_GCM_256 = CheckedError.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
 
 /**
  * @internal
@@ -33,7 +33,7 @@ export async function get_v38PublicSharedCryptoKey() {
 export function parseAuthor(network: unknown, id: unknown): PayloadParseResult.Payload['author'] {
     if (network === null || network === undefined) return OptionalResult.None
     if (id === '' || id === null || id === undefined) return OptionalResult.None
-    if (typeof id !== 'string') return new EKindsError(PayloadException.InvalidPayload, 'Invalid user id').toErr()
+    if (typeof id !== 'string') return new CheckedError(PayloadException.InvalidPayload, 'Invalid user id').toErr()
 
     let net = ''
     if (network === SocialNetworkEnum.Facebook) net = 'facebook.com'
@@ -42,10 +42,10 @@ export function parseAuthor(network: unknown, id: unknown): PayloadParseResult.P
     else if (network === SocialNetworkEnum.Minds) net = 'minds.com'
     else if (typeof network === 'string') net = network
     else if (typeof network !== 'number')
-        return new EKindsError(PayloadException.InvalidPayload, 'Invalid network').toErr()
-    else return new EKindsError(PayloadException.UnknownEnumMember, 'unknown network').toErr()
+        return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()
+    else return new CheckedError(PayloadException.UnknownEnumMember, 'unknown network').toErr()
 
-    if (net.includes('/')) return new EKindsError(PayloadException.InvalidPayload, 'Invalid network').toErr()
+    if (net.includes('/')) return new CheckedError(PayloadException.InvalidPayload, 'Invalid network').toErr()
 
     return OptionalResult.Some(new ProfileIdentifier(net, id))
 }
