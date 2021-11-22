@@ -24,11 +24,3 @@ function wrap<P extends any[], T>(f: (...args: P) => T, valid: (...args: P) => b
             return Result.wrap(() => f(...args)).mapErr(CheckedError.mapErr(throwsE))
         }
 }
-export async function andThenAsync<T, E, Q, E2>(
-    op: Result<T, E> | Promise<Result<T, E>>,
-    mapper: (t: T) => Result<Q, E2> | Promise<Result<Q, E2>>,
-): Promise<Result<Q, E | E2>> {
-    op = await op
-    if (op.err) return op
-    return mapper(op.val)
-}

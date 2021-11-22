@@ -1,11 +1,10 @@
 import type { PayloadParserResult } from '.'
 import type { PayloadParseResult } from '../payload'
 import { CryptoException, PayloadException, assertArray, assertUint8Array } from '../types'
-import { CheckedError as Err, OptionalResult } from '@masknet/shared-base'
+import { andThenAsync, CheckedError, OptionalResult } from '@masknet/shared-base'
 import { Ok, Result } from 'ts-results'
 import { AESKey, AESAlgorithmEnum, AsymmetryCryptoKey, PublicKeyAlgorithmEnum } from '../payload/types'
 import {
-    andThenAsync,
     decodeMessagePackF,
     assertIVLengthEq16,
     importAESFromJWK,
@@ -18,9 +17,9 @@ import { parseAuthor } from './shared'
 // ? See: docs/rfc/000-Payload-37.md
 
 const decode = decodeMessagePackF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
-const InvalidPayload = (msg?: string) => new Err(PayloadException.InvalidPayload, msg).toErr()
-const importSpki = Err.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
-const importAES256 = Err.withErr(importAESFromJWK, CryptoException.InvalidCryptoKey)
+const InvalidPayload = (msg?: string) => new CheckedError(PayloadException.InvalidPayload, msg).toErr()
+const importSpki = CheckedError.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
+const importAES256 = CheckedError.withErr(importAESFromJWK, CryptoException.InvalidCryptoKey)
 export async function parse37(input: Uint8Array): PayloadParserResult {
     const signatureContainer = parseSignatureContainer(input)
     if (signatureContainer.err) return signatureContainer
@@ -32,7 +31,7 @@ function parsePayload37(payload: Uint8Array, signature: PayloadParseResult.Paylo
     const _ = decode(payload).andThen(assertArray('Payload', PayloadException.InvalidPayload))
     return andThenAsync(_, async (item) => {
         const [version, authorNetwork, authorID, authorPublicKeyAlg, authorPublicKey, encryption, data] = item
-        if (version !== -37) return new Err(PayloadException.UnknownVersion, null).toErr()
+        if (version !== -37) return new CheckedError(PayloadException.UnknownVersion, null).toErr()
 
         const normalized: PayloadParseResult.Payload = {
             version: -37,
@@ -102,11 +101,11 @@ function parseAES(aes: unknown) {
                 return Ok<AESKey>({ algr, key: key.val })
             }
         }
-        return new Err(CryptoException.UnsupportedAlgorithm, null).toErr()
+        return new CheckedError(CryptoException.UnsupportedAlgorithm, null).toErr()
     })
 }
 function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
-    type T = Promise<Result<AsymmetryCryptoKey, Err<CryptoException>>>
+    type T = Promise<Result<AsymmetryCryptoKey, CheckedError<CryptoException>>>
     return andThenAsync(assertUint8Array(key, name, CryptoException.InvalidCryptoKey), async (pubKey): T => {
         if (typeof algr === 'number') {
             if (algr in PublicKeyAlgorithmEnum) {
@@ -115,7 +114,7 @@ function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
                 return Ok<AsymmetryCryptoKey>({ algr, key: key.val })
             }
         }
-        return new Err(CryptoException.UnsupportedAlgorithm, null).toErr()
+        return new CheckedError(CryptoException.UnsupportedAlgorithm, null).toErr()
     })
 }
 enum EncryptionKind {

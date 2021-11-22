@@ -9,7 +9,6 @@ import {
 import { CryptoException, PayloadException } from '../types'
 import { Result, Ok, Some } from 'ts-results'
 import {
-    andThenAsync,
     decodeUint8ArrayF,
     decodeTextF,
     decryptWithAES,
@@ -23,7 +22,7 @@ import { isPoint, isPointCompressed, pointCompress } from 'tiny-secp256k1'
 import type { PayloadParserResult } from '.'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import { encodeText } from '@dimensiondev/kit'
-import { CheckedError, Identifier, OptionalResult, ProfileIdentifier } from '@masknet/shared-base'
+import { andThenAsync, CheckedError, Identifier, OptionalResult, ProfileIdentifier } from '@masknet/shared-base'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 const decodeUint8ArrayCrypto = decodeUint8ArrayF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
