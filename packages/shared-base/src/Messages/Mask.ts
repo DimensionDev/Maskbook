@@ -15,6 +15,7 @@ export interface MaskSettingsEvents {
     appearanceSettings: Appearance
     languageSettings: LanguageOptions
     debugModeSetting: boolean
+    pluginIDSettings: string
     currentChainIdSettings: number
     currentBalanceSettings: string
     currentBalancesSettings: BalanceOfChains
@@ -73,6 +74,8 @@ export interface MaskEvents extends MaskSettingsEvents, MaskMobileOnlyEvents, Ma
     requestExtensionPermission: RequestExtensionPermissionEvent
     signRequestApproved: PersonaSignApprovedEvent
     maskSDKHotModuleReload: void
+    __kv_backend_persistent__: [string, unknown]
+    __kv_backend_in_memory__: [string, unknown]
 }
 
 export interface UpdateEvent<Data> {

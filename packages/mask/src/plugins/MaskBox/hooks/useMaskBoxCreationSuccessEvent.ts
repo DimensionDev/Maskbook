@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import type { CreationSuccess } from '@masknet/web3-contracts/types/MaskBox'
 import { useMaskBoxConstants } from '@masknet/web3-shared-evm'
@@ -18,6 +18,7 @@ export function useMaskBoxCreationSuccessEvent(creatorAddress: string, tokenAddr
             },
             fromBlock: MASK_BOX_CONTRACT_FROM_BLOCK,
         })
-        return first(events as unknown as CreationSuccess[])
+        const filtered = (events as unknown as CreationSuccess[]).filter((evt) => evt.returnValues.box_id === boxId)
+        return first(filtered)
     }, [boxId, creatorAddress, tokenAddress, maskBoxContract, MASK_BOX_CONTRACT_FROM_BLOCK])
 }

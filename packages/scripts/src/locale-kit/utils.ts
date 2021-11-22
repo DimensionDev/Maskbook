@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-imports */
 import { promises as fs, readdirSync } from 'fs'
-import { difference, keys, uniq } from 'lodash'
+import { difference, keys, uniq } from 'lodash-unified'
 import { resolve, relative } from 'path'
 import { EXTENSION_SOURCE, ROOT_PATH, walk } from '../utils'
 import { getUsedKeys } from './ast'

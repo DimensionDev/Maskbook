@@ -1,20 +1,7 @@
 import { useState, useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import { isNextStateAvailable } from '..'
-
-export enum TransactionStateType {
-    UNKNOWN = 0,
-    /** Wait for external provider */
-    WAIT_FOR_CONFIRMING = 1,
-    /** Hash is available */
-    HASH = 2,
-    /** Receipt is available */
-    RECEIPT = 3,
-    /** Confirmed or Reverted */
-    CONFIRMED = 4,
-    /** Fail to send */
-    FAILED = 5,
-}
+import { TransactionStateType } from '../types'
+import { isNextStateAvailable } from '../utils'
 
 export type TransactionState =
     | {

@@ -1,6 +1,6 @@
-import type { OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
+import type { WyvernSchemaName } from 'opensea-js/lib/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import type { OpenSeaAssetEventType } from './opensea'
+import type { OpenSeaAssetEventType, OpenSeaFungibleToken } from './opensea'
 import type { RaribleEventType } from './rarible'
 
 export * from './opensea'
@@ -97,25 +97,21 @@ export interface NFTHistory {
     }
     price?: {
         quantity: string
+        price: string
         asset?: {
-            decimals: number
-            imageUrl: string
-            symbol: string
-            usdSpotPrice: number
-            assetContract: {
-                blockExplorerLink: string
-                id: string
-            }
-        }
-    }
-    assetQuantity?: {
-        asset: {
-            decimals?: number
             id: string
+            decimals: number
+            image_url: string
+            image_original_url: string
+            image_preview_url: string
+            asset_contract: {
+                symbol: string
+            }
+            permalink: string
         }
-        quantity: string
-        id: string
+        paymentToken?: OpenSeaFungibleToken
     }
+
     eventType: OpenSeaAssetEventType | RaribleEventType
     transactionBlockExplorerLink?: string
     timestamp: number

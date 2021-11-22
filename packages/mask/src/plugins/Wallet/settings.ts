@@ -12,7 +12,7 @@ import {
     BalanceOfChains,
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_IDENTIFIER } from './constants'
-import { isEqual } from 'lodash-es'
+import { isEqual } from 'lodash-unified'
 
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
     primary: () => 'DO NOT DISPLAY IT IN UI',

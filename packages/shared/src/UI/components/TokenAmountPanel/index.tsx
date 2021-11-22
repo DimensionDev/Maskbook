@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from '../SelectTokenChip'
 import { FungibleTokenDetailed, formatBalance } from '@masknet/web3-shared-evm'
 import { useSharedI18N } from '../../../locales'
-import { useStylesExtends } from '../..'
+import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 import { FormattedBalance } from '../../../wallet'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -140,7 +140,12 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 variant="body2"
                                 component="span">
                                 {t.balance()}:
-                                <FormattedBalance value={balance} decimals={token.decimals} significant={6} />
+                                <FormattedBalance
+                                    value={balance}
+                                    decimals={token.decimals}
+                                    significant={6}
+                                    formatter={formatBalance}
+                                />
                             </Typography>
                         ) : null}
                         <Box

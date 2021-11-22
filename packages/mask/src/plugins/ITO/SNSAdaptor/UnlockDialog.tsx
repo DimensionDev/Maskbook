@@ -11,6 +11,7 @@ import {
     ERC20TokenDetailed,
     EthereumTokenType,
     formatBalance,
+    formatEthereumAddress,
     isGreaterThan,
     pow10,
     resolveAddressLinkOnExplorer,
@@ -107,7 +108,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}>
-                        <FormattedAddress address={ITO2_CONTRACT_ADDRESS} size={4} />
+                        <FormattedAddress address={ITO2_CONTRACT_ADDRESS} size={4} formatter={formatEthereumAddress} />
                     </Link>{' '}
                     to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
                 </Typography>

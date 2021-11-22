@@ -44,7 +44,7 @@ export function HistoryTab(props: HistoryTabProps) {
     //#region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
         if (provider === CollectibleProvider.OPENSEA)
-            return events.value?.data.some((item) => item.price?.asset?.symbol !== 'ETH')
+            return events.value?.data.some((item) => item.price?.paymentToken?.symbol !== 'ETH')
         else return false
     }, [events.value, provider])
     //#endregion
@@ -72,7 +72,7 @@ export function HistoryTab(props: HistoryTabProps) {
                     handlePrevClick={() => setEventPage((prev) => prev - 1)}
                     handleNextClick={() => setEventPage((prev) => prev + 1)}
                     prevDisabled={eventPage === 0}
-                    nextDisabled={!events.value?.pageInfo.hasNextPage}
+                    nextDisabled={!events.value?.hasNextPage}
                     page={eventPage}
                     pageCount={10}
                 />
@@ -108,7 +108,7 @@ export function HistoryTab(props: HistoryTabProps) {
                         handlePrevClick={() => setEventPage((prev) => prev - 1)}
                         handleNextClick={() => setEventPage((prev) => prev + 1)}
                         prevDisabled={eventPage === 0}
-                        nextDisabled={!events.value.pageInfo.hasNextPage}
+                        nextDisabled={!events.value.hasNextPage}
                         page={eventPage}
                         pageCount={10}
                     />

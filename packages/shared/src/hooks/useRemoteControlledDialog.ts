@@ -22,7 +22,7 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
     onUpdateByRemote?: (ev: T) => void,
     tabType: 'self' | 'activated' = 'self',
 ): Result<T> {
-    const [HOOK_ID] = useState(uuid()) // create a id for every hook
+    const [HOOK_ID] = useState(uuid()) // create an uuid for every hook
     const [open, setOpen] = useState(false)
 
     useEffect(

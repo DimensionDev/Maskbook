@@ -1,4 +1,5 @@
-import { isTypedMessageAnchor, isTypedMessageText, isTypedMessageTuple, TypedMessageTuple } from '..'
+import { isTypedMessageAnchor } from '../extension'
+import { isTypedMessageText, isTypedMessageTuple, TypedMessageTuple } from '../core'
 import type {
     NonSerializableTypedMessage,
     NonSerializableWithToJSONTypedMessage,
@@ -6,7 +7,7 @@ import type {
     SerializableTypedMessages,
     TypedMessage,
 } from '../base'
-import { eq } from 'lodash-es'
+import { eq } from 'lodash-unified'
 import { Err, Ok, Result } from 'ts-results'
 
 export function isSerializableTypedMessage(x: TypedMessage): x is SerializableTypedMessages {

@@ -48,6 +48,7 @@ export type ConnectWalletDialogEvent =
       }
     | {
           open: false
+          result: boolean
       }
 
 export type SelectWalletDialogEvent =
@@ -236,6 +237,7 @@ export interface WalletMessage {
     erc1155TokensUpdated: void
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
+
     rpc: unknown
 }
 

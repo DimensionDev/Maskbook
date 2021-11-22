@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
@@ -35,22 +35,26 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
     )
     //#endregion
 
-    // connected
-    useEffect(() => {
-        if (!uri || !open) return
-        Services.Ethereum.connectWalletConnect().then(closeDialog, closeDialog)
-    }, [open, uri, closeDialog])
-
     let mode: QRCodeDialogProps['mode'] = 'qrcode'
     if (process.env.architecture === 'app' && process.env.engine === 'firefox') {
         mode = 'firefox'
     } else if (process.env.architecture === 'app' && process.env.engine === 'safari') {
         mode = 'safari'
     }
-    return <QRCodeDialog uri={uri} open={open} mode={mode} onClose={closeDialog} />
+    return (
+        <QRCodeDialog
+            uri={uri}
+            open={open}
+            mode={mode}
+            onClose={async () => {
+                await Services.Ethereum.cancelWalletConnect()
+                closeDialog()
+            }}
+        />
+    )
 }
 
-interface QRCodeDialogProps {
+export interface QRCodeDialogProps {
     uri: string
     open: boolean
     onClose(): void

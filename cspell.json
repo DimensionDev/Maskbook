@@ -228,7 +228,8 @@
         "apikey",
         "tokenid",
         "NFTRSS",
-        "solana"
+        "solana",
+        "Görli"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -309,7 +310,14 @@
         "fbclid",
         "noamount",
         "txts",
-        "redpackets"
+        "redpackets",
+        "blocto",
+        "onflow",
+        "unauthenticate",
+        "mathwallet",
+        "walletlink",
+        "rpcs",
+        "FUSD"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [

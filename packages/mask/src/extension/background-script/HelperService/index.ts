@@ -1,6 +1,6 @@
-import { memoizePromise } from '../../../../utils-pure'
-import { PopupRoutes } from '../../popups'
+import { PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
+import { memoizePromise } from '../../../../utils-pure'
 import { currentPopupWindowId } from '../../../settings/settings'
 import { isLocked } from '../../../plugins/Wallet/services'
 

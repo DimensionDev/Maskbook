@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import type { Currency } from '../types'
 import type { DataProvider } from '@masknet/public-api'
-import { isUndefined } from 'lodash-es'
+import { isUndefined } from 'lodash-unified'
 import { PluginTraderRPC } from '../messages'
 import { Days } from '../SNSAdaptor/trending/PriceChartDaysControl'
 

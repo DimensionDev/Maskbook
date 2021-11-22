@@ -24,6 +24,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
+import type { useAssetOrder } from '../hooks/useAssetOrder'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -55,12 +56,13 @@ const useStyles = makeStyles()((theme) => {
 
 export interface CheckoutDialogProps {
     asset?: ReturnType<typeof useAsset>
+    assetOrder?: ReturnType<typeof useAssetOrder>
     open: boolean
     onClose: () => void
 }
 
 export function CheckoutDialog(props: CheckoutDialogProps) {
-    const { asset, open, onClose } = props
+    const { asset, open, onClose, assetOrder } = props
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
 
@@ -76,10 +78,10 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const onCheckout = useCallback(async () => {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
-        if (!asset.value.order_) return
+        if (!assetOrder?.value) return
         try {
             await PluginCollectibleRPC.fulfillOrder({
-                order: asset.value.order_,
+                order: assetOrder.value,
                 accountAddress: account,
                 recipientAddress: account,
             })
@@ -92,7 +94,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
             }
             throw error
         }
-    }, [asset?.value, account, showSnackbar])
+    }, [asset?.value, account, showSnackbar, assetOrder?.value])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -113,7 +115,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                             </Box>
                         )}
                         <Box sx={{ padding: 2 }}>
-                            <CheckoutOrder asset={asset} />
+                            <CheckoutOrder asset={asset} assetOrder={assetOrder} />
                             {isVerified ? null : (
                                 <>
                                     <FormControlLabel

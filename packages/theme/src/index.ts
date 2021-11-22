@@ -2,7 +2,7 @@
 import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@mui/material'
 import * as Changes from './changes'
 import * as Components from './component-changes'
-import { merge } from 'lodash-es'
+import { merge } from 'lodash-unified'
 import type { PaletteOptions } from '@mui/material/styles/createPalette'
 import { DarkColor, LightColor, Color } from './constants'
 
@@ -34,8 +34,8 @@ function MaskTheme(mode: PaletteMode) {
 export const MaskLightTheme = MaskTheme('light')
 export const MaskDarkTheme = MaskTheme('dark')
 export * from './makeStyles'
-export * from './Components/index'
-export * from './hooks/index'
+export * from './Components'
+export * from './hooks'
 export * from './ShadowRoot'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
 

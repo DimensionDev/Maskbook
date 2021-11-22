@@ -1,7 +1,7 @@
 import { ChainId, CollectibleProvider, ERC721TokenDetailed } from '../types'
 import { useAsyncRetry } from 'react-use'
 import { useWeb3Context } from '../context'
-import { uniqWith } from 'lodash-es'
+import { uniqWith } from 'lodash-unified'
 import { isSameAddress } from '../utils'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 

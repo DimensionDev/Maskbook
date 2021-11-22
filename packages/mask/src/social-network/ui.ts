@@ -16,6 +16,7 @@ import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
 import { setupShadowRootPortal } from '../utils'
+import { InMemoryStorages, PersistentStorages } from '../../shared'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -88,10 +89,20 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.injection.enhancedProfileNFTAvatar?.(signal)
     ui.injection.openNFTAvatar?.(signal)
+    ui.injection.postAndReplyNFTAvatar?.(signal)
+    ui.injection.collectionAvatar?.(signal)
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),
-        createPluginHost(signal, () => undefined),
+        createPluginHost(signal, (pluginID, signal) => {
+            return {
+                createKVStorage(type, defaultValues) {
+                    if (type === 'memory')
+                        return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                    else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                },
+            }
+        }),
     )
 
     setupShadowRootPortal()

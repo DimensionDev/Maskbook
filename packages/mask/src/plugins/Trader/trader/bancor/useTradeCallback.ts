@@ -4,7 +4,7 @@ import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, us
 import type { SwapBancorRequest } from '../../types'
 import type { TradeComputed } from '../../types'
 import { PluginTraderRPC } from '../../messages'
-import { pick } from 'lodash-es'
+import { pick } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapBancorRequest> | null, gasConfig?: GasOptionConfig) {

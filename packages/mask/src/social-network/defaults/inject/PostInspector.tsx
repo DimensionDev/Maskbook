@@ -5,7 +5,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { PostInspector, PostInspectorProps } from '../../../components/InjectedComponents/PostInspector'
 import { makeStyles } from '@masknet/theme'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 
 export function injectPostInspectorDefault<T extends string>(
     config: InjectPostInspectorDefaultConfig = {},

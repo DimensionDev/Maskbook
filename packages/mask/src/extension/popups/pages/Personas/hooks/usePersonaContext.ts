@@ -3,7 +3,7 @@ import { ECKeyIdentifier, Identifier, PersonaInformation, useValueRef } from '@m
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
 import { useAsyncRetry } from 'react-use'
 import Services from '../../../../service'
-import { head } from 'lodash-es'
+import { head } from 'lodash-unified'
 import { useEffect, useState } from 'react'
 import { MaskMessages } from '../../../../../utils'
 

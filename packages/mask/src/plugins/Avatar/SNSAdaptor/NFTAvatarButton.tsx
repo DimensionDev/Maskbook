@@ -7,7 +7,6 @@ import { useI18N } from '../../../utils'
 const useStyles = makeStyles()((theme) => ({
     root: {
         boxSizing: 'border-box',
-        height: 36,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

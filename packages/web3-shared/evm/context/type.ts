@@ -8,9 +8,9 @@ import type {
     NonFungibleTokenDetailed,
     NetworkType,
     ProviderType,
+    Asset,
     Wallet,
     PortfolioProvider,
-    Asset,
     CollectibleProvider,
     Transaction,
     AddressName,
@@ -20,18 +20,19 @@ import type {
 } from '../types'
 
 export interface Web3ProviderType {
-    provider: Subscription<Provider>
     allowTestnet: Subscription<boolean>
-    account: Subscription<string>
-    tokenPrices: Subscription<CryptoPrice>
     chainId: Subscription<ChainId>
+    account: Subscription<string>
     balance: Subscription<string>
     balances: Subscription<BalanceOfChains>
     blockNumber: Subscription<number>
-    walletPrimary: Subscription<Wallet | null>
-    wallets: Subscription<Wallet[]>
-    providerType: Subscription<ProviderType>
+    provider: Subscription<Provider>
     networkType: Subscription<NetworkType>
+    providerType: Subscription<ProviderType>
+    tokenPrices: Subscription<CryptoPrice>
+    wallets: Subscription<Wallet[]>
+    walletPrimary: Subscription<Wallet | null>
+
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     erc721Tokens: Subscription<ERC721TokenDetailed[]>
     erc1155Tokens: Subscription<ERC1155TokenDetailed[]>
@@ -62,5 +63,4 @@ export interface Web3ProviderType {
         hasNextPage: boolean
     }>
     fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
-    createMnemonicWords: () => Promise<string[]>
 }

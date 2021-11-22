@@ -10,7 +10,7 @@ import { TradeContext, useTradeContext } from '../../../../../plugins/Trader/tra
 import { useAvailableTraderProviders } from '../../../../../plugins/Trader/trending/useAvailableTraderProviders'
 import { useCurrentTradeProvider } from '../../../../../plugins/Trader/trending/useCurrentTradeProvider'
 import { Coin, TagType } from '../../../../../plugins/Trader/types'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 
 export function SwapBox() {
     const location = useLocation()

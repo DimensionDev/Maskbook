@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isDarkTheme } from '../../../utils/theme-tools'

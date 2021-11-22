@@ -4,7 +4,7 @@ import { getTokenPrices, getNativeTokenPrice } from '../../../extension/backgrou
 import { startEffects } from '../../../../utils-pure'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
 import { currentTokenPricesSettings } from '../settings'
-import { uniq } from 'lodash-es'
+import { uniq } from 'lodash-unified'
 
 const { run } = startEffects(import.meta.webpackHot)
 

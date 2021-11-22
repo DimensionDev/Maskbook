@@ -2,7 +2,7 @@ import { personalSign } from '../../../extension/background-script/EthereumServi
 import type { AvatarMetaDB } from '../types'
 import { getNFTAvatarFromJSON } from './db'
 import { getUserAddress, setUserAddress } from './gun'
-import { getNFTAvatarFromRSS, saveNFTAvatarFromRSS } from './rss'
+import { getNFTAvatarFromRSS, saveNFTAvatarToRSS } from './rss3'
 
 export async function getNFTAvatar(userId: string) {
     let result
@@ -21,7 +21,7 @@ export async function getNFTAvatar(userId: string) {
 export async function saveNFTAvatar(address: string, nft: AvatarMetaDB) {
     const signature = await personalSign(nft.userId, address)
     setUserAddress(nft.userId, address)
-    const avatar = await saveNFTAvatarFromRSS(address, nft, signature)
+    const avatar = await saveNFTAvatarToRSS(address, nft, signature)
     return avatar
 }
 
@@ -29,3 +29,7 @@ export async function getAddress(userId: string) {
     const address = await getUserAddress(userId)
     return address
 }
+
+export { getNFTContractVerifiedFromJSON } from './verified'
+export { getUserAddresses } from './gun'
+export { getRSSNode } from './rss3'

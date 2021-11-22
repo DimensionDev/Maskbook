@@ -8,6 +8,7 @@ import { pasteInstagram } from '@masknet/injected-script'
 import { injectPostInspectorInstagram } from './injection/post-inspector'
 import { newPostCompositionInstagram } from './injection/newPostComposition'
 import { InitAutonomousStateProfiles } from '../../social-network/defaults/state/InitProfiles'
+
 const define: SocialNetworkUI.Definition = {
     ...instagramShared,
     ...instagramBase,

@@ -8,7 +8,7 @@ import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage, isLessThan, pow10 } from '@masknet/web3-shared-evm'
 import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
 import BigNumber from 'bignumber.js'
-import { first, noop } from 'lodash-es'
+import { first, noop } from 'lodash-unified'
 import { FormattedBalance, SelectTokenChip, useRemoteControlledDialog } from '@masknet/shared'
 import { ChevronUpIcon } from '@masknet/icons'
 import classnames from 'classnames'
@@ -381,7 +381,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                             noSwitchNetworkTip
                             noChainIcon={false}
                             disablePadding={true}
-                            ChainIconProps={{ size: 24 }}
                             ActionButtonPromiseProps={{
                                 fullWidth: true,
                                 classes: { root: classes.button, disabled: classes.disabledButton },

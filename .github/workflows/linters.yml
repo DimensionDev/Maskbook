@@ -28,7 +28,8 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm install
+      - run: npm install --global pnpm
+      - run: pnpm install
       - run: npx gulp locale-kit
   type-check-and-jest:
     runs-on: ubuntu-20.04
@@ -55,13 +56,14 @@ jobs:
           path: packages/**/dist
           # actions/cache will not upload changes in cache if primary key hits
           # by adding date to the primary key, we can ensure the cache updates on the first build of the day
-          key: ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
           # because that might indicates a structural/flags changes in tsc emit.
           restore-keys: |
-            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}
-      - run: npx pnpm install
+            ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
+            ${{ runner.os }}-tsc-v3-${{ hashFiles('packages/**/tsconfig.json') }}
+      - run: npm install --global pnpm
+      - run: pnpm install
       - run: npx gulp codegen
       - run: node --experimental-vm-modules ./node_modules/jest/bin/jest.js
   eslint:
@@ -77,9 +79,10 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm install
-      - run: npm run lint:ci -- --max-warnings=0
-      - run: npm run lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml
+      - run: npm install --global pnpm
+      - run: pnpm install
+      - run: pnpm run lint:ci -- --max-warnings=0
+      - run: pnpm run lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml
       - name: Upload eslint report
         uses: actions/upload-artifact@v2
         with:

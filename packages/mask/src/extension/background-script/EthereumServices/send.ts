@@ -1,8 +1,9 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import type { HttpProvider } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import { safeUnreachable } from '@dimensiondev/kit'
 import {
     addGasMargin,
     ChainId,
@@ -13,13 +14,14 @@ import {
     isEIP1559Supported,
     isSameAddress,
     ProviderType,
+    SendOverrides,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
-import { safeUnreachable } from '@dimensiondev/kit'
 import * as MetaMask from './providers/MetaMask'
-import { createWeb3 } from './web3'
+import * as Injected from './providers/Injected'
 import * as WalletConnect from './providers/WalletConnect'
 import { getWallet } from '../../../plugins/Wallet/services'
+import { createWeb3 } from './web3'
 import { commitNonce, getNonce, resetNonce } from './nonce'
 import { getGasPrice } from './network'
 import {
@@ -32,12 +34,6 @@ import { Flags } from '../../../utils'
 import { nativeAPI } from '../../../utils/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
-
-export interface SendOverrides {
-    chainId?: ChainId
-    account?: string
-    providerType?: ProviderType
-}
 
 function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
@@ -264,6 +260,22 @@ export async function INTERNAL_send(
                     result: await WalletConnect.signPersonalMessage(data, address, ''),
                 })
                 break
+            case ProviderType.Coin98:
+            case ProviderType.WalletLink:
+            case ProviderType.MathWallet:
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await Injected.createProvider().request({
+                            method: EthereumMethodType.PERSONAL_SIGN,
+                            params: payload.params,
+                        }),
+                    })
+                } catch (error: any) {
+                    callback(error)
+                }
+                break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
             default:
@@ -359,6 +371,16 @@ export async function INTERNAL_send(
                 } catch (error) {
                     if (error instanceof Error) callback(error)
                 }
+                break
+            case ProviderType.Coin98:
+            case ProviderType.WalletLink:
+            case ProviderType.MathWallet:
+                await Injected.ensureConnectedAndUnlocked()
+                Injected.createProvider().send(payload, (error, response) => {
+                    callback(error, response)
+                    handleTransferTransaction(chainIdFinally, payload)
+                    handleRecentTransaction(chainIdFinally, account, payload, response)
+                })
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')

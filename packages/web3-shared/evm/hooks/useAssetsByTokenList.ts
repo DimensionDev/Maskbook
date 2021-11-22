@@ -3,7 +3,7 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback, useEffect, useState } from 'react'
 import { isSameAddress } from '../utils'
-import { sortBy, uniqBy } from 'lodash-es'
+import { sortBy, uniqBy } from 'lodash-unified'
 import type { ChainId } from '../types'
 
 export function useAssetsByTokenList(tokens: FungibleTokenDetailed[], targetChainId?: ChainId) {
