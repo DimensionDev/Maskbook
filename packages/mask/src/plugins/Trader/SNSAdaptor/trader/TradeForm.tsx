@@ -304,6 +304,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             value={outputTokenBalance}
                                             decimals={outputToken?.decimals}
                                             significant={6}
+                                            formatter={formatBalance}
                                         />
                                     </Typography>
                                 </Typography>

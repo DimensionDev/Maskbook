@@ -9,7 +9,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FormattedCurrency } from '@masknet/shared'
 import { ZERO_ADDRESS } from '../../../GoodGhosting/constants'
-import { formatBalance } from '@masknet/web3-shared-evm'
+import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => ({
     filledInput: {
@@ -140,7 +140,12 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                                 <Typography className={classes.balance}>
                                     {t('plugin_ito_list_table_got')}:
                                     <Typography component="span" className={classes.amount} color="primary">
-                                        <FormattedBalance value={balance} decimals={token?.decimals} significant={6} />
+                                        <FormattedBalance
+                                            value={balance}
+                                            decimals={token?.decimals}
+                                            significant={6}
+                                            formatter={formatBalance}
+                                        />
                                     </Typography>
                                 </Typography>
                                 <Chip
@@ -159,7 +164,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                     ),
                     endAdornment: (
                         <Typography className={classes.price}>
-                            ≈ <FormattedCurrency value={tokenValueUSD} sign="$" />
+                            ≈ <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
                         </Typography>
                     ),
                 }}

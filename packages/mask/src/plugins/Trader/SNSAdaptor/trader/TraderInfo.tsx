@@ -132,6 +132,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                                         decimals={nativeToken.decimals ?? 0}
                                         significant={4}
                                         symbol={nativeToken.symbol}
+                                        formatter={formatBalance}
                                     />
                                 </Typography>
                                 <Typography component="span">

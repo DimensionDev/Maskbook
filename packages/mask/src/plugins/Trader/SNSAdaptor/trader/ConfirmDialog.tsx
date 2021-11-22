@@ -6,7 +6,13 @@ import { FormattedAddress, FormattedBalance, useStylesExtends, useValueRef } fro
 import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import type { FungibleTokenDetailed, Wallet } from '@masknet/web3-shared-evm'
-import { createNativeToken, formatWeiToEther, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import {
+    createNativeToken,
+    formatBalance,
+    formatEthereumAddress,
+    formatWeiToEther,
+    resolveAddressLinkOnExplorer,
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon } from '@masknet/icons'
 import { ExternalLink } from 'react-feather'
@@ -103,13 +109,17 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
     return (
         <>
-            <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" maxWidth="md">
+            <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" maxWidth="xs">
                 <DialogContent sx={{ marginLeft: 5, marginRight: 5 }}>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_red_packet_nft_account_name')}</Typography>
                         <Typography>
                             ({wallet?.name})
-                            <FormattedAddress address={wallet?.address ?? ''} size={4} />
+                            <FormattedAddress
+                                address={wallet?.address ?? ''}
+                                size={4}
+                                formatter={formatEthereumAddress}
+                            />
                             <Link
                                 style={{ color: 'inherit', height: 20 }}
                                 target="_blank"
@@ -132,6 +142,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 decimals={inputToken.decimals}
                                 symbol={inputToken.symbol}
                                 significant={4}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </Box>
@@ -148,6 +159,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 decimals={outputToken.decimals}
                                 symbol={outputToken.symbol}
                                 significant={4}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </Box>
@@ -160,6 +172,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     decimals={inputToken.decimals}
                                     symbol={inputToken.symbol}
                                     significant={4}
+                                    formatter={formatBalance}
                                 />
                             ) : (
                                 <FormattedBalance
@@ -167,6 +180,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     decimals={outputToken.decimals}
                                     symbol={outputToken.symbol}
                                     significant={4}
+                                    formatter={formatBalance}
                                 />
                             )}
                             <Box component="span" mx={0.5}>
@@ -178,6 +192,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     decimals={outputToken.decimals}
                                     symbol={outputToken.symbol}
                                     significant={4}
+                                    formatter={formatBalance}
                                 />
                             ) : (
                                 <FormattedBalance
@@ -185,6 +200,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     decimals={inputToken.decimals}
                                     symbol={inputToken.symbol}
                                     significant={4}
+                                    formatter={formatBalance}
                                 />
                             )}
                             <RetweetIcon
@@ -205,6 +221,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 decimals={outputToken.decimals}
                                 significant={6}
                                 symbol={outputToken.symbol}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </Box>
@@ -217,6 +234,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     decimals={nativeToken.decimals ?? 0}
                                     significant={4}
                                     symbol={nativeToken.symbol}
+                                    formatter={formatBalance}
                                 />
                                 <Typography component="span">
                                     {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
