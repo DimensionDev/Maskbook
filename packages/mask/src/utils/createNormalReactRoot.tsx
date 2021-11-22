@@ -8,10 +8,12 @@ export function createNormalReactRoot(jsx: JSX.Element, container?: HTMLElement)
         container = document.createElement('div')
         document.body.appendChild(container)
     }
+
     if (process.env.NODE_ENV === 'development') {
         // Make the document cleaner
         setTimeout(() => [...document.querySelectorAll('script')].forEach((x) => x.remove()), 200)
     }
+
     return ReactDOM.createRoot(container).render(
         <NoEffectUsePortalShadowRootContext.Provider value={true}>
             <ErrorBoundary>{jsx}</ErrorBoundary>

@@ -14,7 +14,7 @@ import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { CompositionDialog } from './CompositionDialog'
-import { set } from 'lodash-es'
+import { set } from 'lodash-unified'
 import { ToolIconURLs } from '../../../resources/tool-icon'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 

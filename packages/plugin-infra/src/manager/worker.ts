@@ -1,4 +1,4 @@
-import type { Plugin } from '..'
+import type { Plugin } from '../types'
 import { createManager } from './manage'
 
 const { startDaemon, activated } = createManager((def) => def.Worker)

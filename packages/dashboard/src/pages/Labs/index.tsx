@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { PageFrame } from '../../components/DashboardFrame'
+import { PageFrame } from '../../components/PageFrame'
 import PluginItem from './components/PluginItem'
 import {
     FileServiceIcon,
@@ -66,13 +66,16 @@ export default function Plugins() {
 
     const account = useAccount()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
-    const openTransakDialog = useCallback((code?: string) => {
-        setBuyDialog({
-            open: true,
-            address: account,
-            code,
-        })
-    }, [])
+    const openTransakDialog = useCallback(
+        (code?: string) => {
+            setBuyDialog({
+                open: true,
+                address: account,
+                code,
+            })
+        },
+        [account],
+    )
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 

@@ -51,7 +51,7 @@ function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
             }}
             NotSetupYetPromptProps={{
                 classes: {
-                    button: classes.buttonText,
+                    buttonText: classes.buttonText,
                 },
             }}
         />

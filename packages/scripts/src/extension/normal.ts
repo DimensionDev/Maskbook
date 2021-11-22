@@ -1,7 +1,7 @@
 import yargs, { Argv } from 'yargs'
 const { hideBin } = require('yargs/helpers')
 import { spawn } from 'child_process'
-import { compact } from 'lodash'
+import { compact } from 'lodash-unified'
 import { resolve } from 'path'
 import { awaitChildProcess, PKG_PATH, watchTask } from '../utils'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts'

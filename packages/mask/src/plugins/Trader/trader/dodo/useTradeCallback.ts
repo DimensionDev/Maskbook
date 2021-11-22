@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
-import { pick } from 'lodash-es'
+import { pick } from 'lodash-unified'
 import type { TransactionConfig } from 'web3-core'
 import { TransactionState, TransactionStateType, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types'

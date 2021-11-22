@@ -1,5 +1,5 @@
 import { deleteDB } from 'idb'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 
 try {
     deleteDB('maskbook-user-groups').catch(noop)

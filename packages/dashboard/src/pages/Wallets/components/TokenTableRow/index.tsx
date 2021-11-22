@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { ChainIcon, FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
 import {
     Asset,
     CurrencyType,
@@ -12,6 +12,7 @@ import {
     pow10,
     useChainId,
 } from '@masknet/web3-shared-evm'
+import { useWeb3State, useNetworkDescriptors } from '@masknet/plugin-infra'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 
@@ -63,9 +64,10 @@ export interface TokenTableRowProps {
 
 export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
     const t = useDashboardI18N()
-    const currentChainId = useChainId()
     const { classes } = useStyles()
-
+    const currentChainId = useChainId()
+    const { Utils } = useWeb3State()
+    const networkDescriptors = useNetworkDescriptors()
     const isOnCurrentChain = useMemo(() => currentChainId === asset.token.chainId, [asset, currentChainId])
 
     return (
@@ -82,7 +84,10 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>
-                            <ChainIcon chainId={asset.token.chainId} size={16} />
+                            <WalletIcon
+                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
+                                size={16}
+                            />
                         </Box>
                     </Box>
                     <Typography className={classes.symbol}>{asset.token.symbol}</Typography>
@@ -105,7 +110,11 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                     {getTokenUSDValue(asset) < 0.01 ? (
                         '<0.01'
                     ) : (
-                        <FormattedCurrency value={getTokenUSDValue(asset).toFixed(2)} sign="$" />
+                        <FormattedCurrency
+                            value={getTokenUSDValue(asset).toFixed(2)}
+                            sign="$"
+                            formatter={Utils?.formatCurrency}
+                        />
                     )}
                 </Typography>
             </TableCell>

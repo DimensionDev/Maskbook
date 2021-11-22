@@ -3,10 +3,11 @@ import BigNumber from 'bignumber.js'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
-import { FormattedAddress, FormattedBalance, ProviderIcon } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, ImageIcon } from '@masknet/shared'
 import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
 import {
     formatBalance,
+    formatEthereumAddress,
     useAccount,
     useProviderType,
     useChainId,
@@ -92,9 +93,8 @@ export interface DrawDialogProps {
 }
 
 export function DrawDialog(props: DrawDialogProps) {
-    const { classes } = useStyles()
     const { boxInfo, open, onClose, onSubmit } = props
-
+    const { classes } = useStyles()
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
 
     const {
@@ -103,6 +103,7 @@ export function DrawDialog(props: DrawDialogProps) {
         paymentTokenPrice,
         paymentTokenBalance,
         paymentTokenDetailed,
+        isBalanceInsufficient,
 
         openBoxTransactionGasLimit,
         setOpenBoxTransactionOverrides,
@@ -214,9 +215,10 @@ export function DrawDialog(props: DrawDialogProps) {
                                 Current Wallet:
                             </Typography>
                             <Box className={classes.content} display="flex" alignItems="center">
-                                <ProviderIcon size={16} providerType={providerType} />
+                                {/* <ImageIcon size={16} providerType={providerType} /> */}
+                                <ImageIcon size={16} />
                                 <Typography color="textPrimary" sx={{ marginLeft: 1 }}>
-                                    <FormattedAddress address={account} size={6} />
+                                    <FormattedAddress address={account} size={6} formatter={formatEthereumAddress} />
                                 </Typography>
                             </Box>
                         </Box>
@@ -258,8 +260,9 @@ export function DrawDialog(props: DrawDialogProps) {
                             fullWidth
                             variant="contained"
                             sx={{ marginTop: 2 }}
+                            disabled={isBalanceInsufficient}
                             onClick={onSubmit}>
-                            Draw
+                            {isBalanceInsufficient ? 'Insufficient balance' : 'Draw'}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>

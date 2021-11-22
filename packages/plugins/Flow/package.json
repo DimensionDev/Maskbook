@@ -1,0 +1,18 @@
+{
+  "name": "@masknet/plugin-flow",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/icons": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "@masknet/web3-shared-flow": "workspace:*",
+    "@onflow/fcl": "^0.0.77",
+    "bignumber.js": "^9.0.1",
+    "lodash-es": "^4.17.21",
+    "react-use": "^17.3.1"
+  }
+}

@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js'
-import type { AssetEvent, Order } from 'opensea-js/lib/types'
 import { parseURL } from '../../utils/utils'
 import {
     openseaHostnames,
@@ -8,6 +7,7 @@ import {
     rariblePathnameRegexMatcher,
 } from './constants'
 import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
+import type { AssetEvent } from './types'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -58,24 +58,23 @@ export function getAssetInfoFromURL(url?: string) {
     return
 }
 
-export function getOrderUnitPrice(order: Order) {
-    if (!order.currentPrice || !order.paymentTokenContract?.decimals) return
-    const price = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
-    const quantity = formatBalance(order.quantity, new BigNumber(order.quantity).toString() !== '1' ? 8 : 0)
-
-    return new BigNumber(price).dividedBy(quantity).toFixed(4, 1).toString()
+export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quantity?: string) {
+    if (!currentPrice || !decimals || !quantity) return
+    const price = formatBalance(currentPrice, decimals)
+    const _quantity = formatBalance(quantity, new BigNumber(quantity).toString() !== '1' ? 8 : 0)
+    return new BigNumber(price).dividedBy(_quantity).toFixed(4, 1).toString()
 }
 
-export function getOrderUSDPrice(order: Order) {
-    if (!order.currentPrice || !order.paymentTokenContract?.decimals) return
-    const price = formatBalance(order.paymentTokenContract.usdPrice, 0)
-    const quantity = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
+export function getOrderUSDPrice(currentPrice?: string, usdPrice?: string, decimals?: number) {
+    if (!currentPrice || !decimals) return
+    const price = formatBalance(usdPrice, 0)
+    const quantity = formatBalance(currentPrice, decimals)
 
     return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1).toString()
 }
 
 export function getLastSalePrice(lastSale: AssetEvent | null) {
-    if (!lastSale?.totalPrice || !lastSale?.paymentToken?.decimals) return
-    const price = formatBalance(lastSale.totalPrice, lastSale.paymentToken.decimals)
+    if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
+    const price = formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
     return price
 }

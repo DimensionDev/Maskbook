@@ -42,9 +42,9 @@ interface PersonalViewProps {
 }
 
 export function PersonalView(props: PersonalViewProps) {
-    const chainId = useChainId()
-    const { classes } = useStyles()
     const { t } = useI18N()
+    const { classes } = useStyles()
+    const chainId = useChainId()
     const gameToken = useGameToken()
     const { canEarlyWithdraw, earlyWithdraw } = useEarlyWithdraw(props.info)
     const [buttonEnabled, setButtonEnabled] = useState(true)
@@ -120,6 +120,7 @@ export function PersonalView(props: PersonalViewProps) {
                                 value={props.info.currentPlayer.amountPaid}
                                 decimals={gameToken.decimals}
                                 symbol={gameToken.symbol}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </Grid>

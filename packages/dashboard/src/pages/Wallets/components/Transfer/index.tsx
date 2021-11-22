@@ -8,13 +8,11 @@ import { ERC721TokenDetailed, FungibleTokenDetailed, useNativeTokenDetailed } fr
 import { useLocation } from 'react-router-dom'
 import { useDashboardI18N } from '../../../../locales'
 import { TransferERC721 } from './TransferERC721'
-
-export enum TransferTab {
-    Token = 'Token',
-    Collectibles = 'Collectibles',
-}
+import { TransferTab } from './types'
 
 const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
+
+export * from './types'
 
 export const Transfer = memo(() => {
     const t = useDashboardI18N()

@@ -1,10 +1,17 @@
 import { fileURLToPath } from 'url'
 import builder from 'core-js-builder'
 import { rollup } from 'rollup'
-import loadConfigFile from 'rollup/dist/loadConfigFile.js'
 import { readFile, writeFile } from 'fs/promises'
 import { createRequire } from 'module'
 import { createHash } from 'crypto'
+
+// https://github.com/rollup/rollup/issues/4253
+// import loadConfigFile from 'rollup/dist/loadConfigFile.js'
+function loadConfigFile(...args) {
+    // https://github.com/rollup/rollup/issues/4253
+    const privateRequire = createRequire(require.resolve('rollup'))
+    return privateRequire('./loadConfigFile.js')(...args)
+}
 
 const require = createRequire(import.meta.url)
 let polyfillVersion = '__'

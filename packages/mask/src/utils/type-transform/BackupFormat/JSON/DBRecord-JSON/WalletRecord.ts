@@ -1,9 +1,9 @@
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
+import { isSameAddress } from '@masknet/web3-shared-evm'
 import type { BackupJSONFileLatest } from '../latest'
 import type { WalletRecord } from '../../../../../plugins/Wallet/services/wallet/type'
-import { JWKToKey, keyToAddr, keyToJWK } from '../../..'
+import { JWKToKey, keyToAddr, keyToJWK } from '../../../SECP256k1-ETH'
 import type { LegacyWalletRecord } from '../../../../../plugins/Wallet/database/types'
-import { isSameAddress } from '@masknet/web3-shared-evm'
 
 type WalletBackup = BackupJSONFileLatest['wallets'][0]
 

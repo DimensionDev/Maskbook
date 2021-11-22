@@ -13,7 +13,7 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
         web3: {
-            operatingSupportedChains: [ChainId.Mainnet, ChainId.xDai, ChainId.Matic, ChainId.Rinkeby],
+            supportedOperationalChains: [ChainId.Mainnet, ChainId.xDai, ChainId.Matic, ChainId.Rinkeby],
         },
     },
 }

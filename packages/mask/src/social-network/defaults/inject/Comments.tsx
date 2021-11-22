@@ -5,7 +5,7 @@ import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShad
 import { PostComment, PostCommentProps } from '../../../components/InjectedComponents/PostComments'
 import { makeStyles } from '@masknet/theme'
 import { PostInfoProvider } from '../../../components/DataSource/usePostInfo'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import { collectNodeText } from '../../../utils'
 import { startWatch } from '../../../utils/watcher'
 
@@ -32,12 +32,7 @@ export function injectPostCommentsDefault<T extends string>(
         const commentWatcher = new MutationObserverWatcher(selector, document.body).useForeach(
             (commentNode, key, meta) => {
                 const commentRef = new ValueRef(collectNodeText(commentNode))
-                const needZipF =
-                    needZip ||
-                    (() => {
-                        commentNode.style.whiteSpace = 'nowrap'
-                        commentNode.style.overflow = 'hidden'
-                    })
+                const needZipF = needZip || (() => undefined)
                 const root = createReactRootShadowed(meta.afterShadow, { signal })
                 root.render(
                     <PostInfoProvider post={current}>

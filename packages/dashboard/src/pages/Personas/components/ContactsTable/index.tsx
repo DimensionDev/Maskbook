@@ -7,7 +7,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { ContactTableRow } from '../ContactTableRow'
 import { EmptyContactPlaceholder } from '../EmptyContactPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
-import { sortBy } from 'lodash-es'
+import { sortBy } from 'lodash-unified'
 import { useDashboardI18N } from '../../../../locales'
 import { Messages } from '../../../../API'
 import { useContainer } from 'unstated-next'
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     header: {
         color: MaskColorVar.normalText,
-        fontWeight: theme.typography.fontWeightRegular,
+        fontWeight: theme.typography.fontWeightRegular as any,
         padding: '24px 28px',
         backgroundColor: MaskColorVar.primaryBackground,
     },

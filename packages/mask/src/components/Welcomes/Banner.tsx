@@ -11,7 +11,7 @@ import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import GuideStep from '../GuideStep'
 import { userGuideStatus } from '../../settings/settings'
 
-interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'button'> {
+interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
     description?: string
     nextStep: 'hidden' | { onClick(): void }
     username?:
@@ -39,7 +39,7 @@ export function BannerUI(props: BannerUIProps) {
     const { t } = useI18N()
 
     return props.nextStep === 'hidden' ? null : (
-        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')} disabled={props.description === 'decryptPostFailed'}>
+        <GuideStep step={2} total={2} tip={t('user_guide_tip_2')} disabled={props.description === 'decryptPostFailed'}>
             <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
                 <MaskSharpIcon color="primary" />
             </IconButton>

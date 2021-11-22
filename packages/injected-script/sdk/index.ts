@@ -1,5 +1,6 @@
 import { CustomEventId, decodeEvent } from '../shared'
 import { onEthEvent } from './bridgedEthereum'
+import { onSolanaEvent } from './bridgedSolana'
 import { sendEvent, rejectPromise, resolvePromise } from './utils'
 
 export { bridgedEthereumProvider } from './bridgedEthereum'
@@ -27,6 +28,8 @@ document.addEventListener(CustomEventId, (e) => {
     switch (r[0]) {
         case 'ethBridgeOnEvent':
             return onEthEvent(...r[1])
+        case 'solanaBridgeOnEvent':
+            return onSolanaEvent(...r[1])
         case 'resolvePromise':
             return resolvePromise(...r[1])
         case 'rejectPromise':
@@ -36,11 +39,16 @@ document.addEventListener(CustomEventId, (e) => {
         case 'ethBridgeMetaMaskIsUnlocked':
         case 'ethBridgePrimitiveAccess':
         case 'ethBridgeRequestListen':
+        case 'solanaBridgeSendRequest':
+        case 'solanaBridgeIsConnected':
+        case 'solanaBridgePrimitiveAccess':
+        case 'solanaBridgeRequestListen':
         case 'input':
         case 'paste':
         case 'pasteImage':
         case 'instagramUpload':
         case 'untilEthBridgeOnline':
+        case 'untilSolanaBridgeOnline':
         case 'hookInputUploadOnce':
             break
         default:

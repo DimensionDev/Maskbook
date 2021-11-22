@@ -1,4 +1,4 @@
 {
   "extends": "../../tsconfig.json",
-  "references": [{ "path": "./evm/" }, { "path": "./solana/" }]
+  "references": [{ "path": "./evm/" }, { "path": "./flow/" }, { "path": "./solana/" }]
 }
