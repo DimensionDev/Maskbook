@@ -503,12 +503,12 @@ export enum DomainProvider {
 }
 
 export enum PortfolioProvider {
-    ZERION = 0,
-    DEBANK = 1,
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
 }
 
 export enum CollectibleProvider {
-    OPENSEA = 0,
+    OPENSEA = 'OpenSea',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
@@ -591,4 +591,18 @@ export enum GasOption {
     Low = 'low',
     Medium = 'medium',
     High = 'high',
+}
+
+export enum TransactionStateType {
+    UNKNOWN = 0,
+    /** Wait for external provider */
+    WAIT_FOR_CONFIRMING = 1,
+    /** Hash is available */
+    HASH = 2,
+    /** Receipt is available */
+    RECEIPT = 3,
+    /** Confirmed or Reverted */
+    CONFIRMED = 4,
+    /** Fail to send */
+    FAILED = 5,
 }

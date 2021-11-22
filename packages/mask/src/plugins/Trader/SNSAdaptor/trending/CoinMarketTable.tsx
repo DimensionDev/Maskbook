@@ -1,8 +1,9 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import { FormattedCurrency } from '@masknet/shared'
+import { formatCurrency } from '@masknet/web3-shared-evm'
+import type { Trending } from '../../types'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -71,11 +72,19 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                     <TableRow>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <TableCell className={classes.cell} align="center">
-                                <FormattedCurrency symbol="USD" value={trending.market?.market_cap ?? 0} />
+                                <FormattedCurrency
+                                    symbol="USD"
+                                    value={trending.market?.market_cap ?? 0}
+                                    formatter={formatCurrency}
+                                />
                             </TableCell>
                         ) : null}
                         <TableCell className={classes.cell} align="center">
-                            <FormattedCurrency symbol="USD" value={trending.market?.total_volume ?? 0} />
+                            <FormattedCurrency
+                                symbol="USD"
+                                value={trending.market?.total_volume ?? 0}
+                                formatter={formatCurrency}
+                            />
                         </TableCell>
                         {dataProvider !== DataProvider.UNISWAP_INFO ? (
                             <>
@@ -83,12 +92,14 @@ export function CoinMarketTable(props: CoinMarketTableProps) {
                                     <FormattedCurrency
                                         value={trending.market?.circulating_supply ?? 0}
                                         symbol={trending.coin.symbol}
+                                        formatter={formatCurrency}
                                     />
                                 </TableCell>
                                 <TableCell className={classes.cell} align="center">
                                     <FormattedCurrency
                                         value={trending.market?.total_supply ?? 0}
                                         symbol={trending.coin.symbol}
+                                        formatter={formatCurrency}
                                     />
                                 </TableCell>
                             </>

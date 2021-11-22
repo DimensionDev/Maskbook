@@ -1,9 +1,11 @@
-import { useProviderType, usePluginIDContext } from '.'
-import { getPluginDefine } from '..'
+import type { NetworkPluginID } from '..'
+import { useProviderType } from './useProviderType'
+import { usePluginIDContext } from './Context'
+import { getPluginDefine } from '../manager/store'
 
-export function useProviderDescriptor(expectedProviderTypeOrID?: string, expectedPluginID?: string) {
+export function useProviderDescriptor(expectedProviderTypeOrID?: string, expectedPluginID?: NetworkPluginID) {
     const pluginID = usePluginIDContext()
-    const providerType = useProviderType()
+    const providerType = useProviderType(expectedPluginID ?? pluginID)
 
     return getPluginDefine(expectedPluginID ?? pluginID)?.declareWeb3Providers?.find((x) =>
         [x.type, x.ID].includes(expectedProviderTypeOrID ?? providerType ?? ''),

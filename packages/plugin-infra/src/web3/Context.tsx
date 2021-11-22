@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react'
+import React, { createContext, useContext, useMemo } from 'react'
 import { createContainer } from 'unstated-next'
 import { useSubscription } from 'use-subscription'
 import { CurrencyType, NetworkPluginID, Web3Plugin } from '../web3-types'
@@ -25,9 +25,8 @@ function usePluginsWeb3Context() {
 
 function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin.ObjectCapabilities.Capabilities>) {
     const pluginContext = context[pluginID]
-    if (!pluginContext) throw new Error(`The context of ${pluginID} is undefined.`)
 
-    const { Shared, Utils } = pluginContext
+    const { Shared, Utils } = pluginContext ?? {}
     const allowTestnet = useSubscription(Shared?.allowTestnet ?? FALSE)
     const chainId = useSubscription(Shared?.chainId ?? ZERO)
     const account = useSubscription(Shared?.account ?? EMPTY_STRING)
@@ -69,10 +68,15 @@ function usePluginWeb3State(pluginID: string, context: Record<string, Web3Plugin
 
 function usePluginsWeb3State() {
     const context = usePluginsWeb3Context()
-    return {
-        [NetworkPluginID.PLUGIN_EVM]: usePluginWeb3State(NetworkPluginID.PLUGIN_EVM, context),
-        [NetworkPluginID.PLUGIN_FLOW]: usePluginWeb3State(NetworkPluginID.PLUGIN_FLOW, context),
-    }
+    const pluginStateEVM = usePluginWeb3State(NetworkPluginID.PLUGIN_EVM, context)
+    const pluginStateFlow = usePluginWeb3State(NetworkPluginID.PLUGIN_FLOW, context)
+    return useMemo(
+        () => ({
+            [NetworkPluginID.PLUGIN_EVM]: pluginStateEVM,
+            [NetworkPluginID.PLUGIN_FLOW]: pluginStateFlow,
+        }),
+        [pluginStateEVM, pluginStateFlow],
+    )
 }
 
 export function usePluginIDContext() {
@@ -83,11 +87,10 @@ const PluginsWeb3StateContext = createContainer(usePluginsWeb3State)
 
 export const usePluginsWeb3StateContext = PluginsWeb3StateContext.useContainer
 
-export function usePluginWeb3StateContext(expectedPluginID?: string) {
+export function usePluginWeb3StateContext(expectedPluginID?: NetworkPluginID) {
     const pluginID = usePluginIDContext()
     const pluginsWeb3State = usePluginsWeb3StateContext()
-    // @ts-ignore
-    return pluginsWeb3State[expectedPluginID ?? pluginID] as ReturnType<typeof usePluginWeb3State>
+    return pluginsWeb3State[expectedPluginID ?? pluginID] ?? {}
 }
 
 export function PluginsWeb3ContextProvider({

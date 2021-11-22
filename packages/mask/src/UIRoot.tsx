@@ -59,8 +59,6 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
     // migrate EVM plugin
     fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
 
-    if (Object.values(NetworkPluginID).some((x) => !PluginsWeb3State[x])) return null
-
     return compose(
         children,
         (jsx) => <Suspense fallback={null} children={jsx} />,

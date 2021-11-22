@@ -1,4 +1,5 @@
-import { isTypedMessageAnchor, isTypedMessageText, isTypedMessageTuple, TypedMessageTuple } from '..'
+import { isTypedMessageAnchor } from '../extension'
+import { isTypedMessageText, isTypedMessageTuple, TypedMessageTuple } from '../core'
 import type {
     NonSerializableTypedMessage,
     NonSerializableWithToJSONTypedMessage,
