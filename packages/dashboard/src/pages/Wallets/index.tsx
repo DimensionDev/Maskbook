@@ -22,6 +22,7 @@ import {
     useWallets,
     Web3Plugin,
 } from '@masknet/plugin-infra'
+import { usePluginID } from '../Personas/api'
 
 function Wallets() {
     const wallet = useWallet()
@@ -40,6 +41,7 @@ function Wallets() {
 
     const networks = getRegisteredWeb3Networks()
     const networkDescriptor = useNetworkDescriptor()
+    const pluginId = usePluginID()
     const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(
         networkDescriptor ?? null,
     )
@@ -99,6 +101,7 @@ function Wallets() {
                         networks={networks}
                         selectedNetwork={selectedNetwork}
                         onSelectNetwork={setSelectedNetwork}
+                        pluginId={pluginId}
                     />
                     <Routes>
                         <Route path="/" element={<TokenAssets network={selectedNetwork} />} />
