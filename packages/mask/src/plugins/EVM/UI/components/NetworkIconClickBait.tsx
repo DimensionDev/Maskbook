@@ -2,23 +2,16 @@ import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import {
-    isInjectedProvider,
-    NetworkType,
-    ProviderType,
-    resolveProviderDownloadLink,
-    useWallets,
-} from '@masknet/web3-shared-evm'
+import { NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'
-import { useInjectedProviderReady, useInjectedProviderType } from '../../hooks'
 
-export function ProviderIconClickBait({
+export function NetworkIconClickBait({
     network,
     provider,
     children,
-    onClick,
     onSubmit,
-}: Web3Plugin.UI.ProviderIconClickBaitProps) {
+    onClick,
+}: Web3Plugin.UI.NetworkIconClickBaitProps) {
     //#region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
@@ -29,22 +22,11 @@ export function ProviderIconClickBait({
     )
     //#endregion
 
-    const providerType = provider.type as ProviderType
+    const providerType = provider?.type as ProviderType | undefined
     const networkType = network.type as NetworkType
 
-    const wallets = useWallets(ProviderType.MaskWallet)
-    const injectedProviderType = useInjectedProviderType()
-    const injectedProviderReady = useInjectedProviderReady()
-
-    const onClickProvider = useCallback(async () => {
-        // open the download page
-        if (isInjectedProvider(providerType) && ProviderType.Fortmatic !== providerType) {
-            if (!injectedProviderReady || providerType !== injectedProviderType) {
-                const downloadLink = resolveProviderDownloadLink(providerType)
-                if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
-                return
-            }
-        }
+    const onClickNetwork = useCallback(async () => {
+        if (!providerType) return
 
         switch (providerType) {
             case ProviderType.MaskWallet:
@@ -53,7 +35,6 @@ export function ProviderIconClickBait({
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
-            case ProviderType.Fortmatic:
                 setConnectWalletDialog({
                     open: true,
                     providerType,
@@ -66,13 +47,9 @@ export function ProviderIconClickBait({
                 unreachable(providerType)
         }
         onClick?.(network, provider)
-    }, [network, provider, wallets, injectedProviderReady, injectedProviderType, onClick])
+    }, [network, provider, onClick])
 
-    // hide injected provider in dashboard
-    if (isInjectedProvider(providerType) && location.href.includes('dashboard.html')) return null
-
-    // coinbase and mathwallet are blocked by CSP
-    if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null
+    if (!providerType) return null
 
     return (
         <>
@@ -80,7 +57,7 @@ export function ProviderIconClickBait({
                 ? cloneElement(children, {
                       ...children.props,
                       ...{
-                          onClick: onClickProvider,
+                          onClick: onClickNetwork,
                       },
                   })
                 : children}

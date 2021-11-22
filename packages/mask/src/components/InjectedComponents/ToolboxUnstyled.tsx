@@ -10,12 +10,12 @@ import {
     ListItemText as MuiListItemText,
     Box,
 } from '@mui/material'
-import { useWallet, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useAccount,
-    useChainId,
+    useWallet,
     useChainColor,
     useChainIdValid,
     useChainDetailed,
@@ -141,7 +141,6 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 function useToolbox() {
     const { t } = useI18N()
     const account = useAccount()
-    const chainId = useChainId()
     const selectedWallet = useWallet()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()

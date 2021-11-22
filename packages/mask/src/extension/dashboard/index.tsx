@@ -10,6 +10,7 @@ import { createPluginHost } from '../../plugin-infra/host'
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
 import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
+import { status } from '../../setup.ui'
 
 const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,
@@ -38,4 +39,4 @@ startPluginDashboard(
         }
     }),
 )
-createNormalReactRoot(<IntegratedDashboard />)
+status.then(() => createNormalReactRoot(<IntegratedDashboard />))

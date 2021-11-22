@@ -5,6 +5,7 @@ import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
+    NetworkPluginID,
     useNetworkDescriptor,
     useNetworkType,
     useWeb3UI,
@@ -14,7 +15,7 @@ import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { hasNativeAPI, nativeAPI } from '../../../../utils'
 import { PluginProviderRender } from './PluginProviderRender'
-import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
+import { pluginIDSettings } from '../../../../settings/settings'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -46,10 +47,10 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
 
-    const pluginID = useValueRef(pluginIDSettings)
-    const networkID = useValueRef(networkIDSettings)
+    const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
+    const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(networkID)
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
     const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkID, undeterminedPluginID)
 
     const networkType = useNetworkType(undeterminedPluginID)
@@ -59,10 +60,9 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     const onSubmit = useCallback(() => {
         if (undeterminedNetwork?.type === networkType) {
             pluginIDSettings.value = undeterminedPluginID
-            networkIDSettings.value = undeterminedNetworkID
         }
         closeDialog()
-    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, undeterminedNetworkID, closeDialog])
+    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog])
 
     // not available for the native app
     if (hasNativeAPI) return null
