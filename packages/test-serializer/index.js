@@ -13,7 +13,7 @@ module.exports = {
             msg += indentation + '}'
             return msg
         }
-        if (isCryptoKey(val)) return `CryptoKey { [native data] }`
+        if (isCryptoKey(val)) return `CryptoKey { [opaque crypto key material] }`
         const inner = printer(val.val, config, indentation, depth, refs)
         if (val.ok) return `Ok(${inner})`
         if (val.err) return `Err(${inner})`
@@ -37,6 +37,6 @@ function isDOMException(a) {
 }
 function isCryptoKey(a) {
     try {
-        return a.constructor.name === 'CryptoKey'
+        return a.constructor.name === 'CryptoKey' || a.constructor.name === 'EcCryptoKey'
     } catch {}
 }

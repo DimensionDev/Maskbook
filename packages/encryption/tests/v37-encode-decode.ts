@@ -1,13 +1,9 @@
 import './setup'
-import { test, beforeAll, expect } from '@jest/globals'
+import { test, expect } from '@jest/globals'
 import { None } from 'ts-results'
 import { encodePayload, AESAlgorithmEnum, parsePayload, PayloadWellFormed } from '../src'
-import { webcrypto } from 'crypto'
 import { importAESFromJWK } from '../src/utils'
 
-beforeAll(() => {
-    Object.assign(globalThis, { crypto: webcrypto })
-})
 const testKey = {
     alg: 'A256GCM',
     ext: true,

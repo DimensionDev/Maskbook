@@ -10,7 +10,7 @@ Object {
   "encryption": Ok(Object {
     "AESKey": Ok(Object {
       "algr": "A256GCM",
-      "key": CryptoKey { [native data] },
+      "key": CryptoKey { [opaque crypto key material] },
     }),
     "iv": Ok(Uint8Array [ 000102030405060708090a0b0c0d0e0f ]),
     "type": "public",
