@@ -13,8 +13,8 @@ import {
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { delay } from '@masknet/shared-base'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { delay } from '../../../../utils'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
@@ -141,18 +141,13 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true
 
-        try {
-            await connectTo()
-            setConnectWalletDialog({
-                open: false,
-                result: true,
-            })
-        } catch {
-            setConnectWalletDialog({
-                open: false,
-                result: false,
-            })
-        }
+        await connectTo()
+        // sync settings
+        await delay(1000)
+        setConnectWalletDialog({
+            open: false,
+            result: true,
+        })
 
         return true
     }, [open, connectTo, setConnectWalletDialog])

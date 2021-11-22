@@ -13,6 +13,7 @@ import {
     Web3ProviderType,
     SendOverrides,
     RequestOptions,
+    isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 
@@ -29,8 +30,7 @@ export const Web3Context: Web3ProviderType = {
     account: createSubscriptionFromAsync(
         async () => {
             const providerType = await Services.Settings.getCurrentSelectedWalletProvider()
-            if ([ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType))
-                return ''
+            if (isInjectedProvider(providerType)) return ''
             return Services.Settings.getSelectedWalletAddress()
         },
         '',

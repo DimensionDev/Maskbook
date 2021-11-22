@@ -36,11 +36,8 @@ export const languageSettings = createGlobalSettings<LanguageOptions>('language'
 })
 //#endregion
 
-//#region web3
+//#region web3 plugin ID
 export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_ID, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
-export const networkIDSettings = createGlobalSettings<string>('networkID', `${PLUGIN_ID}_ethereum`, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 //#endregion

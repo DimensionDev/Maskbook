@@ -1,6 +1,6 @@
 import type { UnboundedRegistry as MessageChannel } from '@dimensiondev/holoflows-kit'
-import type { Option } from 'ts-results'
 import type { Subscription } from 'use-subscription'
+import type { KVStorageBackend } from './types'
 
 export { createInMemoryKVStorageBackend } from './in-memory'
 export { createIndexedDB_KVStorageBackend } from './idb'
@@ -8,11 +8,7 @@ export { createProxyKVStorageBackend } from './proxy'
 export type { ProxiedKVStorageBackend } from './proxy'
 
 export const removed = Symbol.for('removed')
-export interface KVStorageBackend {
-    setValue(key: string, value: unknown): Promise<void>
-    getValue(key: string): Promise<Option<unknown>>
-    beforeAutoSync: Promise<void>
-}
+export * from './types'
 
 /**
  * Create a root scope of simple K/V storage.

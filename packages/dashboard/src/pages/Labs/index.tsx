@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { PageFrame } from '../../components/DashboardFrame'
+import { PageFrame } from '../../components/PageFrame'
 import PluginItem from './components/PluginItem'
 import {
     FileServiceIcon,

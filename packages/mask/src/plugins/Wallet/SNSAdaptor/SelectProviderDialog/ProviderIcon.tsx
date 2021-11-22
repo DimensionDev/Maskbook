@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ProviderIconProps {
-    icon: string
+    icon: URL
     name: React.ReactNode
     onClick?: () => void
     ButtonBaseProps?: Partial<ButtonBaseProps>
@@ -43,7 +43,7 @@ export function ProviderIcon({ icon, name, onClick, ButtonBaseProps }: ProviderI
     return (
         <Card className={classes.root} elevation={0} onClick={onClick}>
             <ButtonBase className={`${classes.content} dashboard-style`} {...ButtonBaseProps}>
-                <img src={icon} className={classes.icon} />
+                <img src={icon.toString()} className={classes.icon} />
                 <Typography className={classes.name} variant="h3">
                     {name}
                 </Typography>

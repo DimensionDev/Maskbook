@@ -7,7 +7,6 @@ import {
     languageSettings,
     currentPluginEnabledStatus,
     pluginIDSettings,
-    networkIDSettings,
 } from '../../settings/settings'
 import {
     currentDataProviderSettings,
@@ -50,7 +49,6 @@ function create<T>(settings: InternalSettings<T>) {
     return [get, set] as const
 }
 export const [getPluginID, setPluginID] = create(pluginIDSettings)
-export const [getNetworkID, setNetworkID] = create(networkIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)

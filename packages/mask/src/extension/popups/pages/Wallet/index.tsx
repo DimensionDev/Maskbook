@@ -3,7 +3,7 @@ import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/w
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
-import { PopupRoutes } from '../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useLocation } from 'react-router-dom'

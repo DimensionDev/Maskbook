@@ -1,7 +1,5 @@
 import { memo } from 'react'
-import { ChainId, getChainDetailed, resolveChainColor } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
-import { ImageIcon } from '../ImageIcon'
 
 const useStyles = makeStyles()({
     point: {
@@ -12,17 +10,21 @@ const useStyles = makeStyles()({
     },
 })
 export interface ChainIconProps {
-    chainId: ChainId
+    color: string
     size?: number
 }
 
-export const ChainIcon = memo<ChainIconProps>(({ chainId, size }) => {
+export const ChainIcon = memo<ChainIconProps>(({ color, size = 12.5 }) => {
     const { classes } = useStyles()
-    const chainDetail = getChainDetailed(chainId)
 
-    return chainDetail?.network === 'mainnet' ? (
-        <ImageIcon size={size ?? 20} />
-    ) : (
-        <div style={{ backgroundColor: resolveChainColor(chainId) }} className={classes.point} />
+    return (
+        <div
+            className={classes.point}
+            style={{
+                width: size,
+                height: size,
+                backgroundColor: color,
+            }}
+        />
     )
 })

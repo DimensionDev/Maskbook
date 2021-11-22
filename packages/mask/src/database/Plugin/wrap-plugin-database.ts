@@ -1,6 +1,6 @@
 import type { IDBPTransaction } from 'idb/build/cjs'
 import type { Plugin, IndexableTaggedUnion } from '@masknet/plugin-infra'
-import { createPluginDBAccess, PluginDatabase, pluginDataHasValidKeyPath, toStore } from '.'
+import { createPluginDBAccess, PluginDatabase, pluginDataHasValidKeyPath, toStore } from './base'
 
 /**
  * Avoid calling it directly.

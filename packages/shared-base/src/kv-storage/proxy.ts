@@ -1,5 +1,6 @@
-import type { KVStorageBackend } from '.'
+import type { KVStorageBackend } from './types'
 import { defer } from '../utils/defer'
+
 export interface ProxiedKVStorageBackend extends KVStorageBackend {
     replaceBackend(backend: KVStorageBackend): void
 }
