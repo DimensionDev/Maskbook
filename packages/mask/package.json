@@ -127,7 +127,7 @@
     "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",
     "@nice-labs/emit-file-webpack-plugin": "^1.1.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.1",
-    "@swc/core": "^1.2.106",
+    "@swc/core": "^1.2.111",
     "@types/webpack-dev-server": "^4.5.0",
     "@typescript-eslint/eslint-plugin": "^5.4.0",
     "@typescript-eslint/parser": "^5.4.0",
