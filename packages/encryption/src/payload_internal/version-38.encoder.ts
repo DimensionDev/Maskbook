@@ -34,7 +34,7 @@ export async function encode38(payload: PayloadWellFormed.Payload) {
         if (compressed.err) {
             console.error(`[@masknet/encryption] An error happened when compressing a secp256k1 key.`, compressed.err)
         }
-        fields[Index.authorPublicKey] = `|${compressed.unwrapOr('_')}`
+        fields[Index.authorPublicKey] = `${compressed.unwrapOr('_')}`
     }
     fields[Index.publicShared] = String(payload.encryption.type === 'public' ? 1 : 0)
     if (payload.author.some) {
@@ -59,7 +59,10 @@ async function encodeAESKeyEncrypted(
 
         // There is no reason that these two steps will fail.
         // Use non-CE version so they're fatal error.
-        const text = JSON.stringify(jwk.val)
+        // ? The original implementation uses JSON.stringify
+        // ? and JsonWebKey key order returned by WebCrypto by browsers and NodeJS are different.
+        // ? We use the Chrome order to keep the result stable.
+        const text = `{"alg":"A256GCM","ext":true,"k":"${jwk.val.k}","key_ops":["decrypt","encrypt"],"kty":"oct"}`
         const ab = encodeText(text)
 
         const encryptedKey = await encryptWithAES(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv, ab)
