@@ -1,4 +1,4 @@
-export type ToolIconTypes = 'encryptedmsg' | 'files' | 'markets' | 'redpacket' | 'swap' | 'token' | 'claim'
+export type ToolIconTypes = 'encryptedmsg' | 'files' | 'markets' | 'redpacket' | 'swap' | 'token' | 'claim' | 'allblue'
 type T = {
     image: string
     label: string
@@ -17,5 +17,6 @@ export const ToolIconURLs: Readonly<Record<ToolIconTypes, T>> = {
     token: { image: new URL('./token.png', import.meta.url).toString(), label: 'Buy Cryptocurrency', priority: 960 },
     swap: { image: new URL('./swap.png', import.meta.url).toString(), label: 'Swap', priority: 950 },
     claim: { image: new URL('./claim.png', import.meta.url).toString(), label: 'Claim', priority: 940 },
+    allblue: { image: new URL('./allblue.png', import.meta.url).toString(), label: 'All Blue', priority: 930 },
     // airdrop: { image: new URL('./airdrop.png', import.meta.url).toString(), text: 'Airdrop' },
 }
