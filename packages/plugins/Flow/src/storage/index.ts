@@ -1,7 +1,9 @@
 import type { User } from '@onflow/fcl'
 import type { ScopedStorage } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-flow'
 
 export const StorageDefaultValue = {
+    chainId: ChainId.Mainnet,
     user: null as User | null,
 }
 

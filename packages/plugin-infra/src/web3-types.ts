@@ -112,14 +112,16 @@ export declare namespace Web3Plugin {
 
     export interface FungibleToken extends Token {
         id: string
+        type: TokenType.Fungible
         address: string
-        decimal?: number
+        decimals?: number
         name: string
         symbol: string
     }
 
     export interface NonFungibleToken extends Token {
         id: string
+        type: TokenType.Fungible
         name: string
         description?: string
     }
@@ -186,14 +188,14 @@ export declare namespace Web3Plugin {
             getFungibleAssets?: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Asset[]>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Asset[]>
         }
@@ -208,7 +210,7 @@ export declare namespace Web3Plugin {
             getTransactions: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Transaction[]>
         }
@@ -217,14 +219,14 @@ export declare namespace Web3Plugin {
             getFungibleTokenLists: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<TokenList[]>
             /** Get the token lists of supported non-fungible tokens. */
             getNonFungibleTokenLists: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<TokenList[]>
         }
