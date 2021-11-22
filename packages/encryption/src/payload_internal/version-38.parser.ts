@@ -119,9 +119,9 @@ async function decodePublicSharedAESKey(
     const import_AES_GCM_256 = Err.withErr(importAESFromJWK.AES_GCM_256, CryptoException.InvalidCryptoKey)
     const decrypt = Err.withErr(decryptWithAES, CryptoException.InvalidCryptoKey)
 
-    const jwk_in_ab = decrypt(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv.val, encryptedKey.val)
-    const jwk_in_text = andThenAsync(jwk_in_ab, decodeTextCrypto)
-    const jwk = andThenAsync(jwk_in_text, JSONParse)
+    const jwk_in_u8arr = await decrypt(AESAlgorithmEnum.A256GCM, publicSharedKey.val, iv.val, encryptedKey.val)
+    const jwk_in_text = await andThenAsync(jwk_in_u8arr, decodeTextCrypto)
+    const jwk = await andThenAsync(jwk_in_text, JSONParse)
     const aes = await andThenAsync(jwk, import_AES_GCM_256)
 
     return aes.map<AESKey>((key) => ({ algr: AESAlgorithmEnum.A256GCM, key }))

@@ -6,10 +6,16 @@ Object {
     "network": "facebook.com",
     "userId": "100027562249574",
   })),
-  "authorPublicKey": Err([Error: [@masknet/encryption] Encountered an invalid CryptoKey.]),
+  "authorPublicKey": Err(EKindsError {
+    "message": "[@masknet/encryption] Encountered an invalid CryptoKey."
+    "cause": [TypeError: The property 'algorithm.namedCurve' must be one of: 'P-256', 'P-384', 'P-521', 'NODE-ED25519', 'NODE-ED448', 'NODE-X25519', 'NODE-X448'. Received 'K-256']
+  }),
   "encrypted": Ok(Uint8Array [ 3a0d6ee692c6f46896b196f14301c01ad2fa26aa ]),
   "encryption": Ok(Object {
-    "AESKey": Err([Error: [@masknet/encryption] Encountered an invalid CryptoKey.]),
+    "AESKey": Ok(Object {
+      "algr": "A256GCM",
+      "key": CryptoKey { [native data] },
+    }),
     "iv": Ok(Uint8Array [ 0633db7e24805c2bdcff69ea2afda7cd ]),
     "type": "public",
   }),
