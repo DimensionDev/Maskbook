@@ -23,6 +23,7 @@
     "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
   },
   "dependencies": {
+    "@dimensiondev/kit": "0.0.0-20211118134922-42648c0",
     "@emotion/cache": "^11.6.0",
     "@emotion/react": "^11.6.0",
     "@emotion/serialize": "^1.0.2",
@@ -40,10 +41,11 @@
     "idb": "5.0.8",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
-    "lodash-unified": "^1.0.1",
+    "lodash-unified": "1.0.1",
     "react": "=18.0.0-alpha-00ced1e2b-20211102",
     "react-dom": "=18.0.0-alpha-00ced1e2b-20211102",
     "react-i18next": "^11.14.2",
+    "ts-results": "3.3.0",
     "web3-core": "1.5.2",
     "web3-core-method": "1.5.2"
   },
@@ -54,8 +56,9 @@
     "@jest/globals": "^27.3.1",
     "@magic-works/i18n-codegen": "^0.0.6",
     "@masknet/cli": "workspace:*",
+    "@masknet/serializer": "workspace:^0.0.0",
     "@nice-labs/git-rev": "^3.5.0",
-    "@types/lodash": "^4.14.177",
+    "@types/lodash-es": "^4.17.5",
     "cspell": "^5.12.5",
     "eslint": "7.32.0",
     "eslint-config-prettier": "^8.3.0",
