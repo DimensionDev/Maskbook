@@ -12,4 +12,5 @@ export const PLUGIN_IDS = {
     MARKET_TREND: 'com.maskbook.trader',
     POLL: 'com.maskbook.poll',
     PETS: 'com.maskbook.pets',
+    CRYPTOARTAI: 'com.maskbook.cryptoartai',
 }

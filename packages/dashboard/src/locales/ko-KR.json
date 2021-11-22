@@ -312,6 +312,8 @@
     "labs_settings_market_trend_source": "디폴트 추세 소스",
     "labs_settings_swap": "스왑 설정",
     "labs_settings_swap_network": "{{network}} 네트워크 디폴트 추세 소스",
+    "labs_cryptoartai": "CRYPTOART.AI",
+    "labs_cryptoartai_desc": "Connect CryptoArt Digital Artworks. The Internationale is a classic anthem that has been a shared memory for generations.",
     "dashboard_mobile_test": "모바일 테스트 참여",
     "dashboard_source_code": "소스 코드",
     "privacy_policy": "개인정보처리방침",

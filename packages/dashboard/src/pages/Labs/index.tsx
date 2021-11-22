@@ -62,6 +62,7 @@ export default function Plugins() {
         [PLUGIN_IDS.MARKETS]: true,
         [PLUGIN_IDS.VALUABLES]: true,
         [PLUGIN_IDS.MARKET_TREND]: true,
+        [PLUGIN_IDS.CRYPTOARTAI]: true,
     })
 
     const account = useAccount()
@@ -216,6 +217,14 @@ export default function Plugins() {
                             desc={t.labs_collectibles_desc()}
                             icon={<CollectiblesIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.COLLECTIBLES]}
+                            onSwitch={onSwitch}
+                        />
+                        <PluginItem
+                            id={PLUGIN_IDS.CRYPTOARTAI}
+                            title={t.labs_cryptoartai()}
+                            desc={t.labs_cryptoartai_desc()}
+                            icon={<CollectiblesIcon />}
+                            enabled={pluginStatus[PLUGIN_IDS.CRYPTOARTAI]}
                             onSwitch={onSwitch}
                         />
                     </Box>
