@@ -17,9 +17,9 @@ import {
     importAESFromJWK,
     importAsymmetryKeyFromJsonWebKeyOrSPKI,
 } from '../utils'
-import { ProfileIdentifier } from '@masknet/shared-base'
 import { safeUnreachable } from '@dimensiondev/kit'
 import { parseSignatureContainer } from './SignatureContainer'
+import { parseAuthor } from './shared'
 // ? Payload format: (binary format)
 // ? See: docs/rfc/000-Payload-37.md
 
@@ -54,25 +54,6 @@ function parsePayload37(payload: Uint8Array, signature: PayloadParseResult.Paylo
         }
         return Ok(normalized)
     })
-}
-
-function parseAuthor(network: unknown, id: unknown): PayloadParseResult.Payload['author'] {
-    if (network === null) return OptionalResult.None
-    if (id === '' || id === null) return OptionalResult.None
-    if (typeof id !== 'string') return InvalidPayload('Invalid user id')
-
-    let net = ''
-    if (network === SocialNetworkEnum.Facebook) net = 'facebook.com'
-    else if (network === SocialNetworkEnum.Twitter) net = 'twitter.com'
-    else if (network === SocialNetworkEnum.Instagram) net = 'instagram.com'
-    else if (network === SocialNetworkEnum.Minds) net = 'minds.com'
-    else if (typeof network === 'string') net = network
-    else if (typeof network !== 'number') return InvalidPayload('Invalid network')
-    else return new Err(PayloadException.UnknownEnumMember, 'unknown network').toErr()
-
-    if (net.includes('/')) return InvalidPayload('Invalid network')
-
-    return OptionalResult.Some(new ProfileIdentifier(net, id))
 }
 
 async function parseEncryption(encryption: unknown): Promise<PayloadParseResult.Payload['encryption']> {
@@ -142,12 +123,6 @@ function importAsymmetryKey(algr: unknown, key: unknown, name: string) {
         }
         return new Err(CryptoException.UnsupportedAlgorithm, null).toErr()
     })
-}
-enum SocialNetworkEnum {
-    Facebook = 0,
-    Twitter = 1,
-    Instagram = 2,
-    Minds = 3,
 }
 enum EncryptionKind {
     Public = 0,

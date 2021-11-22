@@ -1,4 +1,3 @@
-import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import {
     AESKey,
     AESAlgorithmEnum,
@@ -24,15 +23,14 @@ import { isPoint, isPointCompressed, pointCompress } from 'tiny-secp256k1'
 import type { PayloadParserResult } from '.'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import { encodeText } from '@dimensiondev/kit'
+import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 const decodeUint8ArrayCrypto = decodeUint8ArrayF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
-const decodeText = decodeTextF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 const decodeTextCrypto = decodeTextF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
 const JSONParse = JSONParseF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
 const importEC = Err.withErr(importAsymmetryKeyFromJsonWebKeyOrSPKI, CryptoException.InvalidCryptoKey)
 
-// ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
 export async function parse38(payload: string): PayloadParserResult {
     //#region Parse text
     const header = '🎼4/4'
@@ -41,14 +39,13 @@ export async function parse38(payload: string): PayloadParserResult {
     // cut the tail
     rest = rest.slice(0, rest.lastIndexOf(':||'))
 
-    const [AESKeyEncrypted, encryptedText, iv, signature, authorPublicKey, authorUserID, sharedPublic] =
-        splitFields(rest)
+    const { AESKeyEncrypted, encryptedText, iv, signature, authorPublicKey, authorUserID, isPublic } = splitFields(rest)
     //#endregion
 
     //#region Normalization
     const raw_iv = decodeUint8ArrayCrypto(iv).andThen(assertIVLengthEq16)
     const raw_aes = decodeUint8ArrayCrypto(AESKeyEncrypted)
-    const encryption: PayloadParseResult.EndToEndEncryption | PayloadParseResult.PublicEncryption = sharedPublic
+    const encryption: PayloadParseResult.EndToEndEncryption | PayloadParseResult.PublicEncryption = isPublic
         ? {
               type: 'public',
               iv: raw_iv,
@@ -68,10 +65,12 @@ export async function parse38(payload: string): PayloadParserResult {
         encryption: Ok(encryption),
         encrypted: decodeUint8Array(encryptedText),
     }
-    if (authorUserID) {
-        normalized.author = Identifier.fromString(authorUserID, ProfileIdentifier)
+    if (authorUserID.err) {
+        normalized.author = authorUserID.mapErr(Err.mapErr(PayloadException.DecodeFailed))
+    } else if (authorUserID.val.some) {
+        normalized.author = Identifier.fromString(`person:${authorUserID.val.val}`, ProfileIdentifier)
+            .map((x) => Some(x))
             .mapErr(Err.mapErr(PayloadException.DecodeFailed))
-            .map((e) => Some(e))
     }
     if (authorPublicKey) {
         normalized.authorPublicKey = await decodeECDHPublicKey(authorPublicKey)
@@ -89,19 +88,23 @@ export async function parse38(payload: string): PayloadParserResult {
     //#endregion
 }
 
+// ? Version 38:🎼4/4|AESKeyEncrypted|iv|encryptedText|signature|authorPublicKey?|publicShared?|authorIdentifier?:||
 function splitFields(raw: string) {
-    const [AESKeyEncrypted = '', encryptedText = '', iv = '', signature, authorPublicKey, authorUserID, sharedPublic] =
+    const [, AESKeyEncrypted = '', iv = '', encryptedText = '', signature, authorPublicKey, isPublic, authorUserIDRaw] =
         raw.split('|')
-    return [
+    const authorUserID: OptionalResult<string, any> = authorUserIDRaw
+        ? Result.wrap(() => Some(atob(authorUserIDRaw)))
+        : OptionalResult.None
+    return {
         AESKeyEncrypted,
         encryptedText,
         iv,
         // "_" is used as placeholder
-        (signature === '_' ? undefined : signature) as string | undefined,
-        authorPublicKey as string | undefined,
-        authorUserID as string | undefined,
-        sharedPublic === '1' ? true : false,
-    ] as const
+        signature: (signature === '_' ? undefined : signature) as string | undefined,
+        authorPublicKey: authorPublicKey as string | undefined,
+        authorUserID,
+        isPublic: isPublic === '1' ? true : false,
+    }
 }
 
 async function decodePublicSharedAESKey(

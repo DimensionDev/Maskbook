@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Be able to parse current payload: Old infra output for message "test" 1`] = `
+Object {
+  "author": Ok(Some(ProfileIdentifier {
+    "network": "facebook.com",
+    "userId": "100027562249574",
+  })),
+  "authorPublicKey": Err([Error: [@masknet/encryption] Encountered an invalid CryptoKey.]),
+  "encrypted": Ok(Uint8Array [ 3a0d6ee692c6f46896b196f14301c01ad2fa26aa ]),
+  "encryption": Ok(Object {
+    "AESKey": Err([Error: [@masknet/encryption] Encountered an invalid CryptoKey.]),
+    "iv": Ok(Uint8Array [ 0633db7e24805c2bdcff69ea2afda7cd ]),
+    "type": "public",
+  }),
+  "signature": Ok(None),
+  "version": -38,
+}
+`;

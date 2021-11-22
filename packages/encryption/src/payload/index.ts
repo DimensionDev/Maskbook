@@ -5,6 +5,7 @@ import { encodeSignatureContainer } from '../payload_internal/SignatureContainer
 import { EKindsError as Err, EKindsError, PayloadException, CryptoException, OptionalResult } from '../types'
 
 export * from './types'
+
 export async function parsePayload(payload: unknown): PayloadParserResult {
     if (payload instanceof Uint8Array) {
         return parse37(payload.slice())

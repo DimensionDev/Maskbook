@@ -115,3 +115,9 @@ export enum PublicKeyAlgorithmEnum {
 export enum AESAlgorithmEnum {
     A256GCM = 'A256GCM',
 }
+export enum SocialNetworkEnum {
+    Facebook = 0,
+    Twitter = 1,
+    Instagram = 2,
+    Minds = 3,
+}

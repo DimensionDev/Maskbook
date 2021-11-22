@@ -4,7 +4,7 @@ import { decodeArrayBuffer, decodeText } from '@dimensiondev/kit'
 import { decode as decodeMessagePack, encode } from '@msgpack/msgpack'
 export * from './crypto'
 
-const firstArgString = (e: unknown) => typeof e !== 'string'
+const firstArgString = (e: unknown) => typeof e === 'string'
 const firstArgUint8Array = (e: unknown) => e instanceof Uint8Array
 export const decodeUint8ArrayF = wrap((x: string) => {
     return new Uint8Array(decodeArrayBuffer(x))

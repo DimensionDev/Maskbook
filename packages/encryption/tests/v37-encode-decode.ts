@@ -1,3 +1,4 @@
+import './setup'
 import { test, beforeAll, expect } from '@jest/globals'
 import { None } from 'ts-results'
 import { encodePayload, AESAlgorithmEnum, parsePayload, PayloadWellFormed } from '../src'
@@ -10,6 +11,7 @@ beforeAll(() => {
 const testKey = {
     alg: 'A256GCM',
     ext: true,
+    /* cspell:disable-next-line */
     k: 'JRhrRKykmnm3SbuNw6OcXF_jiw0gIlW3QiWNV01jeaE',
     key_ops: ['encrypt', 'decrypt'],
     kty: 'oct',
