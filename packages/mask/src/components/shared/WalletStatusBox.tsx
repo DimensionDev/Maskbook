@@ -4,7 +4,7 @@ import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import {
     useAccount,
     useWeb3State,
@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 3),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.paper,
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -54,14 +54,13 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
     },
     link: {
-        color: theme.palette.text.secondary,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
+        color: theme.palette.text.primary,
     },
     linkIcon: {
         marginRight: theme.spacing(1),
-        color: '#1C68F3',
     },
     networkIcon: {},
     providerIcon: {},
