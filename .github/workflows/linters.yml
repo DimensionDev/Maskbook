@@ -14,6 +14,8 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
       - run: npx prettier@2.4.0 --list-different .
   locale-kit:
     runs-on: ubuntu-20.04

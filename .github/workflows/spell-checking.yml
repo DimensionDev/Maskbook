@@ -10,6 +10,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
       - name: Check Spell
         run: |
           git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1

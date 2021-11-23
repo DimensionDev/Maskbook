@@ -21,6 +21,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
       - name: Restore pnpm cache
         uses: actions/cache@v2
         with:
@@ -55,7 +57,7 @@ jobs:
       - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.2
         with:
-          publish-dir: './packages/netlify/'
+          publish-dir: "./packages/netlify/"
           production-branch: develop
           github-token: ${{ secrets.GITHUB_TOKEN }}
           deploy-message: "Deploy from GitHub Actions"

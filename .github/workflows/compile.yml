@@ -22,6 +22,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
       - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
       - name: Restore pnpm cache
         uses: actions/cache@v2
         with:
