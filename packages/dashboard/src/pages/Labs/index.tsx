@@ -28,6 +28,7 @@ import { PLUGIN_IDS, TUTORIAL_URLS_CN, TUTORIAL_URLS_EN } from './constants'
 import { useLocation } from 'react-router-dom'
 import { ContentContainer } from '../../components/ContentContainer'
 import { useLanguage } from '../Settings/api'
+import { WalletStateBar } from '../Wallets/components/WalletStateBar'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -122,7 +123,7 @@ export default function Plugins() {
     }, [location.search, openTransakDialog, openSwapDialog])
 
     return (
-        <PageFrame title={t.labs()}>
+        <PageFrame title={t.labs()} primaryAction={<WalletStateBar />}>
             <ContentContainer>
                 <Box className={classes.root}>
                     <Box className={classes.list}>
