@@ -22,8 +22,12 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
+      - name: pnpm cache
+        uses: actions/cache@v2
         with:
-          node-version: "16"
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-node-
       - run: npm install --global pnpm
       - run: pnpm install
       - run: npx gulp locale-kit
@@ -39,7 +43,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: '16'
       - name: pnpm cache
         uses: actions/cache@v2
         with:
@@ -70,8 +74,6 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-        with:
-          node-version: "16"
       - name: pnpm cache
         uses: actions/cache@v2
         with:
