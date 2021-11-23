@@ -315,7 +315,14 @@
         "topup",
         "leaderboard",
         "nfthub",
-        "orderbook"
+        "orderbook",
+        "blocto",
+        "onflow",
+        "unauthenticate",
+        "mathwallet",
+        "walletlink",
+        "rpcs",
+        "FUSD"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "ignorePaths": [
