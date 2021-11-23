@@ -18,7 +18,7 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
-import { PluginMessages, PluginServices } from '../../../../API'
+import { PluginMessages } from '../../../../API'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
 import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
@@ -89,7 +89,6 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId, pr
                 e && isSameAddress(e.contractDetailed.address, x.contractDetailed.address) && x.tokenId === e.tokenId,
         )
         if (owner && !isSameAddress(owner.info.owner, account)) {
-            PluginServices.Wallet.removeToken(owner)
             return false
         }
 
