@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useCopyToClipboard } from 'react-use'
 import { first } from 'lodash-unified'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
@@ -16,7 +15,6 @@ import {
     formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
@@ -124,10 +122,8 @@ const SelectWallet = memo(() => {
     const location = useLocation()
     const wallet = useAccount()
     const wallets = useWallets(ProviderType.MaskWallet)
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM)
 
     const [selected, setSelected] = useState(wallet)
-    const [, copyToClipboard] = useCopyToClipboard()
 
     const search = new URLSearchParams(location.search)
 
@@ -139,13 +135,6 @@ const SelectWallet = memo(() => {
     const isInternal = search.get('internal')
 
     const chainIdValid = useChainIdValid()
-
-    const onCopy = useCallback(
-        (address: string) => {
-            copyToClipboard(address)
-        },
-        [copyToClipboard],
-    )
 
     const handleCancel = useCallback(async () => {
         await WalletRPC.selectAccount([], ChainId.Mainnet)

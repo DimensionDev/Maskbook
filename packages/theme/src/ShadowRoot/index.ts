@@ -12,3 +12,4 @@ export {
     createShadowRootForwardedPopperComponent,
     NoEffectUsePortalShadowRootContext,
 } from './Portal'
+export { CSSVariableInjector } from './CSSVariableInjector'

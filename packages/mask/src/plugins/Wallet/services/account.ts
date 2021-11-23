@@ -18,7 +18,8 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { getWallets, hasWallet, updateWallet } from './wallet'
-import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
+import { hasNativeAPI, nativeAPI } from '../../../utils'
+import { Flags } from '../../../../shared'
 
 export async function updateAccount(
     options: {
@@ -75,9 +76,9 @@ export async function updateMaskAccount(options: { account?: string; chainId?: C
     if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
 
     const { account, chainId, networkType } = options
-
     if (chainId) currentMaskWalletChainIdSettings.value = chainId
     if (networkType) currentMaskWalletNetworkSettings.value = networkType
+    if (!account) currentMaskWalletAccountSettings.value = ''
     if (account && EthereumAddress.isValid(account)) currentMaskWalletAccountSettings.value = account
 }
 

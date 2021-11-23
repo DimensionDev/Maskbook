@@ -30,7 +30,7 @@ import {
     currentProviderSettings,
 } from '../../../plugins/Wallet/settings'
 import { debugModeSetting } from '../../../settings/settings'
-import { Flags } from '../../../utils'
+import { Flags } from '../../../../shared'
 import { nativeAPI } from '../../../utils/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'

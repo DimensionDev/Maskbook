@@ -1,6 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
-import { i18n } from '../../utils/i18n-next'
+import { i18n } from '../../../shared-ui/locales_legacy'
 import { PLUGIN_IDENTIFIER, SLIPPAGE_DEFAULT } from './constants'
 import type { ZrxTradePool } from './types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'

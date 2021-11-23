@@ -1,5 +1,5 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, useChainId, Web3Plugin } from '@masknet/plugin-infra'
 import { useFCL } from '@masknet/web3-shared-flow'
 import { getStorage } from '../../storage'
 
@@ -10,7 +10,8 @@ export function ProviderIconClickBait({
     onSubmit,
     onClick,
 }: Web3Plugin.UI.ProviderIconClickBaitProps) {
-    const fcl = useFCL()
+    const chainId = useChainId(NetworkPluginID.PLUGIN_FLOW)
+    const fcl = useFCL(chainId)
 
     const onLogIn = useCallback(async () => {
         onClick?.(network, provider)

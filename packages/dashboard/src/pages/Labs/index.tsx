@@ -19,7 +19,6 @@ import {
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
-import SwapSettingDialog from './components/SwapSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -104,8 +103,6 @@ export default function Plugins() {
     function onSetting(id: string) {
         if (id === PLUGIN_IDS.MARKET_TREND) {
             setOpenTrendSetting(true)
-        } else if (id === PLUGIN_IDS.SWAP) {
-            setOpenSwapSetting(true)
         }
     }
 
@@ -172,7 +169,6 @@ export default function Plugins() {
                             enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
                             onSwitch={onSwitch}
                             onExplore={onExplore}
-                            onSetting={onSetting}
                             icon={<SwapServiceIcon />}
                         />
                         <PluginItem
@@ -257,7 +253,6 @@ export default function Plugins() {
                 </Box>
             </ContentContainer>
 
-            <SwapSettingDialog open={openSwapSetting} onClose={() => setOpenSwapSetting(false)} />
             <MarketTrendSettingDialog open={openTrendSetting} onClose={() => setOpenTrendSetting(false)} />
         </PageFrame>
     )

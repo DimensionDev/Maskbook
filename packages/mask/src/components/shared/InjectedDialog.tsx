@@ -27,7 +27,6 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
-        borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogTitleTypography: {
         marginLeft: 6,

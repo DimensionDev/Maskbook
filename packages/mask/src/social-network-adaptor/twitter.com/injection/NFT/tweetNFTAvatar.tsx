@@ -1,6 +1,7 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTBadgeTweet } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTweet'
-import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
+import { createReactRootShadowed, startWatch } from '../../../../utils'
+import { Flags } from '../../../../../shared'
 import { getInjectNodeInfo } from '../../utils/avatar'
 import { searchRetweetAvatarSelector, searchTweetAvatarSelector } from '../../utils/selector'
 

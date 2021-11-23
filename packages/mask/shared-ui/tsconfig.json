@@ -1,0 +1,13 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/shared-ui/",
+    "tsBuildInfoFile": "../dist/shared-ui.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    "lib": ["ES2021"],
+    "resolveJsonModule": true
+  },
+  "include": ["./", "./**/*.json"],
+  "references": [{ "path": "../../shared-base" }]
+}
