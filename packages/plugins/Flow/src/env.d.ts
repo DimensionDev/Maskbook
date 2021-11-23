@@ -31,5 +31,6 @@ declare module '@onflow/fcl' {
 
     export const send: (data: string[]) => Promise<any>
     export const script: (text: string) => string
+    export const query: (options: { cadence: string; args: (arg: any, t: any) => any[] }) => Promise<any>
     export const getAccount: (address: string) => string
 }
