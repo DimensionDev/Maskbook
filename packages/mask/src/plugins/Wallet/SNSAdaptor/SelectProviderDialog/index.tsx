@@ -5,6 +5,7 @@ import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
 import {
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
+    NetworkPluginID,
     useNetworkDescriptor,
     useNetworkType,
     useWeb3UI,
@@ -14,11 +15,11 @@ import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { hasNativeAPI, nativeAPI } from '../../../../utils'
 import { PluginProviderRender } from './PluginProviderRender'
-import { networkIDSettings, pluginIDSettings } from '../../../../settings/settings'
+import { pluginIDSettings } from '../../../../settings/settings'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
-        padding: theme.spacing(0),
+        padding: theme.spacing(0, 0, 1, 0),
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -43,32 +44,25 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     }, [open])
     //#endregion
 
-    const pluginID = useValueRef(pluginIDSettings)
-    const networkID = useValueRef(networkIDSettings)
-    const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
-    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(networkID)
-
-    const undeterminedWeb3UI = useWeb3UI(undeterminedPluginID)
-    const undeterminedNetworkType = useNetworkType(undeterminedPluginID)
-    const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkType, undeterminedPluginID)
-
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
 
-    const onSubmit = useCallback(() => {
-        const matched =
-            undeterminedNetwork &&
-            undeterminedNetwork.networkSupporterPluginID === undeterminedPluginID &&
-            undeterminedNetwork.ID === undeterminedNetworkID
+    const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
+    const network = useNetworkDescriptor()
+    const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
+    const [undeterminedNetworkID, setUndeterminedNetworkID] = useState(network?.ID)
+    const undeterminedNetwork = useNetworkDescriptor(undeterminedNetworkID, undeterminedPluginID)
 
-        if (matched) {
+    const networkType = useNetworkType(undeterminedPluginID)
+
+    const { NetworkIconClickBait, ProviderIconClickBait } = useWeb3UI(undeterminedPluginID).SelectProviderDialog ?? {}
+
+    const onSubmit = useCallback(() => {
+        if (undeterminedNetwork?.type === networkType) {
             pluginIDSettings.value = undeterminedPluginID
-            networkIDSettings.value = undeterminedNetworkID
         }
         closeDialog()
-    }, [undeterminedNetwork, undeterminedPluginID, undeterminedNetworkID, closeDialog])
-
-    const { NetworkIconClickBait, ProviderIconClickBait } = undeterminedWeb3UI?.SelectProviderDialog ?? {}
+    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog])
 
     // not available for the native app
     if (hasNativeAPI) return null

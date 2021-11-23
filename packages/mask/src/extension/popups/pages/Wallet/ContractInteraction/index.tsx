@@ -1,4 +1,6 @@
 import { memo, useMemo, useState } from 'react'
+import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
+import { useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
@@ -6,6 +8,7 @@ import {
     formatBalance,
     formatGweiToWei,
     formatWeiToEther,
+    formatCurrency,
     getChainIdFromNetworkType,
     isEIP1559Supported,
     NetworkType,
@@ -21,11 +24,9 @@ import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
-import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
-import { useLocation } from 'react-router-dom'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
@@ -329,6 +330,7 @@ const ContractInteraction = memo(() => {
                                             value={tokenAmount}
                                             decimals={tokenDecimals}
                                             significant={4}
+                                            formatter={formatBalance}
                                         />
                                     )}
                                 </Typography>
@@ -336,7 +338,7 @@ const ContractInteraction = memo(() => {
                                     {new BigNumber(tokenValueUSD).isGreaterThan(10 ** 9) ? (
                                         'infinite'
                                     ) : (
-                                        <FormattedCurrency value={tokenValueUSD} sign="$" />
+                                        <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
                                     )}
                                 </Typography>
                             </>
@@ -353,6 +355,7 @@ const ContractInteraction = memo(() => {
                                 decimals={nativeToken?.decimals}
                                 significant={4}
                                 symbol={nativeToken?.symbol}
+                                formatter={formatBalance}
                             />
                             <Link
                                 component="button"
@@ -371,7 +374,7 @@ const ContractInteraction = memo(() => {
                             {new BigNumber(totalUSD).isGreaterThan(10 ** 9) ? (
                                 'infinite'
                             ) : (
-                                <FormattedCurrency value={totalUSD} sign="$" />
+                                <FormattedCurrency value={totalUSD} sign="$" formatter={formatCurrency} />
                             )}
                         </Typography>
                     </div>

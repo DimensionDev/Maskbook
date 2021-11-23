@@ -12,3 +12,7 @@ export enum ProviderType {
     Dapper = 'Dapper',
     Ledger = 'Ledger',
 }
+
+export enum AssetProviderType {
+    Default = 'Default',
+}

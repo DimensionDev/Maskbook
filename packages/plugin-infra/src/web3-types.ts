@@ -15,12 +15,18 @@ export declare namespace Web3Plugin {
         ID: string
         /** The ID of a plugin that provides the functionality of this network. */
         networkSupporterPluginID: string
+        /** The chain id */
+        chainId: number
         /** The network type */
         type: string
         /** The network icon */
         icon: URL
+        /** The network icon in fixed color */
+        iconColor: string
         /** The network name */
         name: string
+        /** Is a mainnet network */
+        isMainnet: boolean
     }
     export interface ProviderDescriptor {
         /** An unique ID for each wallet provider */
@@ -37,7 +43,7 @@ export declare namespace Web3Plugin {
 
     export interface CryptoPrice {
         [token: string]: {
-            [key in CurrencyType]: number
+            [key in CurrencyType]?: number
         }
     }
     export interface ChainDetailed {
@@ -58,20 +64,20 @@ export declare namespace Web3Plugin {
         /** true: Derivable Wallet. false: UnDerivable Wallet */
         hasDerivationPath: boolean
     }
-    export interface Asset<T extends unknown> {
+    export interface Asset {
         id: string
-        chain: string
+        chainId: number
         balance: string
-        token: Token<T>
         /** estimated price */
         price?: {
-            [key in CurrencyType]: string
+            [key in CurrencyType]?: string
         }
         /** estimated value */
         value?: {
-            [key in CurrencyType]: string
+            [key in CurrencyType]?: string
         }
         logoURI?: string
+        token: Token
     }
 
     export interface AddressName {
@@ -95,37 +101,51 @@ export declare namespace Web3Plugin {
         status: 0 | 1
         /** estimated tx fee */
         fee: {
-            [key in CurrencyType]: string
+            [key in CurrencyType]?: string
         }
     }
 
-    export interface Token<T extends unknown> {
+    export interface Token {
         id: string
-        type: TokenType
-        token: T
+        chainId: number
     }
 
-    export interface FungibleTokenMetadata<T extends unknown> {
+    export interface FungibleToken extends Token {
+        id: string
+        type: TokenType.Fungible
+        address: string
+        decimals?: number
+        name: string
+        symbol: string
+    }
+
+    export interface NonFungibleToken extends Token {
+        id: string
+        type: TokenType.Fungible
+        name: string
+        description?: string
+    }
+    export interface FungibleTokenMetadata {
         name: string
         symbol: string
         decimals: number
         iconURL?: string
-        _token: T
+        token: FungibleToken
     }
 
-    export interface NonFungibleTokenMetadata<T extends unknown> {
+    export interface NonFungibleTokenMetadata {
         name: string
         description: string
         mediaType: string
         iconURL?: string
         assetURL?: string
-        _token: T
+        token: NonFungibleToken
     }
 
-    export interface TokenList<T extends unknown> {
+    export interface TokenList {
         name: string
         description?: string
-        tokens: Token<T>[]
+        tokens: Token[]
     }
     export namespace ObjectCapabilities {
         export interface SharedState {
@@ -159,62 +179,62 @@ export declare namespace Web3Plugin {
             /** The default derivable wallet. */
             walletPrimary?: Subscription<Wallet | null>
             /** The user added fungible tokens. */
-            fungibleTokens?: Subscription<Token<unknown>[]>
+            fungibleTokens?: Subscription<FungibleToken[]>
             /** The user added non-fungible tokens. */
-            nonFungibleTokens?: Subscription<Token<unknown>[]>
+            nonFungibleTokens?: Subscription<NonFungibleToken[]>
         }
         export interface AssetState {
             /** Get fungible assets of given account. */
-            getFungibleAssets?: <T extends unknown>(
+            getFungibleAssets?: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
-            ) => Promise<Asset<T>[]>
+            ) => Promise<Asset[]>
             /** Get non-fungible assets of given account. */
-            getNonFungibleAssets: <T extends unknown>(
+            getNonFungibleAssets?: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
-            ) => Promise<Asset<T>[]>
+            ) => Promise<Asset[]>
         }
         export interface TokenManage {
-            addToken: <T extends unknown>(token: Token<T>) => Promise<void>
-            removeToken: <T extends unknown>(token: Token<T>) => Promise<void>
-            trustToken: <T extends unknown>(token: Token<T>) => Promise<void>
-            blockToken: <T extends unknown>(token: Token<T>) => Promise<void>
+            addToken: (token: Token) => Promise<void>
+            removeToken: (token: Token) => Promise<void>
+            trustToken: (token: Token) => Promise<void>
+            blockToken: (token: Token) => Promise<void>
         }
         export interface TransactionState {
             /** Get latest transactions of given account. */
             getTransactions: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Transaction[]>
         }
         export interface TokenListState {
             /** Get the token lists of supported fungible tokens. */
-            getFungibleTokenLists: <T extends unknown>(
+            getFungibleTokenLists: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
-            ) => Promise<TokenList<T>[]>
+            ) => Promise<TokenList[]>
             /** Get the token lists of supported non-fungible tokens. */
-            getNonFungibleTokenLists: <T extends unknown>(
+            getNonFungibleTokenLists: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
-            ) => Promise<TokenList<T>[]>
+            ) => Promise<TokenList[]>
         }
         export interface Others {
             isChainIdValid?: (chainId: number, allowTestnet: boolean) => boolean
             getChainDetailed?: (chainId: number) => ChainDetailed | undefined
-            getFungibleTokenMetadata?: <T extends unknown>(token: Token<T>) => Promise<FungibleTokenMetadata<T>>
-            getNonFungibleTokenMetadata?: <T extends unknown>(token: Token<T>) => Promise<NonFungibleTokenMetadata<T>>
+            getFungibleTokenMetadata?: (token: FungibleToken) => Promise<FungibleTokenMetadata>
+            getNonFungibleTokenMetadata?: (token: NonFungibleToken) => Promise<NonFungibleTokenMetadata>
 
             formatAddress?: (address: string, size?: number) => string
             formatCurrency?: (value: BigNumber.Value, sign?: string, symbol?: string) => string
@@ -240,27 +260,33 @@ export declare namespace Web3Plugin {
     export namespace UI {
         export interface NetworkIconClickBaitProps {
             network: NetworkDescriptor
+            provider?: ProviderDescriptor
             children?: React.ReactNode
-            onClick?: () => void
+            onClick?: (network: NetworkDescriptor, provider?: ProviderDescriptor) => void
+            onSubmit?: (network: NetworkDescriptor, provider?: ProviderDescriptor) => void
         }
         export interface ProviderIconClickBaitProps {
             network: NetworkDescriptor
             provider: ProviderDescriptor
             children?: React.ReactNode
-            onClick?: () => void
+            onClick?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
+            onSubmit?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
         }
         export interface AddressFormatterProps {
             address: string
             size?: number
         }
-        export interface SelectProviderDialogBait {
-            /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-            NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
-            /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-            ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
-        }
         export interface UI {
-            SelectProviderDialog?: SelectProviderDialogBait
+            SelectNetworkMenu?: {
+                /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+                NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+            }
+            SelectProviderDialog?: {
+                /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+                NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+                /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
+                ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
+            }
         }
     }
 }

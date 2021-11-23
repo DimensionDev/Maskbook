@@ -1,7 +1,6 @@
 import {
     appearanceSettings,
     pluginIDSettings,
-    networkIDSettings,
     languageSettings,
     debugModeSetting,
     currentPersonaIdentifier,
@@ -33,7 +32,6 @@ export function ToBeListened(): ToBeListedSettings {
     return {
         appearanceSettings,
         pluginIDSettings,
-        networkIDSettings,
         languageSettings,
         debugModeSetting,
         currentChainIdSettings,

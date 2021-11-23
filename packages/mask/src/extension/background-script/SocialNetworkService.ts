@@ -1,5 +1,5 @@
 import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI } from '../../social-network'
-import { Flags } from '../../utils/flags'
+import { Flags } from '../../../shared'
 import { requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
 import { delay } from '../../utils/utils'

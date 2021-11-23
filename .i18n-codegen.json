@@ -3,8 +3,8 @@
     "version": 1,
     "list": [
         {
-            "input": "./packages/mask/src/locales/en-US.json",
-            "output": "./packages/mask/src/locales/i18n_generated",
+            "input": "./packages/mask/shared-ui/locales/en-US.json",
+            "output": "./packages/mask/shared-ui/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
                 "type": "i18next/react-hooks",

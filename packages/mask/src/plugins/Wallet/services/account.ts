@@ -18,7 +18,8 @@ import {
     currentProviderSettings,
 } from '../settings'
 import { getWallets, hasWallet, updateWallet } from './wallet'
-import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
+import { hasNativeAPI, nativeAPI } from '../../../utils'
+import { Flags } from '../../../../shared'
 
 export async function updateAccount(
     options: {

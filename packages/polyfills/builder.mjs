@@ -24,7 +24,7 @@ let polyfillVersion = '__'
 }
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
-if ((await readFile(versionFilePath, 'utf-8').catch(() => '')) === polyfillVersion) process.exit()
+if ((await readFile(versionFilePath, 'utf-8').catch(() => '')) === polyfillVersion) process.exit(0)
 
 await builder({
     modules: ['es', 'web'],

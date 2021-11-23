@@ -17,7 +17,8 @@ import {
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
-import { useI18N, Flags } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { Flags } from '../../../../shared'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -484,8 +485,8 @@ interface SwappedTokensProps {
 
 function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ shortITOwrapper: false })
     const theme = useTheme()
+    const { classes } = useStyles({ shortITOwrapper: false })
 
     return swappedToken.token ? (
         <ListItem key={i} className={classes.tokenCard}>
@@ -534,6 +535,7 @@ function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
                     value={swappedToken.amount}
                     decimals={swappedToken.token.decimals}
                     symbol={swappedToken.token.symbol}
+                    formatter={formatBalance}
                 />
             </Typography>
         </ListItem>

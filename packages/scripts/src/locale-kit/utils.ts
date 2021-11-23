@@ -5,7 +5,7 @@ import { resolve, relative } from 'path'
 import { EXTENSION_SOURCE, ROOT_PATH, walk } from '../utils'
 import { getUsedKeys } from './ast'
 
-export const LOCALE_PATH = resolve(EXTENSION_SOURCE, 'locales')
+export const LOCALE_PATH = resolve(EXTENSION_SOURCE, '../shared-ui/locales')
 export const LOCALE_NAMES = readdirSync(LOCALE_PATH)
     .filter((name) => name.endsWith('.json'))
     .map((x) => x.slice(0, -5))

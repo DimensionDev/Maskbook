@@ -4,6 +4,7 @@ import { PageHeader } from '../components/PageHeader'
 import { MaskMessages, useI18N } from '../../../../../utils'
 import { useLocation } from 'react-router-dom'
 import { useAsync, useAsyncFn } from 'react-use'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
@@ -143,7 +144,11 @@ const WalletRecovery = memo(() => {
                             <div className={classes.wallet} key={wallet.address}>
                                 <Typography className={classes.label}>{wallet.name}</Typography>
                                 <Typography className={classes.address}>
-                                    <FormattedAddress address={wallet.address} size={16} />
+                                    <FormattedAddress
+                                        address={wallet.address}
+                                        size={16}
+                                        formatter={formatEthereumAddress}
+                                    />
                                 </Typography>
                             </div>
                         )

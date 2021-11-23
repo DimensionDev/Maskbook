@@ -1,6 +1,6 @@
 import { SuccessIcon } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { ProviderIcon } from './ProviderIcon'
@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 21,
         display: 'flex',
         gap: 32,
+        flexWrap: 'wrap',
     },
     networkItem: {
         width: 'auto',
@@ -69,9 +70,9 @@ const useStyles = makeStyles()((theme) => ({
 export interface PluginProviderRenderProps {
     networks: Web3Plugin.NetworkDescriptor[]
     providers: Web3Plugin.ProviderDescriptor[]
-    undeterminedPluginID: string
-    undeterminedNetworkID: string
-    setUndeterminedPluginID: (id: string) => void
+    undeterminedPluginID?: string
+    undeterminedNetworkID?: string
+    setUndeterminedPluginID: (id: NetworkPluginID) => void
     setUndeterminedNetworkID: (id: string) => void
     NetworkIconClickBait?: React.ComponentType<Web3Plugin.UI.NetworkIconClickBaitProps>
     ProviderIconClickBait?: React.ComponentType<Web3Plugin.UI.ProviderIconClickBaitProps>
@@ -99,28 +100,30 @@ export function PluginProviderRender({
                         1. Choose Network
                     </Typography>
                     <List className={classes.list}>
-                        {networks?.map((network) => (
-                            <ListItem
-                                className={classes.networkItem}
-                                key={network.ID}
-                                onClick={() => {
-                                    setUndeterminedPluginID(network.networkSupporterPluginID)
-                                    setUndeterminedNetworkID(network.ID)
-                                }}>
-                                <div className={classes.iconWrapper}>
-                                    {NetworkIconClickBait ? (
-                                        <NetworkIconClickBait network={network}>
+                        {networks
+                            ?.filter((x) => x.isMainnet)
+                            .map((network) => (
+                                <ListItem
+                                    className={classes.networkItem}
+                                    key={network.ID}
+                                    onClick={() => {
+                                        setUndeterminedPluginID(network.networkSupporterPluginID as NetworkPluginID)
+                                        setUndeterminedNetworkID(network.ID)
+                                    }}>
+                                    <div className={classes.iconWrapper}>
+                                        {NetworkIconClickBait ? (
+                                            <NetworkIconClickBait network={network}>
+                                                <ImageIcon icon={network.icon} />
+                                            </NetworkIconClickBait>
+                                        ) : (
                                             <ImageIcon icon={network.icon} />
-                                        </NetworkIconClickBait>
-                                    ) : (
-                                        <ImageIcon icon={network.icon} />
-                                    )}
-                                    {undeterminedNetworkID === network.ID && (
-                                        <SuccessIcon className={classes.checkedBadge} />
-                                    )}
-                                </div>
-                            </ListItem>
-                        ))}
+                                        )}
+                                        {undeterminedNetworkID === network.ID && (
+                                            <SuccessIcon className={classes.checkedBadge} />
+                                        )}
+                                    </div>
+                                </ListItem>
+                            ))}
                     </List>
                 </section>
                 <section className={classes.section}>
@@ -130,20 +133,21 @@ export function PluginProviderRender({
                     <ImageList className={classes.grid} gap={8} cols={3} rowHeight={130}>
                         {providers
                             .filter((x) => x.providerAdaptorPluginID === undeterminedPluginID)
-                            .map((provider) => (
-                                <ImageListItem key={provider.ID}>
-                                    {ProviderIconClickBait ? (
-                                        <ProviderIconClickBait
-                                            network={networks.find((x) => x.ID === undeterminedNetworkID)!}
-                                            provider={provider}
-                                            onClick={onSubmit}>
-                                            <ProviderIcon icon={provider.icon.toString()} name={provider.name} />
-                                        </ProviderIconClickBait>
-                                    ) : (
-                                        <ImageIcon icon={provider.icon} />
-                                    )}
-                                </ImageListItem>
-                            ))}
+                            .map((provider) =>
+                                ProviderIconClickBait ? (
+                                    <ProviderIconClickBait
+                                        key={provider.ID}
+                                        network={networks.find((x) => x.ID === undeterminedNetworkID)!}
+                                        provider={provider}
+                                        onSubmit={onSubmit}>
+                                        <ImageListItem>
+                                            <ProviderIcon icon={provider.icon} name={provider.name} />
+                                        </ImageListItem>
+                                    </ProviderIconClickBait>
+                                ) : (
+                                    <ImageIcon icon={provider.icon} />
+                                ),
+                            )}
                     </ImageList>
                 </section>
             </Box>
