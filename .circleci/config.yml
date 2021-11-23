@@ -30,7 +30,7 @@ jobs:
           command: sudo npm install -g pnpm@6.23.0
       - run:
           name: Install Dependencies
-          command: pnpm install --frozen-lockfile --store-dir ~/.pnpm/
+          command: pnpm install --store-dir ~/.pnpm/
       - save_cache:
           name: Save NPM Package Cache
           key: v3-mask-cache-npm
