@@ -1,6 +1,7 @@
 import Gun from 'gun'
 Object.assign(globalThis, { Gun })
 
+// @ts-ignore
 if (typeof importScripts !== 'function') {
     console.warn('Loading gun in main frame is deprecated. Please load it in a OnDemandWorker')
 }
