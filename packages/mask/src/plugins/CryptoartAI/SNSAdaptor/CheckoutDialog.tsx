@@ -79,7 +79,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
 
     const [purchaseState, purchaseCallback, resetCallback] = usePurchaseCallback(
-        Number(asset?.value?.editionNumber),
+        asset?.value?.editionNumber ? Number(asset?.value?.editionNumber) : 0,
         asset?.value?.priceInWei,
     )
 
