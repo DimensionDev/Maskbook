@@ -201,11 +201,17 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
         if (collectibles.length) {
             setRendCollectibles([...rendCollectibles, ...collectibles])
             if (hasNextPage) {
-                setTimeout(() => {
+                const timer = setTimeout(() => {
                     setPage(page + 1)
                 }, 1000)
+
+                return () => {
+                    clearTimeout(timer)
+                }
             }
         }
+
+        return () => {}
     }, [collectibles])
 
     useEffect(() => {
@@ -245,11 +251,17 @@ export function CollectionList({ address }: { address: string }) {
         if (collections.length) {
             setRendCollections([...rendCollections, ...collections])
             if (hasNextPage) {
-                setTimeout(() => {
+                const timer = setTimeout(() => {
                     setPage(page + 1)
                 }, 3000)
+
+                return () => {
+                    clearTimeout(timer)
+                }
             }
         }
+
+        return () => {}
     }, [collections])
 
     return (
