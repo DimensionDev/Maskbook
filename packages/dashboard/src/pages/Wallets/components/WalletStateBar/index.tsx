@@ -15,6 +15,7 @@ import { PluginMessages } from '../../../../API'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
 import { useNetworkSelector } from './useNetworkSelector'
+import { useAsyncRetry } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     bar: {
@@ -55,6 +56,20 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
+    //#region collection
+    const account = useAccount()
+    const { Asset } = useWeb3State()
+
+    useAsyncRetry(async () => {
+        if (!networkDescriptor) return
+        const assets = await Asset?.getNonFungibleAssets?.(account, '', networkDescriptor)
+        console.log('DEBUG: get assets')
+        console.log({
+            assets,
+        })
+    }, [account, networkDescriptor])
+    //#endregion
+
     if (!wallet) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
@@ -91,7 +106,6 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
 }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const account = useAccount()
     const { Utils, Asset } = useWeb3State()
 
     if (!wallet || !network || !provider) return null

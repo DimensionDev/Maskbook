@@ -29,8 +29,18 @@ declare module '@onflow/fcl' {
     export const logOut: () => {}
     export const signUp: () => {}
 
+    export const cdc: (template: TemplateStringsArray) => string
+    export const args: (args: any[]) => any
+    export const arg: (value: any, type: any) => any
+
     export const send: (data: string[]) => Promise<any>
     export const script: (text: string) => string
+    export const decode: (response: any) => Promise<any>
     export const query: (options: { cadence: string; args: (arg: any, t: any) => any[] }) => Promise<any>
     export const getAccount: (address: string) => string
+    export const getCollection: (collectionID: string) => any[]
+}
+
+declare module '@onflow/types' {
+    export class Address {}
 }

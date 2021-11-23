@@ -10,7 +10,7 @@ import {
 import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
 import { getStorage, StorageDefaultValue } from '../../storage'
 import { formatAddress } from '../../helpers'
-import { getFungibleAssets } from '../../apis'
+import { getFungibleAssets, getNonFungibleAssets } from '../../apis'
 
 function createSubscriptionFromChainId<T>(getter: (value: typeof StorageDefaultValue.chainId) => T) {
     return mapSubscription(getStorage().chainId.subscription, getter)
@@ -46,6 +46,7 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         },
         Asset: {
             getFungibleAssets,
+            getNonFungibleAssets,
         },
         Utils: {
             formatAddress,

@@ -1,0 +1,14 @@
+{
+    "TOP_SHOT_ADDRESS": {
+        "Mainnet": "0x0b2a3299cc857e29",
+        "Testnet": "0x877931736ee77cff"
+    },
+    "MARKET_TOP_SHOT_ADDRESS": {
+        "Mainnet": "0xc1e4f4f4c4257510",
+        "Testnet": "0x547f177b243b4d80"
+    },
+    "NON_FUNGIBLE_TOKEN_ADDRESS": {
+        "Mainnet": "0x1d7e57aa55817448",
+        "Testnet": "0x631e88ae7f1d7c20"
+    }
+}
