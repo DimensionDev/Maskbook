@@ -34,7 +34,7 @@ import {
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
-import { Flags } from '../../utils'
+import { Flags } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 
 function create<T>(settings: InternalSettings<T>) {

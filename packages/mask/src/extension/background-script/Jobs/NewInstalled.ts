@@ -1,5 +1,5 @@
 // No meaning for this module to support hmr but I don't want to invalidate dependencies module by this reason.
-import { Flags } from '../../../utils/flags'
+import { Flags } from '../../../../shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 export default function (signal: AbortSignal) {
     const onInstalled = (detail: { reason: browser.runtime.OnInstalledReason }) => {
