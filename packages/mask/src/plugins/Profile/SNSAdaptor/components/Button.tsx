@@ -2,6 +2,7 @@ import { BUTTON_ICONS, COLORS, COLORTOSTYLE } from '../common/variables'
 import { FiArrowUpRight } from 'react-icons/fi'
 import { BiExpandAlt, BiPlus, BiMinus, BiCheck, BiLoaderAlt } from 'react-icons/bi'
 import type { ReactNode } from 'react'
+import { Typography } from '@mui/material'
 
 interface ButtonInterface {
     color: string
@@ -112,7 +113,8 @@ const Button = ({
     return (
         <div className="flex items-center">
             <button onClick={onClick} className={className}>
-                {text} {iconSVG} {children}
+                <Typography variant="subtitle1">{text}</Typography>
+                {iconSVG} {children}
             </button>
         </div>
     )

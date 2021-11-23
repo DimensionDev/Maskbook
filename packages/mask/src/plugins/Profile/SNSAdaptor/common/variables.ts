@@ -31,7 +31,7 @@ export const COLORTOSTYLE: { [key: string]: colorToStyleInterface } = {
     primary: {
         name: 'primary',
         bgDefault: 'bg-primary',
-        bgAlt: 'bg-white',
+        bgAlt: 'bg-transparent',
         text: 'text-primary',
         border: 'border-primary',
         hoverBg: 'hover:opacity-90',
@@ -41,7 +41,7 @@ export const COLORTOSTYLE: { [key: string]: colorToStyleInterface } = {
     account: {
         name: 'account',
         bgDefault: 'bg-account',
-        bgAlt: 'bg-white',
+        bgAlt: 'bg-transparent',
         text: 'text-account',
         border: 'border-account',
         hoverBg: 'hover:opacity-90',
@@ -51,7 +51,7 @@ export const COLORTOSTYLE: { [key: string]: colorToStyleInterface } = {
     nft: {
         name: 'nft',
         bgDefault: 'bg-nft',
-        bgAlt: 'bg-white',
+        bgAlt: 'bg-transparent',
         text: 'text-nft',
         border: 'border-nft',
         hoverBg: 'hover:opacity-90',
@@ -61,7 +61,7 @@ export const COLORTOSTYLE: { [key: string]: colorToStyleInterface } = {
     donation: {
         name: 'donation',
         bgDefault: 'bg-donation',
-        bgAlt: 'bg-white',
+        bgAlt: 'bg-transparent',
         text: 'text-donation',
         border: 'border-donation',
         hoverBg: 'hover:opacity-90',
@@ -71,7 +71,7 @@ export const COLORTOSTYLE: { [key: string]: colorToStyleInterface } = {
     footprint: {
         name: 'footprint',
         bgDefault: 'bg-footprint',
-        bgAlt: 'bg-white',
+        bgAlt: 'bg-transparent',
         text: 'text-footprint',
         border: 'border-footprint',
         hoverBg: 'hover:opacity-90',

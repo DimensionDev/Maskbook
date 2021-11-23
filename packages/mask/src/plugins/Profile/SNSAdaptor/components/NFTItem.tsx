@@ -1,5 +1,6 @@
 import config from '../common/config'
-import ModelViewer from './ModelViewer'
+import { Typography } from '@mui/material'
+
 interface NFTItemProps {
     previewUrl?: string | null
     detailUrl?: string | null
@@ -8,7 +9,6 @@ interface NFTItemProps {
 
 const NFTItem = ({ previewUrl, detailUrl, isShowingDetails }: NFTItemProps) => {
     const containerClasses = `${classes.nftItem} ${!isShowingDetails ? 'object-cover' : 'object-contain'}`
-
     const fixSchemas = (url: string) => {
         if (url.startsWith('ipfs://')) {
             return url.replace('ipfs://', 'https://cloudflare-ipfs.com/ipfs/')
@@ -41,20 +41,30 @@ const NFTItem = ({ previewUrl, detailUrl, isShowingDetails }: NFTItemProps) => {
     return (
         <div className="flex flex-shrink-0 w-full aspect-w-1 aspect-h-1">
             {getContentType(imageUrl) === 'html' && <iframe className={containerClasses} src={detailUrl} />}
-            {/* {getContentType(imageUrl) === 'model' && (
-                <ModelViewer className={containerClasses} style={containerStyles} src={detailUrl} />
+            {getContentType(imageUrl) === 'model' && (
+                <div className="flex justify-center items-center">
+                    <Typography variant="subtitle2" color="textPrimary">
+                        Click to View
+                    </Typography>
+                </div>
+                // <ModelViewer className={containerClasses} style={containerStyles} src={detailUrl} />
             )}
             {getContentType(imageUrl) === 'video' && (
-                <video
-                    className={containerClasses}
-                    src={detailUrl || previewUrl}
-                    poster={previewUrl}
-                    controls={isShowingDetails}
-                    autoPlay={isShowingDetails}
-                    playsInline
-                    loop
-                    muted
-                />
+                <div className="flex justify-center items-center">
+                    <Typography variant="subtitle2" color="textPrimary">
+                        Click to View
+                    </Typography>
+                </div>
+                // <video
+                //     className={containerClasses}
+                //     src={detailUrl || previewUrl}
+                //     poster={previewUrl}
+                //     controls={isShowingDetails}
+                //     autoPlay={isShowingDetails}
+                //     playsInline
+                //     loop
+                //     muted
+                // />
             )}
             {getContentType(imageUrl) === 'image' && (
                 <img className={containerClasses} src={imageUrl} alt="NFT Image" />

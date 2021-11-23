@@ -29,9 +29,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 9999,
         paddingLeft: theme.spacing(2),
         paddingRight: theme.spacing(2),
-        border: '1px solid',
-        backgroundColor: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
-        color: theme.palette.mode === 'dark' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)',
+        border: '0px solid',
+        backgroundColor: theme.palette.primary.main,
+        color: 'rgb(255, 255, 255)',
         cursor: 'pointer',
     },
 }))
@@ -39,11 +39,12 @@ const useStyles = makeStyles()((theme) => ({
 interface PageTagProps {
     onChange: (tag: PageTags) => void
     tag: PageTags
+    isOwnAddress: boolean
 }
 
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
-    const { onChange, tag } = props
+    const { onChange, tag, isOwnAddress } = props
     return (
         <div className={classes.root}>
             <Button
@@ -74,9 +75,16 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 Footprints
             </Button>
-            <div className={classes.connectRSS3} onClick={() => onChange(PageTags.ConnectRSS3)}>
-                Connect RSS3
-            </div>
+            {isOwnAddress ? (
+                <Button
+                    variant="contained"
+                    className={classes.connectRSS3}
+                    onClick={() => onChange(PageTags.ConnectRSS3)}>
+                    Connect RSS3
+                </Button>
+            ) : (
+                ''
+            )}
         </div>
     )
 }

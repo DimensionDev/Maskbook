@@ -1,11 +1,4 @@
-import { makeStyles } from '@masknet/theme'
-
-const useStyles = makeStyles()((theme) => ({
-    name: {
-        color: theme.palette.mode !== 'dark' ? 'rgb(0, 0, 0)' : 'rgb(255, 255, 255)',
-    },
-}))
-
+import { Typography } from '@mui/material'
 interface DonationCardProps {
     imageUrl: string
     name: string
@@ -18,7 +11,6 @@ interface DonationCardProps {
 }
 
 const DonationCard = ({ imageUrl, name, contribCount, contribDetails, clickEvent = () => {} }: DonationCardProps) => {
-    const { classes } = useStyles()
     return (
         <div
             className="flex flex-row items-center justify-start w-full border-2 rounded cursor-pointer text-body-text bg-body-bg border-donation-bg"
@@ -28,17 +20,19 @@ const DonationCard = ({ imageUrl, name, contribCount, contribDetails, clickEvent
                 src={imageUrl}
                 alt={name}
             />
-            <div className="flex-1 w-0 px-8">
-                <p className={`w-full mb-2 text-lg font-semibold truncate ${classes.name}`}>{name}</p>
+            <div className="flex-1 w-0 px-8 flex flex-col justify-around">
+                <Typography variant="h6" color="textPrimary" fontWeight={600} className="w-full truncate">
+                    {name}
+                </Typography>
                 <div className="flex flex-row w-full overflow-y-auto gap-x-6">
                     <div className="text-donation">
-                        <div className="font-semibold">{contribCount}</div>
-                        <div className="font-normal">Contrib</div>
+                        <Typography variant="subtitle1">{contribCount}</Typography>
+                        <Typography variant="subtitle1">Contrib</Typography>
                     </div>
                     {contribDetails.map((contrib, i) => (
                         <div key={i} className="text-donation">
-                            <div className="font-semibold">{contrib.amount}</div>
-                            <div className="font-normal">{contrib.token}</div>
+                            <Typography variant="subtitle1">{contrib.amount}</Typography>
+                            <Typography variant="subtitle1">{contrib.token}</Typography>
                         </div>
                     ))}
                 </div>
