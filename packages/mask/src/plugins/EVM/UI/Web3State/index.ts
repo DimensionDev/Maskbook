@@ -33,11 +33,12 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         wallets: context.wallets,
     }
     state.Asset = state.Asset ?? {
-        getFungibleAssets: async (address, providerType, networkType, pagination) => {
+        getFungibleAssets: async (address, providerType, network, pagination) => {
+            if (!network) return []
             const assets = await context.getAssetsList(
                 address,
                 providerType as unknown as PortfolioProvider,
-                networkType as NetworkType,
+                network.type as unknown as NetworkType,
             )
             return assets.map((x) => ({
                 id: x.token.address,
