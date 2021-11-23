@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@masknet/icons": "workspace:*",
+    "@masknet/shared": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
     "@types/qrcode": "^1.4.1",
     "@types/tinycolor2": "^1.4.3",
