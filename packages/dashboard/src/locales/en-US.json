@@ -95,7 +95,7 @@
     "gas_fee": "Transaction fee",
     "transfer_cost": "Cost {{gasFee}} {{symbol}} ≈ ${{usd}}",
     "done": "Done!",
-    "labs": "Mask Labs",
+    "labs": "D.Market",
     "wallet_transactions_pending": "Pending",
     "wallet_gas_fee_settings_low": "Low",
     "wallet_gas_fee_settings_medium": "Medium",
