@@ -183,23 +183,25 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             onClose={() => setConnectWalletDialog({ open: false, result: false })}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress providerType={providerType} connection={connection} />
-                <Box className={classes.message}>
-                    <CramIcon />
-                    <Typography>
-                        {t('plugin_wallet_connect_message', {
-                            name: resolveProviderName(providerType),
-                        })}
-                        {` `}
-                        <Link
-                            href={resolveProviderDownloadLink(providerType)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className={classes.link}>
-                            {resolveProviderHostName(providerType)}
-                        </Link>
-                        .
-                    </Typography>
-                </Box>
+                {resolveProviderDownloadLink(providerType) ? (
+                    <Box className={classes.message}>
+                        <CramIcon />
+                        <Typography>
+                            {t('plugin_wallet_connect_message', {
+                                name: resolveProviderName(providerType),
+                            })}
+                            {` `}
+                            <Link
+                                href={resolveProviderDownloadLink(providerType)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={classes.link}>
+                                {resolveProviderHostName(providerType)}
+                            </Link>
+                            .
+                        </Typography>
+                    </Box>
+                ) : null}
             </DialogContent>
         </InjectedDialog>
     )
