@@ -1,5 +1,6 @@
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { definedSocialNetworkWorkers, SocialNetworkWorker } from '.'
+import { definedSocialNetworkWorkers } from './define'
+import type { SocialNetworkWorker } from './types'
 import type { ProfileIdentifier } from '@masknet/shared'
 
 export const definedSocialNetworkWorkersResolved = new Set<SocialNetworkWorker.Definition>()

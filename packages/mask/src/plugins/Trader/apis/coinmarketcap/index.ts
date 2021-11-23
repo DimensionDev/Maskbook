@@ -1,5 +1,5 @@
 import { CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../../constants'
-import { Flags } from '../../../../utils/flags'
+import { Flags } from '../../../../../shared'
 
 export interface Status {
     credit_count: number

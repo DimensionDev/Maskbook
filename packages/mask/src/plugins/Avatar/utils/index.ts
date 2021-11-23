@@ -1,33 +1,51 @@
 import BigNumber from 'bignumber.js'
-import { head, isNull } from 'lodash-es'
-import type { Order } from 'opensea-js/lib/types'
+import { head, isNull } from 'lodash-unified'
 import { PluginCollectibleRPC } from '../../Collectible/messages'
 import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../Collectible/utils'
 import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared-evm'
+import type { AssetOrder } from '../../Collectible/types'
 
 export async function getNFT(address: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
 
-    let orders: Order[] = []
-    if (asset.sellOrders?.length) {
-        orders = asset.sellOrders
+    let orders: AssetOrder[] = []
+    if (asset.sell_orders?.length) {
+        orders = asset.sell_orders
     } else if (asset.orders?.length) {
         orders = asset.orders
-    } else if (asset.buyOrders?.length) {
-        orders = asset.buyOrders
+    } else if (asset.buy_orders?.length) {
+        orders = asset.buy_orders
     }
 
     const order = head(
-        orders.sort((a, b) => new BigNumber(getOrderUSDPrice(b) ?? 0).minus(getOrderUSDPrice(a) ?? 0).toNumber()),
+        orders.sort((a, b) =>
+            new BigNumber(
+                getOrderUSDPrice(
+                    b.current_price,
+                    b.payment_token_contract?.usd_price,
+                    b.payment_token_contract?.decimals,
+                ) ?? 0,
+            )
+                .minus(
+                    getOrderUSDPrice(
+                        a.current_price,
+                        a.payment_token_contract?.usd_price,
+                        a.payment_token_contract?.decimals,
+                    ) ?? 0,
+                )
+                .toNumber(),
+        ),
     )
 
     return {
         amount: order
-            ? new BigNumber(getOrderUnitPrice(order) ?? 0).toFixed()
-            : getLastSalePrice(asset.lastSale) ?? '0',
+            ? new BigNumber(
+                  getOrderUnitPrice(order.current_price, order.payment_token_contract?.decimals, order.quantity) ?? 0,
+              ).toFixed()
+            : getLastSalePrice(asset.last_sale) ?? '0',
         name: asset.name,
-        symbol: order?.paymentTokenContract?.symbol ?? asset.lastSale?.paymentToken?.symbol ?? 'ETH',
-        image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
+        symbol: order?.payment_token_contract?.symbol ?? asset.last_sale?.payment_token?.symbol ?? 'ETH',
+        image: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
         owner: asset.owner.address,
     }
 }
@@ -38,14 +56,14 @@ export async function createNFT(address: string, tokenId: string) {
         {
             chainId: ChainId.Mainnet,
             type: EthereumTokenType.ERC721,
-            name: asset.assetContract.name,
-            symbol: asset.assetContract.tokenSymbol,
-            address: asset.assetContract.address,
+            name: asset.asset_contract.name,
+            symbol: asset.asset_contract.token_symbol,
+            address: asset.asset_contract.address,
         },
         {
             name: asset.name,
             description: asset.description,
-            image: asset.imageUrl ?? asset.imagePreviewUrl ?? '',
+            image: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
             owner: asset.top_ownerships[0].owner.address,
         },
         tokenId,

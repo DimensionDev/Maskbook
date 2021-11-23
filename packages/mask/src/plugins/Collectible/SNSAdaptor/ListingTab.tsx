@@ -45,30 +45,31 @@ export function ListingTab() {
     const isDifferenceToken = useMemo(() => {
         if (provider === CollectibleProvider.OPENSEA) {
             return (
-                orders.value?.some(
+                orders.some(
                     (item) =>
-                        (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
+                        (item.payment_token_contract?.symbol !== 'WETH' &&
+                            item.payment_token_contract?.symbol !== 'ETH') ||
                         (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
-                ) && orders.value.filter((item) => isZero(item.expirationTime ?? 0)).length === 0
+                ) && orders.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {
             return false
         }
-    }, [provider, orders.value])
+    }, [provider, orders])
 
     const dataSource = useMemo(() => {
-        if (!orders.value || !orders.value?.length) return []
-        return orders.value.sort((a, b) => {
-            const current = new BigNumber(a.unitPrice)
-            const next = new BigNumber(b.unitPrice)
+        if (!asset.value || !orders.length) return []
+        return orders.sort((a, b) => {
+            const current = new BigNumber(a.current_price ?? 0)
+            const next = new BigNumber(b.current_price ?? 0)
             if (current.isLessThan(next)) return -1
             else if (current.isGreaterThan(next)) return 1
             return 0
         })
-    }, [orders.value])
+    }, [orders, asset.value])
 
-    if (orders.loading) return <LoadingTable />
-    if (!orders.value || orders.error || !dataSource.length)
+    if (asset.loading) return <LoadingTable />
+    if (!asset.value || asset.error || !dataSource.length)
         return (
             <>
                 <Table size="small" stickyHeader>
@@ -81,7 +82,7 @@ export function ListingTab() {
                                         marginTop: 1,
                                     }}
                                     variant="text"
-                                    onClick={() => orders.retry()}>
+                                    onClick={() => asset.retry()}>
                                     {t('plugin_collectible_retry')}
                                 </Button>
                             </TableCell>
@@ -122,7 +123,7 @@ export function ListingTab() {
                 </TableHead>
                 <TableBody>
                     {dataSource.map((order) => (
-                        <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
+                        <OrderRow key={order.order_hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
                 {(provider === CollectibleProvider.OPENSEA && dataSource.length) || orderPage > 0 ? (

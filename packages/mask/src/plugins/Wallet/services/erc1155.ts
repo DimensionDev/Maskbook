@@ -1,5 +1,5 @@
 import { ERC1155TokenDetailed, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { createTransaction } from '../../../database/helpers/openDB'
+import { createTransaction } from '../../../../background/database/utils/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import { WalletMessages } from '../messages'
 import { ERC1155TokenRecordIntoDB } from './helpers'

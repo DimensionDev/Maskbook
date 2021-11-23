@@ -1,9 +1,9 @@
-import { upperFirst } from 'lodash-es'
+import { upperFirst } from 'lodash-unified'
 import { toHex } from 'web3-utils'
 import { createLookupTableResolver } from './enum'
 import CHAINS from '../assets/chains.json'
 import { getRPCConstants } from '../constants'
-import { ChainId, NetworkType } from '../types'
+import { ChainId, NetworkType, ProviderType } from '../types'
 import COINGECKO_PLATFORMS from '../assets/coingecko-asset-platforms.json'
 import COINGECKO_COIN_LIST from '../assets/coingecko-coin-list.json'
 
@@ -20,6 +20,10 @@ export function isChainIdMainnet(chainId: ChainId) {
 export function isEIP1559Supported(chainId: ChainId) {
     const features = getChainDetailed(chainId)?.features ?? []
     return features.includes('EIP1559')
+}
+
+export function isInjectedProvider(providerType: ProviderType) {
+    return [ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)
 }
 
 export function getChainDetailed(chainId = ChainId.Mainnet) {
@@ -93,7 +97,7 @@ export function getNetworkTypeFromChainId(chainId: ChainId) {
     const map: Record<NetworkType, string> = {
         [NetworkType.Ethereum]: 'ETH',
         [NetworkType.Binance]: 'BSC',
-        [NetworkType.Polygon]: 'Matic',
+        [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
     }

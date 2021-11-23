@@ -1,7 +1,7 @@
 import ss from '@dimensiondev/snapshot.js'
 import type { Proposal, Profile3Box, ProposalIdentifier, VoteSuccess, RawVote, Strategy } from '../../types'
 import Services from '../../../../extension/service'
-import { transform } from 'lodash-es'
+import { transform } from 'lodash-unified'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)
@@ -112,7 +112,7 @@ export async function getScores(
     strategies: Strategy[],
 ) {
     const provider = ss.utils.getProvider(network)
-    const blockTag = Number(snapshot) > blockNumber ? 'latest' : snapshot
+    const blockTag = Number(snapshot) > blockNumber ? 'latest' : Number(snapshot)
     const scores: { [key in string]: number }[] = await ss.utils.getScores(
         space,
         strategies,

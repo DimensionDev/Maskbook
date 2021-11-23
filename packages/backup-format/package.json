@@ -3,8 +3,8 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "type": "module",
   "dependencies": {
-    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@msgpack/msgpack": "^2.7.1"
   }
 }

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { PageFrame } from '../../components/DashboardFrame'
+import { PageFrame } from '../../components/PageFrame'
 import PluginItem from './components/PluginItem'
 import {
     FileServiceIcon,
@@ -20,7 +20,6 @@ import {
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
-import SwapSettingDialog from './components/SwapSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -68,13 +67,16 @@ export default function Plugins() {
 
     const account = useAccount()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
-    const openTransakDialog = useCallback((code?: string) => {
-        setBuyDialog({
-            open: true,
-            address: account,
-            code,
-        })
-    }, [])
+    const openTransakDialog = useCallback(
+        (code?: string) => {
+            setBuyDialog({
+                open: true,
+                address: account,
+                code,
+            })
+        },
+        [account],
+    )
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
@@ -102,8 +104,6 @@ export default function Plugins() {
     function onSetting(id: string) {
         if (id === PLUGIN_IDS.MARKET_TREND) {
             setOpenTrendSetting(true)
-        } else if (id === PLUGIN_IDS.SWAP) {
-            setOpenSwapSetting(true)
         }
     }
 
@@ -170,7 +170,6 @@ export default function Plugins() {
                             enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
                             onSwitch={onSwitch}
                             onExplore={onExplore}
-                            onSetting={onSetting}
                             icon={<SwapServiceIcon />}
                         />
                         <PluginItem
@@ -255,7 +254,6 @@ export default function Plugins() {
                 </Box>
             </ContentContainer>
 
-            <SwapSettingDialog open={openSwapSetting} onClose={() => setOpenSwapSetting(false)} />
             <MarketTrendSettingDialog open={openTrendSetting} onClose={() => setOpenTrendSetting(false)} />
         </PageFrame>
     )

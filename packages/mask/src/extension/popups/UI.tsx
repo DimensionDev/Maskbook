@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
-import { PopupRoutes } from '.'
+import { PopupRoutes } from '@masknet/shared-base'
 // eslint-disable-next-line import/no-deprecated
 import { useClassicMaskFullPageTheme } from '../../utils'
 import '../../social-network-adaptor/browser-action'

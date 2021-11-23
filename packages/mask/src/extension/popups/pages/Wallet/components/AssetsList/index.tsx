@@ -1,13 +1,13 @@
 import { memo, useCallback } from 'react'
-import type { Asset } from '@masknet/web3-shared-evm'
+import { useHistory } from 'react-router-dom'
+import { useContainer } from 'unstated-next'
+import { Asset, formatBalance } from '@masknet/web3-shared-evm'
+import { PopupRoutes } from '@masknet/shared-base'
 import { List, ListItem, ListItemText } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
-import { useContainer } from 'unstated-next'
 import { WalletContext } from '../../hooks/useWalletContext'
-import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../../index'
 
 const useStyles = makeStyles()({
     list: {
@@ -72,11 +72,12 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                         />
                         <ListItemText className={classes.text}>
                             <FormattedBalance
+                                classes={{ symbol: classes.symbol, balance: classes.balance }}
                                 value={asset.balance}
                                 decimals={asset.token.decimals}
                                 symbol={asset.token.symbol}
-                                classes={{ symbol: classes.symbol, balance: classes.balance }}
                                 significant={6}
+                                formatter={formatBalance}
                             />
                         </ListItemText>
                         <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />

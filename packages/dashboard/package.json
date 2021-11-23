@@ -10,15 +10,16 @@
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
-    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@hookform/resolvers": "^2.8.3",
     "@masknet/backup-format": "workspace:*",
     "@masknet/icons": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
+    "@masknet/plugin-flow": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",
     "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
@@ -36,7 +37,7 @@
     "json-stable-stringify": "^1.0.1",
     "lodash-es": "^4.17.21",
     "react-avatar-editor": "^12.0.0",
-    "react-hook-form": "^7.18.1",
+    "react-hook-form": "^7.19.5",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-use": "^17.3.1",
@@ -45,6 +46,7 @@
     "use-subscription": "^1.5.1",
     "uuid": "^8.3.2",
     "wallet.ts": "^1.0.1",
+    "web3-core-helpers": "1.5.2",
     "web3-utils": "^1.5.3",
     "zod": "^3.11.6"
   },
@@ -59,6 +61,6 @@
     "babel-loader": "^8.2.3",
     "buffer": "^6.0.3",
     "stream-browserify": "^3.0.0",
-    "webpack": "^5.61.0"
+    "webpack": "^5.64.1"
   }
 }

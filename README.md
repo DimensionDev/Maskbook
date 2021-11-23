@@ -1,5 +1,5 @@
 <a href="https://mask.io">
-  <img src="https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
+  <img src="https://raw.githubusercontent.com/DimensionDev/Maskbook-Website/master/img/MB--CircleCanvas--WhiteOverBlue.svg"
        width="200" height="200" title="([I:b])" alt="([I:b])">
 </a>
 
@@ -13,13 +13,11 @@
 [![FOSSA Status][badge-fossa]][fossa]
 [![Crowdin][badge-crowdin]][crowdin]
 
-Mask Network is a portal to the new, open internet.
+Mask Network is a portal to the new, open internet, that bridge Web3.0 to Web2.0 platforms.
 With Mask Network, you can send encrypted posts to your friends,
 participate in cryptocurrencies lucky-draws, and share encrypted files on the platforms you are already using.
 
 For general introductions, see [Mask.io](https://mask.io).
-
-/_I thought what I'd do was, I'd pretend I was one of those deaf-mutes._/
 
 [![FOSSA Status][fossa-status]][fossa]
 

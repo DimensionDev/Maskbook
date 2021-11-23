@@ -5,6 +5,7 @@
   "types": "./dist/index.d.ts",
   "sideEffect": false,
   "dependencies": {
+    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@mui/icons-material": "link:..\\empty",
     "@mui/lab": "link:..\\empty",
     "@mui/material": "link:..\\empty",
@@ -17,8 +18,8 @@
     "immer": "^9.0.6",
     "lodash-es": "^4.17.21",
     "react": "../empty",
-    "ts-results": "^3.3.0",
     "typeson": "^6.1.0",
-    "typeson-registry": "^1.0.0-alpha.38"
+    "typeson-registry": "^1.0.0-alpha.38",
+    "use-subscription": "^1.5.1"
   }
 }

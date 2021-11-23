@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import { first, last } from 'lodash-es'
+import { first, last } from 'lodash-unified'
 import { toHex } from 'web3-utils'
 import type { TransactionConfig } from 'web3-core'
 import { encodeText } from '@dimensiondev/kit'

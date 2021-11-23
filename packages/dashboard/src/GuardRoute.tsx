@@ -9,8 +9,7 @@ interface GuardRouteProps {
 }
 
 export default function NoPersonaGuardRoute(props: GuardRouteProps) {
-    const { currentPersona } = PersonaContext.useContainer()
     const { redirectTo, ...rest } = props
-
+    const { currentPersona } = PersonaContext.useContainer()
     return currentPersona ? <Navigate to={redirectTo ?? '/'} replace /> : <Route {...rest} />
 }

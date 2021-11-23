@@ -2,7 +2,7 @@ import { lazy, memo, Suspense } from 'react'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 
 import { PersonaContext } from './hooks/usePersonaContext'
-import { PopupRoutes } from '../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { Route, Switch } from 'react-router-dom'
 
 const Home = lazy(() => import('./Home'))

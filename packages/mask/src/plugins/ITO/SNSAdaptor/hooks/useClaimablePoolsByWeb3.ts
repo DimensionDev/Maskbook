@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { flatten } from 'lodash-es'
+import { flatten } from 'lodash-unified'
 import { sha3 } from 'web3-utils'
 import type { PastLogsOptions, Log } from 'web3-core'
 import {

@@ -28,7 +28,6 @@ export function ToolboxAtFacebook() {
     return (
         <ToolboxHintUnstyled
             iconSize={isSmall ? 24 : 32}
-            icon="colorful"
             Container={Container}
             ListItemButton={Item}
             Typography={Text}

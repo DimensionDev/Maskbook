@@ -2,7 +2,9 @@
 // packages/dashboard/src/initialization/plugins.ts
 
 import '@masknet/plugin-example'
+import '@masknet/plugin-flow'
 import '../plugins/Wallet'
+import '../plugins/EVM'
 import '../plugins/RedPacket'
 import '../plugins/ITO'
 import '../plugins/Snapshot'
@@ -23,6 +25,7 @@ import '../plugins/Furucombo'
 import '../plugins/MaskBox'
 import '../plugins/Profile'
 import '../plugins/Pets'
+import '../plugins/EVM'
 // import '../plugins/NFT'
 // import '../plugins/Airdrop'
 import '../plugins/RealityCards'

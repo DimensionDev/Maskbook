@@ -1,3 +1,5 @@
+import { first } from 'lodash-unified'
+import { EthereumAddress } from 'wallet.ts'
 import {
     ChainId,
     getChainIdFromNetworkType,
@@ -6,7 +8,6 @@ import {
     ProviderType,
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
-import { EthereumAddress } from 'wallet.ts'
 import {
     currentMaskWalletAccountSettings,
     currentAccountSettings,
@@ -16,9 +17,9 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
 } from '../settings'
-import { Flags, hasNativeAPI, nativeAPI } from '../../../utils'
-import { getWallets, hasWallet, updateWallet } from '.'
-import { first } from 'lodash-es'
+import { getWallets, hasWallet, updateWallet } from './wallet'
+import { hasNativeAPI, nativeAPI } from '../../../utils'
+import { Flags } from '../../../../shared'
 
 export async function updateAccount(
     options: {
@@ -75,9 +76,9 @@ export async function updateMaskAccount(options: { account?: string; chainId?: C
     if (!options.chainId && options.networkType) options.chainId = getChainIdFromNetworkType(options.networkType)
 
     const { account, chainId, networkType } = options
-
     if (chainId) currentMaskWalletChainIdSettings.value = chainId
     if (networkType) currentMaskWalletNetworkSettings.value = networkType
+    if (!account) currentMaskWalletAccountSettings.value = ''
     if (account && EthereumAddress.isValid(account)) currentMaskWalletAccountSettings.value = account
 }
 
@@ -96,6 +97,18 @@ export async function resetAccount(
     if (networkType) currentNetworkSettings.value = networkType
     if (providerType) currentProviderSettings.value = providerType
 }
+
+//#region select wallet with popups
+let callbackMemorized: (accounts: string[], chainId: ChainId) => void | undefined
+
+export async function selectAccountPrepare(callback: (accounts: string[], chainId: ChainId) => void) {
+    callbackMemorized = callback
+}
+
+export async function selectAccount(accounts: string[], chainId: ChainId) {
+    callbackMemorized?.(accounts, chainId)
+}
+//#endregion
 
 export async function setDefaultWallet() {
     if (currentAccountSettings.value) return

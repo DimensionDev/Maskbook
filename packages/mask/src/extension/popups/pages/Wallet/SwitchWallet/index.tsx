@@ -1,11 +1,18 @@
 import { memo, useCallback } from 'react'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
+import {
+    isSameAddress,
+    ProviderType,
+    useWallet,
+    useWallets,
+    useWalletPrimary,
+    formatEthereumAddress,
+} from '@masknet/web3-shared-evm'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'
@@ -132,7 +139,11 @@ const SwitchWallet = memo(() => {
                             <ListItemText className={classes.text}>
                                 <Typography className={classes.name}>{item.name}</Typography>
                                 <Typography className={classes.address}>
-                                    <FormattedAddress address={item.address} size={12} />
+                                    <FormattedAddress
+                                        address={item.address}
+                                        size={12}
+                                        formatter={formatEthereumAddress}
+                                    />
                                     <CopyIconButton className={classes.copy} text={item.address} />
                                 </Typography>
                             </ListItemText>

@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import { useClaimablePoolsByWeb3 } from './useClaimablePoolsByWeb3'
-import { unionBy } from 'lodash-es'
+import { unionBy } from 'lodash-unified'
 import {
     getChainDetailed,
     useAccount,

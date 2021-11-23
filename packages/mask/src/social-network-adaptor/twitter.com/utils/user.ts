@@ -1,4 +1,4 @@
-import { isNull } from 'lodash-es'
+import { isNull } from 'lodash-unified'
 import type { SocialNetwork } from '../../../social-network'
 import { bioDescriptionSelector, searchAvatarSelector, searchNickNameSelector } from './selector'
 import { collectNodeText } from '../../../utils'

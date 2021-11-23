@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
+import { formatBalance, NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
 import { FormattedBalance, TokenIcon, useMenu, useValueRef } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
@@ -45,7 +45,12 @@ const Transfer = memo(() => {
                         <Typography>{asset.token.symbol}</Typography>
                     </div>
                     <Typography>
-                        <FormattedBalance value={asset.balance} decimals={asset.token.decimals} significant={4} />
+                        <FormattedBalance
+                            value={asset.balance}
+                            decimals={asset.token.decimals}
+                            significant={4}
+                            formatter={formatBalance}
+                        />
                     </Typography>
                 </MenuItem>
             )

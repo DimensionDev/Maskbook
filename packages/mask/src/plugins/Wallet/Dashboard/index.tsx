@@ -12,7 +12,7 @@ import { ConnectWalletDialog } from '../SNSAdaptor/ConnectWalletDialog'
 import { useStartWatchChainState } from '../hooks/useStartWatchChainState'
 import { WalletRiskWarningDialog } from '../SNSAdaptor/RiskWarningDialog'
 import { GasSettingDialog } from '../SNSAdaptor/GasSettingDialog'
-import { ERC20TokenListDialog } from '../SNSAdaptor/RRC20TokenListDialog'
+import { ERC20TokenListDialog } from '../SNSAdaptor/ERC20TokenListDialog'
 import { TransactionSnackbar } from '../SNSAdaptor/TransactionSnackbar'
 import { RestoreLegacyWalletDialog } from '../SNSAdaptor/RestoreLegacyWalletDialog'
 
@@ -28,7 +28,7 @@ const dashboard: Plugin.Dashboard.Definition = {
                 <SelectProviderDialog />
                 <SelectTokenDialog />
                 <SelectNftContractDialog />
-                <WalletStatusDialog />
+                <WalletStatusDialog isDashboard />
                 <ConnectWalletDialog />
                 <WalletConnectQRCodeDialog />
                 <WalletRenameWalletDialog />
