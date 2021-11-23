@@ -5,7 +5,7 @@ import { useI18N } from '../../../utils'
 import { useState } from 'react'
 import { Card as RCCard, Market, MarketState } from '../types'
 import { CardDialog } from './CardDialog'
-import { formatBalance, formatPercentage, isSameAddress } from '@masknet/web3-shared-evm'
+import { formatBalance, formatEthereumAddress, formatPercentage, isSameAddress } from '@masknet/web3-shared-evm'
 import { useBaseToken } from '../hooks/useBaseToken'
 import BigNumber from 'bignumber.js'
 import { FormattedAddress } from '@masknet/shared'
@@ -96,7 +96,11 @@ export function CardView(props: CardViewProps) {
                             <Grid item container direction="column">
                                 <Grid item>
                                     <Typography variant="body1">
-                                        <FormattedAddress address={ownerAddress} size={4} />
+                                        <FormattedAddress
+                                            address={ownerAddress}
+                                            size={4}
+                                            formatter={formatEthereumAddress}
+                                        />
                                     </Typography>
                                 </Grid>
                             </Grid>
