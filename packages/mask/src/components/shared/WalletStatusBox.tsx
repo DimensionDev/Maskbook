@@ -129,7 +129,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
     }, [openSelectProviderDialog])
 
     return account ? (
-        <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
+        <section
+            className={
+                props.isDashboard ? `${classes.currentAccount} ${classes.dashboardBackground}` : classes.currentAccount
+            }>
             <WalletIcon
                 size={40}
                 badgeSize={18}
