@@ -1,5 +1,5 @@
 import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
-import { i18n } from '../utils/i18n-next'
+import { i18n } from '../../shared-ui/locales_legacy'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'

@@ -1,4 +1,4 @@
-import { applyMaskColorVars } from '@masknet/theme'
+import { applyMaskColorVars } from '../'
 import { Theme, useTheme } from '@mui/material'
 import { useLayoutEffect, useRef } from 'react'
 

@@ -65,6 +65,7 @@ jobs:
       - run: npm install --global pnpm
       - run: pnpm install
       - run: npx gulp codegen
+      - run: npx gulp polyfill
       - run: node --experimental-vm-modules ./node_modules/jest/bin/jest.js
   eslint:
     runs-on: ubuntu-20.04

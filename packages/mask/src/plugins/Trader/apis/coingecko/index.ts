@@ -1,5 +1,5 @@
 import { COIN_GECKO_BASE_URL } from '../../constants'
-import { Flags } from '../../../../utils/flags'
+import { Flags } from '../../../../../shared'
 
 //#region get currency
 export async function getAllCurrencies() {
