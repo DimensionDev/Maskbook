@@ -29,6 +29,7 @@
     { "path": "../utils-pure" },
     { "path": "../utils-ui" },
     { "path": "../background" },
-    { "path": "../shared" }
+    { "path": "../shared" },
+    { "path": "../shared-ui" }
   ]
 }

@@ -1,6 +1,7 @@
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { RelationFavor } from '@masknet/shared-base'
-import { BackupJSONFileLatest, i18n, UpgradeBackupJSONFile } from '../../../utils'
+import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils'
+import { i18n } from '../../../../shared-ui/locales_legacy'
 import {
     attachProfileDB,
     consistentPersonaDBWriteAccess,

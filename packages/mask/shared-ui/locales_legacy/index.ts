@@ -1,6 +1,7 @@
 import i18nNextInstance from 'i18next'
+import type { TOptions } from 'i18next'
+import type en from '../locales/en-US.json'
 import Detector from 'i18next-browser-languagedetector'
-import type { I18NFunction } from './i18n-next-ui'
 
 import { addMaskI18N } from '../locales'
 import { addSharedI18N, fallbackLng } from '@masknet/shared'
@@ -23,8 +24,16 @@ addSharedI18N(i18nNextInstance)
 addDashboardI18N(i18nNextInstance)
 
 export default i18nNextInstance
+
+// Deprecates. Prefer useMaskI18n()
 export const i18n = {
     t: ((key, options) => {
         return i18nNextInstance.t(key, options)
     }) as I18NFunction,
 }
+
+export type I18NFunction = <TKeys extends keyof typeof en>(
+    key: TKeys | TKeys[],
+    // defaultValue?: string,
+    options?: TOptions | string,
+) => typeof en[TKeys]
