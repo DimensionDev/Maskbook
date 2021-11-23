@@ -4,7 +4,7 @@ import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import {
     useAccount,
     useWeb3State,
@@ -30,6 +30,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         alignItems: 'center',
     },
+    dashboardBackground: {
+        background: theme.palette.background.default,
+    },
     accountInfo: {
         fontSize: 16,
         flexGrow: 1,
@@ -54,14 +57,13 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
     },
     link: {
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.primary,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
     },
     linkIcon: {
         marginRight: theme.spacing(1),
-        color: '#1C68F3',
     },
     networkIcon: {},
     providerIcon: {},
@@ -72,8 +74,10 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(2, 0),
     },
 }))
-
-export function WalletStatusBox() {
+interface WalletStatusBox {
+    isDashboard?: boolean
+}
+export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -125,7 +129,7 @@ export function WalletStatusBox() {
     }, [openSelectProviderDialog])
 
     return account ? (
-        <section className={classes.currentAccount}>
+        <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
                 size={40}
                 badgeSize={18}
