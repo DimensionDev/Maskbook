@@ -87,22 +87,6 @@ export default function Plugins() {
         setPluginStatus({ ...pluginStatus, [id]: checked })
     }
 
-    async function onTwitter(id: string) {
-        await Services.SocialNetwork.openSNSAndActivatePlugin('https://www.twitter.com/home', id)
-    }
-
-    async function onFacebook(id: string) {
-        await Services.SocialNetwork.openSNSAndActivatePlugin('https://www.facebook.com', id)
-    }
-
-    function onExplore(id: string) {
-        if (id === PLUGIN_IDS.TRANSAK) {
-            openTransakDialog()
-        } else if (id === PLUGIN_IDS.SWAP) {
-            openSwapDialog()
-        }
-    }
-
     function onSetting(id: string) {
         if (id === PLUGIN_IDS.MARKET_TREND) {
             setOpenTrendSetting(true)
@@ -148,8 +132,6 @@ export default function Plugins() {
                             desc={t.labs_file_service_desc()}
                             icon={<FileServiceIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.FILE_SERVICE]}
-                            onTwitter={onTwitter}
-                            onFacebook={onFacebook}
                             onSwitch={onSwitch}
                             onTutorial={onTutorial}
                         />
@@ -159,8 +141,6 @@ export default function Plugins() {
                             desc={t.labs_markets_desc()}
                             icon={<MarketsIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.MARKETS]}
-                            onTwitter={onTwitter}
-                            onFacebook={onFacebook}
                             onSwitch={onSwitch}
                             onTutorial={onTutorial}
                         />
@@ -170,8 +150,6 @@ export default function Plugins() {
                             desc={t.labs_red_packet_desc()}
                             icon={<RedPacketIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.RED_PACKET]}
-                            onTwitter={onTwitter}
-                            onFacebook={onFacebook}
                             onSwitch={onSwitch}
                             onTutorial={onTutorial}
                         />
@@ -183,7 +161,6 @@ export default function Plugins() {
                             desc={t.labs_swap_desc()}
                             enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
                             onSwitch={onSwitch}
-                            onExplore={onExplore}
                             onSetting={onSetting}
                             onTutorial={onTutorial}
                             icon={<SwapServiceIcon />}
@@ -194,7 +171,6 @@ export default function Plugins() {
                             desc={t.labs_transak_desc()}
                             icon={<TransakIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.TRANSAK]}
-                            onExplore={onExplore}
                             onSwitch={onSwitch}
                             onTutorial={onTutorial}
                         />
