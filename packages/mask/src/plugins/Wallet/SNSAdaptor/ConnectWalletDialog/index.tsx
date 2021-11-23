@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { DialogContent } from '@mui/material'
+import { Box, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { safeUnreachable } from '@dimensiondev/kit'
 import {
@@ -10,19 +10,40 @@ import {
     NetworkType,
     ProviderType,
     resolveNetworkName,
+    resolveProviderDownloadLink,
+    resolveProviderHostName,
     resolveProviderName,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
 import { useInjectedProviderType } from '../../../EVM/hooks'
+import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useI18N } from '../../../../utils'
+import { CramIcon } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(5),
+    },
+    message: {
+        marginTop: theme.spacing(2),
+        borderRadius: theme.spacing(1),
+        display: 'flex',
+        alignItems: 'center',
+        padding: theme.spacing(3),
+        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 95, 95, 0.1)' : 'rgba(255, 95, 95, 0.1)',
+        fontSize: 12,
+        color: 'rgba(255, 95, 95, 1)',
+        '&>:first-child': {
+            marginRight: theme.spacing(1),
+        },
+    },
+    link: {
+        color: 'rgba(255, 95, 95, 1)',
+        textDecoration: 'underline',
     },
 }))
 
@@ -31,6 +52,7 @@ export interface ConnectWalletDialogProps {}
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
     const injectedProviderType = useInjectedProviderType()
+    const { t } = useI18N()
 
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
@@ -161,6 +183,23 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             onClose={() => setConnectWalletDialog({ open: false, result: false })}>
             <DialogContent className={classes.content}>
                 <ConnectionProgress providerType={providerType} connection={connection} />
+                <Box className={classes.message}>
+                    <CramIcon />
+                    <Typography>
+                        {t('plugin_wallet_connect_message', {
+                            name: resolveProviderName(providerType),
+                        })}
+                        {` `}
+                        <Link
+                            href={resolveProviderDownloadLink(providerType)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={classes.link}>
+                            {resolveProviderHostName(providerType)}
+                        </Link>
+                        .
+                    </Typography>
+                </Box>
             </DialogContent>
         </InjectedDialog>
     )

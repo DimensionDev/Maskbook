@@ -216,6 +216,7 @@
     "plugin_wallet_token_unlock": "Exact Unlock",
     "plugin_wallet_token_infinite_unlock": "Infinite Unlock",
     "plugin_wallet_connect_dialog_title": "WalletConnect",
+    "plugin_wallet_connect_message": "Please make sure that your {{name}} wallet is provided by the offical",
     "plugin_wallet_connect_safari_metamask": "Connect to MetaMask",
     "plugin_wallet_connect_safari_rainbow": "Connect to Rainbow",
     "plugin_wallet_connect_safari_trust": "Connect to Trust",

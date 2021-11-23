@@ -38,6 +38,19 @@ export const resolveProviderDownloadLink = createLookupTableResolver<ProviderTyp
     '',
 )
 
+export const resolveProviderHostName = createLookupTableResolver<ProviderType, string>(
+    {
+        [ProviderType.MaskWallet]: 'mask.io',
+        [ProviderType.MetaMask]: 'metamask.io',
+        [ProviderType.WalletConnect]: '',
+        [ProviderType.Coin98]: 'coin98insights.com',
+        [ProviderType.WalletLink]: 'coinbase.com',
+        [ProviderType.MathWallet]: 'mathwallet.org',
+        [ProviderType.CustomNetwork]: '',
+    },
+    '',
+)
+
 export const resolveProviderIdentityKey = createLookupTableResolver<
     ProviderType,
     'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
