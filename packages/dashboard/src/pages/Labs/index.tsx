@@ -24,9 +24,10 @@ import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Services } from '../../API'
-import { PLUGIN_IDS } from './constants'
+import { PLUGIN_IDS, TUTORIAL_URLS_CN, TUTORIAL_URLS_EN } from './constants'
 import { useLocation } from 'react-router-dom'
 import { ContentContainer } from '../../components/ContentContainer'
+import { useLanguage } from '../Settings/api'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -63,6 +64,8 @@ export default function Plugins() {
         [PLUGIN_IDS.VALUABLES]: true,
         [PLUGIN_IDS.MARKET_TREND]: true,
     })
+
+    const language = useLanguage()
 
     const account = useAccount()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
@@ -108,6 +111,13 @@ export default function Plugins() {
         }
     }
 
+    function onTutorial(id: string) {
+        const url = language.includes('zh') ? TUTORIAL_URLS_CN[id] : TUTORIAL_URLS_EN[id]
+        if (url) {
+            window.open(url)
+        }
+    }
+
     useEffect(() => {
         Object.values(PLUGIN_IDS).forEach(async (id) => {
             const enabled = await Services.Settings.getPluginEnabled(id)
@@ -141,6 +151,7 @@ export default function Plugins() {
                             onTwitter={onTwitter}
                             onFacebook={onFacebook}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                         <PluginItem
                             id={PLUGIN_IDS.MARKETS}
@@ -151,6 +162,7 @@ export default function Plugins() {
                             onTwitter={onTwitter}
                             onFacebook={onFacebook}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                         <PluginItem
                             id={PLUGIN_IDS.RED_PACKET}
@@ -161,6 +173,7 @@ export default function Plugins() {
                             onTwitter={onTwitter}
                             onFacebook={onFacebook}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                     </Box>
                     <Box className={classes.list}>
@@ -172,6 +185,7 @@ export default function Plugins() {
                             onSwitch={onSwitch}
                             onExplore={onExplore}
                             onSetting={onSetting}
+                            onTutorial={onTutorial}
                             icon={<SwapServiceIcon />}
                         />
                         <PluginItem
@@ -182,6 +196,7 @@ export default function Plugins() {
                             enabled={pluginStatus[PLUGIN_IDS.TRANSAK]}
                             onExplore={onExplore}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                         <PluginItem
                             id={PLUGIN_IDS.PETS}
@@ -190,6 +205,7 @@ export default function Plugins() {
                             icon={<PetIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.PETS]}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                     </Box>
                     <Box className={classes.list}>
@@ -200,6 +216,7 @@ export default function Plugins() {
                             icon={<SnapshotIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.SNAPSHOT]}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                         <PluginItem
                             id={PLUGIN_IDS.MARKET_TREND}
@@ -209,6 +226,7 @@ export default function Plugins() {
                             enabled={pluginStatus[PLUGIN_IDS.MARKET_TREND]}
                             onSetting={onSetting}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                         <PluginItem
                             id={PLUGIN_IDS.COLLECTIBLES}
@@ -217,6 +235,7 @@ export default function Plugins() {
                             icon={<CollectiblesIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.COLLECTIBLES]}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                     </Box>
                     <Box className={classes.list}>
@@ -227,6 +246,7 @@ export default function Plugins() {
                             icon={<GitcoinIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.GITCOIN]}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                         <PluginItem
                             id={PLUGIN_IDS.VALUABLES}
@@ -235,6 +255,7 @@ export default function Plugins() {
                             icon={<ValuablesIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.VALUABLES]}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                         <PluginItem
                             id={PLUGIN_IDS.DHEDGE}
@@ -243,6 +264,7 @@ export default function Plugins() {
                             icon={<DhedgeIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.DHEDGE]}
                             onSwitch={onSwitch}
+                            onTutorial={onTutorial}
                         />
                     </Box>
                 </Box>
