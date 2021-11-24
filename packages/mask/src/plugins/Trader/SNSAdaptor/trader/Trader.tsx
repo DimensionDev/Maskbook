@@ -298,10 +298,24 @@ export function Trader(props: TraderProps) {
             } else {
                 if (network === NetworkType.Ethereum) {
                     const response = await WalletRPC.getEstimateGasFees(chainId)
-                    return formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()
+                    const maxFeePerGas = formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()
+                    const maxPriorityFeePerGas = formatGweiToWei(
+                        response?.medium.suggestedMaxPriorityFeePerGas ?? 0,
+                    ).toString()
+                    setGasConfig({
+                        maxFeePerGas,
+                        maxPriorityFeePerGas,
+                    })
+
+                    return maxFeePerGas
                 } else {
                     const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-                    return new BigNumber(response?.data.normal.price ?? 0).toString()
+                    const gasPrice = new BigNumber(response?.data.normal.price ?? 0).toString()
+                    setGasConfig({
+                        gasPrice,
+                    })
+
+                    return gasPrice
                 }
             }
         } catch {

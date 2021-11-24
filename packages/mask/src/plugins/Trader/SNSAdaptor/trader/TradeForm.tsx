@@ -275,7 +275,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 onFocusedTradeChange(bestTrade)
             }
         }, [bestTrade])
-        console.log(outputTokenBalance)
+
         return (
             <Box className={classes.root}>
                 <InputTokenPanel
