@@ -3,7 +3,8 @@
   "compilerOptions": {
     "rootDir": "./src",
     "outDir": "./dist/src/",
-    "tsBuildInfoFile": "./dist/src.tsbuildinfo"
+    "tsBuildInfoFile": "./dist/src.tsbuildinfo",
+    "typeRoots": ["./src/@types"]
   },
   "include": ["./src", "./src/**/*.json"],
   "references": [
