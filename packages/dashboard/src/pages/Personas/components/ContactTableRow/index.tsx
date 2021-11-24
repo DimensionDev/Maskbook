@@ -12,7 +12,7 @@ import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn } from 'react-use'
 import { LoadingButton } from '@mui/lab'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     favorite: {
         marginLeft: 16,
         marginRight: 26,
@@ -43,7 +43,12 @@ const useStyles = makeStyles()({
         fontSize: 12,
         color: MaskColorVar.normalText,
     },
-})
+    tableRow: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
+}))
 
 export interface ContactTableRowProps {
     contact: RelationProfile
@@ -105,7 +110,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
         const [first, last] = contact.name.split(' ')
 
         return (
-            <TableRow>
+            <TableRow className={classes.tableRow}>
                 <TableCell align="left" variant="body" sx={{ border: 'none', p: 1.5 }}>
                     <Box display="flex" alignItems="center">
                         <Typography>{index}</Typography>
