@@ -96,7 +96,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     }, [assetsError])
 
     const renderAssets =
-        !account || assetsError || assetsLoading
+        !account || assetsError || assetsLoading || searchedTokenLoading
             ? [...renderTokens]
                   .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))
