@@ -49,8 +49,8 @@ function FoundationDetails(props: Props) {
                     className={classes.accordionHeader}
                     sx={{ height: '44px' }}
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header">
+                    aria-controls="about-content"
+                    id="about-header">
                     <Typography>About</Typography>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionBody}>
@@ -68,8 +68,8 @@ function FoundationDetails(props: Props) {
                     className={classes.accordionHeader}
                     sx={{ height: '44px' }}
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2a-content"
-                    id="panel2a-header">
+                    aria-controls="chain-info-content"
+                    id="chain-info-header">
                     <Typography>Chain info</Typography>
                 </AccordionSummary>
                 <AccordionDetails className={classes.accordionBody}>
