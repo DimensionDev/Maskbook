@@ -147,6 +147,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                             loading={loading}
                             color="secondary"
                             size="small"
+                            variant="contained"
                             className={classes.button}
                             onClick={handleClickInvite}>
                             {t.personas_contacts_invite()}

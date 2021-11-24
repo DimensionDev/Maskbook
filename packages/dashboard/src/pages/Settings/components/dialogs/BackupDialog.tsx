@@ -148,7 +148,12 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                         />
                     ) : null}
 
-                    <LoadingButton fullWidth disabled={backupDisabled} onClick={handleBackup} loading={loading}>
+                    <LoadingButton
+                        fullWidth
+                        disabled={backupDisabled}
+                        onClick={handleBackup}
+                        loading={loading}
+                        variant="contained">
                         {t.settings_button_backup()}
                     </LoadingButton>
                 </Box>
