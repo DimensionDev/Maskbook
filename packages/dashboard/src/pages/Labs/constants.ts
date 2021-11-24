@@ -39,8 +39,12 @@ export const TUTORIAL_URLS_EN: TUTORIAL_URLS_OPT = {
         'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
     [PLUGIN_IDS.VALUABLES]:
         'https://realmasknetwork.notion.site/See-the-latest-offer-of-a-Tweet-NFT-by-Valuables-Plugin-27424923ee454a4a9b0ed16fc5cb93d0',
-    [PLUGIN_IDS.POLL]: '',
-    [PLUGIN_IDS.PETS]: '',
+    [PLUGIN_IDS.POOL_TOGETHER]:
+        'https://realmasknetwork.notion.site/Participate-in-lossless-lottery-via-PoolTogether-on-Twitter-ETH-and-Polygon-377597e14aff441ab645ecba5ea690f1',
+    [PLUGIN_IDS.PETS]: 'https://twitter.com/mintteamnft?s=21',
+    [PLUGIN_IDS.GOOD_GHOSTING]:
+        'https://realmasknetwork.notion.site/Cultivate-a-weekly-saving-habit-via-GoodGhosting-on-Twitter-Polygon-only-f94aa38b01404b9c99c7a03935840962',
+    [PLUGIN_IDS.MASK_BOX]: 'https://box-beta.mask.io/#/',
 }
 
 export const TUTORIAL_URLS_CN: TUTORIAL_URLS_OPT = {
