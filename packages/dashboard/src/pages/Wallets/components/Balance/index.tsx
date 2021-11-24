@@ -9,18 +9,6 @@ import { useDashboardI18N } from '../../../../locales'
 import { RoutePaths } from '../../../../type'
 import { NetworkPluginID } from '@masknet/plugin-infra'
 
-export interface BalanceCardProps {
-    balance: number
-    onSend(): void
-    onBuy(): void
-    onSwap(): void
-    onReceive(): void
-    networks: Web3Plugin.NetworkDescriptor[]
-    selectedNetwork: Web3Plugin.NetworkDescriptor | null
-    pluginId: Web3Plugin.NetworkDescriptor['networkSupporterPluginID'] | null
-    onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
-}
-
 const BalanceContainer = styled('div')(
     ({ theme }) => `
     display: flex;
@@ -80,6 +68,18 @@ const ButtonGroup = styled('div')`
     }
 `
 
+export interface BalanceCardProps {
+    balance: number
+    onSend(): void
+    onBuy(): void
+    onSwap(): void
+    onReceive(): void
+    networks: Web3Plugin.NetworkDescriptor[]
+    selectedNetwork: Web3Plugin.NetworkDescriptor | null
+    pluginId: Web3Plugin.NetworkDescriptor['networkSupporterPluginID'] | null
+    onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
+}
+
 export const Balance = memo<BalanceCardProps>(
     ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork, pluginId }) => {
         const t = useDashboardI18N()
@@ -119,7 +119,9 @@ export const Balance = memo<BalanceCardProps>(
                             disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
                             selectedNetwork={selectedNetwork}
                             networks={renderNetworks}
-                            onSelect={onSelectNetwork}
+                            onSelect={(network: Web3Plugin.NetworkDescriptor | null) =>
+                                renderNetworks.length <= 1 ? () => {} : onSelectNetwork(network)
+                            }
                         />
                     </BalanceDisplayContainer>
                 </Box>

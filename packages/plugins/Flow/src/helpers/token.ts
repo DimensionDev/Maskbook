@@ -1,4 +1,4 @@
-import { TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import type { ChainId } from '@masknet/web3-shared-flow'
 
 export function createFungibleToken(
@@ -22,6 +22,7 @@ export function createFungibleToken(
 export function createFungibleAsset(
     token: Web3Plugin.FungibleToken,
     balance: string,
+    value?: { [key in CurrencyType]?: string },
     logoURI?: string,
 ): Web3Plugin.Asset {
     return {
@@ -30,5 +31,6 @@ export function createFungibleAsset(
         balance,
         token,
         logoURI,
+        value,
     }
 }

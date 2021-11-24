@@ -3,11 +3,11 @@ import {
     createContract,
     createNativeToken,
     CurrencyType,
-    EthereumTokenType,
     formatBalance,
     formatEthereumAddress,
     getEthereumConstants,
     getTokenConstants,
+    isSameAddress,
     PortfolioProvider,
     Web3ProviderType,
 } from '@masknet/web3-shared-evm'
@@ -16,14 +16,17 @@ import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { AbiItem } from 'web3-utils'
 import { uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
+import { Pagination, TokenType } from '@masknet/plugin-infra'
 
 const getTokenUSDValue = (token: Web3Plugin.Asset) =>
     token.value ? Number.parseFloat(token.value?.[CurrencyType.USD] ?? '') : 0
 const getBalanceValue = (asset: Web3Plugin.Asset<Web3Plugin.FungibleToken>) =>
     parseFloat(formatBalance(asset.balance, asset.token.decimals))
 
-const getTokenChainIdValue = (asset: Web3Plugin.Asset) =>
-    (asset.token as any).type === EthereumTokenType.Native ? 1 / asset.token.chainId : 0
+const getTokenChainIdValue = (asset: Web3Plugin.Asset) => {
+    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
+    return isSameAddress(asset.token.id, NATIVE_TOKEN_ADDRESS) ? 1 / asset.token.chainId : 0
+}
 
 const makeSortAssertWithoutChainFn = () => {
     return (a: Web3Plugin.Asset<Web3Plugin.FungibleToken>, b: Web3Plugin.Asset<Web3Plugin.FungibleToken>) => {
@@ -48,7 +51,8 @@ const makeSortAssertWithoutChainFn = () => {
 }
 
 export const getFungibleAssetsFn =
-    (context: Web3ProviderType) => async (address: string, providerType: string, networkType: string) => {
+    (context: Web3ProviderType) =>
+    async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
         const chainId = context.chainId.getCurrentValue()
         const provider = context.provider.getCurrentValue()
         const networks = PLUGIN_NETWORKS
@@ -66,6 +70,7 @@ export const getFungibleAssetsFn =
             logoURI: x.logoURI,
             token: {
                 ...x.token,
+                type: TokenType.Fungible,
                 name: x.token.name!,
                 symbol: x.token.symbol!,
                 id: x.token.address,
@@ -88,12 +93,12 @@ export const getFungibleAssetsFn =
 
         const assetFromChain = balanceList.map(
             (balance, idx): Web3Plugin.Asset<Web3Plugin.FungibleToken> => ({
-                // token id?
                 id: trustedTokens[idx].address,
                 chainId: chainId,
                 token: {
                     ...trustedTokens[idx],
                     id: trustedTokens[idx].address,
+                    type: TokenType.Fungible,
                     name: trustedTokens[idx].name!,
                     symbol: trustedTokens[idx].symbol!,
                 },
@@ -103,20 +108,18 @@ export const getFungibleAssetsFn =
 
         const allTokens = [...assetsFromProvider, ...assetFromChain]
 
-        // TODO: remove type ignore
         const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
             .filter(
                 (t) =>
                     t.isMainnet &&
                     !allTokens.find(
-                        // @ts-ignore
-                        (x) => x.token.chainId === t.chainId && x.token.type === EthereumTokenType.Native,
+                        (x) => x.token.chainId === t.chainId && isSameAddress(x.token.id, NATIVE_TOKEN_ADDRESS),
                     ),
             )
             .map((x) => ({
                 id: NATIVE_TOKEN_ADDRESS!,
                 chainId: x.chainId,
-                token: { ...createNativeToken(x.chainId), id: NATIVE_TOKEN_ADDRESS! },
+                token: { ...createNativeToken(x.chainId), id: NATIVE_TOKEN_ADDRESS!, type: TokenType.Fungible },
                 balance: '0',
             }))
 

@@ -163,9 +163,11 @@ export function Navigation({ onClose }: NavigationProps) {
                             <ListSubTextItem inset primary={t.wallets_transfer()} />
                         </ListItemLink>
                     )}
-                    <ListItemLink to={RoutePaths.WalletsHistory}>
-                        <ListSubTextItem inset primary={t.wallets_history()} />
-                    </ListItemLink>
+                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                        <ListItemLink to={RoutePaths.WalletsHistory}>
+                            <ListSubTextItem inset primary={t.wallets_history()} />
+                        </ListItemLink>
+                    )}
                 </List>
             </Collapse>
             <ListItemLink to={RoutePaths.Labs}>

@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js'
-import type { Pagination, Web3Plugin } from '@masknet/plugin-infra'
+import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra'
 import { ChainId, createClient, getTokenConstants } from '@masknet/web3-shared-flow'
+import { getTokenPrice } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
 
 async function getTokenBalance(
@@ -20,8 +21,9 @@ async function getTokenBalance(
     },
 ) {
     const sdk = createClient(chainId)
-    const balance = await sdk.query({
-        cadence: `
+    try {
+        const balance = await sdk.query({
+            cadence: `
             import FungibleToken from ${fungibleTokenAddress}
             import ${exportKey} from ${tokenAddress}
 
@@ -35,16 +37,20 @@ async function getTokenBalance(
                 return vaultRef.balance
             }
         `,
-        args: (arg, t) => [arg(account, t.Address)],
-    })
-    return new BigNumber(balance)
-        .multipliedBy(10 ** decimals)
-        .integerValue()
-        .toFixed()
+            args: (arg, t) => [arg(account, t.Address)],
+        })
+        return new BigNumber(balance)
+            .multipliedBy(10 ** decimals)
+            .integerValue()
+            .toFixed()
+    } catch {
+        return '0'
+    }
 }
 
 async function getAssetFUSD(chainId: ChainId, account: string) {
     const { FUSD_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
+    const value = await getTokenPrice('usd-coin', CurrencyType.USD)
 
     return createFungibleAsset(
         createFungibleToken(chainId, FUSD_ADDRESS, 'Flow USD', 'FUSD', 8),
@@ -54,27 +60,31 @@ async function getAssetFUSD(chainId: ChainId, account: string) {
             exportKey: 'FUSD',
             storageKey: 'fusdBalance',
         }),
+        value,
         new URL('../assets/FUSD.png', import.meta.url).toString(),
     )
 }
 
 async function getAssetFLOW(chainId: ChainId, account: string) {
     const { FLOW_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
+    const value = await getTokenPrice('flow', CurrencyType.USD)
 
     return createFungibleAsset(
-        createFungibleToken(chainId, FLOW_ADDRESS, 'Flow USD', 'FUSD', 8),
+        createFungibleToken(chainId, FLOW_ADDRESS, 'Flow', 'Flow', 8),
         await getTokenBalance(chainId, account, 8, {
             fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
             tokenAddress: FLOW_ADDRESS,
             exportKey: 'FlowToken',
             storageKey: 'flowTokenBalance',
         }),
+        value,
         new URL('../assets/flow.png', import.meta.url).toString(),
     )
 }
 
 async function getAssetTether(chainId: ChainId, account: string) {
     const { TETHER_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
+    const value = await getTokenPrice('tether', CurrencyType.USD)
 
     return createFungibleAsset(
         createFungibleToken(chainId, TETHER_ADDRESS, 'Tether USD', 'tUSD', 8),
@@ -84,6 +94,7 @@ async function getAssetTether(chainId: ChainId, account: string) {
             exportKey: 'TeleportedTetherToken',
             storageKey: 'teleportedTetherTokenBalance',
         }),
+        value,
         new URL('../assets/tUSD.png', import.meta.url).toString(),
     )
 }
@@ -93,12 +104,14 @@ export async function getFungibleAssets(
     provider: string,
     network: Web3Plugin.NetworkDescriptor,
     pagination?: Pagination,
-): Promise<Web3Plugin.Asset[]> {
+): Promise<Web3Plugin.Asset<Web3Plugin.FungibleToken>[]> {
     const allSettled = await Promise.allSettled([
-        getAssetFUSD(network.chainId, address),
         getAssetFLOW(network.chainId, address),
+        getAssetFUSD(network.chainId, address),
         getAssetTether(network.chainId, address),
     ])
 
-    return allSettled.map((x) => (x.status === 'fulfilled' ? x.value : null)).filter(Boolean) as Web3Plugin.Asset[]
+    return allSettled
+        .map((x) => (x.status === 'fulfilled' ? x.value : null))
+        .filter(Boolean) as Web3Plugin.Asset<Web3Plugin.FungibleToken>[]
 }

@@ -8,7 +8,6 @@ import {
     isSameAddress,
     isValidAddress,
     NetworkType,
-    PortfolioProvider,
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveChainColor,
@@ -23,6 +22,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import Ens from 'ethjs-ens'
 import { getStorage } from '../../storage'
+import { getFungibleAssetsFn } from './getFungibleAssetsFn'
 
 const ZERO_X_ERROR_ADDRESS = '0x'
 

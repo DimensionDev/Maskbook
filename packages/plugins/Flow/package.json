@@ -11,6 +11,7 @@
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-flow": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
     "bignumber.js": "^9.0.1",
     "lodash-es": "^4.17.21",
     "react-use": "^17.3.1"
