@@ -312,7 +312,7 @@ export async function createOrUpdatePersonaDB(
     t: PersonasTransaction<'readwrite'>,
 ) {
     const personaInDB = await t.objectStore('personas').get(record.identifier.toText())
-    if (howToMerge.protectPrivateKey && personaInDB?.hasPrivateKey) return
+    if (howToMerge.protectPrivateKey && !!personaInDB?.privateKey) return
     if (personaInDB) return updatePersonaDB(record, howToMerge, t)
     else
         return createPersonaDB(
