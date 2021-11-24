@@ -4,8 +4,12 @@ import { useAsync } from 'react-use'
 import type { TradeComputed } from '../types'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { TradeStrategy } from '../types'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
-export function useNativeTradeGasLimit(trade: TradeComputed<NativeTokenWrapper> | null, chainId?: ChainId) {
+export function useNativeTradeGasLimit(
+    trade: TradeComputed<NativeTokenWrapper> | null,
+    chainId?: ChainId,
+): AsyncState<number> {
     const account = useAccount()
     const wrapperContract = useNativeTokenWrapperContract(chainId)
 

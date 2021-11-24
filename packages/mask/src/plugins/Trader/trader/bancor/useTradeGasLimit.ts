@@ -5,8 +5,9 @@ import { useMemo } from 'react'
 import { useAsync } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { pick } from 'lodash-unified'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
-export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null) {
+export function useTradeGasLimit(tradeComputed: TradeComputed<SwapBancorRequest> | null): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
     const account = useAccount()
     const web3 = useWeb3(false, targetChainId)

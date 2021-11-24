@@ -1,5 +1,6 @@
 import type { SwapResponse, TradeComputed } from '../../types'
 import { useAsync } from 'react-use'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 import { TradeStrategy } from '../../types'
 import { EthereumTokenType, useAccount, useTraderConstants } from '@masknet/web3-shared-evm'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
@@ -8,7 +9,7 @@ import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import { useTradeAmount } from './useTradeAmount'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 
-export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null) {
+export function useTradeGasLimit(trade: TradeComputed<SwapResponse> | null): AsyncState<number> {
     const account = useAccount()
     const { targetChainId } = TargetChainIdContext.useContainer()
     const exchangeProxyContract = useExchangeProxyContract(targetChainId)

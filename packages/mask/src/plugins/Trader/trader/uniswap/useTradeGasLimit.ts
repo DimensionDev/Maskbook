@@ -6,8 +6,9 @@ import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { swapErrorToUserReadableMessage } from '../../helpers'
+import type { AsyncState } from 'react-use/lib/useAsyncFn'
 
-export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider) {
+export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider): AsyncState<number> {
     const { targetChainId } = TargetChainIdContext.useContainer()
     const web3 = useWeb3(false, targetChainId)
     const account = useAccount()
