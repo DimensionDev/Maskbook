@@ -93,14 +93,14 @@ function Content() {
             }>
             <List className={classes.list}>
                 {votes.map((v) => {
+                    const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
                         v.totalWeight && v.choices
                             ? v.choices.reduce((acc, choice, i) => {
                                   return (
                                       acc +
                                       (i === 0 ? '' : ', ') +
-                                      formatPercentage(choice.weight / v.totalWeight!) +
-                                      ' ' +
+                                      (!isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '') +
                                       choice.name
                                   )
                               }, '')
