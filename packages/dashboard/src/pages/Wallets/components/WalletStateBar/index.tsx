@@ -49,14 +49,10 @@ export const WalletStateBar = memo(() => {
         PluginMessages.Wallet.events.walletStatusDialogUpdated,
     )
 
-    const { openDialog: openConnectWalletDialog } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectProviderDialogUpdated,
-    )
-
     const [menu, openMenu] = useNetworkSelector()
 
     if (!wallet) {
-        return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
+        return <Button onClick={openWalletStatusDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
     return (
         <WalletStateBarUI
