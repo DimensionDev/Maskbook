@@ -13,10 +13,10 @@ import {
     useAssetsByTokenList,
     useChainId,
     useERC20TokenDetailed,
-    useERC20Tokens,
     useERC20TokensDetailedFromTokenLists,
     useEthereumConstants,
     useNativeTokenDetailed,
+    useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
 import { MaskFixedSizeListProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
@@ -43,7 +43,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const t = useSharedI18N()
     const account = useAccount()
     const chainId = useChainId()
-    const trustedERC20Tokens = useERC20Tokens()
+    const trustedERC20Tokens = useTrustedERC20Tokens()
     const { value: nativeToken } = useNativeTokenDetailed()
     const [keyword, setKeyword] = useState('')
 
@@ -106,8 +106,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
 
     const getPlaceHolder = () => {
         if (erc20TokensDetailedLoading) return <Placeholder message="Loading token lists..." />
-        if (searchedTokenLoading) return <Placeholder message="Loading token..." />
-        // if (assetsLoading) return <Placeholder message="Loading token assets..." />
+        if (searchedTokenLoading || searchedTokenLoading) return <Placeholder message="Loading token..." />
         if (!renderAssets.length) return <Placeholder message="No token found" />
         return null
     }

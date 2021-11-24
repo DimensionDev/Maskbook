@@ -7,6 +7,7 @@ import {
     FungibleTokenDetailed,
     isSameAddress,
     useAddERC20TokenCallback,
+    useTrustERC20TokenCallback,
 } from '@masknet/web3-shared-evm'
 import { TokenIcon } from '../TokenIcon'
 import type { MaskSearchableListItemProps } from '@masknet/theme'
@@ -78,6 +79,7 @@ export const getERC20TokenListItem =
         const t = useSharedI18N()
         const { classes } = useStyles()
         const [, addERC20Token] = useAddERC20TokenCallback()
+        const [, trustERC20Token] = useTrustERC20TokenCallback()
         const token = data.token
 
         if (!token) return null
@@ -90,6 +92,7 @@ export const getERC20TokenListItem =
                 event.stopPropagation()
                 if (!token || !account) return
                 await addERC20Token(token as ERC20TokenDetailed)
+                await trustERC20Token(account, token as ERC20TokenDetailed)
             },
             [token, account],
         )
