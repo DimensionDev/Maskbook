@@ -70,7 +70,7 @@ async function getAssetFLOW(chainId: ChainId, account: string) {
     const value = await getTokenPrice('flow', CurrencyType.USD)
 
     return createFungibleAsset(
-        createFungibleToken(chainId, FLOW_ADDRESS, 'Flow', 'Flow', 8),
+        createFungibleToken(chainId, FLOW_ADDRESS, 'Flow', 'FLOW', 8),
         await getTokenBalance(chainId, account, 8, {
             fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
             tokenAddress: FLOW_ADDRESS,

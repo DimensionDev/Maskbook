@@ -130,4 +130,3 @@ function Wallets() {
 export default function () {
     return <Wallets />
 }
-export { getTokenUSDValue } from './utils/getTokenUSDValue'
