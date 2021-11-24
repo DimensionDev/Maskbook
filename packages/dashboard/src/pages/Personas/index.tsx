@@ -83,7 +83,7 @@ function Personas() {
                 <Paper variant="rounded" className={classes.personaCard}>
                     <PersonaRowCard />
                 </Paper>
-                <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <ContentContainer style={{ display: 'flex', flexDirection: 'column' }}>
                     <TabContext value={activeTab}>
                         <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                             {definedSocialNetworks.map(({ networkIdentifier }) => (

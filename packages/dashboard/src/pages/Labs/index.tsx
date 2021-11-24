@@ -19,7 +19,6 @@ import {
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
-import SwapSettingDialog from './components/SwapSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -254,7 +253,6 @@ export default function Plugins() {
                 </Box>
             </ContentContainer>
 
-            <SwapSettingDialog open={openSwapSetting} onClose={() => setOpenSwapSetting(false)} />
             <MarketTrendSettingDialog open={openTrendSetting} onClose={() => setOpenTrendSetting(false)} />
             <TutorialDialog open={openSetupTutorial} onClose={onTutorialDialogClose} />
         </PageFrame>
