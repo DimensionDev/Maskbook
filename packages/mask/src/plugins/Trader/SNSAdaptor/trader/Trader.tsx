@@ -41,6 +41,7 @@ import { NetworkType } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { Link, Typography } from '@mui/material'
+import { ExternalLink } from 'react-feather'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -344,17 +345,17 @@ export function Trader(props: TraderProps) {
                     showSnackbar(t('plugin_trader_swap_token'), {
                         variant: 'success',
                         message: (
-                            <Typography>
+                            <Typography display="flex" alignItems="center">
                                 {t('plugin_trader_price_pairs', {
                                     input: formatBalance(inputAmount, inputToken?.decimals, 4),
                                     output: formatBalance(outputAmount, outputToken?.decimals, 4),
                                 })}
                                 <Link
-                                    className={classes.link}
+                                    style={{ color: 'inherit', height: 20 }}
                                     href={resolveTransactionLinkOnExplorer(chainId, tradeState.hash)}
                                     target="_blank"
                                     rel="noopener noreferrer">
-                                    {t('plugin_wallet_view_on_explorer')}
+                                    <ExternalLink size={12} />
                                 </Link>
                             </Typography>
                         ),

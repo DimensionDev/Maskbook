@@ -175,6 +175,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         <Typography>
                             {priceReversed ? (
                                 <span>
+                                    <span>1 {outputToken.symbol}</span>
+                                    {' = '}
                                     <strong className={classes.emphasis}>
                                         {formatBalance(
                                             inputAmount
@@ -187,11 +189,11 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                         )}
                                     </strong>
                                     {inputToken.symbol}
-                                    {' = '}
-                                    <span>1 {outputToken.symbol}</span>
                                 </span>
                             ) : (
                                 <span>
+                                    <span>1 {inputToken.symbol}</span>
+                                    {' = '}
                                     <strong className={classes.emphasis}>
                                         {formatBalance(
                                             outputAmount
@@ -204,8 +206,6 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                         )}
                                     </strong>
                                     {outputToken.symbol}
-                                    {' = '}
-                                    <span>1 {inputToken.symbol}</span>
                                 </span>
                             )}
                             <RetweetIcon
