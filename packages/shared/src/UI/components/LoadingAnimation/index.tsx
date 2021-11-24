@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import type { SvgIconProps } from '@mui/material'
 import classNames from 'classnames'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()({
     animated: {
         '@keyframes loadingAnimation': {
             '0%': {
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
         },
         animation: `loadingAnimation 1.6s linear infinite`,
     },
-}))
+})
 
 export const LoadingAnimation = (props: SvgIconProps) => {
     const { classes } = useStyles()

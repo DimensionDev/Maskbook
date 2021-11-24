@@ -97,7 +97,7 @@ export interface ContactTableRowUIProps {
     theme: 'light' | 'dark'
 }
 
-const SPACE_CODEPOINT = ' '.codePointAt(0)!
+const SPACE_POINT = ' '.codePointAt(0)!
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
     ({ contact, index, handleClickStar, handleClickInvite, theme, loading }) => {
         const t = useDashboardI18N()
@@ -130,8 +130,8 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                     height: 48,
                                 }}>
                                 {/* To support emoji */}
-                                {String.fromCodePoint(first.codePointAt(0) || SPACE_CODEPOINT)}
-                                {String.fromCodePoint((last || '').codePointAt(0) || SPACE_CODEPOINT)}
+                                {String.fromCodePoint(first.codePointAt(0) || SPACE_POINT)}
+                                {String.fromCodePoint((last || '').codePointAt(0) || SPACE_POINT)}
                             </Avatar>
                             {contact.fingerprint ? <MaskBlueIcon className={classes.maskIcon} /> : null}
                         </Box>
