@@ -29,7 +29,6 @@ const useStyles = makeStyles()(() => ({}))
 
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
     chainId: ChainId
-    noChainIcon?: boolean
     noSwitchNetworkTip?: boolean
     disablePadding?: boolean
     switchButtonStyle?: SxProps<Theme>
@@ -45,7 +44,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const allowTestnet = useAllowTestnet()
     const providerType = useValueRef(currentProviderSettings)
 
-    const { noSwitchNetworkTip = false, noChainIcon = true } = props
+    const { noSwitchNetworkTip = false } = props
     const classes = useStylesExtends(useStyles(), props)
     const expectedChainId = props.chainId
     const expectedNetwork = expectedChainId === ChainId.BSC ? 'BSC' : getChainName(expectedChainId)
@@ -115,8 +114,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     variant="contained"
                     size="small"
                     sx={{ marginTop: 1.5 }}
-                    onClick={openSelectProviderDialog}
-                    {...props.ActionButtonPromiseProps}>
+                    onClick={openSelectProviderDialog}>
                     {t('plugin_wallet_connect_wallet')}
                 </ActionButton>
             </Box>
@@ -159,44 +157,18 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                     init={
-                        noChainIcon ? (
-                            t('plugin_wallet_switch_network', {
+                        <span style={{ color: '#fff' }}>
+                            {t('plugin_wallet_switch_network', {
                                 network: expectedNetwork,
-                            })
-                        ) : (
-                            <Box display="flex" justifyContent="center" alignItems="center">
-                                {t('plugin_wallet_switch_network', {
-                                    network: expectedNetwork,
-                                })}
-                            </Box>
-                        )
+                            })}
+                        </span>
                     }
-                    waiting={
-                        noChainIcon ? (
-                            t('plugin_wallet_switch_network_under_going', {
-                                network: expectedNetwork,
-                            })
-                        ) : (
-                            <Box display="flex" justifyContent="center" alignItems="center">
-                                {t('plugin_wallet_switch_network_under_going', {
-                                    network: expectedNetwork,
-                                })}
-                            </Box>
-                        )
-                    }
-                    complete={
-                        noChainIcon ? (
-                            t('plugin_wallet_switch_network', {
-                                network: expectedNetwork,
-                            })
-                        ) : (
-                            <Box display="flex" justifyContent="center" alignItems="center">
-                                {t('plugin_wallet_switch_network', {
-                                    network: expectedNetwork,
-                                })}
-                            </Box>
-                        )
-                    }
+                    waiting={t('plugin_wallet_switch_network_under_going', {
+                        network: expectedNetwork,
+                    })}
+                    complete={t('plugin_wallet_switch_network', {
+                        network: expectedNetwork,
+                    })}
                     failed={t('retry')}
                     executor={onSwitch}
                     completeOnClick={onSwitch}
