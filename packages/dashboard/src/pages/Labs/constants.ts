@@ -5,13 +5,15 @@ export const PLUGIN_IDS = {
     RED_PACKET: 'com.maskbook.red_packet',
     TRANSAK: 'com.maskbook.transak',
     COLLECTIBLES: 'com.maskbook.collectibles',
-    SWAP: '',
+    SWAP: 'com.maskbook.trader',
     SNAPSHOT: 'org.snapshot',
     MARKETS: 'com.maskbook.ito',
     VALUABLES: 'com.maskbook.tweet',
-    MARKET_TREND: 'com.maskbook.trader',
     POLL: 'com.maskbook.poll',
     PETS: 'com.maskbook.pets',
+    MASK_BOX: 'com.maskbook.box',
+    POOL_TOGETHER: 'com.pooltogether',
+    GOOD_GHOSTING: 'co.good_ghosting',
 }
 
 type TUTORIAL_URLS_OPT = {
@@ -37,8 +39,6 @@ export const TUTORIAL_URLS_EN: TUTORIAL_URLS_OPT = {
         'https://realmasknetwork.notion.site/Launch-an-ITO-Initial-Twitter-Offering-Support-ETH-BSC-Polygon-Arbitrum-d84c60903f974f4880d2085a13906d55',
     [PLUGIN_IDS.VALUABLES]:
         'https://realmasknetwork.notion.site/See-the-latest-offer-of-a-Tweet-NFT-by-Valuables-Plugin-27424923ee454a4a9b0ed16fc5cb93d0',
-    [PLUGIN_IDS.MARKET_TREND]:
-        'https://realmasknetwork.notion.site/Check-crypto-info-on-Twitter-Support-CoinGecko-CoinMarketCap-307619336f704ff78063550c7b37a1f6',
     [PLUGIN_IDS.POLL]: '',
     [PLUGIN_IDS.PETS]: '',
 }
@@ -59,8 +59,6 @@ export const TUTORIAL_URLS_CN: TUTORIAL_URLS_OPT = {
     [PLUGIN_IDS.SNAPSHOT]: 'https://realmaskbook.notion.site/Snapshot-639b65028903421a96060e7e47598313',
     [PLUGIN_IDS.MARKETS]: 'https://realmaskbook.notion.site/ITO-ETH-BSC-Polygon-f6ec4ed424fe4884a53e254234a14f8e',
     [PLUGIN_IDS.VALUABLES]: 'https://realmaskbook.notion.site/Mask-Valuables-NFT-fb0654509984448295e71aab90221d2c',
-    [PLUGIN_IDS.MARKET_TREND]:
-        'https://realmaskbook.notion.site/CoinGecko-CoinMarketCap-Uniswap-Info-8a383551e90b4cf99ca195f3ea7bb343',
     [PLUGIN_IDS.POLL]: '',
     [PLUGIN_IDS.PETS]: '',
 }

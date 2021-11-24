@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         background: MaskColorVar.secondaryBackground,
         borderRadius: 16,
-        width: 355,
+        minWidth: 355,
         minHeight: 158,
         margin: theme.spacing(1),
         display: 'flex',
