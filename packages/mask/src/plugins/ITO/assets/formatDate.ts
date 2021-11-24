@@ -1,4 +1,4 @@
-import i18nNextInstance from '../../../utils/i18n-next'
+import i18nNextInstance from '../../../../shared-ui/locales_legacy'
 
 export const dateTimeFormat = (date: Date, includeTime = true) =>
     new Intl.DateTimeFormat(i18nNextInstance.language, {

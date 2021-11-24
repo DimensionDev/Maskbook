@@ -1,3 +1,4 @@
+import './gun.patch'
 import 'gun/sea'
 import 'gun/lib/radix'
 import 'gun/lib/radisk'

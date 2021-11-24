@@ -1,5 +1,16 @@
 {
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
+    "ignorePaths": [
+        "patches/**",
+        "*generated*",
+        "**/dist/**",
+        "**/*.json",
+        "**/node_modules/**",
+        "pnpm-lock.yaml",
+        ".prettierignore",
+        ".github",
+        "*.snap"
+    ],
     "words": [
         "AMPL",
         "Adai",
@@ -223,6 +234,7 @@
         "jailbroken",
         "misoperation",
         "majeure",
+        "Serializers",
         "Swither",
         "nftscan",
         "apikey",
@@ -320,18 +332,6 @@
         "FUSD"
     ],
     "ignoreRegExpList": ["/@servie/"],
-    "ignorePaths": [
-        "**/__tests__/**",
-        "patches/**",
-        "*generated*",
-        "**/dist/**",
-        "**/*.json",
-        "**/node_modules/**",
-        "pnpm-lock.yaml",
-        "tsconfig.tsbuildinfo",
-        ".prettierignore",
-        ".github"
-    ],
     "overrides": [
         {
             "filename": "web3-contracts/types/GoodGhostingIncentives.d.ts",

@@ -9,7 +9,7 @@ import { getNetworkWorker } from '../../../social-network/worker'
 import { createPostDB, PostRecord } from '../../../database/post'
 import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
 import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
-import { i18n } from '../../../utils/i18n-next'
+import { i18n } from '../../../../shared-ui/locales_legacy'
 import { isTypedMessageText, TypedMessage, TypedMessageText } from '../../../protocols/typed-message'
 import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 

@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Flags } from '../../../../utils'
+import { Flags } from '../../../../../shared'
 import { ChainId, ProviderType, useAccount } from '@masknet/web3-shared-evm'
 import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { currentMaskWalletChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'

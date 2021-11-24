@@ -13,13 +13,11 @@
 [![FOSSA Status][badge-fossa]][fossa]
 [![Crowdin][badge-crowdin]][crowdin]
 
-Mask Network is a portal to the new, open internet.
+Mask Network is a portal to the new, open internet, that bridge Web3.0 to Web2.0 platforms.
 With Mask Network, you can send encrypted posts to your friends,
 participate in cryptocurrencies lucky-draws, and share encrypted files on the platforms you are already using.
 
 For general introductions, see [Mask.io](https://mask.io).
-
-/_I thought what I'd do was, I'd pretend I was one of those deaf-mutes._/
 
 [![FOSSA Status][fossa-status]][fossa]
 

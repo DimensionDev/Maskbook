@@ -4,7 +4,7 @@ import { getEnumAsArray } from '@dimensiondev/kit'
 import { TradeProvider } from '@masknet/public-api'
 import { resolveTradeProviderName } from '../../pipes'
 import { TradeProviderIcon } from './TradeProviderIcon'
-import { Flags } from '../../../../utils/flags'
+import { Flags } from '../../../../../shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
