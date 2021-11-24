@@ -94,7 +94,12 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
                     </CountdownButton>
                 </Box>
 
-                <LoadingButton fullWidth sx={{ marginTop: '24px' }} onClick={handleNext} loading={loading}>
+                <LoadingButton
+                    fullWidth
+                    sx={{ marginTop: '24px' }}
+                    onClick={handleNext}
+                    loading={loading}
+                    variant="contained">
                     {t.next()}
                 </LoadingButton>
             </Box>
