@@ -1,7 +1,6 @@
 import { forwardRef, memo } from 'react'
 import { TextFieldProps, TextField } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()(({ palette }) => ({
     textField: {

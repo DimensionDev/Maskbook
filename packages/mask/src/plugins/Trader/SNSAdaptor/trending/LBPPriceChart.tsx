@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
-import { useStylesExtends } from '@masknet/shared'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
 import type { Currency } from '../../types'
 

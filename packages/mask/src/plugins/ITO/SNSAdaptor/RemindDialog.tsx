@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import classNames from 'classnames'
 import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { FormattedAddress, TokenIcon, useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { FormattedAddress, TokenIcon } from '@masknet/shared'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import {
