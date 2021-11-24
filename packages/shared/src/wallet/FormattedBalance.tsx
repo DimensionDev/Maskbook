@@ -1,7 +1,7 @@
 import { FC, Fragment } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '../UI/UIHelper/custom-ui-helper'
+import { useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     balance: {

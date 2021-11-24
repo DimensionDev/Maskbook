@@ -11,11 +11,11 @@ import {
     Dialog,
     useMediaQuery,
 } from '@mui/material'
-import { makeStyles, useDialogStackActor } from '@masknet/theme'
+import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses } from '@masknet/theme'
 import { Children, cloneElement } from 'react'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
-import { ErrorBoundary, useStylesExtends, mergeClasses } from '@masknet/shared'
+import { ErrorBoundary } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
 import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'

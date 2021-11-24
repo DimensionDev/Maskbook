@@ -1,9 +1,9 @@
 import { AvatarGroup, Box, Breadcrumbs, Paper, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import type { TradeComputed } from '../../types'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { TokenIcon, useStylesExtends } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
