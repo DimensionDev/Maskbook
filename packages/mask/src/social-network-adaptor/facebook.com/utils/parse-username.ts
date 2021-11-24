@@ -24,7 +24,7 @@ export function getPostUrlAtFacebook(post: PostIdentifier<ProfileIdentifier>) {
     const { postId } = post
     const { userId } = id
     const host = getFacebookHostName()
-    if (!isValidFacebookUsername(userId)) return ''
+    if (!isValidFacebookUsername(userId)) return host
     if (parseFloat(userId)) return `${host}/permalink.php?story_fbid=${postId}&id=${userId}`
     return `${host}/${userId}/posts/${postId}`
 }
