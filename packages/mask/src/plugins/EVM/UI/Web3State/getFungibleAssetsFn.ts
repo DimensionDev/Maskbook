@@ -2,8 +2,6 @@ import Web3 from 'web3'
 import {
     createContract,
     createNativeToken,
-    CurrencyType,
-    formatBalance,
     formatEthereumAddress,
     getEthereumConstants,
     getTokenConstants,
@@ -12,43 +10,12 @@ import {
     Web3ProviderType,
 } from '@masknet/web3-shared-evm'
 import type { Web3Plugin } from '@masknet/plugin-infra'
+import { Pagination, TokenType } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import type { AbiItem } from 'web3-utils'
 import { uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
-import { Pagination, TokenType } from '@masknet/plugin-infra'
-
-const getTokenUSDValue = (token: Web3Plugin.Asset) =>
-    token.value ? Number.parseFloat(token.value?.[CurrencyType.USD] ?? '') : 0
-const getBalanceValue = (asset: Web3Plugin.Asset<Web3Plugin.FungibleToken>) =>
-    parseFloat(formatBalance(asset.balance, asset.token.decimals))
-
-const getTokenChainIdValue = (asset: Web3Plugin.Asset) => {
-    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
-    return isSameAddress(asset.token.id, NATIVE_TOKEN_ADDRESS) ? 1 / asset.token.chainId : 0
-}
-
-const makeSortAssertWithoutChainFn = () => {
-    return (a: Web3Plugin.Asset<Web3Plugin.FungibleToken>, b: Web3Plugin.Asset<Web3Plugin.FungibleToken>) => {
-        // Token with high usd value estimation has priority
-        const valueDifference = getTokenUSDValue(b) - getTokenUSDValue(a)
-        if (valueDifference !== 0) return valueDifference
-
-        // native token sort
-        const chainValueDifference = getTokenChainIdValue(b) - getTokenChainIdValue(a)
-        if (chainValueDifference !== 0) return chainValueDifference
-
-        // Token with big balance has priority
-        if (getBalanceValue(a) > getBalanceValue(b)) return -1
-        if (getBalanceValue(a) < getBalanceValue(b)) return 1
-
-        // Sorted by alphabet
-        if ((a.token.name ?? '') > (b.token.name ?? '')) return 1
-        if ((a.token.name ?? '') < (b.token.name ?? '')) return -1
-
-        return 0
-    }
-}
+import { makeSortAssertWithoutChainFn } from '../../utils/token'
 
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>

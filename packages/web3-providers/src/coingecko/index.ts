@@ -14,5 +14,6 @@ export async function getTokenPrice(tokenId: string, currency: CurrencyType) {
 }
 
 export async function getTokensPrice(tokenIds: string[], currency: CurrencyType) {
-    return getTokenPrice(tokenIds.join(','), currency)
+    const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=${tokenIds}&vs_currencies=${currency}`
+    return fetch(requestPath).then((r) => r.json() as Promise<CryptoPrice>)
 }
