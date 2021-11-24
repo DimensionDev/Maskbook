@@ -1,12 +1,11 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper } from '@mui/material'
-import { makeStyles, getMaskColor } from '@masknet/theme'
-import { useStylesExtends, ImageIcon } from '@masknet/shared'
-import { useProviderDescriptor } from '@masknet/plugin-infra'
+import { useStylesExtends, makeStyles, getMaskColor } from '@masknet/theme'
+import { ImageIcon } from '@masknet/shared'
+import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
 import { ProviderType, resolveProviderName } from '@masknet/web3-shared-evm'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { PLUGIN_ID } from '../../../EVM/constants'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -33,7 +32,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const providerDescriptor = useProviderDescriptor(providerType, PLUGIN_ID)
+    const providerDescriptor = useProviderDescriptor(providerType, NetworkPluginID.PLUGIN_EVM)
 
     return (
         <Paper elevation={0}>

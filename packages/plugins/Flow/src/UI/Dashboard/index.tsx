@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra/src'
+import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../../base'
 import { Web3UI } from '../Web3UI'
 import { createWeb3State } from '../Web3State'

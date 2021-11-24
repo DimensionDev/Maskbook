@@ -12,20 +12,19 @@ import {
 import { WalletMessages } from '../../../Wallet/messages'
 import { useInjectedProviderReady, useInjectedProviderType } from '../../hooks'
 
-export interface ProviderIconClickBaitProps {
-    network: Web3Plugin.NetworkDescriptor
-    provider: Web3Plugin.ProviderDescriptor
-    children?: React.ReactNode
-    onClick?: () => void
-}
-
-export function ProviderIconClickBait({ network, provider, children, onClick }: ProviderIconClickBaitProps) {
+export function ProviderIconClickBait({
+    network,
+    provider,
+    children,
+    onClick,
+    onSubmit,
+}: Web3Plugin.UI.ProviderIconClickBaitProps) {
     //#region connect wallet dialog
     const { setDialog: setConnectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.connectWalletDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (ev.result) onClick?.()
+            if (ev.result) onSubmit?.(network, provider)
         },
     )
     //#endregion
@@ -39,7 +38,7 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
 
     const onClickProvider = useCallback(async () => {
         // open the download page
-        if (isInjectedProvider(providerType) || ProviderType.MetaMask === providerType) {
+        if (isInjectedProvider(providerType)) {
             if (!injectedProviderReady || providerType !== injectedProviderType) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
                 if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
@@ -65,7 +64,8 @@ export function ProviderIconClickBait({ network, provider, children, onClick }: 
             default:
                 unreachable(providerType)
         }
-    }, [networkType, providerType, wallets, injectedProviderReady, injectedProviderType, onClick])
+        onClick?.(network, provider)
+    }, [network, provider, wallets, injectedProviderReady, injectedProviderType, onClick])
 
     // hide injected provider in dashboard
     if (isInjectedProvider(providerType) && location.href.includes('dashboard.html')) return null

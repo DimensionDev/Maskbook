@@ -1,7 +1,6 @@
 import type { FC } from 'react'
 import { CardActions, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { MaskTextIcon } from '../../../../resources/MaskIcon'
 import type { DataProvider, TradeProvider } from '@masknet/public-api'

@@ -15,12 +15,18 @@ export declare namespace Web3Plugin {
         ID: string
         /** The ID of a plugin that provides the functionality of this network. */
         networkSupporterPluginID: string
+        /** The chain id */
+        chainId: number
         /** The network type */
         type: string
         /** The network icon */
         icon: URL
+        /** The network icon in fixed color */
+        iconColor: string
         /** The network name */
         name: string
+        /** Is a mainnet network */
+        isMainnet: boolean
     }
     export interface ProviderDescriptor {
         /** An unique ID for each wallet provider */
@@ -101,7 +107,6 @@ export declare namespace Web3Plugin {
 
     export interface Token {
         id: string
-        type: TokenType
         chainId: number
     }
 
@@ -109,14 +114,14 @@ export declare namespace Web3Plugin {
         id: string
         type: TokenType.Fungible
         address: string
-        decimal?: number
+        decimals?: number
         name: string
         symbol: string
     }
 
     export interface NonFungibleToken extends Token {
         id: string
-        type: TokenType.NonFungible
+        type: TokenType.Fungible
         name: string
         description?: string
     }
@@ -183,14 +188,14 @@ export declare namespace Web3Plugin {
             getFungibleAssets?: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Asset[]>
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Asset[]>
         }
@@ -205,7 +210,7 @@ export declare namespace Web3Plugin {
             getTransactions: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Transaction[]>
         }
@@ -214,14 +219,14 @@ export declare namespace Web3Plugin {
             getFungibleTokenLists: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<TokenList[]>
             /** Get the token lists of supported non-fungible tokens. */
             getNonFungibleTokenLists: (
                 address: string,
                 providerType: string,
-                networkType: string,
+                network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<TokenList[]>
         }
@@ -255,27 +260,33 @@ export declare namespace Web3Plugin {
     export namespace UI {
         export interface NetworkIconClickBaitProps {
             network: NetworkDescriptor
+            provider?: ProviderDescriptor
             children?: React.ReactNode
-            onClick?: () => void
+            onClick?: (network: NetworkDescriptor, provider?: ProviderDescriptor) => void
+            onSubmit?: (network: NetworkDescriptor, provider?: ProviderDescriptor) => void
         }
         export interface ProviderIconClickBaitProps {
             network: NetworkDescriptor
             provider: ProviderDescriptor
             children?: React.ReactNode
-            onClick?: () => void
+            onClick?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
+            onSubmit?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
         }
         export interface AddressFormatterProps {
             address: string
             size?: number
         }
-        export interface SelectProviderDialogBait {
-            /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
-            NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
-            /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
-            ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
-        }
         export interface UI {
-            SelectProviderDialog?: SelectProviderDialogBait
+            SelectNetworkMenu?: {
+                /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+                NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+            }
+            SelectProviderDialog?: {
+                /** This UI will receive network icon as children component, and the plugin may hook click handle on it. */
+                NetworkIconClickBait?: Plugin.InjectUIReact<UI.NetworkIconClickBaitProps>
+                /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
+                ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
+            }
         }
     }
 }

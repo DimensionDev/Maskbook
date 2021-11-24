@@ -3,11 +3,11 @@ import { initReactI18next, useTranslation as useTranslation_, UseTranslationOpti
 import type { TOptions } from 'i18next'
 import { useEffect } from 'react'
 import { useUpdate } from 'react-use'
-import type en from '../locales/en-US.json'
-import i18nNextInstance from './i18n-next'
+import type en from '../../shared-ui/locales/en-US.json'
+import i18nNextInstance from '../../shared-ui/locales_legacy'
 import { languageSettings } from '../settings/settings'
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
-import { languages } from '../locales'
+import { languages } from '../../shared-ui'
 
 i18nNextInstance.use(initReactI18next)
 

@@ -7,7 +7,6 @@ import {
     languageSettings,
     currentPluginEnabledStatus,
     pluginIDSettings,
-    networkIDSettings,
 } from '../../settings/settings'
 import {
     currentDataProviderSettings,
@@ -35,7 +34,7 @@ import {
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
-import { Flags } from '../../utils'
+import { Flags } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 
 function create<T>(settings: InternalSettings<T>) {
@@ -50,7 +49,6 @@ function create<T>(settings: InternalSettings<T>) {
     return [get, set] as const
 }
 export const [getPluginID, setPluginID] = create(pluginIDSettings)
-export const [getNetworkID, setNetworkID] = create(networkIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)

@@ -1,7 +1,6 @@
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import { Tabs, Tab, Box, BoxProps, Paper } from '@mui/material'
-import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     tab: {

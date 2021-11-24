@@ -5,7 +5,7 @@ import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/help
 import type { ImageTemplateTypes } from '../../resources/image-payload'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
-import { i18n, useI18N } from '../../utils'
+import { useI18N } from '../../utils'
 import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTextPayload'
 import type { SubmitComposition } from './CompositionUI'
 import { unreachable } from '@dimensiondev/kit'
@@ -44,13 +44,19 @@ export function useSubmit(onClose: () => void) {
             // TODO: move into the plugin system
             const redPacketMetadata = RedPacketMetadataReader(content.meta)
             if (encode === 'image') {
+                const text = t('additional_post_box__steganography_post_pre', {
+                    random: new Date().toLocaleString(),
+                })
                 if (redPacketMetadata.ok) {
-                    await pasteImage(encrypted, 'eth', redPacketPreText.replace(encrypted, ''))
+                    await pasteImage(text, 'eth', redPacketPreText.replace(encrypted, ''))
                 } else {
-                    await pasteImage(encrypted, 'v2', null)
+                    await pasteImage(text, 'v2', null)
                 }
             } else {
-                pasteTextEncode(encrypted, redPacketMetadata.ok ? redPacketPreText : null)
+                pasteTextEncode(
+                    t('additional_post_box__encrypted_post_pre', { encrypted }),
+                    redPacketMetadata.ok ? redPacketPreText : null,
+                )
             }
             // This step write data on gun. There is nothing to write if it shared with public
             if (target !== 'Everyone') Services.Crypto.publishPostAESKey(token)
@@ -61,20 +67,15 @@ export function useSubmit(onClose: () => void) {
 }
 
 function pasteTextEncode(encrypted: string, text: string | null) {
-    const defaultText = i18n.t('additional_post_box__encrypted_post_pre', { encrypted })
-
-    activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text ?? defaultText, {
+    activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text ?? encrypted, {
         recover: true,
     })
 }
 async function pasteImage(encrypted: string, template: ImageTemplateTypes, text: string | null) {
-    const defaultText = i18n.t('additional_post_box__steganography_post_pre', {
-        random: new Date().toLocaleString(),
-    })
     const img = await SteganographyTextPayload(template, encrypted)
     // Don't await this, otherwise the dialog won't disappear
     activatedSocialNetworkUI.automation.nativeCompositionDialog!.attachImage!(img, {
         recover: true,
-        relatedTextPayload: text ?? defaultText,
+        relatedTextPayload: text ?? encrypted,
     })
 }

@@ -2,7 +2,8 @@
 import Typeson from 'typeson'
 import type { Serialization } from 'async-call-rpc'
 import { Ok, Err, Some, None } from 'ts-results'
-import { BigNumber } from 'bignumber.js'
+import * as BN from 'bignumber.js'
+const { default: BigNumber } = BN
 
 /** @internal */
 export function serialize<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {

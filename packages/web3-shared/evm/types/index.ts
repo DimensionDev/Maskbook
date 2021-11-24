@@ -503,12 +503,12 @@ export enum DomainProvider {
 }
 
 export enum PortfolioProvider {
-    ZERION = 0,
-    DEBANK = 1,
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
 }
 
 export enum CollectibleProvider {
-    OPENSEA = 0,
+    OPENSEA = 'OpenSea',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
