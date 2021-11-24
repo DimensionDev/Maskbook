@@ -2,9 +2,10 @@ import type { Trade, TradeComputed } from '../../types'
 import { useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { TradeProvider } from '@masknet/public-api'
-import { last } from 'lodash-unified'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useAsync } from 'react-use'
+import BigNumber from 'bignumber.js'
+import { swapErrorToUserReadableMessage } from '../../helpers'
 
 export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvider: TradeProvider) {
     const { targetChainId } = TargetChainIdContext.useContainer()
@@ -24,13 +25,35 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
                         ? {}
                         : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
                 }
-                try {
-                    return web3.eth.estimateGas(config)
-                } catch {
-                    return 0
-                }
+                return web3.eth
+                    .estimateGas(config)
+                    .then((gasEstimate) => {
+                        return {
+                            gasEstimate: new BigNumber(gasEstimate),
+                        }
+                    })
+                    .catch((error) => {
+                        return web3.eth
+                            .call(config)
+                            .then(() => {
+                                return {
+                                    error: new Error('Gas estimate failed.'),
+                                }
+                            })
+                            .catch((error) => {
+                                return {
+                                    call: x,
+                                    error: new Error(swapErrorToUserReadableMessage(error)),
+                                }
+                            })
+                    })
             }),
         )
-        return last(estimateGases)
+        return estimateGases
+            .find(
+                (el, ix, list): el is { gasEstimate: BigNumber } =>
+                    'gasEstimate' in el && (ix === list.length - 1 || 'gasEstimate' in list[ix + 1]),
+            )
+            ?.gasEstimate.toNumber()
     }, [tradeParameters.length])
 }

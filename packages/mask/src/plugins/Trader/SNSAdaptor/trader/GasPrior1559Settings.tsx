@@ -173,12 +173,10 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
                 <AccordionSummary className={classes.summary} expandIcon={<ExpandMore />}>
                     <Typography className={classes.heading}>{t('popups_wallet_gas_price')}</Typography>
                     <Typography className={classes.accordingTitle}>
-                        {selected
-                            ? t('plugin_trader_gas_option', {
-                                  option: options[selected].title,
-                                  value: formatWeiToGwei(options[selected].gasPrice ?? 0).toString(),
-                              })
-                            : null}
+                        {t('plugin_trader_gas_option', {
+                            option: options[selected].title,
+                            value: formatWeiToGwei(options[selected].gasPrice ?? 0).toString(),
+                        })}
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{ paddingLeft: 0, paddingRight: 0 }}>

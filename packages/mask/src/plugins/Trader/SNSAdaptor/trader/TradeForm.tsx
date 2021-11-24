@@ -114,11 +114,12 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
                 paddingBottom: 13,
                 fontSize: 13,
                 lineHeight: '18px',
+                marginRight: 13,
             },
         },
         chipTokenIcon: {
-            width: '36px!important',
-            height: '36px!important',
+            width: '28px!important',
+            height: '28px!important',
         },
         controller: {
             width: '100%',
@@ -137,6 +138,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
                 fontSize: 13,
                 lineHeight: '18px',
                 color: theme.palette.primary.contrastText,
+                marginRight: 0,
             },
         },
         tooltip: {
@@ -273,7 +275,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                 onFocusedTradeChange(bestTrade)
             }
         }, [bestTrade])
-
+        console.log(outputTokenBalance)
         return (
             <Box className={classes.root}>
                 <InputTokenPanel
@@ -425,6 +427,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                                         : '',
                                                     symbol: approveToken?.symbol,
                                                 })}
+                                                placement="top"
                                                 arrow
                                                 disableFocusListener
                                                 disableTouchListener>

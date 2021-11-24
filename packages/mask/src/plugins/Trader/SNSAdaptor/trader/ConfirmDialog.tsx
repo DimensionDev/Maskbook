@@ -11,6 +11,7 @@ import {
     formatBalance,
     formatEthereumAddress,
     formatWeiToEther,
+    pow10,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
@@ -25,6 +26,7 @@ const useStyles = makeStyles()(() => ({
     section: {
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center',
         ['& > p']: {
             fontSize: 16,
             lineHeight: '22px',
@@ -56,6 +58,11 @@ const useStyles = makeStyles()(() => ({
         padding: '13px 0',
         borderRadius: 24,
         height: 'auto',
+    },
+    content: {
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
 }))
 
@@ -110,7 +117,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     return (
         <>
             <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" maxWidth="xs">
-                <DialogContent sx={{ marginLeft: 5, marginRight: 5 }}>
+                <DialogContent className={classes.content} sx={{ marginLeft: 5, marginRight: 5 }}>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_red_packet_nft_account_name')}</Typography>
                         <Typography>
@@ -167,41 +174,39 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         <Typography>{t('plugin_trader_tab_price')}</Typography>
                         <Typography>
                             {priceReversed ? (
-                                <FormattedBalance
-                                    value={inputAmount.toFixed() ?? '0'}
-                                    decimals={inputToken.decimals}
-                                    symbol={inputToken.symbol}
-                                    significant={4}
-                                    formatter={formatBalance}
-                                />
+                                <span>
+                                    <strong className={classes.emphasis}>
+                                        {formatBalance(
+                                            inputAmount
+                                                .dividedBy(outputAmount)
+                                                .multipliedBy(pow10(outputToken.decimals - inputToken.decimals))
+                                                .multipliedBy(pow10(inputToken.decimals))
+                                                .integerValue(),
+                                            inputToken.decimals,
+                                            6,
+                                        )}
+                                    </strong>
+                                    {inputToken.symbol}
+                                    {' = '}
+                                    <span>1 {outputToken.symbol}</span>
+                                </span>
                             ) : (
-                                <FormattedBalance
-                                    value={outputAmount.toFixed() ?? '0'}
-                                    decimals={outputToken.decimals}
-                                    symbol={outputToken.symbol}
-                                    significant={4}
-                                    formatter={formatBalance}
-                                />
-                            )}
-                            <Box component="span" mx={0.5}>
-                                =
-                            </Box>
-                            {priceReversed ? (
-                                <FormattedBalance
-                                    value={outputAmount.toFixed() ?? '0'}
-                                    decimals={outputToken.decimals}
-                                    symbol={outputToken.symbol}
-                                    significant={4}
-                                    formatter={formatBalance}
-                                />
-                            ) : (
-                                <FormattedBalance
-                                    value={inputAmount.toFixed() ?? '0'}
-                                    decimals={inputToken.decimals}
-                                    symbol={inputToken.symbol}
-                                    significant={4}
-                                    formatter={formatBalance}
-                                />
+                                <span>
+                                    <strong className={classes.emphasis}>
+                                        {formatBalance(
+                                            outputAmount
+                                                .dividedBy(inputAmount)
+                                                .multipliedBy(pow10(inputToken.decimals - outputToken.decimals))
+                                                .multipliedBy(pow10(outputToken.decimals))
+                                                .integerValue(),
+                                            outputToken.decimals,
+                                            6,
+                                        )}
+                                    </strong>
+                                    {outputToken.symbol}
+                                    {' = '}
+                                    <span>1 {inputToken.symbol}</span>
+                                </span>
                             )}
                             <RetweetIcon
                                 style={{ marginLeft: 4, cursor: 'pointer' }}

@@ -59,7 +59,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function TraderDialog() {
+interface TraderDialogProps {
+    open?: boolean
+    onClose?: () => void
+}
+
+export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId()
@@ -67,9 +72,12 @@ export function TraderDialog() {
     const [traderProps, setTraderProps] = useState<TraderProps>()
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
 
-    const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated, (ev) => {
-        if (ev?.traderProps) setTraderProps(ev.traderProps)
-    })
+    const { open: remoteOpen, closeDialog } = useRemoteControlledDialog(
+        PluginTraderMessages.swapDialogUpdated,
+        (ev) => {
+            if (ev?.traderProps) setTraderProps(ev.traderProps)
+        },
+    )
 
     const { value: chains } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
@@ -83,7 +91,13 @@ export function TraderDialog() {
     return (
         <TargetChainIdContext.Provider>
             <AllProviderTradeContext.Provider>
-                <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_trader_swap')}>
+                <InjectedDialog
+                    open={open || remoteOpen}
+                    onClose={() => {
+                        onClose?.()
+                        closeDialog()
+                    }}
+                    title={t('plugin_trader_swap')}>
                     <DialogContent className={classes.content}>
                         <div className={classes.walletStatusBox}>
                             <WalletStatusBox />

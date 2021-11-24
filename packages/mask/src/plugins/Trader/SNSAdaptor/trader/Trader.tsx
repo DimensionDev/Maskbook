@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
     ChainId,
     createERC20Token,
@@ -10,6 +10,7 @@ import {
     FungibleTokenDetailed,
     GasOptionConfig,
     getNetworkTypeFromChainId,
+    resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
     useChainIdValid,
@@ -39,6 +40,7 @@ import { PluginTraderMessages } from '../../messages'
 import { NetworkType } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
+import { Link, Typography } from '@mui/material'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -56,6 +58,7 @@ export interface TraderProps extends withClasses<never> {
 }
 
 export function Trader(props: TraderProps) {
+    const tradeRef = useRef<TradeInfo | undefined>()
     const { coin, tokenDetailed, chainId: targetChainId } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
@@ -67,6 +70,7 @@ export function Trader(props: TraderProps) {
     const currentAccount = useValueRef(currentAccountSettings)
     const currentProvider = useValueRef(currentProviderSettings)
     const classes = useStylesExtends(useStyles(), props)
+    const { showSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
@@ -110,6 +114,7 @@ export function Trader(props: TraderProps) {
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
         outputToken?.type ?? EthereumTokenType.Native,
         outputToken?.address ?? '',
+        chainId,
     )
 
     useEffect(() => {
@@ -316,6 +321,52 @@ export function Trader(props: TraderProps) {
     }, [tradeState /* update tx dialog only if state changed */])
     //#endregion
 
+    useUpdateEffect(() => {
+        const { current: tradeInfo } = tradeRef
+        if (tradeInfo?.value && tradeState) {
+            const { inputAmount, outputAmount, inputToken, outputToken } = tradeInfo.value
+            switch (tradeState.type) {
+                case TransactionStateType.HASH:
+                    showSnackbar(t('plugin_trader_swap_token'), {
+                        variant: 'success',
+                        message: (
+                            <Typography>
+                                {t('plugin_trader_price_pairs', {
+                                    input: formatBalance(inputAmount, inputToken?.decimals, 4),
+                                    output: formatBalance(outputAmount, outputToken?.decimals, 4),
+                                })}
+                                <Link
+                                    className={classes.link}
+                                    href={resolveTransactionLinkOnExplorer(chainId, tradeState.hash)}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    {t('plugin_wallet_view_on_explorer')}
+                                </Link>
+                            </Typography>
+                        ),
+                    })
+                    break
+                case TransactionStateType.FAILED:
+                    showSnackbar(t('plugin_trader_swap_token'), {
+                        variant: 'error',
+                        message: t('plugin_wallet_transaction_rejected'),
+                    })
+                    break
+                case TransactionStateType.WAIT_FOR_CONFIRMING:
+                    showSnackbar(t('plugin_trader_swap_token'), {
+                        message: t('plugin_trader_price_pairs', {
+                            input: formatBalance(inputAmount, inputToken?.decimals, 4),
+                            output: formatBalance(outputAmount, outputToken?.decimals, 4),
+                        }),
+                        processing: true,
+                    })
+                    break
+                default:
+                    return
+            }
+        }
+    }, [tradeState, chainId])
+
     //#region swap callback
     const onSwap = useCallback(() => {
         // no need to open the confirmation dialog if it (un)wraps the native token
@@ -380,6 +431,10 @@ export function Trader(props: TraderProps) {
             setGasConfig(undefined)
         }
     }, [chainId])
+
+    useUpdateEffect(() => {
+        if (focusedTrade) tradeRef.current = focusedTrade
+    }, [focusedTrade])
 
     useEffect(() => {
         return PluginTraderMessages.swapSettingsUpdated.on((event) => {
