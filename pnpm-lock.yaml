@@ -840,6 +840,16 @@ importers:
   packages/web3-kit:
     specifiers: {}
 
+  packages/web3-providers:
+    specifiers:
+      json-stable-stringify: ^1.0.1
+      lodash-unified: 1.0.1
+      urlcat: ^2.0.4
+    dependencies:
+      json-stable-stringify: 1.0.1
+      lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
+      urlcat: 2.0.4
+
   packages/web3-shared/evm:
     specifiers:
       '@ensdomains/address-encoder': ^0.2.6
