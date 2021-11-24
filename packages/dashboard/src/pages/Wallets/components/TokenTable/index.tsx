@@ -5,7 +5,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { TokenTableRow } from '../TokenTableRow'
-import { ChainId, formatBalance, useWeb3State, useTrustedERC20Tokens  }  from '@masknet/web3-shared-evm'
+import { useWeb3State, useTrustedERC20Tokens  }  from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
@@ -18,8 +18,8 @@ import {
     Web3Plugin,
     useAccount,
     NetworkPluginID,
+    usePluginIDContext,
 } from '@masknet/plugin-infra'
-import { usePluginID } from '../../../Personas/api'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TokenTableProps {
-    selectedChainId: ChainId | null
+    selectedChainId: number | null
 }
 
 export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
@@ -72,7 +72,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const { Asset } = useWeb3PluginState()
 
     const trustedERC20Tokens = useTrustedERC20Tokens()
-    const { networkType, portfolioProvider } = useWeb3State()
+    const { portfolioProvider } = useWeb3State()
     const network = useNetworkDescriptor()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
     const account = useAccount()
@@ -82,7 +82,7 @@ export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
         value: detailedTokens,
     } = useAsync(
         async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
-        [account, Asset, portfolioProvider, networkType],
+        [account, Asset, portfolioProvider],
     )
 
     const onSwap = useCallback((token: Web3Plugin.FungibleToken) => {
@@ -129,7 +129,8 @@ export interface TokenTableUIProps {
 export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading, isEmpty, dataSource }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const currentPluginId = usePluginID()
+    const currentPluginId = usePluginIDContext()
+    const { Utils } = useWeb3PluginState()
 
     return (
         <TableContainer className={classes.container}>
@@ -167,10 +168,12 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                             {dataSource
                                 .sort((first, second) => {
                                     // @ts-ignore
-                                    const firstValue = new BigNumber(formatBalance(first.balance, first.token.decimals))
+                                    const firstValue = new BigNumber(
+                                        Utils?.formatBalance?.(first.balance, first.token.decimals) ?? '',
+                                    )
                                     const secondValue = new BigNumber(
                                         // @ts-ignore
-                                        formatBalance(second.balance, second.token.decimals),
+                                        Utils?.formatBalance?.(second.balance, second.token.decimals) ?? '',
                                     )
 
                                     if (firstValue.eq(secondValue)) return 0

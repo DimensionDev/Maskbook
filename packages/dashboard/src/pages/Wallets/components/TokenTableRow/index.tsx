@@ -8,13 +8,13 @@ import {
     NetworkPluginID,
     useChainId,
     useNetworkDescriptors,
+    usePluginIDContext,
     useWeb3State,
     Web3Plugin,
 } from '@masknet/plugin-infra'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
-import { usePluginID } from '../../../Personas/api'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -76,7 +76,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
     const currentChainId = useChainId()
     const { Utils } = useWeb3State()
     const networkDescriptors = useNetworkDescriptors()
-    const currentPluginId = usePluginID()
+    const currentPluginId = usePluginIDContext()
     const isOnCurrentChain = useMemo(() => currentChainId === asset.token.chainId, [asset, currentChainId])
 
     return (

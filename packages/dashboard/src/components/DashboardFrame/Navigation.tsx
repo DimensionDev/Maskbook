@@ -34,8 +34,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
-import { usePluginID } from '../../pages/Personas/api'
-import { NetworkPluginID } from '@masknet/plugin-infra'
+import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -128,7 +127,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
-    const currentPluginId = usePluginID()
+    const currentPluginId = usePluginIDContext()
 
     const onExpand = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()

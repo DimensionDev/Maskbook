@@ -14,6 +14,7 @@ import {
     PluginsWeb3ContextProvider,
     useActivatedPluginsDashboard,
     useAllPluginsWeb3State,
+    usePluginIDContext,
 } from '@masknet/plugin-infra'
 import { Web3Provider } from '@masknet/web3-shared-evm'
 
@@ -25,14 +26,14 @@ import '../utils/kv-storage'
 import './PluginHost'
 import { Pages } from '../pages/routes'
 import { Web3Context } from '../web3/context'
-import { useAppearance, usePluginID } from '../pages/Personas/api'
+import { useAppearance } from '../pages/Personas/api'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
 import { fixWeb3State } from '../../../mask/src/plugins/EVM/UI/Web3State'
 
 const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x) => x.GlobalInjection)
 
 export default function DashboardRoot() {
-    const pluginID = usePluginID()
+    const pluginID = usePluginIDContext()
     const PluginsWeb3State = useAllPluginsWeb3State()
 
     // TODO:

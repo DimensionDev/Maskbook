@@ -11,8 +11,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useCurrentCollectibleDataProvider } from '../../api'
-import { usePluginID } from '../../../Personas/api'
-import { NetworkPluginID } from '@masknet/plugin-infra'
+import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -47,7 +46,7 @@ interface TokenAssetsProps {
 
 export const TokenAssets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
-    const pluginId = usePluginID()
+    const pluginId = usePluginIDContext()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),

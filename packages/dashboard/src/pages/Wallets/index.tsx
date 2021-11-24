@@ -19,12 +19,12 @@ import {
     useAccount,
     useChainId,
     useNetworkDescriptor,
+    usePluginIDContext,
     useWallet,
     useWallets,
     useWeb3State as useWeb3PluginState,
     Web3Plugin,
 } from '@masknet/plugin-infra'
-import { usePluginID } from '../Personas/api'
 import { useAsync } from 'react-use'
 import { getTokenUSDValue } from './utils/getTokenUSDValue'
 
@@ -48,7 +48,7 @@ function Wallets() {
 
     const networks = getRegisteredWeb3Networks()
     const networkDescriptor = useNetworkDescriptor()
-    const pluginId = usePluginID()
+    const pluginId = usePluginIDContext()
     const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(
         networkDescriptor ?? null,
     )
