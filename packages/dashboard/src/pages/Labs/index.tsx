@@ -31,6 +31,7 @@ import { useLanguage } from '../Settings/api'
 import { WalletStateBar } from '../Wallets/components/WalletStateBar'
 import { PoolTogetherURL } from '../../assets'
 import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
+import TutorialDialog from './components/TutorialDialog'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -54,6 +55,7 @@ export default function Plugins() {
     const location = useLocation()
     const [openTrendSetting, setOpenTrendSetting] = useState(false)
     const [openSwapSetting, setOpenSwapSetting] = useState(false)
+    const [openSetupTutorial, setOpenSetupTutorial] = useState(!localStorage.getItem('dismissTutorialDialog'))
     const [pluginStatus, setPluginStatus] = useState({
         [PLUGIN_IDS.FILE_SERVICE]: true,
         [PLUGIN_IDS.GITCOIN]: true,
@@ -207,6 +209,13 @@ export default function Plugins() {
         }
     }
 
+    function onTutorialDialogClose(checked: boolean) {
+        setOpenSetupTutorial(false)
+        if (checked) {
+            localStorage.setItem('dismissTutorialDialog', 'true')
+        }
+    }
+
     useEffect(() => {
         Object.values(PLUGIN_IDS).forEach(async (id) => {
             const enabled = await Services.Settings.getPluginEnabled(id)
@@ -247,6 +256,7 @@ export default function Plugins() {
 
             <SwapSettingDialog open={openSwapSetting} onClose={() => setOpenSwapSetting(false)} />
             <MarketTrendSettingDialog open={openTrendSetting} onClose={() => setOpenTrendSetting(false)} />
+            <TutorialDialog open={openSetupTutorial} onClose={onTutorialDialogClose} />
         </PageFrame>
     )
 }
