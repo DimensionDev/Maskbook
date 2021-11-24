@@ -20,7 +20,7 @@ export default function TutorialDialog({ open, onClose }: TutorialDialogProps) {
                     <SetupTutorial />
                     <FormControlLabel
                         control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
-                        label={t.labs_do_not_show_agian()}
+                        label={t.labs_do_not_show_again()}
                         sx={{ marginTop: '8px' }}
                     />
                 </Box>
