@@ -14,6 +14,7 @@ packages:
   - 'packages/shared-base'
   - 'packages/shared'
   - 'packages/web3-kit'
+  - 'packages/web3-providers'
   - 'packages/web3-constants'
   - 'packages/web3-contracts'
   - 'packages/web3-shared/evm'

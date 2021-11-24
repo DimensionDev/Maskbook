@@ -12,7 +12,6 @@ import { useCurrentVisitingIdentity } from '../../../../components/DataSource/us
 import { getAvatarId } from '../../utils/user'
 import { toPNG } from '../../../../plugins/Avatar/utils'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { useCurrentProfileIdentifiers } from '../../../../plugins/Avatar/hooks/useCurrentProfileIdentifiers'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 
@@ -36,7 +35,6 @@ async function changeImageToActiveElements(image: File | Blob): Promise<void> {
 
 function NFTAvatarInTwitter() {
     const { classes } = useStyles()
-    const myIdentities = useCurrentProfileIdentifiers()
     const identity = useCurrentVisitingIdentity()
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 

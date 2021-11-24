@@ -1,0 +1,9 @@
+{
+  "name": "@masknet/web3-providers",
+  "private": true,
+  "dependencies": {
+    "json-stable-stringify": "^1.0.1",
+    "lodash-unified": "1.0.1",
+    "urlcat": "^2.0.4"
+  }
+}
