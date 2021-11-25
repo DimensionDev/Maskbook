@@ -28,7 +28,6 @@ export function NFTPage(props: NFTPageProps) {
     const { address, isOwnAddress, isConnected } = props
     const { classes } = useStyles()
 
-    // const [isConnected, setIsConnected] = useState(false)
     const [listedNFT, setlistedNFT] = useState<GeneralAssetWithTags[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -43,11 +42,6 @@ export function NFTPage(props: NFTPageProps) {
     }
 
     useEffect(() => {
-        // if (Object.keys(RSS3.getPageOwner()).length !== 0) {
-        //     setIsConnected(true)
-        // } else {
-        //     setIsConnected(false)
-        // }
         loadNFTs()
     }, [isConnected])
 

@@ -27,7 +27,6 @@ export function DonationPage(props: DonationPageProps) {
     const { address, isOwnAddress, isConnected } = props
     const { classes } = useStyles()
 
-    // const [isConnected, setIsConnected] = useState(false)
     const [listedDonation, setlistedDonation] = useState<GeneralAssetWithTags[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -42,13 +41,6 @@ export function DonationPage(props: DonationPageProps) {
     }
 
     useEffect(() => {
-        // if (Object.keys(RSS3.getPageOwner()).length !== 0) {
-        //     setIsConnected(true)
-
-        // } else {
-        //     setIsConnected(false)
-        //     setIsLoading(false)
-        // }
         loadDonations()
     }, [])
 

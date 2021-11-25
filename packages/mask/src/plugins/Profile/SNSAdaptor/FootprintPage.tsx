@@ -29,7 +29,6 @@ export function FootprintPage(props: FootprintPageProps) {
     const { username, address, isOwnAddress, isConnected } = props
     const { classes } = useStyles()
 
-    // const [isConnected, setIsConnected] = useState(false)
     const [listedFootprint, setListedFootprint] = useState<GeneralAssetWithTags[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -44,12 +43,6 @@ export function FootprintPage(props: FootprintPageProps) {
     }
 
     useEffect(() => {
-        // if (Object.keys(RSS3.getPageOwner()).length !== 0) {
-        //     setIsConnected(true)
-
-        // } else {
-        //     setIsConnected(false)
-        // }
         loadFootprints()
     }, [isLoading])
 

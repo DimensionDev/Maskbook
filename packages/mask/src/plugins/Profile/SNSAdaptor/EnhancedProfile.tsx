@@ -15,6 +15,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { useAccount } from '@masknet/plugin-infra'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useEthereumAddress } from '@masknet/web3-shared-evm'
+import type { RSS3Index } from 'rss3-next/types/rss3'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -51,19 +52,21 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     const [persona, setPersona] = useState<RSS3DetailPersona | undefined>(undefined)
     const [isConnected, setIsConnected] = useState(false)
-
-    const checkConnection = (connected: boolean) => {
-        setIsConnected(connected)
-    }
+    const [username, setUsername] = useState<string>('')
 
     const init = async (currentAccount: any) => {
         await RSS3.setPageOwner(currentAccount?.address)
         const pageOwner = RSS3.getPageOwner()
         const apiUser = RSS3.getAPIUser()
-        const rss3Asset = await (apiUser.persona as IRSS3).assets.get(pageOwner.address)
+        const rss3Username = (await (apiUser.persona as IRSS3).profile.get(pageOwner.address)).name
+        setUsername(rss3Username || '')
+        const rss3Sign = ((await (apiUser.persona as IRSS3).files.get(pageOwner.address)) as RSS3Index).signature
+        setIsConnected(rss3Sign === '' ? false : true)
+        // const rss3File = await apiUser.persona.files.get(user.address)
     }
 
     useLocationChange(() => {
+        setCurrentTag(PageTags.WalletTag)
         MaskMessages.events.profileNFTsTabUpdated.sendToLocal('reset')
     })
 
@@ -73,10 +76,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             setIsOwnAddress(currentAccount?.address === address)
         }
         console.log(currentAccount)
+
         return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
             setShow(data.show)
         })
-    }, [identity, currentAccount])
+    }, [identity, currentAccount, isConnected])
 
     const content = useMemo(() => {
         switch (currentTag) {
@@ -101,14 +105,14 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.FootprintTag:
                 return (
                     <FootprintPage
-                        username={persona?.profile?.name || ''}
+                        username={username}
                         address={currentAccount?.address || ''}
                         isOwnAddress={isOwnAddress}
                         isConnected={isConnected}
                     />
                 )
             case PageTags.ConnectRSS3:
-                return <ConnectRSS3Page isOwnAddress={isOwnAddress} checkConnection={checkConnection} />
+                return <ConnectRSS3Page isOwnAddress={isOwnAddress} />
             default:
                 unreachable(currentTag)
         }
