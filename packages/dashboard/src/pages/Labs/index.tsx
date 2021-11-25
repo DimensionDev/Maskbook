@@ -23,7 +23,7 @@ import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Services } from '../../API'
-import { PLUGIN_IDS, TUTORIAL_URLS_CN, TUTORIAL_URLS_EN } from './constants'
+import { PLUGIN_IDS, TUTORIAL_URLS_EN } from './constants'
 import { useLocation } from 'react-router-dom'
 import { ContentContainer } from '../../components/ContentContainer'
 import { useLanguage } from '../Settings/api'
@@ -53,7 +53,6 @@ export default function Plugins() {
     const { classes } = useStyles()
     const location = useLocation()
     const [openTrendSetting, setOpenTrendSetting] = useState(false)
-    const [openSwapSetting, setOpenSwapSetting] = useState(false)
     const [openSetupTutorial, setOpenSetupTutorial] = useState(!localStorage.getItem('dismissTutorialDialog'))
     const [pluginStatus, setPluginStatus] = useState({
         [PLUGIN_IDS.FILE_SERVICE]: true,
@@ -202,7 +201,7 @@ export default function Plugins() {
     }
 
     function onTutorial(id: string) {
-        const url = language.includes('zh') ? TUTORIAL_URLS_CN[id] : TUTORIAL_URLS_EN[id]
+        const url = TUTORIAL_URLS_EN[id]
         if (url) {
             window.open(url)
         }
