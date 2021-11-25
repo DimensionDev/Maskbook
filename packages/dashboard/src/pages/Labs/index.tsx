@@ -203,7 +203,7 @@ export default function Plugins() {
     function onTutorial(id: string) {
         const url = TUTORIAL_URLS_EN[id]
         if (url) {
-            window.open(url)
+            window.open(url, '_blank', 'noopener noreferrer')
         }
     }
 
