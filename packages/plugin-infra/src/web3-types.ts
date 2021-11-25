@@ -147,6 +147,9 @@ export declare namespace Web3Plugin {
         description?: string
         tokens: Token[]
     }
+
+    export type EnsAddressBook = Record<string, string>
+
     export namespace ObjectCapabilities {
         export interface SharedState {
             allowTestnet?: Subscription<boolean>
@@ -198,6 +201,10 @@ export declare namespace Web3Plugin {
                 network: NetworkDescriptor,
                 pagination?: Pagination,
             ) => Promise<Asset[]>
+        }
+        export interface NameServiceState {
+            lookup?: (domain: string) => Promise<string | undefined>
+            reverse?: (address: string) => Promise<string | undefined>
         }
         export interface TokenManage {
             addToken: (token: Token) => Promise<void>
@@ -251,6 +258,7 @@ export declare namespace Web3Plugin {
         export interface Capabilities {
             Shared?: SharedState
             Asset?: AssetState
+            NameService?: NameServiceState
             Token?: TokenManage
             Transaction?: TransactionState
             TokenList?: TokenListState

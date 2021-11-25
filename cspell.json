@@ -330,7 +330,8 @@
         "walletlink",
         "rpcs",
         "FUSD",
-        "isfacebook"
+        "isfacebook",
+        "ethjs"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
