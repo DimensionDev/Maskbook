@@ -81,7 +81,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     throw new Error('Timeout!')
                 })(),
                 networkType === NetworkType.Ethereum
-                    ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                    ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
                     : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
             ])
         } catch {
