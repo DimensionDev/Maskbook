@@ -28,6 +28,5 @@ export function useMyIdentities() {
 export function useCurrentIdentity(noDefault?: boolean): Profile | null {
     const all = useMyIdentities()
     const current = useValueRef(currentSelectedIdentity[activatedSocialNetworkUI.networkIdentifier])
-    console.log(current)
     return all.find((i) => i.identifier.toText() === current) || (noDefault ? null : all[0])
 }

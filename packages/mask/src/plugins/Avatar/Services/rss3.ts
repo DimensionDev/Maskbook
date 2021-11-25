@@ -32,8 +32,6 @@ export async function getNFTAvatarFromRSS(userId: string, address: string) {
     const result = await v
     if (!result) return
     const { type, nfts } = result
-    console.log('+++++++++++++++++++++++++++++++++++')
-    console.log(nfts)
 
     const web3 = new Web3()
     if (type === 'NFTS') {

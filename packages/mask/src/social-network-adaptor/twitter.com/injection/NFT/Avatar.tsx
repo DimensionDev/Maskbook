@@ -22,11 +22,9 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
 
             const run = async () => {
                 const twitterId = getTwitterId(ele)
-                console.log(twitterId)
                 if (!twitterId) return
 
                 const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
-                console.log(info)
                 if (!info) return
 
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
