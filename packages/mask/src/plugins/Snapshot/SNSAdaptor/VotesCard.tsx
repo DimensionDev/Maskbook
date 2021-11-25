@@ -61,11 +61,14 @@ const useStyles = makeStyles()((theme) => {
         },
         link: {
             display: 'flex',
-            width: '35%',
+            minWidth: 130,
             color: 'inherit',
             alignItems: 'center',
             textDecoration: 'none !important',
             marginRight: 16,
+        },
+        power: {
+            minWidth: 90,
         },
         shadowRootTooltip: {
             color: 'white',
@@ -136,7 +139,7 @@ function Content() {
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
                             ) : null}
-                            <Typography>
+                            <Typography className={classes.power}>
                                 {millify(v.balance, { precision: 2, lowercase: true }) +
                                     ' ' +
                                     (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
