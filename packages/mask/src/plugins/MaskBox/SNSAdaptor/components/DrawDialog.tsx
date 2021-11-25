@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
-import { useProviderDescriptor, NetworkPluginID } from '@masknet/plugin-infra'
+import { useProviderDescriptor } from '@masknet/plugin-infra'
 import { FormattedAddress, FormattedBalance, ImageIcon } from '@masknet/shared'
 import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
 import {
@@ -110,7 +110,7 @@ export function DrawDialog(props: DrawDialogProps) {
         setOpenBoxTransactionOverrides,
     } = useContainer(Context)
 
-    const providerDescriptor = useProviderDescriptor(NetworkPluginID.PLUGIN_EVM)
+    const providerDescriptor = useProviderDescriptor()
     const account = useAccount()
     const chainId = useChainId()
     const providerType = useProviderType()
