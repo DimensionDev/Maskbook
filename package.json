@@ -23,7 +23,6 @@
     "packages/mask/**/*": "node ./packages/scripts/src/bin/precommit-hook-localekit.js"
   },
   "dependencies": {
-    "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@dimensiondev/kit": "0.0.0-20211118134922-42648c0",
     "@emotion/cache": "^11.6.0",
     "@emotion/react": "^11.6.0",
