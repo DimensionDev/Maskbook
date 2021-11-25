@@ -7,7 +7,6 @@ import config from './common/config'
 import Button from './components/Button'
 import { COLORS } from './common/variables'
 import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
 import formatter from './common/address'
 import { CircularProgress } from '@mui/material'
 import utils from './common/utils'
@@ -27,8 +26,6 @@ interface DonationPageProps {
 export function DonationPage(props: DonationPageProps) {
     const { address, isOwnAddress } = props
     const { classes } = useStyles()
-
-    const { listedDonation, address } = props
 
     const [isConnected, setIsConnected] = useState(false)
     const [listedDonation, setlistedDonation] = useState<GeneralAssetWithTags[]>([])

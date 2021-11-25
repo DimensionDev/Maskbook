@@ -28,8 +28,6 @@ export function NFTPage(props: NFTPageProps) {
     const { address, isOwnAddress } = props
     const { classes } = useStyles()
 
-    const { listedNFT, address } = props
-
     const [isConnected, setIsConnected] = useState(false)
     const [listedNFT, setlistedNFT] = useState<GeneralAssetWithTags[]>([])
     const [isLoading, setIsLoading] = useState(true)

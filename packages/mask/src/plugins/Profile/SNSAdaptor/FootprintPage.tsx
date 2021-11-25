@@ -29,8 +29,6 @@ export function FootprintPage(props: FootprintPageProps) {
     const { username, address, isOwnAddress } = props
     const { classes } = useStyles()
 
-    const { listedFootprint, username, address } = props
-
     const [isConnected, setIsConnected] = useState(false)
     const [listedFootprint, setListedFootprint] = useState<GeneralAssetWithTags[]>([])
     const [isLoading, setIsLoading] = useState(true)

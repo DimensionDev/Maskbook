@@ -119,14 +119,16 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
                                     </Typography>
                                 </div>
                             </div>
-                        </div>
-                    )
-                ) : (
-                    <Typography className={classes.msg} variant="body1">
-                        Please connect an Ethereum compatible wallet
-                    </Typography>
-                )}
-            </div>
+                        )
+                    ) : (
+                        <Typography className={classes.msg} variant="body2">
+                            Please connect an Ethereum compatible wallet
+                        </Typography>
+                    )}
+                </div>
+            ) : (
+                <div> </div>
+            )}
         </div>
     )
 }
