@@ -78,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+        marginTop: theme.spacing(1),
     },
 }))
 
