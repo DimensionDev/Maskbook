@@ -14,11 +14,12 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ConnectRSS3PageProps {
     isOwnAddress: boolean
+    checkConnection: (arg: boolean) => void
 }
 
 export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
     const { classes } = useStyles()
-    const { isOwnAddress } = props
+    const { isOwnAddress, checkConnection } = props
     const address = useAccount()
     const [isRSS3FileExist, setIsRSS3FileExist] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
@@ -32,6 +33,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
                 console.log('Hello RSS3')
             }
             setIsRSS3FileExist(true)
+            checkConnection(true)
         } catch (error) {
             console.log(error)
         }
@@ -47,11 +49,14 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
                     await apiUser.files.get(address)
                     await RSS3.setPageOwner(address)
                     setIsRSS3FileExist(true)
+                    checkConnection(true)
                 } catch (error) {
                     setIsRSS3FileExist(false)
+                    checkConnection(false)
                 }
             } else {
                 setIsRSS3FileExist(true)
+                checkConnection(true)
             }
         }
         setIsLoading(false)

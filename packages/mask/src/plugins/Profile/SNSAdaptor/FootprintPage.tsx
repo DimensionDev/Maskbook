@@ -5,7 +5,6 @@ import config from './common/config'
 import Button from './components/Button'
 import { COLORS } from './common/variables'
 import { Typography } from '@mui/material'
-import RSS3 from './common/rss3'
 import { makeStyles } from '@masknet/theme'
 import formatter from './common/address'
 import { CircularProgress } from '@mui/material'
@@ -23,13 +22,14 @@ interface FootprintPageProps {
     username: string
     address: string
     isOwnAddress: boolean
+    isConnected: boolean
 }
 
 export function FootprintPage(props: FootprintPageProps) {
-    const { username, address, isOwnAddress } = props
+    const { username, address, isOwnAddress, isConnected } = props
     const { classes } = useStyles()
 
-    const [isConnected, setIsConnected] = useState(false)
+    // const [isConnected, setIsConnected] = useState(false)
     const [listedFootprint, setListedFootprint] = useState<GeneralAssetWithTags[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -44,58 +44,61 @@ export function FootprintPage(props: FootprintPageProps) {
     }
 
     useEffect(() => {
-        if (Object.keys(RSS3.getPageOwner()).length !== 0) {
-            setIsConnected(true)
-        } else {
-            setIsConnected(false)
-        }
+        // if (Object.keys(RSS3.getPageOwner()).length !== 0) {
+        //     setIsConnected(true)
+
+        // } else {
+        //     setIsConnected(false)
+        // }
         loadFootprints()
-    }, [])
+    }, [isLoading])
 
     return (
         <>
-            {isLoading ? (
-                <div className="flex justify-center items-center">
-                    <CircularProgress />
-                </div>
-            ) : address !== '' ? (
+            {address !== '' ? (
                 isConnected ? (
-                    <div>
-                        <section className="flex flex-row justify-between items-center w-full gap-4">
-                            <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary">
-                                {formatter(address)}
-                            </Typography>
-                            {isOwnAddress ? (
-                                <Button
-                                    isOutlined={true}
-                                    color={COLORS.footprint}
-                                    text="Edit"
-                                    onClick={() => {
-                                        window.open(`https://rss3.bio/`)
-                                    }}
-                                />
-                            ) : (
-                                ''
-                            )}
-                        </section>
-                        <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
-                            {listedFootprint.map((asset, index) => (
-                                <FootprintCard
-                                    key={index}
-                                    imageUrl={asset.info.image_preview_url || config.undefinedImageAlt}
-                                    startDate={asset.info.start_date}
-                                    endDate={asset.info.end_date}
-                                    city={asset.info.country}
-                                    country={asset.info.city}
-                                    username={username}
-                                    activity={asset.info.title || ''}
-                                    clickEvent={() => {
-                                        toSingleFootprint(asset.platform, asset.identity, asset.id, asset.type)
-                                    }}
-                                />
-                            ))}
-                        </section>
-                    </div>
+                    isLoading ? (
+                        <div className="flex justify-center items-center">
+                            <CircularProgress />
+                        </div>
+                    ) : (
+                        <div>
+                            <section className="flex flex-row justify-between items-center w-full gap-4">
+                                <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary">
+                                    {formatter(address)}
+                                </Typography>
+                                {isOwnAddress ? (
+                                    <Button
+                                        isOutlined={true}
+                                        color={COLORS.footprint}
+                                        text="Edit"
+                                        onClick={() => {
+                                            window.open(`https://rss3.bio/`)
+                                        }}
+                                    />
+                                ) : (
+                                    ''
+                                )}
+                            </section>
+                            <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
+                                {listedFootprint.map((asset, index) => (
+                                    <FootprintCard
+                                        key={index}
+                                        imageUrl={asset.info.image_preview_url || config.undefinedImageAlt}
+                                        startDate={asset.info.start_date}
+                                        endDate={asset.info.end_date}
+                                        city={asset.info.country}
+                                        country={asset.info.city}
+                                        username={username}
+                                        activity={asset.info.title || ''}
+                                        clickEvent={() => {
+                                            toSingleFootprint(asset.platform, asset.identity, asset.id, asset.type)
+                                        }}
+                                    />
+                                ))}
+                            </section>
+                        </div>
+                    )
                 ) : (
                     <div className="text-center my-8">
                         <Typography className={classes.msg} variant="body1">

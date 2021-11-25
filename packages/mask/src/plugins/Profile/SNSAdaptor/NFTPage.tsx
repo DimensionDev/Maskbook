@@ -5,7 +5,6 @@ import Button from './components/Button'
 import type { GeneralAssetWithTags } from './common/types'
 import { COLORS } from './common/variables'
 import { Typography } from '@mui/material'
-import RSS3 from './common/rss3'
 import { makeStyles } from '@masknet/theme'
 import formatter from './common/address'
 import { CircularProgress } from '@mui/material'
@@ -22,13 +21,14 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTPageProps {
     address: string
     isOwnAddress: boolean
+    isConnected: boolean
 }
 
 export function NFTPage(props: NFTPageProps) {
-    const { address, isOwnAddress } = props
+    const { address, isOwnAddress, isConnected } = props
     const { classes } = useStyles()
 
-    const [isConnected, setIsConnected] = useState(false)
+    // const [isConnected, setIsConnected] = useState(false)
     const [listedNFT, setlistedNFT] = useState<GeneralAssetWithTags[]>([])
     const [isLoading, setIsLoading] = useState(true)
 
@@ -43,63 +43,65 @@ export function NFTPage(props: NFTPageProps) {
     }
 
     useEffect(() => {
-        if (Object.keys(RSS3.getPageOwner()).length !== 0) {
-            setIsConnected(true)
-        } else {
-            setIsConnected(false)
-        }
+        // if (Object.keys(RSS3.getPageOwner()).length !== 0) {
+        //     setIsConnected(true)
+        // } else {
+        //     setIsConnected(false)
+        // }
         loadNFTs()
-    }, [isLoading])
+    }, [isConnected])
 
     return (
         <>
-            {isLoading ? (
-                <div className="flex justify-center items-center">
-                    <CircularProgress />
-                </div>
-            ) : address !== '' ? (
+            {address !== '' ? (
                 isConnected ? (
-                    <div>
-                        <section className="flex flex-row justify-between items-center w-full gap-4">
-                            <div className="text-nft">
-                                <Typography className={classes.primaryText} variant="subtitle1">
-                                    {formatter(address)}
-                                </Typography>
-                            </div>
-                            {isOwnAddress ? (
-                                <Button
-                                    isOutlined={true}
-                                    color={COLORS.nft}
-                                    text="Edit"
-                                    onClick={() => {
-                                        window.open(`https://rss3.bio/`)
-                                    }}
-                                />
-                            ) : (
-                                ''
-                            )}
-                        </section>
-                        <section className="grid gap-4 py-4 grid-cols-2 md:grid-cols-3 justify-items-center">
-                            {listedNFT.map((asset, index) => (
-                                <div
-                                    key={index}
-                                    className="relative cursor-pointer w-full"
-                                    onClick={() => {
-                                        toSingleFootprint(asset.platform, asset.identity, asset.id, asset.type)
-                                    }}>
-                                    <NFTItem
-                                        previewUrl={asset.info.image_preview_url}
-                                        detailUrl={asset.info.animation_url}
-                                    />
-                                    <NFTBadges
-                                        location="overlay"
-                                        chain={asset.type.split('-')[0]}
-                                        collectionImg={asset.info.collection_icon}
-                                    />
+                    isLoading ? (
+                        <div className="flex justify-center items-center">
+                            <CircularProgress />
+                        </div>
+                    ) : (
+                        <div>
+                            <section className="flex flex-row justify-between items-center w-full gap-4">
+                                <div className="text-nft">
+                                    <Typography className={classes.primaryText} variant="subtitle1">
+                                        {formatter(address)}
+                                    </Typography>
                                 </div>
-                            ))}
-                        </section>
-                    </div>
+                                {isOwnAddress ? (
+                                    <Button
+                                        isOutlined={true}
+                                        color={COLORS.nft}
+                                        text="Edit"
+                                        onClick={() => {
+                                            window.open(`https://rss3.bio/`)
+                                        }}
+                                    />
+                                ) : (
+                                    ''
+                                )}
+                            </section>
+                            <section className="grid gap-4 py-4 grid-cols-2 md:grid-cols-3 justify-items-center">
+                                {listedNFT.map((asset, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative cursor-pointer w-full"
+                                        onClick={() => {
+                                            toSingleFootprint(asset.platform, asset.identity, asset.id, asset.type)
+                                        }}>
+                                        <NFTItem
+                                            previewUrl={asset.info.image_preview_url}
+                                            detailUrl={asset.info.animation_url}
+                                        />
+                                        <NFTBadges
+                                            location="overlay"
+                                            chain={asset.type.split('-')[0]}
+                                            collectionImg={asset.info.collection_icon}
+                                        />
+                                    </div>
+                                ))}
+                            </section>
+                        </div>
+                    )
                 ) : (
                     <div className="text-center my-8">
                         <Typography className={classes.msg} variant="body1">

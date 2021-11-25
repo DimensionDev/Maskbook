@@ -50,17 +50,13 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.WalletTag)
 
     const [persona, setPersona] = useState<RSS3DetailPersona | undefined>(undefined)
-    const [isConnected, setIsConnected] = useState(false)
-
-    const checkConnection = (connected: boolean) => {
-        setIsConnected(connected)
-    }
 
     const init = async (currentAccount: any) => {
         await RSS3.setPageOwner(currentAccount?.address)
         const pageOwner = RSS3.getPageOwner()
         const apiUser = RSS3.getAPIUser()
         const rss3Asset = await (apiUser.persona as IRSS3).assets.get(pageOwner.address)
+        setPersona(pageOwner)
     }
 
     useLocationChange(() => {
@@ -83,32 +79,19 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.WalletTag:
                 return <WalletsPage />
             case PageTags.NFTTag:
-                return (
-                    <NFTPage
-                        address={currentAccount?.address || ''}
-                        isOwnAddress={isOwnAddress}
-                        isConnected={isConnected}
-                    />
-                )
+                return <NFTPage address={currentAccount?.address || ''} isOwnAddress={isOwnAddress} />
             case PageTags.DonationTag:
-                return (
-                    <DonationPage
-                        address={currentAccount?.address || ''}
-                        isOwnAddress={isOwnAddress}
-                        isConnected={isConnected}
-                    />
-                )
+                return <DonationPage address={currentAccount?.address || ''} isOwnAddress={isOwnAddress} />
             case PageTags.FootprintTag:
                 return (
                     <FootprintPage
                         username={persona?.profile?.name || ''}
                         address={currentAccount?.address || ''}
                         isOwnAddress={isOwnAddress}
-                        isConnected={isConnected}
                     />
                 )
             case PageTags.ConnectRSS3:
-                return <ConnectRSS3Page isOwnAddress={isOwnAddress} checkConnection={checkConnection} />
+                return <ConnectRSS3Page isOwnAddress={isOwnAddress} />
             default:
                 unreachable(currentTag)
         }
