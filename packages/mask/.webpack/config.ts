@@ -111,7 +111,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 },
             },
             rules: [
-                { test: /\.svg$/, use: ['@svgr/webpack'] },
                 // Opt in source map
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
                 // TypeScript

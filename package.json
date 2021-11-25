@@ -58,7 +58,6 @@
     "@masknet/cli": "workspace:*",
     "@masknet/serializer": "workspace:^0.0.0",
     "@nice-labs/git-rev": "^3.5.0",
-    "@svgr/webpack": "^5.5.0",
     "@types/lodash-es": "^4.17.5",
     "cspell": "^5.12.5",
     "eslint": "7.32.0",
