@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { NetworkType } from '@masknet/web3-shared-evm'
-import { useStylesExtends } from '../..'
+import classNames from 'classnames'
+import { useStylesExtends } from '@masknet/theme'
 const useStyles = makeStyles()((theme) => ({
     icon: {
         borderRadius: '50%',
@@ -35,7 +36,7 @@ export function NetworkIcon(props: NetworkIconProps) {
             height={size}
             width={size}
             src={icons[networkType]}
-            className={props.bordered ? `${classes.icon} ${classes.border}` : classes.icon}
+            className={classNames(classes.icon, props.bordered ? classes.border : '')}
         />
     ) : null
 }
