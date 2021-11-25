@@ -28,7 +28,7 @@ export function DonationPage(props: DonationPageProps) {
     const { classes } = useStyles()
 
     const [listedDonation, setlistedDonation] = useState<GeneralAssetWithTags[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
 
     const toSingleDonation = (platform: string, identity: string, id: string, type: string) => {
         window.open(
@@ -40,7 +40,7 @@ export function DonationPage(props: DonationPageProps) {
 
     const loadDonations = async () => {
         const { listed } = await utils.initAssets('Gitcoin-Donation')
-        setIsLoading(false)
+        setLoading(false)
         setlistedDonation(listed)
     }
 

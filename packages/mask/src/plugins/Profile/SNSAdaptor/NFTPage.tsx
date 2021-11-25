@@ -29,7 +29,7 @@ export function NFTPage(props: NFTPageProps) {
     const { classes } = useStyles()
 
     const [listedNFT, setlistedNFT] = useState<GeneralAssetWithTags[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
 
     const toSingleFootprint = (platform: string, identity: string, id: string, type: string) => {
         window.open(
@@ -41,7 +41,7 @@ export function NFTPage(props: NFTPageProps) {
 
     const loadNFTs = async () => {
         const { listed } = await utils.initAssets('NFT')
-        setIsLoading(false)
+        setLoading(false)
         setlistedNFT(listed)
     }
 

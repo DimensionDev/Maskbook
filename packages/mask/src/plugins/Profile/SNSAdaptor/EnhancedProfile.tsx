@@ -50,7 +50,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const classes = useStylesExtends(useStyles(), props)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.WalletTag)
 
-    const [isConnected, setIsConnected] = useState(false)
+    const [isConnected, setConnected] = useState(false)
     const [username, setUsername] = useState<string>('')
 
     const init = async (currentAccount: any) => {
@@ -60,7 +60,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         const rss3Username = (await (apiUser.persona as IRSS3).profile.get(pageOwner.address)).name
         setUsername(rss3Username || '')
         const rss3Sign = ((await (apiUser.persona as IRSS3).files.get(pageOwner.address)) as RSS3Index).signature
-        setIsConnected(rss3Sign === '' ? false : true)
+        setConnected(rss3Sign === '' ? false : true)
     }
 
     useLocationChange(() => {

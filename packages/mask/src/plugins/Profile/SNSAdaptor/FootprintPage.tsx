@@ -30,7 +30,7 @@ export function FootprintPage(props: FootprintPageProps) {
     const { classes } = useStyles()
 
     const [listedFootprint, setListedFootprint] = useState<GeneralAssetWithTags[]>([])
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
 
     const toSingleFootprint = (platform: string, identity: string, id: string, type: string) => {
         window.open(
@@ -42,7 +42,7 @@ export function FootprintPage(props: FootprintPageProps) {
 
     const loadFootprints = async () => {
         const { listed } = await utils.initAssets('POAP')
-        setIsLoading(false)
+        setLoading(false)
         setListedFootprint(listed)
     }
 
