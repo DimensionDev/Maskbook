@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { NFTBadgeTimeline } from './NFTBadgeTimeline'
 
 const useStyles = makeStyles()((theme) => ({
@@ -14,7 +14,7 @@ interface NFTBadgeTweetProps {
 
 export function NFTBadgeTweet(props: NFTBadgeTweetProps) {
     const { avatarId, width, height } = props
-    const identity = useCurrentIdentity()
+    const identity = useLastRecognizedIdentity()
 
     if (!identity?.identifier.userId) return null
     return <NFTBadgeTimeline width={width} height={height} userId={identity?.identifier.userId} avatarId={avatarId} />

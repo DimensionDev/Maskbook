@@ -11,7 +11,8 @@ export async function getNFTAvatar(userId: string) {
         result = await getNFTAvatarFromJSON(userId)
         return result
     }
-    result = await getNFTAvatarFromRSS(address)
+
+    result = await getNFTAvatarFromRSS(userId, address)
     if (!result) {
         result = await getNFTAvatarFromJSON(userId)
     }

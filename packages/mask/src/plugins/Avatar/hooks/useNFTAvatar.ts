@@ -7,7 +7,7 @@ export function useNFTAvatar(userId: string): AsyncState<AvatarMetaDB | undefine
     return useAsync(async () => {
         if (!userId) return
         if (userId === '$unknown') return
-
+        console.log(userId)
         return PluginNFTAvatarRPC.getNFTAvatar(userId)
     }, [userId])
 }
