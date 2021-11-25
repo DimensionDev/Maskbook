@@ -57,7 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         width: 18,
         height: 18,
-        marginLeft: theme.spacing(0.5),
     },
     iconWrapper: {
         display: 'flex',

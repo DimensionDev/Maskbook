@@ -37,6 +37,7 @@ export * from './makeStyles'
 export * from './Components'
 export * from './hooks'
 export * from './ShadowRoot'
+export * from './UIHelper/custom-ui-helper'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
 
 const query = '(prefers-color-scheme: dark)'

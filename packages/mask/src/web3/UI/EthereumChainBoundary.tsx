@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
 import {
     ChainId,
@@ -15,7 +15,7 @@ import {
     useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared-evm'
-import { useValueRef, delay, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
@@ -81,7 +81,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     throw new Error('Timeout!')
                 })(),
                 networkType === NetworkType.Ethereum
-                    ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                    ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
                     : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
             ])
         } catch {

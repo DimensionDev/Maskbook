@@ -1,6 +1,6 @@
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { DialogContent, IconButton } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CloseIcon from '@mui/icons-material/Close'
 import { useState } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
