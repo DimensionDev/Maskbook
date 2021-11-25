@@ -3,6 +3,7 @@ import {
     Body,
     ColumnContentLayout,
     Footer,
+    PersonaLogoBox,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { useNavigate } from 'react-router-dom'
@@ -40,7 +41,9 @@ export const ConnectSocialMedia = () => {
                 action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
             />
             <Body>
-                <SignUpAccountLogo />
+                <PersonaLogoBox>
+                    <SignUpAccountLogo />
+                </PersonaLogoBox>
                 <div>
                     <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(4) }}>
                         <Button variant="text" onClick={() => navigate(RoutePaths.Setup)}>

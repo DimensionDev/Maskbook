@@ -7,7 +7,7 @@ import { RestoreFromLocal } from './RestoreFromLocal'
 import { RestoreFromMnemonic } from './RestoreFromMnemonic'
 import { RestoreFromCloud } from './RestoreFromCloud'
 import { RestoreFromPrivateKey } from './RestoreFromPrivateKey'
-import { RestoreBlueLogo, SignUpAccountLogo } from '../RegisterFrame/ColumnContentLayout'
+import { PersonaLogoBox, RestoreBlueLogo, SignUpAccountLogo } from '../RegisterFrame/ColumnContentLayout'
 import { TabContext, TabPanel } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
@@ -33,12 +33,14 @@ export const Restore = memo(() => {
 
     return (
         <>
-            {['mnemonic', 'privateKey'].includes(currentTab) ? <SignUpAccountLogo /> : <RestoreBlueLogo />}
+            <PersonaLogoBox>
+                {['mnemonic', 'privateKey'].includes(currentTab) ? <SignUpAccountLogo /> : <RestoreBlueLogo />}
+            </PersonaLogoBox>
             <TabContext value={currentTab}>
                 <ButtonGroupTabList
                     classes={{ root: classes.tabs }}
                     onChange={onChange}
-                    aria-label={t.wallets_import_wallet_tabs()}>
+                    aria-label={t.sign_in_account_tab_identity()}>
                     <Tab label={t.wallets_wallet_mnemonic()} value={tabs.mnemonic} />
                     <Tab label={t.wallets_wallet_private_key()} value={tabs.privateKey} />
                     <Tab label={t.wallets_wallet_json_file()} value={tabs.local} />
