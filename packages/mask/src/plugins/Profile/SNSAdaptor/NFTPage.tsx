@@ -32,7 +32,11 @@ export function NFTPage(props: NFTPageProps) {
     const [isLoading, setIsLoading] = useState(true)
 
     const toSingleFootprint = (platform: string, identity: string, id: string, type: string) => {
-        window.open(`https://rss3.bio/${address}/singlenft/${platform}/${identity}/${id}/${type}`)
+        window.open(
+            `https://rss3.bio/${address}/singlenft/${platform}/${identity}/${id}/${type}`,
+            '_blank',
+            'noopener noreferrer',
+        )
     }
 
     const loadNFTs = async () => {
@@ -67,7 +71,7 @@ export function NFTPage(props: NFTPageProps) {
                                         color={COLORS.nft}
                                         text="Edit"
                                         onClick={() => {
-                                            window.open(`https://rss3.bio/`)
+                                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
                                         }}
                                     />
                                 ) : (

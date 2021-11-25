@@ -33,7 +33,11 @@ export function FootprintPage(props: FootprintPageProps) {
     const [isLoading, setIsLoading] = useState(true)
 
     const toSingleFootprint = (platform: string, identity: string, id: string, type: string) => {
-        window.open(`https://rss3.bio/${address}/singlefootprint/${platform}/${identity}/${id}/${type}`)
+        window.open(
+            `https://rss3.bio/${address}/singlefootprint/${platform}/${identity}/${id}/${type}`,
+            '_blank',
+            'noopener noreferrer',
+        )
     }
 
     const loadFootprints = async () => {
@@ -66,7 +70,7 @@ export function FootprintPage(props: FootprintPageProps) {
                                         color={COLORS.footprint}
                                         text="Edit"
                                         onClick={() => {
-                                            window.open(`https://rss3.bio/`)
+                                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
                                         }}
                                     />
                                 ) : (

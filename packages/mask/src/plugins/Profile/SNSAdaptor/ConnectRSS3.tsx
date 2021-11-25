@@ -5,6 +5,7 @@ import RSS3, { IRSS3 } from './common/rss3'
 import { useAccount } from '@masknet/plugin-infra'
 import { Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { EthereumAddress } from 'wallet.ts'
 
 const useStyles = makeStyles()((theme) => ({
     msg: {
@@ -39,7 +40,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
     }
 
     const testAccount = async () => {
-        if (address.length === 42 && address.startsWith('0x')) {
+        if (EthereumAddress.isValid(address)) {
             setIsEVMpAddress(true)
             if (!RSS3.isValidRSS3()) {
                 const apiUser = RSS3.getAPIUser().persona as IRSS3
@@ -127,9 +128,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
                         </Typography>
                     )}
                 </div>
-            ) : (
-                <div> </div>
-            )}
+            ) : null}
         </div>
     )
 }

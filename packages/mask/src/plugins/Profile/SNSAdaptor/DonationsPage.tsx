@@ -31,7 +31,11 @@ export function DonationPage(props: DonationPageProps) {
     const [isLoading, setIsLoading] = useState(true)
 
     const toSingleDonation = (platform: string, identity: string, id: string, type: string) => {
-        window.open(`https://rss3.bio/${address}/singlegitcoin/${platform}/${identity}/${id}/${type}`)
+        window.open(
+            `https://rss3.bio/${address}/singlegitcoin/${platform}/${identity}/${id}/${type}`,
+            '_blank',
+            'noopener noreferrer',
+        )
     }
 
     const loadDonations = async () => {
@@ -64,7 +68,7 @@ export function DonationPage(props: DonationPageProps) {
                                         color={COLORS.donation}
                                         text="Edit"
                                         onClick={() => {
-                                            window.open(`https://rss3.bio/`)
+                                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
                                         }}
                                     />
                                 ) : (

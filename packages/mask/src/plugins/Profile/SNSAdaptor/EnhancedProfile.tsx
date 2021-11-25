@@ -10,11 +10,11 @@ import { FootprintPage } from './FootprintPage'
 import { ConnectRSS3Page } from './ConnectRSS3'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
-import RSS3, { IRSS3, RSS3DetailPersona } from './common/rss3'
+import RSS3, { IRSS3 } from './common/rss3'
 import { unreachable } from '@dimensiondev/kit'
 import { useAccount } from '@masknet/plugin-infra'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useEthereumAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, useEthereumAddress } from '@masknet/web3-shared-evm'
 import type { RSS3Index } from 'rss3-next/types/rss3'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,12 +45,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         identity.bio ?? '',
     )
 
-    const [isOwnAddress, setIsOwnAddress] = useState<boolean>(false)
-    const [show, setShow] = useState(false)
+    const [isOwnAddress, setOwnAddress] = useState(false)
+    const [hidden, setHidden] = useState(true)
     const classes = useStylesExtends(useStyles(), props)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.WalletTag)
 
-    const [persona, setPersona] = useState<RSS3DetailPersona | undefined>(undefined)
     const [isConnected, setIsConnected] = useState(false)
     const [username, setUsername] = useState<string>('')
 
@@ -62,7 +61,6 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         setUsername(rss3Username || '')
         const rss3Sign = ((await (apiUser.persona as IRSS3).files.get(pageOwner.address)) as RSS3Index).signature
         setIsConnected(rss3Sign === '' ? false : true)
-        // const rss3File = await apiUser.persona.files.get(user.address)
     }
 
     useLocationChange(() => {
@@ -73,12 +71,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     useEffect(() => {
         if (!loadingENS && currentAccount?.address !== '') {
             init(currentAccount)
-            setIsOwnAddress(currentAccount?.address === address)
+            setOwnAddress(isSameAddress(currentAccount?.address, address))
         }
-        console.log(currentAccount)
 
         return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
-            setShow(data.show)
+            setHidden(!data.show)
         })
     }, [identity, currentAccount, isConnected])
 
@@ -118,7 +115,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         }
     }, [currentTag])
 
-    if (!show) return null
+    if (hidden) return null
 
     return (
         <>
