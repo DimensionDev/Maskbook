@@ -217,7 +217,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                         ? investables.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         : investables
                     ).map((row: Investable) => (
-                        <TableRow key={row.token.address} className={classes.row}>
+                        <TableRow key={row.address} className={classes.row}>
                             <TableCell
                                 className={classes.cell}
                                 component="th"
@@ -231,7 +231,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                                 <Button
                                     className={classes.invest}
                                     size="small"
-                                    href={`${BASE_URL}/${row.category}/${row.chainId}/${row.token.address}`}
+                                    href={`${BASE_URL}/${row.category}/${row.chainId}/${row.address}`}
                                     target="_blank">
                                     {t('plugin_furucombo_invest')}
                                 </Button>

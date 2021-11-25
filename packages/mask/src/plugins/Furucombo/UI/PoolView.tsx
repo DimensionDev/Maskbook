@@ -89,7 +89,7 @@ export function PoolView(props: PoolProps) {
     const {
         category,
         chainId,
-        token: { address },
+        address,
         name,
         protocol,
         liquidity,
