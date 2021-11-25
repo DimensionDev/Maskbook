@@ -66,7 +66,9 @@ const useStyles = makeStyles()((theme) => ({
         marginRight: theme.spacing(1),
     },
     networkIcon: {},
-    providerIcon: {},
+    providerIcon: {
+        border: `1px solid ${theme.palette.background.default}`,
+    },
     connectButtonWrapper: {
         display: 'flex',
         justifyContent: 'center',
@@ -133,8 +135,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
             <WalletIcon
                 size={40}
                 badgeSize={18}
-                networkIcon={networkDescriptor?.icon}
-                providerIcon={providerDescriptor?.icon}
+                networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
+                providerIcon={networkDescriptor?.icon}
                 classes={{
                     networkIcon: classes.networkIcon,
                     providerIcon: classes.providerIcon,
