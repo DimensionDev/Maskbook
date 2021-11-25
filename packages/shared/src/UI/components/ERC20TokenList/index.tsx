@@ -106,7 +106,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
 
     const getPlaceHolder = () => {
         if (erc20TokensDetailedLoading) return <Placeholder message="Loading token lists..." />
-        if (searchedTokenLoading || searchedTokenLoading) return <Placeholder message="Loading token..." />
+        if (searchedTokenLoading) return <Placeholder message="Loading token..." />
         if (!renderAssets.length) return <Placeholder message="No token found" />
         return null
     }
