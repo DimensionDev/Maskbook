@@ -11,7 +11,7 @@ import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon } from '@masknet/shared'
-import { ChangeNetworkTip } from '../TokenTableRow/ChangeNetworkTip'
+import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
 import { useNetworkDescriptor } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({

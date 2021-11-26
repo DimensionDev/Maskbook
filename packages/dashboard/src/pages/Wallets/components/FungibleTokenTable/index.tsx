@@ -4,8 +4,8 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
-import { TokenTableRow } from '../TokenTableRow'
-import { useWeb3State, useTrustedERC20Tokens  }  from '@masknet/web3-shared-evm'
+import { FungibleTokenTableRow } from '../FungibleTokenTableRow'
+import { useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
@@ -67,11 +67,10 @@ interface TokenTableProps {
     selectedChainId: number | null
 }
 
-export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
+export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
     const { Asset } = useWeb3PluginState()
 
-    const trustedERC20Tokens = useTrustedERC20Tokens()
     const { portfolioProvider } = useWeb3State()
     const network = useNetworkDescriptor()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
@@ -181,7 +180,7 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                                     return Number(firstValue.lt(secondValue))
                                 })
                                 .map((asset, index) => (
-                                    <TokenTableRow
+                                    <FungibleTokenTableRow
                                         onSend={() => onSend(asset.token)}
                                         onSwap={() => onSwap(asset.token)}
                                         asset={asset}

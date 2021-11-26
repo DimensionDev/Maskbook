@@ -70,7 +70,7 @@ export interface TokenTableRowProps {
     onSend(): void
 }
 
-export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
+export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const currentChainId = useChainId()

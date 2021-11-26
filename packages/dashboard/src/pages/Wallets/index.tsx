@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import { useWeb3State } from '@masknet/web3-shared-evm'
 import { StartUp } from './StartUp'
-import { TokenAssets } from './components/TokenAssets'
+import { Assets } from './components/Assets'
 import { Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { Balance } from './components/Balance'
 import { Transfer } from './components/Transfer'
@@ -106,7 +106,7 @@ function Wallets() {
                         pluginId={pluginId}
                     />
                     <Routes>
-                        <Route path="/" element={<TokenAssets network={selectedNetwork} />} />
+                        <Route path="/" element={<Assets network={selectedNetwork} />} />
                         <Route path="transfer" element={<Transfer />} />
                         <Route
                             path="history"

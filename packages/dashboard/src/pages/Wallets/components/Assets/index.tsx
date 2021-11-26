@@ -3,7 +3,7 @@ import { ContentContainer } from '../../../../components/ContentContainer'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
 import { makeStyles, useTabs } from '@masknet/theme'
-import { TokenTable } from '../TokenTable'
+import { FungibleTokenTable } from '../FungibleTokenTable'
 import { useDashboardI18N } from '../../../../locales'
 import { CollectibleList } from '../CollectibleList'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
@@ -44,7 +44,7 @@ interface TokenAssetsProps {
     network: Web3Plugin.NetworkDescriptor | null
 }
 
-export const TokenAssets = memo<TokenAssetsProps>(({ network }) => {
+export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
     const pluginId = usePluginIDContext()
     const { classes } = useStyles()
@@ -93,7 +93,7 @@ export const TokenAssets = memo<TokenAssetsProps>(({ network }) => {
                         )}
                     </Box>
                     <TabPanel value={AssetTab.Token} key={AssetTab.Token} sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <TokenTable selectedChainId={network?.chainId ?? null} />
+                        <FungibleTokenTable selectedChainId={network?.chainId ?? null} />
                     </TabPanel>
                     <TabPanel
                         value={AssetTab.Collectibles}
