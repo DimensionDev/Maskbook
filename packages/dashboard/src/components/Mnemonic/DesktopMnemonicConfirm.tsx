@@ -10,6 +10,11 @@ export interface DesktopMnemonicConfirmProps {
     setAll?(words: string[]): void
 }
 
+const parserPastingAllMnemonic = (text: string) => {
+    const result = [...text.matchAll(/([a-z])+/g)]
+    return result.length === 12 ? result : null
+}
+
 export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) => {
     const { puzzleWords, indexes, onChange, setAll } = props
     useDrop({ onText: (text) => handlePaster(text) })
@@ -17,9 +22,10 @@ export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) 
     const handlePaster = useCallback(
         (text: string) => {
             if (!setAll) return
-            const result = [...text.matchAll(/([a-z])+/g)]
-            if (result.length !== 12) return
-            setAll(result.map((x) => x[0]))
+
+            const words = parserPastingAllMnemonic(text)
+            if (!words) return
+            setAll(words.map((x) => x[0]))
         },
         [setAll],
     )
@@ -35,8 +41,14 @@ export const DesktopMnemonicConfirm = memo((props: DesktopMnemonicConfirmProps) 
                         InputProps={{ disableUnderline: true }}
                         disabled={indexes && !indexes.includes(i)}
                         onChange={(e) => {
-                            if ((e.nativeEvent as InputEvent).inputType === 'insertFromPaste') return
-                            onChange(e.target.value, indexes ? indexes.indexOf(i) : i)
+                            const text = e.target.value
+                            if (
+                                (e.nativeEvent as InputEvent).inputType === 'insertFromPaste' &&
+                                parserPastingAllMnemonic(text)
+                            ) {
+                                return
+                            }
+                            onChange(text, indexes ? indexes.indexOf(i) : i)
                         }}
                     />
                 </Grid>
