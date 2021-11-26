@@ -18,7 +18,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'block',
         width: '100%',
         height: '100%',
-        border: `1px solid ${theme.palette.background.default}`,
         borderRadius: '50%',
     },
     badgeIcon: {
