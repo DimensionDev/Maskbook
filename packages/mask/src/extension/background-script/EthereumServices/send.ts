@@ -35,6 +35,7 @@ import { Flags } from '../../../../shared'
 import { nativeAPI } from '../../../utils/native-rpc'
 import { WalletRPC } from '../../../plugins/Wallet/messages'
 import { getSendTransactionComputedPayload } from './rpc'
+import { getError, hasError } from './error'
 
 function parseGasPrice(price: string | undefined) {
     return Number.parseInt(price ?? '0x0', 16)
@@ -126,18 +127,6 @@ function getTransactionHash(response?: JsonRpcResponse) {
     if (typeof hash !== 'string') return ''
     if (!/^0x([\dA-Fa-f]{64})$/.test(hash)) return ''
     return hash
-}
-
-function getError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
-    if (error instanceof Error && error.message) return error
-    if (typeof error === 'string' && error) return new Error(error)
-    //#region the error object in the rpc response
-    const responseError = response?.error as unknown
-    if (responseError instanceof Error) return getError(responseError, null, fallback)
-    //#endregion
-    if (typeof response?.error === 'string' && response?.error) return new Error(response.error)
-    if (fallback) return new Error(fallback)
-    return new Error('Unknown Error.')
 }
 
 async function handleTransferTransaction(chainId: ChainId, payload: JsonRpcPayload) {
@@ -358,7 +347,12 @@ export async function INTERNAL_send(
                         params: [signed.rawTransaction],
                     },
                     (error, response) => {
-                        callback(getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION), response)
+                        callback(
+                            hasError(error, response)
+                                ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)
+                                : null,
+                            response,
+                        )
                         switch (payload.method) {
                             case EthereumMethodType.ETH_SEND_TRANSACTION:
                                 handleNonce(chainIdFinally, account, error, response)
@@ -376,7 +370,12 @@ export async function INTERNAL_send(
                 try {
                     await MetaMask.ensureConnectedAndUnlocked()
                     provider?.send(payload, (error, response) => {
-                        callback(getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION), response)
+                        callback(
+                            hasError(error, response)
+                                ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)
+                                : null,
+                            response,
+                        )
                         handleTransferTransaction(chainIdFinally, payload)
                         handleRecentTransaction(chainIdFinally, account, payload, response)
                     })
@@ -400,7 +399,12 @@ export async function INTERNAL_send(
             case ProviderType.MathWallet:
                 await Injected.ensureConnectedAndUnlocked()
                 Injected.createProvider().send(payload, (error, response) => {
-                    callback(getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION), response)
+                    callback(
+                        hasError(error, response)
+                            ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)
+                            : null,
+                        response,
+                    )
                     handleTransferTransaction(chainIdFinally, payload)
                     handleRecentTransaction(chainIdFinally, account, payload, response)
                 })
