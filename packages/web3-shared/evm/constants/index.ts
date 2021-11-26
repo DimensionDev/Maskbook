@@ -10,7 +10,6 @@ import Trader from '@masknet/web3-constants/evm/trader.json'
 import Trending from '@masknet/web3-constants/evm/trending.json'
 import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import RPC from '@masknet/web3-constants/evm/rpc.json'
-import PoolTogether from '@masknet/web3-constants/evm/pooltogether.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
 import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy.json'
@@ -58,9 +57,6 @@ export const useRPCConstants = hookTransform(getRPCConstants)
 
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
-
-export const getPoolTogetherConstants = transform(PoolTogether)
-export const usePoolTogetherConstants = hookTransform(getPoolTogetherConstants)
 
 export const getGoodGhostingConstants = transform(GoodGhosting)
 export const useGoodGhostingConstants = hookTransform(getGoodGhostingConstants)

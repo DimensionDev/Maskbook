@@ -1,17 +1,14 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/constants'
-import { usePoolTogetherConstants } from '@masknet/web3-shared-evm'
 import { Card, CardActions, CardContent, CircularProgress, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
-import { useEffect } from 'react'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { PoolTogetherIcon } from '../../../resources/PoolTogetherIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
-import { usePool, usePools } from '../hooks/usePools'
-import type { Pool } from '../types'
 import { Account } from './Account'
 import { PoolsView } from './PoolsView'
+import { usePools } from '../hooks/usePools'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -109,21 +106,10 @@ interface PoolTogetherViewProps {}
 export function PoolTogetherView(props: PoolTogetherViewProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [pools, setPools] = useState<Pool[]>([])
 
     //#region pools
-    const { value: _pools = [], error: error, loading: loading, retry: retry } = usePools()
-    _pools.sort((x, y) => Number(y.prize.weeklyTotalValueUsd) - Number(x.prize.weeklyTotalValueUsd))
-    //#endregion
-
-    //#region mask pool
-    const { MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH } = usePoolTogetherConstants()
-    const {
-        value: maskPool,
-        error: errorMask,
-        loading: loadingMask,
-        retry: retryMask,
-    } = usePool(MASK_POOL_ADDRESS, MASK_POOL_SUBGRAPH, true)
+    const { value: pools = [], error: error, loading: loading, retry: retry } = usePools()
+    pools.sort((x, y) => Number(y.prize.weeklyTotalValueUsd) - Number(x.prize.weeklyTotalValueUsd))
     //#endregion
 
     //#region tabs
@@ -134,20 +120,12 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
     ].filter(Boolean)
     //#endregion
 
-    useEffect(() => {
-        if (maskPool) {
-            setPools([maskPool, ..._pools])
-        } else {
-            setPools(_pools)
-        }
-    }, [_pools, maskPool])
-
-    if (loading || loadingMask) {
+    if (loading) {
         return <CircularProgress className={classes.progress} color="primary" size={15} />
     }
 
-    if (error || errorMask) {
-        return <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryMask} />
+    if (error) {
+        return <RefreshIcon className={classes.refresh} color="primary" onClick={() => retry()} />
     }
 
     if (pools.length === 0) {
