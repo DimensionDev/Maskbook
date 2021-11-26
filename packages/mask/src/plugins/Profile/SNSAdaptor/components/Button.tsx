@@ -40,7 +40,6 @@ const Button = ({
     text,
     children,
     fontSize,
-    icon,
     isOutlined,
     isDisabled,
     isFullRound,
@@ -93,16 +92,6 @@ const Button = ({
 
     if (isFullRound) {
         className = className.replace('rounded', 'rounded-full')
-    }
-
-    if (typeof icon !== 'undefined') {
-        if (typeof height === 'undefined') {
-            className += ' h-6'
-        }
-        if (typeof width === 'undefined') {
-            className += ' w-6'
-        }
-        className = className.replace('py-sm px-3', 'p-0.5')
     }
 
     return (

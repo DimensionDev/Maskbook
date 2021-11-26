@@ -124,7 +124,6 @@
     "webextension-polyfill": "^0.8.0",
     "z-schema": "^5.0.2",
     "zod": "3.11.6",
-    "axios": "^0.24.0",
     "ethers": "^5.5.1"
   },
   "devDependencies": {

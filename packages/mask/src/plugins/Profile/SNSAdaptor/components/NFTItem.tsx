@@ -47,7 +47,6 @@ const NFTItem = ({ previewUrl, detailUrl, isShowingDetails }: NFTItemProps) => {
                         Click to View
                     </Typography>
                 </div>
-                // <ModelViewer className={containerClasses} style={containerStyles} src={detailUrl} />
             )}
             {getContentType(imageUrl) === 'video' && (
                 <div className="flex justify-center items-center">
@@ -55,16 +54,6 @@ const NFTItem = ({ previewUrl, detailUrl, isShowingDetails }: NFTItemProps) => {
                         Click to View
                     </Typography>
                 </div>
-                // <video
-                //     className={containerClasses}
-                //     src={detailUrl || previewUrl}
-                //     poster={previewUrl}
-                //     controls={isShowingDetails}
-                //     autoPlay={isShowingDetails}
-                //     playsInline
-                //     loop
-                //     muted
-                // />
             )}
             {getContentType(imageUrl) === 'image' && (
                 <img className={containerClasses} src={imageUrl} alt="NFT Image" />
