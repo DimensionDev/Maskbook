@@ -82,6 +82,7 @@
     "wallets_transfer_error_contract": "Select NFT contract",
     "wallets_transfer_error_nft": "Select one NFT",
     "wallets_transfer_error_invalid_address": "Invalid recipient address",
+    "wallet_transfer_error_no_address_has_been_set_name": "No address has been set for this name.",
     "wallets_transfer_error_insufficient_balance": "Insufficient {{symbol}} balance",
     "wallets_transfer_send": "Send",
     "wallets_transfer_memo_placeholder": "Optional message",

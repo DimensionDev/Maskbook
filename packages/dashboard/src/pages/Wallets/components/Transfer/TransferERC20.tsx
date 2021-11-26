@@ -1,5 +1,5 @@
-import { MaskTextField } from '@masknet/theme'
-import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
+import { MaskColorVar, MaskTextField } from '@masknet/theme'
+import { Box, Button, IconButton, Stack, Typography, Link } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import {
     EthereumTokenType,
@@ -18,7 +18,8 @@ import {
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { TokenAmountPanel } from '@masknet/shared'
+import { useLookupAddress, useWeb3State } from '@masknet/plugin-infra'
+import { FormattedAddress, TokenAmountPanel } from '@masknet/shared'
 import TuneIcon from '@mui/icons-material/Tune'
 import { EthereumAddress } from 'wallet.ts'
 import { SelectTokenDialog } from '../SelectTokenDialog'
@@ -46,6 +47,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const chainId = useChainId()
     const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
 
+    const { Utils } = useWeb3State()
+
     useEffect(() => {
         setSelectedToken(token)
     }, [token])
@@ -59,9 +62,22 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const nativeTokenPrice = useNativeTokenPrice()
     const isNativeToken = selectedToken.type === EthereumTokenType.Native
 
+    //#region resolve ENS domain
+    const { value: registeredAddress = '', error: resolveEnsDomainError } = useLookupAddress(address)
+    //#endregion
+
     // transfer amount
     const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(selectedToken.decimals)).toFixed()
-    const erc20GasLimit = useGasLimit(selectedToken.type, selectedToken.address, transferAmount, address)
+    const erc20GasLimit = useGasLimit(
+        selectedToken.type,
+        selectedToken.address,
+        transferAmount,
+        EthereumAddress.isValid(address)
+            ? address
+            : EthereumAddress.isValid(registeredAddress)
+            ? registeredAddress
+            : '',
+    )
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
 
@@ -87,8 +103,15 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     )
 
     const onTransfer = useCallback(async () => {
-        await transferCallback(transferAmount, address, gasConfig, memo)
-    }, [transferAmount, address, memo, selectedToken.decimals, transferCallback, gasConfig])
+        if (EthereumAddress.isValid(address)) {
+            await transferCallback(transferAmount, address, gasConfig, memo)
+            return
+        } else if (Utils?.isValidDomain?.(address) && EthereumAddress.isValid(registeredAddress)) {
+            await transferCallback(transferAmount, registeredAddress, gasConfig, memo)
+            return
+        }
+        return
+    }, [transferAmount, address, memo, selectedToken.decimals, transferCallback, gasConfig, registeredAddress, Utils])
 
     //#region validation
     const validationMessage = useMemo(() => {
@@ -96,9 +119,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
-        if (!EthereumAddress.isValid(address)) return t.wallets_transfer_error_invalid_address()
+        if (!(EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address)))
+            return t.wallets_transfer_error_invalid_address()
+        if (Utils?.isValidDomain?.(address) && (resolveEnsDomainError || !registeredAddress)) {
+            return t.wallet_transfer_error_no_address_has_been_set_name()
+        }
         return ''
-    }, [transferAmount, maxAmount, address, tokenBalance, selectedToken, amount])
+    }, [transferAmount, maxAmount, address, tokenBalance, selectedToken, amount, Utils])
     //#endregion
 
     useEffect(() => {
@@ -120,6 +147,29 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         onChange={(e) => setAddress(e.currentTarget.value)}
                         label={t.wallets_transfer_to_address()}
                     />
+                    {registeredAddress ? (
+                        <Link
+                            href={Utils?.resolveEnsDomains?.(address)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            underline="none">
+                            <Box my={1}>
+                                <Typography fontSize={16} lineHeight="22px" fontWeight={500}>
+                                    {address}
+                                </Typography>
+                                <Typography
+                                    fontSize={14}
+                                    lineHeight="20px"
+                                    style={{ color: MaskColorVar.textSecondary }}>
+                                    <FormattedAddress
+                                        address={registeredAddress}
+                                        size={4}
+                                        formatter={Utils?.formatAddress}
+                                    />
+                                </Typography>
+                            </Box>
+                        </Link>
+                    ) : null}
                 </Box>
                 <Box mt={2}>
                     <TokenAmountPanel
