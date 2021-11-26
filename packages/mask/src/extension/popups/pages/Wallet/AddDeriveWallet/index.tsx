@@ -89,7 +89,7 @@ const AddDeriveWallet = memo(() => {
 
             return derivableAccounts.map((derivedWallet, index) => {
                 const added = !!wallets.find(currySameAddress(derivedWallet.address))
-                const selected = !!unDeriveWallets.find((item) => item === index + page * 10)
+                const selected = unDeriveWallets.find((item) => item === index + page * 10) !== undefined
                 return {
                     added,
                     selected,
