@@ -124,11 +124,8 @@
     "webextension-polyfill": "^0.8.0",
     "z-schema": "^5.0.2",
     "zod": "3.11.6",
-    "react-icons": "4.3.1",
-    "@google/model-viewer": "1.9.2",
     "axios": "^0.24.0",
-    "ethers": "^5.5.1",
-    "@walletconnect/web3-provider": "^1.6.6"
+    "ethers": "^5.5.1"
   },
   "devDependencies": {
     "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",

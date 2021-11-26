@@ -1,7 +1,7 @@
 import ImageHolder from './ImageHolder'
-import { BiCalendar, BiLocationPlus } from 'react-icons/bi'
 import { Typography } from '@mui/material'
-
+import EventRoundedIcon from '@mui/icons-material/EventRounded'
+import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
 interface FootprintProps {
     imageUrl: string
     startDate: string | undefined
@@ -48,13 +48,13 @@ const FootprintCard = ({
             </section>
             <section className="flex flex-col justify-around flex-1 text-sm leading-normal text-body-text">
                 <div className="flex flex-row items-center gap-2">
-                    <BiCalendar className="text-footprint" />
+                    <EventRoundedIcon className="text-footprint" fontSize="small" />
                     <Typography variant="body1" color="textPrimary">
                         {displayDate}
                     </Typography>
                 </div>
                 <div className="flex flex-row items-center gap-2">
-                    <BiLocationPlus className="text-footprint" />
+                    <LocationOnRoundedIcon className="text-footprint" fontSize="small" />
                     <Typography variant="body1" color="textPrimary">
                         {location}
                     </Typography>

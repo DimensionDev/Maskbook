@@ -3,7 +3,7 @@ import { COLORS } from './common/variables'
 import { useEffect, useState } from 'react'
 import RSS3, { IRSS3 } from './common/rss3'
 import { useAccount } from '@masknet/plugin-infra'
-import { Typography, Link } from '@mui/material'
+import { Typography, Link, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EthereumAddress } from 'wallet.ts'
 
@@ -69,7 +69,9 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
             {isOwnAddress ? (
                 <div className="flex flex-col my-8 gap-y-6 items-center justify-center">
                     {isLoading ? (
-                        <Button isOutlined={false} color={COLORS.primary} icon="loading" width="w-60" height="h-14" />
+                        <Button isOutlined={false} color={COLORS.primary} width="w-60" height="h-14">
+                            <CircularProgress sx={{ color: 'text.Primary' }} size="1rem" />
+                        </Button>
                     ) : isEVMpAddress ? (
                         isRSS3FileExist ? (
                             <div className="flex flex-col my-8 gap-y-6 items-center px-4 justify-center">
