@@ -31,9 +31,9 @@ const setTaggedOrder = (tagged: TypesWithTag, order?: number): void => {
         }
     }
     if (order) {
-        tagged.tags.push(`pass:order:${order}`)
+        tagged.tags.push(`${config.tags.prefix}:order:${order}`)
     } else {
-        tagged.tags.push(config.tags.hiddenTag)
+        tagged.tags.push(`${config.tags.prefix}:${config.tags.hiddenTag}`)
     }
 }
 
@@ -106,7 +106,7 @@ async function initAssets(type: string, limit?: number) {
 
     for (const asset of allAssets) {
         if (asset.type.endsWith(type)) {
-            if (asset.tags?.includes(config.tags.hiddenTag)) {
+            if (asset.tags?.includes(`${config.tags.prefix}:${config.tags.hiddenTag}`)) {
                 unlisted.push(asset)
             } else {
                 listed.push(asset)
@@ -154,7 +154,7 @@ async function initAccounts() {
     const allAccounts = await apiUser.accounts.get(pageOwner.address)
 
     for (const account of allAccounts) {
-        if (account.tags?.includes(config.tags.hiddenTag)) {
+        if (account.tags?.includes(`${config.tags.prefix}:${config.tags.hiddenTag}`)) {
             unlisted.push(account)
         } else {
             listed.push(account)
