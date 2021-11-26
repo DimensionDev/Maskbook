@@ -39,6 +39,7 @@ export function createERC20Token(
     decimals: number,
     name: string,
     symbol: string,
+    logoURI?: string[],
 ): ERC20TokenDetailed {
     return {
         type: EthereumTokenType.ERC20,
@@ -47,6 +48,7 @@ export function createERC20Token(
         decimals,
         name,
         symbol,
+        logoURI,
     }
 }
 

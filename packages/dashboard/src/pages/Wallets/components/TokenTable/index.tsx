@@ -20,6 +20,7 @@ import {
     useWeb3State,
     useChainBalanceList,
     useChainBalance,
+    useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -77,7 +78,8 @@ interface TokenTableProps {
 export const TokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
 
-    const { erc20Tokens: trustedERC20Tokens, providerType } = useWeb3State()
+    const trustedERC20Tokens = useTrustedERC20Tokens()
+    const { providerType } = useWeb3State()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
     const account = useAccount()
     const { value: selectedChainBalance } = useChainBalance(

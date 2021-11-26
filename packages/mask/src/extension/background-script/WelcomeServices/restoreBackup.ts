@@ -32,7 +32,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             for (const x of data.personas) {
                 await createOrUpdatePersonaDB(
                     PersonaRecordFromJSONFormat(x),
-                    { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' },
+                    { explicitUndefinedField: 'ignore', linkedProfiles: 'merge', protectPrivateKey: true },
                     t,
                 )
             }
