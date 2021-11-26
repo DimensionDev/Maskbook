@@ -12,12 +12,11 @@ import {
     Divider,
     CircularProgress,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import AddIcon from '@mui/icons-material/Add'
 import addDate from 'date-fns/add'
 import { usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '@masknet/shared'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import type { PollGunDB } from '../Services'

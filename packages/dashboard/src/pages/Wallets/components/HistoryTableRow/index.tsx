@@ -47,6 +47,11 @@ const useStyles = makeStyles()((theme) => ({
     send: {
         color: MaskColorVar.redMain,
     },
+    hover: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
 }))
 
 export interface HistoryTableRowProps {
@@ -75,7 +80,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
     const { classes } = useStyles()
     const { Utils } = useWeb3State()
     return (
-        <TableRow>
+        <TableRow className={classes.hover}>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box style={{ display: 'flex', alignItems: 'center' }}>
                     <TransactionIcon

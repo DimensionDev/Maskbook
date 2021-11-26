@@ -57,7 +57,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 18,
         width: 18,
         height: 18,
-        marginLeft: theme.spacing(0.5),
     },
     iconWrapper: {
         display: 'flex',
@@ -155,9 +154,6 @@ function useToolbox() {
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
-    const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
     //#endregion
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
@@ -180,9 +176,8 @@ function useToolbox() {
 
     const openWallet = useCallback(() => {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
-        if (isWalletValid) return openWalletStatusDialog()
-        else return openSelectWalletDialog()
-    }, [openWalletStatusDialog, openSelectWalletDialog, hasNativeAPI, isWalletValid])
+        return openWalletStatusDialog()
+    }, [openWalletStatusDialog, hasNativeAPI])
 
     const walletTitle = renderButtonText()
 

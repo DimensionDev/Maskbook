@@ -329,7 +329,8 @@
         "mathwallet",
         "walletlink",
         "rpcs",
-        "FUSD"
+        "FUSD",
+        "isfacebook"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

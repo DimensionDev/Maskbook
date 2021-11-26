@@ -1,6 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { EnhancedProfilePage } from '../../../plugins/Profile/SNSAdaptor/EnhancedProfile'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
@@ -60,7 +59,6 @@ export function EnhancedProfilePageAtTwitter() {
         : EMPTY_STYLE
 
     const { classes } = useStyles({ backgroundColor: style.backgroundColor, fontFamily: fontStyle.fontFamily })
-    const identity = useCurrentVisitingIdentity()
 
     return <EnhancedProfilePage classes={classes} />
 }

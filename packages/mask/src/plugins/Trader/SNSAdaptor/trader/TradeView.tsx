@@ -1,5 +1,4 @@
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Trader, TraderProps } from './Trader'
 
 const useStyles = makeStyles()((theme) => {
