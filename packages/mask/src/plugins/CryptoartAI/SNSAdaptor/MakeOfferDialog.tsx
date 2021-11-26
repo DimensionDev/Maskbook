@@ -77,7 +77,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const [placeBidState, placeBidCallback, resetCallback] = usePlaceBidCallback(
         is24Auction,
-        Number(asset?.value?.editionNumber),
+        asset?.value?.editionNumber ? Number(asset?.value?.editionNumber) : 0,
     )
 
     const onMakeOffer = useCallback(() => {
