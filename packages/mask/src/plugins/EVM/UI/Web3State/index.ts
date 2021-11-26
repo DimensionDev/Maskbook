@@ -16,6 +16,8 @@ import {
     resolveChainName,
     resolveTransactionLinkOnExplorer,
     Web3ProviderType,
+    isValidDomain,
+    resolveEnsDomains,
 } from '@masknet/web3-shared-evm'
 import Ens from 'ethjs-ens'
 import { getStorage, StorageDefaultValue } from '../../storage'
@@ -71,17 +73,21 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
     }
     state.NameService = state.NameService ?? {
         lookup: async (domain: string) => {
+            const chainId = context.chainId.getCurrentValue()
+            const network = context.networkType.getCurrentValue()
+            const provider = context.provider.getCurrentValue()
+
             // Only support Ethereum on evm
-            if (context.networkType.getCurrentValue() !== NetworkType.Ethereum) return undefined
+            if (network !== NetworkType.Ethereum) return undefined
 
             const ensAddressBook = getStorage().ensAddressBook.value
 
-            const cacheAddress = ensAddressBook[domain]
+            const cacheAddress = ensAddressBook[chainId]?.[domain]
             if (cacheAddress) return cacheAddress
 
             const address = await new Ens({
-                provider: context.provider.getCurrentValue(),
-                network: context.chainId.getCurrentValue(),
+                provider,
+                network: chainId,
             }).lookup(domain)
 
             if (isSameAddress(address, ZERO_ADDRESS) || isSameAddress(address, ZERO_X_ERROR_ADDRESS)) {
@@ -91,26 +97,39 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             if (address)
                 await getStorage().ensAddressBook.setValue({
                     ...ensAddressBook,
-                    ...{ [address]: domain, [domain]: address },
+                    [chainId]: {
+                        ...ensAddressBook[chainId],
+                        ...{ [address]: domain, [domain]: address },
+                    },
                 })
 
             return address
         },
         reverse: async (address: string) => {
             if (!isValidAddress(address)) return undefined
+            const chainId = context.chainId.getCurrentValue()
+            const network = context.networkType.getCurrentValue()
+            const provider = context.provider.getCurrentValue()
+
+            // Only support Ethereum on evm
+            if (network !== NetworkType.Ethereum) return undefined
+
             const ensAddressBook = getStorage().ensAddressBook.value
-            const cacheDomain = ensAddressBook[address]
+            const cacheDomain = ensAddressBook[chainId]?.[address]
             if (cacheDomain) return cacheDomain
 
             const domain = await new Ens({
-                provider: context.provider.getCurrentValue(),
-                network: context.chainId.getCurrentValue(),
+                provider,
+                network: chainId,
             }).reverse(address)
 
             if (domain)
                 await getStorage().ensAddressBook.setValue({
                     ...ensAddressBook,
-                    ...{ [address]: domain, [domain]: address },
+                    [chainId]: {
+                        ...ensAddressBook[chainId],
+                        ...{ [address]: domain, [domain]: address },
+                    },
                 })
 
             return domain
@@ -131,6 +150,8 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         resolveTransactionLink: resolveTransactionLinkOnExplorer,
         resolveAddressLink: resolveAddressLinkOnExplorer,
         resolveBlockLink: resolveBlockLinkOnExplorer,
+        isValidDomain,
+        resolveEnsDomains,
     }
     return state
 }

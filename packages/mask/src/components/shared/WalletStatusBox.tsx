@@ -12,6 +12,7 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useProviderType,
+    useReverseAddress,
 } from '@masknet/plugin-infra'
 import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -89,6 +90,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const networkDescriptor = useNetworkDescriptor()
     const { Utils } = useWeb3State() ?? {}
 
+    const { value: domain } = useReverseAddress(account)
+
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopy = useSnackbarCallback(
@@ -146,7 +149,11 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2">
-                        <FormattedAddress address={account} size={9} formatter={Utils?.formatAddress} />
+                        {domain ? (
+                            domain
+                        ) : (
+                            <FormattedAddress address={account} size={9} formatter={Utils?.formatAddress} />
+                        )}
                     </Typography>
                     <Link
                         className={classes.link}

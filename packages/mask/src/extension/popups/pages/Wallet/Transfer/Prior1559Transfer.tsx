@@ -203,7 +203,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         selectedAsset?.token.type,
         selectedAsset?.token.address,
         new BigNumber(!!amount ? amount : 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
-        address,
+        EthereumAddress.isValid(address) ? address : '',
     )
     //#endregion
 
@@ -255,7 +255,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const [menu, openMenu] = useMenu(
         <MenuItem className={classes.expand} key="expand">
-            <Typography className={classes.title}>Transfer between my accounts</Typography>
+            <Typography className={classes.title}>{t('wallet_transfer_between_my_account')}</Typography>
             <ExpandMore style={{ fontSize: 20 }} />
         </MenuItem>,
         <Collapse in>
@@ -340,9 +340,9 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         return (
             <>
                 <form className={classes.container} onSubmit={handleConfirm}>
-                    <Typography className={classes.label}>Transfer Account</Typography>
+                    <Typography className={classes.label}>{t('wallet_transfer_transfer_account')}</Typography>
                     <Typography className={classes.accountName}>{accountName}</Typography>
-                    <Typography className={classes.label}>Receiving Account</Typography>
+                    <Typography className={classes.label}>{t('wallet_transfer_receiving_account')}</Typography>
                     <Controller
                         render={({ field }) => (
                             <StyledInput

@@ -862,12 +862,14 @@ importers:
       '@ensdomains/address-encoder': ^0.2.6
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
+      '@types/punycode': ^2.1.0
       '@types/use-subscription': ^1.0.0
       '@unstoppabledomains/resolution': ^5.0.1
       bignumber.js: 9.0.1
       ethereum-blockies: ^0.1.1
       fuse.js: ^6.4.6
       lodash-es: ^4.17.21
+      punycode: ^2.1.1
       react-use: ^17.3.1
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
@@ -880,11 +882,13 @@ importers:
       '@ensdomains/address-encoder': 0.2.6
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts
+      '@types/punycode': 2.1.0
       '@unstoppabledomains/resolution': 5.0.1
       bignumber.js: 9.0.1
       ethereum-blockies: 0.1.1
       fuse.js: 6.4.6
       lodash-es: 4.17.21
+      punycode: 2.1.1
       react-use: 17.3.1_9a9fcfd9691ee39f83ac00f4a3221da4
       unstated-next: 1.1.0
       urlcat: 2.0.4
@@ -9557,6 +9561,10 @@ packages:
     dependencies:
       '@types/retry': 0.12.1
     dev: true
+
+  /@types/punycode/2.1.0:
+    resolution: {integrity: sha512-PG5aLpW6PJOeV2fHRslP4IOMWn+G+Uq8CfnyJ+PDS8ndCbU+soO+fB3NKCKo0p/Jh2Y4aPaiQZsrOXFdzpcA6g==}
+    dev: false
 
   /@types/qrcode/1.4.1:
     resolution: {integrity: sha512-vxMyr7JM7tYPxu8vUE83NiosWX5DZieCyYeJRoOIg0pAkyofCBzknJ2ycUZkPGDFis2RS8GN/BeJLnRnAPxeCA==}

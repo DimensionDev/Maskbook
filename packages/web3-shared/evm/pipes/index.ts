@@ -130,6 +130,10 @@ export function resolveIPFSLink(ipfs: string): string {
     return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
 }
 
+export function resolveEnsDomains(domain: string) {
+    return urlcat('https://app.ens.domains/name/:domain/details', { domain })
+}
+
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
     switch (provider) {
         case CollectibleProvider.OPENSEA:

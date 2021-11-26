@@ -148,7 +148,9 @@ export declare namespace Web3Plugin {
         tokens: Token[]
     }
 
-    export type EnsAddressBook = Record<string, string>
+    export type EnsAddressBook = {
+        [chainId: number]: Record<string, string> | undefined
+    }
 
     export namespace ObjectCapabilities {
         export interface SharedState {
@@ -254,6 +256,9 @@ export declare namespace Web3Plugin {
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
+
+            resolveEnsDomains?: (domain: string) => string
+            isValidDomain?: (domain: string) => boolean
         }
         export interface Capabilities {
             Shared?: SharedState

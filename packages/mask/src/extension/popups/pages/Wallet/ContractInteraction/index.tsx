@@ -31,6 +31,7 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
+import { useReverseAddress } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -120,6 +121,13 @@ const useStyles = makeStyles()(() => ({
         position: 'fixed',
         bottom: 0,
         width: '100%',
+    },
+    domain: {
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 500,
+        color: '#15181B',
+        margin: '10px 0',
     },
 }))
 
@@ -303,6 +311,8 @@ const ContractInteraction = memo(() => {
         }
     }, [request, requestLoading])
 
+    const { value: domain } = useReverseAddress(to)
+
     return requestLoading ? (
         <LoadingPlaceholder />
     ) : (
@@ -310,6 +320,7 @@ const ContractInteraction = memo(() => {
             <main className={classes.container}>
                 <div className={classes.info}>
                     <Typography className={classes.title}>{typeName}</Typography>
+                    {domain ? <Typography className={classes.domain}>{domain}</Typography> : null}
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
                     </Typography>

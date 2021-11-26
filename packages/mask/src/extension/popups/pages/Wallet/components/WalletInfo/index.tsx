@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
 import { EditIcon, MaskWalletIcon } from '@masknet/icons'
@@ -8,6 +8,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
+import { useReverseAddress } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     container: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles()({
     left: {
         display: 'flex',
         alignItems: 'center',
+        flex: 1,
     },
     name: {
         display: 'flex',
@@ -93,6 +95,8 @@ export interface WalletInfoUIProps {
 
 export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingClick, onEditClick, hideSettings }) => {
     const { classes } = useStyles()
+    const { value: domain } = useReverseAddress(address)
+
     return (
         <div className={classes.container}>
             <div className={classes.left}>
@@ -101,12 +105,15 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingC
                 </div>
                 <div>
                     {name && (
-                        <Typography className={classes.name}>
-                            {name} <EditIcon onClick={onEditClick} className={classes.edit} />
-                        </Typography>
+                        <Box display="flex" justifyContent="space-between" alignItems="center">
+                            <Typography className={classes.name}>
+                                {name} <EditIcon onClick={onEditClick} className={classes.edit} />
+                            </Typography>
+                            {domain ? <Typography className={classes.name}>{domain}</Typography> : null}
+                        </Box>
                     )}
                     <Typography className={classes.address}>
-                        <FormattedAddress address={address} size={12} formatter={formatEthereumAddress} />
+                        <FormattedAddress address={address} size={16} formatter={formatEthereumAddress} />
                         <CopyIconButton text={address ?? ''} className={classes.copy} />
                     </Typography>
                 </div>

@@ -6,10 +6,10 @@ import { FormattedAddress, LoadingAnimation, useRemoteControlledDialog, WalletIc
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
-    useAccount,
     useWallet,
     useWeb3State,
     Web3Plugin,
+    useReverseAddress,
 } from '@masknet/plugin-infra'
 import { PluginMessages } from '../../../../API'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
@@ -55,6 +55,8 @@ export const WalletStateBar = memo(() => {
 
     const [menu, openMenu] = useNetworkSelector()
 
+    const { value: domain } = useReverseAddress(wallet?.address)
+
     if (!wallet) {
         return <Button onClick={openConnectWalletDialog}>{t.wallets_connect_wallet_connect()}</Button>
     }
@@ -62,6 +64,7 @@ export const WalletStateBar = memo(() => {
         <WalletStateBarUI
             isPending={!!pendingTransactions.length}
             wallet={wallet}
+            domain={domain}
             network={networkDescriptor}
             provider={providerDescriptor}
             openConnectWalletDialog={openWalletStatusDialog}
@@ -76,6 +79,7 @@ interface WalletStateBarUIProps {
     network?: Web3Plugin.NetworkDescriptor
     provider?: Web3Plugin.ProviderDescriptor
     wallet?: Web3Plugin.Wallet
+    domain?: string
     openConnectWalletDialog(): void
     openMenu: ReturnType<typeof useNetworkSelector>[1]
 }
@@ -85,14 +89,14 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
     network,
     provider,
     wallet,
+    domain,
     openConnectWalletDialog,
     openMenu,
     children,
 }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const account = useAccount()
-    const { Utils, Asset } = useWeb3State()
+    const { Utils } = useWeb3State()
 
     if (!wallet || !network || !provider) return null
 
@@ -129,7 +133,14 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     <WalletIcon providerIcon={provider.icon} inverse size={38} />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
-                    <Box fontSize={16}>{wallet.name}</Box>
+                    <Box fontSize={16} display="flex" alignItems="center">
+                        {wallet.name}
+                        {domain ? (
+                            <Typography fontSize={14} marginLeft={1}>
+                                {domain}
+                            </Typography>
+                        ) : null}
+                    </Box>
                     <Box fontSize={12}>
                         <FormattedAddress address={wallet.address} size={10} formatter={Utils?.formatAddress} />
                     </Box>

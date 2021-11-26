@@ -8,6 +8,7 @@ import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContai
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
 import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
+import { useReverseAddress } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -37,11 +38,14 @@ export interface ReceiveDialogProps {
 
 export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, walletAddress, onClose }) => {
     const currentSelectedWalletNetwork = useCurrentSelectedWalletNetwork()
+    const { value: domain } = useReverseAddress(walletAddress)
+
     return (
         <ReceiveDialogUI
             open={open}
             chainName={chainName}
             walletAddress={walletAddress}
+            domain={domain}
             onClose={onClose}
             currentNetworkType={currentSelectedWalletNetwork}
         />
@@ -50,10 +54,11 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
 
 export interface ReceiveDialogUIProps extends ReceiveDialogProps {
     currentNetworkType: NetworkType
+    domain?: string
 }
 
 export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
-    ({ open, currentNetworkType, chainName, onClose, walletAddress }) => {
+    ({ open, currentNetworkType, chainName, onClose, walletAddress, domain }) => {
         const { classes } = useStyles()
         const t = useDashboardI18N()
         const [, copyToClipboard] = useCopyToClipboard()
@@ -86,7 +91,7 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
                         {t.wallets_address()}
                     </Typography>
                     <Typography variant="body2" className={classes.address}>
-                        {walletAddress}
+                        {domain ?? walletAddress}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
