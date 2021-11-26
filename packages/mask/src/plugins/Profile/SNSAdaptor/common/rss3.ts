@@ -1,7 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 import { ethers } from 'ethers'
 import RSS3 from 'rss3-next'
-import axios from 'axios'
+import { fetch } from './middleware'
 import type { RSS3Account, RSS3Profile } from 'rss3-next/types/rss3'
 import type { GitcoinResponse, GeneralAsset, NFTResponse, POAPResponse } from './types'
 import config from './config'
@@ -146,7 +146,7 @@ export default {
         } else {
             let data: IAssetProfile | null = null
             try {
-                const res = await axios.get(`/assets/list`, {
+                const res = await fetch(`/assets/list`, {
                     baseURL: config.hubEndpoint,
                     params: {
                         personaID: address,
@@ -166,7 +166,7 @@ export default {
     getNFTDetails: async (address: string, platform: string, identity: string, id: string, type: string) => {
         let data: NFTResponse | null = null
         try {
-            const res = await axios.get(`/assets/details`, {
+            const res = await fetch(`/assets/details`, {
                 baseURL: config.hubEndpoint,
                 params: {
                     personaID: address,
@@ -187,7 +187,7 @@ export default {
     getGitcoinDonation: async (address: string, platform: string, identity: string, id: string) => {
         let data: GitcoinResponse | null = null
         try {
-            const res = await axios.get(`/assets/details`, {
+            const res = await fetch(`/assets/details`, {
                 baseURL: config.hubEndpoint,
                 params: {
                     personaID: address,
@@ -208,7 +208,7 @@ export default {
     getFootprintDetail: async (address: string, platform: string, identity: string, id: string) => {
         let data: POAPResponse | null = null
         try {
-            const res = await axios.get(`/assets/details`, {
+            const res = await fetch(`/assets/details`, {
                 baseURL: config.hubEndpoint,
                 params: {
                     personaID: address,

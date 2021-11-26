@@ -1,6 +1,6 @@
 import { ethers } from 'ethers'
 import { utils } from 'ethers/lib'
-import axios from 'axios'
+import { fetch } from './middleware'
 
 import config from './config'
 
@@ -36,29 +36,26 @@ async function callRNSContract<T>(
         })
     }
 
-    const contract = await new ethers.Contract(
-        getRNSContract(cname),
-        config.rns.contract[cname],
-        signer ? signer : provider,
-    )
+    const contract = new ethers.Contract(getRNSContract(cname), config.rns.contract[cname], signer ? signer : provider)
     return contract[method](...args)
 }
 
 async function checkInfuraID(id: string) {
-    try {
-        const res = await axios.post(`https://mainnet.infura.io/v3/${id}`, {
-            jsonrpc: '2.0',
-            id: 1,
-            method: 'eth_accounts',
-            params: [],
-        })
-        if (res.data) {
-            return true
-        }
-    } catch (error) {
-        console.log(error)
-    }
-    return false
+    // try {
+    //     const res = await axios.post(`https://mainnet.infura.io/v3/${id}`, {
+    //         jsonrpc: '2.0',
+    //         id: 1,
+    //         method: 'eth_accounts',
+    //         params: [],
+    //     })
+    //     if (res.data) {
+    //         return true
+    //     }
+    // } catch (error) {
+    //     console.log(error)
+    // }
+    // return false
+    return true
 }
 
 function getRNSContract(cname: CNAME) {
@@ -99,7 +96,11 @@ export default {
             return addrCache[addr]
         } else {
             try {
-                const domainInfo = (await axios.get(`https://rss3.domains/address/${addr}`)).data
+                const domainInfo = (
+                    await fetch(`/address/${addr}`, {
+                        baseURL: 'https://rss3.domains',
+                    })
+                ).data
                 if (isPureRNS) {
                     return domainInfo.rnsName || ''
                 } else {
@@ -130,7 +131,11 @@ export default {
     async name2Addr(name: string) {
         let addr
         try {
-            addr = (await axios.get(`https://rss3.domains/name/${name}`)).data.address
+            addr = (
+                await fetch(`/name/${name}`, {
+                    baseURL: 'https://rss3.domains',
+                })
+            ).data.address
             return addr
         } catch (error) {
             name = (name + config.rns.suffix).toLowerCase()
