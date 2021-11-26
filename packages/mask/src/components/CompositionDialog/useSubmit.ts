@@ -44,18 +44,18 @@ export function useSubmit(onClose: () => void) {
             // TODO: move into the plugin system
             const redPacketMetadata = RedPacketMetadataReader(content.meta)
             if (encode === 'image') {
-                const text = t('additional_post_box__steganography_post_pre', {
+                const defaultText = t('additional_post_box__steganography_post_pre', {
                     random: new Date().toLocaleString(),
                 })
                 if (redPacketMetadata.ok) {
-                    await pasteImage(text, 'eth', redPacketPreText.replace(encrypted, ''))
+                    await pasteImage(redPacketPreText.replace(encrypted, '') ?? defaultText, encrypted, 'eth')
                 } else {
-                    await pasteImage(text, 'v2', null)
+                    await pasteImage(defaultText, encrypted, 'v2')
                 }
             } else {
                 pasteTextEncode(
-                    t('additional_post_box__encrypted_post_pre', { encrypted }),
-                    redPacketMetadata.ok ? redPacketPreText : null,
+                    (redPacketMetadata.ok ? redPacketPreText : null) ??
+                        t('additional_post_box__encrypted_post_pre', { encrypted }),
                 )
             }
             // This step write data on gun. There is nothing to write if it shared with public
@@ -66,16 +66,16 @@ export function useSubmit(onClose: () => void) {
     )
 }
 
-function pasteTextEncode(encrypted: string, text: string | null) {
-    activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text ?? encrypted, {
+function pasteTextEncode(text: string) {
+    activatedSocialNetworkUI.automation.nativeCompositionDialog?.appendText?.(text, {
         recover: true,
     })
 }
-async function pasteImage(encrypted: string, template: ImageTemplateTypes, text: string | null) {
+async function pasteImage(relatedTextPayload: string, encrypted: string, template: ImageTemplateTypes) {
     const img = await SteganographyTextPayload(template, encrypted)
     // Don't await this, otherwise the dialog won't disappear
     activatedSocialNetworkUI.automation.nativeCompositionDialog!.attachImage!(img, {
         recover: true,
-        relatedTextPayload: text ?? encrypted,
+        relatedTextPayload,
     })
 }
