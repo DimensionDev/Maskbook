@@ -6,7 +6,6 @@ import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json'
 import ITO2 from '@masknet/web3-contracts/abis/ITO2.json'
 import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import ERC20 from '@masknet/web3-contracts/abis/ERC20.json'
-import ERC721 from '@masknet/web3-contracts/abis/ERC721.json'
 import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
 import SwapRouter from '@masknet/web3-contracts/abis/SwapRouter.json'
 import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json'
@@ -57,7 +56,6 @@ constructABI(ITO2 as AbiItem[])
 constructABI(HappyRedPacketV4 as AbiItem[])
 constructABI(MaskBox as AbiItem[])
 constructABI(ERC20 as AbiItem[])
-constructABI(ERC721 as AbiItem[])
 constructABI(RouterV2ABI as AbiItem[]) // uniswap V2 like
 constructABI(SwapRouter as AbiItem[]) // uniswap V3 like
 //#endregion
