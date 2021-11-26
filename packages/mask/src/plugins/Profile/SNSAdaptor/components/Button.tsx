@@ -1,6 +1,4 @@
-import { BUTTON_ICONS, COLORS, COLORTOSTYLE } from '../common/variables'
-import { FiArrowUpRight } from 'react-icons/fi'
-import { BiExpandAlt, BiPlus, BiMinus, BiCheck, BiLoaderAlt } from 'react-icons/bi'
+import { COLORS, COLORTOSTYLE } from '../common/variables'
 import type { ReactNode } from 'react'
 import { Typography } from '@mui/material'
 
@@ -97,8 +95,6 @@ const Button = ({
         className = className.replace('rounded', 'rounded-full')
     }
 
-    let iconSVG = null
-
     if (typeof icon !== 'undefined') {
         if (typeof height === 'undefined') {
             className += ' h-6'
@@ -107,28 +103,15 @@ const Button = ({
             className += ' w-6'
         }
         className = className.replace('py-sm px-3', 'p-0.5')
-        iconSVG = iconSVGMap.get(icon)
     }
 
     return (
         <div className="flex items-center">
             <button onClick={onClick} className={className}>
                 <Typography variant="subtitle1">{text}</Typography>
-                {iconSVG} {children}
+                {children}
             </button>
         </div>
     )
 }
-
-const iconClass = 'w-full h-full'
-
-const iconSVGMap = new Map([
-    [BUTTON_ICONS.expand, <BiExpandAlt className={`${iconClass} p-0.5`} />],
-    [BUTTON_ICONS.plus, <BiPlus className={iconClass} />],
-    [BUTTON_ICONS.minus, <BiMinus className={iconClass} />],
-    [BUTTON_ICONS.external, <FiArrowUpRight className={iconClass} />],
-    [BUTTON_ICONS.check, <BiCheck className={iconClass} />],
-    [BUTTON_ICONS.loading, <BiLoaderAlt className={`${iconClass} animate-spin`} />],
-])
-
 export default Button
