@@ -54,10 +54,13 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
             paddingLeft: theme.spacing(2),
             cursor: 'pointer',
+            '&:hover': {
+                background: theme.palette.background.default,
+            },
         },
         [`&.${listItemClasses.selected}`]: {
             color: MaskColorVar.textLink,
-            backgroundColor: 'transparent',
+            backgroundColor: theme.palette.background.default,
             position: 'relative',
             [`${listItemIconClasses.root}`]: {
                 color: MaskColorVar.textLink,
@@ -79,8 +82,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
 
 const LogoItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.root}`]: {
-        justifyContent: 'center',
-        paddingLeft: theme.spacing(7),
+        justifyContent: 'start',
         marginBottom: theme.spacing(3.5),
     },
 })) as any as typeof MuiListItem

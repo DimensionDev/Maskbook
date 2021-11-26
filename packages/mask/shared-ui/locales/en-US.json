@@ -684,7 +684,7 @@
     "plugin_good_ghosting_insufficient_balance": "You need at least {{amount}} {{token}} in your wallet to do this.",
     "plugin_good_ghosting_balance_error": "Failed to check balance. Click to retry.",
     "plugin_unlockprotocol_select_unlock_lock": "Select Unlock Lock",
-    "plugin_unlockprotocol_no_lock_found": "No lock found. Create your own lock at <dashboard>Creator Dashboard</dashboard>.",
+    "plugin_unlockprotocol_no_lock_found": "No lock found. Create your own lock at <dashboard>Unlock protocol Creator Dashboard</dashboard>.",
     "plugin_unlockprotocol_submit_post": "Submit Post",
     "plugin_unlockprotocol_title": "Unlock Protocol",
     "plugin_unlockprotocol_server_error": "Some Server error occured, Please try again later.",
