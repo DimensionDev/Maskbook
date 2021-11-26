@@ -1,6 +1,6 @@
 {
     "MASK_BOX_CONTRACT_ADDRESS": {
-        "Mainnet": "0x0dFB34D213f613Dda67a2924F60b5301d42ABFb7",
+        "Mainnet": "0x294428f04b0F9EbC49B7Ad61E2736ebD6808c145",
         "Ropsten": "",
         "Rinkeby": "0xc3D410eDd9C54662fa3D87731bfAf33EBbf04A39",
         "Kovan": "",
@@ -14,7 +14,7 @@
         "xDai": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
-        "Mainnet": 13396393,
+        "Mainnet": 13687866,
         "Ropsten": 0,
         "Rinkeby": 9369286,
         "Kovan": 0,
@@ -28,7 +28,7 @@
         "xDai": 0
     },
     "MASK_BOX_TEST_NFT": {
-        "Mainnet": "",
+        "Mainnet": "0x56136E69A5771436a9598804c5eA792230c21181",
         "Ropsten": "",
         "Rinkeby": "0x0c8FB5C985E00fb1D002b6B9700084492Fb4B9A8",
         "Kovan": "",
