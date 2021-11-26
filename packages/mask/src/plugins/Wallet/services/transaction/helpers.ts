@@ -13,15 +13,15 @@ import { unreachable } from '@dimensiondev/kit'
 export function getPayloadId(payload: JsonRpcPayload) {
     if (!payload.id || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return ''
     const [config] = payload.params as [TransactionConfig]
-    const { from, to, data = '0x0', value = '0x0' } = config
-    if (!from || !to) return ''
-    return sha3([from, to, data, value].join('_')) ?? ''
+    const { from, to, gas, data = '0x0', value = '0x0' } = config
+    if (!from || !to || !gas) return ''
+    return sha3([from, to, gas, data, value].join('_')) ?? ''
 }
 
 export function getTransactionId(transaction: Transaction | null) {
     if (!transaction) return ''
-    const { from, to, input, value } = transaction
-    return sha3([from, to, input || '0x0', value || '0x0'].join('_')) ?? ''
+    const { from, to, gas, input, value } = transaction
+    return sha3([from, to, gas, input || '0x0', value || '0x0'].join('_')) ?? ''
 }
 
 export function getReceiptStatus(receipt: TransactionReceipt | null) {
