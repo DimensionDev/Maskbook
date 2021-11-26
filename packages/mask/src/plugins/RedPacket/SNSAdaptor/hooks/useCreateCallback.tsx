@@ -74,13 +74,13 @@ function checkParams(paramsObj: paramsObjType, setCreateState?: (value: Transact
     return true
 }
 
-export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number) {
+export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number, publicKey: string) {
     const redPacketContract = useRedPacketContract(version)
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
     return useAsync(async () => {
         if (!redPacketSettings || !redPacketContract) return null
-        const { duration, isRandom, message, name, shares, total, token, publicKey } = redPacketSettings
+        const { duration, isRandom, message, name, shares, total, token } = redPacketSettings
         const seed = Math.random().toString()
         const tokenType = token!.type === EthereumTokenType.Native ? 0 : 1
         const tokenAddress = token!.type === EthereumTokenType.Native ? NATIVE_TOKEN_ADDRESS : token!.address
@@ -119,13 +119,13 @@ export function useCreateParams(redPacketSettings: RedPacketSettings | undefined
     }, [redPacketSettings, account, redPacketContract]).value
 }
 
-export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number) {
+export function useCreateCallback(redPacketSettings: RedPacketSettings, version: number, publicKey: string) {
     const account = useAccount()
     const chainId = useChainId()
     const [createState, setCreateState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const [createSettings, setCreateSettings] = useState<RedPacketSettings | null>(null)
-    const paramResult = useCreateParams(redPacketSettings, version)
+    const paramResult = useCreateParams(redPacketSettings, version, publicKey)
 
     const transactionHashRef = useRef<string>()
 
