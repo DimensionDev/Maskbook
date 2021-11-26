@@ -134,7 +134,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
         <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
                 size={40}
-                badgeSize={18}
+                badgeSize={16}
                 networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
                 providerIcon={networkDescriptor?.icon}
                 classes={{
