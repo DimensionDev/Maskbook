@@ -327,21 +327,21 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
                 .toFixed()
 
-            if (EthereumAddress.isValid(data.address)) {
-                await transferCallback(transferAmount, data.address, {
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
-                    gas: new BigNumber(data.gasLimit).toNumber(),
-                })
-                return
-            } else if (Utils?.isValidDomain?.(data.address) && EthereumAddress.isValid(registeredAddress)) {
+            //If input address is ens domain, use registeredAddress to transfer
+            if (Utils?.isValidDomain?.(data.address) && EthereumAddress.isValid(registeredAddress)) {
                 await transferCallback(transferAmount, registeredAddress, {
                     maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
                     maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
                     gas: new BigNumber(data.gasLimit).toNumber(),
                 })
                 return
-            } else return
+            }
+
+            await transferCallback(transferAmount, data.address, {
+                maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+                maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
+                gas: new BigNumber(data.gasLimit).toNumber(),
+            })
         },
         [selectedAsset, transferCallback, registeredAddress, Utils],
     )
