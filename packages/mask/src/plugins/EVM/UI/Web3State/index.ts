@@ -35,18 +35,16 @@ function createSubscriptionFromEnsAddressBook<T>(getter: (value: typeof StorageD
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
     if (!state || !context) return
 
-    state.Shared = {
-        ...(state.Shared ?? {
-            allowTestnet: context.allowTestnet,
-            chainId: context.chainId,
-            account: context.account,
-            balance: context.balance,
-            blockNumber: context.blockNumber,
-            networkType: context.networkType,
-            providerType: context.providerType,
-            walletPrimary: context.walletPrimary,
-            wallets: context.wallets,
-        }),
+    state.Shared = state.Shared ?? {
+        allowTestnet: context.allowTestnet,
+        chainId: context.chainId,
+        account: context.account,
+        balance: context.balance,
+        blockNumber: context.blockNumber,
+        networkType: context.networkType,
+        providerType: context.providerType,
+        walletPrimary: context.walletPrimary,
+        wallets: context.wallets,
     }
     state.Asset = state.Asset ?? {
         getFungibleAssets: async (address, providerType, network, pagination) => {
