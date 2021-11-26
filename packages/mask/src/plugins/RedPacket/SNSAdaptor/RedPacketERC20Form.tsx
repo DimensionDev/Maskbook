@@ -183,6 +183,11 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         [isRandom, senderName, message, t('plugin_red_packet_best_wishes'), shares, token, totalAmount],
     )
 
+    const onClick = useCallback(() => {
+        onChange(creatingParams)
+        onNext()
+    }, [creatingParams, onChange, onNext])
+
     if (!token) return null
     return (
         <>
@@ -274,7 +279,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         className={classes.button}
                         fullWidth
                         disabled={!!validationMessage}
-                        onClick={onNext}>
+                        onClick={onClick}>
                         {validationMessage || t('plugin_red_packet_next')}
                     </ActionButton>
                 </EthereumERC20TokenApprovedBoundary>

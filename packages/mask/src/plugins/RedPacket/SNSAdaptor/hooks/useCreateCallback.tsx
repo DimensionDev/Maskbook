@@ -21,8 +21,6 @@ import {
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {
-    publicKey: string
-    privateKey: string
     shares: number
     duration: number
     isRandom: boolean
