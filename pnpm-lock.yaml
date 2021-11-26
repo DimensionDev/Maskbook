@@ -51,7 +51,7 @@ importers:
       lodash-es: ^4.17.21
       lodash-unified: 1.0.1
       only-allow: ^1.0.0
-      prettier: ^2.4.1
+      prettier: ^2.5.0
       react: '=18.0.0-alpha-00ced1e2b-20211102'
       react-dom: '=18.0.0-alpha-00ced1e2b-20211102'
       react-i18next: ^11.14.2
@@ -102,7 +102,7 @@ importers:
       eslint-config-prettier: 8.3.0_eslint@7.32.0
       eslint-plugin-import: 2.24.2_eslint@7.32.0
       eslint-plugin-lodash: 7.3.0_eslint@7.32.0
-      eslint-plugin-prettier: 4.0.0_6e975bd57c7acf028c1a9ddbbf60c898
+      eslint-plugin-prettier: 4.0.0_e5f3e56ec0b0596291e7b017ad8e25e2
       eslint-plugin-react: 7.26.1_eslint@7.32.0
       eslint-plugin-react-hooks: 4.2.0_eslint@7.32.0
       eslint-plugin-unicorn: 37.0.1_eslint@7.32.0
@@ -112,7 +112,7 @@ importers:
       jest: 27.3.1_ts-node@10.4.0
       lint-staged: 12.0.2
       only-allow: 1.0.0
-      prettier: 2.4.1
+      prettier: 2.5.0
       ts-jest: 27.0.7_jest@27.3.1+typescript@4.5.2
       ts-node: 10.4.0_typescript@4.5.2
       typescript: 4.5.2
@@ -14872,7 +14872,7 @@ packages:
       lodash: 4.17.21
     dev: true
 
-  /eslint-plugin-prettier/4.0.0_6e975bd57c7acf028c1a9ddbbf60c898:
+  /eslint-plugin-prettier/4.0.0_e5f3e56ec0b0596291e7b017ad8e25e2:
     resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
@@ -14885,7 +14885,7 @@ packages:
     dependencies:
       eslint: 7.32.0
       eslint-config-prettier: 8.3.0_eslint@7.32.0
-      prettier: 2.4.1
+      prettier: 2.5.0
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -21359,6 +21359,12 @@ packages:
 
   /prettier/2.4.1:
     resolution: {integrity: sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
+
+  /prettier/2.5.0:
+    resolution: {integrity: sha512-FM/zAKgWTxj40rH03VxzIPdXmj39SwSjwG0heUcNFwI+EMZJnY93yAiKXM3dObIKAM5TA88werc8T/EwhB45eg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
     dev: true
