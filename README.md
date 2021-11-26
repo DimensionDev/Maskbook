@@ -13,9 +13,9 @@
 [![FOSSA Status][badge-fossa]][fossa]
 [![Crowdin][badge-crowdin]][crowdin]
 
-Mask Network is a portal to the new, open internet, that bridge Web3.0 to Web2.0 platforms.
-With Mask Network, you can send encrypted posts to your friends,
-participate in cryptocurrencies lucky-draws, and share encrypted files on the platforms you are already using.
+Mask Network is a portal to the new, open internet, that bridge from Web2.0 to Web3.0 .
+With Mask Network, you can send encrypted posts to your friends, trade your best token on Twitter, enjoy NFT pfps,
+participate in crypto lucky-draws, and share encrypted files on the platforms you are already using.
 
 For general introductions, see [Mask.io](https://mask.io).
 
