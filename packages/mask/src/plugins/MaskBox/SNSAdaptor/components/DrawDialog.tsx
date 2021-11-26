@@ -89,12 +89,13 @@ const useStyles = makeStyles()((theme) => ({
 export interface DrawDialogProps {
     boxInfo: BoxInfo
     open: boolean
+    drawing?: boolean
     onClose: () => void
     onSubmit: () => Promise<void>
 }
 
 export function DrawDialog(props: DrawDialogProps) {
-    const { boxInfo, open, onClose, onSubmit } = props
+    const { boxInfo, open, drawing, onClose, onSubmit } = props
     const { classes } = useStyles()
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
 
@@ -268,9 +269,9 @@ export function DrawDialog(props: DrawDialogProps) {
                             fullWidth
                             variant="contained"
                             sx={{ marginTop: 2 }}
-                            disabled={isBalanceInsufficient}
+                            disabled={isBalanceInsufficient || drawing}
                             onClick={onSubmit}>
-                            {isBalanceInsufficient ? 'Insufficient balance' : 'Draw'}
+                            {isBalanceInsufficient ? 'Insufficient balance' : drawing ? 'Drawing' : 'Draw'}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>

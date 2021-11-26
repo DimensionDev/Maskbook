@@ -108,10 +108,13 @@ export function PreviewCard(props: PreviewCardProps) {
         retryMaskBoxTokensForSale,
         retryMaskBoxPurchasedTokens,
     ])
+    const [drawing, setDrawing] = useState(false)
     const onDraw = useCallback(async () => {
+        setDrawing(true)
         setOpenDrawDialog(false)
         refreshLastPurchasedTokenIds()
         await openBoxCallback()
+        setDrawing(false)
     }, [openBoxCallback, refreshLastPurchasedTokenIds])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
@@ -210,6 +213,7 @@ export function PreviewCard(props: PreviewCardProps) {
             <DrawDialog
                 boxInfo={boxInfo}
                 open={openDrawDialog}
+                drawing={drawing}
                 onClose={() => {
                     setOpenBoxTransactionOverrides(null)
                     setOpenDrawDialog(false)
