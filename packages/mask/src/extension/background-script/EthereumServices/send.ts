@@ -7,6 +7,7 @@ import { safeUnreachable } from '@dimensiondev/kit'
 import {
     addGasMargin,
     ChainId,
+    EthereumErrorType,
     EthereumMethodType,
     EthereumRpcType,
     EthereumTransactionConfig,
@@ -127,6 +128,18 @@ function getTransactionHash(response?: JsonRpcResponse) {
     return hash
 }
 
+function getError(error: unknown, response?: JsonRpcResponse | null, fallback?: string): Error {
+    if (error instanceof Error && error.message) return error
+    if (typeof error === 'string' && error) return new Error(error)
+    //#region the error object in the rpc response
+    const responseError = response?.error as unknown
+    if (responseError instanceof Error) return getError(responseError, null, fallback)
+    //#endregion
+    if (typeof response?.error === 'string' && response?.error) return new Error(response.error)
+    if (fallback) return new Error(fallback)
+    return new Error('Unknown Error.')
+}
+
 async function handleTransferTransaction(chainId: ChainId, payload: JsonRpcPayload) {
     if (payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
     const computedPayload = await getSendTransactionComputedPayload(payload)
@@ -234,17 +247,12 @@ export async function INTERNAL_send(
                         id: payload.id as number,
                         result: signed,
                     })
-                } catch (error: unknown) {
-                    callback(error instanceof Error ? error : new Error('Failed to sign message.'))
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
                 }
                 break
             case ProviderType.MetaMask:
-                try {
-                    await MetaMask.ensureConnectedAndUnlocked()
-                } catch (error: any) {
-                    callback(error)
-                    break
-                }
+                await MetaMask.ensureConnectedAndUnlocked()
                 provider?.send(
                     {
                         ...payload,
@@ -254,11 +262,15 @@ export async function INTERNAL_send(
                 )
                 break
             case ProviderType.WalletConnect:
-                callback(null, {
-                    jsonrpc: '2.0',
-                    id: payload.id as number,
-                    result: await WalletConnect.signPersonalMessage(data, address, ''),
-                })
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await WalletConnect.signPersonalMessage(data, address, ''),
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
                 break
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
@@ -272,8 +284,8 @@ export async function INTERNAL_send(
                             params: payload.params,
                         }),
                     })
-                } catch (error: any) {
-                    callback(error)
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
                 }
                 break
             case ProviderType.CustomNetwork:
@@ -287,7 +299,10 @@ export async function INTERNAL_send(
         const hash = getPayloadHash(payload)
         const config = getPayloadConfig(payload)
 
-        if (!config) throw new Error('Failed to send transaction.')
+        if (!config) {
+            callback(getError(null, null, EthereumErrorType.ERR_SEND_TRANSACTION))
+            return
+        }
 
         // add nonce
         if (providerType === ProviderType.MaskWallet && config.from && !config.nonce)
@@ -306,8 +321,10 @@ export async function INTERNAL_send(
             parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
 
         if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally) && !isEIP1559Valid) {
-            throw new Error('To be implemented.')
-        } else if (!isGasPriceValid) {
+            callback(new Error('Invalid EIP1159 payload.'))
+            return
+        }
+        if (!isGasPriceValid) {
             config.gasPrice = await getGasPrice()
         }
 
@@ -322,11 +339,17 @@ export async function INTERNAL_send(
         // send the transaction
         switch (providerType) {
             case ProviderType.MaskWallet:
-                if (!wallet?.storedKeyInfo || !privKey) throw new Error('Unable to sign transaction.')
+                if (!wallet?.storedKeyInfo || !privKey) {
+                    callback(getError(null, null, EthereumErrorType.ERR_SIGN_TRANSACTION))
+                    return
+                }
 
                 // send the signed transaction
                 const signed = await web3.eth.accounts.signTransaction(config, privKey)
-                if (!signed.rawTransaction) throw new Error('Failed to sign transaction.')
+                if (!signed.rawTransaction) {
+                    callback(getError(null, null, EthereumErrorType.ERR_SIGN_TRANSACTION))
+                    return
+                }
 
                 provider?.send(
                     {
@@ -335,7 +358,7 @@ export async function INTERNAL_send(
                         params: [signed.rawTransaction],
                     },
                     (error, response) => {
-                        callback(error, response)
+                        callback(getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION), response)
                         switch (payload.method) {
                             case EthereumMethodType.ETH_SEND_TRANSACTION:
                                 handleNonce(chainIdFinally, account, error, response)
@@ -353,12 +376,12 @@ export async function INTERNAL_send(
                 try {
                     await MetaMask.ensureConnectedAndUnlocked()
                     provider?.send(payload, (error, response) => {
-                        callback(error, response)
+                        callback(getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION), response)
                         handleTransferTransaction(chainIdFinally, payload)
                         handleRecentTransaction(chainIdFinally, account, payload, response)
                     })
                 } catch (error) {
-                    if (error instanceof Error) callback(error)
+                    callback(getError(error, null, EthereumErrorType.ERR_SEND_TRANSACTION))
                     break
                 }
                 break
@@ -369,7 +392,7 @@ export async function INTERNAL_send(
                     handleTransferTransaction(chainIdFinally, payload)
                     handleRecentTransaction(chainIdFinally, account, payload, response)
                 } catch (error) {
-                    if (error instanceof Error) callback(error)
+                    callback(getError(error, null, EthereumErrorType.ERR_SEND_TRANSACTION))
                 }
                 break
             case ProviderType.Coin98:
@@ -377,7 +400,7 @@ export async function INTERNAL_send(
             case ProviderType.MathWallet:
                 await Injected.ensureConnectedAndUnlocked()
                 Injected.createProvider().send(payload, (error, response) => {
-                    callback(error, response)
+                    callback(getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION), response)
                     handleTransferTransaction(chainIdFinally, payload)
                     handleRecentTransaction(chainIdFinally, account, payload, response)
                 })
@@ -437,8 +460,8 @@ export async function INTERNAL_send(
                 provider.send(payload, callback)
                 break
         }
-    } catch (error: any) {
-        callback(error)
+    } catch (error) {
+        callback(getError(error, null, 'Failed to send request.'))
     }
 }
 
