@@ -13,7 +13,7 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
         const uniqTokens = uniqBy([...tokensForAsset, ...tokens], (x) => x.address)
         const sortedTokens = sortBy(uniqTokens, (x) => x.address)
         setTokensForAsset(sortedTokens)
-    }, [tokens.length])
+    }, [tokens.map((x) => x.address.slice(0, 5)).join('')])
 
     const {
         value: assetsDetailedChain = [],

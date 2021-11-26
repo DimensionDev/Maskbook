@@ -93,10 +93,8 @@ export const getERC20TokenListItem =
             async (event: React.MouseEvent<HTMLButtonElement>) => {
                 event.stopPropagation()
                 if (!token || !account) return
-                await Promise.all([
-                    addERC20Token(token as ERC20TokenDetailed),
-                    trustERC20Token(account, token as ERC20TokenDetailed),
-                ])
+                await addERC20Token(token as ERC20TokenDetailed)
+                await trustERC20Token(account, token as ERC20TokenDetailed)
             },
             [token, account],
         )
