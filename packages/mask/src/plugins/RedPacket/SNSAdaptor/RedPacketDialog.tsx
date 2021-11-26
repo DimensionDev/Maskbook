@@ -119,7 +119,6 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         contract_version,
     )
     //#endregion
-
     // assemble JSON payload
     const payload = useRef<RedPacketJSONPayload>({
         network: getChainName(chainId),
@@ -169,6 +168,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             }
             payload.current.is_random = createSettings.isRandom
             payload.current.shares = createSettings.shares
+            console.log({ privateKey: createSettings.privateKey })
             payload.current.password = createSettings.privateKey
             payload.current.rpid = CreationSuccess.id
             payload.current.total = CreationSuccess.total
@@ -191,6 +191,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         //  web page before create successfully.
         if (createState.type === TransactionStateType.WAIT_FOR_CONFIRMING && createState.hash) {
             payload.current.txid = createState.hash
+            console.log({ r: createSettings!.privateKey, p: createSettings!.publicKey })
             const record: RedPacketRecord = {
                 id: createState.hash!,
                 from: '',

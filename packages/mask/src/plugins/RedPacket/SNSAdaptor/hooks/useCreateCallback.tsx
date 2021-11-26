@@ -131,7 +131,7 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
 
     const createCallback = useCallback(async () => {
         const { token } = redPacketSettings
-
+        console.log({ publicKey: redPacketSettings.publicKey, paramResult })
         if (!token || !redPacketContract || !paramResult) {
             setCreateState({
                 type: TransactionStateType.UNKNOWN,
@@ -172,11 +172,13 @@ export function useCreateCallback(redPacketSettings: RedPacketSettings, version:
                 .create_red_packet(...params)
                 .send(config as PayableTx)
                 .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                    setCreateState({
-                        type: TransactionStateType.WAIT_FOR_CONFIRMING,
-                        hash,
-                    })
-                    transactionHashRef.current = hash
+                    setTimeout(() => {
+                        setCreateState({
+                            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+                            hash,
+                        })
+                        transactionHashRef.current = hash
+                    }, 10000)
                 })
                 .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                     setCreateState({

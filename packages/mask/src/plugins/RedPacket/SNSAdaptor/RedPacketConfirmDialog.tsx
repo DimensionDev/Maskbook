@@ -178,7 +178,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </ActionButton>
             </Grid>
             <Grid item xs={6}>
-                <ActionButton variant="contained" size="large" fullWidth onClick={onCreate}>
+                <ActionButton variant="contained" size="large" fullWidth onClick={() => setTimeout(onCreate, 10000)}>
                     {t('plugin_red_packet_send_symbol', {
                         amount: formatBalance(settings?.total, settings?.token?.decimals ?? 0),
                         symbol: settings?.token?.symbol,
