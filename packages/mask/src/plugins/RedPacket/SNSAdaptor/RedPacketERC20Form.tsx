@@ -10,7 +10,6 @@ import {
     useNativeTokenDetailed,
     useRedPacketConstants,
     useFungibleTokenBalance,
-    useWeb3,
 } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
@@ -91,7 +90,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { onChange, onNext, origin } = props
     // context
-    const web3 = useWeb3()
     const account = useAccount()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
@@ -186,12 +184,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     )
 
     const onClick = useCallback(() => {
-        const { address: publicKey, privateKey } = web3.eth.accounts.create()
-        onChange({
-            publicKey,
-            privateKey,
-            ...creatingParams,
-        })
+        onChange(creatingParams)
         onNext()
     }, [creatingParams, onChange, onNext])
 
