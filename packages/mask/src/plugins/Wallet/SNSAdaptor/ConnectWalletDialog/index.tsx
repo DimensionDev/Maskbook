@@ -63,7 +63,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         // a short time loading makes the user fells better
         await delay(1000)
-
         let account: string | undefined
         let chainId: ChainId | undefined
 
