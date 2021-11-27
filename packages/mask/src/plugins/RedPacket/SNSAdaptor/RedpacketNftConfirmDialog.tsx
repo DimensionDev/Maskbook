@@ -117,19 +117,8 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 36,
         height: 36,
     },
-    cancelButton: {
-        backgroundColor: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
-        color: '#1C68F3',
-        '&:hover': {
-            backgroundColor: theme.palette.mode === 'light' ? '#EDF1F2' : '#16181C',
-        },
-    },
-    sendButton: {
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
-    },
+    cancelButton: {},
+    sendButton: {},
     snackBarText: {
         fontSize: 14,
     },
