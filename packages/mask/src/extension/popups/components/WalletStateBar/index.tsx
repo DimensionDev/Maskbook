@@ -2,7 +2,7 @@ import { FC, memo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useProviderDescriptor } from '@masknet/plugin-infra'
+import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Stack, StackProps, Typography } from '@mui/material'
 import { NetworkSelector } from '../../components/NetworkSelector'
@@ -38,8 +38,8 @@ interface WalletStateBarUIProps extends StackProps {
 export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
     ({ isPending, walletAddress, walletName, openConnectWalletDialog, children, ...rest }) => {
         const { t } = useI18N()
-        const providerDescriptor = useProviderDescriptor()
         const { classes } = useStyles()
+        const providerDescriptor = useProviderDescriptor(undefined, NetworkPluginID.PLUGIN_EVM)
 
         if (!providerDescriptor) return null
 
