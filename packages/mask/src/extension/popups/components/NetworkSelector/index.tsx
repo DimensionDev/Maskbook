@@ -88,7 +88,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
     const [menu, openMenu] = useMenu(
         ...(networks
             ?.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
-            .filter((x) => (Flags.support_eth_network_switch ? true : x.isMainnet))
+            .filter((x) => (Flags.support_testnet_switch ? true : x.isMainnet))
             .map((network) => {
                 const chainId = network.chainId
 
@@ -99,7 +99,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                         selected={chainId === currentNetwork.chainId}>
                         {network.isMainnet ? (
                             <WalletIcon size={20} networkIcon={network.icon} />
-                        ) : Flags.support_eth_network_switch ? (
+                        ) : Flags.support_testnet_switch ? (
                             <ChainIcon color={network.iconColor} />
                         ) : null}
                         <Typography sx={{ marginLeft: 1 }}>{network.name}</Typography>
