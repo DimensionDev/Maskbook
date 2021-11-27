@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
@@ -83,13 +83,17 @@ export function PreviewCard(props: PreviewCardProps) {
         retryMaskBoxPurchasedTokens,
     } = useContainer(Context)
 
+    const txConfig = useMemo(() => {
+        return {
+            ...openBoxTransaction?.config,
+            gas: openBoxTransactionOverrides?.gas ?? openBoxTransactionGasLimit,
+        }
+    }, [openBoxTransaction?.config, openBoxTransactionOverrides, openBoxTransactionGasLimit])
+
     //#region open box
     const [openBoxState, openBoxCallback, resetOpenBoxCallback] = useTransactionCallback(
         TransactionStateType.CONFIRMED,
-        {
-            ...openBoxTransaction?.config,
-            gas: openBoxTransactionOverrides?.gas ?? openBoxTransactionGasLimit,
-        },
+        txConfig,
         openBoxTransaction?.method,
     )
     const onRefresh = useCallback(() => {
@@ -111,9 +115,11 @@ export function PreviewCard(props: PreviewCardProps) {
     const [drawing, setDrawing] = useState(false)
     const onDraw = useCallback(async () => {
         setDrawing(true)
-        setOpenDrawDialog(false)
         refreshLastPurchasedTokenIds()
-        await openBoxCallback()
+        try {
+            await openBoxCallback()
+            setOpenDrawDialog(false)
+        } catch {}
         setDrawing(false)
     }, [openBoxCallback, refreshLastPurchasedTokenIds])
 

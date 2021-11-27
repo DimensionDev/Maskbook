@@ -18,7 +18,6 @@ import {
     useERC20TokenDetailed,
     useERC721ContractDetailed,
     useMaskBoxConstants,
-    addGasMargin,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
@@ -252,7 +251,7 @@ function useContext(initialState?: { boxId: string }) {
     const { value: openBoxTransactionGasLimit = 0 } = useAsyncRetry(async () => {
         if (!openBoxTransaction) return 0
         const estimatedGas = await openBoxTransaction.method.estimateGas(omit(openBoxTransaction.config, 'gas'))
-        return addGasMargin(estimatedGas).toNumber()
+        return new BigNumber(estimatedGas).toNumber()
     }, [openBoxTransaction, isAllowanceEnough])
     //#endregion
 
