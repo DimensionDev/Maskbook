@@ -93,9 +93,9 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                         />
                         <Box className={classes.chainIcon}>
                             <WalletIcon
-                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
                                 classes={{ networkIcon: classes.networkIcon }}
                                 size={16}
+                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
                             />
                         </Box>
                     </Box>
