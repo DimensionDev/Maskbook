@@ -14,8 +14,10 @@ import {
     EthereumTokenType,
     useChainId,
     useAccount,
+    useERC20TokenAllowance,
     useERC20TokenDetailed,
     useERC721ContractDetailed,
+    useMaskBoxConstants,
     addGasMargin,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
@@ -38,6 +40,7 @@ function useContext(initialState?: { boxId: string }) {
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
+    const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
 
     const [boxId, setBoxId] = useState(initialState?.boxId ?? '')
     const [paymentTokenAddress, setPaymentTokenAddress] = useState('')
@@ -219,11 +222,11 @@ function useContext(initialState?: { boxId: string }) {
     const paymentTokenIndex =
         boxInfo?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1
     const paymentTokenPrice = paymentTokenInfo?.price ?? '0'
-    const paymentTokenBalance = isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
-        ? paymentNativeTokenBalance
-        : paymentERC20TokenBalance
+    const costAmount = new BigNumber(paymentTokenPrice).multipliedBy(paymentCount)
+    const isNativeToken = isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
+    const paymentTokenBalance = isNativeToken ? paymentNativeTokenBalance : paymentERC20TokenBalance
     const paymentTokenDetailed = paymentTokenInfo?.token ?? null
-    const isBalanceInsufficient = new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).gt(paymentTokenBalance)
+    const isBalanceInsufficient = costAmount.gt(paymentTokenBalance)
 
     useEffect(() => {
         const firstPaymentTokenAddress = first(boxInfo?.payments)?.token.address
@@ -241,11 +244,16 @@ function useContext(initialState?: { boxId: string }) {
         paymentTokenDetailed,
         openBoxTransactionOverrides,
     )
+    const { value: erc20Allowance } = useERC20TokenAllowance(
+        isNativeToken ? undefined : paymentTokenAddress,
+        MASK_BOX_CONTRACT_ADDRESS,
+    )
+    const isAllowanceEnough = isNativeToken ? true : costAmount.lte(erc20Allowance ?? '0')
     const { value: openBoxTransactionGasLimit = 0 } = useAsyncRetry(async () => {
         if (!openBoxTransaction) return 0
         const estimatedGas = await openBoxTransaction.method.estimateGas(omit(openBoxTransaction.config, 'gas'))
         return addGasMargin(estimatedGas).toNumber()
-    }, [openBoxTransaction])
+    }, [openBoxTransaction, isAllowanceEnough])
     //#endregion
 
     return {
@@ -291,6 +299,7 @@ function useContext(initialState?: { boxId: string }) {
         paymentTokenBalance,
         paymentTokenDetailed,
         isBalanceInsufficient,
+        isAllowanceEnough,
 
         // transactions
         openBoxTransaction,

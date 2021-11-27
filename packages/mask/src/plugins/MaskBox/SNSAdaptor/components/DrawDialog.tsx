@@ -10,6 +10,7 @@ import {
     formatBalance,
     formatEthereumAddress,
     useAccount,
+    useProviderType,
     useChainId,
     useMaskBoxConstants,
     EthereumTokenType,
@@ -19,6 +20,7 @@ import ActionButton from '../../../../extension/options-page/DashboardComponents
 import { EthereumERC20TokenApprovedBoundary } from '../../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { BoxInfo } from '../../type'
+import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
 
@@ -104,11 +106,16 @@ export function DrawDialog(props: DrawDialogProps) {
         paymentTokenBalance,
         paymentTokenDetailed,
         isBalanceInsufficient,
+        isAllowanceEnough,
+
+        openBoxTransactionGasLimit,
+        setOpenBoxTransactionOverrides,
     } = useContainer(Context)
 
     const providerDescriptor = useProviderDescriptor()
     const account = useAccount()
     const chainId = useChainId()
+    const providerType = useProviderType()
 
     const onCount = useCallback(
         (step: number) => {
@@ -236,6 +243,19 @@ export function DrawDialog(props: DrawDialogProps) {
                                 </Typography>
                             </Box>
                         </Box>
+                        {isAllowanceEnough && (
+                            <Box className={classes.section} display="flex" alignItems="center">
+                                <Typography className={classes.title} color="textPrimary">
+                                    Gas Fee:
+                                </Typography>
+                                <Box className={classes.content}>
+                                    <GasSettingBar
+                                        gasLimit={openBoxTransactionGasLimit}
+                                        onChange={setOpenBoxTransactionOverrides}
+                                    />
+                                </Box>
+                            </Box>
+                        )}
                     </Box>
                 </Box>
 
