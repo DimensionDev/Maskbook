@@ -1,3 +1,4 @@
+import { useMemo, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
@@ -10,7 +11,6 @@ import {
     ERC721TokenDetailed,
     useWeb3,
     TransactionStateType,
-    resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -21,11 +21,8 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../../../utils'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useMemo, useCallback, useEffect, useState } from 'react'
-import { useCustomSnackbar } from '@masknet/theme'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { RedPacketNftMetaKey } from '../constants'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { RedPacketRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
@@ -170,7 +167,6 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
     )
 
     const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
-    const { showSnackbar } = useCustomSnackbar()
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
     const [txid, setTxid] = useState('')
     const onSendPost = useCallback(
@@ -201,36 +197,18 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
             return
         }
 
-        if (createState.type === TransactionStateType.FAILED) {
-            showSnackbar(createState.error.message, { variant: 'error' })
-        } else if (createState.type === TransactionStateType.CONFIRMED && createState.no === 0) {
+        if (createState.type === TransactionStateType.CONFIRMED && createState.no === 0) {
             const { receipt } = createState
 
             const { id } = (receipt.events?.CreationSuccess.returnValues ?? {}) as {
                 id: string
             }
             onSendPost(id)
-            showSnackbar(
-                <div className={classes.snackBar}>
-                    <Typography className={classes.snackBarText}>{t('plugin_wallet_transaction_confirmed')}</Typography>
-                    <Link
-                        href={resolveTransactionLinkOnExplorer(contract!.chainId, createState.receipt.transactionHash)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={classes.snackBarLink}>
-                        <OpenInNewIcon className={classes.openIcon} />
-                    </Link>
-                </div>,
-                {
-                    variant: 'success',
-                    anchorOrigin: { horizontal: 'right', vertical: 'top' },
-                },
-            )
             onClose()
         }
 
         resetCallback()
-    }, [createState, onSendPost, contract])
+    }, [createState, onSendPost])
 
     return (
         <InjectedDialog open={open} onClose={onBack} title={t('confirm')} maxWidth="xs">
