@@ -34,3 +34,16 @@ export async function getAddress(userId: string) {
 export { getNFTContractVerifiedFromJSON } from './verified'
 export { getUserAddresses } from './gun'
 export { getRSSNode } from './rss3'
+
+export async function getImage(image: string): Promise<string> {
+    const response = await globalThis.fetch(image)
+    return (await blobToBase64(await response.blob())) as string
+}
+
+function blobToBase64(blob: Blob) {
+    return new Promise((resolve, _) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.readAsDataURL(blob)
+    })
+}
