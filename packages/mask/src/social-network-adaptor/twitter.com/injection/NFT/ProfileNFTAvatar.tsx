@@ -11,11 +11,10 @@ import {
 } from '../../utils/selector'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
-import { toPNG } from '../../../../plugins/Avatar/utils'
+import { getImage, toPNG } from '../../../../plugins/Avatar/utils'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
-import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
@@ -69,7 +68,7 @@ function NFTAvatarInTwitter() {
 
     const onChange = async (token: ERC721TokenDetailed) => {
         if (!token.info.image) return
-        const imageBase64 = await PluginNFTAvatarRPC.getImage(token.info.image)
+        const imageBase64 = await getImage(token.info.image)
         const image = await toPNG(imageBase64)
         if (!image) return
         changeImageToActiveElements(image)
