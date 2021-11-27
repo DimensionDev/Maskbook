@@ -34,17 +34,17 @@ export async function getNFTAvatarFromRSS(userId: string, address: string) {
     const { type, nfts } = result
 
     const web3 = new Web3()
+    let nft: NFTRSSNode
     if (type === 'NFTS') {
         const data = nfts as Record<string, NFTRSSNode>
-        const result = web3.eth.accounts.recover(data[userId].nft.userId, data[userId].signature)
-        if (!isSameAddress(result, address)) return
-        return data[userId].nft
+        nft = data[userId]
     } else {
-        const data = nfts as NFTRSSNode
-        const result = web3.eth.accounts.recover(data.nft.userId, data.signature)
-        if (!isSameAddress(result, address)) return
-        return data.nft
+        nft = nfts as NFTRSSNode
     }
+
+    const sig_address = web3.eth.accounts.recover(nft.nft.userId, nft.signature)
+    if (!isSameAddress(sig_address, address)) return
+    return nft.nft
 }
 
 async function _getNFTAvatarFromRSS(

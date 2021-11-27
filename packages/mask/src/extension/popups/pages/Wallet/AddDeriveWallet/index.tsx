@@ -83,13 +83,16 @@ const AddDeriveWallet = memo(() => {
 
     const { loading, value: dataSource } = useAsync(async () => {
         if (mnemonic) {
+            const unDeriveWallets = Array.from(indexes.current)
+
             const derivableAccounts = await WalletRPC.getDerivableAccounts(mnemonic, page)
 
-            return derivableAccounts.map((derivedWallet) => {
+            return derivableAccounts.map((derivedWallet, index) => {
                 const added = !!wallets.find(currySameAddress(derivedWallet.address))
-
+                const selected = unDeriveWallets.find((item) => item === index + page * 10) !== undefined
                 return {
                     added,
+                    selected,
                     address: derivedWallet.address,
                 }
             })
@@ -100,9 +103,9 @@ const AddDeriveWallet = memo(() => {
     const onCheck = useCallback(
         async (checked, index) => {
             if (checked) {
-                indexes.current.add(page + index)
+                indexes.current.add(page * 10 + index)
             } else {
-                indexes.current.delete(page + index)
+                indexes.current.delete(page * 10 + index)
             }
         },
         [page],

@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useStylesExtends } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 
 import { MaskMessages } from '../../../utils'
 import { useLocationChange } from '../../../utils/hooks/useLocationChange'

@@ -303,6 +303,12 @@ export enum EthereumMethodType {
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
 }
 
+export enum EthereumErrorType {
+    ERR_SIGN_TRANSACTION = 'Failed to sign transaction.',
+    ERR_SEND_TRANSACTION = 'Failed to send transaction.',
+    ERR_SIGN_MESSAGE = 'Failed to sign message.',
+}
+
 export type EthereumTransactionConfig = TransactionConfig_ & {
     // EIP1559
     maxFeePerGas?: string

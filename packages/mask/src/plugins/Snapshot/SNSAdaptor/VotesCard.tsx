@@ -61,11 +61,14 @@ const useStyles = makeStyles()((theme) => {
         },
         link: {
             display: 'flex',
-            width: '35%',
+            minWidth: 130,
             color: 'inherit',
             alignItems: 'center',
             textDecoration: 'none !important',
             marginRight: 16,
+        },
+        power: {
+            minWidth: 90,
         },
         shadowRootTooltip: {
             color: 'white',
@@ -93,14 +96,14 @@ function Content() {
             }>
             <List className={classes.list}>
                 {votes.map((v) => {
+                    const isAverageWeight = v.choices?.every((c) => c.weight === 1)
                     const fullChoiceText =
                         v.totalWeight && v.choices
                             ? v.choices.reduce((acc, choice, i) => {
                                   return (
                                       acc +
                                       (i === 0 ? '' : ', ') +
-                                      formatPercentage(choice.weight / v.totalWeight!) +
-                                      ' ' +
+                                      (!isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '') +
                                       choice.name
                                   )
                               }, '')
@@ -136,7 +139,7 @@ function Content() {
                                     <Typography className={classes.choice}>{fullChoiceText}</Typography>
                                 </ShadowRootTooltip>
                             ) : null}
-                            <Typography>
+                            <Typography className={classes.power}>
                                 {millify(v.balance, { precision: 2, lowercase: true }) +
                                     ' ' +
                                     (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}

@@ -1,5 +1,4 @@
-import { useStylesExtends } from '@masknet/shared'
-import { getMaskColor, makeStyles } from '@masknet/theme'
+import { getMaskColor, makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     formatEthereumAddress,
     resolveAddressLinkOnExplorer,

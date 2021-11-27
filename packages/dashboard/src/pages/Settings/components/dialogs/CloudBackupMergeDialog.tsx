@@ -116,7 +116,12 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                     />
                 ) : null}
 
-                <LoadingButton fullWidth onClick={onBackup} loading={loading} disabled={incorrectBackupPassword}>
+                <LoadingButton
+                    fullWidth
+                    onClick={onBackup}
+                    loading={loading}
+                    disabled={incorrectBackupPassword}
+                    variant="contained">
                     {t.settings_button_backup()}
                 </LoadingButton>
             </Box>

@@ -1,6 +1,6 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef, or, SubscriptionFromValueRef } from '@masknet/shared'
-import { Appearance } from '@masknet/theme'
+import { useValueRef, SubscriptionFromValueRef } from '@masknet/shared'
+import { Appearance, or } from '@masknet/theme'
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { blue, green, grey, orange, red } from '@mui/material/colors'
