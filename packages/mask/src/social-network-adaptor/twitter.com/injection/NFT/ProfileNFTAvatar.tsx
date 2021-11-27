@@ -63,7 +63,6 @@ async function changeImageToActiveElements(image: File | Blob): Promise<void> {
 
 function NFTAvatarInTwitter() {
     const { classes } = useStyles(getStyles())
-    const myIdentities = useCurrentProfileIdentifiers()
     const identity = useCurrentVisitingIdentity()
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 
