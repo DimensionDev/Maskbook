@@ -233,6 +233,18 @@ importers:
   packages/empty:
     specifiers: {}
 
+  packages/encryption:
+    specifiers:
+      '@masknet/shared-base': workspace:*
+      '@msgpack/msgpack': ^2.7.0
+      pvtsutils: ^1.2.0
+      tiny-secp256k1: ^2.1.2
+    dependencies:
+      '@masknet/shared-base': link:../shared-base
+      '@msgpack/msgpack': 2.7.1
+      pvtsutils: 1.2.1
+      tiny-secp256k1: 2.1.2
+
   packages/external-plugin-previewer:
     specifiers:
       '@masknet/theme': workspace:*
@@ -830,6 +842,16 @@ importers:
 
   packages/web3-kit:
     specifiers: {}
+
+  packages/web3-providers:
+    specifiers:
+      json-stable-stringify: ^1.0.1
+      lodash-unified: 1.0.1
+      urlcat: ^2.0.4
+    dependencies:
+      json-stable-stringify: 1.0.1
+      lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
+      urlcat: 2.0.4
 
   packages/web3-shared/evm:
     specifiers:
@@ -21580,7 +21602,6 @@ packages:
     dependencies:
       tslib: 2.3.1
     dev: false
-    optional: true
 
   /pvutils/1.0.17:
     resolution: {integrity: sha512-wLHYUQxWaXVQvKnwIDWFVKDJku9XDCvyhhxoq8dc5MFdIlRenyPI9eSfEtcvgHgD7FlvCyGAlWgOzRnZD99GZQ==}
@@ -24424,6 +24445,13 @@ packages:
       nan: 2.14.2
     dev: false
 
+  /tiny-secp256k1/2.1.2:
+    resolution: {integrity: sha512-8qPw7zDK6Hco2tVGYGQeOmOPp/hZnREwy2iIkcq0ygAuqc9WHo29vKN94lNymh1QbB3nthtAMF6KTIrdbsIotA==}
+    engines: {node: '>=14.0.0'}
+    dependencies:
+      uint8array-tools: 0.0.6
+    dev: false
+
   /tiny-warning/1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
     dev: false
@@ -25029,6 +25057,11 @@ packages:
       uglify-js: 2.8.29
       webpack: 3.12.0
       webpack-sources: 1.4.3
+    dev: false
+
+  /uint8array-tools/0.0.6:
+    resolution: {integrity: sha512-aIvEHNRX1AlOYAr6qSUjQBn4mCduxx6MtC967aRDTb2UUBPj0Ix2ZFQDcmXUUO/UxRPHcw1f5a5nVbCSKDSOqA==}
+    engines: {node: '>=14.0.0'}
     dev: false
 
   /ultron/1.1.1:
