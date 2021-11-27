@@ -4,7 +4,11 @@ import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../../shared'
 import { ChainId, ProviderType, useAccount } from '@masknet/web3-shared-evm'
 import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
-import { currentMaskWalletChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import {
+    currentMaskWalletAccountSettings,
+    currentMaskWalletChainIdSettings,
+    currentProviderSettings,
+} from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenu, useValueRef, WalletIcon } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
@@ -56,6 +60,7 @@ export const NetworkSelector = memo(() => {
             }
             return WalletRPC.updateMaskAccount({
                 chainId,
+                account: currentMaskWalletAccountSettings.value,
             })
         },
         [currentProvider, account],
