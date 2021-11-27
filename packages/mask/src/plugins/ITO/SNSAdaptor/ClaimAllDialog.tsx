@@ -44,10 +44,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: '100%',
         fontSize: 18,
         fontWeight: 400,
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
     },
     footer: {
         marginTop: theme.spacing(2),

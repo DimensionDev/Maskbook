@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => {
             position: 'static !important' as any,
             height: 'auto !important',
             padding: theme.spacing(2),
-            backgroundColor: MaskColorVar.lightBackground,
+            backgroundColor: theme.palette.background.default,
             [smallQuery]: {
                 padding: theme.spacing(2, 1.5),
             },

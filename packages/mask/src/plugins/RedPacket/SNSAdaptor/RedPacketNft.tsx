@@ -94,10 +94,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: '0px !important',
         minHeight: 38,
         height: 38,
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
     },
     footer: {
         display: 'flex',
