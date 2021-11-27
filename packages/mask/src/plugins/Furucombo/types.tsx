@@ -12,7 +12,7 @@ export interface Investable {
     stakingToken: Token | null
     strategies: Strategy[]
     swapProtocol: string | null
-    address: string;
+    address: string
     token: Token
     tokens: Token[]
     updatedAt: string
