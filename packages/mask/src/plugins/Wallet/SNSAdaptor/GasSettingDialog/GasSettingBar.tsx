@@ -60,8 +60,8 @@ export function GasSettingBar(props: GasSettingBarProps) {
                 (isEIP1559Supported(chainId)
                     ? {
                           gas: evt.gasLimit,
-                          maxFee: evt.maxFee,
-                          priorityFee: evt.priorityFee,
+                          maxFeePerGas: evt.maxFee,
+                          maxPriorityFeePerGas: evt.priorityFee,
                       }
                     : {
                           gas: evt.gasLimit,
