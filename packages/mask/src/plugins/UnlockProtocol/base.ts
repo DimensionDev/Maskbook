@@ -1,9 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { pluginDescription, pluginIcon, pluginName } from './constants'
+import { pluginDescription, pluginIcon, pluginName, pluginId } from './constants'
 
 export const base: Plugin.Shared.Definition = {
-    ID: pluginName,
+    ID: pluginId,
     icon: pluginIcon,
     name: { fallback: pluginName },
     description: { fallback: pluginDescription },

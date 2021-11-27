@@ -1,10 +1,9 @@
 import { useCallback, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Button, CircularProgress, DialogActions, DialogContent } from '@mui/material'
 import { useI18N } from '../../utils'
 import { SelectProfileUI } from '../shared/SelectProfileUI'
 import type { Profile } from '../../database'
-import { useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../shared/InjectedDialog'
 
 export interface SelectProfileDialogProps extends withClasses<never> {

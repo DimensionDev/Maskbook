@@ -98,7 +98,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                 color={network.iconColor ?? ''}
                 className={classes.bar}
                 onClick={openMenu}>
-                <Typography component="span" sx={{ background: network.iconColor }} className={classes.dot} />
+                <Typography component="span" sx={{ backgroundColor: network.iconColor }} className={classes.dot} />
                 <Typography component="span" fontSize={12}>
                     {network.name}
                 </Typography>

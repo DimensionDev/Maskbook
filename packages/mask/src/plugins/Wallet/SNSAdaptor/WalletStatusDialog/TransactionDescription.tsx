@@ -47,7 +47,7 @@ function getTransactionDescription(
                         true,
                     )}`
                 default:
-                    return `Contract Interaction ${
+                    return `${computedPayload.name ?? 'Contract Interaction'} ${
                         computedPayload._tx.value
                             ? getTokenAmountDescription(
                                   computedPayload._tx.value as string | undefined,

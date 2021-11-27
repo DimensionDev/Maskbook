@@ -15,5 +15,5 @@ export const useCollectibleOwners = (tokens: ERC721TokenDetailed[]) => {
 
         const result = await Promise.all(calls)
         return result.filter(Boolean)
-    }, [tokens.length])
+    }, [tokens.map((x) => x.tokenId).join('')])
 }

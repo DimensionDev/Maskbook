@@ -1,7 +1,7 @@
 import { ChainId, getChainDetailed, getNetworkTypeFromChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ImageIcon, useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { ImageIcon } from '@masknet/shared'
 import { getNetworkColor } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({

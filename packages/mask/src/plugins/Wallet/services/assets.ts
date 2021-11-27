@@ -142,7 +142,14 @@ function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
                 token:
                     chainIdFromId && isChainIdMainnet(chainIdFromId)
                         ? createNativeToken(chainIdFromChain)
-                        : createERC20Token(chainIdFromChain, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
+                        : createERC20Token(
+                              chainIdFromChain,
+                              formatEthereumAddress(y.id),
+                              y.decimals,
+                              y.name,
+                              y.symbol,
+                              y.logo_url ? [y.logo_url] : undefined,
+                          ),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),

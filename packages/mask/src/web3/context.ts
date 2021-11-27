@@ -28,7 +28,7 @@ import {
 } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
-import { Flags } from '../utils'
+import { Flags } from '../../shared'
 import { createExternalProvider } from './helpers'
 import { createInjectedProvider } from '../extension/background-script/EthereumService'
 import Services from '../extension/service'

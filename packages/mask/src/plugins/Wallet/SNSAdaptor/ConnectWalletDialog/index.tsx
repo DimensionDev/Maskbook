@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { safeUnreachable } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -13,7 +13,7 @@ import {
     resolveProviderName,
     Fortmatic,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
@@ -64,7 +64,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         // a short time loading makes the user fells better
         await delay(1000)
-
         let account: string | undefined
         let chainId: ChainId | undefined
 

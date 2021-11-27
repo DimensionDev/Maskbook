@@ -14,7 +14,8 @@ import {
     FilledInput,
 } from '@mui/material'
 
-import { Flags, useI18N, usePortalShadowRoot } from '../../../utils'
+import { useI18N, usePortalShadowRoot } from '../../../utils'
+import { Flags } from '../../../../shared'
 import { useRegionList } from './hooks/useRegion'
 import type { RegionCode } from './hooks/useRegion'
 

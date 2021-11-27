@@ -68,6 +68,9 @@ export function ProviderIconClickBait({
         onClick?.(network, provider)
     }, [network, provider, wallets, injectedProviderReady, injectedProviderType, onClick])
 
+    // temporary hide inject providers
+    if (isInjectedProvider(providerType)) return null
+
     // hide injected provider in dashboard
     if (isInjectedProvider(providerType) && location.href.includes('dashboard.html')) return null
 

@@ -1,7 +1,7 @@
 import { ERC20TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import LBP from '../apis/LBP/LBP.json'
 import { useMemo } from 'react'
-import { Flags } from '../../../utils/flags'
+import { Flags } from '../../../../shared'
 
 export function useLBP(token?: ERC20TokenDetailed) {
     return useMemo(() => {
