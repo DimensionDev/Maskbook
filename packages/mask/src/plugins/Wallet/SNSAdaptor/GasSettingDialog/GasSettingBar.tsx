@@ -75,7 +75,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
         return new BigNumber(gasLimit).multipliedBy(
             isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
         )
-    }, [chainId, gasLimit, gasPrice, maxFee])
+    }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
 
     return (
         <Box display="flex" flexDirection="row" alignItems="center">
