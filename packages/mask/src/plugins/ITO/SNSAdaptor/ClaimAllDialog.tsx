@@ -414,7 +414,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     </div>
                                 ) : null}
                             </>
-                        ) : !showNftAirdrop && !loadingAirdrop && chainId !== ChainId.Matic ? (
+                        ) : !showNftAirdrop && !loadingAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
