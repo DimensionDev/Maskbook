@@ -1,7 +1,8 @@
 import { FC, memo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
-import { FormattedAddress, ImageIcon } from '@masknet/shared'
+import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { useProviderDescriptor } from '@masknet/plugin-infra'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Stack, StackProps, Typography } from '@mui/material'
 import { NetworkSelector } from '../../components/NetworkSelector'
@@ -37,7 +38,10 @@ interface WalletStateBarUIProps extends StackProps {
 export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
     ({ isPending, walletAddress, walletName, openConnectWalletDialog, children, ...rest }) => {
         const { t } = useI18N()
+        const providerDescriptor = useProviderDescriptor()
         const { classes } = useStyles()
+
+        if (!providerDescriptor) return null
 
         return (
             <Stack justifyContent="center" direction="row" alignItems="center" {...rest}>
@@ -59,7 +63,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                 )}
                 <Stack direction="row" onClick={openConnectWalletDialog} sx={{ cursor: 'pointer' }}>
                     <Stack mx={1} justifyContent="center">
-                        <ImageIcon />
+                        <WalletIcon providerIcon={providerDescriptor.icon} inverse size={38} />
                     </Stack>
                     <Box sx={{ userSelect: 'none' }}>
                         <Box fontSize={16}>{walletName ?? '-'}</Box>
