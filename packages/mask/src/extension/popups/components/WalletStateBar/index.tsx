@@ -3,7 +3,7 @@ import { LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Stack, StackProps, Typography } from '@mui/material'
 import { NetworkSelector } from '../../components/NetworkSelector'
 import { useI18N } from '../../../../utils'
@@ -39,7 +39,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
     ({ isPending, walletAddress, walletName, openConnectWalletDialog, children, ...rest }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-        const providerDescriptor = useProviderDescriptor(undefined, NetworkPluginID.PLUGIN_EVM)
+        const providerDescriptor = useProviderDescriptor(ProviderType.MaskWallet, NetworkPluginID.PLUGIN_EVM)
 
         if (!providerDescriptor) return null
 
