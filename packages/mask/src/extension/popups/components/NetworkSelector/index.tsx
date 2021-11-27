@@ -84,9 +84,11 @@ export interface NetworkSelectorUIProps {
 export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChainChange }) => {
     const { classes } = useStyles()
     const networks = getRegisteredWeb3Networks()
+
     const [menu, openMenu] = useMenu(
         ...(networks
             ?.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+            .filter((x) => (Flags.support_eth_network_switch ? true : x.isMainnet))
             .map((network) => {
                 const chainId = network.chainId
 
