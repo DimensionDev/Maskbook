@@ -146,7 +146,10 @@ function useContext(initialState?: { boxId: string }) {
     }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBit])
 
     const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
-    const isQualifiedByContract = boxInfo?.qualificationAddress ? isWhitelisted : true
+    const isQualifiedByContract =
+        boxInfo?.qualificationAddress && !isSameAddress(boxInfo?.qualificationAddress, ZERO_ADDRESS)
+            ? isWhitelisted
+            : true
 
     //#region check holder min token
     const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)
@@ -247,7 +250,7 @@ function useContext(initialState?: { boxId: string }) {
         isNativeToken ? undefined : paymentTokenAddress,
         MASK_BOX_CONTRACT_ADDRESS,
     )
-    const canPurchase = isBalanceInsufficient && isQualified && !!boxInfo?.personalRemaining
+    const canPurchase = !isBalanceInsufficient && isQualified && !!boxInfo?.personalRemaining
     const allowToPurchase = boxState === BoxState.READY
     const isAllowanceEnough = isNativeToken ? true : costAmount.lte(erc20Allowance ?? '0')
     const { value: openBoxTransactionGasLimit = 0 } = useAsyncRetry(async () => {

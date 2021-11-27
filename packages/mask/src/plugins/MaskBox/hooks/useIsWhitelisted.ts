@@ -9,5 +9,5 @@ export function useIsWhitelisted(address?: string, account?: string) {
         return contract.methods.is_qualified(account, '0x00').call()
     }, [account, contract])
 
-    return useMemo(() => result.value ?? { qualified: false, error_msg: '' }, [result])
+    return useMemo(() => result.value ?? { qualified: false, error_msg: '' }, [result.value])
 }
