@@ -36,8 +36,8 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.1,
     },
     video: {
-        width: 160,
-        height: 220,
+        width: 172,
+        height: 172,
     },
 }))
 
@@ -69,7 +69,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                 <CircularProgress />
             ) : (
                 <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
-                    <Card className={classes.root} style={{ width: 160, height: 220 }}>
+                    <Card className={classes.root} style={{ width: 172, height: 172 }}>
                         {readonly || !wallet ? null : (
                             <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                         )}
@@ -98,12 +98,4 @@ export function CollectibleCard(props: CollectibleCardProps) {
             )}
         </>
     )
-}
-
-function blobToBase64(blob: Blob) {
-    return new Promise((resolve, _) => {
-        const reader = new FileReader()
-        reader.onloadend = () => resolve(reader.result)
-        reader.readAsDataURL(blob)
-    })
 }

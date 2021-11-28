@@ -135,10 +135,15 @@ export function dispatchEventRaw<T extends Event>(
             event,
             clone_into({
                 get(target, key) {
-                    if (key === 'currentTarget') return unwrapXRay_CPPBindingObject(currentTarget())
-                    return (source as any)[key] ?? (unwrapXRay_CPPBindingObject(target) as any)[key]
+                    if (key === 'currentTarget' || (key === 'target' && isTwitter()))
+                        return unwrapXRay_CPPBindingObject(currentTarget())
+                    return
                 },
             }),
         )
     }
+}
+
+function isTwitter(): Boolean {
+    return window.location.href.includes('twitter.com')
 }

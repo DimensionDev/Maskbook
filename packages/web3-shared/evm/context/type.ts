@@ -16,6 +16,7 @@ import type {
     AddressName,
     AddressNameType,
     CryptoPrice,
+    ERC721TokenCollectionInfo,
 } from '../types'
 
 export interface Web3ProviderType {
@@ -48,7 +49,15 @@ export interface Web3ProviderType {
         provider: CollectibleProvider,
         page?: number,
         size?: number,
+        collection?: string,
     ) => Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }>
+    getCollectionsNFT: (
+        address: string,
+        chainId: ChainId,
+        provider: CollectibleProvider,
+        page?: number,
+        size?: number,
+    ) => Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }>
     getAddressNamesList: (twitterId: string, addressNameType: AddressNameType) => Promise<AddressName[]>
     getTransactionList: (
         address: string,

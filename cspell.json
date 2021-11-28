@@ -241,7 +241,8 @@
         "tokenid",
         "NFTRSS",
         "solana",
-        "Görli"
+        "Görli",
+        "resizer"
     ],
     "ignoreWords": [
         "cryptopunks",

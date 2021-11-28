@@ -18,6 +18,7 @@ import {
     pow10,
     getChainShortName,
     getChainIdFromNetworkType,
+    ERC721TokenCollectionInfo,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
@@ -35,15 +36,42 @@ import type {
     ZerionCovalentAsset,
 } from '../types'
 
+export async function getCollectionsNFT(
+    address: string,
+    chainId: ChainId,
+    provider: CollectibleProvider,
+    page?: number,
+    size?: number,
+): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
+    if (provider === CollectibleProvider.OPENSEA) {
+        const { collections } = await OpenSeaAPI.getCollections(address, { chainId, page, size })
+
+        return {
+            collections: collections.map((x) => ({
+                name: x.name,
+                image: x.image_url || undefined,
+                slug: x.slug,
+            })),
+            hasNextPage: collections.length === size,
+        }
+    }
+
+    return {
+        collections: [],
+        hasNextPage: false,
+    }
+}
+
 export async function getAssetsListNFT(
     address: string,
     chainId: ChainId,
     provider: CollectibleProvider,
     page?: number,
     size?: number,
+    collection?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
     if (provider === CollectibleProvider.OPENSEA) {
-        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
+        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size, collection })
         return {
             assets: assets
                 .filter(
