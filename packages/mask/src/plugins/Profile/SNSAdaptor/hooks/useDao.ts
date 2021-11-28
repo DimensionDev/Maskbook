@@ -35,5 +35,5 @@ export function useDao(userId: string) {
         } catch {
             return undefined
         }
-    }, [])
+    }, [api])
 }
