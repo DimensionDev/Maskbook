@@ -12,13 +12,11 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     button: {
-        border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(237, 241, 242, 1)' : 'rgba(47, 51, 54, 1)'}`,
         borderRadius: 9999,
-        color: theme.palette.mode === 'dark' ? 'rgba(239, 243, 244, 1)' : 'rgba(17, 20, 24, 1) ',
     },
     selected: {
-        border: '1px solid rgb(29,155,240) !important',
-        color: 'rgb(29,155,240) !important',
+        border: `1px solid ${theme.palette.primary.contrastText} !important`,
+        color: theme.palette.primary.contrastText,
     },
     hidden: {
         display: 'none',
