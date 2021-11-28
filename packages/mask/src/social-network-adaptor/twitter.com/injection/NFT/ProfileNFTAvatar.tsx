@@ -11,7 +11,7 @@ import {
 } from '../../utils/selector'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
-import { getImage, toPNG } from '../../../../plugins/Avatar/utils'
+import { toPNG } from '../../../../plugins/Avatar/utils'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
@@ -68,8 +68,7 @@ function NFTAvatarInTwitter() {
 
     const onChange = async (token: ERC721TokenDetailed) => {
         if (!token.info.image) return
-        const imageBase64 = await getImage(token.info.image)
-        const image = await toPNG(imageBase64)
+        const image = await toPNG(token.info.image)
         if (!image) return
         changeImageToActiveElements(image)
 

@@ -9,7 +9,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
-import Services from '../../../service'
 import { useAsyncRetry } from 'react-use'
 import { Video } from '../../../../components/shared/Video'
 import { Image } from '../../../../components/shared/Image'
@@ -57,13 +56,13 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const { loading, value } = useAsyncRetry(async () => {
         if (!token.info.image) return
 
-        const blob = await Services.Helper.fetch(token.info.image)
-        const imgBase64 = (await blobToBase64(blob)) as string
-        return { imgBlob: blob, imgBase64 }
+        const blob = await (await fetch(token.info.image)).blob()
+        return blob
     }, [token])
 
-    const isVideo = !!value?.imgBase64.match(/^data:video/)?.[0]
-    const isHtml = !!value?.imgBase64.match(/^data:text/)
+    const isVideo = value?.type.match(/^video/)?.[0]
+    const isHtml = !!value?.type.match(/^text/)?.[0]
+
     return (
         <>
             {loading ? (
@@ -74,10 +73,10 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         {readonly || !wallet ? null : (
                             <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                         )}
-                        {value ? (
+                        {token.info.image ? (
                             isVideo ? (
                                 <Video
-                                    src={value.imgBlob}
+                                    src={value ?? token.info.image}
                                     VideoProps={{ className: classes.video, autoPlay: true, loop: true }}
                                 />
                             ) : isHtml ? (
@@ -88,7 +87,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                                     width={160}
                                     height={220}
                                     style={{ objectFit: 'contain' }}
-                                    src={value.imgBlob}
+                                    src={value ?? token.info.image}
                                 />
                             )
                         ) : (
