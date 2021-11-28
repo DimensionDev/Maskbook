@@ -356,6 +356,7 @@ importers:
       html-webpack-plugin: ^5.5.0
       https-browserify: ^1.0.0
       i18next-browser-languagedetector: ^6.1.2
+      iframe-resizer-react: ^1.1.0
       immer: ^9.0.7
       isomorphic-dompurify: ^0.16.0
       jsbi: 3.1.4
@@ -483,6 +484,7 @@ importers:
       history: 5.1.0
       https-browserify: 1.0.0
       i18next-browser-languagedetector: 6.1.2
+      iframe-resizer-react: 1.1.0_9a9fcfd9691ee39f83ac00f4a3221da4
       immer: 9.0.7
       isomorphic-dompurify: 0.16.0
       jsbi: 3.1.4
@@ -5208,7 +5210,7 @@ packages:
     resolution: {integrity: sha512-UdkhFWzWcJCZVsj1O/H8/oqj/0RVYjLc1OhPjBrQdALAkQHpCp8xXI4WLnuGTADqTdJZww0NtgwG+TRPkXt27w==}
     dependencies:
       crc-32: 1.2.0
-      ethereumjs-util: 7.1.0
+      ethereumjs-util: 7.1.3
 
   /@ethereumjs/tx/3.3.0:
     resolution: {integrity: sha512-yTwEj2lVzSMgE6Hjw9Oa1DZks/nKTWM8Wn4ykDNapBPua2f4nXO3qKnni86O6lgDj5fVNRqbDsD0yy7/XNGDEA==}
@@ -15410,6 +15412,7 @@ packages:
       ethereum-cryptography: 0.1.3
       ethjs-util: 0.1.6
       rlp: 2.2.7
+    dev: false
 
   /ethereumjs-util/7.1.3:
     resolution: {integrity: sha512-y+82tEbyASO0K0X1/SRhbJJoAlfcvq8JbrG4a5cjrOks7HS/36efU/0j2flxCPOUM++HFahk33kr/ZxyC4vNuw==}
@@ -15420,7 +15423,6 @@ packages:
       create-hash: 1.2.0
       ethereum-cryptography: 0.1.3
       rlp: 2.2.7
-    dev: false
 
   /ethereumjs-vm/2.6.0:
     resolution: {integrity: sha512-r/XIUik/ynGbxS3y+mvGnbOKnuLo40V5Mj1J25+HEO63aWYREIqvWeRO/hnROlMBE5WoniQmPmhiaN0ctiHaXw==}
@@ -15490,6 +15492,7 @@ packages:
     dependencies:
       is-hex-prefixed: 1.0.0
       strip-hex-prefix: 1.0.0
+    dev: false
 
   /event-emitter/0.3.5:
     resolution: {integrity: sha1-34xp7vFkeSPHFXuc6DhAYQsCzDk=}
@@ -17449,6 +17452,25 @@ packages:
   /iferr/0.1.5:
     resolution: {integrity: sha1-xg7taebY/bazEEofy8ocGS3FtQE=}
     dev: true
+
+  /iframe-resizer-react/1.1.0_9a9fcfd9691ee39f83ac00f4a3221da4:
+    resolution: {integrity: sha512-FrytSq91AIJaDgE+6uK/Vdd6IR8CrwLoZ6eGmL2qQMPTzF0xlSV2jaSzRRUh5V2fttD7vzl21jvBl97bV40eBw==}
+    engines: {node: '>=8', npm: '>=5'}
+    peerDependencies:
+      prop-types: '>=15.7.2'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      iframe-resizer: 4.3.2
+      react: 18.0.0-alpha-00ced1e2b-20211102
+      react-dom: 18.0.0-alpha-00ced1e2b-20211102_c9c210d65bdac3c3f586a38a4275dd8c
+      warning: 4.0.3
+    dev: false
+
+  /iframe-resizer/4.3.2:
+    resolution: {integrity: sha512-gOWo2hmdPjMQsQ+zTKbses08mDfDEMh4NneGQNP4qwePYujY1lguqP6gnbeJkf154gojWlBhIltlgnMfYjGHWA==}
+    engines: {node: '>=0.8.0'}
+    dev: false
 
   /ignore/4.0.6:
     resolution: {integrity: sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==}
@@ -25695,7 +25717,6 @@ packages:
     resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
     dependencies:
       loose-envify: 1.4.0
-    dev: true
 
   /watchpack-chokidar2/2.0.1:
     resolution: {integrity: sha512-nCFfBIPKr5Sh61s4LPpy1Wtfi0HE8isJ3d2Yb5/Ppw2P2B/3eVSEBjKfN0fmHJSK14+31KwMKmcrzs2GM4P0Ww==}
