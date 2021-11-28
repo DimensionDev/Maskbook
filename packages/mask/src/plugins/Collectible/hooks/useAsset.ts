@@ -81,7 +81,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                         }`,
                     },
                     token_id: openSeaResponse.token_id,
-                    token_address: openSeaResponse.token_address,
+                    token_address: openSeaResponse.token_address ?? openSeaResponse.asset_contract.address,
                     traits: openSeaResponse.traits,
                     safelist_request_status: openSeaResponse.collection?.safelist_request_status ?? '',
                     description: openSeaResponse.description,
