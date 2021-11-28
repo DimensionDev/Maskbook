@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classNames from 'classnames'
 import { PageTags } from '../types'
+import type { Dao_Payload } from './hooks/useDao'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -11,13 +12,11 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     button: {
-        border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(237, 241, 242, 1)' : 'rgba(47, 51, 54, 1)'}`,
         borderRadius: 9999,
-        color: theme.palette.mode === 'dark' ? 'rgba(239, 243, 244, 1)' : 'rgba(17, 20, 24, 1) ',
     },
     selected: {
-        border: `1px solid ${theme.palette.primary.main}`,
-        color: theme.palette.primary.main,
+        border: `1px solid ${theme.palette.primary.contrastText} !important`,
+        color: theme.palette.primary.contrastText,
     },
     hidden: {
         display: 'none',
@@ -27,11 +26,12 @@ const useStyles = makeStyles()((theme) => ({
 interface PageTagProps {
     onChange: (tag: PageTags) => void
     tag: PageTags
+    daoPayload: Dao_Payload | undefined
 }
 
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
-    const { onChange, tag } = props
+    const { onChange, tag, daoPayload } = props
     return (
         <div className={classes.root}>
             <Button
@@ -63,6 +63,15 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 Donations
             </Button>
+            {daoPayload ? (
+                <Button
+                    variant="outlined"
+                    className={classNames(classes.button, tag === PageTags.DAOTag ? classes.selected : '')}
+                    onClick={() => onChange(PageTags.DAOTag)}
+                    size="medium">
+                    DAO
+                </Button>
+            ) : null}
         </div>
     )
 }
