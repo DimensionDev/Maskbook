@@ -26,7 +26,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             return null
         return {
             from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas', 'gasPrice']),
+            ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas']),
         } as TransactionConfig
     }, [account, tradeComputed])
 
