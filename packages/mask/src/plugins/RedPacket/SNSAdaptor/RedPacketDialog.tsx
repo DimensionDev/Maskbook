@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react'
+import { useState, useCallback, useRef, useMemo, useEffect } from 'react'
 import { DialogContent } from '@mui/material'
 import { usePortalShadowRoot, makeStyles } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -20,6 +20,7 @@ import {
     useChainId,
     useNetworkType,
     useRedPacketConstants,
+    useWeb3,
 } from '@masknet/web3-shared-evm'
 import { RedPacketSettings, useCreateCallback } from './hooks/useCreateCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -71,6 +72,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const networkType = useNetworkType()
     const contract_version = 4
     const [settings, setSettings] = useState<RedPacketSettings>()
+    const web3 = useWeb3()
 
     const onClose = useCallback(() => {
         setStep(CreateRedPacketPageStep.NewRedPacketPage)
@@ -80,9 +82,13 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         props.onClose()
     }, [props, state])
 
+    const { address: publicKey, privateKey } = useMemo(() => web3.eth.accounts.create(), [])
+
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
-
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
     const onCreateOrSelect = useCallback(
         async (payload: RedPacketJSONPayload) => {
             if (payload.password === '') {
@@ -104,6 +110,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                 attachMetadata(RedPacketMetaKey, payload)
             } else dropMetadata(RedPacketMetaKey)
             onClose()
+            closeWalletStatusDialog()
         },
         [onClose, chainId, senderName],
     )
@@ -114,6 +121,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [createSettings, createState, createCallback, resetCreateCallback] = useCreateCallback(
         settings!,
         contract_version,
+        publicKey,
     )
     //#endregion
 
@@ -166,7 +174,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             }
             payload.current.is_random = createSettings.isRandom
             payload.current.shares = createSettings.shares
-            payload.current.password = createSettings.privateKey
+            payload.current.password = privateKey
             payload.current.rpid = CreationSuccess.id
             payload.current.total = CreationSuccess.total
             payload.current.duration = createSettings.duration
@@ -191,7 +199,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             const record: RedPacketRecord = {
                 id: createState.hash!,
                 from: '',
-                password: createSettings!.privateKey,
+                password: privateKey,
                 contract_version,
             }
             RedPacketRPC.discoverRedPacket(record)

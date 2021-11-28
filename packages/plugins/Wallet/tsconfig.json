@@ -1,12 +1,12 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src/",
-    "outDir": "./dist/",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo",
+    "rootDir": "src",
+    "outDir": "dist",
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
     "resolveJsonModule": true
   },
-  "include": ["./src", "./src/**/*.json"],
+  "include": ["src", "src/**/*.json"],
   "references": [
     { "path": "../../plugin-infra" },
     { "path": "../../web3-shared/evm" },

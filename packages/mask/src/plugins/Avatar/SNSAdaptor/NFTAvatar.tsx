@@ -1,8 +1,8 @@
 import { useCallback, useState } from 'react'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
     ERC721TokenDetailed,

@@ -1,4 +1,6 @@
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled'
+// see https://github.com/import-js/eslint-plugin-import/issues/2288
+// eslint-disable-next-line import/no-deprecated
 import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from '@mui/material'
 
 const twitterBreakPoint = 1265
@@ -34,6 +36,8 @@ const Icon = styled(ListItemIcon)`
 `
 
 export function ToolboxHintAtTwitter() {
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     const mini = useMediaQuery(`(max-width: ${twitterBreakPoint}px)`)
     return (
         <ToolboxHintUnstyled

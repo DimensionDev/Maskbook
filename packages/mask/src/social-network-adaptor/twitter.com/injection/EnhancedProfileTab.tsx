@@ -1,7 +1,7 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
 import {
-    searchForegroundColorSelector,
+    searchAppBarBackSelector,
     searchNewTweetButtonSelector,
     searchProfileEmptySelector,
     searchProfileTabListLastChildSelector,
@@ -12,6 +12,8 @@ import {
 import Color from 'color'
 import { makeStyles } from '@masknet/theme'
 import { EnhancedProfileTab } from '../../../plugins/Profile/SNSAdaptor/EnhancedProfileTab'
+import { useLocationChange } from '../../../utils/hooks/useLocationChange'
+import { useState } from 'react'
 
 export function injectEnhancedProfileTabAtTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabListLastChildSelector())
@@ -116,7 +118,7 @@ function getStyle() {
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
     const eleNewTweetButton = searchNewTweetButtonSelector().evaluate()
     const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
-    const eleBackButton = searchForegroundColorSelector().evaluate()
+    const eleBackButton = searchAppBarBackSelector().evaluate()
     const backButtonColorStyle = eleBackButton ? window.getComputedStyle(eleBackButton) : EMPTY_STYLE
 
     return {
@@ -131,8 +133,14 @@ function getStyle() {
 }
 
 export function EnhancedProfileTabAtTwitter() {
-    const style = getStyle()
+    const [style, setStyle] = useState<StyleProps>(getStyle())
+
     const { classes } = useStyles(style)
+
+    useLocationChange(() => {
+        setStyle(getStyle())
+    })
+
     return (
         <EnhancedProfileTab
             title="Web3"

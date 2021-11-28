@@ -21,7 +21,7 @@ import {
     ERC721TokenCollectionInfo,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { values } from 'lodash-es'
+import { values } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
@@ -91,7 +91,12 @@ export async function getAssetsListNFT(
                         {
                             name: x.name || x.asset_contract.name,
                             description: x.description || x.asset_contract.symbol,
-                            image: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
+                            image:
+                                x.image_original_url ||
+                                x.image_url ||
+                                x.image_preview_url ||
+                                x.asset_contract.image_url ||
+                                '',
                         },
                         x.token_id,
                     ),
@@ -165,7 +170,14 @@ function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
                 token:
                     chainIdFromId && isChainIdMainnet(chainIdFromId)
                         ? createNativeToken(chainIdFromChain)
-                        : createERC20Token(chainIdFromChain, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
+                        : createERC20Token(
+                              chainIdFromChain,
+                              formatEthereumAddress(y.id),
+                              y.decimals,
+                              y.name,
+                              y.symbol,
+                              y.logo_url ? [y.logo_url] : undefined,
+                          ),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),

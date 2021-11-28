@@ -51,7 +51,7 @@ import { MaskMessages } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
 import { RelationFavor } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
-import { first, orderBy } from 'lodash-es'
+import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 
 assertEnvironment(Environment.ManifestBackground)
@@ -82,7 +82,6 @@ export async function updateProfileInfo(
     data: {
         nickname?: string | null
         avatarURL?: string | null
-        forceUpdateAvatar?: boolean
     },
 ): Promise<void> {
     if (data.nickname) {
@@ -94,7 +93,7 @@ export async function updateProfileInfo(
         }
         await consistentPersonaDBWriteAccess((t) => createOrUpdateProfileDB(rec, t))
     }
-    if (data.avatarURL) await storeAvatar(identifier, data.avatarURL, data.forceUpdateAvatar)
+    if (data.avatarURL) await storeAvatar(identifier, data.avatarURL)
 }
 export function removeProfile(id: ProfileIdentifier): Promise<void> {
     return consistentPersonaDBWriteAccess((t) => deleteProfileDB(id, t))

@@ -1,4 +1,4 @@
-import { escapeRegExp } from 'lodash-es'
+import { escapeRegExp } from 'lodash-unified'
 
 export const POOLTOGETHER_PLUGIN_ID = 'com.pooltogether'
 

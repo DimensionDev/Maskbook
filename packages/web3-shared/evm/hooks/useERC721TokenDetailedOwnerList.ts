@@ -7,9 +7,9 @@ import { safeNonPayableTransactionCall } from '../utils'
 import { ERC721ContractDetailed, ERC721TokenDetailed, EthereumTokenType, ChainId } from '../types'
 import { getERC721TokenDetailedFromChain } from './useERC721TokenDetailed'
 import { useEffect, useRef, useState } from 'react'
-import { min, uniqBy } from 'lodash-es'
+import { min, uniqBy } from 'lodash-unified'
 import urlcat from 'urlcat'
-import { useChainId } from '../index'
+import { useChainId } from './useChainId'
 
 export const ERC721_ENUMERABLE_INTERFACE_ID = '0x780e9d63'
 

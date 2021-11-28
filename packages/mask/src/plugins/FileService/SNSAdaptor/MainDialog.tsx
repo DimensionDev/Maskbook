@@ -1,9 +1,11 @@
 import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { isNil } from 'lodash-es'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { isNil } from 'lodash-unified'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'
+import { WalletMessages } from '../../Wallet/messages'
 import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { Entry } from './components'
 import { META_KEY_2 } from '../constants'
@@ -35,6 +37,9 @@ const FileServiceDialog: React.FC<Props> = (props) => {
     const [uploading, setUploading] = useState(false)
     const [selectedFileInfo, setSelectedFileInfo] = useState<FileInfo | null>(null)
     const { attachMetadata, dropMetadata } = useCompositionContext()
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
     const onInsert = () => {
         if (isNil(selectedFileInfo)) {
             return
@@ -44,6 +49,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         } else {
             dropMetadata(META_KEY_2)
         }
+        closeWalletStatusDialog()
         props.onClose()
     }
     const onDecline = () => {

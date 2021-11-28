@@ -1,6 +1,6 @@
 import { makeTypedMessageText, TypedMessage } from '../../../protocols/typed-message'
 import { untilDocumentReady } from '../../../utils/dom'
-import { i18n } from '../../../utils/i18n-next'
+import { i18n } from '../../../../shared-ui/locales_legacy'
 import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { delay } from '../../../utils/utils'
 import { composeButtonSelector, composeDialogIndicatorSelector, composeTextareaSelector } from '../utils/selector'

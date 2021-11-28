@@ -1,6 +1,6 @@
 import type { SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { i18n } from '../i18n-next'
+import { i18n } from '../../../shared-ui/locales_legacy'
 import { Result, Ok, Err } from 'ts-results'
 import { Identifier, ProfileIdentifier } from '../../database/type'
 import { decodeTextPayloadUI, encodeTextPayloadUI } from '../../social-network/utils/text-payload-ui'

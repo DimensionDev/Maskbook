@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
 import {
     ChainId,
@@ -17,11 +18,13 @@ import {
 import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
-import Services from '../../extension/service'
 import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
+import Services from '../../extension/service'
 
-export interface EthereumChainBoundaryProps {
+const useStyles = makeStyles()(() => ({}))
+
+export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
     chainId: ChainId
     noSwitchNetworkTip?: boolean
     switchButtonStyle?: SxProps<Theme>
@@ -37,6 +40,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const providerType = useValueRef(currentProviderSettings)
 
     const { noSwitchNetworkTip = false } = props
+    const classes = useStylesExtends(useStyles(), props)
     const expectedChainId = props.chainId
     const expectedNetwork = expectedChainId === ChainId.BSC ? 'BSC' : getChainName(expectedChainId)
     const actualChainId = chainId
@@ -77,7 +81,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     throw new Error('Timeout!')
                 })(),
                 networkType === NetworkType.Ethereum
-                    ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                    ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
                     : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
             ])
         } catch {
@@ -141,10 +145,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 <ActionButtonPromise
                     variant="contained"
                     size="small"
+                    className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
-                    init={t('plugin_wallet_switch_network', {
-                        network: expectedNetwork,
-                    })}
+                    init={
+                        <span>
+                            {t('plugin_wallet_switch_network', {
+                                network: expectedNetwork,
+                            })}
+                        </span>
+                    }
                     waiting={t('plugin_wallet_switch_network_under_going', {
                         network: expectedNetwork,
                     })}

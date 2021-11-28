@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { useStylesExtends, useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
     CollectibleProvider,
@@ -10,8 +10,8 @@ import {
     useCollections,
     Wallet,
 } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'

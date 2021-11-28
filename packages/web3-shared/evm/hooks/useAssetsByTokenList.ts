@@ -3,7 +3,7 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback, useEffect, useState } from 'react'
 import { isSameAddress } from '../utils'
-import { sortBy, uniqBy } from 'lodash-es'
+import { sortBy, uniqBy } from 'lodash-unified'
 
 export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
     const [tokensForAsset, setTokensForAsset] = useState<FungibleTokenDetailed[]>([])
@@ -13,7 +13,7 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[]) {
         const uniqTokens = uniqBy([...tokensForAsset, ...tokens], (x) => x.address)
         const sortedTokens = sortBy(uniqTokens, (x) => x.address)
         setTokensForAsset(sortedTokens)
-    }, [tokens.length])
+    }, [tokens.map((x) => x.address.slice(0, 5)).join('')])
 
     const {
         value: assetsDetailedChain = [],

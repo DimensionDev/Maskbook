@@ -1,6 +1,6 @@
 import { Card, CardContent, Typography, CardActions, Button } from '@mui/material'
-import { RenderContext } from '../index'
-import type { Component } from './index'
+import { RenderContext } from '../RenderContext'
+import type { Component } from './types'
 import { useContext } from 'react'
 export const MaskCard: Component<MaskCardProps> = (props) => {
     const context = useContext(RenderContext)

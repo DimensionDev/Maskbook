@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { getAssetAsBlobURL } from '../../../utils'
 import Drag from './drag'
 import AnimatedMessage from './animatedMsg'

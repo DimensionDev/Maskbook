@@ -1,12 +1,12 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
-import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
-import { FormattedBalance, useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
+import { FormattedBalance } from '@masknet/shared'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { formatBalance } from '@masknet/web3-shared-evm'
+import { useWeb3State } from '@masknet/plugin-infra'
+import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { useI18N } from '../../utils'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -77,7 +77,9 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
         MaxChipProps,
     } = props
     const { t } = useI18N()
+
     const classes = useStylesExtends(useStyles(), props)
+    const { Utils } = useWeb3State()
 
     //#region update amount by self
     const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
@@ -137,7 +139,12 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                 variant="body2"
                                 component="span">
                                 {t('plugin_ito_list_table_got')}:
-                                <FormattedBalance value={balance} decimals={token.decimals} significant={6} />
+                                <FormattedBalance
+                                    value={balance}
+                                    decimals={token.decimals}
+                                    significant={6}
+                                    formatter={Utils?.formatBalance}
+                                />
                             </Typography>
                         ) : null}
                         <Box
@@ -159,12 +166,12 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     variant="outlined"
                                     onClick={() => {
                                         onAmountChange(
-                                            formatBalance(
+                                            Utils?.formatBalance?.(
                                                 new BigNumber(maxAmount ?? balance)
                                                     .dividedBy(maxAmountShares)
                                                     .decimalPlaces(0, 1),
                                                 token.decimals,
-                                            ),
+                                            ) ?? '0',
                                         )
                                     }}
                                     {...MaxChipProps}

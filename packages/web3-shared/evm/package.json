@@ -4,7 +4,6 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
@@ -19,6 +18,7 @@
     "use-subscription": "^1.5.1",
     "wallet.ts": "^1.0.1",
     "web3": "1.5.2",
+    "web3-core-helpers": "1.5.2",
     "web3-utils": "1.5.2"
   },
   "devDependencies": {

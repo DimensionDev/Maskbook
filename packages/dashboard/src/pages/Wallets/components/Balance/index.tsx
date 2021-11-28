@@ -1,12 +1,11 @@
 import { memo } from 'react'
-import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
-import { useDashboardI18N } from '../../../../locales'
-import { MaskColorVar } from '@masknet/theme'
-import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
-import type { NetworkType } from '@masknet/web3-shared-evm'
-import { ChainId, getChainName } from '@masknet/web3-shared-evm'
-import { MiniNetworkSelector } from '@masknet/shared'
 import { useMatch } from 'react-router-dom'
+import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
+import { MaskColorVar } from '@masknet/theme'
+import { useDashboardI18N } from '../../../../locales'
+import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
+import { MiniNetworkSelector } from '@masknet/shared'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { RoutePaths } from '../../../../type'
 
 export interface BalanceCardProps {
@@ -15,9 +14,9 @@ export interface BalanceCardProps {
     onBuy(): void
     onSwap(): void
     onReceive(): void
-    selectedChainId: ChainId | null
-    networks: NetworkType[]
-    onSelectNetwork(id: ChainId | null): void
+    networks: Web3Plugin.NetworkDescriptor[]
+    selectedNetwork: Web3Plugin.NetworkDescriptor | null
+    onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
 }
 
 const BalanceContainer = styled('div')(
@@ -60,7 +59,7 @@ const BalanceTitle = styled(Typography)(
 
 const BalanceContent = styled(Typography)(
     ({ theme }) => `
-    font-size: ${theme.typography.h6.fontSize};
+    font-size: ${theme.typography.h5.fontSize};
     color: ${MaskColorVar.textPrimary};
     line-height: ${theme.typography.h2.lineHeight};
 `,
@@ -80,7 +79,7 @@ const ButtonGroup = styled('div')`
 `
 
 export const Balance = memo<BalanceCardProps>(
-    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedChainId }) => {
+    ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork }) => {
         const t = useDashboardI18N()
 
         const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
@@ -97,10 +96,9 @@ export const Balance = memo<BalanceCardProps>(
                     </IconContainer>
                     <BalanceDisplayContainer>
                         <BalanceTitle>
-                            {t.wallets_balance()}{' '}
-                            {selectedChainId ? getChainName(selectedChainId) : t.wallets_balance_all_chain()}
+                            {t.wallets_balance()} {selectedNetwork?.name ?? t.wallets_balance_all_chain()}
                         </BalanceTitle>
-                        <BalanceContent sx={{ py: 0.5 }}>
+                        <BalanceContent sx={{ py: 1.5 }}>
                             {isNaN(balance)
                                 ? '-'
                                 : balance.toLocaleString('en', {
@@ -111,9 +109,9 @@ export const Balance = memo<BalanceCardProps>(
                         <MiniNetworkSelector
                             hideAllNetworkButton={isHiddenAllButton}
                             disabledNonCurrentNetwork={isDisabledNonCurrentChainSelect}
-                            onSelect={onSelectNetwork}
-                            selectedChainId={selectedChainId}
+                            selectedNetwork={selectedNetwork}
                             networks={networks}
+                            onSelect={onSelectNetwork}
                         />
                     </BalanceDisplayContainer>
                 </Box>

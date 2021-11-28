@@ -1,9 +1,9 @@
+import { first } from 'lodash-unified'
 import type { JsonRpcResponse } from 'web3-core-helpers'
-import { first } from 'lodash-es'
 import WalletConnect from '@walletconnect/client'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import { ProviderType, ChainId } from '@masknet/web3-shared-evm'
-import * as Maskbook from './Mask'
+import * as MaskWallet from './MaskWallet'
 import { resetAccount, updateAccount } from '../../../../plugins/Wallet/services'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 
@@ -53,7 +53,7 @@ export async function sendCustomRequest(payload: IJsonRpcRequest) {
 // Wrap promise as PromiEvent because WalletConnect returns transaction hash only
 // docs: https://docs.walletconnect.org/client-api
 export function createWeb3({ chainId = currentChainIdSettings.value }: { chainId?: ChainId } = {}) {
-    return Maskbook.createWeb3({
+    return MaskWallet.createWeb3({
         chainId,
     })
 }

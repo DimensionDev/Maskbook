@@ -1,4 +1,4 @@
-import { noop, omit } from 'lodash-es'
+import { noop, omit } from 'lodash-unified'
 import { createContext, useContext } from 'react'
 import type { FileInfo } from '../../types'
 

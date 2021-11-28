@@ -22,7 +22,7 @@ const themeSB = createBuildStorybook6(
 const icons = series(
     function buildIcons() {
         const icons = resolve(PKG_PATH, 'icons')
-        return shell.cwd(icons)`npm run build`
+        return shell.cwd(icons)`pnpm run build`
     },
     function copyIcons() {
         const from = src(resolve(PKG_PATH, 'icons', 'build.html'))

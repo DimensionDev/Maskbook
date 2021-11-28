@@ -1,5 +1,5 @@
 import { batchReplace, parseURL, regexMatchAll } from '../../utils/utils'
-import { isNull } from 'lodash-es'
+import { isNull } from 'lodash-unified'
 const ICAO9303Checksum = {
     encode: (input: string) => {
         return `${input}${(

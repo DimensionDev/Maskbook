@@ -7,7 +7,7 @@ import { currentPluginEnabledStatus } from '../settings/settings'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 // Do not export from '../utils/' to prevent initialization failure
 import { MaskMessages } from '../utils/messages'
-import i18nNextInstance from '../utils/i18n-next'
+import i18nNextInstance from '../../shared-ui/locales_legacy'
 import { createI18NBundle } from '@masknet/shared'
 
 export function createPluginHost<Context>(

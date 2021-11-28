@@ -21,6 +21,10 @@ const config: InitialOptionsTsJest = {
     coverageProvider: 'v8',
     testMatch: ['**/tests/**/*.[jt]s?(x)'],
     extensionsToTreatAsEsm: ['.ts', '.tsx'],
+    moduleNameMapper: {
+        '@masknet/shared-base': '<rootDir>/packages/shared-base/src/index.ts',
+    },
+    snapshotSerializers: ['@masknet/serializer'],
 }
 
 export default config
