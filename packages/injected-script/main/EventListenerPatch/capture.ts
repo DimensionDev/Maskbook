@@ -135,10 +135,8 @@ export function dispatchEventRaw<T extends Event>(
             event,
             clone_into({
                 get(target, key) {
-                    if (isTwitter()) {
-                        if (key === 'currentTarget' || key === 'target')
-                            return unwrapXRay_CPPBindingObject(currentTarget())
-                    } else if (key === 'currentTarget') return unwrapXRay_CPPBindingObject(currentTarget())
+                    if (key === 'currentTarget' || (key === 'target' && isTwitter()))
+                        return unwrapXRay_CPPBindingObject(currentTarget())
                     return
                 },
             }),
