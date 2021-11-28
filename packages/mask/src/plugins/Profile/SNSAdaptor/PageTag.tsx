@@ -16,8 +16,8 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.mode === 'dark' ? 'rgba(239, 243, 244, 1)' : 'rgba(17, 20, 24, 1) ',
     },
     selected: {
-        border: `1px solid ${theme.palette.primary.main}`,
-        color: theme.palette.primary.main,
+        border: '1px solid rgb(29,155,240) !important',
+        color: 'rgb(29,155,240) !important',
     },
     hidden: {
         display: 'none',
@@ -62,6 +62,13 @@ export function PageTag(props: PageTagProps) {
                 onClick={() => onChange(PageTags.DonationTag)}
                 size="medium">
                 Donations
+            </Button>
+            <Button
+                variant="outlined"
+                className={classNames(classes.button, tag === PageTags.DAOTag ? classes.selected : '')}
+                onClick={() => onChange(PageTags.DAOTag)}
+                size="medium">
+                DAO
             </Button>
         </div>
     )
