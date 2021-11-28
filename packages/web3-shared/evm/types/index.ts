@@ -163,6 +163,12 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
     record_id: string
 }
 
+export interface ERC721TokenCollectionInfo {
+    name: string
+    image?: string
+    slug: string
+}
+
 //#endregion
 
 //#region ERC1155

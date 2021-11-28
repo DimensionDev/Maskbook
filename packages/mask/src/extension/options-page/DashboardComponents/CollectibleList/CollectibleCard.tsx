@@ -35,8 +35,8 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.1,
     },
     video: {
-        width: 160,
-        height: 220,
+        width: 172,
+        height: 172,
     },
 }))
 
@@ -55,7 +55,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const isVideo = token.info.image?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i)
     return (
         <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
-            <Card className={classes.root} style={{ width: 160, height: 220 }}>
+            <Card className={classes.root} style={{ width: 172, height: 172, borderRadius: 0 }}>
                 {readonly || !wallet ? null : (
                     <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                 )}
@@ -65,9 +65,9 @@ export function CollectibleCard(props: CollectibleCardProps) {
                     ) : (
                         <Image
                             component="img"
-                            width={160}
-                            height={220}
-                            style={{ objectFit: 'contain' }}
+                            width={172}
+                            height={172}
+                            style={{ objectFit: 'cover' }}
                             src={token.info.image}
                         />
                     )
