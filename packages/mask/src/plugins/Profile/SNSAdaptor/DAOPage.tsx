@@ -12,5 +12,5 @@ const IFrame = styled('iframe')(({ theme }) => ({
 interface DAOPageProps {}
 export function DAOPage(props: DAOPageProps) {
     const mode = useTheme().palette.mode
-    return <IFrame src={`http://localhost:8000?mode=${mode}`} />
+    return <IFrame src={`https://dimensiondev.github.io/DAO-Interface/?mode=${mode}`} />
 }
