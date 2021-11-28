@@ -12,11 +12,14 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     button: {
+        border: `1px solid ${theme.palette.text.primary} !important`,
+        color: theme.palette.text.primary,
         borderRadius: 9999,
     },
     selected: {
-        border: `1px solid ${theme.palette.primary.contrastText} !important`,
-        color: theme.palette.primary.contrastText,
+        border: `1px solid ${theme.palette.primary.main} !important`,
+        color: theme.palette.primary.main,
+        borderRadius: 9999,
     },
     hidden: {
         display: 'none',
@@ -24,9 +27,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PageTagProps {
-    onChange: (tag: PageTags) => void
     tag: PageTags
     daoPayload: Dao_Payload | undefined
+    onChange: (tag: PageTags) => void
 }
 
 export function PageTag(props: PageTagProps) {
@@ -36,29 +39,21 @@ export function PageTag(props: PageTagProps) {
         <div className={classes.root}>
             <Button
                 variant="outlined"
-                className={classNames(
-                    classes.hidden,
-                    classes.button,
-                    tag === PageTags.WalletTag ? classes.selected : '',
-                )}
+                className={classNames(classes.hidden, tag === PageTags.WalletTag ? classes.selected : classes.button)}
                 onClick={() => onChange(PageTags.WalletTag)}
                 size="medium">
                 Wallets
             </Button>
             <Button
                 variant="outlined"
-                className={classNames(classes.button, tag === PageTags.NFTTag ? classes.selected : '')}
+                className={tag === PageTags.NFTTag ? classes.selected : classes.button}
                 onClick={() => onChange(PageTags.NFTTag)}
                 size="medium">
                 NFTs
             </Button>
             <Button
                 variant="outlined"
-                className={classNames(
-                    classes.hidden,
-                    classes.button,
-                    tag === PageTags.DonationTag ? classes.selected : '',
-                )}
+                className={classNames(classes.hidden, tag === PageTags.DonationTag ? classes.selected : classes.button)}
                 onClick={() => onChange(PageTags.DonationTag)}
                 size="medium">
                 Donations
@@ -66,7 +61,7 @@ export function PageTag(props: PageTagProps) {
             {daoPayload ? (
                 <Button
                     variant="outlined"
-                    className={classNames(classes.button, tag === PageTags.DAOTag ? classes.selected : '')}
+                    className={tag === PageTags.DAOTag ? classes.selected : classes.button}
                     onClick={() => onChange(PageTags.DAOTag)}
                     size="medium">
                     DAO
