@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classNames from 'classnames'
 import { PageTags } from '../types'
+import type { Dao_Payload } from './hooks/useDao'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -27,11 +28,12 @@ const useStyles = makeStyles()((theme) => ({
 interface PageTagProps {
     onChange: (tag: PageTags) => void
     tag: PageTags
+    daoPayload: Dao_Payload | undefined
 }
 
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
-    const { onChange, tag } = props
+    const { onChange, tag, daoPayload } = props
     return (
         <div className={classes.root}>
             <Button
@@ -63,13 +65,15 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 Donations
             </Button>
-            <Button
-                variant="outlined"
-                className={classNames(classes.button, tag === PageTags.DAOTag ? classes.selected : '')}
-                onClick={() => onChange(PageTags.DAOTag)}
-                size="medium">
-                DAO
-            </Button>
+            {daoPayload ? (
+                <Button
+                    variant="outlined"
+                    className={classNames(classes.button, tag === PageTags.DAOTag ? classes.selected : '')}
+                    onClick={() => onChange(PageTags.DAOTag)}
+                    size="medium">
+                    DAO
+                </Button>
+            ) : null}
         </div>
     )
 }
