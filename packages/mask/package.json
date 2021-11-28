@@ -84,6 +84,7 @@
     "json2csv": "^5.0.6",
     "jsx-jsonml-devtools-renderer": "^1.4.3",
     "lodash-es": "npm:lodash@^4.17.11",
+    "iframe-resizer-react": "^1.1.0",
     "millify": "^4.0.0",
     "next-tick": "^1.0.0",
     "opensea-js": "^1.1.11",
