@@ -138,13 +138,13 @@ export function WalletStatusBox(props: WalletStatusBox) {
     return account ? (
         <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
+                classes={{
+                    providerIcon: props.isDashboard ? classes.dashboardProvider : classes.twitterProviderBorder,
+                }}
                 size={48}
                 badgeSize={16}
                 networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
                 providerIcon={networkDescriptor?.icon}
-                classes={{
-                    providerIcon: props.isDashboard ? classes.dashboardProvider : classes.twitterProviderBorder,
-                }}
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>

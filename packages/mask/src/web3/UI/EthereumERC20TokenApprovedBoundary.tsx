@@ -16,6 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         position: 'relative',
         marginTop: theme.spacing(1.5),
+        lineHeight: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     buttonLabel: {
         display: 'block',
