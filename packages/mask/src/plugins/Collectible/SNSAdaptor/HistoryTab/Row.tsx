@@ -51,6 +51,7 @@ export function Row({ event, isDifferenceToken }: Props) {
 
     const unitPrice = useMemo(() => {
         if (provider === CollectibleProvider.RARIBLE || !isDifferenceToken || !event.price) return null
+
         return getOrderUnitPrice(event.price.price ?? 0, event.price.paymentToken?.decimals, event.price.quantity)
     }, [event, isDifferenceToken, provider])
 
