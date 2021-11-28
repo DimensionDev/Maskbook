@@ -4,6 +4,7 @@ import * as ABICoder from 'web3-eth-abi'
 // built in abis
 import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json'
 import ITO2 from '@masknet/web3-contracts/abis/ITO2.json'
+import NftHappyRedPacket from '@masknet/web3-contracts/abis/NftHappyRedPacket.json'
 import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import ERC20 from '@masknet/web3-contracts/abis/ERC20.json'
 import RouterV2ABI from '@masknet/web3-contracts/abis/RouterV2.json'
@@ -36,7 +37,10 @@ function constructABI(abi: AbiItem[]) {
         const { name, inputs = [] } = x
         if (!name) return
         try {
-            ABI_MAP.set(coder.encodeFunctionSignature(`${x.name}(${inputs.map((y) => y.type).join(',')})`), {
+            const sig = coder.encodeFunctionSignature(`${x.name}(${inputs.map((y) => y.type).join(',')})`)
+            if (ABI_MAP.has(sig))
+                console.warn(`The signature of ${`${x.name}(${inputs.map((y) => y.type).join(',')})`} already exists.`)
+            ABI_MAP.set(sig, {
                 name,
                 parameters:
                     inputs.map((y) => ({
@@ -53,6 +57,7 @@ function constructABI(abi: AbiItem[]) {
 
 constructABI(BulkCheckout as AbiItem[]) // donate gitcoin grants
 constructABI(ITO2 as AbiItem[])
+constructABI(NftHappyRedPacket as AbiItem[])
 constructABI(HappyRedPacketV4 as AbiItem[])
 constructABI(MaskBox as AbiItem[])
 constructABI(ERC20 as AbiItem[])

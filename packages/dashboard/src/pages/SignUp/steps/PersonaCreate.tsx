@@ -5,6 +5,7 @@ import {
     Body,
     ColumnContentLayout,
     Footer,
+    PersonaLogoBox,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { RoutePaths } from '../../../type'
@@ -72,7 +73,9 @@ export const PersonaCreate = () => {
                 action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
             />
             <Body>
-                <SignUpAccountLogo />
+                <PersonaLogoBox>
+                    <SignUpAccountLogo />
+                </PersonaLogoBox>
                 <Box>
                     <MaskTextField
                         required

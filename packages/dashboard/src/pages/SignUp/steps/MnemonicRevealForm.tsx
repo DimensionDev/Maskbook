@@ -7,7 +7,12 @@ import { useCustomSnackbar } from '@masknet/theme'
 import { RoutePaths } from '../../../type'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
-import { Body, ColumnContentLayout, SignUpAccountLogo } from '../../../components/RegisterFrame/ColumnContentLayout'
+import {
+    Body,
+    ColumnContentLayout,
+    PersonaLogoBox,
+    SignUpAccountLogo,
+} from '../../../components/RegisterFrame/ColumnContentLayout'
 import { useDashboardI18N } from '../../../locales'
 import { DesktopMnemonicConfirm, MnemonicReveal } from '../../../components/Mnemonic'
 import { SignUpRoutePath } from '../routePath'
@@ -50,7 +55,9 @@ export const MnemonicRevealForm = memo(() => {
                 action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
             />
             <Body>
-                <SignUpAccountLogo />
+                <PersonaLogoBox>
+                    <SignUpAccountLogo />
+                </PersonaLogoBox>
                 {step === CreateWalletStep.NameAndWords && (
                     <>
                         <Stack
