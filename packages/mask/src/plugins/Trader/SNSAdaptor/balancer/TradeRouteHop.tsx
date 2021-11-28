@@ -19,6 +19,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    icon: {
+        width: 16,
+        height: 16,
+    },
 }))
 
 export interface TradeRouteHopProps {
@@ -45,7 +49,7 @@ export function TradeRouteHop(props: TradeRouteHopProps) {
                     href={resolveTradePairLink(TradeProvider.BALANCER, hop.pool.address, networkType)}>
                     {hop.pool.tokens.map((token) => (
                         <Box display="flex" alignItems="center" key={token.address}>
-                            <TokenIcon address={token.address} />
+                            <TokenIcon classes={{ icon: classes.icon }} address={token.address} />
                         </Box>
                     ))}
                 </Link>
