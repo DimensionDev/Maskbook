@@ -10,6 +10,9 @@ const useStyles = makeStyles()((theme) => ({
         gap: '8px',
         flexWrap: 'wrap',
     },
+    hidden: {
+        display: 'none',
+    },
     button: {
         border: `1px solid ${theme.palette.text.primary} !important`,
         color: theme.palette.text.primary,
@@ -47,8 +50,7 @@ interface PageTagProps {
 
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
-    const { onChange, tag, isOwnAddress } = props
-    const { onChange, tag, daoPayload } = props
+    const { onChange, tag, isOwnAddress, daoPayload } = props
     return (
         <div className={classes.root}>
             <Button
@@ -95,9 +97,7 @@ export function PageTag(props: PageTagProps) {
                     onClick={() => onChange(PageTags.ConnectRSS3)}>
                     Connect RSS3
                 </Button>
-            ) : (
-                null
-            )}
+            ) : null}
         </div>
     )
 }

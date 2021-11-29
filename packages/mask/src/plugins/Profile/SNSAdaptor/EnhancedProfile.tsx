@@ -47,7 +47,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     )
     const userId = identity.identifier.userId.toLowerCase()
     const { value: daoPayload } = useDao(userId)
-    
+
     const [isOwnAddress, setOwnAddress] = useState(false)
     const [hidden, setHidden] = useState(true)
     const classes = useStylesExtends(useStyles(), props)
@@ -66,7 +66,6 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         const rss3Sign = ((await (apiUser.persona as IRSS3).files.get(pageOwner.address)) as RSS3Index).signature
         setConnected(rss3Sign === '' ? false : true)
     }
-
 
     useLocationChange(() => {
         setCurrentTag(PageTags.WalletTag)
@@ -129,7 +128,12 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
             <div className={classes.root}>
                 <div className={classes.tags}>
-                    <PageTag onChange={(tag) => setCurrentTag(tag)} tag={currentTag} isOwnAddress={isOwnAddress} />
+                    <PageTag
+                        daoPayload={daoPayload}
+                        onChange={(tag) => setCurrentTag(tag)}
+                        tag={currentTag}
+                        isOwnAddress={isOwnAddress}
+                    />
                 </div>
                 <div className={classes.content}>{content}</div>
             </div>
