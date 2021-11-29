@@ -1,5 +1,4 @@
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import AbstractTab, { AbstractTabProps } from './AbstractTab'
 import { ChainId, getChainDetailed } from '@masknet/web3-shared-evm'
 

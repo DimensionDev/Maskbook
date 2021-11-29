@@ -3,14 +3,7 @@ import { Box, Button, Stack, Typography } from '@mui/material'
 import { TransactionStatusType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { FormattedAddress, LoadingAnimation, useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
-import {
-    useNetworkDescriptor,
-    useProviderDescriptor,
-    useAccount,
-    useWallet,
-    useWeb3State,
-    Web3Plugin,
-} from '@masknet/plugin-infra'
+import { useNetworkDescriptor, useProviderDescriptor, useWallet, useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
 import { PluginMessages } from '../../../../API'
 import { useRecentTransactions } from '../../hooks/useRecentTransactions'
 import { useDashboardI18N } from '../../../../locales'
@@ -91,8 +84,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
 }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
-    const account = useAccount()
-    const { Utils, Asset } = useWeb3State()
+    const { Utils } = useWeb3State()
 
     if (!wallet || !network || !provider) return null
 
@@ -106,7 +98,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                 color={network.iconColor ?? ''}
                 className={classes.bar}
                 onClick={openMenu}>
-                <Typography component="span" sx={{ background: network.iconColor }} className={classes.dot} />
+                <Typography component="span" sx={{ backgroundColor: network.iconColor }} className={classes.dot} />
                 <Typography component="span" fontSize={12}>
                     {network.name}
                 </Typography>

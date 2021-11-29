@@ -1,7 +1,6 @@
 import { Paper, Box, Typography, Button } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import WarningIcon from '@mui/icons-material/Warning'
-import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {

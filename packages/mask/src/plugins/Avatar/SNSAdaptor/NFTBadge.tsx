@@ -1,5 +1,4 @@
-import { useStylesExtends } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { resolveOpenSeaLink } from '@masknet/web3-shared-evm'
 import Link from '@mui/material/Link'
 import BigNumber from 'bignumber.js'

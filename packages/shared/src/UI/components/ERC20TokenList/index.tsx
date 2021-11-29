@@ -96,7 +96,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     }, [assetsError])
 
     const renderAssets =
-        !account || assetsError || assetsLoading
+        !account || assetsError || assetsLoading || searchedTokenLoading
             ? [...renderTokens]
                   .sort(makeSortTokenFn(chainId, { isMaskBoost: true }))
                   .map((token) => ({ token: token, balance: null }))
@@ -107,7 +107,6 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const getPlaceHolder = () => {
         if (erc20TokensDetailedLoading) return <Placeholder message="Loading token lists..." />
         if (searchedTokenLoading) return <Placeholder message="Loading token..." />
-        // if (assetsLoading) return <Placeholder message="Loading token assets..." />
         if (!renderAssets.length) return <Placeholder message="No token found" />
         return null
     }

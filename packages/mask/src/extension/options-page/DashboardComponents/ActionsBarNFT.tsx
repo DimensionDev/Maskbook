@@ -1,10 +1,9 @@
 import { useCallback } from 'react'
 import { IconButton, MenuItem } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
 import { Wallet, ERC721TokenDetailed, EthereumTokenType, useChainIdValid } from '@masknet/web3-shared-evm'
 import { useMenu, useI18N } from '../../../utils'
-import { useStylesExtends } from '@masknet/shared'
 // eslint-disable-next-line import/no-deprecated
 import { useModal } from '../DashboardDialogs/Base'
 import { DashboardWalletHideTokenConfirmDialog, DashboardWalletTransferDialogNFT } from '../DashboardDialogs/Wallet'

@@ -1,10 +1,9 @@
 import classNames from 'classnames'
 import { Breadcrumbs, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
 import { formatPercentage } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
-import { useStylesExtends } from '@masknet/shared'
 import type { SwapResponse, TradeComputed } from '../../types'
 import { TradeRouteHop } from './TradeRouteHop'
 

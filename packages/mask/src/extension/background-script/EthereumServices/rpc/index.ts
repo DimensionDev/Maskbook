@@ -11,25 +11,12 @@ import {
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getCode } from '../network'
-import ABI_LIST from './abi_list.json'
-
-type AbiItem = {
-    name: string
-    parameters: {
-        name: string
-        type: string
-    }[]
-}
+import { readABI } from './abi'
 
 // fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder
 
 const { ZERO_ADDRESS = '' } = getTokenConstants()
-
-const ABI_LIST_WITH_SIGNATURE = (ABI_LIST as AbiItem[]).map((x) => ({
-    ...x,
-    signature: coder.encodeFunctionSignature(`${x.name}(${x.parameters.map((y) => y.type).join(',')})`),
-}))
 
 function isEmptyHex(hex: string) {
     return !hex || ['0x', '0x0'].includes(hex)
@@ -131,7 +118,7 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
 
     if (data) {
         // contract interaction
-        const abi = ABI_LIST_WITH_SIGNATURE.find((x) => x.signature === signature)
+        const abi = readABI(signature)
 
         if (abi) {
             try {
@@ -181,7 +168,6 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
         } else {
             return {
                 type: EthereumRpcType.CONTRACT_INTERACTION,
-                name: 'Unknown',
                 _tx: config,
             }
         }

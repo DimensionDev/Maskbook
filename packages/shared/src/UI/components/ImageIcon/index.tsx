@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
+import { useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => {
     return {
