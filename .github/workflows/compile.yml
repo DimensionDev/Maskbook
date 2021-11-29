@@ -21,13 +21,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: actions/setup-node@v2
-      - name: Restore pnpm cache
-        uses: actions/cache@v2
+      - uses: pnpm/action-setup@v2
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
+          version: '6.23.1'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'pnpm'
       - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
@@ -36,7 +36,6 @@ jobs:
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
           restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
-      - run: npm install --global pnpm
       - run: pnpm install
       - run: npx gulp build-ci
       - name: Upload `MaskNetwork.base.zip`
