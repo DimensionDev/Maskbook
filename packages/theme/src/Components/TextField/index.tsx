@@ -44,7 +44,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     inputFocused: {
         background: MaskColorVar.primaryBackground,
-        padding: 7,
         boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
     },
 }))

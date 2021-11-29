@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useI18N, useMatchXS, useQueryNavigatorPermission } from '../../utils'
 import formatDateTime from 'date-fns/format'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     DialogActions,
     DialogContent,
@@ -16,7 +16,7 @@ import {
     Button,
     Typography,
 } from '@mui/material'
-import { AutoPasteFailedEvent, useStylesExtends } from '@masknet/shared'
+import type { AutoPasteFailedEvent } from '@masknet/shared'
 import { Image } from '../shared/Image'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'

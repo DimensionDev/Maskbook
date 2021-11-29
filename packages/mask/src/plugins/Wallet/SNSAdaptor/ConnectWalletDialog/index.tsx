@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Box, DialogContent, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { safeUnreachable } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -20,7 +20,7 @@ import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
 import { useInjectedProviderType } from '../../../EVM/hooks'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { CramIcon } from '@masknet/icons'
 
@@ -85,7 +85,6 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
 
         // a short time loading makes the user fells better
         await delay(1000)
-
         let account: string | undefined
         let chainId: ChainId | undefined
 

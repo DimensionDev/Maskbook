@@ -29,11 +29,11 @@ import { injectEnhancedProfileTabAtTwitter } from './injection/EnhancedProfileTa
 import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
-import { injectProfileNFTAvatarInTwitter } from './injection/NFT/profileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
-import { injectUserNFTAvatarAtTweet } from './injection/NFT/tweetNFTAvatar'
+import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
 import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
+import { injectProfileNFTAvatarInTwitter } from './injection/NFT/profileNFTAvatar'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

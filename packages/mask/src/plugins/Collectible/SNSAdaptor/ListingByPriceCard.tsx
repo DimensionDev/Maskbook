@@ -1,6 +1,5 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { useCustomSnackbar } from '@masknet/theme'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -62,7 +61,6 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -102,26 +100,19 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
-        try {
-            await PluginCollectibleRPC.createSellOrder({
-                asset: toAsset({
-                    tokenId: asset.value.token_id,
-                    tokenAddress: asset.value.token_address,
-                    schemaName: asset.value.asset_contract.schema_name,
-                }),
-                accountAddress: account,
-                startAmount: Number.parseFloat(amount),
-                endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
-                listingTime: futureTimeChecked ? toUnixTimestamp(scheduleTime) : undefined,
-                expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
-                buyerAddress: privacyChecked ? buyerAddress : undefined,
-            })
-        } catch (error) {
-            if (error instanceof Error) {
-                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
-            }
-            throw error
-        }
+        await PluginCollectibleRPC.createSellOrder({
+            asset: toAsset({
+                tokenId: asset.value.token_id,
+                tokenAddress: asset.value.token_address,
+                schemaName: asset.value.asset_contract.schema_name,
+            }),
+            accountAddress: account,
+            startAmount: Number.parseFloat(amount),
+            endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
+            listingTime: futureTimeChecked ? toUnixTimestamp(scheduleTime) : undefined,
+            expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
+            buyerAddress: privacyChecked ? buyerAddress : undefined,
+        })
     }, [
         asset?.value,
         token,
@@ -134,7 +125,6 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         endingPriceChecked,
         futureTimeChecked,
         privacyChecked,
-        showSnackbar,
     ])
 
     useEffect(() => {
