@@ -1,4 +1,4 @@
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import {
     EthereumTokenType,
     formatBalance,
@@ -10,11 +10,10 @@ import {
     useNativeTokenDetailed,
     useRedPacketConstants,
     useFungibleTokenBalance,
-    useWeb3,
 } from '@masknet/web3-shared-evm'
 import { omit } from 'lodash-unified'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
@@ -91,7 +90,6 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { onChange, onNext, origin } = props
     // context
-    const web3 = useWeb3()
     const account = useAccount()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
@@ -186,12 +184,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     )
 
     const onClick = useCallback(() => {
-        const { address: publicKey, privateKey } = web3.eth.accounts.create()
-        onChange({
-            publicKey,
-            privateKey,
-            ...creatingParams,
-        })
+        onChange(creatingParams)
         onNext()
     }, [creatingParams, onChange, onNext])
 

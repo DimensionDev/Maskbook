@@ -154,7 +154,6 @@ export const Dialog: Theme = (mode, colors): ThemeOptions => ({
                         display: 'flex',
                         flexDirection: 'row-reverse',
                         alignItems: 'center',
-                        borderBottom: 'none!important',
                         p: {
                             width: '100%',
                             display: 'inline-flex',

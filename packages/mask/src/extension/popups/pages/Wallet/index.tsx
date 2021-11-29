@@ -12,8 +12,6 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
-import { first } from 'lodash-unified'
-import { currentAccountSettings } from '../../../../plugins/Wallet/settings'
 import urlcat from 'urlcat'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
@@ -91,20 +89,6 @@ export default function Wallet() {
             if (hasRequest) retry()
         })
     }, [retry])
-
-    useEffect(() => {
-        if (!wallet && wallets.length) {
-            WalletRPC.updateMaskAccount({
-                account: first(wallets)?.address,
-            })
-
-            if (!currentAccountSettings.value)
-                WalletRPC.updateAccount({
-                    account: first(wallets)?.address,
-                    providerType: ProviderType.MaskWallet,
-                })
-        }
-    }, [wallets, wallet])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>

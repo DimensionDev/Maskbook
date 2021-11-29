@@ -4,7 +4,11 @@ import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../../shared'
 import { ChainId, ProviderType, useAccount } from '@masknet/web3-shared-evm'
 import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
-import { currentMaskWalletChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import {
+    currentMaskWalletAccountSettings,
+    currentMaskWalletChainIdSettings,
+    currentProviderSettings,
+} from '../../../../plugins/Wallet/settings'
 import { ChainIcon, useMenu, useValueRef, WalletIcon } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
@@ -56,6 +60,7 @@ export const NetworkSelector = memo(() => {
             }
             return WalletRPC.updateMaskAccount({
                 chainId,
+                account: currentMaskWalletAccountSettings.value,
             })
         },
         [currentProvider, account],
@@ -79,9 +84,11 @@ export interface NetworkSelectorUIProps {
 export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork, onChainChange }) => {
     const { classes } = useStyles()
     const networks = getRegisteredWeb3Networks()
+
     const [menu, openMenu] = useMenu(
         ...(networks
             ?.filter((x) => x.networkSupporterPluginID === NetworkPluginID.PLUGIN_EVM)
+            .filter((x) => (Flags.support_testnet_switch ? true : x.isMainnet))
             .map((network) => {
                 const chainId = network.chainId
 
@@ -92,7 +99,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentNetwork,
                         selected={chainId === currentNetwork.chainId}>
                         {network.isMainnet ? (
                             <WalletIcon size={20} networkIcon={network.icon} />
-                        ) : Flags.support_eth_network_switch ? (
+                        ) : Flags.support_testnet_switch ? (
                             <ChainIcon color={network.iconColor} />
                         ) : null}
                         <Typography sx={{ marginLeft: 1 }}>{network.name}</Typography>

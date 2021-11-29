@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
 import {
     ChainId,
     createERC20Token,
@@ -17,7 +17,7 @@ import {
     useFungibleTokenBalance,
     useWallet,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, useStylesExtends, useValueRef } from '@masknet/shared'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
 import { delay, useI18N } from '../../../../utils'

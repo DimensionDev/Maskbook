@@ -1,6 +1,5 @@
 import { Typography, Card, Box, CircularProgress, CircularProgressProps } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
 import { TypedMessage, makeTypedMessageText } from '../../protocols/typed-message'
 import { TypedMessageRendererProps, DefaultTypedMessageRenderer } from './TypedMessageRenderer'

@@ -40,7 +40,7 @@ export const LightColor = {
 
     iconLight: '#a6a9b6',
 
-    divider: '#f3f3f4',
+    divider: '#eff3f4',
 
     border: '#F3F3F4',
 

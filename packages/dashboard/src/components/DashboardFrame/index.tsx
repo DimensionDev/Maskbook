@@ -1,4 +1,6 @@
 import { memo, Suspense, useMemo, useState } from 'react'
+// see https://github.com/import-js/eslint-plugin-import/issues/2288
+// eslint-disable-next-line import/no-deprecated
 import { Grid, styled, Theme, useMediaQuery } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
@@ -20,6 +22,8 @@ const LeftContainer = styled(Grid)(({ theme }) => ({
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
 
 export const DashboardFrame = memo((props: DashboardFrameProps) => {
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const [navigationExpanded, setNavigationExpanded] = useState(true)
     const [drawerOpen, setDrawerOpen] = useState(false)

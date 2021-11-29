@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import { DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     FungibleTokenDetailed,
     useNativeTokenDetailed,
@@ -12,7 +12,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import { WalletMessages } from '../../Wallet/messages'
 import { delay, useI18N } from '../../../utils'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'

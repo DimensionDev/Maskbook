@@ -30,6 +30,11 @@ const useStyles = makeStyles()((theme) => ({
         whiteSpace: 'nowrap',
         overflow: 'hidden',
     },
+    row: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
     cell: {
         padding: theme.spacing(2),
         border: 'none',
@@ -54,6 +59,9 @@ const useStyles = makeStyles()((theme) => ({
     tipArrow: {
         color: '#111432',
     },
+    networkIcon: {
+        border: `1px solid ${theme.palette.background.default}`,
+    },
 }))
 
 export interface TokenTableRowProps {
@@ -71,7 +79,7 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
     const isOnCurrentChain = useMemo(() => currentChainId === asset.token.chainId, [asset, currentChainId])
 
     return (
-        <TableRow>
+        <TableRow className={classes.row}>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box position="relative">
@@ -85,8 +93,9 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                         />
                         <Box className={classes.chainIcon}>
                             <WalletIcon
-                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
+                                classes={{ networkIcon: classes.networkIcon }}
                                 size={16}
+                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
                             />
                         </Box>
                     </Box>

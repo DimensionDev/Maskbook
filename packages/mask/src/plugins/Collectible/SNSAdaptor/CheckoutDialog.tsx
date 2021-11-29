@@ -11,7 +11,6 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useCustomSnackbar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -68,7 +67,6 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -79,22 +77,12 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!assetOrder?.value) return
-        try {
-            await PluginCollectibleRPC.fulfillOrder({
-                order: assetOrder.value,
-                accountAddress: account,
-                recipientAddress: account,
-            })
-        } catch (error) {
-            if (error instanceof Error) {
-                showSnackbar(error.message, {
-                    variant: 'error',
-                    preventDuplicate: true,
-                })
-            }
-            throw error
-        }
-    }, [asset?.value, account, showSnackbar, assetOrder?.value])
+        await PluginCollectibleRPC.fulfillOrder({
+            order: assetOrder.value,
+            accountAddress: account,
+            recipientAddress: account,
+        })
+    }, [asset?.value, account, assetOrder?.value])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

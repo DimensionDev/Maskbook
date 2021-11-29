@@ -44,10 +44,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: '100%',
         fontSize: 18,
         fontWeight: 400,
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
     },
     footer: {
         marginTop: theme.spacing(2),
@@ -210,10 +206,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 535,
         margin: '24px auto',
     },
-    claimAllButton: {
-        background: `${theme.palette.mode === 'light' ? '#111418' : '#EFF3F4'} !important`,
-        color: `${theme.palette.mode === 'light' ? '#FFFFFF' : '#0F1419'} !important`,
-    },
+    claimAllButton: {},
 }))
 
 interface ClaimAllDialogProps {
@@ -414,7 +407,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     </div>
                                 ) : null}
                             </>
-                        ) : !showNftAirdrop && !loadingAirdrop && chainId !== ChainId.Matic ? (
+                        ) : !showNftAirdrop && !loadingAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
