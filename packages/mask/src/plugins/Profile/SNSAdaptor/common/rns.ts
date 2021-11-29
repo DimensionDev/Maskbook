@@ -41,20 +41,6 @@ async function callRNSContract<T>(
 }
 
 async function checkInfuraID(id: string) {
-    // try {
-    //     const res = await axios.post(`https://mainnet.infura.io/v3/${id}`, {
-    //         jsonrpc: '2.0',
-    //         id: 1,
-    //         method: 'eth_accounts',
-    //         params: [],
-    //     })
-    //     if (res.data) {
-    //         return true
-    //     }
-    // } catch (error) {
-    //     console.log(error)
-    // }
-    // return false
     return true
 }
 
