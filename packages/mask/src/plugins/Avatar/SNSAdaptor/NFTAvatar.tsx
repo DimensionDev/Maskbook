@@ -175,7 +175,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                               token={token}
                                               key={i}
                                               selectedToken={selectedToken}
-                                              onChange={(token) => setSelectedToken(token)}
+                                              onChange={setSelectedToken}
                                           />
                                       ))}
                         </Box>
