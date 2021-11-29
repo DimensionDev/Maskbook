@@ -69,7 +69,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     return (
         <div className={classes.root}>
             <div className={classes.tags}>
-                <PageTag onChange={(tag) => setCurrentTag(tag)} tag={currentTag} daoPayload={daoPayload} />
+                <PageTag onChange={setCurrentTag} tag={currentTag} daoPayload={daoPayload} />
             </div>
             <div className={classes.content}>{content}</div>
         </div>
