@@ -1,5 +1,5 @@
 import { createGlobalSettings } from '../../settings/createSettings'
-import { i18n } from '../../utils/i18n-next'
+import { i18n } from '../../../shared-ui/locales_legacy'
 import {
     ChainId,
     CollectibleProvider,

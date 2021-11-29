@@ -1,9 +1,8 @@
-import { createReactRootShadowedPartial, setupPortalShadowRoot } from '@masknet/theme'
-import { untilDomLoaded } from '../dom'
-import { Flags } from '../flags'
+import { createReactRootShadowedPartial, setupPortalShadowRoot, CSSVariableInjector } from '@masknet/theme'
+import { untilDomLoaded } from '../../../utils-ui'
+import { Flags } from '../../../shared'
 import { MaskUIRoot } from '../../UIRoot'
-import { CSSVariableInjector } from './CSSVariableInjector'
-import { useClassicMaskSNSTheme } from '..'
+import { useClassicMaskSNSTheme } from '../theme'
 import { createRoot } from 'react-dom'
 
 const captureEvents: (keyof HTMLElementEventMap)[] = [

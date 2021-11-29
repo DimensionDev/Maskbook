@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
-    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@hookform/resolvers": "^2.8.3",
     "@masknet/backup-format": "workspace:*",
     "@masknet/icons": "workspace:*",
@@ -28,17 +27,17 @@
     "@servie/events": "^3.0.0",
     "@types/color": "^3.0.2",
     "@types/react-avatar-editor": "^10.3.6",
-    "async-call-rpc": "^6.0.0",
+    "async-call-rpc": "^6.0.1",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
     "color": "^4.0.1",
-    "date-fns": "2.25.0",
+    "date-fns": "2.26.0",
     "history": "^5.1.0",
     "i18next-browser-languagedetector": "^6.1.2",
     "json-stable-stringify": "^1.0.1",
     "lodash-es": "^4.17.21",
     "react-avatar-editor": "^12.0.0",
-    "react-hook-form": "^7.19.5",
+    "react-hook-form": "^7.20.2",
     "react-router": "^6.0.0-beta.0",
     "react-router-dom": "^6.0.0-beta.0",
     "react-use": "^17.3.1",
@@ -62,6 +61,6 @@
     "babel-loader": "^8.2.3",
     "buffer": "^6.0.3",
     "stream-browserify": "^3.0.0",
-    "webpack": "^5.64.1"
+    "webpack": "^5.64.4"
   }
 }

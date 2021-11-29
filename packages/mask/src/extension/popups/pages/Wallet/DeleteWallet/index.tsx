@@ -3,12 +3,12 @@ import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { WalletIcon, WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
-import { ProviderType, useWallet } from '@masknet/web3-shared-evm'
-import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { useI18N } from '../../../../../utils'
-import { PopupRoutes } from '../../../index'
+import { ProviderType, useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { PopupRoutes } from '@masknet/shared-base'
 import { first } from 'lodash-unified'
 import { FormattedAddress } from '@masknet/shared'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
 
@@ -140,7 +140,7 @@ const DeleteWallet = memo(() => {
                     <div>
                         <Typography className={classes.name}>{wallet?.name}</Typography>
                         <Typography className={classes.address}>
-                            <FormattedAddress address={wallet?.address} size={10} />
+                            <FormattedAddress address={wallet?.address} size={10} formatter={formatEthereumAddress} />
                         </Typography>
                     </div>
                 </div>

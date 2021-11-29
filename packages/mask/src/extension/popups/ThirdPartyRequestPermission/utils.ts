@@ -1,4 +1,5 @@
-import { PopupRoutes, getRouteURLWithNoParam } from '..'
+import { PopupRoutes } from '@masknet/shared-base'
+import { getRouteURLWithNoParam } from '../utils'
 import type { ThirdPartyPluginPermission } from '../../background-script/ThirdPartyPlugin/types'
 
 export function constructThirdPartyRequestPermissionURL(

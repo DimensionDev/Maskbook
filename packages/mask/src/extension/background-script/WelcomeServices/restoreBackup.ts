@@ -1,6 +1,7 @@
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { RelationFavor } from '@masknet/shared-base'
-import { BackupJSONFileLatest, i18n, UpgradeBackupJSONFile } from '../../../utils'
+import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../../utils'
+import { i18n } from '../../../../shared-ui/locales_legacy'
 import {
     attachProfileDB,
     consistentPersonaDBWriteAccess,
@@ -31,7 +32,7 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
             for (const x of data.personas) {
                 await createOrUpdatePersonaDB(
                     PersonaRecordFromJSONFormat(x),
-                    { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' },
+                    { explicitUndefinedField: 'ignore', linkedProfiles: 'merge', protectPrivateKey: true },
                     t,
                 )
             }

@@ -21,6 +21,7 @@ export const LoadingButton = memo<LoadingButtonProps>((props) => {
             classes={{
                 loadingIndicator: classes.icon,
             }}
+            variant="contained"
             soloLoading={false}
             loadingIndicator={
                 <Stack width="100%" direction="row" alignItems="center" gap={1} justifyContent="center">

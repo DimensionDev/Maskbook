@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
+import type { ChainId } from '..'
 import * as SDK from '../sdk'
-import { useChainId } from '.'
 
-export function useFCL() {
-    const chainId = useChainId()
+export function useFCL(chainId: ChainId) {
     return useMemo(() => {
         return SDK.createClient(chainId)
     }, [chainId])

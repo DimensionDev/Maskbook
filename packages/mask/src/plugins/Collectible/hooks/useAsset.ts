@@ -27,11 +27,16 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
         switch (provider) {
             case CollectibleProvider.OPENSEA:
                 const openSeaResponse = await PluginCollectibleRPC.getAsset(token.contractAddress, token.tokenId)
+
                 const desktopOrder = head(
-                    (openSeaResponse.sellOrders ?? []).sort(
+                    (openSeaResponse.sell_orders ?? []).sort(
                         (a, b) =>
-                            new BigNumber(getOrderUnitPrice(a) ?? 0).toNumber() -
-                            new BigNumber(getOrderUnitPrice(b) ?? 0).toNumber(),
+                            new BigNumber(
+                                getOrderUnitPrice(a.current_price, a.payment_token_contract?.decimals, a.quantity) ?? 0,
+                            ).toNumber() -
+                            new BigNumber(
+                                getOrderUnitPrice(b.current_price, b.payment_token_contract?.decimals, b.quantity) ?? 0,
+                            ).toNumber(),
                     ),
                 )
 
@@ -39,17 +44,30 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     is_verified: ['approved', 'verified'].includes(
                         openSeaResponse.collection?.safelist_request_status ?? '',
                     ),
-                    is_order_weth: isSameAddress(desktopOrder?.paymentToken ?? '', WNATIVE_ADDRESS),
+
+                    is_order_weth: isSameAddress(desktopOrder?.payment_token ?? '', WNATIVE_ADDRESS),
                     is_collection_weth: openSeaResponse.collection.payment_tokens.some(
                         currySameAddress(WNATIVE_ADDRESS),
                     ),
                     is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
                     // it's an IOS string as my inspection
                     is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
-                    image_url: openSeaResponse.imageUrl,
-                    asset_contract: openSeaResponse.assetContract,
-                    current_price: desktopOrder ? new BigNumber(getOrderUnitPrice(desktopOrder) ?? 0).toNumber() : null,
-                    current_symbol: desktopOrder?.paymentTokenContract?.symbol ?? 'ETH',
+                    image_url:
+                        openSeaResponse.image_url_original ??
+                        openSeaResponse.image_url ??
+                        openSeaResponse.image_preview_url ??
+                        '',
+                    asset_contract: openSeaResponse.asset_contract,
+                    current_price: desktopOrder
+                        ? new BigNumber(
+                              getOrderUnitPrice(
+                                  desktopOrder.current_price,
+                                  desktopOrder.payment_token_contract?.decimals,
+                                  desktopOrder.quantity,
+                              ) ?? 0,
+                          ).toNumber()
+                        : null,
+                    current_symbol: desktopOrder?.payment_token_contract?.symbol ?? 'ETH',
                     owner: {
                         ...openSeaResponse.owner,
                         link: `${OpenSeaAccountURL}${
@@ -62,8 +80,8 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                             openSeaResponse.creator?.user?.username ?? openSeaResponse.creator?.address ?? ''
                         }`,
                     },
-                    token_id: openSeaResponse.tokenId,
-                    token_address: openSeaResponse.tokenAddress,
+                    token_id: openSeaResponse.token_id,
+                    token_address: openSeaResponse.token_address ?? openSeaResponse.asset_contract.address,
                     traits: openSeaResponse.traits,
                     safelist_request_status: openSeaResponse.collection?.safelist_request_status ?? '',
                     description: openSeaResponse.description,
@@ -73,17 +91,17 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     end_time: openSeaResponse.endTime
                         ? new Date(openSeaResponse.endTime)
                         : desktopOrder
-                        ? toDate(Number.parseInt(desktopOrder.listingTime as unknown as string, 10))
+                        ? toDate(Number.parseInt(desktopOrder.listing_time as unknown as string, 10))
                         : null,
-                    order_payment_tokens: desktopOrder?.paymentTokenContract
-                        ? [toTokenDetailed(chainId, desktopOrder.paymentTokenContract)]
+                    order_payment_tokens: desktopOrder?.payment_token_contract
+                        ? [toTokenDetailed(chainId, desktopOrder.payment_token_contract)]
                         : [],
                     offer_payment_tokens: uniqBy(
                         openSeaResponse.collection.payment_tokens.map((x) => toTokenDetailed(chainId, x)),
                         (x) => x.address.toLowerCase(),
                     ).filter((x) => x.type === EthereumTokenType.ERC20),
-                    order_: desktopOrder,
                     slug: openSeaResponse.collection.slug,
+                    orders: openSeaResponse.orders,
                     response_: openSeaResponse,
                 }
             case CollectibleProvider.RARIBLE:
@@ -124,7 +142,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     end_time: null,
                     order_payment_tokens: [] as FungibleTokenDetailed[],
                     offer_payment_tokens: [] as FungibleTokenDetailed[],
-                    order_: null,
+
                     slug: '',
                     response_: raribleResponse,
                 }

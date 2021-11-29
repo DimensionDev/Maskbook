@@ -2,8 +2,8 @@ import '../utils/debug/general'
 import '../utils/debug/ui'
 import Services from '../extension/service'
 import { untilDomLoaded } from '../utils/dom'
-import { Flags } from '../utils/flags'
-import i18nNextInstance from '../utils/i18n-next'
+import { Flags } from '../../shared'
+import i18nNextInstance from '../../shared-ui/locales_legacy'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
 import { delay } from '../utils/utils'
@@ -88,6 +88,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.injection.enhancedProfileNFTAvatar?.(signal)
     ui.injection.openNFTAvatar?.(signal)
+    ui.injection.postAndReplyNFTAvatar?.(signal)
+    ui.injection.collectionAvatar?.(signal)
 
     startPluginSNSAdaptor(
         getCurrentSNSNetwork(ui.networkIdentifier),

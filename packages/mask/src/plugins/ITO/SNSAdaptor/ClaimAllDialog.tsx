@@ -17,7 +17,8 @@ import {
 import classNames from 'classnames'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
-import { useI18N, Flags } from '../../../utils'
+import { useI18N } from '../../../utils'
+import { Flags } from '../../../../shared'
 import { useSpaceStationCampaignInfo } from './hooks/useSpaceStationCampaignInfo'
 import { NftAirdropCard } from './NftAirdropCard'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -43,10 +44,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: '100%',
         fontSize: 18,
         fontWeight: 400,
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
     },
     footer: {
         marginTop: theme.spacing(2),
@@ -209,10 +206,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 535,
         margin: '24px auto',
     },
-    claimAllButton: {
-        background: `${theme.palette.mode === 'light' ? '#111418' : '#EFF3F4'} !important`,
-        color: `${theme.palette.mode === 'light' ? '#FFFFFF' : '#0F1419'} !important`,
-    },
+    claimAllButton: {},
 }))
 
 interface ClaimAllDialogProps {
@@ -413,7 +407,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                     </div>
                                 ) : null}
                             </>
-                        ) : !showNftAirdrop && !loadingAirdrop && chainId !== ChainId.Matic ? (
+                        ) : !showNftAirdrop && !loadingAirdrop ? (
                             <div className={classes.emptyContentWrapper}>
                                 <Typography color="textPrimary">{t('plugin_ito_no_claimable_token')} </Typography>
                             </div>
@@ -484,8 +478,8 @@ interface SwappedTokensProps {
 
 function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
     const { t } = useI18N()
-    const { classes } = useStyles({ shortITOwrapper: false })
     const theme = useTheme()
+    const { classes } = useStyles({ shortITOwrapper: false })
 
     return swappedToken.token ? (
         <ListItem key={i} className={classes.tokenCard}>
@@ -534,6 +528,7 @@ function SwappedToken({ i, swappedToken }: SwappedTokensProps) {
                     value={swappedToken.amount}
                     decimals={swappedToken.token.decimals}
                     symbol={swappedToken.token.symbol}
+                    formatter={formatBalance}
                 />
             </Typography>
         </ListItem>

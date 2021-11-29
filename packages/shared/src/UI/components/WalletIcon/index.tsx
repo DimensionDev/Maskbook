@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
-import { ImageIcon } from '..'
-import { useStylesExtends } from '../..'
+import { ImageIcon } from '../ImageIcon'
+import { useStylesExtends } from '@masknet/theme'
 
 interface StyleProps {
     size: number
@@ -18,6 +18,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'block',
         width: '100%',
         height: '100%',
+        borderRadius: '50%',
     },
     badgeIcon: {
         position: 'absolute',
@@ -32,13 +33,22 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 interface WalletIconProps extends withClasses<'networkIcon' | 'providerIcon'> {
     size?: number
     badgeSize?: number
+    inverse?: boolean
     networkIcon?: URL
     providerIcon?: URL
 }
 
 export const WalletIcon = (props: WalletIconProps) => {
-    const { size = 24, badgeSize = 14, networkIcon, providerIcon } = props
+    const { size = 24, badgeSize = 14, inverse = false, networkIcon, providerIcon } = props
     const classes = useStylesExtends(useStyles({ size: badgeSize > size ? badgeSize : size }), props)
+
+    //#region icon names
+    const names = [
+        classNames(classes.mainIcon, classes.networkIcon),
+        classNames(classes.badgeIcon, classes.providerIcon),
+    ]
+    if (inverse) names.reverse()
+    //#endregion
 
     return (
         <div
@@ -50,7 +60,7 @@ export const WalletIcon = (props: WalletIconProps) => {
             {networkIcon ? (
                 <ImageIcon
                     classes={{
-                        icon: classNames(classes.mainIcon, classes.networkIcon),
+                        icon: names[0],
                     }}
                     size={size}
                     icon={networkIcon}
@@ -59,7 +69,7 @@ export const WalletIcon = (props: WalletIconProps) => {
             {providerIcon ? (
                 <ImageIcon
                     classes={{
-                        icon: classNames(classes.badgeIcon, classes.providerIcon),
+                        icon: names[1],
                     }}
                     size={badgeSize}
                     icon={providerIcon}

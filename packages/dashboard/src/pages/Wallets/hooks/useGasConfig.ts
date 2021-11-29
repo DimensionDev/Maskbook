@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { toHex, toWei } from 'web3-utils'
 import BigNumber from 'bignumber.js'
-import { GasOption, isEIP1559Supported, useChainId, useGasPrice } from '@masknet/web3-shared-evm'
+import { formatGweiToWei, GasOption, isEIP1559Supported, useChainId, useGasPrice } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useGasOptions } from '../../../hooks/useGasOptions'
@@ -9,6 +9,7 @@ import { useGasOptions } from '../../../hooks/useGasOptions'
 function gweiToWei(gwei: number | string) {
     return toWei(new BigNumber(gwei).toFixed(9), 'gwei')
 }
+
 export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const chainId = useChainId()
 
@@ -45,10 +46,10 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         if (is1559Supported) {
             const gasLevel = gasOptions.medium as Exclude<typeof gasOptions.medium, number>
             setMaxFee((oldVal) => {
-                return !oldVal ? gweiToWei(gasLevel.suggestedMaxFeePerGas) : oldVal
+                return !oldVal ? formatGweiToWei(gasLevel.suggestedMaxFeePerGas) : oldVal
             })
             setPriorityFee((oldVal) => {
-                return !oldVal ? gweiToWei(gasLevel.suggestedMaxPriorityFeePerGas) : oldVal
+                return !oldVal ? formatGweiToWei(gasLevel.suggestedMaxPriorityFeePerGas) : oldVal
             })
         } else {
             setCustomGasPrice((oldVal) => (!oldVal ? (gasOptions.medium as number) : oldVal))
@@ -59,8 +60,8 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         return is1559Supported
             ? {
                   gas: gasLimit_,
-                  maxFeePerGas: toHex(new BigNumber(maxFee).toFixed()),
-                  maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).toFixed()),
+                  maxFeePerGas: toHex(new BigNumber(maxFee).integerValue().toFixed()),
+                  maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).integerValue().toFixed()),
               }
             : { gas: gasLimit_, gasPrice: new BigNumber(gasPrice).toNumber() }
     }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice])

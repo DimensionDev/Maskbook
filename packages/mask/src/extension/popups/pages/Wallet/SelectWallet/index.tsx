@@ -1,5 +1,8 @@
+import { memo, useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { first } from 'lodash-unified'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
-import { ChainIcon, FormattedAddress } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -9,12 +12,9 @@ import {
     useAccount,
     useChainIdValid,
     useWallets,
+    formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { first } from 'lodash-unified'
-import { memo, useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useCopyToClipboard } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
@@ -124,7 +124,6 @@ const SelectWallet = memo(() => {
     const wallets = useWallets(ProviderType.MaskWallet)
 
     const [selected, setSelected] = useState(wallet)
-    const [, copyToClipboard] = useCopyToClipboard()
 
     const search = new URLSearchParams(location.search)
 
@@ -136,13 +135,6 @@ const SelectWallet = memo(() => {
     const isInternal = search.get('internal')
 
     const chainIdValid = useChainIdValid()
-
-    const onCopy = useCallback(
-        (address: string) => {
-            copyToClipboard(address)
-        },
-        [copyToClipboard],
-    )
 
     const handleCancel = useCallback(async () => {
         await WalletRPC.selectAccount([], ChainId.Mainnet)
@@ -176,9 +168,7 @@ const SelectWallet = memo(() => {
             <div className={classes.content}>
                 <div className={classes.header}>
                     <div className={classes.network}>
-                        <div className={classes.iconWrapper}>
-                            <ChainIcon chainId={chainId} />
-                        </div>
+                        <div className={classes.iconWrapper}>{/* <ChainIcon chainId={chainId} /> */}</div>
                         <Typography className={classes.title}>{getNetworkName(chainId)}</Typography>
                     </div>
                 </div>
@@ -191,7 +181,11 @@ const SelectWallet = memo(() => {
                                     <div>
                                         <Typography className={classes.name}>{item.name}</Typography>
                                         <Typography className={classes.address}>
-                                            <FormattedAddress address={item.address} size={12} />
+                                            <FormattedAddress
+                                                address={item.address}
+                                                size={12}
+                                                formatter={formatEthereumAddress}
+                                            />
                                             <CopyIconButton className={classes.copy} text={item.address} />
                                         </Typography>
                                     </div>

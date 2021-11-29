@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
 import { useValueRef } from '@masknet/shared'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { isInjectedProvider } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../messages'
 import { currentProviderSettings } from '../../../Wallet/settings'
 import Services from '../../../../extension/service'
@@ -34,14 +34,14 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
 
     useEffect(() => {
         return bridgedEthereumProvider.on('accountsChanged', async (event) => {
-            if (![ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return
+            if (!isInjectedProvider(providerType)) return
             Services.Ethereum.notifyInjectedEvent('accountsChanged', event, providerType)
         })
     }, [providerType])
 
     useEffect(() => {
         return bridgedEthereumProvider.on('chainChanged', (event) => {
-            if (![ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return
+            if (!isInjectedProvider(providerType)) return
             Services.Ethereum.notifyInjectedEvent('chainChanged', event, providerType)
         })
     }, [providerType])

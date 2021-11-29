@@ -5,11 +5,11 @@ import { Web3Provider } from '@masknet/web3-shared-evm'
 import { CssBaseline, StyledEngineProvider, Theme, ThemeProvider } from '@mui/material'
 import { NetworkPluginID, PluginsWeb3ContextProvider, useAllPluginsWeb3State } from '@masknet/plugin-infra'
 import { ErrorBoundary, ErrorBoundaryBuildInfoContext, useValueRef } from '@masknet/shared'
-import i18nNextInstance from './utils/i18n-next'
+import i18nNextInstance from '../shared-ui/locales_legacy'
 import { Web3Context } from './web3/context'
 import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
 import { activatedSocialNetworkUI } from './social-network'
-import { FACEBOOK_ID } from './social-network-adaptor/facebook.com/base'
+import { isFacebook } from './social-network-adaptor/facebook.com/base'
 import { pluginIDSettings } from './settings/settings'
 import { fixWeb3State } from './plugins/EVM/UI/Web3State'
 
@@ -33,7 +33,7 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
                 disableWindowBlurListener={false}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 children={jsx}
-                isFacebook={activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID}
+                isfacebook={Boolean(isFacebook(activatedSocialNetworkUI)).toString()}
             />
         ),
         baseline
@@ -58,8 +58,6 @@ export function MaskUIRoot({ children, kind, useTheme }: MaskUIRootProps) {
     // TODO:
     // migrate EVM plugin
     fixWeb3State(PluginsWeb3State[NetworkPluginID.PLUGIN_EVM], Web3Context)
-
-    if (Object.values(NetworkPluginID).some((x) => !PluginsWeb3State[x])) return null
 
     return compose(
         children,

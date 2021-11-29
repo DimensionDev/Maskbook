@@ -4,6 +4,25 @@
         "inputs": [
             {
                 "indexed": true,
+                "internalType": "uint256",
+                "name": "box_id",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "creator",
+                "type": "address"
+            }
+        ],
+        "name": "CancelSuccess",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
                 "internalType": "address",
                 "name": "creator",
                 "type": "address"
@@ -138,6 +157,19 @@
     {
         "inputs": [
             {
+                "internalType": "address[]",
+                "name": "addrs",
+                "type": "address[]"
+            }
+        ],
+        "name": "addAdmin",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
                 "internalType": "uint256",
                 "name": "box_id",
                 "type": "uint256"
@@ -149,6 +181,51 @@
             }
         ],
         "name": "addNftIntoBox",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "addrs",
+                "type": "address[]"
+            }
+        ],
+        "name": "addWhitelist",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "admin",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "box_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "cancelBox",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -224,6 +301,16 @@
                 "internalType": "address",
                 "name": "qualification",
                 "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "holder_token_addr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "holder_min_token_amount",
+                "type": "uint256"
             }
         ],
         "name": "createBox",
@@ -257,6 +344,40 @@
                 "type": "string"
             },
             {
+                "internalType": "uint32",
+                "name": "personal_limit",
+                "type": "uint32"
+            },
+            {
+                "internalType": "address",
+                "name": "qualification",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "holder_token_addr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256",
+                "name": "holder_min_token_amount",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "box_id",
+                "type": "uint256"
+            }
+        ],
+        "name": "getBoxStatus",
+        "outputs": [
+            {
                 "components": [
                     {
                         "internalType": "address",
@@ -279,11 +400,6 @@
                 "type": "tuple[]"
             },
             {
-                "internalType": "uint32",
-                "name": "personal_limit",
-                "type": "uint32"
-            },
-            {
                 "internalType": "bool",
                 "name": "started",
                 "type": "bool"
@@ -291,6 +407,11 @@
             {
                 "internalType": "bool",
                 "name": "expired",
+                "type": "bool"
+            },
+            {
+                "internalType": "bool",
+                "name": "canceled",
                 "type": "bool"
             },
             {
@@ -302,11 +423,6 @@
                 "internalType": "uint256",
                 "name": "total",
                 "type": "uint256"
-            },
-            {
-                "internalType": "address",
-                "name": "qualification",
-                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -414,6 +530,19 @@
         "type": "function"
     },
     {
+        "inputs": [
+            {
+                "internalType": "address[]",
+                "name": "addrs",
+                "type": "address[]"
+            }
+        ],
+        "name": "removeWhitelist",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
         "inputs": [],
         "name": "renounceOwnership",
         "outputs": [],
@@ -431,6 +560,25 @@
         "name": "transferOwnership",
         "outputs": [],
         "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "",
+                "type": "address"
+            }
+        ],
+        "name": "whitelist",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
         "type": "function"
     }
 ]

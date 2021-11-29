@@ -132,6 +132,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                 onConfirm?.({
                     gasLimit: data.gasLimit,
                     maxFee: toWei(data.maxFeePerGas, 'gwei'),
+                    priorityFee: toWei(data.maxPriorityFeePerGas, 'gwei'),
                     gasOption: selectedGasOption,
                 })
             },

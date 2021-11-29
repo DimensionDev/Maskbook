@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '../..'
+import { useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => {
     return {

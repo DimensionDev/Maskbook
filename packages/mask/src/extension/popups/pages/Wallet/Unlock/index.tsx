@@ -9,7 +9,7 @@ import { EnterDashboard } from '../../../components/EnterDashboard'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
 
 const useStyles = makeStyles()((theme) => ({

@@ -4,4 +4,5 @@ export enum PageTags {
     DonationTag = 'Donations',
     FootprintTag = 'Footprints',
     ConnectRSS3 = 'ConnectRSS3',
+    DAOTag = 'DAO',
 }

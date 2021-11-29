@@ -1,8 +1,18 @@
 import { DOMProxy, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { NFTBadgeTimeline } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadgeTimeline'
-import { createReactRootShadowed, Flags, startWatch } from '../../../../utils'
+import { createReactRootShadowed, startWatch } from '../../../../utils'
+import { Flags } from '../../../../../shared'
+import { getInjectNodeInfo } from '../../utils/avatar'
 import { postAvatarsContentSelector } from '../../utils/selector'
-import { getAvatarId } from '../../utils/user'
+
+function getTwitterId(ele: HTMLElement) {
+    const twitterIdNode = (ele.firstChild?.nextSibling as HTMLElement).querySelector(
+        '[dir="ltr"] > span',
+    ) as HTMLSpanElement
+    if (!twitterIdNode) return
+    const twitterId = twitterIdNode.innerText.trim().replace('@', '')
+    return twitterId
+}
 
 function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
     startWatch(
@@ -11,23 +21,32 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
             const remove = () => remover()
 
             const run = async () => {
-                const twitterIdNode = ele.querySelector(
-                    'div > :nth-child(2) > :nth-child(2) > div > div > div > div > div > a > div > :last-child',
-                ) as HTMLSpanElement
-                if (!twitterIdNode) return
-                const twitterId = twitterIdNode.innerText.trim().replace('@', '')
-                const avatarIdNode = ele.querySelector(
-                    'div > :nth-child(2) > div > div > div > a > div > :last-child > div > img',
-                ) as HTMLImageElement
-                if (!avatarIdNode) return
-                const avatarId = getAvatarId(avatarIdNode.getAttribute('src') ?? '')
-                const nftDom = ele.firstChild?.firstChild?.firstChild?.nextSibling?.firstChild
-                    ?.firstChild as HTMLElement
-                if (!nftDom) return
+                const twitterId = getTwitterId(ele)
+                if (!twitterId) return
+
+                const info = getInjectNodeInfo(ele.firstChild as HTMLElement)
+                if (!info) return
+
                 const proxy = DOMProxy({ afterShadowRootInit: { mode: Flags.using_ShadowDOM_attach_mode } })
-                proxy.realCurrent = nftDom
+                proxy.realCurrent = info.element.firstChild as HTMLElement
+
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
-                root.render(<NFTBadgeTimeline userId={twitterId} avatarId={avatarId} />)
+                root.render(
+                    <div
+                        style={{
+                            position: 'absolute',
+                            left: -2,
+                            top: -2,
+                            zIndex: -1,
+                        }}>
+                        <NFTBadgeTimeline
+                            userId={twitterId}
+                            avatarId={info.avatarId}
+                            width={info.width}
+                            height={info.height}
+                        />
+                    </div>,
+                )
                 remover = root.destory
             }
 

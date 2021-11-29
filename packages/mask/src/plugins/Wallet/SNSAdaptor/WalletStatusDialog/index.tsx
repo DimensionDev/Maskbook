@@ -5,11 +5,11 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { useChainIdValid } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { MaskMessages } from '../../../../utils/messages'
+import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -35,8 +35,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.text.primary,
     },
 }))
-
-export function WalletStatusDialog() {
+export interface WalletStatusDialogProps {
+    isDashboard?: boolean
+}
+export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
 
     const { classes } = useStyles()
@@ -60,9 +62,13 @@ export function WalletStatusDialog() {
         <InjectedDialog title="Mask Network" open={open} onClose={closeDialog} maxWidth="sm">
             <DialogContent className={classes.content}>
                 <Typography className={classes.subTitle}>{t('wallets')}</Typography>
-                <WalletStatusBox />
-                <Typography className={classes.subTitle}>{t('applications')}</Typography>
-                <ApplicationBoard />
+                <WalletStatusBox isDashboard={props.isDashboard} />
+                {!props.isDashboard && (
+                    <>
+                        <Typography className={classes.subTitle}>{t('applications')}</Typography>
+                        <ApplicationBoard />
+                    </>
+                )}
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

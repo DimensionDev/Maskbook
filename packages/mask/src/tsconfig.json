@@ -8,6 +8,7 @@
     "lib": ["ES2021"]
   },
   "include": ["./", "./**/*.json"],
+
   // ! Note: mask/ depends dashboard/ on source-code level
   // !       but dashboard/ depends mask/ on type level
   // !       do not add dashboard/ as a reference otherwise there is a circular dependency on the type level.
@@ -27,7 +28,9 @@
     { "path": "../../mask-sdk/server" },
     { "path": "../web-workers" },
     { "path": "../utils-pure" },
+    { "path": "../utils-ui" },
     { "path": "../background" },
-    { "path": "../shared" }
+    { "path": "../shared" },
+    { "path": "../shared-ui" }
   ]
 }

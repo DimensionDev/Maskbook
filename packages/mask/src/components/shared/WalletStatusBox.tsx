@@ -4,7 +4,7 @@ import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import {
     useAccount,
     useWeb3State,
@@ -23,12 +23,15 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 3, 3),
     },
     currentAccount: {
-        padding: theme.spacing(2, 3),
+        padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
         backgroundColor: getMaskColor(theme).twitterBackground,
         borderRadius: 8,
         alignItems: 'center',
+    },
+    dashboardBackground: {
+        background: theme.palette.background.default,
     },
     accountInfo: {
         fontSize: 16,
@@ -38,6 +41,7 @@ const useStyles = makeStyles()((theme) => ({
     accountName: {
         fontSize: 16,
         marginRight: 6,
+        marginBottom: 6,
     },
     infoRow: {
         display: 'flex',
@@ -54,17 +58,22 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
     },
     link: {
-        color: theme.palette.text.secondary,
+        color: theme.palette.text.primary,
         fontSize: 14,
         display: 'flex',
         alignItems: 'center',
     },
     linkIcon: {
         marginRight: theme.spacing(1),
-        color: '#1C68F3',
     },
-    networkIcon: {},
-    providerIcon: {},
+    dashboardProvider: {
+        border: `1px solid ${theme.palette.background.default}`,
+    },
+    twitterProviderBorder: {
+        border: `1px solid ${getMaskColor(theme).twitterBackground}`,
+        width: 14,
+        height: 14,
+    },
     connectButtonWrapper: {
         display: 'flex',
         justifyContent: 'center',
@@ -72,8 +81,10 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(2, 0),
     },
 }))
-
-export function WalletStatusBox() {
+interface WalletStatusBox {
+    isDashboard?: boolean
+}
+export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -125,16 +136,15 @@ export function WalletStatusBox() {
     }, [openSelectProviderDialog])
 
     return account ? (
-        <section className={classes.currentAccount}>
+        <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
-                size={40}
-                badgeSize={18}
-                networkIcon={networkDescriptor?.icon}
-                providerIcon={providerDescriptor?.icon}
                 classes={{
-                    networkIcon: classes.networkIcon,
-                    providerIcon: classes.providerIcon,
+                    providerIcon: props.isDashboard ? classes.dashboardProvider : classes.twitterProviderBorder,
                 }}
+                size={48}
+                badgeSize={16}
+                networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
+                providerIcon={networkDescriptor?.icon}
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>

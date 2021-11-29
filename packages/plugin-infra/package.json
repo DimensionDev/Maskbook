@@ -11,10 +11,9 @@
     "@masknet/theme": "workspace:*",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
-    "async-call-rpc": "^6.0.0",
+    "async-call-rpc": "^6.0.1",
     "bignumber.js": "^9.0.1",
     "lodash-es": "^4.17.21",
-    "ts-results": "^3.3.0",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   }

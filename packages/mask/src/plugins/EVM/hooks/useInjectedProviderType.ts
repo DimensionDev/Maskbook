@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
-import { useInjectedProviderReady } from '.'
+import { useInjectedProviderReady } from './useInjectedProviderReady'
 
 export function useInjectedProviderType() {
     const injectedProviderReady = useInjectedProviderReady()

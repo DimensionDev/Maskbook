@@ -13,7 +13,7 @@ import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
 import { facebookShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'
-import { Flags } from '../../../utils'
+import { Flags } from '../../../../shared'
 import { collectNodeText } from '../../../utils'
 import { None, Some, Option } from 'ts-results'
 
@@ -147,20 +147,30 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
             const url = new URL(location.href)
             return url.searchParams.get('id')
         } else {
-            // In timeline
-            const postTimeNode1 = root.querySelector('[href*="permalink"]')
-            const postIdMode1 = postTimeNode1
-                ? postTimeNode1.getAttribute('href')?.match(/(?<=story_fbid=)(\d+)/g)?.[0] ?? null
-                : null
+            try {
+                // In timeline
+                const postTimeNode1 = root.querySelector('[href*="permalink"]')
+                const postIdMode1 = postTimeNode1
+                    ? postTimeNode1
+                          .getAttribute('href')
+                          ?.match(/story_fbid=(\d+)/g)?.[0]
+                          .split('=')[1] ?? null
+                    : null
 
-            if (postIdMode1) return postIdMode1
+                if (postIdMode1) return postIdMode1
 
-            const postTimeNode2 = root.querySelector('[href*="posts"]')
-            const postIdMode2 = postTimeNode2
-                ? postTimeNode2.getAttribute('href')?.match(/(?<=posts\/)(\d+)/g)?.[0] ?? null
-                : null
+                const postTimeNode2 = root.querySelector('[href*="posts"]')
+                const postIdMode2 = postTimeNode2
+                    ? postTimeNode2
+                          .getAttribute('href')
+                          ?.match(/posts\/(\d+)/g)?.[0]
+                          .split('/')[1] ?? null
+                    : null
 
-            if (postIdMode2 && /^-?\d+$/.test(postIdMode2)) return postIdMode2
+                if (postIdMode2 && /^-?\d+$/.test(postIdMode2)) return postIdMode2
+            } catch {
+                return null
+            }
 
             const parent = node.current.parentElement
             if (!parent) return null

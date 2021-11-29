@@ -3,10 +3,12 @@ import BigNumber from 'bignumber.js'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
+import { useProviderDescriptor } from '@masknet/plugin-infra'
 import { FormattedAddress, FormattedBalance, ImageIcon } from '@masknet/shared'
 import { Box, Button, DialogContent, TextField, Typography } from '@mui/material'
 import {
     formatBalance,
+    formatEthereumAddress,
     useAccount,
     useProviderType,
     useChainId,
@@ -87,14 +89,14 @@ const useStyles = makeStyles()((theme) => ({
 export interface DrawDialogProps {
     boxInfo: BoxInfo
     open: boolean
+    drawing?: boolean
     onClose: () => void
     onSubmit: () => Promise<void>
 }
 
 export function DrawDialog(props: DrawDialogProps) {
+    const { boxInfo, open, drawing, onClose, onSubmit } = props
     const { classes } = useStyles()
-    const { boxInfo, open, onClose, onSubmit } = props
-
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
 
     const {
@@ -104,11 +106,13 @@ export function DrawDialog(props: DrawDialogProps) {
         paymentTokenBalance,
         paymentTokenDetailed,
         isBalanceInsufficient,
+        isAllowanceEnough,
 
         openBoxTransactionGasLimit,
         setOpenBoxTransactionOverrides,
     } = useContainer(Context)
 
+    const providerDescriptor = useProviderDescriptor()
     const account = useAccount()
     const chainId = useChainId()
     const providerType = useProviderType()
@@ -130,7 +134,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 <FormattedBalance
                                     value={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount)}
                                     decimals={paymentTokenDetailed?.decimals ?? 0}
-                                    symbol={paymentTokenDetailed?.symbol}
+                                    formatter={formatBalance}
                                     significant={6}
                                 />
                             </span>
@@ -192,7 +196,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                     variant="outlined"
                                     color="inherit"
                                     disabled={
-                                        paymentCount >= Math.min(boxInfo.remaining, boxInfo.personalRemaining) ||
+                                        paymentCount >= boxInfo.availableAmount ||
                                         boxInfo.remaining === 0 ||
                                         boxInfo.personalRemaining === 1
                                     }
@@ -207,7 +211,14 @@ export function DrawDialog(props: DrawDialogProps) {
                             </Typography>
                             <Typography className={classes.content} color="textPrimary">
                                 {boxInfo.personalLimit}
-                                {boxInfo.tokenIdsPurchased.length ? ` (${boxInfo.personalRemaining} remaining)` : ''}
+                            </Typography>
+                        </Box>
+                        <Box className={classes.section} display="flex" alignItems="center">
+                            <Typography className={classes.title} color="textPrimary">
+                                Available amount:
+                            </Typography>
+                            <Typography className={classes.content} color="textPrimary">
+                                {boxInfo.availableAmount}/{boxInfo.total}
                             </Typography>
                         </Box>
                         <Box className={classes.section} display="flex" alignItems="center">
@@ -215,10 +226,9 @@ export function DrawDialog(props: DrawDialogProps) {
                                 Current Wallet:
                             </Typography>
                             <Box className={classes.content} display="flex" alignItems="center">
-                                {/* <ImageIcon size={16} providerType={providerType} /> */}
-                                <ImageIcon size={16} />
+                                <ImageIcon size={16} icon={providerDescriptor?.icon} />
                                 <Typography color="textPrimary" sx={{ marginLeft: 1 }}>
-                                    <FormattedAddress address={account} size={6} />
+                                    <FormattedAddress address={account} size={6} formatter={formatEthereumAddress} />
                                 </Typography>
                             </Box>
                         </Box>
@@ -233,17 +243,19 @@ export function DrawDialog(props: DrawDialogProps) {
                                 </Typography>
                             </Box>
                         </Box>
-                        <Box className={classes.section} display="flex" alignItems="center">
-                            <Typography className={classes.title} color="textPrimary">
-                                Gas Fee:
-                            </Typography>
-                            <Box className={classes.content}>
-                                <GasSettingBar
-                                    gasLimit={openBoxTransactionGasLimit}
-                                    onChange={setOpenBoxTransactionOverrides}
-                                />
+                        {isAllowanceEnough && (
+                            <Box className={classes.section} display="flex" alignItems="center">
+                                <Typography className={classes.title} color="textPrimary">
+                                    Gas Fee:
+                                </Typography>
+                                <Box className={classes.content}>
+                                    <GasSettingBar
+                                        gasLimit={openBoxTransactionGasLimit}
+                                        onChange={setOpenBoxTransactionOverrides}
+                                    />
+                                </Box>
                             </Box>
-                        </Box>
+                        )}
                     </Box>
                 </Box>
 
@@ -260,9 +272,9 @@ export function DrawDialog(props: DrawDialogProps) {
                             fullWidth
                             variant="contained"
                             sx={{ marginTop: 2 }}
-                            disabled={isBalanceInsufficient}
+                            disabled={isBalanceInsufficient || drawing}
                             onClick={onSubmit}>
-                            {isBalanceInsufficient ? 'Insufficient balance' : 'Draw'}
+                            {isBalanceInsufficient ? 'Insufficient balance' : drawing ? 'Drawing' : 'Draw'}
                         </ActionButton>
                     </EthereumERC20TokenApprovedBoundary>
                 </EthereumWalletConnectedBoundary>

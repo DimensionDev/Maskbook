@@ -1,3 +1,3 @@
-export * from './FormatBalance'
-export * from './FormatAddress'
-export * from './FormatCurrency'
+export * from './FormattedBalance'
+export * from './FormattedAddress'
+export * from './FormattedCurrency'

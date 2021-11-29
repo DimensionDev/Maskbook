@@ -1,11 +1,8 @@
 import type { MaskSDK_SNS_ContextIdentifier } from '../../plugins/External/sns-context'
 import { PopupRoutes } from '@masknet/shared-base'
 
-export { PopupRoutes } from '@masknet/shared-base'
+import { getRouteURLWithNoParam } from './utils'
 
-export function getRouteURLWithNoParam(kind: PopupRoutes) {
-    return browser.runtime.getURL(`/popups.html#${kind}`)
-}
 export function PermissionAwareRedirectOf(url: string, context: MaskSDK_SNS_ContextIdentifier) {
     return (
         getRouteURLWithNoParam(PopupRoutes.PermissionAwareRedirect) +
@@ -14,3 +11,4 @@ export function PermissionAwareRedirectOf(url: string, context: MaskSDK_SNS_Cont
 }
 export { constructRequestPermissionURL } from './RequestPermission/utils'
 export { constructSignRequestURL } from './SignRequest/utils'
+export { getRouteURLWithNoParam } from './utils'

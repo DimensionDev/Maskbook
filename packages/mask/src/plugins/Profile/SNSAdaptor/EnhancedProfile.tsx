@@ -1,13 +1,14 @@
 import { useState, useEffect, useMemo } from 'react'
-import { useStylesExtends } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { MaskMessages } from '../../../utils'
 import { useLocationChange } from '../../../utils/hooks/useLocationChange'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { WalletsPage } from './WalletsPage'
 import { NFTPage } from './NFTPage'
 import { DonationPage } from './DonationsPage'
 import { FootprintPage } from './FootprintPage'
 import { ConnectRSS3Page } from './ConnectRSS3'
+import { DAOPage } from './DAOPage'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
 import RSS3, { IRSS3 } from './common/rss3'
@@ -16,6 +17,7 @@ import { useAccount } from '@masknet/plugin-infra'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { isSameAddress, useEthereumAddress } from '@masknet/web3-shared-evm'
 import type { RSS3Index } from 'rss3-next/types/rss3'
+import { useDao } from './hooks/useDao'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,10 +46,13 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         identity.identifier.userId,
         identity.bio ?? '',
     )
-
+    const userId = identity.identifier.userId.toLowerCase()
+    const { value: daoPayload } = useDao(userId)
+    
     const [isOwnAddress, setOwnAddress] = useState(false)
     const [hidden, setHidden] = useState(true)
     const classes = useStylesExtends(useStyles(), props)
+
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.WalletTag)
 
     const [isConnected, setConnected] = useState(false)
@@ -62,6 +67,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         const rss3Sign = ((await (apiUser.persona as IRSS3).files.get(pageOwner.address)) as RSS3Index).signature
         setConnected(rss3Sign === '' ? false : true)
     }
+
 
     useLocationChange(() => {
         setCurrentTag(PageTags.WalletTag)
@@ -110,6 +116,8 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                 )
             case PageTags.ConnectRSS3:
                 return <ConnectRSS3Page isOwnAddress={isOwnAddress} />
+            case PageTags.DAOTag:
+                return <DAOPage payload={daoPayload} userId={userId} />
             default:
                 unreachable(currentTag)
         }

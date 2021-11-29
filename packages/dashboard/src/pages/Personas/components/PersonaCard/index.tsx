@@ -100,7 +100,6 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                             (x) => x.identifier.network === networkIdentifier,
                         )
 
-                        currentNetworkProfiles.map(() => {})
                         if (!currentNetworkProfiles.length) {
                             return (
                                 <UnconnectedPersonaLine

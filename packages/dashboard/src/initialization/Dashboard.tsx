@@ -6,7 +6,6 @@ import {
     applyMaskColorVars,
     MaskDarkTheme,
     useSystemPreferencePalette,
-    NoEffectUsePortalShadowRootContext,
 } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
 import {
@@ -53,31 +52,27 @@ export default function DashboardRoot() {
     applyMaskColorVars(document.body, appearance === 'default' ? mode : appearance)
     //#endregion
 
-    if (!PluginsWeb3State) return null
-
     return (
-        <NoEffectUsePortalShadowRootContext.Provider value={true}>
-            <Web3Provider value={Web3Context}>
-                <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
-                    <I18nextProvider i18n={i18n}>
-                        <StyledEngineProvider injectFirst>
-                            <ThemeProvider theme={theme}>
-                                <PersonaContext.Provider>
-                                    <ErrorBoundary>
-                                        <CssBaseline />
-                                        <CustomSnackbarProvider>
-                                            <HashRouter>
-                                                <Pages />
-                                            </HashRouter>
-                                            <PluginRender />
-                                        </CustomSnackbarProvider>
-                                    </ErrorBoundary>
-                                </PersonaContext.Provider>
-                            </ThemeProvider>
-                        </StyledEngineProvider>
-                    </I18nextProvider>
-                </PluginsWeb3ContextProvider>
-            </Web3Provider>
-        </NoEffectUsePortalShadowRootContext.Provider>
+        <Web3Provider value={Web3Context}>
+            <PluginsWeb3ContextProvider pluginID={pluginID} value={PluginsWeb3State}>
+                <I18nextProvider i18n={i18n}>
+                    <StyledEngineProvider injectFirst>
+                        <ThemeProvider theme={theme}>
+                            <PersonaContext.Provider>
+                                <ErrorBoundary>
+                                    <CssBaseline />
+                                    <CustomSnackbarProvider>
+                                        <HashRouter>
+                                            <Pages />
+                                        </HashRouter>
+                                        <PluginRender />
+                                    </CustomSnackbarProvider>
+                                </ErrorBoundary>
+                            </PersonaContext.Provider>
+                        </ThemeProvider>
+                    </StyledEngineProvider>
+                </I18nextProvider>
+            </PluginsWeb3ContextProvider>
+        </Web3Provider>
     )
 }

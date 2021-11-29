@@ -1,6 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { Trade } from '@uniswap/v2-sdk'
 import { TradeProvider } from '@masknet/public-api'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
@@ -16,7 +16,7 @@ import {
     useChainIdValid,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
 import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
@@ -327,7 +327,7 @@ export function Trader(props: TraderProps) {
                     {context?.IS_UNISWAP_V2_LIKE ? (
                         <UniswapTradeRoute classes={{ root: classes.router }} trade={tradeComputed} />
                     ) : null}
-                    {[TradeProvider.BALANCER].includes(provider) ? (
+                    {[TradeProvider.BALANCER].includes(provider) && tradeComputed.trade_ ? (
                         <BalancerTradeRoute
                             classes={{ root: classes.router }}
                             trade={tradeComputed as TradeComputed<SwapResponse>}

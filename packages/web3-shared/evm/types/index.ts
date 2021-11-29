@@ -163,6 +163,12 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
     record_id: string
 }
 
+export interface ERC721TokenCollectionInfo {
+    name: string
+    image?: string
+    slug: string
+}
+
 //#endregion
 
 //#region ERC1155
@@ -301,6 +307,12 @@ export enum EthereumMethodType {
     // only for mask
     MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
+}
+
+export enum EthereumErrorType {
+    ERR_SIGN_TRANSACTION = 'Failed to sign transaction.',
+    ERR_SEND_TRANSACTION = 'Failed to send transaction.',
+    ERR_SIGN_MESSAGE = 'Failed to sign message.',
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {
@@ -503,12 +515,12 @@ export enum DomainProvider {
 }
 
 export enum PortfolioProvider {
-    ZERION = 0,
-    DEBANK = 1,
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
 }
 
 export enum CollectibleProvider {
-    OPENSEA = 0,
+    OPENSEA = 'OpenSea',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
@@ -591,4 +603,18 @@ export enum GasOption {
     Low = 'low',
     Medium = 'medium',
     High = 'high',
+}
+
+export enum TransactionStateType {
+    UNKNOWN = 0,
+    /** Wait for external provider */
+    WAIT_FOR_CONFIRMING = 1,
+    /** Hash is available */
+    HASH = 2,
+    /** Receipt is available */
+    RECEIPT = 3,
+    /** Confirmed or Reverted */
+    CONFIRMED = 4,
+    /** Fail to send */
+    FAILED = 5,
 }
