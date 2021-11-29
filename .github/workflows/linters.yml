@@ -22,6 +22,8 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: pnpm/action-setup@v2
+        with:
+          version: '6.23.1'
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
@@ -39,6 +41,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: pnpm/action-setup@v2
+        with:
+          version: '6.23.1'
+        with:
+          version: '6.23.1'
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
@@ -54,6 +60,8 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: pnpm/action-setup@v2
+        with:
+          version: '6.23.1'
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
