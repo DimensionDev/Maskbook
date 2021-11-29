@@ -1,7 +1,7 @@
 import { Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, formatCurrency } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import type { Ticker } from '../../types'
 import { DataProvider } from '@masknet/public-api'
@@ -68,11 +68,11 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             {ticker.price ? (
                 <TableCell className={classes.cell}>
-                    <FormattedCurrency value={ticker.price} sign="$" />
+                    <FormattedCurrency value={ticker.price} sign="$" formatter={formatCurrency} />
                 </TableCell>
             ) : null}
             <TableCell className={classes.cell}>
-                <FormattedCurrency value={ticker.volume} sign="$" />
+                <FormattedCurrency value={ticker.volume} sign="$" formatter={formatCurrency} />
             </TableCell>
             <TableCell className={classes.cell}>{formatElapsed(ticker.updated.getTime())}</TableCell>
         </TableRow>

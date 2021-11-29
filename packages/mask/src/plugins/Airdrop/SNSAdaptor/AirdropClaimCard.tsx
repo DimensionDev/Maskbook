@@ -1,12 +1,12 @@
-import { Box, ClickAwayListener, Skeleton, Tooltip, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, ClickAwayListener, Skeleton, Typography } from '@mui/material'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Info as InfoIcon } from '@mui/icons-material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { AirdropIcon } from '../../../resources/AirdropIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import {
     ERC20TokenDetailed,
     formatPercentage,
@@ -25,6 +25,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { ShadowRootTooltip } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -213,7 +214,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                             {checkState.type === CheckStateType.YEP || checkState.type === CheckStateType.NOPE ? (
                                 <ClickAwayListener onClickAway={() => setShowTooltip(false)}>
                                     <div>
-                                        <Tooltip
+                                        <ShadowRootTooltip
                                             placement="top-end"
                                             PopperProps={{
                                                 disablePortal: true,
@@ -228,7 +229,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                                             ).toUTCString()} and ends at ${new Date(checkState.end).toUTCString()}.`}
                                             style={{ lineHeight: 0.8, cursor: 'pointer', marginLeft: 2 }}>
                                             <InfoIcon fontSize="small" onClick={(e) => setShowTooltip(true)} />
-                                        </Tooltip>
+                                        </ShadowRootTooltip>
                                     </div>
                                 </ClickAwayListener>
                             ) : null}

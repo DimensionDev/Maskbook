@@ -1,4 +1,4 @@
-import { omit } from 'lodash-es'
+import { omit } from 'lodash-unified'
 import {
     ERC1155TokenDetailed,
     ERC20TokenDetailed,

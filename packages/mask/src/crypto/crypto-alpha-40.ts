@@ -11,7 +11,7 @@ import {
 } from '@dimensiondev/kit'
 import { memoizePromise } from '../../utils-pure'
 import { makeTypedMessageText } from '../protocols/typed-message'
-import { i18n } from '../utils/i18n-next'
+import { i18n } from '../../shared-ui/locales_legacy'
 import { CryptoWorker } from '../modules/workers'
 import type {
     EC_Private_JsonWebKey,

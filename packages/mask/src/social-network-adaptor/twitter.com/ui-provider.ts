@@ -29,9 +29,11 @@ import { injectEnhancedProfileTabAtTwitter } from './injection/EnhancedProfileTa
 import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
-import { injectProfileNFTAvatarInTwitter } from './injection/NFT/profileNFTAvatar'
+import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
 import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
 import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
+import { injectUserNFTAvatarAtTweet } from './injection/NFT/TweetNFTAvatar'
+import { injectNFTContractAtTwitter } from './injection/NFT/NFTContract'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -61,7 +63,7 @@ const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             padding: '3px 16px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#eff3f4'}`,
             '& > h2': {
                 display: 'inline-block',
                 whiteSpace: 'nowrap',
@@ -171,6 +173,8 @@ const twitterUI: SocialNetworkUI.Definition = {
         enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
         profileAvatar: injectNFTAvatarInTwitter,
         openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
+        postAndReplyNFTAvatar: injectUserNFTAvatarAtTweet,
+        collectionAvatar: injectNFTContractAtTwitter,
     },
     configuration: {
         steganography: {

@@ -1,7 +1,7 @@
 import ss from '@dimensiondev/snapshot.js'
 import type { Proposal, Profile3Box, ProposalIdentifier, VoteSuccess, RawVote, Strategy } from '../../types'
 import Services from '../../../../extension/service'
-import { transform } from 'lodash-es'
+import { transform } from 'lodash-unified'
 
 export async function fetchProposal(id: string) {
     const { votes, proposal } = await fetchProposalFromGraphql(id)

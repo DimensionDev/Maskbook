@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { IconButton } from '@mui/material'
 import { useLastRecognizedIdentity, useMyIdentities } from '../DataSource/useActivatedUI'
 import Services from '../../extension/service'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { DashboardRoutes, useStylesExtends, useValueRef } from '@masknet/shared'
+import { DashboardRoutes, useValueRef } from '@masknet/shared'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
@@ -39,7 +39,7 @@ export function BannerUI(props: BannerUIProps) {
     const { t } = useI18N()
 
     return props.nextStep === 'hidden' ? null : (
-        <GuideStep step={3} total={3} tip={t('user_guide_tip_3')} disabled={props.description === 'decryptPostFailed'}>
+        <GuideStep step={2} total={2} tip={t('user_guide_tip_2')} disabled={props.description === 'decryptPostFailed'}>
             <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
                 <MaskSharpIcon color="primary" />
             </IconButton>

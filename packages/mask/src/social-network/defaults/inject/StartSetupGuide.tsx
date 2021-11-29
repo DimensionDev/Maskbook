@@ -1,7 +1,7 @@
 import type { PersonaIdentifier } from '../../../database/type'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { SetupGuide } from '../../../components/InjectedComponents/SetupGuide'
-import { Flags } from '../../../utils/flags'
+import { Flags } from '../../../../shared'
 
 function UI({ unmount, persona }: { unmount: () => void; persona: PersonaIdentifier }) {
     return <SetupGuide persona={persona} onClose={unmount} />

@@ -39,7 +39,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         devtool: sourceMapKind,
         target: ['web', 'es2019'],
         entry: {},
-        experiments: { asset: true },
+        experiments: { backCompat: false },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -57,7 +57,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 const alias = {
                     // We want to always use the full version.
                     'async-call-rpc$': require.resolve('async-call-rpc/full'),
-                    lodash: require.resolve('lodash-es'),
                     '@dimensiondev/holoflows-kit': require.resolve('@dimensiondev/holoflows-kit/es'),
                     // It's a Node impl for xhr which is unnecessary
                     'xhr2-cookies': require.resolve('./package-overrides/xhr2-cookies.js'),
@@ -71,12 +70,16 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/shared-base': join(__dirname, '../../shared-base/src/'),
                     '@masknet/theme': join(__dirname, '../../theme/src/'),
                     '@masknet/icons': join(__dirname, '../../icons/index.ts'),
+                    '@masknet/web3-kit': join(__dirname, '../../web3-kit/src/'),
+                    '@masknet/web3-providers': join(__dirname, '../../web3-providers/src/'),
+                    '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
+                    '@masknet/web3-shared-flow': join(__dirname, '../../web3-shared/flow/'),
+                    '@masknet/web3-shared-solana': join(__dirname, '../../web3-shared/solana/'),
                     '@masknet/plugin-infra': join(__dirname, '../../plugin-infra/src/'),
                     '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
+                    '@masknet/plugin-flow': join(__dirname, '../../plugins/Flow/src/'),
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
-                    '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
-                    '@masknet/web3-shared-solana': join(__dirname, '../../web3-shared/solana/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
                     '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),

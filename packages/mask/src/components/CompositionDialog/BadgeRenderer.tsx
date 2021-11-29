@@ -1,7 +1,8 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
 import type { TypedMessage } from '@masknet/shared-base'
-import { Box, Tooltip, Chip } from '@mui/material'
+import { Box, Chip } from '@mui/material'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
+import { ShadowRootTooltip } from '../../utils'
 
 export interface BadgeRendererProps {
     meta: TypedMessage['meta']
@@ -59,11 +60,11 @@ interface MetaBadgeProps {
 function MetaBadge({ title, children, onDelete, readonly }: React.PropsWithChildren<MetaBadgeProps>) {
     return (
         <Box sx={{ marginRight: 1, marginTop: 1, display: 'inline-block' }}>
-            <Tooltip title={title}>
+            <ShadowRootTooltip title={title}>
                 <span>
                     <Chip disabled={readonly} onDelete={onDelete} label={children} />
                 </span>
-            </Tooltip>
+            </ShadowRootTooltip>
         </Box>
     )
 }

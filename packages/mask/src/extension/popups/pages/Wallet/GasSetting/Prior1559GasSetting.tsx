@@ -20,10 +20,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { LoadingButton } from '@mui/lab'
-import { isEmpty } from 'lodash-es'
+import { isEmpty } from 'lodash-unified'
 import { useHistory } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({

@@ -4,12 +4,12 @@ import LinkIcon from '@mui/icons-material/Link'
 import { FormattedBalance } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-evm'
 import { formatElapsed } from '../../../Wallet/formatter'
-import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { CollectibleProvider, NFTHistory, OpenSeaAssetEventType, RaribleEventType } from '../../types'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
 import { Account } from '../Account'
+import { getOrderUnitPrice } from '../../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -51,10 +51,8 @@ export function Row({ event, isDifferenceToken }: Props) {
 
     const unitPrice = useMemo(() => {
         if (provider === CollectibleProvider.RARIBLE || !isDifferenceToken || !event.price) return null
-        const price = formatBalance(event.price.quantity, event.price.asset?.decimals ?? 0)
-        const quantity = formatBalance(event.assetQuantity?.quantity ?? 0, event.assetQuantity?.asset.decimals ?? 0)
 
-        return new BigNumber(price).dividedBy(quantity).toFixed(3, 1).toString()
+        return getOrderUnitPrice(event.price.price ?? 0, event.price.paymentToken?.decimals, event.price.quantity)
     }, [event, isDifferenceToken, provider])
 
     return (
@@ -73,27 +71,25 @@ export function Row({ event, isDifferenceToken }: Props) {
                 <>
                     <TableCell>
                         <Typography className={classes.content} variant="body2">
-                            {event.price?.asset?.imageUrl && (
-                                <Link
-                                    href={event.price.asset.assetContract.blockExplorerLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
+                            {event.price?.asset?.image_url && (
+                                <Link href={event.price.asset.permalink} target="_blank" rel="noopener noreferrer">
                                     <img
-                                        src={event.price.asset.imageUrl}
+                                        src={event.price.asset.image_url}
                                         className={classes.token}
-                                        alt={event.price.asset.symbol}
+                                        alt={event.price.paymentToken?.symbol}
                                     />
                                 </Link>
                             )}
                             {unitPrice}
-                            {event.price?.asset?.symbol}
+                            {event.price?.paymentToken?.symbol}
                         </Typography>
                     </TableCell>
                     <TableCell>
                         <Typography className={classes.content} variant="body2">
                             <FormattedBalance
-                                value={event.assetQuantity?.quantity ?? 0}
-                                decimals={event.assetQuantity?.asset.decimals ?? 0}
+                                value={event.price?.quantity ?? 0}
+                                decimals={event.price?.asset?.decimals ?? 0}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </TableCell>

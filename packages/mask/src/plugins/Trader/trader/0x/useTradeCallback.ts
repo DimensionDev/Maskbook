@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
-import { pick } from 'lodash-es'
+import { pick } from 'lodash-unified'
 import type { TransactionConfig } from 'web3-core'
 import {
     ChainId,
@@ -26,7 +26,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
             return null
         return {
             from: account,
-            ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas', 'gasPrice']),
+            ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas']),
         } as TransactionConfig
     }, [account, tradeComputed])
 

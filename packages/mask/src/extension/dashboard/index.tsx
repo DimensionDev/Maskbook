@@ -9,6 +9,8 @@ import { startPluginDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
 import type { DashboardPluginMessages, DashboardPluginServices } from '@masknet/shared'
 import { createNormalReactRoot } from '../../utils/createNormalReactRoot'
+import { InMemoryStorages, PersistentStorages } from '../../../shared/kv-storage'
+import { status } from '../../setup.ui'
 
 const msg: DashboardPluginMessages = {
     Wallet: WalletMessages,
@@ -27,5 +29,14 @@ setMessages(MaskMessages)
 setPluginServices(rpc)
 // @ts-ignore
 setPluginMessages(msg)
-startPluginDashboard(createPluginHost(undefined, () => undefined))
-createNormalReactRoot(<IntegratedDashboard />)
+startPluginDashboard(
+    createPluginHost(undefined, (pluginID, signal) => {
+        return {
+            createKVStorage(type, defaultValues) {
+                if (type === 'memory') return InMemoryStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+                else return PersistentStorages.Plugin.createSubScope(pluginID, defaultValues, signal)
+            },
+        }
+    }),
+)
+status.then(() => createNormalReactRoot(<IntegratedDashboard />))

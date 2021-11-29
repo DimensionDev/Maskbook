@@ -1,3 +1,5 @@
+// see https://github.com/import-js/eslint-plugin-import/issues/2288
+// eslint-disable-next-line import/no-deprecated
 import { styled, ListItemButton, Typography, ListItemIcon, useMediaQuery } from '@mui/material'
 import { ToolboxHintUnstyled } from '../../../components/InjectedComponents/ToolboxUnstyled'
 
@@ -24,11 +26,12 @@ const Icon = styled(ListItemIcon)`
 `
 
 export function ToolboxAtFacebook() {
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     const isSmall = useMediaQuery(`(max-height: ${fbBreakPoint}px)`)
     return (
         <ToolboxHintUnstyled
             iconSize={isSmall ? 24 : 32}
-            icon="colorful"
             Container={Container}
             ListItemButton={Item}
             Typography={Text}

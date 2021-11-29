@@ -134,7 +134,7 @@ export function fetchUserParticipatedStoryStatus(address: string): Promise<UserS
 }
 
 export function fetchSecretKey(cid: string, address: string): Promise<{key: string; iv: string}> {
-    return request<{key: string; iv: string}>(`${ALLBLUE_API_PREFIX}/clue_key?cid=${cid}&uaddr${address}`, {
+    return request<{key: string; iv: string}>(`${ALLBLUE_API_PREFIX}/clue_key?cid=${cid}&uaddr=${address}`, {
         method: 'GET',
     })
 }

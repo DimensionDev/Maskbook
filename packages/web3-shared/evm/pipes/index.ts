@@ -1,3 +1,4 @@
+import urlcat from 'urlcat'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -5,21 +6,52 @@ import {
     ERC721Token,
     NativeToken,
     NetworkType,
-    ERC721TokenDetailed,
     ProviderType,
     CollectibleProvider,
+    ERC721TokenDetailed,
 } from '../types'
 import { getChainDetailed, createLookupTableResolver } from '../utils'
-import urlcat from 'urlcat'
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
     {
-        [ProviderType.MaskWallet]: 'Mask',
+        [ProviderType.MaskWallet]: 'Mask Network',
         [ProviderType.MetaMask]: 'MetaMask',
         [ProviderType.WalletConnect]: 'WalletConnect',
         [ProviderType.CustomNetwork]: 'CustomNetwork',
+        [ProviderType.Coin98]: 'Coin98',
+        [ProviderType.WalletLink]: 'Coinbase',
+        [ProviderType.MathWallet]: 'MathWallet',
     },
     'Unknown Network',
+)
+
+export const resolveProviderDownloadLink = createLookupTableResolver<ProviderType, string>(
+    {
+        [ProviderType.MaskWallet]: 'https://mask.io/download-links',
+        [ProviderType.MetaMask]: 'https://metamask.io/download.html',
+        [ProviderType.WalletConnect]: '',
+        [ProviderType.Coin98]: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
+        [ProviderType.WalletLink]: 'https://wallet.coinbase.com/',
+        [ProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
+        [ProviderType.CustomNetwork]: '',
+    },
+    '',
+)
+
+export const resolveProviderIdentityKey = createLookupTableResolver<
+    ProviderType,
+    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
+>(
+    {
+        [ProviderType.MaskWallet]: 'isMaskWallet',
+        [ProviderType.MetaMask]: 'isMetaMask',
+        [ProviderType.WalletConnect]: '',
+        [ProviderType.MathWallet]: 'isMathWallet',
+        [ProviderType.Coin98]: 'isCoin98',
+        [ProviderType.WalletLink]: 'isWalletLink',
+        [ProviderType.CustomNetwork]: '',
+    },
+    '',
 )
 
 export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType, string>(
@@ -35,9 +67,9 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
 
 export const resolveNetworkName = createLookupTableResolver<NetworkType, string>(
     {
+        [NetworkType.Ethereum]: 'Ethereum',
         [NetworkType.Binance]: 'Binance Smart Chain',
         [NetworkType.Polygon]: 'Polygon',
-        [NetworkType.Ethereum]: 'Ethereum',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
     },

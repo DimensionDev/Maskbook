@@ -29,9 +29,9 @@ export default function NoNftCard(props: NoNftCardProps) {
     const { classes } = useStyles()
     const { t } = useI18N()
 
-    const renderNftCard = (title: string, img: string, url: string, count: number) => {
+    const renderNftCard = (title: string, img: string, url: string, count: number, address: string) => {
         return (
-            <Card className={classes.card} variant="outlined">
+            <Card key={address} className={classes.card} variant="outlined">
                 <CardMedia component={'img'} image={img} />
                 <CardContent className={classes.content}>
                     <Typography gutterBottom variant="h5" component="div">
@@ -57,7 +57,7 @@ export default function NoNftCard(props: NoNftCardProps) {
     return (
         <Box sx={{ marginTop: 1 }}>
             {conditions.map((condition) =>
-                renderNftCard(condition.name, condition.img, condition.url, condition.minAmount),
+                renderNftCard(condition.name, condition.img, condition.url, condition.minAmount, condition.address),
             )}
         </Box>
     )

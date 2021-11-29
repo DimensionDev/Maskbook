@@ -1,6 +1,5 @@
 import { Typography, Card, ButtonBase, ButtonBaseProps } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
@@ -13,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: theme.spacing(4, 1),
+        padding: theme.spacing(3, 1, 2),
         backgroundColor: getMaskColor(theme).twitterBackground,
     },
     logo: {
@@ -45,8 +44,11 @@ export interface ProviderProps
 export function Provider(props: ProviderProps) {
     const classes = useStylesExtends(useStyles(), props)
     return (
-        <Card className={classes.root} elevation={0} onClick={props.onClick}>
-            <ButtonBase className={`${classes.content} dashboard-style`} {...props.ButtonBaseProps}>
+        <Card className={classes.root} elevation={0} style={{ opacity: props.ButtonBaseProps?.disabled ? 0.5 : 1 }}>
+            <ButtonBase
+                className={`${classes.content} dashboard-style`}
+                {...props.ButtonBaseProps}
+                onClick={props.onClick}>
                 <div className={classes.logo}>{props.logo}</div>
                 <Typography className={classes.name} variant="h3">
                     {props.name}

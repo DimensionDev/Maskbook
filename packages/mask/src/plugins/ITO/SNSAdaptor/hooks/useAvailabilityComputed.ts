@@ -1,4 +1,4 @@
-import { compact } from 'lodash-es'
+import { compact } from 'lodash-unified'
 import { useChainId, useITOConstants } from '@masknet/web3-shared-evm'
 import { JSON_PayloadInMask, JSON_PayloadFromChain, ITO_Status } from '../../types'
 import { useAvailability } from './useAvailability'

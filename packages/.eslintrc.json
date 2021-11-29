@@ -9,7 +9,8 @@
             "error",
             {
                 "paths": [
-                    { "name": "lodash", "message": "Please use lodash-es instead." },
+                    { "name": "lodash", "message": "Please use lodash-unified instead." },
+                    { "name": "lodash-es", "message": "Please use lodash-unified instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
                     { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." }
                 ]

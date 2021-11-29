@@ -1,4 +1,4 @@
-import { map } from 'lodash-es'
+import { map } from 'lodash-unified'
 import { makeNewBugIssueURL } from './issue'
 
 export const DEBUG_INFO = {

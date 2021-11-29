@@ -116,12 +116,22 @@ export interface AssetsListResponse {
     assets: Asset[]
 }
 
-export async function getAssetsList(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
-    const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
+export interface CollectionsResponse {
+    collections: AssetCollection[]
+}
+
+export async function getAssetsList(
+    from: string,
+    opts: { chainId?: ChainId; page?: number; size?: number; collection?: string },
+) {
+    const { chainId = ChainId.Mainnet, page = 0, size = 50, collection } = opts
     const params = new URLSearchParams()
     params.append('owner', from.toLowerCase())
     params.append('limit', String(size))
     params.append('offset', String(size * page))
+    if (collection) {
+        params.append('collection', collection)
+    }
 
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
         return {
@@ -139,4 +149,33 @@ export async function getAssetsList(from: string, opts: { chainId?: ChainId; pag
         },
     )
     return (await response.json()) as AssetsListResponse
+}
+
+export async function getCollections(owner: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
+    const { chainId = ChainId.Mainnet, page = 0, size = 300 } = opts
+    const params = new URLSearchParams()
+    params.append('asset_owner', owner.toLowerCase())
+    params.append('limit', String(size))
+    params.append('offset', String(size * page))
+
+    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
+        return {
+            collections: [],
+        } as CollectionsResponse
+
+    const response = await fetch(
+        `https://${
+            chainId === ChainId.Mainnet ? 'api' : 'rinkeby-api'
+        }.opensea.io/api/v1/collections?${params.toString()}`,
+        {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'x-api-key': OPENSEA_API_KEY,
+            },
+        },
+    )
+    const collections = (await response.json()) as AssetCollection[]
+
+    return { collections }
 }

@@ -6,8 +6,6 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
-    formatEthereumAddress,
-    resolveTransactionLinkOnExplorer,
     TransactionType,
     useChainId,
     ZerionTransactionDirection,
@@ -16,6 +14,7 @@ import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
+import { useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -48,6 +47,11 @@ const useStyles = makeStyles()((theme) => ({
     send: {
         color: MaskColorVar.redMain,
     },
+    hover: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
 }))
 
 export interface HistoryTableRowProps {
@@ -74,8 +78,9 @@ export interface HistoryTableRowUIProps extends HistoryTableRowProps {
 
 export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId, formattedType }) => {
     const { classes } = useStyles()
+    const { Utils } = useWeb3State()
     return (
-        <TableRow>
+        <TableRow className={classes.hover}>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box style={{ display: 'flex', alignItems: 'center' }}>
                     <TransactionIcon
@@ -121,10 +126,10 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
             </TableCell>
             <TableCell className={classes.cell} align="center">
                 <Box className={classes.link}>
-                    <Typography variant="body2">{formatEthereumAddress(transaction.toAddress, 4)}</Typography>
+                    <Typography variant="body2">{Utils?.formatAddress?.(transaction.toAddress, 4)}</Typography>
                     <Link
                         sx={{ height: 21 }}
-                        href={resolveTransactionLinkOnExplorer(chainId, transaction.id)}
+                        href={Utils?.resolveTransactionLink?.(chainId, transaction.id)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <LinkOutIcon className={classes.linkIcon} />

@@ -6,7 +6,7 @@ import {
     formatEthereumAddress,
     getChainDetailed,
 } from '@masknet/web3-shared-evm'
-import { groupBy } from 'lodash-es'
+import { groupBy } from 'lodash-unified'
 
 const NATIVE_TOKEN_ADDRESS_IN_1INCH = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
 

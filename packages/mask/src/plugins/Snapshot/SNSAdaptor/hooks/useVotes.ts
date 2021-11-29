@@ -34,6 +34,12 @@ async function Suspender(identifier: ProposalIdentifier) {
             const choices =
                 typeof v.choice === 'number'
                     ? undefined
+                    : Array.isArray(v.choice)
+                    ? v.choice.map((i) => ({
+                          weight: 1,
+                          name: proposal.choices[i - 1],
+                          index: Number(i),
+                      }))
                     : Object.entries(v.choice).map(([i, weight]) => ({
                           weight,
                           name: proposal.choices[Number(i) - 1],
@@ -45,9 +51,11 @@ async function Suspender(identifier: ProposalIdentifier) {
                 choice: typeof v.choice === 'number' ? proposal.choices[v.choice - 1] : undefined,
                 choices,
                 totalWeight: choices
-                    ? choices.reduce((acc, choice) => {
-                          return acc + choice.weight
-                      }, 0)
+                    ? Array.isArray(v.choice)
+                        ? v.choice.length
+                        : choices.reduce((acc, choice) => {
+                              return acc + choice.weight
+                          }, 0)
                     : undefined,
                 address: v.voter,
                 authorIpfsHash: v.id,

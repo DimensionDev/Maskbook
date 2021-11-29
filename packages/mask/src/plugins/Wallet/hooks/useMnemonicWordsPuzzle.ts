@@ -1,4 +1,4 @@
-import { shuffle } from 'lodash-es'
+import { shuffle } from 'lodash-unified'
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { WalletRPC } from '../messages'

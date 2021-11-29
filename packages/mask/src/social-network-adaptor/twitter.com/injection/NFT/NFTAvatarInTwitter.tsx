@@ -1,5 +1,5 @@
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
-import { searchTwitterAvatarSelector } from '../../utils/selector'
+import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect } from 'react'
@@ -52,6 +52,12 @@ function NFTAvatarInTwitter() {
     const wallet = useWallet()
     const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
+    const ele = searchTwitterAvatarLinkSelector().evaluate()
+    let size = 170
+    if (ele) {
+        const style = window.getComputedStyle(ele)
+        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 3
+    }
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const onUpdate = (data: NFTAvatarEvent) => {
@@ -97,13 +103,31 @@ function NFTAvatarInTwitter() {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [onUpdate])
 
+    useEffect(() => {
+        if (!avatar || !avatar.avatarId) return
+        if (getAvatarId(identity.avatar ?? '') !== avatar.avatarId) return
+        const avatarDom = searchTwitterAvatarSelector().evaluate()?.parentElement
+        if (avatarDom) {
+            avatarDom.style.marginBottom = '10px'
+            avatarDom.style.overflow = 'unset'
+        }
+
+        const backgroundImgDom = searchTwitterAvatarSelector().evaluate()?.firstChild?.nextSibling?.firstChild
+            ?.firstChild as HTMLElement
+        if (backgroundImgDom) {
+            backgroundImgDom.style.borderRadius = '100%'
+        }
+    }, [identity, avatar, searchTwitterAvatarSelector, searchTwitterAvatarSelector])
+
     if (!avatar) return null
+
     return (
         <>
             {getAvatarId(identity.avatar ?? '') === avatar.avatarId && avatar.avatarId ? (
                 <NFTBadge
                     avatar={avatar}
-                    size={14}
+                    size={size}
+                    width={15}
                     classes={{ root: classes.root, text: classes.text, icon: classes.icon }}
                 />
             ) : null}
