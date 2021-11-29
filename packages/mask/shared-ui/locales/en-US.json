@@ -1,4 +1,6 @@
 {
+    "plugins": "Plugins",
+    "experimental": "Experimental",
     "add_to_key_store_success": "The public key has been added to the Keystore",
     "add_token": "Add Token",
     "add_token_search_hint": "Search Tokens Symbols Name or Contract address",
@@ -80,6 +82,7 @@
     "post_dialog__select_recipients_title": "Select Recipients",
     "post_dialog__select_specific_e2e_target_title": "and Mask Network users ({{selected}} selected)",
     "post_dialog__title": "Mask: Compose",
+    "post_dialog_enable_paste_auto": "Enable auto paste",
     "post_modal_hint__button": "Compose encrypted post",
     "post_substitute_label": "Mask",
     "hide": "Hide",
