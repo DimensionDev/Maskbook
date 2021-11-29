@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Serialize Text 1`] = `Uint8Array [ 920094010182b0636f6d2e6578616d706c652e74657374a26869b1636f6d2e6578616d706c652e746573743283a16101a1629102a163c40401020304ab48656c6c6f20776f726c64 ]`;
+
+exports[`Serialize Text 2`] = `
+Ok(Object {
+  "content": "Hello world",
+  "meta": Object {
+    "com.example.test": "hi",
+    "com.example.test2": Object {
+      "a": 1,
+      "b": Array [
+        2,
+      ],
+      "c": Uint8Array [ 01020304 ],
+    },
+  },
+  "serializable": true,
+  "type": "text",
+  "version": 1,
+})
+`;
+
+exports[`Serialize Tuple 1`] = `Uint8Array [ 9200940001c09294010182b0636f6d2e6578616d706c652e74657374a26869b1636f6d2e6578616d706c652e746573743283a16101a1629102a163c40401020304ab48656c6c6f20776f726c64940101c0a7616e6f74686572 ]`;
+
+exports[`Serialize Tuple 2`] = `
+Ok(Object {
+  "items": Array [
+    Object {
+      "content": "Hello world",
+      "meta": Object {
+        "com.example.test": "hi",
+        "com.example.test2": Object {
+          "a": 1,
+          "b": Array [
+            2,
+          ],
+          "c": Uint8Array [ 01020304 ],
+        },
+      },
+      "serializable": true,
+      "type": "text",
+      "version": 1,
+    },
+    Object {
+      "content": "another",
+      "meta": undefined,
+      "serializable": true,
+      "type": "text",
+      "version": 1,
+    },
+  ],
+  "meta": undefined,
+  "type": "tuple",
+})
+`;

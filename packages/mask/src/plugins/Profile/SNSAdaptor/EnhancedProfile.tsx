@@ -130,9 +130,9 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                 <div className={classes.tags}>
                     <PageTag
                         daoPayload={daoPayload}
-                        onChange={(tag) => setCurrentTag(tag)}
                         tag={currentTag}
                         isOwnAddress={isOwnAddress}
+                        onChange={(tag) => setCurrentTag(tag)}
                     />
                 </div>
                 <div className={classes.content}>{content}</div>
