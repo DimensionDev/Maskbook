@@ -21,9 +21,9 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
     const { classes } = useStyles()
     const { isOwnAddress } = props
     const address = useAccount()
-    const [isRSS3FileExist, setIsRSS3FileExist] = useState(false)
+    const [isRSS3FileExist, setRSS3FileExist] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
-    const [isEVMpAddress, setIsEVMpAddress] = useState(false)
+    const [isEVMpAddress, setEVMpAddress] = useState(false)
 
     const oneKeyActivate = async () => {
         setIsLoading(true)
@@ -32,7 +32,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
                 // Activate RSS3 account
                 console.log('Hello RSS3')
             }
-            setIsRSS3FileExist(true)
+            setRSS3FileExist(true)
         } catch (error) {
             console.log(error)
         }
@@ -41,18 +41,18 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
 
     const testAccount = async () => {
         if (EthereumAddress.isValid(address)) {
-            setIsEVMpAddress(true)
+            setEVMpAddress(true)
             if (!RSS3.isValidRSS3()) {
                 const apiUser = RSS3.getAPIUser().persona as IRSS3
                 try {
                     await apiUser.files.get(address)
                     await RSS3.setPageOwner(address)
-                    setIsRSS3FileExist(true)
+                    setRSS3FileExist(true)
                 } catch (error) {
-                    setIsRSS3FileExist(false)
+                    setRSS3FileExist(false)
                 }
             } else {
-                setIsRSS3FileExist(true)
+                setRSS3FileExist(true)
             }
         }
         setIsLoading(false)
