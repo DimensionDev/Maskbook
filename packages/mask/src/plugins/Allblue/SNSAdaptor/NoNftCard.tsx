@@ -38,15 +38,11 @@ export default function NoNftCard(props: NoNftCardProps) {
                         {title}
                     </Typography>
                     <Typography variant={'body2'} color={'textSecondary'}>
-                        {t(count > 1 ? 'plugin_allblue_buy_nft_tip' : 'plugin_allblue_buy_nfts_tip', { count })}
+                        {t(count > 1 ? 'plugin_allblue_buy_nfts_tip' : 'plugin_allblue_buy_nft_tip', { count })}
                     </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'flex-end' }} className={classes.content}>
-                    <Button
-                        component={'a'}
-                        href={url}
-                        target={'_blank'}
-                        size={conditions.length > 1 ? 'small' : 'medium'}>
+                    <Button component={'a'} href={url} variant="contained" target={'_blank'} size={'small'}>
                         {t('plugin_allblue_buy')}
                     </Button>
                 </CardActions>

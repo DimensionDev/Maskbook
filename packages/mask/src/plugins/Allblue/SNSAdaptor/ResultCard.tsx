@@ -69,8 +69,8 @@ export default function ResultCard(props: ResultViewProps) {
                         {result.question}
                     </Typography>
                     {result.options.map((option, index) => {
-                        const count = result.count.find((e) => e.choice === index)
-                        const percent = (((count?.value || 0) * 100) / total).toFixed(1)
+                        const value = result.count.find((e) => e.choice === index)?.value || 0
+                        const percent = ((value * 100) / total).toFixed(1)
                         return (
                             <Card
                                 variant={'outlined'}
@@ -93,7 +93,9 @@ export default function ResultCard(props: ResultViewProps) {
                                         <Chip
                                             sx={{ marginRight: '8px' }}
                                             size={'small'}
-                                            label={`${count?.value || 0}${t('plugin_allblue_votes')}`}
+                                            label={`${value} ${t(
+                                                value > 1 ? 'plugin_allblue_votes' : 'plugin_allblue_vote',
+                                            )}`}
                                         />
                                         <Typography color="textPrimary" sx={{ fontSize: '13px', lineHeight: '24px' }}>
                                             {option}

@@ -4,7 +4,7 @@ export enum AllbluePostType {
     Poll = 'poll',
     PuzzleResult = 'puzzle_result',
     PollResult = 'poll_result',
-    Encryption = 'encryption'
+    Encryption = 'encryption',
 }
 
 export interface ProposalIdentifier {

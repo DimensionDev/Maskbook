@@ -76,8 +76,11 @@ export function PostInspector(props: PostInspectorProps) {
         Allblue_Consts.then((res) => {
             setConsts(res)
         })
-        fetchData()
     }, [])
+
+    useEffect(() => {
+        fetchData()
+    }, [account])
 
     const fetchData = () => {
         postType !== AllbluePostType.Encryption &&

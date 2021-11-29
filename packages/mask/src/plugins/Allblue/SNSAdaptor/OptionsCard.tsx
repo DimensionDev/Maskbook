@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
 import { Alert, Box, Card, CardContent, Chip, Step, StepContent, StepLabel, Stepper, Typography } from '@mui/material'
-import { Adjust, DoneOutlined, Send } from '@mui/icons-material'
+import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send } from '@mui/icons-material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import NoNftCard from './NoNftCard'
 import { createContract, useChainId, useWeb3 } from '../../../../../web3-shared/evm'
@@ -13,11 +13,11 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { AbiItem } from 'web3-utils'
 import { BorderLinearProgress } from './ResultCard'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useOptionsStyles = makeStyles()((theme) => {
     return {
         progressOption: {
-            cursor: 'pointer',
             transition: 'all .5s',
             padding: '12px 18px',
             borderRadius: '16px',
@@ -32,7 +32,6 @@ const useOptionsStyles = makeStyles()((theme) => {
             },
         },
         blockChip: {
-            color: theme.palette.text.primary,
             width: '100%',
             marginBottom: 8,
             justifyContent: 'space-between',
@@ -132,6 +131,7 @@ export default function OptionsCard(props: OptionsViewProps) {
     }, [userStatus])
 
     const checkCondition = async () => {
+        setError('')
         if (userStatus) {
             for (const condition of userStatus.conditions) {
                 if (condition.chainId !== chainId) {
@@ -172,6 +172,7 @@ export default function OptionsCard(props: OptionsViewProps) {
 
             return !!userStatus.count ? (
                 <Card
+                    sx={choice !== index ? { cursor: 'pointer' } : {}}
                     className={classes.progressOption}
                     variant={'outlined'}
                     key={option}
@@ -194,18 +195,26 @@ export default function OptionsCard(props: OptionsViewProps) {
                             <Chip
                                 sx={{ marginRight: '8px' }}
                                 size={'small'}
-                                label={`${count}${t('plugin_allblue_votes')}`}
+                                label={`${count} ${t(count > 1 ? 'plugin_allblue_votes' : 'plugin_allblue_vote')}`}
                             />
                             <Typography color="textPrimary" sx={{ fontSize: '13px', lineHeight: '24px' }}>
                                 {option}
                             </Typography>
                         </Box>
-                        {choice === index && (
+                        {choice === index ? (
                             <Chip
-                                icon={<Adjust />}
+                                icon={<RadioButtonChecked />}
                                 size={'small'}
                                 color={'primary'}
                                 label={t('plugin_allblue_selected')}
+                            />
+                        ) : (
+                            <Chip
+                                sx={{ cursor: 'pointer' }}
+                                icon={<RadioButtonUnchecked />}
+                                size={'small'}
+                                color={'default'}
+                                label={t('plugin_allblue_unselect')}
                             />
                         )}
                     </Box>
@@ -383,9 +392,17 @@ export default function OptionsCard(props: OptionsViewProps) {
                         </>
                     )}
                     {error === 'unsupported-chain' && (
-                        <Alert severity="warning">{`${t('plugin_allblue_unsupported_chain', {
-                            chain: userStatus.conditions[0]?.chain || '',
-                        })}`}</Alert>
+                        <>
+                            <Alert severity="info">
+                                <div>{`${t('plugin_allblue_unsupported_chain', {
+                                    chain: userStatus.conditions[0]?.chain || '',
+                                })}`}</div>
+                                <EthereumChainBoundary
+                                    noSwitchNetworkTip={true}
+                                    chainId={userStatus.conditions[0]?.chainId}
+                                />
+                            </Alert>
+                        </>
                     )}
                     {error === 'insufficient-nft' && (
                         <Alert severity="info">{t('plugin_allblue_insufficient_nft')}</Alert>

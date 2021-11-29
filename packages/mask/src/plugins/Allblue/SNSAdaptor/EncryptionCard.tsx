@@ -13,6 +13,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
 
     const { t } = useI18N()
     const { address } = useContext(AllblueContext)
+    const [failed, setFailed] = useState<boolean>(false)
     const [message, setMessage] = useState<string>('')
     const [err, setErr] = useState<{
         code: number
@@ -20,6 +21,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
     }>()
 
     useEffect(() => {
+        setFailed(false)
         try {
             const raw = JSON.parse(Buffer.from(payload, 'base64').toString())
             if (!!raw.cid && !!raw.data) {
@@ -37,7 +39,9 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                         setErr(e)
                     })
             }
-        } catch (e) {}
+        } catch (e) {
+            setFailed(true)
+        }
     }, [payload])
 
     return (
@@ -54,7 +58,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                     </Typography>
                 </>
             )}
-
+            {failed && <Alert severity="error">{t('plugin_allblue_decrypted_failed')}</Alert>}
             {err && (
                 <Alert severity="info" sx={{ mb: 1 }}>
                     {t('plugin_allblue_decrypt_102')}
