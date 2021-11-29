@@ -135,6 +135,7 @@ export function dispatchEventRaw<T extends Event>(
             event,
             clone_into({
                 get(target, key) {
+                    // HACK: https://github.com/DimensionDev/Maskbook/pull/4970/
                     if (key === 'currentTarget' || (key === 'target' && isTwitter()))
                         return unwrapXRay_CPPBindingObject(currentTarget())
                     return
@@ -144,6 +145,7 @@ export function dispatchEventRaw<T extends Event>(
     }
 }
 
+const { includes } = String.prototype
 function isTwitter(): Boolean {
-    return window.location.href.includes('twitter.com')
+    return apply(includes, window.location.href, ['twitter.com'])
 }
