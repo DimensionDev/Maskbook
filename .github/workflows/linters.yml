@@ -26,7 +26,7 @@ jobs:
           version: '6.23.1'
       - uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '16
           cache: 'pnpm'
       - run: pnpm install
       - run: npx gulp locale-kit
@@ -47,7 +47,7 @@ jobs:
           version: '6.23.1'
       - uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '16
           cache: 'pnpm'
       - run: pnpm install
       - run: npx gulp codegen
@@ -64,7 +64,7 @@ jobs:
           version: '6.23.1'
       - uses: actions/setup-node@v2
         with:
-          node-version: '17'
+          node-version: '16
           cache: 'pnpm'
       - run: pnpm install
       - run: pnpm run lint:ci -- --max-warnings=0
