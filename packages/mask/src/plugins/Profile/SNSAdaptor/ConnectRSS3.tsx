@@ -22,11 +22,11 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
     const { isOwnAddress } = props
     const address = useAccount()
     const [isRSS3FileExist, setRSS3FileExist] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
+    const [loading, setLoading] = useState(true)
     const [isEVMpAddress, setEVMpAddress] = useState(false)
 
     const oneKeyActivate = async () => {
-        setIsLoading(true)
+        setLoading(true)
         try {
             if (await RSS3.connect(address)) {
                 // Activate RSS3 account
@@ -36,7 +36,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
         } catch (error) {
             console.log(error)
         }
-        setIsLoading(false)
+        setLoading(false)
     }
 
     const testAccount = async () => {
@@ -55,7 +55,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
                 setRSS3FileExist(true)
             }
         }
-        setIsLoading(false)
+        setLoading(false)
     }
 
     useEffect(() => {
@@ -68,7 +68,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
             <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
             {isOwnAddress ? (
                 <div className="flex flex-col my-8 gap-y-6 items-center justify-center">
-                    {isLoading ? (
+                    {loading ? (
                         <Button isOutlined={false} color={COLORS.primary} width="w-60" height="h-14">
                             <CircularProgress sx={{ color: 'text.Primary' }} size="1rem" />
                         </Button>
