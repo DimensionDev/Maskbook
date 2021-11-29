@@ -21,7 +21,7 @@ import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { useNFTscanFindAssets } from '../hooks/useNFTscanFindAssets'
-import { unionBy } from 'lodash-es'
+import { unionBy } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => ({
     search: {

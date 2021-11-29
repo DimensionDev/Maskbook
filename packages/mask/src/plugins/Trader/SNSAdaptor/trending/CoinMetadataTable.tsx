@@ -4,6 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import FileCopyIcon from '@mui/icons-material/FileCopy'
 import type { DataProvider } from '@masknet/public-api'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { Trending } from '../../types'
 import { Linking } from './Linking'
 import { CoinMetadataTags } from './CoinMetadataTags'
@@ -103,7 +104,11 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                             </TableCell>
                             <TableCell>
                                 <Typography variant="body2" component="span">
-                                    <FormattedAddress address={trending.coin.contract_address} size={4} />
+                                    <FormattedAddress
+                                        address={trending.coin.contract_address}
+                                        size={4}
+                                        formatter={formatEthereumAddress}
+                                    />
                                 </Typography>
                                 <IconButton color="primary" size="small" onClick={onCopyAddress}>
                                     <FileCopyIcon fontSize="small" />

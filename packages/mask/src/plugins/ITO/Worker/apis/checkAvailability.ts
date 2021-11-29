@@ -1,27 +1,17 @@
 import ITO_ABI from '@masknet/web3-contracts/abis/ITO.json'
 import ITO2_ABI from '@masknet/web3-contracts/abis/ITO2.json'
-import { first } from 'lodash-es'
-import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
-import { JsonRpcProvider } from '@ethersproject/providers'
 import type { Availability } from '../../types'
+import Services from '../../../../extension/service'
 
 const interFaceV1 = new Interface(ITO_ABI)
 const interFaceV2 = new Interface(ITO2_ABI)
 
 // ITO Contract readonly method, read it no matter on whatever chains you are.
 export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId, isV1 = false) {
-    const { RPC } = getRPCConstants(chainId)
-    const providerURL = first(RPC)
-    if (!providerURL) throw new Error('Unknown chain id.')
-    const provider = new JsonRpcProvider(providerURL)
-
     const callData = (isV1 ? interFaceV1 : interFaceV2).encodeFunctionData('check_availability', [pid])
-    const data = await provider.call({
-        to,
-        from,
-        data: callData,
-    })
+    const data = await Services.Ethereum.call({ to, from, data: callData }, { chainId })
     return decodeResult(data, isV1)
 }
 

@@ -31,7 +31,7 @@
     "notistack": "2.0.3",
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",
-    "tss-react": "^2.0.1",
+    "tss-react": "^2.1.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   },
@@ -44,6 +44,6 @@
     "@storybook/manager-webpack5": "^6.4.0-alpha.38",
     "@storybook/react": "^6.3.12",
     "babel-loader": "^8.2.3",
-    "webpack": "^5.61.0"
+    "webpack": "^5.64.4"
   }
 }

@@ -18,9 +18,10 @@ import {
     pow10,
     getChainShortName,
     getChainIdFromNetworkType,
+    ERC721TokenCollectionInfo,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { values } from 'lodash-es'
+import { values } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
@@ -35,15 +36,42 @@ import type {
     ZerionCovalentAsset,
 } from '../types'
 
+export async function getCollectionsNFT(
+    address: string,
+    chainId: ChainId,
+    provider: CollectibleProvider,
+    page?: number,
+    size?: number,
+): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
+    if (provider === CollectibleProvider.OPENSEA) {
+        const { collections } = await OpenSeaAPI.getCollections(address, { chainId, page, size })
+
+        return {
+            collections: collections.map((x) => ({
+                name: x.name,
+                image: x.image_url || undefined,
+                slug: x.slug,
+            })),
+            hasNextPage: collections.length === size,
+        }
+    }
+
+    return {
+        collections: [],
+        hasNextPage: false,
+    }
+}
+
 export async function getAssetsListNFT(
     address: string,
     chainId: ChainId,
     provider: CollectibleProvider,
     page?: number,
     size?: number,
+    collection?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
     if (provider === CollectibleProvider.OPENSEA) {
-        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
+        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size, collection })
         return {
             assets: assets
                 .filter(
@@ -137,7 +165,14 @@ function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
                 token:
                     chainIdFromId && isChainIdMainnet(chainIdFromId)
                         ? createNativeToken(chainIdFromChain)
-                        : createERC20Token(chainIdFromChain, formatEthereumAddress(y.id), y.decimals, y.name, y.symbol),
+                        : createERC20Token(
+                              chainIdFromChain,
+                              formatEthereumAddress(y.id),
+                              y.decimals,
+                              y.name,
+                              y.symbol,
+                              y.logo_url ? [y.logo_url] : undefined,
+                          ),
                 balance: new BigNumber(y.balance).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),

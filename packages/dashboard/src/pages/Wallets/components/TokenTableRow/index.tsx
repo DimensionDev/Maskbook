@@ -2,7 +2,7 @@ import { memo, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { Box, Button, TableCell, TableRow, Tooltip, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { ChainIcon, FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedCurrency, TokenIcon, WalletIcon } from '@masknet/shared'
 import {
     Asset,
     CurrencyType,
@@ -12,6 +12,7 @@ import {
     pow10,
     useChainId,
 } from '@masknet/web3-shared-evm'
+import { useWeb3State, useNetworkDescriptors } from '@masknet/plugin-infra'
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 
@@ -28,6 +29,11 @@ const useStyles = makeStyles()((theme) => ({
         textTransform: 'capitalize',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
+    },
+    row: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
     },
     cell: {
         padding: theme.spacing(2),
@@ -53,6 +59,9 @@ const useStyles = makeStyles()((theme) => ({
     tipArrow: {
         color: '#111432',
     },
+    networkIcon: {
+        border: `1px solid ${theme.palette.background.default}`,
+    },
 }))
 
 export interface TokenTableRowProps {
@@ -63,13 +72,14 @@ export interface TokenTableRowProps {
 
 export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }) => {
     const t = useDashboardI18N()
-    const currentChainId = useChainId()
     const { classes } = useStyles()
-
+    const currentChainId = useChainId()
+    const { Utils } = useWeb3State()
+    const networkDescriptors = useNetworkDescriptors()
     const isOnCurrentChain = useMemo(() => currentChainId === asset.token.chainId, [asset, currentChainId])
 
     return (
-        <TableRow>
+        <TableRow className={classes.row}>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Box position="relative">
@@ -82,7 +92,11 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                             AvatarProps={{ sx: { width: 36, height: 36 } }}
                         />
                         <Box className={classes.chainIcon}>
-                            <ChainIcon chainId={asset.token.chainId} size={16} />
+                            <WalletIcon
+                                classes={{ networkIcon: classes.networkIcon }}
+                                size={16}
+                                networkIcon={networkDescriptors.find((x) => x.chainId === asset.token.chainId)?.icon}
+                            />
                         </Box>
                     </Box>
                     <Typography className={classes.symbol}>{asset.token.symbol}</Typography>
@@ -105,7 +119,11 @@ export const TokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, onSwap }
                     {getTokenUSDValue(asset) < 0.01 ? (
                         '<0.01'
                     ) : (
-                        <FormattedCurrency value={getTokenUSDValue(asset).toFixed(2)} sign="$" />
+                        <FormattedCurrency
+                            value={getTokenUSDValue(asset).toFixed(2)}
+                            sign="$"
+                            formatter={Utils?.formatCurrency}
+                        />
                     )}
                 </Typography>
             </TableCell>

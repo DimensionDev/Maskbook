@@ -1,7 +1,6 @@
 import { useBlockie } from '@masknet/web3-shared-evm'
 import { Avatar, AvatarProps } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

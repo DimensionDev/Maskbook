@@ -55,7 +55,7 @@ const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             padding: '3px 16px',
-            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#eff3f4'}`,
             '& > h2': {
                 display: 'inline-block',
                 whiteSpace: 'nowrap',

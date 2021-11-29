@@ -11,8 +11,7 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { first } from 'lodash-es'
-import { useCustomSnackbar } from '@masknet/theme'
+import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
@@ -79,7 +78,6 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -94,25 +92,18 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
-        try {
-            await PluginCollectibleRPC.createBuyOrder({
-                asset: toAsset({
-                    tokenId: asset.value.token_id,
-                    tokenAddress: asset.value.token_address,
-                    schemaName: asset.value.asset_contract.schemaName,
-                }),
-                accountAddress: account,
-                startAmount: Number.parseFloat(amount),
-                expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
-                paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
-            })
-        } catch (error) {
-            if (error instanceof Error) {
-                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
-            }
-            throw error
-        }
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, showSnackbar])
+        await PluginCollectibleRPC.createBuyOrder({
+            asset: toAsset({
+                tokenId: asset.value.token_id,
+                tokenAddress: asset.value.token_address,
+                schemaName: asset.value.asset_contract.schema_name,
+            }),
+            accountAddress: account,
+            startAmount: Number.parseFloat(amount),
+            expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
+            paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
+        })
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

@@ -1,28 +1,19 @@
+import { CircularProgress } from '@mui/material'
 import { useEffect, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '../../../utils'
 import { useNFTAvatar } from '../hooks'
 import type { AvatarMetaDB } from '../types'
-import { NFTBadge } from './NFTBadge'
+import { RainbowBox } from './RainbowBox'
 
-const useStyles = makeStyles()((theme) => ({
-    root: {
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: 22,
-        zIndex: 1,
-        transform: 'scale(0.65)',
-    },
-}))
-interface NFTBadgeTimelineProps {
+interface NFTBadgeTimelineProps extends withClasses<'root'> {
     userId: string
     avatarId: string
+    width: number
+    height: number
 }
 
 export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
-    const { userId, avatarId } = props
-    const { classes } = useStyles()
+    const { userId, avatarId, width, height } = props
     const { loading, value: _avatar } = useNFTAvatar(userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB>()
     const [avatarId_, setAvatarId_] = useState('')
@@ -49,9 +40,5 @@ export function NFTBadgeTimeline(props: NFTBadgeTimelineProps) {
     if (!avatar) return null
     if (avatarId_ && avatar.avatarId !== avatarId_) return null
 
-    return (
-        <div className={classes.root}>
-            <NFTBadge avatar={avatar} />
-        </div>
-    )
+    return loading ? <CircularProgress size={width} /> : <RainbowBox width={width} height={height} radius="100%" />
 }

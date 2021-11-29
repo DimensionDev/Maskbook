@@ -98,6 +98,13 @@ export function useCreateNftRedpacketCallback(
                 nftRedPacketContract.methods
                     .create_red_packet(...params)
                     .send(config as NonPayableTx)
+                    // Note: DO NOT remove this event listener since it relates to password saving.
+                    .on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
+                        setCreateState({
+                            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+                            hash,
+                        })
+                    })
                     .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
                         setCreateState({
                             type: TransactionStateType.CONFIRMED,

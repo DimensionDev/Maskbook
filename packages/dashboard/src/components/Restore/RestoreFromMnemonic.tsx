@@ -3,7 +3,7 @@ import { useList } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
-import { some } from 'lodash-es'
+import { some } from 'lodash-unified'
 import { MaskAlert } from '../MaskAlert'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { Services } from '../../API'
@@ -29,7 +29,7 @@ export const RestoreFromMnemonic = () => {
     const [error, setError] = useState('')
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const t = useDashboardI18N()
-    const [values, { updateAt }] = useList(Array.from<string>({ length: 12 }).fill(''))
+    const [values, { updateAt, set: setMnemonic }] = useList(Array.from<string>({ length: 12 }).fill(''))
 
     const handleImport = async () => {
         try {
@@ -57,6 +57,7 @@ export const RestoreFromMnemonic = () => {
                         setError('')
                     }}
                     puzzleWords={values}
+                    setAll={setMnemonic}
                 />
                 {error && (
                     <Typography className={classes.error} variant="body2">

@@ -1,8 +1,8 @@
 import { Paper, Stack, Tab, Tabs } from '@mui/material'
 import { makeStyles, MaskColorVar, useCustomSnackbar } from '@masknet/theme'
-import { PageFrame } from '../../components/DashboardFrame'
+import { PageFrame } from '../../components/PageFrame'
 import { useEffect, useState } from 'react'
-import { capitalize } from 'lodash-es'
+import { capitalize } from 'lodash-unified'
 import { TabContext, TabPanel } from '@mui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
 import { PersonaDrawer } from './components/PersonaDrawer'
@@ -83,7 +83,7 @@ function Personas() {
                 <Paper variant="rounded" className={classes.personaCard}>
                     <PersonaRowCard />
                 </Paper>
-                <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <ContentContainer style={{ display: 'flex', flexDirection: 'column' }}>
                     <TabContext value={activeTab}>
                         <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                             {definedSocialNetworks.map(({ networkIdentifier }) => (

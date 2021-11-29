@@ -16,10 +16,6 @@
             "url": "http://json-schema.org/draft-07/schema"
         },
         {
-            "fileMatch": ["/packages/mask/src/locales/*.json"],
-            "url": "/.vscode/schema/locale.json"
-        },
-        {
             "fileMatch": ["/packages/constants/src/*-constants.json"],
             "url": "/.vscode/schema/constants.json"
         }

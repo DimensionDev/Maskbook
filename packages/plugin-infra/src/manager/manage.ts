@@ -7,9 +7,10 @@ import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store
 // not-loaded => loaded
 // loaded => activated (activatePlugin)
 // activated => loaded (stopPlugin)
-export function createManager<T extends Plugin.Shared.DefinitionDeferred<Context>, Context>(
-    selectLoader: (plugin: Plugin.DeferredDefinition) => undefined | Plugin.Loader<T>,
-) {
+export function createManager<
+    T extends Plugin.Shared.DefinitionDeferred<Context>,
+    Context extends Plugin.Shared.SharedContext,
+>(selectLoader: (plugin: Plugin.DeferredDefinition) => undefined | Plugin.Loader<T>) {
     interface ActivatedPluginInstance {
         instance: T
         controller: AbortController
@@ -43,10 +44,10 @@ export function createManager<T extends Plugin.Shared.DefinitionDeferred<Context
     function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: string) => boolean) {
         _host = host
         const { enabled, signal, addI18NResource } = _host
-        const off2 = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
+        const removeListener = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
 
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
-        signal?.addEventListener('abort', off2)
+        signal?.addEventListener('abort', removeListener)
 
         for (const plugin of registeredPlugins) {
             plugin.i18n && addI18NResource(plugin.ID, plugin.i18n)

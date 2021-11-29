@@ -1,5 +1,6 @@
-import { PopupRoutes, getRouteURLWithNoParam } from '..'
+import { PopupRoutes } from '@masknet/shared-base'
 import urlcat from 'urlcat'
+import { getRouteURLWithNoParam } from '../utils'
 
 export interface SignRequest {
     // TODO: support sign binary (u8[])

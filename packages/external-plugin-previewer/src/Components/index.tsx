@@ -1,13 +1,10 @@
 import { createElement } from 'react'
+import type { Component } from './types'
 
 export { MaskCard } from './MaskCard'
 export { MaskBlockQuote as MaskCodeBlock } from './BlockQuote'
 export { Translate } from './Translate'
-
-export interface Component<P> {
-    (props: P, dispatchEvent: (event: Event) => void): React.ReactChild
-    displayName: string
-}
+export * from './types'
 
 export const span = createNativeTagDelegate('span')
 export const div = createNativeTagDelegate('div')

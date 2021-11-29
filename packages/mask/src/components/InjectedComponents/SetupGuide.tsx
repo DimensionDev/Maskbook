@@ -9,6 +9,8 @@ import {
     unstable_createMuiStrictModeTheme,
     IconButton,
     Box,
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
     Theme,
 } from '@mui/material'
@@ -17,7 +19,7 @@ import { ArrowRight } from 'react-feather'
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
 import CloseIcon from '@mui/icons-material/Close'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import { useValueRef } from '@masknet/shared'
 import { useI18N, MaskMessages, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
@@ -202,6 +204,8 @@ interface ContentUIProps {
 function ContentUI(props: ContentUIProps) {
     const { classes } = useStyles()
     const xsMatch = useMatchXS()
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
@@ -244,6 +248,8 @@ function WizardDialog(props: WizardDialogProps) {
     const { t } = useI18N()
     const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
     const { classes } = useWizardDialogStyles()
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     return (
@@ -341,6 +347,8 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
         e.preventDefault()
         onConnect()
     }
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     const onJump = useCallback(

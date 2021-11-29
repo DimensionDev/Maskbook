@@ -1,5 +1,5 @@
 import JSBI from 'jsbi'
-import { memoize } from 'lodash-es'
+import { memoize } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } from '@uniswap/sdk-core'
 import type { Trade } from '@uniswap/v2-sdk'

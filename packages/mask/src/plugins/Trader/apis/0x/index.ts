@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { BIPS_BASE, ZRX_BASE_URL } from '../../constants'
 import type {
     SwapErrorResponse,

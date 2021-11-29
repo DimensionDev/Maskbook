@@ -1,9 +1,10 @@
 import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
-import { i18n } from '../utils/i18n-next'
+import { i18n } from '../../shared-ui/locales_legacy'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
+import { PLUGIN_ID } from '../plugins/EVM/constants'
 
 /**
  * Does the debug mode on
@@ -32,6 +33,12 @@ export const appearanceSettings = createGlobalSettings<Appearance>('appearance',
 export const languageSettings = createGlobalSettings<LanguageOptions>('language', LanguageOptions.__auto__, {
     primary: () => i18n.t('settings_language'),
     secondary: () => i18n.t('settings_language_secondary'),
+})
+//#endregion
+
+//#region web3 plugin ID
+export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_ID, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 //#endregion
 

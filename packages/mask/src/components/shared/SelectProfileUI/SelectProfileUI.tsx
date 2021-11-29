@@ -1,11 +1,10 @@
 import { useState, useCallback } from 'react'
 import { ListItem, ListItemText, InputBase, Button, List, Box, Chip } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import type { Profile } from '../../../database'
 import { ProfileInList } from './ProfileInList'
 import { ProfileInChip } from './ProfileInChip'
-import { useStylesExtends } from '@masknet/shared'
 import { FixedSizeList } from 'react-window'
 
 export interface SelectProfileUIProps extends withClasses<'root'> {

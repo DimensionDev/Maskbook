@@ -1,6 +1,5 @@
 import { CardHeader, CardContent, CardActions, Skeleton } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 
 const useStyles = makeStyles()({

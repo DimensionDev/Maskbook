@@ -1,11 +1,11 @@
+import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { resolveProviderName, ProviderType } from '@masknet/web3-shared-evm'
+import { useStylesExtends, makeStyles, getMaskColor } from '@masknet/theme'
+import { ImageIcon } from '@masknet/shared'
+import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
+import { ProviderType, resolveProviderName } from '@masknet/web3-shared-evm'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
-import { ProviderIcon, useStylesExtends } from '@masknet/shared'
-import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
-import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -32,11 +32,13 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const providerDescriptor = useProviderDescriptor(providerType, NetworkPluginID.PLUGIN_EVM)
+
     return (
         <Paper elevation={0}>
             <Card className={`${classes.content} dashboard-style`} elevation={0}>
                 <Box display="flex" alignItems="center">
-                    <ProviderIcon providerType={providerType} />
+                    <ImageIcon icon={providerDescriptor?.icon} />
                     <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
                         {connected ? (
                             <Typography>Connected to {resolveProviderName(providerType)}</Typography>
@@ -51,7 +53,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         ) : null}
                         {!loading && error ? (
                             <Typography className={classes.error} color="red" variant="body2">
-                                {error.message}
+                                {error.message || `Failed to connect to ${resolveProviderName(providerType)}.`}
                             </Typography>
                         ) : null}
                     </Box>

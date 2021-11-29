@@ -13,8 +13,8 @@ import {
     Switch,
     Typography,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
 import { TradeProvider } from '@masknet/public-api'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { useI18N } from '../../../../utils'
