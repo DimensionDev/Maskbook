@@ -16,6 +16,7 @@ import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 import type { Profile } from '../../database'
 import { CompositionContext } from './CompositionContext'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()({
     root: {
@@ -131,7 +132,9 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 label={
                     <>
                         {t('post_dialog__image_payload')}
-                        {Flags.image_payload_marked_as_beta && <sup className={classes.sup}>(Beta)</sup>}
+                        {Flags.image_payload_marked_as_beta && (
+                            <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                        )}
                     </>
                 }
                 onClick={() => setEncoding(encodingKind === 'image' ? 'text' : 'image')}
@@ -170,7 +173,12 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 />
 
                 <Typography>
-                    {t('plugins')} <sup>({t('experimental')})</sup>
+                    <Trans
+                        i18nKey="post_dialog_plugins_experimental"
+                        components={{
+                            sup: <sup />,
+                        }}
+                    />
                 </Typography>
                 <div className={classes.flex}>
                     <PluginEntryRender readonly={sending} ref={PluginEntry} />
