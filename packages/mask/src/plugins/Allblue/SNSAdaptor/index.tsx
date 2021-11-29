@@ -38,7 +38,7 @@ const isAllblueURL = (x: string): boolean =>
 function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()
     return (
-        <MaskPluginWrapper pluginName="Allblue">
+        <MaskPluginWrapper pluginName="FindTruman">
             <Suspense
                 fallback={Array.from({ length: 2 })
                     .fill(0)
@@ -75,7 +75,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer url={link} />
     },
     CompositionDialogEntry: {
-        label: '🌊 All Blue',
+        label: '🔍 FindTruman',
         dialog: AllBlueDialog,
     },
     ToolbarEntry: {

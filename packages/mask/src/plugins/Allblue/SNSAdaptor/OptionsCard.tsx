@@ -32,7 +32,7 @@ const useOptionsStyles = makeStyles()((theme) => {
             },
         },
         blockChip: {
-            color: '#fff',
+            color: theme.palette.text.primary,
             width: '100%',
             marginBottom: 8,
             justifyContent: 'space-between',

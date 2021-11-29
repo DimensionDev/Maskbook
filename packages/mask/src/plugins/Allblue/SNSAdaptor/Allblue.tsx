@@ -140,7 +140,7 @@ export function Allblue(props: AllblueProps) {
                                     <Box>
                                         {unvoted && (
                                             <Chip
-                                                sx={{ marginRight: '8px', color: '#fff' }}
+                                                sx={{ marginRight: '8px' }}
                                                 size="small"
                                                 label={t('plugin_allblue_have_not_voted')}
                                                 color="default"
@@ -149,7 +149,7 @@ export function Allblue(props: AllblueProps) {
                                         )}
                                         {voted && (
                                             <Chip
-                                                sx={{ marginRight: '8px', color: '#fff' }}
+                                                sx={{ marginRight: '8px' }}
                                                 size="small"
                                                 label={t('plugin_allblue_have_voted')}
                                                 color="success"
