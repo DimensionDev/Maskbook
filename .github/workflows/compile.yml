@@ -21,7 +21,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
-      - uses: pnpm/action-setup@2
+      - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '17'
