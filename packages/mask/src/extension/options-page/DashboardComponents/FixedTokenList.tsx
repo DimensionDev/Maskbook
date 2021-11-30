@@ -108,9 +108,9 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
     //#endregion
 
-    if (erc20TokensDetailedLoading) return renderPlaceholder('Loading token lists...')
+    if (erc20TokensDetailedLoading) return renderPlaceholder(t('wallet_loading_list'))
     if (searchedTokenLoading) return renderPlaceholder(t('wallet_loading_token'))
-    if (assetsLoading) return renderPlaceholder('Loading token assets...')
+    if (assetsLoading) return renderPlaceholder(t('wallet_loading_assets'))
     if (!renderAssets.length) return renderPlaceholder(t('wallet_search_contract_no_result'))
 
     return (

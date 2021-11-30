@@ -185,7 +185,7 @@ const BackupWallet = memo(() => {
                     ) : null}
                     {!jsonFile && !privateKey ? (
                         <div className={classes.tabPanel} style={{ flex: 1 }}>
-                            <Typography className={classes.label}>Confirm with password</Typography>
+                            <Typography className={classes.label}>{t('wallet_confirm_with_password')}</Typography>
                             <PasswordField
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

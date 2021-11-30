@@ -24,6 +24,8 @@ import Services from '../../../extension/service'
 import { useExternalPluginManifest } from '../loader'
 import { createThirdPartyPopupContext } from '../sns-context'
 import { Link as LinkIcon, Person as PublisherIcon, Description as DescriptionIcon } from '@mui/icons-material'
+import { useI18N } from '../../../utils'
+import { Trans } from 'react-i18next'
 
 export function PluginLoader() {
     const [input, setInput] = useState(
@@ -33,28 +35,27 @@ export function PluginLoader() {
     )
     const [url, setURL] = useState<null | string>(null)
     const invalidURL = Result.wrap(() => new URL(input)).err
+    const { t } = useI18N()
 
     return (
         <Stack sx={{ minHeight: 400 }} spacing={2}>
             <Alert severity="warning">
-                <AlertTitle>External plugin: an experimental Mask Network feature!</AlertTitle>
+                <AlertTitle>{t('plugin_external_loader_alert_title')}</AlertTitle>
+                <Typography variant="body1">{t('plugin_external_loader_intro')}</Typography>
                 <Typography variant="body1">
-                    Mask External plugin is an early stage feature of Mask Network that allows anyone to develop an
-                    external Mask plugin.
+                    <Trans
+                        i18nKey="plugin_external_loader_example_github"
+                        components={{
+                            terms: <Link target="_blank" href="https://github.com/DimensionDev/Mask-Plugin-Example" />,
+                        }}
+                    />
                 </Typography>
-                <Typography variant="body1">
-                    An official plugin example can be found at{' '}
-                    <Link target="_blank" href="https://github.com/DimensionDev/Mask-Plugin-Example">
-                        GitHub
-                    </Link>
-                    .
-                </Typography>
-                <Typography variant="body1">IT WILL CHANGE. DO NOT BUILD OFFICIAL PRODUCT ON IT.</Typography>
+                <Typography variant="body1">{t('plugin_external_loader_alert')}</Typography>
             </Alert>
             {url ? <Loader url={url} /> : null}
             <article>
-                <Typography variant="h6">Search for an external plugin</Typography>
-                <Typography variant="body1">Every external plugin has to hosted on an URL.</Typography>
+                <Typography variant="h6">{t('plugin_external_loader_search_holder')}</Typography>
+                <Typography variant="body1">{t('plugin_external_loader_search_sub_title')}</Typography>
             </article>
             <Autocomplete
                 disablePortal
@@ -76,7 +77,7 @@ export function PluginLoader() {
             />
             <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
                 <Button variant="contained" disabled={invalidURL} onClick={() => setURL(input)}>
-                    Search for plugin
+                    {t('plugin_external_loader_search_button')}
                 </Button>
             </Box>
         </Stack>
@@ -84,19 +85,21 @@ export function PluginLoader() {
 }
 
 function Loader(props: { url: string }) {
+    const { t } = useI18N()
     const { loading, retry, error, value } = useExternalPluginManifest(props.url)
     if (error) return <SnackbarContent message={'Failed to load the plugin from ' + props.url} />
     const contribution = value?.contribution?.composition
     const skeleton = <Skeleton variant="text" sx={{ display: 'inline-block' }} width={150} />
     const manifestURL = `${props.url}mask-manifest.json`
+
     return (
         <Box>
             <Typography variant="h6">
-                {loading ? <CircularProgress sx={{ marginRight: 1 }} size={16} /> : null}External plugin:{' '}
-                {loading ? skeleton : value?.name ?? 'Unknown name'}
+                {loading ? <CircularProgress sx={{ marginRight: 1 }} size={16} /> : null}
+                {t('plugin_external_name')}:{loading ? skeleton : value?.name ?? 'Unknown name'}
             </Typography>
             <List dense>
-                <ListItem secondaryAction={<Button onClick={retry}>Reload</Button>}>
+                <ListItem secondaryAction={<Button onClick={retry}>{t('reload')}</Button>}>
                     <ListItemAvatar>
                         <Avatar>
                             <LinkIcon />
@@ -140,7 +143,7 @@ function Loader(props: { url: string }) {
                                 ),
                             )
                         }}>
-                        Let's get started
+                        {t('plugin_external_get_started')}
                     </Button>
                 ) : null}
             </Box>
