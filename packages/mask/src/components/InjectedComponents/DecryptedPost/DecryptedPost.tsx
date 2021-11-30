@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useReducer, useState } from 'react'
-import { makeTypedMessageTuple, TypedMessageTuple, or } from '@masknet/shared'
+import { makeTypedMessageTuple, TypedMessageTuple } from '@masknet/shared'
+import { or } from '@masknet/theme'
 import { unreachable } from '@dimensiondev/kit'
 
 import { delay } from '../../../utils/utils'

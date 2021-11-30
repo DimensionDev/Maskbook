@@ -86,7 +86,6 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                 {networks
                     .filter((x) => x.isMainnet)
                     .map((network) => {
-                        const chainId = network.chainId
                         return (
                             <Box
                                 key={network.ID}

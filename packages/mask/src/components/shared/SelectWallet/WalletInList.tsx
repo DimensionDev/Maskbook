@@ -1,11 +1,10 @@
 import { Avatar, ListItemAvatar, ListItemIcon, ListItemText, ListTypeMap } from '@mui/material'
 import ListItemButton from '@mui/material/ListItemButton'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
 import type { DefaultComponentProps } from '@mui/material/OverridableComponent'
 import { formatEthereumAddress, useBlockie, Wallet } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { useStylesExtends } from '@masknet/shared'
 
 const useStyle = makeStyles()((theme) => ({
     root: {

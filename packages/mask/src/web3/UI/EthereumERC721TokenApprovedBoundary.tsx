@@ -7,12 +7,11 @@ import {
 } from '@masknet/web3-shared-evm'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { useI18N } from '../../utils'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
 import { Typography, Link } from '@mui/material'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { useMemo, useEffect } from 'react'
 import { EthereumAddress } from 'wallet.ts'
-import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
     snackBarText: {

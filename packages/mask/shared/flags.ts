@@ -25,7 +25,7 @@ export const Flags = {
     has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
     has_firefox_xray_vision: process.env.engine === 'firefox',
-    support_eth_network_switch: betaOrInsiderOnly,
+    support_testnet_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
     transak_enabled: webOnly,

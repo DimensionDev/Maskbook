@@ -1,5 +1,4 @@
-import { useStylesExtends } from '@masknet/shared'
-import { keyframes, makeStyles } from '@masknet/theme'
+import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
 
 const rainbowBorderKeyFrames = keyframes`
 0%,to {

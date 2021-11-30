@@ -1,6 +1,7 @@
 import { Box, Button, IconButton, Typography } from '@mui/material'
 import { Alert, AlertTitle, styled } from '@mui/material'
 import { useMemo, useState } from 'react'
+import { useTimeoutFn } from 'react-use'
 import ExpandLess from '@mui/icons-material/ExpandLess'
 import ExpandMore from '@mui/icons-material/ExpandMore'
 import { useContext } from 'react'
@@ -23,6 +24,16 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const t = useSharedI18N()
 
     const [showStack, setShowStack] = useState(false)
+
+    // This is a rarely reported crash. It is likely a race condition.
+    // https://github.com/DimensionDev/Maskbook/issues?q=Failed+to+execute+%27insertBefore%27+on+%27Node%27+
+    // It seems like DOM mutation from out of our application might conflict with React reconciliation.
+    // As a temporary fix, try to recover this React tree after 200ms.
+    useTimeoutFn(() => {
+        if (error.message.includes(`Failed to execute 'insertBefore' on 'Node'`)) {
+            onRetry()
+        }
+    }, 200)
 
     // crash report, will send to GitHub
     const reportTitle = `[Crash] ${error.type}: ${error.message}`

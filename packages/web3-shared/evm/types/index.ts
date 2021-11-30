@@ -163,6 +163,12 @@ export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
     record_id: string
 }
 
+export interface ERC721TokenCollectionInfo {
+    name: string
+    image?: string
+    slug: string
+}
+
 //#endregion
 
 //#region ERC1155
@@ -301,6 +307,12 @@ export enum EthereumMethodType {
     // only for mask
     MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
+}
+
+export enum EthereumErrorType {
+    ERR_SIGN_TRANSACTION = 'Failed to sign transaction.',
+    ERR_SEND_TRANSACTION = 'Failed to send transaction.',
+    ERR_SIGN_MESSAGE = 'Failed to sign message.',
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {

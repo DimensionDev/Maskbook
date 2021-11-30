@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { ImageIcon } from '../ImageIcon'
-import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
+import { useStylesExtends } from '@masknet/theme'
 
 interface StyleProps {
     size: number
@@ -18,6 +18,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'block',
         width: '100%',
         height: '100%',
+        borderRadius: '50%',
     },
     badgeIcon: {
         position: 'absolute',

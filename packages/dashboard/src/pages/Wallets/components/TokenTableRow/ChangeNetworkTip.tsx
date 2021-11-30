@@ -60,11 +60,10 @@ export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
         },
         [providerType, account],
     )
-
     return (
         <Typography component="span" sx={{ background: '#111432', color: MaskColorVar.white }} variant="body2">
             {t.wallets_assets_token_sent_not_connect_tip({
-                chainName: getNetworkTypeFromChainId(chainId) ?? 'Unknown Network',
+                chainName: getNetworkTypeFromChainId(chainId, true) ?? 'Unknown Network',
             })}{' '}
             <Link
                 sx={{ cursor: 'pointer', color: MaskColorVar.white, textDecoration: 'underline' }}

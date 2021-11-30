@@ -1,6 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "references": [{ "path": "./src/" }],
+  "references": [{ "path": "./src" }],
   "files": [],
   "ts-node": {
     "transpileOnly": true,

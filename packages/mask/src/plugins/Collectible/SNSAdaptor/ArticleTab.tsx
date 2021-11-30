@@ -25,15 +25,13 @@ interface AssetPlayerProps {
 // opensea supports: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF.
 const AssetPlayer: FC<AssetPlayerProps> = ({ src, alt }) => {
     const { classes } = useStyles()
-    if (!src) {
-        return null
-    }
+    if (!src) return null
     const isVideo = src.match(/\.(mp4|webm)$/i)
-    if (isVideo) {
-        return <Video src={src} VideoProps={{ className: classes.player }} />
-    } else {
-        return <img className={classes.player} src={src} alt={alt} />
-    }
+    return isVideo ? (
+        <Video src={src} VideoProps={{ className: classes.player }} />
+    ) : (
+        <img className={classes.player} src={src} alt={alt} />
+    )
 }
 
 export interface ArticleTabProps {}

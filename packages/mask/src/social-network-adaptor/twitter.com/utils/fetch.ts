@@ -11,7 +11,7 @@ import {
     isTypedMessageText,
     TypedMessageText,
 } from '@masknet/shared'
-import { collectNodeText } from '../../../utils'
+import { collectNodeText, collectTwitterEmoji } from '../../../utils'
 
 /**
  * @example
@@ -97,7 +97,7 @@ export const postContentMessageParser = (node: HTMLElement) => {
             const matched = src?.match(/emoji\/v2\/svg\/([\w\-]+)\.svg/)
             if (matched?.[1]) {
                 const codePoints = matched[1].split('-').map((x) => Number.parseInt(`0x${x}`, 16))
-                return makeTypedMessageText(String.fromCodePoint(...codePoints))
+                return makeTypedMessageText(collectTwitterEmoji(codePoints))
             }
             return makeTypedMessageEmpty()
         } else if (node.childNodes.length) {

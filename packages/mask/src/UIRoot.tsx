@@ -9,7 +9,7 @@ import i18nNextInstance from '../shared-ui/locales_legacy'
 import { Web3Context } from './web3/context'
 import { buildInfoMarkdown } from './extension/background-script/Jobs/PrintBuildFlags'
 import { activatedSocialNetworkUI } from './social-network'
-import { FACEBOOK_ID } from './social-network-adaptor/facebook.com/base'
+import { isFacebook } from './social-network-adaptor/facebook.com/base'
 import { pluginIDSettings } from './settings/settings'
 import { fixWeb3State } from './plugins/EVM/UI/Web3State'
 
@@ -33,7 +33,7 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
                 disableWindowBlurListener={false}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 children={jsx}
-                isFacebook={activatedSocialNetworkUI.networkIdentifier === FACEBOOK_ID}
+                isFacebook={isFacebook(activatedSocialNetworkUI)}
             />
         ),
         baseline

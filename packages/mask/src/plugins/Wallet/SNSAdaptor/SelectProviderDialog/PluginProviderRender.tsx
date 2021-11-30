@@ -145,7 +145,9 @@ export function PluginProviderRender({
                                         </ImageListItem>
                                     </ProviderIconClickBait>
                                 ) : (
-                                    <ImageIcon icon={provider.icon} />
+                                    <ImageListItem>
+                                        <ProviderIcon icon={provider.icon} name={provider.name} />
+                                    </ImageListItem>
                                 ),
                             )}
                     </ImageList>

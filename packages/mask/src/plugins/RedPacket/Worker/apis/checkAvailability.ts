@@ -1,25 +1,22 @@
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import { first } from 'lodash-unified'
-import { ChainId, getRPCConstants } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Interface } from '@ethersproject/abi'
-import { JsonRpcProvider } from '@ethersproject/providers'
 import type { RedpacketAvailability } from '../../types'
+import Services from '../../../../extension/service'
 
 const interFace = new Interface(REDPACKET_ABI)
 
 // red-packet contract readonly method, read it no matter on whatever chains you are.
 export async function checkAvailability(pid: string, from: string, to: string, chainId: ChainId) {
-    const { RPC } = getRPCConstants(chainId)
-    const providerURL = first(RPC)
-    if (!providerURL) throw new Error('Unknown chain id.')
-    const provider = new JsonRpcProvider(providerURL)
-
     const callData = interFace.encodeFunctionData('check_availability', [pid])
-    const data = await provider.call({
-        to,
-        from,
-        data: callData,
-    })
+    const data = await Services.Ethereum.call(
+        {
+            to,
+            from,
+            data: callData,
+        },
+        { chainId },
+    )
     return decodeResult(data)
 }
 
