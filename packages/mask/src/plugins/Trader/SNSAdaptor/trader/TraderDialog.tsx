@@ -20,10 +20,7 @@ const useStyles = makeStyles()((theme) => ({
         margin: '24px auto',
     },
     abstractTabWrapper: {
-        position: 'sticky',
-        top: 0,
         width: '100%',
-        zIndex: 2,
         paddingTop: theme.spacing(1),
         paddingBottom: theme.spacing(2),
     },

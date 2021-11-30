@@ -242,6 +242,24 @@ export function Trader(props: TraderProps) {
     }, [allTradeComputed, resetTimeout])
     //#endregion
 
+    //#region the click handler of switch arrow
+    const onSwitchToken = useCallback(() => {
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+            token: outputToken,
+        })
+
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+            token: inputToken,
+        })
+
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
+            amount: '',
+        })
+    }, [dispatchTradeStore, inputToken, outputToken, inputAmount])
+
     //#region remote controlled transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
@@ -474,6 +492,7 @@ export function Trader(props: TraderProps) {
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
                 onSwap={onSwap}
                 gasPrice={gasPrice}
+                onSwitch={onSwitchToken}
             />
             {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
                 <ConfirmDialog

@@ -23,6 +23,7 @@ import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
+import { find } from 'lodash-unified'
 
 export function useAllTradeComputed(
     inputAmount: string,
@@ -32,6 +33,7 @@ export function useAllTradeComputed(
     const { targetChainId } = TargetChainIdContext.useContainer()
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
+    const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK', targetChainId)
 
     // NATIVE-WNATIVE pair
     const nativeToken_ = useNativeTokenTrade(inputToken, outputToken)
@@ -45,15 +47,14 @@ export function useAllTradeComputed(
     )
 
     const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, targetChainId)
-
     //uniswap-v2
     const uniswapV2_ = useUniswapV2Trade(
         TradeProvider.UNISWAP_V2,
         TradeStrategy.ExactIn,
         inputAmount_,
         '0',
-        inputToken,
-        outputToken,
+        !!find(tradeProviders, TradeProvider.UNISWAP_V2) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.UNISWAP_V2) ? outputToken : undefined,
     )
     const uniswapV2 = useUniswapTradeComputed(uniswapV2_.value, inputToken, outputToken)
 
@@ -65,8 +66,8 @@ export function useAllTradeComputed(
         TradeStrategy.ExactIn,
         inputAmount_,
         '0',
-        inputToken,
-        outputToken,
+        !!find(tradeProviders, TradeProvider.SUSHISWAP) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.SUSHISWAP) ? outputToken : undefined,
     )
     const sushiSwap = useUniswapTradeComputed(sushiSwap_.value, inputToken, outputToken)
     const sushiSwapEstimateGas = useUniswapTradeGasLimit(sushiSwap, TradeProvider.SUSHISWAP)
@@ -77,8 +78,8 @@ export function useAllTradeComputed(
         TradeStrategy.ExactIn,
         inputAmount_,
         '0',
-        inputToken,
-        outputToken,
+        !!find(tradeProviders, TradeProvider.SASHIMISWAP) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.SASHIMISWAP) ? outputToken : undefined,
     )
     const sashimiSwap = useUniswapTradeComputed(sashimiSwap_.value, inputToken, outputToken)
     const sashimiSwapEstimateGas = useUniswapTradeGasLimit(sashimiSwap, TradeProvider.SASHIMISWAP)
@@ -89,8 +90,8 @@ export function useAllTradeComputed(
         TradeStrategy.ExactIn,
         inputAmount_,
         '0',
-        inputToken,
-        outputToken,
+        !!find(tradeProviders, TradeProvider.QUICKSWAP) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.QUICKSWAP) ? outputToken : undefined,
     )
     const quickSwap = useUniswapTradeComputed(quickSwap_.value, inputToken, outputToken)
     const quickSwapEstimateGas = useUniswapTradeGasLimit(quickSwap, TradeProvider.QUICKSWAP)
@@ -101,24 +102,42 @@ export function useAllTradeComputed(
         TradeStrategy.ExactIn,
         inputAmount_,
         '0',
-        inputToken,
-        outputToken,
+        !!find(tradeProviders, TradeProvider.PANCAKESWAP) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.PANCAKESWAP) ? outputToken : undefined,
     )
     const pancakeSwap = useUniswapTradeComputed(pancakeSwap_.value, inputToken, outputToken)
     const pancakeSwapEstimateGas = useUniswapTradeGasLimit(pancakeSwap, TradeProvider.PANCAKESWAP)
 
     // uniswap-v3 like providers
-    const uniswapV3_ = useUniswapV3Trade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const uniswapV3_ = useUniswapV3Trade(
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        !!find(tradeProviders, TradeProvider.UNISWAP_V3) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.UNISWAP_V3) ? outputToken : undefined,
+    )
     const uniswapV3 = useUniswapTradeComputed(uniswapV3_.value, inputToken, outputToken)
     const uniswapV3SwapEstimateGas = useUniswapTradeGasLimit(uniswapV3, TradeProvider.UNISWAP_V3)
 
     // zrx
-    const zrx_ = useZrxTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const zrx_ = useZrxTrade(
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        !!find(tradeProviders, TradeProvider.ZRX) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.ZRX) ? outputToken : undefined,
+    )
     const zrx = useZrxTradeComputed(zrx_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
     const zrxSwapEstimateGas = useZrxTradeGasLimit(zrx)
 
     // balancer
-    const balancer_ = useBalancerTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const balancer_ = useBalancerTrade(
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        !!find(tradeProviders, TradeProvider.BALANCER) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.BALANCER) ? outputToken : undefined,
+    )
     const balancer = useBalancerTradeComputed(
         balancer_.value ?? null,
         TradeStrategy.ExactIn,
@@ -130,12 +149,24 @@ export function useAllTradeComputed(
     const balancerSwapEstimateGas = useBalancerTradeGasLimit(balancer)
 
     // dodo
-    const dodo_ = useDODOTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const dodo_ = useDODOTrade(
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        !!find(tradeProviders, TradeProvider.DODO) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.DODO) ? outputToken : undefined,
+    )
     const dodo = useDODOTradeComputed(dodo_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
     const dodoSwapEstimateGas = useDODOTradeGasLimit(dodo)
 
     // bancor
-    const bancor_ = useBancorTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const bancor_ = useBancorTrade(
+        TradeStrategy.ExactIn,
+        inputAmount_,
+        '0',
+        !!find(tradeProviders, TradeProvider.BANCOR) ? inputToken : undefined,
+        !!find(tradeProviders, TradeProvider.BANCOR) ? outputToken : undefined,
+    )
 
     const bancor = useBancorTradeComputed(bancor_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
 
@@ -153,8 +184,6 @@ export function useAllTradeComputed(
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
     ]
-
-    const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK', targetChainId)
 
     return nativeToken_.value
         ? tradeProviders.map((item) => ({

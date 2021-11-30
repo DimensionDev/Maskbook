@@ -9,7 +9,7 @@ import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
 import { FormattedBalance, SelectTokenChip, useRemoteControlledDialog } from '@masknet/shared'
-import { ChevronUpIcon } from '@masknet/icons'
+import { ChevronUpIcon, DropIcon } from '@masknet/icons'
 import classnames from 'classnames'
 import { TraderInfo } from './TraderInfo'
 import { PluginTraderMessages } from '../../messages'
@@ -74,10 +74,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             transition: 'all 300ms',
         },
         status: {
-            marginTop: theme.spacing(0.5),
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            marginBottom: 20,
         },
         label: {
             flex: 1,
@@ -145,9 +145,22 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             backgroundColor: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
             color: theme.palette.mode === 'dark' ? '#7B8192' : '#ffffff',
             borderRadius: 8,
+            padding: 16,
+            textAlign: 'left',
+            fontSize: 16,
+            lineHeight: '22px',
+            fontWeight: 500,
         },
         tooltipArrow: {
             color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+        },
+        dropIcon: {
+            width: 20,
+            height: 24,
+            fill: MaskColorVar.twitterButton,
+        },
+        connectWallet: {
+            marginTop: 0,
         },
     }
 })
@@ -166,6 +179,7 @@ export interface AllTradeFormProps {
     gasPrice?: string
     onFocusedTradeChange: (trade: TradeInfo) => void
     onSwap: () => void
+    onSwitch: () => void
 }
 
 export const TradeForm = memo<AllTradeFormProps>(
@@ -183,6 +197,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         onFocusedTradeChange,
         onSwap,
         gasPrice,
+        onSwitch,
     }) => {
         const userSelected = useRef(false)
         const isDashboard = location.href.includes('dashboard.html')
@@ -276,8 +291,44 @@ export const TradeForm = memo<AllTradeFormProps>(
             }
         }, [bestTrade])
 
+        const firstTraderInfo = useMemo(() => {
+            if (!bestTrade) return null
+
+            if (isExpand)
+                return (
+                    <TraderInfo
+                        trade={bestTrade}
+                        gasPrice={gasPrice}
+                        onClick={() => {
+                            if (!userSelected.current) userSelected.current = true
+                            onFocusedTradeChange(bestTrade)
+                        }}
+                        isFocus={bestTrade.provider === focusedTrade?.provider}
+                        isBest
+                    />
+                )
+            else if (focusedTrade)
+                return (
+                    <TraderInfo
+                        trade={focusedTrade}
+                        gasPrice={gasPrice}
+                        onClick={() => {
+                            onFocusedTradeChange(focusedTrade)
+                        }}
+                        isFocus
+                        isBest={bestTrade.provider === focusedTrade.provider}
+                    />
+                )
+            return null
+        }, [trades, bestTrade, gasPrice, focusedTrade, onFocusedTradeChange, isExpand])
+
         return (
             <Box className={classes.root}>
+                <Box display="flex" justifyContent="flex-start" mb={1} width="100%">
+                    <Typography fontSize={14} lineHeight="20px">
+                        {t('plugin_trader_swap_from')}
+                    </Typography>
+                </Box>
                 <InputTokenPanel
                     chainId={chainId}
                     amount={inputAmount}
@@ -287,17 +338,20 @@ export const TradeForm = memo<AllTradeFormProps>(
                     SelectTokenChip={{
                         ChipProps: {
                             onClick: () => onTokenChipClick(TokenPanelType.Input),
+                            deleteIcon: <DropIcon className={classes.dropIcon} />,
                         },
                     }}
                 />
                 <Box className={classes.reverse}>
-                    <ArrowDownward className={classes.reverseIcon} color="primary" />
+                    <ArrowDownward className={classes.reverseIcon} color="primary" onClick={onSwitch} />
                 </Box>
                 <Box className={classes.section} marginBottom={2.5}>
                     <Box display="flex" justifyContent="space-between" mb={1}>
                         {outputToken && outputTokenBalance !== undefined ? (
                             <>
-                                <Typography>{t('plugin_trader_swap_to')}</Typography>
+                                <Typography fontSize={14} lineHeight="20px">
+                                    {t('plugin_trader_swap_to')}
+                                </Typography>
                                 <Typography className={classes.balance}>
                                     {t('plugin_ito_list_table_got')}:
                                     <Typography component="span" className={classes.amount} color="primary">
@@ -321,22 +375,15 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 noToken: classes.noToken,
                             }}
                             token={outputToken}
-                            ChipProps={{ onClick: () => onTokenChipClick(TokenPanelType.Output) }}
+                            ChipProps={{
+                                onClick: () => onTokenChipClick(TokenPanelType.Output),
+                                deleteIcon: <DropIcon className={classes.dropIcon} />,
+                                onDelete: noop,
+                            }}
                         />
 
                         <Box marginTop="10px">
-                            {bestTrade?.value ? (
-                                <TraderInfo
-                                    trade={bestTrade}
-                                    gasPrice={gasPrice}
-                                    onClick={() => {
-                                        if (!userSelected.current) userSelected.current = true
-                                        onFocusedTradeChange(bestTrade)
-                                    }}
-                                    isFocus={bestTrade.provider === focusedTrade?.provider}
-                                    isBest
-                                />
-                            ) : null}
+                            {firstTraderInfo}
                             <Collapse in={isExpand}>
                                 {trades.slice(1).map((trade) => (
                                     <TraderInfo
@@ -363,7 +410,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                     </Box>
                 </Box>
                 <Box className={classes.controller}>
-                    <Box className={classes.section} my={1}>
+                    <Box className={classes.section}>
                         <div className={classes.status}>
                             <Typography className={classes.label} color="textSecondary" variant="body2">
                                 {t('plugin_trader_slippage_tolerance')}{' '}
@@ -389,7 +436,8 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 style: { padding: '12px 0', marginTop: 0 },
                             }}>
                             <EthereumWalletConnectedBoundary
-                                ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}>
+                                ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
+                                classes={{ connectWallet: classes.connectWallet }}>
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={approveAmount.toFixed()}
                                     token={

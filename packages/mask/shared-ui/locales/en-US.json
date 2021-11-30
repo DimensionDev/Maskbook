@@ -353,6 +353,7 @@
     "plugin_trader_settings_trade_provider_primary": "Choose Exchange Network",
     "plugin_trader_settings_trade_provider_secondary": "Swap cryptocurrencies on different exchange networks.",
     "plugin_trader_slippage_tolerance": "Slippage Tolerance:",
+    "plugin_trader_swap_from": "From",
     "plugin_trader_swap_to": "To(estimated)",
     "plugin_trader_gas_fee": "Gas fee",
     "plugin_trader_unlock_symbol": "Unlock {{symbol}}",

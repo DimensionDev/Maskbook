@@ -47,6 +47,10 @@ const useStyles = makeStyles()(() => ({
         marginTop: 12,
         fontSize: 12,
         lineHeight: '16px',
+        padding: '12px 20px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     alertIcon: {
         color: MaskColorVar.twitterInfo,
@@ -60,6 +64,10 @@ const useStyles = makeStyles()(() => ({
         height: 'auto',
     },
     content: {
+        marginLeft: 40,
+        marginRight: 40,
+        paddingLeft: 0,
+        paddingRight: 0,
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -117,7 +125,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     return (
         <>
             <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" maxWidth="xs">
-                <DialogContent className={classes.content} sx={{ marginLeft: 5, marginRight: 5 }}>
+                <DialogContent className={classes.content}>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_red_packet_nft_account_name')}</Typography>
                         <Typography>
@@ -177,7 +185,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 <span>
                                     <span>1 {outputToken.symbol}</span>
                                     {' = '}
-                                    <strong className={classes.emphasis}>
+                                    <span>
                                         {formatBalance(
                                             inputAmount
                                                 .dividedBy(outputAmount)
@@ -187,15 +195,15 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                             inputToken.decimals,
                                             6,
                                         )}
-                                    </strong>
+                                    </span>
                                     {inputToken.symbol}
                                 </span>
                             ) : (
                                 <span>
                                     <span>1 {inputToken.symbol}</span>
                                     {' = '}
-                                    <strong className={classes.emphasis}>
-                                        {formatBalance(
+                                    <span>
+                                        {`${formatBalance(
                                             outputAmount
                                                 .dividedBy(inputAmount)
                                                 .multipliedBy(pow10(inputToken.decimals - outputToken.decimals))
@@ -203,9 +211,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                                 .integerValue(),
                                             outputToken.decimals,
                                             6,
-                                        )}
-                                    </strong>
-                                    {outputToken.symbol}
+                                        )} ${outputToken.symbol}`}
+                                    </span>
                                 </span>
                             )}
                             <RetweetIcon
@@ -251,7 +258,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         {t('plugin_trader_confirm_tips')}
                     </Alert>
                 </DialogContent>
-                <DialogActions sx={{ marginLeft: 5, marginRight: 5 }}>
+                <DialogActions
+                    sx={{ marginLeft: 5, marginRight: 5, paddingLeft: 0, paddingRight: 0, paddingBottom: 5 }}>
                     <Button
                         classes={{ root: classes.button }}
                         color="primary"

@@ -48,6 +48,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 24,
         cursor: 'pointer',
         padding: '25px 12px 8px 0',
+        width: 'auto',
     },
     focus: {
         border: `1px solid ${theme.palette.primary.main}`,
@@ -125,8 +126,10 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                         <Typography className={classes.provider}>{resolveTradeProviderName(trade.provider)}</Typography>
                         {gasFee ? (
                             <Typography className={classes.cost}>
-                                {t('plugin_trader_gas_fee')}
-                                <Typography component="span" marginLeft={0.5}>
+                                <Typography fontSize={14} lineHeight="20px" component="span">
+                                    {t('plugin_trader_gas_fee')}
+                                </Typography>
+                                <Typography fontSize={14} lineHeight="20px" component="span" marginLeft={0.5}>
                                     <FormattedBalance
                                         value={gasFee}
                                         decimals={nativeToken.decimals ?? 0}
@@ -135,7 +138,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
                                         formatter={formatBalance}
                                     />
                                 </Typography>
-                                <Typography component="span">
+                                <Typography fontSize={14} lineHeight="20px" component="span">
                                     {t('plugin_trader_tx_cost_usd', { usd: feeValueUSD })}
                                 </Typography>
                             </Typography>
