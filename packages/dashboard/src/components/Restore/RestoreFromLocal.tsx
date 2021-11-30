@@ -15,9 +15,9 @@ import { LoadingCard } from './steps/LoadingCard'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
-import { LoadingButton } from '../LoadingButton'
 import PasswordField from '../PasswordField'
 import { useCustomSnackbar } from '@masknet/theme'
+import { LoadingButton } from '@masknet/shared'
 
 enum RestoreStatus {
     WaitingInput = 0,

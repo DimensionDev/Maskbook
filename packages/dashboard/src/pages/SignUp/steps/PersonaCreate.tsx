@@ -13,12 +13,11 @@ import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Box, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
-import { delay } from '@masknet/shared'
+import { delay, LoadingButton } from '@masknet/shared'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { Services } from '../../../API'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
-import { LoadingButton } from '../../../components/LoadingButton'
 
 const Label = ({ value }: { value: string }) => (
     <Typography
@@ -87,12 +86,7 @@ export const PersonaCreate = () => {
                         helperText={error}
                     />
                     <ButtonContainer>
-                        <LoadingButton
-                            size="large"
-                            variant="rounded"
-                            color="primary"
-                            onClick={create}
-                            disabled={!personaName}>
+                        <LoadingButton size="large" color="primary" onClick={create} disabled={!personaName}>
                             {t.next()}
                         </LoadingButton>
                     </ButtonContainer>

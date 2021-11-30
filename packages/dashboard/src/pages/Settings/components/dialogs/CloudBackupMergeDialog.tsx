@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styled, Typography } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
 import type { BackupFileInfo } from '../../type'
 import { useDashboardI18N } from '../../../../locales'
@@ -11,6 +10,7 @@ import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import PasswordField from '../../../../components/PasswordField'
+import { LoadingButton } from '@masknet/shared'
 
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
@@ -44,7 +44,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
         showSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
     }, [onMerged, showSnackbar])
 
-    const [{ loading }, handleMerge] = useAsyncFn(async () => {
+    const [, handleMerge] = useAsyncFn(async () => {
         try {
             const encrypted = await fetchBackupValue(info.downloadURL)
             const decrypted = await decryptBackup(encode(account + backupPassword), encrypted)
@@ -66,11 +66,11 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
         }
     }, [backupPassword, account, info])
 
-    const onBackup = () => {
+    const onBackup = async () => {
         if (mode === '1') {
             onMerged(false)
         } else {
-            handleMerge()
+            await handleMerge()
         }
     }
 
@@ -89,7 +89,6 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                 <Typography sx={{ fontSize: '13px', padding: '24px 0' }}>
                     {t.settings_dialogs_backup_action_desc()}
                 </Typography>
-
                 <RadioGroup aria-label="mode" name="mode" value={mode} onChange={(e) => setMode(e.target.value)}>
                     <StyledFormControlLabel
                         value="1"
@@ -103,7 +102,6 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                         label={t.settings_dialogs_merge_to_local_data()}
                     />
                 </RadioGroup>
-
                 {mode === '2' ? (
                     <PasswordField
                         fullWidth
@@ -115,13 +113,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                         helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
                 ) : null}
-
-                <LoadingButton
-                    fullWidth
-                    onClick={onBackup}
-                    loading={loading}
-                    disabled={incorrectBackupPassword}
-                    variant="contained">
+                <LoadingButton fullWidth onClick={onBackup} disabled={incorrectBackupPassword}>
                     {t.settings_button_backup()}
                 </LoadingButton>
             </Box>

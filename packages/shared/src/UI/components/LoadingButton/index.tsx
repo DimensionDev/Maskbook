@@ -1,12 +1,15 @@
 import { getMaskColor, makeStyles, MaskLoadingButton } from '@masknet/theme'
 import { memo } from 'react'
 import { ButtonProps, Stack } from '@mui/material'
-import { LoadingAnimation } from '@masknet/shared'
+import { LoadingAnimation } from '../LoadingAnimation'
 
 interface LoadingButtonProps extends ButtonProps {
     onClick(event: React.MouseEvent<HTMLButtonElement>): Promise<unknown>
 }
 const useStyles = makeStyles()((theme) => ({
+    loading: {
+        opacity: '1 !important',
+    },
     icon: {
         color: getMaskColor(theme).white,
         width: '100%',
@@ -19,6 +22,7 @@ export const LoadingButton = memo<LoadingButtonProps>((props) => {
     return (
         <MaskLoadingButton
             classes={{
+                disabled: classes.loading,
                 loadingIndicator: classes.icon,
             }}
             variant="contained"

@@ -12,7 +12,7 @@ import { RoutePaths } from '../../type'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
-import { LoadingButton } from '../LoadingButton'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     error: {
