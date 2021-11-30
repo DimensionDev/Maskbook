@@ -47,11 +47,6 @@ export default function EncryptionCard(props: EncryptionCardProps) {
 
     return (
         <CardContent>
-            {!address && (
-                <Alert icon={false} severity="info" sx={{ justifyContent: 'center', textAlign: 'center' }}>
-                    <EthereumChainBoundary noSwitchNetworkTip={true} chainId={1} />
-                </Alert>
-            )}
             {!!message && (
                 <>
                     <Typography variant={'body1'} color={'text.secondary'}>

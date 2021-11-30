@@ -182,16 +182,14 @@ export function Allblue(props: AllblueProps) {
                                 result={puzzleResult || pollResult}
                             />
                         )}
-                    {!address && (
-                        <Box sx={{ padding: '0 16px' }}>
-                            <Alert icon={false} severity="info" sx={{ justifyContent: 'center', textAlign: 'center' }}>
-                                <EthereumChainBoundary noSwitchNetworkTip={true} chainId={1} />
-                            </Alert>
-                        </Box>
-                    )}
                 </>
             ) : (
                 <EncryptionCard payload={encryptionPayload} />
+            )}
+            {!address && (
+                <Box sx={{padding: '0 16px'}}>
+                    <Alert severity="info">{t('plugin_allblue_connect_wallet_tip')}</Alert>
+                </Box>
             )}
             <Footer />
         </Card>

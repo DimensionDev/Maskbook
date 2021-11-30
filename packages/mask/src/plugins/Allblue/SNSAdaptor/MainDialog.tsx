@@ -177,11 +177,7 @@ const AllBlueDialog: React.FC<Props> = (props) => {
                 props.onClose()
             }}>
             <DialogContent>
-                {!account && (
-                    <Alert icon={false} severity="info" sx={{ justifyContent: 'center', textAlign: 'center' }}>
-                        <EthereumChainBoundary noSwitchNetworkTip={true} chainId={1} />
-                    </Alert>
-                )}
+                {!account && <Alert severity="info">{t('plugin_allblue_connect_wallet_tip')}</Alert>}
                 {!!account && statuses.length === 0 && (
                     <Alert
                         severity="info"

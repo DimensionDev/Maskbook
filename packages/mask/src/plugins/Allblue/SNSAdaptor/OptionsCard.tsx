@@ -411,7 +411,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                     {error === 'insufficient-nft' && (
                         <Alert severity="info">{t('plugin_allblue_insufficient_nft')}</Alert>
                     )}
-                    {error === 'insufficient-nft' && userStatus.status === 1 && (
+                    {error === 'insufficient-nft' && (
                         <NoNftCard conditions={unmeetCondition} />
                     )}
                 </>
