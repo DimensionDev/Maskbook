@@ -3,7 +3,7 @@ import type { GeneralAsset, GeneralAssetWithTags } from './types'
 import config from './config'
 import RSS3, { IRSS3 } from './rss3'
 
-const orderPattern = new RegExp(`^${config.tags.prefix}:order:(-?\d+)$`, 'i')
+const orderPattern = new RegExp(`^${config.tags.prefix}:order:(-?\\d+)$`, 'i')
 
 type TypesWithTag = RSS3Account | GeneralAssetWithTags
 
