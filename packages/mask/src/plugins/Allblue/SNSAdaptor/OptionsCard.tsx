@@ -120,6 +120,8 @@ export default function OptionsCard(props: OptionsViewProps) {
     }, [chainId, userStatus])
 
     useEffect(() => {
+        console.log('userStatus update', userStatus)
+        setChoice(userStatus ? userStatus.choice : -1)
         setSelected(userStatus ? userStatus.choice !== -1 : true)
         setTimeout(() => {
             type === AllbluePostType.Poll &&
@@ -132,6 +134,7 @@ export default function OptionsCard(props: OptionsViewProps) {
 
     const checkCondition = async () => {
         setError('')
+        setUnmeetCondition([])
         if (userStatus) {
             for (const condition of userStatus.conditions) {
                 if (condition.chainId !== chainId) {
@@ -392,17 +395,18 @@ export default function OptionsCard(props: OptionsViewProps) {
                         </>
                     )}
                     {error === 'unsupported-chain' && (
-                        <>
-                            <Alert severity="info">
-                                <div>{`${t('plugin_allblue_unsupported_chain', {
-                                    chain: userStatus.conditions[0]?.chain || '',
-                                })}`}</div>
-                                <EthereumChainBoundary
-                                    noSwitchNetworkTip={true}
-                                    chainId={userStatus.conditions[0]?.chainId}
-                                />
-                            </Alert>
-                        </>
+                        <Alert
+                            icon={false}
+                            severity="info"
+                            sx={{ marginTop: 1, justifyContent: 'center', textAlign: 'center' }}>
+                            <div>{`${t('plugin_allblue_unsupported_chain', {
+                                chain: userStatus.conditions[0]?.chain || '',
+                            })}`}</div>
+                            <EthereumChainBoundary
+                                noSwitchNetworkTip={true}
+                                chainId={userStatus.conditions[0]?.chainId}
+                            />
+                        </Alert>
                     )}
                     {error === 'insufficient-nft' && (
                         <Alert severity="info">{t('plugin_allblue_insufficient_nft')}</Alert>

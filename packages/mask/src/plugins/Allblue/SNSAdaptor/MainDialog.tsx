@@ -8,6 +8,7 @@ import { fetchConsts, fetchUserParticipatedStoryStatus } from '../Worker/apis'
 import type { UserStoryStatus, AllblueConsts } from '../types'
 import { BorderLinearProgress } from './ResultCard'
 import { Allblue_Consts } from '../constants'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 interface Props extends InjectedDialogProps {
     onClose: () => void
@@ -176,7 +177,11 @@ const AllBlueDialog: React.FC<Props> = (props) => {
                 props.onClose()
             }}>
             <DialogContent>
-                {!account && <Alert severity="info">{t('plugin_allblue_connect_wallet_tip')}</Alert>}
+                {!account && (
+                    <Alert icon={false} severity="info" sx={{ justifyContent: 'center', textAlign: 'center' }}>
+                        <EthereumChainBoundary noSwitchNetworkTip={true} chainId={1} />
+                    </Alert>
+                )}
                 {!!account && statuses.length === 0 && (
                     <Alert
                         severity="info"

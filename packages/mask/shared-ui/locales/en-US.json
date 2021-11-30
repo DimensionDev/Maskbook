@@ -615,7 +615,7 @@
     "plugin_allblue_insufficient_nft": "The following specific NFTs are needed for this vote.",
     "plugin_allblue_buy_nft_tip": "At least {{count}} copy of this NFT is required.",
     "plugin_allblue_buy_nfts_tip": "At least {{count}} copies of this NFT are required.",
-    "plugin_allblue_connect_wallet_tip": "Connect with one of our available wallet first!",
+    "plugin_allblue_connect_wallet_tip": "Please connect to a wallet.",
     "plugin_allblue_no_participation_tip": "You have not participated in any vote yet.",
     "plugin_allblue_explore": "EXPLORE",
     "plugin_allblue_what_is_whodunnit": "What is whodunnit?",

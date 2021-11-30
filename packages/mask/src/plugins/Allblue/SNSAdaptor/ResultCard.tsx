@@ -70,7 +70,7 @@ export default function ResultCard(props: ResultViewProps) {
                     </Typography>
                     {result.options.map((option, index) => {
                         const value = result.count.find((e) => e.choice === index)?.value || 0
-                        const percent = ((value * 100) / total).toFixed(1)
+                        const percent = (total > 0 ? (value * 100) / total : 0).toFixed(2)
                         return (
                             <Card
                                 variant={'outlined'}
@@ -129,7 +129,7 @@ export default function ResultCard(props: ResultViewProps) {
                                     <Box sx={{ width: '100%', mr: 1 }}>
                                         <BorderLinearProgress value={Number(percent)} variant={'determinate'} />
                                     </Box>
-                                    <Box sx={{ minWidth: 45, display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Box sx={{ minWidth: 50, display: 'flex', justifyContent: 'flex-end' }}>
                                         <Typography variant="body2" color="text.secondary">{`${percent}%`}</Typography>
                                     </Box>
                                 </Box>

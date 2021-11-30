@@ -10,6 +10,7 @@ import OptionsCard from './OptionsCard'
 import Footer from './Footer'
 import StageCard from './StageCard'
 import EncryptionCard from './EncryptionCard'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -182,9 +183,11 @@ export function Allblue(props: AllblueProps) {
                             />
                         )}
                     {!address && (
-                        <CardContent>
-                            <Alert severity="info">{t('plugin_allblue_connect_wallet_tip')}</Alert>
-                        </CardContent>
+                        <Box sx={{ padding: '0 16px' }}>
+                            <Alert icon={false} severity="info" sx={{ justifyContent: 'center', textAlign: 'center' }}>
+                                <EthereumChainBoundary noSwitchNetworkTip={true} chainId={1} />
+                            </Alert>
+                        </Box>
                     )}
                 </>
             ) : (

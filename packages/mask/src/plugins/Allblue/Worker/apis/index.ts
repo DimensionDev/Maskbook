@@ -31,7 +31,7 @@ function request<T>(url: string, options: any, params?: any): Promise<T> {
             } else {
                 reject({ code, msg, data })
             }
-        } catch (e) {
+        } catch (error) {
             reject(-1)
         }
     })
@@ -100,8 +100,8 @@ export function submitPuzzle(address: string, param: SubmitPuzzleParams): Promis
                 },
             )
             resolve(res)
-        } catch (e) {
-            reject(e)
+        } catch (error) {
+            reject(error)
         }
     })
 }
@@ -121,8 +121,8 @@ export function submitPoll(address: string, param: SubmitPollParams): Promise<st
                 },
             )
             resolve(res)
-        } catch (e) {
-            reject(e)
+        } catch (error) {
+            reject(error)
         }
     })
 }
