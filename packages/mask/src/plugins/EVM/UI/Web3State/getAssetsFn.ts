@@ -28,14 +28,16 @@ export const getFungibleAssetsFn =
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
         const chainId = context.chainId.getCurrentValue()
         const provider = context.provider.getCurrentValue()
+        const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
         const networks = PLUGIN_NETWORKS
+        const trustedTokens = context.erc20Tokens
+            .getCurrentValue()
+            .filter((x) => wallet?.erc20_token_whitelist.has(formatEthereumAddress(x.address)))
+
         const web3 = new Web3(provider)
-        // TODO: filter by trust token
-        const trustedTokens = context.erc20Tokens.getCurrentValue()
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
         const dataFromProvider = await context.getAssetsList(address, PortfolioProvider.DEBANK)
-        // TODO: create convert function
         const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
             id: x.token.address,
             chainId: x.token.chainId,
@@ -129,7 +131,7 @@ export const getNonFungibleTokenFn =
             tokenInDb = fromChain.filter(Boolean) as any[]
         }
 
-        const result = await context.getAssetsListNFT(
+        const tokenFromProvider = await context.getAssetsListNFT(
             address.toLowerCase(),
             network?.chainId ?? ChainId.Mainnet,
             CollectibleProvider.OPENSEA,
@@ -137,7 +139,7 @@ export const getNonFungibleTokenFn =
             pagination?.size ?? 20,
         )
 
-        const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...result.assets]
+        const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider.assets]
             .map(
                 (x) =>
                     ({
@@ -163,7 +165,7 @@ export const getNonFungibleTokenFn =
             .filter((x) => !network || x.chainId === network.chainId)
 
         return {
-            hasNextPage: result.assets.length === pagination?.size ?? 20,
+            hasNextPage: tokenFromProvider.assets.length === pagination?.size ?? 20,
             currentPage: pagination?.page ?? 0,
             data: allData,
         }

@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
@@ -73,6 +73,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     const { Asset } = useWeb3PluginState()
     const { portfolioProvider } = useWeb3State()
     const network = useNetworkDescriptor()
+    const [tokenUpdateCount, setTokenUpdateCount] = useState(0)
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     const {
@@ -81,8 +82,14 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         value: detailedTokens,
     } = useAsync(
         async () => Asset?.getFungibleAssets?.(account, portfolioProvider, network!),
-        [account, Asset, portfolioProvider],
+        [account, Asset, portfolioProvider, tokenUpdateCount],
     )
+
+    useEffect(() => {
+        PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
+            setTimeout(() => setTokenUpdateCount(tokenUpdateCount + 1), 100),
+        )
+    }, [])
 
     const onSwap = useCallback((token: Web3Plugin.FungibleToken) => {
         openSwapDialog({
