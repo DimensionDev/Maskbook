@@ -74,6 +74,13 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 Donations
             </Button>
+            <Button
+                variant="outlined"
+                className={classNames(classes.button, tag === PageTags.FootprintTag ? classes.selected : '')}
+                onClick={() => onChange(PageTags.FootprintTag)}
+                size="medium">
+                Footprints
+            </Button>
             {daoPayload ? (
                 <Button
                     variant="outlined"
@@ -83,13 +90,6 @@ export function PageTag(props: PageTagProps) {
                     DAO
                 </Button>
             ) : null}
-            <Button
-                variant="outlined"
-                className={classNames(classes.button, tag === PageTags.FootprintTag ? classes.selected : '')}
-                onClick={() => onChange(PageTags.FootprintTag)}
-                size="medium">
-                Footprints
-            </Button>
             {isOwned ? (
                 <Button
                     variant="contained"
