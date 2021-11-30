@@ -12,9 +12,8 @@ import { PageTags } from '../types'
 import { PageTag } from './PageTag'
 import RSS3, { IRSS3 } from './common/rss3'
 import { unreachable } from '@dimensiondev/kit'
-import { useAccount } from '@masknet/plugin-infra'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { isSameAddress, useEthereumAddress } from '@masknet/web3-shared-evm'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useEthereumAddress } from '@masknet/web3-shared-evm'
 import type { RSS3Index } from 'rss3-next/types/rss3'
 import { useDao } from './hooks/useDao'
 
@@ -38,27 +37,33 @@ const useStyles = makeStyles()((theme) => ({
 interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {}
 
 export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
-    const address = useAccount()
+    const classes = useStylesExtends(useStyles(), props)
+
+    //#region identity
     const identity = useCurrentVisitingIdentity()
-    const { loading: loadingENS, value: currentAccount } = useEthereumAddress(
+    const lastRegonizedIdentity = useLastRecognizedIdentity()
+    const { value: currentAccount } = useEthereumAddress(
         identity.nickname ?? '',
         identity.identifier.userId,
         identity.bio ?? '',
     )
+    const isOwned = lastRegonizedIdentity.identifier.equals(identity.identifier)
+    const currentAccountAddress = currentAccount?.address ?? ''
+    //#endregion
+
+    //#region DAO
     const userId = identity.identifier.userId.toLowerCase()
     const { value: daoPayload } = useDao(userId)
+    //#endregion
 
-    const [isOwnAddress, setOwnAddress] = useState(false)
     const [hidden, setHidden] = useState(true)
-    const classes = useStylesExtends(useStyles(), props)
-
-    const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.WalletTag)
+    const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
 
     const [isConnected, setConnected] = useState(false)
     const [username, setUsername] = useState<string>('')
 
-    const init = async (currentAccount: any) => {
-        await RSS3.setPageOwner(currentAccount?.address)
+    const init = async (account: string) => {
+        await RSS3.setPageOwner(account)
         const pageOwner = RSS3.getPageOwner()
         const apiUser = RSS3.getAPIUser()
         const rss3Username = (await (apiUser.persona as IRSS3).profile.get(pageOwner.address)).name
@@ -68,58 +73,42 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     }
 
     useLocationChange(() => {
-        setCurrentTag(PageTags.WalletTag)
+        setCurrentTag(PageTags.NFTTag)
         MaskMessages.events.profileNFTsTabUpdated.sendToLocal('reset')
     })
 
     useEffect(() => {
-        if (!loadingENS && currentAccount?.address !== '') {
-            init(currentAccount)
-            setOwnAddress(isSameAddress(currentAccount?.address, address))
-        }
-
+        if (currentAccountAddress) init(currentAccountAddress)
         return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [address, identity, currentAccount, isConnected])
+    }, [identity, currentAccountAddress, isConnected])
 
     const content = useMemo(() => {
         switch (currentTag) {
             case PageTags.WalletTag:
                 return <WalletsPage />
             case PageTags.NFTTag:
-                return (
-                    <NFTPage
-                        address={currentAccount?.address || ''}
-                        isOwnAddress={isOwnAddress}
-                        isConnected={isConnected}
-                    />
-                )
+                return <NFTPage address={currentAccountAddress} isOwned={isOwned} isConnected={isConnected} />
             case PageTags.DonationTag:
-                return (
-                    <DonationPage
-                        address={currentAccount?.address || ''}
-                        isOwnAddress={isOwnAddress}
-                        isConnected={isConnected}
-                    />
-                )
+                return <DonationPage address={currentAccountAddress} isOwned={isOwned} isConnected={isConnected} />
             case PageTags.FootprintTag:
                 return (
                     <FootprintPage
                         username={username}
-                        address={currentAccount?.address || ''}
-                        isOwnAddress={isOwnAddress}
+                        address={currentAccountAddress}
+                        isOwned={isOwned}
                         isConnected={isConnected}
                     />
                 )
             case PageTags.ConnectRSS3:
-                return <ConnectRSS3Page isOwnAddress={isOwnAddress} />
+                return <ConnectRSS3Page isOwned={isOwned} />
             case PageTags.DAOTag:
                 return <DAOPage payload={daoPayload} userId={userId} />
             default:
                 unreachable(currentTag)
         }
-    }, [currentTag])
+    }, [currentTag, currentAccountAddress, isOwned, isConnected, username, daoPayload])
 
     if (hidden) return null
 
@@ -131,7 +120,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     <PageTag
                         daoPayload={daoPayload}
                         tag={currentTag}
-                        isOwnAddress={isOwnAddress}
+                        isOwned={isOwned}
                         onChange={(tag) => setCurrentTag(tag)}
                     />
                 </div>

@@ -20,12 +20,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface NFTPageProps {
     address: string
-    isOwnAddress: boolean
+    isOwned: boolean
     isConnected: boolean
 }
 
 export function NFTPage(props: NFTPageProps) {
-    const { address, isOwnAddress, isConnected } = props
+    const { address, isOwned, isConnected } = props
     const { classes } = useStyles()
 
     const [listedNFT, setlistedNFT] = useState<GeneralAssetWithTags[]>([])
@@ -65,7 +65,7 @@ export function NFTPage(props: NFTPageProps) {
                                         {formatter(address)}
                                     </Typography>
                                 </div>
-                                {isOwnAddress ? (
+                                {isOwned ? (
                                     <Button
                                         isOutlined={true}
                                         color={COLORS.nft}
@@ -103,7 +103,7 @@ export function NFTPage(props: NFTPageProps) {
                 ) : (
                     <div className="text-center my-8">
                         <Typography className={classes.msg} variant="body1">
-                            {isOwnAddress
+                            {isOwned
                                 ? 'Please connect your RSS3 profile.'
                                 : 'This user has not connected with RSS3 yet.'}
                         </Typography>
@@ -112,7 +112,7 @@ export function NFTPage(props: NFTPageProps) {
             ) : (
                 <div className="text-center my-8">
                     <Typography className={classes.msg} variant="body1">
-                        {isOwnAddress
+                        {isOwned
                             ? 'Please connect an Ethereum compatible wallet.'
                             : 'This user has not connected any Ethereum compatible wallet.'}
                     </Typography>

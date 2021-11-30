@@ -43,14 +43,14 @@ const useStyles = makeStyles()((theme) => ({
 
 interface PageTagProps {
     tag: PageTags
-    isOwnAddress: boolean
+    isOwned: boolean
     daoPayload: Dao_Payload | undefined
     onChange: (tag: PageTags) => void
 }
 
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
-    const { onChange, tag, isOwnAddress, daoPayload } = props
+    const { onChange, tag, isOwned, daoPayload } = props
     return (
         <div className={classes.root}>
             <Button
@@ -90,7 +90,7 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 Footprints
             </Button>
-            {isOwnAddress ? (
+            {isOwned ? (
                 <Button
                     variant="contained"
                     className={classes.connectRSS3}

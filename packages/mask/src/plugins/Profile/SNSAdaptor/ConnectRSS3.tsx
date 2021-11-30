@@ -14,12 +14,12 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface ConnectRSS3PageProps {
-    isOwnAddress: boolean
+    isOwned: boolean
 }
 
 export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
     const { classes } = useStyles()
-    const { isOwnAddress } = props
+    const { isOwned } = props
     const address = useAccount()
     const [isRSS3FileExist, setRSS3FileExist] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -66,7 +66,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
     return (
         <div>
             <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
-            {isOwnAddress ? (
+            {isOwned ? (
                 <div className="flex flex-col my-8 gap-y-6 items-center justify-center">
                     {loading ? (
                         <Button isOutlined={false} color={COLORS.primary} width="w-60" height="h-14">

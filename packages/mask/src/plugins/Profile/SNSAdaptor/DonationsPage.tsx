@@ -20,11 +20,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface DonationPageProps {
     address: string
-    isOwnAddress: boolean
+    isOwned: boolean
     isConnected: boolean
 }
 export function DonationPage(props: DonationPageProps) {
-    const { address, isOwnAddress, isConnected } = props
+    const { address, isOwned, isConnected } = props
     const { classes } = useStyles()
 
     const [listedDonation, setlistedDonation] = useState<GeneralAssetWithTags[]>([])
@@ -62,7 +62,7 @@ export function DonationPage(props: DonationPageProps) {
                                 <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary">
                                     {formatter(address)}
                                 </Typography>
-                                {isOwnAddress ? (
+                                {isOwned ? (
                                     <Button
                                         isOutlined={true}
                                         color={COLORS.donation}
@@ -94,7 +94,7 @@ export function DonationPage(props: DonationPageProps) {
                 ) : (
                     <div className="text-center my-8">
                         <Typography className={classes.msg} variant="body1">
-                            {isOwnAddress
+                            {isOwned
                                 ? 'Please connect your RSS3 profile.'
                                 : 'This user has not connected with RSS3 yet.'}
                         </Typography>
@@ -103,7 +103,7 @@ export function DonationPage(props: DonationPageProps) {
             ) : (
                 <div className="text-center my-8">
                     <Typography className={classes.msg} variant="body1">
-                        {isOwnAddress
+                        {isOwned
                             ? 'Please connect an Ethereum compatible wallet.'
                             : 'This user has not connected any Ethereum compatible wallet.'}
                     </Typography>

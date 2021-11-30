@@ -21,12 +21,12 @@ const useStyles = makeStyles()((theme) => ({
 interface FootprintPageProps {
     username: string
     address: string
-    isOwnAddress: boolean
+    isOwned: boolean
     isConnected: boolean
 }
 
 export function FootprintPage(props: FootprintPageProps) {
-    const { username, address, isOwnAddress, isConnected } = props
+    const { username, address, isOwned, isConnected } = props
     const { classes } = useStyles()
 
     const [listedFootprint, setListedFootprint] = useState<GeneralAssetWithTags[]>([])
@@ -64,7 +64,7 @@ export function FootprintPage(props: FootprintPageProps) {
                                 <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary">
                                     {formatter(address)}
                                 </Typography>
-                                {isOwnAddress ? (
+                                {isOwned ? (
                                     <Button
                                         isOutlined={true}
                                         color={COLORS.footprint}
@@ -99,7 +99,7 @@ export function FootprintPage(props: FootprintPageProps) {
                 ) : (
                     <div className="text-center my-8">
                         <Typography className={classes.msg} variant="body1">
-                            {isOwnAddress
+                            {isOwned
                                 ? 'Please connect your RSS3 profile.'
                                 : 'This user has not connected with RSS3 yet.'}
                         </Typography>
@@ -108,7 +108,7 @@ export function FootprintPage(props: FootprintPageProps) {
             ) : (
                 <div className="text-center my-8">
                     <Typography className={classes.msg} variant="body1">
-                        {isOwnAddress
+                        {isOwned
                             ? 'Please connect an Ethereum compatible wallet.'
                             : 'This user has not connected any Ethereum compatible wallet.'}
                     </Typography>
