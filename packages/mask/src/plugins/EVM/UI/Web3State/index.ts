@@ -1,5 +1,7 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import {
+    ChainId,
+    CollectibleProvider,
     formatBalance,
     formatCurrency,
     formatEthereumAddress,
@@ -13,6 +15,7 @@ import {
     resolveChainColor,
     resolveChainFullName,
     resolveChainName,
+    resolveCollectibleLink,
     resolveTransactionLinkOnExplorer,
     Web3ProviderType,
     isValidDomain,
@@ -22,7 +25,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import Ens from 'ethjs-ens'
 import { getStorage } from '../../storage'
-import { getFungibleAssetsFn } from './getFungibleAssetsFn'
+import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
 
 const ZERO_X_ERROR_ADDRESS = '0x'
 
@@ -44,6 +47,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
     }
     state.Asset = state.Asset ?? {
         getFungibleAssets: getFungibleAssetsFn(context),
+        getNonFungibleAssets: getNonFungibleTokenFn(context),
     }
     state.NameService = state.NameService ?? {
         lookup: async (domain: string) => {
@@ -131,6 +135,11 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         isValidDomain,
         resolveDomainLink,
         formatDomainName,
+        resolveCollectibleLink: (chainId: number, address: string, tokenId: string) =>
+            resolveCollectibleLink(chainId as ChainId, CollectibleProvider.OPENSEA, {
+                contractDetailed: { address: address },
+                tokenId: tokenId,
+            } as unknown as any),
     }
     return state
 }

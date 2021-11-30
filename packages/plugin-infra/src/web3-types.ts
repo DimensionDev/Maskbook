@@ -1,6 +1,7 @@
 import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Pagination, Plugin } from './types'
+import type { Pageable } from './types'
 
 /**
  * A network plugin defines the way to connect to a single chain.
@@ -154,12 +155,14 @@ export declare namespace Web3Plugin {
         logoURI?: string | string[]
     }
 
-    export interface NonFungibleToken extends Token {
-        id: string
-        type: TokenType.NonFungible
+    export interface NonFungibleContract {
+        chainId: number
         name: string
-        description?: string
+        symbol: string
+        address: string
+        iconURL?: string
     }
+
     export interface FungibleTokenMetadata {
         name: string
         symbol: string
@@ -174,7 +177,18 @@ export declare namespace Web3Plugin {
         mediaType: string
         iconURL?: string
         assetURL?: string
-        token: NonFungibleToken
+    }
+
+    export interface NonFungibleToken extends Token {
+        // chainId_contractAddress_tokenId
+        id: string
+        tokenId: string
+        type: TokenType.NonFungible
+        name: string
+        description?: string
+        owner?: string
+        metadata?: NonFungibleTokenMetadata
+        contract?: NonFungibleContract
     }
 
     export interface TokenList {
@@ -234,10 +248,10 @@ export declare namespace Web3Plugin {
             /** Get non-fungible assets of given account. */
             getNonFungibleAssets?: (
                 address: string,
-                providerType: string,
-                network: NetworkDescriptor,
-                pagination?: Pagination,
-            ) => Promise<Asset[]>
+                pagination: Pagination,
+                providerType?: string,
+                network?: NetworkDescriptor,
+            ) => Promise<Pageable<NonFungibleToken>>
         }
         export interface NameServiceState {
             lookup?: (domain: string) => Promise<string | undefined>
@@ -290,6 +304,7 @@ export declare namespace Web3Plugin {
 
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
+            resolveCollectibleLink?: (chainId: number, address: string, tokenId: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
 
             resolveDomainLink?: (domain: string) => string

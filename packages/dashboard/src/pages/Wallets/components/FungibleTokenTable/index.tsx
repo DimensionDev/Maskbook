@@ -69,12 +69,12 @@ interface TokenTableProps {
 
 export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) => {
     const navigate = useNavigate()
+    const account = useAccount()
     const { Asset } = useWeb3PluginState()
-
     const { portfolioProvider } = useWeb3State()
     const network = useNetworkDescriptor()
     const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
-    const account = useAccount()
+
     const {
         error: detailedTokensError,
         loading: detailedTokensLoading,

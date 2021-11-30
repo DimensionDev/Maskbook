@@ -10,7 +10,6 @@ import { AddCollectibleDialog } from '../AddCollectibleDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { useCurrentCollectibleDataProvider } from '../../api'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -53,8 +52,6 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
         [AssetTab.Investment]: t.wallets_assets_investment(),
         [AssetTab.Collectibles]: t.wallets_assets_collectibles(),
     }
-    // Workaround: if useCurrentCollectibleDataProvider hook in CollectibleList component, will lead tooltip error: Maximum update depth exceeded.
-    const provider = useCurrentCollectibleDataProvider()
 
     const [currentTab, onChange] = useTabs(AssetTab.Token, AssetTab.Collectibles)
 
@@ -69,11 +66,9 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                 <TabContext value={currentTab}>
                     <Box className={classes.caption}>
                         <TabList onChange={onChange}>
-                            {assetTabs
-                                .filter((x) => pluginId !== NetworkPluginID.PLUGIN_EVM && x !== AssetTab.Collectibles)
-                                .map((key) => (
-                                    <Tab key={key} value={key} label={assetTabsLabel[key]} />
-                                ))}
+                            {assetTabs.map((key) => (
+                                <Tab key={key} value={key} label={assetTabsLabel[key]} />
+                            ))}
                         </TabList>
                         {pluginId === NetworkPluginID.PLUGIN_EVM && (
                             <Button
@@ -99,7 +94,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                         value={AssetTab.Collectibles}
                         key={AssetTab.Collectibles}
                         sx={{ minHeight: 'calc(100% - 48px)' }}>
-                        <CollectibleList selectedChainId={network?.chainId ?? null} provider={provider} />
+                        <CollectibleList selectedNetwork={network} />
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
