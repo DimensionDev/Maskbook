@@ -86,7 +86,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                                     component="img"
                                     width={172}
                                     height={172}
-                                    style={{ objectFit: 'contain' }}
+                                    style={{ objectFit: 'cover' }}
                                     src={value ?? token.info.image}
                                 />
                             )
