@@ -69,7 +69,7 @@ export function PageTag(props: PageTagProps) {
             </Button>
             <Button
                 variant="outlined"
-                className={classNames(classes.hidden, tag === PageTags.DonationTag ? classes.selected : classes.button)}
+                className={tag === PageTags.DonationTag ? classes.selected : classes.button}
                 onClick={() => onChange(PageTags.DonationTag)}
                 size="medium">
                 Donations
