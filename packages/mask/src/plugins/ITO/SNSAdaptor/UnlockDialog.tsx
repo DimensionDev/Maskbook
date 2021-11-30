@@ -22,6 +22,7 @@ import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { Trans } from 'react-i18next'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -85,7 +86,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
         token?.address ?? '',
     )
     //#endregion
-    if (!tokens.length) return <Typography>No need to unlock any token on this ITO.</Typography>
+    if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
     return (
         <div className={classes.root}>
             <TokenAmountPanel
@@ -103,14 +104,27 @@ export function UnlockDialog(props: UnlockDialogProps) {
             />
             {ITO2_CONTRACT_ADDRESS ? (
                 <Typography className={classes.tip} variant="body2" color="textSecondary">
-                    Allow the contract{' '}
-                    <Link
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}>
-                        <FormattedAddress address={ITO2_CONTRACT_ADDRESS} size={4} formatter={formatEthereumAddress} />
-                    </Link>{' '}
-                    to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
+                    <Trans
+                        components={{
+                            link: (
+                                <Link
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}
+                                />
+                            ),
+                            address: (
+                                <FormattedAddress
+                                    address={ITO2_CONTRACT_ADDRESS}
+                                    size={4}
+                                    formatter={formatEthereumAddress}
+                                />
+                            ),
+                        }}
+                        values={{
+                            symbol: token.symbol ?? 'Token',
+                        }}
+                    />
                 </Typography>
             ) : null}
             <EthereumWalletConnectedBoundary>
