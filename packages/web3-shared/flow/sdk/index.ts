@@ -1,4 +1,4 @@
-import * as fcl from '@onflow/fcl'
+import * as fcl from '@dimensiondev/onflow-fcl'
 import type { ChainId } from '../types'
 import { getAuthConstants } from '../constants'
 

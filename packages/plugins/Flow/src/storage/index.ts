@@ -1,4 +1,4 @@
-import type { User } from '@onflow/fcl'
+import type { User } from '@dimensiondev/onflow-fcl'
 import type { ScopedStorage } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-flow'
 

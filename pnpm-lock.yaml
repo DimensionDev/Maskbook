@@ -590,24 +590,24 @@ importers:
 
   packages/plugins/Flow:
     specifiers:
+      '@dimensiondev/onflow-fcl': ^0.0.78-alpha.8
       '@masknet/icons': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-shared-flow': workspace:*
-      '@onflow/fcl': ^0.0.77
       bignumber.js: ^9.0.1
       lodash-es: ^4.17.21
       react-use: ^17.3.1
     dependencies:
+      '@dimensiondev/onflow-fcl': 0.0.78-alpha.8
       '@masknet/icons': link:../../icons
       '@masknet/plugin-infra': link:../../plugin-infra
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
-      '@onflow/fcl': 0.0.77
       bignumber.js: 9.0.1
       lodash-es: 4.17.21
       react-use: 17.3.1_9a9fcfd9691ee39f83ac00f4a3221da4
@@ -898,16 +898,16 @@ importers:
 
   packages/web3-shared/flow:
     specifiers:
+      '@dimensiondev/onflow-fcl': ^0.0.78-alpha.8
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-kit': workspace:*
-      '@onflow/fcl': ^0.0.77
       '@onflow/types': ^0.0.5
       react-use: ^17.3.1
       urlcat: ^2.0.4
     dependencies:
+      '@dimensiondev/onflow-fcl': 0.0.78-alpha.8
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-kit': link:../../web3-kit
-      '@onflow/fcl': 0.0.77
       '@onflow/types': 0.0.5
       react-use: 17.3.1_9a9fcfd9691ee39f83ac00f4a3221da4
       urlcat: 2.0.4
@@ -4874,6 +4874,47 @@ packages:
       extension-port-stream: 1.0.0
     dev: false
 
+  /@dimensiondev/onflow-fcl/0.0.78-alpha.8:
+    resolution: {integrity: sha512-iUFF47VNVqgUfsfkPYyS86aZ7unw1f/8xqFmtF5Vwo8u1ukJm1y7w5zez4DRlMHdjhkXhDS+DGsJWfJA10mOjQ==, tarball: download/@dimensiondev/onflow-fcl/0.0.78-alpha.8/25f4dfea54e5c06abe0aecb29e5d9654c84440bb7d42262bfaee69ad2dc6d579}
+    dependencies:
+      '@dimensiondev/onflow-sdk': 0.0.56-alpha.1
+      '@onflow/interaction': 0.0.11
+      '@onflow/rlp': 0.0.3
+      '@onflow/types': 0.0.6
+      '@onflow/util-actor': 0.0.2
+      '@onflow/util-address': 0.0.0
+      '@onflow/util-invariant': 0.0.0
+      '@onflow/util-template': 0.0.1
+      '@onflow/util-uid': 0.0.1
+    transitivePeerDependencies:
+      - google-protobuf
+    dev: false
+
+  /@dimensiondev/onflow-protobuf/0.1.8:
+    resolution: {integrity: sha512-xtrl+HMhkBEwb38RmErxuW/iIblbvaw2rv8gfn7s1SCjNQv2zQQVc2Evc/JHlLdsmpvnDUklZdCOBgjF4QDMpA==, tarball: download/@dimensiondev/onflow-protobuf/0.1.8/68fd936b4029a0d0a893cf4616e2957316e937214ba561ff85a4e5bbf07556fc}
+    dependencies:
+      '@improbable-eng/grpc-web': 0.12.0_google-protobuf@3.19.1
+      elliptic: 6.5.4
+      google-protobuf: 3.19.1
+    dev: false
+
+  /@dimensiondev/onflow-sdk/0.0.56-alpha.1:
+    resolution: {integrity: sha512-5Q8CD/SKYPZCloFiAzRfWEbrLjVolNZUkC8F5zKSSP/AEvykN9NsBPs9zRpWu7PJB7Bg8yk2UlBiqWlPsP5BQA==, tarball: download/@dimensiondev/onflow-sdk/0.0.56-alpha.1/80db01333dfc5e3d5d3a23b9d3df101004e66e829f482d4940e33b7f90bc6fcd}
+    dependencies:
+      '@dimensiondev/onflow-protobuf': 0.1.8
+      '@improbable-eng/grpc-web': 0.14.1
+      '@improbable-eng/grpc-web-node-http-transport': 0.14.1_@improbable-eng+grpc-web@0.14.1
+      '@onflow/rlp': 0.0.3
+      '@onflow/util-actor': 0.0.2
+      '@onflow/util-address': 0.0.0
+      '@onflow/util-invariant': 0.0.0
+      '@onflow/util-template': 0.0.1
+      deepmerge: 4.2.2
+      sha3: 2.1.4
+    transitivePeerDependencies:
+      - google-protobuf
+    dev: false
+
   /@dimensiondev/patch-package/6.5.0:
     resolution: {integrity: sha512-n+wVwEZGGemMvjaX3GVP7Tuta7lMmCJIWAieh5BGjYvImH4hU8BzHXm7IzFmWWxm5N1zT4/5QWWNIAUVrQzgLw==, tarball: download/@dimensiondev/patch-package/6.5.0/136792f9635000ae1fe0e6d7f44d1d26ada840b347ad5795b21383eb659ce7c3}
     engines: {npm: '>5'}
@@ -6346,59 +6387,20 @@ packages:
       rimraf: 3.0.2
     dev: true
 
-  /@onflow/fcl/0.0.77:
-    resolution: {integrity: sha512-hgFW51Va29KwlzhDy6Fm15UesfXluRTR5RJn+zrm5d5HFfkquaxKOnMGT5waKVFn5u4THQIE6v+OnaDDchGNpg==}
-    dependencies:
-      '@onflow/interaction': 0.0.11
-      '@onflow/rlp': 0.0.3
-      '@onflow/sdk': 0.0.54
-      '@onflow/types': 0.0.4
-      '@onflow/util-actor': 0.0.2
-      '@onflow/util-address': 0.0.0
-      '@onflow/util-invariant': 0.0.0
-      '@onflow/util-template': 0.0.1
-      '@onflow/util-uid': 0.0.1
-    transitivePeerDependencies:
-      - google-protobuf
-    dev: false
-
   /@onflow/interaction/0.0.11:
     resolution: {integrity: sha512-Xuq1Mmx6Wyba/F/L+QLQs0yJeQDsIDwy5SKk5vrCuVgIj0yD8k506g5L8ODrbM1LWll8i0tQsoOi0F85vNl5sA==}
-    dev: false
-
-  /@onflow/protobuf/0.1.8:
-    resolution: {integrity: sha512-Taww31RrpJMr3fkWgF2HR2TcRbAoPbMjwRYt9IlYknyRX5YTzpaU35petdqDRfxwmfY9mRxHbiInujX4aV02Hw==}
-    dependencies:
-      '@improbable-eng/grpc-web': 0.12.0_google-protobuf@3.19.1
-      google-protobuf: 3.19.1
     dev: false
 
   /@onflow/rlp/0.0.3:
     resolution: {integrity: sha512-oAf0VEiMjX8eC6Vd66j1BdGYTHOM6UBaS/sLSScnc7bKX5gICqe2gtEsCeJVE9rUzRk3GD3JqXRnPAW6YFWd/Q==}
     dev: false
 
-  /@onflow/sdk/0.0.54:
-    resolution: {integrity: sha512-4kC1kpxUvWUvWs7kymWX6bJjmch155XmNc3GRT3ZLeCQPIYbEYGVagH9AJzdmBRvxgFiiNpPJaNAjD3NusgCLQ==}
-    dependencies:
-      '@improbable-eng/grpc-web': 0.14.1
-      '@improbable-eng/grpc-web-node-http-transport': 0.14.1_@improbable-eng+grpc-web@0.14.1
-      '@onflow/protobuf': 0.1.8
-      '@onflow/rlp': 0.0.3
-      '@onflow/util-actor': 0.0.2
-      '@onflow/util-address': 0.0.0
-      '@onflow/util-invariant': 0.0.0
-      '@onflow/util-template': 0.0.1
-      deepmerge: 4.2.2
-    transitivePeerDependencies:
-      - google-protobuf
-    dev: false
-
-  /@onflow/types/0.0.4:
-    resolution: {integrity: sha512-47r0qTM45mR7FSvyEE0njGljkpgy3MCf/2W82pfZ/PTFGWr1nsGV/4j2bUfK9Sry4Ymz2W20iRZVP3xpqOhqGw==}
-    dev: false
-
   /@onflow/types/0.0.5:
     resolution: {integrity: sha512-Pgh3hz3Cr8KPpkaDd1E3FdQRASGqpfA1NK7dtgz+6xdTdESeqU2z0ksocrOdfy9ikRvKt4RyFmDuXPx2CVbjuQ==}
+    dev: false
+
+  /@onflow/types/0.0.6:
+    resolution: {integrity: sha512-2eBrmqiFO37EUOJvzksygP8Wu6lL/m9az36AF0qYdGQW/79KGCHBCchUsIzxyGt8UDXl/dgnIcMkiTH7tWZqXg==}
     dev: false
 
   /@onflow/util-actor/0.0.2:
