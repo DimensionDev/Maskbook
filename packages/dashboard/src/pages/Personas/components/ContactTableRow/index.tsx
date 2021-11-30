@@ -10,7 +10,7 @@ import { generateContactAvatarColor } from '../../../../utils/generateContactAva
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn } from 'react-use'
-import { LoadingButton } from '@mui/lab'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     favorite: {
@@ -74,7 +74,7 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
         }
     }, [contact, currentPersona, onReset])
 
-    const [{ loading }, handleClickInvite] = useAsyncFn(async () => {
+    const [, handleClickInvite] = useAsyncFn(async () => {
         return Services.SocialNetwork.openShareLink(
             network,
             t.personas_invite_post({ identifier: contact.identifier.userId }),
@@ -86,7 +86,6 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
             handleClickInvite={handleClickInvite}
             handleClickStar={handleClickStar}
             theme={theme}
-            loading={loading}
             contact={contact}
             index={index}
         />
@@ -96,15 +95,14 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
 export interface ContactTableRowUIProps {
     contact: RelationProfile
     index: number
-    handleClickInvite(): void
+    handleClickInvite(): Promise<void>
     handleClickStar(): void
-    loading: boolean
     theme: 'light' | 'dark'
 }
 
 const SPACE_POINT = ' '.codePointAt(0)!
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
-    ({ contact, index, handleClickStar, handleClickInvite, theme, loading }) => {
+    ({ contact, index, handleClickStar, handleClickInvite, theme }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const [first, last] = contact.name.split(' ')
@@ -149,10 +147,8 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                 <TableCell align="center" sx={{ border: 'none' }}>
                     {!contact.fingerprint ? (
                         <LoadingButton
-                            loading={loading}
                             color="secondary"
                             size="small"
-                            variant="contained"
                             className={classes.button}
                             onClick={handleClickInvite}>
                             {t.personas_contacts_invite()}

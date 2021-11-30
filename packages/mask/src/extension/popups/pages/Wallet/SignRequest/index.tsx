@@ -6,10 +6,10 @@ import { useI18N } from '../../../../../utils'
 import { EthereumRpcType, useWallet } from '@masknet/web3-shared-evm'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '../../../../service'
-import { LoadingButton } from '@mui/lab'
 import { toUtf8 } from 'web3-utils'
 import { useHistory, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -139,14 +139,13 @@ const SignRequest = memo(() => {
             ) : null}
             <div className={classes.controller}>
                 <LoadingButton
-                    loading={rejectLoading}
                     variant="contained"
                     className={classes.button}
                     style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
                     onClick={handleReject}>
                     {t('cancel')}
                 </LoadingButton>
-                <LoadingButton loading={loading} variant="contained" className={classes.button} onClick={handleConfirm}>
+                <LoadingButton className={classes.button} onClick={handleConfirm}>
                     {t('confirm')}
                 </LoadingButton>
             </div>

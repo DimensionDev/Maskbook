@@ -18,13 +18,13 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
-import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useHistory } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -94,11 +94,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 12,
         lineHeight: '16px',
         color: '#15181B',
-    },
-    disabled: {
-        opacity: 0.5,
-        backgroundColor: '#1C68F3!important',
-        color: '#ffffff!important',
     },
 }))
 
@@ -449,13 +444,7 @@ export const GasSetting1559 = memo(() => {
                     name="maxFeePerGas"
                 />
             </form>
-            <LoadingButton
-                loading={loading}
-                variant="contained"
-                fullWidth
-                classes={{ root: classes.button, disabled: classes.disabled }}
-                disabled={!isEmpty(errors)}
-                onClick={onSubmit}>
+            <LoadingButton fullWidth className={classes.button} disabled={!isEmpty(errors)} onClick={onSubmit}>
                 {t('confirm')}
             </LoadingButton>
         </>

@@ -9,10 +9,10 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
 import { currySameAddress, ProviderType, useWallets } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
-import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { first } from 'lodash-unified'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     container: {
@@ -63,11 +63,6 @@ const useStyles = makeStyles()({
     },
     toolbar: {
         padding: 0,
-    },
-    disabled: {
-        opacity: 0.5,
-        backgroundColor: '#1C68F3!important',
-        color: '#ffffff!important',
     },
 })
 
@@ -186,13 +181,7 @@ const AddDeriveWallet = memo(() => {
                     classes={{ root: classes.pagination, toolbar: classes.toolbar }}
                 />
             ) : null}
-            <LoadingButton
-                loading={confirmLoading}
-                disabled={confirmLoading || loading}
-                variant="contained"
-                classes={{ root: classes.button, disabled: classes.disabled }}
-                onClick={onConfirm}
-                fullWidth>
+            <LoadingButton disabled={confirmLoading} className={classes.button} onClick={onConfirm} fullWidth>
                 {t('popups_wallet_done')}
             </LoadingButton>
         </div>

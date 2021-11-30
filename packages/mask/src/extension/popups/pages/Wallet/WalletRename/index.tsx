@@ -7,10 +7,10 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useHistory } from 'react-router-dom'
 import { useI18N } from '../../../../../utils'
 import { useAsyncFn } from 'react-use'
-import { LoadingButton } from '@mui/lab'
 import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
 import { useSetWalletNameForm } from '../hooks/useSetWalletNameForm'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     header: {
@@ -33,11 +33,6 @@ const useStyles = makeStyles()({
         fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
-    },
-    disabled: {
-        opacity: 0.5,
-        backgroundColor: '#1C68F3!important',
-        color: '#ffffff!important',
     },
 })
 
@@ -85,10 +80,9 @@ const WalletRename = memo(() => {
                 />
                 <LoadingButton
                     fullWidth
-                    loading={loading}
                     variant="contained"
                     disabled={!isValid}
-                    classes={{ root: classes.button, disabled: classes.disabled }}
+                    className={classes.button}
                     onClick={onSubmit}>
                     {t('confirm')}
                 </LoadingButton>

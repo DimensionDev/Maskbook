@@ -9,8 +9,8 @@ import { useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { LoadingButton } from '@mui/lab'
 import { usePasswordForm } from '../hooks/usePasswordForm'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     container: {
@@ -51,11 +51,6 @@ const useStyles = makeStyles()({
         marginTop: 20,
         padding: '9px 10px',
         borderRadius: 20,
-    },
-    disabled: {
-        opacity: 0.5,
-        backgroundColor: '#1C68F3!important',
-        color: '#ffffff!important',
     },
     controller: {
         padding: '16px 10px',
@@ -135,13 +130,7 @@ const SetPaymentPassword = memo(() => {
                 </form>
             </div>
             <div className={classes.controller}>
-                <LoadingButton
-                    loading={loading}
-                    variant="contained"
-                    fullWidth
-                    classes={{ root: classes.button, disabled: classes.disabled }}
-                    disabled={!isValid}
-                    onClick={onSubmit}>
+                <LoadingButton fullWidth className={classes.button} disabled={!isValid} onClick={onSubmit}>
                     {t('confirm')}
                 </LoadingButton>
             </div>

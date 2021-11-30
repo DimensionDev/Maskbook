@@ -5,7 +5,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
+import { TabContext, TabPanel } from '@mui/lab'
 import { useHistory, useLocation } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { JsonFileBox } from '../components/JsonFileBox'
@@ -20,6 +20,7 @@ import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     container: {
@@ -93,11 +94,6 @@ const useStyles = makeStyles()({
     },
     controller: {
         padding: '20px 10px',
-    },
-    disabled: {
-        opacity: 0.5,
-        backgroundColor: '#1C68F3!important',
-        color: '#ffffff!important',
     },
 })
 
@@ -313,13 +309,7 @@ const ImportWallet = memo(() => {
                 <Typography className={classes.error}>{errorMessage}</Typography>
             </div>
             <div className={classes.controller}>
-                <LoadingButton
-                    loading={loading}
-                    variant="contained"
-                    fullWidth
-                    classes={{ root: classes.button, disabled: classes.disabled }}
-                    disabled={disabled}
-                    onClick={onSubmit}>
+                <LoadingButton fullWidth classes={classes.button} disabled={disabled} onClick={onSubmit}>
                     {t('import')}
                 </LoadingButton>
             </div>

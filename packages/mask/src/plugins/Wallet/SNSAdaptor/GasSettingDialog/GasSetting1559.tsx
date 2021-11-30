@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { formatGweiToEther, useChainId, useNativeTokenDetailed, GasOption } from '@masknet/web3-shared-evm'
 import { toWei } from 'web3-utils'
 import { Typography } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-unified'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
@@ -15,6 +14,7 @@ import { WalletRPC } from '../../../Wallet/messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import { useGasSettingStyles } from './useGasSettingStyles'
 import type { GasSettingProps } from './types'
+import { LoadingButton } from '@masknet/shared'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
@@ -290,13 +290,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                         name="maxFeePerGas"
                     />
                 </form>
-                <LoadingButton
-                    loading={getGasOptionsLoading}
-                    variant="contained"
-                    fullWidth
-                    className={classes.button}
-                    disabled={!isEmpty(errors)}
-                    onClick={onSubmit}>
+                <LoadingButton fullWidth className={classes.button} disabled={!isEmpty(errors)} onClick={onSubmit}>
                     {t('confirm')}
                 </LoadingButton>
             </>

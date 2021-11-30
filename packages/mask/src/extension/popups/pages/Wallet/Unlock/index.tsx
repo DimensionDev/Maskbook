@@ -4,13 +4,13 @@ import { useHistory, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { MaskWalletIcon } from '@masknet/icons'
 import { Typography } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 import { EnterDashboard } from '../../../components/EnterDashboard'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWalletLockStatus } from '../hooks/useWalletLockStatus'
+import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     contain: {
@@ -61,7 +61,7 @@ const Unlock = memo(() => {
 
     const history = useHistory()
 
-    const [{ value: verified, loading }, handleUnlock] = useAsyncFn(async () => {
+    const [{ value: verified }, handleUnlock] = useAsyncFn(async () => {
         return WalletRPC.unlockWallet(password)
     }, [password])
 
@@ -94,13 +94,7 @@ const Unlock = memo(() => {
                         helperText={verified === false ? t('popups_wallet_unlock_error_password') : ''}
                     />
                 </div>
-                <LoadingButton
-                    loading={loading}
-                    fullWidth
-                    variant="contained"
-                    classes={{ root: classes.button, disabled: classes.disabled }}
-                    disabled={!password}
-                    onClick={handleUnlock}>
+                <LoadingButton fullWidth className={classes.button} disabled={!password} onClick={handleUnlock}>
                     {t('unlock')}
                 </LoadingButton>
             </main>

@@ -6,11 +6,10 @@ import { useI18N } from '../../../../../utils'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
-import { LoadingButton } from '@mui/lab'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import type { PersonaInformation } from '@masknet/shared-base'
-import { formatFingerprint } from '@masknet/shared'
+import { formatFingerprint, LoadingButton } from '@masknet/shared'
 import { PasswordField } from '../../../components/PasswordField'
 
 const useStyles = makeStyles()((theme) => ({
@@ -124,7 +123,7 @@ export interface LogoutUIProps {
     backupPassword: string
     loading: boolean
     onCancel: () => void
-    onLogout: () => void
+    onLogout: () => Promise<void>
 }
 
 export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout, onCancel, deletingPersona }) => {
@@ -133,8 +132,8 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
     const [password, setPassword] = useState('')
     const [error, setError] = useState(false)
 
-    const onConfirm = useCallback(() => {
-        if (!backupPassword || backupPassword === password) onLogout()
+    const onConfirm = useCallback(async () => {
+        if (!backupPassword || backupPassword === password) await onLogout()
         else setError(true)
     }, [onLogout, backupPassword, password])
 
@@ -177,8 +176,6 @@ export const LogoutUI = memo<LogoutUIProps>(({ backupPassword, loading, onLogout
                     {t('cancel')}
                 </Button>
                 <LoadingButton
-                    loading={loading}
-                    variant="contained"
                     className={classes.button}
                     color="error"
                     style={{ backgroundColor: '#ff5555' }}
