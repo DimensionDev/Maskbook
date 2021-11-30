@@ -6,6 +6,7 @@
   "sideEffect": false,
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
+    "@msgpack/msgpack": "^2.7.1",
     "@mui/icons-material": "link:..\\empty",
     "@mui/lab": "link:..\\empty",
     "@mui/material": "link:..\\empty",
