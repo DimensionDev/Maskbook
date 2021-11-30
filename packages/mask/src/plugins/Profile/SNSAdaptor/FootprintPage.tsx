@@ -100,8 +100,8 @@ export function FootprintPage(props: FootprintPageProps) {
                     <div className="text-center my-8">
                         <Typography className={classes.msg} variant="body1">
                             {isOwnAddress
-                                ? 'Please connect your RSS3 profile'
-                                : 'This user has not connect with RSS3 yet'}
+                                ? 'Please connect your RSS3 profile.'
+                                : 'This user has not connected with RSS3 yet.'}
                         </Typography>
                     </div>
                 )
@@ -109,8 +109,8 @@ export function FootprintPage(props: FootprintPageProps) {
                 <div className="text-center my-8">
                     <Typography className={classes.msg} variant="body1">
                         {isOwnAddress
-                            ? 'Please connect an Ethereum compatible wallet'
-                            : 'This user has not connect any Ethereum compatible wallet'}
+                            ? 'Please connect an Ethereum compatible wallet.'
+                            : 'This user has not connected any Ethereum compatible wallet.'}
                     </Typography>
                 </div>
             )}

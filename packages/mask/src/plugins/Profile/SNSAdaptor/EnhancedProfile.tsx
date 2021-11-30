@@ -81,7 +81,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [identity, currentAccount, isConnected])
+    }, [address, identity, currentAccount, isConnected])
 
     const content = useMemo(() => {
         switch (currentTag) {
