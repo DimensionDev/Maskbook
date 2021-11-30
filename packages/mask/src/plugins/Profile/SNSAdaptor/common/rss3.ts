@@ -2,26 +2,19 @@
 import { ethers } from 'ethers'
 import RSS3 from 'rss3-next'
 import { fetch } from './middleware'
-import type { RSS3Account, RSS3Profile } from 'rss3-next/types/rss3'
 import type { GitcoinResponse, GeneralAsset, NFTResponse, POAPResponse } from './types'
 import config from './config'
-import rns from './rns'
 import Events from './events'
 import Services from '../../../../extension/service'
 
 export const EMPTY_RSS3_DP: RSS3DetailPersona = {
     persona: null,
     address: '',
-    name: '',
-    profile: null,
-    followers: [],
-    followings: [],
     isReady: false,
 }
 const RSS3PageOwner: RSS3DetailPersona = Object.create(EMPTY_RSS3_DP)
 const RSS3LoginUser: RSS3DetailPersona = Object.create(EMPTY_RSS3_DP)
 const assetsProfileCache: Map<string, IAssetProfile> = new Map()
-let ethersProvider: ethers.providers.Web3Provider | null
 
 export type IRSS3 = RSS3
 
@@ -33,10 +26,6 @@ export interface IAssetProfile {
 export interface RSS3DetailPersona {
     persona: RSS3 | null
     address: string
-    name: string
-    profile: RSS3Profile | null
-    followers: string[]
-    followings: string[]
     isReady: boolean
 }
 
@@ -63,16 +52,6 @@ async function initUser(user: RSS3DetailPersona, skipSignSync: boolean = false) 
             await user.persona.files.sync()
         }
     }
-    if (user.name && !user.address) {
-        user.address = await rns.name2Addr(user.name)
-    }
-    if (user.address && !user.name) {
-        user.name = await rns.addr2Name(user.address)
-    }
-    const RSS3APIPersona = apiPersona()
-    user.profile = await RSS3APIPersona.profile.get(user.address)
-    user.followers = await RSS3APIPersona.backlinks.get(user.address, 'following')
-    user.followings = (await RSS3APIPersona.links.get(user.address, 'following'))?.list || []
     user.isReady = true
 }
 
@@ -122,11 +101,6 @@ export default {
             if (RSS3PageOwner.address !== addrOrName) {
                 isReloadRequired = true
                 RSS3PageOwner.address = addrOrName
-            }
-        } else {
-            if (RSS3PageOwner.name !== addrOrName) {
-                isReloadRequired = true
-                RSS3PageOwner.name = addrOrName
             }
         }
         if (isReloadRequired) {
@@ -225,39 +199,5 @@ export default {
             data = null
         }
         return data
-    },
-
-    addNewMetamaskAccount: async (): Promise<RSS3Account> => {
-        // js don't support multiple return values,
-        // so here I'm using signature as a message provider
-        if (!RSS3LoginUser.persona) {
-            return {
-                platform: '',
-                identity: '',
-                signature: 'Not logged in',
-            }
-        }
-        const metamaskEthereum = (window as any).ethereum
-        ethersProvider = new ethers.providers.Web3Provider(metamaskEthereum)
-        const accounts = await metamaskEthereum.request({
-            method: 'eth_requestAccounts',
-        })
-        const address = ethers.utils.getAddress(accounts[0])
-
-        const newTmpAddress: RSS3Account = {
-            platform: 'EVM+',
-            identity: address,
-        }
-
-        const signature =
-            (await ethersProvider
-                ?.getSigner()
-                .signMessage(RSS3LoginUser.persona.accounts.getSigMessage(newTmpAddress))) || ''
-
-        return {
-            platform: 'EVM+',
-            identity: address,
-            signature: signature,
-        }
     },
 }
