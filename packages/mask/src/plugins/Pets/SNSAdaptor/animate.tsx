@@ -6,6 +6,11 @@ import AnimatedMessage from './animatedMsg'
 import Tip from './tooltip'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 
+import { ChainId } from '@masknet/web3-shared-evm'
+import { useAccount, useChainId, useCollectibles } from '@masknet/web3-shared-evm'
+import { useValueRef } from '@masknet/shared'
+import { currentNonFungibleAssetDataProviderSettings } from '../../Wallet/settings'
+
 const useStyles = makeStyles()(() => ({
     root: {
         position: 'fixed',
@@ -17,6 +22,8 @@ const useStyles = makeStyles()(() => ({
         width: '100%',
         height: '100%',
         backgroundSize: 'contain',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
     },
     close: {
         width: 15,
@@ -48,12 +55,36 @@ const AnimatePic = () => {
     const handleMouseEnter = () => setInfoShow(true)
     const handleMouseLeave = () => setInfoShow(false)
 
+    const [NFT, setNFT] = useState('')
+    const account = useAccount()
+    const chainId = useChainId()
+    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
+    const {
+        value = {
+            collectibles: [],
+            hasNextPage: false,
+        },
+        loading,
+        retry,
+        error,
+    } = useCollectibles(account, ChainId.Mainnet, provider, 0, 50)
+    const { collectibles, hasNextPage } = value
+    console.log('collectibles', collectibles, hasNextPage)
+
+    useEffect(() => {
+        collectibles.forEach((item: any, idx: number) => {
+            if (idx === 0) {
+                setNFT(item.info.image)
+            }
+        })
+    }, [JSON.stringify(collectibles)])
+
     return (
         <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             {show ? (
                 <Drag>
                     <AnimatedMessage />
-                    <div className={classes.img} style={{ backgroundImage: `url(${Background})` }} />
+                    <div className={classes.img} style={{ backgroundImage: `url(${NFT})` }} />
                     {infoShow ? (
                         <>
                             <Tip />

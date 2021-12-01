@@ -78,6 +78,8 @@ export default function Plugins() {
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
+    const { openDialog: openEssayDialog } = useRemoteControlledDialog(PluginMessages.Pets.essayDialogUpdated)
+
     async function onSwitch(id: string, checked: boolean) {
         await Services.Settings.setPluginEnabled(id, checked)
         setPluginStatus({ ...pluginStatus, [id]: checked })
@@ -96,6 +98,8 @@ export default function Plugins() {
             openTransakDialog()
         } else if (id === PLUGIN_IDS.SWAP) {
             openSwapDialog()
+        } else if (id === PLUGIN_IDS.PETS) {
+            openEssayDialog()
         }
     }
 
@@ -160,6 +164,7 @@ export default function Plugins() {
                             onSwitch={onSwitch}
                         />
                     </Box>
+
                     <Box className={classes.list}>
                         <PluginItem
                             id={PLUGIN_IDS.SWAP}
@@ -185,6 +190,7 @@ export default function Plugins() {
                             desc={t.labs_pets_desc()}
                             icon={<PetIcon />}
                             enabled={pluginStatus[PLUGIN_IDS.PETS]}
+                            onExplore={onExplore}
                             onSwitch={onSwitch}
                         />
                     </Box>

@@ -10,9 +10,11 @@ export interface DashboardPluginMessages {
     Wallet: unknown
     Transak: unknown
     Swap: unknown
+    Pets: unknown
 }
 
 export interface DashboardPluginServices {
     Wallet: unknown
     Swap: unknown
+    Pets: unknown
 }

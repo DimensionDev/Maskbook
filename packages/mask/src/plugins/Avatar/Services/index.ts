@@ -21,6 +21,7 @@ export async function getNFTAvatar(userId: string) {
 
 export async function saveNFTAvatar(address: string, nft: AvatarMetaDB) {
     const signature = await personalSign(nft.userId, address)
+    console.log('signature, saveNFTAvatar', signature)
     setUserAddress(nft.userId, address)
     const avatar = await saveNFTAvatarToRSS(address, nft, signature)
     return avatar
