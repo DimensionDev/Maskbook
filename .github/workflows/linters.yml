@@ -21,14 +21,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - uses: actions/setup-node@v2
-      - name: pnpm cache
-        uses: actions/cache@v2
+      - uses: pnpm/action-setup@v2
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - run: npm install --global pnpm
+          version: '6.23.1'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'pnpm'
       - run: pnpm install
       - run: npx gulp locale-kit
   type-check-and-jest:
@@ -41,16 +40,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+      - uses: pnpm/action-setup@v2
+        with:
+          version: '6.23.1'
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - name: pnpm cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - run: npm install --global pnpm
+          cache: 'pnpm'
       - run: pnpm install
       - run: npx gulp codegen
       - run: npx gulp polyfill
@@ -61,14 +57,13 @@ jobs:
       - uses: actions/checkout@v2
         with:
           ref: ${{ github.event.pull_request.head.sha }}
-      - uses: actions/setup-node@v2
-      - name: pnpm cache
-        uses: actions/cache@v2
+      - uses: pnpm/action-setup@v2
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - run: npm install --global pnpm
+          version: '6.23.1'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'pnpm'
       - run: pnpm install
       - run: pnpm run lint:ci -- --max-warnings=0
       - run: pnpm run lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml

@@ -110,6 +110,7 @@ export function submitPoll(address: string, param: SubmitPollParams): Promise<st
     return new Promise<string>(async (resolve, reject) => {
         try {
             const sig = await Services.Ethereum.personalSign(JSON.stringify(param), address)
+            console.log('sig', sig)
             const res = await request<string>(
                 `${ALLBLUE_API_PREFIX}/polls/submit`,
                 {

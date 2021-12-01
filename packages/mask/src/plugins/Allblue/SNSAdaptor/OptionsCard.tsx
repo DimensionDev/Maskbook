@@ -3,7 +3,19 @@ import { AllbluePostType } from '../types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
-import { Alert, Box, Card, CardContent, Chip, Step, StepContent, StepLabel, Stepper, Typography } from '@mui/material'
+import {
+    Alert,
+    Box,
+    Card,
+    CardContent,
+    Chip,
+    Step,
+    StepContent,
+    StepLabel,
+    Stepper,
+    Typography,
+    Snackbar,
+} from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send } from '@mui/icons-material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import NoNftCard from './NoNftCard'
@@ -78,6 +90,7 @@ export default function OptionsCard(props: OptionsViewProps) {
     const [submitting, setSubmitting] = useState<boolean>(false)
     const [error, setError] = useState<'' | 'unsupported-chain' | 'insufficient-nft'>('')
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
+    const [snackVisible, setSnackVisible] = useState<boolean>(false)
     // const [verticalStepper] = useState<boolean>(document.body.clientWidth < 420)
 
     const { classes } = useOptionsStyles()
@@ -273,7 +286,8 @@ export default function OptionsCard(props: OptionsViewProps) {
                             .then((res) => {
                                 setSubmitting(false)
                             })
-                            .catch((error_) => {
+                            .catch((error) => {
+                                setSnackVisible(true)
                                 setSubmitting(false)
                             })
                     }}
@@ -385,6 +399,19 @@ export default function OptionsCard(props: OptionsViewProps) {
 
     return (
         <CardContent ref={parentRef}>
+            <Snackbar
+                autoHideDuration={2000}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={snackVisible}
+                onClose={() => setSnackVisible(false)}>
+                <Alert
+                    onClose={() => setSnackVisible(false)}
+                    variant={'filled'}
+                    severity="error"
+                    sx={{ width: '100%' }}>
+                    {t('plugin_allblue_submit_failed')}
+                </Alert>
+            </Snackbar>
             {userStatus && (
                 <>
                     {/*{type === AllbluePostType.Poll && renderStepper(userStatus, verticalStepper)}*/}
@@ -411,9 +438,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                     {error === 'insufficient-nft' && (
                         <Alert severity="info">{t('plugin_allblue_insufficient_nft')}</Alert>
                     )}
-                    {error === 'insufficient-nft' && (
-                        <NoNftCard conditions={unmeetCondition} />
-                    )}
+                    {error === 'insufficient-nft' && <NoNftCard conditions={unmeetCondition} />}
                 </>
             )}
         </CardContent>

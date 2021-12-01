@@ -33,7 +33,7 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
                 disableWindowBlurListener={false}
                 anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
                 children={jsx}
-                isfacebook={Boolean(isFacebook(activatedSocialNetworkUI)).toString()}
+                isFacebook={isFacebook(activatedSocialNetworkUI)}
             />
         ),
         baseline

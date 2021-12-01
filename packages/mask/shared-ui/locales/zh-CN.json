@@ -557,6 +557,7 @@
     "plugin_allblue_puzzle_underway": "谜底尚未公布",
     "plugin_allblue_voting_underway": "投票仍在进行中",
     "plugin_allblue_submit": "提交",
+    "plugin_allblue_submit_failed": "提交失败",
     "plugin_allblue_vote": "票",
     "plugin_allblue_votes": "票",
     "plugin_allblue_have_voted": "已投票",

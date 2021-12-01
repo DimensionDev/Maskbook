@@ -598,6 +598,7 @@
     "plugin_allblue_voting_underway": "The voting continues to be tallied.",
     "plugin_allblue_voting_rate": "Hit rate: ",
     "plugin_allblue_submit": "SUBMIT",
+    "plugin_allblue_submit_failed": "Failed to submit.",
     "plugin_allblue_vote": "vote",
     "plugin_allblue_votes": "votes",
     "plugin_allblue_have_voted": "Voted",
