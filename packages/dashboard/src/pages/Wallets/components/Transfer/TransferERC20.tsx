@@ -1,5 +1,5 @@
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
-import { Box, Button, IconButton, Stack, Typography, Link } from '@mui/material'
+import { Box, Button, IconButton, Stack, Typography, Link, Popover } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import {
     EthereumTokenType,
@@ -38,6 +38,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
     const network = useNetworkDescriptor()
     const [gasLimit_, setGasLimit_] = useState(0)
 
@@ -122,6 +123,14 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (!address) return t.wallets_transfer_error_address_absence()
         if (!(EthereumAddress.isValid(address) || (address.includes('.eth') && Utils?.isValidDomain?.(address))))
             return t.wallets_transfer_error_invalid_address()
+        if (
+            address.includes('.eth') &&
+            Utils?.isValidDomain?.(address) &&
+            (resolveEnsDomainError || !registeredAddress)
+        ) {
+            if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
+            return t.wallet_transfer_error_no_address_has_been_set_name()
+        }
         return ''
     }, [
         transferAmount,
@@ -133,21 +142,9 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         Utils,
         registeredAddress,
         resolveEnsDomainError,
+        network,
     ])
     //#endregion
-
-    const validationEnsMessage = useMemo(() => {
-        if (
-            address.includes('.eth') &&
-            Utils?.isValidDomain?.(address) &&
-            (resolveEnsDomainError || !registeredAddress)
-        ) {
-            if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
-            return t.wallet_transfer_error_no_address_has_been_set_name()
-        }
-
-        return ''
-    }, [address, Utils, resolveEnsDomainError, registeredAddress, network])
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
@@ -158,6 +155,50 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         }
     }, [transferState])
 
+    const ensContent = useMemo(() => {
+        if (registeredAddress) {
+            return (
+                <Link
+                    href={Utils?.resolveEnsDomains?.(address)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="none">
+                    <Box py={1.5} px={4}>
+                        <Typography fontSize={16} lineHeight="22px" fontWeight={500}>
+                            {address}
+                        </Typography>
+                        <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
+                            <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
+                        </Typography>
+                    </Box>
+                </Link>
+            )
+        }
+
+        if (address.includes('.eth')) {
+            if (network?.type !== NetworkType.Ethereum) {
+                return (
+                    <Box py={2.5} px={1.5}>
+                        <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
+                            {t.wallet_transfer_error_no_ens_support()}
+                        </Typography>
+                    </Box>
+                )
+            }
+            if (Utils?.isValidDomain?.(address) && resolveEnsDomainError) {
+                return (
+                    <Box py={2.5} px={1.5}>
+                        <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
+                            {t.wallet_transfer_error_no_address_has_been_set_name()}
+                        </Typography>
+                    </Box>
+                )
+            }
+        }
+
+        return
+    }, [registeredAddress, address, Utils?.isValidDomain, MaskColorVar, resolveEnsDomainError, network?.type])
+
     return (
         <Stack direction="row" justifyContent="center" mt={4}>
             <Stack width={640} minWidth={500}>
@@ -165,34 +206,27 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     <MaskTextField
                         required
                         value={address}
+                        InputProps={{
+                            onClick: (event) => {
+                                event.stopPropagation()
+                                event.preventDefault()
+                                setAnchorEl(event.currentTarget)
+                            },
+                        }}
                         onChange={(e) => setAddress(e.currentTarget.value)}
                         label={t.wallets_transfer_to_address()}
-                        error={!!validationEnsMessage}
-                        helperText={validationEnsMessage}
                     />
-                    {registeredAddress ? (
-                        <Link
-                            href={Utils?.resolveEnsDomains?.(address)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            underline="none">
-                            <Box my={1}>
-                                <Typography fontSize={16} lineHeight="22px" fontWeight={500}>
-                                    {address}
-                                </Typography>
-                                <Typography
-                                    fontSize={14}
-                                    lineHeight="20px"
-                                    style={{ color: MaskColorVar.textSecondary }}>
-                                    <FormattedAddress
-                                        address={registeredAddress}
-                                        size={4}
-                                        formatter={Utils?.formatAddress}
-                                    />
-                                </Typography>
-                            </Box>
-                        </Link>
-                    ) : null}
+
+                    <Popover
+                        anchorEl={anchorEl}
+                        onClose={() => setAnchorEl(null)}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                        open={Boolean(anchorEl) && !!ensContent}>
+                        {ensContent}
+                    </Popover>
                 </Box>
                 <Box mt={2}>
                     <TokenAmountPanel

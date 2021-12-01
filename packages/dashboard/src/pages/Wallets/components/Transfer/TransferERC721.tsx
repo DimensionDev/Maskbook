@@ -1,5 +1,5 @@
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
-import { Box, Button, IconButton, Link, Stack, Typography } from '@mui/material'
+import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import {
@@ -8,6 +8,7 @@ import {
     EthereumTokenType,
     formatWeiToEther,
     isSameAddress,
+    resolveEnsDomains,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -60,6 +61,7 @@ export const TransferERC721 = memo(() => {
     const { classes } = useStyles()
     const [defaultToken, setDefaultToken] = useState<ERC721TokenDetailed | null>(null)
     const navigate = useNavigate()
+    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
@@ -190,23 +192,48 @@ export const TransferERC721 = memo(() => {
         [transferCallback, contract?.address, gasConfig, registeredAddress, Utils],
     )
 
-    useEffect(() => {
-        if (
-            allFormFields.recipient.includes('.eth') &&
-            Utils?.isValidDomain?.(allFormFields.recipient) &&
-            (resolveEnsDomainError || !registeredAddress)
-        ) {
-            if (network?.type !== NetworkType.Ethereum) {
-                setError('recipient', { message: t.wallet_transfer_error_no_ens_support() })
-                return
-            }
-            setError('recipient', { message: t.wallet_transfer_error_no_address_has_been_set_name() })
-        } else if (registeredAddress) {
-            clearErrors('recipient')
+    const ensContent = useMemo(() => {
+        if (registeredAddress) {
+            return (
+                <Link
+                    href={Utils?.resolveEnsDomains?.(allFormFields.recipient)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="none">
+                    <Box py={1.5} px={4}>
+                        <Typography fontSize={16} lineHeight="22px" fontWeight={500}>
+                            {allFormFields.recipient}
+                        </Typography>
+                        <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
+                            <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
+                        </Typography>
+                    </Box>
+                </Link>
+            )
         }
 
+        if (allFormFields.recipient.includes('.eth')) {
+            if (network?.type !== NetworkType.Ethereum) {
+                return (
+                    <Box py={2.5} px={1.5}>
+                        <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
+                            {t.wallet_transfer_error_no_ens_support()}
+                        </Typography>
+                    </Box>
+                )
+            }
+            if (Utils?.isValidDomain?.(allFormFields.recipient) && resolveEnsDomainError) {
+                return (
+                    <Box py={2.5} px={1.5}>
+                        <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
+                            {t.wallet_transfer_error_no_address_has_been_set_name()}
+                        </Typography>
+                    </Box>
+                )
+            }
+        }
         return
-    }, [allFormFields.recipient, registeredAddress, resolveEnsDomainError, network, Utils?.isValidDomain])
+    }, [allFormFields, resolveEnsDomainError, resolveEnsDomains()])
 
     const contractIcon = useMemo(() => {
         if (!contract?.iconURL) return null
@@ -232,34 +259,28 @@ export const TransferERC721 = memo(() => {
                                     helperText={errors.recipient?.message}
                                     error={!!errors.recipient}
                                     value={field.field.value}
+                                    InputProps={{
+                                        onClick: (event) => {
+                                            event.stopPropagation()
+                                            event.preventDefault()
+                                            setAnchorEl(event.currentTarget)
+                                        },
+                                    }}
                                     label={t.wallets_transfer_to_address()}
                                 />
                             )}
                             name="recipient"
                         />
-                        {registeredAddress ? (
-                            <Link
-                                href={Utils?.resolveEnsDomains?.(allFormFields.recipient)}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                underline="none">
-                                <Box my={1}>
-                                    <Typography fontSize={16} lineHeight="22px" fontWeight={500}>
-                                        {allFormFields.recipient}
-                                    </Typography>
-                                    <Typography
-                                        fontSize={14}
-                                        lineHeight="20px"
-                                        style={{ color: MaskColorVar.textSecondary }}>
-                                        <FormattedAddress
-                                            address={registeredAddress}
-                                            size={4}
-                                            formatter={Utils?.formatAddress}
-                                        />
-                                    </Typography>
-                                </Box>
-                            </Link>
-                        ) : null}
+                        <Popover
+                            anchorEl={anchorEl}
+                            onClose={() => setAnchorEl(null)}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            open={Boolean(anchorEl) && !!ensContent}>
+                            {ensContent}
+                        </Popover>
                     </Box>
                     <Box width="100%" mt={2}>
                         <Controller
