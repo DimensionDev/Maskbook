@@ -52,7 +52,7 @@ export function RedPacket(props: RedPacketProps) {
 
     const { value: tokenDetailed } = useFungibleTokenDetailed(
         payload.token?.type ?? payload.token_type ?? EthereumTokenType.Native,
-        payload.token?.address ?? '',
+        payload.token?.address ?? payload.token_address ?? '',
     )
     const token = payload.token ?? tokenDetailed
     //#endregion
