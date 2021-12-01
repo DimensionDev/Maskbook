@@ -530,12 +530,12 @@ export enum DomainProvider {
     UNS = 'UNS',
 }
 
-export enum PortfolioProvider {
+export enum FungibleAssetProvider {
     ZERION = 'Zerion',
     DEBANK = 'Debank',
 }
 
-export enum CollectibleProvider {
+export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
 }
 

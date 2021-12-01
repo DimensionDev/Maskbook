@@ -3,6 +3,7 @@ import { DialogContent, Box, DialogActions, Button, Typography } from '@mui/mate
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { TokenIcon } from '@masknet/shared'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -33,6 +34,7 @@ interface ClaimDialogUIProps extends InjectedDialogProps {
 function ClaimDialogUI(props: ClaimDialogUIProps) {
     const { open, amount, token, onClaim, onClose } = props
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
 
     if (!token) return null
 
@@ -58,7 +60,7 @@ function ClaimDialogUI(props: ClaimDialogUIProps) {
             </DialogContent>
             <DialogActions>
                 <Button variant="contained" sx={{ width: '100%' }} onClick={onClaim}>
-                    Claim {`${amount}.00`} {token.symbol}
+                    {t('plugin_airdrop_claim')} {`${amount}.00`} {token.symbol}
                 </Button>
             </DialogActions>
         </InjectedDialog>

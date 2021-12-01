@@ -62,7 +62,7 @@ export function RestoreLegacyWalletDialog(props: RestoreLegacyWalletDialogProps)
                 </Typography>
                 <Box display="flex" justifyContent="center">
                     <Button variant="contained" onClick={onRestore} sx={{ marginTop: 2 }}>
-                        Confirm
+                        {t('confirm')}
                     </Button>
                 </Box>
             </DialogContent>

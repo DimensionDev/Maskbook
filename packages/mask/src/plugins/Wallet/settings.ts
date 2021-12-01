@@ -2,11 +2,11 @@ import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../../shared-ui/locales_legacy'
 import {
     ChainId,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
     CryptoPrice,
     GasOptions,
     NetworkType,
-    PortfolioProvider,
+    FungibleAssetProvider,
     ProviderType,
     LockStatus,
     BalanceOfChains,
@@ -75,26 +75,26 @@ export const currentProviderSettings = createGlobalSettings<ProviderType>(
 )
 
 /**
- * The default portfolio data provider
+ * The default asset data provider
  */
-export const currentPortfolioDataProviderSettings = createGlobalSettings<PortfolioProvider>(
-    `${PLUGIN_IDENTIFIER}+portfolioProvider`,
-    PortfolioProvider.DEBANK,
+export const currentFungibleAssetDataProviderSettings = createGlobalSettings<FungibleAssetProvider>(
+    `${PLUGIN_IDENTIFIER}+fungibleAssetProvider`,
+    FungibleAssetProvider.DEBANK,
     {
-        primary: () => i18n.t('plugin_wallet_settings_portfolio_data_source_primary'),
-        secondary: () => i18n.t('plugin_wallet_settings_portfolio_data_source_secondary'),
+        primary: () => i18n.t('plugin_wallet_settings_fungible_asset_data_source_primary'),
+        secondary: () => i18n.t('plugin_wallet_settings_fungible_asset_data_source_secondary'),
     },
 )
 
 /**
  * The default collectible data provider
  */
-export const currentCollectibleDataProviderSettings = createGlobalSettings<CollectibleProvider>(
-    `${PLUGIN_IDENTIFIER}+collectibleProvider`,
-    CollectibleProvider.OPENSEA,
+export const currentNonFungibleAssetDataProviderSettings = createGlobalSettings<NonFungibleAssetProvider>(
+    `${PLUGIN_IDENTIFIER}+nonFungibleAssetProvider`,
+    NonFungibleAssetProvider.OPENSEA,
     {
-        primary: () => i18n.t('plugin_wallet_settings_collectible_data_source_primary'),
-        secondary: () => i18n.t('plugin_wallet_settings_collectible_data_source_secondary'),
+        primary: () => i18n.t('plugin_wallet_settings_non_fungible_data_source_primary'),
+        secondary: () => i18n.t('plugin_wallet_settings_non_fungible_data_source_secondary'),
     },
 )
 

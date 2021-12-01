@@ -219,11 +219,6 @@ export enum LanguageOptions {
     zhTW = 'zh-TW',
     koKR = 'ko-KR',
     jaJP = 'ja-JP',
-    esES = 'es-ES',
-    faIR = 'fa-IR',
-    itIT = 'it-IT',
-    ruRU = 'ru-RU',
-    frFR = 'fr-FR',
 }
 
 /** Supported display languages */
@@ -233,9 +228,4 @@ export enum SupportedLanguages {
     zhTW = 'zh-TW',
     koKR = 'ko-KR',
     jaJP = 'ja-JP',
-    esES = 'es-ES',
-    faIR = 'fa-IR',
-    itIT = 'it-IT',
-    ruRU = 'ru-RU',
-    frFR = 'fr-FR',
 }
