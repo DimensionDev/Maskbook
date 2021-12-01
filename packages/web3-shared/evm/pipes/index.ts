@@ -130,7 +130,8 @@ export function resolveIPFSLink(ipfs: string): string {
     return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
 }
 
-export function resolveEnsDomains(domain: string) {
+export function resolveEnsDomains(domain?: string) {
+    if (!domain) return ''
     return urlcat('https://app.ens.domains/name/:domain/details', { domain })
 }
 

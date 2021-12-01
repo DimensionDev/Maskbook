@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useCallback, useMemo, useState } from 'react'
+import { memo, SyntheticEvent, useCallback, useMemo, useState, ReactElement } from 'react'
 import { useI18N } from '../../../../../utils'
 import {
     Asset,
@@ -25,7 +25,7 @@ import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { makeStyles } from '@masknet/theme'
-import { Box, Button, Chip, Collapse, Link, MenuItem, Typography } from '@mui/material'
+import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
@@ -37,7 +37,7 @@ import { LoadingButton } from '@mui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'
 import { useLookupAddress, useWeb3State } from '@masknet/plugin-infra'
-import { RightIcon } from '../../../../../../../icons/general'
+import { RightIcon } from '@masknet/icons'
 import { AccountItem } from './AccountItem'
 
 const useStyles = makeStyles()({
@@ -129,6 +129,15 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: '20px',
     },
+    popover: {
+        width: '100%',
+    },
+    errorMessage: {
+        color: '#FF5F5F',
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 500,
+    },
 })
 const MIN_GAS_LIMIT = 21000
 export interface Transfer1559Props {
@@ -164,7 +173,9 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_address_absence'))
                     .refine(
-                        (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
+                        (address) =>
+                            EthereumAddress.isValid(address) ||
+                            (address.includes('.eth') && Utils?.isValidDomain?.(address)),
                         t('wallet_transfer_error_invalid_address'),
                     )
                     .refine((address) => address !== wallet?.address, t('wallet_transfer_error_address_absence')),
@@ -261,8 +272,15 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     useUpdateEffect(() => {
         // The input is ens domain but the binding address cannot be found
-        if (Utils?.isValidDomain?.(address) && (resolveEnsDomainError || !registeredAddress))
-            methods.setError('address', { message: t('wallet_transfer_error_no_address_has_been_set_name') })
+        if (
+            address.includes('.eth') &&
+            Utils?.isValidDomain?.(address) &&
+            (resolveEnsDomainError || !registeredAddress)
+        )
+            methods.setError('address', {
+                type: 'resolveFailed',
+                message: t('wallet_transfer_error_no_address_has_been_set_name'),
+            })
     }, [resolveEnsDomainError, registeredAddress, methods.setError, address, Utils])
     //#endregion
 
@@ -362,6 +380,43 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         </Collapse>,
     )
 
+    const ensContent = useMemo(() => {
+        if (registeredAddress && !resolveEnsDomainError && Utils?.resolveEnsDomains)
+            return (
+                <Link
+                    href={Utils.resolveEnsDomains(address)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="none">
+                    <Box display="flex" justifyContent="space-between" alignItems="center" p={1.5}>
+                        <Box>
+                            <Typography fontSize={14} fontWeight={600} lineHeight="20px" color="#000000">
+                                {address}
+                            </Typography>
+                            <Typography color="#7B8192" fontSize={14} lineHeight="20px">
+                                <FormattedAddress
+                                    address={registeredAddress}
+                                    size={4}
+                                    formatter={formatEthereumAddress}
+                                />
+                            </Typography>
+                        </Box>
+                        <RightIcon />
+                    </Box>
+                </Link>
+            )
+        if (methods.formState.errors.address?.type === 'resolveFailed') {
+            return (
+                <Box py={2.5} px={1.5}>
+                    <Typography className={classes.errorMessage}>
+                        {methods.formState.errors.address?.message}
+                    </Typography>
+                </Box>
+            )
+        }
+        return
+    }, [address, registeredAddress, Utils?.resolveEnsDomains, methods.formState.errors.address?.type])
+
     return (
         <FormProvider {...methods}>
             <Transfer1559TransferUI
@@ -374,11 +429,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 handleCancel={() => history.goBack()}
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
-                ensNameSpace={
-                    registeredAddress && !resolveEnsDomainError
-                        ? { domain: address, address: registeredAddress }
-                        : undefined
-                }
+                ensContent={ensContent}
             />
             {otherWallets.length ? menu : null}
         </FormProvider>
@@ -395,10 +446,7 @@ export interface Transfer1559UIProps {
     handleCancel: () => void
     handleConfirm: () => void
     confirmLoading: boolean
-    ensNameSpace?: {
-        address: string
-        domain: string
-    }
+    ensContent?: ReactElement
 }
 
 type TransferFormData = {
@@ -420,10 +468,11 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         handleCancel,
         handleConfirm,
         confirmLoading,
-        ensNameSpace,
+        ensContent,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
+        const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
@@ -444,8 +493,6 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
             'gasLimit',
         ])
 
-        const { Utils } = useWeb3State()
-
         return (
             <>
                 <div className={classes.container}>
@@ -465,40 +512,27 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                             <UserIcon className={classes.user} />
                                         </div>
                                     ),
+                                    onClick: (event) => {
+                                        event.stopPropagation()
+                                        event.preventDefault()
+                                        setAnchorEl(event.currentTarget)
+                                    },
                                 }}
                             />
                         )}
                         name="address"
                     />
-                    {ensNameSpace && Utils?.resolveEnsDomains ? (
-                        <Link
-                            href={Utils.resolveEnsDomains(ensNameSpace.domain)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            underline="none">
-                            <Box
-                                display="flex"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                marginTop={1}
-                                marginBottom={2}
-                                px="9px">
-                                <Box>
-                                    <Typography fontSize={12} lineHeight="14px">
-                                        {ensNameSpace.domain}
-                                    </Typography>
-                                    <Typography className={classes.balance}>
-                                        <FormattedAddress
-                                            address={ensNameSpace.address}
-                                            size={4}
-                                            formatter={formatEthereumAddress}
-                                        />
-                                    </Typography>
-                                </Box>
-                                <RightIcon />
-                            </Box>
-                        </Link>
-                    ) : null}
+                    <Popover
+                        open={Boolean(anchorEl) && !!ensContent}
+                        classes={{ paper: classes.popover }}
+                        anchorEl={anchorEl}
+                        onClose={() => setAnchorEl(null)}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}>
+                        {ensContent}
+                    </Popover>
                     <Typography className={classes.label}>
                         <span>{t('popups_wallet_choose_token')}</span>
                         <Typography className={classes.balance} component="span">
