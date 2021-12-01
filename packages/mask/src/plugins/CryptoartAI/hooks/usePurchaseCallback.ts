@@ -66,7 +66,7 @@ export function usePurchaseCallback(editionNumber: number, priceInWei: number) {
                         type: TransactionStateType.HASH,
                         hash,
                     })
-                    resolve(hash)
+                    resolve()
                 })
                 .on(TransactionEventType.ERROR, (error) => {
                     setPurchaseState({
