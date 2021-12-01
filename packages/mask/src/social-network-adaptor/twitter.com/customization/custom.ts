@@ -58,6 +58,15 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 dark: toRGB(shade(primaryColorRGB, -10)),
                 contrastText: toRGB(primaryContrastColorRGB),
             }
+
+            theme.palette.custom = {
+                bottom: '#FFFFFF',
+                bg: '#F6F8F8',
+                line: '#EFF3F4',
+                input: '#EDF1F2',
+                strong: '#111418',
+            }
+
             const themeName = isDark ? (isDarker ? 'darker' : 'dark') : 'light'
             const colorSchema = twitterColorSchema[themeName]
             const colors = Object.keys(colorSchema) as Array<keyof typeof colorSchema>
