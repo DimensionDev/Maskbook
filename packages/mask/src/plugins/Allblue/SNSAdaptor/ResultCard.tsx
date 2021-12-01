@@ -73,7 +73,7 @@ export default function ResultCard(props: ResultViewProps) {
                         const percent = (total > 0 ? (value * 100) / total : 0).toFixed(2)
                         return (
                             <Card
-                                variant={'outlined'}
+                                variant="outlined"
                                 key={option}
                                 // marginBottom={1}
                                 sx={{
@@ -92,7 +92,7 @@ export default function ResultCard(props: ResultViewProps) {
                                     <Box sx={{ display: 'flex', alignItems: 'top' }}>
                                         <Chip
                                             sx={{ marginRight: '8px' }}
-                                            size={'small'}
+                                            size="small"
                                             label={`${value} ${t(
                                                 value > 1 ? 'plugin_allblue_votes' : 'plugin_allblue_vote',
                                             )}`}
@@ -101,20 +101,20 @@ export default function ResultCard(props: ResultViewProps) {
                                             {option}
                                         </Typography>
                                     </Box>
-                                    <Stack direction={'row'} spacing={1}>
+                                    <Stack direction="row" spacing={1}>
                                         {choice === index && (
                                             <Chip
                                                 icon={<Adjust />}
-                                                size={'small'}
-                                                color={'primary'}
+                                                size="small"
+                                                color="primary"
                                                 label={t('plugin_allblue_selected')}
                                             />
                                         )}
                                         {answer === index && (
                                             <Chip
                                                 icon={<CheckCircle />}
-                                                color={'success'}
-                                                size={'small'}
+                                                color="success"
+                                                size="small"
                                                 label={t(
                                                     type === AllbluePostType.PuzzleResult
                                                         ? 'plugin_allblue_answer'
@@ -125,11 +125,11 @@ export default function ResultCard(props: ResultViewProps) {
                                     </Stack>
                                 </Box>
 
-                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <Box sx={{ width: '100%', mr: 1 }}>
-                                        <BorderLinearProgress value={Number(percent)} variant={'determinate'} />
+                                <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '16px' }}>
+                                    <Box sx={{ flex: 1 }}>
+                                        <BorderLinearProgress value={Number(percent)} variant="determinate" />
                                     </Box>
-                                    <Box sx={{ minWidth: 50, display: 'flex', justifyContent: 'flex-end' }}>
+                                    <Box sx={{ width: 54 }}>
                                         <Typography variant="body2" color="text.secondary">{`${percent}%`}</Typography>
                                     </Box>
                                 </Box>

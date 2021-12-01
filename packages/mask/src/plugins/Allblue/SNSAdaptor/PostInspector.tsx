@@ -82,11 +82,11 @@ export function PostInspector(props: PostInspectorProps) {
         fetchData()
     }, [account])
 
-    const fetchData = () => {
+    const fetchData = async () => {
         postType !== AllbluePostType.Encryption &&
-            fetchStoryInfo(storyId).then((res) => {
+            (await fetchStoryInfo(storyId).then((res) => {
                 setStoryInfo(res)
-            })
+            }))
         switch (postType) {
             case AllbluePostType.Encryption:
                 let searchParams = new URLSearchParams(url.split('?')[1])
@@ -95,37 +95,37 @@ export function PostInspector(props: PostInspectorProps) {
                 break
             case AllbluePostType.Status:
                 !!account &&
-                    fetchUserStoryStatus(storyId, account).then((res) => {
+                    (await fetchUserStoryStatus(storyId, account).then((res) => {
                         setUserStoryStatus(res)
-                    })
+                    }))
                 break
             case AllbluePostType.Puzzle:
                 !!account &&
-                    fetchUserPuzzleStatus(targetId, account).then((res) => {
+                    (await fetchUserPuzzleStatus(targetId, account).then((res) => {
                         setUserPuzzleStatus(res)
-                    })
+                    }))
                 break
             case AllbluePostType.Poll:
                 !!account &&
-                    fetchUserPollStatus(targetId, account).then((res) => {
+                    (await fetchUserPollStatus(targetId, account).then((res) => {
                         setUserPollStatus(res)
-                    })
+                    }))
                 break
             case AllbluePostType.PuzzleResult:
                 !!account &&
-                    fetchUserPuzzleStatus(targetId, account).then((res) => {
+                    (await fetchUserPuzzleStatus(targetId, account).then((res) => {
                         setUserPuzzleStatus(res)
-                    })
-                fetchPuzzleResult(targetId).then((res) => {
+                    }))
+                await fetchPuzzleResult(targetId).then((res) => {
                     setPuzzleResult(res)
                 })
                 break
             case AllbluePostType.PollResult:
                 !!account &&
-                    fetchUserPollStatus(targetId, account).then((res) => {
+                    (await fetchUserPollStatus(targetId, account).then((res) => {
                         setUserPollStatus(res)
-                    })
-                fetchPollResult(targetId).then((res) => {
+                    }))
+                await fetchPollResult(targetId).then((res) => {
                     setPollResult(res)
                 })
                 break
@@ -133,7 +133,7 @@ export function PostInspector(props: PostInspectorProps) {
     }
 
     const handleSubmit = (choice: number) => {
-        return new Promise<boolean>((resolve) => {
+        return new Promise<boolean>((resolve, reject) => {
             switch (postType) {
                 case AllbluePostType.Puzzle:
                     submitPuzzle(account, {
@@ -142,12 +142,12 @@ export function PostInspector(props: PostInspectorProps) {
                         timestamp: Math.floor(new Date().valueOf() / 1000),
                         choice,
                     })
-                        .then((res) => {
-                            fetchData()
+                        .then(async (res) => {
+                            await fetchData()
                             resolve(true)
                         })
                         .catch((e) => {
-                            resolve(false)
+                            reject(false)
                         })
                     break
                 case AllbluePostType.Poll:
@@ -157,12 +157,12 @@ export function PostInspector(props: PostInspectorProps) {
                         timestamp: Math.floor(new Date().valueOf() / 1000),
                         choice,
                     })
-                        .then((res) => {
-                            fetchData()
+                        .then(async (res) => {
+                            await fetchData()
                             resolve(true)
                         })
                         .catch((e) => {
-                            resolve(false)
+                            reject(false)
                         })
                     break
             }

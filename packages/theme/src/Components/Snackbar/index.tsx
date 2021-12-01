@@ -27,10 +27,10 @@ export { SnackbarProvider, useSnackbar } from 'notistack'
 export type { VariantType, OptionsObject, SnackbarKey, SnackbarMessage } from 'notistack'
 
 interface StyleProps {
-    isfacebook?: boolean
+    isFacebook?: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { isfacebook }, createRef) => {
+const useStyles = makeStyles<StyleProps>()((theme, { isFacebook }, createRef) => {
     const { palette } = theme
     const isDark = palette.mode === 'dark'
     const spinningAnimationKeyFrames = keyframes`
@@ -108,7 +108,7 @@ to {
     return {
         root: {
             zIndex: 9999,
-            transform: isfacebook ? 'translateY(100px)' : 'none',
+            transform: isFacebook ? 'translateY(80px)' : 'none',
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
@@ -176,7 +176,7 @@ export interface CustomSnackbarContentProps {
     processing?: boolean
     variant?: VariantType
     action?: SnackbarAction
-    isfacebook?: boolean
+    isFacebook?: boolean
     classes?: Partial<ReturnType<typeof useStyles>['classes']>
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
@@ -188,7 +188,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 }
 
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
-    const classes = useStylesExtends(useStyles({ isfacebook: props.isfacebook }), props)
+    const classes = useStylesExtends(useStyles({ isFacebook: props.isFacebook ?? false }), props)
     const snackbar = useSnackbar()
     const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
@@ -218,9 +218,9 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
     )
 })
 
-export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isfacebook?: string }>((props) => {
+export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isFacebook?: boolean }>((props) => {
     const ref = useRef<SnackbarProvider>(null)
-    const { classes } = useStyles({ isfacebook: Boolean(props.isfacebook) })
+    const { classes } = useStyles({ isFacebook: props.isFacebook ?? false })
     const onDismiss = (key: string | number) => () => {
         ref.current?.closeSnackbar(key)
     }
@@ -237,7 +237,7 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isfacebook?
                     id={key}
                     variant={props.variant ?? 'default'}
                     title={title}
-                    isfacebook={Boolean(props.isfacebook)}
+                    isFacebook={props.isFacebook}
                 />
             )}
             action={(key) => (

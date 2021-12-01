@@ -3,7 +3,19 @@ import { AllbluePostType } from '../types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
-import { Alert, Box, Card, CardContent, Chip, Step, StepContent, StepLabel, Stepper, Typography } from '@mui/material'
+import {
+    Alert,
+    Box,
+    Card,
+    CardContent,
+    Chip,
+    Step,
+    StepContent,
+    StepLabel,
+    Stepper,
+    Typography,
+    Snackbar,
+} from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send } from '@mui/icons-material'
 import LoadingButton from '@mui/lab/LoadingButton'
 import NoNftCard from './NoNftCard'
@@ -78,6 +90,7 @@ export default function OptionsCard(props: OptionsViewProps) {
     const [submitting, setSubmitting] = useState<boolean>(false)
     const [error, setError] = useState<'' | 'unsupported-chain' | 'insufficient-nft'>('')
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
+    const [snackVisible, setSnackVisible] = useState<boolean>(false)
     // const [verticalStepper] = useState<boolean>(document.body.clientWidth < 420)
 
     const { classes } = useOptionsStyles()
@@ -120,7 +133,6 @@ export default function OptionsCard(props: OptionsViewProps) {
     }, [chainId, userStatus])
 
     useEffect(() => {
-        console.log('userStatus update', userStatus)
         setChoice(userStatus ? userStatus.choice : -1)
         setSelected(userStatus ? userStatus.choice !== -1 : true)
         setTimeout(() => {
@@ -142,7 +154,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                     return
                 }
             }
-            let _unmeetCondition: PuzzleCondition[] = []
+            const _unmeetCondition: PuzzleCondition[] = []
             for (const condition of userStatus.conditions) {
                 const { type, address, minAmount } = condition
                 switch (type) {
@@ -177,7 +189,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                 <Card
                     sx={choice !== index ? { cursor: 'pointer' } : {}}
                     className={classes.progressOption}
-                    variant={'outlined'}
+                    variant="outlined"
                     key={option}
                     onClick={
                         !selected && !error && userStatus.status !== 0
@@ -197,7 +209,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                         <Box sx={{ display: 'flex', alignItems: 'top' }}>
                             <Chip
                                 sx={{ marginRight: '8px' }}
-                                size={'small'}
+                                size="small"
                                 label={`${count} ${t(count > 1 ? 'plugin_allblue_votes' : 'plugin_allblue_vote')}`}
                             />
                             <Typography color="textPrimary" sx={{ fontSize: '13px', lineHeight: '24px' }}>
@@ -207,25 +219,25 @@ export default function OptionsCard(props: OptionsViewProps) {
                         {choice === index ? (
                             <Chip
                                 icon={<RadioButtonChecked />}
-                                size={'small'}
-                                color={'primary'}
+                                size="small"
+                                color="primary"
                                 label={t('plugin_allblue_selected')}
                             />
                         ) : (
                             <Chip
                                 sx={{ cursor: 'pointer' }}
                                 icon={<RadioButtonUnchecked />}
-                                size={'small'}
-                                color={'default'}
+                                size="small"
+                                color="default"
                                 label={t('plugin_allblue_unselect')}
                             />
                         )}
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Box sx={{ width: '100%', mr: 1 }}>
-                            <BorderLinearProgress value={Number(percent)} variant={'determinate'} />
+                    <Box sx={{ display: 'flex', alignItems: 'center', columnGap: '16px' }}>
+                        <Box sx={{ flex: 1 }}>
+                            <BorderLinearProgress value={Number(percent)} variant="determinate" />
                         </Box>
-                        <Box sx={{ minWidth: 52, display: 'flex', justifyContent: 'flex-end' }}>
+                        <Box sx={{ width: 54 }}>
                             <Typography variant="body2" color="text.secondary">{`${percent}%`}</Typography>
                         </Box>
                     </Box>
@@ -233,7 +245,7 @@ export default function OptionsCard(props: OptionsViewProps) {
             ) : (
                 <Box key={index} sx={{ position: 'relative' }}>
                     <Chip
-                        id={'submit'}
+                        id="submit"
                         className={classes.blockChip}
                         label={
                             <div
@@ -273,7 +285,8 @@ export default function OptionsCard(props: OptionsViewProps) {
                             .then((res) => {
                                 setSubmitting(false)
                             })
-                            .catch((error_) => {
+                            .catch((error) => {
+                                setSnackVisible(true)
                                 setSubmitting(false)
                             })
                     }}
@@ -317,7 +330,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                             return vertical ? (
                                 <Step key={index} completed={false} expanded={true}>
                                     <StepLabel>
-                                        <Typography variant="h6" color={'text.primary'} gutterBottom={false}>
+                                        <Typography variant="h6" color="text.primary" gutterBottom={false}>
                                             {e.poll}
                                         </Typography>
                                     </StepLabel>
@@ -334,7 +347,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 <Step key={index} completed={false}>
                                     <StepLabel>
                                         <Box>
-                                            <Typography variant="h6" color={'text.primary'} gutterBottom={false}>
+                                            <Typography variant="h6" color="text.primary" gutterBottom={false}>
                                                 {e.poll}
                                             </Typography>
                                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -351,10 +364,10 @@ export default function OptionsCard(props: OptionsViewProps) {
                             )
                         })}
                         {vertical ? (
-                            <Step key={'latest'} completed={false} expanded={true}>
+                            <Step key="latest" completed={false} expanded={true}>
                                 <StepLabel>
                                     <Box>
-                                        <Typography variant="h6" color={'text.primary'} gutterBottom={true}>
+                                        <Typography variant="h6" color="text.primary" gutterBottom={true}>
                                             {userStatus.question}
                                         </Typography>
                                     </Box>
@@ -365,10 +378,10 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 </StepContent>
                             </Step>
                         ) : (
-                            <Step key={'latest'} completed={false}>
+                            <Step key="latest" completed={false}>
                                 <StepLabel>
                                     <Box>
-                                        <Typography variant="h6" color={'text.primary'} gutterBottom={true}>
+                                        <Typography variant="h6" color="text.primary" gutterBottom={true}>
                                             {userStatus.question}
                                         </Typography>
                                         {renderOptions(userStatus)}
@@ -385,6 +398,15 @@ export default function OptionsCard(props: OptionsViewProps) {
 
     return (
         <CardContent ref={parentRef}>
+            <Snackbar
+                autoHideDuration={2000}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={snackVisible}
+                onClose={() => setSnackVisible(false)}>
+                <Alert onClose={() => setSnackVisible(false)} variant="filled" severity="error" sx={{ width: '100%' }}>
+                    {t('plugin_allblue_submit_failed')}
+                </Alert>
+            </Snackbar>
             {userStatus && (
                 <>
                     {/*{type === AllbluePostType.Poll && renderStepper(userStatus, verticalStepper)}*/}
@@ -411,9 +433,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                     {error === 'insufficient-nft' && (
                         <Alert severity="info">{t('plugin_allblue_insufficient_nft')}</Alert>
                     )}
-                    {error === 'insufficient-nft' && (
-                        <NoNftCard conditions={unmeetCondition} />
-                    )}
+                    {error === 'insufficient-nft' && <NoNftCard conditions={unmeetCondition} />}
                 </>
             )}
         </CardContent>

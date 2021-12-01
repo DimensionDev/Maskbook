@@ -187,7 +187,7 @@ export function Allblue(props: AllblueProps) {
                 <EncryptionCard payload={encryptionPayload} />
             )}
             {!address && (
-                <Box sx={{padding: '0 16px'}}>
+                <Box sx={{ padding: '0 16px' }}>
                     <Alert severity="info">{t('plugin_allblue_connect_wallet_tip')}</Alert>
                 </Box>
             )}
