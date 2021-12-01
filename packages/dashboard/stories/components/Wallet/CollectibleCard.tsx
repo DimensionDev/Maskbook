@@ -9,6 +9,7 @@ export const CollectibleCard = of({
     args: {
         chainId: ChainId.Mainnet,
         provider: NonFungibleAssetProvider.OPENSEA,
+        // @ts-ignore
         token: createERC721Token(
             {
                 type: EthereumTokenType.ERC721,

@@ -1,18 +1,12 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
-import {
-    ERC721TokenDetailed,
-    ChainId,
-    NonFungibleAssetProvider,
-    resolveCollectibleLink,
-} from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon } from '@masknet/shared'
 import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
-import { useNetworkDescriptor, Web3Plugin, useWeb3State } from '@masknet/plugin-infra'
+import { useNetworkDescriptor, useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

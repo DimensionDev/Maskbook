@@ -1,16 +1,17 @@
 import Web3 from 'web3'
 import {
     ChainId,
-    CollectibleProvider,
     createContract,
     createNativeToken,
     ERC721TokenDetailed,
     formatEthereumAddress,
+    FungibleAssetProvider,
     getERC721TokenDetailedFromChain,
     getEthereumConstants,
+    getRPCConstants,
     getTokenConstants,
     isSameAddress,
-    PortfolioProvider,
+    NonFungibleAssetProvider,
     Web3ProviderType,
 } from '@masknet/web3-shared-evm'
 import type { Web3Plugin } from '@masknet/plugin-infra'
@@ -18,7 +19,7 @@ import { Pageable, Pagination, TokenType } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { AbiItem } from 'web3-utils'
-import { uniqBy } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import { PLUGIN_NETWORKS } from '../../constants'
 import { makeSortAssertWithoutChainFn } from '../../utils/token'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
@@ -37,7 +38,7 @@ export const getFungibleAssetsFn =
         const web3 = new Web3(provider)
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
-        const dataFromProvider = await context.getAssetsList(address, PortfolioProvider.DEBANK)
+        const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
         const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
             id: x.token.address,
             chainId: x.token.chainId,
@@ -119,12 +120,18 @@ export const getNonFungibleTokenFn =
         // validate and show trusted erc721 token in first page
         if (pagination?.page === 0) {
             const provider = context.provider.getCurrentValue()
-            const web3 = new Web3(provider)
             const trustedTokens = context.erc721Tokens.getCurrentValue()
             const calls = trustedTokens.map((x) => {
-                const contract = createContract<ERC721>(web3, x.contractDetailed.address, ERC721ABI as AbiItem[])
-                if (!contract) return null
-                return getERC721TokenDetailedFromChain(x.contractDetailed, contract, x.tokenId)
+                const web3 = new Web3(provider)
+                const { RPC } = getRPCConstants(x.contractDetailed.chainId)
+                const providerURL = first(RPC)
+                if (providerURL) {
+                    web3.setProvider(providerURL)
+                    const contract = createContract<ERC721>(web3, x.contractDetailed.address, ERC721ABI as AbiItem[])
+                    if (!contract) return null
+                    return getERC721TokenDetailedFromChain(x.contractDetailed, contract, x.tokenId)
+                }
+                return null
             })
 
             const fromChain = await Promise.all(calls)
@@ -134,7 +141,7 @@ export const getNonFungibleTokenFn =
         const tokenFromProvider = await context.getAssetsListNFT(
             address.toLowerCase(),
             network?.chainId ?? ChainId.Mainnet,
-            CollectibleProvider.OPENSEA,
+            NonFungibleAssetProvider.OPENSEA,
             pagination?.page ?? 0,
             pagination?.size ?? 20,
         )
