@@ -7,7 +7,7 @@ import { makeStyles } from '@masknet/theme'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
-import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
+import { formatEthereumEns, NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
 import { useReverseAddress } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -91,7 +91,7 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
                         {t.wallets_address()}
                     </Typography>
                     <Typography variant="body2" className={classes.address}>
-                        {domain ?? walletAddress}
+                        {domain ? formatEthereumEns(domain) : walletAddress}
                     </Typography>
                 </DialogContent>
                 <DialogActions>

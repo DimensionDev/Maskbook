@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import { MenuItem, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { formatEthereumAddress } from '../../../../../../../web3-shared/evm'
+import { formatEthereumAddress, formatEthereumEns } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useReverseAddress } from '@masknet/plugin-infra'
 
@@ -45,7 +45,7 @@ export const AccountItem = memo<AccountItemProps>(({ account, onClick }) => {
                 {account.name}
                 {domain ? (
                     <Typography component="span" className={classes.domain}>
-                        {domain}
+                        {formatEthereumEns(domain)}
                     </Typography>
                 ) : null}
             </Typography>

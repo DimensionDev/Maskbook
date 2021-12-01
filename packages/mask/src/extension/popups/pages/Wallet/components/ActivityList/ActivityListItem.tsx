@@ -2,7 +2,11 @@ import type { RecentTransaction } from '../../../../../../plugins/Wallet/service
 import { makeStyles } from '@masknet/theme'
 import React, { memo } from 'react'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
-import { formatEthereumAddress, TransactionStatusType } from '../../../../../../../../web3-shared/evm'
+import {
+    formatEthereumAddress,
+    formatEthereumEns,
+    TransactionStatusType,
+} from '../../../../../../../../web3-shared/evm'
 import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon } from '@masknet/icons'
 import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
 import formatDateTime from 'date-fns/format'
@@ -93,7 +97,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                             {transaction.at ? `${formatDateTime(transaction.at, 'MMM dd')}.  ` : null}
                             {!!toAddress
                                 ? t('popups_wallet_activity_to_address', {
-                                      address: domain ?? formatEthereumAddress(toAddress, 4),
+                                      address: formatEthereumEns(domain) ?? formatEthereumAddress(toAddress, 4),
                                   })
                                 : null}
                         </Typography>

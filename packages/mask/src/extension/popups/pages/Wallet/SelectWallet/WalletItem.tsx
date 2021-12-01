@@ -4,7 +4,7 @@ import { memo } from 'react'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, formatEthereumEns } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../components/CopyIconButton'
 import { useReverseAddress } from '@masknet/plugin-infra'
 
@@ -63,7 +63,7 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                     <div>
                         <Typography className={classes.name}>
                             <Typography component="span"> {wallet.name}</Typography>
-                            {domain ? <Typography component="span">{domain}</Typography> : null}
+                            {domain ? <Typography component="span">{formatEthereumEns(domain)}</Typography> : null}
                         </Typography>
                         <Typography className={classes.address}>
                             <FormattedAddress address={wallet.address} size={12} formatter={formatEthereumAddress} />

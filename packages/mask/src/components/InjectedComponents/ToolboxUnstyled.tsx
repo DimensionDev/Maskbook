@@ -10,7 +10,7 @@ import {
     ListItemText as MuiListItemText,
     Box,
 } from '@mui/material'
-import { TransactionStatusType } from '@masknet/web3-shared-evm'
+import { formatEthereumEns, TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -167,7 +167,8 @@ function useToolbox() {
     function renderButtonText() {
         if (!account) return t('plugin_wallet_on_connect')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
-        if (pendingTransactions.length <= 0) return domain ?? Utils?.formatAddress?.(account, 4) ?? account
+        if (pendingTransactions.length <= 0)
+            return formatEthereumEns(domain) ?? Utils?.formatAddress?.(account, 4) ?? account
         return (
             <>
                 <span>

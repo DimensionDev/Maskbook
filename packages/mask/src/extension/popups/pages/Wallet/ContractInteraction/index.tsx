@@ -16,6 +16,7 @@ import {
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
+    formatEthereumEns,
 } from '@masknet/web3-shared-evm'
 import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
@@ -320,7 +321,7 @@ const ContractInteraction = memo(() => {
             <main className={classes.container}>
                 <div className={classes.info}>
                     <Typography className={classes.title}>{typeName}</Typography>
-                    {domain ? <Typography className={classes.domain}>{domain}</Typography> : null}
+                    {domain ? <Typography className={classes.domain}>{formatEthereumEns(domain)}</Typography> : null}
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
                     </Typography>

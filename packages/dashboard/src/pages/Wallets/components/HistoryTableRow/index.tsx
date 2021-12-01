@@ -6,6 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
+    formatEthereumEns,
     TransactionType,
     useChainId,
     ZerionTransactionDirection,
@@ -137,7 +138,7 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
             <TableCell className={classes.cell} align="center">
                 <Box className={classes.link}>
                     <Typography variant="body2">
-                        {domain ?? Utils?.formatAddress?.(transaction.toAddress, 4)}
+                        {domain ? formatEthereumEns(domain) : Utils?.formatAddress?.(transaction.toAddress, 4)}
                     </Typography>
                     <Link
                         sx={{ height: 21 }}

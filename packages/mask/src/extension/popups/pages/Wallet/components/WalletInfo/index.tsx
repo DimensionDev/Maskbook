@@ -6,7 +6,7 @@ import { EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useWallet, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useWallet, formatEthereumAddress, formatEthereumEns } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
 import { useReverseAddress } from '@masknet/plugin-infra'
 
@@ -67,6 +67,8 @@ export const WalletInfo = memo(() => {
     const wallet = useWallet()
     const history = useHistory()
 
+    const { value: domain } = useReverseAddress(wallet.address)
+
     const excludePath = useRouteMatch({
         path: PopupRoutes.WalletSettings,
         exact: true,
@@ -81,6 +83,7 @@ export const WalletInfo = memo(() => {
             onEditClick={() => history.push(PopupRoutes.WalletRename)}
             onSettingClick={() => history.push(PopupRoutes.WalletSettings)}
             hideSettings={!!excludePath}
+            domain={domain}
         />
     )
 })
@@ -91,36 +94,40 @@ export interface WalletInfoUIProps {
     onSettingClick: () => void
     onEditClick: () => void
     hideSettings: boolean
+    domain?: string
 }
 
-export const WalletInfoUI = memo<WalletInfoUIProps>(({ name, address, onSettingClick, onEditClick, hideSettings }) => {
-    const { classes } = useStyles()
-    const { value: domain } = useReverseAddress(address)
+export const WalletInfoUI = memo<WalletInfoUIProps>(
+    ({ name, address, onSettingClick, onEditClick, hideSettings, domain }) => {
+        const { classes } = useStyles()
 
-    return (
-        <div className={classes.container}>
-            <div className={classes.left}>
-                <div className={classes.walletBackground}>
-                    <MaskWalletIcon />
+        return (
+            <div className={classes.container}>
+                <div className={classes.left}>
+                    <div className={classes.walletBackground}>
+                        <MaskWalletIcon />
+                    </div>
+                    <div>
+                        {name && (
+                            <Box display="flex" justifyContent="space-between" alignItems="center">
+                                <Typography className={classes.name}>
+                                    {name} <EditIcon onClick={onEditClick} className={classes.edit} />
+                                </Typography>
+                                {domain ? (
+                                    <Typography className={classes.name}>{formatEthereumEns(domain)}</Typography>
+                                ) : null}
+                            </Box>
+                        )}
+                        <Typography className={classes.address}>
+                            <FormattedAddress address={address} size={16} formatter={formatEthereumAddress} />
+                            <CopyIconButton text={address ?? ''} className={classes.copy} />
+                        </Typography>
+                    </div>
                 </div>
-                <div>
-                    {name && (
-                        <Box display="flex" justifyContent="space-between" alignItems="center">
-                            <Typography className={classes.name}>
-                                {name} <EditIcon onClick={onEditClick} className={classes.edit} />
-                            </Typography>
-                            {domain ? <Typography className={classes.name}>{domain}</Typography> : null}
-                        </Box>
-                    )}
-                    <Typography className={classes.address}>
-                        <FormattedAddress address={address} size={16} formatter={formatEthereumAddress} />
-                        <CopyIconButton text={address ?? ''} className={classes.copy} />
-                    </Typography>
-                </div>
+                {!hideSettings ? (
+                    <MoreHoriz color="primary" style={{ cursor: 'pointer' }} onClick={onSettingClick} />
+                ) : null}
             </div>
-            {!hideSettings ? (
-                <MoreHoriz color="primary" style={{ cursor: 'pointer' }} onClick={onSettingClick} />
-            ) : null}
-        </div>
-    )
-})
+        )
+    },
+)
