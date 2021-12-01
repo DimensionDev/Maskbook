@@ -49,7 +49,7 @@ function SignRequestHandler(props: SignRequest) {
             <Typography variant="h3">{t('popups_sign_request')}</Typography>
             <Typography variant="body1">
                 <Box sx={{ textDecoration: 'underline', display: 'inline' }} component="span">
-                    {t('popups_unkonwn_source')}
+                    {t('popups_unknown_source')}
                 </Box>
                 {t('popups_request_sign')}
             </Typography>

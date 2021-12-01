@@ -209,7 +209,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
         </Box>
     ) : (
         <Box className={classes.root}>
-            <Typography className={classes.title}>{t('plugin_ito_luanch_campaign')}</Typography>
+            <Typography className={classes.title}>{t('plugin_ito_launch_campaign')}</Typography>
             <div className={classes.claimTimeWrapper}>
                 <Typography className={classes.text}>{t('wallet_airdrop_nft_unclaimed_title')}</Typography>
 
@@ -233,7 +233,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                 })}
             </div>
             <Typography className={classes.text}>
-                {t('pulgin_ito_total_claimable_count')}
+                {t('plugin_ito_total_claimable_count')}
                 {`${claimableCount} ${claimableCount > 1 ? 'items' : 'item'}`},
             </Typography>
 
