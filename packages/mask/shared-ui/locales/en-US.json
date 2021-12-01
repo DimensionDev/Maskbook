@@ -58,6 +58,8 @@
     "user_guide_tip_connected": "You have connected to this account successfully.",
     "user_guide_tip_1": "Click here to connect your wallet. You can choose the network or change your wallet here.",
     "user_guide_tip_2": "Click here to have a quick start.",
+    "create_persona": "Create persona",
+    "connect_persona": "Connect persona",
     "import": "Import",
     "no_search_result": "No result",
     "loading": "Loading",
