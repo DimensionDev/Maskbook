@@ -67,7 +67,7 @@ export const WalletInfo = memo(() => {
     const wallet = useWallet()
     const history = useHistory()
 
-    const { value: domain } = useReverseAddress(wallet.address)
+    const { value: domain } = useReverseAddress(wallet?.address)
 
     const excludePath = useRouteMatch({
         path: PopupRoutes.WalletSettings,

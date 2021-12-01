@@ -10,6 +10,7 @@ import { TradeContext } from '../../trader/useTradeContext'
 import { getPairAddress } from '../../helpers'
 import { useNetworkType } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -39,6 +40,7 @@ export function TradePairViewer(props: TradePairViewerProps) {
     const { trade, provider } = props
     const { classes } = useStyles()
     const networkType = useNetworkType()
+    const { t } = useI18N()
 
     const context = useContext(TradeContext)
     const address = getPairAddress(
@@ -60,7 +62,7 @@ export function TradePairViewer(props: TradePairViewerProps) {
                 target="_blank"
                 rel="noopener noreferrer">
                 <Typography className={classes.text} color="textSecondary" variant="body2" component="span">
-                    View pair analytics
+                    {t('plugin_trader_view_pair_analytics')}
                 </Typography>
                 <Typography className={classes.icon} color="textSecondary" variant="body2" component="span">
                     <ExternalLink size={14} />

@@ -348,7 +348,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const [menu, openMenu] = useMenu(
         <MenuItem className={classes.expand} key="expand">
-            <Typography className={classes.title}>{t('wallet_transfer_between_my_account')}</Typography>
+            <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
             <ExpandMore style={{ fontSize: 20 }} />
         </MenuItem>,
         <Collapse in>
@@ -449,7 +449,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         return (
             <>
                 <div className={classes.container}>
-                    <Typography className={classes.label}>{t('wallet_transfer_transfer_account')}</Typography>
+                    <Typography className={classes.label}>{t('wallet_transfer_account')}</Typography>
                     <Typography className={classes.accountName}>{accountName}</Typography>
                     <Typography className={classes.label}>{t('wallet_transfer_receiving_account')}</Typography>
                     <Controller
@@ -579,7 +579,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         }}
                         name="amount"
                     />
-                    <Typography className={classes.label}>Gas Limit</Typography>
+                    <Typography className={classes.label}>{t('gas_limit')}</Typography>
                     <Controller
                         render={({ field }) => (
                             <StyledInput

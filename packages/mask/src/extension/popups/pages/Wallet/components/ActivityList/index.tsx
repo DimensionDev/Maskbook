@@ -174,7 +174,7 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
             {!isExpand ? (
                 <div className={classes.buttonContainer}>
                     <Button fullWidth className={classes.moreButton} onClick={() => setExpand(true)}>
-                        More
+                        {t('more')}
                     </Button>
                 </div>
             ) : null}

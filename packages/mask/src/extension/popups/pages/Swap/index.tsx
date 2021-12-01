@@ -8,6 +8,7 @@ import { WalletStateBarUI } from '../../components/WalletStateBar'
 import { SwapBox } from './SwapBox'
 import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
+import { useI18N } from '../../../../utils'
 import { useReverseAddress } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
@@ -54,6 +55,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export default function SwapPage() {
+    const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
@@ -83,7 +85,7 @@ export default function SwapPage() {
                     </header>
                     <main className={classes.main}>
                         <Typography variant="h1" className={classes.title}>
-                            Swap
+                            {t('plugin_trader_swap')}
                         </Typography>
                         <SwapBox />
                     </main>

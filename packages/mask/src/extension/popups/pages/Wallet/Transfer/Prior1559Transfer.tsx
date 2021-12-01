@@ -255,7 +255,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const [menu, openMenu] = useMenu(
         <MenuItem className={classes.expand} key="expand">
-            <Typography className={classes.title}>{t('wallet_transfer_between_my_account')}</Typography>
+            <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
             <ExpandMore style={{ fontSize: 20 }} />
         </MenuItem>,
         <Collapse in>
@@ -340,7 +340,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         return (
             <>
                 <form className={classes.container} onSubmit={handleConfirm}>
-                    <Typography className={classes.label}>{t('wallet_transfer_transfer_account')}</Typography>
+                    <Typography className={classes.label}>{t('wallet_transfer_account')}</Typography>
                     <Typography className={classes.accountName}>{accountName}</Typography>
                     <Typography className={classes.label}>{t('wallet_transfer_receiving_account')}</Typography>
                     <Controller
@@ -443,7 +443,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
 
                     <div className={classes.gasInput}>
                         <div>
-                            <Typography className={classes.label}>Gas Price</Typography>
+                            <Typography className={classes.label}>{t('gas_price')}</Typography>
                             <Controller
                                 render={({ field }) => (
                                     <StyledInput
@@ -459,7 +459,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                             />
                         </div>
                         <div>
-                            <Typography className={classes.label}>Gas limit</Typography>
+                            <Typography className={classes.label}>{t('gas_limit')}</Typography>
                             <Controller
                                 render={({ field }) => (
                                     <StyledInput
