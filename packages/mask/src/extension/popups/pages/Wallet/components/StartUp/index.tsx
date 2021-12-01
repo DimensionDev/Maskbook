@@ -1,7 +1,7 @@
 import { memo, useCallback } from 'react'
 import { Alert, AlertTitle, Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { MaskWalletIcon, ImportWalletIcon } from '@masknet/icons'
 import { EnterDashboard } from '../../../../components/EnterDashboard'
 import { NetworkSelector } from '../../../../components/NetworkSelector'
@@ -9,6 +9,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../../utils'
 import { useHasPassword } from '../../../../hook/useHasPassword'
 import Services from '../../../../../service'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -70,14 +71,18 @@ const useStyles = makeStyles()((theme) => ({
 export const WalletStartUp = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
+    const location = useLocation()
 
     const onEnterCreateWallet = useCallback(async () => {
+        const params = new URLSearchParams(location.search)
         await browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL('/dashboard.html#/create-mask-wallet'),
+            url: browser.runtime.getURL(
+                urlcat('/dashboard.html#/create-mask-wallet', { chainId: params.get('chainId') }),
+            ),
         })
         await Services.Helper.removePopupWindow()
-    }, [])
+    }, [location.search])
 
     const { hasPassword, loading } = useHasPassword()
 

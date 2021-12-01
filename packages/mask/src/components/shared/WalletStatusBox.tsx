@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 3, 3),
     },
     currentAccount: {
-        padding: theme.spacing(2, 3),
+        padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
         backgroundColor: getMaskColor(theme).twitterBackground,
@@ -42,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     accountName: {
         fontSize: 16,
         marginRight: 6,
+        marginBottom: 6,
     },
     infoRow: {
         display: 'flex',
@@ -66,8 +67,14 @@ const useStyles = makeStyles()((theme) => ({
     linkIcon: {
         marginRight: theme.spacing(1),
     },
-    networkIcon: {},
-    providerIcon: {},
+    dashboardProvider: {
+        border: `1px solid ${theme.palette.background.default}`,
+    },
+    twitterProviderBorder: {
+        border: `1px solid ${getMaskColor(theme).twitterBackground}`,
+        width: 14,
+        height: 14,
+    },
     connectButtonWrapper: {
         display: 'flex',
         justifyContent: 'center',
@@ -134,14 +141,13 @@ export function WalletStatusBox(props: WalletStatusBox) {
     return account ? (
         <section className={classNames(classes.currentAccount, props.isDashboard ? classes.dashboardBackground : '')}>
             <WalletIcon
-                size={40}
-                badgeSize={18}
-                networkIcon={networkDescriptor?.icon}
-                providerIcon={providerDescriptor?.icon}
                 classes={{
-                    networkIcon: classes.networkIcon,
-                    providerIcon: classes.providerIcon,
+                    providerIcon: props.isDashboard ? classes.dashboardProvider : classes.twitterProviderBorder,
                 }}
+                size={48}
+                badgeSize={16}
+                networkIcon={providerDescriptor?.icon} // switch providerIcon and networkIcon to meet design
+                providerIcon={networkDescriptor?.icon}
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>

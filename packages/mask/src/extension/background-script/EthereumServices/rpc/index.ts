@@ -168,7 +168,6 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
         } else {
             return {
                 type: EthereumRpcType.CONTRACT_INTERACTION,
-                name: 'Unknown',
                 _tx: config,
             }
         }

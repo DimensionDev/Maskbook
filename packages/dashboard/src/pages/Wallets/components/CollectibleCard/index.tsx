@@ -1,6 +1,11 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
-import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared-evm'
+import {
+    ERC721TokenDetailed,
+    ChainId,
+    NonFungibleAssetProvider,
+    resolveCollectibleLink,
+} from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
@@ -63,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CollectibleCardProps {
     chainId: ChainId
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     token: ERC721TokenDetailed
     onSend(): void
 }

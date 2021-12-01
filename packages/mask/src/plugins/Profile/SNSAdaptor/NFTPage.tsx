@@ -9,7 +9,7 @@ import {
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Box, Link, Typography, CircularProgress } from '@mui/material'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { CollectibleListAddress } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { useI18N } from '../../../utils'
 import { useUserOwnerAddress } from '../../Avatar/hooks/useUserOwnerAddress'
 
@@ -67,33 +67,40 @@ export function NFTPage(props: NFTPageProps) {
                 </Box>
             ) : (
                 <>
-                    <Box className={classes.note} display="flex" alignItems="center" justifyContent="flex-end">
-                        <Typography color="textPrimary" component="span">
-                            Current display of {type}:{' '}
-                            <Link
-                                href={resolveAddressLinkOnExplorer(
-                                    ChainId.Mainnet,
-                                    (address?.length === 0 ? walletAddressGun : address) ?? '',
-                                )}
-                                target="_blank"
-                                rel="noopener noreferrer">
-                                {type === EthereumNameType.DEFAULT
-                                    ? formatEthereumAddress(
-                                          (address?.length === 0 ? walletAddressGun : address) ?? '',
-                                          4,
-                                      )
-                                    : name}
-                            </Link>
-                        </Typography>
-                        <Typography
-                            sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
-                            color="textPrimary"
-                            component="span"
-                            title={RULE_TIP}>
-                            <InfoOutlinedIcon color="inherit" fontSize="small" />
-                        </Typography>
+                    <Box
+                        className={classes.note}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="flex-end"
+                        flexWrap="wrap">
+                        <Box display="flex" alignItems="center">
+                            <Typography color="textPrimary" component="span">
+                                Current display of {type}:{' '}
+                                <Link
+                                    href={resolveAddressLinkOnExplorer(
+                                        ChainId.Mainnet,
+                                        (address?.length === 0 ? walletAddressGun : address) ?? '',
+                                    )}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    {type === EthereumNameType.DEFAULT
+                                        ? formatEthereumAddress(
+                                              (address?.length === 0 ? walletAddressGun : address) ?? '',
+                                              4,
+                                          )
+                                        : name}
+                                </Link>
+                            </Typography>
+                            <Typography
+                                sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
+                                color="textPrimary"
+                                component="span"
+                                title={RULE_TIP}>
+                                <InfoOutlinedIcon color="inherit" fontSize="small" />
+                            </Typography>
+                        </Box>
                     </Box>
-                    <CollectibleListAddress address={(address?.length === 0 ? walletAddressGun : address) ?? ''} />
+                    <CollectionList address={(address?.length === 0 ? walletAddressGun : address) ?? ''} />
                 </>
             )}
         </div>

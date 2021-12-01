@@ -4,6 +4,7 @@ import { PluginCollectibleRPC } from '../../Collectible/messages'
 import { getLastSalePrice, getOrderUnitPrice, getOrderUSDPrice } from '../../Collectible/utils'
 import { ChainId, createERC721Token, EthereumTokenType } from '@masknet/web3-shared-evm'
 import type { AssetOrder } from '../../Collectible/types'
+import Services from '../../../extension/service'
 
 export async function getNFT(address: string, tokenId: string) {
     const asset = await PluginCollectibleRPC.getAsset(address, tokenId, ChainId.Mainnet)
@@ -45,7 +46,7 @@ export async function getNFT(address: string, tokenId: string) {
             : getLastSalePrice(asset.last_sale) ?? '0',
         name: asset.name,
         symbol: order?.payment_token_contract?.symbol ?? asset.last_sale?.payment_token?.symbol ?? 'ETH',
-        image: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
+        image: asset.image_url ?? asset.image_preview_url ?? '',
         owner: asset.owner.address,
     }
 }
@@ -63,12 +64,25 @@ export async function createNFT(address: string, tokenId: string) {
         {
             name: asset.name,
             description: asset.description,
-            image: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
+            image: asset.image_url ?? asset.image_preview_url ?? '',
             owner: asset.top_ownerships[0].owner.address,
         },
         tokenId,
     )
     return token
+}
+
+export async function getImage(image: string): Promise<string> {
+    const blob = await Services.Helper.fetch(image)
+    return (await blobToBase64(blob)) as string
+}
+
+function blobToBase64(blob: Blob) {
+    return new Promise((resolve, _) => {
+        const reader = new FileReader()
+        reader.onloadend = () => resolve(reader.result)
+        reader.readAsDataURL(blob)
+    })
 }
 
 export function toPNG(image: string) {

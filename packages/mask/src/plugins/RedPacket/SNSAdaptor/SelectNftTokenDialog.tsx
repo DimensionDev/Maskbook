@@ -74,10 +74,6 @@ const useStyles = makeStyles()((theme) => ({
     searchButton: {
         borderRadius: 6,
         width: 100,
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
     },
     searchWrapper: {
         display: 'flex',
@@ -123,10 +119,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     confirmButton: {
         width: '100%',
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
     },
     tokenSelector: {
         display: 'grid',

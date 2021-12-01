@@ -74,6 +74,7 @@ export interface ToolboxHintProps {
     ListItemIcon?: React.ComponentType<Pick<ListItemIconProps, 'children'>>
     Typography?: React.ComponentType<Pick<TypographyProps, 'children' | 'className'>>
     iconSize?: number
+    badgeSize?: number
     mini?: boolean
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
@@ -85,6 +86,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
+        badgeSize = 10,
         mini,
     } = props
     const { classes } = useStyles()
@@ -102,8 +104,9 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                             {isWalletValid ? (
                                 <WalletIcon
                                     size={iconSize}
-                                    networkIcon={networkDescriptor?.icon}
-                                    providerIcon={providerDescriptor?.icon}
+                                    badgeSize={badgeSize}
+                                    networkIcon={providerDescriptor?.icon} // switch the icon to meet design
+                                    providerIcon={networkDescriptor?.icon}
                                 />
                             ) : (
                                 <MaskFilledIcon size={iconSize} />

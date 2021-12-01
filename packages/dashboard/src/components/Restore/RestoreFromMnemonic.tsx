@@ -29,7 +29,7 @@ export const RestoreFromMnemonic = () => {
     const [error, setError] = useState('')
     const { changeCurrentPersona } = PersonaContext.useContainer()
     const t = useDashboardI18N()
-    const [values, { updateAt }] = useList(Array.from<string>({ length: 12 }).fill(''))
+    const [values, { updateAt, set: setMnemonic }] = useList(Array.from<string>({ length: 12 }).fill(''))
 
     const handleImport = async () => {
         try {
@@ -57,6 +57,7 @@ export const RestoreFromMnemonic = () => {
                         setError('')
                     }}
                     puzzleWords={values}
+                    setAll={setMnemonic}
                 />
                 {error && (
                     <Typography className={classes.error} variant="body2">

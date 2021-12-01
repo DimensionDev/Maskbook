@@ -32,6 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '24px',
         wordBreak: 'break-all',
+        whiteSpace: 'pre-line',
     },
 }))
 

@@ -327,7 +327,7 @@ export function Trader(props: TraderProps) {
                     {context?.IS_UNISWAP_V2_LIKE ? (
                         <UniswapTradeRoute classes={{ root: classes.router }} trade={tradeComputed} />
                     ) : null}
-                    {[TradeProvider.BALANCER].includes(provider) ? (
+                    {[TradeProvider.BALANCER].includes(provider) && tradeComputed.trade_ ? (
                         <BalancerTradeRoute
                             classes={{ root: classes.router }}
                             trade={tradeComputed as TradeComputed<SwapResponse>}

@@ -12,7 +12,7 @@ import {
     useCollectibles,
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
-import { currentCollectibleDataProviderSettings } from '../../../plugins/Wallet/settings'
+import { currentNonFungibleAssetDataProviderSettings } from '../../../plugins/Wallet/settings'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
@@ -78,6 +78,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         flexDirection: 'row',
+        marginTop: theme.spacing(1),
     },
 }))
 
@@ -90,7 +91,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const chainId = useChainId()
-    const provider = useValueRef(currentCollectibleDataProviderSettings)
+    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const [page, setPage] = useState(0)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
     const [open_, setOpen_] = useState(false)
@@ -174,7 +175,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                               token={token}
                                               key={i}
                                               selectedToken={selectedToken}
-                                              onChange={(token) => setSelectedToken(token)}
+                                              onChange={setSelectedToken}
                                           />
                                       ))}
                         </Box>
