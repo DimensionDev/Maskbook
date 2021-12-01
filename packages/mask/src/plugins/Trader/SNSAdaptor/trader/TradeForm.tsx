@@ -322,6 +322,10 @@ export const TradeForm = memo<AllTradeFormProps>(
             return null
         }, [trades, bestTrade, gasPrice, focusedTrade, onFocusedTradeChange, isExpand])
 
+        useUpdateEffect(() => {
+            userSelected.current = false
+        }, [inputAmount, inputToken, outputToken])
+
         return (
             <Box className={classes.root}>
                 <Box display="flex" justifyContent="flex-start" mb={1} width="100%">

@@ -111,6 +111,28 @@ export function TransactionSnackbar() {
                 (progress.state as { hash?: string }).hash ??
                 (progress.state as { receipt?: TransactionReceipt }).receipt?.transactionHash
 
+            if (
+                ['swapExactETHForTokens', 'swapExactTokensForETH', 'swapExactTokensForTokens'].includes(
+                    payload?.name ?? '',
+                )
+            ) {
+                if (progress.state.type === TransactionStateType.CONFIRMED) {
+                    showSingletonSnackbar('Successfully swapped Token', {
+                        ...config,
+                        ...{ message: getFullMessage(getTitle(progress.state, payload, hash), hash) },
+                    })
+                    return
+                }
+
+                if (progress.state.type === TransactionStateType.FAILED) {
+                    showSingletonSnackbar('Swap Token', {
+                        ...config,
+                        ...{ message: getFullMessage('Transaction rejected', hash) },
+                    })
+                    return
+                }
+            }
+
             showSingletonSnackbar(getTitle(progress.state, payload, hash), {
                 ...config,
                 ...{ message: getFullMessage(config.message, hash) },
