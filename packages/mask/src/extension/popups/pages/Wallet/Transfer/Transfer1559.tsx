@@ -388,7 +388,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     target="_blank"
                     rel="noopener noreferrer"
                     underline="none">
-                    <Box display="flex" justifyContent="space-between" alignItems="center" p={1.5}>
+                    <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
                         <Box>
                             <Typography fontSize={14} fontWeight={600} lineHeight="20px" color="#000000">
                                 {address}

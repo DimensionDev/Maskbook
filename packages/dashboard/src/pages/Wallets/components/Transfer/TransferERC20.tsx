@@ -18,7 +18,7 @@ import {
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { useLookupAddress, useWeb3State } from '@masknet/plugin-infra'
+import { useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { FormattedAddress, TokenAmountPanel } from '@masknet/shared'
 import TuneIcon from '@mui/icons-material/Tune'
 import { EthereumAddress } from 'wallet.ts'
@@ -26,6 +26,7 @@ import { SelectTokenDialog } from '../SelectTokenDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useGasConfig } from '../../hooks/useGasConfig'
+import { NetworkType } from '@masknet/public-api'
 
 interface TransferERC20Props {
     token: FungibleTokenDetailed
@@ -37,7 +38,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
-
+    const network = useNetworkDescriptor()
     const [gasLimit_, setGasLimit_] = useState(0)
 
     const { value: defaultGasPrice = '0' } = useGasPrice()
@@ -119,14 +120,34 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
-        if (!(EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address)))
+        if (!(EthereumAddress.isValid(address) || (address.includes('.eth') && Utils?.isValidDomain?.(address))))
             return t.wallets_transfer_error_invalid_address()
-        if (Utils?.isValidDomain?.(address) && (resolveEnsDomainError || !registeredAddress)) {
+        return ''
+    }, [
+        transferAmount,
+        maxAmount,
+        address,
+        tokenBalance,
+        selectedToken,
+        amount,
+        Utils,
+        registeredAddress,
+        resolveEnsDomainError,
+    ])
+    //#endregion
+
+    const validationEnsMessage = useMemo(() => {
+        if (
+            address.includes('.eth') &&
+            Utils?.isValidDomain?.(address) &&
+            (resolveEnsDomainError || !registeredAddress)
+        ) {
+            if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
             return t.wallet_transfer_error_no_address_has_been_set_name()
         }
+
         return ''
-    }, [transferAmount, maxAmount, address, tokenBalance, selectedToken, amount, Utils])
-    //#endregion
+    }, [address, Utils, resolveEnsDomainError, registeredAddress, network])
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.FAILED || transferState.type === TransactionStateType.HASH) {
@@ -146,6 +167,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         value={address}
                         onChange={(e) => setAddress(e.currentTarget.value)}
                         label={t.wallets_transfer_to_address()}
+                        error={!!validationEnsMessage}
+                        helperText={validationEnsMessage}
                     />
                     {registeredAddress ? (
                         <Link
