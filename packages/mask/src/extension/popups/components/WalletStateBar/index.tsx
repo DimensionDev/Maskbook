@@ -3,7 +3,7 @@ import { LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
-import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, formatEthereumEns, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Stack, StackProps, Typography } from '@mui/material'
 import { NetworkSelector } from '../../components/NetworkSelector'
 import { useI18N } from '../../../../utils'
@@ -32,11 +32,12 @@ interface WalletStateBarUIProps extends StackProps {
     isPending: boolean
     walletName?: string
     walletAddress?: string
+    domain?: string
     openConnectWalletDialog(): void
 }
 
 export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
-    ({ isPending, walletAddress, walletName, openConnectWalletDialog, children, ...rest }) => {
+    ({ isPending, walletAddress, walletName, openConnectWalletDialog, children, domain, ...rest }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
         const providerDescriptor = useProviderDescriptor(ProviderType.MaskWallet, NetworkPluginID.PLUGIN_EVM)
@@ -68,11 +69,15 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                     <Box sx={{ userSelect: 'none' }}>
                         <Box fontSize={16}>{walletName ?? '-'}</Box>
                         <Box fontSize={12}>
-                            <FormattedAddress
-                                address={walletAddress ?? '-'}
-                                size={10}
-                                formatter={formatEthereumAddress}
-                            />
+                            {domain ? (
+                                formatEthereumEns(domain)
+                            ) : (
+                                <FormattedAddress
+                                    address={walletAddress ?? '-'}
+                                    size={10}
+                                    formatter={formatEthereumAddress}
+                                />
+                            )}
                         </Box>
                     </Box>
                 </Stack>
