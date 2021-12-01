@@ -8,13 +8,14 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import Services from '../../../../service'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
-import { FormattedAddress, LoadingButton, useValueRef } from '@masknet/shared'
+import { FormattedAddress, useValueRef } from '@masknet/shared'
 import { useHasPassword } from '../../../hook/useHasPassword'
 import type { z as zod } from 'zod'
 import { Controller } from 'react-hook-form'
 import { usePasswordForm } from '../hooks/usePasswordForm'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { LoadingButton } from '@mui/lab'
 import { currentPersonaIdentifier } from '../../../../../settings/settings'
 
 const useStyles = makeStyles()({
@@ -62,6 +63,11 @@ const useStyles = makeStyles()({
         fontWeight: 600,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 })
 
@@ -192,9 +198,11 @@ const WalletRecovery = memo(() => {
             </div>
             <div className={classes.controller}>
                 <LoadingButton
+                    loading={setPasswordLoading || confirmLoading}
                     fullWidth
                     disabled={!hasPassword ? !isValid : false}
-                    className={classes.button}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
+                    variant="contained"
                     onClick={onConfirm}>
                     {t('confirm')}
                 </LoadingButton>

@@ -7,6 +7,7 @@ import {
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-unified'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
@@ -20,7 +21,6 @@ import { WalletRPC } from '../../../Wallet/messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import type { GasSettingProps } from './types'
 import { useGasSettingStyles } from './useGasSettingStyles'
-import { LoadingButton } from '@masknet/shared'
 
 export const Prior1559GasSetting: FC<GasSettingProps> = memo(
     ({ gasLimit, minGasLimit = 0, gasOption = GasOption.Medium, onConfirm = noop }) => {
@@ -186,6 +186,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                     />
                 </form>
                 <LoadingButton
+                    loading={getGasOptionsLoading}
                     variant="contained"
                     fullWidth
                     className={classes.button}

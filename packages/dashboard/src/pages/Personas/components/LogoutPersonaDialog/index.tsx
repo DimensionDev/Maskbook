@@ -3,11 +3,12 @@ import { memo, useCallback } from 'react'
 import { getMaskColor, makeStyles, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
-import { LoadingButton, PersonaIdentifier } from '@masknet/shared'
+import type { PersonaIdentifier } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 import { WarningIcon } from '@masknet/icons'
+import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     svg: {
@@ -59,7 +60,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
                 <Button color="secondary" onClick={onClose} sx={{ minWidth: 150 }}>
                     {t.personas_cancel()}
                 </Button>
-                <LoadingButton color="error" onClick={handleLogout} sx={{ minWidth: 150 }}>
+                <LoadingButton color="error" onClick={handleLogout} sx={{ minWidth: 150 }} variant="contained">
                     {t.personas_logout()}
                 </LoadingButton>
             </DialogActions>

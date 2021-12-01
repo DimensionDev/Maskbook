@@ -7,12 +7,13 @@ import { PageHeader } from '../components/PageHeader'
 import { useI18N } from '../../../../../utils'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
-import { FormattedAddress, LoadingButton, PopupRoutes } from '@masknet/shared'
+import { FormattedAddress, PopupRoutes } from '@masknet/shared'
 import { useHasPassword } from '../../../hook/useHasPassword'
 import type { z as zod } from 'zod'
 import { usePasswordForm } from '../hooks/usePasswordForm'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { LoadingButton } from '@mui/lab'
 import Services from '../../../../service'
 import { useHistory } from 'react-router-dom'
 
@@ -61,6 +62,11 @@ const useStyles = makeStyles()({
         fontWeight: 600,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 })
 
@@ -190,9 +196,11 @@ const WalletRecovery = memo(() => {
             </div>
             <div className={classes.controller}>
                 <LoadingButton
+                    loading={restoreLegacyWalletLoading || confirmLoading}
                     fullWidth
                     disabled={!hasPassword ? !isValid : false}
-                    classes={classes}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
+                    variant="contained"
                     onClick={onConfirm}>
                     {t('confirm')}
                 </LoadingButton>

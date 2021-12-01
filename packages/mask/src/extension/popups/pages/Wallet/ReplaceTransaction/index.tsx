@@ -13,7 +13,7 @@ import {
     isEIP1559Supported,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { LoadingButton, useValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
 import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../../../utils'
@@ -22,6 +22,7 @@ import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { StyledInput } from '../../../components/StyledInput'
+import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
@@ -50,6 +51,11 @@ const useStyles = makeStyles()({
         marginTop: 10,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 })
 
@@ -301,7 +307,13 @@ const ReplaceTransaction = memo(() => {
                     {errorMessage}
                 </Typography>
             ) : null}
-            <LoadingButton fullWidth className={classes.button} disabled={!isEmpty(errors)} onClick={onSubmit}>
+            <LoadingButton
+                loading={loading}
+                variant="contained"
+                fullWidth
+                classes={{ root: classes.button, disabled: classes.disabled }}
+                disabled={!isEmpty(errors)}
+                onClick={onSubmit}>
                 {t('confirm')}
             </LoadingButton>
         </Box>

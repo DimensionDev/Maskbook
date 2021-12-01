@@ -25,12 +25,13 @@ import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
 import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
-import { FormattedAddress, FormattedBalance, LoadingButton, TokenIcon, useMenu } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import { ExpandMore } from '@mui/icons-material'
 import { useHistory } from 'react-router-dom'
+import { LoadingButton } from '@mui/lab'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { toHex } from 'web3-utils'
 
@@ -297,7 +298,7 @@ export interface Prior1559TransferUIProps {
     handleMaxClick: () => void
     selectedAsset?: Asset
     handleCancel: () => void
-    handleConfirm: () => Promise<void>
+    handleConfirm: () => void
     confirmLoading: boolean
     maxAmount: string
 }
@@ -318,6 +319,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         selectedAsset,
         handleConfirm,
         handleCancel,
+        confirmLoading,
         maxAmount,
     }) => {
         const { t } = useI18N()
@@ -482,7 +484,11 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                         onClick={handleCancel}>
                         {t('cancel')}
                     </Button>
-                    <LoadingButton className={classes.button} onClick={handleConfirm}>
+                    <LoadingButton
+                        loading={confirmLoading}
+                        variant="contained"
+                        className={classes.button}
+                        onClick={handleConfirm}>
                         {t('confirm')}
                     </LoadingButton>
                 </div>

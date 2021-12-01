@@ -2,13 +2,13 @@ import { makeStyles } from '@masknet/theme'
 import { memo, useState } from 'react'
 import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
+import { LoadingButton } from '@mui/lab'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { PersonaContext } from '../hooks/usePersonaContext'
 import Services from '../../../../service'
 import { PopupRoutes } from '@masknet/shared-base'
-import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()({
     header: {
@@ -32,6 +32,11 @@ const useStyles = makeStyles()({
         padding: '9px 0',
         borderRadius: 20,
     },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
+    },
 })
 
 const PERSONA_NAME_MAX_LENGTH = 24
@@ -44,7 +49,7 @@ const PersonaRename = memo(() => {
     const { currentPersona } = PersonaContext.useContainer()
     const { classes } = useStyles()
 
-    const [, renamePersona] = useAsyncFn(async () => {
+    const [{ loading }, renamePersona] = useAsyncFn(async () => {
         if (!name || !currentPersona) return
         if (name.length >= PERSONA_NAME_MAX_LENGTH) {
             setError(t('popups_rename_error_tip', { length: PERSONA_NAME_MAX_LENGTH }))
@@ -72,7 +77,13 @@ const PersonaRename = memo(() => {
                     error={!!error}
                     helperText={error}
                 />
-                <LoadingButton fullWidth className={classes.button} onClick={renamePersona}>
+                <LoadingButton
+                    fullWidth
+                    loading={loading}
+                    variant="contained"
+                    disabled={!name}
+                    classes={{ root: classes.button, disabled: classes.disabled }}
+                    onClick={renamePersona}>
                     {t('confirm')}
                 </LoadingButton>
             </div>

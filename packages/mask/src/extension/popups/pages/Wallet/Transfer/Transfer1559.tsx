@@ -28,11 +28,12 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
-import { FormattedAddress, FormattedBalance, LoadingButton, TokenIcon, useMenu } from '@masknet/shared'
+import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
 import { ExpandMore } from '@mui/icons-material'
 import { useHistory } from 'react-router-dom'
+import { LoadingButton } from '@mui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'
 
@@ -368,7 +369,7 @@ export interface Transfer1559UIProps {
     selectedAsset?: Asset
     etherPrice: number
     handleCancel: () => void
-    handleConfirm: () => Promise<void>
+    handleConfirm: () => void
     confirmLoading: boolean
 }
 
@@ -390,6 +391,7 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         etherPrice,
         handleCancel,
         handleConfirm,
+        confirmLoading,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
@@ -593,7 +595,11 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         onClick={handleCancel}>
                         {t('cancel')}
                     </Button>
-                    <LoadingButton className={classes.button} onClick={handleConfirm}>
+                    <LoadingButton
+                        loading={confirmLoading}
+                        variant="contained"
+                        className={classes.button}
+                        onClick={handleConfirm}>
                         {t('confirm')}
                     </LoadingButton>
                 </div>

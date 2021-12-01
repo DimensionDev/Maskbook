@@ -17,11 +17,12 @@ import {
     useERC20TokenDetailed,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon, LoadingButton } from '@masknet/shared'
+import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
+import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
@@ -385,12 +386,18 @@ const ContractInteraction = memo(() => {
                 ) : null}
                 <div className={classes.controller}>
                     <LoadingButton
+                        loading={rejectLoading}
+                        variant="contained"
                         className={classes.button}
                         style={!rejectLoading ? { backgroundColor: '#F7F9FA', color: '#1C68F3' } : undefined}
                         onClick={handleReject}>
                         {t('cancel')}
                     </LoadingButton>
-                    <LoadingButton className={classes.button} onClick={handleConfirm}>
+                    <LoadingButton
+                        loading={loading}
+                        variant="contained"
+                        className={classes.button}
+                        onClick={handleConfirm}>
                         {transferError ? t('popups_wallet_re_send') : t('confirm')}
                     </LoadingButton>
                 </div>

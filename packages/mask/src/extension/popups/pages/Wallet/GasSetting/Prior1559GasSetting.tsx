@@ -19,12 +19,12 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
+import { LoadingButton } from '@mui/lab'
 import { isEmpty } from 'lodash-unified'
 import { useHistory } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex } from 'web3-utils'
-import { LoadingButton } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -79,6 +79,11 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 10,
         padding: '9px 10px',
         borderRadius: 20,
+    },
+    disabled: {
+        opacity: 0.5,
+        backgroundColor: '#1C68F3!important',
+        color: '#ffffff!important',
     },
 }))
 
@@ -299,9 +304,10 @@ export const Prior1559GasSetting = memo(() => {
                 />
             </form>
             <LoadingButton
+                loading={loading}
                 variant="contained"
                 fullWidth
-                classes={classes.button}
+                classes={{ root: classes.button, disabled: classes.disabled }}
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
                 {t('confirm')}

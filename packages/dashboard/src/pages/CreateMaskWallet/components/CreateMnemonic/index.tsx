@@ -151,6 +151,7 @@ const CreateMnemonic = memo(() => {
                 open={open}
                 onClose={onClose}
                 onSubmit={onSubmit}
+                loading={walletState.loading}
                 address={walletState.value}
             />
         </>

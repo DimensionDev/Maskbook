@@ -1,8 +1,9 @@
 import { memo, useState } from 'react'
 import { Box, Typography, styled, Button, Dialog, DialogTitle, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { LoadingButton } from '@mui/lab'
 import { MaskColorVar } from '@masknet/theme'
-import { LoadingButton, useSnackbarCallback } from '@masknet/shared'
+import { useSnackbarCallback } from '@masknet/shared'
 import { SuccessIcon, CopyIcon } from '@masknet/icons'
 import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { useDashboardI18N } from '../../../../locales'
@@ -77,10 +78,11 @@ export interface VerifyMnemonicDialogProps {
     onUpdateAnswerWords: (word: string, index: number) => void
     onSubmit: () => void
     address?: string
+    loading: boolean
 }
 
 export const VerifyMnemonicDialog = memo<VerifyMnemonicDialogProps>(
-    ({ matched, open, onClose, puzzleWords, indexes, onUpdateAnswerWords, onSubmit, address }) => {
+    ({ matched, open, onClose, puzzleWords, indexes, onUpdateAnswerWords, onSubmit, loading, address }) => {
         const navigate = useNavigate()
         const t = useDashboardI18N()
         const [, copyToClipboard] = useCopyToClipboard()
@@ -100,6 +102,7 @@ export const VerifyMnemonicDialog = memo<VerifyMnemonicDialogProps>(
                 indexes={indexes}
                 onUpdateAnswerWords={onUpdateAnswerWords}
                 onSubmit={onSubmit}
+                loading={loading}
                 address={address}
                 onCopy={copyWalletAddress}
                 onDoneClick={() => navigate(RoutePaths.Wallets)}
@@ -114,7 +117,19 @@ export interface VerifyMnemonicDialogUIProps extends VerifyMnemonicDialogProps {
 }
 
 export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
-    ({ matched, open, onClose, puzzleWords, indexes, onUpdateAnswerWords, onSubmit, address, onCopy, onDoneClick }) => {
+    ({
+        matched,
+        open,
+        onClose,
+        puzzleWords,
+        indexes,
+        onUpdateAnswerWords,
+        onSubmit,
+        loading,
+        address,
+        onCopy,
+        onDoneClick,
+    }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         const [verified, setVerified] = useState(false)
@@ -159,9 +174,9 @@ export const VerifyMnemonicDialogUI = memo<VerifyMnemonicDialogUIProps>(
                                 ) : null}
 
                                 <LoadingButton
+                                    loading={loading}
                                     fullWidth
                                     className={classes.button}
-                                    // @ts-ignore
                                     onClick={() => {
                                         if (!verified) setVerified(true)
                                         if (matched) onSubmit()
