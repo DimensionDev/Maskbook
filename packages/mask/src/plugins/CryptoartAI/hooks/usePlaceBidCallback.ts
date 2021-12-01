@@ -88,7 +88,7 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: number)
                                 type: TransactionStateType.HASH,
                                 hash,
                             })
-                            resolve(hash)
+                            resolve()
                         })
                         .on(TransactionEventType.ERROR, (error) => {
                             setPlaceBidState({
