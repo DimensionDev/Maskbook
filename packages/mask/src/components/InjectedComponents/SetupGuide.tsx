@@ -32,7 +32,7 @@ import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
-    SayHelloWorld = 'say-hello-world',
+    Close = 'close',
 }
 
 //#region wizard dialog
@@ -459,8 +459,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         }
     }, [lastState_])
     useEffect(() => {
-        if (!lastState.status) return
-        setStep(lastState.status)
+        setStep(lastState.status ?? SetupGuideStep.Close)
     }, [step, setStep, lastState])
     //#endregion
 
@@ -495,7 +494,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onClose = () => {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
-        props.onClose?.()
     }
 
     return step === SetupGuideStep.FindUsername ? (
