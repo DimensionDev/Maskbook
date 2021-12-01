@@ -19,8 +19,8 @@ import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { AccountType } from '../../pages/Settings/type'
 import { UserContext } from '../../pages/Settings/hooks/UserContext'
 import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
+import { LoadingButton } from '../LoadingButton'
 import type { BackupPreview } from '../../../../mask/src/utils'
-import { LoadingButton } from '@masknet/shared'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()

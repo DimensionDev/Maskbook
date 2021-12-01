@@ -5,8 +5,8 @@ import { useState, useContext, useMemo, useEffect } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { fetchDownloadLink, sendCode, useLanguage, VerifyCodeRequest } from '../../api'
 import { BackupFileInfo, AccountType, Scenario, Locale } from '../../type'
+import { LoadingButton } from '@mui/lab'
 import { useAsyncFn } from 'react-use'
-import { LoadingButton } from '@masknet/shared'
 
 export interface VerifyNextData {
     fileInfo?: BackupFileInfo
@@ -94,7 +94,12 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
                     </CountdownButton>
                 </Box>
 
-                <LoadingButton fullWidth sx={{ marginTop: '24px' }} onClick={handleNext}>
+                <LoadingButton
+                    fullWidth
+                    sx={{ marginTop: '24px' }}
+                    onClick={handleNext}
+                    loading={loading}
+                    variant="contained">
                     {t.next()}
                 </LoadingButton>
             </Box>
