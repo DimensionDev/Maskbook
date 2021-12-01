@@ -122,7 +122,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
                             ),
                         }}
                         values={{
-                            symbol: token.symbol ?? 'Token',
+                            symbol: token.symbol ?? 'Unknown',
                         }}
                     />
                 </Typography>
