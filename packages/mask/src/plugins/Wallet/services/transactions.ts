@@ -1,4 +1,4 @@
-import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared-evm'
+import { NetworkType, pow10, FungibleAssetProvider } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { isNil } from 'lodash-unified'
 import * as DeBankAPI from '../apis/debank'
@@ -16,14 +16,14 @@ import {
 export async function getTransactionList(
     address: string,
     network: NetworkType,
-    provider: PortfolioProvider,
+    provider: FungibleAssetProvider,
     page?: number,
     size = 30,
 ): Promise<{
     transactions: Transaction[]
     hasNextPage: boolean
 }> {
-    if (provider === PortfolioProvider.DEBANK) {
+    if (provider === FungibleAssetProvider.DEBANK) {
         const name = resolveDebankChainName(network)
         if (!name)
             return {
@@ -36,7 +36,7 @@ export async function getTransactionList(
             transactions: fromDeBank(data),
             hasNextPage: false,
         }
-    } else if (provider === PortfolioProvider.ZERION) {
+    } else if (provider === FungibleAssetProvider.ZERION) {
         const scope = resolveZerionTransactionsScopeName(network)
         if (!scope)
             return {
