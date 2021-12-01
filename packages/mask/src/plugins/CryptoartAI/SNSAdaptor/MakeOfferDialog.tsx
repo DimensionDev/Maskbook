@@ -71,7 +71,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const [atleastBidValue, setAtleastBidValue] = useState(0)
     useEffect(() => {
         setAtleastBidValue(
-            asset?.value?.latestBidVo?.priceInEth ? Number(asset?.value?.latestBidVo.priceInEth) + 0.01 : 0,
+            asset?.value?.latestBidVo?.priceInEth ? Number(asset?.value?.latestBidVo.priceInEth) + 0.01 : 0.01,
         )
     }, [asset?.value?.latestBidVo])
 
@@ -86,10 +86,15 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
-        (ev) => {
-            if (ev.open) return
-            resetCallback()
-        },
+        useCallback(
+            (ev) => {
+                if (!ev.open) {
+                    if (placeBidState.type === TransactionStateType.HASH) onClose()
+                }
+                resetCallback()
+            },
+            [placeBidState, onClose],
+        ),
     )
 
     useEffect(() => {

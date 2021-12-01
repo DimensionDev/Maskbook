@@ -61,13 +61,12 @@ export function usePurchaseCallback(editionNumber: number, priceInWei: number) {
                     })
                     resolve()
                 })
-                .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
+                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     setPurchaseState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
+                        type: TransactionStateType.HASH,
+                        hash,
                     })
-                    resolve()
+                    resolve(hash)
                 })
                 .on(TransactionEventType.ERROR, (error) => {
                     setPurchaseState({
