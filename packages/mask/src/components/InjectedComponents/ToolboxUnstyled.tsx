@@ -201,7 +201,7 @@ function useToolbox() {
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
     function renderButtonText() {
-        if (!account) return t('plugin_wallet_on_connect')
+        if (!account) return t('mask_network')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
         if (pendingTransactions.length <= 0) return Utils?.formatAddress?.(account, 4) ?? account
         return (
