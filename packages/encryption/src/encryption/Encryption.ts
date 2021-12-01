@@ -6,6 +6,8 @@ import type {
     PostIVIdentifier,
     EC_Public_CryptoKey,
     EC_Private_CryptoKey,
+    ECKeyIdentifier,
+    IdentifierMap,
 } from '@masknet/shared-base'
 
 export interface EncryptOptions {
@@ -51,6 +53,13 @@ export interface EncryptResult {
     output: string | Uint8Array
     identifier: PostIVIdentifier
     author: [ProfileIdentifier, PersonaIdentifier]
-    target: EncryptTargetPublic | EncryptTargetE2E
+    /** Additional information that need to be send to the internet in order to allow recipients to decrypt */
+    e2e?: IdentifierMap<ECKeyIdentifier, EncryptionResultE2E>
+}
+export interface EncryptionResultE2E {
+    encryptedPostKey: Uint8Array
+    iv: Uint8Array
+    /** This feature is supported since v37. */
+    ephemeralPublicKey?: EC_Public_CryptoKey
 }
 export declare function encrypt(options: EncryptOptions, io: EncryptIO): Promise<EncryptResult>
