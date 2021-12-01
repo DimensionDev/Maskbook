@@ -2,7 +2,7 @@ import { unreachable } from '@dimensiondev/kit'
 import {
     Asset,
     ChainId,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
     createERC20Token,
     createERC721Token,
     createNativeToken,
@@ -14,7 +14,7 @@ import {
     getTokenConstants,
     isChainIdMainnet,
     NetworkType,
-    PortfolioProvider,
+    FungibleAssetProvider,
     pow10,
     getChainShortName,
     getChainIdFromNetworkType,
@@ -39,11 +39,11 @@ import type {
 export async function getCollectionsNFT(
     address: string,
     chainId: ChainId,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     page?: number,
     size?: number,
 ): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
-    if (provider === CollectibleProvider.OPENSEA) {
+    if (provider === NonFungibleAssetProvider.OPENSEA) {
         const { collections } = await OpenSeaAPI.getCollections(address, { chainId, page, size })
 
         return {
@@ -65,12 +65,12 @@ export async function getCollectionsNFT(
 export async function getAssetsListNFT(
     address: string,
     chainId: ChainId,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     page?: number,
     size?: number,
     collection?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
-    if (provider === CollectibleProvider.OPENSEA) {
+    if (provider === NonFungibleAssetProvider.OPENSEA) {
         const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size, collection })
         return {
             assets: assets
@@ -107,12 +107,12 @@ export async function getAssetsListNFT(
 
 export async function getAssetsList(
     address: string,
-    provider: PortfolioProvider,
+    provider: FungibleAssetProvider,
     network?: NetworkType,
 ): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
-        case PortfolioProvider.ZERION:
+        case FungibleAssetProvider.ZERION:
             let result: Asset[] = []
             //xdai-assets is not support
             const scopes = network
@@ -143,7 +143,7 @@ export async function getAssetsList(
             }
 
             return result
-        case PortfolioProvider.DEBANK:
+        case FungibleAssetProvider.DEBANK:
             const { data = [], error_code } = await DebankAPI.getAssetsList(address)
             if (error_code === 0) return formatAssetsFromDebank(data, network)
             return []

@@ -5,7 +5,7 @@ import {
     useChainId,
     ERC721TokenDetailed,
     resolveCollectibleLink,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
 } from '@masknet/web3-shared-evm'
 import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CollectibleCardProps {
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     wallet?: Wallet
     token: ERC721TokenDetailed
     readonly?: boolean
@@ -84,9 +84,9 @@ export function CollectibleCard(props: CollectibleCardProps) {
                             ) : (
                                 <Image
                                     component="img"
-                                    width={160}
-                                    height={220}
-                                    style={{ objectFit: 'contain' }}
+                                    width={172}
+                                    height={172}
+                                    style={{ objectFit: 'cover' }}
                                     src={value ?? token.info.image}
                                 />
                             )

@@ -138,7 +138,7 @@ export function dispatchEventRaw<T extends Event>(
                     // HACK: https://github.com/DimensionDev/Maskbook/pull/4970/
                     if (key === 'currentTarget' || (key === 'target' && isTwitter()))
                         return unwrapXRay_CPPBindingObject(currentTarget())
-                    return
+                    return (source as any)[key] ?? (unwrapXRay_CPPBindingObject(target) as any)[key]
                 },
             }),
         )
