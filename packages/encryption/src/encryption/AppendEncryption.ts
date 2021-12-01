@@ -17,4 +17,7 @@ export interface AppendEncryptionOptions {
 export interface AppendEncryptionResult {
     e2e?: IdentifierMap<ECKeyIdentifier, EncryptionResultE2E>
 }
-export declare function appendEncryptionTarget(options: AppendEncryptionOptions, io: EncryptIO): Promise<void>
+export declare function appendEncryptionTarget(
+    options: AppendEncryptionOptions,
+    io: EncryptIO,
+): Promise<AppendEncryptionResult>
