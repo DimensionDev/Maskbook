@@ -96,7 +96,7 @@ function Loader(props: { url: string }) {
         <Box>
             <Typography variant="h6">
                 {loading ? <CircularProgress sx={{ marginRight: 1 }} size={16} /> : null}
-                {t('plugin_external_name')}:{loading ? skeleton : value?.name ?? 'Unknown name'}
+                {t('plugin_external_name')}: {loading ? skeleton : value?.name ?? 'Unknown name'}
             </Typography>
             <List dense>
                 <ListItem secondaryAction={<Button onClick={retry}>{t('reload')}</Button>}>
