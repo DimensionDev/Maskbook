@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { FungibleTokenDetailed, useNativeTokenDetailed, useChainDetailed } from '@masknet/web3-shared-evm'
@@ -43,6 +43,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [id, setId] = useState('')
     const [keyword, setKeyword] = useState('')
     const chainDetailed = useChainDetailed()
+    const [rowSize, setRowSize] = useState(54)
 
     //#region the native token
     const { value: nativeTokenDetailed } = useNativeTokenDetailed()
@@ -52,6 +53,15 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const [disableNativeToken, setDisableNativeToken] = useState(true)
     const [disableSearchBar, setDisableSearchBar] = useState(false)
     const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
+
+    useEffect(() => {
+        try {
+            const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
+            setRowSize(fontSize * 3.6)
+        } catch {
+            setRowSize(54)
+        }
+    }, [])
 
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.selectTokenDialogUpdated, (ev) => {
         if (!ev.open) return
@@ -107,7 +117,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                     }}
                     FixedSizeListProps={{
                         height: disableSearchBar ? 350 : 288,
-                        itemSize: 52,
+                        itemSize: rowSize,
                         overscanCount: 4,
                         ...FixedTokenListProps?.FixedSizeListProps,
                     }}
