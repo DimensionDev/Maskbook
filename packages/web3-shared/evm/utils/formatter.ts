@@ -59,8 +59,8 @@ export function formatEthereumAddress(address: string, size = 0) {
     return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
 }
 
-export function formatEthereumEns(domain: string, size = 4) {
-    if (!isValidDomain(domain)) return domain
+export function formatEthereumEns(domain?: string, size = 4) {
+    if (!domain || !isValidDomain(domain)) return domain
     const [domainName, company] = domain.split('.')
     console.log(domainName)
     if (domainName.length < 13) return domain

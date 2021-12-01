@@ -91,7 +91,10 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
                         {t.wallets_address()}
                     </Typography>
                     <Typography variant="body2" className={classes.address}>
-                        {domain ? formatEthereumEns(domain) : walletAddress}
+                        {domain ? formatEthereumEns(domain) : null}
+                    </Typography>
+                    <Typography variant="body2" className={classes.address}>
+                        {walletAddress}
                     </Typography>
                 </DialogContent>
                 <DialogActions>
