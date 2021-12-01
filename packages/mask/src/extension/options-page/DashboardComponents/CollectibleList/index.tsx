@@ -3,7 +3,7 @@ import { useUpdateEffect } from 'react-use'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
     ERC721TokenCollectionInfo,
     ERC721TokenDetailed,
     useCollectibles,
@@ -12,7 +12,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
+import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
@@ -84,7 +84,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface CollectibleItemProps {
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     wallet?: Wallet
     token: ERC721TokenDetailed
     readonly?: boolean
@@ -106,7 +106,7 @@ function CollectibleItem(props: CollectibleItemProps) {
 }
 
 interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     wallet?: Wallet
     collectibles: ERC721TokenDetailed[]
     loading: boolean
@@ -179,7 +179,7 @@ export interface CollectibleListAddressProps extends withClasses<'empty' | 'butt
 
 export function CollectibleListAddress(props: CollectibleListAddressProps) {
     const { address, collection, setCount } = props
-    const provider = useValueRef(currentCollectibleDataProviderSettings)
+    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
     const classes = props.classes ?? {}
@@ -233,7 +233,7 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
 }
 
 export function CollectionList({ address }: { address: string }) {
-    const provider = useValueRef(currentCollectibleDataProviderSettings)
+    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
     const { classes } = useStyles()
