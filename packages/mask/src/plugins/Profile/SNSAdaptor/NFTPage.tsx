@@ -10,14 +10,8 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Box, Link, Typography, CircularProgress } from '@mui/material'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
-import { useI18N } from '../../../utils'
+import { ShadowRootTooltip, useI18N } from '../../../utils'
 import { useUserOwnerAddress } from '../../Avatar/hooks/useUserOwnerAddress'
-
-const RULE_TIP = [
-    '1. Twitter name or bio contains ENS (e.g. vitalik.eth);',
-    '2. Twitter bio contains valid Ethereum address;',
-    '3. The ENS or Ethereum address has NFTs in it.',
-].join('\n')
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -33,6 +27,20 @@ const useStyles = makeStyles()((theme) => ({
         '& > p': {
             color: getMaskColor(theme).textPrimary,
         },
+    },
+    icon: {
+        color: getMaskColor(theme).textPrimary,
+    },
+    iconContainer: {
+        display: 'inherit',
+    },
+    tooltip: {
+        height: '100%',
+        borderRadius: 0,
+        color: getMaskColor(theme).textPrimary,
+        backgroundColor: getMaskColor(theme).twitterBackgroundHover,
+        textAlign: 'initial',
+        opacity: 0.9,
     },
 }))
 
@@ -50,6 +58,27 @@ export function NFTPage(props: NFTPageProps) {
     const { type, name, address } = value ?? {}
     const { loading: loadingWalletGun, value: walletAddressGun } = useUserOwnerAddress(identity.identifier.userId)
 
+    const rulesTipMap = [
+        t('plugin_profile_binding_rule1'),
+        t('plugin_profile_binding_rule2'),
+        t('plugin_profile_binding_rule3'),
+        t('plugin_profile_binding_rule4', { suffix: `".eth"` }),
+    ]
+
+    const tooltipRender = (
+        <div>
+            <div style={{ fontSize: '0.8rem' }}>{t('plugin_profile_binding_rules_title')}</div>
+            {rulesTipMap.map((item) => {
+                return (
+                    <div>
+                        {item}
+                        <br />
+                    </div>
+                )
+            })}
+        </div>
+    )
+
     if (!address && !walletAddressGun)
         return (
             <div className={classes.root}>
@@ -58,7 +87,6 @@ export function NFTPage(props: NFTPageProps) {
                 </Box>
             </div>
         )
-
     return (
         <div className={classes.root}>
             {loadingWalletGun || loadingENS ? (
@@ -75,7 +103,7 @@ export function NFTPage(props: NFTPageProps) {
                         flexWrap="wrap">
                         <Box display="flex" alignItems="center">
                             <Typography color="textPrimary" component="span">
-                                Current display of {type}:{' '}
+                                {t('plugin_profile_current_display_of', { type: type })}
                                 <Link
                                     href={resolveAddressLinkOnExplorer(
                                         ChainId.Mainnet,
@@ -91,13 +119,20 @@ export function NFTPage(props: NFTPageProps) {
                                         : name}
                                 </Link>
                             </Typography>
-                            <Typography
-                                sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
-                                color="textPrimary"
-                                component="span"
-                                title={RULE_TIP}>
-                                <InfoOutlinedIcon color="inherit" fontSize="small" />
-                            </Typography>
+                            <div className={classes.iconContainer}>
+                                <ShadowRootTooltip
+                                    title={tooltipRender}
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    classes={{ tooltip: classes.tooltip }}>
+                                    <InfoOutlinedIcon
+                                        fontSize="small"
+                                        className={classes.icon}
+                                        sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
+                                    />
+                                </ShadowRootTooltip>
+                            </div>
                         </Box>
                     </Box>
                     <CollectionList address={(address?.length === 0 ? walletAddressGun : address) ?? ''} />

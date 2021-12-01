@@ -920,5 +920,11 @@
     "nft_button_add_collectible": "Add Collectible",
     "nft_avatar": "NFT Avatar",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",
+    "plugin_profile_binding_rules_title": "Binding Rules",
+    "plugin_profile_binding_rule1": "1. Their Twitter nickname is their ENS",
+    "plugin_profile_binding_rule2": "2. Their Twitter bio contains ENS",
+    "plugin_profile_binding_rule3": "3. Their Twitter bio contains a validated address",
+    "plugin_profile_binding_rule4": "4. Their Twitter id + {{suffix}} from their ENS",
+    "plugin_profile_current_display_of": "Current display of {{type}}: ",
     "plugin_vcent_last_offer_at": "LATEST OFFER at"
 }
