@@ -135,13 +135,15 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                 size={4}
                                 formatter={formatEthereumAddress}
                             />
-                            <Link
-                                style={{ color: 'inherit', height: 20 }}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href={resolveAddressLinkOnExplorer(chainId, wallet?.address ?? '')}>
-                                <ExternalLink style={{ marginLeft: 5 }} size={20} />
-                            </Link>
+                            {wallet?.address ? (
+                                <Link
+                                    style={{ color: 'inherit', height: 20 }}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={resolveAddressLinkOnExplorer(chainId, wallet.address)}>
+                                    <ExternalLink style={{ marginLeft: 5 }} size={20} />
+                                </Link>
+                            ) : null}
                         </Typography>
                     </Box>
                     <Box className={classes.section}>

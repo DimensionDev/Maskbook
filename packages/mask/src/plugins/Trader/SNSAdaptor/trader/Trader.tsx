@@ -351,52 +351,6 @@ export function Trader(props: TraderProps) {
     }, [tradeState /* update tx dialog only if state changed */])
     //#endregion
 
-    // useUpdateEffect(() => {
-    //     const { current: tradeInfo } = tradeRef
-    //     if (tradeInfo?.value && tradeState) {
-    //         const { inputAmount, outputAmount, inputToken, outputToken } = tradeInfo.value
-    //         switch (tradeState.type) {
-    //             case TransactionStateType.HASH:
-    //                 showSnackbar(t('plugin_trader_swap_token'), {
-    //                     variant: 'success',
-    //                     message: (
-    //                         <Typography display="flex" alignItems="center">
-    //                             {t('plugin_trader_price_pairs', {
-    //                                 input: formatBalance(inputAmount, inputToken?.decimals, 4),
-    //                                 output: formatBalance(outputAmount, outputToken?.decimals, 4),
-    //                             })}
-    //                             <Link
-    //                                 style={{ color: 'inherit', height: 20 }}
-    //                                 href={resolveTransactionLinkOnExplorer(chainId, tradeState.hash)}
-    //                                 target="_blank"
-    //                                 rel="noopener noreferrer">
-    //                                 <ExternalLink size={12} />
-    //                             </Link>
-    //                         </Typography>
-    //                     ),
-    //                 })
-    //                 break
-    //             case TransactionStateType.FAILED:
-    //                 showSnackbar(t('plugin_trader_swap_token'), {
-    //                     variant: 'error',
-    //                     message: t('plugin_wallet_transaction_rejected'),
-    //                 })
-    //                 break
-    //             case TransactionStateType.WAIT_FOR_CONFIRMING:
-    //                 showSnackbar(t('plugin_trader_swap_token'), {
-    //                     message: t('plugin_trader_price_pairs', {
-    //                         input: formatBalance(inputAmount, inputToken?.decimals, 4),
-    //                         output: formatBalance(outputAmount, outputToken?.decimals, 4),
-    //                     }),
-    //                     processing: true,
-    //                 })
-    //                 break
-    //             default:
-    //                 return
-    //         }
-    //     }
-    // }, [tradeState, chainId])
-
     //#region swap callback
     const onSwap = useCallback(() => {
         // no need to open the confirmation dialog if it (un)wraps the native token
