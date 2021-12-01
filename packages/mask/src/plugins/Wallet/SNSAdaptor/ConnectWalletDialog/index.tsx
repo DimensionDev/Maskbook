@@ -11,7 +11,6 @@ import {
     ProviderType,
     resolveNetworkName,
     resolveProviderName,
-    Fortmatic,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
@@ -94,7 +93,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
                 ;({ account, chainId } = await Services.Ethereum.connectInjected())
                 break
             case ProviderType.Fortmatic:
-                ;({ account, chainId } = await Fortmatic.connect(expectedChainId))
+                ;({ account, chainId } = await Services.Ethereum.connectFortmatic())
                 break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')

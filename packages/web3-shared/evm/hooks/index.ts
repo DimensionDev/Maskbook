@@ -60,7 +60,6 @@ export * from './useChainColor'
 export * from './useResolveENS'
 export * from './useResolveUNS'
 export * from './useGasLimit'
-export * from './useFortmaticProvider'
 
 // wallet plugin related
 export * from './useWalletPrimary'

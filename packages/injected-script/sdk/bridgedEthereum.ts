@@ -66,7 +66,7 @@ export interface BridgedEthereumProvider {
     on(event: string, callback: (...args: any) => void): () => void
     /** Access primitive property on the window.ethereum object. */
     getProperty(
-        key: 'isMaskWallet' | 'isMetaMask' | 'isCoin98' | 'isMathWallet' | 'isWalletLink' | 'isFortmatic',
+        key: 'isMaskWallet' | 'isMetaMask' | 'isCoin98' | 'isMathWallet' | 'isWalletLink',
     ): Promise<boolean | undefined>
     /** MetaMask only, experimental API. */
     _metamaskIsUnlocked(): Promise<boolean>

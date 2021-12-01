@@ -7,9 +7,8 @@ import {
     EthereumTokenType,
     ProviderType,
     Web3ProviderType,
-    resolveProviderIdentityKey,
+    resolveProviderInjectedKey,
     isInjectedProvider,
-    Fortmatic,
 } from '@masknet/web3-shared-evm'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
 import {
@@ -30,16 +29,8 @@ import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../../shared'
 import { createExternalProvider } from './helpers'
-import { createInjectedProvider } from '../extension/background-script/EthereumService'
+import { createInjectedProvider, createFortmaticProvider } from '../extension/background-script/EthereumService'
 import Services from '../extension/service'
-
-function createFortmaticProvider(isMask: boolean) {
-    return Fortmatic.createProvider(
-        (isMask
-            ? currentMaskWalletChainIdSettings.value
-            : currentChainIdSettings.value) as Fortmatic.FortmaticSupportedChainId,
-    )
-}
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(
@@ -61,33 +52,21 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
     )
 
     const InjectedProvider = createInjectedProvider()
+    const FortmaticProvider = createFortmaticProvider()
 
     return {
         provider: createSubscriptionFromAsync(
-            async () => (isInjectedProvider(currentProviderSettings.value) ? InjectedProvider : Web3Provider),
+            async () => {
+                const providerType = currentProviderSettings.value
+
+                if (providerType === ProviderType.Fortmatic) return FortmaticProvider
+                else if (isInjectedProvider(providerType)) return InjectedProvider
+                else return Web3Provider
+            },
             Web3Provider,
             (callback) => {
                 const a = currentProviderSettings.addListener(callback)
                 return () => void [a()]
-            },
-        ),
-        fortmaticProvider: createSubscriptionFromAsync(
-            async () => {
-                try {
-                    await currentChainIdSettings.readyPromise
-                    await currentMaskWalletChainIdSettings.readyPromise
-                    await currentProviderSettings.readyPromise
-                } catch (error) {
-                    // do nothing
-                }
-                return createFortmaticProvider(isMask)
-            },
-            createFortmaticProvider(isMask),
-            (callback) => {
-                const a = currentProviderSettings.addListener(callback)
-                const b = currentChainIdSettings.addListener(callback)
-                const c = currentMaskWalletChainIdSettings.addListener(callback)
-                return () => void [a(), b(), c()]
             },
         ),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
@@ -106,12 +85,13 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const providerType = currentProviderSettings.value
 
                 if (location.href.includes('popups.html')) return account
-                if (!isInjectedProvider(providerType) || providerType === ProviderType.Fortmatic) return account
+                if (providerType === ProviderType.Fortmatic) return account
+                if (!isInjectedProvider(providerType)) return account
 
                 try {
-                    const propertyKey = resolveProviderIdentityKey(providerType)
-                    if (!propertyKey) return ''
-                    const propertyValue = await bridgedEthereumProvider.getProperty(propertyKey)
+                    const injectedKey = resolveProviderInjectedKey(providerType)
+                    if (!injectedKey) return ''
+                    const propertyValue = await bridgedEthereumProvider.getProperty(injectedKey)
                     if (propertyValue === true) return account
                     return ''
                 } catch (error) {

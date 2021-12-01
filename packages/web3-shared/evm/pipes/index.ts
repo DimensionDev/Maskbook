@@ -40,9 +40,9 @@ export const resolveProviderDownloadLink = createLookupTableResolver<ProviderTyp
     '',
 )
 
-export const resolveProviderIdentityKey = createLookupTableResolver<
+export const resolveProviderInjectedKey = createLookupTableResolver<
     ProviderType,
-    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | 'isFortmatic' | ''
+    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
 >(
     {
         [ProviderType.MaskWallet]: 'isMaskWallet',
@@ -51,7 +51,7 @@ export const resolveProviderIdentityKey = createLookupTableResolver<
         [ProviderType.MathWallet]: 'isMathWallet',
         [ProviderType.Coin98]: 'isCoin98',
         [ProviderType.WalletLink]: 'isWalletLink',
-        [ProviderType.Fortmatic]: 'isFortmatic',
+        [ProviderType.Fortmatic]: '',
         [ProviderType.CustomNetwork]: '',
     },
     '',

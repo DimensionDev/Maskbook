@@ -5,6 +5,7 @@ import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
 import * as Injected from './providers/Injected'
+import * as Fortmatic from './providers/Fortmatic'
 import { defer } from '@masknet/shared-base'
 
 //#region connect WalletConnect
@@ -82,10 +83,6 @@ export async function connectInjected() {
     }
 }
 
-export function createInjectedProvider() {
-    return Injected.createProvider()
-}
-
 export async function notifyInjectedEvent(name: string, event: unknown, providerType: ProviderType) {
     switch (name) {
         case 'accountsChanged':
@@ -99,3 +96,11 @@ export async function notifyInjectedEvent(name: string, event: unknown, provider
     }
 }
 //#endregion
+
+export async function connectFortmatic() {
+    const { accounts, chainId } = await Fortmatic.requestAccounts()
+    return {
+        account: first(accounts),
+        chainId,
+    }
+}

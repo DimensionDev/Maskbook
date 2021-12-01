@@ -21,6 +21,7 @@ import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
 import * as Injected from './providers/Injected'
 import * as WalletConnect from './providers/WalletConnect'
+import * as Fortmatic from './providers/Fortmatic'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { createWeb3 } from './web3'
 import { commitNonce, getNonce, resetNonce } from './nonce'
@@ -263,12 +264,25 @@ export async function INTERNAL_send(
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
-            case ProviderType.Fortmatic:
                 try {
                     callback(null, {
                         jsonrpc: '2.0',
                         id: payload.id as number,
                         result: await Injected.createProvider().request({
+                            method: EthereumMethodType.PERSONAL_SIGN,
+                            params: payload.params,
+                        }),
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
+            case ProviderType.Fortmatic:
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await Fortmatic.createProvider().request({
                             method: EthereumMethodType.PERSONAL_SIGN,
                             params: payload.params,
                         }),
