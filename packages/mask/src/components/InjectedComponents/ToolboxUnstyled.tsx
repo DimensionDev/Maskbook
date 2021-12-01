@@ -117,7 +117,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
     const title = useMemo(() => {
         return !personas.length ? t('create_persona') : !personaConnected ? t('connect_persona') : walletTitle
-    }, [personas, personaConnected])
+    }, [personas, personaConnected, walletTitle, t])
 
     const onClick = async () => {
         if (!personas.length) {
