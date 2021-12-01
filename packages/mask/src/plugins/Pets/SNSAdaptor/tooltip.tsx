@@ -57,7 +57,7 @@ const Tip = () => {
     const titleRender = (
         <div style={{ backgroundColor: '#FFFFFF', padding: 12, borderRadius: 4, fontFamily: 'TwitterChirp' }}>
             <Typography style={{ fontSize: '12px', color: '#737373', fontWeight: 600, fontFamily: 'TwitterChirp' }}>
-                Loot Properties:
+                {t('plugin_pets_loot_properties')}
             </Typography>
             {loots.map((txt) => (
                 <Typography
@@ -74,7 +74,7 @@ const Tip = () => {
                     marginTop: 4,
                     fontFamily: 'TwitterChirp',
                 }}>
-                Get your NFTshow and News:
+                {t('plugin_pets_get_nft_shows')}
             </Typography>
             <Box onClick={click}>
                 <Typography

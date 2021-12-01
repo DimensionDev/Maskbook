@@ -90,13 +90,13 @@ export function PreviewCard(props: PreviewCardProps) {
     }, [grant, setDonationDialog])
     //#endregion
 
-    if (loading) return <Typography color="textPrimary">Loading...</Typography>
+    if (loading) return <Typography color="textPrimary">{t('loading')}</Typography>
     if (error)
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Typography color="textPrimary">{t('go_wrong')}</Typography>
                 <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
-                    Retry
+                    {t('retry')}
                 </Button>
             </Box>
         )
