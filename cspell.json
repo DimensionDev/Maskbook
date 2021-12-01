@@ -1,5 +1,16 @@
 {
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
+    "ignorePaths": [
+        "patches/**",
+        "*generated*",
+        "**/dist/**",
+        "**/*.json",
+        "**/node_modules/**",
+        "pnpm-lock.yaml",
+        ".prettierignore",
+        ".github",
+        "*.snap"
+    ],
     "words": [
         "AMPL",
         "Adai",
@@ -110,7 +121,6 @@
         "ittr",
         "jsbi",
         "jsonml",
-        "jsqr",
         "kdfparams",
         "keccak",
         "kred",
@@ -224,12 +234,15 @@
         "jailbroken",
         "misoperation",
         "majeure",
+        "Serializers",
         "Swither",
         "nftscan",
         "apikey",
         "tokenid",
         "NFTRSS",
-        "solana"
+        "solana",
+        "Görli",
+        "resizer"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -308,21 +321,19 @@
         "DRAWED",
         "devnet",
         "fbclid",
-        "noamount"
+        "noamount",
+        "txts",
+        "redpackets",
+        "blocto",
+        "onflow",
+        "unauthenticate",
+        "mathwallet",
+        "walletlink",
+        "rpcs",
+        "FUSD",
+        "isfacebook"
     ],
     "ignoreRegExpList": ["/@servie/"],
-    "ignorePaths": [
-        "**/__tests__/**",
-        "patches/**",
-        "*generated*",
-        "**/dist/**",
-        "**/*.json",
-        "**/node_modules/**",
-        "pnpm-lock.yaml",
-        "tsconfig.tsbuildinfo",
-        ".prettierignore",
-        ".github"
-    ],
     "overrides": [
         {
             "filename": "web3-contracts/types/GoodGhostingIncentives.d.ts",

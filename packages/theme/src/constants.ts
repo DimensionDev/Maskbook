@@ -1,5 +1,5 @@
 import { PaletteMode, Theme, useTheme } from '@mui/material'
-import { kebabCase } from 'lodash-es'
+import { kebabCase } from 'lodash-unified'
 import parseColor from 'tinycolor2'
 export const LightColor = {
     primary: '#1c68f3',
@@ -28,7 +28,7 @@ export const LightColor = {
 
     iconLight: '#a6a9b6',
 
-    divider: '#f3f3f4',
+    divider: '#eff3f4',
 
     border: '#F3F3F4',
 

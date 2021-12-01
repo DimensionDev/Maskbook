@@ -1,10 +1,10 @@
 import { useCallback } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { GasConfig, TransactionEventType } from '../types'
+import { TransactionStateType, GasConfig, TransactionEventType } from '../types'
 import { isSameAddress } from '../utils'
 import { useAccount } from './useAccount'
-import { TransactionStateType, useTransactionState } from './useTransactionState'
+import { useTransactionState } from './useTransactionState'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 
 export function useERC721TokenTransferCallback(address?: string) {

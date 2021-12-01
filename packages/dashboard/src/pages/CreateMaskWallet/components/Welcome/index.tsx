@@ -1,10 +1,11 @@
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 import { styled, useTheme } from '@mui/material/styles'
 import { useDashboardI18N } from '../../../../locales'
 import { Button } from '@mui/material'
 import { MaskNotSquareIcon } from '@masknet/icons'
+import urlcat from 'urlcat'
 
 const Content = styled('div')`
     width: 100%;
@@ -53,10 +54,13 @@ const CancelButton = styled(Button)(
 `,
 )
 
+const MASK_PRIVACY_POLICY = 'https://legal.mask.io/maskbook/privacy-policy-browser.html'
+
 const Welcome = memo(() => {
     const iframeRef = useRef<HTMLIFrameElement | null>(null)
     const mode = useTheme().palette.mode
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
 
     const privacyPolicyURL = new URL('../../en.html', import.meta.url).toString()
     const privacyPolicyDocument = useMemo(() => () => iframeRef?.current?.contentWindow?.document, [iframeRef])
@@ -95,7 +99,7 @@ const Welcome = memo(() => {
     }
 
     const handleLinkClick = () => {
-        window.open(`next.html#${RoutePaths.PrivacyPolicy}`)
+        window.open(MASK_PRIVACY_POLICY)
     }
 
     useEffect(
@@ -115,7 +119,9 @@ const Welcome = memo(() => {
             iframeRef={iframeRef}
             privacyPolicyURL={privacyPolicyURL}
             iframeLoadHandler={handleIFrameLoad}
-            agreeHandler={() => navigate(RoutePaths.CreateMaskWalletForm)}
+            agreeHandler={() =>
+                navigate(urlcat(RoutePaths.CreateMaskWalletForm, { chainId: searchParams.get('chainId') }))
+            }
             cancelHandler={() => window.close()}
         />
     )

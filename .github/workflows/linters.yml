@@ -14,7 +14,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-node@v2
-      - run: npx prettier@2.4.0 --list-different .
+      - run: npx prettier@2.5.0 --list-different .
   locale-kit:
     runs-on: ubuntu-20.04
     steps:
@@ -28,7 +28,8 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm install
+      - run: npm install --global pnpm
+      - run: pnpm install
       - run: npx gulp locale-kit
   type-check-and-jest:
     runs-on: ubuntu-20.04
@@ -49,20 +50,10 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - name: Restore TypeScript incremental build cache
-        uses: actions/cache@v2
-        with:
-          path: packages/**/dist
-          # actions/cache will not upload changes in cache if primary key hits
-          # by adding date to the primary key, we can ensure the cache updates on the first build of the day
-          key: ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
-          # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
-          # because that might indicates a structural/flags changes in tsc emit.
-          restore-keys: |
-            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}
-      - run: npx pnpm install
+      - run: npm install --global pnpm
+      - run: pnpm install
       - run: npx gulp codegen
+      - run: npx gulp polyfill
       - run: node --experimental-vm-modules ./node_modules/jest/bin/jest.js
   eslint:
     runs-on: ubuntu-20.04
@@ -77,9 +68,10 @@ jobs:
           path: ~/.pnpm-store
           key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-node-
-      - run: npx pnpm install
-      - run: npm run lint:ci -- --max-warnings=0
-      - run: npm run lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml
+      - run: npm install --global pnpm
+      - run: pnpm install
+      - run: pnpm run lint:ci -- --max-warnings=0
+      - run: pnpm run lint:ci -- --format=junit --output-file=reports/junit/eslint-results.xml
       - name: Upload eslint report
         uses: actions/upload-artifact@v2
         with:

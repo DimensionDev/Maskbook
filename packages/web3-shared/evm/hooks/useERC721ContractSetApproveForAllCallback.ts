@@ -1,13 +1,10 @@
 import { useCallback } from 'react'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    useAccount,
-    useTransactionState,
-    useERC721TokenContract,
-    TransactionStateType,
-    TransactionEventType,
-    useChainId,
-} from '../index'
+import { useAccount } from './useAccount'
+import { useTransactionState } from './useTransactionState'
+import { useERC721TokenContract } from '../contracts'
+import { TransactionStateType, TransactionEventType } from '../types'
+import { useChainId } from './useChainId'
 
 /**
  * @param contractAddress NFT contract Address.
@@ -46,23 +43,16 @@ export function useERC721ContractSetApproveForAllCallback(
         }
 
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = erc721TokenContract.methods
+            erc721TokenContract.methods
                 .setApprovalForAll(operator, approved)
                 .send(config as NonPayableTx)
-
-            promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setApproveState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                })
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setApproveState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setApproveState({

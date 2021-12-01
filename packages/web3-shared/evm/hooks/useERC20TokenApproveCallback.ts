@@ -1,13 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { once } from 'lodash-es'
+import { once } from 'lodash-unified'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionEventType } from '../types'
+import { TransactionStateType, TransactionEventType } from '../types'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useAccount } from './useAccount'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
-import { TransactionStateType, useTransactionState } from './useTransactionState'
+import { useTransactionState } from './useTransactionState'
 import { isLessThan } from '../utils'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
@@ -107,14 +107,13 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
 
             // send transaction and wait for hash
             return new Promise<void>(async (resolve, reject) => {
-                const promiEvent = erc20Contract.methods
-                    .approve(spender, useExact ? amount : MaxUint256)
-                    .send(config as NonPayableTx)
                 const revalidate = once(() => {
                     revalidateBalance()
                     revalidateAllowance()
                 })
-                promiEvent
+                erc20Contract.methods
+                    .approve(spender, useExact ? amount : MaxUint256)
+                    .send(config as NonPayableTx)
                     .on(TransactionEventType.RECEIPT, (receipt) => {
                         setTransactionState({
                             type: TransactionStateType.CONFIRMED,
@@ -122,6 +121,7 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
                             receipt,
                         })
                         revalidate()
+                        resolve()
                     })
                     .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                         setTransactionState({

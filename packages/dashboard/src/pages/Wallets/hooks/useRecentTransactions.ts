@@ -10,12 +10,12 @@ export function useRecentTransactions(status?: TransactionStatusType) {
 
     const result = useAsyncRetry(async () => {
         if (!account) return []
-        const transactions = await PluginServices.Wallet.getRecentTransactionList(account)
+        const transactions = await PluginServices.Wallet.getRecentTransactions(chainId, account)
         return transactions.filter((x) => (typeof status !== 'undefined' ? x.status === status : true))
-    }, [account, status, chainId])
+    }, [chainId, account, status])
 
-    useEffect(() => PluginMessages.Wallet.events.receiptUpdated.on(result.retry), [result.retry])
-    useEffect(() => PluginMessages.Wallet.events.recentTransactionsUpdated.on(result.retry), [result.retry])
+    useEffect(() => PluginMessages.Wallet.events.transactionStateUpdated.on(result.retry), [result.retry])
+    useEffect(() => PluginMessages.Wallet.events.transactionsUpdated.on(result.retry), [result.retry])
 
     return result
 }

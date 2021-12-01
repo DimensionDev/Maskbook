@@ -9,16 +9,14 @@
     "@types/rimraf": "^3.0.2",
     "chalk": "^4.1.2",
     "gulp-zip": "^5.1.0",
-    "lodash": "^4.17.21",
     "proper-lockfile": "^4.1.1",
     "rimraf": "^3.0.2",
-    "yargs": "^17.1.1"
+    "yargs": "^17.2.1"
   },
   "devDependencies": {
     "@types/gulp": "^4.0.9",
-    "@types/inquirer": "^7.3.3",
-    "@types/lodash": "^4.14.172",
+    "@types/lodash": "^4.14.177",
     "@types/proper-lockfile": "^4.1.2",
-    "ts-node": "^10.2.1"
+    "ts-node": "^10.4.0"
   }
 }

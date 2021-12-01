@@ -3,8 +3,8 @@
     "version": 1,
     "list": [
         {
-            "input": "./packages/maskbook/src/locales/en-US.json",
-            "output": "./packages/maskbook/src/locales/i18n_generated",
+            "input": "./packages/mask/shared-ui/locales/en-US.json",
+            "output": "./packages/mask/shared-ui/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
                 "type": "i18next/react-hooks",
@@ -15,8 +15,8 @@
             }
         },
         {
-            "input": "./packages/maskbook/src/social-network-adaptor/twitter.com/locales/en-US.json",
-            "output": "./packages/maskbook/src/social-network-adaptor/twitter.com/locales/i18n_generated",
+            "input": "./packages/mask/src/social-network-adaptor/twitter.com/locales/en-US.json",
+            "output": "./packages/mask/src/social-network-adaptor/twitter.com/locales/i18n_generated",
             "parser": "i18next",
             "generator": {
                 "type": "i18next/react-hooks",
@@ -70,6 +70,18 @@
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
                 "namespace": "com.maskbook.wallet",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
+            "input": "./packages/plugins/Flow/src/locales/en-US.json",
+            "output": "./packages/plugins/Flow/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.flow",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }

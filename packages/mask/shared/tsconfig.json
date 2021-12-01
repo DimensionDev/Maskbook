@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/shared/",
+    "tsBuildInfoFile": "../dist/shared.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    "lib": ["ES2021"]
+  },
+  "include": ["./"],
+  "references": [{ "path": "../../shared-base" }]
+}

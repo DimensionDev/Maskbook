@@ -1,20 +1,8 @@
-/// <reference types="web-ext-types" />
 /// <reference types="react/next" />
 /// <reference types="react-dom/next" />
+/// <reference types="@masknet/global-types/webpack" />
+/// <reference types="@masknet/global-types/dom" />
 
-declare module NodeJS {
-    interface ProcessEnv {
-        readonly NODE_ENV: 'development' | 'production'
-        readonly channel: 'stable' | 'beta' | 'insider'
-        readonly architecture: 'web' | 'app'
-
-        VERSION: string
-        TAG_NAME: string
-        COMMIT_HASH: string
-        COMMIT_DATE: string
-        REMOTE_URL: string
-        BRANCH_NAME: string
-        DIRTY: boolean
-        TAG_DIRTY: boolean
-    }
-}
+// TODO: remove dependency on the following types. it blocks the publish of this package on it's own.
+/// <reference types="web-ext-types" />
+/// <reference types="@masknet/global-types/flag" />

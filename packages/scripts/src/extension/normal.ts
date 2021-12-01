@@ -1,22 +1,25 @@
 import yargs, { Argv } from 'yargs'
 const { hideBin } = require('yargs/helpers')
 import { spawn } from 'child_process'
-import { compact } from 'lodash'
+import { compact } from 'lodash-unified'
 import { resolve } from 'path'
 import { awaitChildProcess, PKG_PATH, watchTask } from '../utils'
 import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts'
 import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk'
+import { buildPolyfill } from '../projects/polyfill'
 
 const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 const otherFlags = ['beta', 'insider', 'reproducible', 'profile', 'mv3', 'readonlyCache', 'progress'] as const
 
 export async function extension(f?: Function | ExtensionBuildArgs) {
+    await buildPolyfill()
     await buildInjectedScript()
     await buildMaskSDK()
     if (typeof f === 'function') return awaitChildProcess(webpack('build'))
     return awaitChildProcess(webpack('build', f))
 }
 export async function extensionWatch(f?: Function | ExtensionBuildArgs) {
+    buildPolyfill()
     watchInjectedScript()
     watchMaskSDK()
     if (typeof f === 'function') return awaitChildProcess(webpack('dev'))
@@ -42,7 +45,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
         mode === 'dev' ? 'development' : 'production',
         args.progress && '--progress',
         args.profile && '--profile',
-        // this command runs in the /packages/maskbook folder.
+        // this command runs in the /packages/mask folder.
         args.profile && '--json=../../compilation-stats.json',
     ]
     const flags: BuildFlags = {
@@ -79,7 +82,7 @@ function webpack(mode: 'dev' | 'build', args: ExtensionBuildArgs = parseArgs().a
 
     command.push('--env', 'flags=' + Buffer.from(JSON.stringify(flags), 'utf-8').toString('hex'))
     return spawn('npx', compact(command), {
-        cwd: resolve(PKG_PATH, 'maskbook'),
+        cwd: resolve(PKG_PATH, 'mask'),
         stdio: 'inherit',
         shell: true,
     })
