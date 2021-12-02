@@ -34,13 +34,41 @@ const useStyles = makeStyles()((theme) => ({
     iconContainer: {
         display: 'inherit',
     },
+
     tooltip: {
         height: '100%',
-        borderRadius: 0,
+        borderRadius: theme.spacing(1),
         color: getMaskColor(theme).textPrimary,
-        backgroundColor: getMaskColor(theme).twitterBackgroundHover,
+        backgroundColor: getMaskColor(theme).twitterBackground,
         textAlign: 'initial',
-        opacity: 0.9,
+        padding: theme.spacing(2),
+        maxWidth: '348px',
+        boxShadow: `0px 0px 20px ${getMaskColor(theme).twitterBackgroundHover}`,
+    },
+    tipTitle: {
+        fontSize: '18px',
+        fontWeight: 400,
+        lineHeight: '24px',
+        marginBottom: '10px',
+    },
+    tipContent: {
+        fontSize: '14px',
+        lineHeight: '20px',
+        fontWeight: 400,
+    },
+    tipArrows: {
+        width: '40px',
+        height: '40px',
+        color: getMaskColor(theme).twitterBackground,
+        transform: 'translate3d( 226px, 18px, 0px) !important',
+        ':before': {
+            transformOrigin: 'top center',
+            transform: 'rotate(45deg) translate(10px, 0px)',
+            borderRadius: '3px',
+        },
+    },
+    tipPopper: {
+        transform: 'translate3d( 320px, -49px, 0px) !important',
     },
 }))
 
@@ -67,12 +95,11 @@ export function NFTPage(props: NFTPageProps) {
 
     const tooltipRender = (
         <div>
-            <div style={{ fontSize: '0.8rem' }}>{t('plugin_profile_binding_rules_title')}</div>
-            {rulesTipMap.map((item) => {
+            <div className={classes.tipTitle}>{t('plugin_profile_binding_rules_title')}</div>
+            {rulesTipMap.map((item, index) => {
                 return (
-                    <div>
+                    <div key={index} className={classes.tipContent}>
                         {item}
-                        <br />
                     </div>
                 )
             })}
@@ -121,11 +148,17 @@ export function NFTPage(props: NFTPageProps) {
                             </Typography>
                             <div className={classes.iconContainer}>
                                 <ShadowRootTooltip
+                                    arrow
                                     title={tooltipRender}
                                     PopperProps={{
                                         disablePortal: true,
                                     }}
-                                    classes={{ tooltip: classes.tooltip }}>
+                                    classes={{
+                                        tooltip: classes.tooltip,
+                                        arrow: classes.tipArrows,
+                                        popper: classes.tipPopper,
+                                    }}
+                                    placement="top">
                                     <InfoOutlinedIcon
                                         fontSize="small"
                                         className={classes.icon}
