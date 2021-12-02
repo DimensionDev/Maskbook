@@ -72,7 +72,7 @@ const useStyles = makeStyles()({
 })
 
 const AddDeriveWallet = memo(() => {
-    const indexes = useRef(new Set())
+    const indexes = useRef(new Set<number>())
     const { t } = useI18N()
     const history = useHistory()
     const location = useLocation()
@@ -116,26 +116,37 @@ const AddDeriveWallet = memo(() => {
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         const unDeriveWallets = Array.from(indexes.current)
         if (!mnemonic) return
-        const wallets = await Promise.all(
-            unDeriveWallets.map(async (pathIndex) =>
-                WalletRPC.recoverWalletFromMnemonic(
-                    `${walletName}${pathIndex}` ?? '',
-                    mnemonic,
-                    `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
-                ),
-            ),
-        )
 
-        if (!currentMaskWalletAccountSettings.value && wallets.length) {
-            await WalletRPC.updateMaskAccount({
-                account: first(wallets),
-            })
+        if (unDeriveWallets.length) {
+            const firstPath = first(unDeriveWallets)
+            await WalletRPC.recoverWalletFromMnemonic(
+                `${walletName}${firstPath!}`,
+                mnemonic,
+                `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
+            )
 
-            if (!currentAccountSettings.value)
-                await WalletRPC.updateAccount({
+            const wallets = await Promise.all(
+                unDeriveWallets
+                    .slice(1)
+                    .map(async (pathIndex) =>
+                        WalletRPC.recoverWalletFromMnemonic(
+                            `${walletName}${pathIndex}`,
+                            mnemonic,
+                            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
+                        ),
+                    ),
+            )
+            if (!currentMaskWalletAccountSettings.value && wallets.length) {
+                await WalletRPC.updateMaskAccount({
                     account: first(wallets),
-                    providerType: ProviderType.MaskWallet,
                 })
+
+                if (!currentAccountSettings.value)
+                    await WalletRPC.updateAccount({
+                        account: first(wallets),
+                        providerType: ProviderType.MaskWallet,
+                    })
+            }
         }
         history.replace(PopupRoutes.Wallet)
     }, [mnemonic, walletName])
