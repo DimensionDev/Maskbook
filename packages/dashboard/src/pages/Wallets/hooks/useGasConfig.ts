@@ -54,7 +54,19 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         } else {
             setCustomGasPrice((oldVal) => (!oldVal ? (gasOptions.medium as number) : oldVal))
         }
-    }, [is1559Supported, gasOptions])
+    }, [is1559Supported, gasOptions?.medium])
+
+    useEffect(() => {
+        if (!gasOptions) return
+
+        if (is1559Supported) {
+            const gasLevel = gasOptions.medium as Exclude<typeof gasOptions.medium, number>
+            setMaxFee(formatGweiToWei(gasLevel.suggestedMaxFeePerGas))
+            setPriorityFee(formatGweiToWei(gasLevel.suggestedMaxPriorityFeePerGas))
+        } else {
+            setCustomGasPrice(gasOptions.medium as number)
+        }
+    }, [chainId])
 
     const gasConfig = useMemo(() => {
         return is1559Supported
@@ -64,7 +76,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
                   maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).integerValue().toFixed()),
               }
             : { gas: gasLimit_, gasPrice: new BigNumber(gasPrice).toNumber() }
-    }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice])
+    }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice, chainId])
 
     return {
         gasConfig,
