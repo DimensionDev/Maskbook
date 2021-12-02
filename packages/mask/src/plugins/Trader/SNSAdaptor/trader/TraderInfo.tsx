@@ -15,25 +15,25 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     trade: {
         marginTop: 8,
         padding: 10,
-        backgroundColor: `${MaskColorVar.twitterBottom}!important`,
-        border: `1px solid ${MaskColorVar.twitterBorderLine}`,
+        backgroundColor: `${isDashboard ? MaskColorVar.input : MaskColorVar.twitterBottom}!important`,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
         borderRadius: 8,
         cursor: 'pointer',
         position: 'relative',
     },
     provider: {
-        color: MaskColorVar.twitterButton,
+        color: theme.palette.text.primary,
         fontSize: 19,
         lineHeight: '27px',
         fontWeight: 600,
         wordBreak: 'keep-all',
     },
     cost: {
-        color: MaskColorVar.twitterSecond,
+        color: isDashboard ? MaskColorVar.normalText : MaskColorVar.twitterSecond,
         fontSize: 14,
         lineHeight: '20px',
         marginTop: 12,
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     input: {
         textAlign: 'right',
         fontWeight: 500,
-        color: MaskColorVar.twitterButton,
+        color: theme.palette.text.primary,
         lineHeight: '30px',
         fontSize: 24,
         cursor: 'pointer',
@@ -70,7 +70,8 @@ export interface TraderInfoProps {
 
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const isDashboard = location.href.includes('dashboard.html')
+    const { classes } = useStyles({ isDashboard })
     const { targetChainId } = TargetChainIdContext.useContainer()
 
     //#region refresh pools

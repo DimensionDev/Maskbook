@@ -7,7 +7,7 @@ export const LightColor = {
     background: '#FFFFFF',
     secondary: '#e8f0fe',
     secondaryContrastText: '#1c68f3',
-
+    input: '#F6F6F8',
     primaryBackground: '#ffffff',
     secondaryBackground: '#f9fafa',
     lightBackground: '#F9FAFA',
@@ -26,6 +26,7 @@ export const LightColor = {
     twitterBottom: '#ffffff',
     twitterInfoBackground: '#AFC3E1',
     twitterInfo: '#8CA3C7',
+    twitterBg: '#F6F8F8',
     twitterInput: '#EDF1F2',
     twitterLine: '#EBEEF0',
     redMain: '#ff5f5f',
@@ -72,7 +73,7 @@ export const DarkColor: typeof LightColor = {
     background: '#15171A',
     secondary: '#242e57',
     secondaryContrastText: '#ffffff',
-
+    input: '#282B49',
     primaryBackground: '#212442',
     secondaryBackground: '#252846',
     lightBackground: '#2E314F',
@@ -93,6 +94,7 @@ export const DarkColor: typeof LightColor = {
     twitterInfoBackground: '#AFC3E1',
     twitterInfo: '#8CA3C7',
     twitterLine: '#2F3336',
+    twitterBg: '#15171A',
     redMain: '#ff5f5f',
     redLight: '#46304a',
     redContrastText: '#ffffff',

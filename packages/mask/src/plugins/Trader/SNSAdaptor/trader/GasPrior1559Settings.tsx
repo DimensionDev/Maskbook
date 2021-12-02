@@ -10,15 +10,16 @@ import {
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, TextField, Typography } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import classnames from 'classnames'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     container: {
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
@@ -95,7 +96,14 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 600,
         padding: '13px 0',
         height: 48,
-        borderRadius: 24,
+        borderRadius: isDashboard ? 8 : 24,
+    },
+    cancelButton: {
+        backgroundColor: !isDashboard ? MaskColorVar.twitterBg : undefined,
+        color: !isDashboard ? MaskColorVar.twitterButton : undefined,
+        '&:hover': {
+            backgroundColor: !isDashboard ? `${MaskColorVar.twitterBg}!important` : undefined,
+        },
     },
 }))
 
@@ -107,7 +115,8 @@ interface GasPrior1559SettingsProps {
 
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel, onSave: onSave_, gasConfig }) => {
     const chainId = useChainId()
-    const { classes } = useStyles()
+    const isDashboard = location.href.includes('dashboard.html')
+    const { classes } = useStyles({ isDashboard })
     const { t } = useI18N()
     const [selected, setOption] = useState<number>(1)
     const [customGasPrice, setCustomGasPrice] = useState('0')
@@ -236,16 +245,21 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
                 </AccordionDetails>
             </Accordion>
             <Box className={classes.controller}>
-                <Button color="secondary" className={classes.button} onClick={onCancel}>
+                <ActionButton
+                    color="secondary"
+                    variant="contained"
+                    className={classnames(classes.button, classes.cancelButton)}
+                    onClick={onCancel}>
                     {t('cancel')}
-                </Button>
-                <Button
+                </ActionButton>
+                <ActionButton
                     color="primary"
+                    variant="contained"
                     className={classes.button}
                     onClick={handleConfirm}
                     disabled={selected === 2 && !Number(customGasPrice)}>
                     {t('save')}
-                </Button>
+                </ActionButton>
             </Box>
         </>
     )

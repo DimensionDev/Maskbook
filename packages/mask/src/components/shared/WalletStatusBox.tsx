@@ -18,7 +18,7 @@ import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
 import Services from '../../extension/service'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     content: {
         padding: theme.spacing(2, 3, 3),
     },
@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground : getMaskColor(theme).twitterBackground,
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -86,8 +86,9 @@ interface WalletStatusBox {
 }
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
-    const { classes } = useStyles()
 
+    const isDashboard = location.href.includes('dashboard.html')
+    const { classes } = useStyles({ isDashboard })
     const chainId = useChainId()
     const account = useAccount()
 

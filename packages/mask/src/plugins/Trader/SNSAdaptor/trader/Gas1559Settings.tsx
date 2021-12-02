@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
 import { I18NFunction, useI18N } from '../../../../utils'
-import { Accordion, AccordionDetails, AccordionSummary, Box, Button, TextField, Typography } from '@mui/material'
+import { Accordion, AccordionDetails, AccordionSummary, Box, TextField, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { formatGweiToWei, GasOptionConfig, useChainId } from '@masknet/web3-shared-evm'
 import classnames from 'classnames'
@@ -13,8 +13,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ExpandMore } from '@mui/icons-material'
 import { fromWei, toHex } from 'web3-utils'
 import { isEmpty } from 'lodash-unified'
+import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     option: {
         display: 'flex',
         flexDirection: 'column',
@@ -102,15 +103,13 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 600,
         padding: '13px 0',
         height: 48,
-        borderRadius: 24,
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.primary.contrastText,
+        borderRadius: isDashboard ? 8 : 24,
     },
     cancelButton: {
-        backgroundColor: MaskColorVar.twitterBackground,
-        color: MaskColorVar.twitterButton,
+        backgroundColor: !isDashboard ? MaskColorVar.twitterBg : undefined,
+        color: !isDashboard ? MaskColorVar.twitterButton : undefined,
         '&:hover': {
-            backgroundColor: `${MaskColorVar.twitterBackground}!important`,
+            backgroundColor: !isDashboard ? `${MaskColorVar.twitterBg}!important` : undefined,
         },
     },
 }))
@@ -143,7 +142,8 @@ const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: onSave_, gasConfig }) => {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const isDashboard = location.href.includes('dashboard.html')
+    const { classes } = useStyles({ isDashboard })
     const chainId = useChainId()
 
     const [selected, setOption] = useState<number | null>(1)
@@ -361,21 +361,21 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
                 </AccordionDetails>
             </Accordion>
             <Box className={classes.controller}>
-                <Button
+                <ActionButton
                     color="secondary"
                     variant="contained"
                     className={classnames(classes.button, classes.cancelButton)}
                     onClick={onCancel}>
                     {t('cancel')}
-                </Button>
-                <Button
+                </ActionButton>
+                <ActionButton
                     color="primary"
                     variant="contained"
                     className={classes.button}
                     onClick={onSave}
                     disabled={!isEmpty(errors)}>
                     {t('save')}
-                </Button>
+                </ActionButton>
             </Box>
         </>
     )

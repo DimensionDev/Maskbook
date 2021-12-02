@@ -38,22 +38,22 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             cursor: 'pointer',
         },
         card: {
-            backgroundColor: MaskColorVar.twitterInputBackground,
-            border: `1px solid ${MaskColorVar.twitterBorderLine}`,
+            backgroundColor: isDashboard ? MaskColorVar.primaryBackground : MaskColorVar.twitterInputBackground,
+            border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
             borderRadius: 12,
             padding: 12,
         },
         balance: {
             fontSize: 14,
             lineHeight: '20px',
-            color: MaskColorVar.twitterButton,
+            color: theme.palette.text.primary,
         },
         amount: {
             marginLeft: 10,
         },
 
         reverse: {
-            backgroundColor: MaskColorVar.twitterInputBackground,
+            backgroundColor: isDashboard ? MaskColorVar.lightBackground : MaskColorVar.twitterInputBackground,
             width: 32,
             height: 32,
             borderRadius: 16,
@@ -64,7 +64,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
         chevron: {
             fill: 'none',
-            stroke: MaskColorVar.twitterMain,
+            stroke: theme.palette.text.primary,
             transition: 'all 300ms',
             cursor: 'pointer',
         },
@@ -93,7 +93,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             lineHeight: '22px',
             fontWeight: 600,
             padding: '13px 0',
-            borderRadius: 24,
+            borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
         },
         disabledButton: {
@@ -107,7 +107,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         selectedTokenChip: {
             borderRadius: `22px!important`,
             height: 'auto',
-            backgroundColor: MaskColorVar.twitterInput,
+            backgroundColor: isDashboard ? MaskColorVar.input : MaskColorVar.twitterInput,
             [`& .${chipClasses.label}`]: {
                 paddingTop: 13,
                 paddingBottom: 13,
@@ -156,7 +156,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         dropIcon: {
             width: 20,
             height: 24,
-            fill: MaskColorVar.twitterButton,
+            fill: isDashboard ? theme.palette.text.primary : MaskColorVar.twitterButton,
         },
         connectWallet: {
             marginTop: 0,

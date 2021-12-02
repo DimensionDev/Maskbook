@@ -8,13 +8,13 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { PluginTraderMessages } from '../../messages'
 import { Trader, TraderProps } from './Trader'
 import { useI18N } from '../../../../utils'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     walletStatusBox: {
         width: 535,
         margin: '24px auto',
@@ -27,6 +27,7 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         height: 36,
         minHeight: 36,
+        backgroundColor: isDashboard ? `${MaskColorVar.primaryBackground}!important` : undefined,
     },
     tabPaper: {
         backgroundColor: 'inherit',
@@ -63,7 +64,8 @@ interface TraderDialogProps {
 
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
     const { t } = useI18N()
-    const { classes } = useStyles()
+    const isDashboard = location.href.includes('dashboard.html')
+    const { classes } = useStyles({ isDashboard })
     const currentChainId = useChainId()
     const chainIdValid = useChainIdValid()
     const [traderProps, setTraderProps] = useState<TraderProps>()

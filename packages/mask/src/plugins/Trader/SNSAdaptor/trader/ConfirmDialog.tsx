@@ -22,7 +22,7 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
         display: 'flex',
         justifyContent: 'space-between',
@@ -30,7 +30,7 @@ const useStyles = makeStyles()(() => ({
         ['& > p']: {
             fontSize: 16,
             lineHeight: '22px',
-            color: MaskColorVar.twitterMain,
+            color: theme.palette.text.primary,
             display: 'flex',
             alignItems: 'center',
             margin: '12px 0',
@@ -60,7 +60,7 @@ const useStyles = makeStyles()(() => ({
         lineHeight: '22px',
         fontWeight: 600,
         padding: '13px 0',
-        borderRadius: 24,
+        borderRadius: isDashboard ? 8 : 24,
         height: 'auto',
     },
     content: {
@@ -96,7 +96,8 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
     const currentSlippage = useValueRef(currentSlippageSettings)
-    const classes = useStylesExtends(useStyles(), props)
+    const isDashboard = location.href.includes('dashboard.html')
+    const classes = useStylesExtends(useStyles({ isDashboard }), props)
     const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice } = props
     const { inputAmount, outputAmount } = trade
 
@@ -131,7 +132,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
     return (
         <>
-            <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" maxWidth="xs">
+            <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" onlyClose>
                 <DialogContent className={classes.content}>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_red_packet_nft_account_name')}</Typography>

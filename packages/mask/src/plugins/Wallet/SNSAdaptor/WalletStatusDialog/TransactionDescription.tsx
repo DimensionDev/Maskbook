@@ -27,9 +27,6 @@ function getTransactionDescription(
 ) {
     if (!computedPayload) return
     const type = computedPayload.type
-    console.log(nativeTokenDetailed)
-    console.log(computedPayload)
-    console.log(tokenDetailed)
     switch (type) {
         case EthereumRpcType.SEND_ETHER:
             return `Send token -${getTokenAmountDescription(
@@ -72,11 +69,7 @@ function getTransactionDescription(
                         nativeTokenDetailed?.decimals,
                         2,
                     )
-                    const amountOut = formatBalance(
-                        computedPayload.parameters.amountOutMin,
-                        nativeTokenDetailed?.decimals,
-                        2,
-                    )
+                    const amountOut = formatBalance(computedPayload.parameters.amountOutMin, tokenDetailed?.decimals, 2)
                     return `Swap ${amountIn} ${nativeTokenDetailed?.symbol} for ${amountOut} ${tokenDetailed?.symbol}`
                 default:
                     return `${computedPayload.name ?? 'Contract Interaction'} ${
@@ -141,6 +134,8 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
     const { loading: getInputERC20TokenLoading, value: inputTokenDetailed } = useERC20TokenDetailed(inputTokenAddress)
 
     const { loading: getERC20TokenLoading, value: tokenDetailed } = useERC20TokenDetailed(tokenAddress)
+
+    console.log(tokenDetailed)
 
     return !getNativeTokenLoading && !getERC20TokenLoading && !getInputERC20TokenLoading ? (
         <span>

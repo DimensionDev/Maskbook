@@ -11,18 +11,18 @@ import { FormattedCurrency } from '@masknet/shared'
 import { ZERO_ADDRESS } from '../../../GoodGhosting/constants'
 import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     filledInput: {
         borderRadius: 12,
         padding: 12,
-        background: MaskColorVar.twitterInputBackground,
-        border: `1px solid ${MaskColorVar.twitterBorderLine}`,
+        background: isDashboard ? MaskColorVar.primaryBackground : MaskColorVar.twitterInputBackground,
+        border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
         position: 'relative',
     },
     balance: {
         fontSize: 14,
         lineHeight: '20px',
-        color: MaskColorVar.twitterButton,
+        color: theme.palette.text.primary,
     },
     amount: {
         marginLeft: 10,
@@ -30,7 +30,7 @@ const useStyles = makeStyles()(() => ({
     input: {
         textAlign: 'right',
         fontWeight: 500,
-        color: MaskColorVar.twitterButton,
+        color: theme.palette.text.primary,
         lineHeight: '30px',
         fontSize: 24,
     },
@@ -50,12 +50,12 @@ const useStyles = makeStyles()(() => ({
         position: 'absolute',
         top: 18,
         right: 12,
-        color: MaskColorVar.twitterSecond,
+        color: isDashboard ? MaskColorVar.normalText : MaskColorVar.twitterSecond,
     },
     selectedTokenChip: {
         borderRadius: `22px!important`,
         height: 'auto',
-        backgroundColor: MaskColorVar.twitterInput,
+        backgroundColor: isDashboard ? MaskColorVar.input : MaskColorVar.twitterInput,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
             paddingBottom: 10,
@@ -83,7 +83,8 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({ chainId, token, balance, onAmountChange, amount, ...props }) => {
         const { t } = useI18N()
-        const { classes } = useStyles()
+        const isDashboard = location.href.includes('dashboard.html')
+        const { classes } = useStyles({ isDashboard })
 
         //#region update amount by self
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(

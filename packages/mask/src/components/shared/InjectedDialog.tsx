@@ -56,6 +56,7 @@ export type InjectedDialogClassKey =
 export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'title' | 'classes'> {
     classes?: Partial<Record<InjectedDialogClassKey, string>>
     onClose?(): void
+    onlyClose?: boolean
     title?: React.ReactChild
     disableBackdropClick?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
@@ -82,7 +83,16 @@ export function InjectedDialog(props: InjectedDialogProps) {
     // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
 
-    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props
+    const {
+        children,
+        open,
+        disableBackdropClick,
+        titleBarIconStyle,
+        onClose,
+        onlyClose = false,
+        title,
+        ...rest
+    } = props
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
@@ -119,7 +129,9 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 classes={{ root: dialogCloseButton }}
                                 aria-label={t('post_dialog__dismiss_aria')}
                                 onClick={onClose}>
-                                <DialogDismissIconUI style={shouldReplaceExitWithBack ? 'back' : titleBarIconStyle} />
+                                <DialogDismissIconUI
+                                    style={shouldReplaceExitWithBack && !onlyClose ? 'back' : titleBarIconStyle}
+                                />
                             </IconButton>
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
                                 {title}
