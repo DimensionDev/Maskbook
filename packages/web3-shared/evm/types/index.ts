@@ -285,6 +285,7 @@ export enum EthereumMethodType {
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
     ETH_CHAIN_ID = 'eth_chainId',
     ETH_ACCOUNTS = 'eth_accounts',
+    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GET_CODE = 'eth_getCode',

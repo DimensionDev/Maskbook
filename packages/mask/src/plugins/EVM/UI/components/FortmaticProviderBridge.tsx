@@ -2,14 +2,16 @@ import { useEffect } from 'react'
 import Fortmatic from 'fortmatic'
 import { first } from 'lodash-unified'
 import type { FmProvider } from 'fortmatic/dist/cjs/src/core/fm-provider'
-import { useValueRef } from '@masknet/shared'
-import { ChainId, createLookupTableResolver, getRPCConstants } from '@masknet/web3-shared-evm'
+import { ChainId, createLookupTableResolver, EthereumMethodType, getRPCConstants } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../messages'
-import { currentProviderSettings } from '../../../Wallet/settings'
 
 //#region create in-page fortmatic provider
-const TEST_KEY = 'pk_test_D3D403709D9F8A73'
-const LIVE_KEY = 'pk_live_EDC387083BCC4787'
+
+/* spell-checker: disable-next-line */
+const TEST_KEY = 'pk_test_D9EAF9A8ACEC9627'
+
+/* spell-checker: disable-next-line */
+const LIVE_KEY = 'pk_live_331BE8AA24445030'
 
 type FORTMATIC_CHAIN_ID =
     | ChainId.Mainnet
@@ -51,13 +53,14 @@ export function createProvider(chainId: FORTMATIC_CHAIN_ID) {
 export interface FortmaticProviderBridgeProps {}
 
 export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
-    const providerType = useValueRef(currentProviderSettings)
-
     useEffect(() => {
         return EVM_Messages.events.FORTMATIC_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
             try {
                 const provider = createProvider(ChainId.Mainnet)
-                const result = await provider.send(payload.method, payload.params)
+                const result =
+                    payload.method === EthereumMethodType.ETH_REQUEST_ACCOUNTS
+                        ? await provider.enable()
+                        : await provider.send(payload.method, payload.params)
                 EVM_Messages.events.FORTMATIC_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
                     payload,
                     result,
@@ -71,12 +74,6 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
             }
         })
     }, [])
-
-    // accountsChanged
-    useEffect(() => {}, [providerType])
-
-    // chainChanged
-    useEffect(() => {}, [providerType])
 
     return null
 }

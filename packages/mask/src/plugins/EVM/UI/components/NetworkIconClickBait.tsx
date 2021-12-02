@@ -52,6 +52,9 @@ export function NetworkIconClickBait({
 
     if (!providerType) return null
 
+    // only mainnet for Fortmatic
+    if (providerType === ProviderType.Fortmatic && networkType !== NetworkType.Ethereum) return null
+
     return (
         <>
             {isValidElement<object>(children)

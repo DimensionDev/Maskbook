@@ -74,6 +74,9 @@ export function ProviderIconClickBait({
     // hide injected provider in dashboard
     if (isInjectedProvider(providerType) && location.href.includes('dashboard.html')) return null
 
+    // hide fortmatic on non-mainnet networks
+    if (providerType === ProviderType.Fortmatic && networkType !== NetworkType.Ethereum) return null
+
     // coinbase and mathwallet are blocked by CSP
     if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null
 
