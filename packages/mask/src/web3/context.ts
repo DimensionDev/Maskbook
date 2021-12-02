@@ -29,7 +29,6 @@ import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../../shared'
 import { createExternalProvider } from './helpers'
-import { createInjectedProvider, createFortmaticProvider } from '../extension/background-script/EthereumService'
 import Services from '../extension/service'
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
@@ -51,24 +50,8 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         }),
     )
 
-    const InjectedProvider = createInjectedProvider()
-    const FortmaticProvider = createFortmaticProvider()
-
     return {
-        provider: createSubscriptionFromAsync(
-            async () => {
-                const providerType = currentProviderSettings.value
-
-                if (providerType === ProviderType.Fortmatic) return FortmaticProvider
-                else if (isInjectedProvider(providerType)) return InjectedProvider
-                else return Web3Provider
-            },
-            Web3Provider,
-            (callback) => {
-                const a = currentProviderSettings.addListener(callback)
-                return () => void [a()]
-            },
-        ),
+        provider: createStaticSubscription(() => Web3Provider),
         allowTestnet: createStaticSubscription(() => Flags.wallet_allow_testnet),
         chainId: createSubscriptionFromSettings(isMask ? currentMaskWalletChainIdSettings : currentChainIdSettings),
         account: createSubscriptionFromAsync(

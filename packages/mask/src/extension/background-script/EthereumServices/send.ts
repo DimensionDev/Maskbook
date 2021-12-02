@@ -411,9 +411,20 @@ export async function INTERNAL_send(
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
-            case ProviderType.Fortmatic:
-                if (providerType !== ProviderType.Fortmatic) await Injected.ensureConnectedAndUnlocked()
+                await Injected.ensureConnectedAndUnlocked()
                 Injected.createProvider().send(payload, (error, response) => {
+                    callback(
+                        hasError(error, response)
+                            ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)
+                            : null,
+                        response,
+                    )
+                    handleTransferTransaction(chainIdFinally, payload)
+                    handleRecentTransaction(chainIdFinally, account, payload, response)
+                })
+                break
+            case ProviderType.Fortmatic:
+                Fortmatic.createProvider().send(payload, (error, response) => {
                     callback(
                         hasError(error, response)
                             ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)

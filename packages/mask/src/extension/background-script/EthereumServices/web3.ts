@@ -24,12 +24,12 @@ export async function createWeb3({
             return WalletConnect.createWeb3({
                 chainId,
             })
-        case ProviderType.Fortmatic:
-            return Fortmatic.createWeb3({ chainId })
         case ProviderType.Coin98:
         case ProviderType.WalletLink:
         case ProviderType.MathWallet:
             return Injected.createWeb3()
+        case ProviderType.Fortmatic:
+            return Fortmatic.createWeb3()
         case ProviderType.CustomNetwork:
             throw new Error('To be implemented.')
         default:
