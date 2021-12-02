@@ -77,7 +77,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
             page={page}
             onPageChange={setPage}
             hasNextPage={hasNextPage}
-            showPagination={!collectiblesLoading && !(page === 0 && collectibles.length === 0)}
+            showPagination={!collectiblesLoading && !(page === 0 && !hasNextPage)}
             dataSource={collectibles}
             chainId={network?.chainId ?? 1}
             onSend={onSend}
