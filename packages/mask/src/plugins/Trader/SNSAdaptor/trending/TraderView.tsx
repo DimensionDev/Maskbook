@@ -188,7 +188,7 @@ export function TraderView(props: TraderViewProps) {
             <TrendingViewError
                 message={
                     <span>
-                        Fail to load trending info from{' '}
+                        {t('plugin_trader_fail_to_load')}
                         <Link
                             color="primary"
                             target="_blank"

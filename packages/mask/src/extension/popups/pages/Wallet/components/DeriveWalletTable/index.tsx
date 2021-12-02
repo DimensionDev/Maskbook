@@ -15,6 +15,7 @@ import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
 import { formatBalance, formatEthereumAddress, useWeb3 } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../../../../utils'
 
 const useStyles = makeStyles()({
     header: {
@@ -47,19 +48,19 @@ export interface DeriveWalletTableProps {
 
 export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSource, onCheck, confirmLoading }) => {
     const { classes } = useStyles()
-
+    const { t } = useI18N()
     return (
         <Table size="small" padding="none" stickyHeader>
             <TableHead>
                 <TableRow>
                     <TableCell key="address" align="center" variant="head" className={classes.header}>
-                        <Typography className={classes.title}>Address</Typography>
+                        <Typography className={classes.title}>{t('address')}</Typography>
                     </TableCell>
                     <TableCell key="balance" align="center" variant="head" className={classes.header}>
-                        <Typography className={classes.title}>Balance(ETH)</Typography>
+                        <Typography className={classes.title}>{t('wallet_balance_eth')}</Typography>
                     </TableCell>
                     <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                        <Typography className={classes.title}>Operation</Typography>
+                        <Typography className={classes.title}>{t('operation')}</Typography>
                     </TableCell>
                 </TableRow>
             </TableHead>

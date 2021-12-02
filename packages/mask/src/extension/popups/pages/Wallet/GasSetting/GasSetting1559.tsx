@@ -349,7 +349,7 @@ export const GasSetting1559 = memo(() => {
                         <Typography className={classes.optionsTitle}>{title}</Typography>
                         <Typography component="div">
                             {new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
-                            <Typography variant="inherit">Gwei</Typography>
+                            <Typography variant="inherit">{t('wallet_transfer_gwei')}</Typography>
                         </Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {

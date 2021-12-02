@@ -129,7 +129,7 @@ export function PoolView(props: PoolProps) {
                             variant="outlined"
                             href={`${BASE_URL}/${category}/${chainId}/${address}`}
                             target="_blank">
-                            Invest
+                            {t('plugin_furucombo_invest')}
                         </Button>
                     </Grid>
                 </Grid>
