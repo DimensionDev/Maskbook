@@ -68,6 +68,18 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         width: '28px!important',
         height: '28px!important',
     },
+    noToken: {
+        borderRadius: `18px !important`,
+        backgroundColor: theme.palette.primary.main,
+        [`& .${chipClasses.label}`]: {
+            paddingTop: 9,
+            paddingBottom: 9,
+            fontSize: 13,
+            lineHeight: '18px',
+            color: theme.palette.primary.contrastText,
+            marginRight: 0,
+        },
+    },
 }))
 
 export interface InputTokenPanelProps extends withClasses<'root'> {
@@ -134,7 +146,11 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
                             }}>
                             <SelectTokenChip
                                 token={token}
-                                classes={{ chip: classes.selectedTokenChip, tokenIcon: classes.chipTokenIcon }}
+                                classes={{
+                                    chip: classes.selectedTokenChip,
+                                    tokenIcon: classes.chipTokenIcon,
+                                    noToken: classes.noToken,
+                                }}
                                 {...props.SelectTokenChip}
                             />
                             <Box display="flex" mt={1} alignItems="center">

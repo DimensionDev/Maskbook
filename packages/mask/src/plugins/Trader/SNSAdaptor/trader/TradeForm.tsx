@@ -111,8 +111,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             height: 'auto',
             backgroundColor: isDashboard ? MaskColorVar.input : MaskColorVar.twitterInput,
             [`& .${chipClasses.label}`]: {
-                paddingTop: 13,
-                paddingBottom: 13,
+                paddingTop: 10,
+                paddingBottom: 10,
                 fontSize: 13,
                 lineHeight: '18px',
                 marginRight: 13,
@@ -396,30 +396,35 @@ export const TradeForm = memo<AllTradeFormProps>(
                             }}
                         />
 
-                        <Box marginTop="10px">
-                            {firstTraderInfo}
-                            <Collapse in={isExpand}>
-                                {trades.slice(1).map((trade) => (
-                                    <TraderInfo
-                                        key={trade.provider}
-                                        trade={trade}
-                                        onClick={() => {
-                                            if (!userSelected.current) userSelected.current = true
-                                            onFocusedTradeChange(trade)
-                                        }}
-                                        isFocus={trade.provider === focusedTrade?.provider}
-                                        gasPrice={gasPrice}
-                                    />
-                                ))}
-                            </Collapse>
-                        </Box>
                         {trades.filter((item) => !!item.value).length > 1 ? (
-                            <Box width="100%" display="flex" justifyContent="center" marginTop={2.5}>
-                                <ChevronUpIcon
-                                    className={classnames(classes.chevron, isExpand ? classes.reverseChevron : null)}
-                                    onClick={() => setIsExpand(!isExpand)}
-                                />
-                            </Box>
+                            <>
+                                <Box marginTop="20px">
+                                    {firstTraderInfo}
+                                    <Collapse in={isExpand}>
+                                        {trades.slice(1).map((trade) => (
+                                            <TraderInfo
+                                                key={trade.provider}
+                                                trade={trade}
+                                                onClick={() => {
+                                                    if (!userSelected.current) userSelected.current = true
+                                                    onFocusedTradeChange(trade)
+                                                }}
+                                                isFocus={trade.provider === focusedTrade?.provider}
+                                                gasPrice={gasPrice}
+                                            />
+                                        ))}
+                                    </Collapse>
+                                </Box>
+                                <Box width="100%" display="flex" justifyContent="center" marginTop={1.5}>
+                                    <ChevronUpIcon
+                                        className={classnames(
+                                            classes.chevron,
+                                            isExpand ? classes.reverseChevron : null,
+                                        )}
+                                        onClick={() => setIsExpand(!isExpand)}
+                                    />
+                                </Box>
+                            </>
                         ) : null}
                     </Box>
                 </Box>

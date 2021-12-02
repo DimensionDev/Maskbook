@@ -87,8 +87,6 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
         if (!chainIdValid) closeDialog()
     }, [chainIdValid, closeDialog])
 
-    console.log(currentChainId)
-
     return (
         <TargetChainIdContext.Provider>
             <AllProviderTradeContext.Provider>

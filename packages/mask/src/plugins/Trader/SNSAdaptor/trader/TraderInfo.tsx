@@ -17,7 +17,7 @@ import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     trade: {
-        marginTop: 8,
+        marginBottom: 8,
         padding: 10,
         backgroundColor: `${isDashboard ? MaskColorVar.input : MaskColorVar.twitterBottom}!important`,
         border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
