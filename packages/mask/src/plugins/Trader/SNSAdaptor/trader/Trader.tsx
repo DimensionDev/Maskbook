@@ -39,6 +39,7 @@ import { PluginTraderMessages } from '../../messages'
 import { NetworkType } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
+import { SettingsDialog } from './SettingsDialog'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -458,6 +459,7 @@ export function Trader(props: TraderProps) {
                     onClose={onConfirmDialogClose}
                 />
             ) : null}
+            <SettingsDialog />
         </div>
     )
 }

@@ -132,7 +132,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
 
     return (
         <>
-            <InjectedDialog open={open} onClose={onClose} title="Confirm Swap" onlyClose={isDashboard}>
+            <InjectedDialog open={open} onClose={onClose} title="Confirm Swap">
                 <DialogContent className={classes.content}>
                     <Box className={classes.section}>
                         <Typography>{t('plugin_red_packet_nft_account_name')}</Typography>

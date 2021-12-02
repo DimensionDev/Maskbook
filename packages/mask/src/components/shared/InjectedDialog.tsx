@@ -56,7 +56,6 @@ export type InjectedDialogClassKey =
 export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'title' | 'classes'> {
     classes?: Partial<Record<InjectedDialogClassKey, string>>
     onClose?(): void
-    onlyClose?: boolean
     title?: React.ReactChild
     disableBackdropClick?: boolean
     titleBarIconStyle?: 'auto' | 'back' | 'close'
@@ -82,17 +81,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
     // see https://github.com/import-js/eslint-plugin-import/issues/2288
     // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
-
-    const {
-        children,
-        open,
-        disableBackdropClick,
-        titleBarIconStyle,
-        onClose,
-        onlyClose = false,
-        title,
-        ...rest
-    } = props
+    const isDashboard = location.href.includes('dashboard.html')
+    const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
     const content = CopyElementWithNewProps(children, DialogContent, { root: dialogContent })
@@ -130,7 +120,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 aria-label={t('post_dialog__dismiss_aria')}
                                 onClick={onClose}>
                                 <DialogDismissIconUI
-                                    style={shouldReplaceExitWithBack && !onlyClose ? 'back' : titleBarIconStyle}
+                                    style={shouldReplaceExitWithBack && !isDashboard ? 'back' : titleBarIconStyle}
                                 />
                             </IconButton>
                             <Typography className={dialogTitleTypography} display="inline" variant="inherit">
