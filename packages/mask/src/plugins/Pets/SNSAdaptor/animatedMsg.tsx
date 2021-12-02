@@ -8,7 +8,6 @@ import { useAccount } from '@masknet/web3-shared-evm'
 const useStyles = makeStyles()(() => ({
     txt: {
         position: 'absolute',
-        // opacity: 0,
         top: -40,
         fontSize: '12px',
         color: '#737373',
