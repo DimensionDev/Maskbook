@@ -1,6 +1,6 @@
 import { useWeb3Context, useWeb3State } from '../context'
 import { useAsyncRetry } from 'react-use'
-import { ChainId, PortfolioProvider } from '../types'
+import { ChainId, FungibleAssetProvider } from '../types'
 import { unreachable } from '@dimensiondev/kit'
 import { getNetworkTypeFromChainId } from '../utils'
 
@@ -19,8 +19,8 @@ export function useTransactions(address: string, page?: number, size?: number, c
         }
 
         switch (portfolioProvider) {
-            case PortfolioProvider.DEBANK:
-            case PortfolioProvider.ZERION:
+            case FungibleAssetProvider.DEBANK:
+            case FungibleAssetProvider.ZERION:
                 return getTransactionList(address.toLowerCase(), network, portfolioProvider, page, size)
             default:
                 unreachable(portfolioProvider)

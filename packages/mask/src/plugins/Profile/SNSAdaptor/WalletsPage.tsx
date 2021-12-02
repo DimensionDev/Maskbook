@@ -1,13 +1,15 @@
-import { RewardIcon } from '@masknet/icons'
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { ImageIcon, useRemoteControlledDialog, useSnackbarCallback } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress, resolveAddressLinkOnExplorer, useChainId, useWallets } from '@masknet/web3-shared-evm'
-import { Button, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { Trans } from 'react-i18next'
-import { Copy, ExternalLink } from 'react-feather'
 import { useCopyToClipboard } from 'react-use'
+import { Copy, ExternalLink } from 'react-feather'
+import { RewardIcon } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { NetworkPluginID, useNetworkDescriptor } from '@masknet/plugin-infra'
+import { ImageIcon, useRemoteControlledDialog, useSnackbarCallback } from '@masknet/shared'
+import { formatEthereumAddress, resolveAddressLinkOnExplorer, useChainId, useWallets } from '@masknet/web3-shared-evm'
+import { Button, Link, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,10 +46,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export function WalletsPage() {
-    const wallets = useWallets()
-
-    const chainId = useChainId()
     const { classes } = useStyles()
+    const { t } = useI18N()
+    const chainId = useChainId()
+    const wallets = useWallets()
+    const networkDescriptor = useNetworkDescriptor(undefined, NetworkPluginID.PLUGIN_EVM)
     const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
@@ -57,7 +60,7 @@ export function WalletsPage() {
     const onCopy = useSnackbarCallback({
         executor: async (ev: React.MouseEvent<HTMLAnchorElement>, address) => copyToClipboard(address),
         deps: [],
-        successText: 'Copy wallet address successfully!',
+        successText: t('copy_success_of_wallet_addr'),
     })
     //#endregion
 
@@ -67,7 +70,7 @@ export function WalletsPage() {
                 {wallets.map((wallet, i) => (
                     <ListItem key={i}>
                         <ListItemIcon className={classes.icon}>
-                            <ImageIcon size={20} />
+                            <ImageIcon size={20} icon={networkDescriptor?.icon} />
                         </ListItemIcon>
                         <ListItemIcon className={classes.address}>
                             <Typography variant="body1" color="textPrimary">
@@ -93,7 +96,7 @@ export function WalletsPage() {
                         <ListItemText />
                         <ListItemIcon>
                             <RewardIcon />
-                            Tip
+                            {t('tip')}
                         </ListItemIcon>
                     </ListItem>
                 ))}
@@ -113,7 +116,7 @@ export function WalletsPage() {
                         size="small"
                         variant="contained"
                         onClick={openSelectWalletDialog}>
-                        Connect Wallet
+                        {t('plugin_wallet_on_connect')}
                     </Button>
                 </div>
             ) : (

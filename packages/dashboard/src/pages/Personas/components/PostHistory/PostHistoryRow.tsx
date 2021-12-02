@@ -7,8 +7,22 @@ import type { PostRecord } from '@masknet/shared'
 import { PLUGIN_IDS } from '../../../Labs/constants'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
+import { makeStyles } from '@masknet/theme'
 
 const MSG_DELIMITER = '2c1aca02'
+
+const useStyles = makeStyles()((theme) => {
+    return {
+        hover: {
+            '&:hover': {
+                backgroundColor: theme.palette.background.default,
+            },
+            alignItems: 'center',
+            padding: `${theme.spacing(2)} ${theme.spacing(3)}`,
+            borderRadius: '8px',
+        },
+    }
+})
 
 const parseFileServiceMessage = (body: any) => {
     const link = `https://arweave.net/${body.landingTxID}/#${body.key}`
@@ -151,8 +165,9 @@ interface PostHistoryRowUIProps {
 }
 
 const PostHistoryRowUI = memo<PostHistoryRowUIProps>(({ post, message, icon, operation, onClick, recipients }) => {
+    const { classes } = useStyles()
     return (
-        <Stack direction="row" gap={1.5} sx={{ mb: 3 }} alignItems="center">
+        <Stack direction="row" gap={1.5} className={classes.hover}>
             <Stack
                 justifyContent="center"
                 alignItems="center"

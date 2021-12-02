@@ -23,7 +23,6 @@ export function useEvents(provider: CollectibleProvider, token?: CollectibleToke
                     size,
                 )
 
-                console.log(openseaEvents)
                 return {
                     data: openseaEvents.map((event) => {
                         const accountPair =

@@ -9,6 +9,8 @@ import {
     Typography,
     useTheme,
     Dialog,
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
 } from '@mui/material'
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses } from '@masknet/theme'
@@ -27,6 +29,7 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     dialogTitle: {
         padding: theme.spacing(1, 2),
+        borderBottom: `1px solid ${theme.palette.divider}`,
     },
     dialogTitleTypography: {
         marginLeft: 6,
@@ -75,6 +78,8 @@ export function InjectedDialog(props: InjectedDialogProps) {
         props,
         overwrite.InjectedDialog?.classes,
     )
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
 
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props

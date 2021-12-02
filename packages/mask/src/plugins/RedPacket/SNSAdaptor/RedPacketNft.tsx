@@ -1,6 +1,4 @@
-import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import {
     useAccount,
     resolveAddressLinkOnExplorer,
@@ -11,9 +9,7 @@ import {
     useNetworkType,
     ERC721ContractDetailed,
     TransactionStateType,
-    resolveTransactionLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
-import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import LaunchIcon from '@mui/icons-material/Launch'
 import {
     Grid,
@@ -98,10 +94,6 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: '0px !important',
         minHeight: 38,
         height: 38,
-        backgroundColor: '#1C68F3',
-        '&:hover': {
-            backgroundColor: '#1854c4',
-        },
     },
     footer: {
         display: 'flex',
@@ -251,7 +243,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { classes } = useStyles()
     const web3 = useWeb3()
     const account = useAccount()
-    const { showSnackbar } = useCustomSnackbar()
 
     const {
         value: availability,
@@ -260,11 +251,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account)
 
-    //#region remote controlled select provider dialog
-    const { openDialog: openSelectProviderDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
-    //#endregion
     const [claimState, claimCallback, resetCallback] = useClaimNftRedpacketCallback(
         payload.id,
         availability?.totalAmount,
@@ -311,30 +297,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             return
         }
 
-        if (claimState.type === TransactionStateType.FAILED) {
-            showSnackbar(claimState.error.message, {
-                variant: 'error',
-                anchorOrigin: { horizontal: 'right', vertical: 'top' },
-            })
-        } else if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
-            showSnackbar(
-                <div className={classes.snackBar}>
-                    <Typography className={classes.snackBarText}>
-                        {t('plugin_red_packet_claim_successfully')}
-                    </Typography>
-                    <Link
-                        href={resolveTransactionLinkOnExplorer(payload.chainId, claimState.receipt.transactionHash)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={classes.snackBarLink}>
-                        <OpenInNewIcon className={classes.openIcon} />
-                    </Link>
-                </div>,
-                {
-                    variant: 'success',
-                    anchorOrigin: { horizontal: 'right', vertical: 'top' },
-                },
-            )
+        if (claimState.type === TransactionStateType.CONFIRMED && claimState.no === 0) {
             retryAvailability()
         }
 
@@ -441,7 +404,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 ) : (
                     <CardMedia className={classes.image} component="div" image={rpNftImg} title="nft icon">
                         <Typography className={classes.remain}>
-                            {availability.claimedAmount}/{availability.totalAmount} Collectibles
+                            {availability.claimedAmount}/{availability.totalAmount} {t('dashboard_tab_collectibles')}
                         </Typography>
                     </CardMedia>
                 )}

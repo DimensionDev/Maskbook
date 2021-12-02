@@ -10,12 +10,13 @@ import type {
     ProviderType,
     Asset,
     Wallet,
-    PortfolioProvider,
-    CollectibleProvider,
+    FungibleAssetProvider,
+    NonFungibleAssetProvider,
     Transaction,
     AddressName,
     AddressNameType,
     CryptoPrice,
+    ERC721TokenCollectionInfo,
 } from '../types'
 
 export interface Web3ProviderType {
@@ -34,26 +35,34 @@ export interface Web3ProviderType {
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     erc721Tokens: Subscription<ERC721TokenDetailed[]>
     erc1155Tokens: Subscription<ERC1155TokenDetailed[]>
-    portfolioProvider: Subscription<PortfolioProvider>
+    portfolioProvider: Subscription<FungibleAssetProvider>
 
     addToken: (token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     removeToken: (token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     trustToken: (address: string, token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     blockToken: (address: string, token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
 
-    getAssetsList: (address: string, provider: PortfolioProvider, network?: NetworkType) => Promise<Asset[]>
+    getAssetsList: (address: string, provider: FungibleAssetProvider, network?: NetworkType) => Promise<Asset[]>
     getAssetsListNFT: (
         address: string,
         chainId: ChainId,
-        provider: CollectibleProvider,
+        provider: NonFungibleAssetProvider,
         page?: number,
         size?: number,
+        collection?: string,
     ) => Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }>
+    getCollectionsNFT: (
+        address: string,
+        chainId: ChainId,
+        provider: NonFungibleAssetProvider,
+        page?: number,
+        size?: number,
+    ) => Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }>
     getAddressNamesList: (twitterId: string, addressNameType: AddressNameType) => Promise<AddressName[]>
     getTransactionList: (
         address: string,
         network: NetworkType,
-        provider: PortfolioProvider,
+        provider: FungibleAssetProvider,
         page?: number,
         size?: number,
     ) => Promise<{

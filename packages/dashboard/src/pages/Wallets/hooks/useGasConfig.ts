@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
-import { toHex } from 'web3-utils'
+import { toHex, toWei } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { formatGweiToWei, GasOption, isEIP1559Supported, useChainId, useGasPrice } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useGasOptions } from '../../../hooks/useGasOptions'
+
+function gweiToWei(gwei: number | string) {
+    return toWei(new BigNumber(gwei).toFixed(9), 'gwei')
+}
 
 export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const chainId = useChainId()
@@ -56,8 +60,8 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         return is1559Supported
             ? {
                   gas: gasLimit_,
-                  maxFeePerGas: toHex(new BigNumber(maxFee).toFixed()),
-                  maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).toFixed()),
+                  maxFeePerGas: toHex(new BigNumber(maxFee).integerValue().toFixed()),
+                  maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).integerValue().toFixed()),
               }
             : { gas: gasLimit_, gasPrice: new BigNumber(gasPrice).toNumber() }
     }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice])

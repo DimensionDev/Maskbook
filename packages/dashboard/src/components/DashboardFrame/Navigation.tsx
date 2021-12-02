@@ -5,6 +5,8 @@ import {
     ListItemIcon,
     Collapse,
     Theme,
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     useMediaQuery,
     styled,
     listItemClasses,
@@ -54,10 +56,13 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
             color: theme.palette.mode === 'light' ? '' : 'rgba(255,255,255,.8)',
             paddingLeft: theme.spacing(2),
             cursor: 'pointer',
+            '&:hover': {
+                background: theme.palette.background.default,
+            },
         },
         [`&.${listItemClasses.selected}`]: {
             color: MaskColorVar.textLink,
-            backgroundColor: 'transparent',
+            backgroundColor: theme.palette.background.default,
             position: 'relative',
             [`${listItemIconClasses.root}`]: {
                 color: MaskColorVar.textLink,
@@ -79,8 +84,7 @@ const ListItemLink = styled(ListItemLinkUnStyled)(({ theme }) => {
 
 const LogoItem = styled(MuiListItem)(({ theme }) => ({
     [`&.${listItemClasses.root}`]: {
-        justifyContent: 'center',
-        paddingLeft: theme.spacing(7),
+        justifyContent: 'start',
         marginBottom: theme.spacing(3.5),
     },
 })) as any as typeof MuiListItem
@@ -117,6 +121,8 @@ export function Navigation({ onClose }: NavigationProps) {
     const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
     const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
 
+    // see https://github.com/import-js/eslint-plugin-import/issues/2288
+    // eslint-disable-next-line import/no-deprecated
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode

@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect } from 'react'
-import { useCustomSnackbar } from '@masknet/theme'
+import React, { useCallback } from 'react'
 import { Grid } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ApproveStateType,
     ERC20TokenDetailed,
     formatBalance,
-    TransactionStateType,
     useERC20TokenApproveCallback,
 } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
@@ -18,6 +16,9 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         position: 'relative',
         marginTop: theme.spacing(1.5),
+        lineHeight: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     buttonLabel: {
         display: 'block',
@@ -47,7 +48,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
 
     const [{ type: approveStateType, allowance }, transactionState, approveCallback, resetApproveCallback] =
         useERC20TokenApproveCallback(token?.address ?? '', amount, spender)
@@ -59,11 +59,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         },
         [approveStateType, transactionState, approveCallback],
     )
-
-    useEffect(() => {
-        if (transactionState.type === TransactionStateType.FAILED)
-            showSnackbar(transactionState.error.message, { variant: 'error' })
-    }, [transactionState.type, showSnackbar])
 
     // not a valid erc20 token, please given token as undefined
     if (!token) return <Grid container>{children}</Grid>
@@ -92,7 +87,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     size="large"
                     onClick={resetApproveCallback}
                     {...props.ActionButtonProps}>
-                    Failed to load {token.symbol ?? token.name ?? 'Token'}. Click to retry.
+                    {t('wallet_load_retry', { symbol: token.symbol ?? token.name ?? 'Token' })}
                 </ActionButton>
             </Grid>
         )

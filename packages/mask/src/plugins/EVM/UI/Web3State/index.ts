@@ -6,7 +6,7 @@ import {
     getChainDetailed,
     isChainIdValid,
     NetworkType,
-    PortfolioProvider,
+    FungibleAssetProvider,
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveChainColor,
@@ -37,7 +37,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             if (!network) return []
             const assets = await context.getAssetsList(
                 address,
-                providerType as unknown as PortfolioProvider,
+                providerType as unknown as FungibleAssetProvider,
                 network.type as unknown as NetworkType,
             )
             return assets.map((x) => ({

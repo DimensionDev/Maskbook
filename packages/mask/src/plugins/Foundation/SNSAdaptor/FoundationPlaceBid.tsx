@@ -16,9 +16,9 @@ import {
     useNativeTokenDetailed,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils'
-import { makeStyles } from '@masknet/theme'
 import FoundationCountdown from './FoundationCountdown'
 import type { Nft, Metadata } from '../types'
 import { WalletMessages } from '../../Wallet/messages'

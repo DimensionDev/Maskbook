@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { z as zod } from 'zod'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { RoutePaths } from '../../../../type'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
@@ -92,7 +92,7 @@ const CreateWalletForm = memo(() => {
     const [open, setOpen] = useState(true)
     const { classes } = useStyles()
     const navigate = useNavigate()
-
+    const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     useEffect(() => {
@@ -141,7 +141,7 @@ const CreateWalletForm = memo(() => {
 
     const onSubmit = handleSubmit((data) => {
         navigate(
-            urlcat(RoutePaths.CreateMaskWalletMnemonic, { name: data.name }),
+            urlcat(RoutePaths.CreateMaskWalletMnemonic, { name: data.name, chainId: searchParams.get('chainId') }),
             data.password
                 ? {
                       state: { password: data.password },

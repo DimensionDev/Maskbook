@@ -1,16 +1,17 @@
-import { Card, Link } from '@mui/material'
+import { Card, CircularProgress, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     Wallet,
     useChainId,
     ERC721TokenDetailed,
     resolveCollectibleLink,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
 } from '@masknet/web3-shared-evm'
-import { Image } from '../../../../components/shared/Image'
 import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
+import { useAsyncRetry } from 'react-use'
 import { Video } from '../../../../components/shared/Video'
+import { Image } from '../../../../components/shared/Image'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -35,13 +36,13 @@ const useStyles = makeStyles()((theme) => ({
         opacity: 0.1,
     },
     video: {
-        width: 160,
-        height: 220,
+        width: 172,
+        height: 172,
     },
 }))
 
 export interface CollectibleCardProps {
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     wallet?: Wallet
     token: ERC721TokenDetailed
     readonly?: boolean
@@ -52,29 +53,49 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const { classes } = useStyles()
     const chainId = useChainId()
 
-    const isVideo = token.info.image?.match(/\.(mp4|webm|mov|ogg|mp3|wav)$/i)
+    const { loading, value } = useAsyncRetry(async () => {
+        if (!token.info.image) return
+
+        const blob = await (await fetch(token.info.image)).blob()
+        return blob
+    }, [token])
+
+    const isVideo = value?.type.match(/^video/)?.[0]
+    const isHtml = !!value?.type.match(/^text/)?.[0]
+
     return (
-        <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
-            <Card className={classes.root} style={{ width: 160, height: 220 }}>
-                {readonly || !wallet ? null : (
-                    <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
-                )}
-                {token.info.image ? (
-                    isVideo ? (
-                        <Video src={token.info.image} VideoProps={{ className: classes.video }} />
-                    ) : (
-                        <Image
-                            component="img"
-                            width={160}
-                            height={220}
-                            style={{ objectFit: 'contain' }}
-                            src={token.info.image}
-                        />
-                    )
-                ) : (
-                    <MaskSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
-                )}
-            </Card>
-        </Link>
+        <>
+            {loading ? (
+                <CircularProgress />
+            ) : (
+                <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
+                    <Card className={classes.root} style={{ width: 172, height: 172 }}>
+                        {readonly || !wallet ? null : (
+                            <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
+                        )}
+                        {token.info.image ? (
+                            isVideo ? (
+                                <Video
+                                    src={value ?? token.info.image}
+                                    VideoProps={{ className: classes.video, autoPlay: true, loop: true }}
+                                />
+                            ) : isHtml ? (
+                                <iframe src={token.info.image} />
+                            ) : (
+                                <Image
+                                    component="img"
+                                    width={172}
+                                    height={172}
+                                    style={{ objectFit: 'cover' }}
+                                    src={value ?? token.info.image}
+                                />
+                            )
+                        ) : (
+                            <MaskSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
+                        )}
+                    </Card>
+                </Link>
+            )}
+        </>
     )
 }
