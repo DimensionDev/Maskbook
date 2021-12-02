@@ -5,14 +5,17 @@ import {
     decodeTypedMessageV38ToV40Format,
     ProfileIdentifier,
     AESCryptoKey,
+    EC_Public_CryptoKey,
 } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
-import type { PayloadParseResult } from '../payload'
+import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
+import { decryptWithAES, importAESFromJWK } from '../utils'
 
 export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncIterableIterator<DecryptionProcess> {
     yield progress(K.Started)
 
     const { author: _author, encrypted: _encrypted, encryption: _encryption, version } = options.message
+    const { authorPublicKey: _authorPublicKey } = options.message
 
     if (_encryption.err) return yield new DecryptionError(ErrorReasons.PayloadBroken, _encryption.val)
     if (_encrypted.err) return yield new DecryptionError(ErrorReasons.PayloadBroken, _encrypted.val)
@@ -25,22 +28,18 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
         if (iv.err) return yield new DecryptionError(ErrorReasons.PayloadBroken, iv.val)
         return yield* decryptWithPostAESKey(version, AESKey.val.key as AESCryptoKey, encrypted, iv.val, io)
     } else if (encryption.type === 'E2E') {
-        // Try to decrypt as author/whoAmI
         const { ephemeralPublicKey, iv: _iv, ownersAESKeyEncrypted } = encryption
         if (_iv.err) return yield new DecryptionError(ErrorReasons.PayloadBroken, _iv.val)
         const iv = _iv.val
 
-        // Try to decrypt this post as author (using ownersAESKeyEncrypted field)
+        // ! Try to decrypt this post as author (using ownersAESKeyEncrypted field)
+        //#region
         const author = _author.unwrapOr(None)
         const hasAuthorLocalKey = author.some ? io.hasLocalKeyOf(author.val).catch(() => false) : Promise.resolve(false)
         if (ownersAESKeyEncrypted.ok) {
             try {
                 const aes_raw = await io.decryptByLocalKey(author.unwrapOr(null), ownersAESKeyEncrypted.val, iv)
-                const aes_text = new TextDecoder().decode(aes_raw)
-                const aes_jwk = JSON.parse(aes_text)
-                const aes = (await crypto.subtle.importKey('jwk', aes_jwk, { name: 'AES-GCM', length: 256 }, false, [
-                    'decrypt',
-                ])) as AESCryptoKey
+                const aes = await importAESKeyFromJWKFromTextEncoder(aes_raw)
                 return yield* decryptWithPostAESKey(version, aes, encrypted, iv, io)
             } catch (err) {
                 if (await hasAuthorLocalKey) {
@@ -49,16 +48,70 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
                     // it does not make sense to try the following steps (because it will never have a result).
                     return yield new DecryptionError(ErrorReasons.CannotDecryptAsAuthor, err)
                 }
+                // fall through
             }
         } else {
             if (await hasAuthorLocalKey) {
                 // If the ownersAESKeyEncrypted is corrupted and we're the author, we cannot do anything to continue.
                 return yield new DecryptionError(ErrorReasons.CannotDecryptAsAuthor, ownersAESKeyEncrypted.val)
             }
+            // fall through
         }
-        throw new Error('TODO')
+        //#endregion
+
+        // ! Try to decrypt this post by ECDHE
+        //#region
+        const authorPublicKey = _authorPublicKey.unwrapOr(None)
+        if (version === -40 || version === -39 || version === -38) {
+            // Static ECDH
+            const authorECPub = await Result.wrapAsync(async () =>
+                authorPublicKey.some
+                    ? (authorPublicKey.val.key as EC_Public_CryptoKey)
+                    : io.queryPublicKey(author.unwrapOr(null), options.signal),
+            )
+            // Cannot do ECDH if no public key
+            if (authorECPub.err) return yield new DecryptionError(ErrorReasons.AuthorPublicKeyNotFound, authorECPub.val)
+
+            // Cannot do ECDH if no private key
+            const derivedKeys = await Result.wrapAsync(() => io.deriveAESKey(authorECPub.val))
+            if (derivedKeys.err) return yield new DecryptionError(ErrorReasons.MyPrivateKeyNotFound, authorECPub.val)
+            if (derivedKeys.val.length === 0)
+                return yield new DecryptionError(ErrorReasons.MyPrivateKeyNotFound, undefined)
+
+            // ECDH key derived. Now start looking for post AES key.
+            if (version === -40) {
+                // version -40 does not support append share targer, therefore we only try once.
+                try {
+                    const key = await io.queryPostKey_version40(iv, author.map((x) => x.userId).unwrapOr(null))
+                    if (key === null) return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
+                    const { encryptedKey, iv: ecdhIV } = key
+                    for (const each of derivedKeys.val) {
+                        if (options.signal?.aborted) return yield new DecryptionError(ErrorReasons.Aborted, undefined)
+                        const trial = await decryptWithAES(AESAlgorithmEnum.A256GCM, each, ecdhIV, encryptedKey)
+                        if (trial.err) continue
+                        return yield* parseTypedMessage(version, io, trial.val)
+                    }
+                    return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
+                } catch (err) {
+                    return yield new DecryptionError(ErrorReasons.NotShareTarget, err)
+                }
+            }
+            throw new Error('TODO')
+        } else if (version === -37) {
+            // ECDHE
+            throw new Error('TODO')
+        }
+        unreachable(version)
+        //#endregion
     }
     unreachable(encryption)
+}
+
+// uint8 |> TextDecoder |> JSON.parse |> importAESKeyFromJWK
+async function importAESKeyFromJWKFromTextEncoder(aes_raw: Uint8Array) {
+    const aes_text = new TextDecoder().decode(aes_raw)
+    const aes_jwk = JSON.parse(aes_text)
+    return (await importAESFromJWK.AES_GCM_256(aes_jwk)).unwrap()
 }
 
 async function* decryptWithPostAESKey(
@@ -68,9 +121,7 @@ async function* decryptWithPostAESKey(
     iv: Uint8Array,
     io: DecryptIO,
 ): AsyncIterableIterator<DecryptionProcess> {
-    const { err, val } = await Result.wrapAsync(() =>
-        crypto.subtle.decrypt({ name: 'AES-GCM', iv }, postAESKey, encrypted),
-    )
+    const { err, val } = await decryptWithAES(AESAlgorithmEnum.A256GCM, postAESKey, iv, encrypted)
     if (err) return yield new DecryptionError(ErrorReasons.DecryptFailed, val)
     return yield* parseTypedMessage(version, io, val)
 }
@@ -84,7 +135,7 @@ async function* parseTypedMessage(
         version === -37 ? decodeTypedMessageFromDocument(raw) : decodeTypedMessageV38ToV40Format(raw, version)
     if (err) return yield new DecryptionError(ErrorReasons.PayloadDecryptedButNoValidTypedMessageIsFound, val)
     io.setCache(val).catch(() => {})
-    return progress(K.Success, { content: val })
+    return yield progress(K.Success, { content: val })
 }
 
 function progress(kind: DecryptionProgressKind.Success, rest: Omit<DecryptionSuccess, 'type'>): DecryptionSuccess
@@ -113,6 +164,26 @@ export interface DecryptIO {
      * @returns The decrypted data
      */
     decryptByLocalKey(authorHint: ProfileIdentifier | null, data: Uint8Array, iv: Uint8Array): Promise<Uint8Array>
+    queryPublicKey(id: ProfileIdentifier | null, signal?: AbortSignal): Promise<EC_Public_CryptoKey>
+    queryPostKey_version40(iv: Uint8Array, userID: string | null): Promise<StaticECDH_Result | null>
+    queryPostKey_version39_version38(): Promise<StaticECDH_Result[]>
+    queryPostKey_version37(): Promise<EphemeralECDH_Result[]>
+    /**
+     * Derive a group of AES key for ECDH.
+     *
+     * Implementor should derive a new AES-GCM key for each private key they have access to.
+     * @param publicKey The public key used in ECDH
+     */
+    deriveAESKey(publicKey: EC_Public_CryptoKey): Promise<AESCryptoKey[]>
+}
+export interface StaticECDH_Result {
+    encryptedKey: Uint8Array
+    iv: Uint8Array
+}
+export interface EphemeralECDH_Result extends StaticECDH_Result {
+    // It might be contained in the original payload.
+    ephemeralPublicKey?: EC_Public_CryptoKey
+    ephemeralPublicKeySignature?: Uint8Array
 }
 export enum DecryptionProgressKind {
     Started = 'started',
@@ -130,10 +201,14 @@ enum ErrorReasons {
     PayloadDecryptedButNoValidTypedMessageIsFound = '[@masknet/encryption] Payload decrypted, but no valid TypedMessage is found.',
     CannotDecryptAsAuthor = '[@masknet/encryption] Failed decrypt as the author of this payload.',
     DecryptFailed = '[@masknet/encryption] Post key found, but decryption failed.',
+    AuthorPublicKeyNotFound = "[@masknet/encryption] Cannot found author's public key",
+    MyPrivateKeyNotFound = '[@masknet/encryption] Cannot decrypt because there is no private key found.',
+    NotShareTarget = '[@masknet/encryption] No valid key is found. Likely this post is not shared with you',
+    Aborted = '[@masknet/encryption] Task aborted.',
 }
 export class DecryptionError extends Error {
     static Reasons = ErrorReasons
-    type = DecryptionProgressKind.Error
+    readonly type = DecryptionProgressKind.Error
     constructor(public override message: ErrorReasons, cause: unknown, public recoverable = false) {
         super(message, { cause })
     }
