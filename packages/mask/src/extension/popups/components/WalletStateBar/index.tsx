@@ -67,17 +67,20 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                         <WalletIcon providerIcon={providerDescriptor.icon} inverse size={38} />
                     </Stack>
                     <Box sx={{ userSelect: 'none' }}>
-                        <Box fontSize={16}>{walletName ?? '-'}</Box>
-                        <Box fontSize={12}>
+                        <Box fontSize={16}>
+                            {walletName ?? '-'}
                             {domain ? (
-                                formatEthereumEns(domain)
-                            ) : (
-                                <FormattedAddress
-                                    address={walletAddress ?? '-'}
-                                    size={10}
-                                    formatter={formatEthereumAddress}
-                                />
-                            )}
+                                <Typography fontSize={14} marginLeft={1}>
+                                    {formatEthereumEns(domain)}
+                                </Typography>
+                            ) : null}
+                        </Box>
+                        <Box fontSize={12}>
+                            <FormattedAddress
+                                address={walletAddress ?? '-'}
+                                size={10}
+                                formatter={formatEthereumAddress}
+                            />
                         </Box>
                     </Box>
                 </Stack>

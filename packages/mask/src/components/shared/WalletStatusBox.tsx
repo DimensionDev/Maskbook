@@ -81,6 +81,15 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         margin: theme.spacing(2, 0),
     },
+    domain: {
+        fontSize: 16,
+        lineHeight: '18px',
+        marginLeft: 6,
+        padding: 4,
+        borderRadius: 8,
+        backgroundColor: '#ffffff',
+        color: theme.palette.common.black,
+    },
 }))
 interface WalletStatusBox {
     isDashboard?: boolean
@@ -152,14 +161,11 @@ export function WalletStatusBox(props: WalletStatusBox) {
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow}>
                     <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
+                    {domain ? <Typography className={classes.domain}>{formatEthereumEns(domain)}</Typography> : null}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2">
-                        {domain ? (
-                            formatEthereumEns(domain)
-                        ) : (
-                            <FormattedAddress address={account} size={9} formatter={Utils?.formatAddress} />
-                        )}
+                        <FormattedAddress address={account} size={9} formatter={Utils?.formatAddress} />
                     </Typography>
                     <Link
                         className={classes.link}
