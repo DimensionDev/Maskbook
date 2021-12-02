@@ -40,6 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         marginBottom: theme.spacing(2),
         display: 'grid',
+        gridGap: theme.spacing(2),
         gridTemplateColumns: 'repeat(auto-fit, minmax(355px, 1fr))',
     },
 }))

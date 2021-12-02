@@ -15,7 +15,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 16,
         minWidth: 355,
         minHeight: 158,
-        margin: theme.spacing(1),
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
