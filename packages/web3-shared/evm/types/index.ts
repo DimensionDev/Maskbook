@@ -96,6 +96,8 @@ export interface Wallet {
     erc1155_token_whitelist: Set<string>
     /** A list of untrusted ERC1155 contract address */
     erc1155_token_blacklist: Set<string>
+    /** yep: removable, nope: unremovable */
+    configurable: boolean
     /** yep: Mask Wallet, nope: External Wallet */
     hasStoredKeyInfo: boolean
     /** yep: Derivable Wallet. nope: UnDerivable Wallet */
