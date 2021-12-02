@@ -1,6 +1,6 @@
 import { NetworkType } from '@masknet/web3-shared-evm'
 
-export const DODO_BASE_URL = 'https://dodo-route.dodoex.io'
+export const DODO_BASE_URL = 'https://dodoex.r2d2.to'
 
 export const networkNames: Record<NetworkType, string> = {
     [NetworkType.Ethereum]: 'mainnet',
