@@ -27,7 +27,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     tab: {
         height: 36,
         minHeight: 36,
-        backgroundColor: isDashboard ? `${MaskColorVar.primaryBackground}!important` : undefined,
+        backgroundColor: isDashboard ? `${MaskColorVar.primaryBackground2}!important` : undefined,
     },
     tabPaper: {
         backgroundColor: 'inherit',
@@ -39,8 +39,8 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         margin: '0 auto',
         borderRadius: 4,
         '& .Mui-selected': {
-            color: theme.palette.primary.contrastText,
-            backgroundColor: theme.palette.primary.main,
+            color: '#ffffff',
+            backgroundColor: `${theme.palette.primary.main}!important`,
         },
     },
     indicator: {
@@ -86,6 +86,8 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
     useEffect(() => {
         if (!chainIdValid) closeDialog()
     }, [chainIdValid, closeDialog])
+
+    console.log(currentChainId)
 
     return (
         <TargetChainIdContext.Provider>

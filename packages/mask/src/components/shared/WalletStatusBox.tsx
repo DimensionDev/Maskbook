@@ -26,7 +26,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground : getMaskColor(theme).twitterBackground,
+        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : getMaskColor(theme).twitterBackground,
         borderRadius: 8,
         alignItems: 'center',
     },

@@ -15,7 +15,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     filledInput: {
         borderRadius: 12,
         padding: 12,
-        background: isDashboard ? MaskColorVar.primaryBackground : MaskColorVar.twitterInputBackground,
+        background: isDashboard ? MaskColorVar.primaryBackground2 : MaskColorVar.twitterInputBackground,
         border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
         position: 'relative',
     },

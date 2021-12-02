@@ -135,8 +135,6 @@ export function RecentTransactionDescription(props: RecentTransactionDescription
 
     const { loading: getERC20TokenLoading, value: tokenDetailed } = useERC20TokenDetailed(tokenAddress)
 
-    console.log(tokenDetailed)
-
     return !getNativeTokenLoading && !getERC20TokenLoading && !getInputERC20TokenLoading ? (
         <span>
             {getTransactionDescription(

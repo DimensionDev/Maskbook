@@ -36,9 +36,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         },
         reverseIcon: {
             cursor: 'pointer',
+            color: isDashboard ? `${theme.palette.text.primary}!important` : undefined,
         },
         card: {
-            backgroundColor: isDashboard ? MaskColorVar.primaryBackground : MaskColorVar.twitterInputBackground,
+            backgroundColor: isDashboard ? MaskColorVar.primaryBackground2 : MaskColorVar.twitterInputBackground,
             border: `1px solid ${isDashboard ? MaskColorVar.lineLight : MaskColorVar.twitterBorderLine}`,
             borderRadius: 12,
             padding: 12,
@@ -95,13 +96,14 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             padding: '13px 0',
             borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
+            marginTop: 0,
         },
         disabledButton: {
             fontSize: 18,
             lineHeight: '22px',
             fontWeight: 600,
             padding: '13px 0',
-            borderRadius: 24,
+            borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
         },
         selectedTokenChip: {
@@ -448,7 +450,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             }}>
                             <EthereumWalletConnectedBoundary
                                 ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
-                                classes={{ connectWallet: classes.connectWallet }}>
+                                classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
                                 <EthereumERC20TokenApprovedBoundary
                                     amount={approveAmount.toFixed()}
                                     token={
