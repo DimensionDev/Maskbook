@@ -11,9 +11,11 @@ export function useAssetsByTokenList(tokens: FungibleTokenDetailed[], targetChai
 
     // merge tokens to avoid fetch asset from chain all the time
     useEffect(() => {
-        const uniqTokens = uniqBy([...tokens, ...tokensForAsset], (x) => x.address)
-        const sortedTokens = sortBy(uniqTokens, (x) => x.address)
-        setTokensForAsset(sortedTokens)
+        setTokensForAsset((oldTokensForAsset) => {
+            const uniqTokens = uniqBy([...tokens, ...oldTokensForAsset], (x) => x.address)
+            const sortedTokens = sortBy(uniqTokens, (x) => x.address)
+            return sortedTokens
+        })
     }, [tokens.map((x) => x.address.slice(0, 5)).join('')])
 
     const {

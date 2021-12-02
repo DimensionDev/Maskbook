@@ -89,19 +89,23 @@ const ID_ADDRESS_MAP: {
 }
 
 const NETWORK_ID_MAP: Record<DataProvider, Record<NetworkType, string>> = {
+    // https://www.coingecko.com/en/coins/{value}
     [DataProvider.COIN_GECKO]: {
         [NetworkType.Ethereum]: 'ethereum',
         [NetworkType.Binance]: 'binance-smart-chain',
         [NetworkType.Polygon]: 'polygon-pos',
         [NetworkType.Arbitrum]: 'arbitrum-one',
         [NetworkType.xDai]: 'xdai',
+        [NetworkType.Fantom]: 'fantom',
     },
+    // https://s2.coinmarketcap.com/static/img/coins/64x64/{value}.png
     [DataProvider.COIN_MARKET_CAP]: {
         [NetworkType.Ethereum]: '1027',
         [NetworkType.Binance]: '1839',
         [NetworkType.Polygon]: '3890',
         [NetworkType.Arbitrum]: '11841',
         [NetworkType.xDai]: '5601',
+        [NetworkType.Fantom]: '3513',
     },
     [DataProvider.UNISWAP_INFO]: {
         [NetworkType.Ethereum]: '',
@@ -109,6 +113,7 @@ const NETWORK_ID_MAP: Record<DataProvider, Record<NetworkType, string>> = {
         [NetworkType.Polygon]: '',
         [NetworkType.Arbitrum]: '',
         [NetworkType.xDai]: '',
+        [NetworkType.Fantom]: '',
     },
 }
 

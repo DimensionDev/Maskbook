@@ -93,6 +93,7 @@ export const getChainIdFromNetworkType = createLookupTableResolver<NetworkType, 
         [NetworkType.Polygon]: ChainId.Matic,
         [NetworkType.Arbitrum]: ChainId.Arbitrum,
         [NetworkType.xDai]: ChainId.xDai,
+        [NetworkType.Fantom]: ChainId.Fantom,
     },
     ChainId.Mainnet,
 )
@@ -104,6 +105,7 @@ export function getNetworkTypeFromChainId(chainId: ChainId, value?: boolean) {
         [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
+        [NetworkType.Fantom]: 'FTM',
     }
     const chainDetailed = getChainDetailed(chainId)
     const entry = Object.entries(map).find(([key, value]) => {
@@ -123,7 +125,12 @@ export function getCoingeckoPlatformId(chainId: ChainId) {
 }
 
 export function getCoingeckoCoinId(chainId: ChainId) {
-    return COINGECKO_COIN_LIST.find((coin) => coin.chainId === chainId)?.id
+    const coin = COINGECKO_COIN_LIST.find((coin) => coin.chainId === chainId)
+    if (!coin) {
+        console.log(new Error(`No coin config found for ${chainId}`))
+        return
+    }
+    return coin.id
 }
 
 export function getNetworkName(chainId: ChainId) {

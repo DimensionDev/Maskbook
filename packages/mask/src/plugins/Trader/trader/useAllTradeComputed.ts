@@ -64,14 +64,15 @@ export function useAllTradeComputed(
 
     const uniswapEstimateGas = useUniswapTradeGasLimit(uniswapV2, TradeProvider.UNISWAP_V2)
 
+    const containSushiSwap = tradeProviders.some((x) => x === TradeProvider.SUSHISWAP)
     // sushi swap
     const sushiSwap_ = useUniswapV2Trade(
         TradeProvider.SUSHISWAP,
         TradeStrategy.ExactIn,
         inputAmount_,
         '0',
-        tradeProviders.some((x) => x === TradeProvider.SUSHISWAP) ? inputToken : undefined,
-        tradeProviders.some((x) => x === TradeProvider.SUSHISWAP) ? outputToken : undefined,
+        containSushiSwap ? inputToken : undefined,
+        containSushiSwap ? outputToken : undefined,
     )
     const sushiSwap = useUniswapTradeComputed(sushiSwap_.value, inputToken, outputToken)
     const sushiSwapEstimateGas = useUniswapTradeGasLimit(sushiSwap, TradeProvider.SUSHISWAP)

@@ -51,6 +51,7 @@ export const Flags = {
     polygon_enabled: true,
     arbitrum_enabled: true,
     xdai_enabled: true,
+    fantom_enabled: true,
     flow_enabled: true,
     nft_airdrop_enabled: false,
 
