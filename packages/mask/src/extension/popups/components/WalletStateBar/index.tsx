@@ -67,7 +67,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                         <WalletIcon providerIcon={providerDescriptor.icon} inverse size={38} />
                     </Stack>
                     <Box sx={{ userSelect: 'none' }}>
-                        <Box fontSize={16}>
+                        <Box fontSize={16} display="flex" alignItems="center">
                             {walletName ?? '-'}
                             {domain ? (
                                 <Typography fontSize={14} marginLeft={1}>

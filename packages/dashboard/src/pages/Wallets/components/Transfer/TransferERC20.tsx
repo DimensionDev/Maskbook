@@ -1,6 +1,6 @@
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Stack, Typography, Link, Popover } from '@mui/material'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
     EthereumTokenType,
     formatWeiToEther,
@@ -27,6 +27,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { NetworkType } from '@masknet/public-api'
+import { useUpdateEffect } from 'react-use'
 
 interface TransferERC20Props {
     token: FungibleTokenDetailed
@@ -35,10 +36,12 @@ interface TransferERC20Props {
 const GAS_LIMIT = 30000
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
+    const anchorEl = useRef<HTMLDivElement | null>(null)
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
-    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+    const [popoverOpen, setPopoverOpen] = useState(false)
+    const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const network = useNetworkDescriptor()
     const [gasLimit_, setGasLimit_] = useState(0)
 
@@ -65,7 +68,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const isNativeToken = selectedToken.type === EthereumTokenType.Native
 
     //#region resolve ENS domain
-    const { value: registeredAddress = '', error: resolveEnsDomainError } = useLookupAddress(address)
+    const {
+        value: registeredAddress = '',
+        error: resolveEnsDomainError,
+        loading: resolveEnsLoading,
+    } = useLookupAddress(address)
     //#endregion
 
     // transfer amount
@@ -156,6 +163,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [transferState])
 
     const ensContent = useMemo(() => {
+        if (resolveEnsLoading) return
         if (registeredAddress) {
             return (
                 <Link
@@ -163,8 +171,13 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     underline="none">
-                    <Box py={1.5} px={4}>
-                        <Typography fontSize={16} lineHeight="22px" fontWeight={500}>
+                    <Box style={{ padding: 10 }}>
+                        <Typography
+                            fontSize={16}
+                            lineHeight="22px"
+                            fontWeight={500}
+                            marginBottom="10px"
+                            style={{ color: MaskColorVar.textPrimary }}>
                             {address}
                         </Typography>
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
@@ -178,7 +191,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (address.includes('.eth')) {
             if (network?.type !== NetworkType.Ethereum) {
                 return (
-                    <Box py={2.5} px={1.5}>
+                    <Box style={{ padding: '25px 10px' }}>
                         <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
                             {t.wallet_transfer_error_no_ens_support()}
                         </Typography>
@@ -187,7 +200,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
             }
             if (Utils?.isValidDomain?.(address) && resolveEnsDomainError) {
                 return (
-                    <Box py={2.5} px={1.5}>
+                    <Box style={{ padding: '25px 10px' }}>
                         <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
                             {t.wallet_transfer_error_no_address_has_been_set_name()}
                         </Typography>
@@ -197,7 +210,19 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         }
 
         return
-    }, [registeredAddress, address, Utils?.isValidDomain, MaskColorVar, resolveEnsDomainError, network?.type])
+    }, [
+        registeredAddress,
+        address,
+        Utils?.isValidDomain,
+        MaskColorVar,
+        resolveEnsDomainError,
+        network?.type,
+        resolveEnsLoading,
+    ])
+
+    useUpdateEffect(() => {
+        setPopoverOpen(!!ensContent && !!anchorEl.current)
+    }, [ensContent])
 
     return (
         <Stack direction="row" justifyContent="center" mt={4}>
@@ -208,9 +233,9 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         value={address}
                         InputProps={{
                             onClick: (event) => {
-                                event.stopPropagation()
-                                event.preventDefault()
-                                setAnchorEl(event.currentTarget)
+                                if (!anchorEl.current) anchorEl.current = event.currentTarget
+                                if (!!ensContent) setPopoverOpen(true)
+                                setMinPopoverWidth(event.currentTarget.clientWidth)
                             },
                         }}
                         onChange={(e) => setAddress(e.currentTarget.value)}
@@ -218,13 +243,16 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     />
 
                     <Popover
-                        anchorEl={anchorEl}
-                        onClose={() => setAnchorEl(null)}
+                        anchorEl={anchorEl.current}
+                        onClose={() => setPopoverOpen(false)}
+                        PaperProps={{
+                            style: { minWidth: `${minPopoverWidth}px`, borderRadius: 4 },
+                        }}
                         anchorOrigin={{
                             vertical: 'bottom',
                             horizontal: 'left',
                         }}
-                        open={Boolean(anchorEl) && !!ensContent}>
+                        open={popoverOpen}>
                         {ensContent}
                     </Popover>
                 </Box>

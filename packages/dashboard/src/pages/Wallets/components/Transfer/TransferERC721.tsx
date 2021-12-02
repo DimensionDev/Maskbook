@@ -1,6 +1,6 @@
 import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
 import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import {
     ERC721ContractDetailed,
@@ -8,7 +8,6 @@ import {
     EthereumTokenType,
     formatWeiToEther,
     isSameAddress,
-    resolveEnsDomains,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -39,6 +38,7 @@ import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
 import { useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { NetworkType } from '@masknet/public-api'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -55,13 +55,16 @@ type FormInputs = {
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const chainId = useChainId()
+    const anchorEl = useRef<HTMLDivElement | null>(null)
+
     const { state } = useLocation() as {
         state: { erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
     }
     const { classes } = useStyles()
     const [defaultToken, setDefaultToken] = useState<ERC721TokenDetailed | null>(null)
     const navigate = useNavigate()
-    const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+    const [popoverOpen, setPopoverOpen] = useState(false)
+    const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
@@ -110,7 +113,11 @@ export const TransferERC721 = memo(() => {
     const allFormFields = watch()
 
     //#region resolve ENS domain
-    const { value: registeredAddress = '', error: resolveEnsDomainError } = useLookupAddress(allFormFields.recipient)
+    const {
+        value: registeredAddress = '',
+        error: resolveEnsDomainError,
+        loading: resolveEnsDomainLoading,
+    } = useLookupAddress(allFormFields.recipient)
     //#endregion
 
     const erc721GasLimit = useGasLimit(
@@ -189,10 +196,11 @@ export const TransferERC721 = memo(() => {
             }
             return
         },
-        [transferCallback, contract?.address, gasConfig, registeredAddress, Utils],
+        [transferCallback, contract?.address, gasConfig, registeredAddress, Utils?.isValidDomain],
     )
 
     const ensContent = useMemo(() => {
+        if (resolveEnsDomainLoading) return
         if (registeredAddress) {
             return (
                 <Link
@@ -200,8 +208,12 @@ export const TransferERC721 = memo(() => {
                     target="_blank"
                     rel="noopener noreferrer"
                     underline="none">
-                    <Box py={1.5} px={4}>
-                        <Typography fontSize={16} lineHeight="22px" fontWeight={500}>
+                    <Box style={{ padding: 10 }}>
+                        <Typography
+                            fontSize={16}
+                            lineHeight="22px"
+                            fontWeight={500}
+                            style={{ color: MaskColorVar.textPrimary }}>
                             {allFormFields.recipient}
                         </Typography>
                         <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
@@ -215,7 +227,7 @@ export const TransferERC721 = memo(() => {
         if (allFormFields.recipient.includes('.eth')) {
             if (network?.type !== NetworkType.Ethereum) {
                 return (
-                    <Box py={2.5} px={1.5}>
+                    <Box style={{ padding: '25px 10px' }}>
                         <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
                             {t.wallet_transfer_error_no_ens_support()}
                         </Typography>
@@ -224,7 +236,7 @@ export const TransferERC721 = memo(() => {
             }
             if (Utils?.isValidDomain?.(allFormFields.recipient) && resolveEnsDomainError) {
                 return (
-                    <Box py={2.5} px={1.5}>
+                    <Box style={{ padding: '25px 10px' }}>
                         <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
                             {t.wallet_transfer_error_no_address_has_been_set_name()}
                         </Typography>
@@ -233,7 +245,18 @@ export const TransferERC721 = memo(() => {
             }
         }
         return
-    }, [allFormFields, resolveEnsDomainError, resolveEnsDomains()])
+    }, [
+        allFormFields.recipient,
+        resolveEnsDomainError,
+        Utils?.isValidDomain,
+        resolveEnsDomainLoading,
+        network,
+        registeredAddress,
+    ])
+
+    useUpdateEffect(() => {
+        setPopoverOpen(!!ensContent && !!anchorEl.current)
+    }, [ensContent])
 
     const contractIcon = useMemo(() => {
         if (!contract?.iconURL) return null
@@ -261,9 +284,9 @@ export const TransferERC721 = memo(() => {
                                     value={field.field.value}
                                     InputProps={{
                                         onClick: (event) => {
-                                            event.stopPropagation()
-                                            event.preventDefault()
-                                            setAnchorEl(event.currentTarget)
+                                            if (!anchorEl.current) anchorEl.current = event.currentTarget
+                                            if (!!ensContent) setPopoverOpen(true)
+                                            setMinPopoverWidth(event.currentTarget.clientWidth)
                                         },
                                     }}
                                     label={t.wallets_transfer_to_address()}
@@ -272,13 +295,16 @@ export const TransferERC721 = memo(() => {
                             name="recipient"
                         />
                         <Popover
-                            anchorEl={anchorEl}
-                            onClose={() => setAnchorEl(null)}
+                            anchorEl={anchorEl.current}
+                            onClose={() => setPopoverOpen(false)}
+                            PaperProps={{
+                                style: { minWidth: `${minPopoverWidth}px`, borderRadius: 4 },
+                            }}
                             anchorOrigin={{
                                 vertical: 'bottom',
                                 horizontal: 'left',
                             }}
-                            open={Boolean(anchorEl) && !!ensContent}>
+                            open={popoverOpen}>
                             {ensContent}
                         </Popover>
                     </Box>

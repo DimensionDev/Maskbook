@@ -42,7 +42,6 @@ const useStyles = makeStyles()((theme) => ({
     accountName: {
         fontSize: 16,
         marginRight: 6,
-        marginBottom: 6,
     },
     infoRow: {
         display: 'flex',
@@ -159,7 +158,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 providerIcon={networkDescriptor?.icon}
             />
             <div className={classes.accountInfo}>
-                <div className={classes.infoRow}>
+                <div className={classes.infoRow} style={{ marginBottom: 6 }}>
                     <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
                     {domain ? <Typography className={classes.domain}>{formatEthereumEns(domain)}</Typography> : null}
                 </div>

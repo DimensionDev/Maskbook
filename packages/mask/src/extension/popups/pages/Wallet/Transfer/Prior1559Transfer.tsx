@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useCallback, useMemo, useState } from 'react'
+import { memo, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
@@ -336,7 +336,8 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-        const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+        const anchorEl = useRef<HTMLDivElement | null>(null)
+        const [popoverOpen, setPopoverOpen] = useState(false)
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
@@ -349,6 +350,10 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         const {
             formState: { errors },
         } = useFormContext<TransferFormData>()
+
+        useUpdateEffect(() => {
+            setPopoverOpen(hasEnsSuffix && !!anchorEl.current)
+        }, [hasEnsSuffix])
 
         return (
             <>
@@ -369,9 +374,8 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                         </div>
                                     ),
                                     onClick: (event) => {
-                                        event.stopPropagation()
-                                        event.preventDefault()
-                                        setAnchorEl(event.currentTarget)
+                                        if (!anchorEl.current) anchorEl.current = event.currentTarget
+                                        if (hasEnsSuffix) setPopoverOpen(true)
                                     },
                                 }}
                             />
@@ -379,10 +383,10 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                         name="address"
                     />
                     <Popover
-                        open={Boolean(anchorEl) && hasEnsSuffix}
+                        open={popoverOpen}
                         classes={{ paper: classes.popover }}
-                        anchorEl={anchorEl}
-                        onClose={() => setAnchorEl(null)}
+                        anchorEl={anchorEl.current}
+                        onClose={() => setPopoverOpen(false)}
                         anchorOrigin={{
                             vertical: 'bottom',
                             horizontal: 'left',

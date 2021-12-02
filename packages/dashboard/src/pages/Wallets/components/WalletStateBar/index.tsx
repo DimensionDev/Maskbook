@@ -34,6 +34,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 10,
         borderRadius: 5,
     },
+    domain: {
+        fontSize: 14,
+        marginLeft: 20,
+        background: theme.palette.mode === 'dark' ? 'rgba(73, 137, 255, 0.2)' : 'rgba(28, 104, 243, 0.1)',
+        padding: '2px 8px',
+        borderRadius: 4,
+    },
 }))
 
 export const WalletStateBar = memo(() => {
@@ -136,9 +143,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     <Box fontSize={16} display="flex" alignItems="center">
                         {wallet.name}
                         {domain ? (
-                            <Typography fontSize={14} marginLeft={1}>
-                                {formatEthereumEns(domain)}
-                            </Typography>
+                            <Typography className={classes.domain}>{formatEthereumEns(domain)}</Typography>
                         ) : null}
                     </Box>
                     <Box fontSize={12}>

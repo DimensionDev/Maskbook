@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useCallback, useMemo, useState, ReactElement } from 'react'
+import { memo, SyntheticEvent, useCallback, useMemo, useState, ReactElement, useRef } from 'react'
 import { useI18N } from '../../../../../utils'
 import {
     Asset,
@@ -268,7 +268,11 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const [address, amount, maxFeePerGas] = methods.watch(['address', 'amount', 'maxFeePerGas'])
 
     //#region resolve ENS domain
-    const { value: registeredAddress = '', error: resolveEnsDomainError } = useLookupAddress(address)
+    const {
+        value: registeredAddress = '',
+        error: resolveEnsDomainError,
+        loading: resolveEnsDomainLoading,
+    } = useLookupAddress(address)
 
     useUpdateEffect(() => {
         // The input is ens domain but the binding address cannot be found
@@ -381,6 +385,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
 
     const ensContent = useMemo(() => {
+        if (resolveEnsDomainLoading) return
         if (registeredAddress && !resolveEnsDomainError && Utils?.resolveEnsDomains)
             return (
                 <Link
@@ -415,7 +420,14 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
             )
         }
         return
-    }, [address, registeredAddress, Utils?.resolveEnsDomains, methods.formState.errors.address?.type])
+    }, [
+        address,
+        registeredAddress,
+        Utils?.resolveEnsDomains,
+        methods.formState.errors.address?.type,
+        resolveEnsDomainLoading,
+        resolveEnsDomainError,
+    ])
 
     return (
         <FormProvider {...methods}>
@@ -470,9 +482,10 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
         confirmLoading,
         ensContent,
     }) => {
+        const anchorEl = useRef<HTMLDivElement | null>(null)
         const { t } = useI18N()
         const { classes } = useStyles()
-        const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
+        const [popoverOpen, setPopoverOpen] = useState(false)
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
@@ -492,6 +505,10 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
             'maxFeePerGas',
             'gasLimit',
         ])
+
+        useUpdateEffect(() => {
+            setPopoverOpen(!!ensContent && !!anchorEl.current)
+        }, [ensContent])
 
         return (
             <>
@@ -513,9 +530,8 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                                         </div>
                                     ),
                                     onClick: (event) => {
-                                        event.stopPropagation()
-                                        event.preventDefault()
-                                        setAnchorEl(event.currentTarget)
+                                        if (!anchorEl.current) anchorEl.current = event.currentTarget
+                                        if (!!ensContent) setPopoverOpen(true)
                                     },
                                 }}
                             />
@@ -523,10 +539,10 @@ export const Transfer1559TransferUI = memo<Transfer1559UIProps>(
                         name="address"
                     />
                     <Popover
-                        open={Boolean(anchorEl) && !!ensContent}
+                        open={popoverOpen}
                         classes={{ paper: classes.popover }}
-                        anchorEl={anchorEl}
-                        onClose={() => setAnchorEl(null)}
+                        anchorEl={anchorEl.current}
+                        onClose={() => setPopoverOpen(false)}
                         anchorOrigin={{
                             vertical: 'bottom',
                             horizontal: 'left',
