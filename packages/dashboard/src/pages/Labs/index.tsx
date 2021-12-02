@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2),
         marginBottom: theme.spacing(2),
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(355px, 1fr))',
     },
 }))
 

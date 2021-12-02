@@ -25,6 +25,10 @@ const useStyles = makeStyles()((theme) => ({
         background: MaskColorVar.primaryBackground,
         width: '44px',
         height: '44px',
+        '> *': {
+            width: 28,
+            height: 28,
+        },
     },
     settings: {
         alignSelf: 'flex-start',
@@ -37,7 +41,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
     },
 }))
 
