@@ -26,7 +26,7 @@ export const TUTORIAL_URLS_EN: TUTORIAL_URLS_OPT = {
     [PLUGIN_IDS.GITCOIN]:
         'https://realmasknetwork.notion.site/Make-a-quick-Gitcoin-Grant-donation-98ed83784ed4446a8a13fa685c7bddfb',
     [PLUGIN_IDS.DHEDGE]:
-        'https://realmasknetwork.notion.site/Invest-in-your-favourite-fund-manager-via-dHEDGE-on-Twitter-ETH-and-Polygon-b00ff2e626949279c83b59ed9207b9a',
+        'https://realmasknetwork.notion.site/Invest-in-your-favourite-fund-manager-via-dHEDGE-on-Twitter-ETH-and-Polygon-fb00ff2e626949279c83b59ed9207b9a',
     [PLUGIN_IDS.RED_PACKET]:
         'https://realmasknetwork.notion.site/Gift-token-NFTs-to-your-friends-Support-ETH-BSC-and-Polygon-0a71fd421aae4563bd07caa3e2129e5b',
     [PLUGIN_IDS.TRANSAK]: 'https://transak.com/',
@@ -44,7 +44,8 @@ export const TUTORIAL_URLS_EN: TUTORIAL_URLS_OPT = {
     [PLUGIN_IDS.PETS]: 'https://twitter.com/mintteamnft?s=21',
     [PLUGIN_IDS.GOOD_GHOSTING]:
         'https://realmasknetwork.notion.site/Cultivate-a-weekly-saving-habit-via-GoodGhosting-on-Twitter-Polygon-only-f94aa38b01404b9c99c7a03935840962',
-    [PLUGIN_IDS.MASK_BOX]: 'https://box-beta.mask.io/#/',
+    [PLUGIN_IDS.MASK_BOX]:
+        'https://realmasknetwork.notion.site/How-to-participate-in-a-MaskBox-sale-d0941687649a4ef7a38d71f23ecbe4da',
 }
 
 export const TUTORIAL_URLS_CN: TUTORIAL_URLS_OPT = {
