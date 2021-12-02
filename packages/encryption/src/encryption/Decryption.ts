@@ -1,6 +1,4 @@
-import { unreachable } from '@dimensiondev/kit'
-import { TypedMessage, decodeTypedMessageFromDocument, makeTypedMessageText } from '@masknet/shared-base'
-import { None, Result } from 'ts-results'
+import { TypedMessage, decodeTypedMessageFromDocument, decodeTypedMessageV38ToV40Format } from '@masknet/shared-base'
 import type { PayloadParseResult } from '../payload'
 
 export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncIterableIterator<DecryptionProcess> {
@@ -34,40 +32,11 @@ async function* parseTypedMessage(
     io: DecryptIO,
     raw: Uint8Array,
 ): AsyncIterableIterator<DecryptionProcess> {
-    if (version === -37) {
-        const { err, val } = decodeTypedMessageFromDocument(raw)
-        if (err) return yield new DecryptionError(ErrorReasons.PayloadDecryptedButNoValidTypedMessageIsFound, val)
-        io.setCache(val).catch(() => {})
-        return yield progress(K.Success, { content: val })
-    } else if (version === -38) {
-        const decoder = new TextDecoder()
-        const { val, err } = Result.wrap(() => decoder.decode(raw))
-        if (err) return yield new DecryptionError(ErrorReasons.PayloadDecryptedButNoValidTypedMessageIsFound, val)
-
-        const maybeMetadata = (() => {
-            if (!val.includes('🧩')) return None
-            const [maybeJSON] = val.split('🧩')
-            return Result.wrap(() => JSON.parse(maybeJSON))
-                .toOption()
-                .map((val) => {
-                    if (typeof val !== 'object' || Array.isArray(val)) return new Map()
-                    return new Map(Object.entries(val))
-                })
-        })()
-        const tm = maybeMetadata.some
-            ? makeTypedMessageText(val.replace(/.+🧩/, ''), maybeMetadata.val)
-            : makeTypedMessageText(val)
-        io.setCache(tm).catch(() => {})
-        return yield progress(K.Success, { content: tm })
-    } else if (version === -39 || version === -40) {
-        const decoder = new TextDecoder()
-        const { val, err } = Result.wrap(() => decoder.decode(raw)).map(makeTypedMessageText)
-        if (err) return yield new DecryptionError(ErrorReasons.PayloadDecryptedButNoValidTypedMessageIsFound, val)
-
-        io.setCache(val).catch(() => {})
-        return yield progress(K.Success, { content: val })
-    }
-    unreachable(version)
+    const { err, val } =
+        version === -37 ? decodeTypedMessageFromDocument(raw) : decodeTypedMessageV38ToV40Format(raw, version)
+    if (err) return yield new DecryptionError(ErrorReasons.PayloadDecryptedButNoValidTypedMessageIsFound, val)
+    io.setCache(val).catch(() => {})
+    return progress(K.Success, { content: val })
 }
 
 function progress(kind: DecryptionProgressKind.Success, rest: Omit<DecryptionSuccess, 'type'>): DecryptionSuccess
