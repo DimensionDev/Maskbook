@@ -61,6 +61,7 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     network?: string
     token_type?: EthereumTokenType.Native | EthereumTokenType.ERC20
     token?: FungibleTokenDetailed
+    token_address?: string
     claimers?: { address: string; name: string }[]
     total_remaining?: string
 }

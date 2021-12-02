@@ -5,7 +5,7 @@ import { useTokenPrice } from '../../plugins/Wallet/hooks/useTokenPrice'
 
 interface TokenPriceProps extends Omit<HTMLProps<HTMLSpanElement>, 'children'> {
     chainId: ChainId
-    contractAddress: string | undefined
+    contractAddress?: string
     amount: BigNumber.Value
     currencyType?: CurrencyType
 }

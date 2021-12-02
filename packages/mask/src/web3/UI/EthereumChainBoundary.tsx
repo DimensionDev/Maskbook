@@ -148,7 +148,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
                     init={
-                        <span style={{ color: '#fff' }}>
+                        <span>
                             {t('plugin_wallet_switch_network', {
                                 network: expectedNetwork,
                             })}

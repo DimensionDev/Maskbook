@@ -20,12 +20,12 @@ import { queryMyPersonas } from './IdentityService'
 import {
     currentBalanceSettings,
     currentBlockNumberSettings,
-    currentCollectibleDataProviderSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
+    currentNonFungibleAssetDataProviderSettings,
     currentGasOptionsSettings,
     currentEtherPriceSettings,
     currentTokenPricesSettings,
@@ -88,11 +88,11 @@ export const [getCurrentMaskWalletNetworkType, setCurrentMaskWalletNetworkType] 
 )
 
 export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
 )
 
 export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvider] = create(
-    currentCollectibleDataProviderSettings,
+    currentNonFungibleAssetDataProviderSettings,
 )
 
 export const [getCurrentMaskWalletLockedSettings, setCurrentMaskWalletLockedSettings] = create(

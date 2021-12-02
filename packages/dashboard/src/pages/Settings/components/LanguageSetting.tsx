@@ -22,11 +22,6 @@ export default function LanguageSetting() {
             <MenuItem value={LanguageOptions.zhTW}>繁体中文</MenuItem>
             <MenuItem value={LanguageOptions.jaJP}>日本語</MenuItem>
             <MenuItem value={LanguageOptions.koKR}>한국인</MenuItem>
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.esES}>lengua española</MenuItem>}
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.itIT}>lingua italiana</MenuItem>}
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.frFR}>langue française</MenuItem>}
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.ruRU}>русский язык</MenuItem>}
-            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.faIR}>زبان فارسی</MenuItem>}
         </SettingSelect>
     )
 }

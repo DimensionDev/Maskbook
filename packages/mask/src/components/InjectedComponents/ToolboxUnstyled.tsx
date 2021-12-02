@@ -73,6 +73,7 @@ export interface ToolboxHintProps {
     ListItemIcon?: React.ComponentType<Pick<ListItemIconProps, 'children'>>
     Typography?: React.ComponentType<Pick<TypographyProps, 'children' | 'className'>>
     iconSize?: number
+    badgeSize?: number
     mini?: boolean
 }
 export function ToolboxHintUnstyled(props: ToolboxHintProps) {
@@ -84,6 +85,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
         Container = 'div',
         Typography = MuiTypography,
         iconSize = 24,
+        badgeSize = 10,
         mini,
     } = props
     const { classes } = useStyles()
@@ -101,8 +103,9 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                             {isWalletValid ? (
                                 <WalletIcon
                                     size={iconSize}
-                                    networkIcon={networkDescriptor?.icon}
-                                    providerIcon={providerDescriptor?.icon}
+                                    badgeSize={badgeSize}
+                                    networkIcon={providerDescriptor?.icon} // switch the icon to meet design
+                                    providerIcon={networkDescriptor?.icon}
                                 />
                             ) : (
                                 <MaskFilledIcon size={iconSize} />
@@ -154,9 +157,6 @@ function useToolbox() {
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
         WalletMessages.events.walletStatusDialogUpdated,
     )
-    const { openDialog: openSelectWalletDialog } = useRemoteControlledDialog(
-        WalletMessages.events.selectProviderDialogUpdated,
-    )
     //#endregion
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
@@ -179,9 +179,8 @@ function useToolbox() {
 
     const openWallet = useCallback(() => {
         if (hasNativeAPI) return nativeAPI?.api.misc_openCreateWalletView()
-        if (isWalletValid) return openWalletStatusDialog()
-        else return openSelectWalletDialog()
-    }, [openWalletStatusDialog, openSelectWalletDialog, hasNativeAPI, isWalletValid])
+        return openWalletStatusDialog()
+    }, [openWalletStatusDialog, hasNativeAPI])
 
     const walletTitle = renderButtonText()
 

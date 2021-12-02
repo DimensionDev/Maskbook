@@ -18,7 +18,7 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
     currentTokenPricesSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
@@ -116,7 +116,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             [],
             WalletMessages.events.erc1155TokensUpdated.on,
         ),
-        portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
+        portfolioProvider: createSubscriptionFromSettings(currentFungibleAssetDataProviderSettings),
 
         addToken: WalletRPC.addToken,
         removeToken: WalletRPC.removeToken,
@@ -125,6 +125,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
 
         getAssetsList: WalletRPC.getAssetsList,
         getAssetsListNFT: WalletRPC.getAssetsListNFT,
+        getCollectionsNFT: WalletRPC.getCollectionsNFT,
         getAddressNamesList: WalletRPC.getAddressNames,
         getTransactionList: WalletRPC.getTransactionList,
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,

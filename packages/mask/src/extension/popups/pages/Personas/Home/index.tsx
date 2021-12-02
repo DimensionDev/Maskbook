@@ -89,7 +89,7 @@ const useStyles = makeStyles()({
 const PersonaHome = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [isExpand, setIsExpand] = useState(true)
+    const [isExpand, setExpand] = useState(true)
     const { currentPersona, setDeletingPersona } = PersonaContext.useContainer()
     const history = useHistory()
 
@@ -121,7 +121,7 @@ const PersonaHome = memo(() => {
                             </Typography>
                         </div>
                     </div>
-                    <div onClick={() => setIsExpand((pre) => !pre)}>
+                    <div onClick={() => setExpand((pre) => !pre)}>
                         {isExpand ? (
                             <ChevronDown className={classes.chevronIcon} />
                         ) : (
