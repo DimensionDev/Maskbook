@@ -18,6 +18,10 @@ export const [useAppearance] = createGlobalState(Services.Settings.getTheme, (x)
     Messages.events.appearanceSettings.on(x),
 )
 
+export const [usePluginID] = createGlobalState(Services.Settings.getPluginID, (x) =>
+    Messages.events.pluginIDSettings.on(x),
+)
+
 export const [useCurrentPersonaIdentifier] = createGlobalState(Services.Settings.getCurrentPersonaIdentifier, (x) =>
     Messages.events.currentPersonaIdentifier.on(x),
 )
