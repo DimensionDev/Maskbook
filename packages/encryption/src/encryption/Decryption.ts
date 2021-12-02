@@ -4,11 +4,6 @@ import type { PayloadParseResult } from '../payload'
 export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncIterableIterator<DecryptionProcess> {
     yield progress(K.Started)
 
-    if (!options.disableCache) {
-        const cache = await io.getCache(options.signal)
-        if (cache) return yield progress(K.Success, { content: cache })
-    }
-
     const {
         message: { author, authorPublicKey, encrypted, encryption, signature, version },
     } = options
@@ -47,11 +42,9 @@ function progress(kind: DecryptionProgressKind, rest?: object): DecryptionProces
 
 export interface DecryptionOption {
     message: PayloadParseResult.Payload
-    disableCache?: boolean
     signal?: AbortSignal
 }
 export interface DecryptIO {
-    getCache(signal: AbortSignal | undefined): Promise<TypedMessage | null>
     setCache(result: TypedMessage): Promise<void>
 }
 export enum DecryptionProgressKind {
