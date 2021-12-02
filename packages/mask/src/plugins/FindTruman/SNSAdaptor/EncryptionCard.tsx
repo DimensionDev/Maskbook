@@ -29,11 +29,11 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                     .then(async (res) => {
                         setMessage(raw.data)
                     })
-                    .catch((e) => {
-                        setErr(e)
+                    .catch((error) => {
+                        setErr(error)
                     })
             }
-        } catch (e) {
+        } catch (error) {
             setFailed(true)
         }
     }, [payload])
@@ -42,11 +42,11 @@ export default function EncryptionCard(props: EncryptionCardProps) {
         <CardContent>
             {!!message && (
                 <>
-                    <Typography variant={'body1'} color={'text.secondary'}>
+                    <Typography variant="body1" color="text.secondary">
                         {t('plugin_find_truman_decrypted_by')}
                     </Typography>
                     <Divider sx={{ margin: '8px 0' }} />
-                    <Typography variant={'h6'} color={'text.primary'}>
+                    <Typography variant="h6" color="text.primary">
                         {message}
                     </Typography>
                 </>

@@ -32,21 +32,21 @@ export default function NoNftCard(props: NoNftCardProps) {
     const renderNftCard = (title: string, img: string, url: string, count: number, address: string) => {
         return (
             <Card key={address} className={classes.card} variant="outlined">
-                <CardMedia component={'img'} image={img} />
+                <CardMedia component="img" image={img} />
                 <CardContent className={classes.content}>
                     <Typography gutterBottom variant="h5" component="div">
                         {title}
                     </Typography>
-                    <Typography variant={'body2'} color={'textSecondary'}>
+                    <Typography variant="body2" color="textSecondary">
                         {t(count > 1 ? 'plugin_find_truman_buy_nfts_tip' : 'plugin_find_truman_buy_nft_tip', { count })}
                     </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'flex-end' }} className={classes.content}>
                     <Button
-                        component={'a'}
+                        component="a"
                         href={url}
-                        variant={'contained'}
-                        target={'_blank'}
+                        variant="contained"
+                        target="_blank"
                         size={conditions.length > 1 ? 'small' : 'medium'}>
                         {t('plugin_find_truman_buy')}
                     </Button>

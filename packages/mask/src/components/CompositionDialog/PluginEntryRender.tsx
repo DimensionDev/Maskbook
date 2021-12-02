@@ -12,7 +12,7 @@ import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
-
+import { Trans } from 'react-i18next'
 const useStyles = makeStyles()({
     sup: {
         paddingLeft: 2,
@@ -92,7 +92,7 @@ const CustomEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <sup className={classes.sup}>(Beta)</sup>}
+                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
                     </>
                 }
                 onClick={onClick}
@@ -115,7 +115,7 @@ const DialogEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <sup className={classes.sup}>(Beta)</sup>}
+                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
                     </>
                 }
                 disabled={props.readonly}

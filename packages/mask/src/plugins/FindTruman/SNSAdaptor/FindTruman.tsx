@@ -113,7 +113,7 @@ export function FindTruman(props: FindTrumanProps) {
                         onLoad={() => {
                             setLoadImg(false)
                         }}
-                        alt={''}
+                        alt=""
                         component="img"
                         height={140}
                         sx={{
@@ -123,17 +123,13 @@ export function FindTruman(props: FindTrumanProps) {
                     />
                     {loadImg && (
                         <Box sx={{ display: 'flex', position: 'absolute', top: 0, left: 0, width: '100%' }}>
-                            <Skeleton animation="wave" variant="rectangular" height={140} width={'100%'} />
+                            <Skeleton animation="wave" variant="rectangular" height={140} width="100%" />
                         </Box>
                     )}
                     <CardHeader
                         title={
                             storyInfo && (
-                                <Box
-                                    display="flex"
-                                    flexWrap={'wrap'}
-                                    alignItems="center"
-                                    justifyContent="space-between">
+                                <Box display="flex" flexWrap="wrap" alignItems="center" justifyContent="space-between">
                                     <Typography className={classes.title} component="b" sx={{ marginRight: 0.5 }}>
                                         {storyInfo.name}
                                     </Typography>

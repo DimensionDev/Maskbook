@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => {
  * https://findtruman.io/#/findtruman/stories/{storyId}/poll_result/{pollId}
  */
 const isFindTrumanURL = (x: string): boolean =>
+    // eslint-disable-next-line
     /^https:\/\/findtruman.io\/#\/(findtruman\/stories\/[a-zA-Z0-9]+(\/|\/(puzzles|polls|puzzle_result|poll_result)\/[a-zA-Z0-9]+\/?)?|encryption\?payload=.+)$/i.test(
         x,
     )

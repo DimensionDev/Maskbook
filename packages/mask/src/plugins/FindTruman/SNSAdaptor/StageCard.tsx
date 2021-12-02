@@ -17,7 +17,7 @@ export default function StageCard(props: StageCardProps) {
                     <BorderLinearProgress
                         color={color}
                         value={total > 0 ? (success * 100) / total : 0}
-                        variant={'determinate'}
+                        variant="determinate"
                     />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -33,10 +33,10 @@ export default function StageCard(props: StageCardProps) {
                 <Grid container spacing={1}>
                     <Grid item sm={6} xs={12}>
                         <Box sx={{ padding: '0 24px' }}>
-                            <Typography variant="h6" color={'text.primary'} gutterBottom={true}>
+                            <Typography variant="h6" color="text.primary" gutterBottom={true}>
                                 {t('plugin_find_truman_status_puzzle')}
                             </Typography>
-                            <Typography variant="body2" color={'text.secondary'} gutterBottom={true}>
+                            <Typography variant="body2" color="text.secondary" gutterBottom={true}>
                                 {`${t('plugin_find_truman_puzzle_rate')}${
                                     userStoryStatus.puzzles.total > 0
                                         ? (
@@ -48,12 +48,12 @@ export default function StageCard(props: StageCardProps) {
                             </Typography>
                             {renderProgress(userStoryStatus.puzzles.total, userStoryStatus.puzzles.solved, 'success')}
                             {userStoryStatus.puzzles.waiting === 1 && (
-                                <Typography variant={'body2'} color={'text.secondary'} gutterBottom={true}>{`${
+                                <Typography variant="body2" color="text.secondary" gutterBottom={true}>{`${
                                     userStoryStatus.puzzles.waiting
                                 } ${t('plugin_find_truman_puzzle_to_be_revealed')}`}</Typography>
                             )}
                             {userStoryStatus.puzzles.waiting > 1 && (
-                                <Typography variant={'body2'} color={'text.secondary'} gutterBottom={true}>{`${
+                                <Typography variant="body2" color="text.secondary" gutterBottom={true}>{`${
                                     userStoryStatus.puzzles.waiting
                                 } ${t('plugin_find_truman_puzzles_to_be_revealed')}`}</Typography>
                             )}
@@ -61,10 +61,10 @@ export default function StageCard(props: StageCardProps) {
                     </Grid>
                     <Grid item sm={6} xs={12}>
                         <Box sx={{ padding: '0 24px' }}>
-                            <Typography variant="h6" color={'text.primary'} gutterBottom={true}>
+                            <Typography variant="h6" color="text.primary" gutterBottom={true}>
                                 {t('plugin_find_truman_status_poll')}
                             </Typography>
-                            <Typography variant="body2" color={'text.secondary'} gutterBottom={true}>
+                            <Typography variant="body2" color="text.secondary" gutterBottom={true}>
                                 {`${t('plugin_find_truman_voting_rate')}${
                                     userStoryStatus.polls.total > 0
                                         ? ((userStoryStatus.polls.hit * 100) / userStoryStatus.polls.total).toFixed(2)
@@ -73,12 +73,12 @@ export default function StageCard(props: StageCardProps) {
                             </Typography>
                             {renderProgress(userStoryStatus.polls.total, userStoryStatus.polls.hit, 'secondary')}
                             {userStoryStatus.polls.waiting === 1 && (
-                                <Typography variant={'body2'} color={'text.secondary'} gutterBottom={true}>{`${
+                                <Typography variant="body2" color="text.secondary" gutterBottom={true}>{`${
                                     userStoryStatus.polls.waiting
                                 } ${t('plugin_find_truman_poll_to_be_revealed')}`}</Typography>
                             )}
                             {userStoryStatus.polls.waiting > 1 && (
-                                <Typography variant={'body2'} color={'text.secondary'} gutterBottom={true}>{`${
+                                <Typography variant="body2" color="text.secondary" gutterBottom={true}>{`${
                                     userStoryStatus.polls.waiting
                                 } ${t('plugin_find_truman_polls_to_be_revealed')}`}</Typography>
                             )}

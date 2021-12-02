@@ -72,7 +72,7 @@ export default function ResultCard(props: ResultViewProps) {
                         const percent = (total > 0 ? (value * 100) / total : 0).toFixed(2)
                         return (
                             <Card
-                                variant={'outlined'}
+                                variant="outlined"
                                 key={option}
                                 sx={{
                                     padding: '12px 18px',
@@ -99,20 +99,20 @@ export default function ResultCard(props: ResultViewProps) {
                                             {option}
                                         </Typography>
                                     </Box>
-                                    <Stack direction={'row'} spacing={1}>
+                                    <Stack direction="row" spacing={1}>
                                         {choice === index && (
                                             <Chip
                                                 icon={<Adjust />}
-                                                size={'small'}
-                                                color={'primary'}
+                                                size="small"
+                                                color="primary"
                                                 label={t('plugin_find_truman_selected')}
                                             />
                                         )}
                                         {answer === index && (
                                             <Chip
                                                 icon={<CheckCircle />}
-                                                color={'success'}
-                                                size={'small'}
+                                                color="success"
+                                                size="small"
                                                 label={t(
                                                     type === FindTrumanPostType.PuzzleResult
                                                         ? 'plugin_find_truman_answer'

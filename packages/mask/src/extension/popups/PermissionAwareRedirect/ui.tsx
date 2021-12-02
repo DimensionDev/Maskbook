@@ -1,34 +1,33 @@
 import { Typography, Card, CardContent, Button, CardActions } from '@mui/material'
+import { useI18N } from '../../../utils'
+import { Trans } from 'react-i18next'
 
 export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {
+    const { t } = useI18N()
     if (props.granted) {
         return (
             <>
-                Redirect to {props.url}.
+                {t('redirect_to')} {props.url}.
                 <br />
-                If your browser does not redirect, please <a href={props.url}>click here</a>.
+                <Trans i18nKey="redirect_alert" components={{ terms: <a href={props.url} /> }} />
             </>
         )
     }
     return (
         <Card>
             <CardContent>
-                <Typography variant="h6">Permission request</Typography>
-                <Typography variant="body1">
-                    To continue, Mask Network needs permission to access the following URL:
-                </Typography>
+                <Typography variant="h6">{t('popups_permission_request')}</Typography>
+                <Typography variant="body1">{t('popups_permission_request_content')}</Typography>
                 <br />
                 <Typography variant="body1">{props.url}</Typography>
                 <br />
-                <Typography variant="body1">
-                    This gives Mask Network the necessary abilities to provide the requested function properly.
-                </Typography>
+                <Typography variant="body1">{t('popups_permission_request_content2')}</Typography>
             </CardContent>
             <CardActions sx={{ flexDirection: 'row-reverse' }}>
                 <Button variant="contained" onClick={props.onRequest}>
-                    Grant
+                    {t('popups_grant')}
                 </Button>
-                <Button onClick={props.onCancel}>Cancel</Button>
+                <Button onClick={props.onCancel}>{t('cancel')}</Button>
             </CardActions>
         </Card>
     )

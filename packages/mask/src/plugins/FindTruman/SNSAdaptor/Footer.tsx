@@ -35,11 +35,11 @@ export default function Footer() {
                         disablePortal: true,
                     }}
                     title={consts.faqDesc}
-                    placement={'top'}
+                    placement="top"
                     arrow>
                     <Link
-                        component={'a'}
-                        target={'_blank'}
+                        component="a"
+                        target="_blank"
                         href={consts.faqUrl}
                         variant="body2"
                         sx={{ fontWeight: 'bold', fontSize: '12px' }}>
@@ -47,22 +47,21 @@ export default function Footer() {
                     </Link>
                 </Tooltip>
             )}
-            <Stack flexWrap={'wrap'} rowGap={1} direction={'row'}>
-                {consts &&
-                    consts.icons.map((e) => (
-                        <Chip
-                            className={classes.chip}
-                            key={e.label}
-                            size={'small'}
-                            avatar={<Avatar alt="FindTruman" src={e.icon} />}
-                            label={e.label}
-                            variant="outlined"
-                            clickable={true}
-                            component={'a'}
-                            target={'_blank'}
-                            href={e.url}
-                        />
-                    ))}
+            <Stack flexWrap="wrap" rowGap={1} direction="row">
+                {consts?.icons.map((e) => (
+                    <Chip
+                        className={classes.chip}
+                        key={e.label}
+                        size="small"
+                        avatar={<Avatar alt="FindTruman" src={e.icon} />}
+                        label={e.label}
+                        variant="outlined"
+                        clickable={true}
+                        component="a"
+                        target="_blank"
+                        href={e.url}
+                    />
+                ))}
             </Stack>
         </Box>
     )

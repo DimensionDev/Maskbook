@@ -40,7 +40,7 @@ export function PostInspector(props: PostInspectorProps) {
     const storyId = _storyId ? _storyId : ''
     const targetId = _targetId ? _targetId : ''
 
-    let postType: FindTrumanPostType = url.includes('/encryption?')
+    const postType: FindTrumanPostType = url.includes('/encryption?')
         ? FindTrumanPostType.Encryption
         : url.includes('/puzzles/')
         ? FindTrumanPostType.Puzzle
@@ -68,8 +68,8 @@ export function PostInspector(props: PostInspectorProps) {
                     .then((res) => {
                         resolve(res)
                     })
-                    .catch((e) => {
-                        reject(e)
+                    .catch((error) => {
+                        reject(error)
                     })
             })
         }
@@ -89,7 +89,7 @@ export function PostInspector(props: PostInspectorProps) {
             }))
         switch (postType) {
             case FindTrumanPostType.Encryption:
-                let searchParams = new URLSearchParams(url.split('?')[1])
+                const searchParams = new URLSearchParams(url.split('?')[1])
                 const payload = searchParams.get('payload') || ''
                 setEncryptionPayload(payload)
                 break
@@ -139,14 +139,14 @@ export function PostInspector(props: PostInspectorProps) {
                     submitPuzzle(account, {
                         target: userPuzzleStatus?.id || '',
                         from: account,
-                        timestamp: Math.floor(new Date().valueOf() / 1000),
+                        timestamp: Math.floor(Date.now() / 1000),
                         choice,
                     })
                         .then(async (res) => {
                             await fetchData()
                             resolve(true)
                         })
-                        .catch((e) => {
+                        .catch((error) => {
                             reject(false)
                         })
                     break
@@ -154,14 +154,14 @@ export function PostInspector(props: PostInspectorProps) {
                     submitPoll(account, {
                         target: userPollStatus?.id || '',
                         from: account,
-                        timestamp: Math.floor(new Date().valueOf() / 1000),
+                        timestamp: Math.floor(Date.now() / 1000),
                         choice,
                     })
                         .then(async (res) => {
                             await fetchData()
                             resolve(true)
                         })
-                        .catch((e) => {
+                        .catch((error) => {
                             reject(false)
                         })
                     break

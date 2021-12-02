@@ -161,7 +161,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                 <Card
                     sx={choice !== index ? { cursor: 'pointer' } : {}}
                     className={classes.progressOption}
-                    variant={'outlined'}
+                    variant="outlined"
                     key={option}
                     onClick={
                         !selected && !error && userStatus.status !== 0
@@ -219,7 +219,7 @@ export default function OptionsCard(props: OptionsViewProps) {
             ) : (
                 <Box key={index} sx={{ position: 'relative' }}>
                     <Chip
-                        id={'submit'}
+                        id="submit"
                         className={classes.blockChip}
                         label={
                             <div
@@ -304,7 +304,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                             return vertical ? (
                                 <Step key={index} completed={false} expanded={true}>
                                     <StepLabel>
-                                        <Typography variant="h6" color={'text.primary'} gutterBottom={false}>
+                                        <Typography variant="h6" color="text.primary" gutterBottom={false}>
                                             {e.poll}
                                         </Typography>
                                     </StepLabel>
@@ -321,7 +321,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 <Step key={index} completed={false}>
                                     <StepLabel>
                                         <Box>
-                                            <Typography variant="h6" color={'text.primary'} gutterBottom={false}>
+                                            <Typography variant="h6" color="text.primary" gutterBottom={false}>
                                                 {e.poll}
                                             </Typography>
                                             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -338,10 +338,10 @@ export default function OptionsCard(props: OptionsViewProps) {
                             )
                         })}
                         {vertical ? (
-                            <Step key={'latest'} completed={false} expanded={true}>
+                            <Step key="latest" completed={false} expanded={true}>
                                 <StepLabel>
                                     <Box>
-                                        <Typography variant="h6" color={'text.primary'} gutterBottom={true}>
+                                        <Typography variant="h6" color="text.primary" gutterBottom={true}>
                                             {userStatus.question}
                                         </Typography>
                                     </Box>
@@ -352,10 +352,10 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 </StepContent>
                             </Step>
                         ) : (
-                            <Step key={'latest'} completed={false}>
+                            <Step key="latest" completed={false}>
                                 <StepLabel>
                                     <Box>
-                                        <Typography variant="h6" color={'text.primary'} gutterBottom={true}>
+                                        <Typography variant="h6" color="text.primary" gutterBottom={true}>
                                             {userStatus.question}
                                         </Typography>
                                         {renderOptions(userStatus)}

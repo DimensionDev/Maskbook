@@ -55,8 +55,8 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                         .then((res) => {
                             resolve(res)
                         })
-                        .catch((e) => {
-                            reject(e)
+                        .catch((error) => {
+                            reject(error)
                         })
                 })
             }
@@ -76,7 +76,7 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                     <BorderLinearProgress
                         color={color}
                         value={total > 0 ? (success * 100) / total : 0}
-                        variant={'determinate'}
+                        variant="determinate"
                     />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -96,16 +96,16 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                     </Grid>
                     <Grid item xs={7}>
                         <Box sx={{ padding: '0 12px' }}>
-                            <Typography variant={'h6'} color={'text.primary'} gutterBottom={true}>
+                            <Typography variant="h6" color="text.primary" gutterBottom={true}>
                                 {name}
                             </Typography>
                             <Grid container spacing={2}>
                                 <Grid item sm={6} xs={12}>
                                     <Box sx={{ padding: '0' }}>
-                                        <Typography variant="body1" color={'text.primary'} gutterBottom={true}>
+                                        <Typography variant="body1" color="text.primary" gutterBottom={true}>
                                             {t('plugin_find_truman_status_puzzle')}
                                         </Typography>
-                                        <Typography variant="body2" color={'text.secondary'} gutterBottom={true}>
+                                        <Typography variant="body2" color="text.secondary" gutterBottom={true}>
                                             {`${t('plugin_find_truman_puzzle_rate')}${
                                                 puzzles.total > 0
                                                     ? ((puzzles.solved * 100) / puzzles.total).toFixed(2)
@@ -115,16 +115,16 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                                         {renderProgress(puzzles.total, puzzles.solved, 'success')}
                                         {puzzles.waiting === 1 && (
                                             <Typography
-                                                variant={'caption'}
-                                                color={'text.secondary'}
+                                                variant="caption"
+                                                color="text.secondary"
                                                 gutterBottom={true}>{`${puzzles.waiting} ${t(
                                                 'plugin_find_truman_puzzle_to_be_revealed',
                                             )}`}</Typography>
                                         )}
                                         {puzzles.waiting > 1 && (
                                             <Typography
-                                                variant={'caption'}
-                                                color={'text.secondary'}
+                                                variant="caption"
+                                                color="text.secondary"
                                                 gutterBottom={false}>{`${puzzles.waiting} ${t(
                                                 'plugin_find_truman_puzzles_to_be_revealed',
                                             )}`}</Typography>
@@ -133,10 +133,10 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                                 </Grid>
                                 <Grid item sm={6} xs={12}>
                                     <Box sx={{ padding: '0' }}>
-                                        <Typography variant="body1" color={'text.primary'} gutterBottom={true}>
+                                        <Typography variant="body1" color="text.primary" gutterBottom={true}>
                                             {t('plugin_find_truman_status_poll')}
                                         </Typography>
-                                        <Typography variant="body2" color={'text.secondary'} gutterBottom={true}>
+                                        <Typography variant="body2" color="text.secondary" gutterBottom={true}>
                                             {`${t('plugin_find_truman_voting_rate')}${
                                                 polls.total > 0 ? ((polls.hit * 100) / polls.total).toFixed(2) : '0.00'
                                             }%`}
@@ -144,16 +144,16 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                                         {renderProgress(polls.total, polls.hit, 'secondary')}
                                         {polls.waiting === 1 && (
                                             <Typography
-                                                variant={'caption'}
-                                                color={'text.secondary'}
+                                                variant="caption"
+                                                color="text.secondary"
                                                 gutterBottom={true}>{`${polls.waiting} ${t(
                                                 'plugin_find_truman_poll_to_be_revealed',
                                             )}`}</Typography>
                                         )}
                                         {polls.waiting > 1 && (
                                             <Typography
-                                                variant={'caption'}
-                                                color={'text.secondary'}
+                                                variant="caption"
+                                                color="text.secondary"
                                                 gutterBottom={false}>{`${polls.waiting} ${t(
                                                 'plugin_find_truman_polls_to_be_revealed',
                                             )}`}</Typography>
@@ -184,8 +184,8 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                             <Button
                                 color="inherit"
                                 size="small"
-                                component={'a'}
-                                target={'_blank'}
+                                component="a"
+                                target="_blank"
                                 href={consts?.discoveryUrl}>
                                 {consts?.discoveryLabel}
                             </Button>

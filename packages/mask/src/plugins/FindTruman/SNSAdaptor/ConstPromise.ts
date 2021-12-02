@@ -1,9 +1,9 @@
 import type { FindTrumanConst } from '../types'
 
 enum Status {
-    PENDING,
-    FULFILLED,
-    REJECTED,
+    PENDING = 0,
+    FULFILLED = 1,
+    REJECTED = 2,
 }
 export default class FindTrumanConstPromise {
     constructor() {}
@@ -30,7 +30,7 @@ export default class FindTrumanConstPromise {
         this.value = value
         while (this.successCallback.length) {
             const cb = this.successCallback.shift()
-            cb && cb(this.value)
+            cb?.(this.value)
         }
     }
     reject = (reason: any) => {
@@ -39,7 +39,7 @@ export default class FindTrumanConstPromise {
         this.err = reason
         while (this.failCallback.length) {
             const cb = this.failCallback.shift()
-            cb && cb(this.err)
+            cb?.(this.err)
         }
     }
 
@@ -47,7 +47,7 @@ export default class FindTrumanConstPromise {
         if (this.status === Status.FULFILLED) {
             successCallback(this.value)
         } else if (this.status === Status.REJECTED) {
-            failCallback && failCallback(this.err)
+            failCallback?.(this.err)
         } else {
             this.successCallback.push(successCallback)
             failCallback && this.failCallback.push(failCallback)

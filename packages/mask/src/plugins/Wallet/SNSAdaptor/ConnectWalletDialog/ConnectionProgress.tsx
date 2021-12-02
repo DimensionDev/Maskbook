@@ -41,14 +41,18 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                     <ImageIcon icon={providerDescriptor?.icon} />
                     <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
                         {connected ? (
-                            <Typography>Connected to {resolveProviderName(providerType)}</Typography>
+                            <Typography>
+                                {t('plugin_wallet_connected_to')} {resolveProviderName(providerType)}
+                            </Typography>
                         ) : (
-                            <Typography>Connect to {resolveProviderName(providerType)}</Typography>
+                            <Typography>
+                                {t('plugin_wallet_connect_to')} {resolveProviderName(providerType)}
+                            </Typography>
                         )}
                         {loading ? (
                             <Box display="flex" alignItems="center">
                                 <CircularProgress size={14} color="primary" sx={{ marginRight: 1 }} />
-                                <Typography variant="body2">Initializing…</Typography>
+                                <Typography variant="body2">{t('initializing')}</Typography>
                             </Box>
                         ) : null}
                         {!loading && error ? (
