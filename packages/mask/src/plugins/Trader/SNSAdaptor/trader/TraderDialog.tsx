@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
     tab: {
         height: 36,
         minHeight: 36,
-        fontWeight: 300,
     },
     tabPaper: {
         backgroundColor: 'inherit',
