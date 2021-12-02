@@ -7,7 +7,7 @@ import {
     NativeToken,
     NetworkType,
     ProviderType,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
     ERC721TokenDetailed,
 } from '../types'
 import { getChainDetailed, createLookupTableResolver } from '../utils'
@@ -133,9 +133,9 @@ export function resolveIPFSLink(ipfs: string): string {
     return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
 }
 
-export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
+export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFungibleAssetProvider) {
     switch (provider) {
-        case CollectibleProvider.OPENSEA:
+        case NonFungibleAssetProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
             return `https://opensea.io`
         default:
@@ -143,9 +143,9 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
     }
 }
 
-export function resolveCollectibleAssetLink(chainId: ChainId, provider: CollectibleProvider) {
+export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungibleAssetProvider) {
     switch (provider) {
-        case CollectibleProvider.OPENSEA:
+        case NonFungibleAssetProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io/assets`
             if (chainId === ChainId.Matic) return `https://opensea.io/assets/matic`
             return `https://opensea.io/assets`
@@ -156,11 +156,11 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: Collecti
 
 export function resolveCollectibleLink(
     chainId: ChainId,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     { contractDetailed: { address }, tokenId }: ERC721TokenDetailed,
 ) {
     switch (provider) {
-        case CollectibleProvider.OPENSEA:
+        case NonFungibleAssetProvider.OPENSEA:
             return urlcat(resolveCollectibleAssetLink(chainId, provider), '/:address/:tokenId', {
                 address,
                 tokenId,

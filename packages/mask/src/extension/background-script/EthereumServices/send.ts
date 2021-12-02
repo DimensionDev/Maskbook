@@ -323,7 +323,7 @@ export async function INTERNAL_send(
         const isEIP1559Valid =
             parseGasPrice(config.maxFeePerGas as string) > 0 && parseGasPrice(config.maxPriorityFeePerGas as string) > 0
 
-        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally) && !isEIP1559Valid) {
+        if (Flags.EIP1559_enabled && isEIP1559Supported(chainIdFinally) && !isEIP1559Valid && !isGasPriceValid) {
             callback(new Error('Invalid EIP1159 payload.'))
             return
         }

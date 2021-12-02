@@ -3,7 +3,7 @@ import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
     ERC721TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
@@ -45,7 +45,7 @@ const useStyles = makeStyles()({
 
 interface CollectibleListProps {
     selectedChainId: ChainId | null
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
 }
 
 export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId, provider }) => {
@@ -127,7 +127,7 @@ export interface CollectibleListUIProps {
     isEmpty: boolean
     showPagination: boolean
     chainId: ChainId
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     dataSource: ERC721TokenDetailed[]
     onSend(detail: ERC721TokenDetailed): void
 }

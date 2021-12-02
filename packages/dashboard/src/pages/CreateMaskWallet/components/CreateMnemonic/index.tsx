@@ -4,11 +4,11 @@ import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
 import { InfoIcon, RefreshIcon } from '@masknet/icons'
 import { useDashboardI18N } from '../../../../locales'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { MnemonicReveal } from '../../../../components/Mnemonic'
 import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { PluginServices, Services } from '../../../../API'
 import { RoutePaths } from '../../../../type'
 import type { Search } from 'history'
@@ -81,7 +81,7 @@ const CreateMnemonic = memo(() => {
     const navigate = useNavigate()
     const [open, setOpen] = useState(false)
     const [words, puzzleWords, indexes, answerCallback, resetCallback, refreshCallback] = useMnemonicWordsPuzzle()
-
+    const [searchParams] = useSearchParams()
     const { value: hasPassword, loading, retry } = useAsyncRetry(PluginServices.Wallet.hasPassword, [])
 
     useEffect(() => {
@@ -116,14 +116,19 @@ const CreateMnemonic = memo(() => {
 
         const account = await Services.Settings.getSelectedWalletAddress()
 
-        if (!account)
+        if (!account) {
             await PluginServices.Wallet.updateAccount({
                 account: address_,
                 providerType: ProviderType.MaskWallet,
             })
+            const chainId = searchParams.get('chainId')
+            if (chainId) {
+                await PluginServices.Wallet.selectAccount([address_], Number(chainId) as ChainId)
+            }
+        }
 
         return address_
-    }, [location.search, words, resetCallback, hasPassword])
+    }, [location.search, words, resetCallback, hasPassword, searchParams])
 
     const onClose = useCallback(() => {
         refreshCallback()

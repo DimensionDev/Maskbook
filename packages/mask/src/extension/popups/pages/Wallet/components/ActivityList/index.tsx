@@ -131,7 +131,7 @@ export interface ActivityListUIProps {
 export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }) => {
     const { classes } = useStyles()
     const { t } = useI18N()
-    const [isExpand, setIsExpand] = useState(!(dataSource.length > 3))
+    const [isExpand, setExpand] = useState(!(dataSource.length > 3))
     const history = useHistory()
     const { setTransaction } = useContainer(WalletContext)
 
@@ -227,8 +227,8 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
             </List>
             {!isExpand ? (
                 <div className={classes.buttonContainer}>
-                    <Button fullWidth className={classes.moreButton} onClick={() => setIsExpand(true)}>
-                        More
+                    <Button fullWidth className={classes.moreButton} onClick={() => setExpand(true)}>
+                        {t('more')}
                     </Button>
                 </div>
             ) : null}

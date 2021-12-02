@@ -18,7 +18,7 @@ import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
@@ -173,26 +173,37 @@ const ImportWallet = memo(() => {
                                 keyStoreContent,
                                 keyStorePassword,
                             )
+                            if (!currentMaskWalletAccountSettings.value) {
+                                await WalletRPC.updateMaskAccount({
+                                    account: wallet,
+                                })
+                            }
                             if (!currentAccountSettings.value) {
                                 await WalletRPC.updateAccount({
                                     account: wallet,
                                     providerType: ProviderType.MaskWallet,
                                 })
-
-                                await WalletRPC.selectAccount([wallet], chainId)
                             }
+                            await WalletRPC.selectAccount([wallet], chainId)
                             history.replace(PopupRoutes.Wallet)
                             await Services.Helper.removePopupWindow()
                             break
                         case ImportWalletTab.PrivateKey:
                             const privateKeyWallet = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
+                            if (!currentMaskWalletAccountSettings.value) {
+                                await WalletRPC.updateMaskAccount({
+                                    account: privateKeyWallet,
+                                })
+                            }
+
                             if (!currentAccountSettings.value) {
                                 await WalletRPC.updateAccount({
                                     account: privateKeyWallet,
                                     providerType: ProviderType.MaskWallet,
                                 })
-                                await WalletRPC.selectAccount([privateKeyWallet], chainId)
                             }
+
+                            await WalletRPC.selectAccount([privateKeyWallet], chainId)
                             await Services.Helper.removePopupWindow()
                             history.replace(PopupRoutes.Wallet)
                             break

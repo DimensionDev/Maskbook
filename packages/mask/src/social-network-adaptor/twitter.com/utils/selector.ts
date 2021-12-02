@@ -217,6 +217,9 @@ export const searchAvatarSelectorImage = () =>
 
 export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')
+
+export const searchProfessionalButtonSelector = () =>
+    querySelector<E>('[data-testid="ProfessionalButton_Switch_To_Professional"]')
 //#endregion
 
 //#region avatar selector

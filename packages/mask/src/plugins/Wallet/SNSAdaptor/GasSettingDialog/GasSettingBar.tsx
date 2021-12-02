@@ -60,8 +60,8 @@ export function GasSettingBar(props: GasSettingBarProps) {
                 (isEIP1559Supported(chainId)
                     ? {
                           gas: evt.gasLimit,
-                          maxFee: evt.maxFee,
-                          priorityFee: evt.priorityFee,
+                          maxFeePerGas: evt.maxFee,
+                          maxPriorityFeePerGas: evt.priorityFee,
                       }
                     : {
                           gas: evt.gasLimit,
@@ -75,7 +75,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
         return new BigNumber(gasLimit).multipliedBy(
             isEIP1559Supported(chainId) && maxFee ? new BigNumber(maxFee) : gasPrice ?? gasPriceDefault,
         )
-    }, [chainId, gasLimit, gasPrice, maxFee])
+    }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
 
     return (
         <Box display="flex" flexDirection="row" alignItems="center">
@@ -83,7 +83,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
                 <span>
                     {formatWeiToEther(gasFee).toFixed(6)} {nativeTokenDetailed?.symbol ?? ''} ≈
                 </span>
-                <TokenPrice chainId={chainId} contractAddress={nativeTokenDetailed?.address ?? ''} amount={gasFee} />
+                <TokenPrice chainId={chainId} amount={formatWeiToEther(gasFee)} />
             </Typography>
             <IconButton size="small" onClick={onOpenGasSettingDialog}>
                 <Tune fontSize="small" color="inherit" />

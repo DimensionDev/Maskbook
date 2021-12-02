@@ -20,13 +20,13 @@ export const parameters = {
 export const decorators = [
     // withMatrix,
     (Story) => {
-        const [isDark, setIsDark] = useState(false)
+        const [isDark, setDark] = useState(false)
         useEffect(() => {
             applyMaskColorVars(document.body, isDark ? 'dark' : 'light')
         }, [isDark])
         return (
             <StyledEngineProvider injectFirst>
-                <select onChange={(e) => setIsDark('dark' === e.currentTarget.value)}>
+                <select onChange={(e) => setDark('dark' === e.currentTarget.value)}>
                     <option value="light">Light</option>
                     <option value="dark">Dark</option>
                 </select>

@@ -120,7 +120,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     //#endregion
 
     //#region packet settings
-    const [isRandom, setIsRandom] = useState(origin?.isRandom ? 1 : 0)
+    const [isRandom, setRandom] = useState(origin?.isRandom ? 1 : 0)
     const [message, setMessage] = useState(origin?.message || t('plugin_red_packet_best_wishes'))
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -200,7 +200,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             // foolproof, reset amount since the meaning of amount changed:
                             // 'total amount' <=> 'amount per share'
                             setRawAmount('0')
-                            setIsRandom(e.target.value as number)
+                            setRandom(e.target.value as number)
                         }}
                         MenuProps={{
                             anchorOrigin: {

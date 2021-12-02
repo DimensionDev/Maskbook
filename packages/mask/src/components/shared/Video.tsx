@@ -19,7 +19,7 @@ export const Video = forwardRef<VideoRef, VideoProps>(function Video(props, outg
     const videoRef = useRef<HTMLVideoElement>(null)
 
     const { loading, error, value } = useAsync(async () => {
-        if (typeof src !== 'string') return
+        if (typeof src !== 'string') return src
         return Services.Helper.fetch(src)
     }, [src])
 
