@@ -2,7 +2,9 @@ import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { defer } from '@masknet/shared-base'
+import { ChainId, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../../../plugins/EVM/messages'
+import { resetAccount } from '../../../../plugins/Wallet/services'
 
 //#region redirect requests to the content page
 let id = 0
@@ -70,12 +72,23 @@ export function createWeb3() {
     return web3
 }
 
-export async function requestAccounts() {
-    const web3 = createWeb3()
-    const chainId = await web3.eth.getChainId()
-    const accounts = await web3.eth.requestAccounts()
-    return {
-        chainId,
-        accounts,
+export async function requestAccounts(expectedChainId: ChainId) {
+    const provider = createProvider()
+    const response = await provider.request({
+        method: EthereumMethodType.MASK_LOGIN_FORTMATIC,
+        params: [expectedChainId],
+    })
+    return response as {
+        chainId: ChainId
+        accounts: string[]
     }
+}
+
+export async function dismissAccounts(expectedChainId: ChainId) {
+    const provider = createProvider()
+    await provider.request({
+        method: EthereumMethodType.MASK_LOGOUT_FORTMATIC,
+        params: [expectedChainId],
+    })
+    resetAccount()
 }

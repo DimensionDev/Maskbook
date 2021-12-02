@@ -309,6 +309,8 @@ export enum EthereumMethodType {
     // only for mask
     MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
+    MASK_LOGIN_FORTMATIC = 'mask_loginFortmatic',
+    MASK_LOGOUT_FORTMATIC = 'mask_logoutFortmatic',
 }
 
 export enum EthereumErrorType {

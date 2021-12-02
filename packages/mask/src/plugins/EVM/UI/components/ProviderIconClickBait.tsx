@@ -3,6 +3,8 @@ import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import {
+    getChainIdFromNetworkType,
+    isFortmaticSupported,
     isInjectedProvider,
     NetworkType,
     ProviderType,
@@ -74,8 +76,9 @@ export function ProviderIconClickBait({
     // hide injected provider in dashboard
     if (isInjectedProvider(providerType) && location.href.includes('dashboard.html')) return null
 
-    // hide fortmatic on non-mainnet networks
-    if (providerType === ProviderType.Fortmatic && networkType !== NetworkType.Ethereum) return null
+    // hide fortmatic for some networks because of incomplete supporting
+    if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
+        return null
 
     // coinbase and mathwallet are blocked by CSP
     if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null

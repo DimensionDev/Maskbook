@@ -7,6 +7,8 @@ import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@mas
 import { MiniNetworkSelector } from '@masknet/shared'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { RoutePaths } from '../../../../type'
+import Services from '../../../../../../mask/src/extension/service'
+import { useAccount } from '@masknet/web3-shared-evm'
 
 export interface BalanceCardProps {
     balance: number
@@ -82,6 +84,7 @@ export const Balance = memo<BalanceCardProps>(
     ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork }) => {
         const t = useDashboardI18N()
 
+        const account = useAccount()
         const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
         const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
 
@@ -116,6 +119,17 @@ export const Balance = memo<BalanceCardProps>(
                     </BalanceDisplayContainer>
                 </Box>
                 <ButtonGroup>
+                    <button
+                        onClick={async () => {
+                            try {
+                                const result = await Services.Ethereum.personalSign('HELLO', account)
+                                alert(result)
+                            } catch (error) {
+                                if (error instanceof Error) alert(error.message)
+                            }
+                        }}>
+                        Sign
+                    </button>
                     <Button size="small" onClick={onSend} endIcon={<SendIcon fontSize="inherit" />}>
                         {t.wallets_balance_Send()}
                     </Button>

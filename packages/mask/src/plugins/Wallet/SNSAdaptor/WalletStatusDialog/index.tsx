@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import ErrorIcon from '@mui/icons-material/Error'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useChainIdValid } from '@masknet/web3-shared-evm'
+import { useAccount, useChainIdValid } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
@@ -10,6 +10,7 @@ import { useI18N } from '../../../../utils'
 import { WalletMessages } from '../../messages'
 import { MaskMessages } from '../../../../utils/messages'
 import { ApplicationBoard } from '../../../../components/shared/ApplicationBoard'
+import Services from '../../../../extension/service'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -42,6 +43,7 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
     const { t } = useI18N()
 
     const { classes } = useStyles()
+    const account = useAccount()
     const chainIdValid = useChainIdValid()
 
     //#region remote controlled dialog logic
@@ -69,6 +71,16 @@ export function WalletStatusDialog(props: WalletStatusDialogProps) {
                         <ApplicationBoard />
                     </>
                 )}
+                <button
+                    onClick={async () => {
+                        try {
+                            alert(await Services.Ethereum.personalSign('HELLO', account))
+                        } catch (error) {
+                            if (error instanceof Error) alert(error.message)
+                        }
+                    }}>
+                    Sign
+                </button>
             </DialogContent>
             {!chainIdValid ? (
                 <DialogActions className={classes.footer}>

@@ -2,7 +2,7 @@ import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import { getChainIdFromNetworkType, isFortmaticSupported, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'
 
 export function NetworkIconClickBait({
@@ -52,8 +52,9 @@ export function NetworkIconClickBait({
 
     if (!providerType) return null
 
-    // only mainnet for Fortmatic
-    if (providerType === ProviderType.Fortmatic && networkType !== NetworkType.Ethereum) return null
+    // hide fortmatic for some networks because of incomplete supporting
+    if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
+        return null
 
     return (
         <>
