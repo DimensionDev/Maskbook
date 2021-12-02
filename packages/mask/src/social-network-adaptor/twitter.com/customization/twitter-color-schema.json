@@ -7,15 +7,7 @@
             "50": "#eff3f4"
         },
         "text": {
-            "primary": "#0f1419",
-            "secondary": "#536471"
-        },
-        "custom": {
-            "bottom": "#FFFFFF",
-            "bg": "#F6F8F8",
-            "line": "#EFF3F4",
-            "input": "#EDF1F2",
-            "strong": "#111418"
+            "primary": "#0f1419"
         }
     },
     "light_high_contrast": {
@@ -27,24 +19,9 @@
         },
         "text": {
             "primary": "#141d26"
-        },
-        "custom": {
-            "bottom": "#FFFFFF",
-            "bg": "#F6F8F8",
-            "line": "#EFF3F4",
-            "input": "#EDF1F2",
-            "strong": "#111418"
         }
     },
     "dark": {
-        "custom": {
-            "bottom": "#151D26",
-            "bg": "#18232E",
-            "line": "#38444D",
-            "input": "#212D39",
-            "strong": "#EFF3F4",
-            "bgHover": "#1D2933"
-        },
         "grey": {
             "700": "#8899a6",
             "300": "#6b7d8c",
@@ -52,8 +29,7 @@
             "50": "#253341"
         },
         "text": {
-            "primary": "#ffffff",
-            "secondary": "#8899A6"
+            "primary": "#ffffff"
         }
     },
     "dark_high_contrast": {
@@ -65,14 +41,6 @@
         },
         "text": {
             "primary": "#ffffff"
-        },
-        "custom": {
-            "bottom": "#151D26",
-            "bg": "#18232E",
-            "line": "#38444D",
-            "input": "#212D39",
-            "strong": "#EFF3F4",
-            "bgHover": "#1D2933"
         }
     },
     "darker": {
@@ -83,15 +51,7 @@
             "50": "#202327"
         },
         "text": {
-            "primary": "#d9d9d9",
-            "secondary": "#6E767D"
-        },
-        "custom": {
-            "bottom": "#000000",
-            "bg": "#15171A",
-            "line": "#2F3336",
-            "input": "#1D2023",
-            "strong": "#EFF3F4"
+            "primary": "#d9d9d9"
         }
     },
     "darker_high_contrast": {
@@ -103,13 +63,6 @@
         },
         "text": {
             "primary": "#ffffff"
-        },
-        "custom": {
-            "bottom": "#000000",
-            "bg": "#15171A",
-            "line": "#2F3336",
-            "input": "#1D2023",
-            "strong": "#EFF3F4"
         }
     }
 }

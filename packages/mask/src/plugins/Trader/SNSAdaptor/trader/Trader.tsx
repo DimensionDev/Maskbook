@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { makeStyles, useCustomSnackbar, useStylesExtends } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     ChainId,
     createERC20Token,
@@ -24,7 +24,7 @@ import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import { useAsync, useTimeoutFn, useUpdateEffect } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
@@ -68,7 +68,6 @@ export function Trader(props: TraderProps) {
     const currentAccount = useValueRef(currentAccountSettings)
     const currentProvider = useValueRef(currentProviderSettings)
     const classes = useStylesExtends(useStyles(), props)
-    const { showSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
@@ -116,12 +115,22 @@ export function Trader(props: TraderProps) {
     )
 
     useEffect(() => {
-        if (inputToken?.type !== EthereumTokenType.Native && inputTokenBalance_ && !loadingInputTokenBalance)
+        if (
+            inputToken &&
+            inputToken?.type !== EthereumTokenType.Native &&
+            inputTokenBalance_ &&
+            !loadingInputTokenBalance
+        )
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: inputTokenBalance_,
             })
-        if (outputToken?.type !== EthereumTokenType.Native && outputTokenBalance_ && !loadingOutputTokenBalance)
+        if (
+            outputToken &&
+            outputToken?.type !== EthereumTokenType.Native &&
+            outputTokenBalance_ &&
+            !loadingOutputTokenBalance
+        )
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
                 balance: outputTokenBalance_,
@@ -226,24 +235,16 @@ export function Trader(props: TraderProps) {
     }, [])
     //#endregion
 
-    //#region refresh pairs
-    const [, , resetTimeout] = useTimeoutFn(() => {
-        // FIXME:
-        // failed to update onRefreshClick callback
-        onRefreshClick()
-    }, 30 /* seconds */ * 1000 /* milliseconds */)
-
-    const onRefreshClick = useCallback(async () => {
-        allTradeComputed.forEach((trade) => trade.retry())
-        resetTimeout()
-    }, [allTradeComputed, resetTimeout])
-    //#endregion
-
     //#region the click handler of switch arrow
     const onSwitchToken = useCallback(() => {
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
             token: outputToken,
+        })
+
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+            balance: '',
         })
 
         dispatchTradeStore({
@@ -438,7 +439,6 @@ export function Trader(props: TraderProps) {
                 inputAmount={inputAmount}
                 onInputAmountChange={onInputAmountChange}
                 onTokenChipClick={onTokenChipClick}
-                onRefreshClick={onRefreshClick}
                 focusedTrade={focusedTrade}
                 onFocusedTradeChange={(trade) => setFocusTrade(trade)}
                 onSwap={onSwap}

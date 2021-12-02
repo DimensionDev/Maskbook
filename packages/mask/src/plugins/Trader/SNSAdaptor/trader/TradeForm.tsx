@@ -15,7 +15,6 @@ import { TraderInfo } from './TraderInfo'
 import { PluginTraderMessages } from '../../messages'
 import { isNativeTokenWrapper, toBips } from '../../helpers'
 import { currentSlippageSettings } from '../../settings'
-import RefreshOutlined from '@mui/icons-material/RefreshOutlined'
 import TuneIcon from '@mui/icons-material/Tune'
 import { MINIMUM_AMOUNT } from '../../constants'
 import { resolveTradeProviderName, resolveUniswapWarningLevel } from '../../pipes'
@@ -162,6 +161,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         connectWallet: {
             marginTop: 0,
         },
+        slippageValue: {
+            fontSize: 12,
+            lineHeight: '16px',
+            color: theme.palette.text.secondary,
+        },
     }
 })
 
@@ -192,7 +196,6 @@ export const TradeForm = memo<AllTradeFormProps>(
         onInputAmountChange,
         inputTokenBalance,
         outputTokenBalance,
-        onRefreshClick,
         focusedTrade,
         onFocusedTradeChange,
         onSwap,
@@ -423,11 +426,10 @@ export const TradeForm = memo<AllTradeFormProps>(
                         <div className={classes.status}>
                             <Typography className={classes.label} color="textSecondary" variant="body2">
                                 {t('plugin_trader_slippage_tolerance')}{' '}
+                            </Typography>
+                            <Typography className={classes.slippageValue}>
                                 {formatPercentage(toBips(currentSlippageSettings.value))}
                             </Typography>
-                            <IconButton className={classes.icon} size="small" onClick={onRefreshClick}>
-                                <RefreshOutlined fontSize="small" />
-                            </IconButton>
                             <IconButton className={classes.icon} size="small" onClick={openSwapSettingDialog}>
                                 <TuneIcon fontSize="small" />
                             </IconButton>

@@ -72,6 +72,13 @@ const useStyles = makeStyles()(() => ({
             display: 'none',
         },
     },
+    actions: {
+        marginLeft: 40,
+        marginRight: 40,
+        paddingLeft: 0,
+        paddingRight: 0,
+        paddingBottom: 40,
+    },
 }))
 
 export interface ConfirmDialogUIProps extends withClasses<never> {
@@ -260,8 +267,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                         {t('plugin_trader_confirm_tips')}
                     </Alert>
                 </DialogContent>
-                <DialogActions
-                    sx={{ marginLeft: 5, marginRight: 5, paddingLeft: 0, paddingRight: 0, paddingBottom: 5 }}>
+                <DialogActions className={classes.actions}>
                     <Button
                         classes={{ root: classes.button }}
                         color="primary"
