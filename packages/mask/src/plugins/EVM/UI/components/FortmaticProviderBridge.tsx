@@ -11,11 +11,6 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
 
     useEffect(() => {
         return EVM_Messages.events.FORTMATIC_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
-            console.log('DEBUG: fortmatic')
-            console.log({
-                payload,
-            })
-
             const handleResponse = (error: unknown, result?: any) => {
                 if (error) {
                     EVM_Messages.events.FORTMATIC_PROVIDER_RPC_RESPONSE.sendToBackgroundPage({
@@ -34,10 +29,7 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
             const chainIdFinally = (
                 payload.method === EthereumMethodType.MASK_LOGIN_FORTMATIC ? first<ChainId>(payload.params) : chainId
             ) as Fortmatic.ChainIdFortmatic
-
             if (!chainIdFinally || !isFortmaticSupported(chainIdFinally)) throw new Error('Not supported.')
-
-            const provider = Fortmatic.createProvider(chainIdFinally)
 
             try {
                 switch (payload.method) {
@@ -51,6 +43,7 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
                         handleResponse(null, await Fortmatic.logout(chainIdFinally))
                         break
                     default:
+                        const provider = Fortmatic.createProvider(chainIdFinally)
                         handleResponse(null, await provider.send(payload.method, payload.params))
                         break
                 }
