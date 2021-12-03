@@ -159,8 +159,6 @@ const ImportWallet = memo(() => {
                             // valid the mnemonic
                             await getDerivableAccounts(mnemonic, 0, 1)
                             const params = query({ name: data.name })
-
-                            // setMnemonic(mnemonic)
                             history.replace({
                                 pathname: PopupRoutes.AddDeriveWallet,
                                 search: `?${params}`,
