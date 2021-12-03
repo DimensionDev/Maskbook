@@ -88,14 +88,6 @@ export function ListingTab() {
                             </TableCell>
                         </TableRow>
                     </TableBody>
-                    <TableListPagination
-                        handlePrevClick={() => setOrderPage((prev) => prev - 1)}
-                        handleNextClick={() => setOrderPage((prev) => prev + 1)}
-                        prevDisabled={orderPage === 0}
-                        nextDisabled={dataSource.length < 10}
-                        page={orderPage}
-                        pageCount={10}
-                    />
                 </Table>
             </>
         )

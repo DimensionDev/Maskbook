@@ -332,7 +332,11 @@
         "rpcs",
         "FUSD",
         "isfacebook",
-        "ethjs"
+        "ethjs",
+        "isfacebook",
+        "findtruman",
+        "uaddr",
+        "consts"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

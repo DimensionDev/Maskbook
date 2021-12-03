@@ -52,6 +52,7 @@ type FormInputs = {
     tokenId: string
 }
 
+const GAS_LIMIT = 30000
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const chainId = useChainId()
@@ -133,9 +134,9 @@ export const TransferERC721 = memo(() => {
     )
 
     useEffect(() => {
-        setGasLimit_(erc721GasLimit.value ?? 0)
+        setGasLimit_(erc721GasLimit.value ? erc721GasLimit.value : GAS_LIMIT)
     }, [erc721GasLimit.value])
-    const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, 0)
+    const { gasConfig, onCustomGasSetting, gasLimit } = useGasConfig(gasLimit_, GAS_LIMIT)
 
     const account = useAccount()
     const nativeToken = useNativeTokenDetailed()

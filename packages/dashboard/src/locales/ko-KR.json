@@ -90,7 +90,7 @@
     "gas_fee": "거래 수수료",
     "transfer_cost": "Cost {{gasFee}} {{symbol}} ≈ ${{usd}}",
     "done": "완료",
-    "labs": "D.Market",
+    "labs": "Mask Labs",
     "wallet_transactions_pending": "대기중",
     "wallet_gas_fee_settings_low": "낮음",
     "wallet_gas_fee_settings_medium": "보통",

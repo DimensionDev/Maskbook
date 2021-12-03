@@ -3,6 +3,7 @@ import { base } from '../../base'
 import { Web3UI } from '../Web3UI'
 import { InjectedProviderBridge } from '../components/InjectedProviderBridge'
 import { setupStorage, StorageDefaultValue } from '../../storage'
+import { FortmaticProviderBridge } from '../components/FortmaticProviderBridge'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -15,6 +16,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return (
             <>
                 <InjectedProviderBridge />
+                <FortmaticProviderBridge />
             </>
         )
     },
