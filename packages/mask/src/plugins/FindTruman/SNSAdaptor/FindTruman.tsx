@@ -4,7 +4,7 @@ import { FindTrumanContext } from '../context'
 import { Alert, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Typography } from '@mui/material'
 import type { PollResult, PuzzleResult, StoryInfo, UserPollStatus, UserPuzzleStatus, UserStoryStatus } from '../types'
 import { FindTrumanPostType } from '../types'
-import { useI18N } from '../../../utils'
+import { I18NFunction, useI18N } from '../../../utils'
 import ResultCard from './ResultCard'
 import OptionsCard from './OptionsCard'
 import Footer from './Footer'
@@ -82,6 +82,23 @@ interface FindTrumanProps {
     onSubmit: (choice: number) => Promise<boolean>
 }
 
+function getPostTypeTitle(t: I18NFunction, postType: FindTrumanPostType) {
+    switch (postType) {
+        case FindTrumanPostType.Poll:
+            return t('plugin_find_truman_status_poll')
+        case FindTrumanPostType.Puzzle:
+            return t('plugin_find_truman_status_puzzle')
+        case FindTrumanPostType.PuzzleResult:
+            return t('plugin_find_truman_status_puzzle_result')
+        case FindTrumanPostType.PollResult:
+            return t('plugin_find_truman_status_poll_result')
+        case FindTrumanPostType.Status:
+            return t('plugin_find_truman_status_result')
+        default:
+            return ''
+    }
+}
+
 export function FindTruman(props: FindTrumanProps) {
     const { classes } = useStyles()
     const { address } = useContext(FindTrumanContext)
@@ -152,11 +169,7 @@ export function FindTruman(props: FindTrumanProps) {
                                                 variant="filled"
                                             />
                                         )}
-                                        <Chip
-                                            color="primary"
-                                            size="small"
-                                            label={t(`plugin_find_truman_status_${postType}`)}
-                                        />
+                                        <Chip color="primary" size="small" label={getPostTypeTitle(t, postType)} />
                                     </Box>
                                 </Box>
                             )
