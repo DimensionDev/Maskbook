@@ -36,7 +36,7 @@ import { useGasConfig } from '../../hooks/useGasConfig'
 import { useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
-import { useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { NetworkType } from '@masknet/public-api'
 import { useUpdateEffect } from 'react-use'
 
@@ -78,8 +78,7 @@ export const TransferERC721 = memo(() => {
         recipient: z
             .string()
             .refine(
-                (address) =>
-                    EthereumAddress.isValid(address) || (address.includes('.eth') && Utils?.isValidDomain?.(address)),
+                (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
                 t.wallets_incorrect_address(),
             ),
         contract: z.string().min(1, t.wallets_collectible_contract_is_empty()),
@@ -116,9 +115,9 @@ export const TransferERC721 = memo(() => {
     //#region resolve ENS domain
     const {
         value: registeredAddress = '',
-        error: resolveEnsDomainError,
-        loading: resolveEnsDomainLoading,
-    } = useLookupAddress(allFormFields.recipient)
+        error: resolveDomainError,
+        loading: resolveDomainLoading,
+    } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
     //#endregion
 
     const erc721GasLimit = useGasLimit(
@@ -201,11 +200,11 @@ export const TransferERC721 = memo(() => {
     )
 
     const ensContent = useMemo(() => {
-        if (resolveEnsDomainLoading) return
+        if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
                 <Link
-                    href={Utils?.resolveEnsDomains?.(allFormFields.recipient)}
+                    href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
                     target="_blank"
                     rel="noopener noreferrer"
                     underline="none">
@@ -235,7 +234,7 @@ export const TransferERC721 = memo(() => {
                     </Box>
                 )
             }
-            if (Utils?.isValidDomain?.(allFormFields.recipient) && resolveEnsDomainError) {
+            if (Utils?.isValidDomain?.(allFormFields.recipient) && resolveDomainError) {
                 return (
                     <Box style={{ padding: '25px 10px' }}>
                         <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
@@ -248,9 +247,9 @@ export const TransferERC721 = memo(() => {
         return
     }, [
         allFormFields.recipient,
-        resolveEnsDomainError,
+        resolveDomainError,
         Utils?.isValidDomain,
-        resolveEnsDomainLoading,
+        resolveDomainLoading,
         network,
         registeredAddress,
     ])

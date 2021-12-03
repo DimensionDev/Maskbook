@@ -17,20 +17,16 @@ import {
     resolveTransactionLinkOnExplorer,
     Web3ProviderType,
     isValidDomain,
-    resolveEnsDomains,
+    resolveDomainLink,
+    formatDomainName,
 } from '@masknet/web3-shared-evm'
 import Ens from 'ethjs-ens'
-import { getStorage, StorageDefaultValue } from '../../storage'
-import { mapSubscription } from '@masknet/shared-base'
+import { getStorage } from '../../storage'
 
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 const ZERO_X_ERROR_ADDRESS = '0x'
 
 export const Web3State: Web3Plugin.ObjectCapabilities.Capabilities = {}
-
-function createSubscriptionFromEnsAddressBook<T>(getter: (value: typeof StorageDefaultValue.ensAddressBook) => T) {
-    return mapSubscription(getStorage().ensAddressBook.subscription, getter)
-}
 
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
     if (!state || !context) return
@@ -78,25 +74,29 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             // Only support Ethereum on evm
             if (network !== NetworkType.Ethereum) return undefined
 
-            const ensAddressBook = getStorage().ensAddressBook.value
+            const domainAddressBook = getStorage().domainAddressBook.value
 
-            const cacheAddress = ensAddressBook[chainId]?.[domain]
-            if (cacheAddress) return cacheAddress
+            const cacheAddress = domainAddressBook[chainId]?.[domain]
+            if (cacheAddress && isValidAddress(cacheAddress)) return cacheAddress
 
             const address = await new Ens({
                 provider,
                 network: chainId,
             }).lookup(domain)
 
-            if (isSameAddress(address, ZERO_ADDRESS) || isSameAddress(address, ZERO_X_ERROR_ADDRESS)) {
+            if (
+                isSameAddress(address, ZERO_ADDRESS) ||
+                isSameAddress(address, ZERO_X_ERROR_ADDRESS) ||
+                isValidAddress(address)
+            ) {
                 return undefined
             }
 
             if (address)
-                await getStorage().ensAddressBook.setValue({
-                    ...ensAddressBook,
+                await getStorage().domainAddressBook.setValue({
+                    ...domainAddressBook,
                     [chainId]: {
-                        ...ensAddressBook[chainId],
+                        ...domainAddressBook[chainId],
                         ...{ [address]: domain, [domain]: address },
                     },
                 })
@@ -112,8 +112,8 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             // Only support Ethereum on evm
             if (network !== NetworkType.Ethereum) return undefined
 
-            const ensAddressBook = getStorage().ensAddressBook.value
-            const cacheDomain = ensAddressBook[chainId]?.[address]
+            const domainAddressBook = getStorage().domainAddressBook.value
+            const cacheDomain = domainAddressBook[chainId]?.[address]
             if (cacheDomain) return cacheDomain
 
             const domain = await new Ens({
@@ -122,10 +122,10 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             }).reverse(address)
 
             if (domain)
-                await getStorage().ensAddressBook.setValue({
-                    ...ensAddressBook,
+                await getStorage().domainAddressBook.setValue({
+                    ...domainAddressBook,
                     [chainId]: {
-                        ...ensAddressBook[chainId],
+                        ...domainAddressBook[chainId],
                         ...{ [address]: domain, [domain]: address },
                     },
                 })
@@ -149,7 +149,8 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         resolveAddressLink: resolveAddressLinkOnExplorer,
         resolveBlockLink: resolveBlockLinkOnExplorer,
         isValidDomain,
-        resolveEnsDomains,
+        resolveDomainLink,
+        formatDomainName,
     }
     return state
 }

@@ -6,9 +6,9 @@ import { EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
 import { useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
-import { useWallet, formatEthereumAddress, formatEthereumEns } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress, useWallet } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
-import { useReverseAddress } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     container: {
@@ -67,7 +67,8 @@ export const WalletInfo = memo(() => {
     const wallet = useWallet()
     const history = useHistory()
 
-    const { value: domain } = useReverseAddress(wallet?.address)
+    const { value: domain } = useReverseAddress(wallet?.address, NetworkPluginID.PLUGIN_EVM)
+    const { Utils } = useWeb3State()
 
     const excludePath = useRouteMatch({
         path: PopupRoutes.WalletSettings,
@@ -84,6 +85,7 @@ export const WalletInfo = memo(() => {
             onSettingClick={() => history.push(PopupRoutes.WalletSettings)}
             hideSettings={!!excludePath}
             domain={domain}
+            formatDomainName={Utils?.formatDomainName}
         />
     )
 })
@@ -95,10 +97,11 @@ export interface WalletInfoUIProps {
     onEditClick: () => void
     hideSettings: boolean
     domain?: string
+    formatDomainName?: (domain?: string, size?: number) => string | undefined
 }
 
 export const WalletInfoUI = memo<WalletInfoUIProps>(
-    ({ name, address, onSettingClick, onEditClick, hideSettings, domain }) => {
+    ({ name, address, onSettingClick, onEditClick, hideSettings, domain, formatDomainName }) => {
         const { classes } = useStyles()
 
         return (
@@ -113,8 +116,8 @@ export const WalletInfoUI = memo<WalletInfoUIProps>(
                                 <Typography className={classes.name}>
                                     {name} <EditIcon onClick={onEditClick} className={classes.edit} />
                                 </Typography>
-                                {domain ? (
-                                    <Typography className={classes.name}>{formatEthereumEns(domain)}</Typography>
+                                {domain && formatDomainName ? (
+                                    <Typography className={classes.name}>{formatDomainName(domain)}</Typography>
                                 ) : null}
                             </Box>
                         )}

@@ -1,6 +1,6 @@
 import { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { formatEthereumEns, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { TransactionStatusType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { FormattedAddress, LoadingAnimation, useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
 import {
@@ -33,13 +33,6 @@ const useStyles = makeStyles()((theme) => ({
         width: 10,
         height: 10,
         borderRadius: 5,
-    },
-    domain: {
-        fontSize: 14,
-        marginLeft: 20,
-        background: theme.palette.mode === 'dark' ? 'rgba(73, 137, 255, 0.2)' : 'rgba(28, 104, 243, 0.1)',
-        padding: '2px 8px',
-        borderRadius: 4,
     },
 }))
 
@@ -141,10 +134,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
                     <Box fontSize={16} display="flex" alignItems="center">
-                        {wallet.name}
-                        {domain ? (
-                            <Typography className={classes.domain}>{formatEthereumEns(domain)}</Typography>
-                        ) : null}
+                        {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : wallet.name}
                     </Box>
                     <Box fontSize={12}>
                         <FormattedAddress address={wallet.address} size={10} formatter={Utils?.formatAddress} />

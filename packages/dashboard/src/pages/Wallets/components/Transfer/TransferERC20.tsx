@@ -1,5 +1,5 @@
 import { MaskColorVar, MaskTextField } from '@masknet/theme'
-import { Box, Button, IconButton, Stack, Typography, Link, Popover } from '@mui/material'
+import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
     EthereumTokenType,
@@ -18,7 +18,7 @@ import {
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { FormattedAddress, TokenAmountPanel } from '@masknet/shared'
 import TuneIcon from '@mui/icons-material/Tune'
 import { EthereumAddress } from 'wallet.ts'
@@ -70,9 +70,9 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     //#region resolve ENS domain
     const {
         value: registeredAddress = '',
-        error: resolveEnsDomainError,
-        loading: resolveEnsLoading,
-    } = useLookupAddress(address)
+        error: resolveDomainError,
+        loading: resolveDomainLoading,
+    } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
     //#endregion
 
     // transfer amount
@@ -81,11 +81,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         selectedToken.type,
         selectedToken.address,
         transferAmount,
-        EthereumAddress.isValid(address)
-            ? address
-            : EthereumAddress.isValid(registeredAddress)
-            ? registeredAddress
-            : '',
+        EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     const { gasConfig, onCustomGasSetting, gasLimit, maxFee } = useGasConfig(gasLimit_, 30000)
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
@@ -115,7 +111,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (EthereumAddress.isValid(address)) {
             await transferCallback(transferAmount, address, gasConfig, memo)
             return
-        } else if (Utils?.isValidDomain?.(address) && EthereumAddress.isValid(registeredAddress)) {
+        } else if (Utils?.isValidDomain?.(address)) {
             await transferCallback(transferAmount, registeredAddress, gasConfig, memo)
             return
         }
@@ -128,13 +124,9 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
-        if (!(EthereumAddress.isValid(address) || (address.includes('.eth') && Utils?.isValidDomain?.(address))))
+        if (!(EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address)))
             return t.wallets_transfer_error_invalid_address()
-        if (
-            address.includes('.eth') &&
-            Utils?.isValidDomain?.(address) &&
-            (resolveEnsDomainError || !registeredAddress)
-        ) {
+        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
             if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
             return t.wallet_transfer_error_no_address_has_been_set_name()
         }
@@ -148,7 +140,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         amount,
         Utils,
         registeredAddress,
-        resolveEnsDomainError,
+        resolveDomainError,
         network,
     ])
     //#endregion
@@ -163,11 +155,11 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [transferState])
 
     const ensContent = useMemo(() => {
-        if (resolveEnsLoading) return
+        if (resolveDomainLoading) return
         if (registeredAddress) {
             return (
                 <Link
-                    href={Utils?.resolveEnsDomains?.(address)}
+                    href={Utils?.resolveDomainLink?.(address)}
                     target="_blank"
                     rel="noopener noreferrer"
                     underline="none">
@@ -198,7 +190,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Box>
                 )
             }
-            if (Utils?.isValidDomain?.(address) && resolveEnsDomainError) {
+            if (Utils?.isValidDomain?.(address) && resolveDomainError) {
                 return (
                     <Box style={{ padding: '25px 10px' }}>
                         <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
@@ -215,9 +207,9 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         address,
         Utils?.isValidDomain,
         MaskColorVar,
-        resolveEnsDomainError,
+        resolveDomainError,
         network?.type,
-        resolveEnsLoading,
+        resolveDomainLoading,
     ])
 
     useUpdateEffect(() => {

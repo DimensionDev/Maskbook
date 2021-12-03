@@ -10,7 +10,7 @@ import {
     ListItemText as MuiListItemText,
     Box,
 } from '@mui/material'
-import { formatEthereumEns, TransactionStatusType } from '@masknet/web3-shared-evm'
+import { TransactionStatusType } from '@masknet/web3-shared-evm'
 import {
     useNetworkDescriptor,
     useProviderDescriptor,
@@ -207,7 +207,7 @@ function useToolbox() {
         if (!account) return t('mask_network')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
         if (pendingTransactions.length <= 0)
-            return formatEthereumEns(domain) ?? Utils?.formatAddress?.(account, 4) ?? account
+            return Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || account
         return (
             <>
                 <span>

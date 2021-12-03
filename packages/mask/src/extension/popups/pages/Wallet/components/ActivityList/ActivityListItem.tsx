@@ -2,16 +2,12 @@ import type { RecentTransaction } from '../../../../../../plugins/Wallet/service
 import { makeStyles } from '@masknet/theme'
 import React, { memo } from 'react'
 import { Box, Button, ListItem, ListItemText, Typography } from '@mui/material'
-import {
-    formatEthereumAddress,
-    formatEthereumEns,
-    TransactionStatusType,
-} from '../../../../../../../../web3-shared/evm'
+import { formatEthereumAddress, TransactionStatusType } from '../../../../../../../../web3-shared/evm'
 import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon } from '@masknet/icons'
 import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../../../../utils'
-import { useReverseAddress } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     item: {
@@ -70,8 +66,8 @@ export const ActivityListItem = memo<ActivityListItemProps>(
     ({ transaction, toAddress, onSpeedUpClick, onCancelClick }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
-
-        const { value: domain } = useReverseAddress(toAddress)
+        const { Utils } = useWeb3State()
+        const { value: domain } = useReverseAddress(toAddress, NetworkPluginID.PLUGIN_EVM)
 
         return (
             <ListItem className={classes.item}>
@@ -97,7 +93,7 @@ export const ActivityListItem = memo<ActivityListItemProps>(
                             {transaction.at ? `${formatDateTime(transaction.at, 'MMM dd')}.  ` : null}
                             {!!toAddress
                                 ? t('popups_wallet_activity_to_address', {
-                                      address: formatEthereumEns(domain) ?? formatEthereumAddress(toAddress, 4),
+                                      address: Utils?.formatDomainName?.(domain) || formatEthereumAddress(toAddress, 4),
                                   })
                                 : null}
                         </Typography>

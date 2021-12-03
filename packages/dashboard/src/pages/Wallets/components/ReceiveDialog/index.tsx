@@ -7,8 +7,8 @@ import { makeStyles } from '@masknet/theme'
 import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContainer'
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
-import { formatEthereumEns, NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
-import { useReverseAddress } from '@masknet/plugin-infra'
+import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -39,7 +39,7 @@ export interface ReceiveDialogProps {
 export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, walletAddress, onClose }) => {
     const currentSelectedWalletNetwork = useCurrentSelectedWalletNetwork()
     const { value: domain } = useReverseAddress(walletAddress)
-
+    const { Utils } = useWeb3State()
     return (
         <ReceiveDialogUI
             open={open}
@@ -48,6 +48,7 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
             domain={domain}
             onClose={onClose}
             currentNetworkType={currentSelectedWalletNetwork}
+            formatDomainName={Utils?.formatDomainName}
         />
     )
 })
@@ -55,10 +56,11 @@ export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, wallet
 export interface ReceiveDialogUIProps extends ReceiveDialogProps {
     currentNetworkType: NetworkType
     domain?: string
+    formatDomainName?: (domain?: string, size?: number) => string | undefined
 }
 
 export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
-    ({ open, currentNetworkType, chainName, onClose, walletAddress, domain }) => {
+    ({ open, currentNetworkType, chainName, onClose, walletAddress, domain, formatDomainName }) => {
         const { classes } = useStyles()
         const t = useDashboardI18N()
         const [, copyToClipboard] = useCopyToClipboard()
@@ -90,9 +92,13 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
                     <Typography variant="body2" className={classes.addressTitle}>
                         {t.wallets_address()}
                     </Typography>
-                    <Typography variant="body2" className={classes.address}>
-                        {domain ? formatEthereumEns(domain) : null}
-                    </Typography>
+
+                    {domain && formatDomainName ? (
+                        <Typography variant="body2" className={classes.address}>
+                            {formatDomainName(domain)}
+                        </Typography>
+                    ) : null}
+
                     <Typography variant="body2" className={classes.address}>
                         {walletAddress}
                     </Typography>

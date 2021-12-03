@@ -2,8 +2,8 @@ import { FC, memo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
-import { formatEthereumAddress, formatEthereumEns, ProviderType } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useProviderDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Stack, StackProps, Typography } from '@mui/material'
 import { NetworkSelector } from '../../components/NetworkSelector'
 import { useI18N } from '../../../../utils'
@@ -40,6 +40,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
     ({ isPending, walletAddress, walletName, openConnectWalletDialog, children, domain, ...rest }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
+        const { Utils } = useWeb3State()
         const providerDescriptor = useProviderDescriptor(ProviderType.MaskWallet, NetworkPluginID.PLUGIN_EVM)
 
         if (!providerDescriptor) return null
@@ -71,7 +72,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                             {walletName ?? '-'}
                             {domain ? (
                                 <Typography fontSize={14} marginLeft={1}>
-                                    {formatEthereumEns(domain)}
+                                    {Utils?.formatDomainName?.(domain)}
                                 </Typography>
                             ) : null}
                         </Box>

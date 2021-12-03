@@ -9,7 +9,7 @@ import { SwapBox } from './SwapBox'
 import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils'
-import { useReverseAddress } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -67,7 +67,7 @@ export default function SwapPage() {
         })
     }, [chainId])
 
-    const { value: domain } = useReverseAddress(wallet?.address)
+    const { value: domain } = useReverseAddress(wallet?.address, NetworkPluginID.PLUGIN_EVM)
 
     return (
         <Web3Provider value={SwapWeb3Context}>

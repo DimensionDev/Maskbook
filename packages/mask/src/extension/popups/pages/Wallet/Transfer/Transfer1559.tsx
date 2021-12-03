@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useCallback, useMemo, useState, ReactElement, useRef } from 'react'
+import { memo, ReactElement, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import {
     Asset,
@@ -27,7 +27,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Chip, Collapse, Link, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
-import { UserIcon } from '@masknet/icons'
+import { RightIcon, UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { ChevronDown } from 'react-feather'
 import { noop } from 'lodash-unified'
@@ -36,8 +36,7 @@ import { useHistory } from 'react-router-dom'
 import { LoadingButton } from '@mui/lab'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { toHex } from 'web3-utils'
-import { useLookupAddress, useWeb3State } from '@masknet/plugin-infra'
-import { RightIcon } from '@masknet/icons'
+import { NetworkPluginID, useLookupAddress, useWeb3State } from '@masknet/plugin-infra'
 import { AccountItem } from './AccountItem'
 
 const useStyles = makeStyles()({
@@ -138,6 +137,17 @@ const useStyles = makeStyles()({
         lineHeight: '22px',
         fontWeight: 500,
     },
+    domainName: {
+        fontSize: 14,
+        fontWeight: 600,
+        lineHeight: '20px',
+        color: '#000000',
+    },
+    registeredAddress: {
+        color: '#7B8192',
+        fontSize: 14,
+        lineHeight: '20px',
+    },
 })
 const MIN_GAS_LIMIT = 21000
 export interface Transfer1559Props {
@@ -173,9 +183,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_address_absence'))
                     .refine(
-                        (address) =>
-                            EthereumAddress.isValid(address) ||
-                            (address.includes('.eth') && Utils?.isValidDomain?.(address)),
+                        (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
                         t('wallet_transfer_error_invalid_address'),
                     )
                     .refine((address) => address !== wallet?.address, t('wallet_transfer_error_address_absence')),
@@ -270,22 +278,18 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     //#region resolve ENS domain
     const {
         value: registeredAddress = '',
-        error: resolveEnsDomainError,
-        loading: resolveEnsDomainLoading,
-    } = useLookupAddress(address)
+        error: resolveDomainError,
+        loading: resolveDomainLoading,
+    } = useLookupAddress(address, NetworkPluginID.PLUGIN_EVM)
 
     useUpdateEffect(() => {
         // The input is ens domain but the binding address cannot be found
-        if (
-            address.includes('.eth') &&
-            Utils?.isValidDomain?.(address) &&
-            (resolveEnsDomainError || !registeredAddress)
-        )
+        if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress))
             methods.setError('address', {
                 type: 'resolveFailed',
                 message: t('wallet_transfer_error_no_address_has_been_set_name'),
             })
-    }, [resolveEnsDomainError, registeredAddress, methods.setError, address, Utils])
+    }, [resolveDomainError, registeredAddress, methods.setError, address, Utils])
     //#endregion
 
     //#region Get min gas limit with amount and recipient address
@@ -293,11 +297,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
         selectedAsset?.token.type,
         selectedAsset?.token.address,
         new BigNumber(amount ?? 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
-        EthereumAddress.isValid(address)
-            ? address
-            : EthereumAddress.isValid(registeredAddress)
-            ? registeredAddress
-            : '',
+        EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     //#endregion
 
@@ -350,7 +350,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 .toFixed()
 
             //If input address is ens domain, use registeredAddress to transfer
-            if (Utils?.isValidDomain?.(data.address) && EthereumAddress.isValid(registeredAddress)) {
+            if (Utils?.isValidDomain?.(data.address)) {
                 await transferCallback(transferAmount, registeredAddress, {
                     maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
                     maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
@@ -385,20 +385,18 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     )
 
     const ensContent = useMemo(() => {
-        if (resolveEnsDomainLoading) return
-        if (registeredAddress && !resolveEnsDomainError && Utils?.resolveEnsDomains)
+        if (resolveDomainLoading) return
+        if (registeredAddress && !resolveDomainError && Utils?.resolveDomainLink)
             return (
                 <Link
-                    href={Utils.resolveEnsDomains(address)}
+                    href={Utils.resolveDomainLink(address)}
                     target="_blank"
                     rel="noopener noreferrer"
                     underline="none">
                     <Box display="flex" justifyContent="space-between" alignItems="center" py={2.5} px={1.5}>
                         <Box>
-                            <Typography fontSize={14} fontWeight={600} lineHeight="20px" color="#000000">
-                                {address}
-                            </Typography>
-                            <Typography color="#7B8192" fontSize={14} lineHeight="20px">
+                            <Typography className={classes.domainName}>{address}</Typography>
+                            <Typography className={classes.registeredAddress}>
                                 <FormattedAddress
                                     address={registeredAddress}
                                     size={4}
@@ -423,10 +421,10 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     }, [
         address,
         registeredAddress,
-        Utils?.resolveEnsDomains,
+        Utils?.resolveDomainLink,
         methods.formState.errors.address?.type,
-        resolveEnsDomainLoading,
-        resolveEnsDomainError,
+        resolveDomainLoading,
+        resolveDomainError,
     ])
 
     return (

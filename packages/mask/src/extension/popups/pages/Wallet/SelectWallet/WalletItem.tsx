@@ -1,12 +1,12 @@
 import type { Wallet } from '@masknet/web3-shared-evm'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
 import { ListItem, ListItemText, Typography } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { formatEthereumAddress, formatEthereumEns } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../components/CopyIconButton'
-import { useReverseAddress } from '@masknet/plugin-infra'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()({
     item: {
@@ -52,8 +52,8 @@ export interface WalletItemProps {
 
 export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }) => {
     const { classes } = useStyles()
-
-    const { value: domain } = useReverseAddress(wallet.address)
+    const { Utils } = useWeb3State()
+    const { value: domain } = useReverseAddress(wallet.address, NetworkPluginID.PLUGIN_EVM)
 
     return (
         <ListItem className={classes.item} onClick={onClick}>
@@ -63,7 +63,9 @@ export const WalletItem = memo<WalletItemProps>(({ wallet, onClick, isSelected }
                     <div>
                         <Typography className={classes.name}>
                             <Typography component="span"> {wallet.name}</Typography>
-                            {domain ? <Typography component="span">{formatEthereumEns(domain)}</Typography> : null}
+                            {domain && Utils?.formatDomainName ? (
+                                <Typography component="span">{Utils.formatDomainName(domain)}</Typography>
+                            ) : null}
                         </Typography>
                         <Typography className={classes.address}>
                             <FormattedAddress address={wallet.address} size={12} formatter={formatEthereumAddress} />

@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Copy, ExternalLink } from 'react-feather'
 import classNames from 'classnames'
-import { formatEthereumEns, ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import {
@@ -166,8 +166,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow} style={{ marginBottom: 6 }}>
-                    <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
-                    {domain ? <Typography className={classes.domain}>{formatEthereumEns(domain)}</Typography> : null}
+                    <Typography className={classes.accountName}>
+                        {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : providerDescriptor?.name}
+                    </Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2">

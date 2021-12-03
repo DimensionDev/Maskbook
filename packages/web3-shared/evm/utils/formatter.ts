@@ -59,7 +59,7 @@ export function formatEthereumAddress(address: string, size = 0) {
     return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
 }
 
-export function formatEthereumEns(domain?: string, size = 4) {
+export function formatDomainName(domain?: string, size = 4) {
     if (!domain || !isValidDomain(domain)) return domain
     const [domainName, company] = domain.split('.')
     if (domainName.length < 13) return domain
