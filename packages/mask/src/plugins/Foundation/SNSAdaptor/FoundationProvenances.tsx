@@ -9,7 +9,6 @@ import {
     TableRow,
     TableCell,
     TableBody,
-    useMediaQuery,
 } from '@mui/material'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
@@ -54,10 +53,9 @@ function FoundationProvenances(props: Props) {
     const { classes } = useStyles()
     const account = useAccount()
     const { value: nativeToken } = useNativeTokenDetailed()
-    const isDarkModeEnabled = useMediaQuery('(prefers-color-scheme: dark)')
-        ? { padding: 1.5, color: '#121212' }
-        : { padding: 3, color: 'none' }
-    const tableType = useMediaQuery('(prefers-color-scheme: dark)') ? 'separate' : 'collapse'
+    const darkModo = window.matchMedia('(prefers-color-scheme: dark)')
+    const isDarkModeEnabled = darkModo ? { padding: 1.5, color: '#121212' } : { padding: 3, color: 'none' }
+    const tableType = darkModo ? 'separate' : 'collapse'
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
     const histories = props.histories.sort((first: NftHistory, second: NftHistory) => {
         if (first.date < second.date) {
