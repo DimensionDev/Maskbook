@@ -6,7 +6,7 @@ import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
@@ -111,7 +111,6 @@ const ImportWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const chainId = useChainId()
-    const location = useLocation()
     const { classes } = useStyles()
     const [currentTab, setCurrentTab] = useState(ImportWalletTab.Mnemonic)
     const [mnemonic, setMnemonic] = useState('')
@@ -119,7 +118,6 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-
     const schema = useMemo(() => {
         return zod.object({
             name: zod.string().min(1).max(12),
@@ -160,11 +158,13 @@ const ImportWallet = memo(() => {
                         case ImportWalletTab.Mnemonic:
                             // valid the mnemonic
                             await getDerivableAccounts(mnemonic, 0, 1)
+                            const params = query({ name: data.name })
 
-                            const params = query({ mnemonic, name: data.name })
+                            // setMnemonic(mnemonic)
                             history.replace({
                                 pathname: PopupRoutes.AddDeriveWallet,
                                 search: `?${params}`,
+                                state: { mnemonic },
                             })
                             break
                         case ImportWalletTab.JsonFile:
@@ -217,7 +217,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, location.search, disabled, chainId],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, chainId, history],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)
