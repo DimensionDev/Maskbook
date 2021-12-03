@@ -100,13 +100,12 @@ export interface DecryptSuccess {
 }
 enum ErrorReasons {
     PayloadBroken = '[@masknet/encryption] Payload is broken.',
-    PayloadDecryptedButNoValidTypedMessageIsFound = '[@masknet/encryption] Payload decrypted, but no valid TypedMessage is found.',
+    PayloadDecryptedButTypedMessageBroken = "[@masknet/encryption] Payload decrypted, but it's inner TypedMessage is broken.",
     CannotDecryptAsAuthor = '[@masknet/encryption] Failed decrypt as the author of this payload.',
     DecryptFailed = '[@masknet/encryption] Post key found, but decryption failed.',
     AuthorPublicKeyNotFound = "[@masknet/encryption] Cannot found author's public key",
-    MyPrivateKeyNotFound = '[@masknet/encryption] Cannot decrypt because there is no private key found.',
+    PrivateKeyNotFound = '[@masknet/encryption] Cannot continue to decrypt because there is no private key found.',
     NotShareTarget = '[@masknet/encryption] No valid key is found. Likely this post is not shared with you',
-    Aborted = '[@masknet/encryption] Task aborted.',
 }
 export class DecryptError extends Error {
     static Reasons = ErrorReasons
