@@ -7,7 +7,7 @@ import {
     AESCryptoKey,
     EC_Public_CryptoKey,
 } from '@masknet/shared-base'
-import { None, Result } from 'ts-results'
+import { None, Option, Result } from 'ts-results'
 import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
 import { decryptWithAES, importAESFromJWK } from '../utils'
 
@@ -31,10 +31,10 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
         const { ephemeralPublicKey, iv: _iv, ownersAESKeyEncrypted } = encryption
         if (_iv.err) return yield new DecryptionError(ErrorReasons.PayloadBroken, _iv.val)
         const iv = _iv.val
+        const author = _author.unwrapOr(None)
 
         // ! Try to decrypt this post as author (using ownersAESKeyEncrypted field)
         //#region
-        const author = _author.unwrapOr(None)
         const hasAuthorLocalKey = author.some ? io.hasLocalKeyOf(author.val).catch(() => false) : Promise.resolve(false)
         if (ownersAESKeyEncrypted.ok) {
             try {
@@ -64,39 +64,14 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
         const authorPublicKey = _authorPublicKey.unwrapOr(None)
         if (version === -40 || version === -39 || version === -38) {
             // Static ECDH
-            const authorECPub = await Result.wrapAsync(async () =>
-                authorPublicKey.some
-                    ? (authorPublicKey.val.key as EC_Public_CryptoKey)
-                    : io.queryPublicKey(author.unwrapOr(null), options.signal),
-            )
+            const authorECPub = await Result.wrapAsync(async () => {
+                if (authorPublicKey.some) return authorPublicKey.val.key as EC_Public_CryptoKey
+                return io.queryPublicKey(author.unwrapOr(null), options.signal)
+            })
             // Cannot do ECDH if no public key
             if (authorECPub.err) return yield new DecryptionError(ErrorReasons.AuthorPublicKeyNotFound, authorECPub.val)
 
-            // Cannot do ECDH if no private key
-            const derivedKeys = await Result.wrapAsync(() => io.deriveAESKey(authorECPub.val))
-            if (derivedKeys.err) return yield new DecryptionError(ErrorReasons.MyPrivateKeyNotFound, authorECPub.val)
-            if (derivedKeys.val.length === 0)
-                return yield new DecryptionError(ErrorReasons.MyPrivateKeyNotFound, undefined)
-
-            // ECDH key derived. Now start looking for post AES key.
-            if (version === -40) {
-                // version -40 does not support append share targer, therefore we only try once.
-                try {
-                    const key = await io.queryPostKey_version40(iv, author.map((x) => x.userId).unwrapOr(null))
-                    if (key === null) return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
-                    const { encryptedKey, iv: ecdhIV } = key
-                    for (const each of derivedKeys.val) {
-                        if (options.signal?.aborted) return yield new DecryptionError(ErrorReasons.Aborted, undefined)
-                        const trial = await decryptWithAES(AESAlgorithmEnum.A256GCM, each, ecdhIV, encryptedKey)
-                        if (trial.err) continue
-                        return yield* parseTypedMessage(version, io, trial.val)
-                    }
-                    return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
-                } catch (err) {
-                    return yield new DecryptionError(ErrorReasons.NotShareTarget, err)
-                }
-            }
-            throw new Error('TODO')
+            return yield* v38To40StaticECDH(version, io, authorECPub.val, iv, author, options.signal)
         } else if (version === -37) {
             // ECDHE
             throw new Error('TODO')
@@ -105,6 +80,40 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
         //#endregion
     }
     unreachable(encryption)
+}
+
+async function* v38To40StaticECDH(
+    version: Version,
+    io: DecryptIO,
+    authorECPub: EC_Public_CryptoKey,
+    iv: Uint8Array,
+    author: Option<ProfileIdentifier>,
+    signal: AbortSignal | undefined,
+): AsyncIterableIterator<DecryptionProcess> {
+    // Cannot do ECDH if no private key
+    const derivedKeys = await Result.wrapAsync(() => io.deriveAESKey(authorECPub))
+    if (derivedKeys.err) return yield new DecryptionError(ErrorReasons.MyPrivateKeyNotFound, authorECPub)
+    if (derivedKeys.val.length === 0) return yield new DecryptionError(ErrorReasons.MyPrivateKeyNotFound, undefined)
+
+    // ECDH key derived. Now start looking for post AES key.
+    // version -40 does not support append share targer, therefore we only try once.
+    if (version === -40) {
+        try {
+            const key = await io.queryPostKey_version40(iv, author.map((x) => x.userId).unwrapOr(null))
+            if (key === null) return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
+            const { encryptedKey, iv: ecdhIV } = key
+            for (const each of derivedKeys.val) {
+                if (signal?.aborted) return yield new DecryptionError(ErrorReasons.Aborted, undefined)
+                const trial = await decryptWithAES(AESAlgorithmEnum.A256GCM, each, ecdhIV, encryptedKey)
+                if (trial.err) continue
+                return yield* parseTypedMessage(version, io, trial.val)
+            }
+            return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
+        } catch (err) {
+            return yield new DecryptionError(ErrorReasons.NotShareTarget, err)
+        }
+    }
+    throw new Error('TODO')
 }
 
 // uint8 |> TextDecoder |> JSON.parse |> importAESKeyFromJWK
