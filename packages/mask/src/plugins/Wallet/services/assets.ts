@@ -172,7 +172,7 @@ function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType
                               y.symbol,
                               y.logo_url ? [y.logo_url] : undefined,
                           ),
-                balance: new BigNumber(y.amount).toFixed(),
+                balance: new BigNumber(y.amount).multipliedBy(pow10(y.decimals)).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
