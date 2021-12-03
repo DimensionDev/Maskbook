@@ -709,6 +709,9 @@
     "plugin_find_truman_display_name": "FindTruman - Statistics",
     "plugin_find_truman_status_puzzle": "Story Puzzle",
     "plugin_find_truman_status_poll": "Plot Voting",
+    "plugin_find_truman_status_result": "Stage Result",
+    "plugin_find_truman_status_puzzle_result": "Revealing Answer",
+    "plugin_find_truman_status_poll_result": "Plot Confirmation",
     "plugin_find_truman_puzzle_to_be_revealed": "puzzle is left to be revealed.",
     "plugin_find_truman_puzzles_to_be_revealed": "puzzles are left to be revealed",
     "plugin_find_truman_poll_to_be_revealed": "vote continues to be tallied.",
@@ -977,5 +980,11 @@
     "nft_button_add_collectible": "Add Collectible",
     "nft_avatar": "NFT Avatar",
     "plugin_profile_no_wallets": "Connect your wallet here.<br/>This section will be shown to your encrypted friends.<br/>The display content includes digital art, donations, badges<br/>and other public information on chain.",
+    "plugin_profile_binding_rules_title": "The NFT gallary will show NFTs as below rules:",
+    "plugin_profile_binding_rule1": "1. Twitter nickname is ENS.",
+    "plugin_profile_binding_rule2": "2. Twitter bio contains ENS(e.g. vitalik.eth) or valid address.",
+    "plugin_profile_binding_rule3": "3. Twitter ID + {{suffix}} is ENS.",
+    "plugin_profile_binding_rule4": "4. Address used to sign the avator.",
+    "plugin_profile_current_display_of": "Current display of {{type}}: ",
     "plugin_vcent_last_offer_at": "LATEST OFFER at"
 }
