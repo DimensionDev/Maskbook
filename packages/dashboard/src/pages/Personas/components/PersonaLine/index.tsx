@@ -1,5 +1,5 @@
 import { memo, MouseEvent, useState } from 'react'
-import { Box, Button, Link, Typography } from '@mui/material'
+import { Box, Button, Link, Stack, Typography } from '@mui/material'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { makeStyles } from '@masknet/theme'
@@ -83,15 +83,17 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                     }}>
                     <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                         {SOCIAL_MEDIA_ICON_MAPPING[networkIdentifier]}
-                        {profileIdentifiers.map((x) => (
-                            <Typography
-                                variant="caption"
-                                key={x.userId}
-                                onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
-                                sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
-                                {`@${x.userId}`}
-                            </Typography>
-                        ))}
+                        <Stack flexWrap="wrap" flexDirection="row">
+                            {profileIdentifiers.map((x) => (
+                                <Typography
+                                    variant="caption"
+                                    key={x.userId}
+                                    onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
+                                    sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
+                                    {`@${x.userId}`}
+                                </Typography>
+                            ))}
+                        </Stack>
                     </Box>
                     {!isHideOperations && (
                         <Box>
