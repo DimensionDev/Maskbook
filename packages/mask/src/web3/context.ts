@@ -7,7 +7,7 @@ import {
     EthereumTokenType,
     ProviderType,
     Web3ProviderType,
-    resolveProviderIdentityKey,
+    resolveProviderInjectedKey,
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
@@ -69,12 +69,13 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const providerType = currentProviderSettings.value
 
                 if (location.href.includes('popups.html')) return account
+                if (providerType === ProviderType.Fortmatic) return account
                 if (!isInjectedProvider(providerType)) return account
 
                 try {
-                    const propertyKey = resolveProviderIdentityKey(providerType)
-                    if (!propertyKey) return ''
-                    const propertyValue = await bridgedEthereumProvider.getProperty(propertyKey)
+                    const injectedKey = resolveProviderInjectedKey(providerType)
+                    if (!injectedKey) return ''
+                    const propertyValue = await bridgedEthereumProvider.getProperty(injectedKey)
                     if (propertyValue === true) return account
                     return ''
                 } catch (error) {

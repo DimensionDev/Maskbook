@@ -67,6 +67,7 @@ export enum ProviderType {
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
     Coin98 = 'Coin98',
     MathWallet = 'MathWallet',
     WalletLink = 'WalletLink',
@@ -300,6 +301,7 @@ export enum EthereumMethodType {
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
     ETH_CHAIN_ID = 'eth_chainId',
     ETH_ACCOUNTS = 'eth_accounts',
+    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GET_CODE = 'eth_getCode',
@@ -323,6 +325,8 @@ export enum EthereumMethodType {
     // only for mask
     MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
+    MASK_LOGIN_FORTMATIC = 'mask_loginFortmatic',
+    MASK_LOGOUT_FORTMATIC = 'mask_logoutFortmatic',
 }
 
 export enum EthereumErrorType {

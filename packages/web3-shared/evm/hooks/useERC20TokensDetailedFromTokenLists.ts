@@ -29,11 +29,11 @@ export function useERC20TokensDetailedFromTokenLists(
         () =>
             new Fuse([...additionalTokens, ...tokensFromList], {
                 shouldSort: true,
-                threshold: 0.45,
+                threshold: 0,
                 minMatchCharLength: 1,
                 keys: [
                     { name: 'name', weight: 0.5 },
-                    { name: 'symbol', weight: 0.5 },
+                    { name: 'symbol', weight: 1 },
                 ],
             }),
         [tokensFromList, additionalTokens],

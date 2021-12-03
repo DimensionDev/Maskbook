@@ -4,6 +4,7 @@ import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as Injected from './providers/Injected'
+import * as Fortmatic from './providers/Fortmatic'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 
 export async function createWeb3({
@@ -27,6 +28,8 @@ export async function createWeb3({
         case ProviderType.WalletLink:
         case ProviderType.MathWallet:
             return Injected.createWeb3()
+        case ProviderType.Fortmatic:
+            return Fortmatic.createWeb3()
         case ProviderType.CustomNetwork:
             throw new Error('To be implemented.')
         default:

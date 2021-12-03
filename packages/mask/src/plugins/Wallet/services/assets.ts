@@ -28,8 +28,8 @@ import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import { resolveChainByScope, resolveZerionAssetsScopeName } from '../pipes'
 import type {
-    BalanceRecord,
     SocketRequestAssetScope,
+    WalletTokenRecord,
     ZerionAddressAsset,
     ZerionAddressCovalentAsset,
     ZerionAsset,
@@ -144,15 +144,14 @@ export async function getAssetsList(
 
             return result
         case FungibleAssetProvider.DEBANK:
-            const { data = [], error_code } = await DebankAPI.getAssetsList(address)
-            if (error_code === 0) return formatAssetsFromDebank(data, network)
-            return []
+            const data = await DebankAPI.getAssetsList(address)
+            return formatAssetsFromDebank(data, network)
         default:
             unreachable(provider)
     }
 }
 
-function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
+function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType) {
     return data
         .filter((x) => !network || getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
         .filter((x) => x.is_verified)
@@ -173,14 +172,12 @@ function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
                               y.symbol,
                               y.logo_url ? [y.logo_url] : undefined,
                           ),
-                balance: new BigNumber(y.balance).toFixed(),
+                balance: new BigNumber(y.amount).multipliedBy(pow10(y.decimals)).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
                 value: {
-                    [CurrencyType.USD]: new BigNumber(y.price ?? 0)
-                        .multipliedBy(new BigNumber(y.balance).dividedBy(pow10(y.decimals)))
-                        .toFixed(),
+                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).multipliedBy(new BigNumber(y.amount)).toFixed(),
                 },
                 logoURI: y.logo_url,
             }

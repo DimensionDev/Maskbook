@@ -2,10 +2,10 @@ import { memo } from 'react'
 import { useMatch } from 'react-router-dom'
 import { Box, Button, buttonClasses, styled, Typography } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
-import { useDashboardI18N } from '../../../../locales'
 import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@masknet/icons'
 import { MiniNetworkSelector } from '@masknet/shared'
 import type { Web3Plugin } from '@masknet/plugin-infra'
+import { useDashboardI18N } from '../../../../locales'
 import { RoutePaths } from '../../../../type'
 
 export interface BalanceCardProps {
