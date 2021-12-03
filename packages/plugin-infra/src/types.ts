@@ -106,6 +106,10 @@ export namespace Plugin.Shared {
         declareWeb3Networks?: Web3Plugin.NetworkDescriptor[]
         /** Introduce wallet providers information. */
         declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
+        /** Introduce application information. */
+        declareApplications?: Web3Plugin.ApplicationDescriptor[]
+        /** Introduce application category information. */
+        declareApplicationCategories?: Web3Plugin.ApplicationCategoryDescriptor[]
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
