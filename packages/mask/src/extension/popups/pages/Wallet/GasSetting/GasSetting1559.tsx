@@ -243,7 +243,7 @@ export const GasSetting1559 = memo(() => {
                 )
                 setValue(
                     'maxFeePerGas',
-                    fromWei(new BigNumber(value.computedPayload._tx.maxFeePerGas).toString(), 'gwei').toString(),
+                    fromWei(new BigNumber(value.computedPayload._tx.maxFeePerGas).toFixed(), 'gwei').toString(),
                 )
             } else {
                 setOption(1)
@@ -290,7 +290,7 @@ export const GasSetting1559 = memo(() => {
                 history.goBack()
             }
         },
-        [value],
+        [value, history],
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))

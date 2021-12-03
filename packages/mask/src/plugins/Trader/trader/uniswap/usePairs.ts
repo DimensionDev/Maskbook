@@ -44,7 +44,6 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
         contracts,
         Array.from<'getReserves'>({ length: contracts.length }).fill('getReserves'),
         [],
-        1_000_000,
         targetChainId,
         targetBlockNumber,
     )

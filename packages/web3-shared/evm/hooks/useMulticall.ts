@@ -220,9 +220,9 @@ export function useMultipleContractSingleData<T extends BaseContract, K extends 
     contracts: T[],
     names: K[],
     callData: Parameters<T['methods'][K]>,
-    gasLimit = DEFAULT_GAS_LIMIT,
     chainId?: ChainId,
     blockNumber?: number,
+    gasLimit = DEFAULT_GAS_LIMIT,
 ) {
     const calls = useMemo(
         () =>

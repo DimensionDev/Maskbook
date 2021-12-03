@@ -57,7 +57,6 @@ export function usePools(
         poolContracts,
         Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
         [],
-        1_000_000,
         chainId,
         targetBlockNumber,
     )
@@ -65,7 +64,6 @@ export function usePools(
         poolContracts,
         Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
         [],
-        1_000_000,
         chainId,
         targetBlockNumber,
     )
