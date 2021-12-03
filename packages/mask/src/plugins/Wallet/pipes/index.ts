@@ -37,6 +37,7 @@ export const resolveDebankChainName = createLookupTableResolver<NetworkType, str
         [NetworkType.Polygon]: 'matic',
         [NetworkType.Arbitrum]: 'arb',
         [NetworkType.xDai]: 'xdai',
+        [NetworkType.Celo]: 'celo',
     },
     '',
 )
@@ -48,6 +49,7 @@ export const resolveZerionAssetsScopeName = createLookupTableResolver<NetworkTyp
         [NetworkType.Polygon]: 'polygon-assets',
         [NetworkType.Arbitrum]: 'arbitrum-assets',
         [NetworkType.xDai]: 'xdai-assets',
+        [NetworkType.Celo]: 'celo-assets',
     },
     '',
 )
@@ -59,6 +61,7 @@ export const resolveZerionTransactionsScopeName = createLookupTableResolver<Netw
         [NetworkType.Polygon]: 'polygon-transactions',
         [NetworkType.Arbitrum]: 'arbitrum-transactions',
         [NetworkType.xDai]: 'xdai-transactions',
+        [NetworkType.Celo]: 'celo-transactions',
     },
     '',
 )
