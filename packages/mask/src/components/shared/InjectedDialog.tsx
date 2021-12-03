@@ -113,7 +113,13 @@ export function InjectedDialog(props: InjectedDialogProps) {
                 {...extraProps}>
                 <ErrorBoundary>
                     {title ? (
-                        <DialogTitle className="dashboard-dialog-title-hook" classes={{ root: dialogTitle }}>
+                        <DialogTitle
+                            className="dashboard-dialog-title-hook"
+                            classes={{ root: dialogTitle }}
+                            style={{
+                                border: isDashboard ? 'none' : undefined,
+                                fontSize: isDashboard ? 24 : undefined,
+                            }}>
                             <IconButton
                                 size="large"
                                 classes={{ root: dialogCloseButton }}

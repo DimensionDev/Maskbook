@@ -98,9 +98,11 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                     }}
                     title={t('plugin_trader_swap')}>
                     <DialogContent className={classes.content}>
-                        <div className={classes.walletStatusBox}>
-                            <WalletStatusBox />
-                        </div>
+                        {!isDashboard ? (
+                            <div className={classes.walletStatusBox}>
+                                <WalletStatusBox />
+                            </div>
+                        ) : null}
                         <div className={classes.abstractTabWrapper}>
                             <NetworkTab
                                 chainId={chainId}

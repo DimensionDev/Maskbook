@@ -61,7 +61,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             paddingBottom: 10,
             fontSize: 13,
             lineHeight: '18px',
-            marginRight: 13,
+            marginRight: 8,
         },
     },
     chipTokenIcon: {
@@ -77,7 +77,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             fontSize: 13,
             lineHeight: '18px',
             color: theme.palette.primary.contrastText,
-            marginRight: 0,
+            marginRight: 10,
         },
     },
 }))
