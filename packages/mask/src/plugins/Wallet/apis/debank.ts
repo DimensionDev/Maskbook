@@ -1,8 +1,9 @@
-import type { BalanceListResponse, HistoryResponse, GasPriceDictResponse } from '../types'
+import type { HistoryResponse, GasPriceDictResponse, WalletTokenRecord } from '../types'
 import urlcat from 'urlcat'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const DEBANK_API = 'https://api.debank.com'
+const DEBANK_OPEN_API = 'https://openapi.debank.com'
 
 export async function getTransactionList(address: string, chain: string) {
     const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${chain}`)
@@ -10,8 +11,14 @@ export async function getTransactionList(address: string, chain: string) {
 }
 
 export async function getAssetsList(address: string) {
-    const response = await fetch(`${DEBANK_API}/token/balance_list?is_all=true&user_addr=${address.toLowerCase()}`)
-    return (await response.json()) as BalanceListResponse
+    const response = await fetch(
+        `${DEBANK_OPEN_API}/v1/user/token_list?is_all=true&has_balance=true&id=${address.toLowerCase()}`,
+    )
+    try {
+        return ((await response.json()) ?? []) as WalletTokenRecord[]
+    } catch {
+        return []
+    }
 }
 
 const chainIdMap: Record<number, string> = {

@@ -21,6 +21,7 @@ import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
 import * as Injected from './providers/Injected'
 import * as WalletConnect from './providers/WalletConnect'
+import * as Fortmatic from './providers/Fortmatic'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { createWeb3 } from './web3'
 import { commitNonce, getNonce, resetNonce } from './nonce'
@@ -202,7 +203,6 @@ export async function INTERNAL_send(
         console.table(payload)
         console.debug(new Error().stack)
     }
-
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
     const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined
@@ -269,6 +269,20 @@ export async function INTERNAL_send(
                         jsonrpc: '2.0',
                         id: payload.id as number,
                         result: await Injected.createProvider().request({
+                            method: EthereumMethodType.PERSONAL_SIGN,
+                            params: payload.params,
+                        }),
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
+            case ProviderType.Fortmatic:
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await Fortmatic.createProvider().request({
                             method: EthereumMethodType.PERSONAL_SIGN,
                             params: payload.params,
                         }),
@@ -399,6 +413,18 @@ export async function INTERNAL_send(
             case ProviderType.MathWallet:
                 await Injected.ensureConnectedAndUnlocked()
                 Injected.createProvider().send(payload, (error, response) => {
+                    callback(
+                        hasError(error, response)
+                            ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)
+                            : null,
+                        response,
+                    )
+                    handleTransferTransaction(chainIdFinally, payload)
+                    handleRecentTransaction(chainIdFinally, account, payload, response)
+                })
+                break
+            case ProviderType.Fortmatic:
+                Fortmatic.createProvider().send(payload, (error, response) => {
                     callback(
                         hasError(error, response)
                             ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)

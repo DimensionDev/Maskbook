@@ -46,6 +46,7 @@ export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
                 case ProviderType.Coin98:
                 case ProviderType.WalletLink:
                 case ProviderType.MathWallet:
+                case ProviderType.Fortmatic:
                     setConnectWalletDialog({
                         open: true,
                         providerType,
