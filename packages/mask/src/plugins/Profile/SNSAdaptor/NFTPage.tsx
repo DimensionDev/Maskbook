@@ -39,11 +39,10 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         borderRadius: theme.spacing(1),
         color: getMaskColor(theme).textPrimary,
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: getMaskColor(theme).tooltipBackground,
         textAlign: 'initial',
         padding: theme.spacing(2),
-        maxWidth: '348px',
-        boxShadow: `0px 0px 20px ${getMaskColor(theme).twitterBackgroundHover}`,
+        maxWidth: '428px',
     },
     tipTitle: {
         fontSize: '18px',
@@ -57,10 +56,10 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
     },
     tipArrows: {
-        width: '40px',
-        height: '40px',
-        color: getMaskColor(theme).twitterBackground,
-        transform: 'translate3d( 226px, 18px, 0px) !important',
+        width: '45px',
+        height: '45px',
+        color: getMaskColor(theme).tooltipBackground,
+        transform: 'translate3d( 226px, 21px, 0px) !important',
         ':before': {
             transformOrigin: 'top center',
             transform: 'rotate(45deg) translate(10px, 0px)',
@@ -89,8 +88,8 @@ export function NFTPage(props: NFTPageProps) {
     const rulesTipMap = [
         t('plugin_profile_binding_rule1'),
         t('plugin_profile_binding_rule2'),
-        t('plugin_profile_binding_rule3'),
-        t('plugin_profile_binding_rule4', { suffix: `".eth"` }),
+        t('plugin_profile_binding_rule3', { suffix: `".eth"` }),
+        t('plugin_profile_binding_rule4'),
     ]
 
     const tooltipRender = (
