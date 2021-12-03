@@ -6,6 +6,7 @@ import {
     ProfileIdentifier,
     AESCryptoKey,
     EC_Public_CryptoKey,
+    andThenAsync,
 } from '@masknet/shared-base'
 import { None, Result } from 'ts-results'
 import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
@@ -22,11 +23,19 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
     const encryption = _encryption.val
     const encrypted = _encrypted.val
 
+    // ! try decrypt by cache
+    {
+        const cacheKey = await io.getPostKeyCache().catch(() => null)
+        const iv = encryption.iv.unwrapOr(null)
+        if (cacheKey && iv) return yield* decryptWithPostAESKey(version, cacheKey, encrypted, iv)
+    }
+
     if (encryption.type === 'public') {
         const { AESKey, iv } = encryption
         if (AESKey.err) return yield new DecryptionError(ErrorReasons.PayloadBroken, AESKey.val)
         if (iv.err) return yield new DecryptionError(ErrorReasons.PayloadBroken, iv.val)
-        return yield* decryptWithPostAESKey(version, AESKey.val.key as AESCryptoKey, encrypted, iv.val, io)
+        // Not calling setPostCache here. It's public post and saving key is wasting storage space.
+        return yield* decryptWithPostAESKey(version, AESKey.val.key as AESCryptoKey, encrypted, iv.val)
     } else if (encryption.type === 'E2E') {
         const { ephemeralPublicKey, iv: _iv, ownersAESKeyEncrypted } = encryption
         if (_iv.err) return yield new DecryptionError(ErrorReasons.PayloadBroken, _iv.val)
@@ -40,7 +49,8 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
             try {
                 const aes_raw = await io.decryptByLocalKey(author.unwrapOr(null), ownersAESKeyEncrypted.val, iv)
                 const aes = await importAESKeyFromJWKFromTextEncoder(aes_raw)
-                return yield* decryptWithPostAESKey(version, aes, encrypted, iv, io)
+                io.setPostKeyCache(aes).catch(() => {})
+                return yield* decryptWithPostAESKey(version, aes, encrypted, iv)
             } catch (err) {
                 if (await hasAuthorLocalKey) {
                     // If we fall into this branch, it means we failed to decrypt as author.
@@ -73,7 +83,7 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
             })
             if (authorECPub.err) return yield new DecryptionError(ErrorReasons.AuthorPublicKeyNotFound, authorECPub.val)
 
-            return yield* v38To40StaticECDH(version, io, authorECPub.val, iv, options.signal)
+            return yield* v38To40StaticECDH(version, io, authorECPub.val, iv, encrypted, options.signal)
         }
         //#endregion
     }
@@ -85,6 +95,7 @@ async function* v38To40StaticECDH(
     io: DecryptIO,
     authorECPub: EC_Public_CryptoKey,
     iv: Uint8Array,
+    encrypted: Uint8Array,
     signal: AbortSignal | undefined,
 ): AsyncIterableIterator<DecryptionProcess> {
     // Cannot do ECDH if no private key
@@ -93,27 +104,33 @@ async function* v38To40StaticECDH(
     if (derivedKeys.val.length === 0) return yield new DecryptionError(ErrorReasons.MyPrivateKeyNotFound, undefined)
 
     // ECDH key derived. Now start looking for post AES key.
-    // version -40 does not support append share target, therefore we only try once.
-    if (version === -40) {
-        try {
-            const postKeyEncrypted = await io.queryPostKey_version40(iv)
-            if (postKeyEncrypted === null) return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
-            const { encryptedKey, iv: postKeyIV } = postKeyEncrypted
-            for (const each of derivedKeys.val) {
-                if (signal?.aborted) return yield new DecryptionError(ErrorReasons.Aborted, undefined)
-                const decryptResult = await decryptWithAES(AESAlgorithmEnum.A256GCM, each, postKeyIV, encryptedKey)
-                if (decryptResult.err) continue
-                return yield* parseTypedMessage(version, io, decryptResult.val)
-            }
-            // no available key. no need to wait further. 万策尽きた
-            return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
-        } catch (err) {
-            return yield new DecryptionError(ErrorReasons.NotShareTarget, err)
+
+    const postAESKeyIterator = {
+        '-40': async function* (iv: Uint8Array) {
+            const val = await io.queryPostKey_version40(iv)
+            if (val) yield val
+        },
+        '-39': io.queryPostKey_version39,
+        '-38': io.queryPostKey_version38,
+    }[version](iv, signal)
+
+    for await (const { encryptedKey: encryptedPostKey, iv: postKeyIV } of postAESKeyIterator) {
+        for (const derivedKey of derivedKeys.val) {
+            const possiblePostKey = await andThenAsync(
+                decryptWithAES(AESAlgorithmEnum.A256GCM, derivedKey, postKeyIV, encryptedPostKey),
+                (postKeyRaw) => Result.wrapAsync(() => importAESKeyFromJWKFromTextEncoder(postKeyRaw)),
+            )
+            if (possiblePostKey.err) continue
+            const decrypted = await decryptWithAES(AESAlgorithmEnum.A256GCM, possiblePostKey.val, iv, encrypted)
+            if (decrypted.err) continue
+
+            io.setPostKeyCache(possiblePostKey.val).catch(() => {})
+            // If we'd able to decrypt the raw message, we will stop here.
+            // because try further key cannot resolve the problem of parseTypedMessage failed.
+            return yield* parseTypedMessage(version, decrypted.val)
         }
-    } else {
-        const k = version === -39 ? io.queryPostKey_version39(iv) : io.queryPostKey_version38(iv)
-        throw new Error('TODO')
     }
+    return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
 }
 
 // uint8 |> TextDecoder |> JSON.parse |> importAESKeyFromJWK
@@ -128,22 +145,16 @@ async function* decryptWithPostAESKey(
     postAESKey: AESCryptoKey,
     encrypted: Uint8Array,
     iv: Uint8Array,
-    io: DecryptIO,
 ): AsyncIterableIterator<DecryptionProcess> {
     const { err, val } = await decryptWithAES(AESAlgorithmEnum.A256GCM, postAESKey, iv, encrypted)
     if (err) return yield new DecryptionError(ErrorReasons.DecryptFailed, val)
-    return yield* parseTypedMessage(version, io, val)
+    return yield* parseTypedMessage(version, val)
 }
 
-async function* parseTypedMessage(
-    version: Version,
-    io: DecryptIO,
-    raw: Uint8Array,
-): AsyncIterableIterator<DecryptionProcess> {
+async function* parseTypedMessage(version: Version, raw: Uint8Array): AsyncIterableIterator<DecryptionProcess> {
     const { err, val } =
         version === -37 ? decodeTypedMessageFromDocument(raw) : decodeTypedMessageV38ToV40Format(raw, version)
     if (err) return yield new DecryptionError(ErrorReasons.PayloadDecryptedButNoValidTypedMessageIsFound, val)
-    io.setCache(val).catch(() => {})
     return yield progress(DecryptionProgressKind.Success, { content: val })
 }
 
@@ -158,7 +169,8 @@ export interface DecryptionOption {
     signal?: AbortSignal
 }
 export interface DecryptIO {
-    setCache(result: TypedMessage): Promise<void>
+    getPostKeyCache(): Promise<AESCryptoKey | null>
+    setPostKeyCache(key: AESCryptoKey): Promise<void>
     hasLocalKeyOf(author: ProfileIdentifier): Promise<boolean>
     /**
      * Try to decrypt message by someone's localKey.
@@ -175,9 +187,9 @@ export interface DecryptIO {
     decryptByLocalKey(authorHint: ProfileIdentifier | null, data: Uint8Array, iv: Uint8Array): Promise<Uint8Array>
     queryPublicKey(id: ProfileIdentifier | null, signal?: AbortSignal): Promise<EC_Public_CryptoKey>
     queryPostKey_version40(iv: Uint8Array): Promise<StaticECDH_Result | null>
-    queryPostKey_version39(iv: Uint8Array): Promise<StaticECDH_Result[]>
-    queryPostKey_version38(iv: Uint8Array): Promise<StaticECDH_Result[]>
-    queryPostKey_version37(): Promise<EphemeralECDH_Result[]>
+    queryPostKey_version39(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<StaticECDH_Result>
+    queryPostKey_version38(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<StaticECDH_Result>
+    queryPostKey_version37(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<EphemeralECDH_Result>
     /**
      * Derive a group of AES key for ECDH.
      *
