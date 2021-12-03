@@ -6,7 +6,7 @@ An AES key that never exported.
 
 It is connected to the Persona or the Profile.
 
-It is used to encrypt some message to themself to allow them to decrypt the message later.
+It is used to encrypt some message to themselves to allow them to decrypt the message later.
 
 ## Steps:
 
