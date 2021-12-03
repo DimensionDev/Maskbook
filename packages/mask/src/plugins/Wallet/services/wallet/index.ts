@@ -305,6 +305,7 @@ export async function recoverWalletFromMnemonic(
         password: password_,
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
+
     if (await database.hasStoredKeyInfo(imported.StoredKey)) {
         const exported = await sdk.exportPrivateKeyOfPath({
             coin: api.Coin.Ethereum,

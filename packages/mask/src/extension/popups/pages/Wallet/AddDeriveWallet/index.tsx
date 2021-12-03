@@ -77,7 +77,7 @@ const AddDeriveWallet = memo(() => {
     const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
-    const wallets = useWallets()
+    const wallets = useWallets(ProviderType.MaskWallet)
     const mnemonic = new URLSearchParams(location.search).get('mnemonic')
     const walletName = new URLSearchParams(location.search).get('name')
 
@@ -100,7 +100,7 @@ const AddDeriveWallet = memo(() => {
             })
         }
         return []
-    }, [mnemonic, wallets, page])
+    }, [mnemonic, wallets.length, page])
 
     const onCheck = useCallback(
         async (checked, index) => {
@@ -119,7 +119,7 @@ const AddDeriveWallet = memo(() => {
 
         if (unDeriveWallets.length) {
             const firstPath = first(unDeriveWallets)
-            await WalletRPC.recoverWalletFromMnemonic(
+            const firstWallet = await WalletRPC.recoverWalletFromMnemonic(
                 `${walletName}${firstPath!}`,
                 mnemonic,
                 `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
@@ -136,20 +136,21 @@ const AddDeriveWallet = memo(() => {
                         ),
                     ),
             )
-            if (!currentMaskWalletAccountSettings.value && wallets.length) {
-                await WalletRPC.updateMaskAccount({
-                    account: first(wallets),
-                })
 
-                if (!currentAccountSettings.value)
-                    await WalletRPC.updateAccount({
-                        account: first(wallets),
-                        providerType: ProviderType.MaskWallet,
-                    })
+            if (!currentMaskWalletAccountSettings.value) {
+                await WalletRPC.updateMaskAccount({
+                    account: firstWallet,
+                })
+            }
+            if (!currentAccountSettings.value) {
+                await WalletRPC.updateAccount({
+                    account: firstWallet,
+                    providerType: ProviderType.MaskWallet,
+                })
             }
         }
         history.replace(PopupRoutes.Wallet)
-    }, [mnemonic, walletName])
+    }, [mnemonic, walletName, wallets.length])
 
     return (
         <div className={classes.container}>
