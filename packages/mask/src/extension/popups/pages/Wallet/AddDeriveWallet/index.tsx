@@ -77,7 +77,7 @@ const AddDeriveWallet = memo(() => {
     const history = useHistory()
     const location = useLocation()
     const { classes } = useStyles()
-    const wallets = useWallets()
+    const wallets = useWallets(ProviderType.MaskWallet)
     const mnemonic = new URLSearchParams(location.search).get('mnemonic')
     const walletName = new URLSearchParams(location.search).get('name')
 
@@ -100,7 +100,7 @@ const AddDeriveWallet = memo(() => {
             })
         }
         return []
-    }, [mnemonic, wallets, page])
+    }, [mnemonic, wallets.length, page])
 
     const onCheck = useCallback(
         async (checked, index) => {
