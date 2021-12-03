@@ -331,7 +331,10 @@
         "walletlink",
         "rpcs",
         "FUSD",
-        "isfacebook"
+        "isfacebook",
+        "findtruman",
+        "uaddr",
+        "consts"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
