@@ -95,7 +95,7 @@
     "gas_fee": "交易手续费",
     "transfer_cost": "花费 {{gasFee}} {{symbol}} ≈ {{usd}} 美元",
     "done": "完成!",
-    "labs": "Mask Labs",
+    "labs": "D.Market",
     "wallet_transactions_pending": "待定中",
     "wallet_gas_fee_settings_low": "低",
     "wallet_gas_fee_settings_medium": "中",

@@ -145,7 +145,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 <span>≈</span>
                                 <TokenPrice
                                     chainId={chainId}
-                                    amount={paymentTokenPrice}
+                                    amount={formatBalance(paymentTokenPrice, paymentTokenDetailed.decimals)}
                                     contractAddress={paymentTokenDetailed.address}
                                 />
                             </Typography>
@@ -171,7 +171,13 @@ export function DrawDialog(props: DrawDialogProps) {
                                     size="small"
                                     sx={{ marginLeft: 1, marginRight: 1 }}
                                     value={paymentCount}
-                                    onChange={(ev) => setPaymentCount(Number.parseInt(ev.target.value, 10))}
+                                    disabled={boxInfo.remaining === 0 || boxInfo.personalRemaining <= 1}
+                                    onChange={(ev) => {
+                                        const count = Number.parseInt(ev.target.value, 10)
+                                        if (count >= 1 && count <= boxInfo.availableAmount) {
+                                            setPaymentCount(count)
+                                        }
+                                    }}
                                     InputProps={{
                                         classes: {
                                             root: classes.field,
