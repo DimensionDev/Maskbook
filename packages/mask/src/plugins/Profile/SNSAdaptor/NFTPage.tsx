@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
     },
     note: {
-        padding: theme.spacing(1),
+        padding: `0 ${theme.spacing(1)}`,
         textAlign: 'right',
     },
     text: {
@@ -43,6 +43,7 @@ const useStyles = makeStyles()((theme) => ({
         textAlign: 'initial',
         padding: theme.spacing(2),
         maxWidth: '428px',
+        boxShadow: `0px 0px 20px rgba(28, 104, 243, 0.05)`,
     },
     tipTitle: {
         fontSize: '18px',
@@ -64,6 +65,7 @@ const useStyles = makeStyles()((theme) => ({
             transformOrigin: 'top center',
             transform: 'rotate(45deg) translate(10px, 0px)',
             borderRadius: '3px',
+            boxShadow: `0px 0px 20px rgba(28, 104, 243, 0.05)`,
         },
     },
     tipPopper: {
