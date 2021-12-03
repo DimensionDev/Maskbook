@@ -56,7 +56,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
 
     useEffect(() => {
         try {
-            const fontSize = parseFloat(getComputedStyle(document.documentElement).fontSize)
+            const fontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
             setRowSize(fontSize * 3.6)
         } catch {
             setRowSize(54)
