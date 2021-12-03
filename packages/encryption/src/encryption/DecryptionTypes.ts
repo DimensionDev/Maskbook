@@ -1,20 +1,29 @@
 import type { TypedMessage, ProfileIdentifier, AESCryptoKey, EC_Public_CryptoKey } from '@masknet/shared-base'
 import type { PayloadParseResult } from '../payload'
 
-export interface DecryptionOption {
+export interface DecryptOptions {
     message: PayloadParseResult.Payload
     signal?: AbortSignal
 }
 export interface DecryptIO {
+    /** Return the cached post key for this payload. */
     getPostKeyCache(): Promise<AESCryptoKey | null>
+    /**
+     * Store the post key into the cache so next time it will be much faster.
+     * @param key Post AES key
+     */
     setPostKeyCache(key: AESCryptoKey): Promise<void>
+    /**
+     * Checkout if the host has the local key of the given ProfileIdentifier.
+     * @param author Author of this payload
+     */
     hasLocalKeyOf(author: ProfileIdentifier): Promise<boolean>
     /**
      * Try to decrypt message by someone's localKey.
      *
-     * Implementor must try authorHint's localKey if they have access to.
+     * Host must try authorHint's localKey if they have access to.
      *
-     * Implementor may try other localKeys they owned even not listed in the authorHint.
+     * Host may try other localKeys they owned even not listed in the authorHint.
      *
      * @param authorHint A hint for searching the localKey.
      * @param data Encrypted data
@@ -22,40 +31,71 @@ export interface DecryptIO {
      * @returns The decrypted data
      */
     decryptByLocalKey(authorHint: ProfileIdentifier | null, data: Uint8Array, iv: Uint8Array): Promise<Uint8Array>
-    queryPublicKey(id: ProfileIdentifier | null, signal?: AbortSignal): Promise<EC_Public_CryptoKey>
-    queryPostKey_version40(iv: Uint8Array): Promise<StaticECDH_Result | null>
-    queryPostKey_version39(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<StaticECDH_Result>
-    queryPostKey_version38(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<StaticECDH_Result>
-    queryPostKey_version37(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<EphemeralECDH_Result>
+    /**
+     * If the author is null, the host should use some heuristic approach (e.g. where they found the post).
+     * @param author ProfileIdentifier of the author. Might be empty.
+     */
+    queryAuthorPublicKey(author: ProfileIdentifier | null, signal?: AbortSignal): Promise<EC_Public_CryptoKey | null>
+    /**
+     * Query the key from the gun.
+     *
+     * Error from this function will become a fatal error.
+     */
+    queryPostKey_version40(iv: Uint8Array): Promise<DecryptStaticECDH_PostKey | null>
+    /**
+     * Query the key from the gun.
+     *
+     * This should be an infinite async iterator that listen to the gun network until the AbortSignal is triggered.
+     *
+     * Error from this function will become a fatal error.
+     */
+    queryPostKey_version39(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<DecryptStaticECDH_PostKey>
+    /**
+     * Query the key from the gun.
+     *
+     * This should be an infinite async iterator that listen to the gun network until the AbortSignal is triggered.
+     *
+     * Error from this function will become a fatal error.
+     */
+    queryPostKey_version38(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<DecryptStaticECDH_PostKey>
+    /**
+     * Query the key from the gun.
+     *
+     * This should be an infinite async iterator that listen to the gun network until the AbortSignal is triggered.
+     *
+     * Error from this function will become a fatal error.
+     */
+    queryPostKey_version37(iv: Uint8Array, signal?: AbortSignal): AsyncIterableIterator<DecryptEphemeralECDH_PostKey>
     /**
      * Derive a group of AES key for ECDH.
      *
-     * Implementor should derive a new AES-GCM key for each private key they have access to.
-     * @param publicKey The public key used in ECDH
-     * @returns This function MUST NOT throw an error. Error will be treated as fatal error.
+     * Host should derive a new AES-GCM key for each private key they have access to.
      *
      * If the provided key cannot derive AES with any key (e.g. The given key is ED25519 but there is only P-256 private keys)
      * please return an empty array.
+     *
+     * Error from this function will become a fatal error.
+     * @param publicKey The public key used in ECDH
      */
     deriveAESKey(publicKey: EC_Public_CryptoKey): Promise<AESCryptoKey[]>
 }
-export interface StaticECDH_Result {
-    encryptedKey: Uint8Array
-    iv: Uint8Array
+export interface DecryptStaticECDH_PostKey {
+    encryptedPostKey: Uint8Array
+    postKeyIV: Uint8Array
 }
-export interface EphemeralECDH_Result extends StaticECDH_Result {
+export interface DecryptEphemeralECDH_PostKey extends DecryptStaticECDH_PostKey {
     // It might be contained in the original payload.
     ephemeralPublicKey?: EC_Public_CryptoKey
     ephemeralPublicKeySignature?: Uint8Array
 }
-export enum DecryptionProgressKind {
+export enum DecryptProgressKind {
     Started = 'started',
     Success = 'success',
     Error = 'error',
 }
-export type DecryptionProcess = { type: DecryptionProgressKind.Started } | DecryptionSuccess | DecryptionError
-export interface DecryptionSuccess {
-    type: DecryptionProgressKind.Success
+export type DecryptProgress = { type: DecryptProgressKind.Started } | DecryptSuccess | DecryptError
+export interface DecryptSuccess {
+    type: DecryptProgressKind.Success
     content: TypedMessage
 }
 enum ErrorReasons {
@@ -68,9 +108,9 @@ enum ErrorReasons {
     NotShareTarget = '[@masknet/encryption] No valid key is found. Likely this post is not shared with you',
     Aborted = '[@masknet/encryption] Task aborted.',
 }
-export class DecryptionError extends Error {
+export class DecryptError extends Error {
     static Reasons = ErrorReasons
-    readonly type = DecryptionProgressKind.Error
+    readonly type = DecryptProgressKind.Error
     constructor(public override message: ErrorReasons, cause: unknown, public recoverable = false) {
         super(message, { cause })
     }

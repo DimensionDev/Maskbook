@@ -62,4 +62,4 @@ export interface EncryptionResultE2E {
     /** This feature is supported since v37. */
     ephemeralPublicKey?: EC_Public_CryptoKey
 }
-export declare function encrypt(options: EncryptOptions, io: EncryptIO): Promise<EncryptResult>
+declare function encrypt(options: EncryptOptions, io: EncryptIO): Promise<EncryptResult>
