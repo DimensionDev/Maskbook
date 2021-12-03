@@ -50,52 +50,54 @@ async function getTokenBalance(
 
 async function getAssetFUSD(chainId: ChainId, account: string) {
     const { FUSD_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const value = await getTokenPrice('usd-coin', CurrencyType.USD)
-
+    const price = await getTokenPrice('usd-coin', CurrencyType.USD)
+    const balance = await getTokenBalance(chainId, account, 8, {
+        fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
+        tokenAddress: FUSD_ADDRESS,
+        exportKey: 'FUSD',
+        storageKey: 'fusdBalance',
+    })
     return createFungibleAsset(
         createFungibleToken(chainId, FUSD_ADDRESS, 'Flow USD', 'FUSD', 8),
-        await getTokenBalance(chainId, account, 8, {
-            fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
-            tokenAddress: FUSD_ADDRESS,
-            exportKey: 'FUSD',
-            storageKey: 'fusdBalance',
-        }),
-        value,
+        balance,
         new URL('../assets/FUSD.png', import.meta.url).toString(),
+        price,
     )
 }
 
 async function getAssetFLOW(chainId: ChainId, account: string) {
     const { FLOW_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const value = await getTokenPrice('flow', CurrencyType.USD)
+    const price = await getTokenPrice('flow', CurrencyType.USD)
+    const balance = await getTokenBalance(chainId, account, 8, {
+        fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
+        tokenAddress: FLOW_ADDRESS,
+        exportKey: 'FlowToken',
+        storageKey: 'flowTokenBalance',
+    })
 
     return createFungibleAsset(
         createFungibleToken(chainId, FLOW_ADDRESS, 'Flow', 'FLOW', 8),
-        await getTokenBalance(chainId, account, 8, {
-            fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
-            tokenAddress: FLOW_ADDRESS,
-            exportKey: 'FlowToken',
-            storageKey: 'flowTokenBalance',
-        }),
-        value,
+        balance,
         new URL('../assets/flow.png', import.meta.url).toString(),
+        price,
     )
 }
 
 async function getAssetTether(chainId: ChainId, account: string) {
     const { TETHER_ADDRESS = '', FUNGIBLE_TOKEN_ADDRESS = '' } = getTokenConstants(chainId)
-    const value = await getTokenPrice('tether', CurrencyType.USD)
+    const price = await getTokenPrice('tether', CurrencyType.USD)
+    const balance = await getTokenBalance(chainId, account, 8, {
+        fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
+        tokenAddress: TETHER_ADDRESS,
+        exportKey: 'TeleportedTetherToken',
+        storageKey: 'teleportedTetherTokenBalance',
+    })
 
     return createFungibleAsset(
         createFungibleToken(chainId, TETHER_ADDRESS, 'Tether USD', 'tUSD', 8),
-        await getTokenBalance(chainId, account, 8, {
-            fungibleTokenAddress: FUNGIBLE_TOKEN_ADDRESS,
-            tokenAddress: TETHER_ADDRESS,
-            exportKey: 'TeleportedTetherToken',
-            storageKey: 'teleportedTetherTokenBalance',
-        }),
-        value,
+        balance,
         new URL('../assets/tUSD.png', import.meta.url).toString(),
+        price,
     )
 }
 

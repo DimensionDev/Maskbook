@@ -1,5 +1,6 @@
 import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import type { ChainId } from '@masknet/web3-shared-flow'
+import BigNumber from 'bignumber.js'
 
 export function createFungibleToken(
     chainId: ChainId,
@@ -22,15 +23,20 @@ export function createFungibleToken(
 export function createFungibleAsset(
     token: Web3Plugin.FungibleToken,
     balance: string,
-    value?: { [key in CurrencyType]?: string },
     logoURI?: string,
+    price?: { [key in CurrencyType]?: string },
 ): Web3Plugin.Asset {
     return {
         id: token.address,
         chainId: token.chainId,
-        balance,
+        balance: new BigNumber(balance).dividedBy(new BigNumber(10).pow(8)).toFixed(),
         token,
         logoURI,
-        value,
+        value: {
+            [CurrencyType.USD]: new BigNumber(price?.usd ?? 0)
+                .multipliedBy(new BigNumber(balance).dividedBy(new BigNumber(10).pow(8)))
+                .toFixed(),
+        },
+        price,
     }
 }
