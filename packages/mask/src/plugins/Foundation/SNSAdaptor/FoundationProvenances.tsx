@@ -74,7 +74,7 @@ function FoundationProvenances(props: Props) {
                 <Table
                     sx={{ borderCollapse: tableType, borderSpacing: '0px 16px' }}
                     size="small"
-                    aria-label="provenancestable">
+                    aria-label="Provenances-table">
                     <TableHead className={classes.table}>
                         <TableRow>
                             <TableCell>Event</TableCell>

@@ -47,11 +47,11 @@ interface Props extends withClasses<never> {
     link: string
 }
 
-interface propshasCountdown extends withClasses<never> {
+interface Countdown extends withClasses<never> {
     date: string
 }
 
-function HasCountdown(props: propshasCountdown) {
+function HasCountdown(props: Countdown) {
     const unixDate = new Date(Number(props.date) * 1000).getTime()
     if (unixDate > Date.now()) {
         return <FoundationCountdown dateEnding={unixDate} />
@@ -86,7 +86,7 @@ function FoundationPlaceBid(props: Props) {
 
     //#region transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
-    const shareLink = activatedSocialNetworkUI.utils
+    const ShareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
                 ? [
@@ -118,7 +118,7 @@ function FoundationPlaceBid(props: Props) {
         if (placeBidState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
-            shareLink,
+            shareLink: ShareLink,
             state: placeBidState,
             summary: t('plugin_foundation_open_dialog', {
                 amount: formatBalance(amount, token.decimals),

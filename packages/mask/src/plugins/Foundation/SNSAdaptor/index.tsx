@@ -1,5 +1,5 @@
 import { base } from '../base'
-import { uniq } from 'lodash-es'
+import { uniq } from 'lodash-unified'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { checkUrl, getRelevantUrl } from '../utils'

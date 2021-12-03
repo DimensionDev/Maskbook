@@ -84,7 +84,7 @@ function FoundationContent(props: Props) {
     const tabs = [
         <Tab className={classes.tab} key="articles" label={t('plugin_foundation_articles')} />,
         <Tab className={classes.tab} key="details" label={t('plugin_foundation_details')} />,
-        <Tab className={classes.tab} key="provenance" label={t('plugin_foundation_provenace')} />,
+        <Tab className={classes.tab} key="provenance" label={t('plugin_foundation_provenance')} />,
     ]
     return (
         <CardContent>

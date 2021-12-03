@@ -5,7 +5,7 @@ export const base: Plugin.Shared.Definition = {
     icon: '🤔',
     name: { fallback: 'Foundation' },
     description: { fallback: 'Foundation plugin to Mask for buy nft' },
-    publisher: { name: { fallback: 'lucasespinosa28' }, link: 'https://github.com/lucasespinosa28/' },
+    publisher: { name: { fallback: 'Lucasespinosa28' }, link: 'https://github.com/lucasespinosa28/' },
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
