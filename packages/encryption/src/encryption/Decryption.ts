@@ -73,7 +73,7 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
         //#region
         const authorPublicKey = _authorPublicKey.unwrapOr(None)
         if (version === -37) {
-            throw new Error('TODO')
+            return yield* v37ECDHE(iv, encrypted, ephemeralPublicKey, io, options.signal)
         } else {
             // Static ECDH
             // to do static ECDH, we need to have the authors public key first. bail if not found.
@@ -88,6 +88,33 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
         //#endregion
     }
     unreachable(encryption)
+}
+
+async function* v37ECDHE(
+    iv: Uint8Array,
+    encrypted: Uint8Array,
+    inlinedECDHE: PayloadParseResult.EndToEndEncryption['ephemeralPublicKey'],
+    io: DecryptIO,
+    signal: AbortSignal | undefined,
+) {
+    const inlinedECDHE_Result = Promise.all(
+        Object.values(inlinedECDHE)
+            .map((x) => x.unwrapOr(null!))
+            .filter(Boolean)
+            .map((x) => io.deriveAESKey(x.key as EC_Public_CryptoKey)),
+    ).then((x) => x.flat())
+
+    return yield* decryptByECDH(
+        -37,
+        io.queryPostKey_version37(iv, signal),
+        {
+            type: 'ephemeral',
+            provider: (key) => (key ? io.deriveAESKey(key) : inlinedECDHE_Result),
+        },
+        iv,
+        encrypted,
+        io,
+    )
 }
 
 async function* v38To40StaticECDH(
@@ -114,8 +141,35 @@ async function* v38To40StaticECDH(
         '-38': io.queryPostKey_version38,
     }[version](iv, signal)
 
-    for await (const { encryptedKey: encryptedPostKey, iv: postKeyIV } of postAESKeyIterator) {
-        for (const derivedKey of derivedKeys.val) {
+    return yield* decryptByECDH(
+        version,
+        postAESKeyIterator,
+        { type: 'static', provider: derivedKeys.val },
+        iv,
+        encrypted,
+        io,
+    )
+}
+
+async function* decryptByECDH(
+    version: Version,
+    possiblePostKeyIterator: AsyncIterableIterator<EphemeralECDH_Result>,
+    ecdhProvider:
+        | { type: 'static'; provider: AESCryptoKey[] }
+        // it's optional argument because the ephemeralPublicKey maybe inlined in the post payload.
+        | { type: 'ephemeral'; provider: (ephemeralPublicKey?: EC_Public_CryptoKey) => Promise<AESCryptoKey[]> },
+    iv: Uint8Array,
+    encrypted: Uint8Array,
+    io: DecryptIO,
+) {
+    const { provider, type } = ecdhProvider
+    for await (const _ of possiblePostKeyIterator) {
+        const { encryptedKey: encryptedPostKey, iv: postKeyIV, ephemeralPublicKey } = _
+        // TODO: how to deal with signature?
+        // TODO: what to do if provider return 0 AES key?
+        // TODO: what to do if provider throws?
+        const derivedKeys = await (type === 'static' ? provider : provider(ephemeralPublicKey))
+        for (const derivedKey of derivedKeys) {
             const possiblePostKey = await andThenAsync(
                 decryptWithAES(AESAlgorithmEnum.A256GCM, derivedKey, postKeyIV, encryptedPostKey),
                 (postKeyRaw) => Result.wrapAsync(() => importAESKeyFromJWKFromTextEncoder(postKeyRaw)),
@@ -130,7 +184,7 @@ async function* v38To40StaticECDH(
             return yield* parseTypedMessage(version, decrypted.val)
         }
     }
-    return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
+    return void (yield new DecryptionError(ErrorReasons.NotShareTarget, undefined))
 }
 
 // uint8 |> TextDecoder |> JSON.parse |> importAESKeyFromJWK
@@ -195,6 +249,10 @@ export interface DecryptIO {
      *
      * Implementor should derive a new AES-GCM key for each private key they have access to.
      * @param publicKey The public key used in ECDH
+     * @returns This function MUST NOT throw an error. Error will be treated as fatal error.
+     *
+     * If the provided key cannot derive AES with any key (e.g. The given key is ED25519 but there is only P-256 private keys)
+     * please return an empty array.
      */
     deriveAESKey(publicKey: EC_Public_CryptoKey): Promise<AESCryptoKey[]>
 }
