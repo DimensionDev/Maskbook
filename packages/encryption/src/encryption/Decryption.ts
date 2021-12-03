@@ -7,12 +7,12 @@ import {
     AESCryptoKey,
     EC_Public_CryptoKey,
 } from '@masknet/shared-base'
-import { None, Option, Result } from 'ts-results'
+import { None, Result } from 'ts-results'
 import { AESAlgorithmEnum, PayloadParseResult } from '../payload'
 import { decryptWithAES, importAESFromJWK } from '../utils'
 
 export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncIterableIterator<DecryptionProcess> {
-    yield progress(K.Started)
+    yield progress(DecryptionProgressKind.Started)
 
     const { author: _author, encrypted: _encrypted, encryption: _encryption, version } = options.message
     const { authorPublicKey: _authorPublicKey } = options.message
@@ -62,32 +62,29 @@ export async function* decrypt(options: DecryptionOption, io: DecryptIO): AsyncI
         // ! Try to decrypt this post by ECDHE
         //#region
         const authorPublicKey = _authorPublicKey.unwrapOr(None)
-        if (version === -40 || version === -39 || version === -38) {
+        if (version === -37) {
+            throw new Error('TODO')
+        } else {
             // Static ECDH
+            // to do static ECDH, we need to have the authors public key first. bail if not found.
             const authorECPub = await Result.wrapAsync(async () => {
                 if (authorPublicKey.some) return authorPublicKey.val.key as EC_Public_CryptoKey
                 return io.queryPublicKey(author.unwrapOr(null), options.signal)
             })
-            // Cannot do ECDH if no public key
             if (authorECPub.err) return yield new DecryptionError(ErrorReasons.AuthorPublicKeyNotFound, authorECPub.val)
 
-            return yield* v38To40StaticECDH(version, io, authorECPub.val, iv, author, options.signal)
-        } else if (version === -37) {
-            // ECDHE
-            throw new Error('TODO')
+            return yield* v38To40StaticECDH(version, io, authorECPub.val, iv, options.signal)
         }
-        unreachable(version)
         //#endregion
     }
     unreachable(encryption)
 }
 
 async function* v38To40StaticECDH(
-    version: Version,
+    version: -38 | -39 | -40,
     io: DecryptIO,
     authorECPub: EC_Public_CryptoKey,
     iv: Uint8Array,
-    author: Option<ProfileIdentifier>,
     signal: AbortSignal | undefined,
 ): AsyncIterableIterator<DecryptionProcess> {
     // Cannot do ECDH if no private key
@@ -96,24 +93,27 @@ async function* v38To40StaticECDH(
     if (derivedKeys.val.length === 0) return yield new DecryptionError(ErrorReasons.MyPrivateKeyNotFound, undefined)
 
     // ECDH key derived. Now start looking for post AES key.
-    // version -40 does not support append share targer, therefore we only try once.
+    // version -40 does not support append share target, therefore we only try once.
     if (version === -40) {
         try {
-            const key = await io.queryPostKey_version40(iv, author.map((x) => x.userId).unwrapOr(null))
-            if (key === null) return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
-            const { encryptedKey, iv: ecdhIV } = key
+            const postKeyEncrypted = await io.queryPostKey_version40(iv)
+            if (postKeyEncrypted === null) return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
+            const { encryptedKey, iv: postKeyIV } = postKeyEncrypted
             for (const each of derivedKeys.val) {
                 if (signal?.aborted) return yield new DecryptionError(ErrorReasons.Aborted, undefined)
-                const trial = await decryptWithAES(AESAlgorithmEnum.A256GCM, each, ecdhIV, encryptedKey)
-                if (trial.err) continue
-                return yield* parseTypedMessage(version, io, trial.val)
+                const decryptResult = await decryptWithAES(AESAlgorithmEnum.A256GCM, each, postKeyIV, encryptedKey)
+                if (decryptResult.err) continue
+                return yield* parseTypedMessage(version, io, decryptResult.val)
             }
+            // no available key. no need to wait further. 万策尽きた
             return yield new DecryptionError(ErrorReasons.NotShareTarget, undefined)
         } catch (err) {
             return yield new DecryptionError(ErrorReasons.NotShareTarget, err)
         }
+    } else {
+        const k = version === -39 ? io.queryPostKey_version39(iv) : io.queryPostKey_version38(iv)
+        throw new Error('TODO')
     }
-    throw new Error('TODO')
 }
 
 // uint8 |> TextDecoder |> JSON.parse |> importAESKeyFromJWK
@@ -144,7 +144,7 @@ async function* parseTypedMessage(
         version === -37 ? decodeTypedMessageFromDocument(raw) : decodeTypedMessageV38ToV40Format(raw, version)
     if (err) return yield new DecryptionError(ErrorReasons.PayloadDecryptedButNoValidTypedMessageIsFound, val)
     io.setCache(val).catch(() => {})
-    return yield progress(K.Success, { content: val })
+    return yield progress(DecryptionProgressKind.Success, { content: val })
 }
 
 function progress(kind: DecryptionProgressKind.Success, rest: Omit<DecryptionSuccess, 'type'>): DecryptionSuccess
@@ -174,8 +174,9 @@ export interface DecryptIO {
      */
     decryptByLocalKey(authorHint: ProfileIdentifier | null, data: Uint8Array, iv: Uint8Array): Promise<Uint8Array>
     queryPublicKey(id: ProfileIdentifier | null, signal?: AbortSignal): Promise<EC_Public_CryptoKey>
-    queryPostKey_version40(iv: Uint8Array, userID: string | null): Promise<StaticECDH_Result | null>
-    queryPostKey_version39_version38(): Promise<StaticECDH_Result[]>
+    queryPostKey_version40(iv: Uint8Array): Promise<StaticECDH_Result | null>
+    queryPostKey_version39(iv: Uint8Array): Promise<StaticECDH_Result[]>
+    queryPostKey_version38(iv: Uint8Array): Promise<StaticECDH_Result[]>
     queryPostKey_version37(): Promise<EphemeralECDH_Result[]>
     /**
      * Derive a group of AES key for ECDH.
@@ -199,7 +200,6 @@ export enum DecryptionProgressKind {
     Success = 'success',
     Error = 'error',
 }
-const K = DecryptionProgressKind
 export type DecryptionProcess = { type: DecryptionProgressKind.Started } | DecryptionSuccess | DecryptionError
 export interface DecryptionSuccess {
     type: DecryptionProgressKind.Success
