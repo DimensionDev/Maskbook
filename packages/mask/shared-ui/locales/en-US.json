@@ -222,6 +222,7 @@
     "wallets": "Wallets",
     "wallet_status_button_change": "Change",
     "wallet_status_button_disconnect": "Disconnect",
+    "wallet_status_button_disconnecting": "Disconnecting",
     "wallet_status_button_copy_address": "Copy Address",
     "wallet_transfer_account": "Transfer Account",
     "wallet_transfer_receiving_account": "Receiving Account",

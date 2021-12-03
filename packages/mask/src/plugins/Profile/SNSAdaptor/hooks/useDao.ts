@@ -1,4 +1,4 @@
-import { useAsync } from 'react-use'
+import { useAsyncRetry } from 'react-use'
 import type BigNumber from 'bignumber.js'
 
 export type Dao_Payload = {
@@ -24,7 +24,7 @@ export type Dao_Payload = {
 }
 export function useDao(userId: string) {
     const api = `https://dimensiondev.github.io/Maskbook-Configuration/com.maskbook.dao-${userId.toLowerCase()}.json`
-    return useAsync(async () => {
+    return useAsyncRetry(async () => {
         try {
             const res = await fetch(api)
             if (!res.ok) {
