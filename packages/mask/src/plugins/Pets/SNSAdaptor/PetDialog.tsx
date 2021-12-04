@@ -1,19 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useAccount } from '@masknet/web3-shared-evm'
-import { Button, TextField, Typography, DialogContent, Grid, MenuItem } from '@mui/material'
+import { Button, TextField, Typography, DialogContent, Grid, MenuItem, Snackbar } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { PluginPetMessages } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 import { TWITTER } from '../constants'
-import PreviewBox from './components/previewBox'
+import PreviewBox from './previewBox'
 
 const useStyles = makeStyles()((theme) => ({
+    desBox: {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
     des: {
         paddingBottom: '-12px',
         color: '#7b8192',
-        fontSize: '12px',
+        fontSize: '12px !important',
     },
     input: {
         margin: theme.spacing(2, 0, 0),
@@ -43,13 +47,39 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+const selectMock = [
+    {
+        value: '1728',
+        label: 'Baby Unifairy #1728',
+        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
+    },
+    {
+        value: '1729',
+        label: 'Baby Unifairy #1728',
+        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
+    },
+    {
+        value: '1730',
+        label: 'Baby Unifairy #1728',
+        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
+    },
+    {
+        value: '1731',
+        label: 'Baby Unifairy #1728',
+        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
+    },
+    {
+        value: '1732',
+        label: 'Baby Unifairy #1728',
+        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
+    },
+]
 export function PetDialog() {
     const classes = useStylesExtends(useStyles(), {})
     const account = useAccount()
     const myPersonas = useMyPersonas()
     // const [input, setInput] = useState('')
-    const [collectionsValue, setCollectionsValue] = useState<string>()
-    const [imageValue, setImageValue] = useState<string>()
+
     const [user, setUser] = useState<{ userId: string; address: string }>({
         userId: '',
         address: '',
@@ -70,8 +100,21 @@ export function PetDialog() {
     const saveHandle = async () => {
         // if (!input) return
         // await PluginPetRPC.saveEssay(user.address, input, user.userId)
-        closeDialog()
+        if (!collectionsValue) {
+            setCollectionsError(true)
+            return
+        }
 
+        if (!imageValue) {
+            setImageError(true)
+            return
+        }
+
+        setTipShow(true)
+        closeDialog()
+        setTimeout(() => {
+            setTipShow(false)
+        }, 2000)
         // if(wordResult && wordResult.userId) {
         // }
     }
@@ -81,13 +124,42 @@ export function PetDialog() {
         console.log('ev', ev)
     })
 
-    return (
-        <InjectedDialog open={open} onClose={closeDialog} title="Set up your NFT pet">
+    const [collectionsValue, setCollectionsValue] = useState<string>()
+    const [isCollectionsError, setCollectionsError] = useState(false)
+    const onCollectionsChage = (v: string) => {
+        setCollectionsValue(v)
+        setCollectionsError(false)
+    }
+
+    const [imageValue, setImageValue] = useState<string>()
+    const [isImageError, setImageError] = useState(false)
+    const onImageChange = (v: string) => {
+        setImageValue(v)
+        setImageError(false)
+    }
+
+    const [msgValue, setMsgValue] = useState<string>()
+    const setMsgValueCheck = (v: string) => {
+        if (v.length > 20) {
+            return
+        }
+        setMsgValue(v)
+    }
+
+    const imageChose = useMemo(() => {
+        const imageChosed = selectMock.find((item) => item.value === imageValue)
+        return imageChosed?.url
+    }, [imageValue])
+
+    const [isTipShow, setTipShow] = useState(false)
+
+    return [
+        <InjectedDialog open={open} onClose={closeDialog} title="Set up your NFT pet" key="dialog">
             <DialogContent>
                 <Typography className={classes.des}>Can customize pet image and language</Typography>
                 <Grid container spacing={2}>
                     <Grid item xs={4}>
-                        <PreviewBox className={classes.prevBox} />
+                        <PreviewBox message={msgValue} imageUrl={imageChose} />
                     </Grid>
                     <Grid item xs={8}>
                         <TextField
@@ -97,8 +169,9 @@ export function PetDialog() {
                             select
                             required
                             value={collectionsValue}
+                            error={isCollectionsError}
                             variant="outlined"
-                            onChange={(e) => setCollectionsValue(e.target.value)}>
+                            onChange={(e) => onCollectionsChage(e.target.value)}>
                             <MenuItem key="Traveloggers" value="Traveloggers">
                                 Traveloggers
                             </MenuItem>
@@ -113,73 +186,24 @@ export function PetDialog() {
                             select
                             required
                             value={imageValue}
+                            error={isImageError}
                             variant="outlined"
                             disabled={!collectionsValue}
                             maxRows={2}
-                            onChange={(e) => setImageValue(e.target.value)}>
-                            <MenuItem key="#1728" value="#1728">
-                                <Typography className={classes.itemFix}>
-                                    <img
-                                        className={classes.thumbnail}
-                                        src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
-                                    />
-                                    Baby Unifairy #1728
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem key="#1729" value="#1729">
-                                <Typography className={classes.itemFix}>
-                                    <img
-                                        className={classes.thumbnail}
-                                        src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
-                                    />
-                                    Baby Unifairy #1728
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem key="#1730" value="#1730">
-                                <Typography className={classes.itemFix}>
-                                    <img
-                                        className={classes.thumbnail}
-                                        src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
-                                    />
-                                    Baby Unifairy #1728
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem key="#1731" value="#1731">
-                                <Typography className={classes.itemFix}>
-                                    <img
-                                        className={classes.thumbnail}
-                                        src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
-                                    />
-                                    Baby Unifairy #1728
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem key="#1732" value="#1732">
-                                <Typography className={classes.itemFix}>
-                                    <img
-                                        className={classes.thumbnail}
-                                        src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
-                                    />
-                                    Baby Unifairy #1728
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem key="#1733" value="#1733">
-                                <Typography className={classes.itemFix}>
-                                    <img
-                                        className={classes.thumbnail}
-                                        src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
-                                    />
-                                    Baby Unifairy #1728
-                                </Typography>
-                            </MenuItem>
-                            <MenuItem key="#1734" value="#1734">
-                                <Typography className={classes.itemFix}>
-                                    <img
-                                        className={classes.thumbnail}
-                                        src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
-                                    />
-                                    Baby Unifairy #1728
-                                </Typography>
-                            </MenuItem>
+                            onChange={(e) => onImageChange(e.target.value)}>
+                            {selectMock.map((item, index) => {
+                                return (
+                                    <MenuItem key={item.value} value={item.value}>
+                                        <Typography className={classes.itemFix}>
+                                            <img
+                                                className={classes.thumbnail}
+                                                src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
+                                            />
+                                            {item.label}
+                                        </Typography>
+                                    </MenuItem>
+                                )
+                            })}
                         </TextField>
                         <TextField
                             className={classes.input}
@@ -188,6 +212,8 @@ export function PetDialog() {
                             multiline
                             rows={3}
                             disabled={!collectionsValue}
+                            value={msgValue}
+                            onChange={(e) => setMsgValueCheck(e.target.value)}
                         />
                     </Grid>
                 </Grid>
@@ -195,8 +221,17 @@ export function PetDialog() {
                 <Button className={classes.btn} variant="contained" size="large" fullWidth onClick={saveHandle}>
                     Confirm Add
                 </Button>
-                <Typography className={classes.des}>Support By: Mask</Typography>
+                <Typography className={classes.desBox}>
+                    <Typography className={classes.des}>Support By: Mask</Typography>
+                    <Typography className={classes.des}>RSS3</Typography>
+                </Typography>
             </DialogContent>
-        </InjectedDialog>
-    )
+        </InjectedDialog>,
+        <Snackbar
+            anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            open={isTipShow}
+            message="Your new pet has been successFully set up"
+            key="tip"
+        />,
+    ]
 }
