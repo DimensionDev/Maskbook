@@ -396,7 +396,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                             }}
                         />
 
-                        {trades.filter((item) => !!item.value).length > 1 ? (
+                        {trades.filter((item) => !!item.value).length >= 1 ? (
                             <>
                                 <Box marginTop="20px">
                                     {firstTraderInfo}

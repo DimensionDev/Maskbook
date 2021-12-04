@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     ChainId,
@@ -10,10 +10,12 @@ import {
     FungibleTokenDetailed,
     GasOptionConfig,
     getNetworkTypeFromChainId,
+    isSameAddress,
     TransactionStateType,
     useChainId,
     useChainIdValid,
     useFungibleTokenBalance,
+    useTokenConstants,
     useWallet,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
@@ -57,7 +59,6 @@ export interface TraderProps extends withClasses<never> {
 }
 
 export function Trader(props: TraderProps) {
-    const tradeRef = useRef<TradeInfo | undefined>()
     const { coin, tokenDetailed, chainId: targetChainId } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
     const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
@@ -66,6 +67,7 @@ export function Trader(props: TraderProps) {
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const currentAccount = useValueRef(currentAccountSettings)
     const currentProvider = useValueRef(currentProviderSettings)
     const classes = useStylesExtends(useStyles(), props)
@@ -82,19 +84,37 @@ export function Trader(props: TraderProps) {
     } = AllProviderTradeContext.useContainer()
     //endregion
 
+    //#region if chain id be changed, update input token be native token
     useEffect(() => {
         if (!chainIdValid) return
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
             token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
         })
+    }, [chainId, chainIdValid])
+    //#endregion
+
+    //#region if coin be changed, update output token
+    useEffect(() => {
+        if (!coin || currentChainId !== targetChainId) return
+        // if coin be native token and input token also be native token, reset it
+        if (
+            isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
+            inputToken?.type === EthereumTokenType.Native &&
+            coin.symbol === inputToken.symbol
+        ) {
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+                token: undefined,
+            })
+        }
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-            token: coin?.contract_address
+            token: coin.contract_address
                 ? createERC20Token(chainId, coin.contract_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
                 : undefined,
         })
-    }, [coin, chainId, chainIdValid, decimals])
+    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, currentChainId, targetChainId])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
@@ -165,11 +185,15 @@ export function Trader(props: TraderProps) {
                 })
             }
 
-            if (inputToken?.type === EthereumTokenType.Native)
-                dispatchTradeStore({ type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE, balance })
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+                balance: inputToken?.type === EthereumTokenType.Native ? balance : '0',
+            })
 
-            if (outputToken?.type === EthereumTokenType.Native)
-                dispatchTradeStore({ type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE, balance })
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
+                balance: outputToken?.type === EthereumTokenType.Native ? balance : '0',
+            })
         }
     }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId])
     // #endregion
@@ -411,16 +435,23 @@ export function Trader(props: TraderProps) {
     }, [targetChainId, inputToken, outputToken, inputAmount])
     //#endregion
 
+    //#region if chain id be changed, reset the chain id on context, and reset gas config
     useUpdateEffect(() => {
         if (chainId) {
             setTargetChainId(chainId)
             setGasConfig(undefined)
         }
     }, [chainId])
+    //#endregion
 
+    //#region if target chain id be changed, reset output token
     useUpdateEffect(() => {
-        if (focusedTrade) tradeRef.current = focusedTrade
-    }, [focusedTrade])
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+            token: undefined,
+        })
+    }, [targetChainId])
+    //#endregion
 
     useEffect(() => {
         return PluginTraderMessages.swapSettingsUpdated.on((event) => {
