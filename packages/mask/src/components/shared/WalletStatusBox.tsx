@@ -12,6 +12,7 @@ import {
     useNetworkDescriptor,
     useProviderDescriptor,
     useProviderType,
+    useReverseAddress,
 } from '@masknet/plugin-infra'
 import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -42,7 +43,6 @@ const useStyles = makeStyles()((theme) => ({
     accountName: {
         fontSize: 16,
         marginRight: 6,
-        marginBottom: 6,
     },
     infoRow: {
         display: 'flex',
@@ -81,6 +81,15 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         margin: theme.spacing(2, 0),
     },
+    domain: {
+        fontSize: 16,
+        lineHeight: '18px',
+        marginLeft: 6,
+        padding: 4,
+        borderRadius: 8,
+        backgroundColor: '#ffffff',
+        color: theme.palette.common.black,
+    },
 }))
 interface WalletStatusBox {
     isDashboard?: boolean
@@ -96,6 +105,8 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
     const { Utils } = useWeb3State() ?? {}
+
+    const { value: domain } = useReverseAddress(account)
 
     //#region copy addr to clipboard
     const [, copyToClipboard] = useCopyToClipboard()
@@ -154,8 +165,10 @@ export function WalletStatusBox(props: WalletStatusBox) {
                 providerIcon={networkDescriptor?.icon}
             />
             <div className={classes.accountInfo}>
-                <div className={classes.infoRow}>
-                    <Typography className={classes.accountName}>{providerDescriptor?.name}</Typography>
+                <div className={classes.infoRow} style={{ marginBottom: 6 }}>
+                    <Typography className={classes.accountName}>
+                        {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : providerDescriptor?.name}
+                    </Typography>
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2">

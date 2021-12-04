@@ -31,7 +31,6 @@ export interface Web3ProviderType {
     tokenPrices: Subscription<CryptoPrice>
     wallets: Subscription<Wallet[]>
     walletPrimary: Subscription<Wallet | null>
-
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     erc721Tokens: Subscription<ERC721TokenDetailed[]>
     erc1155Tokens: Subscription<ERC1155TokenDetailed[]>

@@ -118,7 +118,6 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             WalletMessages.events.erc1155TokensUpdated.on,
         ),
         portfolioProvider: createSubscriptionFromSettings(currentFungibleAssetDataProviderSettings),
-
         addToken: WalletRPC.addToken,
         removeToken: WalletRPC.removeToken,
         trustToken: WalletRPC.trustToken,
