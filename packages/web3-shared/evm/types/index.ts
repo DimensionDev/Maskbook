@@ -24,6 +24,16 @@ export interface CryptoPrice {
     [token: string]: PriceRecord
 }
 
+export interface BalanceOfChainRecord {
+    [chainId: number]: string
+}
+
+export interface BalanceOfChains {
+    [provider: string]: {
+        [chainId: number]: string
+    }
+}
+
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -274,6 +284,12 @@ export type PriorEIP1559GasConfig = {
 }
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
+
+export type GasOptionConfig = {
+    maxFeePerGas?: number | string
+    maxPriorityFeePerGas?: number | string
+    gasPrice?: number | string
+}
 
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods

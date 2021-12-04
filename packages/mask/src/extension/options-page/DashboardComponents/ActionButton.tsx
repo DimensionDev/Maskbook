@@ -81,7 +81,7 @@ export default function ActionButton<T extends React.ComponentType<any> = React.
     )
 }
 
-interface ActionButtonPromiseProps extends ButtonProps {
+export interface ActionButtonPromiseProps extends ButtonProps {
     executor: () => Promise<void>
     init: React.ReactChild
     complete: React.ReactChild

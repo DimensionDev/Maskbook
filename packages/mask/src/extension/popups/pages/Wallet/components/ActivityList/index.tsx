@@ -4,26 +4,22 @@ import { memo, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useContainer } from 'unstated-next'
-import { Box, Button, Link, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Button, Link, List } from '@mui/material'
 import {
     ChainId,
     EthereumRpcType,
-    formatEthereumAddress,
     isNative,
     isSameAddress,
     resolveTransactionLinkOnExplorer,
-    TransactionStatusType,
     useChainId,
 } from '@masknet/web3-shared-evm'
 import { PopupRoutes } from '@masknet/shared-base'
-import formatDateTime from 'date-fns/format'
-import { ArrowRightIcon, CircleCloseIcon, InteractionCircleIcon, LoaderIcon } from '@masknet/icons'
 import { WalletContext } from '../../hooks/useWalletContext'
-import { RecentTransactionDescription } from '../../../../../../plugins/Wallet/SNSAdaptor/WalletStatusDialog/TransactionDescription'
 import type { RecentTransaction } from '../../../../../../plugins/Wallet/services'
 import type Services from '../../../../../service'
 import { useI18N } from '../../../../../../utils'
 import { ReplaceType } from '../../type'
+import { ActivityListItem } from './ActivityListItem'
 
 const useStyles = makeStyles()({
     list: {
@@ -149,78 +145,28 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                             rel="noopener noreferrer"
                             key={index}
                             style={{ textDecoration: 'none' }}>
-                            <ListItem className={classes.item}>
-                                {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                                    <LoaderIcon className={classes.loader} />
-                                ) : transaction.status === TransactionStatusType.SUCCEED ||
-                                  transaction.status === TransactionStatusType.CANCELLED ? (
-                                    <InteractionCircleIcon className={classes.interaction} />
-                                ) : (
-                                    <CircleCloseIcon style={{ fill: 'none' }} />
-                                )}
-                                <ListItemText style={{ marginLeft: 15 }}>
-                                    <Typography className={classes.description}>
-                                        <RecentTransactionDescription {...transaction} />
-                                    </Typography>
-
-                                    {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                                        <Typography fontSize={12} color="#FFB915" fontWeight={600} lineHeight="16px">
-                                            {t('pending')}
-                                        </Typography>
-                                    ) : (
-                                        <Typography className={classes.secondaryDesc}>
-                                            {transaction.at ? `${formatDateTime(transaction.at, 'MMM dd')}.  ` : null}
-                                            {!!toAddress
-                                                ? t('popups_wallet_activity_to_address', {
-                                                      address: formatEthereumAddress(toAddress, 4),
-                                                  })
-                                                : null}
-                                        </Typography>
-                                    )}
-
-                                    {transaction.status === TransactionStatusType.NOT_DEPEND ? (
-                                        <Box display="flex" mt={1}>
-                                            {!transaction.payloadReplacement ? (
-                                                <Button
-                                                    className={classes.button}
-                                                    variant="contained"
-                                                    onClick={(e) => {
-                                                        e.preventDefault()
-                                                        setTransaction(transaction)
-                                                        history.push(
-                                                            urlcat(PopupRoutes.ReplaceTransaction, {
-                                                                type: ReplaceType.SPEED_UP,
-                                                            }),
-                                                        )
-                                                    }}>
-                                                    {t('speed_up')}
-                                                </Button>
-                                            ) : null}
-                                            <Button
-                                                className={classes.button}
-                                                style={{ color: '#1C68F3', backgroundColor: '#F7F9FA', marginLeft: 2 }}
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    setTransaction(transaction)
-                                                    history.push(
-                                                        urlcat(PopupRoutes.ReplaceTransaction, {
-                                                            type: ReplaceType.CANCEL,
-                                                        }),
-                                                    )
-                                                }}>
-                                                {t('cancel')}
-                                            </Button>
-                                        </Box>
-                                    ) : null}
-
-                                    {transaction.status === TransactionStatusType.FAILED ? (
-                                        <Typography fontSize={12} color="#FF5F5F" fontWeight={600} lineHeight="16px">
-                                            {t('failed')}
-                                        </Typography>
-                                    ) : null}
-                                </ListItemText>
-                                <ArrowRightIcon className={classes.arrow} style={{ fill: 'none' }} />
-                            </ListItem>
+                            <ActivityListItem
+                                transaction={transaction}
+                                toAddress={toAddress}
+                                onSpeedUpClick={(e) => {
+                                    e.preventDefault()
+                                    setTransaction(transaction)
+                                    history.push(
+                                        urlcat(PopupRoutes.ReplaceTransaction, {
+                                            type: ReplaceType.SPEED_UP,
+                                        }),
+                                    )
+                                }}
+                                onCancelClick={(e) => {
+                                    e.preventDefault()
+                                    setTransaction(transaction)
+                                    history.push(
+                                        urlcat(PopupRoutes.ReplaceTransaction, {
+                                            type: ReplaceType.CANCEL,
+                                        }),
+                                    )
+                                }}
+                            />
                         </Link>
                     )
                 })}
