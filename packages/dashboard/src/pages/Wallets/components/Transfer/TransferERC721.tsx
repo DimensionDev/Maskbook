@@ -114,7 +114,7 @@ export const TransferERC721 = memo(() => {
 
     //#region resolve ENS domain
     const {
-        value: registeredAddress,
+        value: registeredAddress = '',
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)

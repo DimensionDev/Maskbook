@@ -13,6 +13,7 @@ import {
     useProviderDescriptor,
     useProviderType,
     useReverseAddress,
+    useWallet,
 } from '@masknet/plugin-infra'
 import { FormattedAddress, useRemoteControlledDialog, useSnackbarCallback, WalletIcon } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
@@ -100,7 +101,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
 
     const chainId = useChainId()
     const account = useAccount()
-
+    const wallet = useWallet()
     const providerType = useProviderType()
     const providerDescriptor = useProviderDescriptor()
     const networkDescriptor = useNetworkDescriptor()
@@ -166,9 +167,22 @@ export function WalletStatusBox(props: WalletStatusBox) {
             />
             <div className={classes.accountInfo}>
                 <div className={classes.infoRow} style={{ marginBottom: 6 }}>
-                    <Typography className={classes.accountName}>
-                        {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : providerDescriptor?.name}
-                    </Typography>
+                    {providerType !== ProviderType.MaskWallet ? (
+                        <Typography className={classes.accountName}>
+                            {domain && Utils?.formatDomainName
+                                ? Utils.formatDomainName(domain)
+                                : providerDescriptor?.name}
+                        </Typography>
+                    ) : (
+                        <>
+                            <Typography className={classes.accountName}>
+                                {wallet?.name ?? providerDescriptor?.name}
+                            </Typography>
+                            {domain && Utils?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            ) : null}
+                        </>
+                    )}
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.address} variant="body2">
