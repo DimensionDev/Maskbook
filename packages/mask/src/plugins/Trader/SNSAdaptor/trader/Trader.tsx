@@ -1,60 +1,51 @@
-import { useCallback, useContext, useEffect, useState } from 'react'
-import { useAsyncRetry, useTimeoutFn } from 'react-use'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import type { Trade } from '@uniswap/v2-sdk'
-import { TradeProvider } from '@masknet/public-api'
-import type { Currency, TradeType } from '@uniswap/sdk-core'
 import {
     ChainId,
     createERC20Token,
     createNativeToken,
     EthereumTokenType,
     formatBalance,
+    formatGweiToWei,
     FungibleTokenDetailed,
+    GasOptionConfig,
+    getNetworkTypeFromChainId,
     TransactionStateType,
     useChainId,
     useChainIdValid,
     useFungibleTokenBalance,
+    useWallet,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import type { Coin } from '../../types'
+import { TokenPanelType, TradeInfo } from '../../types'
+import { delay, useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
-import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
-import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
-import { TradeSummary } from './TradeSummary'
-import { ConfirmDialog } from './ConfirmDialog'
-import { TradeActionType } from '../../trader/useTradeState'
-import { Coin, SwapResponse, SwapRouteData, TokenPanelType, TradeComputed, SwapBancorRequest } from '../../types'
-import { TradePairViewer as UniswapPairViewer } from '../uniswap/TradePairViewer'
-import { TradePairViewer as DODOPairViewer } from '../dodo/TradePairViewer'
-import { useTradeCallback } from '../../trader/useTradeCallback'
-import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
-import { activatedSocialNetworkUI } from '../../../../social-network'
-import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
-import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
+import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { UST } from '../../constants'
-import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
+import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
+import { useAsync, useUpdateEffect } from 'react-use'
+import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
+import { activatedSocialNetworkUI } from '../../../../social-network'
+import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
+import { useTradeCallback } from '../../trader/useTradeCallback'
 import { isNativeTokenWrapper } from '../../helpers'
-import { TradeContext } from '../../trader/useTradeContext'
-import { PluginTraderRPC } from '../../messages'
-import { delay } from '../../../../utils'
-import { useI18N } from '../../../../utils/i18n-next-ui'
+import { ConfirmDialog } from './ConfirmDialog'
+import Services from '../../../../extension/service'
+import { currentAccountSettings, currentBalancesSettings, currentProviderSettings } from '../../../Wallet/settings'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { WalletRPC } from '../../../Wallet/messages'
+import { PluginTraderMessages } from '../../messages'
+import { NetworkType } from '@masknet/public-api'
+import BigNumber from 'bignumber.js'
+import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
+import { SettingsDialog } from './SettingsDialog'
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles()(() => {
     return {
         root: {
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: 266,
-            position: 'relative',
-        },
-        progress: {
-            bottom: theme.spacing(1),
-            right: theme.spacing(1),
-            position: 'absolute',
-        },
-        summary: {},
-        router: {
-            marginTop: 0,
+            width: 535,
+            margin: 'auto',
         },
     }
 })
@@ -62,102 +53,131 @@ const useStyles = makeStyles()((theme) => {
 export interface TraderProps extends withClasses<never> {
     coin?: Coin
     tokenDetailed?: FungibleTokenDetailed
+    chainId?: ChainId
 }
 
 export function Trader(props: TraderProps) {
-    const { coin, tokenDetailed } = props
+    const tradeRef = useRef<TradeInfo | undefined>()
+    const { coin, tokenDetailed, chainId: targetChainId } = props
     const { decimals } = tokenDetailed ?? coin ?? {}
-
-    const chainId = useChainId()
+    const [focusedTrade, setFocusTrade] = useState<TradeInfo>()
+    const [gasConfig, setGasConfig] = useState<GasOptionConfig | undefined>()
+    const wallet = useWallet()
+    const currentChainId = useChainId()
+    const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid()
+    const currentAccount = useValueRef(currentAccountSettings)
+    const currentProvider = useValueRef(currentProviderSettings)
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
-
-    const context = useContext(TradeContext)
-    const provider = context?.TYPE ?? TradeProvider.UNISWAP_V2
+    const { setTargetChainId } = TargetChainIdContext.useContainer()
 
     //#region trade state
     const {
-        tradeState: [tradeStore, dispatchTradeStore],
-        tradeComputed: { value: tradeComputed, ...asyncTradeComputed },
-    } = useTradeStateComputed(provider)
-    const { inputToken, outputToken } = tradeStore
+        tradeState: [
+            { inputToken, outputToken, inputTokenBalance, outputTokenBalance, inputAmount },
+            dispatchTradeStore,
+        ],
+        allTradeComputed,
+    } = AllProviderTradeContext.useContainer()
+    //endregion
 
     useEffect(() => {
         if (!chainIdValid) return
         dispatchTradeStore({
-            type: TradeActionType.UPDATE_INPUT_TOKEN,
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
             token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
         })
         dispatchTradeStore({
-            type: TradeActionType.UPDATE_OUTPUT_TOKEN,
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
             token: coin?.contract_address
                 ? createERC20Token(chainId, coin.contract_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
                 : undefined,
         })
     }, [coin, chainId, chainIdValid, decimals])
-    //#endregion
 
-    //#region switch tokens
-    const onReverseClick = useCallback(() => {
-        dispatchTradeStore({
-            type: TradeActionType.SWITCH_TOKEN,
-        })
-    }, [])
-    //#endregion
-
-    //#region update amount
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
-            type: TradeActionType.UPDATE_INPUT_AMOUNT,
+            type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
             amount,
         })
     }, [])
-    const onOutputAmountChange = useCallback((amount: string) => {
-        dispatchTradeStore({
-            type: TradeActionType.UPDATE_OUTPUT_AMOUNT,
-            amount,
-        })
-    }, [])
-    //#endregion
 
     //#region update balance
-    const {
-        value: inputTokenBalance_,
-        loading: loadingInputTokenBalance,
-        retry: retryInputTokenBalance,
-    } = useFungibleTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
-    const {
-        value: outputTokenBalance_,
-        loading: loadingOutputTokenBalance,
-        retry: retryOutputTokenBalance,
-    } = useFungibleTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
+    const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
+        inputToken?.type ?? EthereumTokenType.Native,
+        inputToken?.address ?? '',
+    )
+
+    const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
+        outputToken?.type ?? EthereumTokenType.Native,
+        outputToken?.address ?? '',
+        chainId,
+    )
 
     useEffect(() => {
-        if (inputTokenBalance_ && !loadingInputTokenBalance)
+        if (
+            inputToken &&
+            inputToken?.type !== EthereumTokenType.Native &&
+            inputTokenBalance_ &&
+            !loadingInputTokenBalance
+        )
             dispatchTradeStore({
-                type: TradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: inputTokenBalance_,
             })
-        if (outputTokenBalance_ && !loadingOutputTokenBalance)
+        if (
+            outputToken &&
+            outputToken?.type !== EthereumTokenType.Native &&
+            outputTokenBalance_ &&
+            !loadingOutputTokenBalance
+        )
             dispatchTradeStore({
-                type: TradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
+                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
                 balance: outputTokenBalance_,
             })
-    }, [inputTokenBalance_, outputTokenBalance_, loadingInputTokenBalance, loadingOutputTokenBalance])
+    }, [
+        inputToken,
+        outputToken,
+        inputTokenBalance_,
+        outputTokenBalance_,
+        loadingInputTokenBalance,
+        loadingOutputTokenBalance,
+    ])
 
-    const onUpdateTokenBalance = useCallback(() => {
-        retryInputTokenBalance()
-        retryOutputTokenBalance()
-    }, [retryInputTokenBalance, retryOutputTokenBalance])
-    //#endregion
+    // Query the balance of native tokens on target chain
+    useAsync(async () => {
+        if (chainId) {
+            const cacheBalance = currentBalancesSettings.value[currentProvider][chainId]
 
-    //#region the best trade
-    const { inputAmount, outputAmount, inputTokenBalance, outputTokenBalance, strategy } = tradeStore
+            let balance: string
 
-    //#region select token
+            if (cacheBalance) balance = cacheBalance
+            else {
+                balance = await Services.Ethereum.getBalance(currentAccount, {
+                    chainId: chainId,
+                    providerType: currentProvider,
+                })
+                await WalletRPC.updateBalances({
+                    [currentProvider]: {
+                        [chainId]: balance,
+                    },
+                })
+            }
+
+            if (inputToken?.type === EthereumTokenType.Native)
+                dispatchTradeStore({ type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE, balance })
+
+            if (outputToken?.type === EthereumTokenType.Native)
+                dispatchTradeStore({ type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE, balance })
+        }
+    }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId])
+    // #endregion
+
+    // #region select token
     const excludeTokens = [inputToken, outputToken].filter(Boolean).map((x) => x?.address) as string[]
     const [focusedTokenPanelType, setFocusedTokenPanelType] = useState(TokenPanelType.Input)
+
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
         WalletMessages.events.selectTokenDialogUpdated,
         useCallback(
@@ -166,18 +186,26 @@ export function Trader(props: TraderProps) {
                 dispatchTradeStore({
                     type:
                         focusedTokenPanelType === TokenPanelType.Input
-                            ? TradeActionType.UPDATE_INPUT_TOKEN
-                            : TradeActionType.UPDATE_OUTPUT_TOKEN,
+                            ? AllProviderTradeActionType.UPDATE_INPUT_TOKEN
+                            : AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
                     token: ev.token,
                 })
+                if (focusedTokenPanelType === TokenPanelType.Input) {
+                    dispatchTradeStore({
+                        type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
+                        amount: '',
+                    })
+                }
             },
             [dispatchTradeStore, focusedTokenPanelType],
         ),
     )
+
     const onTokenChipClick = useCallback(
         (type: TokenPanelType) => {
             setFocusedTokenPanelType(type)
             setSelectTokenDialog({
+                chainId,
                 open: true,
                 uuid: String(type),
                 disableNativeToken: false,
@@ -186,54 +214,66 @@ export function Trader(props: TraderProps) {
                 },
             })
         },
-        [excludeTokens.join()],
+        [excludeTokens.join(), chainId],
     )
     //#endregion
 
     //#region blocking (swap)
-    const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(provider, tradeComputed)
+    const [tradeState, tradeCallback, resetTradeCallback] = useTradeCallback(
+        focusedTrade?.provider,
+        focusedTrade?.value,
+        gasConfig,
+    )
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const onConfirmDialogConfirm = useCallback(async () => {
         setOpenConfirmDialog(false)
         await delay(100)
         await tradeCallback()
     }, [tradeCallback])
+
     const onConfirmDialogClose = useCallback(() => {
         setOpenConfirmDialog(false)
     }, [])
     //#endregion
 
-    //#region refresh pools
-    const { error: updateBalancerPoolsError, loading: updateBalancerPoolsLoading } = useAsyncRetry(async () => {
-        // force update balancer's pools each time user enters into the swap tab
-        if (provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true)
-    }, [provider])
-    //#endregion
+    //#region the click handler of switch arrow
+    const onSwitchToken = useCallback(() => {
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+            token: outputToken,
+        })
 
-    //#region refresh pairs
-    const [, , resetTimeout] = useTimeoutFn(() => {
-        // FIXME:
-        // failed to update onRefreshClick callback
-        onRefreshClick()
-    }, 30 /* seconds */ * 1000 /* milliseconds */)
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+            balance: '',
+        })
 
-    const onRefreshClick = useCallback(async () => {
-        asyncTradeComputed.retry()
-        resetTimeout()
-    }, [asyncTradeComputed.retry, resetTimeout])
-    //#endregion
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+            token: inputToken,
+        })
+
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
+            amount: '',
+        })
+    }, [dispatchTradeStore, inputToken, outputToken, inputAmount])
 
     //#region remote controlled transaction dialog
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            tradeComputed && inputToken && outputToken
+            focusedTrade?.value && inputToken && outputToken
                 ? [
-                      `I just swapped ${formatBalance(tradeComputed.inputAmount, inputToken.decimals, 6)} ${cashTag}${
-                          inputToken.symbol
-                      } for ${formatBalance(tradeComputed.outputAmount, outputToken.decimals, 6)} ${cashTag}${
-                          outputToken.symbol
-                      }.${
+                      `I just swapped ${formatBalance(
+                          focusedTrade.value.inputAmount,
+                          inputToken.decimals,
+                          6,
+                      )} ${cashTag}${inputToken.symbol} for ${formatBalance(
+                          focusedTrade.value.outputAmount,
+                          outputToken.decimals,
+                          6,
+                      )} ${cashTag}${outputToken.symbol}.${
                           isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                               ? `Follow @${
                                     isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
@@ -247,29 +287,64 @@ export function Trader(props: TraderProps) {
                 : '',
         )
         .toString()
+    //#endregion
 
-    // close the transaction dialog
+    //#region close the transaction dialog
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (tradeState.type === TransactionStateType.HASH) {
+            if (tradeState?.type === TransactionStateType.HASH) {
                 dispatchTradeStore({
-                    type: TradeActionType.UPDATE_INPUT_AMOUNT,
-                    amount: '',
-                })
-                dispatchTradeStore({
-                    type: TradeActionType.UPDATE_OUTPUT_AMOUNT,
+                    type: AllProviderTradeActionType.UPDATE_INPUT_AMOUNT,
                     amount: '',
                 })
             }
             resetTradeCallback()
         },
     )
+    //#endregion
 
-    // open the transaction dialog
+    //#region get gas price
+    const { value: gasPrice } = useAsync(async () => {
+        try {
+            const network = getNetworkTypeFromChainId(chainId)
+            if (gasConfig) {
+                return new BigNumber(
+                    (network === NetworkType.Ethereum ? gasConfig.maxFeePerGas : gasConfig.gasPrice) ?? 0,
+                ).toString()
+            } else {
+                if (network === NetworkType.Ethereum) {
+                    const response = await WalletRPC.getEstimateGasFees(chainId)
+                    const maxFeePerGas = formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()
+                    const maxPriorityFeePerGas = formatGweiToWei(
+                        response?.medium.suggestedMaxPriorityFeePerGas ?? 0,
+                    ).toString()
+                    setGasConfig({
+                        maxFeePerGas,
+                        maxPriorityFeePerGas,
+                    })
+
+                    return maxFeePerGas
+                } else {
+                    const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
+                    const gasPrice = new BigNumber(response?.data.normal.price ?? 0).toString()
+                    setGasConfig({
+                        gasPrice,
+                    })
+
+                    return gasPrice
+                }
+            }
+        } catch {
+            return '0'
+        }
+    }, [chainId, gasConfig])
+    //#endregion
+
+    //#region open the transaction dialog
     useEffect(() => {
-        if (tradeState.type === TransactionStateType.UNKNOWN) return
+        if (tradeState?.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
             shareLink,
@@ -281,72 +356,110 @@ export function Trader(props: TraderProps) {
     //#region swap callback
     const onSwap = useCallback(() => {
         // no need to open the confirmation dialog if it (un)wraps the native token
-        if (tradeComputed && isNativeTokenWrapper(tradeComputed)) tradeCallback()
+        if (focusedTrade?.value && isNativeTokenWrapper(focusedTrade.value)) tradeCallback()
         else setOpenConfirmDialog(true)
-    }, [tradeComputed])
+    }, [focusedTrade, tradeCallback])
     //#endregion
+
+    //#region The trades sort by best price (Estimate received * price - Gas fee * native token price)
+    const nativeTokenPrice = useNativeTokenPrice(chainId)
+    const outputTokenPrice = useTokenPrice(chainId, outputToken?.address.toLowerCase())
+    const sortedAllTradeComputed = useMemo(() => {
+        if (outputToken && outputTokenPrice) {
+            return allTradeComputed
+                .map((trade) => {
+                    if (gasPrice && trade.value && trade.gas.value) {
+                        const gasFee = new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
+
+                        const gasFeeUSD = new BigNumber(formatBalance(gasFee ?? 0, outputToken.decimals)).times(
+                            nativeTokenPrice,
+                        )
+
+                        const finalPrice = new BigNumber(
+                            formatBalance(trade.value.outputAmount, outputToken.decimals, 2),
+                        )
+                            .times(outputToken.type !== EthereumTokenType.Native ? outputTokenPrice : nativeTokenPrice)
+                            .minus(gasFeeUSD)
+
+                        return {
+                            ...trade,
+                            finalPrice,
+                        }
+                    }
+                    return trade
+                })
+                .filter(({ finalPrice }) => !!finalPrice)
+                .sort(({ finalPrice: a }, { finalPrice: b }) => {
+                    if (a && b && new BigNumber(a).isGreaterThan(b)) return -1
+                    if (a && b && new BigNumber(a).isLessThan(b)) return 1
+                    return 0
+                })
+        }
+        return allTradeComputed
+            .filter(({ value }) => !!value)
+            .sort(({ value: a }, { value: b }) => {
+                if (a?.outputAmount.isGreaterThan(b?.outputAmount ?? 0)) return -1
+                if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
+                return 0
+            })
+    }, [allTradeComputed, outputToken, gasPrice, outputTokenPrice, nativeTokenPrice])
+    //#endregion
+
+    //#region reset focused trade when chainId, inputToken, outputToken, inputAmount be changed
+    useUpdateEffect(() => {
+        setFocusTrade(undefined)
+    }, [targetChainId, inputToken, outputToken, inputAmount])
+    //#endregion
+
+    useUpdateEffect(() => {
+        if (chainId) {
+            setTargetChainId(chainId)
+            setGasConfig(undefined)
+        }
+    }, [chainId])
+
+    useUpdateEffect(() => {
+        if (focusedTrade) tradeRef.current = focusedTrade
+    }, [focusedTrade])
+
+    useEffect(() => {
+        return PluginTraderMessages.swapSettingsUpdated.on((event) => {
+            if (event.open) return
+            if (event.gasConfig) setGasConfig(event.gasConfig)
+        })
+    }, [])
 
     return (
         <div className={classes.root}>
             <TradeForm
-                trade={tradeComputed}
-                provider={provider}
-                strategy={strategy}
-                loading={asyncTradeComputed.loading || updateBalancerPoolsLoading}
+                trades={sortedAllTradeComputed}
                 inputToken={inputToken}
                 outputToken={outputToken}
                 inputTokenBalance={inputTokenBalance}
                 outputTokenBalance={outputTokenBalance}
                 inputAmount={inputAmount}
-                outputAmount={outputAmount}
                 onInputAmountChange={onInputAmountChange}
-                onOutputAmountChange={onOutputAmountChange}
-                onReverseClick={onReverseClick}
-                onRefreshClick={onRefreshClick}
                 onTokenChipClick={onTokenChipClick}
+                focusedTrade={focusedTrade}
+                onFocusedTradeChange={(trade) => setFocusTrade(trade)}
                 onSwap={onSwap}
+                gasPrice={gasPrice}
+                onSwitch={onSwitchToken}
             />
-            {tradeComputed && !isNativeTokenWrapper(tradeComputed) && inputToken && outputToken ? (
-                <>
-                    <ConfirmDialog
-                        open={openConfirmDialog}
-                        trade={tradeComputed}
-                        provider={provider}
-                        inputToken={inputToken}
-                        outputToken={outputToken}
-                        onConfirm={onConfirmDialogConfirm}
-                        onClose={onConfirmDialogClose}
-                    />
-                    <TradeSummary
-                        classes={{ root: classes.summary }}
-                        trade={tradeComputed}
-                        provider={provider}
-                        inputToken={inputToken}
-                        outputToken={outputToken}
-                    />
-                    {context?.IS_UNISWAP_V2_LIKE ? (
-                        <UniswapTradeRoute classes={{ root: classes.router }} trade={tradeComputed} />
-                    ) : null}
-                    {[TradeProvider.BALANCER].includes(provider) && tradeComputed.trade_ ? (
-                        <BalancerTradeRoute
-                            classes={{ root: classes.router }}
-                            trade={tradeComputed as TradeComputed<SwapResponse>}
-                        />
-                    ) : null}
-                    {context?.IS_UNISWAP_V2_LIKE ? (
-                        <UniswapPairViewer
-                            trade={tradeComputed as TradeComputed<Trade<Currency, Currency, TradeType>>}
-                            provider={provider}
-                        />
-                    ) : null}
-                    {TradeProvider.DODO === provider ? (
-                        <DODOPairViewer trade={tradeComputed as TradeComputed<SwapRouteData>} provider={provider} />
-                    ) : null}
-                    {TradeProvider.BANCOR === provider ? (
-                        <DODOPairViewer trade={tradeComputed as TradeComputed<SwapBancorRequest>} provider={provider} />
-                    ) : null}
-                </>
+            {focusedTrade?.value && !isNativeTokenWrapper(focusedTrade.value) && inputToken && outputToken ? (
+                <ConfirmDialog
+                    wallet={wallet}
+                    open={openConfirmDialog}
+                    trade={focusedTrade.value}
+                    gas={focusedTrade.gas.value}
+                    gasPrice={gasPrice}
+                    inputToken={inputToken}
+                    outputToken={outputToken}
+                    onConfirm={onConfirmDialogConfirm}
+                    onClose={onConfirmDialogClose}
+                />
             ) : null}
+            <SettingsDialog />
         </div>
     )
 }

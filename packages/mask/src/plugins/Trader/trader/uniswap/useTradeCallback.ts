@@ -1,11 +1,12 @@
 import { useCallback, useState } from 'react'
 import BigNumber from 'bignumber.js'
 import type { SwapParameters } from '@uniswap/v2-sdk'
-import { TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, TransactionState, TransactionStateType, useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
-import { SLIPPAGE_DEFAULT } from '../../constants'
 import type { SwapCall, Trade, TradeComputed } from '../../types'
 import { swapErrorToUserReadableMessage } from '../../helpers'
+import type { TradeProvider } from '@masknet/public-api'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 interface FailedCall {
     parameters: SwapParameters
@@ -26,10 +27,15 @@ interface FailedCall extends SwapCallEstimate {
     error: Error
 }
 
-export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlippage = SLIPPAGE_DEFAULT) {
-    const web3 = useWeb3()
+export function useTradeCallback(
+    trade: TradeComputed<Trade> | null,
+    tradeProvider?: TradeProvider,
+    gasConfig?: GasOptionConfig,
+) {
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const web3 = useWeb3(false, targetChainId)
     const account = useAccount()
-    const tradeParameters = useTradeParameters(trade, allowedSlippage)
+    const tradeParameters = useTradeParameters(trade, tradeProvider)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
@@ -135,6 +141,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                     data: calldata,
                     ...('gasEstimate' in bestCallOption ? { gas: bestCallOption.gasEstimate.toFixed() } : {}),
                     ...(!value || /^0x0*$/.test(value) ? {} : { value }),
+                    ...gasConfig,
                 },
                 async (error, hash) => {
                     if (error) {
@@ -165,7 +172,7 @@ export function useTradeCallback(trade: TradeComputed<Trade> | null, allowedSlip
                 },
             )
         })
-    }, [web3, account, tradeParameters])
+    }, [web3, account, tradeParameters, gasConfig])
 
     const resetCallback = useCallback(() => {
         setTradeState({

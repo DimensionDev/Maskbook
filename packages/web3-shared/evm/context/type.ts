@@ -16,6 +16,7 @@ import type {
     AddressName,
     AddressNameType,
     CryptoPrice,
+    BalanceOfChains,
     ERC721TokenCollectionInfo,
 } from '../types'
 
@@ -24,6 +25,7 @@ export interface Web3ProviderType {
     chainId: Subscription<ChainId>
     account: Subscription<string>
     balance: Subscription<string>
+    balances: Subscription<BalanceOfChains>
     blockNumber: Subscription<number>
     provider: Subscription<Provider>
     networkType: Subscription<NetworkType>

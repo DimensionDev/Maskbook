@@ -1,12 +1,17 @@
-import { useContext, useMemo } from 'react'
-import { createERC20Token, EthereumTokenType, FungibleTokenDetailed, useChainId, ZERO } from '@masknet/web3-shared-evm'
+import { useMemo } from 'react'
+import { createERC20Token, EthereumTokenType, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared-evm'
 import { TradeProvider } from '@masknet/public-api'
 import type { SwapQuoteResponse, TradeComputed } from '../types'
-import { TradeContext } from './useTradeContext'
+import { useGetTradeContext } from './useGetTradeContext'
+import { TargetChainIdContext } from './useTargetChainIdContext'
 
-export function useTradeApproveComputed(trade: TradeComputed<unknown> | null, token?: FungibleTokenDetailed) {
-    const chainId = useChainId()
-    const context = useContext(TradeContext)
+export function useTradeApproveComputed(
+    trade: TradeComputed<unknown> | null,
+    provider?: TradeProvider,
+    token?: FungibleTokenDetailed,
+) {
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const context = useGetTradeContext(provider)
 
     return useMemo(() => {
         return {
