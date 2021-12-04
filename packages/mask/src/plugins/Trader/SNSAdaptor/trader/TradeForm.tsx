@@ -96,7 +96,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             padding: '13px 0',
             borderRadius: isDashboard ? 8 : 24,
             height: 'auto',
-            marginTop: 0,
+            marginTop: '0px !important',
         },
         disabledButton: {
             fontSize: 18,
