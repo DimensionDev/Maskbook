@@ -1,6 +1,6 @@
 import { FC, memo } from 'react'
 import { Box, Button, Stack, Typography } from '@mui/material'
-import { TransactionStatusType } from '@masknet/web3-shared-evm'
+import { ProviderType, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { FormattedAddress, LoadingAnimation, useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
 import {
@@ -34,6 +34,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 10,
         borderRadius: 5,
     },
+    domain: {
+        fontSize: 14,
+        marginLeft: 20,
+        background: theme.palette.mode === 'dark' ? 'rgba(73, 137, 255, 0.2)' : 'rgba(28, 104, 243, 0.1)',
+        padding: '2px 8px',
+        borderRadius: 4,
+    },
 }))
 
 export const WalletStateBar = memo(() => {
@@ -42,7 +49,6 @@ export const WalletStateBar = memo(() => {
     const wallet = useWallet()
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
-
     const { value: pendingTransactions = [] } = useRecentTransactions(TransactionStatusType.NOT_DEPEND)
 
     const { openDialog: openWalletStatusDialog } = useRemoteControlledDialog(
@@ -133,9 +139,19 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                     <WalletIcon providerIcon={provider.icon} inverse size={38} />
                 </Stack>
                 <Box sx={{ userSelect: 'none' }}>
-                    <Box fontSize={16} display="flex" alignItems="center">
-                        {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : wallet.name}
-                    </Box>
+                    {provider.type !== ProviderType.MaskWallet ? (
+                        <Box fontSize={16} display="flex" alignItems="center">
+                            {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : wallet.name}
+                        </Box>
+                    ) : (
+                        <Box fontSize={16} display="flex" alignItems="center">
+                            {wallet.name}
+                            {domain && Utils?.formatDomainName ? (
+                                <Typography className={classes.domain}>{Utils.formatDomainName(domain)}</Typography>
+                            ) : null}
+                        </Box>
+                    )}
+
                     <Box fontSize={12}>
                         <FormattedAddress address={wallet.address} size={10} formatter={Utils?.formatAddress} />
                     </Box>
