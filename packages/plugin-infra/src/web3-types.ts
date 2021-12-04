@@ -2,14 +2,39 @@ import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Pagination, Plugin } from './types'
 
+/**
+ * A network plugin defines the way to connect to a single chain.
+ */
+export enum NetworkPluginID {
+    PLUGIN_EVM = 'com.mask.evm',
+    PLUGIN_FLOW = 'com.mask.flow',
+}
+
+export enum CurrencyType {
+    NATIVE = 'native',
+    BTC = 'btc',
+    USD = 'usd',
+}
+
+export enum TokenType {
+    Fungible = 'Fungible',
+    NonFungible = 'NonFungible',
+}
+
 export declare namespace Web3Plugin {
-    export interface EnableRequirement {
-        /**
-         * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
-         * When the current chain is not supported, the composition entry will be hidden.
-         */
-        supportedOperationalChains?: number[]
-    }
+    /**
+     * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
+     * When the current chain is not supported, the composition entry will be hidden.
+     */
+    export type EnableRequirement = Partial<
+        Record<
+            NetworkPluginID,
+            {
+                supportedChainIds?: number[]
+            }
+        >
+    >
+
     export interface NetworkDescriptor {
         /** An unique ID for each network */
         ID: string
@@ -289,23 +314,4 @@ export declare namespace Web3Plugin {
             }
         }
     }
-}
-
-/**
- * A network plugin defines the way to connect to a single chain.
- */
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-}
-
-export enum CurrencyType {
-    NATIVE = 'native',
-    BTC = 'btc',
-    USD = 'usd',
-}
-
-export enum TokenType {
-    Fungible = 'Fungible',
-    NonFungible = 'NonFungible',
 }

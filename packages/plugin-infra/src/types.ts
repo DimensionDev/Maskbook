@@ -148,6 +148,7 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
+        /** The Web3 Network this plugin supports */
         web3?: Web3Plugin.EnableRequirement
     }
     export interface ManagementProperty {
