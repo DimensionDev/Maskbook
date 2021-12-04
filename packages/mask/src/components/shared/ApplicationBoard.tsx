@@ -190,7 +190,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             isFlow,
         ),
         createEntry(
-            'File service',
+            'File Service',
             new URL('./assets/files.png', import.meta.url).toString(),
             () => openEncryptedMessage(FileServicePluginID),
             undefined,
@@ -220,7 +220,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             false,
         ),
         createEntry(
-            'Mask Box',
+            'MaskBox',
             new URL('./assets/mask_box.png', import.meta.url).toString(),
             () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
             undefined,
@@ -235,7 +235,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             isFlow,
         ),
         createEntry(
-            'Fiat on-ramp',
+            'Fiat On-Ramp',
             new URL('./assets/fiat_ramp.png', import.meta.url).toString(),
             () => setBuyDialog({ open: true, address: account }),
             undefined,
