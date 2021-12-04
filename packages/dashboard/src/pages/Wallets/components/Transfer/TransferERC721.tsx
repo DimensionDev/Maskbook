@@ -114,7 +114,7 @@ export const TransferERC721 = memo(() => {
 
     //#region resolve ENS domain
     const {
-        value: registeredAddress = '',
+        value: registeredAddress,
         error: resolveDomainError,
         loading: resolveDomainLoading,
     } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
@@ -124,11 +124,7 @@ export const TransferERC721 = memo(() => {
         EthereumTokenType.ERC721,
         contract?.address,
         undefined,
-        EthereumAddress.isValid(allFormFields.recipient)
-            ? allFormFields.recipient
-            : EthereumAddress.isValid(registeredAddress)
-            ? registeredAddress
-            : '',
+        EthereumAddress.isValid(allFormFields.recipient) ? allFormFields.recipient : registeredAddress,
         allFormFields.tokenId,
     )
 
