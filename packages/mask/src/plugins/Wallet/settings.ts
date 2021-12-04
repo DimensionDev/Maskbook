@@ -182,7 +182,7 @@ export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
 )
 
 /**
- *
+ * ERC20 Token balances
  */
 export const currentBalancesSettings = createGlobalSettings<BalanceOfChains>(
     `${PLUGIN_IDENTIFIER}+balances`,

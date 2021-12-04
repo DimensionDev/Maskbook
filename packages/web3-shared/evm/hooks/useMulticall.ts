@@ -144,7 +144,6 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                     results: calls.map((call) => getCallResult(call, chainId, blockNumber) ?? [false, '0x0', '0x0']),
                 })
             } catch (error) {
-                console.log(error)
                 if (error instanceof Error) {
                     setMulticallState({
                         type: MulticallStateType.FAILED,

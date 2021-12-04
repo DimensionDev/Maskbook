@@ -37,7 +37,6 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 36,
         margin: '0 auto',
         borderRadius: 4,
-        // backgroundColor: theme.palette.background.default,
         '& .Mui-selected': {
             color: theme.palette.primary.contrastText,
             backgroundColor: theme.palette.primary.main,
@@ -131,7 +130,6 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     //#endregion
 
     //#region Swap
-    // const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
     //#endregion
 
