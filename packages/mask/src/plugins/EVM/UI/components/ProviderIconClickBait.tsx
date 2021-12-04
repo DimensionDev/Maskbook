@@ -80,6 +80,9 @@ export function ProviderIconClickBait({
     if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
         return null
 
+    // temporary hide fortmatic provider
+    if (providerType === ProviderType.Fortmatic) return null
+
     // coinbase and mathwallet are blocked by CSP
     if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null
 
