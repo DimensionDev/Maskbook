@@ -1,6 +1,6 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
 
-export interface CryptoartAIJSON_Payload {
+export interface CryptoartAI_Payload {
     chain_id: ChainId
     creator: string
     token_id: string

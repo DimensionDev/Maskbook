@@ -4,7 +4,7 @@ import { useI18N } from '../../../utils'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { FormattedAddress } from '@masknet/shared'
-import { resolveAddressLinkOnExplorer, getChainName, useChainId } from '@masknet/web3-shared-evm'
+import { resolveAddressLinkOnExplorer, getChainName, useChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { Account } from './Account'
 import { resolveWebLinkOnCryptoartAI } from '../pipes'
@@ -46,6 +46,10 @@ const useStyles = makeStyles()((theme) => {
                 marginBottom: 0,
             },
         },
+        edition_row: {
+            display: 'flex',
+            marginBottom: theme.spacing(0.5),
+        },
         tokenId: {
             maxWidth: 112,
             overflow: 'hidden',
@@ -77,7 +81,10 @@ export function TokenTab(props: TokenTabProps) {
                             href={resolveWebLinkOnCryptoartAI(chainId) + '/' + asset.value.creator.username}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Account address={asset.value.creator.ethAddress} username={asset.value.creator.username} />
+                            <Account
+                                address={asset.value.creator.ethAddress}
+                                username={formatEthereumAddress(asset.value.creator.username, 4)}
+                            />
                         </Link>
                     </Typography>
                 ) : null}
@@ -90,28 +97,40 @@ export function TokenTab(props: TokenTabProps) {
                             rel="noopener noreferrer">
                             <Account
                                 address={asset.value.owner[0]?.ownerAddress}
-                                username={asset.value.owner[0]?.ownerName}
+                                username={formatEthereumAddress(asset.value.owner[0]?.ownerName, 4)}
                             />
                         </Link>
                     </Typography>
                 ) : null}
-                {asset.value.linkWithCreation ? (
-                    <Typography variant="body2">
-                        {t('plugin_collectible_view_on')}{' '}
-                        <Link href={asset.value.linkWithCreation} target="_blank" rel="noopener noreferrer">
-                            etherscan
-                        </Link>
-                    </Typography>
-                ) : null}
-                {asset.value.linkWithIpfs ? (
-                    <Typography variant="body2">
-                        {t('plugin_collectible_view_on')}{' '}
-                        <Link href={asset.value.linkWithIpfs} target="_blank" rel="noopener noreferrer">
-                            IPFS
-                        </Link>
-                    </Typography>
-                ) : null}
+            </Box>
+            <Box className={classes.container}>
+                <Typography variant="body1" sx={{ marginBottom: 1 }}>
+                    {t('plugin_cryptoartai_description_title')}
+                </Typography>
                 <Markdown classes={{ root: classes.markdown }} content={asset.value?.description ?? ''} />
+            </Box>
+            <Box className={classes.container}>
+                <Typography variant="body1" sx={{ marginBottom: 1 }}>
+                    {t('plugin_cryptoartai_edition')}
+                </Typography>
+                <Box className={classes.edition_row}>
+                    {asset.value.linkWithCreation ? (
+                        <Typography variant="body2" style={{ marginRight: '20px' }}>
+                            {t('plugin_collectible_view_on')}{' '}
+                            <Link href={asset.value.linkWithCreation} target="_blank" rel="noopener noreferrer">
+                                ΞEtherscan
+                            </Link>
+                        </Typography>
+                    ) : null}
+                    {asset.value.linkWithIpfs ? (
+                        <Typography variant="body2">
+                            {t('plugin_collectible_view_on')}{' '}
+                            <Link href={asset.value.linkWithIpfs} target="_blank" rel="noopener noreferrer">
+                                IPFS
+                            </Link>
+                        </Typography>
+                    ) : null}
+                </Box>
             </Box>
 
             <Box className={classes.container}>
@@ -126,7 +145,11 @@ export function TokenTab(props: TokenTabProps) {
                         target="_blank"
                         rel="noopener noreferrer">
                         <Typography variant="body2">
-                            <FormattedAddress address={token?.contractAddress ?? ''} size={4} />
+                            <FormattedAddress
+                                address={token?.contractAddress ?? ''}
+                                size={4}
+                                formatter={formatEthereumAddress}
+                            />
                         </Typography>
                     </Link>
                 </Box>

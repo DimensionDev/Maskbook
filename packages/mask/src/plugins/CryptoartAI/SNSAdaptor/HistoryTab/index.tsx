@@ -68,10 +68,9 @@ export function HistoryTab(props: HistoryTabProps) {
                 <TableHead>
                     <TableRow>
                         <TableCell>{t('plugin_cryptoartai_operator')}</TableCell>
-                        <TableCell>{t('plugin_cryptoartai_activitytype')}</TableCell>
+                        <TableCell>{t('plugin_cryptoartai_activity_type')}</TableCell>
                         <TableCell>{t('plugin_cryptoartai_time')}</TableCell>
                         <TableCell>{t('plugin_cryptoartai_price')}</TableCell>
-                        <TableCell>{t('plugin_cryptoartai_tx')}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

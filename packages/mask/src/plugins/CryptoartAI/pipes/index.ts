@@ -1,36 +1,31 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import {
-    cryptoartaiHostnames,
-    cryptoartaiAPIEndpoint,
-    cryptoartaiPathnameRegexMatcher,
-    cryptoartaiPaymentTokens,
-} from '../constants'
+import { pathnameRegexMatcher, mainNetwork, testNetwork } from '../constants'
 
 export function resolveAPILinkOnCryptoartAI(chainId?: ChainId) {
     if (chainId === ChainId.Kovan) {
-        return cryptoartaiAPIEndpoint[1]
+        return testNetwork.endpoint
     }
 
-    return cryptoartaiAPIEndpoint[0]
+    return mainNetwork.endpoint
 }
 
 export function resolveWebLinkOnCryptoartAI(chainId?: ChainId) {
     if (chainId === ChainId.Kovan) {
-        return 'https://' + cryptoartaiHostnames[1]
+        return `https://${testNetwork.hostname}`
     }
 
-    return 'https://' + cryptoartaiHostnames[0]
+    return `https://${mainNetwork.hostname}`
 }
 
 export function resolveAssetLinkOnCryptoartAI(creator: string, token_id: string, chainId?: ChainId) {
-    return urlcat(resolveWebLinkOnCryptoartAI(chainId) + cryptoartaiPathnameRegexMatcher, `${creator}/${token_id}`)
+    return urlcat(resolveWebLinkOnCryptoartAI(chainId) + pathnameRegexMatcher, `${creator}/${token_id}`)
 }
 
 export function resolvePaymentTokensOnCryptoartAI(chainId?: ChainId) {
     if (chainId === ChainId.Kovan) {
-        return [cryptoartaiPaymentTokens[1]]
+        return [testNetwork.paymentToken]
     }
 
-    return [cryptoartaiPaymentTokens[0]]
+    return [mainNetwork.paymentToken]
 }

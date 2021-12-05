@@ -204,17 +204,14 @@ export function Collectible(props: CollectibleProps) {
                                 </Box>
                             ) : null}
 
-                            {asset.value?.priceInEth ? (
+                            {asset.value?.priceInEth > 100000 ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
-                                            i18nKey="plugin_cryptoartai_description"
+                                            i18nKey="plugin_cryptoartai_no_price_description"
                                             values={{
-                                                bidprice: asset.value?.latestBidVo?.priceInEth ?? 0,
-                                                price:
-                                                    asset.value?.priceInEth > 100000
-                                                        ? 'Unknown'
-                                                        : asset.value?.priceInEth,
+                                                bidPrice: asset.value?.latestBidVo?.priceInEth ?? 0,
+                                                price: 'Unknown',
                                                 symbol: ' Ξ',
                                                 soldNum:
                                                     asset.value?.soldNum === asset.value?.totalAvailable
@@ -226,7 +223,26 @@ export function Collectible(props: CollectibleProps) {
                                         />
                                     </Typography>
                                 </Box>
-                            ) : null}
+                            ) : (
+                                <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
+                                    <Typography className={classes.description} component="span">
+                                        <Trans
+                                            i18nKey="plugin_cryptoartai_description"
+                                            values={{
+                                                bidPrice: asset.value?.latestBidVo?.priceInEth ?? 0,
+                                                price: asset.value?.priceInEth,
+                                                symbol: ' Ξ',
+                                                soldNum:
+                                                    asset.value?.soldNum === asset.value?.totalAvailable
+                                                        ? asset.value?.soldNum
+                                                        : asset.value?.soldNum + 1,
+                                                totalAvailable: asset.value?.totalAvailable,
+                                                editionNumber: asset.value?.editionNumber,
+                                            }}
+                                        />
+                                    </Typography>
+                                </Box>
+                            )}
                         </>
                     }
                 />

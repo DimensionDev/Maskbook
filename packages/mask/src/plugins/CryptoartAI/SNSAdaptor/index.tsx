@@ -4,9 +4,9 @@ import { getTypedMessageContent } from '../../../protocols/typed-message'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
-import type { CryptoartAIJSON_Payload } from '../types'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_NAME } from '../constants'
+import type { CryptoartAI_Payload } from '../types'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 export default sns
 
-function renderPostInspector(payload: CryptoartAIJSON_Payload) {
+function renderPostInspector(payload: CryptoartAI_Payload) {
     return (
         <MaskPluginWrapper pluginName={PLUGIN_NAME}>
             <PostInspector payload={payload} />

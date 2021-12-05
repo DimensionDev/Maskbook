@@ -1,6 +1,6 @@
 import { useAccount, useChainId, useTokenConstants, isSameAddress } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
-import { toTokenIdentifier } from '../helpers'
+import { toTokenIdentifier } from '../utils'
 import type { CryptoartAIToken } from '../types'
 
 import { getAsset } from '../apis'

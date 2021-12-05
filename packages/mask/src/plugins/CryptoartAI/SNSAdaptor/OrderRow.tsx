@@ -1,7 +1,8 @@
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Account } from './Account'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../utils'
 import { resolveWebLinkOnCryptoartAI } from '../pipes'
 
 import { subAddressStr } from '../utils'
@@ -41,6 +42,16 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 14,
             lineHeight: 1,
         },
+        ethPrice: {
+            display: 'flex',
+            alignItems: 'center',
+            fontWeight: 700,
+        },
+        usdcPrice: {
+            display: 'flex',
+            alignItems: 'center',
+            color: 'grey',
+        },
     }
 })
 
@@ -51,6 +62,7 @@ interface IRowProps {
 }
 
 export function OrderRow({ event, chainId }: IRowProps) {
+    const { t } = useI18N()
     const { classes } = useStyles()
 
     return (
@@ -64,7 +76,10 @@ export function OrderRow({ event, chainId }: IRowProps) {
                     rel="noopener noreferrer">
                     <Avatar src={event.avatorPath} className={classes.avatar} />
                     <Typography className={classes.accountName} variant="body2">
-                        <Account username={subAddressStr(event.operatorName) ?? ''} address={event.operatorAddress} />
+                        <Account
+                            username={formatEthereumAddress(event.operatorName, 4) ?? ''}
+                            address={event.operatorAddress}
+                        />
                     </Typography>
                 </Link>
             </TableCell>
@@ -79,9 +94,10 @@ export function OrderRow({ event, chainId }: IRowProps) {
                 </Typography>
             </TableCell>
             <TableCell>
-                <Typography className={classes.content} variant="body2">
+                <Typography className={classes.ethPrice} variant="body2">
                     {event.priceInEth + ' Ξ'}
-                    <br />
+                </Typography>
+                <Typography className={classes.usdcPrice} variant="body2">
                     {'($' + event.priceInUsd + ')'}
                 </Typography>
             </TableCell>
@@ -92,7 +108,8 @@ export function OrderRow({ event, chainId }: IRowProps) {
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
-                    <Avatar src="https://cdn.furucombo.app/assets/img/token/QUICK.png" className={classes.avatar} />
+                    {/* <Avatar src="https://cdn.furucombo.app/assets/img/token/QUICK.png" className={classes.avatar} /> */}
+                    {t('plugin_cryptoartai_tx')}
                 </Link>
             </TableCell>
         </TableRow>

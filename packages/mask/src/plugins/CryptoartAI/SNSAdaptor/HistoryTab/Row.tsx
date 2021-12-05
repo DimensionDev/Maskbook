@@ -1,7 +1,7 @@
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Account } from '../Account'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { resolveWebLinkOnCryptoartAI } from '../../pipes'
 
 import { subAddressStr } from '../../utils'
@@ -32,6 +32,16 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
         },
+        ethPrice: {
+            display: 'flex',
+            alignItems: 'center',
+            fontWeight: 700,
+        },
+        usdcPrice: {
+            display: 'flex',
+            alignItems: 'center',
+            color: 'grey',
+        },
     }
 })
 
@@ -54,26 +64,12 @@ export function Row({ event, chainId }: Props) {
                     rel="noopener noreferrer">
                     <Avatar src={event.avatorPath} className={classes.avatar} />
                     <Typography className={classes.accountName} variant="body2">
-                        <Account username={subAddressStr(event.operatorName) ?? ''} address={event.operatorAddress} />
+                        <Account
+                            username={formatEthereumAddress(event.operatorName, 4) ?? ''}
+                            address={event.operatorAddress}
+                        />
                     </Typography>
                 </Link>
-            </TableCell>
-            <TableCell>
-                <Typography className={classes.content} variant="body2">
-                    {event.transactionTypeName}
-                </Typography>
-            </TableCell>
-            <TableCell>
-                <Typography className={classes.content} variant="body2">
-                    {event.createTime.substr(0, event.createTime.length - 3)}
-                </Typography>
-            </TableCell>
-            <TableCell>
-                <Typography className={classes.content} variant="body2">
-                    {event.priceInEth + ' Ξ'}
-                    <br />
-                    {'($' + event.priceInUsd + ')'}
-                </Typography>
             </TableCell>
             <TableCell>
                 <Link
@@ -82,8 +78,24 @@ export function Row({ event, chainId }: Props) {
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
-                    <Avatar src="https://cdn.furucombo.app/assets/img/token/QUICK.png" className={classes.avatar} />
+                    {/* <Avatar src="https://cdn.furucombo.app/assets/img/token/QUICK.png" className={classes.avatar} /> */}
+                    <Typography className={classes.content} variant="body2">
+                        {event.transactionTypeName}
+                    </Typography>
                 </Link>
+            </TableCell>
+            <TableCell>
+                <Typography className={classes.content} variant="body2">
+                    {event.createTime.substr(0, event.createTime.length - 3)}
+                </Typography>
+            </TableCell>
+            <TableCell>
+                <Typography className={classes.ethPrice} variant="body2">
+                    {event.priceInEth + ' Ξ'}
+                </Typography>
+                <Typography className={classes.usdcPrice} variant="body2">
+                    {'($' + event.priceInUsd + ')'}
+                </Typography>
             </TableCell>
         </TableRow>
     )

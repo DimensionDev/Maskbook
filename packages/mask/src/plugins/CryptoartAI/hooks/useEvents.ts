@@ -1,7 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '@masknet/web3-shared-evm'
 import type { CryptoartAIToken } from '../types'
-import { toTokenIdentifier } from '../helpers'
+import { toTokenIdentifier } from '../utils'
 
 import { getEvents } from '../apis'
 

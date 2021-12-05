@@ -1,10 +1,10 @@
-import type { CryptoartAIJSON_Payload } from '../types'
+import type { CryptoartAI_Payload } from '../types'
 import { Collectible } from './Collectible'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 export interface PostInspectorProps {
-    payload: CryptoartAIJSON_Payload
+    payload: CryptoartAI_Payload
 }
 
 export function PostInspector(props: PostInspectorProps) {

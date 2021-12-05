@@ -1,30 +1,37 @@
 import { OrderSide } from 'opensea-js/lib/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import urlcat from 'urlcat'
 import { resolveAPILinkOnCryptoartAI } from '../pipes'
 
 export async function getAsset(tokenId: string, chainId?: ChainId) {
     const ownersResponse: any = await (
-        await fetch(resolveAPILinkOnCryptoartAI(chainId) + '/api/artwork/current/owners/' + tokenId, {
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                Accept: 'application/json, text/plain, */*',
+        await fetch(
+            urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/current/owners/:tokenId', { tokenId: tokenId }),
+            {
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    Accept: 'application/json, text/plain, */*',
+                },
             },
-        })
+        )
     ).json()
 
     const tradeResponse: any = await (
-        await fetch(resolveAPILinkOnCryptoartAI(chainId) + '/api/artwork/tradeInfo/' + tokenId, {
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                Accept: 'application/json, text/plain, */*',
+        await fetch(
+            urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/tradeInfo/:tokenId', { tokenId: tokenId }),
+            {
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    Accept: 'application/json, text/plain, */*',
+                },
             },
-        })
+        )
     ).json()
 
     const fetchResponse = await (
-        await fetch(resolveAPILinkOnCryptoartAI(chainId) + '/api/artwork/detail', {
+        await fetch(urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/detail'), {
             mode: 'cors',
             method: 'POST',
             headers: {
@@ -57,13 +64,16 @@ export async function getAsset(tokenId: string, chainId?: ChainId) {
 
 export async function getEvents(tokenId: string, chainId?: ChainId) {
     const historyResponse: any = await (
-        await fetch(resolveAPILinkOnCryptoartAI(chainId) + '/api/artwork/recent/history/' + tokenId, {
-            mode: 'cors',
-            headers: {
-                'Content-Type': 'application/json; charset=UTF-8',
-                Accept: 'application/json, text/plain, */*',
+        await fetch(
+            urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/recent/history/:tokenId', { tokenId: tokenId }),
+            {
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json; charset=UTF-8',
+                    Accept: 'application/json, text/plain, */*',
+                },
             },
-        })
+        )
     ).json()
 
     return historyResponse.data
@@ -82,19 +92,12 @@ export async function getOrders(tokenId: string, side = OrderSide.Buy, chainId?:
 
     const historyResponse = (await getEvents(tokenId, chainId))
         .filter((event: any) => {
-            return (
-                event.transactionType === 'Bid Placed' ||
-                event.transactionType === 'Bid Withdrawn' ||
-                event.transactionType === 'Settled'
-            )
+            return ['Bid Placed', 'Bid Withdrawn', 'Settled'].includes(event.transactionType)
         })
         .map((event: any, idx: any) => {
-            event.status =
-                event.transactionType === 'Bid Withdrawn'
-                    ? 'Withdrawn'
-                    : event.transactionType === 'Settled'
-                    ? 'Settled'
-                    : 'Expired'
+            event.status = 'Expired'
+            if (event.transactionType === 'Bid Withdrawn') event.status = 'Withdrawn'
+            else if (event.transactionType === 'Settled') event.status = 'Settled'
             return event
         })
 
@@ -107,12 +110,4 @@ export async function getOrders(tokenId: string, side = OrderSide.Buy, chainId?:
             return event
         }),
     }
-}
-
-export async function buyNow(tokenId: string, priceInEth: string, account: string, chainId?: ChainId) {
-    return {}
-}
-
-export async function makeOffer(tokenId: string, priceInEth: string, account: string, chainId?: ChainId) {
-    return {}
 }

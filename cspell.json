@@ -336,7 +336,14 @@
         "isfacebook",
         "findtruman",
         "uaddr",
-        "consts"
+        "consts",
+        "cryptoartai",
+        "cryptoart",
+        "avator",
+        "testweb",
+        "metadate",
+        "AICANFT",
+        "CANFT"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

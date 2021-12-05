@@ -54,7 +54,7 @@ export function OfferTab() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { asset, token, offers } = CollectibleState.useContainer()
+    const { asset, offers } = CollectibleState.useContainer()
 
     const dataSource: any = useMemo(() => {
         if (!offers.value || offers.error) return []
@@ -62,7 +62,7 @@ export function OfferTab() {
     }, [offers.value])
 
     if (offers.loading) return <LoadingTable />
-    if (!offers.value || offers.error)
+    if (!offers.value || offers.error || dataSource?.history?.length <= 0)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>
@@ -88,7 +88,7 @@ export function OfferTab() {
             {dataSource?.trade?.latestBid > 0 ? (
                 <Box className={classes.container}>
                     <Typography variant="body1" sx={{ marginBottom: 1 }}>
-                        {t('plugin_cryptoartai_latestbid')}
+                        {t('plugin_cryptoartai_latest_bid')}
                     </Typography>
                     <Box className={classes.chain_row}>
                         <Typography variant="body2">
@@ -103,7 +103,7 @@ export function OfferTab() {
             {asset?.value?.is24Auction && asset.value.latestBidVo?.auctionEndTime ? (
                 <Box className={classes.container}>
                     <Typography variant="body2">
-                        {t('plugin_cryptoartai_auctionendtime')}
+                        {t('plugin_cryptoartai_auction_end_time')}
                         <strong>{asset.value.latestBidVo?.auctionEndTime}</strong>
                     </Typography>
                 </Box>

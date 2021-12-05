@@ -1,7 +1,5 @@
-import type { FC } from 'react'
 import { Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Video } from '../../../components/shared/Video'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 
@@ -18,25 +16,6 @@ const useStyles = makeStyles()({
     },
 })
 
-interface AssetPlayerProps {
-    src?: string
-    alt: string
-}
-
-// opensea supports: JPG, PNG, GIF, SVG, MP4, WEBM, MP3, WAV, OGG, GLB, GLTF.
-const AssetPlayer: FC<AssetPlayerProps> = ({ src, alt }) => {
-    const { classes } = useStyles()
-    if (!src) {
-        return null
-    }
-    const isVideo = src.match(/\.(mp4|webm)$/i)
-    if (isVideo) {
-        return <Video src={src} VideoProps={{ className: classes.player }} />
-    } else {
-        return <img className={classes.player} src={src} alt={alt} />
-    }
-}
-
 export interface ArticleTabProps {}
 
 export function ArticleTab(props: ArticleTabProps) {
@@ -48,12 +27,12 @@ export function ArticleTab(props: ArticleTabProps) {
     return (
         <CollectibleTab>
             <div className={classes.body}>
-                {asset.value.ossUrl.match(/\.(mp4|webm)$/i) ? (
+                {asset.value.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
                     <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
-                        <AssetPlayer src={resourceUrl} alt={asset.value.title} />
+                        <img className={classes.player} src={resourceUrl} alt={asset.value.title} />
                     </Link>
                 ) : (
-                    <AssetPlayer src={resourceUrl} alt={asset.value.title} />
+                    <img className={classes.player} src={resourceUrl} alt={asset.value.title} />
                 )}
             </div>
         </CollectibleTab>

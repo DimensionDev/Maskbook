@@ -1,8 +1,9 @@
 import { useCallback, useMemo, useEffect } from 'react'
-import { DialogContent, Box, Card, CardContent, CardActions, Typography } from '@mui/material'
+import { DialogContent, Box, Card, CardContent, CardActions, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
-import { useChainId, useFungibleTokenWatched, TransactionStateType } from '@masknet/web3-shared-evm'
+import BigNumber from 'bignumber.js'
+import { useChainId, useFungibleTokenWatched, TransactionStateType, pow10 } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -50,6 +51,16 @@ const useStyles = makeStyles()((theme) => {
                 marginBottom: 0,
             },
         },
+        mediaContent: {
+            display: 'flex',
+            justifyContent: 'center',
+            height: '200px',
+        },
+        player: {
+            maxWidth: '100%',
+            maxHeight: '100%',
+            border: 'none',
+        },
     }
 })
 
@@ -80,7 +91,11 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const [purchaseState, purchaseCallback, resetCallback] = usePurchaseCallback(
         asset?.value?.editionNumber ? Number(asset?.value?.editionNumber) : 0,
-        asset?.value?.priceInWei,
+        asset?.value?.priceInWei > 0
+            ? asset?.value?.priceInWei
+            : new BigNumber(0.01)
+                  .multipliedBy(pow10(selectedPaymentToken ? selectedPaymentToken.decimals : 18))
+                  .toNumber(),
     )
 
     const onCheckout = useCallback(() => {
@@ -122,6 +137,23 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
             <DialogContent className={classes.content}>
                 <Card elevation={0}>
                     <CardContent>
+                        <Box className={classes.mediaContent}>
+                            {asset?.value?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
+                                <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
+                                    <img
+                                        className={classes.player}
+                                        src={asset.value.shareUrl}
+                                        alt={asset.value.title}
+                                    />
+                                </Link>
+                            ) : (
+                                <img
+                                    className={classes.player}
+                                    src={asset?.value?.shareUrl}
+                                    alt={asset?.value?.title}
+                                />
+                            )}
+                        </Box>
                         <Box className={classes.container}>
                             <Typography variant="body1" sx={{ marginBottom: 1 }}>
                                 <strong>
@@ -138,11 +170,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                 <Typography variant="body2">{asset?.value?.editionNumber}</Typography>
                             </Box>
                             <Box className={classes.chain_row}>
-                                <Typography variant="body2">{t('plugin_cryptoartai_title')}</Typography>
-                                <Typography variant="body2">{asset?.value?.title}</Typography>
-                            </Box>
-                            <Box className={classes.chain_row}>
-                                <Typography variant="body2">{t('plugin_cryptoartai_currentbalance')}</Typography>
+                                <Typography variant="body2">{t('plugin_cryptoartai_current_balance')}</Typography>
                                 <Typography variant="body2">
                                     {formatBalance(balance.value, token?.value?.decimals, 6)}
                                 </Typography>
@@ -157,7 +185,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                 variant="contained"
                                 disabled={!!validationMessage}
                                 onClick={onCheckout}>
-                                {validationMessage || t('plugin_cryptoartai_buynow')}
+                                {validationMessage || t('plugin_cryptoartai_buy_now')}
                             </ActionButton>
                         </EthereumWalletConnectedBoundary>
                     </CardActions>
