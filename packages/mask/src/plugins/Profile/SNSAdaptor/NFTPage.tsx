@@ -46,7 +46,7 @@ const useStyles = makeStyles()((theme) => ({
         boxShadow: `0px 0px 20px rgba(28, 104, 243, 0.05)`,
     },
     tipTitle: {
-        fontSize: '18px',
+        fontSize: '16px',
         fontWeight: 400,
         lineHeight: '24px',
         marginBottom: '10px',
@@ -57,20 +57,16 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
     },
     tipArrows: {
-        width: '45px',
-        height: '45px',
+        width: '30px',
+        height: '21px',
+        transform: 'translate3d(193px, 14px, 0px) !important',
         color: getMaskColor(theme).tooltipBackground,
-        transform: 'translate3d( 226px, 21px, 0px) !important',
         ':before': {
-            transformOrigin: 'top center',
-            transform: 'rotate(45deg) translate(10px, 0px)',
             borderRadius: '3px',
             boxShadow: `0px 0px 20px rgba(28, 104, 243, 0.05)`,
         },
     },
-    tipPopper: {
-        transform: 'translate3d( 320px, -49px, 0px) !important',
-    },
+    tipPopper: {},
 }))
 
 interface NFTPageProps extends withClasses<'text' | 'button'> {}
@@ -149,6 +145,7 @@ export function NFTPage(props: NFTPageProps) {
                             </Typography>
                             <div className={classes.iconContainer}>
                                 <ShadowRootTooltip
+                                    open
                                     arrow
                                     title={tooltipRender}
                                     PopperProps={{
@@ -157,7 +154,6 @@ export function NFTPage(props: NFTPageProps) {
                                     classes={{
                                         tooltip: classes.tooltip,
                                         arrow: classes.tipArrows,
-                                        popper: classes.tipPopper,
                                     }}
                                     placement="top">
                                     <InfoOutlinedIcon
