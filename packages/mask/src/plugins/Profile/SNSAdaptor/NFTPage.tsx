@@ -145,7 +145,6 @@ export function NFTPage(props: NFTPageProps) {
                             </Typography>
                             <div className={classes.iconContainer}>
                                 <ShadowRootTooltip
-                                    open
                                     arrow
                                     title={tooltipRender}
                                     PopperProps={{
