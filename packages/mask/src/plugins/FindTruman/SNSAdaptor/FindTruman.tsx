@@ -134,7 +134,7 @@ export function FindTruman(props: FindTrumanProps) {
                         component="img"
                         height={140}
                         sx={{
-                            visibility: loadImg ? 'hidden' : 'visible',
+                            visibility: loadImg ? 'hidden' : 'unset',
                         }}
                         image={storyInfo?.img}
                     />
