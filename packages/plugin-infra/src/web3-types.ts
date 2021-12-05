@@ -75,17 +75,6 @@ export declare namespace Web3Plugin {
         name: string
     }
 
-    export interface ApplicationDescriptor {
-        /** An unique ID for each application */
-        ID: string
-        /** A sub-category defined by each network plugin */
-        categoryID?: string
-        /** The application icon */
-        icon: URL
-        /** The application name */
-        name: string
-    }
-
     export interface CryptoPrice {
         [token: string]: {
             [key in CurrencyType]?: number
@@ -331,11 +320,6 @@ export declare namespace Web3Plugin {
             onClick?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
             onSubmit?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
         }
-        export interface ApplicationIconClickBaitProps {
-            application: ApplicationDescriptor
-            category?: ApplicationCategoryDescriptor
-        }
-
         export interface ApplicationCategoryIconClickBaitProps {
             category: ApplicationCategoryDescriptor
         }
@@ -355,8 +339,6 @@ export declare namespace Web3Plugin {
                 ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
             }
             WalletStatusDialog?: {
-                /** This UI will receive application icon as children component, and the plugin may hook click handle on it. */
-                ApplicationIconClickBait?: Plugin.InjectUIReact<UI.ApplicationIconClickBaitProps>
                 /** This UI will receive application category icon as children component, and the plugin may hook click handle on it. */
                 ApplicationCategoryIconClickBait?: Plugin.InjectUIReact<UI.ApplicationCategoryIconClickBaitProps>
             }

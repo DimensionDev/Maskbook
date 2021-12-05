@@ -14,7 +14,6 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     i18n: languages,
-    declareApplications: [],
     declareApplicationCategories: [],
     declareWeb3Networks: PLUGIN_NETWORKS,
     declareWeb3Providers: PLUGIN_PROVIDERS,
