@@ -18,13 +18,14 @@ import {
 import {
     RaribleUserURL,
     RaribleRopstenUserURL,
-    RaribleIPFSURL,
     RaribleMainnetURL,
     RaribleMainnetAPI_URL,
+    RaribleChainURL,
 } from './constants'
 import urlcat from 'urlcat'
 import { AssetOrder, NFTAsset, NFTAssetOwner, NFTHistory, OrderSide } from '../types'
 import { compact, first } from 'lodash-unified'
+import { toRaribleImage } from './helpers'
 
 export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
     {
@@ -33,11 +34,6 @@ export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainn
     },
     RaribleUserURL,
 )
-
-function toRaribleImage(url?: string) {
-    if (!url) return ''
-    return `${RaribleIPFSURL}${url.replace('ipfs://ipfs/', '')}`
-}
 
 export async function fetchFromRarible<T>(root: string, subPath: string, config = {} as RequestInit) {
     const response = await (
@@ -225,7 +221,7 @@ function createERC721TokenAsset(
         info: {
             name: asset?.meta.name ?? '',
             description: asset?.meta.description ?? '',
-            image: asset?.meta.image.url.ORIGINAL ?? asset?.meta.image.url.PREVIEW ?? '',
+            image: toRaribleImage(asset?.meta.image.url.ORIGINAL ?? asset?.meta.image.url.PREVIEW ?? ''),
             owner: asset?.owners[0],
         },
         tokenId: tokenId,
@@ -238,7 +234,8 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId) {
     return {
         is_verified: false,
         is_auction: false,
-        image_url: asset?.meta.image.url.PREVIEW,
+        token_address: asset.contract,
+        image_url: toRaribleImage(asset?.meta.image.url.ORIGINAL),
         asset_contract: null,
         owner: owner
             ? {
@@ -266,18 +263,40 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId) {
         end_time: null,
         order_payment_tokens: [] as FungibleTokenDetailed[],
         offer_payment_tokens: [] as FungibleTokenDetailed[],
-
+        top_ownerships: owner
+            ? [
+                  {
+                      owner: {
+                          address: owner,
+                          profile_img_url: '',
+                          user: { username: owner },
+                          link: '',
+                      },
+                  },
+              ]
+            : null,
         slug: '',
         response_: asset,
     } as NFTAsset
 }
 
 async function _getAsset(address: string, tokenId: string) {
-    return fetchFromRarible<RaribleNFTItemMapResponse>(
-        RaribleMainnetAPI_URL,
-        `/ethereum/nft/items/${address}:${tokenId}`,
-        {},
+    const assetResponse = await fetchFromRarible<RaribleNFTItemMapResponse>(
+        RaribleChainURL,
+        urlcat('/v0.1/nft/items/:address::tokenId', {
+            includeMeta: true,
+            address,
+            tokenId,
+        }),
+        {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'content-type': 'application/json',
+            },
+        },
     )
+    return assetResponse
 }
 
 export async function getAsset(address: string, tokenId: string, chainId: ChainId) {
@@ -294,16 +313,19 @@ export async function getNFT(tokenAddress: string, tokenId: string) {
 
 export async function getNFTs(from: string, chainId: ChainId) {
     const params = new URLSearchParams()
-
     params.append('owner', from)
-    const asset = await fetchFromRarible<{
-        total: number
-        continuation: string
-        items: RaribleNFTItemMapResponse[]
-    }>(RaribleMainnetAPI_URL, `/ethereum/nft/items/byOwner?${params.toString()}`, {})
-    if (!asset) return [] as ERC721TokenDetailed[]
-
-    return asset.items.map((asset) => createERC721TokenAsset(asset.contract, asset.tokenId, asset))
+    const assetResponse = await fetchFromRarible<{ total: number; items: RaribleNFTItemMapResponse[] }>(
+        RaribleChainURL,
+        `/v0.1/nft/items/byOwner?${params.toString()}`,
+        {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                'content-type': 'application/json',
+            },
+        },
+    )
+    return assetResponse.items.map((asset) => createERC721TokenAsset(asset.contract, asset.tokenId, asset))
 }
 
 export async function getContractBalance(from: string, contract_address: string, chainId: ChainId) {
