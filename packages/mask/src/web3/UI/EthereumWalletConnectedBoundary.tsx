@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface EthereumWalletConnectedBoundaryProps
-    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton'> {
+    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton' | 'button'> {
     offChain?: boolean
     children?: React.ReactNode
     hideRiskWarningConfirmed?: boolean

@@ -70,6 +70,7 @@
     "date-fns": "^2.26.0",
     "elliptic": "^6.5.3",
     "ethereumjs-util": "^7.1.0",
+    "ethjs-ens": "^2.0.1",
     "event-iterator": "^2.0.0",
     "fuse.js": "^6.4.3",
     "graphql": "^15.5.1",

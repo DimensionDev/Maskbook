@@ -4,13 +4,19 @@ import type { Currency, CurrencyAmount, TradeType } from '@uniswap/sdk-core'
 import { isTradeBetter } from '../../helpers'
 import { useAllCommonPairs } from './useAllCommonPairs'
 import { BETTER_TRADE_LESS_HOPS_THRESHOLD, MAX_HOP } from '../../constants'
+import type { TradeProvider } from '@masknet/public-api'
 
 export function useV2BestTradeExactIn(
+    tradeProvider: TradeProvider,
     currencyAmountIn?: CurrencyAmount<Currency>,
     currencyOut?: Currency,
     { maxHops = MAX_HOP } = {},
 ) {
-    const { value: allowedPairs = [], ...asyncResult } = useAllCommonPairs(currencyAmountIn?.currency, currencyOut)
+    const { value: allowedPairs = [], ...asyncResult } = useAllCommonPairs(
+        tradeProvider,
+        currencyAmountIn?.currency,
+        currencyOut,
+    )
 
     const bestTrade = useMemo(() => {
         if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
@@ -49,11 +55,16 @@ export function useV2BestTradeExactIn(
 }
 
 export function useV2BestTradeExactOut(
+    tradeProvider: TradeProvider,
     currencyIn?: Currency,
     currencyAmountOut?: CurrencyAmount<Currency>,
     { maxHops = MAX_HOP } = {},
 ) {
-    const { value: allowedPairs = [], ...asyncResult } = useAllCommonPairs(currencyIn, currencyAmountOut?.currency)
+    const { value: allowedPairs = [], ...asyncResult } = useAllCommonPairs(
+        tradeProvider,
+        currencyIn,
+        currencyAmountOut?.currency,
+    )
 
     const bestTrade = useMemo(() => {
         if (currencyIn && currencyAmountOut && allowedPairs.length > 0) {

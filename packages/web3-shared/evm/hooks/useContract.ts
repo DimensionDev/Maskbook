@@ -4,6 +4,7 @@ import type { AbiItem } from 'web3-utils'
 import { EthereumAddress } from 'wallet.ts'
 import type { BaseContract } from '@masknet/web3-contracts/types/types'
 import { useWeb3 } from './useWeb3'
+import type { ChainId } from '../types'
 
 export function createContract<T extends BaseContract>(web3: Web3, address: string, ABI: AbiItem[]) {
     if (!address || !EthereumAddress.isValid(address)) return null
@@ -19,8 +20,13 @@ export function createContract<T extends BaseContract>(web3: Web3, address: stri
  * @param address
  * @param ABI
  */
-export function useContract<T extends BaseContract>(address: string = '', ABI: AbiItem[] = [], readonly = false) {
-    const web3 = useWeb3(readonly)
+export function useContract<T extends BaseContract>(
+    address: string = '',
+    ABI: AbiItem[] = [],
+    readonly = false,
+    chainId?: ChainId,
+) {
+    const web3 = useWeb3(readonly, chainId)
     return useMemo(() => createContract<T>(web3, address, ABI), [web3, address, ABI])
 }
 
@@ -29,8 +35,13 @@ export function useContract<T extends BaseContract>(address: string = '', ABI: A
  * @param listOfAddress
  * @param ABI
  */
-export function useContracts<T extends BaseContract>(listOfAddress: string[], ABI: AbiItem[] = [], readonly = false) {
-    const web3 = useWeb3(readonly)
+export function useContracts<T extends BaseContract>(
+    listOfAddress: string[],
+    ABI: AbiItem[] = [],
+    readonly = false,
+    chainId?: ChainId,
+) {
+    const web3 = useWeb3(readonly, chainId)
     const contracts = useMemo(
         () => listOfAddress.map((address) => createContract<T>(web3, address, ABI)),
         [web3, JSON.stringify(listOfAddress), ABI],

@@ -142,12 +142,12 @@ export function PluginProviderRender({
                                         network={networks.find((x) => x.ID === undeterminedNetworkID)!}
                                         provider={provider}
                                         onSubmit={onSubmit}>
-                                        <ImageListItem>
+                                        <ImageListItem key={provider.ID}>
                                             <ProviderIcon icon={provider.icon} name={provider.name} />
                                         </ImageListItem>
                                     </ProviderIconClickBait>
                                 ) : (
-                                    <ImageListItem>
+                                    <ImageListItem key={provider.ID}>
                                         <ProviderIcon icon={provider.icon} name={provider.name} />
                                     </ImageListItem>
                                 ),

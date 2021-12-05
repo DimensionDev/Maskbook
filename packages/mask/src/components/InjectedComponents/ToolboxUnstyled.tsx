@@ -20,6 +20,7 @@ import {
     useChainIdValid,
     useChainDetailed,
     useWeb3State,
+    useReverseAddress,
 } from '@masknet/plugin-infra'
 import { useCallback, useMemo } from 'react'
 import { useRemoteControlledDialog, WalletIcon, ProfileIdentifier, DashboardRoutes } from '@masknet/shared'
@@ -200,10 +201,13 @@ function useToolbox() {
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
+    const { value: domain } = useReverseAddress(account)
+
     function renderButtonText() {
         if (!account) return t('mask_network')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
-        if (pendingTransactions.length <= 0) return Utils?.formatAddress?.(account, 4) ?? account
+        if (pendingTransactions.length <= 0)
+            return Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || account
         return (
             <>
                 <span>

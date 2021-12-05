@@ -197,6 +197,7 @@ const WalletRecovery = memo(() => {
             <div className={classes.controller}>
                 <LoadingButton
                     loading={restoreLegacyWalletLoading || confirmLoading}
+                    loadingPosition="end"
                     fullWidth
                     disabled={!hasPassword ? !isValid : false}
                     classes={{ root: classes.button, disabled: classes.disabled }}
