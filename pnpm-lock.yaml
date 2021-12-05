@@ -647,6 +647,7 @@ importers:
       '@rollup/plugin-node-resolve': ^13.0.6
       '@rollup/plugin-sucrase': ^4.0.1
       '@types/node': ^16.11.6
+      buffer: ^6.0.3
       clipboard-polyfill: ^3.0.3
       core-js: ^3.19.1
       core-js-builder: ^3.19.1
@@ -655,6 +656,7 @@ importers:
       rollup-plugin-terser: ^7.0.2
       webcrypto-liner: 1.2.4
     dependencies:
+      buffer: 6.0.3
       clipboard-polyfill: 3.0.3
       core-js: 3.19.1
       elliptic: 6.5.4
