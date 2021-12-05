@@ -7,9 +7,8 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
-import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { isZero, useAccount } from '@masknet/web3-shared-evm'
+import { isZero, NonFungibleAssetProvider, useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -43,14 +42,14 @@ export function ListingTab() {
     const { token, asset, provider, orders, orderPage, setOrderPage } = CollectibleState.useContainer()
 
     const isDifferenceToken = useMemo(() => {
-        if (provider === CollectibleProvider.OPENSEA) {
+        if (provider === NonFungibleAssetProvider.OPENSEA) {
             return (
-                orders.some(
+                orders.value?.some(
                     (item) =>
                         (item.payment_token_contract?.symbol !== 'WETH' &&
                             item.payment_token_contract?.symbol !== 'ETH') ||
                         (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
-                ) && orders.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
+                ) && orders.value?.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {
             return false
@@ -58,8 +57,8 @@ export function ListingTab() {
     }, [provider, orders])
 
     const dataSource = useMemo(() => {
-        if (!asset.value || !orders.length) return []
-        return orders.sort((a, b) => {
+        if (!orders.value || !orders.value?.length) return []
+        return orders.value.sort((a, b) => {
             const current = new BigNumber(a.current_price ?? 0)
             const next = new BigNumber(b.current_price ?? 0)
             if (current.isLessThan(next)) return -1
@@ -114,7 +113,7 @@ export function ListingTab() {
                         ) : (
                             <>
                                 <TableCell>{t('plugin_collectible_price')}</TableCell>
-                                {provider === CollectibleProvider.OPENSEA ? (
+                                {provider === NonFungibleAssetProvider.OPENSEA ? (
                                     <TableCell>{t('plugin_collectible_expiration')}</TableCell>
                                 ) : null}
                             </>
@@ -126,7 +125,7 @@ export function ListingTab() {
                         <OrderRow key={order.order_hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === CollectibleProvider.OPENSEA && dataSource.length) || orderPage > 0 ? (
+                {(provider === NonFungibleAssetProvider.OPENSEA && dataSource.length) || orderPage > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setOrderPage((prev) => prev - 1)}
                         handleNextClick={() => setOrderPage((prev) => prev + 1)}

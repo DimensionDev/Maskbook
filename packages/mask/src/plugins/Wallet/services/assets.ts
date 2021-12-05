@@ -4,7 +4,6 @@ import {
     ChainId,
     NonFungibleAssetProvider,
     createERC20Token,
-    createERC721Token,
     createNativeToken,
     CurrencyType,
     EthereumTokenType,
@@ -23,8 +22,8 @@ import {
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
+import { EVM_RPC } from '../../EVM/messages'
 import * as DebankAPI from '../apis/debank'
-import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import { resolveChainByScope, resolveZerionAssetsScopeName } from '../pipes'
 import type {
@@ -44,14 +43,10 @@ export async function getCollectionsNFT(
     size?: number,
 ): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
     if (provider === NonFungibleAssetProvider.OPENSEA) {
-        const { collections } = await OpenSeaAPI.getCollections(address, { chainId, page, size })
+        const collections = await EVM_RPC.getCollections(address, chainId, provider, page, size)
 
         return {
-            collections: collections.map((x) => ({
-                name: x.name,
-                image: x.image_url || undefined,
-                slug: x.slug,
-            })),
+            collections,
             hasNextPage: collections.length === size,
         }
     }
@@ -70,40 +65,19 @@ export async function getAssetsListNFT(
     size?: number,
     collection?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
-    if (provider === NonFungibleAssetProvider.OPENSEA) {
-        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size, collection })
+    if (!EthereumAddress.isValid(address))
         return {
-            assets: assets
-                .filter(
-                    (x) =>
-                        ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
-                        ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
-                )
-                .map((x) =>
-                    createERC721Token(
-                        {
-                            chainId: ChainId.Mainnet,
-                            type: EthereumTokenType.ERC721,
-                            name: x.asset_contract.name,
-                            symbol: x.asset_contract.symbol,
-                            address: x.asset_contract.address,
-                        },
-                        {
-                            name: x.name || x.asset_contract.name,
-                            description: x.description || x.asset_contract.symbol,
-                            image: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
-                        },
-                        x.token_id,
-                    ),
-                ),
-            hasNextPage: assets.length === size,
+            assets: [],
+            hasNextPage: false,
         }
-    }
+    const tokens = await EVM_RPC.getNFTsPaged(address, chainId, provider, page, size)
     return {
-        assets: [],
-        hasNextPage: false,
+        assets: tokens,
+        hasNextPage: tokens.length === size,
     }
 }
+
+const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
 export async function getAssetsList(
     address: string,
@@ -186,8 +160,6 @@ function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
             }
         })
 }
-
-const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 
 function formatAssetsFromZerion(
     data: ZerionAddressAsset[] | ZerionAddressCovalentAsset[],

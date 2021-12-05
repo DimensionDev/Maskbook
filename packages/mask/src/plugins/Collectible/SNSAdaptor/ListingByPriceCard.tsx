@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -19,7 +19,7 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
-import type { useAsset } from '../hooks/useAsset'
+import type { useAsset } from '../../EVM/hooks/useAsset'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -58,7 +58,7 @@ export interface ListingByPriceCardProps {
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
-
+    const { showSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -100,19 +100,26 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createSellOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schema_name,
-            }),
-            accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
-            listingTime: futureTimeChecked ? toUnixTimestamp(scheduleTime) : undefined,
-            expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
-            buyerAddress: privacyChecked ? buyerAddress : undefined,
-        })
+        try {
+            await PluginCollectibleRPC.createSellOrder({
+                asset: toAsset({
+                    tokenId: asset.value.token_id,
+                    tokenAddress: asset.value.token_address,
+                    schemaName: asset.value.asset_contract?.schemaName,
+                }),
+                accountAddress: account,
+                startAmount: Number.parseFloat(amount),
+                endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
+                listingTime: futureTimeChecked ? toUnixTimestamp(scheduleTime) : undefined,
+                expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
+                buyerAddress: privacyChecked ? buyerAddress : undefined,
+            })
+        } catch (error) {
+            if (error instanceof Error) {
+                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+            }
+            throw error
+        }
     }, [
         asset?.value,
         token,

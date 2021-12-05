@@ -12,17 +12,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     PostInspector: function Component() {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
-
+        const links = usePostInfoDetails
+            .postMetadataMentionedLinks()
+            .concat(usePostInfoDetails.postMentionedLinks()) as string[]
         const link = uniq(links).find(checkUrl)
         const asset = getAssetInfoFromURL(link)
 
-        return asset ? renderPostInspector(asset) : null
+        return asset ? renderPostInspector(asset as CollectibleJSON_Payload) : null
     },
     DecryptedInspector: function Component(props) {
         const collectibleUrl = getRelevantUrl(getTypedMessageContent(props.message))
         const asset = getAssetInfoFromURL(collectibleUrl)
-        return asset ? renderPostInspector(asset) : null
+        return asset ? renderPostInspector(asset as CollectibleJSON_Payload) : null
     },
 }
 

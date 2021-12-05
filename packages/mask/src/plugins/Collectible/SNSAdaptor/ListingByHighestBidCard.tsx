@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardActions, CardContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -16,9 +16,9 @@ import { ActionButtonPromise } from '../../../extension/options-page/DashboardCo
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
-import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
+import type { useAsset } from '../../EVM/hooks/useAsset'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -49,7 +49,7 @@ export interface ListingByHighestBidCardProps {
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
-
+    const { showSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -71,20 +71,27 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createSellOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schema_name,
-            }),
-            accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            expirationTime: toUnixTimestamp(expirationDateTime),
-            englishAuctionReservePrice: Number.parseFloat(reservePrice),
-            waitForHighestBid: true,
-            paymentTokenAddress: token.value.address, // english auction must be erc20 token
-        })
-    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime])
+        try {
+            await PluginCollectibleRPC.createSellOrder({
+                asset: toAsset({
+                    tokenId: asset.value.token_id,
+                    tokenAddress: asset.value.token_address,
+                    schemaName: asset.value.asset_contract?.schemaName,
+                }),
+                accountAddress: account,
+                startAmount: Number.parseFloat(amount),
+                expirationTime: toUnixTimestamp(expirationDateTime),
+                englishAuctionReservePrice: Number.parseFloat(reservePrice),
+                waitForHighestBid: true,
+                paymentTokenAddress: token.value.address, // english auction must be erc20 token
+            })
+        } catch (error) {
+            if (error instanceof Error) {
+                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+            }
+            throw error
+        }
+    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime, showSnackbar])
 
     useEffect(() => {
         setAmount('')

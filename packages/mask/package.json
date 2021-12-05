@@ -31,6 +31,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
     "@msgpack/msgpack": "^2.7.1",
     "@servie/events": "^3.0.0",
     "@sinonjs/text-encoding": "^0.7.1",

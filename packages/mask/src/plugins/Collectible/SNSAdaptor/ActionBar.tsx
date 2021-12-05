@@ -7,6 +7,7 @@ import { useControlledDialog } from '../../../utils/hooks/useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
+import { useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -26,7 +27,8 @@ export interface ActionBarProps {}
 export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { asset, token, assetOrder } = CollectibleState.useContainer()
+    const account = useAccount()
+    const { asset, assetOrder, token } = CollectibleState.useContainer()
 
     const {
         open: openCheckoutDialog,
@@ -54,7 +56,7 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_place_bid')}
                 </ActionButton>
             ) : null}
-            {!asset.value.is_owner && !asset.value.is_auction && assetOrder.value ? (
+            {!asset.value.is_owner && !asset.value.is_auction && asset.value?.desktopOrder ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -82,8 +84,8 @@ export function ActionBar(props: ActionBarProps) {
                 </ActionButton>
             ) : null}
             <CheckoutDialog
-                assetOrder={assetOrder}
                 asset={asset}
+                order={assetOrder}
                 open={openCheckoutDialog}
                 onClose={onCloseCheckoutDialog}
             />

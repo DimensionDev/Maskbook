@@ -1,9 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "rootDir": "./src/",
+    "rootDir": "./",
     "outDir": "./dist/",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["./src", "./src/**/*.json"]
+  "include": ["./", "./**/*.json"],
+  "references": [{ "path": "../web3-shared/evm" }]
 }

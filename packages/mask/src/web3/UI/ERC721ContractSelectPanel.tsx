@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
-import { ERC721ContractDetailed, useERC721ContractBalance, useAccount, isSameAddress } from '@masknet/web3-shared-evm'
+import { ERC721ContractDetailed, useERC721ContractBalance, useAccount } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Typography, CircularProgress } from '@mui/material'
@@ -9,7 +9,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { SelectNftContractDialogEvent, WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { useNFTscanFindAssets } from '../../plugins/Wallet/hooks/useNFTscanFindAssets'
+import { useNFTBalance } from '../../plugins/EVM/hooks/useNFTBalance'
 
 interface StyleProps {
     hasIcon: boolean
@@ -72,19 +72,15 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
-    const { value: assets, loading: loadingFromNFTscan } = useNFTscanFindAssets(account, !contract)
+    const { value: balanceFromNFTscan, loading: loadingBalanceFromNFTscan } = useNFTBalance(account, contract?.address)
 
     const { t } = useI18N()
-
-    const balanceFromNFTscan = assets
-        ? assets.find((asset) => isSameAddress(asset.contractDetailed.address, contract?.address))?.balance
-        : undefined
 
     const balance = balanceFromChain ? Number(balanceFromChain) : balanceFromNFTscan ?? 0
 
     onBalanceChange(balance)
 
-    const loading = (loadingFromChain || loadingFromNFTscan) && !balance
+    const loading = (loadingFromChain || loadingBalanceFromNFTscan) && !balance
 
     //#region select contract
     const [id] = useState(uuid())

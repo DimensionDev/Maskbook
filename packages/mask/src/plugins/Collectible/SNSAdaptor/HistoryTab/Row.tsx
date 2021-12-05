@@ -2,14 +2,16 @@ import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LinkIcon from '@mui/icons-material/Link'
 import { FormattedBalance } from '@masknet/shared'
-import { formatBalance } from '@masknet/web3-shared-evm'
+import { formatBalance, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { formatElapsed } from '../../../Wallet/formatter'
 import { useMemo } from 'react'
-import { CollectibleProvider, NFTHistory, OpenSeaAssetEventType, RaribleEventType } from '../../types'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
 import { Account } from '../Account'
-import { getOrderUnitPrice } from '../../utils'
+import type { NFTHistory } from '@masknet/web3-providers'
+import { getOrderUnitPrice } from '@masknet/web3-providers'
+import type { OpenSeaAssetEventType } from '../../types/opensea'
+import type { RaribleEventType } from '../../types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -50,8 +52,7 @@ export function Row({ event, isDifferenceToken }: Props) {
     const { provider } = CollectibleState.useContainer()
 
     const unitPrice = useMemo(() => {
-        if (provider === CollectibleProvider.RARIBLE || !isDifferenceToken || !event.price) return null
-
+        if (provider === NonFungibleAssetProvider.RARIBLE || !isDifferenceToken || !event.price) return null
         return getOrderUnitPrice(event.price.price ?? 0, event.price.paymentToken?.decimals, event.price.quantity)
     }, [event, isDifferenceToken, provider])
 
@@ -59,7 +60,7 @@ export function Row({ event, isDifferenceToken }: Props) {
         <TableRow>
             <TableCell>
                 <Typography className={classes.content} variant="body2">
-                    {provider === CollectibleProvider.OPENSEA
+                    {provider === NonFungibleAssetProvider.OPENSEA
                         ? resolveOpenSeaAssetEventType(
                               event.eventType as OpenSeaAssetEventType,
                               event.accountPair.from?.username,
@@ -74,9 +75,9 @@ export function Row({ event, isDifferenceToken }: Props) {
                             {event.price?.asset?.image_url && (
                                 <Link href={event.price.asset.permalink} target="_blank" rel="noopener noreferrer">
                                     <img
-                                        src={event.price.asset.image_url}
+                                        src={event.price.asset?.image_original_url ?? event.price.asset.image_url}
                                         className={classes.token}
-                                        alt={event.price.paymentToken?.symbol}
+                                        alt={event.price.asset?.asset_contract.symbol}
                                     />
                                 </Link>
                             )}
@@ -89,7 +90,6 @@ export function Row({ event, isDifferenceToken }: Props) {
                             <FormattedBalance
                                 value={event.price?.quantity ?? 0}
                                 decimals={event.price?.asset?.decimals ?? 0}
-                                formatter={formatBalance}
                             />
                         </Typography>
                     </TableCell>
@@ -97,7 +97,7 @@ export function Row({ event, isDifferenceToken }: Props) {
             ) : (
                 <TableCell>
                     <Typography className={classes.content} variant="body2">
-                        {event.price && provider === CollectibleProvider.OPENSEA
+                        {event.price && provider === NonFungibleAssetProvider.OPENSEA
                             ? formatBalance(event.price.quantity, event.price?.asset?.decimals ?? 0)
                             : event.price?.quantity ?? ''}
                     </Typography>

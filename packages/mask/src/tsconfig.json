@@ -18,6 +18,7 @@
     { "path": "../../shared-base" },
     { "path": "../../web3-shared/evm" },
     { "path": "../../web3-shared/flow" },
+    { "path": "../../web3-providers" },
     { "path": "../../theme" },
     { "path": "../../icons" },
     { "path": "../../plugin-infra" },

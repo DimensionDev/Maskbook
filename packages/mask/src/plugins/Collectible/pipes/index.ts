@@ -1,8 +1,8 @@
 import { identity } from 'lodash-unified'
 import { Network } from 'opensea-js'
-import { ChainId, createLookupTableResolver } from '@masknet/web3-shared-evm'
+import { ChainId, createLookupTableResolver, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
-import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../types'
+import { OpenSeaAssetEventType, RaribleEventType } from '../types'
 import urlcat from 'urlcat'
 
 export function resolveOpenSeaAssetEventType(eventType: OpenSeaAssetEventType, fromUserName?: string) {
@@ -44,10 +44,11 @@ export const resolveOpenSeaNetwork = createLookupTableResolver<ChainId.Mainnet |
     Network.Main,
 )
 
-export const resolveCollectibleProviderName = createLookupTableResolver<CollectibleProvider, string>(
+export const resolveCollectibleProviderName = createLookupTableResolver<NonFungibleAssetProvider, string>(
     {
-        [CollectibleProvider.OPENSEA]: 'OpenSea',
-        [CollectibleProvider.RARIBLE]: 'Rarible',
+        [NonFungibleAssetProvider.OPENSEA]: 'OpenSea',
+        [NonFungibleAssetProvider.RARIBLE]: 'Rarible',
+        [NonFungibleAssetProvider.NFTSCAN]: 'NFTScan',
     },
     (providerType) => {
         throw new Error(`Unknown provider type: ${providerType}.`)

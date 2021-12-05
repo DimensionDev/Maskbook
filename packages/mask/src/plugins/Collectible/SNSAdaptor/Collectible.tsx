@@ -30,13 +30,13 @@ import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { PluginSkeleton } from './PluginSkeleton'
-import { CollectibleProvider, CollectibleTab } from '../types'
+import { CollectibleTab } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
 
@@ -143,16 +143,16 @@ export function Collectible(props: CollectibleProps) {
     const { asset, provider, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
     //#region sync with settings
-    const collectibleProviderOptions = getEnumAsArray(CollectibleProvider)
+    const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentCollectibleProviderSettings.value = option.value as CollectibleProvider
+        currentCollectibleProviderSettings.value = option.value as NonFungibleAssetProvider
     }, [])
     //#endregion
 
     //#region provider switcher
     const CollectibleProviderSwitcher = useSettingsSwitcher(
         currentCollectibleProviderSettings,
-        getEnumAsArray(CollectibleProvider).map((x) => x.value),
+        getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
         resolveCollectibleProviderName,
     )
     //#endregion
@@ -311,7 +311,7 @@ export function Collectible(props: CollectibleProps) {
                     </Typography>
                 </Box>
             )}
-            {provider === CollectibleProvider.OPENSEA ? <ActionBar /> : null}
+            {provider === NonFungibleAssetProvider.OPENSEA ? <ActionBar /> : null}
         </>
     )
 }

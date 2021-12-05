@@ -1,7 +1,11 @@
 {
   "name": "@masknet/web3-providers",
   "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "dependencies": {
+    "@masknet/web3-shared-evm": "workspace:*",
+    "bignumber.js": "^9.0.1",
     "json-stable-stringify": "^1.0.1",
     "lodash-unified": "1.0.1",
     "urlcat": "^2.0.4"

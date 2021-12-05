@@ -10,7 +10,7 @@ import {
     Typography,
     Link,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import {
@@ -28,12 +28,12 @@ import { UnreviewedWarning } from './UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import type { useAsset } from '../hooks/useAsset'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset, toUnixTimestamp } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
+import type { useAsset } from '../../EVM/hooks/useAsset'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -75,7 +75,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const isVerified = asset?.value?.is_verified ?? false
     const paymentTokens = (isAuction ? asset?.value?.order_payment_tokens : asset?.value?.offer_payment_tokens) ?? []
     const selectedPaymentToken = first(paymentTokens)
-
+    const { showSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -92,18 +92,25 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
-        await PluginCollectibleRPC.createBuyOrder({
-            asset: toAsset({
-                tokenId: asset.value.token_id,
-                tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schema_name,
-            }),
-            accountAddress: account,
-            startAmount: Number.parseFloat(amount),
-            expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
-            paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
-        })
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
+        try {
+            await PluginCollectibleRPC.createBuyOrder({
+                asset: toAsset({
+                    tokenId: asset.value.token_id,
+                    tokenAddress: asset.value.token_address,
+                    schemaName: asset.value.asset_contract?.schemaName,
+                }),
+                accountAddress: account,
+                startAmount: Number.parseFloat(amount),
+                expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
+                paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
+            })
+        } catch (error) {
+            if (error instanceof Error) {
+                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+            }
+            throw error
+        }
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, showSnackbar])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

@@ -32,9 +32,9 @@ export interface Ownership {
     tokenId: string
     owner: string
     value: number
-    date: Date
-    price: number
-    priceEth: number
+    date: string
+    price: string
+    priceEth: string
     buyToken: string
     buyTokenId: string
     status: string
@@ -167,15 +167,15 @@ export interface RaribleOfferResponse {
     buyAssetType: string
     value: number
     signature: string
-    updateDate: Date
+    updateDate: string
     importantUpdateDate: Date
     updateStateDate: Date
     contractVersion: number
-    fee: number
+    fee: string
     sold: number
     canceled: boolean
     pending: RaribleTransferItem[]
-    buyPriceEth: number
+    buyPriceEth: string
     version: number
     id: string
     active: boolean
@@ -199,8 +199,8 @@ export interface RaribleHistory {
     '@type': RaribleEventType
     id: string
     owner: string
-    value: number
-    price: number
+    value: string
+    price: string
     buyToken: string
     buyTokenId: string
     buyer?: string

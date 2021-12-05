@@ -52,7 +52,7 @@ export function AddNFT(props: AddNFTProps) {
 
         createNFT(address, tokenId)
             .then((token) => {
-                if (!isSameAddress(token.info.owner, account)) {
+                if (!token || !isSameAddress(token?.info.owner, account)) {
                     setMessage(t('nft_owner_hint'))
                     return
                 }
