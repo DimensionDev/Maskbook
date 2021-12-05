@@ -1,14 +1,14 @@
-import type { NonSerializableWithToJSONTypedMessage, TypedMessage } from './base'
+import type { NonSerializableWithAltTypedMessage, TypedMessage } from './base'
 import { composeSome, createIsType } from './utils/internal'
 import { makeTypedMessageText, TypedMessageText } from './core'
 export type WellKnownExtensionTypedMessages = TypedMessageAnchor
 /** It represents a single link */
-export interface TypedMessageAnchor extends NonSerializableWithToJSONTypedMessage {
+export interface TypedMessageAnchor extends NonSerializableWithAltTypedMessage {
     readonly type: 'x-anchor'
     readonly category: 'normal' | 'user' | 'cash' | 'hash'
     readonly href: string
     readonly content: string
-    readonly toJSON: TypedMessageText
+    readonly alt: TypedMessageText
 }
 export const isTypedMessageAnchor = createIsType<TypedMessageAnchor>('x-anchor')
 export function makeTypedMessageAnchor(
@@ -22,7 +22,7 @@ export function makeTypedMessageAnchor(
         category,
         href,
         content,
-        toJSON: makeTypedMessageText(`[${content}](${href})`),
+        alt: makeTypedMessageText(`[${content}](${href})`),
     }
 }
 //

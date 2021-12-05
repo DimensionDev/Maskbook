@@ -1,6 +1,6 @@
 /// <reference types="@masknet/global-types/webpack" />
 
-declare module '@onflow/fcl' {
+declare module '@blocto/fcl' {
     export interface User {
         addr: string | null
         f_type: 'User'

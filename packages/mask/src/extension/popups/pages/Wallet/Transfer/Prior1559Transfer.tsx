@@ -1,4 +1,4 @@
-import { memo, SyntheticEvent, useCallback, useMemo, useState } from 'react'
+import { memo, SyntheticEvent, useCallback, useMemo, useRef, useState } from 'react'
 import { useI18N } from '../../../../../utils'
 import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
@@ -22,7 +22,7 @@ import {
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { Box, Button, Chip, Collapse, MenuItem, Typography } from '@mui/material'
+import { Box, Button, Chip, Collapse, MenuItem, Popover, Typography } from '@mui/material'
 import { StyledInput } from '../../../components/StyledInput'
 import { UserIcon } from '@masknet/icons'
 import { FormattedAddress, FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
@@ -121,6 +121,15 @@ const useStyles = makeStyles()({
         fontSize: 14,
         lineHeight: '20px',
     },
+    popover: {
+        width: '100%',
+    },
+    errorMessage: {
+        color: '#FF5F5F',
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 500,
+    },
 })
 
 export interface Prior1559TransferProps {
@@ -203,7 +212,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         selectedAsset?.token.type,
         selectedAsset?.token.address,
         new BigNumber(!!amount ? amount : 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
-        address,
+        EthereumAddress.isValid(address) ? address : '',
     )
     //#endregion
 
@@ -255,7 +264,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const [menu, openMenu] = useMenu(
         <MenuItem className={classes.expand} key="expand">
-            <Typography className={classes.title}>Transfer between my accounts</Typography>
+            <Typography className={classes.title}>{t('wallet_transfer_between_my_accounts')}</Typography>
             <ExpandMore style={{ fontSize: 20 }} />
         </MenuItem>,
         <Collapse in>
@@ -285,6 +294,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
                 handleConfirm={methods.handleSubmit(onSubmit)}
                 confirmLoading={loading}
                 maxAmount={maxAmount}
+                hasEnsSuffix={address.includes('.eth')}
             />
             {otherWallets ? menu : null}
         </FormProvider>
@@ -301,6 +311,7 @@ export interface Prior1559TransferUIProps {
     handleConfirm: () => void
     confirmLoading: boolean
     maxAmount: string
+    hasEnsSuffix: boolean
 }
 
 type TransferFormData = {
@@ -321,9 +332,12 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
         handleCancel,
         confirmLoading,
         maxAmount,
+        hasEnsSuffix,
     }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
+        const anchorEl = useRef<HTMLDivElement | null>(null)
+        const [popoverOpen, setPopoverOpen] = useState(false)
 
         const { RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT } = useMemo(
             () => ({
@@ -337,12 +351,16 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
             formState: { errors },
         } = useFormContext<TransferFormData>()
 
+        useUpdateEffect(() => {
+            setPopoverOpen(hasEnsSuffix && !!anchorEl.current)
+        }, [hasEnsSuffix])
+
         return (
             <>
                 <form className={classes.container} onSubmit={handleConfirm}>
-                    <Typography className={classes.label}>Transfer Account</Typography>
+                    <Typography className={classes.label}>{t('wallet_transfer_account')}</Typography>
                     <Typography className={classes.accountName}>{accountName}</Typography>
-                    <Typography className={classes.label}>Receiving Account</Typography>
+                    <Typography className={classes.label}>{t('wallet_transfer_receiving_account')}</Typography>
                     <Controller
                         render={({ field }) => (
                             <StyledInput
@@ -355,11 +373,30 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                                             <UserIcon className={classes.user} />
                                         </div>
                                     ),
+                                    onClick: (event) => {
+                                        if (!anchorEl.current) anchorEl.current = event.currentTarget
+                                        if (hasEnsSuffix) setPopoverOpen(true)
+                                    },
                                 }}
                             />
                         )}
                         name="address"
                     />
+                    <Popover
+                        open={popoverOpen}
+                        classes={{ paper: classes.popover }}
+                        anchorEl={anchorEl.current}
+                        onClose={() => setPopoverOpen(false)}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}>
+                        <Box py={2.5} px={1.5}>
+                            <Typography className={classes.errorMessage}>
+                                {t('wallet_transfer_error_no_support_ens')}
+                            </Typography>
+                        </Box>
+                    </Popover>
                     <Typography className={classes.label}>
                         <span>{t('popups_wallet_choose_token')}</span>
                         <Typography className={classes.balance} component="span">
@@ -443,7 +480,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
 
                     <div className={classes.gasInput}>
                         <div>
-                            <Typography className={classes.label}>Gas Price</Typography>
+                            <Typography className={classes.label}>{t('gas_price')}</Typography>
                             <Controller
                                 render={({ field }) => (
                                     <StyledInput
@@ -459,7 +496,7 @@ export const Prior1559TransferUI = memo<Prior1559TransferUIProps>(
                             />
                         </div>
                         <div>
-                            <Typography className={classes.label}>Gas limit</Typography>
+                            <Typography className={classes.label}>{t('gas_limit')}</Typography>
                             <Controller
                                 render={({ field }) => (
                                     <StyledInput

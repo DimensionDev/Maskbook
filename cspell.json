@@ -241,7 +241,8 @@
         "tokenid",
         "NFTRSS",
         "solana",
-        "Görli"
+        "Görli",
+        "resizer"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -330,7 +331,12 @@
         "walletlink",
         "rpcs",
         "FUSD",
-        "isfacebook"
+        "isfacebook",
+        "ethjs",
+        "isfacebook",
+        "findtruman",
+        "uaddr",
+        "consts"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

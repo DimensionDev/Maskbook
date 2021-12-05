@@ -2,26 +2,28 @@ import type { ExchangeProxy } from '@masknet/web3-contracts/types/ExchangeProxy'
 import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
+    GasOptionConfig,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
     useAccount,
-    useChainId,
     useTraderConstants,
 } from '@masknet/web3-shared-evm'
 import { useCallback, useState } from 'react'
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 import { useTradeAmount } from './useTradeAmount'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTradeCallback(
     trade: TradeComputed<SwapResponse> | null,
     exchangeProxyContract: ExchangeProxy | null,
     allowedSlippage = SLIPPAGE_DEFAULT,
+    gasConfig?: GasOptionConfig,
 ) {
     const account = useAccount()
-    const chainId = useChainId()
-    const { BALANCER_ETH_ADDRESS } = useTraderConstants()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const { BALANCER_ETH_ADDRESS } = useTraderConstants(chainId)
 
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
@@ -105,6 +107,7 @@ export function useTradeCallback(
                     throw error
                 }),
             value: transactionValue,
+            ...gasConfig,
         }
 
         // send transaction and wait for hash

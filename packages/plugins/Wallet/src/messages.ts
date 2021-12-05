@@ -12,6 +12,7 @@ import type {
 } from '@masknet/web3-shared-evm'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export type TransactionDialogEvent =
     | {
@@ -105,6 +106,7 @@ export type SelectTokenDialogEvent =
     | {
           open: true
           uuid: string
+          chainId?: ChainId
           disableNativeToken?: boolean
           disableSearchBar?: boolean
           FixedTokenListProps?: {

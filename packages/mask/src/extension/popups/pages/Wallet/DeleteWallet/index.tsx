@@ -10,7 +10,7 @@ import { FormattedAddress } from '@masknet/shared'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles()({
     content: {
@@ -107,9 +107,15 @@ const DeleteWallet = memo(() => {
                 await WalletRPC.removeWallet(wallet.address, password)
                 const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
 
-                await WalletRPC.updateMaskAccount({
-                    account: first(wallets)?.address ?? '',
-                })
+                const otherWalletAddress = first(wallets)?.address
+
+                if (otherWalletAddress) {
+                    await WalletRPC.updateMaskAccount({
+                        account: otherWalletAddress,
+                    })
+                } else {
+                    currentMaskWalletAccountSettings.value = ''
+                }
 
                 if (currentAccountSettings.value === wallet.address) {
                     await WalletRPC.updateAccount({

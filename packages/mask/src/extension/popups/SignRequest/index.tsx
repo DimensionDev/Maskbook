@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
 import { MaskMessages } from '../../../utils'
 import { MissingParameter } from '../MissingParameter'
+import { useI18N } from '../../../utils'
 import type { SignRequest } from './utils'
 
 export default function SignRequest() {
@@ -30,6 +31,7 @@ const useStyles = makeStyles()({
 
 function SignRequestHandler(props: SignRequest) {
     const { classes } = useStyles()
+    const { t } = useI18N()
     const personas = useMyPersonas()
     const [selected, setSelected] = useState(personas[0].identifier.toText())
     useEffect(() => {
@@ -44,15 +46,15 @@ function SignRequestHandler(props: SignRequest) {
     }
     return (
         <DialogContent className={classes.root}>
-            <Typography variant="h3">Sign request:</Typography>
+            <Typography variant="h3">{t('popups_sign_request')}</Typography>
             <Typography variant="body1">
                 <Box sx={{ textDecoration: 'underline', display: 'inline' }} component="span">
-                    Unknown source
-                </Box>{' '}
-                requested to sign the following message with your persona:
+                    {t('popups_unknown_source')}
+                </Box>
+                {t('popups_request_sign')}
             </Typography>
             <TextField multiline inputProps={{ readOnly: true }} fullWidth value={props.message} />
-            <Typography variant="body1">Which persona would you like to sign this message?</Typography>
+            <Typography variant="body1">{t('popups_choose_persona')}</Typography>
             <Select fullWidth value={selected} onChange={(e) => setSelected(e.target.value)}>
                 {personas.map((persona) => (
                     <MenuItem selected key={persona.identifier.toText()} value={persona.identifier.toText()}>
@@ -61,9 +63,9 @@ function SignRequestHandler(props: SignRequest) {
                 ))}
             </Select>
             <DialogActions>
-                <Button onClick={window.close}>Cancel</Button>
+                <Button onClick={window.close}>{t('cancel')}</Button>
                 <Button onClick={onSign} variant="contained">
-                    Sign
+                    {t('sign')}
                 </Button>
             </DialogActions>
         </DialogContent>

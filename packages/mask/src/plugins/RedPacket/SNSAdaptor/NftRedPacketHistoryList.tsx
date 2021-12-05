@@ -7,6 +7,7 @@ import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme, _, createRef) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -73,6 +74,7 @@ interface Props {
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes } = useStyles()
+    const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
     const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
@@ -93,7 +95,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     if (loading) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                Loading...
+                {t('loading')}
             </Typography>
         )
     }

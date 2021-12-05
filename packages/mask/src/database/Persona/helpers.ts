@@ -203,7 +203,7 @@ export async function createPersonaByMnemonic(
         localKey,
         mnemonic,
         nickname,
-        uninitialized: true,
+        uninitialized: false,
     })
 }
 
@@ -223,7 +223,7 @@ export async function createPersonaByMnemonicV2(mnemonicWord: string, nickname: 
         localKey,
         mnemonic,
         nickname,
-        uninitialized: true,
+        uninitialized: false,
     })
 }
 

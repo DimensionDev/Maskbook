@@ -2,7 +2,7 @@ import { unreachable } from '@dimensiondev/kit'
 import {
     Asset,
     ChainId,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
     createERC20Token,
     createERC721Token,
     createNativeToken,
@@ -14,10 +14,11 @@ import {
     getTokenConstants,
     isChainIdMainnet,
     NetworkType,
-    PortfolioProvider,
+    FungibleAssetProvider,
     pow10,
     getChainShortName,
     getChainIdFromNetworkType,
+    ERC721TokenCollectionInfo,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
@@ -27,23 +28,50 @@ import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import { resolveChainByScope, resolveZerionAssetsScopeName } from '../pipes'
 import type {
-    BalanceRecord,
     SocketRequestAssetScope,
+    WalletTokenRecord,
     ZerionAddressAsset,
     ZerionAddressCovalentAsset,
     ZerionAsset,
     ZerionCovalentAsset,
 } from '../types'
 
+export async function getCollectionsNFT(
+    address: string,
+    chainId: ChainId,
+    provider: NonFungibleAssetProvider,
+    page?: number,
+    size?: number,
+): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
+    if (provider === NonFungibleAssetProvider.OPENSEA) {
+        const { collections } = await OpenSeaAPI.getCollections(address, { chainId, page, size })
+
+        return {
+            collections: collections.map((x) => ({
+                name: x.name,
+                image: x.image_url || undefined,
+                slug: x.slug,
+            })),
+            hasNextPage: collections.length === size,
+        }
+    }
+
+    return {
+        collections: [],
+        hasNextPage: false,
+    }
+}
+
 export async function getAssetsListNFT(
     address: string,
     chainId: ChainId,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     page?: number,
     size?: number,
+    collection?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
-    if (provider === CollectibleProvider.OPENSEA) {
-        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size })
+    if (provider === NonFungibleAssetProvider.OPENSEA) {
+        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size, collection })
         return {
             assets: assets
                 .filter(
@@ -63,12 +91,7 @@ export async function getAssetsListNFT(
                         {
                             name: x.name || x.asset_contract.name,
                             description: x.description || x.asset_contract.symbol,
-                            image:
-                                x.image_original_url ||
-                                x.image_url ||
-                                x.image_preview_url ||
-                                x.asset_contract.image_url ||
-                                '',
+                            image: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
                         },
                         x.token_id,
                     ),
@@ -84,12 +107,12 @@ export async function getAssetsListNFT(
 
 export async function getAssetsList(
     address: string,
-    provider: PortfolioProvider,
+    provider: FungibleAssetProvider,
     network?: NetworkType,
 ): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
-        case PortfolioProvider.ZERION:
+        case FungibleAssetProvider.ZERION:
             let result: Asset[] = []
             //xdai-assets is not support
             const scopes = network
@@ -120,16 +143,15 @@ export async function getAssetsList(
             }
 
             return result
-        case PortfolioProvider.DEBANK:
-            const { data = [], error_code } = await DebankAPI.getAssetsList(address)
-            if (error_code === 0) return formatAssetsFromDebank(data, network)
-            return []
+        case FungibleAssetProvider.DEBANK:
+            const data = await DebankAPI.getAssetsList(address)
+            return formatAssetsFromDebank(data, network)
         default:
             unreachable(provider)
     }
 }
 
-function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
+function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType) {
     return data
         .filter((x) => !network || getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
         .filter((x) => x.is_verified)
@@ -150,14 +172,12 @@ function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
                               y.symbol,
                               y.logo_url ? [y.logo_url] : undefined,
                           ),
-                balance: new BigNumber(y.balance).toFixed(),
+                balance: new BigNumber(y.amount).multipliedBy(pow10(y.decimals)).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
                 value: {
-                    [CurrencyType.USD]: new BigNumber(y.price ?? 0)
-                        .multipliedBy(new BigNumber(y.balance).dividedBy(pow10(y.decimals)))
-                        .toFixed(),
+                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).multipliedBy(new BigNumber(y.amount)).toFixed(),
                 },
                 logoURI: y.logo_url,
             }

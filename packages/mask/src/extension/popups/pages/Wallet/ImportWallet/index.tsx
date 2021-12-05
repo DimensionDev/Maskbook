@@ -6,7 +6,7 @@ import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { JsonFileBox } from '../components/JsonFileBox'
 import { StyledInput } from '../../../components/StyledInput'
@@ -18,7 +18,7 @@ import Services from '../../../../service'
 import { getDerivableAccounts } from '../../../../../plugins/Wallet/services'
 import { PageHeader } from '../components/PageHeader'
 import { PasswordField } from '../../../components/PasswordField'
-import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { ProviderType, useChainId } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()({
@@ -111,7 +111,6 @@ const ImportWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const chainId = useChainId()
-    const location = useLocation()
     const { classes } = useStyles()
     const [currentTab, setCurrentTab] = useState(ImportWalletTab.Mnemonic)
     const [mnemonic, setMnemonic] = useState('')
@@ -119,7 +118,6 @@ const ImportWallet = memo(() => {
     const [keyStorePassword, setKeyStorePassword] = useState('')
     const [privateKey, setPrivateKey] = useState('')
     const [errorMessage, setErrorMessage] = useState('')
-
     const schema = useMemo(() => {
         return zod.object({
             name: zod.string().min(1).max(12),
@@ -160,11 +158,11 @@ const ImportWallet = memo(() => {
                         case ImportWalletTab.Mnemonic:
                             // valid the mnemonic
                             await getDerivableAccounts(mnemonic, 0, 1)
-
-                            const params = query({ mnemonic, name: data.name })
+                            const params = query({ name: data.name })
                             history.replace({
                                 pathname: PopupRoutes.AddDeriveWallet,
                                 search: `?${params}`,
+                                state: { mnemonic },
                             })
                             break
                         case ImportWalletTab.JsonFile:
@@ -173,26 +171,37 @@ const ImportWallet = memo(() => {
                                 keyStoreContent,
                                 keyStorePassword,
                             )
+                            if (!currentMaskWalletAccountSettings.value) {
+                                await WalletRPC.updateMaskAccount({
+                                    account: wallet,
+                                })
+                            }
                             if (!currentAccountSettings.value) {
                                 await WalletRPC.updateAccount({
                                     account: wallet,
                                     providerType: ProviderType.MaskWallet,
                                 })
-
-                                await WalletRPC.selectAccount([wallet], chainId)
                             }
+                            await WalletRPC.selectAccount([wallet], chainId)
                             history.replace(PopupRoutes.Wallet)
                             await Services.Helper.removePopupWindow()
                             break
                         case ImportWalletTab.PrivateKey:
                             const privateKeyWallet = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
+                            if (!currentMaskWalletAccountSettings.value) {
+                                await WalletRPC.updateMaskAccount({
+                                    account: privateKeyWallet,
+                                })
+                            }
+
                             if (!currentAccountSettings.value) {
                                 await WalletRPC.updateAccount({
                                     account: privateKeyWallet,
                                     providerType: ProviderType.MaskWallet,
                                 })
-                                await WalletRPC.selectAccount([privateKeyWallet], chainId)
                             }
+
+                            await WalletRPC.selectAccount([privateKeyWallet], chainId)
                             await Services.Helper.removePopupWindow()
                             history.replace(PopupRoutes.Wallet)
                             break
@@ -206,7 +215,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, location.search, disabled, chainId],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, chainId, history],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)

@@ -7,7 +7,6 @@ import { useControlledDialog } from '../../../utils/hooks/useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
-import { useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -27,7 +26,6 @@ export interface ActionBarProps {}
 export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
     const { asset, token, assetOrder } = CollectibleState.useContainer()
 
     const {

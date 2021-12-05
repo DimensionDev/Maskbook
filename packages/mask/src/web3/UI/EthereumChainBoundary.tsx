@@ -16,7 +16,10 @@ import {
     useChainId,
 } from '@masknet/web3-shared-evm'
 import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
-import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, {
+    ActionButtonPromise,
+    ActionButtonPromiseProps,
+} from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
 import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
@@ -27,9 +30,11 @@ const useStyles = makeStyles()(() => ({}))
 export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
     chainId: ChainId
     noSwitchNetworkTip?: boolean
+    disablePadding?: boolean
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
+    ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
@@ -131,7 +136,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         )
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" sx={{ paddingTop: 1, paddingBottom: 1 }}>
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={!props.disablePadding ? { paddingTop: 1, paddingBottom: 1 } : null}>
             {!noSwitchNetworkTip ? (
                 <Typography color="textPrimary">
                     <span>
@@ -164,6 +173,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     executor={onSwitch}
                     completeOnClick={onSwitch}
                     failedOnClick="use executor"
+                    {...props.ActionButtonPromiseProps}
                 />
             ) : null}
         </Box>

@@ -9,7 +9,7 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { isZero, useAccount } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -39,8 +39,7 @@ const useStyles = makeStyles()((theme) => {
 export function OfferTab() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
-    const { asset, token, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
+    const { asset, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
 
     const isDifferenceToken = useMemo(() => {
         if (provider === CollectibleProvider.OPENSEA) {
@@ -81,14 +80,6 @@ export function OfferTab() {
                         </TableCell>
                     </TableRow>
                 </TableBody>
-                <TableListPagination
-                    handlePrevClick={() => setOfferPage((prev) => prev - 1)}
-                    handleNextClick={() => setOfferPage((prev) => prev + 1)}
-                    prevDisabled={offerPage === 0}
-                    nextDisabled={dataSource.length < 10}
-                    page={offerPage}
-                    pageCount={10}
-                />
             </Table>
         )
 

@@ -6,8 +6,9 @@ import type {
     CryptoPrice,
     NetworkType,
     ProviderType,
-    PortfolioProvider,
-    CollectibleProvider,
+    BalanceOfChains,
+    FungibleAssetProvider,
+    NonFungibleAssetProvider,
 } from '../../../web3-shared/evm'
 
 export interface MaskSettingsEvents {
@@ -17,14 +18,15 @@ export interface MaskSettingsEvents {
     pluginIDSettings: string
     currentChainIdSettings: number
     currentBalanceSettings: string
+    currentBalancesSettings: BalanceOfChains
     currentBlockNumberSettings: number
     currentTokenPricesSettings: CryptoPrice
     currentDataProviderSettings: DataProvider
     currentProviderSettings: ProviderType
     currentNetworkSettings: NetworkType
     currentAccountSettings: string
-    currentPortfolioDataProviderSettings: PortfolioProvider
-    currentCollectibleDataProviderSettings: CollectibleProvider
+    currentFungibleAssetDataProviderSettings: FungibleAssetProvider
+    currentNonFungibleAssetDataProviderSettings: NonFungibleAssetProvider
     currentPersonaIdentifier: string
     ethereumNetworkTradeProviderSettings: TradeProvider
     polygonNetworkTradeProviderSettings: TradeProvider
