@@ -12,7 +12,6 @@ import {
     formatEthereumAddress,
     isGreaterThan,
     isZero,
-    pow10,
     useChainId,
     useGasLimit,
     useTokenTransferCallback,
@@ -156,15 +155,11 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             amount: zod
                 .string()
                 .refine((amount) => {
-                    const transferAmount = new BigNumber(amount || '0').multipliedBy(
-                        pow10(selectedAsset?.token.decimals ?? 0),
-                    )
+                    const transferAmount = new BigNumber(amount || '0').shiftedBy(selectedAsset?.token.decimals ?? 0)
                     return !!transferAmount || !isZero(transferAmount)
                 }, t('wallet_transfer_error_amount_absence'))
                 .refine((amount) => {
-                    const transferAmount = new BigNumber(amount || '0').multipliedBy(
-                        pow10(selectedAsset?.token.decimals ?? 0),
-                    )
+                    const transferAmount = new BigNumber(amount || '0').shiftedBy(selectedAsset?.token.decimals ?? 0)
                     return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
                 }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
             gasLimit: zod
@@ -211,7 +206,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const { value: minGasLimit, error } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
-        new BigNumber(!!amount ? amount : 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
+        new BigNumber(!!amount ? amount : 0).shiftedBy(selectedAsset?.token.decimals ?? 0).toFixed(),
         EthereumAddress.isValid(address) ? address : '',
     )
     //#endregion
@@ -252,7 +247,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = new BigNumber(data.amount || '0')
-                .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
+                .shiftedBy(selectedAsset?.token.decimals || 0)
                 .toFixed()
             await transferCallback(transferAmount, data.address, {
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),

@@ -8,7 +8,6 @@ import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
     isGreaterThan,
     ONE,
-    pow10,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -214,7 +213,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
         const unlockTime_ = unlockTime ? Math.floor((unlockTime.getTime() - ITO_CONTRACT_BASE_TIMESTAMP) / 1000) : 0
         const now = Math.floor((Date.now() - ITO_CONTRACT_BASE_TIMESTAMP) / 1000)
 
-        const ONE_TOKEN = ONE.multipliedBy(pow10(token!.decimals ?? 0))
+        const ONE_TOKEN = ONE.shiftedBy(token!.decimals ?? 0)
         const exchangeAmountsDivided = exchangeAmounts.map((x, i) => {
             const amount = new BigNumber(x)
             const divisor = gcd(ONE_TOKEN, amount)

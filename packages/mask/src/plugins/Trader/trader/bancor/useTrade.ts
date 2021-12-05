@@ -5,7 +5,6 @@ import {
     useBlockNumber,
     useTokenConstants,
     useTraderConstants,
-    pow10,
     ChainId,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
@@ -29,8 +28,8 @@ export function useTrade(
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount()
 
-    const inputAmount = new BigNumber(inputAmountWei).dividedBy(pow10(inputToken?.decimals ?? 0)).toFixed()
-    const outputAmount = new BigNumber(outputAmountWei).dividedBy(pow10(outputToken?.decimals ?? 0)).toFixed()
+    const inputAmount = new BigNumber(inputAmountWei).shiftedBy(-(inputToken?.decimals ?? 0)).toFixed()
+    const outputAmount = new BigNumber(outputAmountWei).shiftedBy(-(outputToken?.decimals ?? 0)).toFixed()
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     return useAsyncRetry(async () => {

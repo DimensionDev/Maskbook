@@ -12,7 +12,6 @@ import {
     getChainIdFromNetworkType,
     isEIP1559Supported,
     NetworkType,
-    pow10,
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
@@ -283,7 +282,7 @@ const ContractInteraction = memo(() => {
     const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
     const tokenValueUSD = new BigNumber(tokenAmount)
-        .dividedBy(pow10(tokenDecimals ?? 0))
+        .shiftedBy(-(tokenDecimals ?? 0))
         .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
         .toString()
 
