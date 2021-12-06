@@ -3,7 +3,7 @@ import { DialogContent, Box, Card, CardContent, CardActions, Typography, Link } 
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { useChainId, useFungibleTokenWatched, TransactionStateType, pow10 } from '@masknet/web3-shared-evm'
+import { useChainId, useFungibleTokenWatched, TransactionStateType } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -97,9 +97,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         asset?.value?.editionNumber ? Number(asset?.value?.editionNumber) : 0,
         asset?.value?.priceInWei > 0
             ? asset?.value?.priceInWei
-            : new BigNumber(0.01)
-                  .multipliedBy(pow10(selectedPaymentToken ? selectedPaymentToken.decimals : 18))
-                  .toNumber(),
+            : new BigNumber(0.01).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber(),
     )
 
     const onCheckout = useCallback(() => {

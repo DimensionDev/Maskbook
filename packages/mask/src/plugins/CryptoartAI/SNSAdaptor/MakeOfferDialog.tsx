@@ -3,7 +3,7 @@ import { DialogContent, Box, Card, CardContent, CardActions, Link } from '@mui/m
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, isNative, useFungibleTokenWatched, useChainId, pow10 } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, isNative, useFungibleTokenWatched, useChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -92,9 +92,9 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         let atLeastBid = 0.01
         if (asset?.value?.latestBidVo?.priceInEth) {
             atLeastBid =
-                Number(asset?.value?.latestBidVo.priceInEth) >= 1
-                    ? Number(asset?.value?.latestBidVo.priceInEth) + 0.1
-                    : Number(asset?.value?.latestBidVo.priceInEth) + 0.01
+                asset?.value?.latestBidVo.priceInEth >= 1
+                    ? new BigNumber(asset?.value?.latestBidVo.priceInEth).plus(0.1).toNumber()
+                    : new BigNumber(asset?.value?.latestBidVo.priceInEth).plus(0.01).toNumber()
         }
         setAtLeastBidValue(atLeastBid)
     }, [asset?.value?.latestBidVo])
@@ -105,11 +105,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     )
 
     const onMakeOffer = useCallback(() => {
-        placeBidCallback(
-            new BigNumber(amount)
-                .multipliedBy(pow10(selectedPaymentToken ? selectedPaymentToken.decimals : 18))
-                .toNumber(),
-        )
+        placeBidCallback(new BigNumber(amount).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber())
     }, [placeBidCallback, amount])
 
     const assetLink = resolveAssetLinkOnCryptoartAI(asset?.value?.creator?.username, asset?.value?.token_id, chainId)
@@ -232,7 +228,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         />
                         <p className={classes.details} style={{ marginTop: '10px' }}>
                             {t('plugin_cryptoartai_current_highest_offer')}
-                            <strong style={{ color: 'black', fontSize: '18px' }}>
+                            <strong style={{ fontSize: '18px' }}>
                                 {(asset.value?.latestBidVo?.priceInEth ?? 0) + ' ETH'}
                             </strong>
                         </p>
