@@ -15,8 +15,6 @@ export async function fetchPools() {
     const response = await fetch(API_URL, {
         mode: 'cors',
         credentials: 'omit',
-        redirect: 'follow',
-        referrer: 'no-referrer',
         headers: { 'x-api-key': API_KEY },
     })
 

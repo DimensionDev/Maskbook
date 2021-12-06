@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom'
 import { DeleteIcon, MasksIcon } from '@masknet/icons'
 import { Button, Typography } from '@mui/material'
 import { formatFingerprint } from '@masknet/shared'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { ProfileList } from '../components/ProfileList'
 import { EnterDashboard } from '../../../components/EnterDashboard'
@@ -89,7 +89,7 @@ const useStyles = makeStyles()({
 const PersonaHome = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const [isExpand, setIsExpand] = useState(true)
+    const [isExpand, setExpand] = useState(true)
     const { currentPersona, setDeletingPersona } = PersonaContext.useContainer()
     const history = useHistory()
 
@@ -121,7 +121,7 @@ const PersonaHome = memo(() => {
                             </Typography>
                         </div>
                     </div>
-                    <div onClick={() => setIsExpand((pre) => !pre)}>
+                    <div onClick={() => setExpand((pre) => !pre)}>
                         {isExpand ? (
                             <ChevronDown className={classes.chevronIcon} />
                         ) : (

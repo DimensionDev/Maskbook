@@ -4,7 +4,7 @@ import Services from '../../extension/service'
 import { PersonaArrayComparer } from '../../utils/comparer'
 import { MaskMessages } from '../../utils/messages'
 import type { Persona } from '../../database'
-import { debounce } from 'lodash-es'
+import { debounce } from 'lodash-unified'
 
 let isLoading: Promise<void> | null
 

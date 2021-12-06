@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import { first, last } from 'lodash-es'
+import { first, last } from 'lodash-unified'
 import { toHex } from 'web3-utils'
 import type { TransactionConfig } from 'web3-core'
 import { encodeText } from '@dimensiondev/kit'
@@ -144,7 +144,6 @@ export async function signTransaction(
     const password_ = await password.INTERNAL_getPasswordRequired()
     const wallet = await database.getWalletRequired(address)
     return sdk.signTransaction({
-        address,
         password: password_,
         coin: api.Coin.Ethereum,
         storedKeyData: wallet.storedKeyInfo?.data,

@@ -1,7 +1,8 @@
 import { useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
 import type { TypedMessage } from '@masknet/shared-base'
-import { Box, Tooltip, Chip } from '@mui/material'
+import { Box, Chip } from '@mui/material'
 import { usePluginI18NField } from '../../plugin-infra/I18NFieldRender'
+import { ShadowRootTooltip, useI18N } from '../../utils'
 
 export interface BadgeRendererProps {
     meta: TypedMessage['meta']
@@ -12,6 +13,7 @@ export interface BadgeRendererProps {
 export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererProps) {
     const plugins = useActivatedPluginsSNSAdaptor()
     const i18n = usePluginI18NField()
+    const { t } = useI18N()
     if (!meta) return null
 
     const result = [...meta.entries()].flatMap(([metaKey, metaValue]) => {
@@ -35,7 +37,10 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
             function normalizeBadgeDescriptor(desc: Plugin.SNSAdaptor.BadgeDescriptor | string | null) {
                 if (!desc) return null
                 if (typeof desc === 'string')
-                    desc = { text: desc, tooltip: `Provided by plugin "${i18n(plugin.ID, plugin.name)}"` }
+                    desc = {
+                        text: desc,
+                        tooltip: `${t('badge_renderer_provided_by_plugin')} "${i18n(plugin.ID, plugin.name)}"`,
+                    }
                 return (
                     <MetaBadge
                         readonly={readonly}
@@ -59,11 +64,11 @@ interface MetaBadgeProps {
 function MetaBadge({ title, children, onDelete, readonly }: React.PropsWithChildren<MetaBadgeProps>) {
     return (
         <Box sx={{ marginRight: 1, marginTop: 1, display: 'inline-block' }}>
-            <Tooltip title={title}>
+            <ShadowRootTooltip title={title}>
                 <span>
                     <Chip disabled={readonly} onDelete={onDelete} label={children} />
                 </span>
-            </Tooltip>
+            </ShadowRootTooltip>
         </Box>
     )
 }

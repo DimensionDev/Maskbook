@@ -1,7 +1,6 @@
 import type { FC } from 'react'
 import { CardActions, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { MaskTextIcon } from '../../../../resources/MaskIcon'
 import type { DataProvider, TradeProvider } from '@masknet/public-api'
@@ -84,7 +83,7 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
             </Typography>
             {showDataProviderIcon ? (
                 <div className={classes.footMenu}>
-                    <Typography className={classes.footnote}>Data Source</Typography>
+                    <Typography className={classes.footnote}>{t('plugin_trader_data_source')}</Typography>
                     <FootnoteMenu
                         options={dataProviders.map((x) => ({
                             name: (
@@ -103,7 +102,7 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
             ) : null}
             {showTradeProviderIcon ? (
                 <div className={classes.footMenu}>
-                    <Typography className={classes.footnote}>Supported by</Typography>
+                    <Typography className={classes.footnote}>{t('supported_by')}</Typography>
                     <FootnoteMenu
                         options={tradeProviders.map((x) => ({
                             name: (

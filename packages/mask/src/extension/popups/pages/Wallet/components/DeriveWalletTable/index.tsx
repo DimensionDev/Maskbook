@@ -1,4 +1,5 @@
 import { memo } from 'react'
+import { useAsync } from 'react-use'
 import {
     Table,
     TableCell,
@@ -12,9 +13,9 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
-import { useAsync } from 'react-use'
-import Services from '../../../../../service'
 import { CheckedBorderIcon, CheckedIcon } from '@masknet/icons'
+import { formatBalance, formatEthereumAddress, useWeb3 } from '@masknet/web3-shared-evm'
+import { useI18N } from '../../../../../../utils'
 
 const useStyles = makeStyles()({
     header: {
@@ -40,26 +41,26 @@ const useStyles = makeStyles()({
 
 export interface DeriveWalletTableProps {
     loading: boolean
-    dataSource?: { address: string; added: boolean }[]
+    dataSource?: { address: string; added: boolean; selected: boolean }[]
     onCheck: (checked: boolean, index: number) => void
     confirmLoading: boolean
 }
 
 export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSource, onCheck, confirmLoading }) => {
     const { classes } = useStyles()
-
+    const { t } = useI18N()
     return (
         <Table size="small" padding="none" stickyHeader>
             <TableHead>
                 <TableRow>
                     <TableCell key="address" align="center" variant="head" className={classes.header}>
-                        <Typography className={classes.title}>Address</Typography>
+                        <Typography className={classes.title}>{t('address')}</Typography>
                     </TableCell>
                     <TableCell key="balance" align="center" variant="head" className={classes.header}>
-                        <Typography className={classes.title}>Balance(ETH)</Typography>
+                        <Typography className={classes.title}>{t('wallet_balance_eth')}</Typography>
                     </TableCell>
                     <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                        <Typography className={classes.title}>Operation</Typography>
+                        <Typography className={classes.title}>{t('operation')}</Typography>
                     </TableCell>
                 </TableRow>
             </TableHead>
@@ -69,6 +70,7 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
                           <DeriveWalletTableRow
                               address={item.address}
                               key={index}
+                              selected={item.selected}
                               added={item.added}
                               onCheck={(checked) => onCheck(checked, index)}
                               confirmLoading={confirmLoading}
@@ -96,19 +98,20 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(({ loading, dataSo
 export interface DeriveWalletTableRowProps {
     address: string
     added: boolean
+    selected: boolean
     onCheck: (checked: boolean) => void
     confirmLoading: boolean
 }
-export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, added, onCheck }) => {
+export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, added, onCheck, selected }) => {
     const { classes } = useStyles()
-
-    const { loading, value: balance } = useAsync(async () => Services.Ethereum.getBalance(address))
+    const web3 = useWeb3()
+    const { loading, value: balance } = useAsync(async () => web3.eth.getBalance(address), [web3, address])
 
     return (
         <TableRow key={address}>
             <TableCell align="center" variant="body" className={classes.cell}>
                 <Typography className={classes.title}>
-                    <FormattedAddress address={address} size={4} />
+                    <FormattedAddress address={address} size={4} formatter={formatEthereumAddress} />
                 </Typography>
             </TableCell>
             <TableCell align="center" variant="body" className={classes.cell}>
@@ -116,14 +119,20 @@ export const DeriveWalletTableRow = memo<DeriveWalletTableRowProps>(({ address, 
                     <CircularProgress sx={{ color: '#15181B' }} size={12} />
                 ) : (
                     <Typography className={classes.title}>
-                        <FormattedBalance value={balance} decimals={18} significant={4} symbol="ETH" />
+                        <FormattedBalance
+                            value={balance}
+                            decimals={18}
+                            significant={4}
+                            symbol="ETH"
+                            formatter={formatBalance}
+                        />
                     </Typography>
                 )}
             </TableCell>
             <TableCell align="center" variant="body" className={classes.cell}>
                 <Checkbox
                     disabled={added}
-                    defaultChecked={added}
+                    defaultChecked={selected || added}
                     icon={<CheckedBorderIcon sx={{ fontSize: '16px', stroke: '#1C68F3' }} />}
                     checkedIcon={<CheckedIcon sx={{ fontSize: '16px' }} />}
                     sx={{

@@ -63,7 +63,7 @@ export function WalletRenameWalletDialog() {
             </DialogContent>
             <DialogActions className={classes.dialogActions}>
                 <Button fullWidth color="inherit" variant="outlined" onClick={handleClose}>
-                    Cancel
+                    {t('confirm')}
                 </Button>
                 <Button
                     className={classes.actionButton}
@@ -71,7 +71,7 @@ export function WalletRenameWalletDialog() {
                     onClick={handleRename}
                     disabled={!name}
                     fullWidth>
-                    Confirm
+                    {t('cancel')}
                 </Button>
             </DialogActions>
         </InjectedDialog>

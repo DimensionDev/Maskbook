@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Redirect, Route, Switch } from 'react-router-dom'
 import { HashRouter } from 'react-router-dom'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
-import { PopupRoutes } from '.'
+import { PopupRoutes } from '@masknet/shared-base'
 // eslint-disable-next-line import/no-deprecated
 import { useClassicMaskFullPageTheme } from '../../utils'
 import '../../social-network-adaptor/browser-action'
@@ -34,8 +34,8 @@ export default function Popups() {
                     {/* ! Don't remove this suspense. Otherwise react-router v5 doesn't work while changing routes.  */}
                     <Suspense fallback="">
                         <Switch>
-                            <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
                             <Route path={PopupRoutes.Personas} children={frame(<Personas />)} />
+                            <Route path={PopupRoutes.Wallet} children={frame(<Wallet />)} />
                             <Route path={PopupRoutes.Swap} children={<SwapPage />} />
                             <Route path={PopupRoutes.RequestPermission} exact>
                                 <RequestPermissionPage />
@@ -49,7 +49,7 @@ export default function Popups() {
                             <Route path={PopupRoutes.SignRequest} exact>
                                 <SignRequest />
                             </Route>
-                            <Route children={<Redirect to={PopupRoutes.Wallet} />} />
+                            <Route children={<Redirect to={PopupRoutes.Personas} />} />
                         </Switch>
                     </Suspense>
                     {/* TODO: Should only load plugins when the page is plugin-aware. */}

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { useStylesExtends } from '@masknet/shared'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { getAssetAsBlobURL } from '../../../utils'
 import Drag from './drag'
 import AnimatedMessage from './animatedMsg'
@@ -20,13 +19,13 @@ const useStyles = makeStyles()(() => ({
         backgroundSize: 'contain',
     },
     close: {
-        width: 25,
-        height: 25,
+        width: 15,
+        height: 15,
         cursor: 'pointer',
         backgroundSize: 'contain',
         position: 'absolute',
-        top: 10,
-        right: 0,
+        top: 0,
+        right: -10,
     },
 }))
 
@@ -36,6 +35,7 @@ const AnimatePic = () => {
     const Close = getAssetAsBlobURL(new URL('../assets/close.png', import.meta.url))
 
     const [show, setShow] = useState(false)
+    const [infoShow, setInfoShow] = useState(false)
 
     const identity = useCurrentVisitingIdentity()
     useEffect(() => {
@@ -45,15 +45,25 @@ const AnimatePic = () => {
     }, [identity])
 
     const handleClose = () => setShow(false)
+    const handleMouseEnter = () => setInfoShow(true)
+    const handleMouseLeave = () => setInfoShow(false)
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             {show ? (
                 <Drag>
                     <AnimatedMessage />
                     <div className={classes.img} style={{ backgroundImage: `url(${Background})` }} />
-                    <Tip />
-                    <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${Close})` }} />
+                    {infoShow ? (
+                        <>
+                            <Tip />
+                            <div
+                                className={classes.close}
+                                onClick={handleClose}
+                                style={{ backgroundImage: `url(${Close})` }}
+                            />
+                        </>
+                    ) : null}
                 </Drag>
             ) : null}
         </div>

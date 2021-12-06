@@ -21,25 +21,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: '6.23.1'
       - uses: actions/setup-node@v2
-      - name: Restore pnpm cache
-        uses: actions/cache@v2
         with:
-          path: ~/.pnpm-store
-          key: ${{ runner.os }}-node-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-node-
-      - name: Restore TypeScript incremental build cache
-        uses: actions/cache@v2
-        with:
-          path: packages/**/dist
-          # actions/cache will not upload changes in cache if primary key hits
-          # by adding date to the primary key, we can ensure the cache updates on the first build of the day
-          key: ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
-          # Allow fallback to cache of different dependencies but not allowing fallback to different tsconfig
-          # because that might indicates a structural/flags changes in tsc emit.
-          restore-keys: |
-            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}-${{ hashFiles('pnpm-lock.yaml') }}
-            ${{ runner.os }}-tsc-v2-${{ hashFiles('packages/**/tsconfig.json') }}
+          node-version: '16'
+          cache: 'pnpm'
       - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
@@ -48,7 +36,7 @@ jobs:
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
           restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
-      - run: npx pnpm install
+      - run: pnpm install
       - run: npx gulp build-ci
       - name: Upload `MaskNetwork.base.zip`
         uses: actions/upload-artifact@v2

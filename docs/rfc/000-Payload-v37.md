@@ -1,7 +1,5 @@
 # Payload version -37
 
-Playground: copy [the playground file](./000-TypedMessage-and-Payload-37-playground.js) into a https: web page.
-
 ## Design target
 
 - MUST be a binary format.
@@ -40,7 +38,7 @@ All Tuple in this specification MUST be treated as non-fixed length. This means 
 This is the top-most data type.
 
 ```typescript
-type SignatureContainer = [version: Integer, payload: Binary, signature: Binary]
+type SignatureContainer = [version: Integer, payload: Binary, signature: Binary | null]
 ```
 
 #### `version` field
@@ -60,22 +58,24 @@ The implementation MUST fail when the payload is not a `Payload37` after decodin
 
 This field represents the EC signature of the payload. The implementation MUST use SHA-256 algorithm.
 
+When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
+
 ### `Payload37`
 
 ```typescript
 type PayloadAlpha37 = [
   version: Integer,
-  authorNetwork: String | SocialNetworkEnum,
-  authorID: String,
+  authorNetwork: String | SocialNetworkEnum | null,
+  authorID: String | null,
   authorPublicKeyAlgorithm: String | PublicKeyAlgorithmEnum,
-  authorPublicKey: Binary,
+  authorPublicKey: Binary | null,
   encryption: Encryption,
   data: Binary,
 ]
 enum SocialNetworkEnum {
   Facebook = 0,
   Twitter = 1,
-  Instgram = 2,
+  Instagram = 2,
   Minds = 3,
 }
 enum PublicKeyAlgorithmEnum {
@@ -100,9 +100,13 @@ When it is `SocialNetworkEnum`, it represents a SocialNetwork that is supported 
 
 When it is `String`, it represents a SocialNetwork cannot be expressed within the enum. e.g. A decentralized SNS like Mastodon.
 
+When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
+
 #### `authorID` field
 
 This field represents the identifiable ID of the author of this payload belongs to. In the case of an anonymous post, this field should be an empty string.
+
+When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
 
 #### `authorPublicKeyAlgorithm` field
 
@@ -112,7 +116,7 @@ When it is `PublicKeyAlgorithmEnum`, it represents a well-known asymmetric algor
 
 When it is `String`, it represents a asymmetric algorithm that not covered in this specification.
 
-The implementation MUST fail if the algorithm is not supported.
+The implementation MUST NOT fail if the algorithm is not supported.
 
 #### `authorPublicKey` field
 
@@ -122,13 +126,15 @@ The value is in the DER encoding of the SubjectPublicKeyInfo (`spki`) structure 
 
 [rfc5280]: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.7
 
+When it is `null`, it represents no this information is available (due to software defeat or user choice to opt-out).
+
 #### `encryption` field
 
 This field represents how this payload is encrypted. There are two types of encryption, `PublicEncrypted` and `PeerToPeerEncrypted`
 
 ```typescript
 type Encryption = PublicEncrypted | PeerToPeerEncrypted
-enum EncryptionKind = {
+enum EncryptionKind {
   Public = 0,
   PeerToPeer = 1,
 }

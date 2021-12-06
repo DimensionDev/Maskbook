@@ -1,5 +1,6 @@
-import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
-import { ChainIcon, FormattedAddress } from '@masknet/shared'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { first } from 'lodash-unified'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -10,16 +11,12 @@ import {
     useChainIdValid,
     useWallets,
 } from '@masknet/web3-shared-evm'
-import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
-import { first } from 'lodash-es'
-import { memo, useCallback, useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { useCopyToClipboard } from 'react-use'
+import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { CopyIconButton } from '../../../components/CopyIconButton'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
+import { WalletItem } from './WalletItem'
 
 const useStyles = makeStyles()({
     content: {
@@ -66,36 +63,6 @@ const useStyles = makeStyles()({
         height: 'calc(100vh - 168px)',
         overflow: 'auto',
     },
-    item: {
-        padding: 10,
-        borderBottom: '1px solid #F7F9FA',
-        cursor: 'pointer',
-    },
-    address: {
-        fontSize: 12,
-        color: '#1C68F3',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    copy: {
-        fontSize: 12,
-        stroke: '#1C68F3',
-        marginLeft: 4,
-        cursor: 'pointer',
-    },
-    name: {
-        fontSize: 14,
-        color: '#1C68F3',
-        fontWeight: 500,
-    },
-    text: {
-        marginLeft: 4,
-    },
-    listItem: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
     controller: {
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
@@ -124,11 +91,11 @@ const SelectWallet = memo(() => {
     const wallets = useWallets(ProviderType.MaskWallet)
 
     const [selected, setSelected] = useState(wallet)
-    const [, copyToClipboard] = useCopyToClipboard()
 
     const search = new URLSearchParams(location.search)
 
-    const chainId = Number.parseInt(search.get('chainId') ?? '0', 10) as ChainId
+    const chainIdSearched = search.get('chainId')
+    const chainId = chainIdSearched ? (Number.parseInt(chainIdSearched, 10) as ChainId) : undefined
     // Swap page also uses SelectWallet, but changing wallet in Swap page
     // should not affect other pages, for example, dashboard.
     // So we make Swap page 'internal' for popups
@@ -136,14 +103,10 @@ const SelectWallet = memo(() => {
 
     const chainIdValid = useChainIdValid()
 
-    const onCopy = useCallback(
-        (address: string) => {
-            copyToClipboard(address)
-        },
-        [copyToClipboard],
-    )
-
-    const handleCancel = useCallback(() => Services.Helper.removePopupWindow(), [])
+    const handleCancel = useCallback(async () => {
+        await WalletRPC.selectAccount([], ChainId.Mainnet)
+        await Services.Helper.removePopupWindow()
+    }, [])
 
     const handleConfirm = useCallback(async () => {
         await WalletRPC.updateMaskAccount({
@@ -157,7 +120,9 @@ const SelectWallet = memo(() => {
                 providerType: ProviderType.MaskWallet,
             })
         }
-
+        if (chainId) {
+            await WalletRPC.selectAccount([selected], chainId)
+        }
         return Services.Helper.removePopupWindow()
     }, [chainId, selected, isInternal])
 
@@ -165,34 +130,23 @@ const SelectWallet = memo(() => {
         if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
     }, [selected, wallets])
 
-    return chainIdValid ? (
+    return chainId && chainIdValid ? (
         <>
             <div className={classes.content}>
                 <div className={classes.header}>
                     <div className={classes.network}>
-                        <div className={classes.iconWrapper}>
-                            <ChainIcon chainId={chainId} />
-                        </div>
+                        <div className={classes.iconWrapper}>{/* <ChainIcon chainId={chainId} /> */}</div>
                         <Typography className={classes.title}>{getNetworkName(chainId)}</Typography>
                     </div>
                 </div>
                 <List dense className={classes.list}>
                     {wallets.map((item, index) => (
-                        <ListItem className={classes.item} key={index} onClick={() => setSelected(item.address)}>
-                            <MaskWalletIcon />
-                            <ListItemText className={classes.text}>
-                                <div className={classes.listItem}>
-                                    <div>
-                                        <Typography className={classes.name}>{item.name}</Typography>
-                                        <Typography className={classes.address}>
-                                            <FormattedAddress address={item.address} size={12} />
-                                            <CopyIconButton className={classes.copy} text={item.address} />
-                                        </Typography>
-                                    </div>
-                                    {isSameAddress(item.address, selected) ? <SuccessIcon /> : null}
-                                </div>
-                            </ListItemText>
-                        </ListItem>
+                        <WalletItem
+                            key={index}
+                            wallet={item}
+                            onClick={() => setSelected(item.address)}
+                            isSelected={isSameAddress(item.address, selected)}
+                        />
                     ))}
                 </List>
             </div>

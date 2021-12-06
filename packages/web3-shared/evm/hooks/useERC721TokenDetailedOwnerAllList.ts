@@ -3,7 +3,7 @@ import { useOpenseaAPIConstants } from '../constants'
 import { getERC721TokenDetailedOwnerListFromOpensea } from './useERC721TokenDetailedOwnerList'
 import type { ERC721TokenDetailed } from '../types'
 import { useRef } from 'react'
-import { useChainId } from '../index'
+import { useChainId } from './useChainId'
 
 /**
  * Fetch all assets by opensea api not only restrict to one contract.

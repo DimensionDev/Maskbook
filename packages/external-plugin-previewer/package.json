@@ -4,12 +4,9 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist",
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {
     "@masknet/theme": "workspace:*",
-    "ef.js": "^0.13.12"
-  },
-  "devDependencies": {
+    "ef.js": "^0.14.2"
   }
 }

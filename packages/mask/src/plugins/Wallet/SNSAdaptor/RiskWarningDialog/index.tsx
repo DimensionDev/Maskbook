@@ -105,7 +105,7 @@ export function WalletRiskWarningDialog() {
                     />
                     <Paper elevation={0} className={`${classes.wallet} dashboard-style`}>
                         <Typography variant="body1" color="textSecondary">
-                            Wallet
+                            {t('nft_wallet_label')}
                         </Typography>
                         <Typography variant="body1" color="textPrimary">
                             {isMobile ? formatEthereumAddress(account, 5) : account}

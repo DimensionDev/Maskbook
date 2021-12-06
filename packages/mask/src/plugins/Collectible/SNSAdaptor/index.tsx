@@ -1,4 +1,4 @@
-import { uniq } from 'lodash-es'
+import { uniq } from 'lodash-unified'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
 import MaskPluginWrapper from '../../MaskPluginWrapper'

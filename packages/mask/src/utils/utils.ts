@@ -3,7 +3,7 @@
  * in this file please.
  */
 import { pasteImage } from '@masknet/injected-script'
-import { isNull } from 'lodash-es'
+import { isNull } from 'lodash-unified'
 import Services from '../extension/service'
 import { blobToArrayBuffer } from '@dimensiondev/kit'
 export { parseURL } from '@masknet/shared'
@@ -105,47 +105,4 @@ export function batchReplace(source: string, group: Array<[string | RegExp, stri
         storage = storage.replace(v[0], v[1])
     }
     return storage
-}
-
-export function addUint8Array(a: ArrayBuffer, b: ArrayBuffer) {
-    const x = new Uint8Array(a)
-    const y = new Uint8Array(b)
-    const c = new Uint8Array(x.length + y.length)
-    c.set(x)
-    c.set(y, x.length)
-    return c
-}
-/**
- * !!!! Please use the Promise constructor if possible
- * If you don't understand https://groups.google.com/forum/#!topic/bluebird-js/mUiX2-vXW2s
- */
-export function defer<T, E = unknown>() {
-    let a!: (val: T) => void, b!: (err: E) => void
-    const p = new Promise<T>((x, y) => {
-        a = x
-        b = y
-    })
-    return [p, a, b] as const
-}
-
-export function buf2hex(buffer: ArrayBuffer) {
-    return Array.prototype.map.call(new Uint8Array(buffer), (x) => ('00' + x.toString(16)).slice(-2)).join('')
-}
-
-export function hex2buf(hex: string) {
-    let hex_ = hex
-    hex_ = hex.replace(/^0x/, '') // strip 0x
-    if (hex_.length % 2) hex_ = `0${hex_}` // pad even zero
-    const buf = []
-    for (let i = 0; i < hex_.length; i += 2) buf.push(Number.parseInt(hex_.substr(i, 2), 16))
-    return new Uint8Array(buf)
-}
-
-export function assert(x: any, ...args: any): asserts x {
-    console.assert(x, ...args)
-    if (!x) throw new Error('Assert failed!')
-}
-
-export function nonNullable<T>(x: undefined | null | T): x is T {
-    return x !== undefined && x !== null
 }

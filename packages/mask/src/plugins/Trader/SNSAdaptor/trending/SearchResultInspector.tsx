@@ -3,6 +3,7 @@ import { useAvailableTraderProviders } from '../../trending/useAvailableTraderPr
 import { useSearchedKeyword } from '../../trending/useSearchedKeyword'
 import { TagType } from '../../types'
 import { TraderView } from './TraderView'
+import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 
 export interface SearchResultInspectorProps {}
 
@@ -15,12 +16,14 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     if (!name || !dataProviders?.length) return null
     return (
-        <TraderView
-            isPopper={false}
-            name={name}
-            tagType={type_}
-            dataProviders={dataProviders}
-            tradeProviders={traderProviders}
-        />
+        <TargetChainIdContext.Provider>
+            <TraderView
+                isPopper={false}
+                name={name}
+                tagType={type_}
+                dataProviders={dataProviders}
+                tradeProviders={traderProviders}
+            />
+        </TargetChainIdContext.Provider>
     )
 }

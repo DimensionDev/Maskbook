@@ -1,6 +1,6 @@
 import { Resolution } from '@unstoppabledomains/resolution'
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from '.'
+import { useChainId } from './useChainId'
 
 export function useResolveUNS(name: string) {
     const chainId = useChainId()

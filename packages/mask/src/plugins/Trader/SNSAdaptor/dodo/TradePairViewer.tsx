@@ -5,6 +5,7 @@ import { resolveTradePairLink } from '../../pipes'
 import type { TradeComputed } from '../../types'
 import { useNetworkType } from '@masknet/web3-shared-evm'
 import type { TradeProvider } from '@masknet/public-api'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -31,6 +32,7 @@ export function TradePairViewer<T extends Tokens>(props: { trade: TradeComputed<
     const { trade, provider } = props
     const { classes } = useStyles()
     const networkType = useNetworkType()
+    const { t } = useI18N()
 
     if (!trade.trade_?.fromTokenSymbol || !trade.trade_?.toTokenSymbol) return null
     const address = `${trade.trade_?.fromTokenSymbol}-${trade.trade_?.toTokenSymbol}`
@@ -48,7 +50,7 @@ export function TradePairViewer<T extends Tokens>(props: { trade: TradeComputed<
                 target="_blank"
                 rel="noopener noreferrer">
                 <Typography className={classes.text} color="textSecondary" variant="body2" component="span">
-                    View pair analytics
+                    {t('plugin_trader_view_pair_analytics')}
                 </Typography>
                 <Typography className={classes.icon} color="textSecondary" variant="body2" component="span">
                     <ExternalLink size={14} />

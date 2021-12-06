@@ -1,7 +1,7 @@
 import { Paper, Box, Typography, Button } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import WarningIcon from '@mui/icons-material/Warning'
-import { useStylesExtends } from '@masknet/shared'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -24,6 +24,7 @@ export interface PriceStaleWarningProps extends withClasses<never> {
 
 export function PriceStaleWarning(props: PriceStaleWarningProps) {
     const { onAccept } = props
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     return (
@@ -36,10 +37,10 @@ export function PriceStaleWarning(props: PriceStaleWarningProps) {
                 }}>
                 <Typography className={classes.type} color="primary">
                     <WarningIcon className={classes.icon} />
-                    <span>Price Updated</span>
+                    <span>{t('plugin_trader_price_updated')}</span>
                 </Typography>
                 <Button variant="text" color="primary" onClick={onAccept}>
-                    Accept
+                    {t('accept')}
                 </Button>
             </Box>
         </Paper>

@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import { Box, Typography, Theme } from '@mui/material'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { SxProps } from '@mui/system'
 import {
     ChainId,
@@ -15,18 +16,25 @@ import {
     useChainId,
 } from '@masknet/web3-shared-evm'
 import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
-import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import ActionButton, {
+    ActionButtonPromise,
+    ActionButtonPromiseProps,
+} from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
-import Services from '../../extension/service'
 import { useI18N } from '../../utils'
 import { WalletMessages, WalletRPC } from '../../plugins/Wallet/messages'
+import Services from '../../extension/service'
 
-export interface EthereumChainBoundaryProps {
+const useStyles = makeStyles()(() => ({}))
+
+export interface EthereumChainBoundaryProps extends withClasses<'switchButton'> {
     chainId: ChainId
     noSwitchNetworkTip?: boolean
+    disablePadding?: boolean
     switchButtonStyle?: SxProps<Theme>
     children?: React.ReactNode
     isValidChainId?: (actualChainId: ChainId, expectedChainId: ChainId) => boolean
+    ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
 }
 
 export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
@@ -37,6 +45,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
     const providerType = useValueRef(currentProviderSettings)
 
     const { noSwitchNetworkTip = false } = props
+    const classes = useStylesExtends(useStyles(), props)
     const expectedChainId = props.chainId
     const expectedNetwork = expectedChainId === ChainId.BSC ? 'BSC' : getChainName(expectedChainId)
     const actualChainId = chainId
@@ -77,7 +86,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     throw new Error('Timeout!')
                 })(),
                 networkType === NetworkType.Ethereum
-                    ? Services.Ethereum.switchEthereumChain(ChainId.Mainnet, overrides)
+                    ? Services.Ethereum.switchEthereumChain(expectedChainId, overrides)
                     : Services.Ethereum.addEthereumChain(chainDetailedCAIP, account, overrides),
             ])
         } catch {
@@ -127,7 +136,11 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         )
 
     return (
-        <Box display="flex" flexDirection="column" alignItems="center" sx={{ paddingTop: 1, paddingBottom: 1 }}>
+        <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={!props.disablePadding ? { paddingTop: 1, paddingBottom: 1 } : null}>
             {!noSwitchNetworkTip ? (
                 <Typography color="textPrimary">
                     <span>
@@ -141,10 +154,15 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                 <ActionButtonPromise
                     variant="contained"
                     size="small"
+                    className={classes.switchButton}
                     sx={props.switchButtonStyle ?? { marginTop: 1.5 }}
-                    init={t('plugin_wallet_switch_network', {
-                        network: expectedNetwork,
-                    })}
+                    init={
+                        <span>
+                            {t('plugin_wallet_switch_network', {
+                                network: expectedNetwork,
+                            })}
+                        </span>
+                    }
                     waiting={t('plugin_wallet_switch_network_under_going', {
                         network: expectedNetwork,
                     })}
@@ -155,6 +173,7 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
                     executor={onSwitch}
                     completeOnClick={onSwitch}
                     failedOnClick="use executor"
+                    {...props.ActionButtonPromiseProps}
                 />
             ) : null}
         </Box>

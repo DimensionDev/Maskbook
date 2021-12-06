@@ -1,7 +1,7 @@
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef, useStylesExtends } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
 import { Chip } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import type { ChipProps } from '@mui/material/Chip'
 import Lock from '@mui/icons-material/Lock'
 import { useEffect } from 'react'
@@ -13,10 +13,14 @@ import { usePostInfoDetails } from '../DataSource/usePostInfo'
 const useStyle = makeStyles()({
     root: {
         height: 'auto',
+        width: 'calc(98% - 10px)',
         padding: '6px',
     },
     label: {
-        whiteSpace: 'initial',
+        width: '90%',
+        overflowWrap: 'break-word',
+        whiteSpace: 'normal',
+        textOverflow: 'clip',
     },
 })
 export type PostCommentDecryptedProps = React.PropsWithChildren<{ ChipProps?: ChipProps }>

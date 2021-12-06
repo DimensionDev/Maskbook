@@ -1,5 +1,5 @@
 import { PLUGIN_IDENTIFIER } from '../constants'
-import { createPluginDatabase } from '../../../database/Plugin/wrap-plugin-database'
+import { createPluginDatabase } from '../../../database/Plugin'
 import type { AddressBookChunk } from '../services/addressBook'
 import type { RecentTransactionChunk } from '../services/transaction/database'
 import type {

@@ -1,21 +1,23 @@
 import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
-import { pick } from 'lodash-es'
+import { pick } from 'lodash-unified'
 import type { TransactionConfig } from 'web3-core'
 import {
     ChainId,
+    GasOptionConfig,
     TransactionState,
     TransactionStateType,
     useAccount,
-    useChainId,
     useWeb3,
 } from '@masknet/web3-shared-evm'
 import type { SwapQuoteResponse, TradeComputed } from '../../types'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
-export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null) {
-    const web3 = useWeb3()
+export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
     const account = useAccount()
-    const chainId = useChainId()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+
+    const web3 = useWeb3(false, chainId)
     const [tradeState, setTradeState] = useState<TransactionState>({
         type: TransactionStateType.UNKNOWN,
     })
@@ -27,6 +29,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
         return {
             from: account,
             ...pick(tradeComputed.trade_, ['to', 'data', 'value', 'gas', 'gasPrice']),
+            ...gasConfig,
         } as TransactionConfig
     }, [account, tradeComputed])
 
@@ -80,7 +83,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse>
                 }
             })
         })
-    }, [web3, account, chainId, stringify(config)])
+    }, [web3, account, chainId, stringify(config), gasConfig])
 
     const resetCallback = useCallback(() => {
         setTradeState({

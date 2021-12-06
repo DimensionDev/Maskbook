@@ -11,7 +11,7 @@ export default function EmailSetting() {
     return (
         <>
             <SettingButton size="large" onClick={() => setOpen(true)}>
-                {user.email ? t.settings_button_change() : t.settings_button_setting()}
+                {user.email ? t.settings_button_change() : t.settings_button_setup()}
             </SettingButton>
             {open ? <SettingEmailDialog open={open} onClose={() => setOpen(false)} /> : null}
         </>

@@ -1,13 +1,14 @@
 import { createPluginMessage, createPluginRPC, createPluginRPCGenerator } from '@masknet/plugin-infra'
+import type { _AsyncVersionOf } from 'async-call-rpc'
 import { FileServicePluginID } from '../constants'
 
 import.meta.webpackHot && import.meta.webpackHot.accept()
 
 const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }>(FileServicePluginID)
 
-export const PluginFileServiceRPC = createPluginRPC(
+export const PluginFileServiceRPC: _AsyncVersionOf<typeof import('./service')> = createPluginRPC(
     FileServicePluginID,
-    () => import('./service'),
+    () => import('./service') as any,
     PluginFileServiceMessage._,
 )
 

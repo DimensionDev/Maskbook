@@ -10,16 +10,25 @@ export function sendEvent<K extends keyof InternalEvents>(name: K, ...params: In
     )
 }
 const promisePool = new Map<number, [resolve: Function, reject: Function]>()
+let id: number = 1
 export function createPromise<T>(callback: (id: number) => void) {
     return new Promise<T>((resolve, reject) => {
-        const id = Math.random()
+        id += 1
         promisePool.set(id, [resolve, reject])
         callback(id)
     })
 }
 export function resolvePromise(id: number, data: unknown) {
-    promisePool.get(id)?.[0](data)
+    const pair = promisePool.get(id)
+    if (pair) {
+        pair[0](data)
+        promisePool.delete(id)
+    }
 }
 export function rejectPromise(id: number, data: unknown) {
-    promisePool.get(id)?.[1](data)
+    const pair = promisePool.get(id)
+    if (pair) {
+        pair[1](data)
+        promisePool.delete(id)
+    }
 }

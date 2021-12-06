@@ -6,8 +6,6 @@ import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
-    formatEthereumAddress,
-    resolveTransactionLinkOnExplorer,
     TransactionType,
     useChainId,
     ZerionTransactionDirection,
@@ -16,6 +14,7 @@ import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
@@ -48,6 +47,11 @@ const useStyles = makeStyles()((theme) => ({
     send: {
         color: MaskColorVar.redMain,
     },
+    hover: {
+        '&:hover': {
+            backgroundColor: theme.palette.background.default,
+        },
+    },
 }))
 
 export interface HistoryTableRowProps {
@@ -57,6 +61,8 @@ export interface HistoryTableRowProps {
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction }) => {
     const chainId = useChainId()
 
+    const { value: domain } = useReverseAddress(transaction.toAddress)
+
     const transactionType = useMemo(() => {
         if (transaction.type === TransactionType.CREATE_RED_PACKET) {
             return 'Create Luck Drop'
@@ -64,18 +70,27 @@ export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction }) => {
         return (transaction.type ?? '').replace(/_/g, ' ')
     }, [transaction.type])
 
-    return <HistoryTableRowUI transaction={transaction} formattedType={transactionType} chainId={chainId} />
+    return (
+        <HistoryTableRowUI
+            transaction={transaction}
+            formattedType={transactionType}
+            chainId={chainId}
+            domain={domain}
+        />
+    )
 })
 
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
     chainId: ChainId
     formattedType: string
+    domain?: string
 }
 
-export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId, formattedType }) => {
+export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId, formattedType, domain }) => {
     const { classes } = useStyles()
+    const { Utils } = useWeb3State()
     return (
-        <TableRow>
+        <TableRow className={classes.hover}>
             <TableCell className={classes.cell} align="center" variant="body">
                 <Box style={{ display: 'flex', alignItems: 'center' }}>
                     <TransactionIcon
@@ -121,10 +136,12 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
             </TableCell>
             <TableCell className={classes.cell} align="center">
                 <Box className={classes.link}>
-                    <Typography variant="body2">{formatEthereumAddress(transaction.toAddress, 4)}</Typography>
+                    <Typography variant="body2">
+                        {domain ? Utils?.formatDomainName?.(domain) : Utils?.formatAddress?.(transaction.toAddress, 4)}
+                    </Typography>
                     <Link
                         sx={{ height: 21 }}
-                        href={resolveTransactionLinkOnExplorer(chainId, transaction.id)}
+                        href={Utils?.resolveTransactionLink?.(chainId, transaction.id)}
                         target="_blank"
                         rel="noopener noreferrer">
                         <LinkOutIcon className={classes.linkIcon} />

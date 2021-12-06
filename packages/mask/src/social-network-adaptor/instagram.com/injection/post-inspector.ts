@@ -1,6 +1,6 @@
 import { injectPostInspectorDefault } from '../../../social-network/defaults'
 import type { PostInfo } from '../../../social-network/PostInfo'
-import { Flags } from '../../../utils/flags'
+import { Flags } from '../../../../shared'
 
 const map = new WeakMap<HTMLElement, ShadowRoot>()
 function getShadowRoot(node: HTMLElement) {

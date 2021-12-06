@@ -8,7 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { usePasswordForm } from '../hooks/usePasswordForm'
 

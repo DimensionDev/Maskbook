@@ -1,10 +1,11 @@
 import { Box, TextField, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useState, useCallback } from 'react'
-import { useStylesExtends } from '@masknet/shared'
 import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { useI18N } from '../../../utils'
+import { Trans } from 'react-i18next'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -66,6 +67,7 @@ export interface AirdropCheckCardProps extends withClasses<never> {
 export function AirdropCheckCard(props: AirdropCheckCardProps) {
     const { token } = props
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
 
     //#region check callback
     const [checkAddress, setCheckAddress] = useState('')
@@ -80,7 +82,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
 
     return (
         <Box className={classes.root}>
-            <Typography>Check Address</Typography>
+            <Typography>{t('popups_check_address')}</Typography>
             <Box className={classes.controller}>
                 <TextField
                     classes={{ root: classes.textfield }}
@@ -106,15 +108,20 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
                             {(() => {
                                 switch (checkState.type) {
                                     case CheckStateType.YEP:
-                                        return `The address has ${checkState.packet.amount}.00 ${token.symbol} to claim.`
+                                        return (
+                                            <Trans
+                                                i18nKey="plugin_airdrop_claim_amount"
+                                                values={{ amount: checkState.packet.amount, symbol: token.symbol }}
+                                            />
+                                        )
                                     case CheckStateType.NOPE:
-                                        return 'The address has no reward to claim.'
+                                        return t('plugin_airdrop_no_reward')
                                     case CheckStateType.CLAIMED:
-                                        return 'The address has already claimed the reward.'
+                                        return t('plugin_airdrop_claimed')
                                     case CheckStateType.FAILED:
-                                        return checkState.error.message ?? 'Failed to check the reward.'
+                                        return checkState.error.message ?? t('plugin_airdrop_failed')
                                     case CheckStateType.PENDING:
-                                        return 'Checking in progress...'
+                                        return t('plugin_airdrop_checking')
                                     default:
                                         return ''
                                 }
@@ -122,7 +129,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
                         </Typography>
                     }
                     onChange={(e) => setCheckAddress(e.target.value)}
-                    placeholder="Enter the wallet address."
+                    placeholder={t('plugin_airdrop_placeholder')}
                     inputProps={{
                         maxLength: 42,
                     }}
@@ -134,7 +141,7 @@ export function AirdropCheckCard(props: AirdropCheckCardProps) {
                         loading={checkState.type === CheckStateType.PENDING}
                         disabled={!checkAddress}
                         onClick={onCheckButtonClick}>
-                        Check
+                        {t('check')}
                     </ActionButton>
                 </Box>
             </Box>

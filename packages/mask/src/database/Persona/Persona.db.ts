@@ -3,9 +3,13 @@ import Fuse from 'fuse.js'
 import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '../type'
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
 import { IdentifierMap } from '../IdentifierMap'
-import { PrototypeLess, restorePrototype } from '../../utils/type'
+import { PrototypeLess, restorePrototype } from '../../../utils-pure'
 import { MaskMessages } from '../../utils/messages'
-import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../helpers/openDB'
+import {
+    createDBAccessWithAsyncUpgrade,
+    createTransaction,
+    IDBPSafeTransaction,
+} from '../../../background/database/utils/openDB'
 import { assertPersonaDBConsistency } from './consistency'
 import type {
     AESJsonWebKey,
@@ -304,10 +308,16 @@ export async function updatePersonaDB(
 
 export async function createOrUpdatePersonaDB(
     record: Partial<PersonaRecord> & Pick<PersonaRecord, 'identifier' | 'publicKey'>,
-    howToMerge: Parameters<typeof updatePersonaDB>[1],
+    howToMerge: Parameters<typeof updatePersonaDB>[1] & { protectPrivateKey?: boolean },
     t: PersonasTransaction<'readwrite'>,
 ) {
-    if (await t.objectStore('personas').get(record.identifier.toText())) return updatePersonaDB(record, howToMerge, t)
+    const personaInDB = await t.objectStore('personas').get(record.identifier.toText())
+    if (howToMerge.protectPrivateKey && !!personaInDB?.privateKey) {
+        const nextRecord = personaRecordOutDB(personaInDB)
+        nextRecord.hasLogout = false
+        return updatePersonaDB(nextRecord, howToMerge, t)
+    }
+    if (personaInDB) return updatePersonaDB(record, howToMerge, t)
     else
         return createPersonaDB(
             {

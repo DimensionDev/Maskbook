@@ -1,19 +1,21 @@
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { Controller } from 'react-hook-form'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { PageHeader } from '../components/PageHeader'
 import { useI18N } from '../../../../../utils'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
-import { FormattedAddress } from '@masknet/shared'
+import { FormattedAddress, PopupRoutes } from '@masknet/shared'
 import { useHasPassword } from '../../../hook/useHasPassword'
 import type { z as zod } from 'zod'
 import { usePasswordForm } from '../hooks/usePasswordForm'
 import { PasswordField } from '../../../components/PasswordField'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { LoadingButton } from '@mui/lab'
+import Services from '../../../../service'
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles()({
     container: {
@@ -71,7 +73,7 @@ const useStyles = makeStyles()({
 const WalletRecovery = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-
+    const history = useHistory()
     const { hasPassword, loading: getHasPasswordLoading } = useHasPassword()
 
     const {
@@ -92,42 +94,42 @@ const WalletRecovery = memo(() => {
     const [{ loading: restoreLegacyWalletLoading }, handleRestoreLegacyWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             try {
-                if (hasPassword) {
-                    const unlocked = await WalletRPC.unlockWallet(data.password)
-                    if (!unlocked) throw new Error(t('popups_wallet_unlock_error_password'))
-                } else await WalletRPC.setPassword(data.password)
-
-                // restore wallet and ignore the result
-                await Promise.allSettled(
-                    legacyWallets.map(async (x) => {
-                        const name = x.name ?? 'Mask Wallet'
-                        if (x._private_key_) await WalletRPC.recoverWalletFromPrivateKey(name, x._private_key_)
-                        else await WalletRPC.recoverWalletFromMnemonic(name, x.mnemonic.join(' '))
-                    }),
-                )
-
-                // double check the restoring result
-                await Promise.allSettled(
-                    legacyWallets.map(async (x) => {
-                        if (await WalletRPC.hasWallet(x.address)) await WalletRPC.freezeLegacyWallet(x.address)
-                    }),
-                )
-
-                window.close()
+                await WalletRPC.setPassword(data.password)
             } catch (error) {
                 if (error instanceof Error) {
                     setError('password', { message: error.message })
                 }
             }
         },
-        [hasPassword, legacyWallets.map((x) => x.address).join(), setError],
+        [setError],
     )
 
     const onSubmit = handleSubmit(handleRestoreLegacyWallet)
 
-    const onConfirm = useCallback(async () => {
-        await onSubmit()
-    }, [onSubmit])
+    const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
+        if (!hasPassword) {
+            await onSubmit()
+        }
+
+        // restore wallet and ignore the result
+        await Promise.allSettled(
+            legacyWallets.map(async (x) => {
+                const name = x.name ?? 'Mask Wallet'
+                if (x._private_key_) await WalletRPC.recoverWalletFromPrivateKey(name, x._private_key_)
+                else await WalletRPC.recoverWalletFromMnemonic(name, x.mnemonic.join(' '))
+            }),
+        )
+
+        // double check the restoring result
+        await Promise.allSettled(
+            legacyWallets.map(async (x) => {
+                if (await WalletRPC.hasWallet(x.address)) await WalletRPC.freezeLegacyWallet(x.address)
+            }),
+        )
+
+        await Services.Helper.removePopupWindow()
+        history.replace(PopupRoutes.Wallet)
+    }, [onSubmit, hasPassword, legacyWallets.map((x) => x.address).join(), history])
 
     return getHasPasswordLoading || getLegacyWalletsLoading ? (
         <LoadingPlaceholder />
@@ -141,7 +143,11 @@ const WalletRecovery = memo(() => {
                             <div className={classes.wallet} key={wallet.address}>
                                 <Typography className={classes.label}>{wallet.name}</Typography>
                                 <Typography className={classes.address}>
-                                    <FormattedAddress address={wallet.address} size={16} />
+                                    <FormattedAddress
+                                        address={wallet.address}
+                                        size={16}
+                                        formatter={formatEthereumAddress}
+                                    />
                                 </Typography>
                             </div>
                         )
@@ -185,35 +191,15 @@ const WalletRecovery = memo(() => {
                             </div>
                             <Typography className={classes.tips}>{t('popups_wallet_payment_password_tip')}</Typography>
                         </form>
-                    ) : (
-                        <form className={classes.form}>
-                            <div style={{ marginTop: 16 }}>
-                                <Typography className={classes.label}>{t('popups_wallet_payment_password')}</Typography>
-                                <Controller
-                                    control={control}
-                                    render={({ field }) => (
-                                        <PasswordField
-                                            {...field}
-                                            classes={{ root: classes.textField }}
-                                            type="password"
-                                            variant="filled"
-                                            placeholder={t('popups_wallet_payment_password')}
-                                            error={!isValid && !!errors.password?.message}
-                                            helperText={!isValid ? errors.password?.message : ''}
-                                        />
-                                    )}
-                                    name="password"
-                                />
-                            </div>
-                        </form>
-                    )}
+                    ) : null}
                 </div>
             </div>
             <div className={classes.controller}>
                 <LoadingButton
-                    loading={restoreLegacyWalletLoading}
+                    loading={restoreLegacyWalletLoading || confirmLoading}
+                    loadingPosition="end"
                     fullWidth
-                    disabled={!isValid}
+                    disabled={!hasPassword ? !isValid : false}
                     classes={{ root: classes.button, disabled: classes.disabled }}
                     variant="contained"
                     onClick={onConfirm}>

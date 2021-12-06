@@ -2,7 +2,7 @@ import { Card, Typography, CircularProgress, List, ListItem } from '@mui/materia
 import { makeStyles } from '@masknet/theme'
 import isValid from 'date-fns/isValid'
 import formatDistance from 'date-fns/formatDistance'
-import { zhTW, enUS, ja, zhCN, ko, es, ru, it, faIR, fr } from 'date-fns/locale'
+import { zhTW, enUS, ja, zhCN, ko } from 'date-fns/locale'
 import { useI18N, useLanguage } from '../../../utils'
 import type { PollGunDB } from '../Services'
 import { PollStatus } from '../types'
@@ -84,11 +84,6 @@ export function PollCardUI(props: PollCardProps) {
                 if (lang === SupportedLanguages.zhTW) return zhTW
                 if (lang === SupportedLanguages.zhCN) return zhCN
                 if (lang === SupportedLanguages.koKR) return ko
-                if (lang === SupportedLanguages.esES) return es
-                if (lang === SupportedLanguages.itIT) return it
-                if (lang === SupportedLanguages.ruRU) return ru
-                if (lang === SupportedLanguages.faIR) return faIR
-                if (lang === SupportedLanguages.frFR) return fr
                 safeUnreachable(lang)
                 return enUS
             }

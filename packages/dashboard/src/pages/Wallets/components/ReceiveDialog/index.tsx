@@ -8,6 +8,7 @@ import { WalletQRCodeContainer } from '../../../../components/WalletQRCodeContai
 import { useCopyToClipboard } from 'react-use'
 import { useCurrentSelectedWalletNetwork } from '../../api'
 import { NetworkType, resolveNetworkAddressPrefix } from '@masknet/web3-shared-evm'
+import { useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -37,23 +38,29 @@ export interface ReceiveDialogProps {
 
 export const ReceiveDialog = memo<ReceiveDialogProps>(({ open, chainName, walletAddress, onClose }) => {
     const currentSelectedWalletNetwork = useCurrentSelectedWalletNetwork()
+    const { value: domain } = useReverseAddress(walletAddress)
+    const { Utils } = useWeb3State()
     return (
         <ReceiveDialogUI
             open={open}
             chainName={chainName}
             walletAddress={walletAddress}
+            domain={domain}
             onClose={onClose}
             currentNetworkType={currentSelectedWalletNetwork}
+            formatDomainName={Utils?.formatDomainName}
         />
     )
 })
 
 export interface ReceiveDialogUIProps extends ReceiveDialogProps {
     currentNetworkType: NetworkType
+    domain?: string
+    formatDomainName?: (domain?: string, size?: number) => string | undefined
 }
 
 export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
-    ({ open, currentNetworkType, chainName, onClose, walletAddress }) => {
+    ({ open, currentNetworkType, chainName, onClose, walletAddress, domain, formatDomainName }) => {
         const { classes } = useStyles()
         const t = useDashboardI18N()
         const [, copyToClipboard] = useCopyToClipboard()
@@ -85,6 +92,13 @@ export const ReceiveDialogUI = memo<ReceiveDialogUIProps>(
                     <Typography variant="body2" className={classes.addressTitle}>
                         {t.wallets_address()}
                     </Typography>
+
+                    {domain && formatDomainName ? (
+                        <Typography variant="body2" className={classes.address}>
+                            {formatDomainName(domain)}
+                        </Typography>
+                    ) : null}
+
                     <Typography variant="body2" className={classes.address}>
                         {walletAddress}
                     </Typography>

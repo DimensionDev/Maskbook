@@ -1,6 +1,6 @@
 import { getTrendingConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 
 async function fetchFromUniswapV2Health<T>(query: string) {

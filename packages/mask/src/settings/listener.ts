@@ -1,25 +1,21 @@
-import type { ValueRef } from '@dimensiondev/holoflows-kit'
 import {
-    allPostReplacementSettings,
     appearanceSettings,
+    pluginIDSettings,
     languageSettings,
     debugModeSetting,
     currentPersonaIdentifier,
 } from './settings'
+import type { MaskSettingsEvents } from '@masknet/shared-base'
 import {
     currentAccountSettings,
-    currentMaskWalletAccountSettings,
     currentBalanceSettings,
-    currentEtherPriceSettings,
+    currentBalancesSettings,
     currentBlockNumberSettings,
     currentChainIdSettings,
-    currentMaskWalletChainIdSettings,
-    currentMaskWalletNetworkSettings,
-    currentCollectibleDataProviderSettings,
+    currentNonFungibleAssetDataProviderSettings,
     currentNetworkSettings,
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
     currentProviderSettings,
-    currentMaskWalletLockStatusSettings,
     currentTokenPricesSettings,
 } from '../plugins/Wallet/settings'
 import {
@@ -30,38 +26,31 @@ import {
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
+import type { InternalSettings } from './createSettings'
 
-export function ToBeListened() {
+type ToBeListedSettings = { [key in keyof MaskSettingsEvents]: InternalSettings<MaskSettingsEvents[key]> }
+export function ToBeListened(): ToBeListedSettings {
     return {
-        allPostReplacementSettings,
         appearanceSettings,
+        pluginIDSettings,
         languageSettings,
         debugModeSetting,
         currentChainIdSettings,
         currentBalanceSettings,
+        currentBalancesSettings,
         currentBlockNumberSettings,
-        currentEtherPriceSettings,
         currentTokenPricesSettings,
-        currentTrendingDataProviderSettings: currentDataProviderSettings,
+        currentDataProviderSettings,
         currentProviderSettings,
         currentNetworkSettings,
         currentAccountSettings,
-        currentAccountMaskWalletSettings: currentMaskWalletAccountSettings,
-        currentMaskWalletChainIdSettings,
-        currentMaskWalletNetworkSettings,
-        currentPortfolioDataProviderSettings,
-        currentCollectibleDataProviderSettings,
+        currentFungibleAssetDataProviderSettings,
+        currentNonFungibleAssetDataProviderSettings,
         currentPersonaIdentifier,
         ethereumNetworkTradeProviderSettings,
         polygonNetworkTradeProviderSettings,
         binanceNetworkTradeProviderSettings,
         arbitrumNetworkTradeProviderSettings,
         xdaiNetworkTradeProviderSettings,
-        currentMaskWalletLockedSettings: currentMaskWalletLockStatusSettings,
     }
-}
-export type SettingsEventName = ReturnType<typeof ToBeListened>
-
-export type SettingsEvents = {
-    [key in keyof SettingsEventName]: SettingsEventName[key] extends ValueRef<infer T> ? T : void
 }

@@ -2,7 +2,7 @@ import { SOR } from '@balancer-labs/sor'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { ChainId, getRPCConstants, getTraderConstants, isSameAddress, ZERO } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
-import { first, memoize } from 'lodash-es'
+import { first, memoize } from 'lodash-unified'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import { BALANCER_MAX_NO_POOLS, BALANCER_SOR_GAS_PRICE, BALANCER_SWAP_TYPE } from '../../constants'
 import { getFutureTimestamps } from '../../helpers/blocks'
@@ -38,19 +38,25 @@ function createSOR(chainId: ChainId) {
 }
 //#endregion
 
-export async function updatePools(force = false) {
-    const chainId = currentChainIdSettings.value
-    const sor = createSOR(chainId)
+export async function updatePools(force = false, chainId?: ChainId) {
+    const currentChainId = chainId ?? currentChainIdSettings.value
+    const sor = createSOR(currentChainId)
 
     // this fetches all pools list from URL in constructor then onChain balances using Multicall
     if (!sor.isAllFetched || force) {
-        sor.poolsUrl = `${getTraderConstants(chainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
+        sor.poolsUrl = `${getTraderConstants(currentChainId).BALANCER_POOLS_URL}?timestamp=${Date.now()}`
         await sor.fetchPools()
     }
 }
 
-export async function getSwaps(tokenIn: string, tokenOut: string, swapType: BALANCER_SWAP_TYPE, amount: string) {
-    const chainId = currentChainIdSettings.value
+export async function getSwaps(
+    tokenIn: string,
+    tokenOut: string,
+    swapType: BALANCER_SWAP_TYPE,
+    amount: string,
+    targetChainId?: ChainId,
+) {
+    const chainId = targetChainId ?? currentChainIdSettings.value
     const sor = createSOR(chainId)
 
     // this calculates the cost to make a swap which is used as an input to sor to allow it to make gas efficient recommendations.

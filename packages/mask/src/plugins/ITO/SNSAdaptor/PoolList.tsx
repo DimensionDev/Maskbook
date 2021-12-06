@@ -6,6 +6,7 @@ import { useScrollBottomEvent } from '@masknet/shared'
 import type { JSON_PayloadInMask } from '../types'
 import { PoolInList } from './PoolInList'
 import { useRef, useState, useCallback } from 'react'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -30,6 +31,7 @@ export interface PoolListProps {
 
 export function PoolList(props: PoolListProps) {
     const { classes } = useStyles()
+    const { t } = useI18N()
     const account = useAccount()
     const [page, setPage] = useState(0)
     const { value = { loadMore: true, pools: [] }, loading, retry } = useAllPoolsAsSeller(account, page)
@@ -46,7 +48,7 @@ export function PoolList(props: PoolListProps) {
                 </Box>
             ) : pools.length === 0 ? (
                 <Typography variant="body1" color="textSecondary" className={classes.content}>
-                    No Data
+                    {t('no_data')}
                 </Typography>
             ) : (
                 <div className={classes.content}>

@@ -1,6 +1,7 @@
 # If you need to speedup webpack build, please also add the new package builds into
 # webpack config.resolve.alias
 packages:
+  - 'packages/test-serializer'
   - 'packages/empty'
   - 'packages/polyfills'
   - 'packages/polyfills/types'
@@ -12,9 +13,12 @@ packages:
   - 'packages/public-api'
   - 'packages/shared-base'
   - 'packages/shared'
+  - 'packages/web3-kit'
+  - 'packages/web3-providers'
   - 'packages/web3-constants'
   - 'packages/web3-contracts'
   - 'packages/web3-shared/evm'
+  - 'packages/web3-shared/flow'
   - 'packages/web3-shared/solana'
   - 'packages/storybook-shared'
   - 'packages/icons'
@@ -22,5 +26,7 @@ packages:
   - 'packages/plugin-infra'
   - 'packages/plugins/example'
   - 'packages/plugins/Wallet'
+  - 'packages/plugins/Flow'
   - 'packages/external-plugin-previewer'
   - 'packages/backup-format'
+  - 'packages/encryption'

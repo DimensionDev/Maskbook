@@ -1,6 +1,9 @@
-import { MaskMessages, startEffect } from '../../utils'
+import { MaskMessages } from '../../utils'
+import { startEffects } from '../../../utils-pure'
 
-startEffect(import.meta.webpackHot, (signal) => {
+const { signal } = startEffects(import.meta.webpackHot)
+
+try {
     if (process.env.NODE_ENV === 'development') {
         document.addEventListener(
             'mask-sdk-reload',
@@ -8,4 +11,4 @@ startEffect(import.meta.webpackHot, (signal) => {
             { signal },
         )
     }
-})
+} catch {}

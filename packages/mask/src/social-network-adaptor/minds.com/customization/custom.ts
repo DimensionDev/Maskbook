@@ -4,7 +4,7 @@ import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'
 import { useValueRef, SubscriptionFromValueRef } from '@masknet/shared'
 import type { SocialNetworkUI } from '../../../social-network'
-import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB } from '../../../utils/theme-tools'
+import { fromRGB, getBackgroundColor, getForegroundColor, shade, toRGB } from '../../../utils/theme-tools'
 import { themeListItemSelector } from '../utils/selector'
 
 // TODO: get this from DOM. But currently Minds has a single primary color
@@ -22,10 +22,10 @@ export function startWatchThemeColor(signal: AbortSignal) {
     function updateThemeColor() {
         const contrastColor = getForegroundColor(themeListItemSelector().evaluate()!)
         const backgroundColor = getBackgroundColor(document.body)
-        currentTheme.value = isDark(fromRGB(backgroundColor)!) ? 'dark' : 'light'
-
+        currentTheme.value = contrastColor === 'rgb(255,255,255)' ? 'dark' : 'light'
         if (contrastColor) primaryColorContrastColorRef.value = contrastColor
-        if (backgroundColor) backgroundColorRef.value = backgroundColor
+        if (backgroundColor)
+            backgroundColorRef.value = currentTheme.value === 'light' ? 'rgb(244, 244 ,245)' : 'rgb(26, 32, 37)'
     }
 
     const watcher = new MutationObserverWatcher(themeListItemSelector())

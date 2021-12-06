@@ -1,17 +1,15 @@
 import { memo, useCallback } from 'react'
-import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Button, List } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isSameAddress, ProviderType, useWallet, useWallets, useWalletPrimary } from '@masknet/web3-shared-evm'
-import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
-import { FormattedAddress } from '@masknet/shared'
 import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../../utils'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useCopyToClipboard } from 'react-use'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
-import { CopyIconButton } from '../../../components/CopyIconButton'
+import { WalletItem } from './WalletItem'
 
 const useStyles = makeStyles()({
     header: {
@@ -127,17 +125,12 @@ const SwitchWallet = memo(() => {
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {wallets.map((item, index) => (
-                        <ListItem className={classes.item} key={index} onClick={() => handleSelect(item.address)}>
-                            <MaskWalletIcon />
-                            <ListItemText className={classes.text}>
-                                <Typography className={classes.name}>{item.name}</Typography>
-                                <Typography className={classes.address}>
-                                    <FormattedAddress address={item.address} size={12} />
-                                    <CopyIconButton className={classes.copy} text={item.address} />
-                                </Typography>
-                            </ListItemText>
-                            {isSameAddress(item.address, wallet?.address) ? <SuccessIcon /> : null}
-                        </ListItem>
+                        <WalletItem
+                            key={index}
+                            wallet={item}
+                            onClick={() => handleSelect(item.address)}
+                            isSelected={isSameAddress(item.address, wallet?.address)}
+                        />
                     ))}
                 </List>
             </div>

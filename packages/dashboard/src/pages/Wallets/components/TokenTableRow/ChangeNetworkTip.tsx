@@ -7,6 +7,7 @@ import {
     useAccount,
     useWeb3StateContext,
 } from '@masknet/web3-shared-evm'
+import { safeUnreachable } from '@dimensiondev/kit'
 import { Link, Typography } from '@mui/material'
 import { PluginMessages, PluginServices } from '../../../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -42,6 +43,10 @@ export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
                     break
                 case ProviderType.MetaMask:
                 case ProviderType.WalletConnect:
+                case ProviderType.Coin98:
+                case ProviderType.WalletLink:
+                case ProviderType.MathWallet:
+                case ProviderType.Fortmatic:
                     setConnectWalletDialog({
                         open: true,
                         providerType,
@@ -51,16 +56,15 @@ export const ChangeNetworkTip = memo<ChangeNetworkTipProps>(({ chainId }) => {
                 case ProviderType.CustomNetwork:
                     throw new Error('To be implemented.')
                 default:
-                    throw new Error('Unreachable case:' + providerType)
+                    safeUnreachable(providerType)
             }
         },
         [providerType, account],
     )
-
     return (
         <Typography component="span" sx={{ background: '#111432', color: MaskColorVar.white }} variant="body2">
             {t.wallets_assets_token_sent_not_connect_tip({
-                chainName: getNetworkTypeFromChainId(chainId) ?? 'Unknown Network',
+                chainName: getNetworkTypeFromChainId(chainId, true) ?? 'Unknown Network',
             })}{' '}
             <Link
                 sx={{ cursor: 'pointer', color: MaskColorVar.white, textDecoration: 'underline' }}

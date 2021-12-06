@@ -1,6 +1,16 @@
 import type { TransactionConfig as TransactionConfig_ } from 'web3-core'
 import type { NonPayableTransactionObject, PayableTransactionObject } from '@masknet/web3-contracts/types/types'
 
+export interface SendOverrides {
+    chainId?: ChainId
+    account?: string
+    providerType?: ProviderType
+}
+
+export interface RequestOptions {
+    popupsWindow?: boolean
+}
+
 export enum CurrencyType {
     USD = 'usd',
 }
@@ -8,9 +18,20 @@ export enum CurrencyType {
 export interface PriceRecord {
     [currency: string]: number
 }
+
 /** Base on response of coingecko's token price API */
 export interface CryptoPrice {
     [token: string]: PriceRecord
+}
+
+export interface BalanceOfChainRecord {
+    [chainId: number]: string
+}
+
+export interface BalanceOfChains {
+    [provider: string]: {
+        [chainId: number]: string
+    }
 }
 
 // bigint is not in our list. iOS doesn't support that.
@@ -46,6 +67,10 @@ export enum ProviderType {
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
+    Coin98 = 'Coin98',
+    MathWallet = 'MathWallet',
+    WalletLink = 'WalletLink',
     CustomNetwork = 'CustomNetwork',
 }
 
@@ -147,6 +172,12 @@ export interface ERC721TokenDetailed {
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {
     record_id: string
+}
+
+export interface ERC721TokenCollectionInfo {
+    name: string
+    image?: string
+    slug: string
 }
 
 //#endregion
@@ -254,6 +285,12 @@ export type PriorEIP1559GasConfig = {
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
 
+export type GasOptionConfig = {
+    maxFeePerGas?: number | string
+    maxPriorityFeePerGas?: number | string
+    gasPrice?: number | string
+}
+
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods
 export enum EthereumMethodType {
@@ -262,7 +299,9 @@ export enum EthereumMethodType {
     PERSONAL_SIGN = 'personal_sign',
     WALLET_ADD_ETHEREUM_CHAIN = 'wallet_addEthereumChain',
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
+    ETH_CHAIN_ID = 'eth_chainId',
     ETH_ACCOUNTS = 'eth_accounts',
+    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GET_CODE = 'eth_getCode',
@@ -286,6 +325,14 @@ export enum EthereumMethodType {
     // only for mask
     MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
+    MASK_LOGIN_FORTMATIC = 'mask_loginFortmatic',
+    MASK_LOGOUT_FORTMATIC = 'mask_logoutFortmatic',
+}
+
+export enum EthereumErrorType {
+    ERR_SIGN_TRANSACTION = 'Failed to sign transaction.',
+    ERR_SEND_TRANSACTION = 'Failed to send transaction.',
+    ERR_SIGN_MESSAGE = 'Failed to sign message.',
 }
 
 export type EthereumTransactionConfig = TransactionConfig_ & {
@@ -487,13 +534,13 @@ export enum DomainProvider {
     UNS = 'UNS',
 }
 
-export enum PortfolioProvider {
-    ZERION = 0,
-    DEBANK = 1,
+export enum FungibleAssetProvider {
+    ZERION = 'Zerion',
+    DEBANK = 'Debank',
 }
 
-export enum CollectibleProvider {
-    OPENSEA = 0,
+export enum NonFungibleAssetProvider {
+    OPENSEA = 'OpenSea',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>
@@ -576,4 +623,18 @@ export enum GasOption {
     Low = 'low',
     Medium = 'medium',
     High = 'high',
+}
+
+export enum TransactionStateType {
+    UNKNOWN = 0,
+    /** Wait for external provider */
+    WAIT_FOR_CONFIRMING = 1,
+    /** Hash is available */
+    HASH = 2,
+    /** Receipt is available */
+    RECEIPT = 3,
+    /** Confirmed or Reverted */
+    CONFIRMED = 4,
+    /** Fail to send */
+    FAILED = 5,
 }

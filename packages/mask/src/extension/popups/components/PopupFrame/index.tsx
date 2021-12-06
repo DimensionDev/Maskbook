@@ -4,7 +4,7 @@ import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
-import { PopupRoutes } from '../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
 import { useI18N } from '../../../../utils'
@@ -120,6 +120,11 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                         )}
                     </Box>
                     <Box className={classes.right}>
+                        {!!excludePersonaPath ? null : (
+                            <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
+                                {t('personas')}
+                            </NavLink>
+                        )}
                         <NavLink
                             style={{ marginRight: 5 }}
                             to={!excludePersonaPath ? PopupRoutes.Wallet : location}
@@ -127,11 +132,6 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
                             activeClassName={classes.active}>
                             {t('wallets')}
                         </NavLink>
-                        {!!excludePersonaPath ? null : (
-                            <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
-                                {t('personas')}
-                            </NavLink>
-                        )}
                     </Box>
                 </Box>
                 <Box className={classes.container}>

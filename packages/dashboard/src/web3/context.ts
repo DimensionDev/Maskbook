@@ -1,15 +1,19 @@
-import { noop } from 'lodash-es'
+import { noop } from 'lodash-unified'
 import type { Subscription } from 'use-subscription'
+import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import {
     ChainId,
     ERC1155TokenDetailed,
     ERC721TokenDetailed,
-    PortfolioProvider,
+    FungibleAssetProvider,
     ProviderType,
     ERC20TokenDetailed,
     EthereumTokenType,
     NetworkType,
     Web3ProviderType,
+    SendOverrides,
+    RequestOptions,
+    isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
 
@@ -24,9 +28,17 @@ export const Web3Context: Web3ProviderType = {
         return () => {}
     }),
     account: createSubscriptionFromAsync(
-        Services.Settings.getSelectedWalletAddress,
+        async () => {
+            const providerType = await Services.Settings.getCurrentSelectedWalletProvider()
+            if (isInjectedProvider(providerType)) return ''
+            return Services.Settings.getSelectedWalletAddress()
+        },
         '',
-        Messages.events.currentAccountSettings.on,
+        (callback) => {
+            const a = Messages.events.currentAccountSettings.on(callback)
+            const b = Messages.events.currentProviderSettings.on(callback)
+            return () => void [a(), b()]
+        },
     ),
     tokenPrices: createSubscriptionFromAsync(
         Services.Settings.getTokenPrices,
@@ -34,6 +46,11 @@ export const Web3Context: Web3ProviderType = {
         Messages.events.currentTokenPricesSettings.on,
     ),
     balance: createSubscriptionFromAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
+    balances: createSubscriptionFromAsync(
+        Services.Settings.getBalances,
+        {},
+        Messages.events.currentBalancesSettings.on,
+    ),
     blockNumber: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
         0,
@@ -81,8 +98,8 @@ export const Web3Context: Web3ProviderType = {
     ),
     portfolioProvider: createSubscriptionFromAsync(
         Services.Settings.getCurrentPortfolioDataProvider,
-        PortfolioProvider.DEBANK,
-        Messages.events.currentPortfolioDataProviderSettings.on,
+        FungibleAssetProvider.DEBANK,
+        Messages.events.currentFungibleAssetDataProviderSettings.on,
     ),
 
     addToken: PluginServices.Wallet.addToken,
@@ -92,21 +109,47 @@ export const Web3Context: Web3ProviderType = {
 
     getAssetsList: PluginServices.Wallet.getAssetsList,
     getAssetsListNFT: PluginServices.Wallet.getAssetsListNFT,
+    getCollectionsNFT: PluginServices.Wallet.getCollectionsNFT,
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
-    createMnemonicWords: PluginServices.Wallet.createMnemonicWords,
 }
 
 export function createExternalProvider() {
+    const send = (
+        payload: JsonRpcPayload,
+        callback: (error: Error | null, response?: JsonRpcResponse) => void,
+        overrides?: SendOverrides,
+        options?: RequestOptions,
+    ) => {
+        Services.Ethereum.request(
+            {
+                method: payload.method,
+                params: payload.params,
+            },
+            overrides,
+            options,
+        ).then(
+            (result) => {
+                callback(null, {
+                    jsonrpc: '2.0',
+                    id: payload.id as number,
+                    result,
+                })
+            },
+            (error) => {
+                callback(error)
+            },
+        )
+    }
     return {
         isMetaMask: false,
         isStatus: true,
         host: '',
         path: '',
         request: Services.Ethereum.request,
-        send: Services.Ethereum.requestSend,
-        sendAsync: Services.Ethereum.requestSend,
+        send,
+        sendAsync: send,
     }
 }
 

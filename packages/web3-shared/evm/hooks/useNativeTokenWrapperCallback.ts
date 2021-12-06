@@ -2,17 +2,17 @@ import { useCallback } from 'react'
 import type { NonPayableTx, PayableTx } from '@masknet/web3-contracts/types/types'
 import { useNativeTokenWrapperContract } from '../contracts/useWrappedEtherContract'
 import { useAccount } from './useAccount'
-import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { TransactionEventType } from '../types'
+import { useTransactionState } from './useTransactionState'
+import { ChainId, GasOptionConfig, TransactionStateType, TransactionEventType } from '../types'
 import { isLessThan, isZero } from '../utils'
 
-export function useNativeTokenWrapperCallback() {
+export function useNativeTokenWrapperCallback(chainId?: ChainId) {
     const account = useAccount()
-    const wrapperContract = useNativeTokenWrapperContract()
+    const wrapperContract = useNativeTokenWrapperContract(chainId)
     const [transactionState, setTransactionState] = useTransactionState()
 
     const wrapCallback = useCallback(
-        async (amount: string) => {
+        async (amount: string, gasConfig?: GasOptionConfig) => {
             if (!wrapperContract || !amount) {
                 setTransactionState({
                     type: TransactionStateType.UNKNOWN,
@@ -51,6 +51,7 @@ export function useNativeTokenWrapperCallback() {
                         })
                         throw error
                     }),
+                ...gasConfig,
             }
 
             // send transaction and wait for hash
@@ -78,7 +79,7 @@ export function useNativeTokenWrapperCallback() {
     )
 
     const unwrapCallback = useCallback(
-        async (all = true, amount = '0') => {
+        async (all = true, amount = '0', gasConfig?: GasOptionConfig) => {
             if (!wrapperContract || !amount) {
                 setTransactionState({
                     type: TransactionStateType.UNKNOWN,
@@ -128,6 +129,7 @@ export function useNativeTokenWrapperCallback() {
                         })
                         throw error
                     }),
+                ...gasConfig,
             }
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {

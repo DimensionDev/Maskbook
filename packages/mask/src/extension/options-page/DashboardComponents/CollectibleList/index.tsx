@@ -1,14 +1,22 @@
 import { createContext, useState, useEffect } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { useStylesExtends, useValueRef } from '@masknet/shared'
-import { ChainId, CollectibleProvider, ERC721TokenDetailed, useCollectibles, Wallet } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
+import { useValueRef } from '@masknet/shared'
+import {
+    ChainId,
+    NonFungibleAssetProvider,
+    ERC721TokenCollectionInfo,
+    ERC721TokenDetailed,
+    useCollectibles,
+    useCollections,
+    Wallet,
+} from '@masknet/web3-shared-evm'
+import { Box, Button, Skeleton, Typography } from '@mui/material'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
-import { searchProfileTabSelector } from '../../../../social-network-adaptor/twitter.com/utils/selector'
+import { Image } from '../../../../components/shared/Image'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -18,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'grid',
         flexWrap: 'wrap',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(172px, 1fr))',
         gridGap: theme.spacing(1),
     },
     text: {
@@ -43,14 +51,15 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
     },
     description: {
-        textAlign: 'center',
-        marginTop: theme.spacing(0.5),
-        maxWidth: 160,
+        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        alignSelf: 'stretch',
     },
     name: {
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        lineHeight: '36px',
+        paddingLeft: '8px',
     },
     loading: {
         position: 'absolute',
@@ -60,37 +69,54 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         width: '100%',
     },
+    collectionWrap: {
+        width: '24px',
+        height: '24px',
+        borderRadius: '50%',
+        background: 'rgba(229,232,235,1)',
+    },
+    collectionImg: {
+        objectFit: 'cover',
+        width: '100%',
+        height: '100%',
+        borderRadius: '50%',
+    },
 }))
 
+interface CollectibleItemProps {
+    provider: NonFungibleAssetProvider
+    wallet?: Wallet
+    token: ERC721TokenDetailed
+    readonly?: boolean
+}
+
+function CollectibleItem(props: CollectibleItemProps) {
+    const { provider, wallet, token, readonly } = props
+    const { classes } = useStyles()
+    return (
+        <div className={classes.card}>
+            <CollectibleCard token={token} provider={provider} wallet={wallet} readonly={readonly} />
+            <div className={classes.description}>
+                <Typography className={classes.name} color="textPrimary" variant="body2">
+                    {token.info.name}
+                </Typography>
+            </div>
+        </div>
+    )
+}
+
 interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'> {
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     wallet?: Wallet
     collectibles: ERC721TokenDetailed[]
     loading: boolean
     collectiblesRetry: () => void
     error: Error | undefined
-    hasNextPage: boolean
     readonly?: boolean
-    page: number
     hasRetry?: boolean
-    onNextPage: () => void
-    onPrevPage: () => void
 }
 function CollectibleListUI(props: CollectibleListUIProps) {
-    const {
-        provider,
-        wallet,
-        collectibles,
-        loading,
-        hasNextPage,
-        collectiblesRetry,
-        error,
-        readonly,
-        page,
-        hasRetry = true,
-        onNextPage,
-        onPrevPage,
-    } = props
+    const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
@@ -98,15 +124,15 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     if (loading)
         return (
             <Box className={classes.root}>
-                {Array.from({ length: 12 })
+                {Array.from({ length: 3 })
                     .fill(0)
                     .map((_, i) => (
                         <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                            <Skeleton animation="wave" variant="rectangular" width={160} height={220} />
+                            <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
                             <Skeleton
                                 animation="wave"
                                 variant="text"
-                                width={160}
+                                width={172}
                                 height={20}
                                 style={{ marginTop: 4 }}
                             />
@@ -130,50 +156,30 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                 ) : (
                     <Box className={classes.root}>
                         {collectibles.map((x, i) => (
-                            <div className={classes.card} key={i}>
-                                <CollectibleCard token={x} provider={provider} wallet={wallet} readonly={readonly} />
-                                <div className={classes.description}>
-                                    <Typography className={classes.name} color="textSecondary" variant="body2">
-                                        {x.info.name}
-                                    </Typography>
-                                </div>
-                            </div>
+                            <CollectibleItem
+                                token={x}
+                                provider={provider}
+                                wallet={wallet}
+                                readonly={readonly}
+                                key={i}
+                            />
                         ))}
                     </Box>
                 )}
             </Box>
-            {!(page === 0 && collectibles.length === 0) ? (
-                <TablePagination
-                    count={-1}
-                    component="div"
-                    onPageChange={() => {}}
-                    page={page}
-                    rowsPerPage={30}
-                    rowsPerPageOptions={[30]}
-                    labelDisplayedRows={() => null}
-                    backIconButtonProps={{
-                        onClick: () => onPrevPage(),
-                        size: 'small',
-                        disabled: page === 0,
-                    }}
-                    nextIconButtonProps={{
-                        onClick: () => onNextPage(),
-                        disabled: !hasNextPage,
-                        size: 'small',
-                    }}
-                />
-            ) : null}
         </CollectibleContext.Provider>
     )
 }
 
 export interface CollectibleListAddressProps extends withClasses<'empty' | 'button'> {
     address: string
+    collection?: string
+    setCount: (count: number) => void
 }
 
 export function CollectibleListAddress(props: CollectibleListAddressProps) {
-    const { address } = props
-    const provider = useValueRef(currentCollectibleDataProviderSettings)
+    const { address, collection, setCount } = props
+    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const chainId = ChainId.Mainnet
     const [page, setPage] = useState(0)
     const classes = props.classes ?? {}
@@ -183,18 +189,34 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
         loading: collectiblesLoading,
         retry: collectiblesRetry,
         error: collectiblesError,
-    } = useCollectibles(address, chainId, provider, page, 50)
+    } = useCollectibles(address, chainId, provider, page, 50, collection)
     const { collectibles = [], hasNextPage } = value
+    const [rendCollectibles, setRendCollectibles] = useState<ERC721TokenDetailed[]>([])
 
     useUpdateEffect(() => {
         setPage(0)
     }, [provider, address])
 
     useEffect(() => {
-        const tab = searchProfileTabSelector().evaluate()
-        if (!tab) return
-        tab.scrollIntoView()
-    }, [page])
+        if (collectibles.length) {
+            setRendCollectibles([...rendCollectibles, ...collectibles])
+            if (hasNextPage) {
+                const timer = setTimeout(() => {
+                    setPage(page + 1)
+                }, 1000)
+
+                return () => {
+                    clearTimeout(timer)
+                }
+            }
+        }
+
+        return () => {}
+    }, [collectibles])
+
+    useEffect(() => {
+        setCount(rendCollectibles.length)
+    }, [rendCollectibles])
 
     return (
         <CollectibleListUI
@@ -205,11 +227,69 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             collectiblesRetry={collectiblesRetry}
             error={collectiblesError}
             readonly={true}
-            page={page}
-            hasNextPage={hasNextPage}
             hasRetry={!!address}
-            onPrevPage={() => setPage((prev) => prev - 1)}
-            onNextPage={() => setPage((next) => next + 1)}
         />
+    )
+}
+
+export function CollectionList({ address }: { address: string }) {
+    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
+    const chainId = ChainId.Mainnet
+    const [page, setPage] = useState(0)
+    const { classes } = useStyles()
+    const [counts, setCounts] = useState<number[]>([])
+    const [rendCollections, setRendCollections] = useState<ERC721TokenCollectionInfo[]>([])
+
+    const { value = { collections: [], hasNextPage: false } } = useCollections(address, chainId, provider, page, 3)
+    const { collections = [], hasNextPage } = value
+
+    useUpdateEffect(() => {
+        setPage(0)
+    }, [provider, address])
+
+    useEffect(() => {
+        if (collections.length) {
+            setRendCollections([...rendCollections, ...collections])
+            if (hasNextPage) {
+                const timer = setTimeout(() => {
+                    setPage(page + 1)
+                }, 3000)
+
+                return () => {
+                    clearTimeout(timer)
+                }
+            }
+        }
+
+        return () => {}
+    }, [collections])
+
+    return (
+        <Box>
+            {rendCollections.map((x, i) => (
+                <Box key={i}>
+                    <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
+                        <Box className={classes.collectionWrap}>
+                            {x.image ? <Image component="img" className={classes.collectionImg} src={x.image} /> : null}
+                        </Box>
+                        <Typography
+                            className={classes.name}
+                            color="textPrimary"
+                            variant="body2"
+                            sx={{ fontSize: '16px' }}>
+                            {x.name}({counts[i]})
+                        </Typography>
+                    </Box>
+                    <CollectibleListAddress
+                        address={address}
+                        collection={x.slug}
+                        setCount={(count) => {
+                            counts[i] = count
+                            setCounts(counts)
+                        }}
+                    />
+                </Box>
+            ))}
+        </Box>
     )
 }

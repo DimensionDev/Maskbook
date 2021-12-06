@@ -1,28 +1,27 @@
-import { PageFrame } from '../../components/DashboardFrame'
-import {
-    ChainId,
-    getTokenUSDValue,
-    useAssets,
-    useChainId,
-    useWallet,
-    useWallets,
-    useWeb3State,
-} from '@masknet/web3-shared-evm'
+import { useEffect, useMemo, useState } from 'react'
+import BigNumber from 'bignumber.js'
+import { getTokenUSDValue, useAssets, useWeb3State } from '@masknet/web3-shared-evm'
 import { StartUp } from './StartUp'
 import { TokenAssets } from './components/TokenAssets'
 import { Route, Routes, useLocation, useMatch, useNavigate } from 'react-router-dom'
 import { Balance } from './components/Balance'
 import { Transfer } from './components/Transfer'
 import { History } from './components/History'
-import { useEffect, useMemo, useState } from 'react'
-import BigNumber from 'bignumber.js'
+import { PageFrame } from '../../components/PageFrame'
 import { ReceiveDialog } from './components/ReceiveDialog'
 import { RoutePaths } from '../../type'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PluginMessages, PluginServices } from '../../API'
+import { PluginMessages } from '../../API'
 import { WalletStateBar } from './components/WalletStateBar'
 import { useDashboardI18N } from '../../locales'
-import { useAsync } from 'react-use'
+import {
+    getRegisteredWeb3Networks,
+    useChainId,
+    useNetworkDescriptor,
+    useWallet,
+    useWallets,
+    Web3Plugin,
+} from '@masknet/plugin-infra'
 
 function Wallets() {
     const wallet = useWallet()
@@ -38,28 +37,32 @@ function Wallets() {
     const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
 
     const [receiveOpen, setReceiveOpen] = useState(false)
-    const [selectedChainId, setSelectedChainId] = useState<ChainId | null>(null)
+
+    const networks = getRegisteredWeb3Networks()
+    const networkDescriptor = useNetworkDescriptor()
+    const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(
+        networkDescriptor ?? null,
+    )
 
     const { openDialog: openBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
-    const { value: networks } = useAsync(async () => PluginServices.Wallet.getSupportedNetworks(), [])
     const { value: detailedTokens } = useAssets(
-        trustedERC20Tokens.filter((x) => !selectedChainId || x.chainId === selectedChainId) || [],
-        selectedChainId === null ? 'all' : selectedChainId,
+        trustedERC20Tokens.filter((x) => x.chainId === selectedNetwork?.chainId),
+        selectedNetwork ? selectedNetwork.chainId : 'all',
     )
 
     useEffect(() => {
         if (isWalletPath) return
-        setSelectedChainId(currentChainId)
-    }, [currentChainId])
+        setSelectedNetwork(networkDescriptor ?? null)
+    }, [networkDescriptor])
 
     useEffect(() => {
         if (isWalletTransferPath || isWalletHistoryPath) {
-            setSelectedChainId(currentChainId)
+            setSelectedNetwork(networkDescriptor ?? null)
             return
         }
-        setSelectedChainId(null)
+        setSelectedNetwork(null)
     }, [pathname])
 
     const balance = useMemo(() => {
@@ -69,7 +72,7 @@ function Wallets() {
                 detailedTokens.map((asset) => getTokenUSDValue(asset)),
             )
             .toNumber()
-    }, [detailedTokens, selectedChainId])
+    }, [detailedTokens])
 
     const pateTitle = useMemo(() => {
         if (wallets.length === 0) return t.create_wallet_form_title()
@@ -79,7 +82,7 @@ function Wallets() {
         if (isWalletHistoryPath) return t.wallets_history()
 
         return t.wallets()
-    }, [isWalletTransferPath, isWalletHistoryPath, isWalletPath, wallets.length])
+    }, [isWalletPath, isWalletHistoryPath, isWalletTransferPath, wallets.length])
 
     return (
         <PageFrame title={pateTitle} noBackgroundFill primaryAction={<WalletStateBar />}>
@@ -93,16 +96,16 @@ function Wallets() {
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}
                         onReceive={() => setReceiveOpen(true)}
-                        networks={networks ?? []}
-                        onSelectNetwork={(chainId) => setSelectedChainId(chainId)}
-                        selectedChainId={selectedChainId}
+                        networks={networks}
+                        selectedNetwork={selectedNetwork}
+                        onSelectNetwork={setSelectedNetwork}
                     />
                     <Routes>
-                        <Route path="/" element={<TokenAssets selectedChainId={selectedChainId} />} />
+                        <Route path="/" element={<TokenAssets network={selectedNetwork} />} />
                         <Route path="transfer" element={<Transfer />} />
                         <Route
                             path="history"
-                            element={<History selectedChainId={selectedChainId ?? currentChainId} />}
+                            element={<History selectedChainId={selectedNetwork?.chainId ?? currentChainId} />}
                         />
                     </Routes>
                 </>

@@ -4,9 +4,11 @@ import { makeStyles } from '@masknet/theme'
 import FileCopyIcon from '@mui/icons-material/FileCopy'
 import type { DataProvider } from '@masknet/public-api'
 import { useSnackbarCallback, FormattedAddress } from '@masknet/shared'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import type { Trending } from '../../types'
 import { Linking } from './Linking'
 import { CoinMetadataTags } from './CoinMetadataTags'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -45,7 +47,7 @@ export interface CoinMetadataTableProps {
 
 export function CoinMetadataTable(props: CoinMetadataTableProps) {
     const { dataProvider, trending } = props
-
+    const { t } = useI18N()
     const { classes } = useStyles()
     const [, copyToClipboard] = useCopyToClipboard()
     const onCopyAddress = useSnackbarCallback(async () => {
@@ -71,7 +73,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                         <TableRow>
                             <TableCell>
                                 <Typography className={classes.label} variant="body2">
-                                    Market Cap
+                                    {t('plugin_trader_market_cap')}
                                 </Typography>
                             </TableCell>
                             <TableCell>{`Rank #${trending.coin.market_cap_rank}`}</TableCell>
@@ -98,12 +100,16 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                         <TableRow>
                             <TableCell>
                                 <Typography className={classes.label} variant="body2">
-                                    Contract
+                                    {t('contract')}
                                 </Typography>
                             </TableCell>
                             <TableCell>
                                 <Typography variant="body2" component="span">
-                                    <FormattedAddress address={trending.coin.contract_address} size={4} />
+                                    <FormattedAddress
+                                        address={trending.coin.contract_address}
+                                        size={4}
+                                        formatter={formatEthereumAddress}
+                                    />
                                 </Typography>
                                 <IconButton color="primary" size="small" onClick={onCopyAddress}>
                                     <FileCopyIcon fontSize="small" />
@@ -115,7 +121,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                         <TableRow>
                             <TableCell>
                                 <Typography className={classes.label} variant="body2">
-                                    Tags
+                                    {t('tags')}
                                 </Typography>
                             </TableCell>
                             <TableCell>

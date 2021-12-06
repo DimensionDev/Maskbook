@@ -1,11 +1,12 @@
-import { TokenIcon } from '@masknet/shared'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
-import { Box, ListItem, Typography } from '@mui/material'
-import classNames from 'classnames'
-import { fill } from 'lodash-es'
 import { FC, memo, MouseEventHandler, useCallback } from 'react'
 import { Trans } from 'react-i18next'
+import classNames from 'classnames'
+import { fill } from 'lodash-unified'
+import { TokenIcon, useRemoteControlledDialog } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { WalletMessages } from '@masknet/plugin-wallet'
+import { ERC721ContractDetailed, useAccount, useERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { Box, ListItem, Typography } from '@mui/material'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
@@ -24,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
             position: 'static !important' as any,
             height: 'auto !important',
             padding: theme.spacing(2),
-            backgroundColor: MaskColorVar.lightBackground,
+            backgroundColor: theme.palette.background.default,
             [smallQuery]: {
                 padding: theme.spacing(2, 1.5),
             },
@@ -148,12 +149,15 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
             computed: { canSend, isPasswordValid },
         } = useNftAvailabilityComputed(account, history.payload)
         const { value: contractDetailed } = useERC721ContractDetailed(history.token_contract.address)
-
+        const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+            WalletMessages.events.walletStatusDialogUpdated,
+        )
         const handleSend = useCallback(() => {
             if (canSend && contractDetailed && isPasswordValid) {
                 onSend(history, contractDetailed)
+                closeWalletStatusDialog()
             }
-        }, [onSend, canSend, history, contractDetailed, isPasswordValid])
+        }, [onSend, closeWalletStatusDialog, canSend, history, contractDetailed, isPasswordValid])
 
         const { value: redpacketStatus } = useAvailabilityNftRedPacket(history.rpid, account)
         const bitStatusList = redpacketStatus

@@ -20,6 +20,7 @@ import InfoIcon from '@mui/icons-material/Info'
 import DoneIcon from '@mui/icons-material/Done'
 import { LoadingIcon, RiskIcon } from '@masknet/icons'
 import { makeStyles } from '../../makeStyles'
+import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 import { MaskColorVar } from '../../constants'
 
 export { SnackbarProvider, useSnackbar } from 'notistack'
@@ -107,7 +108,7 @@ to {
     return {
         root: {
             zIndex: 9999,
-            transform: isFacebook ? 'translateY(100px)' : 'none',
+            transform: isFacebook ? 'translateY(80px)' : 'none',
             color: MaskColorVar.textLight,
             pointerEvents: 'inherit',
         },
@@ -176,6 +177,7 @@ export interface CustomSnackbarContentProps {
     variant?: VariantType
     action?: SnackbarAction
     isFacebook?: boolean
+    classes?: Partial<ReturnType<typeof useStyles>['classes']>
 }
 const IconMap: Record<VariantType, React.ReactNode> = {
     default: <InfoIcon color="inherit" />,
@@ -186,7 +188,7 @@ const IconMap: Record<VariantType, React.ReactNode> = {
 }
 
 export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarContentProps>((props, ref) => {
-    const { classes } = useStyles({ isFacebook: props.isFacebook })
+    const classes = useStylesExtends(useStyles({ isFacebook: props.isFacebook ?? false }), props)
     const snackbar = useSnackbar()
     const loadingIcon = <LoadingIcon color="inherit" className={classes.spinning} />
     const variantIcon = props.processing ? loadingIcon : props.variant ? IconMap[props.variant] : null
@@ -218,7 +220,7 @@ export const CustomSnackbarContent = forwardRef<HTMLDivElement, CustomSnackbarCo
 
 export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isFacebook?: boolean }>((props) => {
     const ref = useRef<SnackbarProvider>(null)
-    const { classes } = useStyles({ isFacebook: props.isFacebook })
+    const { classes } = useStyles({ isFacebook: props.isFacebook ?? false })
     const onDismiss = (key: string | number) => () => {
         ref.current?.closeSnackbar(key)
     }
@@ -257,7 +259,7 @@ export const CustomSnackbarProvider = memo<SnackbarProviderProps & { isFacebook?
 
 export interface ShowSnackbarOptions
     extends OptionsObject,
-        Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon'> {}
+        Pick<CustomSnackbarContentProps, 'message' | 'processing' | 'icon' | 'classes'> {}
 
 export function useCustomSnackbar() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
@@ -280,6 +282,7 @@ export function useCustomSnackbar() {
                             message={message}
                             processing={processing}
                             action={rest.action}
+                            classes={rest.classes}
                         />
                     )
                 },

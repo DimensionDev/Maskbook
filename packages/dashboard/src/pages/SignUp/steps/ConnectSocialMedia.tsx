@@ -3,6 +3,7 @@ import {
     Body,
     ColumnContentLayout,
     Footer,
+    PersonaLogoBox,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { useNavigate } from 'react-router-dom'
@@ -10,7 +11,7 @@ import { RoutePaths } from '../../../type'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { useDashboardI18N } from '../../../locales'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
-import { upperFirst } from 'lodash-es'
+import { upperFirst } from 'lodash-unified'
 import { Button, Stack } from '@mui/material'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { ActionCard } from '../../../components/ActionCard'
@@ -40,7 +41,9 @@ export const ConnectSocialMedia = () => {
                 action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
             />
             <Body>
-                <SignUpAccountLogo />
+                <PersonaLogoBox>
+                    <SignUpAccountLogo />
+                </PersonaLogoBox>
                 <div>
                     <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(4) }}>
                         <Button variant="text" onClick={() => navigate(RoutePaths.Setup)}>

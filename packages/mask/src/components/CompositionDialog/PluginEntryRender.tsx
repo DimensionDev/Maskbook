@@ -1,5 +1,6 @@
 import {
-    useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet,
+    usePluginIDContext,
+    useActivatedPluginSNSAdaptor_Web3Supported,
     useActivatedPluginsSNSAdaptor,
     Plugin,
 } from '@masknet/plugin-infra'
@@ -11,7 +12,8 @@ import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useRef, forwardRef, memo, useImperativeHandle } from 'react'
-
+import { useChainId } from '@masknet/web3-shared-evm'
+import { Trans } from 'react-i18next'
 const useStyles = makeStyles()({
     sup: {
         paddingLeft: 2,
@@ -24,7 +26,9 @@ export const PluginEntryRender = memo(
     forwardRef<PluginEntryRenderRef, { readonly: boolean }>((props, ref) => {
         const [trackPluginRef] = useSetPluginEntryRenderRef(ref)
         const pluginField = usePluginI18NField()
-        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptorWithOperatingChainSupportedMet()
+        const chainId = useChainId()
+        const pluginID = usePluginIDContext()
+        const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
         const result = [...useActivatedPluginsSNSAdaptor()]
             .sort((plugin) => {
                 // TODO: support priority order
@@ -90,7 +94,7 @@ const CustomEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <sup className={classes.sup}>(Beta)</sup>}
+                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
                     </>
                 }
                 onClick={onClick}
@@ -113,7 +117,7 @@ const DialogEntry = memo(
                 label={
                     <>
                         <PluginI18NFieldRender field={label} pluginID={id} />
-                        {unstable && <sup className={classes.sup}>(Beta)</sup>}
+                        {unstable && <Trans i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />}
                     </>
                 }
                 disabled={props.readonly}

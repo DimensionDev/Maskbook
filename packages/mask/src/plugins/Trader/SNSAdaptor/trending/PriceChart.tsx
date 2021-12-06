@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
 import { CircularProgress, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
 import { usePriceLineChart } from '../../../hooks/usePriceLineChart'
-import { useStylesExtends } from '@masknet/shared'
 
 const DEFAULT_DIMENSION: Dimension = {
     top: 32,

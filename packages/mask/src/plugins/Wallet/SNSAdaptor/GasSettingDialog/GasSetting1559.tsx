@@ -4,14 +4,14 @@ import { toWei } from 'web3-utils'
 import { Typography } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import BigNumber from 'bignumber.js'
-import { isEmpty, noop } from 'lodash-es'
+import { isEmpty, noop } from 'lodash-unified'
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { z as zod } from 'zod'
 import { StyledInput } from '../../../../extension/popups/components/StyledInput'
 import { useI18N } from '../../../../utils'
-import { WalletRPC } from '../../../Wallet/messages'
+import { WalletRPC } from '../../messages'
 import { useNativeTokenPrice } from '../../hooks/useTokenPrice'
 import { useGasSettingStyles } from './useGasSettingStyles'
 import type { GasSettingProps } from './types'
@@ -132,6 +132,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                 onConfirm?.({
                     gasLimit: data.gasLimit,
                     maxFee: toWei(data.maxFeePerGas, 'gwei'),
+                    priorityFee: toWei(data.maxPriorityFeePerGas, 'gwei'),
                     gasOption: selectedGasOption,
                 })
             },

@@ -1,4 +1,4 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isDarkTheme } from '../../../utils/theme-tools'
@@ -7,6 +7,7 @@ import { VCentIconLight, VCentIconDark } from '../icons/VCent'
 import { VALUABLES_VCENT_URL } from '../constants'
 import { useAsync } from 'react-use'
 import { PluginVCentRPC } from '../messages'
+import { useI18N } from '../../../utils'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
@@ -74,6 +75,7 @@ const useStyle = makeStyles()((theme) => ({
 
 export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) {
     const { classes } = useStyle()
+    const { t } = useI18N()
     const { value: tweets } = useAsync(() => PluginVCentRPC.getTweetData(tweetAddress), [tweetAddress])
     const tweet = first(tweets)
 
@@ -89,7 +91,7 @@ export default function VCentDialog({ tweetAddress }: { tweetAddress: string }) 
                 style={isDarkTheme() ? { backgroundColor: '#1a2735' } : { backgroundColor: '#f3f3f3' }}>
                 <div className={classes.VCent}>{isDarkTheme() ? <VCentIconDark /> : <VCentIconLight />}</div>
                 <div className={classes.bidInfo}>
-                    <div className={classes.text}>LATEST OFFER at</div>
+                    <div className={classes.text}>{t('plugin_vcent_last_offer_at')}</div>
                     <div className={classes.textUSD}> ${tweet.amount_usd}</div>
                     <div className={classes.textETH}>
                         (<ETHIcon />

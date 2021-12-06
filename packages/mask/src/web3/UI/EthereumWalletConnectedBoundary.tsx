@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import classNames from 'classnames'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface EthereumWalletConnectedBoundaryProps
-    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton'> {
+    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton' | 'button'> {
     offChain?: boolean
     children?: React.ReactNode
     hideRiskWarningConfirmed?: boolean

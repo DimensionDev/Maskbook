@@ -1,16 +1,19 @@
 import { memo, useCallback, useRef, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
-import { Typography, TablePagination, tablePaginationClasses, TableContainer } from '@mui/material'
+import { TableContainer, TablePagination, tablePaginationClasses, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkSelector } from '../../../components/NetworkSelector'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
 import { useAsync, useAsyncFn } from 'react-use'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { DeriveWalletTable } from '../components/DeriveWalletTable'
-import { currySameAddress, useWallets } from '@masknet/web3-shared-evm'
+import { currySameAddress, ProviderType, useWallets } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../../utils'
 import { LoadingButton } from '@mui/lab'
-import { PopupRoutes } from '../../../index'
+import { PopupRoutes } from '@masknet/shared-base'
+import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
+import { first } from 'lodash-unified'
+import type { Search } from 'history'
 
 const useStyles = makeStyles()({
     container: {
@@ -73,36 +76,39 @@ const AddDeriveWallet = memo(() => {
     const indexes = useRef(new Set())
     const { t } = useI18N()
     const history = useHistory()
-    const location = useLocation()
+    const location = useLocation() as { state: { mnemonic: string }; search: Search }
     const { classes } = useStyles()
-    const wallets = useWallets()
-    const mnemonic = new URLSearchParams(location.search).get('mnemonic')
+    const wallets = useWallets(ProviderType.MaskWallet)
     const walletName = new URLSearchParams(location.search).get('name')
+    const { mnemonic } = location.state
 
     const [page, setPage] = useState(0)
 
     const { loading, value: dataSource } = useAsync(async () => {
         if (mnemonic) {
+            const unDeriveWallets = Array.from(indexes.current)
+
             const derivableAccounts = await WalletRPC.getDerivableAccounts(mnemonic, page)
 
-            return derivableAccounts.map((derivedWallet) => {
+            return derivableAccounts.map((derivedWallet, index) => {
                 const added = !!wallets.find(currySameAddress(derivedWallet.address))
-
+                const selected = unDeriveWallets.find((item) => item === index + page * 10) !== undefined
                 return {
                     added,
+                    selected,
                     address: derivedWallet.address,
                 }
             })
         }
         return []
-    }, [mnemonic, wallets, page])
+    }, [mnemonic, wallets.length, page])
 
     const onCheck = useCallback(
         async (checked, index) => {
             if (checked) {
-                indexes.current.add(page + index)
+                indexes.current.add(page * 10 + index)
             } else {
-                indexes.current.delete(page + index)
+                indexes.current.delete(page * 10 + index)
             }
         },
         [page],
@@ -111,7 +117,7 @@ const AddDeriveWallet = memo(() => {
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         const unDeriveWallets = Array.from(indexes.current)
         if (!mnemonic) return
-        await Promise.all(
+        const wallets = await Promise.all(
             unDeriveWallets.map(async (pathIndex) =>
                 WalletRPC.recoverWalletFromMnemonic(
                     `${walletName}${pathIndex}` ?? '',
@@ -120,6 +126,18 @@ const AddDeriveWallet = memo(() => {
                 ),
             ),
         )
+
+        if (!currentMaskWalletAccountSettings.value && wallets.length) {
+            await WalletRPC.updateMaskAccount({
+                account: first(wallets),
+            })
+
+            if (!currentAccountSettings.value)
+                await WalletRPC.updateAccount({
+                    account: first(wallets),
+                    providerType: ProviderType.MaskWallet,
+                })
+        }
         history.replace(PopupRoutes.Wallet)
     }, [mnemonic, walletName])
 

@@ -3,7 +3,7 @@ import { EthereumRpcType, ProviderType, useWallet, useWallets } from '@masknet/w
 import { WalletAssets } from './components/WalletAssets'
 import { Route, Switch, useHistory } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
-import { PopupRoutes } from '../../index'
+import { PopupRoutes } from '@masknet/shared-base'
 import { WalletContext } from './hooks/useWalletContext'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder'
 import { useLocation } from 'react-router-dom'
@@ -12,8 +12,6 @@ import { WalletMessages, WalletRPC } from '../../../../plugins/Wallet/messages'
 import Services from '../../../service'
 import SelectWallet from './SelectWallet'
 import { useWalletLockStatus } from './hooks/useWalletLockStatus'
-import { first } from 'lodash-es'
-import { currentAccountSettings } from '../../../../plugins/Wallet/settings'
 import urlcat from 'urlcat'
 
 const ImportWallet = lazy(() => import('./ImportWallet'))
@@ -80,11 +78,7 @@ export default function Wallet() {
     }, [location.search, location.pathname])
 
     useEffect(() => {
-        if (
-            isLocked &&
-            !getLockStatusLoading &&
-            ![PopupRoutes.WalletRecovered, PopupRoutes.Unlock].some((item) => item === location.pathname)
-        ) {
+        if (isLocked && !getLockStatusLoading && location.pathname !== PopupRoutes.Unlock) {
             history.replace(urlcat(PopupRoutes.Unlock, { from: location.pathname }))
             return
         }
@@ -95,20 +89,6 @@ export default function Wallet() {
             if (hasRequest) retry()
         })
     }, [retry])
-
-    useEffect(() => {
-        if (!wallet && wallets.length) {
-            WalletRPC.updateMaskAccount({
-                account: first(wallets)?.address,
-            })
-
-            if (!currentAccountSettings.value)
-                WalletRPC.updateAccount({
-                    account: first(wallets)?.address,
-                    providerType: ProviderType.MaskWallet,
-                })
-        }
-    }, [wallets, wallet])
 
     return (
         <Suspense fallback={<LoadingPlaceholder />}>

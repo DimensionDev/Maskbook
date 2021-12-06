@@ -1,12 +1,12 @@
-import { Box, ClickAwayListener, Skeleton, Tooltip, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Box, ClickAwayListener, Skeleton, Typography } from '@mui/material'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Info as InfoIcon } from '@mui/icons-material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { AirdropIcon } from '../../../resources/AirdropIcon'
 import { activatedSocialNetworkUI } from '../../../social-network'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import {
     ERC20TokenDetailed,
     formatPercentage,
@@ -25,6 +25,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { useI18N } from '../../../utils/i18n-next-ui'
+import { ShadowRootTooltip } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -197,7 +198,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
             <Box className={classes.root} display="flex" justifyContent="space-between">
                 <Typography>{packetError.message}</Typography>
                 <ActionButton className={classes.button} variant="contained" onClick={() => packetRetry()}>
-                    Retry
+                    {t('retry')}
                 </ActionButton>
             </Box>
         )
@@ -209,11 +210,11 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                     <AirdropIcon classes={{ root: classes.icon }} />
                     <Box>
                         <Typography className={classes.title} sx={{ display: 'flex', alignItems: 'center' }}>
-                            <span style={{ lineHeight: 1.5 }}>Airdrop</span>
+                            <span style={{ lineHeight: 1.5 }}>{t('plugin_airdrop_airdrop')}</span>
                             {checkState.type === CheckStateType.YEP || checkState.type === CheckStateType.NOPE ? (
                                 <ClickAwayListener onClickAway={() => setShowTooltip(false)}>
                                     <div>
-                                        <Tooltip
+                                        <ShadowRootTooltip
                                             placement="top-end"
                                             PopperProps={{
                                                 disablePortal: true,
@@ -223,12 +224,13 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                                             classes={{ popper: classes.tooltipPopover, tooltip: classes.tooltip }}
                                             disableHoverListener
                                             disableTouchListener
-                                            title={`Airdrop MASK, 20% reduction every 24 hours. Airdrop starts at ${new Date(
-                                                checkState.start,
-                                            ).toUTCString()} and ends at ${new Date(checkState.end).toUTCString()}.`}
+                                            title={t('plugin_airdrop_dialog_title', {
+                                                start: new Date(checkState.start).toUTCString(),
+                                                end: new Date(checkState.end).toUTCString(),
+                                            })}
                                             style={{ lineHeight: 0.8, cursor: 'pointer', marginLeft: 2 }}>
                                             <InfoIcon fontSize="small" onClick={(e) => setShowTooltip(true)} />
-                                        </Tooltip>
+                                        </ShadowRootTooltip>
                                     </div>
                                 </ClickAwayListener>
                             ) : null}
@@ -243,7 +245,9 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                 <Box display="flex">
                     <Box marginLeft={2.5}>
                         {checkState.type === CheckStateType.YEP ? (
-                            <Typography>Current Ratio: {formatPercentage(checkState.ratio)}</Typography>
+                            <Typography>
+                                {t('plugin_airdrop_current_ratio')} {formatPercentage(checkState.ratio)}
+                            </Typography>
                         ) : null}
                         <Box display="flex" alignItems="center" justifyContent="flex-end" marginTop={1.5}>
                             <ActionButton
@@ -251,7 +255,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                                 variant="contained"
                                 disabled={checkState.type !== CheckStateType.YEP || isZero(checkState.claimable)}
                                 onClick={onClaimButtonClick}>
-                                Claim
+                                {t('plugin_airdrop_claim')}
                             </ActionButton>
                         </Box>
                     </Box>

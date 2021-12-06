@@ -1,13 +1,13 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef, or, SubscriptionFromValueRef } from '@masknet/shared'
-import { Appearance } from '@masknet/theme'
+import { useValueRef, SubscriptionFromValueRef } from '@masknet/shared'
+import { Appearance, or } from '@masknet/theme'
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { blue, green, grey, orange, red } from '@mui/material/colors'
-import { jaJP, koKR, zhTW, zhCN, esES, itIT, ruRU, faIR, frFR, enUS, Localization } from '@mui/material/locale/index'
+import { jaJP, koKR, zhTW, zhCN, enUS, Localization } from '@mui/material/locale/index'
 import { makeStyles } from '@masknet/theme'
 import type { Theme, ThemeOptions } from '@mui/material/styles/createTheme'
-import { cloneDeep, merge } from 'lodash-es'
+import { cloneDeep, merge } from 'lodash-unified'
 import { useRef } from 'react'
 import { appearanceSettings, languageSettings } from '../settings/settings'
 import { activatedSocialNetworkUI } from '../social-network'
@@ -151,13 +151,8 @@ function useThemeLanguage(): [loc: Localization, RTL: boolean] {
         [SupportedLanguages.koKR]: koKR,
         [SupportedLanguages.zhTW]: zhTW,
         [SupportedLanguages.zhCN]: zhCN,
-        [SupportedLanguages.ruRU]: ruRU,
-        [SupportedLanguages.itIT]: itIT,
-        [SupportedLanguages.esES]: esES,
-        [SupportedLanguages.frFR]: frFR,
-        [SupportedLanguages.faIR]: faIR,
     }
-    return [langs[displayLanguage] || enUS, language === LanguageOptions.faIR]
+    return [langs[displayLanguage] || enUS, false]
 }
 
 export interface ClassicMaskFullPageThemeOptions {

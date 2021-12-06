@@ -1,7 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classNames from 'classnames'
+import { useI18N } from '../../../utils'
 import { PageTags } from '../types'
+import type { Dao_Payload } from './hooks/useDao'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -11,13 +13,14 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     button: {
-        border: `1px solid ${theme.palette.mode === 'dark' ? 'rgba(237, 241, 242, 1)' : 'rgba(47, 51, 54, 1)'}`,
+        border: `1px solid ${theme.palette.text.primary} !important`,
+        color: theme.palette.text.primary,
         borderRadius: 9999,
-        color: theme.palette.mode === 'dark' ? 'rgba(239, 243, 244, 1)' : 'rgba(17, 20, 24, 1) ',
     },
     selected: {
-        border: `1px solid ${theme.palette.primary.main}`,
+        border: `1px solid ${theme.palette.primary.main} !important`,
         color: theme.palette.primary.main,
+        borderRadius: 9999,
     },
     hidden: {
         display: 'none',
@@ -25,44 +28,47 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface PageTagProps {
-    onChange: (tag: PageTags) => void
     tag: PageTags
+    daoPayload: Dao_Payload | undefined
+    onChange: (tag: PageTags) => void
 }
 
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
-    const { onChange, tag } = props
+    const { onChange, tag, daoPayload } = props
+    const { t } = useI18N()
     return (
         <div className={classes.root}>
             <Button
                 variant="outlined"
-                className={classNames(
-                    classes.hidden,
-                    classes.button,
-                    tag === PageTags.WalletTag ? classes.selected : '',
-                )}
+                className={classNames(classes.hidden, tag === PageTags.WalletTag ? classes.selected : classes.button)}
                 onClick={() => onChange(PageTags.WalletTag)}
                 size="medium">
-                Wallets
+                {t('wallets')}
             </Button>
             <Button
                 variant="outlined"
-                className={classNames(classes.button, tag === PageTags.NFTTag ? classes.selected : '')}
+                className={tag === PageTags.NFTTag ? classes.selected : classes.button}
                 onClick={() => onChange(PageTags.NFTTag)}
                 size="medium">
-                NFTs
+                {t('nfts')}
             </Button>
             <Button
                 variant="outlined"
-                className={classNames(
-                    classes.hidden,
-                    classes.button,
-                    tag === PageTags.DonationTag ? classes.selected : '',
-                )}
+                className={classNames(classes.hidden, tag === PageTags.DonationTag ? classes.selected : classes.button)}
                 onClick={() => onChange(PageTags.DonationTag)}
                 size="medium">
-                Donations
+                {t('donations')}
             </Button>
+            {daoPayload ? (
+                <Button
+                    variant="outlined"
+                    className={tag === PageTags.DAOTag ? classes.selected : classes.button}
+                    onClick={() => onChange(PageTags.DAOTag)}
+                    size="medium">
+                    {t('dao')}
+                </Button>
+            ) : null}
         </div>
     )
 }

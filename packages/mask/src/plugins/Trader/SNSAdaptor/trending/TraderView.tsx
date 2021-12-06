@@ -188,7 +188,7 @@ export function TraderView(props: TraderViewProps) {
             <TrendingViewError
                 message={
                     <span>
-                        Fail to load trending info from{' '}
+                        {t('plugin_trader_fail_to_load')}
                         <Link
                             color="primary"
                             target="_blank"
@@ -249,7 +249,7 @@ export function TraderView(props: TraderViewProps) {
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
                 showDataProviderIcon={tabIndex < 3}
-                showTradeProviderIcon={tabIndex === 3}
+                showTradeProviderIcon={false}
                 dataProviders={dataProviders}
                 tradeProviders={tradeProviders}
                 TrendingCardProps={{ classes: { root: classes.root } }}>

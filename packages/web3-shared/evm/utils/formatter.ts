@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { EthereumAddress } from 'wallet.ts'
-import { pow10 } from '.'
+import { pow10 } from './number'
+import { isValidDomain } from './domain'
 
 export function formatPercentage(value: BigNumber.Value) {
     const percentage = new BigNumber(value)
@@ -54,8 +55,16 @@ export function formatCurrency(value: BigNumber.Value, sign = '') {
 export function formatEthereumAddress(address: string, size = 0) {
     if (!EthereumAddress.isValid(address)) return address
     const address_ = EthereumAddress.checksumAddress(address)
-    if (size === 0) return address_
+    if (size === 0 || size >= 20) return address_
     return `${address_.substr(0, 2 + size)}...${address_.substr(-size)}`
+}
+
+export function formatDomainName(domain?: string, size = 4) {
+    if (!domain || !isValidDomain(domain)) return domain
+    const [domainName, company] = domain.split('.')
+    if (domainName.length < 13) return domain
+
+    return `${domainName.substr(0, size)}...${domainName.substr(-size)}.${company}`
 }
 
 export function formatKeccakHash(hash: string, size = 0) {

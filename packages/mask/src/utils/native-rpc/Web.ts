@@ -10,6 +10,8 @@ import type { Persona, Profile } from '../../database'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
+import { MaskMessages } from '../messages'
+import type { PersonaInformation } from '@masknet/shared'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
@@ -57,7 +59,29 @@ const profileRelationFormatter = (
     }
 }
 
+const personaInformationFormatter = (p: PersonaInformation) => {
+    const profiles = p.linkedProfiles.map((profileInformation) => {
+        return {
+            nickname: profileInformation.nickname,
+            identifier: profileInformation.identifier.toText(),
+            avatar: profileInformation.avatar,
+        }
+    })
+
+    return {
+        identifier: p.identifier.toText(),
+        nickname: p.nickname,
+        linkedProfiles: profiles,
+    }
+}
+
 export const MaskNetworkAPI: MaskNetworkAPIs = {
+    async app_resume() {
+        MaskMessages.events.mobile_app_resumed.sendToAll()
+    },
+    async app_suspended() {
+        MaskMessages.events.mobile_app_suspended.sendToAll()
+    },
     web_echo: async (arg) => arg.echo,
     getDashboardURL: async () => browser.runtime.getURL('/dashboard.html'),
     getConnectedPersonas: async () => {
@@ -208,6 +232,17 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     persona_setCurrentPersonaIdentifier: async ({ identifier }) => {
         await Services.Settings.setCurrentPersonaIdentifier(stringToPersonaIdentifier(identifier))
     },
+    persona_getOwnedPersonaInformation: async ({ identifier }) => {
+        const personas = await Services.Identity.queryOwnedPersonaInformation()
+        const currentPersona = personas.find((x) => x.identifier.equals(stringToPersonaIdentifier(identifier)))
+        if (!currentPersona) {
+            throw new Error('invalid currentPersonaIdentifier')
+        }
+        return personaInformationFormatter(currentPersona)
+    },
+    persona_logout: async ({ identifier }) => {
+        await Services.Identity.logoutPersona(stringToPersonaIdentifier(identifier))
+    },
     profile_queryProfiles: async ({ network }) => {
         const result = await Services.Identity.queryProfiles(network)
 
@@ -264,7 +299,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
         })
     },
     wallet_getLegacyWalletInfo: async () => {
-        const wallets = await WalletRPC.getLegacyWallets()
+        const wallets = await WalletRPC.getLegacyWalletRecords()
         return wallets.map((x) => ({
             address: x.address,
             name: x.name || undefined,

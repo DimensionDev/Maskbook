@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useI18N, MaskMessages, useMatchXS, useQueryNavigatorPermission } from '../../utils'
+import { useI18N, useMatchXS, useQueryNavigatorPermission } from '../../utils'
 import formatDateTime from 'date-fns/format'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     DialogActions,
     DialogContent,
@@ -16,7 +16,7 @@ import {
     Button,
     Typography,
 } from '@mui/material'
-import { useStylesExtends } from '@masknet/shared'
+import type { AutoPasteFailedEvent } from '@masknet/shared'
 import { Image } from '../shared/Image'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'
@@ -29,7 +29,7 @@ import { saveAsFileFromUrl } from '../../extension/background-script/HelperServi
 
 export interface AutoPasteFailedDialogProps extends withClasses<never> {
     onClose: () => void
-    data: MaskMessages['autoPasteFailed']
+    data: AutoPasteFailedEvent
 }
 const useStyles = makeStyles()((theme) => ({
     title: { marginLeft: theme.spacing(1) },
@@ -171,9 +171,9 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
 }
 export function useAutoPasteFailedDialog() {
     const [open, setOpen] = useState(false)
-    const [data, setData] = useState<MaskMessages['autoPasteFailed']>({ text: '' })
+    const [data, setData] = useState<AutoPasteFailedEvent>({ text: '' })
     return [
-        (data: MaskMessages['autoPasteFailed']) => {
+        (data: AutoPasteFailedEvent) => {
             setData(data)
             setOpen(true)
         },

@@ -1,9 +1,8 @@
 import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { formatEthereumAddress, useTokenConstants } from '@masknet/web3-shared-evm'
 import { Button, CircularProgress, IconButton, Link, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import RefreshIcon from '@mui/icons-material/Refresh'
-import { useStylesExtends } from '@masknet/shared'
 import { useI18N } from '../../../../utils'
 import { usePools } from '../../LBP/usePools'
 import { usePoolTokenPrices } from '../../LBP/usePoolTokenPrices'
@@ -73,7 +72,7 @@ export function LBPPanel(props: LBPPanelProps) {
         return (
             <div className={classes.root}>
                 <div className={classes.chart}>
-                    <Typography className={classes.placeholder}>No pools found.</Typography>
+                    <Typography className={classes.placeholder}>{t('plugin_trader_no_pools_found')}</Typography>
                 </div>
             </div>
         )
@@ -106,27 +105,25 @@ export function LBPPanel(props: LBPPanelProps) {
                 />
             </div>
             <Typography className={classes.introduce}>
-                Solid blue line illustrates the historical price of {token.symbol ?? 'Token'} on the{' '}
-                {token.symbol ?? 'Token'}'s LBP. The price could continue to go down if no one buys. Please make your
-                investment decision wisely.
+                {t('plugin_trader_lbp_intro', { symbol: token.symbol ?? 'Tokens' })}
             </Typography>
             <Typography className={classes.introduce}>
                 <Link href="https://link.medium.com/0kfZVzGx8db" target="_blank" rel="noopener noreferrer">
-                    What's LBP?
+                    {t('plugin_trader_what_is_lbp')}
                 </Link>
                 ,{' '}
                 <Link
                     href="https://news.mask.io/2021/02/24/mask-lbp-tutorial"
                     target="_blank"
                     rel="noopener noreferrer">
-                    Tutorial
+                    {t('plugin_trader_tutorial')}
                 </Link>{' '}
                 and{' '}
                 <Link
                     href={`https://pools.balancer.exchange/#/pool/${pools[0].id}/`}
                     target="_blank"
                     rel="noopener noreferrer">
-                    {token.symbol} LBP Pool in Balancer
+                    {token.symbol} {t('plugin_trader_lbp_pool_in_balancer')}
                 </Link>
                 .
             </Typography>

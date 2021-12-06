@@ -1,13 +1,13 @@
 import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
 import { Alert, Box, Skeleton, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
@@ -142,7 +142,7 @@ export function ITO_Card(props: ITO_CardProps) {
                 <Box className={classes.content}>
                     <Typography>{packetError.message}</Typography>
                     <ActionButton className={classes.button} variant="contained" onClick={() => packetRetry()}>
-                        Retry
+                        {t('retry')}
                     </ActionButton>
                 </Box>
             </Box>
@@ -152,7 +152,7 @@ export function ITO_Card(props: ITO_CardProps) {
         <Box className={classes.root}>
             <Box className={classes.content}>
                 <Box display="flex" flexDirection="column" justifyContent="space-between">
-                    <Typography>ITO locked:</Typography>
+                    <Typography>{t('plugin_ito_locked')}</Typography>
                     <Typography className={classes.amount}>
                         {packet && packet.claimable !== '0'
                             ? formatBalance(packet.claimable, token.decimals, 6)
@@ -169,7 +169,7 @@ export function ITO_Card(props: ITO_CardProps) {
                                 packet.claimable === '0'
                             }
                             onClick={onClaimButtonClick}>
-                            Claim
+                            {t('plugin_ito_claim')}
                         </ActionButton>
                     </Box>
                 ) : null}
@@ -177,7 +177,9 @@ export function ITO_Card(props: ITO_CardProps) {
             {packet ? (
                 <Box className={classes.ITOAlertContainer}>
                     <Alert icon={false} className={classes.ITOAlert}>
-                        ITO Mask unlock time is {new Date(Number.parseInt(packet.unlockTime, 10) * 1000).toUTCString()}.
+                        {t('plugin_ito_unlock_time_cert', {
+                            date: new Date(Number.parseInt(packet.unlockTime, 10) * 1000).toUTCString(),
+                        })}
                     </Alert>
                 </Box>
             ) : null}

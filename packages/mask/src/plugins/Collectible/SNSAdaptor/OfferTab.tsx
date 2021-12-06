@@ -9,7 +9,7 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { isZero, useAccount } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -39,30 +39,30 @@ const useStyles = makeStyles()((theme) => {
 export function OfferTab() {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const account = useAccount()
-    const { asset, token, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
+    const { asset, provider, offers, offerPage, setOfferPage } = CollectibleState.useContainer()
 
     const isDifferenceToken = useMemo(() => {
         if (provider === CollectibleProvider.OPENSEA) {
             return (
-                offers.value?.some(
+                offers.some(
                     (item) =>
-                        (item.paymentTokenContract?.symbol !== 'WETH' && item.paymentTokenContract?.symbol !== 'ETH') ||
+                        (item.payment_token_contract?.symbol !== 'WETH' &&
+                            item.payment_token_contract?.symbol !== 'ETH') ||
                         (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
-                ) && offers.value.filter((item) => isZero(item.expirationTime ?? 0)).length === 0
+                ) && offers.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {
             return false
         }
-    }, [provider, offers.value])
+    }, [provider, offers])
 
     const dataSource = useMemo(() => {
-        if (!offers.value || !offers.value?.length) return []
-        return offers.value
-    }, [offers.value])
+        if (!offers.length) return []
+        return offers
+    }, [offers])
 
-    if (offers.loading) return <LoadingTable />
-    if (!offers.value || offers.error || !dataSource.length)
+    if (asset.loading) return <LoadingTable />
+    if (!offers.length || asset.error || !dataSource.length)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>
@@ -74,20 +74,12 @@ export function OfferTab() {
                                     marginTop: 1,
                                 }}
                                 variant="text"
-                                onClick={() => offers.retry()}>
+                                onClick={() => asset.retry()}>
                                 {t('plugin_collectible_retry')}
                             </Button>
                         </TableCell>
                     </TableRow>
                 </TableBody>
-                <TableListPagination
-                    handlePrevClick={() => setOfferPage((prev) => prev - 1)}
-                    handleNextClick={() => setOfferPage((prev) => prev + 1)}
-                    prevDisabled={offerPage === 0}
-                    nextDisabled={dataSource.length < 10}
-                    page={offerPage}
-                    pageCount={10}
-                />
             </Table>
         )
 
@@ -114,7 +106,7 @@ export function OfferTab() {
                 </TableHead>
                 <TableBody>
                     {dataSource.map((order) => (
-                        <OrderRow key={order.hash} order={order} isDifferenceToken={isDifferenceToken} />
+                        <OrderRow key={order.order_hash} order={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
                 {(provider === CollectibleProvider.OPENSEA && dataSource.length) || offerPage > 0 ? (

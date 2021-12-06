@@ -1,4 +1,4 @@
-import { flattenDeep } from 'lodash-es'
+import { flattenDeep } from 'lodash-unified'
 import {
     isTypedMessageEmpty,
     isTypedMessageText,
@@ -8,13 +8,13 @@ import {
     TypedMessage,
     TypedMessageText,
 } from '../../../protocols/typed-message'
-import { notNullable } from '../../../utils/assert'
+import { assertNonNull } from '../../../../utils-pure'
 
 const parseNameArea = (nameArea: HTMLAnchorElement) => {
     const displayNameNode = nameArea.querySelector('strong')
     return {
-        name: displayNameNode && notNullable(displayNameNode) ? displayNameNode.innerText : nameArea.innerText,
-        handle: nameArea.href.substr(8).split('/')[1],
+        name: displayNameNode && assertNonNull(displayNameNode) ? displayNameNode.innerText : nameArea.innerText,
+        handle: nameArea.href.substring(8).split('/')[1],
     }
 }
 
@@ -24,7 +24,7 @@ export const postIdParser = (node: HTMLElement) => {
 }
 
 export const postNameParser = (node: HTMLElement) => {
-    return parseNameArea(notNullable(node.querySelector<HTMLAnchorElement>('.m-activityOwnerBlock__displayName')))
+    return parseNameArea(assertNonNull(node.querySelector<HTMLAnchorElement>('.m-activityOwnerBlock__displayName')))
 }
 
 export const postAvatarParser = (node: HTMLElement) => {

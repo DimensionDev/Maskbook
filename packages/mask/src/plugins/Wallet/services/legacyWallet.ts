@@ -2,11 +2,11 @@ import * as bip39 from 'bip39'
 import { EthereumAddress, HDKey } from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
-import { first } from 'lodash-es'
-import { createTransaction } from '../../../database/helpers/openDB'
+import { first } from 'lodash-unified'
+import { createTransaction } from '../../../../background/database/utils/openDB'
 import { createWalletDBAccess } from '../database/Wallet.db'
 import type { LegacyWalletRecord } from '../database/types'
-import { buf2hex, hex2buf } from '../../../utils/utils'
+import { HexStringToUint8Array as hex2buf, Uint8ArrayToHexString as buf2hex } from '../../../../utils-pure'
 import { currySameAddress, isSameAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { LegacyWalletRecordOutDB } from './helpers'
 import { currentAccountSettings, currentProviderSettings } from '../settings'
@@ -56,6 +56,20 @@ export async function getLegacyWallets(provider?: ProviderType) {
         return [createWalletRecord(address, 'Mask Network')]
     }
 
+    const wallets = await getAllWalletRecords()
+    if (provider === ProviderType.MaskWallet) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
+    if (provider === currentProviderSettings.value)
+        return wallets.filter(currySameAddress(currentAccountSettings.value))
+    if (provider) return []
+    return wallets
+}
+
+export async function getLegacyWalletRecords() {
+    const wallets = await getAllWalletRecords()
+    return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
+}
+
+async function getAllWalletRecords() {
     const t = createTransaction(await createWalletDBAccess(), 'readonly')('Wallet')
     const records = await t.objectStore('Wallet').getAll()
     const wallets = (
@@ -69,19 +83,16 @@ export async function getLegacyWallets(provider?: ProviderType) {
             }),
         )
     ).sort(sortWallet)
-    if (provider === ProviderType.MaskWallet) return wallets.filter((x) => x._private_key_ || x.mnemonic.length)
-    if (provider === currentProviderSettings.value)
-        return wallets.filter(currySameAddress(currentAccountSettings.value))
-    if (provider) return []
     return wallets
-    async function makePrivateKey(record: LegacyWalletRecord) {
-        // not a managed wallet
-        if (!record._private_key_ && !record.mnemonic.length) return ''
-        const { privateKey } = record._private_key_
-            ? await recoverWalletFromPrivateKey(record._private_key_)
-            : await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
-        return `0x${buf2hex(privateKey)}`
-    }
+}
+
+async function makePrivateKey(record: LegacyWalletRecord) {
+    // not a managed wallet
+    if (!record._private_key_ && !record.mnemonic.length) return ''
+    const { privateKey } = record._private_key_
+        ? await recoverWalletFromPrivateKey(record._private_key_)
+        : await recoverWalletFromMnemonicWords(record.mnemonic, record.passphrase, record.path)
+    return `0x${buf2hex(privateKey)}`
 }
 
 export async function freezeLegacyWallet(address: string) {

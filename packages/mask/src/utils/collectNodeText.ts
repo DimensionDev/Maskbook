@@ -1,6 +1,6 @@
 import type { Option } from 'ts-results'
 
-function collectTwitterEmoji(points: number[]) {
+export function collectTwitterEmoji(points: number[]) {
     if (points.length === 0) return ''
     if (points[0] >= 0x23 && points[0] <= 0x39)
         return String.fromCodePoint(points[0], ...(points.includes(0xfe0f) ? [] : [0xfe0f]), ...points.slice(1))

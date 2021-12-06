@@ -3,7 +3,7 @@ import { Box, Stack, TablePagination } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
     ERC721TokenDetailed,
     EthereumTokenType,
     formatEthereumAddress,
@@ -18,20 +18,22 @@ import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
-import { PluginMessages, PluginServices } from '../../../../API'
+import { PluginMessages } from '../../../../API'
 import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../../type'
-import { TransferTab } from '../Transfer'
 import { useCollectibleOwners } from '../../hooks/useCollectibleOwners'
+import { TransferTab } from '../Transfer'
 
 const useStyles = makeStyles()({
     root: {
         padding: '24px 26px 0px',
-        display: 'flex',
-        flexWrap: 'wrap',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, 140px)',
+        gridGap: '20px',
+        justifyContent: 'space-between',
     },
     card: {
-        padding: '10px 14px',
+        // padding: '10px 14px',
     },
     footer: {
         flex: 1,
@@ -43,7 +45,7 @@ const useStyles = makeStyles()({
 
 interface CollectibleListProps {
     selectedChainId: ChainId | null
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
 }
 
 export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId, provider }) => {
@@ -89,7 +91,6 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedChainId, pr
                 e && isSameAddress(e.contractDetailed.address, x.contractDetailed.address) && x.tokenId === e.tokenId,
         )
         if (owner && !isSameAddress(owner.info.owner, account)) {
-            PluginServices.Wallet.removeToken(owner)
             return false
         }
 
@@ -126,7 +127,7 @@ export interface CollectibleListUIProps {
     isEmpty: boolean
     showPagination: boolean
     chainId: ChainId
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     dataSource: ERC721TokenDetailed[]
     onSend(detail: ERC721TokenDetailed): void
 }

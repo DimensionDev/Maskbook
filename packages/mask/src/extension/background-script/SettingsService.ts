@@ -1,11 +1,12 @@
 import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared'
-import { head } from 'lodash-es'
+import { head } from 'lodash-unified'
 import type { InternalSettings } from '../../settings/createSettings'
 import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
     currentPluginEnabledStatus,
+    pluginIDSettings,
 } from '../../settings/settings'
 import {
     currentDataProviderSettings,
@@ -19,12 +20,12 @@ import { queryMyPersonas } from './IdentityService'
 import {
     currentBalanceSettings,
     currentBlockNumberSettings,
-    currentCollectibleDataProviderSettings,
     currentAccountSettings,
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
+    currentNonFungibleAssetDataProviderSettings,
     currentGasOptionsSettings,
     currentEtherPriceSettings,
     currentTokenPricesSettings,
@@ -32,8 +33,10 @@ import {
     currentMaskWalletAccountSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
+    currentBalancesSettings,
 } from '../../plugins/Wallet/settings'
-import { Flags } from '../../utils'
+import { Flags } from '../../../shared'
+import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 
 function create<T>(settings: InternalSettings<T>) {
     async function get() {
@@ -46,10 +49,12 @@ function create<T>(settings: InternalSettings<T>) {
     }
     return [get, set] as const
 }
+export const [getPluginID, setPluginID] = create(pluginIDSettings)
 export const [getTheme, setTheme] = create(appearanceSettings)
 export const [getLanguage, setLanguage] = create(languageSettings)
 export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
+export const [getBalances, setBalances] = create(currentBalancesSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
 export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
@@ -85,11 +90,11 @@ export const [getCurrentMaskWalletNetworkType, setCurrentMaskWalletNetworkType] 
 )
 
 export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
 )
 
 export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvider] = create(
-    currentCollectibleDataProviderSettings,
+    currentNonFungibleAssetDataProviderSettings,
 )
 
 export const [getCurrentMaskWalletLockedSettings, setCurrentMaskWalletLockedSettings] = create(
@@ -126,4 +131,20 @@ export async function setPluginEnabled(id: string, enabled: boolean) {
 
 export async function openTab(url: string) {
     await browser.tabs.create({ active: true, url })
+}
+
+export async function __kv_storage_write__(kind: 'indexedDB' | 'memory', key: string, value: unknown) {
+    if (kind === 'memory') {
+        return inMemory_KVStorageBackend.setValue(key, value)
+    } else {
+        return indexedDB_KVStorageBackend.setValue(key, value)
+    }
+}
+
+export async function __kv_storage_read__(kind: 'indexedDB' | 'memory', key: string) {
+    if (kind === 'memory') {
+        return inMemory_KVStorageBackend.getValue(key)
+    } else {
+        return indexedDB_KVStorageBackend.getValue(key)
+    }
 }

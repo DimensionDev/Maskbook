@@ -1,0 +1,13 @@
+{
+  "name": "@masknet/encryption",
+  "version": "0.0.0",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/shared-base": "workspace:*",
+    "@msgpack/msgpack": "^2.7.0",
+    "pvtsutils": "^1.2.0",
+    "tiny-secp256k1": "^2.1.2"
+  }
+}

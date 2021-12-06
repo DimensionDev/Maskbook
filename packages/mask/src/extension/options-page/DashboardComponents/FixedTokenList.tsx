@@ -15,16 +15,16 @@ import {
     isSameAddress,
     resolveTokenLinkOnExplorer,
     useTokenConstants,
+    ChainId,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-unified'
 import { useMemo, useState } from 'react'
 import { FixedSizeList, FixedSizeListProps } from 'react-window'
-import { useStylesExtends } from '@masknet/shared'
 import { EthereumAddress } from 'wallet.ts'
 import { Link, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import ListItemButton from '@mui/material/ListItemButton'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { useCallback } from 'react'
 import { TokenIcon } from '@masknet/shared'
@@ -34,6 +34,7 @@ export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'>
     blacklist?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
+    targetChainId?: ChainId
     onSelect?(token: FungibleTokenDetailed | null): void
     FixedSizeListProps?: Partial<FixedSizeListProps>
 }
@@ -41,7 +42,8 @@ export interface FixedTokenListProps extends withClasses<'list' | 'placeholder'>
 export function FixedTokenList(props: FixedTokenListProps) {
     const classes = useStylesExtends({}, props)
     const account = useAccount()
-    const chainId = useChainId()
+    const currentChainId = useChainId()
+    const chainId = props.targetChainId ?? currentChainId
     const trustedERC20Tokens = useTrustedERC20Tokens()
     const { t } = useI18N()
 
@@ -56,10 +58,10 @@ export function FixedTokenList(props: FixedTokenListProps) {
     } = props
 
     const [address, setAddress] = useState('')
-    const { ERC20_TOKEN_LISTS } = useEthereumConstants()
+    const { ERC20_TOKEN_LISTS } = useEthereumConstants(chainId)
 
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
-        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword, trustedERC20Tokens)
+        useERC20TokensDetailedFromTokenLists(ERC20_TOKEN_LISTS, keyword, trustedERC20Tokens, chainId)
 
     //#region add token by address
     const matchedTokenAddress = useMemo(() => {
@@ -75,22 +77,29 @@ export function FixedTokenList(props: FixedTokenListProps) {
             (!excludeTokens.length || !excludeTokens.some(currySameAddress(token.address))),
     )
 
-    const renderTokens = uniqBy(
-        [
-            ...tokens,
-            ...filteredTokens,
-            ...(searchedToken && searchedToken.name !== 'Unknown Token' && searchedToken.symbol !== 'Unknown'
-                ? [searchedToken]
-                : []),
-        ],
-        (x) => x.address.toLowerCase(),
+    const renderTokens = useMemo(
+        () =>
+            uniqBy(
+                [
+                    ...tokens,
+                    ...filteredTokens,
+                    ...(searchedToken && searchedToken.name !== 'Unknown Token' && searchedToken.symbol !== 'Unknown'
+                        ? [searchedToken]
+                        : []),
+                ],
+                (x) => x.address.toLowerCase(),
+            ),
+        [tokens, filteredTokens, searchedToken],
     )
 
     const {
         value: assets,
         loading: assetsLoading,
         error: assetsError,
-    } = useAssetsByTokenList(renderTokens.filter((x) => EthereumAddress.isValid(x.address)))
+    } = useAssetsByTokenList(
+        renderTokens.filter((x) => EthereumAddress.isValid(x.address)),
+        chainId,
+    )
 
     const renderAssets =
         !account || assetsError || assetsLoading
@@ -109,9 +118,9 @@ export function FixedTokenList(props: FixedTokenListProps) {
     )
     //#endregion
 
-    if (erc20TokensDetailedLoading) return renderPlaceholder('Loading token lists...')
+    if (erc20TokensDetailedLoading) return renderPlaceholder(t('wallet_loading_list'))
     if (searchedTokenLoading) return renderPlaceholder(t('wallet_loading_token'))
-    if (assetsLoading) return renderPlaceholder('Loading token assets...')
+    if (assetsLoading) return renderPlaceholder(t('wallet_loading_assets'))
     if (!renderAssets.length) return renderPlaceholder(t('wallet_search_contract_no_result'))
 
     return (

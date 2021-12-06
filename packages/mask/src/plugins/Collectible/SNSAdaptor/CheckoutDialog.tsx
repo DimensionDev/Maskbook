@@ -11,7 +11,6 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useCustomSnackbar } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -24,6 +23,7 @@ import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
+import type { useAssetOrder } from '../hooks/useAssetOrder'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -55,18 +55,18 @@ const useStyles = makeStyles()((theme) => {
 
 export interface CheckoutDialogProps {
     asset?: ReturnType<typeof useAsset>
+    assetOrder?: ReturnType<typeof useAssetOrder>
     open: boolean
     onClose: () => void
 }
 
 export function CheckoutDialog(props: CheckoutDialogProps) {
-    const { asset, open, onClose } = props
+    const { asset, open, onClose, assetOrder } = props
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -76,23 +76,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const onCheckout = useCallback(async () => {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
-        if (!asset.value.order_) return
-        try {
-            await PluginCollectibleRPC.fulfillOrder({
-                order: asset.value.order_,
-                accountAddress: account,
-                recipientAddress: account,
-            })
-        } catch (error) {
-            if (error instanceof Error) {
-                showSnackbar(error.message, {
-                    variant: 'error',
-                    preventDuplicate: true,
-                })
-            }
-            throw error
-        }
-    }, [asset?.value, account, showSnackbar])
+        if (!assetOrder?.value) return
+        await PluginCollectibleRPC.fulfillOrder({
+            order: assetOrder.value,
+            accountAddress: account,
+            recipientAddress: account,
+        })
+    }, [asset?.value, account, assetOrder?.value])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -113,7 +103,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                             </Box>
                         )}
                         <Box sx={{ padding: 2 }}>
-                            <CheckoutOrder asset={asset} />
+                            <CheckoutOrder asset={asset} assetOrder={assetOrder} />
                             {isVerified ? null : (
                                 <>
                                     <FormControlLabel

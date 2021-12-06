@@ -1,5 +1,5 @@
 import { Identifier, ProfileIdentifier } from '../../../database/type'
-import { i18n } from '../../../utils/i18n-next'
+import { i18n } from '../../../../shared-ui/locales_legacy'
 
 type T = ProfileIdentifier | undefined
 export function wrapAuthorDifferentMessage(author: T, postBy: T, jsx: React.ReactNode) {
