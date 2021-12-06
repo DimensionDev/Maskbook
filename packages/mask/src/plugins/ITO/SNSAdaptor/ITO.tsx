@@ -179,6 +179,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     textInOneLine: {
         whiteSpace: 'nowrap',
     },
+    claimDate: {
+        marginTop: 16,
+        color: '#F4212E',
+    },
 }))
 
 //#region token item
@@ -681,9 +685,7 @@ export function ITO(props: ITO_Props) {
                                         disabled
                                         size="large"
                                         className={classNames(classes.actionButton, classes.textInOneLine)}>
-                                        {t('plugin_ito_wait_unlock_time', {
-                                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
-                                        })}
+                                        {t('plugin_ito_claim')}
                                     </ActionButton>
                                 )}
                             </Grid>
@@ -751,6 +753,13 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
+            {hasLockTime && !isUnlocked ? (
+                <Typography className={classes.claimDate}>
+                    {t('plugin_ito_wait_unlock_time', {
+                        unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
+                    })}
+                </Typography>
+            ) : null}
             <SwapGuide
                 status={claimDialogStatus}
                 total_remaining={total_remaining}
