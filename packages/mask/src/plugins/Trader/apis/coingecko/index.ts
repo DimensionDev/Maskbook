@@ -1,4 +1,3 @@
-import { uniq } from 'lodash-unified'
 import { COIN_GECKO_BASE_URL } from '../../constants'
 import { Flags } from '../../../../../shared'
 
@@ -114,9 +113,7 @@ export async function getCoinInfo(coinId: string) {
         `${COIN_GECKO_BASE_URL}/coins/${coinId}?developer_data=false&community_data=false&tickers=true`,
         { cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default' },
     )
-    const data = (await response.json()) as CoinInfo
-    data.links.blockchain_site = uniq(data.links.blockchain_site.map((url) => url.toLowerCase()))
-    return data
+    return response.json() as Promise<CoinInfo>
 }
 //#endregion
 
