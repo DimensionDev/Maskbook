@@ -78,7 +78,6 @@ export function Row({ event, chainId }: Props) {
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
-                    {/* <Avatar src="https://cdn.furucombo.app/assets/img/token/QUICK.png" className={classes.avatar} /> */}
                     <Typography className={classes.content} variant="body2">
                         {event.transactionTypeName}
                     </Typography>

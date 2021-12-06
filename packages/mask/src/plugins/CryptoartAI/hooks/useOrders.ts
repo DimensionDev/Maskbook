@@ -13,5 +13,5 @@ export function useOrders(token?: CryptoartAIToken, side = OrderSide.Buy) {
         const tradeResponse = await getOrders(token.tokenId, side, chainId)
 
         return tradeResponse
-    }, [toTokenIdentifier(token)])
+    }, [chainId, toTokenIdentifier(token)])
 }

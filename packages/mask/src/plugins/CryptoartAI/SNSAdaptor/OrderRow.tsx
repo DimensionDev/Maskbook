@@ -108,7 +108,6 @@ export function OrderRow({ event, chainId }: IRowProps) {
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
-                    {/* <Avatar src="https://cdn.furucombo.app/assets/img/token/QUICK.png" className={classes.avatar} /> */}
                     {t('plugin_cryptoartai_tx')}
                 </Link>
             </TableCell>

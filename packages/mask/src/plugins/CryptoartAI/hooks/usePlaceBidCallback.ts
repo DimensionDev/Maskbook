@@ -126,7 +126,7 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: number)
                 }
             })
         },
-        [account, chainId, artistAcceptingBidsV2_contract, cANFTMarket_contract],
+        [account, chainId, is24Auction, editionNumber, artistAcceptingBidsV2_contract, cANFTMarket_contract],
     )
 
     const resetCallback = useCallback(() => {

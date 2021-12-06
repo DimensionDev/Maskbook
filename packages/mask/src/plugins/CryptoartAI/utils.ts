@@ -44,7 +44,7 @@ export function getOrderUnitPrice(order: Order) {
     const price = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
     const quantity = formatBalance(order.quantity, new BigNumber(order.quantity).toString() !== '1' ? 8 : 0)
 
-    return new BigNumber(price).dividedBy(quantity).toFixed(4, 1).toString()
+    return new BigNumber(price).dividedBy(quantity).toFixed(4, 1)
 }
 
 export function getOrderUSDPrice(order: Order) {
@@ -52,7 +52,7 @@ export function getOrderUSDPrice(order: Order) {
     const price = formatBalance(order.paymentTokenContract.usdPrice, 0)
     const quantity = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
 
-    return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1).toString()
+    return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1)
 }
 
 export function getLastSalePrice(lastSale: AssetEvent | null) {

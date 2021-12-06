@@ -343,7 +343,9 @@
         "testweb",
         "metadate",
         "AICANFT",
-        "CANFT"
+        "CANFT",
+        "Kodav",
+        "koda"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
