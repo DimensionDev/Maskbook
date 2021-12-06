@@ -249,7 +249,7 @@ export function TraderView(props: TraderViewProps) {
                 dataProvider={dataProvider}
                 tradeProvider={tradeProvider}
                 showDataProviderIcon={tabIndex < 3}
-                showTradeProviderIcon={tabIndex === 3}
+                showTradeProviderIcon={false}
                 dataProviders={dataProviders}
                 tradeProviders={tradeProviders}
                 TrendingCardProps={{ classes: { root: classes.root } }}>

@@ -7,11 +7,13 @@
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
+    "@types/punycode": "^2.1.0",
     "@unstoppabledomains/resolution": "^5.0.1",
     "bignumber.js": "9.0.1",
     "ethereum-blockies": "^0.1.1",
     "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.21",
+    "punycode": "^2.1.1",
     "react-use": "^17.3.1",
     "unstated-next": "^1.1.0",
     "urlcat": "^2.0.4",
@@ -19,7 +21,8 @@
     "wallet.ts": "^1.0.1",
     "web3": "1.5.2",
     "web3-core-helpers": "1.5.2",
-    "web3-utils": "1.5.2"
+    "web3-utils": "1.5.2",
+    "fortmatic": "^2.2.1"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.0"

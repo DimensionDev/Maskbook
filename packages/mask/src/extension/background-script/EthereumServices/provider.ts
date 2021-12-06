@@ -1,11 +1,12 @@
 import { first } from 'lodash-unified'
+import { defer } from '@masknet/shared-base'
 import type { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import * as MaskWallet from './providers/MaskWallet'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import * as CustomNetwork from './providers/CustomNetwork'
 import * as Injected from './providers/Injected'
-import { defer } from '@masknet/shared-base'
+import * as Fortmatic from './providers/Fortmatic'
 
 //#region connect WalletConnect
 // step 1:
@@ -64,6 +65,20 @@ export async function connectMetaMask() {
         chainId,
     }
 }
+
+//#region fortmatic
+export async function connectFortmatic(expectedChainId: ChainId) {
+    const { accounts, chainId } = await Fortmatic.requestAccounts(expectedChainId)
+    return {
+        account: first(accounts),
+        chainId,
+    }
+}
+
+export async function disconnectFortmatic(expectedChainId: ChainId) {
+    await Fortmatic.dismissAccounts(expectedChainId)
+}
+//#endregion
 
 export async function connectCustomNetwork() {
     const { accounts, chainId } = await CustomNetwork.requestAccounts()

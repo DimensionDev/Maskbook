@@ -1,5 +1,4 @@
 import { createReactRootShadowedPartial, setupPortalShadowRoot, CSSVariableInjector } from '@masknet/theme'
-import { untilDomLoaded } from '../dom'
 import { Flags } from '../../../shared'
 import { MaskUIRoot } from '../../UIRoot'
 import { useClassicMaskSNSTheme } from '../theme'
@@ -18,7 +17,7 @@ const captureEvents: (keyof HTMLElementEventMap)[] = [
     'dragstart',
     'change',
 ]
-untilDomLoaded().then(() => {
+export const setupShadowRootPortal = () => {
     const shadow = setupPortalShadowRoot({ mode: Flags.using_ShadowDOM_attach_mode }, captureEvents)
     createRoot(shadow.appendChild(document.createElement('head'))).render(
         <main>
@@ -26,7 +25,7 @@ untilDomLoaded().then(() => {
             <CSSVariableInjector useTheme={useClassicMaskSNSTheme} />
         </main>,
     )
-})
+}
 
 // https://github.com/DimensionDev/Maskbook/issues/3265 with fast refresh or import order?
 const createReactRootShadowed_raw = createReactRootShadowedPartial({

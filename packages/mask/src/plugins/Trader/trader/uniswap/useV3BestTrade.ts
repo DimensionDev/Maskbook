@@ -8,6 +8,8 @@ import { useQuoterContract } from '../../contracts/uniswap/useQuoterContract'
 import { useAllV3Routes } from './useAllV3Routes'
 import { useSingleContractMultipleData } from '@masknet/web3-shared-evm'
 import { DEFAULT_MULTICALL_GAS_LIMIT } from '../../constants'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useTargetBlockNumber } from '../useTargetBlockNumber'
 
 export enum V3TradeState {
     LOADING = 0,
@@ -26,7 +28,8 @@ export function useV3BestTradeExactIn(
     amountIn?: CurrencyAmount<Currency>,
     currencyOut?: Currency,
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_INPUT> | null> {
-    const quoterContract = useQuoterContract()
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const quoterContract = useQuoterContract(targetChainId)
     const { routes, loading: routesLoading } = useAllV3Routes(amountIn?.currency, currencyOut)
     const quoteExactInInputs = useMemo(() => {
         return routes.map(
@@ -38,11 +41,15 @@ export function useV3BestTradeExactIn(
         )
     }, [amountIn, routes])
 
+    const { value: blockNumber } = useTargetBlockNumber(targetChainId)
+
     const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactInput'>({ length: quoteExactInInputs.length }).fill('quoteExactInput'),
         quoteExactInInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
+        targetChainId,
+        blockNumber,
     )
     const {
         loading: quotesLoading,
@@ -131,7 +138,8 @@ export function useV3BestTradeExactOut(
     amountOut?: CurrencyAmount<Currency>,
 ): AsyncStateRetry<Trade<Currency, Currency, TradeType.EXACT_OUTPUT> | null> {
     const { routes, loading: routesLoading } = useAllV3Routes(currencyIn, amountOut?.currency)
-    const quoterContract = useQuoterContract()
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const quoterContract = useQuoterContract(targetChainId)
     const quoteExactOutInputs = useMemo(() => {
         return routes.map(
             (route) =>
@@ -142,11 +150,15 @@ export function useV3BestTradeExactOut(
         )
     }, [amountOut, routes])
 
+    const { value: blockNumber } = useTargetBlockNumber(targetChainId)
+
     const [quotesResults, quotesCalls, , quotesCallback] = useSingleContractMultipleData(
         quoterContract,
         Array.from<'quoteExactOutput'>({ length: quoteExactOutInputs.length }).fill('quoteExactOutput'),
         quoteExactOutInputs,
         DEFAULT_MULTICALL_GAS_LIMIT,
+        targetChainId,
+        blockNumber,
     )
     const {
         loading: quotesLoading,

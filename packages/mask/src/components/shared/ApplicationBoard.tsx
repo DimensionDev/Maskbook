@@ -10,10 +10,11 @@ import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
-import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
+import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
+import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -36,7 +37,6 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 36,
         margin: '0 auto',
         borderRadius: 4,
-        backgroundColor: theme.palette.background.default,
         '& .Mui-selected': {
             color: theme.palette.primary.contrastText,
             backgroundColor: theme.palette.primary.main,
@@ -104,6 +104,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const currentChainId = useChainId()
     const account = useAccount()
     const selectedWallet = useWallet()
+    const currentPluginId = usePluginIDContext()
+    const isFlow = currentPluginId === NetworkPluginID.PLUGIN_FLOW
+
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
         (id?: string) =>
@@ -127,7 +130,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     //#endregion
 
     //#region Swap
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+    const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
     //#endregion
 
     //#region Fiat on/off ramp
@@ -179,68 +182,93 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     }
 
     const firstLevelEntries: MaskAppEntry[] = [
-        createEntry('Lucky Drop', new URL('./assets/lucky_drop.png', import.meta.url).toString(), () =>
-            openEncryptedMessage(RedPacketPluginID),
+        createEntry(
+            'Lucky Drop',
+            new URL('./assets/lucky_drop.png', import.meta.url).toString(),
+            () => openEncryptedMessage(RedPacketPluginID),
+            undefined,
+            isFlow,
         ),
         createEntry(
-            'File service',
+            'File Service',
             new URL('./assets/files.png', import.meta.url).toString(),
             () => openEncryptedMessage(FileServicePluginID),
             undefined,
             false,
             false,
         ),
-        createEntry('ITO', new URL('./assets/token.png', import.meta.url).toString(), () =>
-            openEncryptedMessage(ITO_PluginID),
+        createEntry(
+            'ITO',
+            new URL('./assets/token.png', import.meta.url).toString(),
+            () => openEncryptedMessage(ITO_PluginID),
+            undefined,
+            isFlow,
         ),
-        createEntry('Claim', new URL('./assets/gift.png', import.meta.url).toString(), onClaimAllDialogOpen),
+        createEntry(
+            'Claim',
+            new URL('./assets/gift.png', import.meta.url).toString(),
+            onClaimAllDialogOpen,
+            undefined,
+            isFlow,
+        ),
         createEntry(
             'Mask Bridge',
             new URL('./assets/bridge.png', import.meta.url).toString(),
             () => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
             undefined,
-            false,
+            isFlow,
             false,
         ),
         createEntry(
-            'Mask Box',
+            'MaskBox',
             new URL('./assets/mask_box.png', import.meta.url).toString(),
             () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
             undefined,
-            false,
+            isFlow,
             false,
         ),
-        createEntry('Swap', new URL('./assets/swap.png', import.meta.url).toString(), openSwapDialog),
         createEntry(
-            'Fiat on-ramp',
+            'Swap',
+            new URL('./assets/swap.png', import.meta.url).toString(),
+            onSwapDialogOpen,
+            undefined,
+            isFlow,
+        ),
+        createEntry(
+            'Fiat On-Ramp',
             new URL('./assets/fiat_ramp.png', import.meta.url).toString(),
             () => setBuyDialog({ open: true, address: account }),
             undefined,
             false,
             false,
         ),
-        createEntry('NFTs', new URL('./assets/nft.png', import.meta.url).toString(), () =>
-            openSecondEntryDir(
-                'NFTs',
-                [
-                    createEntry(
-                        'MaskBox',
-                        new URL('./assets/mask_box.png', import.meta.url).toString(),
-                        () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
-                        undefined,
-                        false,
-                        false,
-                    ),
-                    createEntry(
-                        'Valuables',
-                        new URL('./assets/valuables.png', import.meta.url).toString(),
-                        () => {},
-                        undefined,
-                        true,
-                    ),
-                ],
-                undefined,
-            ),
+        createEntry(
+            'NFTs',
+            new URL('./assets/nft.png', import.meta.url).toString(),
+            () =>
+                openSecondEntryDir(
+                    'NFTs',
+                    [
+                        createEntry(
+                            'MaskBox',
+                            new URL('./assets/mask_box.png', import.meta.url).toString(),
+                            () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
+                            undefined,
+                            false,
+                            false,
+                        ),
+                        createEntry(
+                            'Valuables',
+                            new URL('./assets/valuables.png', import.meta.url).toString(),
+                            () => {},
+                            undefined,
+                            true,
+                        ),
+                    ],
+                    undefined,
+                ),
+            undefined,
+            isFlow,
         ),
         createEntry(
             'Investment',
@@ -314,6 +342,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             {isClaimAllDialogOpen ? (
                 <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
             ) : null}
+            {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
             {isSecondLevelEntryDialogOpen ? (
                 <EntrySecondLevelDialog
                     title={secondLevelEntryDialogTitle}

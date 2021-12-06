@@ -1,6 +1,6 @@
 import classNames from 'classnames'
 import { Chip, ChipProps, CircularProgress } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ErrorIcon from '@mui/icons-material/Error'
 import { noop } from 'lodash-unified'
@@ -28,10 +28,11 @@ const useStyles = makeStyles()((theme) => {
             width: 16,
             height: 16,
         },
+        noToken: {},
     }
 })
 
-export interface SelectTokenChipProps {
+export interface SelectTokenChipProps extends withClasses<'chip' | 'tokenIcon' | 'noToken'> {
     token?: FungibleTokenDetailed | null
     error?: Error
     loading?: boolean
@@ -43,7 +44,7 @@ export interface SelectTokenChipProps {
 export function SelectTokenChip(props: SelectTokenChipProps) {
     const t = useSharedI18N()
     const { token, error, loading = false, readonly = false, ChipProps } = props
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
     if (loading)
         return (
             <Chip
@@ -56,7 +57,13 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         )
     if (!token)
         return (
-            <Chip className={classes.chip} label={t.select_token()} size="small" clickable={!readonly} {...ChipProps} />
+            <Chip
+                className={classNames(classes.chip, classes.noToken)}
+                label={t.select_token()}
+                size="small"
+                clickable={!readonly}
+                {...ChipProps}
+            />
         )
 
     if (token && error)

@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { pluginDescription, pluginIcon, pluginName, pluginId } from './constants'
 
@@ -13,7 +13,9 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
         web3: {
-            supportedOperationalChains: [ChainId.Mainnet, ChainId.xDai, ChainId.Matic, ChainId.Rinkeby],
+            [NetworkPluginID.PLUGIN_EVM]: {
+                supportedChainIds: [ChainId.Mainnet, ChainId.xDai, ChainId.Matic, ChainId.Rinkeby],
+            },
         },
     },
 }
