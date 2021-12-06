@@ -15,6 +15,10 @@ import type { useAsset } from '../hooks/useAsset'
 import { formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
 import { resolvePaymentTokensOnCryptoartAI } from '../pipes'
 import { usePlaceBidCallback } from '../hooks/usePlaceBidCallback'
+import { resolveAssetLinkOnCryptoartAI } from '../pipes'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -108,6 +112,26 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         )
     }, [placeBidCallback, amount])
 
+    const assetLink = resolveAssetLinkOnCryptoartAI(asset?.value?.creator?.username, asset?.value?.token_id, chainId)
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            token
+                ? t(
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? 'plugin_cryptoartai_offer_share'
+                          : 'plugin_cryptoartai_offer_share_no_official_account',
+                      {
+                          amount: amount,
+                          symbol: token?.value?.symbol,
+                          title: asset?.value?.title,
+                          assetLink: assetLink,
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                      },
+                  )
+                : '',
+        )
+        .toString()
+
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
@@ -128,6 +152,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (placeBidState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
+            shareLink,
             state: placeBidState,
             summary:
                 (asset?.value?.is24Auction

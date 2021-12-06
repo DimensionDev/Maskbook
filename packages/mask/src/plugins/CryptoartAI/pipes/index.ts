@@ -19,7 +19,7 @@ export function resolveWebLinkOnCryptoartAI(chainId?: ChainId) {
 }
 
 export function resolveAssetLinkOnCryptoartAI(creator: string, token_id: string, chainId?: ChainId) {
-    return urlcat(resolveWebLinkOnCryptoartAI(chainId) + pathnameRegexMatcher, `${creator}/${token_id}`)
+    return urlcat(resolveWebLinkOnCryptoartAI(chainId) + pathnameRegexMatcher, encodeURI(`${creator}/${token_id}`))
 }
 
 export function resolvePaymentTokensOnCryptoartAI(chainId?: ChainId) {

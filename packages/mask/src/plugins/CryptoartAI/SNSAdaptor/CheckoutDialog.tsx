@@ -14,6 +14,10 @@ import type { useAsset } from '../hooks/useAsset'
 import { formatBalance } from '@masknet/web3-shared-evm'
 import { resolvePaymentTokensOnCryptoartAI } from '../pipes'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback'
+import { resolveAssetLinkOnCryptoartAI } from '../pipes'
+import { activatedSocialNetworkUI } from '../../../social-network'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -102,6 +106,26 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         purchaseCallback()
     }, [purchaseCallback])
 
+    const assetLink = resolveAssetLinkOnCryptoartAI(asset?.value?.creator?.username, asset?.value?.token_id, chainId)
+    const shareLink = activatedSocialNetworkUI.utils
+        .getShareLinkURL?.(
+            token
+                ? t(
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? 'plugin_cryptoartai_share'
+                          : 'plugin_cryptoartai_share_no_official_account',
+                      {
+                          amount: asset?.value?.priceInEth,
+                          symbol: token?.value?.symbol,
+                          title: asset?.value?.title,
+                          assetLink: assetLink,
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                      },
+                  )
+                : '',
+        )
+        .toString()
+
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
@@ -119,6 +143,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         if (purchaseState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialog({
             open: true,
+            shareLink,
             state: purchaseState,
             summary: t('plugin_cryptoartai_buy') + ' ' + asset?.value?.title,
         })
