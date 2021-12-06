@@ -58,7 +58,7 @@ importers:
       ts-jest: ^27.0.7
       ts-node: ^10.4.0
       ts-results: 3.3.0
-      typescript: 4.5.2
+      typescript: 4.6.0-dev.20211202
       web3-core: 1.5.2
       web3-core-method: 1.5.2
     dependencies:
@@ -92,7 +92,7 @@ importers:
       '@commitlint/config-conventional': 15.0.0
       '@dimensiondev/patch-package': 6.5.0
       '@jest/globals': 27.3.1
-      '@magic-works/i18n-codegen': 0.0.6_typescript@4.5.2
+      '@magic-works/i18n-codegen': 0.0.6_typescript@4.6.0-dev.20211202
       '@masknet/cli': link:packages/scripts
       '@masknet/serializer': link:packages/test-serializer
       '@nice-labs/git-rev': 3.5.0
@@ -113,9 +113,9 @@ importers:
       lint-staged: 12.1.2
       only-allow: 1.0.0
       prettier: 2.5.0
-      ts-jest: 27.0.7_jest@27.3.1+typescript@4.5.2
-      ts-node: 10.4.0_typescript@4.5.2
-      typescript: 4.5.2
+      ts-jest: 27.0.7_b2c58650c6f25cbfcbffe6700ea42d1a
+      ts-node: 10.4.0_typescript@4.6.0-dev.20211202
+      typescript: 4.6.0-dev.20211202
 
   packages/backup-format:
     specifiers:
@@ -5971,7 +5971,7 @@ packages:
       '@json-rpc-tools/types': 1.7.6
     dev: false
 
-  /@magic-works/i18n-codegen/0.0.6_typescript@4.5.2:
+  /@magic-works/i18n-codegen/0.0.6_typescript@4.6.0-dev.20211202:
     resolution: {integrity: sha512-vM8DzT7zcmCDk2KBoeyUgGzkW/4MaKIdDTTh67cJT0/VVXu7fQd2tjRglJwOunowTCwPxwIHWjoCD/DIN4iPXQ==}
     hasBin: true
     peerDependencies:
@@ -5980,7 +5980,7 @@ packages:
       chokidar: 3.5.2
       i18next-translation-parser: 1.0.1
       source-map: 0.7.3
-      typescript: 4.5.2
+      typescript: 4.6.0-dev.20211202
       yargs: 16.2.0
     dev: true
 
@@ -18389,7 +18389,7 @@ packages:
       jest-validate: 27.3.1
       micromatch: 4.0.4
       pretty-format: 27.3.1
-      ts-node: 10.4.0_typescript@4.5.2
+      ts-node: 10.4.0_typescript@4.6.0-dev.20211202
     transitivePeerDependencies:
       - bufferutil
       - canvas
@@ -24837,7 +24837,7 @@ packages:
     resolution: {integrity: sha512-Y/arvbn+rrz3JCKl9C4kVNfTfSm2/mEp5FSz5EsZSANGPSlQrpRI5M4PKF+mJnE52jOO90PnPSc3Ur3bTQw0gA==}
     dev: true
 
-  /ts-jest/27.0.7_jest@27.3.1+typescript@4.5.2:
+  /ts-jest/27.0.7_b2c58650c6f25cbfcbffe6700ea42d1a:
     resolution: {integrity: sha512-O41shibMqzdafpuP+CkrOL7ykbmLh+FqQrXEmV9CydQ5JBk0Sj0uAEF5TNNe94fZWKm3yYvWa/IbyV4Yg1zK2Q==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
     hasBin: true
@@ -24863,7 +24863,7 @@ packages:
       lodash.memoize: 4.1.2
       make-error: 1.3.6
       semver: 7.3.5
-      typescript: 4.5.2
+      typescript: 4.6.0-dev.20211202
       yargs-parser: 20.2.9
     dev: true
 
@@ -24893,6 +24893,35 @@ packages:
       diff: 4.0.2
       make-error: 1.3.6
       typescript: 4.5.2
+      yn: 3.1.1
+    dev: true
+
+  /ts-node/10.4.0_typescript@4.6.0-dev.20211202:
+    resolution: {integrity: sha512-g0FlPvvCXSIO1JDF6S232P5jPYqBkRL9qly81ZgAOSU7rwI0stphCgd2kLiCrU9DjQCrJMWEqcNSjQL02s6d8A==}
+    hasBin: true
+    peerDependencies:
+      '@swc/core': '>=1.2.50'
+      '@swc/wasm': '>=1.2.50'
+      '@types/node': '*'
+      typescript: '>=2.7'
+    peerDependenciesMeta:
+      '@swc/core':
+        optional: true
+      '@swc/wasm':
+        optional: true
+    dependencies:
+      '@cspotcode/source-map-support': 0.7.0
+      '@tsconfig/node10': 1.0.8
+      '@tsconfig/node12': 1.0.9
+      '@tsconfig/node14': 1.0.1
+      '@tsconfig/node16': 1.0.2
+      acorn: 8.5.0
+      acorn-walk: 8.2.0
+      arg: 4.1.3
+      create-require: 1.1.1
+      diff: 4.0.2
+      make-error: 1.3.6
+      typescript: 4.6.0-dev.20211202
       yn: 3.1.1
     dev: true
 
@@ -25190,6 +25219,12 @@ packages:
 
   /typescript/4.5.2:
     resolution: {integrity: sha512-5BlMof9H1yGt0P8/WF+wPNw6GfctgGjXp5hkblpyT+8rkASSmkUKMXrxR0Xg8ThVCi/JnHQiKXeBaEwCeQwMFw==}
+    engines: {node: '>=4.2.0'}
+    hasBin: true
+    dev: true
+
+  /typescript/4.6.0-dev.20211202:
+    resolution: {integrity: sha512-GW1OgQGLFnmcm8cyMTFJfudA78Ip94Oktfpj9ZoK1KDKTtGR5pAiZR4wkCYNiDnpWmtYgL7vgRL541KjWBuCiQ==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
