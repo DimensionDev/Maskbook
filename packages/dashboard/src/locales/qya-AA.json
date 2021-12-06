@@ -83,6 +83,8 @@
     "wallets_transfer_error_contract": "crwdns9331:0crwdne9331:0",
     "wallets_transfer_error_nft": "crwdns9333:0crwdne9333:0",
     "wallets_transfer_error_invalid_address": "crwdns8015:0crwdne8015:0",
+    "wallet_transfer_error_no_address_has_been_set_name": "crwdns10429:0crwdne10429:0",
+    "wallet_transfer_error_no_ens_support": "crwdns10431:0crwdne10431:0",
     "wallets_transfer_error_insufficient_balance": "crwdns8017:0{{symbol}}crwdne8017:0",
     "wallets_transfer_send": "crwdns8019:0crwdne8019:0",
     "wallets_transfer_memo_placeholder": "crwdns8021:0crwdne8021:0",
