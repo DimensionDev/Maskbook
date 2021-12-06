@@ -92,9 +92,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         let atLeastBid = 0.01
         if (asset?.value?.latestBidVo?.priceInEth) {
             atLeastBid =
-                asset?.value?.latestBidVo.priceInEth >= 1
-                    ? new BigNumber(asset?.value?.latestBidVo.priceInEth).plus(0.1).toNumber()
-                    : new BigNumber(asset?.value?.latestBidVo.priceInEth).plus(0.01).toNumber()
+                const price = new BigNumber(asset?.value?.latestBidVo.priceInEth)
+                atLeastBid  = price.plus(price.gte(1) ? '0.1' : '0.01').toNumber()
         }
         setAtLeastBidValue(atLeastBid)
     }, [asset?.value?.latestBidVo])
