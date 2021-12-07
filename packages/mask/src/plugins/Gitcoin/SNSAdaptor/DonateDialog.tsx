@@ -136,7 +136,6 @@ export function DonateDialog(props: DonateDialogProps) {
                                 } (mask.io) to donate Gitcoin grants.`
                               : ''
                       }`,
-
                       '#mask_io',
                       postLink,
                   ].join('\n')
