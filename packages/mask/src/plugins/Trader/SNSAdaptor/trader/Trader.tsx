@@ -10,6 +10,7 @@ import {
     FungibleTokenDetailed,
     GasOptionConfig,
     getNetworkTypeFromChainId,
+    isGreaterThan,
     isSameAddress,
     TransactionStateType,
     useChainId,
@@ -24,7 +25,7 @@ import { TokenPanelType, TradeInfo } from '../../types'
 import { delay, useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { UST } from '../../constants'
+import { MINIMUM_AMOUNT, UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
@@ -392,7 +393,12 @@ export function Trader(props: TraderProps) {
         if (outputToken && outputTokenPrice) {
             return allTradeComputed
                 .map((trade) => {
-                    if (gasPrice && trade.value && trade.gas.value) {
+                    if (
+                        gasPrice &&
+                        trade.value &&
+                        isGreaterThan(trade.value.outputAmount, MINIMUM_AMOUNT) &&
+                        trade.gas.value
+                    ) {
                         const gasFee = new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
 
                         const gasFeeUSD = new BigNumber(formatBalance(gasFee ?? 0, outputToken.decimals)).times(
