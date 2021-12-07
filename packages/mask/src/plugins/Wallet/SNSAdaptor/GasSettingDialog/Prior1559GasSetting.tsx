@@ -69,7 +69,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const schema = useMemo(() => {
             return zod.object({
                 gasLimit: zod
-                    .number()
+                    .string()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit),
@@ -89,7 +89,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             mode: 'onChange',
             resolver: zodResolver(schema),
             defaultValues: {
-                gasLimit: gasLimit ?? 0,
+                gasLimit: new BigNumber(gasLimit ?? 0).toString(),
                 gasPrice: '',
             },
             context: {
@@ -100,7 +100,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const [inputGasLimit] = watch(['gasLimit'])
 
         useUpdateEffect(() => {
-            if (gasLimit) setValue('gasLimit', gasLimit)
+            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
         }, [gasLimit, setValue])
 
         useEffect(() => {

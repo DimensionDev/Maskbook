@@ -3,10 +3,8 @@ import {
     isNative,
     useAccount,
     useBlockNumber,
-    useChainId,
     useTokenConstants,
     useTraderConstants,
-    pow10,
     ChainId,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
@@ -14,6 +12,7 @@ import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import BigNumber from 'bignumber.js'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -22,15 +21,15 @@ export function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
-    const chainId = useChainId() as ChainId.Mainnet | ChainId.Ropsten
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount()
 
-    const inputAmount = new BigNumber(inputAmountWei).dividedBy(pow10(inputToken?.decimals ?? 0)).toFixed()
-    const outputAmount = new BigNumber(outputAmountWei).dividedBy(pow10(outputToken?.decimals ?? 0)).toFixed()
+    const inputAmount = new BigNumber(inputAmountWei).shiftedBy(-(inputToken?.decimals ?? 0)).toFixed()
+    const outputAmount = new BigNumber(outputAmountWei).shiftedBy(-(outputToken?.decimals ?? 0)).toFixed()
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     return useAsyncRetry(async () => {
@@ -55,7 +54,7 @@ export function useTrade(
             toAmount: isExactIn ? void 0 : outputAmount,
             slippage,
             user,
-            chainId,
+            chainId: chainId as ChainId.Mainnet | ChainId.Ropsten,
             minimumReceived: '',
         })
     }, [

@@ -11,9 +11,10 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
-        target: 'stable',
+        target: 'beta',
     },
     i18n: languages,
+    declareApplicationCategories: [],
     declareWeb3Networks: PLUGIN_NETWORKS,
     declareWeb3Providers: PLUGIN_PROVIDERS,
 }

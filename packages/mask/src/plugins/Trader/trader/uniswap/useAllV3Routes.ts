@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 import type { Currency } from '@uniswap/sdk-core'
 import { Pool, Route } from '@uniswap/v3-sdk'
-import { useChainId } from '@masknet/web3-shared-evm'
 import { useV3SwapPools } from './useV3SwapPools'
 import { useSingleHopOnly } from './useSingleHopOnly'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 function computeAllRoutes(
     currencyIn: Currency,
@@ -51,7 +51,7 @@ export function useAllV3Routes(
     currencyIn?: Currency,
     currencyOut?: Currency,
 ): { loading: boolean; routes: Route<Currency, Currency>[] } {
-    const chainId = useChainId()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const { pools, loading: poolsLoading } = useV3SwapPools(currencyIn, currencyOut)
     const singleHopOnly = useSingleHopOnly()
 

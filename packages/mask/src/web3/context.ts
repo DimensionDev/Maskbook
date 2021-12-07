@@ -7,7 +7,7 @@ import {
     EthereumTokenType,
     ProviderType,
     Web3ProviderType,
-    resolveProviderIdentityKey,
+    resolveProviderInjectedKey,
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
@@ -24,6 +24,7 @@ import {
     currentMaskWalletNetworkSettings,
     currentMaskWalletAccountSettings,
     currentMaskWalletBalanceSettings,
+    currentBalancesSettings,
 } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
@@ -68,12 +69,13 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const providerType = currentProviderSettings.value
 
                 if (location.href.includes('popups.html')) return account
+                if (providerType === ProviderType.Fortmatic) return account
                 if (!isInjectedProvider(providerType)) return account
 
                 try {
-                    const propertyKey = resolveProviderIdentityKey(providerType)
-                    if (!propertyKey) return ''
-                    const propertyValue = await bridgedEthereumProvider.getProperty(propertyKey)
+                    const injectedKey = resolveProviderInjectedKey(providerType)
+                    if (!injectedKey) return ''
+                    const propertyValue = await bridgedEthereumProvider.getProperty(injectedKey)
                     if (propertyValue === true) return account
                     return ''
                 } catch (error) {
@@ -89,6 +91,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             },
         ),
         balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
+        balances: createSubscriptionFromSettings(currentBalancesSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         walletPrimary: createSubscriptionFromAsync(
@@ -117,7 +120,6 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             WalletMessages.events.erc1155TokensUpdated.on,
         ),
         portfolioProvider: createSubscriptionFromSettings(currentFungibleAssetDataProviderSettings),
-
         addToken: WalletRPC.addToken,
         removeToken: WalletRPC.removeToken,
         trustToken: WalletRPC.trustToken,

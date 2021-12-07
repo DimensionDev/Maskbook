@@ -20,9 +20,10 @@ import {
     useChainIdValid,
     useChainDetailed,
     useWeb3State,
+    useReverseAddress,
 } from '@masknet/plugin-infra'
-import { useCallback } from 'react'
-import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
+import { useCallback, useMemo } from 'react'
+import { useRemoteControlledDialog, WalletIcon, ProfileIdentifier, DashboardRoutes } from '@masknet/shared'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'
@@ -30,6 +31,13 @@ import GuideStep from '../GuideStep'
 import { MaskFilledIcon } from '../../resources/MaskIcon'
 import { makeStyles } from '@masknet/theme'
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord'
+import { useMyPersonas } from '../DataSource/useMyPersonas'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { activatedSocialNetworkUI } from '../../social-network'
+import { Services } from '../../extension/service'
+import { currentSetupGuideStatus } from '../../settings/settings'
+import { SetupGuideStep } from './SetupGuide'
+import stringify from 'json-stable-stringify'
 
 const useStyles = makeStyles()((theme) => ({
     font: {
@@ -94,11 +102,43 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
     const networkDescriptor = useNetworkDescriptor()
     const providerDescriptor = useProviderDescriptor()
 
+    const personas = useMyPersonas()
+    const lastRecognized = useLastRecognizedIdentity()
+
+    const personaConnected = useMemo(() => {
+        const id = new ProfileIdentifier(activatedSocialNetworkUI.networkIdentifier, lastRecognized.identifier.userId)
+        let connected = false
+        personas.forEach((p) => {
+            if (p.linkedProfiles.get(id)) {
+                connected = true
+            }
+        })
+        return connected
+    }, [personas, lastRecognized, activatedSocialNetworkUI])
+
+    const title = useMemo(() => {
+        return !personas.length ? t('create_persona') : !personaConnected ? t('connect_persona') : walletTitle
+    }, [personas, personaConnected, walletTitle, t])
+
+    const onClick = async () => {
+        if (!personas.length) {
+            Services.Welcome.openOptionsPage(DashboardRoutes.Setup)
+        } else if (!personaConnected) {
+            const currentPersona = await Services.Settings.getCurrentPersonaIdentifier()
+            currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier].value = stringify({
+                status: SetupGuideStep.FindUsername,
+                persona: currentPersona?.toText(),
+            })
+        } else {
+            openWallet()
+        }
+    }
+
     return (
         <>
             <GuideStep step={1} total={2} tip={t('user_guide_tip_1')}>
                 <Container>
-                    <ListItemButton onClick={openWallet}>
+                    <ListItemButton onClick={onClick}>
                         <ListItemIcon>
                             {isWalletValid ? (
                                 <WalletIcon
@@ -120,7 +160,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
                                             justifyContent: 'space-between',
                                             alignItems: 'center',
                                         }}>
-                                        <Typography className={classes.font}>{walletTitle}</Typography>
+                                        <Typography className={classes.font}>{title}</Typography>
                                         {shouldDisplayChainIndicator ? (
                                             <FiberManualRecordIcon
                                                 className={classes.chainIcon}
@@ -161,10 +201,13 @@ function useToolbox() {
 
     const isWalletValid = !!account && selectedWallet && chainIdValid
 
+    const { value: domain } = useReverseAddress(account)
+
     function renderButtonText() {
-        if (!account) return t('plugin_wallet_on_connect')
+        if (!account) return t('mask_network')
         if (!chainIdValid) return t('plugin_wallet_wrong_network')
-        if (pendingTransactions.length <= 0) return Utils?.formatAddress?.(account, 4) ?? account
+        if (pendingTransactions.length <= 0)
+            return Utils?.formatDomainName?.(domain) || Utils?.formatAddress?.(account, 4) || account
         return (
             <>
                 <span>

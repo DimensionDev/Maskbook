@@ -21,6 +21,7 @@ export const resolveProviderName = createLookupTableResolver<ProviderType, strin
         [ProviderType.Coin98]: 'Coin98',
         [ProviderType.WalletLink]: 'Coinbase',
         [ProviderType.MathWallet]: 'MathWallet',
+        [ProviderType.Fortmatic]: 'Fortmatic',
     },
     'Unknown Network',
 )
@@ -33,12 +34,13 @@ export const resolveProviderDownloadLink = createLookupTableResolver<ProviderTyp
         [ProviderType.Coin98]: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
         [ProviderType.WalletLink]: 'https://wallet.coinbase.com/',
         [ProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
+        [ProviderType.Fortmatic]: '',
         [ProviderType.CustomNetwork]: '',
     },
     '',
 )
 
-export const resolveProviderIdentityKey = createLookupTableResolver<
+export const resolveProviderInjectedKey = createLookupTableResolver<
     ProviderType,
     'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
 >(
@@ -49,6 +51,7 @@ export const resolveProviderIdentityKey = createLookupTableResolver<
         [ProviderType.MathWallet]: 'isMathWallet',
         [ProviderType.Coin98]: 'isCoin98',
         [ProviderType.WalletLink]: 'isWalletLink',
+        [ProviderType.Fortmatic]: '',
         [ProviderType.CustomNetwork]: '',
     },
     '',
@@ -128,6 +131,11 @@ export function resolveBlockLinkOnExplorer(chainId: ChainId, block: string): str
 
 export function resolveIPFSLink(ipfs: string): string {
     return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
+}
+
+export function resolveDomainLink(domain?: string) {
+    if (!domain) return ''
+    return urlcat('https://app.ens.domains/name/:domain/details', { domain })
 }
 
 export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFungibleAssetProvider) {

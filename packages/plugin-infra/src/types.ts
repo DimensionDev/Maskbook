@@ -106,6 +106,8 @@ export namespace Plugin.Shared {
         declareWeb3Networks?: Web3Plugin.NetworkDescriptor[]
         /** Introduce wallet providers information. */
         declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
+        /** Introduce application category information. */
+        declareApplicationCategories?: Web3Plugin.ApplicationCategoryDescriptor[]
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -148,6 +150,7 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
+        /** The Web3 Network this plugin supports */
         web3?: Web3Plugin.EnableRequirement
     }
     export interface ManagementProperty {
@@ -198,6 +201,8 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
         ToolbarEntry?: ToolbarEntry
+        /** This UI will be rendered as an entry in the wallet status dialog */
+        ApplicationEntry?: ApplicationEntry
     }
     //#region Composition entry
     /**
@@ -274,6 +279,29 @@ export namespace Plugin.SNSAdaptor {
         onClick: 'openCompositionEntry'
     }
     //#endregion
+
+    export interface ApplicationEntry {
+        /**
+         * The icon image URL
+         */
+        icon: URL
+        /**
+         * The name of the application
+         */
+        label: I18NStringField | string
+        /**
+         * Also an entrance in a sub-folder
+         */
+        categoryID?: string
+        /**
+         * Used to order the applications on the board
+         */
+        priority: number
+        /**
+         * What to do if the application icon is clicked.
+         */
+        onClick(): void
+    }
 }
 
 /** This part runs in the dashboard */
