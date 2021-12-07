@@ -451,7 +451,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 fullWidth: true,
                                 classes: { root: classes.button, disabled: classes.disabledButton },
                                 color: 'primary',
-                                style: { padding: '12px 0', marginTop: 0 },
+                                style: { padding: '13px 0', marginTop: 0 },
                             }}>
                             <EthereumWalletConnectedBoundary
                                 ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
