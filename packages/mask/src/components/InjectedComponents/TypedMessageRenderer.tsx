@@ -22,7 +22,7 @@ import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { PayloadReplacer } from './PayloadReplacer'
 import { useI18N } from '../../utils'
 
-interface MetadataRendererProps {
+export interface MetadataRendererProps {
     metadata: TypedMessage['meta']
     message: TypedMessage
 }

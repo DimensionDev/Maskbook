@@ -14,6 +14,7 @@ import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 
 const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
 
@@ -116,6 +117,7 @@ export function PostInspector(props: PostInspectorProps) {
                 ) : null}
                 {props.slotPosition !== 'after' && slot}
                 {x}
+                <PossiblePluginSuggestionPostInspector />
                 <PluginHooksRenderer />
                 {debugInfo}
                 {props.slotPosition !== 'before' && slot}

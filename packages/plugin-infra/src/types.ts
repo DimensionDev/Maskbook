@@ -49,7 +49,8 @@ export declare namespace Plugin {
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
         /** Load the General UI of the plugin. */
-        GeneralUI?: Loader<GeneralUI.DefinitionDeferred>
+        // TODO: not supported yet.
+        // GeneralUI?: Loader<GeneralUI.DefinitionDeferred>
     }
 }
 /**

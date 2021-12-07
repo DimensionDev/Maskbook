@@ -20,7 +20,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
-import { PluginMessages } from '../../API'
+import { Messages, PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { Services } from '../../API'
 import { PLUGIN_IDS, TUTORIAL_URLS_EN } from './constants'
@@ -70,6 +70,15 @@ export default function Plugins() {
         [PLUGIN_IDS.GOOD_GHOSTING]: true,
         [PLUGIN_IDS.POOL_TOGETHER]: true,
     })
+
+    useEffect(
+        () => Messages.events.pluginEnabled.on((id) => setPluginStatus({ ...pluginStatus, [id]: true })),
+        [pluginStatus],
+    )
+    useEffect(
+        () => Messages.events.pluginDisabled.on((id) => setPluginStatus({ ...pluginStatus, [id]: false })),
+        [pluginStatus],
+    )
 
     const plugins = [
         {

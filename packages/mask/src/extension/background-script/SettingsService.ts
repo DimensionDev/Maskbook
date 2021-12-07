@@ -35,7 +35,7 @@ import {
     currentMaskWalletNetworkSettings,
     currentBalancesSettings,
 } from '../../plugins/Wallet/settings'
-import { Flags } from '../../../shared'
+import { Flags, MaskMessages } from '../../../shared'
 import { indexedDB_KVStorageBackend, inMemory_KVStorageBackend } from '../../../background/database/kv-storage'
 
 function create<T>(settings: InternalSettings<T>) {
@@ -127,6 +127,9 @@ export async function getPluginEnabled(id: string) {
 }
 export async function setPluginEnabled(id: string, enabled: boolean) {
     currentPluginEnabledStatus['plugin:' + id].value = enabled
+
+    if (enabled) MaskMessages.events.pluginEnabled.sendToAll(id)
+    else MaskMessages.events.pluginDisabled.sendToAll(id)
 }
 
 export async function openTab(url: string) {
