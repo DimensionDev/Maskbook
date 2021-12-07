@@ -114,7 +114,7 @@ export function Trader(props: TraderProps) {
                 ? createERC20Token(chainId, coin.contract_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
                 : undefined,
         })
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, currentChainId, targetChainId])
+    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, currentChainId, targetChainId, decimals])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
@@ -130,7 +130,9 @@ export function Trader(props: TraderProps) {
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
-        outputToken?.type ?? EthereumTokenType.Native,
+        isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
+            ? EthereumTokenType.Native
+            : outputToken?.type ?? EthereumTokenType.Native,
         outputToken?.address ?? '',
         chainId,
     )
@@ -146,16 +148,12 @@ export function Trader(props: TraderProps) {
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: inputTokenBalance_,
             })
-        if (
-            outputToken &&
-            outputToken?.type !== EthereumTokenType.Native &&
-            outputTokenBalance_ &&
-            !loadingOutputTokenBalance
-        )
+        if (outputToken && outputTokenBalance_ && !loadingOutputTokenBalance) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
                 balance: outputTokenBalance_,
             })
+        }
     }, [
         inputToken,
         outputToken,
@@ -192,7 +190,11 @@ export function Trader(props: TraderProps) {
 
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
-                balance: outputToken?.type === EthereumTokenType.Native ? balance : '0',
+                balance:
+                    isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS) ||
+                    outputToken?.type === EthereumTokenType.Native
+                        ? balance
+                        : '0',
             })
         }
     }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId])
