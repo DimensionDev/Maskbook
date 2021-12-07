@@ -100,8 +100,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
                     name: token.name ?? '',
                     symbol: token.symbol ?? '',
                     contract_address: token.address,
-                    // TODO: remove
-                    // @ts-ignore
                     decimals: token.decimals,
                 },
             },
@@ -173,12 +171,10 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                         <TableBody>
                             {dataSource
                                 .sort((first, second) => {
-                                    // @ts-ignore
                                     const firstValue = new BigNumber(
                                         Utils?.formatBalance?.(first.balance, first.token.decimals) ?? '',
                                     )
                                     const secondValue = new BigNumber(
-                                        // @ts-ignore
                                         Utils?.formatBalance?.(second.balance, second.token.decimals) ?? '',
                                     )
 

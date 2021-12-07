@@ -117,6 +117,7 @@ export const CollectibleListUI = memo<CollectibleListUIProps>(
                                         <CollectibleCard
                                             chainId={chainId}
                                             token={x}
+                                            // TODO: transfer not support multi chain, should remove is after supported
                                             onSend={() => onSend(x as unknown as any)}
                                         />
                                     </div>
