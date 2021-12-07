@@ -4,7 +4,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, formatBalance, formatPercentage, isLessThan, pow10 } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, formatBalance, formatPercentage, isLessThan } from '@masknet/web3-shared-evm'
 import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -234,7 +234,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         //#endregion
 
         //#region form controls
-        const inputTokenTradeAmount = new BigNumber(inputAmount || '0').multipliedBy(pow10(inputToken?.decimals ?? 0))
+        const inputTokenTradeAmount = new BigNumber(inputAmount || '0').shiftedBy(inputToken?.decimals ?? 0)
         //#endregion
 
         //#region UI logic
@@ -451,7 +451,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                                 fullWidth: true,
                                 classes: { root: classes.button, disabled: classes.disabledButton },
                                 color: 'primary',
-                                style: { padding: '12px 0', marginTop: 0 },
+                                style: { padding: '13px 0', marginTop: 0 },
                             }}>
                             <EthereumWalletConnectedBoundary
                                 ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}

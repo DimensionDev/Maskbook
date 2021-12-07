@@ -18,6 +18,7 @@ import {
     useERC20TokenDetailed,
     useERC721ContractDetailed,
     useMaskBoxConstants,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
@@ -31,8 +32,6 @@ import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
 import { useHeartBit } from './useHeartBit'
 import { useIsWhitelisted } from './useIsWhitelisted'
-
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 function useContext(initialState?: { boxId: string }) {
     const heartBit = useHeartBit()

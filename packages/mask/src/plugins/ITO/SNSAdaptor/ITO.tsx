@@ -7,7 +7,6 @@ import {
     isSameAddress,
     currySameAddress,
     isZero,
-    pow10,
     resolveLinkOnExplorer,
     TransactionStateType,
     useAccount,
@@ -579,8 +578,8 @@ export function ITO(props: ITO_Props) {
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])
                                             .dividedBy(exchange_amounts[i * 2 + 1])
-                                            .multipliedBy(pow10(token.decimals - exchangeToken.decimals))
-                                            .multipliedBy(pow10(exchangeToken.decimals))
+                                            .shiftedBy(token.decimals - exchangeToken.decimals)
+                                            .shiftedBy(exchangeToken.decimals)
                                             .integerValue(),
                                         exchangeToken.decimals,
                                     )}

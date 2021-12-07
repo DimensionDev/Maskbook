@@ -17,6 +17,7 @@
     "@ethersproject/solidity": "^5.0.4",
     "@hookform/resolvers": "2.8.3",
     "@masknet/dashboard": "workspace:*",
+    "@masknet/encryption": "workspace:^0.0.0",
     "@masknet/external-plugin-previewer": "workspace:*",
     "@masknet/icons": "workspace:*",
     "@masknet/injected-script": "workspace:*",
@@ -120,7 +121,6 @@
     "web3-eth-abi": "1.5.2",
     "web3-eth-contract": "1.5.2",
     "web3-utils": "1.5.2",
-    "webcrypto-liner": "1.2.4",
     "webextension-polyfill": "^0.8.0",
     "z-schema": "^5.0.2",
     "zod": "3.11.6"

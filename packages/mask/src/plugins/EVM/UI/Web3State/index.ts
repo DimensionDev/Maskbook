@@ -19,11 +19,11 @@ import {
     isValidDomain,
     resolveDomainLink,
     formatDomainName,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import Ens from 'ethjs-ens'
 import { getStorage } from '../../storage'
 
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 const ZERO_X_ERROR_ADDRESS = '0x'
 
 export const Web3State: Web3Plugin.ObjectCapabilities.Capabilities = {}
