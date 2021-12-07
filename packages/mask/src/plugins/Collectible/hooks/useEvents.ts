@@ -1,8 +1,8 @@
 import { useAsyncRetry } from 'react-use'
-import { ChainId, useChainId } from '@masknet/web3-shared-evm'
+import { ChainId, useChainId, ZERO_ADDRESS, isSameAddress } from '@masknet/web3-shared-evm'
 import { CollectibleToken, NFTHistory, CollectibleProvider, OpenSeaAssetEventType } from '../types'
 import { PluginCollectibleRPC } from '../messages'
-import { NullAddress, NullContractAddress, OpenSeaAccountURL } from '../constants'
+import { NullAddress, OpenSeaAccountURL } from '../constants'
 import { toRaribleImage, toTokenIdentifier } from '../helpers'
 import { resolveRaribleUserNetwork } from '../pipes'
 
@@ -92,10 +92,9 @@ export function useEvents(provider: CollectibleProvider, token?: CollectibleToke
                             accountPair: {
                                 from: event.fromInfo
                                     ? {
-                                          username:
-                                              event.fromInfo?.id === NullContractAddress
-                                                  ? NullAddress
-                                                  : event.fromInfo?.name,
+                                          username: isSameAddress(event.fromInfo?.id, ZERO_ADDRESS)
+                                              ? NullAddress
+                                              : event.fromInfo?.name,
                                           address: event.fromInfo?.id,
                                           imageUrl: toRaribleImage(event.fromInfo?.image),
                                           link: `${resolveRaribleUserNetwork(chainId)}${event.fromInfo?.id ?? ''}`,

@@ -4,8 +4,7 @@ import { usePoolTogetherTicketContracts } from '../contracts/usePoolTogetherTick
 import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket'
 import { useAsyncRetry } from 'react-use'
 import type { AccountPool, Pool } from '../types'
-
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 /**
  * A callback for getting account balances of ticket pools
