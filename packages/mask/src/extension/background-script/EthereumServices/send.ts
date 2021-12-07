@@ -484,7 +484,13 @@ export async function INTERNAL_nativeSend(
     const config = getPayloadConfig(payload)
     if (config && !config.chainId) config.chainId = chainIdFinally
     try {
-        const response = await nativeAPI?.api.send(payload)
+        let response: JsonRpcResponse | undefined
+        if (nativeAPI?.type === 'Android') {
+            const jsonResponse = await nativeAPI?.api.sendJson(JSON.stringify(payload))
+            response = JSON.parse(jsonResponse)
+        } else {
+            response = await nativeAPI?.api.send(payload)
+        }
         callback(null, response)
         if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
             handleNonce(chainIdFinally, account, null, response)
