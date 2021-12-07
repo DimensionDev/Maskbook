@@ -1,5 +1,0 @@
-export const PLUGIN_META_KEY = 'com.maskbook.airdrop:1'
-export const PLUGIN_ID = 'com.maskbook.airdrop'
-export const PLUGIN_NAME = 'Airdrop'
-export const PLUGIN_ICON = '🪂'
-export const PLUGIN_DESCRIPTION = ''

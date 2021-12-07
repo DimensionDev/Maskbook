@@ -12,6 +12,7 @@ import {
     useWeb3,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
@@ -23,6 +24,7 @@ import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCall
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { RedPacketNftMetaKey } from '../constants'
+import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
@@ -165,6 +167,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         contract.address,
         tokenIdList,
     )
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
 
     const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
@@ -184,6 +189,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 privateKey,
                 chainId: contract.chainId,
             })
+            closeWalletStatusDialog()
         },
         [duration, message, senderName, contract, privateKey, txid],
     )

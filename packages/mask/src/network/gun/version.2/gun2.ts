@@ -1,5 +1,4 @@
 import Gun from 'gun/gun'
-import type { EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { gunServers } from '../../gun-servers'
 
 export type PersonOnGun2 = {
@@ -11,8 +10,6 @@ export type PersonOnGun2 = {
 export type SharedAESKeyGun2 = {
     encryptedKey: string
     salt: string
-    ephemeralKey?: EC_Public_JsonWebKey
-    ephemeralKeySign?: string
 }
 
 export interface PostOnGun2 {

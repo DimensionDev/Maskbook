@@ -179,13 +179,6 @@ export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
         icon: new URL('./assets/fortmatic.png', import.meta.url),
     },
 ]
-export const PLUGIN_APPLICATIONS: Web3Plugin.ApplicationDescriptor[] = [
-    {
-        ID: `${PLUGIN_ID}_application_redpacket`,
-        name: 'Lucky Drop',
-        icon: new URL('./assets/lucky_drop.png', import.meta.url),
-    },
-]
 export const PLUGIN_APPLICATION_CATEGORIES: Web3Plugin.ApplicationCategoryDescriptor[] = [
     {
         ID: `${PLUGIN_ID}_category_nfts`,

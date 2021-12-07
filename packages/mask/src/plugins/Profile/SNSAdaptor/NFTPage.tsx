@@ -7,10 +7,10 @@ import {
     useEthereumAddress,
 } from '@masknet/web3-shared-evm'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import { Box, Link, Typography, CircularProgress } from '@mui/material'
+import { Box, Link, Typography, CircularProgress, Tooltip } from '@mui/material'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
-import { ShadowRootTooltip, useI18N } from '../../../utils'
+import { useI18N } from '../../../utils'
 import { useUserOwnerAddress } from '../../Avatar/hooks/useUserOwnerAddress'
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,42 +34,9 @@ const useStyles = makeStyles()((theme) => ({
     iconContainer: {
         display: 'inherit',
     },
-
-    tooltip: {
-        height: '100%',
-        borderRadius: theme.spacing(1),
-        color: getMaskColor(theme).textPrimary,
-        backgroundColor: getMaskColor(theme).tooltipBackground,
-        textAlign: 'initial',
-        padding: theme.spacing(2),
-        maxWidth: '428px',
-        boxShadow: `0px 0px 20px rgba(28, 104, 243, 0.05)`,
-    },
-    tipTitle: {
-        fontSize: '18px',
-        fontWeight: 400,
-        lineHeight: '24px',
-        marginBottom: '10px',
-    },
-    tipContent: {
-        fontSize: '14px',
-        lineHeight: '20px',
-        fontWeight: 400,
-    },
-    tipArrows: {
-        width: '45px',
-        height: '45px',
-        color: getMaskColor(theme).tooltipBackground,
-        transform: 'translate3d( 226px, 21px, 0px) !important',
-        ':before': {
-            transformOrigin: 'top center',
-            transform: 'rotate(45deg) translate(10px, 0px)',
-            borderRadius: '3px',
-            boxShadow: `0px 0px 20px rgba(28, 104, 243, 0.05)`,
-        },
-    },
-    tipPopper: {
-        transform: 'translate3d( 320px, -49px, 0px) !important',
+    tipList: {
+        listStyleType: 'decimal',
+        paddingLeft: 16,
     },
 }))
 
@@ -95,15 +62,13 @@ export function NFTPage(props: NFTPageProps) {
     ]
 
     const tooltipRender = (
-        <div>
-            <div className={classes.tipTitle}>{t('plugin_profile_binding_rules_title')}</div>
-            {rulesTipMap.map((item, index) => {
-                return (
-                    <div key={index} className={classes.tipContent}>
-                        {item}
-                    </div>
-                )
-            })}
+        <div style={{ textAlign: 'left' }}>
+            <Typography variant="body2">{t('plugin_profile_binding_rules_title')}</Typography>
+            <ul className={classes.tipList}>
+                {rulesTipMap.map((item, index) => {
+                    return <li key={index}>{item}</li>
+                })}
+            </ul>
         </div>
     )
 
@@ -148,24 +113,19 @@ export function NFTPage(props: NFTPageProps) {
                                 </Link>
                             </Typography>
                             <div className={classes.iconContainer}>
-                                <ShadowRootTooltip
-                                    arrow
-                                    title={tooltipRender}
+                                <Tooltip
                                     PopperProps={{
                                         disablePortal: true,
                                     }}
-                                    classes={{
-                                        tooltip: classes.tooltip,
-                                        arrow: classes.tipArrows,
-                                        popper: classes.tipPopper,
-                                    }}
+                                    title={tooltipRender}
+                                    arrow
                                     placement="top">
                                     <InfoOutlinedIcon
                                         fontSize="small"
                                         className={classes.icon}
                                         sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
                                     />
-                                </ShadowRootTooltip>
+                                </Tooltip>
                             </div>
                         </Box>
                     </Box>
