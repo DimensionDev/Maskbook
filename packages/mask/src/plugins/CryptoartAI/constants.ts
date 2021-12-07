@@ -1,4 +1,4 @@
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_NAME = 'CRYPTOART.AI'
 export const PLUGIN_ICON = '🖼️'
@@ -15,7 +15,7 @@ export const mainNetwork = {
     paymentToken: {
         type: 0,
         chainId: ChainId.Mainnet,
-        address: '0x0000000000000000000000000000000000000000',
+        address: ZERO_ADDRESS,
         decimals: 18,
         name: 'Ether',
         symbol: 'ETH',
@@ -29,7 +29,7 @@ export const testNetwork = {
     paymentToken: {
         type: 0,
         chainId: ChainId.Kovan,
-        address: '0x0000000000000000000000000000000000000000',
+        address: ZERO_ADDRESS,
         decimals: 18,
         name: 'Kovan Ether',
         symbol: 'KOV',
