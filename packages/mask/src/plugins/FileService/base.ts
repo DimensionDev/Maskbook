@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { FileServicePluginID } from './constants'
+import { FileServicePluginID, META_KEY_1, META_KEY_2 } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: FileServicePluginID,
@@ -11,5 +11,8 @@ export const base: Plugin.Shared.Definition = {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
+    },
+    contribution: {
+        metadataKeys: new Set([META_KEY_1, META_KEY_2]),
     },
 }

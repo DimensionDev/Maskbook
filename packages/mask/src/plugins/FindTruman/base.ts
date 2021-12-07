@@ -14,4 +14,9 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
+    contribution: {
+        postContent: new Set([
+            /https:\/\/findtruman.io\/#\/(findtruman\/stories\/[\dA-Za-z]+(\/|\/(puzzles|polls|puzzle_result|poll_result)\/[\dA-Za-z]+\/?)?|encryption\?payload=.+)/,
+        ]),
+    },
 }

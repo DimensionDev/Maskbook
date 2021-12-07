@@ -1,6 +1,6 @@
 import { NetworkPluginID, Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { RedPacketPluginID } from './constants'
+import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
     ID: RedPacketPluginID,
@@ -20,5 +20,8 @@ export const base: Plugin.Shared.Definition = {
                 supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
             },
         },
+    },
+    contribution: {
+        metadataKeys: new Set([RedPacketMetaKey, RedPacketNftMetaKey]),
     },
 }

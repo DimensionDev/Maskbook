@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { POOLTOGETHER_PLUGIN_ID } from './constants'
+import { POOLTOGETHER_PLUGIN_ID, URL_PATTERN } from './constants'
 import { PoolTogetherIcon } from '../../resources/PoolTogetherIcon'
 
 export const base: Plugin.Shared.Definition = {
@@ -13,4 +13,5 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
+    contribution: { postContent: new Set([URL_PATTERN]) },
 }

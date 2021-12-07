@@ -12,4 +12,10 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
+    contribution: {
+        postContent: new Set([
+            /opensea.io\/\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+            /rarible.com\/\/token\/(0x[\dA-Fa-f]{40}):(\d+)/,
+        ]),
+    },
 }

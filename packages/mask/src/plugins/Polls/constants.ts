@@ -1,9 +1,5 @@
-export const pluginName = 'Poll'
-export const identifier = 'com.maskbook.poll'
 export const POLL_META_KEY_1 = 'com.maskbook.poll:1'
 export const PollGunServer = 'com.maskbook.plugin.polls'
-
-export const PLUGIN_META_KEY = 'com.maskbook.poll:1'
 export const PLUGIN_ID = 'com.maskbook.poll'
 export const PLUGIN_NAME = 'Poll'
 export const PLUGIN_ICON = '🗳️'

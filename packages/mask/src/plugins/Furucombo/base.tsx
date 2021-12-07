@@ -15,4 +15,7 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
+    contribution: {
+        postContent: new Set([/https:\/\/furucombo.app\/invest\/(pool|farm)\/(137|1)\/(0x\w+)/]),
+    },
 }

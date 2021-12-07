@@ -15,4 +15,7 @@ export const base: Plugin.Shared.Definition = {
     },
     experimentalMark: true,
     i18n: languages,
+    contribution: {
+        postContent: new Set(['https://box-beta.mask.io', 'https://box.mask.io']),
+    },
 }
