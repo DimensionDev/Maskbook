@@ -213,7 +213,8 @@ export const searchAvatarSelectorImage = () =>
     querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]')
         .at(1)
         .closest<HTMLDivElement>(2)
-        .querySelector<HTMLDivElement>('div > div > :nth-child(2) > div > img')
+        .querySelector<HTMLDivElement>('div > :nth-child(2) img')
+        .enableSingleMode()
 
 export const searchAvatarOpenFileSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1)
 export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="Profile_Save_Button"]')

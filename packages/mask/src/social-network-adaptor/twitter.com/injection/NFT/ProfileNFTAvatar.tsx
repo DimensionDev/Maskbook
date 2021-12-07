@@ -5,6 +5,7 @@ import { blobToArrayBuffer } from '@dimensiondev/kit'
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
 import {
     searchAvatarOpenFileSelector,
+    searchAvatarSelectorImage,
     searchProfessionalButtonSelector,
     searchProfileAvatarSelector,
     searchProfileSaveSelector,
@@ -65,31 +66,62 @@ function NFTAvatarInTwitter() {
     const { classes } = useStyles(getStyles())
     const identity = useCurrentVisitingIdentity()
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
+    const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
 
+    useEffect(() => {
+        if (!selectedToken) return
+        const starter = new MutationObserverWatcher(searchAvatarSelectorImage())
+            .startWatch({
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['src'],
+            })
+            .addListener('onChange', () => {
+                console.log('onChange')
+                assign(selectedToken)
+            })
+
+        return () => starter.stopWatch()
+    }, [selectedToken])
+
+    const assign = async (token: ERC721TokenDetailed) => {
+        const ele = searchAvatarSelectorImage().evaluate() as HTMLImageElement
+        setAvatarEvent({
+            userId: identity.identifier.userId,
+            avatarId: getAvatarId(identity.avatar ?? ''),
+            address: token.contractDetailed.address,
+            tokenId: token.tokenId,
+            imgUrl: ele.getAttribute('src') ?? '',
+        })
+
+        setSelectedToken(undefined)
+    }
     const onChange = async (token: ERC721TokenDetailed) => {
         if (!token.info.image) return
         const image = await toPNG(token.info.image)
         if (!image) return
         changeImageToActiveElements(image)
 
-        setAvatarEvent({
-            userId: identity.identifier.userId,
-            avatarId: getAvatarId(identity.avatar ?? ''),
-            address: token.contractDetailed.address,
-            tokenId: token.tokenId,
-        })
+        setSelectedToken(token)
     }
 
     const handler = () => {
-        MaskMessages.events.NFTAvatarUpdated.sendToLocal(
-            avatarEvent ?? {
+        const ele = searchAvatarSelectorImage().evaluate() as HTMLImageElement
+        const imgUrl = ele.getAttribute('src') ?? ''
+
+        if (!imgUrl || !avatarEvent || !avatarEvent?.imgUrl || imgUrl !== avatarEvent?.imgUrl) {
+            MaskMessages.events.NFTAvatarUpdated.sendToLocal({
                 userId: identity.identifier.userId,
                 avatarId: getAvatarId(identity.avatar ?? ''),
                 address: '',
                 tokenId: '',
-            },
-        )
+            })
+        } else {
+            MaskMessages.events.NFTAvatarUpdated.sendToLocal(avatarEvent)
+        }
         setAvatarEvent(undefined)
+        setSelectedToken(undefined)
     }
 
     useEffect(() => {
