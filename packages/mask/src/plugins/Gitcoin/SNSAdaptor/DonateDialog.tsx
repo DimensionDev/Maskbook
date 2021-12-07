@@ -133,10 +133,12 @@ export function DonateDialog(props: DonateDialogProps) {
                           isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
                               ? `Follow @${
                                     isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
-                                } (mask.io) to donate Gitcoin grants.${postLink}`
+                                } (mask.io) to donate Gitcoin grants.`
                               : ''
                       }`,
+
                       '#mask_io',
+                      postLink,
                   ].join('\n')
                 : '',
         )
