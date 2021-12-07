@@ -29,8 +29,6 @@ import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
 
 const ZERO_X_ERROR_ADDRESS = '0x'
 
-export const Web3State: Web3Plugin.ObjectCapabilities.Capabilities = {}
-
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
     if (!state || !context) return
 
@@ -135,7 +133,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         isValidDomain,
         resolveDomainLink,
         formatDomainName,
-        resolveCollectibleLink: (chainId: number, address: string, tokenId: string) =>
+        resolveNonFungibleTokenLink: (chainId: number, address: string, tokenId: string) =>
             resolveCollectibleLink(chainId as ChainId, NonFungibleAssetProvider.OPENSEA, {
                 contractDetailed: { address: address },
                 tokenId: tokenId,

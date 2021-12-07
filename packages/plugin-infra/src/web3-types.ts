@@ -304,7 +304,7 @@ export declare namespace Web3Plugin {
 
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
-            resolveCollectibleLink?: (chainId: number, address: string, tokenId: string) => string
+            resolveNonFungibleTokenLink?: (chainId: number, address: string, tokenId: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
 
             resolveDomainLink?: (domain: string) => string
