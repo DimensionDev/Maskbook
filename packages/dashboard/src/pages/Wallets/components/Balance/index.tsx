@@ -76,7 +76,7 @@ export interface BalanceCardProps {
     onReceive(): void
     networks: Web3Plugin.NetworkDescriptor[]
     selectedNetwork: Web3Plugin.NetworkDescriptor | null
-    pluginId: Web3Plugin.NetworkDescriptor['networkSupporterPluginID'] | null
+    pluginId: NetworkPluginID | null
     onSelectNetwork(network: Web3Plugin.NetworkDescriptor | null): void
 }
 
