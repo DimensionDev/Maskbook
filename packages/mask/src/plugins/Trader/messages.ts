@@ -3,6 +3,7 @@ import type { DataProvider, TradeProvider } from '@masknet/public-api'
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
 import type { TraderProps } from './SNSAdaptor/trader/Trader'
+import type { GasOptionConfig } from '../../../../web3-shared/evm'
 
 interface CashTagEvent {
     name: string
@@ -14,6 +15,7 @@ interface CashTagEvent {
 
 interface SwapSettingsEvent {
     open: boolean
+    gasConfig?: GasOptionConfig
 }
 
 interface SwapConfirmationEvent {

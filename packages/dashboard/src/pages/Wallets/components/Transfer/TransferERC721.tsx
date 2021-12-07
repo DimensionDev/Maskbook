@@ -1,6 +1,6 @@
-import { makeStyles, MaskTextField } from '@masknet/theme'
-import { Box, Button, IconButton, Stack, Typography } from '@mui/material'
-import { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { makeStyles, MaskColorVar, MaskTextField } from '@masknet/theme'
+import { Box, Button, IconButton, Link, Popover, Stack, Typography } from '@mui/material'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import {
     ERC721ContractDetailed,
@@ -17,7 +17,7 @@ import {
     useNativeTokenDetailed,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { FormattedAddress, useRemoteControlledDialog } from '@masknet/shared'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { SelectNFTList } from './SelectNFTList'
@@ -36,6 +36,9 @@ import { useGasConfig } from '../../hooks/useGasConfig'
 import { useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
+import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
+import { NetworkType } from '@masknet/public-api'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -53,20 +56,31 @@ const GAS_LIMIT = 30000
 export const TransferERC721 = memo(() => {
     const t = useDashboardI18N()
     const chainId = useChainId()
+    const anchorEl = useRef<HTMLDivElement | null>(null)
+
     const { state } = useLocation() as {
         state: { erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
     }
     const { classes } = useStyles()
     const [defaultToken, setDefaultToken] = useState<ERC721TokenDetailed | null>(null)
     const navigate = useNavigate()
+    const [popoverOpen, setPopoverOpen] = useState(false)
+    const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
     const [gasLimit_, setGasLimit_] = useState(0)
+    const network = useNetworkDescriptor()
+    const { Utils } = useWeb3State()
 
     // form
     const schema = z.object({
-        recipient: z.string().refine((address) => EthereumAddress.isValid(address), t.wallets_incorrect_address()),
+        recipient: z
+            .string()
+            .refine(
+                (address) => EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address),
+                t.wallets_incorrect_address(),
+            ),
         contract: z.string().min(1, t.wallets_collectible_contract_is_empty()),
         tokenId: z.string().min(1, t.wallets_collectible_token_id_is_empty()),
     })
@@ -76,7 +90,8 @@ export const TransferERC721 = memo(() => {
         handleSubmit,
         setValue,
         watch,
-        reset,
+        setError,
+        clearErrors,
         formState: { errors, isSubmitting },
     } = useForm<FormInputs>({
         resolver: zodResolver(schema),
@@ -97,11 +112,19 @@ export const TransferERC721 = memo(() => {
 
     const allFormFields = watch()
 
+    //#region resolve ENS domain
+    const {
+        value: registeredAddress = '',
+        error: resolveDomainError,
+        loading: resolveDomainLoading,
+    } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
+    //#endregion
+
     const erc721GasLimit = useGasLimit(
         EthereumTokenType.ERC721,
         contract?.address,
         undefined,
-        allFormFields.recipient,
+        EthereumAddress.isValid(allFormFields.recipient) ? allFormFields.recipient : registeredAddress,
         allFormFields.tokenId,
     )
 
@@ -161,10 +184,75 @@ export const TransferERC721 = memo(() => {
 
     const onTransfer = useCallback(
         async (data) => {
-            await transferCallback(data.tokenId, data.recipient, gasConfig)
+            if (EthereumAddress.isValid(data.recipient)) {
+                await transferCallback(data.tokenId, data.recipient, gasConfig)
+                return
+            } else if (Utils?.isValidDomain?.(data.recipient) && EthereumAddress.isValid(registeredAddress)) {
+                await transferCallback(data.tokenId, registeredAddress, gasConfig)
+            }
+            return
         },
-        [transferCallback, contract?.address, gasConfig],
+        [transferCallback, contract?.address, gasConfig, registeredAddress, Utils?.isValidDomain],
     )
+
+    const ensContent = useMemo(() => {
+        if (resolveDomainLoading) return
+        if (registeredAddress) {
+            return (
+                <Link
+                    href={Utils?.resolveDomainLink?.(allFormFields.recipient)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    underline="none">
+                    <Box style={{ padding: 10 }}>
+                        <Typography
+                            fontSize={16}
+                            lineHeight="22px"
+                            fontWeight={500}
+                            style={{ color: MaskColorVar.textPrimary }}>
+                            {allFormFields.recipient}
+                        </Typography>
+                        <Typography fontSize={14} lineHeight="20px" style={{ color: MaskColorVar.textSecondary }}>
+                            <FormattedAddress address={registeredAddress} size={4} formatter={Utils?.formatAddress} />
+                        </Typography>
+                    </Box>
+                </Link>
+            )
+        }
+
+        if (allFormFields.recipient.includes('.eth')) {
+            if (network?.type !== NetworkType.Ethereum) {
+                return (
+                    <Box style={{ padding: '25px 10px' }}>
+                        <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
+                            {t.wallet_transfer_error_no_ens_support()}
+                        </Typography>
+                    </Box>
+                )
+            }
+            if (Utils?.isValidDomain?.(allFormFields.recipient) && resolveDomainError) {
+                return (
+                    <Box style={{ padding: '25px 10px' }}>
+                        <Typography color="#FF5F5F" fontSize={16} fontWeight={500} lineHeight="22px">
+                            {t.wallet_transfer_error_no_address_has_been_set_name()}
+                        </Typography>
+                    </Box>
+                )
+            }
+        }
+        return
+    }, [
+        allFormFields.recipient,
+        resolveDomainError,
+        Utils?.isValidDomain,
+        resolveDomainLoading,
+        network,
+        registeredAddress,
+    ])
+
+    useUpdateEffect(() => {
+        setPopoverOpen(!!ensContent && !!anchorEl.current)
+    }, [ensContent])
 
     const contractIcon = useMemo(() => {
         if (!contract?.iconURL) return null
@@ -190,11 +278,31 @@ export const TransferERC721 = memo(() => {
                                     helperText={errors.recipient?.message}
                                     error={!!errors.recipient}
                                     value={field.field.value}
+                                    InputProps={{
+                                        onClick: (event) => {
+                                            if (!anchorEl.current) anchorEl.current = event.currentTarget
+                                            if (!!ensContent) setPopoverOpen(true)
+                                            setMinPopoverWidth(event.currentTarget.clientWidth)
+                                        },
+                                    }}
                                     label={t.wallets_transfer_to_address()}
                                 />
                             )}
                             name="recipient"
                         />
+                        <Popover
+                            anchorEl={anchorEl.current}
+                            onClose={() => setPopoverOpen(false)}
+                            PaperProps={{
+                                style: { minWidth: `${minPopoverWidth}px`, borderRadius: 4 },
+                            }}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'left',
+                            }}
+                            open={popoverOpen}>
+                            {ensContent}
+                        </Popover>
                     </Box>
                     <Box width="100%" mt={2}>
                         <Controller

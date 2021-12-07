@@ -2,14 +2,39 @@ import type { BigNumber } from 'bignumber.js'
 import type { Subscription } from 'use-subscription'
 import type { Pagination, Plugin } from './types'
 
+/**
+ * A network plugin defines the way to connect to a single chain.
+ */
+export enum NetworkPluginID {
+    PLUGIN_EVM = 'com.mask.evm',
+    PLUGIN_FLOW = 'com.mask.flow',
+}
+
+export enum CurrencyType {
+    NATIVE = 'native',
+    BTC = 'btc',
+    USD = 'usd',
+}
+
+export enum TokenType {
+    Fungible = 'Fungible',
+    NonFungible = 'NonFungible',
+}
+
 export declare namespace Web3Plugin {
-    export interface EnableRequirement {
-        /**
-         * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
-         * When the current chain is not supported, the composition entry will be hidden.
-         */
-        supportedOperationalChains?: number[]
-    }
+    /**
+     * Plugin can declare what chain it supports to trigger side effects (e.g. create a new transaction).
+     * When the current chain is not supported, the composition entry will be hidden.
+     */
+    export type EnableRequirement = Partial<
+        Record<
+            NetworkPluginID,
+            {
+                supportedChainIds?: number[]
+            }
+        >
+    >
+
     export interface NetworkDescriptor {
         /** An unique ID for each network */
         ID: string
@@ -38,6 +63,15 @@ export declare namespace Web3Plugin {
         /** The provider icon */
         icon: URL
         /** The provider name */
+        name: string
+    }
+
+    export interface ApplicationCategoryDescriptor {
+        /** An unique ID for each category */
+        ID: string
+        /** The category icon */
+        icon: URL
+        /** The category name */
         name: string
     }
 
@@ -147,6 +181,11 @@ export declare namespace Web3Plugin {
         description?: string
         tokens: Token[]
     }
+
+    export type domainAddressBook = {
+        [chainId: number]: Record<string, string> | undefined
+    }
+
     export namespace ObjectCapabilities {
         export interface SharedState {
             allowTestnet?: Subscription<boolean>
@@ -199,6 +238,10 @@ export declare namespace Web3Plugin {
                 pagination?: Pagination,
             ) => Promise<Asset[]>
         }
+        export interface NameServiceState {
+            lookup?: (domain: string) => Promise<string | undefined>
+            reverse?: (address: string) => Promise<string | undefined>
+        }
         export interface TokenManage {
             addToken: (token: Token) => Promise<void>
             removeToken: (token: Token) => Promise<void>
@@ -247,10 +290,15 @@ export declare namespace Web3Plugin {
             resolveTransactionLink?: (chainId: number, transactionId: string) => string
             resolveAddressLink?: (chainId: number, address: string) => string
             resolveBlockLink?: (chainId: number, blockNumber: string) => string
+
+            resolveDomainLink?: (domain: string) => string
+            isValidDomain?: (domain: string) => boolean
+            formatDomainName?: (domain?: string, size?: number) => string | undefined
         }
         export interface Capabilities {
             Shared?: SharedState
             Asset?: AssetState
+            NameService?: NameServiceState
             Token?: TokenManage
             Transaction?: TransactionState
             TokenList?: TokenListState
@@ -272,6 +320,9 @@ export declare namespace Web3Plugin {
             onClick?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
             onSubmit?: (network: NetworkDescriptor, provider: ProviderDescriptor) => void
         }
+        export interface ApplicationCategoryIconClickBaitProps {
+            category: ApplicationCategoryDescriptor
+        }
         export interface AddressFormatterProps {
             address: string
             size?: number
@@ -287,25 +338,10 @@ export declare namespace Web3Plugin {
                 /** This UI will receive provider icon as children component, and the plugin may hook click handle on it. */
                 ProviderIconClickBait?: Plugin.InjectUIReact<UI.ProviderIconClickBaitProps>
             }
+            WalletStatusDialog?: {
+                /** This UI will receive application category icon as children component, and the plugin may hook click handle on it. */
+                ApplicationCategoryIconClickBait?: Plugin.InjectUIReact<UI.ApplicationCategoryIconClickBaitProps>
+            }
         }
     }
-}
-
-/**
- * A network plugin defines the way to connect to a single chain.
- */
-export enum NetworkPluginID {
-    PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
-}
-
-export enum CurrencyType {
-    NATIVE = 'native',
-    BTC = 'btc',
-    USD = 'usd',
-}
-
-export enum TokenType {
-    Fungible = 'Fungible',
-    NonFungible = 'NonFungible',
 }

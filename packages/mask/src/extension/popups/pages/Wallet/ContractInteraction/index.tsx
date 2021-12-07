@@ -1,26 +1,24 @@
 import { memo, useMemo, useState } from 'react'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import {
     EthereumRpcType,
     formatBalance,
+    formatCurrency,
     formatGweiToWei,
     formatWeiToEther,
-    formatCurrency,
     getChainIdFromNetworkType,
     isEIP1559Supported,
     NetworkType,
-    pow10,
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import { useValueRef, FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency, TokenIcon, useValueRef } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
-import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
@@ -31,6 +29,7 @@ import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
+import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -120,6 +119,13 @@ const useStyles = makeStyles()(() => ({
         position: 'fixed',
         bottom: 0,
         width: '100%',
+    },
+    domain: {
+        fontSize: 16,
+        lineHeight: '22px',
+        fontWeight: 500,
+        color: '#15181B',
+        margin: '10px 0',
     },
 }))
 
@@ -276,7 +282,7 @@ const ContractInteraction = memo(() => {
     const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
     const tokenValueUSD = new BigNumber(tokenAmount)
-        .dividedBy(pow10(tokenDecimals ?? 0))
+        .shiftedBy(-(tokenDecimals ?? 0))
         .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
         .toString()
 
@@ -303,6 +309,8 @@ const ContractInteraction = memo(() => {
         }
     }, [request, requestLoading])
 
+    const { value: domain } = useReverseAddress(to, NetworkPluginID.PLUGIN_EVM)
+    const { Utils } = useWeb3State()
     return requestLoading ? (
         <LoadingPlaceholder />
     ) : (
@@ -310,6 +318,9 @@ const ContractInteraction = memo(() => {
             <main className={classes.container}>
                 <div className={classes.info}>
                     <Typography className={classes.title}>{typeName}</Typography>
+                    {domain && Utils?.formatDomainName ? (
+                        <Typography className={classes.domain}>{Utils?.formatDomainName(domain)}</Typography>
+                    ) : null}
                     <Typography className={classes.secondary} style={{ wordBreak: 'break-all' }}>
                         {to}
                     </Typography>

@@ -52,6 +52,7 @@ export async function getWallet(address?: string) {
 
 export async function getWallets(providerType?: ProviderType): Promise<
     (Omit<WalletRecord, 'type'> & {
+        configurable: boolean
         hasStoredKeyInfo: boolean
         hasDerivationPath: boolean
     })[]
@@ -79,6 +80,7 @@ export async function getWallets(providerType?: ProviderType): Promise<
                 erc721_token_blacklist: new Set(),
                 erc1155_token_whitelist: new Set(),
                 erc1155_token_blacklist: new Set(),
+                configurable: false,
                 hasStoredKeyInfo: false,
                 hasDerivationPath: false,
             },
@@ -303,6 +305,7 @@ export async function recoverWalletFromMnemonic(
         password: password_,
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
+
     if (await database.hasStoredKeyInfo(imported.StoredKey)) {
         const exported = await sdk.exportPrivateKeyOfPath({
             coin: api.Coin.Ethereum,

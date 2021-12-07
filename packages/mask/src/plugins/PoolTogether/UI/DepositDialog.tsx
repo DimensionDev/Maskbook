@@ -4,9 +4,9 @@ import {
     formatBalance,
     FungibleTokenDetailed,
     isZero,
-    pow10,
     TransactionStateType,
     useAccount,
+    ZERO_ADDRESS,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
 import { DialogContent, Grid, Typography } from '@mui/material'
@@ -25,7 +25,6 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { ADDRESS_ZERO } from '../constants'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
@@ -130,7 +129,7 @@ export function DepositDialog() {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
@@ -155,7 +154,7 @@ export function DepositDialog() {
         pool?.prizePool.address ?? '',
         amount.toFixed(),
         pool?.tokens.ticket.address ?? '',
-        ADDRESS_ZERO, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
+        ZERO_ADDRESS, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
         token,
     )
     //#endregion

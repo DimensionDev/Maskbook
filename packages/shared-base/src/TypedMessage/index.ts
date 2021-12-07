@@ -9,3 +9,4 @@ export type WellKnownTypedMessages = WellKnownCoreTypedMessages | WellKnownExten
 export const isWellKnownTypedMessages = composeSome(isWellKnownCoreTypedMessages, isWellKnownExtensionTypedMessages)
 export { encodeTypedMessageToDocument } from './binary-encode/encode'
 export { decodeTypedMessageFromDocument } from './binary-encode/decode'
+export * from './deprecated-encode'

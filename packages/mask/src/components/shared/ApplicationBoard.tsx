@@ -10,10 +10,10 @@ import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
-import { PluginTraderMessages } from '../../plugins/Trader/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
+import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -37,7 +37,6 @@ const useStyles = makeStyles()((theme) => ({
         minHeight: 36,
         margin: '0 auto',
         borderRadius: 4,
-        backgroundColor: theme.palette.background.default,
         '& .Mui-selected': {
             color: theme.palette.primary.contrastText,
             backgroundColor: theme.palette.primary.main,
@@ -131,7 +130,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     //#endregion
 
     //#region Swap
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+    const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
     //#endregion
 
     //#region Fiat on/off ramp
@@ -191,7 +190,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             isFlow,
         ),
         createEntry(
-            'File service',
+            'File Service',
             new URL('./assets/files.png', import.meta.url).toString(),
             () => openEncryptedMessage(FileServicePluginID),
             undefined,
@@ -221,7 +220,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             false,
         ),
         createEntry(
-            'Mask Box',
+            'MaskBox',
             new URL('./assets/mask_box.png', import.meta.url).toString(),
             () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
             undefined,
@@ -231,12 +230,12 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         createEntry(
             'Swap',
             new URL('./assets/swap.png', import.meta.url).toString(),
-            openSwapDialog,
+            onSwapDialogOpen,
             undefined,
             isFlow,
         ),
         createEntry(
-            'Fiat on-ramp',
+            'Fiat On-Ramp',
             new URL('./assets/fiat_ramp.png', import.meta.url).toString(),
             () => setBuyDialog({ open: true, address: account }),
             undefined,
@@ -343,6 +342,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             {isClaimAllDialogOpen ? (
                 <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
             ) : null}
+            {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
             {isSecondLevelEntryDialogOpen ? (
                 <EntrySecondLevelDialog
                     title={secondLevelEntryDialogTitle}

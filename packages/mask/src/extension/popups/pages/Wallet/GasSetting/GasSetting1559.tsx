@@ -4,7 +4,6 @@ import {
     EthereumRpcType,
     formatGweiToEther,
     formatGweiToWei,
-    formatWeiToGwei,
     useChainId,
     useNativeTokenDetailed,
     useWeb3,
@@ -24,7 +23,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest'
 import { useHistory } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
-import { toHex } from 'web3-utils'
+import { toHex, fromWei } from 'web3-utils'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -237,11 +236,14 @@ export const GasSetting1559 = memo(() => {
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    formatWeiToGwei(new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas, 16)).toString(),
+                    fromWei(
+                        new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(),
+                        'gwei',
+                    ).toString(),
                 )
                 setValue(
                     'maxFeePerGas',
-                    formatWeiToGwei(new BigNumber(value.computedPayload._tx.maxFeePerGas, 16)).toString(),
+                    fromWei(new BigNumber(value.computedPayload._tx.maxFeePerGas).toFixed(), 'gwei').toString(),
                 )
             } else {
                 setOption(1)
@@ -288,7 +290,7 @@ export const GasSetting1559 = memo(() => {
                 history.goBack()
             }
         },
-        [value],
+        [value, history],
     )
 
     const onSubmit = handleSubmit((data) => handleConfirm(data))
