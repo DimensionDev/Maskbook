@@ -1,6 +1,7 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Trader, TraderProps } from './Trader'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
+import { useChainId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -30,11 +31,12 @@ export interface TradeViewProps extends withClasses<'root'> {
 
 export function TradeView(props: TradeViewProps) {
     const { TraderProps } = props
+    const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.root}>
             <AllProviderTradeContext.Provider>
-                <Trader {...TraderProps} />
+                <Trader {...TraderProps} chainId={chainId} />
             </AllProviderTradeContext.Provider>
         </div>
     )

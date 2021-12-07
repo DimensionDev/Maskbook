@@ -47,13 +47,12 @@ import { SettingsDialog } from './SettingsDialog'
 const useStyles = makeStyles()(() => {
     return {
         root: {
-            width: 535,
             margin: 'auto',
         },
     }
 })
 
-export interface TraderProps extends withClasses<never> {
+export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
     tokenDetailed?: FungibleTokenDetailed
     chainId?: ChainId
