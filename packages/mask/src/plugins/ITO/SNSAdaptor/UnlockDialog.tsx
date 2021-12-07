@@ -13,7 +13,6 @@ import {
     formatBalance,
     formatEthereumAddress,
     isGreaterThan,
-    pow10,
     resolveAddressLinkOnExplorer,
     useChainId,
     useFungibleTokenBalance,
@@ -80,7 +79,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     //#endregion
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',

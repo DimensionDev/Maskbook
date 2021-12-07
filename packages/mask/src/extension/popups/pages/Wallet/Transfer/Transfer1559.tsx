@@ -9,7 +9,6 @@ import {
     formatGweiToWei,
     isGreaterThan,
     isZero,
-    pow10,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
@@ -190,14 +189,14 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 amount: zod
                     .string()
                     .refine((amount) => {
-                        const transferAmount = new BigNumber(amount || '0').multipliedBy(
-                            pow10(selectedAsset?.token.decimals ?? 0),
+                        const transferAmount = new BigNumber(amount || '0').shiftedBy(
+                            selectedAsset?.token.decimals ?? 0,
                         )
                         return !!transferAmount || !isZero(transferAmount)
                     }, t('wallet_transfer_error_amount_absence'))
                     .refine((amount) => {
-                        const transferAmount = new BigNumber(amount || '0').multipliedBy(
-                            pow10(selectedAsset?.token.decimals ?? 0),
+                        const transferAmount = new BigNumber(amount || '0').shiftedBy(
+                            selectedAsset?.token.decimals ?? 0,
                         )
                         return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
                     }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
@@ -296,7 +295,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { value: minGasLimit } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
-        new BigNumber(amount ?? 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
+        new BigNumber(amount ?? 0).shiftedBy(selectedAsset?.token.decimals ?? 0).toFixed(),
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     //#endregion
@@ -346,7 +345,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = new BigNumber(data.amount || '0')
-                .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
+                .shiftedBy(selectedAsset?.token.decimals || 0)
                 .toFixed()
 
             //If input address is ens domain, use registeredAddress to transfer

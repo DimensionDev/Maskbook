@@ -2,7 +2,6 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    pow10,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -112,7 +111,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
     //#endregion
 
     //#region blocking

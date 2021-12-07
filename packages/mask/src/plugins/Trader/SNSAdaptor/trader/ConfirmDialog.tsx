@@ -11,7 +11,6 @@ import {
     formatBalance,
     formatEthereumAddress,
     formatWeiToEther,
-    pow10,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
@@ -199,8 +198,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                         {formatBalance(
                                             inputAmount
                                                 .dividedBy(outputAmount)
-                                                .multipliedBy(pow10(outputToken.decimals - inputToken.decimals))
-                                                .multipliedBy(pow10(inputToken.decimals))
+                                                .shiftedBy(outputToken.decimals - inputToken.decimals)
+                                                .shiftedBy(inputToken.decimals)
                                                 .integerValue(),
                                             inputToken.decimals,
                                             6,
@@ -216,8 +215,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                         {`${formatBalance(
                                             outputAmount
                                                 .dividedBy(inputAmount)
-                                                .multipliedBy(pow10(inputToken.decimals - outputToken.decimals))
-                                                .multipliedBy(pow10(outputToken.decimals))
+                                                .shiftedBy(inputToken.decimals - outputToken.decimals)
+                                                .shiftedBy(outputToken.decimals)
                                                 .integerValue(),
                                             outputToken.decimals,
                                             6,

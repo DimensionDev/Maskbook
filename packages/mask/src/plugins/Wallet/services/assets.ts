@@ -15,7 +15,6 @@ import {
     isChainIdMainnet,
     NetworkType,
     FungibleAssetProvider,
-    pow10,
     getChainShortName,
     getChainIdFromNetworkType,
     ERC721TokenCollectionInfo,
@@ -172,7 +171,7 @@ function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType
                               y.symbol,
                               y.logo_url ? [y.logo_url] : undefined,
                           ),
-                balance: new BigNumber(y.amount).multipliedBy(pow10(y.decimals)).toFixed(),
+                balance: new BigNumber(y.amount).shiftedBy(y.decimals).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
@@ -191,7 +190,7 @@ function formatAssetsFromZerion(
     scope: SocketRequestAssetScope,
 ) {
     return data.map(({ asset, quantity }) => {
-        const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
+        const balance = new BigNumber(quantity).shiftedBy(-asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
         const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
 
