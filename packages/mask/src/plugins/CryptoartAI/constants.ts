@@ -6,7 +6,7 @@ export const PLUGIN_DESCRIPTION = 'The decentralized world of CryptoArt.'
 export const PLUGIN_IDENTIFIER = 'com.maskbook.cryptoartai'
 export const PLUGIN_META_KEY = 'com.maskbook.cryptoartai:1'
 
-export const pathnameRegexMatcher = '/gallery/detail'
+export const prefixPath = '/gallery/detail'
 
 export const mainNetwork = {
     contractAddress: '0x3AD503084f1bD8d15A7F5EbE7A038C064e1E3Fa1',

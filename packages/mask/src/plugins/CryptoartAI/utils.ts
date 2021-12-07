@@ -3,16 +3,13 @@ import type { AssetEvent, Order } from 'opensea-js/lib/types'
 import { parseURL } from '../../utils/utils'
 import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
 import { truncate, escapeRegExp } from 'lodash-unified'
-import { pathnameRegexMatcher, mainNetwork, testNetwork } from './constants'
+import { prefixPath, mainNetwork, testNetwork } from './constants'
 import type { CryptoartAIToken } from './types'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
     const _url = new URL(url.startsWith(protocol) ? url : protocol + url)
-    return (
-        [mainNetwork.hostname, testNetwork.hostname].includes(_url.hostname) &&
-        _url.pathname.includes(pathnameRegexMatcher)
-    )
+    return [mainNetwork.hostname, testNetwork.hostname].includes(_url.hostname) && _url.pathname.includes(prefixPath)
 }
 
 export function getRelevantUrl(textContent: string) {
@@ -29,7 +26,7 @@ export function getAssetInfoFromURL(url?: string) {
     }
 
     const { hostname, pathname } = new URL(url)
-    const pattern = new RegExp(`^${escapeRegExp(pathnameRegexMatcher)}\\/([^\\/]+)/([^\\/]+)$`, 'g')
+    const pattern = new RegExp(`^${escapeRegExp(prefixPath)}\\/([^\\/]+)/([^\\/]+)$`, 'g')
     const matched = pattern.exec(pathname)
     if (!matched) {
         return null // early return
