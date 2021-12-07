@@ -48,7 +48,8 @@ export declare namespace Plugin {
         Dashboard?: Loader<Dashboard.Definition>
         /** Load the Worker part of the plugin. */
         Worker?: Loader<Worker.Definition>
-        ContextFree?: Loader<ContextFree.DefinitionDeferred>
+        /** Load the General UI of the plugin. */
+        GeneralUI?: Loader<GeneralUI.DefinitionDeferred>
     }
 }
 /**
@@ -109,6 +110,12 @@ export namespace Plugin.Shared {
         declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
         /** Introduce application category information. */
         declareApplicationCategories?: Web3Plugin.ApplicationCategoryDescriptor[]
+        /**
+         * Declare what this plugin provides.
+         *
+         * Declare this field properly so Mask Network can suggest your plugin when needed.
+         */
+        contribution?: Contribution
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -178,6 +185,12 @@ export namespace Plugin.Shared {
     export type I18NKey = string
     export type I18NValue = string
     export type I18NResource = Record<I18NLanguage, Record<I18NKey, I18NValue>>
+    export interface Contribution {
+        /** This plugin can recognize and react to the following metadata keys. */
+        metadataKeys?: ReadonlySet<string>
+        /** This plugin can recognize and enhance the post that matches the following matchers. */
+        postContent?: ReadonlySet<RegExp | string>
+    }
 }
 
 /** This part runs in the SNSAdaptor */
@@ -205,7 +218,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as an entry in the wallet status dialog */
         ApplicationEntry?: ApplicationEntry
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
-        __contextFree__?: ContextFree.DefinitionDeferred
+        __general_ui__?: GeneralUI.DefinitionDeferred
     }
     //#region Composition entry
     /**
@@ -321,7 +334,7 @@ export namespace Plugin.Dashboard {
         /** This is the context of the currently chosen network. */
         Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
         /** Plugin DO NOT need to define this. This will be auto set by the plugin host. */
-        __contextFree__?: ContextFree.DefinitionDeferred
+        __general_ui__?: GeneralUI.DefinitionDeferred
     }
 }
 
@@ -433,7 +446,7 @@ export namespace Plugin.Worker {
 }
 
 /** This part defines the plugin part that does not context aware. */
-export namespace Plugin.ContextFree {
+export namespace Plugin.GeneralUI {
     export interface DefinitionDeferred {
         /**
          * Render metadata in many different environments.
