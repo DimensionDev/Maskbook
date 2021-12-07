@@ -95,7 +95,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         [gasFee, tokenPrice],
     )
 
-    if ((trade.loading && trade.value) || updateBalancerPoolsLoading || trade.gas.loading)
+    if (trade.loading)
         return (
             <Box className={classes.trade} display="flex" justifyContent="center" style={{ padding: 24 }}>
                 <CircularProgress />
