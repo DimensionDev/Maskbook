@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
     TransactionEventType,
@@ -55,7 +56,7 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string)
                               throw error
                           })
                     : await cANFTMarket_contract?.methods
-                          .placeBid(editionNumber, '0x0000000000000000000000000000000000000000')
+                          .placeBid(editionNumber, ZERO_ADDRESS)
                           .estimateGas({
                               from: account,
                               value: new BigNumber(priceInWei).toFixed(),
@@ -99,7 +100,7 @@ export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string)
                         })
                 } else {
                     cANFTMarket_contract?.methods
-                        .placeBid(editionNumber, '0x0000000000000000000000000000000000000000')
+                        .placeBid(editionNumber, ZERO_ADDRESS)
                         .send(config as NonPayableTx)
                         .on(TransactionEventType.RECEIPT, (receipt) => {
                             setPlaceBidState({

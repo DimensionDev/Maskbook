@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js'
 import type { AssetEvent, Order } from 'opensea-js/lib/types'
 import { parseURL } from '../../utils/utils'
 import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
-import { truncate, escapeRegExp } from 'lodash-unified'
+import { escapeRegExp } from 'lodash-unified'
 import { prefixPath, mainNetwork, testNetwork } from './constants'
 import type { CryptoartAIToken } from './types'
 
@@ -26,7 +26,7 @@ export function getAssetInfoFromURL(url?: string) {
     }
 
     const { hostname, pathname } = new URL(url)
-    const pattern = new RegExp(`^${escapeRegExp(prefixPath)}\\/([^\\/]+)/([^\\/]+)$`, 'g')
+    const pattern = new RegExp(`^${escapeRegExp(prefixPath)}${/\/([^/]+)\/(\d+)/.source}$`, 'g')
     const matched = pattern.exec(pathname)
     if (!matched) {
         return null // early return
@@ -59,12 +59,6 @@ export function getLastSalePrice(lastSale: AssetEvent | null) {
     if (!lastSale?.totalPrice || !lastSale?.paymentToken?.decimals) return
     const price = formatBalance(lastSale.totalPrice, lastSale.paymentToken.decimals)
     return price
-}
-
-export function subAddressStr(theName: string, theLength: number = 13) {
-    return truncate(theName, {
-        length: theLength,
-    })
 }
 
 export function toTokenIdentifier(token?: CryptoartAIToken) {

@@ -3,8 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Account } from '../Account'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { resolveWebLinkOnCryptoartAI } from '../../pipes'
-
-import { subAddressStr } from '../../utils'
+import { truncate } from 'lodash-unified'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -62,7 +61,12 @@ export function Row({ event, chainId }: Props) {
                     rel="noopener noreferrer">
                     <Avatar src={event.avatorPath} className={classes.avatar} />
                     <Typography className={classes.accountName} variant="body2">
-                        <Account username={subAddressStr(event.operatorName)} address={event.operatorAddress} />
+                        <Account
+                            username={truncate(event.operatorName, {
+                                length: 13,
+                            })}
+                            address={event.operatorAddress}
+                        />
                     </Typography>
                 </Link>
             </TableCell>

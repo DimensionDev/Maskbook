@@ -72,7 +72,7 @@ export async function getEvents(tokenId: string, chainId?: ChainId) {
 
 export async function getOrders(tokenId: string, side = OrderSide.Buy, chainId?: ChainId) {
     const tradeResponse: any = await (
-        await fetch(urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/tradeInfo/', { tokenId }), {
+        await fetch(urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/tradeInfo/:tokenId', { tokenId }), {
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
