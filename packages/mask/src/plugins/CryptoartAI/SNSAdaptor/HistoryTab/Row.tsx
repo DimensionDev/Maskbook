@@ -1,7 +1,7 @@
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Account } from '../Account'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { resolveWebLinkOnCryptoartAI } from '../../pipes'
 
 import { subAddressStr } from '../../utils'
@@ -52,22 +52,17 @@ interface Props {
 
 export function Row({ event, chainId }: Props) {
     const { classes } = useStyles()
-
     return (
         <TableRow>
             <TableCell>
                 <Link
                     href={resolveWebLinkOnCryptoartAI(chainId) + '/' + event.operatorName}
-                    title={subAddressStr(event.operatorNikeName) ?? subAddressStr(event.operatorName) ?? ''}
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
                     <Avatar src={event.avatorPath} className={classes.avatar} />
                     <Typography className={classes.accountName} variant="body2">
-                        <Account
-                            username={formatEthereumAddress(event.operatorName, 4) ?? ''}
-                            address={event.operatorAddress}
-                        />
+                        <Account username={subAddressStr(event.operatorName)} address={event.operatorAddress} />
                     </Typography>
                 </Link>
             </TableCell>

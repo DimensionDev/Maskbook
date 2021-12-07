@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
 
-export function usePurchaseCallback(editionNumber: number, priceInWei: number) {
+export function usePurchaseCallback(editionNumber: string, priceInWei: number) {
     const account = useAccount()
     const chainId = useChainId()
     const { knownOriginDigitalAssetV2_contract } = useCryptoArtAI_Contract()

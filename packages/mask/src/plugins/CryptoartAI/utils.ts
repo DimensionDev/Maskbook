@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js'
 import type { AssetEvent, Order } from 'opensea-js/lib/types'
 import { parseURL } from '../../utils/utils'
 import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
+import { truncate, escapeRegExp } from 'lodash-unified'
 import { pathnameRegexMatcher, mainNetwork, testNetwork } from './constants'
 import type { CryptoartAIToken } from './types'
 
@@ -21,22 +22,24 @@ export function getRelevantUrl(textContent: string) {
 
 export function getAssetInfoFromURL(url?: string) {
     if (!url) return null
-    const _url = new URL(url)
-    const urls = _url.pathname
-        .substring(_url.pathname.indexOf(pathnameRegexMatcher) + pathnameRegexMatcher.length)
-        .split('/')
-    if (urls.length >= 2) {
-        return {
-            chain_id: url.includes(testNetwork.hostname) ? ChainId.Kovan : ChainId.Mainnet,
-            creator: urls[0],
-            token_id: urls[1],
-            contractAddress: url.includes(testNetwork.hostname)
-                ? testNetwork.contractAddress
-                : mainNetwork.contractAddress,
-        }
+
+    const addresses = {
+        [ChainId.Kovan]: testNetwork.contractAddress,
+        [ChainId.Mainnet]: mainNetwork.contractAddress,
     }
 
-    return
+    const { hostname, pathname } = new URL(url)
+    const pattern = new RegExp(`^${escapeRegExp(pathnameRegexMatcher)}\\/([^\\/]+)/([^\\/]+)$`, 'g')
+    const matched = pattern.exec(pathname)
+    if (!matched) {
+        return null // early return
+    }
+
+    const chain_id = hostname === testNetwork.hostname ? ChainId.Kovan : ChainId.Mainnet
+    const creator = matched[1]
+    const token_id = matched[2]
+    const contractAddress = addresses[chain_id]
+    return { chain_id, creator, token_id, contractAddress }
 }
 
 export function getOrderUnitPrice(order: Order) {
@@ -61,8 +64,10 @@ export function getLastSalePrice(lastSale: AssetEvent | null) {
     return price
 }
 
-export function subAddressStr(theName: string, theLength: number = 7) {
-    return theName ? (theName.length > theLength ? theName.substr(0, theLength) + '...' : theName) : null
+export function subAddressStr(theName: string, theLength: number = 13) {
+    return truncate(theName, {
+        length: theLength,
+    })
 }
 
 export function toTokenIdentifier(token?: CryptoartAIToken) {

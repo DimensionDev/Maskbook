@@ -10,7 +10,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
 
-export function usePlaceBidCallback(is24Auction: boolean, editionNumber: number) {
+export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string) {
     const account = useAccount()
     const chainId = useChainId()
     const { artistAcceptingBidsV2_contract, cANFTMarket_contract } = useCryptoArtAI_Contract()

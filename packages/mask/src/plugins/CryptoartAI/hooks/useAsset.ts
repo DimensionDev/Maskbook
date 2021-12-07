@@ -5,6 +5,10 @@ import type { CryptoartAIToken } from '../types'
 
 import { getAsset } from '../apis'
 
+interface OwnerProps {
+    ownerAddress: string
+}
+
 export function useAsset(token?: CryptoartAIToken) {
     const account = useAccount()
     const chainId = useChainId()
@@ -18,7 +22,7 @@ export function useAsset(token?: CryptoartAIToken) {
         return {
             owner: assetResponse.owners,
             trade: assetResponse.trade,
-            is_owner: assetResponse.owners.some((owner: any) => isSameAddress(owner.ownerAddress, account)),
+            is_owner: assetResponse.owners.some((owner: OwnerProps) => isSameAddress(owner.ownerAddress, account)),
             creator: assetResponse.creatorInfo,
             token_id: assetResponse.id,
             title: assetResponse.title,

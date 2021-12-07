@@ -89,17 +89,13 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const [atLeastBidValue, setAtLeastBidValue] = useState(0)
     useEffect(() => {
-        let atLeastBid = 0.01
-        if (asset?.value?.latestBidVo?.priceInEth) {
-            const price = new BigNumber(asset?.value?.latestBidVo.priceInEth)
-            atLeastBid = price.plus(price.gte(1) ? '0.1' : '0.01').toNumber()
-        }
-        setAtLeastBidValue(atLeastBid)
+        const price = new BigNumber(asset?.value?.latestBidVo?.priceInEth)
+        setAtLeastBidValue(price.isFinite() ? price.plus(price.gte(1) ? '0.1' : '0.01').toNumber() : 0.01)
     }, [asset?.value?.latestBidVo])
 
     const [placeBidState, placeBidCallback, resetCallback] = usePlaceBidCallback(
         is24Auction,
-        asset?.value?.editionNumber ? Number(asset?.value?.editionNumber) : 0,
+        asset?.value?.editionNumber ?? '0',
     )
 
     const onMakeOffer = useCallback(() => {
@@ -165,8 +161,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         const amount_ = new BigNumber(amount || '0')
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
-        if (Number(amount) < atLeastBidValue) return t('plugin_collectible_enter_a_price')
-        if (balance_.isZero() || Number(amount) > Number(formatBalance(balance.value, token?.value?.decimals, 6)))
+        if (amount_.lt(atLeastBidValue)) return t('plugin_collectible_enter_a_price')
+        if (balance_.isZero() || amount_.gt(formatBalance(balance.value, token?.value?.decimals, 6)))
             return t('plugin_collectible_insufficient_balance')
         if (
             asset?.value?.is24Auction &&

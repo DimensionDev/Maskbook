@@ -1,7 +1,7 @@
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Account } from './Account'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { resolveWebLinkOnCryptoartAI } from '../pipes'
 
@@ -70,16 +70,12 @@ export function OrderRow({ event, chainId }: IRowProps) {
             <TableCell>
                 <Link
                     href={resolveWebLinkOnCryptoartAI(chainId) + '/' + event.operatorName}
-                    title={subAddressStr(event.operatorNikeName) ?? subAddressStr(event.operatorName) ?? ''}
                     target="_blank"
                     className={classes.account}
                     rel="noopener noreferrer">
                     <Avatar src={event.avatorPath} className={classes.avatar} />
                     <Typography className={classes.accountName} variant="body2">
-                        <Account
-                            username={formatEthereumAddress(event.operatorName, 4) ?? ''}
-                            address={event.operatorAddress}
-                        />
+                        <Account username={subAddressStr(event.operatorName)} address={event.operatorAddress} />
                     </Typography>
                 </Link>
             </TableCell>

@@ -5,29 +5,23 @@ import { resolveAPILinkOnCryptoartAI } from '../pipes'
 
 export async function getAsset(tokenId: string, chainId?: ChainId) {
     const ownersResponse: any = await (
-        await fetch(
-            urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/current/owners/:tokenId', { tokenId: tokenId }),
-            {
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    Accept: 'application/json, text/plain, */*',
-                },
+        await fetch(urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/current/owners/:tokenId', { tokenId }), {
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                Accept: 'application/json',
             },
-        )
+        })
     ).json()
 
     const tradeResponse: any = await (
-        await fetch(
-            urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/tradeInfo/:tokenId', { tokenId: tokenId }),
-            {
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    Accept: 'application/json, text/plain, */*',
-                },
+        await fetch(urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/tradeInfo/:tokenId', { tokenId }), {
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                Accept: 'application/json',
             },
-        )
+        })
     ).json()
 
     const fetchResponse = await (
@@ -36,7 +30,7 @@ export async function getAsset(tokenId: string, chainId?: ChainId) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                Accept: 'application/json, text/plain, */*',
+                Accept: 'application/json',
             },
             body: JSON.stringify({
                 artworkId: tokenId,
@@ -64,16 +58,13 @@ export async function getAsset(tokenId: string, chainId?: ChainId) {
 
 export async function getEvents(tokenId: string, chainId?: ChainId) {
     const historyResponse: any = await (
-        await fetch(
-            urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/recent/history/:tokenId', { tokenId: tokenId }),
-            {
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json; charset=UTF-8',
-                    Accept: 'application/json, text/plain, */*',
-                },
+        await fetch(urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/recent/history/:tokenId', { tokenId }), {
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json; charset=UTF-8',
+                Accept: 'application/json',
             },
-        )
+        })
     ).json()
 
     return historyResponse.data
@@ -81,11 +72,11 @@ export async function getEvents(tokenId: string, chainId?: ChainId) {
 
 export async function getOrders(tokenId: string, side = OrderSide.Buy, chainId?: ChainId) {
     const tradeResponse: any = await (
-        await fetch(resolveAPILinkOnCryptoartAI(chainId) + '/api/artwork/tradeInfo/' + tokenId, {
+        await fetch(urlcat(resolveAPILinkOnCryptoartAI(chainId), '/api/artwork/tradeInfo/', { tokenId }), {
             mode: 'cors',
             headers: {
                 'Content-Type': 'application/json; charset=UTF-8',
-                Accept: 'application/json, text/plain, */*',
+                Accept: 'application/json',
             },
         })
     ).json()

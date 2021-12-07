@@ -94,7 +94,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const { token, balance } = useFungibleTokenWatched(selectedPaymentToken)
 
     const [purchaseState, purchaseCallback, resetCallback] = usePurchaseCallback(
-        asset?.value?.editionNumber ? Number(asset?.value?.editionNumber) : 0,
+        asset?.value?.editionNumber ?? '0',
         asset?.value?.priceInWei > 0
             ? asset?.value?.priceInWei
             : new BigNumber(0.01).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber(),
@@ -149,7 +149,11 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (!isVerified) return t('plugin_collectible_check_tos_document')
-        if (asset?.value?.priceInEth > Number(formatBalance(balance.value, token?.value?.decimals, 6))) {
+        if (
+            new BigNumber(asset?.value?.latestBidVo?.priceInEth).gt(
+                formatBalance(balance.value, token?.value?.decimals, 6),
+            )
+        ) {
             return t('plugin_collectible_insufficient_balance')
         }
         return ''
