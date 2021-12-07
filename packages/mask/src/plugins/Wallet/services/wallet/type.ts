@@ -22,7 +22,7 @@ export interface ERC1155TokenRecord extends Omit<ERC1155TokenDetailed, 'type'> {
     updatedAt: Date
 }
 
-export interface WalletRecord extends Omit<Wallet, 'hasStoredKeyInfo' | 'hasDerivationPath'> {
+export interface WalletRecord extends Omit<Wallet, 'configurable' | 'hasStoredKeyInfo' | 'hasDerivationPath'> {
     id: string
     type: 'wallet'
     derivationPath?: string
