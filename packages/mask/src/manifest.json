@@ -11,5 +11,5 @@
     "homepage_url": "https://mask.io",
     "description": "The portal to the new & open Internet. Send encrypted message and decentralized Apps right on top of social networks.",
     "web_accessible_resources": ["js/*", "*.png"],
-    "content_security_policy": "script-src 'self' 'wasm-eval' 'unsafe-eval'; object-src 'self';"
+    "content_security_policy": "script-src 'self' 'wasm-eval'; object-src 'self';"
 }
