@@ -91,7 +91,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onS
                         target="_blank"
                         rel="noopener noreferrer"
                         href={
-                            Utils?.resolveCollectibleLink?.(
+                            Utils?.resolveNonFungibleTokenLink?.(
                                 token.contract?.chainId,
                                 token.contract.address,
                                 token.tokenId,
