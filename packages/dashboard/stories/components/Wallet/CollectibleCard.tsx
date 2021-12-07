@@ -1,28 +1,33 @@
 import { story } from '@masknet/storybook-shared'
 import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard'
-import { ChainId, createERC721Token, NonFungibleAssetProvider, EthereumTokenType } from '@masknet/web3-shared-evm'
+import { TokenType } from '@masknet/plugin-infra'
 
 const { meta, of } = story(C)
 
 export default meta({ title: 'Components/Wallet/Collectible Card' })
 export const CollectibleCard = of({
     args: {
-        chainId: ChainId.Mainnet,
-        provider: NonFungibleAssetProvider.OPENSEA,
-        // @ts-ignore
-        token: createERC721Token(
-            {
-                type: EthereumTokenType.ERC721,
-                address: '0xd07dc4262bcdbf85190c01c996b4c06a461d2430',
-                chainId: ChainId.Mainnet,
+        chainId: 1,
+        token: {
+            id: 'token_id',
+            chainId: 1,
+            tokenId: '608932',
+            type: TokenType.NonFungible,
+            name: 'Rarible 1155',
+            description: '',
+            owner: 'test_owner',
+            metadata: {
                 name: 'Rarible 1155',
+                description: '',
+                mediaType: '',
+            },
+            contract: {
+                address: 'address',
+                chainId: 1,
+                name: '',
                 symbol: '',
             },
-            {
-                image: 'https://lh3.googleusercontent.com/gqxP0KlEJOXKiu8Qhxtk3lBU5dJqTyol8OgiDZjPB8HD5m-Rc_aLaLQ37j8gXhdgOueaB-qZ__1p7_8PZ3l0mkKOjN9uW0sBgt9n9Q',
-                name: 'Dumb Stray Cats - #7',
-            },
-            '608932',
-        ),
+        },
+        onSend() {},
     },
 })
