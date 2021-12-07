@@ -20,7 +20,7 @@ let polyfillVersion = '__'
     const lockfile = await readFile(lockfilePath)
     const hash = createHash('sha256')
     hash.update(lockfile)
-    polyfillVersion = 'v1' + hash.digest('hex')
+    polyfillVersion = 'v2' + hash.digest('hex')
 }
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
@@ -57,8 +57,7 @@ const liner = await readFile(require.resolve('webcrypto-liner/build/webcrypto-li
 await writeFile(
     fileURLToPath(new URL(`./dist/secp256k1.js`, import.meta.url)),
     `${elliptic};
-${liner};
-delete globalThis.elliptic;`,
+${liner};`,
 )
 
 await appendNull(new URL('./dist/dom.js', import.meta.url))
