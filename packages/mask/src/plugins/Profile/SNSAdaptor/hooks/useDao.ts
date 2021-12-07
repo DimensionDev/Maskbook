@@ -25,15 +25,16 @@ export type Dao_Payload = {
 export function useDao(userId: string) {
     const api = `https://dimensiondev.github.io/Maskbook-Configuration/com.maskbook.dao-${userId.toLowerCase()}.json`
     return useAsyncRetry(async () => {
+        if (!userId || userId.toLowerCase() === 'unknown') return
         try {
             const res = await fetch(api)
             if (!res.ok) {
-                return undefined
+                return
             }
             const r = await res.json()
             return r as Dao_Payload
         } catch {
-            return undefined
+            return
         }
-    }, [api])
+    }, [api, userId])
 }
