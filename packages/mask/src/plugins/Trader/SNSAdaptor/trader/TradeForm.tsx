@@ -347,7 +347,13 @@ export const TradeForm = memo<AllTradeFormProps>(
                     SelectTokenChip={{
                         ChipProps: {
                             onClick: () => onTokenChipClick(TokenPanelType.Input),
-                            deleteIcon: <DropIcon className={classes.dropIcon} />,
+                            deleteIcon: (
+                                <DropIcon
+                                    className={classes.dropIcon}
+                                    style={{ fill: !inputToken ? '#ffffff' : undefined }}
+                                />
+                            ),
+                            onDelete: noop,
                         },
                     }}
                 />
