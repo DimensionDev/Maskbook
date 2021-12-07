@@ -1,4 +1,4 @@
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
 import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab } from '@mui/material'
@@ -53,12 +53,16 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
         [AssetTab.Collectibles]: t.wallets_assets_collectibles(),
     }
 
-    const [currentTab, onChange] = useTabs(AssetTab.Token, AssetTab.Collectibles)
+    const [currentTab, onChange, , setTab] = useTabs(AssetTab.Token, AssetTab.Collectibles)
 
     const [addCollectibleOpen, setAddCollectibleOpen] = useState(false)
     const { setDialog: setSelectToken } = useRemoteControlledDialog(
         PluginMessages.Wallet.events.selectERC20TokenDialogUpdated,
     )
+
+    useEffect(() => {
+        setTab(AssetTab.Token)
+    }, [pluginId])
 
     return (
         <>
@@ -66,9 +70,11 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                 <TabContext value={currentTab}>
                     <Box className={classes.caption}>
                         <TabList onChange={onChange}>
-                            {assetTabs.map((key) => (
-                                <Tab key={key} value={key} label={assetTabsLabel[key]} />
-                            ))}
+                            {assetTabs
+                                .filter((x) => pluginId === NetworkPluginID.PLUGIN_EVM || x === AssetTab.Token)
+                                .map((key) => (
+                                    <Tab key={key} value={key} label={assetTabsLabel[key]} />
+                                ))}
                         </TabList>
                         {pluginId === NetworkPluginID.PLUGIN_EVM && (
                             <Button
