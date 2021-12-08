@@ -206,7 +206,7 @@ export async function deriveWallet(name: string) {
             latestDerivationPath,
         })
 
-        // found a valid candidate, import it by its private key
+        // found a valid candidate, get the private key of it
         const exported = await sdk.exportPrivateKeyOfPath({
             coin: api.Coin.Ethereum,
             password: password_,
@@ -214,6 +214,8 @@ export async function deriveWallet(name: string) {
             StoredKeyData: primaryWallet.storedKeyInfo.data,
         })
         if (!exported?.privateKey) throw new Error(`Failed to export private key at path: ${latestDerivationPath}`)
+
+        // import the candidate by the private key
         return recoverWalletFromPrivateKey(name, exported.privateKey)
     }
 }
