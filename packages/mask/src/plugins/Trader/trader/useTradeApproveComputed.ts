@@ -17,13 +17,7 @@ export function useTradeApproveComputed(
         return {
             approveToken:
                 token?.type === EthereumTokenType.ERC20
-                    ? createERC20Token(
-                          chainId,
-                          token.address,
-                          token.decimals ?? 0,
-                          token.name ?? '',
-                          token.symbol ?? '',
-                      )
+                    ? createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
                     : null,
             approveAmount: trade ? trade.inputAmount : ZERO,
             approveAddress: (() => {

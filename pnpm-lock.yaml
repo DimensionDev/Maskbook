@@ -868,6 +868,7 @@ importers:
       '@ensdomains/address-encoder': ^0.2.6
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
+      '@types/ethereum-blockies': ^0.1.0
       '@types/punycode': ^2.1.0
       '@types/use-subscription': ^1.0.0
       '@unstoppabledomains/resolution': ^5.0.1
@@ -889,6 +890,7 @@ importers:
       '@ensdomains/address-encoder': 0.2.6
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts
+      '@types/ethereum-blockies': 0.1.0
       '@types/punycode': 2.1.0
       '@unstoppabledomains/resolution': 5.0.1
       bignumber.js: 9.0.1
@@ -9376,6 +9378,10 @@ packages:
   /@types/estree/0.0.50:
     resolution: {integrity: sha512-C6N5s2ZFtuZRj54k2/zyRhNDjJwwcViAM3Nbm8zjBpbqAdZ00mr0CFxvSKeO8Y/e03WVFLpQMdHYVfUd6SB+Hw==}
     dev: true
+
+  /@types/ethereum-blockies/0.1.0:
+    resolution: {integrity: sha512-yQgqv9dqnFm9pHmCPUBPGu4NRIGSD/hihO+BwcuzxaxmMX3juD97vRvwUB3uY/MUBQ+7pWvUWDPYSAcZ1dIQDA==}
+    dev: false
 
   /@types/expect/1.20.4:
     resolution: {integrity: sha512-Q5Vn3yjTDyCMV50TB6VRIbQNxSE4OmZR86VSbGaNpfUolm0iePBB4KdEEHmxoY5sT2+2DIvXW0rvMDP2nHZ4Mg==}

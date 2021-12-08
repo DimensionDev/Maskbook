@@ -36,9 +36,9 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
 export function createERC20Token(
     chainId: ChainId,
     address: string,
-    decimals: number,
-    name: string,
-    symbol: string,
+    decimals = 0,
+    name = 'Unknown Token',
+    symbol = 'UNKNOWN',
     logoURI?: string[],
 ): ERC20TokenDetailed {
     return {
@@ -55,8 +55,8 @@ export function createERC20Token(
 export function createERC721ContractDetailed(
     chainId: ChainId,
     address: string,
-    name: string,
-    symbol: string,
+    name = 'Unknown Token',
+    symbol = 'UNKNOWN',
     baseURI?: string,
     iconURL?: string,
 ): ERC721ContractDetailed {

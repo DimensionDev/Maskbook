@@ -343,7 +343,7 @@
     "plugin_red_packet_description_refund": "crwdns4749:0{{balance}}crwdnd4749:0{{symbol}}crwdne4749:0",
     "plugin_red_packet_description_empty": "crwdns4751:0crwdne4751:0",
     "plugin_red_packet_description_broken": "crwdns4753:0crwdne4753:0",
-    "plugin_red_packet_description_failover": "crwdns4755:0{{name}}crwdnd4755:0{{shares}}crwdnd4755:0{{total}}crwdnd4755:0{{symbol}}crwdne4755:0",
+    "plugin_red_packet_description_failover": "crwdnd4755:0{{shares}}crwdnd4755:0{{total}}crwdnd4755:0{{symbol}}crwdne4755:0",
     "plugin_red_packet_claiming_from": "crwdns4757:0{{name}}crwdne4757:0",
     "plugin_red_packet_refunding_for": "crwdns4759:0{{balance}}crwdnd4759:0{{symbol}}crwdne4759:0",
     "plugin_red_packet_amount_per_share": "crwdns4761:0crwdne4761:0",
