@@ -107,7 +107,6 @@ export function TraderView(props: TraderViewProps) {
     const { name, tagType, dataProviders, tradeProviders, isPopper = true } = props
 
     const { t } = useI18N()
-
     const { classes } = useStyles({ isPopper })
     const dataProvider = useCurrentDataProvider(dataProviders)
     const tradeProvider = useCurrentTradeProvider()

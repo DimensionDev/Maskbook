@@ -74,10 +74,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         [`& .${chipClasses.label}`]: {
             paddingTop: 9,
             paddingBottom: 9,
-            fontSize: 13,
+            fontSize: 10,
             lineHeight: '18px',
             color: theme.palette.primary.contrastText,
-            marginRight: 10,
+            marginRight: 0,
         },
     },
 }))
