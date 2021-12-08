@@ -70,7 +70,7 @@ function NFTAvatarInTwitter() {
 
     useEffect(() => {
         if (!selectedToken) return
-        const starter = new MutationObserverWatcher(searchAvatarSelectorImage())
+        const watcher = new MutationObserverWatcher(searchAvatarSelectorImage())
             .startWatch({
                 childList: true,
                 subtree: true,
@@ -78,11 +78,10 @@ function NFTAvatarInTwitter() {
                 attributeFilter: ['src'],
             })
             .addListener('onChange', () => {
-                console.log('onChange')
                 assign(selectedToken)
             })
 
-        return () => starter.stopWatch()
+        return () => watcher.stopWatch()
     }, [selectedToken])
 
     const assign = async (token: ERC721TokenDetailed) => {
