@@ -13,6 +13,7 @@ import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
+import { delay } from '@masknet/shared-base'
 type FormInputs = {
     privateKey: string
 }
@@ -43,6 +44,8 @@ export const RestoreFromPrivateKey = memo(() => {
             const persona = await Services.Identity.queryPersonaByPrivateKey(data.privateKey)
             if (persona) {
                 await changeCurrentPersona(persona.identifier)
+                // Waiting persona changed event notify
+                await delay(100)
                 navigate(RoutePaths.Personas)
             } else {
                 navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
