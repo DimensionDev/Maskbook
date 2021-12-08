@@ -13,7 +13,9 @@ import { PostProviderTwitter } from './collecting/post'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
-import { injectSearchResultBoxAtTwitter } from './injection/SearchResult'
+import { injectSearchResultAtTwitter } from './injection/SearchResult'
+import { injectProfileSliderAtTwitter } from './injection/ProfileSlider'
+import { injectProfileTabAtTwitter } from './injection/ProfileTab'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
@@ -147,7 +149,9 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     injection: {
         toolbox: injectToolboxHintAtTwitter,
-        searchResult: injectSearchResultBoxAtTwitter,
+        searchResult: injectSearchResultAtTwitter,
+        profileSlider: injectProfileSliderAtTwitter,
+        profileTab: injectProfileTabAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,

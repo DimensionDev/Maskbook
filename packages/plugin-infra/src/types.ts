@@ -187,8 +187,8 @@ export namespace Plugin.SNSAdaptor {
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
-        /** This UI will be rendered under the Search box of the SNS. */
-        SearchBox?: InjectUI<{}>
+        /** This UI will be rendered under the Search of the SNS. */
+        SearchResult?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */

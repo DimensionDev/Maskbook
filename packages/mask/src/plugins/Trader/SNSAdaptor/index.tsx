@@ -9,7 +9,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     ...baseDeferred,
     init(signal) {},
-    SearchBox: SearchResultInspector,
+    SearchResult: SearchResultInspector,
     GlobalInjection: function Component() {
         return (
             <>
