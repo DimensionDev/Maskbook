@@ -173,7 +173,7 @@
     "plugin_red_packet_description_refund": "你可以退款 {{balance}} {{symbol}}。",
     "plugin_red_packet_description_empty": "這個紅包是空的。",
     "plugin_red_packet_description_broken": "這個紅包壞了",
-    "plugin_red_packet_description_failover": "寄送人 {{name}} / {{shares}} 分享數 / {{total}} {{symbol}}",
+    "plugin_red_packet_description_failover": "{{shares}} 分享數 / {{total}} {{symbol}}",
     "plugin_red_packet_claiming_from": "認領從 {{name}} 寄來的紅包",
     "plugin_red_packet_refunding_for": "紅包退款 {{balance}} {{symbol}}",
     "plugin_red_packet_amount_per_share": "每次分享總額",
