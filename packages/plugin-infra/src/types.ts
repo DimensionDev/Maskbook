@@ -188,7 +188,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
         /** This UI will be rendered under the Search box of the SNS. */
-        SearchBoxComponent?: InjectUI<{}>
+        SearchBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
@@ -203,6 +203,10 @@ export namespace Plugin.SNSAdaptor {
         ToolbarEntry?: ToolbarEntry
         /** This UI will be rendered as an entry in the wallet status dialog */
         ApplicationEntry?: ApplicationEntry
+        /** This UI will be rendered as sliders on the profile page */
+        ProfileSliders?: ProfileSlider[]
+        /** This UI will be rendered as tabs on the profile page */
+        ProfileTabs?: ProfileTab[]
     }
     //#region Composition entry
     /**
@@ -301,6 +305,36 @@ export namespace Plugin.SNSAdaptor {
          * What to do if the application icon is clicked.
          */
         onClick(): void
+    }
+
+    export interface ProfileSlider {
+        /**
+         * The name of the newsletter
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+        /**
+         * The injected UI
+         */
+        children: InjectUI<{}>
+    }
+
+    export interface ProfileTab {
+        /**
+         * The name of the newsletter
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+        /**
+         * The injected UI
+         */
+        children: InjectUI<{}>
     }
 }
 
