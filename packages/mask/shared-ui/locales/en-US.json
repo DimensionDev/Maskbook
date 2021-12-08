@@ -181,6 +181,7 @@
     "wallet_search_no_result": "No results.",
     "wallet_confirm_with_password": "Confirm with password",
     "wallet_airdrop_nft_unclaimed_title": "NFT Airdrop Unclaimed:",
+    "plugin_not_enabled": "{{plugin}} (Not Enabled)",
     "plugin_external_unknown_plugin": "New unknown Mask plugins found. Do you want to load them?",
     "plugin_external_loader_search_holder": "Search for an external plugin",
     "plugin_external_loader_search_button": "Search for plugin",

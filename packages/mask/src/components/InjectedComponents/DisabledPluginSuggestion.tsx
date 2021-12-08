@@ -6,8 +6,10 @@ import {
     Plugin,
 } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/shared-base'
-import { Button } from '@mui/material'
+import { Switch } from '@mui/material'
 import Services from '../../extension/service'
+import MaskPluginWrapper from '../../plugins/MaskPluginWrapper'
+import { useI18N } from '../../utils'
 
 function useDisabledPlugins() {
     const activated = new Set(useActivatedPluginsSNSAdaptor().map((x) => x.ID))
@@ -45,19 +47,18 @@ export function PossiblePluginSuggestionPostInspector() {
     return <PossiblePluginSuggestionUI plugins={matches} />
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {
+    const { t } = useI18N()
     const { plugins } = props
     if (!plugins.length) return null
     return (
         <>
-            <h1>Plugin suggestion: </h1>
-            <ul>
-                {plugins.map((x) => (
-                    <li key={x.ID}>
-                        {x.ID}
-                        <Button onClick={() => Services.Settings.setPluginEnabled(x.ID, true)}>Enable</Button>
-                    </li>
-                ))}
-            </ul>
+            {plugins.map((x) => (
+                <MaskPluginWrapper
+                    key={x.ID}
+                    pluginName={t('plugin_not_enabled', { plugin: x.name.fallback })}
+                    action={<Switch onChange={() => Services.Settings.setPluginEnabled(x.ID, true)} />}
+                />
+            ))}
         </>
     )
 }
