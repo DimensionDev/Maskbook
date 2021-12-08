@@ -70,6 +70,7 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
             isLoading={transactionLoading}
             isEmpty={!!transactionError || !transactions.length}
             dataSource={transactions}
+            selectedChainId={selectedChainId}
         />
     )
 })
@@ -81,10 +82,11 @@ export interface HistoryTableUIProps {
     isLoading: boolean
     isEmpty: boolean
     dataSource: Transaction[]
+    selectedChainId: ChainId
 }
 
 export const HistoryTableUI = memo<HistoryTableUIProps>(
-    ({ isLoading, isEmpty, dataSource, page, onPageChange, hasNextPage }) => {
+    ({ isLoading, isEmpty, dataSource, page, onPageChange, hasNextPage, selectedChainId }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         return (
@@ -114,7 +116,11 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                             {dataSource.length ? (
                                 <TableBody>
                                     {dataSource.map((transaction, index) => (
-                                        <HistoryTableRow key={index} transaction={transaction} />
+                                        <HistoryTableRow
+                                            key={index}
+                                            transaction={transaction}
+                                            selectedChainId={selectedChainId}
+                                        />
                                     ))}
                                 </TableBody>
                             ) : null}
