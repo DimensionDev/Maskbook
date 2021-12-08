@@ -178,7 +178,7 @@
     "wallets_history_types": "类型",
     "wallets_history_value": "价值",
     "wallets_history_time": "时间",
-    "wallets_history_receiver": "接收者",
+    "wallets_history_receiver": "交互方",
     "wallets_empty_history_tips": "没有任何交易历史",
     "wallets_loading_token": "正在加载代币",
     "personas_setup_connect_tips": "请连接到您的 {{type}} 账户。",

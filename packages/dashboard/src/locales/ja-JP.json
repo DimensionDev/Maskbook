@@ -177,7 +177,7 @@
     "wallets_history_types": "タイプ",
     "wallets_history_value": "価値",
     "wallets_history_time": "時間",
-    "wallets_history_receiver": "受取",
+    "wallets_history_receiver": "交互方",
     "wallets_empty_history_tips": "取引履歴がありません",
     "wallets_loading_token": "トークンを読み込み中",
     "personas_setup_connect_tips": "あなたの {{type}} アカウントに接続してください",
