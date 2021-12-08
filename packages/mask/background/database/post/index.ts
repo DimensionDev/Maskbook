@@ -1,12 +1,18 @@
-/// <reference path="./global.d.ts" />
-import { GroupIdentifier, Identifier, PostIdentifier, PostIVIdentifier, ProfileIdentifier } from './type'
+import {
+    AESCryptoKey,
+    AESJsonWebKey,
+    ECKeyIdentifier,
+    GroupIdentifier,
+    Identifier,
+    IdentifierMap,
+    PersonaIdentifier,
+    PostIdentifier,
+    PostIVIdentifier,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
 import { DBSchema, IDBPTransaction, openDB } from 'idb/with-async-ittr-cjs'
-import { PrototypeLess, restorePrototype, restorePrototypeArray } from '../../utils-pure'
-import { IdentifierMap } from './IdentifierMap'
-import { createDBAccessWithAsyncUpgrade, createTransaction } from '../../background/database/utils/openDB'
-import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
-import { CryptoKeyToJsonWebKey } from '../utils/type-transform/CryptoKey-JsonWebKey'
-import { ECKeyIdentifier, PersonaIdentifier } from '@masknet/shared-base'
+import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype, restorePrototypeArray } from '../../../utils-pure'
+import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
@@ -169,7 +175,7 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
                 const x = r.postCryptoKey
                 if (!x) continue
                 try {
-                    const key = await CryptoKeyToJsonWebKey<AESJsonWebKey>(x as any)
+                    const key = await CryptoKeyToJsonWebKey(x as any as AESCryptoKey)
                     map.set(r.identifier, key)
                 } catch {
                     continue
