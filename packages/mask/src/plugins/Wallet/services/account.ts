@@ -6,7 +6,6 @@ import {
     getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
-    resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
@@ -47,9 +46,7 @@ export async function updateAccount(
         providerType !== ProviderType.MaskWallet &&
         !(await hasWallet(account))
     ) {
-        await updateWallet(account, {
-            name: name || resolveProviderName(providerType),
-        })
+        await updateWallet(account, {})
     }
 
     // update global settings

@@ -55,6 +55,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             display: 'none',
         },
     },
+    tradeRoot: {
+        width: 535,
+        margin: 'auto',
+    },
 }))
 
 interface TraderDialogProps {
@@ -111,7 +115,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                 chains={chains ?? []}
                             />
                         </div>
-                        <Trader {...traderProps} chainId={chainId} />
+                        <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
                     </DialogContent>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>
