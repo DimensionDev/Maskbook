@@ -1,6 +1,6 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { getMaskColor, makeStyles } from '@masknet/theme'
-import { EnhancedProfilePage } from '../../../plugins/Profile/SNSAdaptor/EnhancedProfile'
+import { ProfileTabContent } from '../../../components/InjectedComponents/ProfileTabContent'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
     searchNewTweetButtonSelector,
@@ -8,21 +8,21 @@ import {
     searchProfileTabPageSelector,
 } from '../utils/selector'
 
-function injectEnhancedProfilePageForEmptyState(signal: AbortSignal) {
+function injectProfileTabContentForEmptyState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileEmptySelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfilePageAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
 }
 
-function injectEnhancedProfilePageState(signal: AbortSignal) {
+function injectProfileTabContentState(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabPageSelector())
     startWatch(watcher, signal)
-    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfilePageAtTwitter />)
+    createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabContentAtTwitter />)
 }
 
-export function injectEnhancedProfileAtTwitter(signal: AbortSignal) {
-    injectEnhancedProfilePageForEmptyState(signal)
-    injectEnhancedProfilePageState(signal)
+export function injectProfileTabContentAtTwitter(signal: AbortSignal) {
+    injectProfileTabContentForEmptyState(signal)
+    injectProfileTabContentState(signal)
 }
 
 function getStyleProps() {
@@ -60,7 +60,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export function EnhancedProfilePageAtTwitter() {
+export function ProfileTabContentAtTwitter() {
     const { classes } = useStyles()
-    return <EnhancedProfilePage classes={classes} />
+    return <ProfileTabContent classes={classes} />
 }

@@ -130,10 +130,9 @@ export namespace SocialNetworkUI {
             profileSlider?(signal: AbortSignal): void
             /** Inject UI to the profile tab */
             profileTab?(signal: AbortSignal): void
+            /** Inject UI to the profile page */
+            profileTabContent?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
-            /** Inject UI to the Profile page */
-            enhancedProfileTab?(signal: AbortSignal): void
-            enhancedProfile?(signal: AbortSignal): void
 
             /**
              * @deprecated

@@ -80,8 +80,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
 
-    ui.injection.enhancedProfile?.(signal)
-    ui.injection.enhancedProfileTab?.(signal)
+    ui.injection.profileTab?.(signal)
+    ui.injection.profileTabContent?.(signal)
 
     ui.injection.userAvatar?.(signal)
     ui.injection.profileAvatar?.(signal)

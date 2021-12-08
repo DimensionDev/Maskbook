@@ -188,7 +188,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
         /** This UI will be rendered under the Search of the SNS. */
-        SearchResult?: InjectUI<{}>
+        SearchResultBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
@@ -309,7 +309,7 @@ export namespace Plugin.SNSAdaptor {
 
     export interface ProfileSlider {
         /**
-         * The name of the newsletter
+         * The name of the slider card
          */
         label: I18NStringField | string
         /**
@@ -324,7 +324,7 @@ export namespace Plugin.SNSAdaptor {
 
     export interface ProfileTab {
         /**
-         * The name of the newsletter
+         * The name of the tab
          */
         label: I18NStringField | string
         /**

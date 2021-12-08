@@ -13,9 +13,10 @@ import { PostProviderTwitter } from './collecting/post'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
 import { i18NOverwriteTwitter } from './customization/i18n'
-import { injectSearchResultAtTwitter } from './injection/SearchResult'
+import { injectSearchResultBoxAtTwitter } from './injection/SearchResultBox'
 import { injectProfileSliderAtTwitter } from './injection/ProfileSlider'
 import { injectProfileTabAtTwitter } from './injection/ProfileTab'
+import { injectProfileTabContentAtTwitter } from './injection/ProfileTabContent'
 import { injectPostReplacerAtTwitter } from './injection/PostReplacer'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
@@ -26,8 +27,6 @@ import { pasteImageToCompositionDefault } from '../../social-network/defaults/au
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
-import { injectEnhancedProfileTabAtTwitter } from './injection/EnhancedProfileTab'
-import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
 import { makeStyles } from '@masknet/theme'
 import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
 import { injectProfileNFTAvatarInTwitter } from './injection/NFT/ProfileNFTAvatar'
@@ -149,15 +148,14 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     injection: {
         toolbox: injectToolboxHintAtTwitter,
-        searchResult: injectSearchResultAtTwitter,
-        profileSlider: injectProfileSliderAtTwitter,
+        searchResult: injectSearchResultBoxAtTwitter,
         profileTab: injectProfileTabAtTwitter,
+        profileTabContent: injectProfileTabContentAtTwitter,
+        profileSlider: injectProfileSliderAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtTwitter,
         setupPrompt: injectSetupPromptAtTwitter,
-        enhancedProfile: injectEnhancedProfileAtTwitter,
-        enhancedProfileTab: injectEnhancedProfileTabAtTwitter,
         newPostComposition: {
             start: injectPostBoxComposed,
             supportedInputTypes: {
