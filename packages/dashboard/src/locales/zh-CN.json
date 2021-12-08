@@ -283,6 +283,8 @@
     "settings_dialogs_backup_to_cloud": "备份至云端",
     "settings_dialogs_merge_to_local_data": "将云端备份合并到本地并再次备份到云端",
     "settings_dialogs_backup_action_desc": "云端备份已存在， 您可以选择在备份之前先合并此云端备份到您的本地数据，或者直接覆盖重新备份。",
+    "settings_dialogs_backup_to_cloud_action": "选择此选项会使用本地文件覆盖云端已存在备份.",
+    "settings_dialogs_backup_merge_cloud": "选择此选项会要求输入已存储云端文件密码进行解密.将云端备份和本地备份合并后加密上传.",
     "settings_dialogs_backup_merged_tip": "您已经合并云端备份到本地. 如果您想要继续完成备份，请点击备份按钮将您的所有数据更新到云端。",
     "settings_label_backup_password": "备份密码",
     "settings_label_new_backup_password": "新备份密码",

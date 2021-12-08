@@ -15,7 +15,7 @@ import PasswordField from '../../../../components/PasswordField'
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
         background: MaskColorVar.lightBackground,
-        margin: '0 0 16px',
+        margin: '0',
         padding: '2px 0',
         borderRadius: 8,
     },
@@ -86,16 +86,17 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
         <MaskDialog maxWidth="xs" title={t.settings_cloud_backup()} open={open} onClose={onClose}>
             <Box sx={{ padding: '0 24px 24px' }}>
                 <BackupInfoCard info={info} />
-                <Typography sx={{ fontSize: '13px', padding: '24px 0' }}>
-                    {t.settings_dialogs_backup_action_desc()}
-                </Typography>
 
                 <RadioGroup aria-label="mode" name="mode" value={mode} onChange={(e) => setMode(e.target.value)}>
                     <StyledFormControlLabel
                         value="1"
                         control={<Radio size="small" />}
                         label={t.settings_dialogs_backup_to_cloud()}
+                        style={{ marginTop: '12px' }}
                     />
+                    <Typography sx={{ fontSize: '13px', padding: '12px 0px' }}>
+                        {t.settings_dialogs_backup_to_cloud_action()}
+                    </Typography>
                     <StyledFormControlLabel
                         sx={{ fontSize: 14 }}
                         value="2"
@@ -106,16 +107,18 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
 
                 {mode === '2' ? (
                     <PasswordField
+                        sx={{ marginTop: '12px' }}
                         fullWidth
                         value={backupPassword}
                         onChange={(event) => setBackupPassword(event.target.value)}
                         placeholder={t.settings_label_backup_password_cloud()}
-                        sx={{ marginBottom: '24px' }}
                         error={incorrectBackupPassword}
                         helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
                 ) : null}
-
+                <Typography sx={{ fontSize: '13px', padding: '12px 0px' }}>
+                    {t.settings_dialogs_backup_merge_cloud()}
+                </Typography>
                 <LoadingButton
                     fullWidth
                     onClick={onBackup}
