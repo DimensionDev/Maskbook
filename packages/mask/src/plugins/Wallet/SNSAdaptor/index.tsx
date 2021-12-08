@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, ApplicationEntryConduct } from '@masknet/plugin-infra'
 import { base } from '@masknet/plugin-wallet'
 import { SelectTokenDialog } from './SelectTokenDialog'
 import { SelectNftContractDialog } from './SelectNftContractDialog'
@@ -40,6 +40,15 @@ const sns: Plugin.SNSAdaptor.Definition = {
             </>
         )
     },
+    ApplicationEntries: [
+        {
+            icon: new URL('./assets/bridge.png', import.meta.url),
+            label: 'Mask Bridge',
+            priority: 5,
+            conduct: { type: ApplicationEntryConduct.Link, url: 'https://bridge.mask.io/#/' },
+            walletRequired: false,
+        },
+    ],
 }
 
 export default sns

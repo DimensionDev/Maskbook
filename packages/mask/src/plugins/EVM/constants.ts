@@ -1,4 +1,4 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import { Web3Plugin, NetworkPluginID } from '@masknet/plugin-infra'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_META_KEY = 'com.mask.evm'
@@ -184,5 +184,6 @@ export const PLUGIN_APPLICATION_CATEGORIES: Web3Plugin.ApplicationCategoryDescri
         ID: `${PLUGIN_ID}_category_nfts`,
         name: 'NFTs',
         icon: new URL('./assets/nfts.png', import.meta.url),
+        networkPluginId: NetworkPluginID.PLUGIN_EVM,
     },
 ]

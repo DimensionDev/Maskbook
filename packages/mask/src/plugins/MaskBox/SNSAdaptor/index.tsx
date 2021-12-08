@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from 'react'
-import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
+import { Plugin, usePostInfoDetails, ApplicationEntryConduct } from '@masknet/plugin-infra'
 import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
 import { parseURL } from '../../../utils/utils'
@@ -8,6 +8,7 @@ import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { PreviewCard } from './components/PreviewCard'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { Context } from '../hooks/useContext'
+import { PLUGIN_APPLICATION_CATEGORIES } from '../../EVM/constants'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -29,6 +30,16 @@ const sns: Plugin.SNSAdaptor.Definition = {
         if (!link) return null
         return <Renderer url={link} />
     },
+    ApplicationEntries: [
+        {
+            icon: new URL('./assets/mask_box.png', import.meta.url),
+            label: 'MaskBox',
+            priority: 6,
+            categoryID: PLUGIN_APPLICATION_CATEGORIES[0].ID,
+            conduct: { type: ApplicationEntryConduct.Link, url: 'https://box.mask.io/#/' },
+            walletRequired: false,
+        },
+    ],
 }
 
 export default sns

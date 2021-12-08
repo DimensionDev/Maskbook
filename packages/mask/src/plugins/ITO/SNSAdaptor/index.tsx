@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, NetworkPluginID, ApplicationEntryConduct } from '@masknet/plugin-infra'
 import { ItoLabelIcon } from '../assets/ItoLabelIcon'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
-import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER } from '../constants'
+import { ITO_MetaKey_1, ITO_MetaKey_2, MSG_DELIMITER, ITO_PluginID } from '../constants'
 import type { JSON_PayloadComposeMask } from '../types'
 import { ITO_MetadataReader, payloadIntoMask } from './helpers'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
@@ -17,6 +17,7 @@ import { CompositionDialog } from './CompositionDialog'
 import { set } from 'lodash-unified'
 import { ToolIconURLs } from '../../../resources/tool-icon'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { PLUGIN_NETWORKS } from '../../EVM/constants'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -56,6 +57,28 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ...ToolIconURLs.markets,
         onClick: 'openCompositionEntry',
     },
+    ApplicationEntries: [
+        {
+            icon: new URL('../assets/token.png', import.meta.url),
+            label: 'ITO',
+            priority: 3,
+            conduct: { type: ApplicationEntryConduct.Encryptedmsg, id: ITO_PluginID },
+            supportedNetworkList: [
+                { network: NetworkPluginID.PLUGIN_EVM, chainIdList: PLUGIN_NETWORKS.map((network) => network.chainId) },
+            ],
+            walletRequired: true,
+        },
+        {
+            icon: new URL('../assets/gift.png', import.meta.url),
+            label: 'Claim',
+            priority: 4,
+            conduct: { type: ApplicationEntryConduct.Custom },
+            supportedNetworkList: [
+                { network: NetworkPluginID.PLUGIN_EVM, chainIdList: PLUGIN_NETWORKS.map((network) => network.chainId) },
+            ],
+            walletRequired: true,
+        },
+    ],
 }
 
 function onAttached_ITO(payload: JSON_PayloadComposeMask) {

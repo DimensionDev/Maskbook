@@ -73,6 +73,8 @@ export declare namespace Web3Plugin {
         icon: URL
         /** The category name */
         name: string
+        /** The category network plugin id */
+        networkPluginId: NetworkPluginID
     }
 
     export interface CryptoPrice {

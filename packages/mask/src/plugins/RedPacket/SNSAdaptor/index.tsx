@@ -1,4 +1,4 @@
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, ApplicationEntryConduct, NetworkPluginID } from '@masknet/plugin-infra'
 import {
     ChainId,
     EthereumTokenType,
@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { base } from '../base'
-import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
+import { RedPacketMetaKey, RedPacketNftMetaKey, RedPacketPluginID } from '../constants'
 import {
     RedPacketMetadataReader,
     RedPacketNftMetadataReader,
@@ -21,6 +21,7 @@ import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
 import { ToolIconURLs } from '../../../resources/tool-icon'
+import { PLUGIN_NETWORKS } from '../../EVM/constants'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -68,6 +69,18 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ...ToolIconURLs.redpacket,
         onClick: 'openCompositionEntry',
     },
+    ApplicationEntries: [
+        {
+            icon: new URL('./assets/lucky_drop.png', import.meta.url),
+            label: 'Lucky Drop',
+            priority: 1,
+            conduct: { type: ApplicationEntryConduct.Encryptedmsg, id: RedPacketPluginID },
+            supportedNetworkList: [
+                { network: NetworkPluginID.PLUGIN_EVM, chainIdList: PLUGIN_NETWORKS.map((network) => network.chainId) },
+            ],
+            walletRequired: true,
+        },
+    ],
 }
 interface ERC20RedpacketBadgeProps {
     payload: RedPacketJSONPayload

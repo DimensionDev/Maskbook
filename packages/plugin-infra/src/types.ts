@@ -2,7 +2,7 @@ import type React from 'react'
 import type { Option, Result } from 'ts-results'
 import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared'
 import type { Emitter } from '@servie/events'
-import type { Web3Plugin } from './web3-types'
+import type { Web3Plugin, NetworkPluginID } from './web3-types'
 
 export declare namespace Plugin {
     /**
@@ -202,7 +202,7 @@ export namespace Plugin.SNSAdaptor {
         /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
         ToolbarEntry?: ToolbarEntry
         /** This UI will be rendered as an entry in the wallet status dialog */
-        ApplicationEntry?: ApplicationEntry
+        ApplicationEntries?: ApplicationEntry[]
     }
     //#region Composition entry
     /**
@@ -280,6 +280,14 @@ export namespace Plugin.SNSAdaptor {
     }
     //#endregion
 
+    export type ApplicationEntryForLink = { type: ApplicationEntryConduct.Link; url: string }
+
+    export type ApplicationEntryForEncryptedmsg = { type: ApplicationEntryConduct.Encryptedmsg; id: string }
+
+    export type ApplicationEntryForCustomConduct = { type: ApplicationEntryConduct.Custom }
+
+    export type ApplicationEntrySupportedNetwork = { network: NetworkPluginID; chainIdList: number[] }
+
     export interface ApplicationEntry {
         /**
          * The icon image URL
@@ -300,7 +308,16 @@ export namespace Plugin.SNSAdaptor {
         /**
          * What to do if the application icon is clicked.
          */
-        onClick(): void
+        conduct: ApplicationEntryForLink | ApplicationEntryForEncryptedmsg | ApplicationEntryForCustomConduct
+        /**
+         * Supported Networks
+         */
+        supportedNetworkList?: ApplicationEntrySupportedNetwork[]
+        /**
+         * Whether wallet required
+         */
+        walletRequired: boolean
+        isHide?: () => boolean
     }
 }
 
@@ -471,6 +488,12 @@ export interface I18NStringField {
     fallback: string
 }
 export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
+
+export enum ApplicationEntryConduct {
+    Link = 'Link',
+    Encryptedmsg = 'Encryptedmsg',
+    Custom = 'custom',
+}
 
 /**
  * The current running SocialNetwork.

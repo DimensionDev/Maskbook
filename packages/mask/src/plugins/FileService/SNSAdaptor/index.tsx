@@ -1,9 +1,9 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import type { Plugin } from '@masknet/plugin-infra'
+import { Plugin, ApplicationEntryConduct } from '@masknet/plugin-infra'
 import { truncate } from 'lodash-unified'
 import { ToolIconURLs } from '../../../resources/tool-icon'
 import { base } from '../base'
-import { META_KEY_1, META_KEY_2 } from '../constants'
+import { META_KEY_1, META_KEY_2, FileServicePluginID } from '../constants'
 import { FileInfoMetadataReader } from '../helpers'
 import type { FileInfo } from '../types'
 import FileServiceDialog from './MainDialog'
@@ -29,6 +29,15 @@ const definition: Plugin.SNSAdaptor.Definition = {
         ...ToolIconURLs.files,
         onClick: 'openCompositionEntry',
     },
+    ApplicationEntries: [
+        {
+            icon: new URL('./assets/files.png', import.meta.url),
+            label: 'File Service',
+            priority: 2,
+            conduct: { type: ApplicationEntryConduct.Encryptedmsg, id: FileServicePluginID },
+            walletRequired: false,
+        },
+    ],
 }
 
 export default definition

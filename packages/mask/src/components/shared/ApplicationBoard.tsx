@@ -6,15 +6,18 @@ import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
-import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { FileServicePluginID } from '../../plugins/FileService/constants'
-import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import {
+    usePluginIDContext,
+    useActivatedPluginsSNSAdaptor,
+    Plugin,
+    ApplicationEntryConduct,
+    I18NStringField,
+} from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -86,12 +89,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface MaskAppEntry {
-    title: string
+    title: string | I18NStringField
     img: string
     onClick: any
     supportedChains?: ChainId[]
     hidden: boolean
     walletRequired: boolean
+    priority: number
+    categoryID?: string
 }
 
 interface MaskApplicationBoxProps {
@@ -105,7 +110,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const account = useAccount()
     const selectedWallet = useWallet()
     const currentPluginId = usePluginIDContext()
-    const isFlow = currentPluginId === NetworkPluginID.PLUGIN_FLOW
+    const snsAdaptorPlugins = useActivatedPluginsSNSAdaptor()
 
     //#region Encrypted message
     const openEncryptedMessage = useCallback(
@@ -164,149 +169,109 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     //#endregion
 
     function createEntry(
-        title: string,
-        img: string,
+        title: string | I18NStringField,
+        img: URL,
         onClick: any,
         supportedChains?: ChainId[],
         hidden = false,
         walletRequired = true,
+        priority = 0,
+        categoryID?: string,
     ) {
         return {
             title,
-            img,
+            img: img.toString(),
             onClick,
             supportedChains,
             hidden,
             walletRequired,
+            priority,
+            categoryID,
         }
     }
 
-    const firstLevelEntries: MaskAppEntry[] = [
-        createEntry(
-            'Lucky Drop',
-            new URL('./assets/lucky_drop.png', import.meta.url).toString(),
-            () => openEncryptedMessage(RedPacketPluginID),
-            undefined,
-            isFlow,
-        ),
-        createEntry(
-            'File Service',
-            new URL('./assets/files.png', import.meta.url).toString(),
-            () => openEncryptedMessage(FileServicePluginID),
-            undefined,
-            false,
-            false,
-        ),
-        createEntry(
-            'ITO',
-            new URL('./assets/token.png', import.meta.url).toString(),
-            () => openEncryptedMessage(ITO_PluginID),
-            undefined,
-            isFlow,
-        ),
-        createEntry(
-            'Claim',
-            new URL('./assets/gift.png', import.meta.url).toString(),
-            onClaimAllDialogOpen,
-            undefined,
-            isFlow,
-        ),
-        createEntry(
-            'Mask Bridge',
-            new URL('./assets/bridge.png', import.meta.url).toString(),
-            () => window.open('https://bridge.mask.io/#/', '_blank', 'noopener noreferrer'),
-            undefined,
-            isFlow,
-            false,
-        ),
-        createEntry(
-            'MaskBox',
-            new URL('./assets/mask_box.png', import.meta.url).toString(),
-            () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
-            undefined,
-            isFlow,
-            false,
-        ),
-        createEntry(
-            'Swap',
-            new URL('./assets/swap.png', import.meta.url).toString(),
-            onSwapDialogOpen,
-            undefined,
-            isFlow,
-        ),
-        createEntry(
-            'Fiat On-Ramp',
-            new URL('./assets/fiat_ramp.png', import.meta.url).toString(),
-            () => setBuyDialog({ open: true, address: account }),
-            undefined,
-            false,
-            false,
-        ),
-        createEntry(
-            'NFTs',
-            new URL('./assets/nft.png', import.meta.url).toString(),
-            () =>
-                openSecondEntryDir(
-                    'NFTs',
-                    [
-                        createEntry(
-                            'MaskBox',
-                            new URL('./assets/mask_box.png', import.meta.url).toString(),
-                            () => window.open('https://box.mask.io/#/', '_blank', 'noopener noreferrer'),
+    const _firstEntries = snsAdaptorPlugins
+        .reduce((acc: MaskAppEntry[], p) => {
+            p.ApplicationEntries?.map((entry) => {
+                let handle
+                switch (entry.conduct.type) {
+                    case ApplicationEntryConduct.Encryptedmsg:
+                        handle = () =>
+                            openEncryptedMessage(
+                                (entry.conduct as Plugin.SNSAdaptor.ApplicationEntryForEncryptedmsg).id,
+                            )
+                        break
+                    case ApplicationEntryConduct.Link:
+                        handle = () =>
+                            window.open(
+                                (entry.conduct as Plugin.SNSAdaptor.ApplicationEntryForLink).url,
+                                '_blank',
+                                'noopener noreferrer',
+                            )
+                        break
+                    case ApplicationEntryConduct.Custom:
+                        switch (entry.label) {
+                            case 'Claim':
+                                handle = onClaimAllDialogOpen
+                                break
+                            case 'Swap':
+                                handle = onSwapDialogOpen
+                                break
+                            case 'Fiat On-Ramp':
+                                handle = () => setBuyDialog({ open: true, address: account })
+                                break
+                            default:
+                                handle = () => undefined
+                        }
+
+                        break
+                    default:
+                        handle = () => undefined
+                }
+
+                const supportedNetwork = entry.supportedNetworkList?.find((v) => v.network === currentPluginId)
+
+                acc.push(
+                    createEntry(
+                        entry.label,
+                        entry.icon,
+                        handle,
+                        supportedNetwork?.chainIdList,
+                        !Boolean(supportedNetwork) && entry.walletRequired,
+                        entry.walletRequired,
+                        entry.priority,
+                        entry.categoryID,
+                    ),
+                )
+            })
+
+            return acc
+        }, [])
+        .sort((a, b) => a.priority - b.priority)
+
+    const categoryEntries = snsAdaptorPlugins.reduce((acc: MaskAppEntry[], p) => {
+        p.declareApplicationCategories?.map((category) => {
+            acc.push(
+                createEntry(
+                    category.name,
+                    category.icon,
+                    () =>
+                        openSecondEntryDir(
+                            category.name,
+                            _firstEntries.filter((entry) => entry.categoryID === category.ID),
                             undefined,
-                            false,
-                            false,
                         ),
-                        createEntry(
-                            'Valuables',
-                            new URL('./assets/valuables.png', import.meta.url).toString(),
-                            () => {},
-                            undefined,
-                            true,
-                        ),
-                    ],
                     undefined,
+                    category.networkPluginId !== currentPluginId,
+                    true,
+                    9999,
                 ),
-            undefined,
-            isFlow,
-        ),
-        createEntry(
-            'Investment',
-            new URL('./assets/investment.png', import.meta.url).toString(),
-            () =>
-                openSecondEntryDir(
-                    'Investment',
-                    [
-                        createEntry('Zerion', new URL('./assets/zerion.png', import.meta.url).toString(), () => {}, [
-                            ChainId.Mainnet,
-                        ]),
-                        createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
-                    ],
-                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
-                ),
-            undefined,
-            true,
-        ),
-        createEntry('Saving', new URL('./assets/saving.png', import.meta.url).toString(), undefined, undefined, true),
-        createEntry(
-            'Alternative',
-            new URL('./assets/more.png', import.meta.url).toString(),
-            () =>
-                openSecondEntryDir(
-                    'Alternative',
-                    [
-                        createEntry(
-                            'PoolTogether',
-                            new URL('./assets/pool_together.png', import.meta.url).toString(),
-                            () => {},
-                        ),
-                    ],
-                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
-                ),
-            undefined,
-            true,
-        ),
-    ]
+            )
+        })
+        return acc
+    }, [])
+
+    const firstEntries = _firstEntries.concat(categoryEntries)
 
     return (
         <>
@@ -321,7 +286,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                 </div>
             ) : null}
             <section className={classes.applicationWrapper}>
-                {(secondEntries ?? firstLevelEntries).map(
+                {(secondEntries ?? firstEntries).map(
                     ({ title, img, onClick, supportedChains, hidden, walletRequired }, i) =>
                         (!supportedChains || supportedChains?.includes(chainId)) && !hidden ? (
                             <div
