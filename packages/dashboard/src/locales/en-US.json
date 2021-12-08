@@ -180,7 +180,7 @@
     "wallets_history_types": "Types",
     "wallets_history_value": "Value",
     "wallets_history_time": "Time",
-    "wallets_history_receiver": "Receiver",
+    "wallets_history_receiver": "Interacted with (to)",
     "wallets_empty_history_tips": "No transaction history",
     "wallets_loading_token": "Loading Token",
     "personas_setup_connect_tips": "Please connect to your {{type}} account.",
