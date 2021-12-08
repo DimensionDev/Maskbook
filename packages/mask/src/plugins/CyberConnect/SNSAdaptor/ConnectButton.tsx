@@ -4,27 +4,29 @@ import { makeStyles } from '@masknet/theme'
 import { useWeb3, useAccount } from '@masknet/web3-shared-evm'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages'
+import classname from 'classnames'
+import { CircularProgress } from '@mui/material'
 const useStyles = makeStyles()((theme) => ({
     button: {
         width: '350px',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         background: '#000',
         fontSize: '20px',
         color: '#fff',
-        marginTop: '18px',
+        marginTop: '40px',
         borderRadius: '4px',
-        padding: `${theme.spacing(2)} 0`,
+        padding: '20px 20px 20px 30px',
         transition: 'all .3s ease',
-        svg: {
+        '>svg': {
             marginRight: '20px',
             transition: 'all .3s ease',
         },
         cursor: 'pointer',
         '&:hover': {
             opacity: 0.8,
-            svg: {
+            '>svg': {
                 '&:nth-of-type(1)': {
                     transformOrigin: 'calc(100% + 1px) center',
                     transform: 'rotate(-45deg) translate(2px,0px)',
@@ -33,6 +35,22 @@ const useStyles = makeStyles()((theme) => ({
                     transformOrigin: '-1px center',
                     transform: 'rotate(135deg) translate(-8px,0px)',
                 },
+            },
+        },
+    },
+    isFollowing: {
+        '&:hover': {
+            cursor: 'not-allowed',
+            opacity: 1,
+        },
+        '>svg': {
+            '&:nth-of-type(1)': {
+                transformOrigin: 'calc(100% + 1px) center',
+                transform: 'rotate(-45deg) translate(2px,0px)',
+            },
+            '&:nth-of-type(2)': {
+                transformOrigin: '-1px center',
+                transform: 'rotate(135deg) translate(-8px,0px)',
             },
         },
     },
@@ -72,14 +90,15 @@ export default function ConnectButton({ address }: { address: string }) {
     const myAddress = useAccount()
     const [cc, setCc] = useState<any>(null)
     const [isFollowing, setIsFollowing] = useState<boolean>(false)
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const logoIcon = getAssetAsBlobURL(new URL('../assets/logo-white.svg', import.meta.url))
 
     useEffect(() => {
-        if (address) {
+        if (address && myAddress !== address) {
             ;(async function () {
                 const res = await PluginCyberConnectRPC.fetchFollowStatus(myAddress, address)
                 console.log(res)
-                setIsFollowing(res.data.isFollowing)
+                setIsFollowing(res.data.followStatus.isFollowing)
             })()
         }
     }, [address])
@@ -88,26 +107,44 @@ export default function ConnectButton({ address }: { address: string }) {
         if (web3.eth.currentProvider) {
             const ccInstance = new CyberConnect({
                 provider: web3.eth.currentProvider,
-                namespace: 'CyberConnect',
-                env: Env.STAGING,
+                namespace: 'Mask',
+                env: process.env.NODE_ENV === 'production' ? Env.PRODUCTION : Env.STAGING,
             })
             setCc(ccInstance)
         }
     }, [web3])
 
     const follow = () => {
-        cc?.connect(address).then((res: any) => {
-            console.log(res)
-        })
+        setIsLoading(true)
+        cc?.connect(address)
+            .then((res: any) => {
+                console.log(res)
+                setIsFollowing(false)
+            })
+            .catch((error: any) => {
+                console.log(error)
+                setIsLoading(false)
+            })
     }
 
-    return (
+    return myAddress && myAddress.toLowerCase() !== address.toLowerCase() ? (
         <div
-            className={classes.button}
+            className={classname(classes.button, {
+                [classes.isFollowing]: isFollowing,
+            })}
             onClick={() => {
-                follow()
+                if (!isFollowing) {
+                    follow()
+                } else {
+                }
             }}>
-            <Logo /> Follow Via CyberConnect
+            {!isLoading ? (
+                <>
+                    <Logo /> {!isFollowing ? 'Follow Now' : 'Following'}
+                </>
+            ) : (
+                <CircularProgress size={30} sx={{ marginLeft: '124px' }} />
+            )}
         </div>
-    )
+    ) : null
 }

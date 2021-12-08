@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import Avatar from 'boring-avatars'
 import { PluginCyberConnectRPC } from '../messages'
-import RelationShip from './RelationShip'
 import { Skeleton } from '@mui/material'
 import { useWeb3 } from '@masknet/web3-shared-evm'
 import { getAssetAsBlobURL } from '../../../utils'
 import ConnectButton from './ConnectButton'
 import FollowTab from './FollowTab'
+import { shortenAddress } from '../utils/helper'
 const useStyles = makeStyles()((theme) => ({
     root: {
         display: 'flex',
@@ -27,7 +27,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 800,
         fontSize: '32px',
         lineHeight: '35px',
-        width: '100%',
+        width: '350px',
         textAlign: 'center',
         wordBreak: 'break-word',
         marginTop: '20px',
@@ -52,7 +52,9 @@ const Profile = ({ url }: { url: string }) => {
     const { classes } = useStyles()
     const [, , , , queryAddress] = url.split('/')
     const [identity, setIdentity] = useState<any>(null)
+    const [ensAvatar, setEnsAvatar] = useState<string>('')
     const web3 = useWeb3()
+
     const [ethAddress, setEthAddress] = useState<string>('')
     const SocialMedia = [
         {
@@ -81,6 +83,9 @@ const Profile = ({ url }: { url: string }) => {
             web3.eth.ens.getAddress(queryAddress).then((res) => {
                 setEthAddress(res)
             })
+            // web3.eth.ens.getText('avatar').then((res)=>{
+            //     console.log(res);
+            // })
         } else {
             setEthAddress(queryAddress)
         }
@@ -97,7 +102,7 @@ const Profile = ({ url }: { url: string }) => {
             <div className={classes.avatar}>
                 <Avatar name={queryAddress} square={true} size={350} />
             </div>
-            <div className={classes.userName}>{queryAddress}</div>
+            <div className={classes.userName}>{shortenAddress(queryAddress, 12)}</div>
 
             {!identity ? (
                 <Skeleton width={400} height={40} />
@@ -125,11 +130,11 @@ const Profile = ({ url }: { url: string }) => {
                 )}
             </div>
 
-            {!identity ? (
+            {/* {!identity ? (
                 <Skeleton width={400} height={100} />
             ) : (
                 <RelationShip followingCount={identity.followingCount} followerCount={identity.followerCount} />
-            )}
+            )} */}
             {ethAddress ? <ConnectButton address={ethAddress} /> : <Skeleton width={400} height={40} />}
             {!identity ? (
                 <Skeleton width={400} height={100} />

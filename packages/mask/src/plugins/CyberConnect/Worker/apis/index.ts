@@ -1,5 +1,9 @@
 async function query(data: any) {
-    const res = await fetch(`https://api.stg.cybertino.io/connect/`, {
+    const endpiont =
+        process.env.NODE_ENV === 'production'
+            ? 'https://api.cybertino.io/connect/'
+            : 'https://api.stg.cybertino.io/connect/'
+    const res = await fetch(endpiont, {
         method: 'POST',
         mode: 'cors',
         cache: 'no-cache',
@@ -52,7 +56,7 @@ export async function fetchFollowStatus(fromAddr: string, toAddr: string) {
             $fromAddr: String!
             $toAddr: String!
           ) {
-            followStatus(fromAddr: $fromAddr, toAddr: $toAddr, namespace: "CyberConnect") {
+            followStatus(fromAddr: $fromAddr, toAddr: $toAddr, namespace: "Mask") {
               isFollowed
               isFollowing
             }
