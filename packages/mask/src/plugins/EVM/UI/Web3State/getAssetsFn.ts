@@ -49,7 +49,7 @@ export const getFungibleAssetsFn =
             token: {
                 ...x.token,
                 type: TokenType.Fungible,
-                name: x.token.name ?? 'Unknown Token'!,
+                name: x.token.name ?? 'Unknown Token',
                 symbol: x.token.symbol ?? 'Unknown',
                 id: x.token.address,
                 chainId: x.token.chainId,
