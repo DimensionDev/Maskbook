@@ -122,7 +122,7 @@ export const resolveExplorerAPI = createLookupTableResolver<ChainId, string>(
         [ChainId.Arbitrum_Rinkeby]: '',
         [ChainId.xDai]: 'https://blockscout.com/xdai/mainnet/api',
     },
-    ''
+    '',
 )
 
 export function resolveLinkOnExplorer(chainId: ChainId) {

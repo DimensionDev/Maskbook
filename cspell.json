@@ -337,7 +337,8 @@
         "isfacebook",
         "findtruman",
         "uaddr",
-        "consts"
+        "consts",
+        "txreceipt"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

@@ -10,9 +10,31 @@ import {
 } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 
-export function getPayloadId(payload: JsonRpcPayload) {
-    if (!payload.id || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return ''
+export function toReceipt(status: '0' | '1', transaction: Transaction): TransactionReceipt {
+    return {
+        status: status === '1',
+        transactionHash: transaction.hash,
+        transactionIndex: transaction.transactionIndex ?? 0,
+        blockHash: transaction.blockHash ?? '',
+        blockNumber: transaction.blockNumber ?? 0,
+        from: transaction.from,
+        to: transaction.to ?? '',
+        cumulativeGasUsed: 0,
+        gasUsed: 0,
+        logs: [],
+        logsBloom: '',
+    }
+}
+
+export function getPayloadConfig(payload: JsonRpcPayload) {
+    if (!payload.id || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
     const [config] = payload.params as [TransactionConfig]
+    return config
+}
+
+export function getPayloadId(payload: JsonRpcPayload) {
+    const config = getPayloadConfig(payload)
+    if (!config) return ''
     const { from, to, data = '0x0', value = '0x0' } = config
     if (!from || !to) return ''
     return sha3([from, to, data, value].join('_')) ?? ''
@@ -27,8 +49,8 @@ export function getTransactionId(transaction: Transaction | null) {
 export function getReceiptStatus(receipt: TransactionReceipt | null) {
     if (!receipt) return TransactionStatusType.NOT_DEPEND
     const status = receipt.status as unknown as string
-    if (receipt.status === false || ['0x', '0x0'].includes(status)) return TransactionStatusType.FAILED
-    if (receipt.status === true || ['0x1'].includes(status)) {
+    if (receipt.status === false || ['0', '0x', '0x0'].includes(status)) return TransactionStatusType.FAILED
+    if (receipt.status === true || ['1', '0x1'].includes(status)) {
         if (isSameAddress(receipt.from, receipt.to)) return TransactionStatusType.CANCELLED
         return TransactionStatusType.SUCCEED
     }
