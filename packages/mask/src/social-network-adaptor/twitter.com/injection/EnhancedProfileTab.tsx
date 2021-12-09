@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { createReactRootShadowed, startWatch, untilElementAvailable } from '../../../utils'
+import { createReactRootShadowed, delay, startWatch, untilElementAvailable } from '../../../utils'
 import {
     searchAppBarBackSelector,
     searchNewTweetButtonSelector,
@@ -137,7 +137,8 @@ export function EnhancedProfileTabAtTwitter() {
 
     const { classes } = useStyles(style)
 
-    useLocationChange(() => {
+    useLocationChange(async () => {
+        await delay(500)
         setStyle(getStyle())
     })
 
