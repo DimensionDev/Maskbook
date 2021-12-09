@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import {
     Avatar,
     Box,
@@ -29,6 +30,7 @@ import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { resolveWebLinkOnCryptoartAI } from '../pipes'
+import { CryptoartAITransactionType } from '../types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -130,7 +132,20 @@ export function Collectible(props: CollectibleProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const chainId = useChainId()
-    const { asset, tabIndex, setTabIndex } = CollectibleState.useContainer()
+    const { asset, events, tabIndex, setTabIndex } = CollectibleState.useContainer()
+
+    const [soldPrice, setSoldPrice] = useState(0)
+    useEffect(() => {
+        if (
+            asset.value?.is24Auction &&
+            asset.value?.isSoldOut &&
+            [CryptoartAITransactionType.BID_PLACED, CryptoartAITransactionType.SETTLED].includes(
+                events.value?.data[0].transactionType,
+            )
+        ) {
+            setSoldPrice(events.value?.data[0].priceInEth)
+        } else setSoldPrice(0)
+    }, [asset, events])
 
     if (asset.loading) return <PluginSkeleton />
     if (!asset.value)
@@ -204,13 +219,15 @@ export function Collectible(props: CollectibleProps) {
                                 </Box>
                             ) : null}
 
-                            {asset.value?.priceInEth > 100000 ? (
+                            {asset.value?.priceInEth > 100000 && !asset.value?.isSoldOut ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_cryptoartai_no_price_description"
                                             values={{
-                                                bidPrice: asset.value?.latestBidVo?.priceInEth ?? 0,
+                                                bidPrice: asset.value?.is24Auction
+                                                    ? asset.value?.latestBidVo?.priceInEth
+                                                    : asset.value?.trade?.latestBid,
                                                 price: 'Unknown',
                                                 symbol: ' Ξ',
                                                 soldNum:
@@ -224,12 +241,17 @@ export function Collectible(props: CollectibleProps) {
                                     </Typography>
                                 </Box>
                             ) : (
+                                ''
+                            )}
+                            {asset.value?.priceInEth <= 100000 && !asset.value?.isSoldOut ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_cryptoartai_description"
                                             values={{
-                                                bidPrice: asset.value?.latestBidVo?.priceInEth ?? 0,
+                                                bidPrice: asset.value?.is24Auction
+                                                    ? asset.value?.latestBidVo?.priceInEth
+                                                    : asset.value?.trade?.latestBid,
                                                 price: asset.value?.priceInEth,
                                                 symbol: ' Ξ',
                                                 soldNum:
@@ -242,6 +264,29 @@ export function Collectible(props: CollectibleProps) {
                                         />
                                     </Typography>
                                 </Box>
+                            ) : (
+                                ''
+                            )}
+                            {asset.value.is24Auction && asset.value?.isSoldOut ? (
+                                <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
+                                    <Typography className={classes.description} component="span">
+                                        <Trans
+                                            i18nKey="plugin_cryptoartai_sold_description"
+                                            values={{
+                                                soldPrice: soldPrice,
+                                                symbol: ' Ξ',
+                                                soldNum:
+                                                    asset.value?.soldNum === asset.value?.totalAvailable
+                                                        ? asset.value?.soldNum
+                                                        : asset.value?.soldNum + 1,
+                                                totalAvailable: asset.value?.totalAvailable,
+                                                editionNumber: asset.value?.editionNumber,
+                                            }}
+                                        />
+                                    </Typography>
+                                </Box>
+                            ) : (
+                                ''
                             )}
                         </>
                     }

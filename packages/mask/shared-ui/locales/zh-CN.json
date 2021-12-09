@@ -583,6 +583,7 @@
     "plugin_cryptoartai_latest_bid": "最新出价",
     "plugin_cryptoartai_description": "最新出价 <strong>{{bidPrice}} {{symbol}}</strong>，价格 <strong>{{price}} {{symbol}}</strong>。版本 {{soldNum}} / {{totalAvailable}} #{{editionNumber}}。",
     "plugin_cryptoartai_no_price_description": "最新出价 <strong>{{bidPrice}} {{symbol}}</strong>。版本 {{soldNum}} / {{totalAvailable}} #{{editionNumber}}。",
+    "plugin_cryptoartai_sold_description": "已出售价格 <strong>{{soldPrice}}{{symbol}}</strong>. Edition {{soldNum}} of {{totalAvailable}} #{{editionNumber}}.",
     "plugin_cryptoartai_buy": "购买",
     "plugin_cryptoartai_buy_now": "立即购买",
     "plugin_cryptoartai_current_balance": "当前余额",

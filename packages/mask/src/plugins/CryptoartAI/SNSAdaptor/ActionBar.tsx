@@ -54,7 +54,8 @@ export function ActionBar(props: ActionBarProps) {
                 </ActionButton>
             ) : null}
             {!asset.value.isSoldOut &&
-            (!asset.value.latestBidVo || asset.value.latestBidVo?.priceInEth < asset.value.priceInEth) &&
+            !asset.value.is24Auction &&
+            (!asset.value?.trade?.latestBid || asset.value?.trade?.latestBid < asset.value.priceInEth) &&
             asset.value.trade?.isCanAuction ? (
                 <ActionButton
                     className={classes.button}

@@ -691,6 +691,7 @@
     "plugin_cryptoartai_latest_bid": "Latest Bid",
     "plugin_cryptoartai_description": "Current Bid is <strong>{{bidPrice}}{{symbol}}</strong>, price is <strong>{{price}}{{symbol}}</strong>. Edition {{soldNum}} of {{totalAvailable}} #{{editionNumber}}.",
     "plugin_cryptoartai_no_price_description": "Current Bid is <strong>{{bidPrice}}{{symbol}}</strong>. Edition {{soldNum}} of {{totalAvailable}} #{{editionNumber}}.",
+    "plugin_cryptoartai_sold_description": "Sold for <strong>{{soldPrice}}{{symbol}}</strong>. Edition {{soldNum}} of {{totalAvailable}} #{{editionNumber}}.",
     "plugin_cryptoartai_buy": "Buy",
     "plugin_cryptoartai_buy_now": "Buy now",
     "plugin_cryptoartai_current_balance": "Current balance",

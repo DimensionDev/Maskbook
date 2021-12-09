@@ -20,3 +20,11 @@ export interface CryptoartAIToken {
     tokenId: string
     contractAddress: string
 }
+
+export enum CryptoartAITransactionType {
+    BID_WITHDRAW = 'Bid Withdrawn',
+    SETTLED = 'Settled',
+    BID_PLACED = 'Bid Placed',
+    ON_SALE = 'On Sale',
+    EDITION_CREATED = 'Edition Created',
+}

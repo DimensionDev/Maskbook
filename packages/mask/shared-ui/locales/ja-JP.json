@@ -431,6 +431,7 @@
     "plugin_cryptoartai_latest_bid": "最新の入札",
     "plugin_cryptoartai_description": "最新の入札は <strong>{{bidPrice}}{{symbol}}</strong>，価格 <strong>{{price}}{{symbol}}</strong>。バージョン {{soldNum}} / {{totalAvailable}} #{{editionNumber}}。",
     "plugin_cryptoartai_no_price_description": "最新の入札は <strong>{{bidPrice}}{{symbol}}</strong>。バージョン {{soldNum}} / {{totalAvailable}} #{{editionNumber}}。",
+    "plugin_cryptoartai_sold_description": "販売価格 <strong>{{soldPrice}}{{symbol}}</strong>。バージョン {{soldNum}} / {{totalAvailable}} #{{editionNumber}}。",
     "plugin_cryptoartai_buy": "購入",
     "plugin_cryptoartai_buy_now": "今すぐ購入",
     "plugin_cryptoartai_current_balance": "現在の残高",

@@ -89,7 +89,9 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const [atLeastBidValue, setAtLeastBidValue] = useState(0)
     useEffect(() => {
-        const price = new BigNumber(asset?.value?.latestBidVo?.priceInEth)
+        const price = new BigNumber(
+            is24Auction ? asset?.value?.latestBidVo?.priceInEth : asset?.value?.trade?.latestBid,
+        )
         setAtLeastBidValue(price.isFinite() ? price.plus(price.gte(1) ? '0.1' : '0.01').toNumber() : 0.01)
     }, [asset?.value?.latestBidVo])
 
@@ -223,7 +225,9 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <p className={classes.details} style={{ marginTop: '10px' }}>
                             {t('plugin_cryptoartai_current_highest_offer')}
                             <strong style={{ fontSize: '18px' }}>
-                                {(asset.value?.latestBidVo?.priceInEth ?? 0) + ' ETH'}
+                                {(is24Auction
+                                    ? asset?.value?.latestBidVo?.priceInEth
+                                    : asset?.value?.trade?.latestBid) + ' ETH'}
                             </strong>
                         </p>
                         <p className={classes.details}>

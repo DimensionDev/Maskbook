@@ -11,7 +11,7 @@ function useCollectibleState(token?: CryptoartAIToken) {
 
     const asset = useAsset(token)
     const offers = useOrders(tabIndex === CryptoartAITab.OFFER ? token : undefined, OrderSide.Buy)
-    const events = useEvents(tabIndex === CryptoartAITab.HISTORY ? token : undefined)
+    const events = useEvents(token)
 
     return {
         token,

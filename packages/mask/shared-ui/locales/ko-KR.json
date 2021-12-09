@@ -560,6 +560,7 @@
     "plugin_cryptoartai_latest_bid": "최근 입찰",
     "plugin_cryptoartai_description": "최근 입찰 <strong>{{bidPrice}}{{symbol}}</strong>，가격 <strong>{{price}}{{symbol}}</strong>。버전 {{soldNum}} / {{totalAvailable}} #{{editionNumber}}。",
     "plugin_cryptoartai_no_price_description": "최근 입찰 <strong>{{bidPrice}}{{symbol}}</strong>。버전 {{soldNum}} / {{totalAvailable}} #{{editionNumber}}。",
+    "plugin_cryptoartai_sold_description": "판매 <strong>{{soldPrice}}{{symbol}}</strong>。버전 {{soldNum}} / {{totalAvailable}} #{{editionNumber}}。",
     "plugin_cryptoartai_buy": "구매",
     "plugin_cryptoartai_buy_now": "지금 구매",
     "plugin_cryptoartai_current_balance": "현재 잔액",
