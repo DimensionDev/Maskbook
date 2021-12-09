@@ -95,10 +95,10 @@ export function OrderRow({ event, chainId }: IRowProps) {
             </TableCell>
             <TableCell>
                 <Typography className={classes.ethPrice} variant="body2">
-                    {event.priceInEth + ' Ξ'}
+                    {`${event.priceInEth} Ξ`}
                 </Typography>
                 <Typography className={classes.usdcPrice} variant="body2">
-                    {'($' + event.priceInUsd + ')'}
+                    {`($${event.priceInUsd})`}
                 </Typography>
             </TableCell>
             <TableCell>

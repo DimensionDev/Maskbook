@@ -82,7 +82,7 @@ export async function getOrders(tokenId: string, side = OrderSide.Buy, chainId?:
         })
     ).json()
 
-    const filterType = [TransactionType.BID_PLACED, TransactionType.BID_WITHDRAW, TransactionType.SETTLED]
+    const filterType = [TransactionType.BID_PLACED, TransactionType.BID_WITHDRAW, TransactionType.SETTLED] as const
     const historyResponse = (await getEvents(tokenId, chainId))
         .filter((event: any) => {
             return filterType.includes(event.transactionType)

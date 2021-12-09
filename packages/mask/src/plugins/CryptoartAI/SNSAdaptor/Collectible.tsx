@@ -134,16 +134,16 @@ export function Collectible(props: CollectibleProps) {
     const chainId = useChainId()
     const { asset, events, tabIndex, setTabIndex } = CollectibleState.useContainer()
 
-    const assetSource: any = useMemo(() => {
-        if (!asset.value || asset.error) return {}
+    const assetSource = useMemo(() => {
+        if (!asset.value || asset.error) return
         return asset.value
     }, [asset.value])
 
     const [soldPrice, setSoldPrice] = useState(0)
     useEffect(() => {
         if (
-            assetSource.is24Auction &&
-            assetSource.isSoldOut &&
+            assetSource?.is24Auction &&
+            assetSource?.isSoldOut &&
             [TransactionType.BID_PLACED, TransactionType.SETTLED].includes(events.value?.data[0].transactionType)
         ) {
             setSoldPrice(events.value?.data[0].priceInEth)
@@ -184,61 +184,63 @@ export function Collectible(props: CollectibleProps) {
                             href={
                                 resolveWebLinkOnCryptoartAI(chainId) +
                                 '/' +
-                                (assetSource.owner[0]?.ownerName ?? assetSource.creator?.username ?? '')
+                                (assetSource?.owner[0]?.ownerName ?? assetSource?.creator?.username ?? '')
                             }
-                            title={assetSource.owner[0]?.ownerName ?? assetSource.creator?.username ?? ''}
+                            title={assetSource?.owner[0]?.ownerName ?? assetSource?.creator?.username ?? ''}
                             target="_blank"
                             rel="noopener noreferrer">
-                            <Avatar src={assetSource.owner[0]?.ownerAvator ?? assetSource.creator?.avatorPath ?? ''} />
+                            <Avatar
+                                src={assetSource?.owner[0]?.ownerAvator ?? assetSource?.creator?.avatorPath ?? ''}
+                            />
                         </Link>
                     }
                     title={
                         <Typography style={{ display: 'flex', alignItems: 'center' }}>
-                            {assetSource.tokenUri && assetSource.token_id ? (
+                            {assetSource?.tokenUri && assetSource?.token_id ? (
                                 <Link
                                     color="primary"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     href={resolveAssetLinkOnCryptoartAI(
-                                        assetSource.creator?.username,
-                                        assetSource.token_id,
+                                        assetSource?.creator?.username,
+                                        assetSource?.token_id,
                                         chainId,
                                     )}>
-                                    {assetSource.title ?? ''}
+                                    {assetSource?.title ?? ''}
                                 </Link>
                             ) : (
-                                assetSource.title ?? ''
+                                assetSource?.title ?? ''
                             )}
                             <VerifiedUserIcon color="primary" fontSize="small" sx={{ marginLeft: 0.5 }} />
                         </Typography>
                     }
                     subheader={
                         <>
-                            {assetSource.description ? (
+                            {assetSource?.description ? (
                                 <Box display="flex" alignItems="center">
                                     <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown content={assetSource.description} />
+                                        <Markdown content={assetSource?.description} />
                                     </Typography>
                                 </Box>
                             ) : null}
 
-                            {assetSource.priceInEth > 100000 && !assetSource.isSoldOut ? (
+                            {assetSource?.priceInEth > 100000 && !assetSource?.isSoldOut ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_cryptoartai_no_price_description"
                                             values={{
-                                                bidPrice: assetSource.is24Auction
-                                                    ? assetSource.latestBidVo?.priceInEth
-                                                    : assetSource.trade?.latestBid,
+                                                bidPrice: assetSource?.is24Auction
+                                                    ? assetSource?.latestBidVo?.priceInEth
+                                                    : assetSource?.trade?.latestBid,
                                                 price: 'Unknown',
                                                 symbol: ' Ξ',
                                                 soldNum:
-                                                    assetSource.soldNum === assetSource.totalAvailable
-                                                        ? assetSource.soldNum
-                                                        : assetSource.soldNum + 1,
-                                                totalAvailable: assetSource.totalAvailable,
-                                                editionNumber: assetSource.editionNumber,
+                                                    assetSource?.soldNum === assetSource?.totalAvailable
+                                                        ? assetSource?.soldNum
+                                                        : assetSource?.soldNum + 1,
+                                                totalAvailable: assetSource?.totalAvailable,
+                                                editionNumber: assetSource?.editionNumber,
                                             }}
                                         />
                                     </Typography>
@@ -246,23 +248,24 @@ export function Collectible(props: CollectibleProps) {
                             ) : (
                                 ''
                             )}
-                            {assetSource.priceInEth <= 100000 && !assetSource.isSoldOut ? (
+                            {assetSource?.priceInEth && assetSource?.priceInEth <= 100000 && !assetSource?.isSoldOut ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
                                             i18nKey="plugin_cryptoartai_description"
                                             values={{
-                                                bidPrice: assetSource.is24Auction
-                                                    ? assetSource.latestBidVo?.priceInEth
-                                                    : assetSource.trade?.latestBid,
-                                                price: assetSource.priceInEth,
+                                                bidPrice: assetSource?.is24Auction
+                                                    ? assetSource?.latestBidVo?.priceInEth
+                                                    : assetSource?.trade?.latestBid,
+                                                price: assetSource?.priceInEth,
                                                 symbol: ' Ξ',
                                                 soldNum:
-                                                    assetSource.soldNum === assetSource.totalAvailable
-                                                        ? assetSource.soldNum
-                                                        : assetSource.soldNum + 1,
-                                                totalAvailable: assetSource.totalAvailable,
-                                                editionNumber: assetSource.editionNumber,
+                                                    assetSource?.soldNum &&
+                                                    assetSource?.soldNum === assetSource?.totalAvailable
+                                                        ? assetSource?.soldNum
+                                                        : Number(assetSource?.soldNum) + 1,
+                                                totalAvailable: assetSource?.totalAvailable,
+                                                editionNumber: assetSource?.editionNumber,
                                             }}
                                         />
                                     </Typography>
@@ -270,7 +273,7 @@ export function Collectible(props: CollectibleProps) {
                             ) : (
                                 ''
                             )}
-                            {assetSource.is24Auction && assetSource.isSoldOut ? (
+                            {assetSource?.is24Auction && assetSource?.isSoldOut ? (
                                 <Box display="flex" alignItems="center" sx={{ marginTop: 1 }}>
                                     <Typography className={classes.description} component="span">
                                         <Trans
@@ -279,11 +282,11 @@ export function Collectible(props: CollectibleProps) {
                                                 soldPrice: soldPrice,
                                                 symbol: ' Ξ',
                                                 soldNum:
-                                                    assetSource.soldNum === assetSource.totalAvailable
-                                                        ? assetSource.soldNum
-                                                        : assetSource.soldNum + 1,
-                                                totalAvailable: assetSource.totalAvailable,
-                                                editionNumber: assetSource.editionNumber,
+                                                    assetSource?.soldNum === assetSource?.totalAvailable
+                                                        ? assetSource?.soldNum
+                                                        : assetSource?.soldNum + 1,
+                                                totalAvailable: assetSource?.totalAvailable,
+                                                editionNumber: assetSource?.editionNumber,
                                             }}
                                         />
                                     </Typography>

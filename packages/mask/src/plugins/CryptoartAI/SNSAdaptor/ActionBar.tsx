@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -27,6 +28,11 @@ export function ActionBar(props: ActionBarProps) {
     const { classes } = useStyles()
     const { asset } = CollectibleState.useContainer()
 
+    const assetSource = useMemo(() => {
+        if (!asset.value || asset.error) return
+        return asset.value
+    }, [asset.value])
+
     const {
         open: openCheckoutDialog,
         onOpen: onOpenCheckoutDialog,
@@ -38,10 +44,10 @@ export function ActionBar(props: ActionBarProps) {
 
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
-            {!asset.value.isSoldOut &&
-            !asset.value.is_owner &&
-            asset.value.is24Auction &&
-            new Date(asset.value.latestBidVo?.auctionEndTime).getTime() - Date.now() > 0 ? (
+            {!assetSource?.isSoldOut &&
+            !assetSource?.is_owner &&
+            assetSource?.is24Auction &&
+            new Date(assetSource?.latestBidVo?.auctionEndTime ?? 0).getTime() > Date.now() ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -53,10 +59,10 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_place_bid')}
                 </ActionButton>
             ) : null}
-            {!asset.value.isSoldOut &&
-            !asset.value.is24Auction &&
-            (!asset.value?.trade?.latestBid || asset.value?.trade?.latestBid < asset.value.priceInEth) &&
-            asset.value.trade?.isCanAuction ? (
+            {!assetSource?.isSoldOut &&
+            !assetSource?.is24Auction &&
+            (!assetSource?.trade?.latestBid || assetSource?.trade?.latestBid < assetSource?.priceInEth) &&
+            assetSource?.trade?.isCanAuction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -67,11 +73,11 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_make_offer')}
                 </ActionButton>
             ) : null}
-            {!asset.value.isSoldOut &&
-            asset.value.totalSurplus > 0 &&
-            !asset.value.is24Auction &&
-            asset.value.priceInEth < 100000 &&
-            asset.value.trade?.isCanBuy ? (
+            {!assetSource?.isSoldOut &&
+            assetSource?.totalSurplus > 0 &&
+            !assetSource?.is24Auction &&
+            assetSource?.priceInEth < 100000 &&
+            assetSource?.trade?.isCanBuy ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"

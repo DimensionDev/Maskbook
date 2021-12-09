@@ -8,10 +8,13 @@ import { getOrders } from '../apis'
 export function useOrders(token?: Token, side = OrderSide.Buy) {
     const chainId = useChainId()
     return useAsyncRetry(async () => {
-        if (!token) return []
+        if (!token) return
 
         const tradeResponse = await getOrders(token.tokenId, side, chainId)
 
-        return tradeResponse
+        return {
+            trade: tradeResponse.trade,
+            history: tradeResponse.history,
+        }
     }, [chainId, toTokenIdentifier(token)])
 }

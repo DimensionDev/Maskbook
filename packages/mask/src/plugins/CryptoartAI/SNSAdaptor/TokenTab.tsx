@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Box, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -67,6 +68,11 @@ export function TokenTab(props: TokenTabProps) {
     const chainId = useChainId()
     const { token, asset } = CollectibleState.useContainer()
 
+    const assetSource = useMemo(() => {
+        if (!asset.value || asset.error) return
+        return asset.value
+    }, [asset.value])
+
     if (!asset.value) return null
     return (
         <CollectibleTab classes={{ content: classes.content }}>
@@ -74,30 +80,30 @@ export function TokenTab(props: TokenTabProps) {
                 <Typography variant="body1" sx={{ marginBottom: 1 }}>
                     {t('plugin_collectible_base')}
                 </Typography>
-                {asset.value.creator ? (
+                {assetSource?.creator ? (
                     <Typography variant="body2">
                         {t('plugin_collectible_create_by')}{' '}
                         <Link
-                            href={resolveWebLinkOnCryptoartAI(chainId) + '/' + asset.value.creator.username}
+                            href={resolveWebLinkOnCryptoartAI(chainId) + '/' + assetSource?.creator.username}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Account
-                                address={asset.value.creator.ethAddress}
-                                username={formatEthereumAddress(asset.value.creator.username, 4)}
+                                address={assetSource?.creator.ethAddress}
+                                username={formatEthereumAddress(assetSource?.creator.username, 4)}
                             />
                         </Link>
                     </Typography>
                 ) : null}
-                {asset.value.owner[0] ? (
+                {assetSource?.owner[0] ? (
                     <Typography variant="body2">
                         {t('plugin_collectible_owned_by')}{' '}
                         <Link
-                            href={resolveWebLinkOnCryptoartAI(chainId) + '/' + asset.value.owner[0].ownerName}
+                            href={resolveWebLinkOnCryptoartAI(chainId) + '/' + assetSource?.owner[0].ownerName}
                             target="_blank"
                             rel="noopener noreferrer">
                             <Account
-                                address={asset.value.owner[0]?.ownerAddress}
-                                username={formatEthereumAddress(asset.value.owner[0]?.ownerName, 4)}
+                                address={assetSource?.owner[0]?.ownerAddress}
+                                username={formatEthereumAddress(assetSource?.owner[0]?.ownerName, 4)}
                             />
                         </Link>
                     </Typography>
@@ -107,25 +113,25 @@ export function TokenTab(props: TokenTabProps) {
                 <Typography variant="body1" sx={{ marginBottom: 1 }}>
                     {t('plugin_cryptoartai_description_title')}
                 </Typography>
-                <Markdown classes={{ root: classes.markdown }} content={asset.value?.description ?? ''} />
+                <Markdown classes={{ root: classes.markdown }} content={assetSource?.description ?? ''} />
             </Box>
             <Box className={classes.container}>
                 <Typography variant="body1" sx={{ marginBottom: 1 }}>
                     {t('plugin_cryptoartai_edition')}
                 </Typography>
                 <Box className={classes.edition_row}>
-                    {asset.value.linkWithCreation ? (
+                    {assetSource?.linkWithCreation ? (
                         <Typography variant="body2" style={{ marginRight: '20px' }}>
                             {t('plugin_collectible_view_on')}{' '}
-                            <Link href={asset.value.linkWithCreation} target="_blank" rel="noopener noreferrer">
+                            <Link href={assetSource?.linkWithCreation} target="_blank" rel="noopener noreferrer">
                                 ΞEtherscan
                             </Link>
                         </Typography>
                     ) : null}
-                    {asset.value.linkWithIpfs ? (
+                    {assetSource?.linkWithIpfs ? (
                         <Typography variant="body2">
                             {t('plugin_collectible_view_on')}{' '}
-                            <Link href={asset.value.linkWithIpfs} target="_blank" rel="noopener noreferrer">
+                            <Link href={assetSource?.linkWithIpfs} target="_blank" rel="noopener noreferrer">
                                 IPFS
                             </Link>
                         </Typography>
@@ -156,7 +162,7 @@ export function TokenTab(props: TokenTabProps) {
                 <Box className={classes.chain_row}>
                     <Typography variant="body2">{t('plugin_collectible_token_id')}</Typography>
                     <Typography className={classes.tokenId} variant="body2">
-                        {asset.value?.editionNumber}
+                        {assetSource?.editionNumber}
                     </Typography>
                 </Box>
                 <Box className={classes.chain_row}>

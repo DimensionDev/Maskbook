@@ -56,8 +56,13 @@ export function OfferTab() {
     const chainId = useChainId()
     const { asset, offers } = CollectibleState.useContainer()
 
-    const dataSource: any = useMemo(() => {
-        if (!offers.value || offers.error) return []
+    const assetSource = useMemo(() => {
+        if (!asset.value || asset.error) return
+        return asset.value
+    }, [asset.value])
+
+    const dataSource = useMemo(() => {
+        if (!offers.value || offers.error) return
         return offers.value
     }, [offers.value])
 
@@ -100,11 +105,11 @@ export function OfferTab() {
                     </Box>
                 </Box>
             ) : null}
-            {asset?.value?.is24Auction && asset.value.latestBidVo?.auctionEndTime ? (
+            {assetSource?.is24Auction && assetSource?.latestBidVo?.auctionEndTime ? (
                 <Box className={classes.container}>
                     <Typography variant="body2">
                         {t('plugin_cryptoartai_auction_end_time')}
-                        <strong>{asset.value.latestBidVo?.auctionEndTime}</strong>
+                        <strong>{assetSource?.latestBidVo?.auctionEndTime}</strong>
                     </Typography>
                 </Box>
             ) : null}

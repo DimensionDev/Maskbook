@@ -73,12 +73,17 @@ export interface MakeOfferDialogProps {
 }
 
 export function MakeOfferDialog(props: MakeOfferDialogProps) {
-    const { asset, open, onClose } = props
-    const is24Auction = asset?.value?.is24Auction ?? false
-    const isVerified = (!asset?.value?.isSoldOut && !asset?.value?.is_owner) ?? false
-
     const { t } = useI18N()
     const { classes } = useStyles()
+    const { asset, open, onClose } = props
+
+    const assetSource = useMemo(() => {
+        if (!asset || !asset.value || asset.error) return
+        return asset.value
+    }, [asset?.value])
+
+    const is24Auction = assetSource?.is24Auction ?? false
+    const isVerified = (!assetSource?.isSoldOut && !assetSource?.is_owner) ?? false
 
     const chainId = useChainId()
 
@@ -89,22 +94,20 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const [atLeastBidValue, setAtLeastBidValue] = useState(0)
     useEffect(() => {
-        const price = new BigNumber(
-            is24Auction ? asset?.value?.latestBidVo?.priceInEth : asset?.value?.trade?.latestBid,
-        )
+        const price = new BigNumber(is24Auction ? assetSource?.latestBidVo?.priceInEth : assetSource?.trade?.latestBid)
         setAtLeastBidValue(price.isFinite() ? price.plus(price.gte(1) ? '0.1' : '0.01').toNumber() : 0.01)
-    }, [asset?.value?.latestBidVo])
+    }, [assetSource?.latestBidVo])
 
     const [placeBidState, placeBidCallback, resetCallback] = usePlaceBidCallback(
         is24Auction,
-        asset?.value?.editionNumber ?? '0',
+        assetSource?.editionNumber ?? '0',
     )
 
     const onMakeOffer = useCallback(() => {
         placeBidCallback(new BigNumber(amount).shiftedBy(selectedPaymentToken?.decimals ?? 18).toNumber())
     }, [placeBidCallback, amount])
 
-    const assetLink = resolveAssetLinkOnCryptoartAI(asset?.value?.creator?.username, asset?.value?.token_id, chainId)
+    const assetLink = resolveAssetLinkOnCryptoartAI(assetSource?.creator?.username, assetSource?.token_id, chainId)
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
@@ -115,7 +118,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                       {
                           amount: amount,
                           symbol: token?.value?.symbol,
-                          title: asset?.value?.title,
+                          title: assetSource?.title,
                           assetLink: assetLink,
                           account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
                       },
@@ -147,11 +150,11 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             shareLink,
             state: placeBidState,
             summary:
-                (asset?.value?.is24Auction
+                (assetSource?.is24Auction
                     ? t('plugin_collectible_place_a_bid')
                     : t('plugin_collectible_make_an_offer')) +
                 ' ' +
-                asset?.value?.title,
+                assetSource?.title,
         })
     }, [placeBidState])
 
@@ -167,19 +170,19 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (balance_.isZero() || amount_.gt(formatBalance(balance.value, token?.value?.decimals, 6)))
             return t('plugin_collectible_insufficient_balance')
         if (
-            asset?.value?.is24Auction &&
-            new Date(asset.value.latestBidVo?.auctionEndTime).getTime() - Date.now() <= 0
+            assetSource?.is24Auction &&
+            new Date(assetSource?.latestBidVo?.auctionEndTime).getTime() - Date.now() <= 0
         ) {
             return t('plugin_cryptoartai_auction_end')
         }
         return ''
     }, [amount, balance.value, isVerified, is24Auction])
 
-    if (!asset?.value) return null
+    if (!asset || !asset.value) return null
     return (
         <InjectedDialog
             title={
-                asset?.value?.is24Auction ? t('plugin_collectible_place_a_bid') : t('plugin_collectible_make_an_offer')
+                assetSource?.is24Auction ? t('plugin_collectible_place_a_bid') : t('plugin_collectible_make_an_offer')
             }
             open={open}
             onClose={onClose}>
@@ -187,24 +190,24 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                 <Card elevation={0}>
                     <CardContent>
                         <Box className={classes.mediaContent}>
-                            {asset.value.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
-                                <Link href={asset.value.ossUrl} target="_blank" rel="noopener noreferrer">
+                            {assetSource?.ossUrl.match(/\.(mp4|avi|webm)$/i) ? (
+                                <Link href={assetSource?.ossUrl} target="_blank" rel="noopener noreferrer">
                                     <img
                                         className={classes.player}
-                                        src={asset.value.shareUrl}
-                                        alt={asset.value.title}
+                                        src={assetSource?.shareUrl}
+                                        alt={assetSource?.title}
                                     />
                                 </Link>
                             ) : (
-                                <img className={classes.player} src={asset.value.shareUrl} alt={asset.value.title} />
+                                <img className={classes.player} src={assetSource?.shareUrl} alt={assetSource?.title} />
                             )}
                         </Box>
                         <h3>
-                            {(asset?.value?.is24Auction
+                            {(assetSource?.is24Auction
                                 ? t('plugin_collectible_place_a_bid')
                                 : t('plugin_collectible_make_an_offer')) +
                                 ' ' +
-                                asset?.value?.title}
+                                assetSource?.title}
                         </h3>
                         <SelectTokenAmountPanel
                             amount={amount}
@@ -225,9 +228,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <p className={classes.details} style={{ marginTop: '10px' }}>
                             {t('plugin_cryptoartai_current_highest_offer')}
                             <strong style={{ fontSize: '18px' }}>
-                                {(is24Auction
-                                    ? asset?.value?.latestBidVo?.priceInEth
-                                    : asset?.value?.trade?.latestBid) + ' ETH'}
+                                {(is24Auction ? assetSource?.latestBidVo?.priceInEth : assetSource?.trade?.latestBid) +
+                                    ' ETH'}
                             </strong>
                         </p>
                         <p className={classes.details}>
@@ -239,10 +241,10 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 formatBalance(balance.value, token?.value?.decimals, 6) +
                                 ' ETH'}
                         </p>
-                        {asset?.value?.is24Auction ? (
+                        {assetSource?.is24Auction ? (
                             <p className={classes.details}>
                                 {t('plugin_cryptoartai_auction_end_time')}
-                                <strong>{asset.value.latestBidVo?.auctionEndTime}</strong>
+                                <strong>{assetSource?.latestBidVo?.auctionEndTime}</strong>
                             </p>
                         ) : null}
                     </CardContent>
