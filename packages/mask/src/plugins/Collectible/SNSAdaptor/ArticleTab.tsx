@@ -1,6 +1,7 @@
 import type { FC } from 'react'
 import { Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { renderMedia } from '@masknet/shared'
 import { Video } from '../../../components/shared/Video'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
@@ -27,6 +28,7 @@ const AssetPlayer: FC<AssetPlayerProps> = ({ src, alt }) => {
     const { classes } = useStyles()
     if (!src) return null
     const isVideo = src.match(/\.(mp4|webm)$/i)
+
     return isVideo ? (
         <Video src={src} VideoProps={{ className: classes.player }} />
     ) : (
@@ -41,7 +43,7 @@ export function ArticleTab(props: ArticleTabProps) {
     const { asset } = CollectibleState.useContainer()
 
     if (!asset.value) return null
-    const resourceUrl = asset.value.image_url || asset.value.animation_url
+    const resourceUrl = renderMedia(asset.value.image_url || asset.value.animation_url)
     return (
         <CollectibleTab>
             <div className={classes.body}>
