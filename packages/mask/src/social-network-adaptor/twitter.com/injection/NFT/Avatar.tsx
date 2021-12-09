@@ -35,15 +35,15 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                     <div
                         style={{
                             position: 'absolute',
-                            left: -2,
-                            top: -2,
+                            left: 0,
+                            top: 0,
                             zIndex: -1,
                         }}>
                         <NFTBadgeTimeline
                             userId={twitterId}
                             avatarId={info.avatarId}
-                            width={info.width}
-                            height={info.height}
+                            width={info.width - 4}
+                            height={info.height - 4}
                         />
                     </div>,
                 )
