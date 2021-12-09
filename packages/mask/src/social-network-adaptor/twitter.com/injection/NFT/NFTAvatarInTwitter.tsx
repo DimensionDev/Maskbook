@@ -121,6 +121,9 @@ function NFTAvatarInTwitter() {
 
     if (!avatar) return null
 
+    const avatarParent = searchTwitterAvatarSelector().closest(2).evaluate() as HTMLElement
+    if (avatarParent) avatarParent.style.clipPath = 'unset'
+
     return (
         <>
             {getAvatarId(identity.avatar ?? '') === avatar.avatarId && avatar.avatarId ? (
