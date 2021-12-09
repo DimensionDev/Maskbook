@@ -26,6 +26,7 @@ export interface WalletRecord extends Omit<Wallet, 'hasStoredKeyInfo' | 'hasDeri
     id: string
     type: 'wallet'
     derivationPath?: string
+    latestDerivationPath?: string
     storedKeyInfo?: api.IStoredKeyInfo
     createdAt: Date
     updatedAt: Date
