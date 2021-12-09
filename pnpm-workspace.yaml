@@ -17,6 +17,7 @@ packages:
   - 'packages/web3-providers'
   - 'packages/web3-constants'
   - 'packages/web3-contracts'
+  - 'packages/web3-shared/base'
   - 'packages/web3-shared/evm'
   - 'packages/web3-shared/flow'
   - 'packages/web3-shared/solana'

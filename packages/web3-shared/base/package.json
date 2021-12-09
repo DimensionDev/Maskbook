@@ -1,0 +1,9 @@
+{
+  "name": "@masknet/web3-shared-base",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "bignumber.js": "9.0.1"
+  }
+}
