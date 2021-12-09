@@ -6,7 +6,7 @@ import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_NAME } from '../constants'
-import type { CryptoartAI_Payload } from '../types'
+import type { PayloadType } from '../types'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
 export default sns
 
-function renderPostInspector(payload: CryptoartAI_Payload) {
+function renderPostInspector(payload: PayloadType) {
     return (
         <MaskPluginWrapper pluginName={PLUGIN_NAME}>
             <PostInspector payload={payload} />

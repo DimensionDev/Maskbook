@@ -4,7 +4,7 @@ import { parseURL } from '../../utils/utils'
 import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
 import { escapeRegExp } from 'lodash-unified'
 import { prefixPath, mainNetwork, testNetwork } from './constants'
-import type { CryptoartAIToken } from './types'
+import type { Token } from './types'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -61,7 +61,7 @@ export function getLastSalePrice(lastSale: AssetEvent | null) {
     return price
 }
 
-export function toTokenIdentifier(token?: CryptoartAIToken) {
+export function toTokenIdentifier(token?: Token) {
     if (!token) return ''
     return `${token.contractAddress}_${token.tokenId}`
 }

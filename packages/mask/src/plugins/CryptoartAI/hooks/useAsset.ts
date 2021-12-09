@@ -1,7 +1,7 @@
 import { useAccount, useChainId, useTokenConstants, isSameAddress } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { toTokenIdentifier } from '../utils'
-import type { CryptoartAIToken } from '../types'
+import type { Token } from '../types'
 
 import { getAsset } from '../apis'
 
@@ -9,7 +9,7 @@ interface OwnerProps {
     ownerAddress: string
 }
 
-export function useAsset(token?: CryptoartAIToken) {
+export function useAsset(token?: Token) {
     const account = useAccount()
     const chainId = useChainId()
     const { WNATIVE_ADDRESS } = useTokenConstants()

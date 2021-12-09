@@ -1,11 +1,11 @@
 import { useAsyncRetry } from 'react-use'
 import { useChainId } from '@masknet/web3-shared-evm'
-import type { CryptoartAIToken } from '../types'
+import type { Token } from '../types'
 import { toTokenIdentifier } from '../utils'
 
 import { getEvents } from '../apis'
 
-export function useEvents(token?: CryptoartAIToken) {
+export function useEvents(token?: Token) {
     const chainId = useChainId()
     return useAsyncRetry(async () => {
         if (!token) {
