@@ -1,0 +1,16 @@
+{
+    "API_KEY": {
+        "Mainnet": ["26GHYKIAZREN4HWJ5NCICTGKC183IGXY9A"],
+        "Ropsten": [],
+        "Rinkeby": [],
+        "Kovan": [],
+        "Gorli": [],
+        "BSC": ["5FQ5JHS1BEK4186QCZASE3SD23YD8FIMM8"],
+        "BSCT": [],
+        "Matic": ["5HVFKYFPQXWNQ2TFHCAYJJZ3YIYPWQ5HP8"],
+        "Mumbai": [],
+        "Arbitrum": ["BE8VU1P9FUKRT15FBHKQMU84829VITWWF2"],
+        "Arbitrum_Rinkeby": [],
+        "xDai": []
+    }
+}

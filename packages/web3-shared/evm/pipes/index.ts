@@ -107,6 +107,24 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
     'rgb(214, 217, 220)',
 )
 
+export const resolveExplorerAPI = createLookupTableResolver<ChainId, string>(
+    {
+        [ChainId.Mainnet]: 'https://api.etherscan.io/api',
+        [ChainId.Ropsten]: '',
+        [ChainId.Kovan]: '',
+        [ChainId.Rinkeby]: '',
+        [ChainId.Gorli]: '',
+        [ChainId.BSC]: 'https://api.bscscan.com/api',
+        [ChainId.BSCT]: '',
+        [ChainId.Matic]: 'https://api.polygonscan.com/api',
+        [ChainId.Mumbai]: '',
+        [ChainId.Arbitrum]: 'https://api.arbiscan.io/api',
+        [ChainId.Arbitrum_Rinkeby]: '',
+        [ChainId.xDai]: 'https://blockscout.com/xdai/mainnet/api',
+    },
+    ''
+)
+
 export function resolveLinkOnExplorer(chainId: ChainId) {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) return ''
