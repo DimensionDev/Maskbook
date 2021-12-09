@@ -9,11 +9,11 @@ const VersionContainer = styled('div')(() => ({
     fontSize: '12px',
 }))
 
-interface NavigationVersionFoorterProps extends React.PropsWithChildren<{}> {
+interface NavigationVersionFooterProps extends React.PropsWithChildren<{}> {
     version?: string
 }
 
-export const NavigationVersionFoorter = memo((props: NavigationVersionFoorterProps) => {
+export const NavigationVersionFooter = memo((props: NavigationVersionFooterProps) => {
     const t = useDashboardI18N()
     const version = props.version ?? '2.2.0'
     return <VersionContainer>{t.version_of_stable({ version })}</VersionContainer>

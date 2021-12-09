@@ -6,7 +6,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
-import { NavigationVersionFoorter } from '../NavigationVersionFooter'
+import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: MaskColorVar.primaryBackground,
@@ -49,7 +49,7 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
                 {isLargeScreen && (
                     <LeftContainer item xs={2}>
                         <Navigation />
-                        <NavigationVersionFoorter />
+                        <NavigationVersionFooter />
                     </LeftContainer>
                 )}
                 <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>

@@ -25,7 +25,7 @@ import { Navigation } from '../DashboardFrame/Navigation'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
 import { RoutePaths } from '../../type'
-import { NavigationVersionFoorter } from '../NavigationVersionFooter'
+import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
 const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
 
@@ -169,7 +169,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         variant="temporary"
                         elevation={0}>
                         <Navigation onClose={toggleDrawer} />
-                        <NavigationVersionFoorter />
+                        <NavigationVersionFooter />
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
