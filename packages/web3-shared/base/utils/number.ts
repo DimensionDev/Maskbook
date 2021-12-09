@@ -42,11 +42,11 @@ export function pow10(n: BigNumber.Value) {
 }
 
 /** n << m */
-export function leftShift(n: BigNumber.Value, m: number | undefined | null) {
+export function rightShift(n: BigNumber.Value, m: number | undefined | null) {
     return new BigNumber(n).shiftedBy(+(m ?? 0))
 }
 
 /** n >> m */
-export function rightShift(n: BigNumber.Value, m: number | undefined | null) {
+export function leftShift(n: BigNumber.Value, m: number | undefined | null) {
     return new BigNumber(n).shiftedBy(-(m ?? 0))
 }

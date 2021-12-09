@@ -8,7 +8,7 @@ import {
     ZERO_ADDRESS,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { isZero, leftShift } from '@masknet/web3-shared-base'
+import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { keyframes, makeStyles } from '@masknet/theme'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -128,7 +128,7 @@ export function DepositDialog() {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = leftShift(rawAmount || '0', token?.decimals)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,

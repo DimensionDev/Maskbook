@@ -2,7 +2,7 @@ import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra'
 import { ChainId, createClient, getTokenConstants } from '@masknet/web3-shared-flow'
 import { getTokenPrice } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
-import { leftShift } from '@masknet/web3-shared-base'
+import { rightShift } from '@masknet/web3-shared-base'
 
 async function getTokenBalance(
     chainId: ChainId,
@@ -39,7 +39,7 @@ async function getTokenBalance(
         `,
             args: (arg, t) => [arg(account, t.Address)],
         })
-        return leftShift(balance, decimals).integerValue().toFixed()
+        return rightShift(balance, decimals).integerValue().toFixed()
     } catch {
         return '0'
     }

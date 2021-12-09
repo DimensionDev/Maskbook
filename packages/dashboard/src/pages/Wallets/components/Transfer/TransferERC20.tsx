@@ -14,7 +14,7 @@ import {
     useNativeTokenDetailed,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, leftShift, multipliedBy } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, multipliedBy } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { FormattedAddress, TokenAmountPanel } from '@masknet/shared'
@@ -74,7 +74,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     //#endregion
 
     // transfer amount
-    const transferAmount = leftShift(amount || '0', selectedToken.decimals).toFixed()
+    const transferAmount = rightShift(amount || '0', selectedToken.decimals).toFixed()
     const erc20GasLimit = useGasLimit(
         selectedToken.type,
         selectedToken.address,
@@ -119,7 +119,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     //#region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || isZero(transferAmount)) return t.wallets_transfer_error_amount_absence()
-        if (isGreaterThan(leftShift(amount, selectedToken.decimals).toFixed(), maxAmount))
+        if (isGreaterThan(rightShift(amount, selectedToken.decimals).toFixed(), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
         if (!EthereumAddress.isValid(address)) return t.wallets_transfer_error_invalid_address()

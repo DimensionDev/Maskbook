@@ -5,7 +5,7 @@ import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
-import { isLessThan, leftShift } from '@masknet/web3-shared-base'
+import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -235,7 +235,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         //#endregion
 
         //#region form controls
-        const inputTokenTradeAmount = leftShift(inputAmount || '0', inputToken?.decimals)
+        const inputTokenTradeAmount = rightShift(inputAmount || '0', inputToken?.decimals)
         //#endregion
 
         //#region UI logic

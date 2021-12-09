@@ -1,4 +1,4 @@
-import { multipliedBy, rightShift } from '@masknet/web3-shared-base'
+import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import { NetworkType, FungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { isNil } from 'lodash-unified'
 import * as DeBankAPI from '../apis/debank'
@@ -103,7 +103,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
     return data
         .filter(({ type }) => type !== ZerionRBDTransactionType.AUTHORIZE)
         .map((transaction) => {
-            const ethGasFee = rightShift(transaction.fee?.value ?? 0, -18).toString()
+            const ethGasFee = leftShift(transaction.fee?.value ?? 0, 18).toString()
             const usdGasFee = multipliedBy(ethGasFee, transaction.fee?.price ?? 0).toString()
 
             return {
@@ -119,7 +119,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
                             symbol: asset.symbol,
                             address: asset.asset_code,
                             direction,
-                            amount: rightShift(value, asset.decimals).toNumber(),
+                            amount: leftShift(value, asset.decimals).toNumber(),
                             logoURI: asset.icon_url,
                         }
                     }) ?? [],

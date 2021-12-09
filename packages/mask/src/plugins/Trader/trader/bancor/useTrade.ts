@@ -12,7 +12,7 @@ import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
-import { rightShift } from '@masknet/web3-shared-base'
+import { leftShift } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -28,8 +28,8 @@ export function useTrade(
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount()
 
-    const inputAmount = rightShift(inputAmountWei, inputToken?.decimals ?? 0).toFixed()
-    const outputAmount = rightShift(outputAmountWei, outputToken?.decimals ?? 0).toFixed()
+    const inputAmount = leftShift(inputAmountWei, inputToken?.decimals).toFixed()
+    const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed()
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     return useAsyncRetry(async () => {

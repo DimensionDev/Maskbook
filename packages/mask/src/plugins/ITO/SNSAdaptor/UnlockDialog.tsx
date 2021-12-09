@@ -15,7 +15,7 @@ import {
     useChainId,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, leftShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
@@ -78,7 +78,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
     //#endregion
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = leftShift(rawAmount || '0', token?.decimals)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',

@@ -30,7 +30,7 @@ import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Walle
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
 import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
-import { isGreaterThan, pow10, rightShift } from '@masknet/web3-shared-base'
+import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -282,7 +282,7 @@ const ContractInteraction = memo(() => {
     // token estimated value
     const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
-    const tokenValueUSD = rightShift(tokenAmount, tokenDecimals ?? 0)
+    const tokenValueUSD = leftShift(tokenAmount, tokenDecimals)
         .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
         .toString()
 

@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { leftShift, ZERO } from '@masknet/web3-shared-base'
+import { rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SwapRouteData, TradeComputed, TradeStrategy } from '../../types'
 
 export function useTradeComputed(
@@ -15,9 +15,9 @@ export function useTradeComputed(
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (!isExactIn) return null
-        const inputAmount = leftShift(trade.fromAmount, inputToken.decimals).integerValue()
+        const inputAmount = rightShift(trade.fromAmount, inputToken.decimals).integerValue()
         const executionPrice = new BigNumber(trade.resPricePerToToken)
-        const outputAmount = leftShift(trade.resAmount, outputToken.decimals).integerValue()
+        const outputAmount = rightShift(trade.resAmount, outputToken.decimals).integerValue()
         const priceImpact = new BigNumber(trade.priceImpact)
         return {
             strategy,

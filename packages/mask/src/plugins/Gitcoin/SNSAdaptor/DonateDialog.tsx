@@ -27,7 +27,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
-import { leftShift } from '@masknet/web3-shared-base'
+import { rightShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -112,7 +112,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = leftShift(rawAmount || '0', token?.decimals)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     //#endregion
 
     //#region blocking

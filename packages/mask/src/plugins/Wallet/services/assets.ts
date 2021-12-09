@@ -173,7 +173,7 @@ function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType
                               y.symbol,
                               y.logo_url ? [y.logo_url] : undefined,
                           ),
-                balance: leftShift(y.amount, y.decimals).toFixed(),
+                balance: rightShift(y.amount, y.decimals).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
@@ -192,7 +192,7 @@ function formatAssetsFromZerion(
     scope: SocketRequestAssetScope,
 ) {
     return data.map(({ asset, quantity }) => {
-        const balance = rightShift(quantity, asset.decimals).toNumber()
+        const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
         const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
 
