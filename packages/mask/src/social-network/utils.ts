@@ -1,5 +1,5 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { IdentifierMap, ProfileIdentifier, ObservableWeakMap } from '@masknet/shared'
+import { IdentifierMap, ProfileIdentifier, ObservableWeakMap } from '@masknet/shared-base'
 import type { SocialNetworkUI } from './types'
 
 // By this pattern, I hope we can enforce all providers to use this pattern to init.

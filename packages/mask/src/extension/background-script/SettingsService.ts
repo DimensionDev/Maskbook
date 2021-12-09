@@ -1,4 +1,4 @@
-import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared'
+import { ECKeyIdentifier, Identifier, PersonaIdentifier } from '@masknet/shared-base'
 import { head } from 'lodash-unified'
 import type { InternalSettings } from '../../settings/createSettings'
 import {

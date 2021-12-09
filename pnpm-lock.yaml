@@ -600,6 +600,8 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-flow': workspace:*
       bignumber.js: ^9.0.1
       lodash-es: ^4.17.21
@@ -611,6 +613,8 @@ importers:
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
       bignumber.js: 9.0.1
       lodash-es: 4.17.21
@@ -855,13 +859,21 @@ importers:
 
   packages/web3-providers:
     specifiers:
+      '@masknet/plugin-infra': workspace:*
       json-stable-stringify: ^1.0.1
       lodash-unified: 1.0.1
       urlcat: ^2.0.4
     dependencies:
+      '@masknet/plugin-infra': link:../plugin-infra
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
       urlcat: 2.0.4
+
+  packages/web3-shared/base:
+    specifiers:
+      bignumber.js: 9.0.1
+    dependencies:
+      bignumber.js: 9.0.1
 
   packages/web3-shared/evm:
     specifiers:

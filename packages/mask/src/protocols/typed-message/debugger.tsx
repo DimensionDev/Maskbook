@@ -8,7 +8,7 @@ import {
     isTypedMessageTuple,
     isTypedMessageText,
     isTypedMessageImage,
-} from '@masknet/shared'
+} from '@masknet/shared-base'
 
 class TypedMessageFormatter {
     isTypedMessage(obj: unknown): obj is TypedMessage {

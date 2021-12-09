@@ -1,17 +1,20 @@
-import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-
 // key = channel; value = local implementation
 const RPCCache = new WeakMap<object, object>()
 /**
  * This function provides a localImplementation that is HMR ready.
  * To update, call this function with the SAME CHANNEL object.
  * It will "clone" all methods that impl returns.
+ * @param isBackground If the current environment is background.
  * @param name The name of the local implementation, used for logging
  * @param impl The implementation. Can be an async function.
  * @param ref The reference object that must be the same if you're updating.
  */
-export async function getLocalImplementation<T extends object>(name: string, impl: () => T | Promise<T>, ref: object) {
-    const isBackground = isEnvironment(Environment.ManifestBackground)
+export async function getLocalImplementation<T extends object>(
+    isBackground: boolean,
+    name: string,
+    impl: () => T | Promise<T>,
+    ref: object,
+) {
     if (!isBackground) return {}
 
     const isUpdate = RPCCache.has(ref)
@@ -36,11 +39,11 @@ export async function getLocalImplementation<T extends object>(name: string, imp
 }
 
 export async function getLocalImplementationExotic<T extends object>(
+    isBackground: boolean,
     name: string,
     impl: () => T | Promise<T>,
     ref: object,
 ) {
-    const isBackground = isEnvironment(Environment.ManifestBackground)
     if (!isBackground) return {}
 
     RPCCache.set(ref, await impl())
