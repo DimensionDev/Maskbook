@@ -17,13 +17,14 @@ function useDisabledPlugins() {
     return disabledPlugins
 }
 
-export function useDisabledPluginSuggestionFromPost(postContext: Result<string, any>) {
+export function useDisabledPluginSuggestionFromPost(postContent: Result<string, any>, metaLinks: string[]) {
     const disabled = useDisabledPlugins().filter((x) => x.contribution?.postContent)
 
-    if (postContext.err) return []
+    const { ok, val } = postContent
     const matches = disabled.filter((x) => {
         for (const pattern of x.contribution!.postContent!) {
-            if (postContext.val.match(pattern)) return true
+            if (ok && val.match(pattern)) return true
+            if (metaLinks.some((link) => link.match(pattern))) return true
         }
         return false
     })
@@ -43,7 +44,8 @@ export function useDisabledPluginSuggestionFromMeta(meta: ReadonlyMap<string, un
 
 export function PossiblePluginSuggestionPostInspector() {
     const message = extractTextFromTypedMessage(usePostInfoDetails.postMessage())
-    const matches = useDisabledPluginSuggestionFromPost(message)
+    const metaLinks = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+    const matches = useDisabledPluginSuggestionFromPost(message, metaLinks)
     return <PossiblePluginSuggestionUI plugins={matches} />
 }
 export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefinition[] }) {

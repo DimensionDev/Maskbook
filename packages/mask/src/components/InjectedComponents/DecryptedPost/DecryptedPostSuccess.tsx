@@ -19,7 +19,7 @@ import {
 const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.DecryptedInspector)
 function PluginRendererWithSuggestion(props: MetadataRendererProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata || new Map())
-    const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message))
+    const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
 
     const suggest = Array.from(new Set(a.concat(b)))
     return (
