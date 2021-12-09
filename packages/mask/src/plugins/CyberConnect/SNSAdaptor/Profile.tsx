@@ -102,7 +102,7 @@ const Profile = ({ url }: { url: string }) => {
             <div className={classes.avatar}>
                 <Avatar name={queryAddress} square={true} size={350} />
             </div>
-            <div className={classes.userName}>{shortenAddress(queryAddress, 12)}</div>
+            <div className={classes.userName}>{shortenAddress(queryAddress, 14)}</div>
 
             {!identity ? (
                 <Skeleton width={400} height={40} />

@@ -19,7 +19,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const isCyberConnectUrl = (x: string): boolean => x.includes('stg.app.cyberconnect.me')
+const isCyberConnectUrl = (x: string): boolean => x.includes('app.cyberconnect.me')
 
 function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()
