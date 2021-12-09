@@ -73,7 +73,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
-    const paymentTokens = (isAuction ? asset?.value?.order_payment_tokens : asset?.value?.offer_payment_tokens) ?? []
+    const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
     const selectedPaymentToken = first(paymentTokens)
 
     const { t } = useI18N()
