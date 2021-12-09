@@ -71,7 +71,7 @@
     "sign_in_account_cloud_backup_decrypt_failed": "Decrypt failed, please check password",
     "sign_in_account_cloud_backup_email_format_error": "The email is incorrect.",
     "sign_in_account_cloud_backup_phone_format_error": "The phone number is incorrect.",
-    "sign_in_account_cloud_backup_synchronize_password_tip": "You have successfully verified your cloud password and the backup is being uploaded. To unify backup passwords, please confirm whether you want to synchronize your cloud password as local backup password.",
+    "sign_in_account_cloud_backup_synchronize_password_tip": "You have successfully verified your cloud password and recovered your backup. To unify backup passwords, do you want to synchronize your cloud password as local backup password?",
     "cloud_backup": "Cloud Backups",
     "wallets_transfer": "Transfer",
     "wallets_assets": "Assets",
