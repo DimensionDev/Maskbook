@@ -76,13 +76,12 @@ async function getERC721TokenDetailedOwnerListFromChain(
     owner: string,
     offset: number,
 ) {
-    const queryLimit = 10
     const isEnumerable = await safeNonPayableTransactionCall(
         erc721TokenContract.methods.supportsInterface(ERC721_ENUMERABLE_INTERFACE_ID),
     )
 
     const balance = await safeNonPayableTransactionCall(erc721TokenContract.methods.balanceOf(owner))
-
+    const queryLimit = Number(balance)
     if (!isEnumerable || !balance) return []
 
     const allRequest = Array.from({ length: min([Number(balance), queryLimit])! }).map(async (_v, i) => {
