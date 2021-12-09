@@ -5,6 +5,7 @@ declare module NodeJS {
         readonly engine: 'chromium' | 'firefox' | 'safari'
         readonly channel: 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
+        readonly manifest: 2 | 3
 
         /**
          * Debug flags
