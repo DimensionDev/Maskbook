@@ -11,7 +11,8 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Fantom": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -25,6 +26,7 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Fantom": ""
     }
 }

@@ -5,7 +5,7 @@ import type { ERC20AgainstToken } from './types'
 
 export const USDC = createERC20Tokens('USDC_ADDRESS', 'USD Coin', 'USDC', 6)
 export const USDT = createERC20Tokens('USDT_ADDRESS', 'Tether USD', 'USDT', 6)
-export const fUSDT = createERC20Tokens('fUSDT_ADDRESS', 'Tether USD', 'USDT', 6)
+export const fUSDT = createERC20Tokens('fUSDT_ADDRESS', 'Frapped USDT', 'fUSDT', 6)
 export const HUSD = createERC20Tokens('HUSD_ADDRESS', 'Huobi USD', 'HUSD', 6)
 export const BUSD = createERC20Tokens('BUSD_ADDRESS', 'Huobi USD', 'BUSD', 6)
 export const COMP = createERC20Tokens('COMP_ADDRESS', 'Compound', 'COMP', 18)
