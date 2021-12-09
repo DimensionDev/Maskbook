@@ -10,6 +10,7 @@ import Trader from '@masknet/web3-constants/evm/trader.json'
 import Trending from '@masknet/web3-constants/evm/trending.json'
 import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import RPC from '@masknet/web3-constants/evm/rpc.json'
+import EXPLORER from '@masknet/web3-constants/evm/explorer.json'
 import PoolTogether from '@masknet/web3-constants/evm/pooltogether.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
 import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
@@ -17,6 +18,14 @@ import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import Chain from '@masknet/web3-constants/evm/chain.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
+
+function getEnvConstants(key: string) {
+    try {
+        return process.env[key] ?? ''
+    } catch {
+        return ''
+    }
+}
 
 export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
 
@@ -50,13 +59,11 @@ export const useTrendingConstants = hookTransform(getTrendingConstants)
 export const getMaskBoxConstants = transform(MaskBox)
 export const useMaskBoxConstants = hookTransform(getMaskBoxConstants)
 
-let WEB3_CONSTANTS_RPC = ''
-try {
-    WEB3_CONSTANTS_RPC = process.env.WEB3_CONSTANTS_RPC ?? ''
-} catch {}
-
-export const getRPCConstants = transformFromJSON(WEB3_CONSTANTS_RPC, RPC)
+export const getRPCConstants = transformFromJSON(getEnvConstants('WEB3_CONSTANTS_RPC'), RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
+
+export const getExplorerConstants = transformFromJSON(getEnvConstants('WEB3_CONSTANTS_EXPLORER'), EXPLORER)
+export const useExplorerConstants = hookTransform(getExplorerConstants)
 
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
