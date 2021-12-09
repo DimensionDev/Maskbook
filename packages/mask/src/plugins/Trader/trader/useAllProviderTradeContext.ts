@@ -79,6 +79,7 @@ export function useAllProviderTradeContext() {
     })
 
     const { inputAmount, inputToken, outputToken } = tradeStore
+    console.log('tradeStore', { inputAmount, inputToken, outputToken })
     const allTradeComputed = useAllTradeComputed(inputAmount, inputToken, outputToken)
 
     return {

@@ -65,6 +65,7 @@ export function useAllTradeComputed(
     const uniswapEstimateGas = useUniswapTradeGasLimit(uniswapV2, TradeProvider.UNISWAP_V2)
 
     const containSushiSwap = tradeProviders.some((x) => x === TradeProvider.SUSHISWAP)
+    debugger
     // sushi swap
     const sushiSwap_ = useUniswapV2Trade(
         TradeProvider.SUSHISWAP,
@@ -74,6 +75,13 @@ export function useAllTradeComputed(
         containSushiSwap ? inputToken : undefined,
         containSushiSwap ? outputToken : undefined,
     )
+    console.log('containSushiSwap', {
+        inputAmount_,
+        containSushiSwap,
+        inputToken,
+        outputToken,
+        swapValue: sushiSwap_.value,
+    })
     const sushiSwap = useUniswapTradeComputed(sushiSwap_.value, inputToken, outputToken)
     const sushiSwapEstimateGas = useUniswapTradeGasLimit(sushiSwap, TradeProvider.SUSHISWAP)
 

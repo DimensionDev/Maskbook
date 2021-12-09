@@ -14,14 +14,24 @@ function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
+    debugger
     const isExactIn = strategy === TradeStrategy.ExactIn
-    const isTradable = !isZero(inputAmount) || !isZero(outputAmount)
+    const isTradable = !isZero(inputAmount) // || !isZero(outputAmount)
     const isNotAvailable =
         !isTradable ||
         !inputToken ||
         !outputToken ||
         (inputAmount === '0' && isExactIn) ||
         (outputAmount === '0' && !isExactIn)
+    if (isNotAvailable) {
+        console.log('why is not available', {
+            inputAmount,
+            isTradable,
+            inputToken,
+            outputToken,
+            isExactIn,
+        })
+    }
 
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const inputCurrency = toUniswapCurrency(chainId, inputToken)
@@ -31,6 +41,7 @@ function useTrade(
         isExactIn ? inputToken : outputToken,
         isExactIn ? inputAmount : outputAmount,
     )
+    debugger
     return {
         isNotAvailable,
         isExactIn,
@@ -56,6 +67,7 @@ export function useV2Trade(
         outputToken,
     )
 
+    debugger
     //#region v2
     const v2BestTradeExactIn = useV2BestTradeExactIn(tradeProvider, isExactIn ? tradeAmount : undefined, outputCurrency)
     const v2BestTradeExactOut = useV2BestTradeExactOut(
@@ -65,6 +77,7 @@ export function useV2Trade(
     )
     //#endregion
 
+    debugger
     const v2Trade = isExactIn ? v2BestTradeExactIn : v2BestTradeExactOut
 
     if (isNotAvailable)
@@ -103,6 +116,7 @@ export function useV3Trade(
 
     const v3Trade = isExactIn ? v3BestTradeExactIn : v3BestTradeExactOut
 
+    console.log('isNotAvailable', isNotAvailable)
     if (isNotAvailable)
         return {
             ...v3Trade,

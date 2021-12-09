@@ -50,7 +50,7 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
 
     const asyncResults = useAsyncRetry(
         () => callback(calls, { chainId: numberToHex(targetChainId) }),
-        [calls, targetChainId],
+        [calls, callback, targetChainId],
     )
 
     // compose reserves from multicall results
