@@ -5,6 +5,7 @@ import { PLUGIN_META_KEY, RaribleIPFSURL } from './constants'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types'
 import schema from './schema.json'
 import type BigNumber from 'bignumber.js'
+import { leftShift } from '@masknet/web3-shared-base'
 
 export const CollectibleMetadataReader = createTypedMessageMetadataReader<CollectibleJSON_Payload>(
     PLUGIN_META_KEY,

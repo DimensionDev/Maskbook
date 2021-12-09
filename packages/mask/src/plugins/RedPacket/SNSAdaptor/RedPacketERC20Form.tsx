@@ -8,7 +8,7 @@ import {
     useRedPacketConstants,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
-import { isGreaterThan, isZero, multipliedBy } from '@masknet/web3-shared-base'
+import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { omit } from 'lodash-unified'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
