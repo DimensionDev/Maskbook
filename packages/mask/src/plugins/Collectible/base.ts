@@ -14,8 +14,8 @@ export const base: Plugin.Shared.Definition = {
     },
     contribution: {
         postContent: new Set([
-            /opensea.io\/\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-            /rarible.com\/\/token\/(0x[\dA-Fa-f]{40}):(\d+)/,
+            /opensea.io\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+            /rarible.com\/token\/(0x[\dA-Fa-f]{40}):(\d+)/,
         ]),
     },
 }
