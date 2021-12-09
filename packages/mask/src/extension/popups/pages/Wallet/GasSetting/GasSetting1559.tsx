@@ -24,6 +24,14 @@ import { useHistory } from 'react-router-dom'
 import { useNativeTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { PopupRoutes } from '@masknet/shared-base'
 import { toHex, fromWei } from 'web3-utils'
+import {
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    isLessThan,
+    isLessThanOrEqualTo,
+    isPositive,
+    multipliedBy,
+} from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -187,19 +195,16 @@ export const GasSetting1559 = memo(() => {
                     .string()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
-                        (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimit ?? 0),
+                        (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit ?? 0),
                         t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimit }),
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
                     .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                    .refine(
-                        (value) => new BigNumber(value).isPositive(),
-                        t('wallet_transfer_error_max_priority_gas_fee_positive'),
-                    ),
+                    .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive')),
                 maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
             })
-            .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
+            .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
@@ -300,13 +305,12 @@ export const GasSetting1559 = memo(() => {
     //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
-            new BigNumber(maxPriorityFeePerGas).isGreaterThan(
-                new BigNumber(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
-                    HIGH_FEE_WARNING_MULTIPLIER,
-                ),
+            isGreaterThan(
+                maxPriorityFeePerGas,
+                multipliedBy(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
             return t('wallet_transfer_error_max_priority_gas_fee_too_high')
@@ -315,10 +319,11 @@ export const GasSetting1559 = memo(() => {
 
     const maxFeeGasHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (new BigNumber(maxFeePerGas).isLessThan(gasOptions?.estimatedBaseFee ?? 0))
+        if (isLessThan(maxFeePerGas, gasOptions?.estimatedBaseFee ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
-            new BigNumber(maxFeePerGas).isGreaterThan(
+            isGreaterThan(
+                maxFeePerGas,
                 new BigNumber(gasOptions?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
             )
         )

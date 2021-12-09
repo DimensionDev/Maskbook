@@ -7,6 +7,7 @@
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "@types/ethereum-blockies": "^0.1.0",
     "@types/punycode": "^2.1.0",
     "@unstoppabledomains/resolution": "^5.0.1",

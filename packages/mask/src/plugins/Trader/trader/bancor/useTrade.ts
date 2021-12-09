@@ -11,8 +11,8 @@ import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
-import BigNumber from 'bignumber.js'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { rightShift } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -28,8 +28,8 @@ export function useTrade(
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount()
 
-    const inputAmount = new BigNumber(inputAmountWei).shiftedBy(-(inputToken?.decimals ?? 0)).toFixed()
-    const outputAmount = new BigNumber(outputAmountWei).shiftedBy(-(outputToken?.decimals ?? 0)).toFixed()
+    const inputAmount = rightShift(inputAmountWei, inputToken?.decimals ?? 0).toFixed()
+    const outputAmount = rightShift(outputAmountWei, outputToken?.decimals ?? 0).toFixed()
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     return useAsyncRetry(async () => {

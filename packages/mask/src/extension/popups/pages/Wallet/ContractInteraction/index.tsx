@@ -30,6 +30,7 @@ import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Walle
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
 import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { isGreaterThan, pow10, rightShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -281,8 +282,7 @@ const ContractInteraction = memo(() => {
     // token estimated value
     const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
-    const tokenValueUSD = new BigNumber(tokenAmount)
-        .shiftedBy(-(tokenDecimals ?? 0))
+    const tokenValueUSD = rightShift(tokenAmount, tokenDecimals ?? 0)
         .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
         .toString()
 
@@ -334,7 +334,7 @@ const ContractInteraction = memo(() => {
                         {tokenDecimals !== undefined ? (
                             <>
                                 <Typography className={classes.amount}>
-                                    {new BigNumber(formatBalance(tokenAmount, tokenDecimals)).isGreaterThan(10 ** 9) ? (
+                                    {isGreaterThan(formatBalance(tokenAmount, tokenDecimals), pow10(9)) ? (
                                         'infinite'
                                     ) : (
                                         <FormattedBalance
@@ -346,7 +346,7 @@ const ContractInteraction = memo(() => {
                                     )}
                                 </Typography>
                                 <Typography>
-                                    {new BigNumber(tokenValueUSD).isGreaterThan(10 ** 9) ? (
+                                    {isGreaterThan(tokenValueUSD, pow10(9)) ? (
                                         'infinite'
                                     ) : (
                                         <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
@@ -382,7 +382,7 @@ const ContractInteraction = memo(() => {
                             {t('popups_wallet_contract_interaction_total')}
                         </Typography>
                         <Typography className={classes.gasPrice}>
-                            {new BigNumber(totalUSD).isGreaterThan(10 ** 9) ? (
+                            {isGreaterThan(totalUSD, pow10(9)) ? (
                                 'infinite'
                             ) : (
                                 <FormattedCurrency value={totalUSD} sign="$" formatter={formatCurrency} />

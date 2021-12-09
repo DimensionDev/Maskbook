@@ -1,7 +1,6 @@
-import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-evm'
+import { leftShift, ZERO } from '@masknet/web3-shared-base'
 import type { SwapBancorRequest, TradeComputed, TradeStrategy } from '../../types'
 
 export function useTradeComputed(
@@ -14,9 +13,9 @@ export function useTradeComputed(
         if (!trade) return null
         if (!inputToken || !outputToken) return null
 
-        const inputAmountWei = new BigNumber(trade.fromAmount || '0').shiftedBy(inputToken.decimals ?? 0)
-        const outputAmountWei = new BigNumber(trade.toAmount || '0').shiftedBy(outputToken.decimals ?? 0)
-        const minimumReceivedWei = new BigNumber(trade.minimumReceived).shiftedBy(outputToken.decimals ?? 0)
+        const inputAmountWei = leftShift(trade.fromAmount || '0', inputToken.decimals)
+        const outputAmountWei = leftShift(trade.toAmount || '0', outputToken.decimals)
+        const minimumReceivedWei = leftShift(trade.minimumReceived, outputToken.decimals)
 
         const tradeComputed: TradeComputed<SwapBancorRequest> = {
             strategy,

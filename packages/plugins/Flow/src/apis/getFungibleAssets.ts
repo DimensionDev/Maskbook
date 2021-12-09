@@ -1,8 +1,8 @@
-import BigNumber from 'bignumber.js'
 import { Pagination, Web3Plugin, CurrencyType } from '@masknet/plugin-infra'
 import { ChainId, createClient, getTokenConstants } from '@masknet/web3-shared-flow'
 import { getTokenPrice } from '@masknet/web3-providers'
 import { createFungibleAsset, createFungibleToken } from '../helpers'
+import { leftShift } from '@masknet/web3-shared-base'
 
 async function getTokenBalance(
     chainId: ChainId,
@@ -39,10 +39,7 @@ async function getTokenBalance(
         `,
             args: (arg, t) => [arg(account, t.Address)],
         })
-        return new BigNumber(balance)
-            .multipliedBy(10 ** decimals)
-            .integerValue()
-            .toFixed()
+        return leftShift(balance, decimals).integerValue().toFixed()
     } catch {
         return '0'
     }
