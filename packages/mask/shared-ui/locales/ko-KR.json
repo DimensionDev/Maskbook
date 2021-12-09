@@ -257,7 +257,7 @@
     "plugin_red_packet_description_refund": "{{balance}} {{symbol} 반환 가능합니다.",
     "plugin_red_packet_description_empty": "빈 빨간 백입니다.",
     "plugin_red_packet_description_broken": "파손된 빨간 백입니다.",
-    "plugin_red_packet_description_failover": "{{shares}}에서  / {{total}} {{symbol}} 공유합니다.",
+    "plugin_red_packet_description_failover": "{{name}} / {{shares}}에서  / {{total}} {{symbol}} 공유합니다.",
     "plugin_red_packet_claiming_from": "{{name}}에서 빨간 팩 받는 중",
     "plugin_red_packet_refunding_for": "{{balance}} {{symbol}} 빨간 백 반환 중",
     "plugin_red_packet_amount_per_share": "공유 총액",
