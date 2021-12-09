@@ -80,6 +80,7 @@ const assetCache: Record<string, Promise<ERC721TokenInfo> | ERC721TokenInfo> = O
 const lazyVoid = Promise.resolve()
 
 const BASE64_PREFIX = 'data:application/json;base64,'
+const IPFS_PREFIX = 'ipfs://'
 // Todo: replace this temporary proxy.
 const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
 async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721TokenInfo | void> {
@@ -104,7 +105,10 @@ async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721To
 
     if (promise === lazyVoid) {
         // for some NFT tokens return an URL refers to a JSON file
-        promise = fetch(`${CORS_PROXY}/${tokenURI}`).then((r) => r.json() as ERC721TokenInfo, noop)
+        promise = fetch(tokenURI.startsWith(IPFS_PREFIX) ? tokenURI : `${CORS_PROXY}/${tokenURI}`).then(
+            (r) => r.json() as ERC721TokenInfo,
+            noop,
+        )
         assetCache[tokenURI] = promise as Promise<ERC721TokenInfo>
         const result = await promise
         assetCache[tokenURI] = result as ERC721TokenInfo
