@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { Box, FormControlLabel, formControlLabelClasses, Radio, RadioGroup, styled, Typography } from '@mui/material'
-import LoadingButton from '@mui/lab/LoadingButton'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard'
 import type { BackupFileInfo } from '../../type'
 import { useDashboardI18N } from '../../../../locales'
@@ -11,6 +10,9 @@ import { useAsyncFn } from 'react-use'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import PasswordField from '../../../../components/PasswordField'
+import { makeStyles } from '@masknet/theme'
+import { LoadingButton } from '@mui/lab'
+import { LoadingAnimation } from '@masknet/shared'
 
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
@@ -23,6 +25,17 @@ const StyledFormControlLabel = styled(FormControlLabel)({
         fontSize: 14,
     },
 })
+
+const useStyles = makeStyles()(() => ({
+    helpContent: {
+        fontSize: '13px',
+        padding: '12px 0',
+        color: MaskColorVar.textSecondary,
+    },
+    loadingButtonOverride: {
+        opacity: '1 !important',
+    },
+}))
 
 export interface CloudBackupMergeDialogProps {
     account: string
@@ -38,7 +51,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
     const [incorrectBackupPassword, setIncorrectBackupPassword] = useState(false)
     const t = useDashboardI18N()
     const { showSnackbar } = useCustomSnackbar()
-
+    const { classes } = useStyles()
     const restoreCallback = useCallback(() => {
         onMerged(true)
         showSnackbar(t.settings_alert_merge_success(), { variant: 'success' })
@@ -92,9 +105,9 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                         value="1"
                         control={<Radio size="small" />}
                         label={t.settings_dialogs_backup_to_cloud()}
-                        style={{ marginTop: '12px' }}
+                        style={{ marginTop: '24px' }}
                     />
-                    <Typography sx={{ fontSize: '13px', padding: '12px 0px' }}>
+                    <Typography className={classes.helpContent}>
                         {t.settings_dialogs_backup_to_cloud_action()}
                     </Typography>
                     <StyledFormControlLabel
@@ -116,14 +129,15 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                         helperText={incorrectBackupPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
                 ) : null}
-                <Typography sx={{ fontSize: '13px', padding: '12px 0px' }}>
-                    {t.settings_dialogs_backup_merge_cloud()}
-                </Typography>
+                <Typography className={classes.helpContent}>{t.settings_dialogs_backup_merge_cloud()}</Typography>
                 <LoadingButton
+                    className={(loading && classes.loadingButtonOverride) || ''}
                     fullWidth
                     onClick={onBackup}
                     loading={loading}
+                    loadingPosition="end"
                     disabled={incorrectBackupPassword}
+                    loadingIndicator={<LoadingAnimation />}
                     variant="contained">
                     {t.settings_button_backup()}
                 </LoadingButton>
