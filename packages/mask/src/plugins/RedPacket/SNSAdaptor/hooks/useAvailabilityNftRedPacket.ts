@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js'
 import { useAsyncRetry } from 'react-use'
 import { useNftRedPacketContract } from './useNftRedPacketContract'
 
@@ -17,7 +18,7 @@ export function useAvailabilityNftRedPacket(id: string, from: string) {
 
         const isClaimed = availability.claimed_id !== '0'
         const totalAmount = result.erc721_token_ids.length
-        const bits = Number(result.bit_status).toString(2).split('')
+        const bits = new BigNumber(result.bit_status).toString(2).split('')
         const claimedAmount = bits.reduce((acc, cur) => {
             if (cur === '1') return acc + 1
             return acc
