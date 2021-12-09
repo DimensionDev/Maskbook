@@ -151,7 +151,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         if (!isVerified) return t('plugin_collectible_check_tos_document')
         if (
             new BigNumber(asset?.value?.latestBidVo?.priceInEth).gt(
-                formatBalance(balance.value, token?.value?.decimals, 6),
+                formatBalance(balance.value, token?.value?.decimals, 4),
             )
         ) {
             return t('plugin_collectible_insufficient_balance')
@@ -199,7 +199,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                             <Box className={classes.chain_row}>
                                 <Typography variant="body2">{t('plugin_cryptoartai_current_balance')}</Typography>
                                 <Typography variant="body2">
-                                    {formatBalance(balance.value, token?.value?.decimals, 6)}
+                                    {formatBalance(balance.value, token?.value?.decimals, 4)}
                                 </Typography>
                             </Box>
                         </Box>

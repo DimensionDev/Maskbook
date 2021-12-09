@@ -167,7 +167,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (amount_.lt(atLeastBidValue)) return t('plugin_collectible_enter_a_price')
-        if (balance_.isZero() || amount_.gt(formatBalance(balance.value, token?.value?.decimals, 6)))
+        if (balance_.isZero() || amount_.gt(formatBalance(balance.value, token?.value?.decimals, 4)))
             return t('plugin_collectible_insufficient_balance')
         if (
             assetSource?.is24Auction &&
@@ -238,7 +238,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                         <p className={classes.details}>{t('plugin_cryptoartai_escrowed')}</p>
                         <p className={classes.details}>
                             {t('plugin_cryptoartai_current_balance_is') +
-                                formatBalance(balance.value, token?.value?.decimals, 6) +
+                                formatBalance(balance.value, token?.value?.decimals, 4) +
                                 ' ETH'}
                         </p>
                         {assetSource?.is24Auction ? (
