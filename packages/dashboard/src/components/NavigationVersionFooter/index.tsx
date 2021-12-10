@@ -9,12 +9,8 @@ const VersionContainer = styled('div')(() => ({
     fontSize: '12px',
 }))
 
-interface NavigationVersionFooterProps extends React.PropsWithChildren<{}> {
-    version?: string
-}
-
-export const NavigationVersionFooter = memo((props: NavigationVersionFooterProps) => {
+export const NavigationVersionFooter = memo(() => {
     const t = useDashboardI18N()
-    const version = props.version ?? globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
+    const version = globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
     return <VersionContainer>{version && t.version_of_stable({ version })}</VersionContainer>
 })
