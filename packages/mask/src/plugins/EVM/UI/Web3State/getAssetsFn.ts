@@ -7,6 +7,7 @@ import {
     formatEthereumAddress,
     FungibleAssetProvider,
     getERC721TokenDetailedFromChain,
+    getERC721TokenAssetFromChain,
     getEthereumConstants,
     getRPCConstants,
     getTokenConstants,
@@ -121,7 +122,7 @@ export const getNonFungibleTokenFn =
         if (pagination?.page === 0) {
             const provider = context.provider.getCurrentValue()
             const trustedTokens = context.erc721Tokens.getCurrentValue()
-            const calls = trustedTokens.map((x) => {
+            const calls = trustedTokens.map(async (x) => {
                 const web3 = new Web3(provider)
                 const { RPC } = getRPCConstants(x.contractDetailed.chainId)
                 const providerURL = first(RPC)
@@ -129,7 +130,10 @@ export const getNonFungibleTokenFn =
                     web3.setProvider(providerURL)
                     const contract = createContract<ERC721>(web3, x.contractDetailed.address, ERC721ABI as AbiItem[])
                     if (!contract) return null
-                    return getERC721TokenDetailedFromChain(x.contractDetailed, contract, x.tokenId)
+                    const tokenDetailed = await getERC721TokenDetailedFromChain(x.contractDetailed, contract, x.tokenId)
+                    const info = await getERC721TokenAssetFromChain(tokenDetailed?.info.tokenURI)
+                    if (tokenDetailed && info) tokenDetailed.info = { ...info, ...tokenDetailed.info }
+                    return tokenDetailed
                 }
                 return null
             })
