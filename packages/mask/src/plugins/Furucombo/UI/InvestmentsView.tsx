@@ -171,7 +171,7 @@ export function InvestmentsView(props: InvestmentsProps) {
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10))
+        setRowsPerPage(Number.parseInt(event.target.value, 10))
         setPage(0)
     }
 
