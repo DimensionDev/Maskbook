@@ -29,7 +29,7 @@ export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'>
     blacklist?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
-    disabledSearch?: boolean
+    disableSearch?: boolean
     onSelect?(token: FungibleTokenDetailed | null): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
 }
@@ -120,7 +120,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
                 placeholder: t.erc20_token_list_placeholder(),
             }}
             onSelect={(asset) => onSelect?.(asset.token)}
-            disabledSearch={!!props.disabledSearch}
+            disableSearch={!!props.disableSearch}
             onSearch={setKeyword}
             data={renderAssets as Asset[]}
             searchKey={['token.address', 'token.symbol', 'token.name']}

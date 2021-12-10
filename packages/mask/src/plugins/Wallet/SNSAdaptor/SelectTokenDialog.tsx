@@ -99,7 +99,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                             : [...(FixedTokenListProps?.blacklist ?? [])]
                     }
                     targetChainId={targetChainId}
-                    disabledSearch={disableSearchBar}
+                    disableSearch={disableSearchBar}
                     FixedSizeListProps={{
                         itemSize: rowSize,
                     }}

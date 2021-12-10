@@ -35,7 +35,6 @@
     "badge_renderer_provided_by_plugin": "Provided by plugin",
     "add_to_key_store_success": "The public key has been added to the Keystore",
     "add_token": "Add Token",
-    "add_token_search_hint": "Search Tokens Symbols Name or Contract address",
     "add_nft_contract_search_hint": "Search NFT Contract Symbol Name or Address",
     "applications": "Applications",
     "additional_post_box__encrypted_post_pre": "Decrypt this post with #mask_io ! {{encrypted}}",

@@ -33,7 +33,6 @@
     "badge_renderer_provided_by_plugin": "插件提供：",
     "add_to_key_store_success": "公钥已添加到密钥库",
     "add_token": "添加代币",
-    "add_token_search_hint": "搜索代币代号名称或合约地址",
     "add_nft_contract_search_hint": "搜索 NFT 合约名称或地址",
     "applications": "应用程序",
     "additional_post_box__encrypted_post_pre": "安装 #mask_io 解密此贴文 ！ {{encrypted}}",
