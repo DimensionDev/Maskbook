@@ -4,7 +4,7 @@ import { currentPopupWindowId } from '../../../settings/settings'
 import { isLocked } from '../../../plugins/Wallet/services'
 
 export { __deprecated__getStorage, __deprecated__setStorage } from './storage'
-export { resolveTCOLink } from '../../../../shared/helpers/resolve-t.co'
+export { resolveTCOLink } from '../../../../shared'
 export { fetch, fetchJSON } from '../../../../background/services/helper/fetch'
 export { requestExtensionPermission, queryExtensionPermission } from './extensionPermission'
 

@@ -6,6 +6,7 @@ import { MaskColorVar } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
+import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
 const Root = styled(Grid)(({ theme }) => ({
     backgroundColor: MaskColorVar.primaryBackground,
@@ -17,6 +18,10 @@ const LeftContainer = styled(Grid)(({ theme }) => ({
         // Just meet the design size
         minWidth: 232,
     },
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    paddingBottom: '22px',
 }))
 
 export interface DashboardFrameProps extends React.PropsWithChildren<{}> {}
@@ -44,6 +49,7 @@ export const DashboardFrame = memo((props: DashboardFrameProps) => {
                 {isLargeScreen && (
                     <LeftContainer item xs={2}>
                         <Navigation />
+                        <NavigationVersionFooter />
                     </LeftContainer>
                 )}
                 <Grid container direction="column" item xs={isLargeScreen ? 10 : 12}>
