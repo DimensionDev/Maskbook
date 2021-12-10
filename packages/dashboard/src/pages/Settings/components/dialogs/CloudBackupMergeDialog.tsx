@@ -11,8 +11,7 @@ import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import PasswordField from '../../../../components/PasswordField'
 import { makeStyles } from '@masknet/theme'
-import { LoadingButton } from '@mui/lab'
-import { LoadingAnimation } from '@masknet/shared'
+import { LoadingButton } from '../../../../components/LoadingButton'
 
 const StyledFormControlLabel = styled(FormControlLabel)({
     [`&.${formControlLabelClasses.root}`]: {
@@ -31,9 +30,6 @@ const useStyles = makeStyles()(() => ({
         fontSize: '13px',
         padding: '12px 0',
         color: MaskColorVar.textSecondary,
-    },
-    loadingButtonOverride: {
-        opacity: '1 !important',
     },
 }))
 
@@ -81,7 +77,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
         }
     }, [backupPassword, account, info])
 
-    const onBackup = () => {
+    const onBackup = async () => {
         if (mode === '1') {
             onMerged(false)
         } else {
@@ -132,15 +128,7 @@ export function CloudBackupMergeDialog({ account, info, open, onClose, onMerged 
                     />
                 ) : null}
                 <Typography className={classes.helpContent}>{t.settings_dialogs_backup_merge_cloud()}</Typography>
-                <LoadingButton
-                    className={(loading && classes.loadingButtonOverride) || ''}
-                    fullWidth
-                    onClick={onBackup}
-                    loading={loading}
-                    loadingPosition="end"
-                    disabled={incorrectBackupPassword}
-                    loadingIndicator={<LoadingAnimation />}
-                    variant="contained">
+                <LoadingButton fullWidth onClick={onBackup} loading={loading} disabled={incorrectBackupPassword}>
                     {t.settings_button_backup()}
                 </LoadingButton>
             </Box>

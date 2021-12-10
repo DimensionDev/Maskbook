@@ -6,7 +6,7 @@ import { useDashboardI18N } from '../../../../locales'
 import { MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { UserContext } from '../../hooks/UserContext'
-import LoadingButton from '@mui/lab/LoadingButton'
+import { LoadingButton } from '../../../../components/LoadingButton'
 import { fetchUploadLink, uploadBackupValue, VerifyCodeRequest } from '../../api'
 import formatDateTime from 'date-fns/format'
 import { LoadingCard } from '../../../../components/Restore/steps/LoadingCard'
@@ -148,12 +148,7 @@ export default function BackupDialog({ local = true, params, open, merged, onClo
                         />
                     ) : null}
 
-                    <LoadingButton
-                        fullWidth
-                        disabled={backupDisabled}
-                        onClick={handleBackup}
-                        loading={loading}
-                        variant="contained">
+                    <LoadingButton fullWidth disabled={backupDisabled} onClick={handleBackup} loading={loading}>
                         {t.settings_button_backup()}
                     </LoadingButton>
                 </Box>
