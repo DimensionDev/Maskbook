@@ -7,7 +7,7 @@ const ICAO9303Checksum = {
                 .toUpperCase()
                 .replace(/[+/=]/g, '0')
                 .split('')
-                .map((d, i) => parseInt(d, 36) * [7, 3, 1][i % 3])
+                .map((d, i) => Number.parseInt(d, 36) * [7, 3, 1][i % 3])
                 .reduce((l, r) => l + r, 0) % 19
         )
             .toString(19)
