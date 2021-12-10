@@ -67,7 +67,7 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
     [`& > .${paperClasses.root}`]: {
         width: 232,
         top: theme.mixins.toolbar.minHeight,
-        paddingTop: theme.spacing(7.5),
+        paddingTop: '28px',
         background: new Color(theme.palette.background.paper).alpha(0.8).toString(),
         backdropFilter: 'blur(4px)',
         display: 'flex',
