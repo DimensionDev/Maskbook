@@ -19,7 +19,7 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                 proxy.realCurrent = info.element.firstChild as HTMLElement
                 const root = createReactRootShadowed(proxy.afterShadow, { signal })
                 root.render(
-                    <div style={{ position: 'absolute', top: 0, left: 0, zIndex: -1 }}>
+                    <div style={{ position: 'absolute', top: -1, left: -1, zIndex: 2 }}>
                         <NFTBadgeTweet width={info.width - 4} height={info.height - 4} avatarId={info.avatarId} />
                     </div>,
                 )

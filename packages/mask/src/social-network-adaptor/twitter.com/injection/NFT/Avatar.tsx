@@ -35,9 +35,9 @@ function _(main: () => LiveSelector<HTMLElement, false>, signal: AbortSignal) {
                     <div
                         style={{
                             position: 'absolute',
-                            left: 0,
-                            top: 0,
-                            zIndex: -1,
+                            left: -1,
+                            top: -1,
+                            zIndex: 2,
                         }}>
                         <NFTBadgeTimeline
                             userId={twitterId}

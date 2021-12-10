@@ -56,7 +56,7 @@ function NFTAvatarInTwitter() {
     let size = 170
     if (ele) {
         const style = window.getComputedStyle(ele)
-        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 4
+        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 6
     }
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
