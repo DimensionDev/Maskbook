@@ -25,4 +25,4 @@ export const gun2 = new Gun<ApplicationStateInGunVersion2>({
     localStorage: false,
     radisk: true,
 })
-gun2.opt({ retry: Infinity })
+gun2.opt({ retry: Number.POSITIVE_INFINITY })

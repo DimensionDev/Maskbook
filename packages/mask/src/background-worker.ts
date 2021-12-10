@@ -1,2 +1,2 @@
 import '../background/setup'
-import './extension/service' // setup Services.*
+import '../background/services/setup'

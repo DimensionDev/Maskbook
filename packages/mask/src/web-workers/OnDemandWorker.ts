@@ -94,7 +94,8 @@ export class OnDemandWorker extends EventTarget implements Worker {
         super.removeEventListener(type, listener as any, options)
     }
 }
-Object.setPrototypeOf(OnDemandWorker.prototype, Worker.prototype)
+// Worker does not exist in MV3
+typeof Worker === 'function' && Object.setPrototypeOf(OnDemandWorker.prototype, Worker.prototype)
 const throws = () => {
     throw new TypeError('Please use addEventListener')
 }
