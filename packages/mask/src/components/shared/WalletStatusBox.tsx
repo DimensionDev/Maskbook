@@ -223,12 +223,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         failIcon={<></>}
                     />
                 ) : null}
-                <Button
-                    className={classNames(classes.actionButton)}
-                    color="primary"
-                    variant="contained"
-                    size="small"
-                    onClick={onChange}>
+                <Button className={classNames(classes.actionButton)} variant="sns" size="small" onClick={onChange}>
                     {t('wallet_status_button_change')}
                 </Button>
             </section>

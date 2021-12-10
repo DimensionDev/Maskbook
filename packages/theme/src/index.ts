@@ -7,6 +7,9 @@ import * as Components from './component-changes'
 import { merge } from 'lodash-unified'
 import type { PaletteOptions } from '@mui/material/styles/createPalette'
 import { DarkColor, LightColor, Color } from './constants'
+import tinyColor from 'tinycolor2'
+
+export const parseColor = tinyColor
 
 const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
     mode,
