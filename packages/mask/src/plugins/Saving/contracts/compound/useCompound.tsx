@@ -72,7 +72,7 @@ export function useAllMarkets() {
 
     useEffect(() => {
         const fetchMarkets = async () => {
-            if (controllerContract && web3 && chainId === ChainId.Ropsten && account) {
+            if (controllerContract && web3 && chainId === ChainId.Mainnet && account) {
                 setIsLoading(true)
                 try {
                     const promises = MARKETS.map((market) => {
