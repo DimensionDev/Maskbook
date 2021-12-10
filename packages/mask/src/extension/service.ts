@@ -35,7 +35,7 @@ export const Services = {
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
 
-if (process.env.manifest === 2 && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
+if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
     import.meta.webpackHot.accept(
         [
             './background-script/CryptoService',
@@ -66,7 +66,7 @@ function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
     const load = () => getLocalImplementation(isBackground, `Services.${key}`, impl, channel)
     const localImplementation = load()
     // No HMR support in MV3
-    process.env.manifest === 2 &&
+    process.env.manifest === '2' &&
         isBackground &&
         import.meta.webpackHot &&
         document.addEventListener(SERVICE_HMR_EVENT, load)

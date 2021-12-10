@@ -161,6 +161,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     ...runtime,
                     ...getGitInfo(reproducibleBuild),
                     channel: normalizedFlags.channel,
+                    manifest: String(runtime.manifest),
                 }
                 if (mode === 'development') return EnvironmentPluginCache(runtimeValues)
                 return EnvironmentPluginNoCache(runtimeValues)
