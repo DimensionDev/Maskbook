@@ -155,7 +155,7 @@ export function parseStringOrBytes32(
 
 //#region asset sort
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
-export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
+export const getBalanceValue = (asset: Asset) => Number.parseFloat(formatBalance(asset.balance, asset.token.decimals))
 export const getTokenChainIdValue = (asset: Asset) =>
     asset.token.type === EthereumTokenType.Native ? 1 / asset.token.chainId : 0
 

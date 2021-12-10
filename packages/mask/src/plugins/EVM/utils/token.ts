@@ -6,7 +6,7 @@ export const getTokenUSDValue = (token: Web3Plugin.Asset) =>
     token.value ? Number.parseFloat(token.value?.[CurrencyType.USD] ?? '') : 0
 
 export const getBalanceValue = (asset: Web3Plugin.Asset<Web3Plugin.FungibleToken>) =>
-    parseFloat(formatBalance(asset.balance, asset.token.decimals))
+    Number.parseFloat(formatBalance(asset.balance, asset.token.decimals))
 
 export const getTokenChainIdValue = (asset: Web3Plugin.Asset) => {
     const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()

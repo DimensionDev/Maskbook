@@ -159,8 +159,8 @@ export function InvestmentsView(props: InvestmentsProps) {
         const orderByA = orderBy as keyof typeof a
         const orderByB = orderBy as keyof typeof b
         return order === 'asc'
-            ? parseFloat(a[orderByA]) - parseFloat(b[orderByB])
-            : parseFloat(b[orderByB]) - parseFloat(a[orderByA])
+            ? Number.parseFloat(a[orderByA]) - Number.parseFloat(b[orderByB])
+            : Number.parseFloat(b[orderByB]) - Number.parseFloat(a[orderByA])
     })
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -171,7 +171,7 @@ export function InvestmentsView(props: InvestmentsProps) {
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10))
+        setRowsPerPage(Number.parseInt(event.target.value, 10))
         setPage(0)
     }
 

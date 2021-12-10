@@ -144,7 +144,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         ...useMetadataDebugger(context, Editor.current),
     ].filter(Boolean)
 
-    const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Infinity)
+    const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
     const onSubmit = useCallback(() => {
         if (!Editor.current) return
         setSending(true)
