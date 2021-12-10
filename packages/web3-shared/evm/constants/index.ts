@@ -16,6 +16,7 @@ import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import Chain from '@masknet/web3-constants/evm/chain.json'
+import Saving from '@masknet/web3-constants/evm/saving.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
@@ -77,3 +78,6 @@ export const useChainConstants = hookTransform(getChainConstants)
 
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
+
+export const getSavingConstants = transform(Saving)
+export const useSavingConstants = hookTransform(getSavingConstants)

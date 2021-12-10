@@ -14,6 +14,7 @@ import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
+import { SavingDialog } from '../../plugins/Saving/SNSAdaptor/saving/SavingDialog'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
@@ -131,6 +132,10 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
 
     //#region Swap
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
+    //#endregion
+
+    //#region Swap
+    const { open: isSavingDialogOpen, onOpen: onSavingDialogOpen, onClose: onSavingDialogClose } = useControlledDialog()
     //#endregion
 
     //#region Fiat on/off ramp
@@ -287,7 +292,13 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             undefined,
             true,
         ),
-        createEntry('Saving', new URL('./assets/saving.png', import.meta.url).toString(), undefined, undefined, true),
+        createEntry(
+            'Saving',
+            new URL('./assets/saving.png', import.meta.url).toString(),
+            onSavingDialogOpen,
+            [ChainId.Mainnet],
+            false,
+        ),
         createEntry(
             'Alternative',
             new URL('./assets/more.png', import.meta.url).toString(),
@@ -343,6 +354,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                 <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
             ) : null}
             {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
+            {isSavingDialogOpen ? <SavingDialog open={isSavingDialogOpen} onClose={onSavingDialogClose} /> : null}
             {isSecondLevelEntryDialogOpen ? (
                 <EntrySecondLevelDialog
                     title={secondLevelEntryDialogTitle}

@@ -347,6 +347,7 @@
     "plugin_file_service_error_101": "此输入不是单个文件。",
     "plugin_file_service_error_102": "文件太大，限制为 {{limit}}。",
     "plugin_file_service_on_change_file": "更改文件",
+    "plugin_saving_saving": "Saving",
     "plugin_trader_lbp_pool_in_balancer": "Balancer 的 LBP 池",
     "plugin_trader_tutorial": "教程",
     "plugin_trader_what_is_lbp": "什么是LBP？",

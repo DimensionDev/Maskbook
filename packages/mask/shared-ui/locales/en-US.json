@@ -401,6 +401,7 @@
     "plugin_file_service_error_101": "The input is not a single file.",
     "plugin_file_service_error_102": "The file is too large; limit is {{limit}}.",
     "plugin_file_service_on_change_file": "Change File",
+    "plugin_saving_saving": "Saving",
     "plugin_trader_fail_to_load": "Fail to load trending info from  ",
     "plugin_trader_lbp_pool_in_balancer": "LBP Pool in Balancer",
     "plugin_trader_tutorial": "Tutorial",

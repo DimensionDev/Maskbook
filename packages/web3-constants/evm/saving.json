@@ -1,0 +1,16 @@
+{
+    "COMPOUND_CONTROLLER": {
+        "Mainnet": "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b",
+        "Ropsten": "0xcfa7b0e37f5ac60f3ae25226f5e39ec59ad26152",
+        "Rinkeby": "0x2eaa9d77ae4d8f9cdd9faacd44016e746485bddb",
+        "Kovan": "0x5eae89dc1c671724a672ff0630122ee834098657",
+        "Gorli": "0x627ea49279fd0de89186a58b8758ad02b6be2867",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    }
+}
