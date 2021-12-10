@@ -23,7 +23,7 @@ import { DraggableDiv } from '../shared/DraggableDiv'
 import Download from '@mui/icons-material/CloudDownload'
 import CloseIcon from '@mui/icons-material/Close'
 import OpenInBrowser from '@mui/icons-material/OpenInBrowser'
-import { saveFileFromUrl } from '../../../shared/download'
+import { saveFileFromUrl } from '../../../shared/helpers/download'
 
 export interface AutoPasteFailedDialogProps extends withClasses<never> {
     onClose: () => void
