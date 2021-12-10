@@ -2,6 +2,7 @@ import { ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import classNames from 'classnames'
 import {
     Asset,
+    currySameAddress,
     ERC20TokenDetailed,
     formatBalance,
     FungibleTokenDetailed,
@@ -75,6 +76,7 @@ export const getERC20TokenListItem =
             from: 'search' | 'defaultList'
             inList: boolean
         },
+        selectedTokens: string[],
         account?: string,
     ) =>
     ({ data, onSelect }: MaskSearchableListItemProps<Asset>) => {
@@ -114,14 +116,18 @@ export const getERC20TokenListItem =
                     onClick={onImport}
                     size="small"
                     soloLoading
-                    loadingIndicator={<LoadingIcon sx={{ fontSize: 16 }} />}>
+                    loadingIndicator={<LoadingIcon sx={{ fontSize: 14 }} />}>
                     {t.import()}
                 </MaskLoadingButton>
             )
         }, [info, isNotAdded, isAdded])
 
         return (
-            <ListItem button className={classes.list} onClick={handleTokenSelect}>
+            <ListItem
+                button
+                className={classes.list}
+                onClick={handleTokenSelect}
+                disabled={selectedTokens.some(currySameAddress(address))}>
                 <ListItemIcon>
                     <TokenIcon classes={{ icon: classes.icon }} address={address} name={name} logoURI={logoURI} />
                 </ListItemIcon>

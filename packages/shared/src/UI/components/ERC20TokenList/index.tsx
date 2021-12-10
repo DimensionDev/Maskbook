@@ -3,6 +3,7 @@ import { getERC20TokenListItem } from './ERC20TokenListItem'
 import { uniqBy } from 'lodash-unified'
 import {
     Asset,
+    ChainId,
     currySameAddress,
     FungibleTokenDetailed,
     isSameAddress,
@@ -23,10 +24,12 @@ import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 
 export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
+    targetChainId?: ChainId
     whitelist?: string[]
     blacklist?: string[]
     tokens?: FungibleTokenDetailed[]
     selectedTokens?: string[]
+    disabledSearch?: boolean
     onSelect?(token: FungibleTokenDetailed | null): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
 }
@@ -44,16 +47,16 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const account = useAccount()
     const chainId = useChainId()
     const trustedERC20Tokens = useTrustedERC20Tokens()
-    const { value: nativeToken } = useNativeTokenDetailed()
+    const { value: nativeToken } = useNativeTokenDetailed(props.targetChainId ?? chainId)
     const [keyword, setKeyword] = useState('')
 
     const {
         whitelist: includeTokens,
         blacklist: excludeTokens = [],
-        selectedTokens = [],
         tokens = [],
         onSelect,
         FixedSizeListProps,
+        selectedTokens = [],
     } = props
 
     const { ERC20_TOKEN_LISTS } = useEthereumConstants()
@@ -117,6 +120,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
                 placeholder: t.erc20_token_list_placeholder(),
             }}
             onSelect={(asset) => onSelect?.(asset.token)}
+            disabledSearch={!!props.disabledSearch}
             onSearch={setKeyword}
             data={renderAssets as Asset[]}
             searchKey={['token.address', 'token.symbol', 'token.name']}
@@ -128,6 +132,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
                         ? { from: 'search', inList: true }
                         : { from: 'search', inList: false }
                     : { from: 'defaultList', inList: true },
+                selectedTokens,
                 account,
             )}
             placeholder={getPlaceHolder()}

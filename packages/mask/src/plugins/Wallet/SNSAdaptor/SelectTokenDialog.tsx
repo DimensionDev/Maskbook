@@ -1,20 +1,12 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { DialogContent } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    FungibleTokenDetailed,
-    useNativeTokenDetailed,
-    useChainId,
-    ChainId,
-    getChainDetailed,
-} from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
-import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 
@@ -47,22 +39,15 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
     const chainId = useChainId()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
+
     const [id, setId] = useState('')
-    const [keyword, setKeyword] = useState('')
     const [targetChainId, setChainId] = useState<ChainId | undefined>(chainId)
-
-    const chainDetailed = useMemo(() => getChainDetailed(targetChainId), [targetChainId])
-
     const [rowSize, setRowSize] = useState(54)
 
-    //#region the native token
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed(targetChainId)
-    //#endregion
-
-    //#region remote controlled dialog
     const [disableNativeToken, setDisableNativeToken] = useState(true)
     const [disableSearchBar, setDisableSearchBar] = useState(false)
-    const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
+    const [FixedTokenListProps, setFixedTokenListProps] = useState<ERC20TokenListProps | null>(null)
 
     useEffect(() => {
         try {
@@ -89,9 +74,8 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                 token,
             })
             await delay(300)
-            setKeyword('')
         },
-        [id, setDialog, setKeyword],
+        [id, setDialog],
     )
     const onClose = useCallback(async () => {
         setDialog({
@@ -99,39 +83,25 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
             uuid: id,
         })
         await delay(300)
-        setKeyword('')
     }, [id, setDialog])
-    //#endregion
-
-    const onChange = useCallback((keyword: string) => {
-        setKeyword(keyword)
-    }, [])
 
     return (
         <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')}>
             <DialogContent className={classes.content}>
-                {!disableSearchBar ? <SearchInput label={t('add_token_search_hint')} onChange={onChange} /> : null}
-                <FixedTokenList
+                <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    keyword={keyword}
                     onSelect={onSubmit}
-                    {...{
-                        ...FixedTokenListProps,
-                        targetChainId,
-                        tokens: [
-                            ...(!disableNativeToken &&
-                            nativeTokenDetailed &&
-                            (!keyword || chainDetailed?.nativeCurrency.symbol.includes(keyword.toLowerCase()))
-                                ? [nativeTokenDetailed]
-                                : []),
-                            ...(FixedTokenListProps?.tokens ?? []),
-                        ],
-                    }}
+                    {...FixedTokenListProps}
+                    tokens={[...(FixedTokenListProps?.tokens ?? [])]}
+                    blacklist={
+                        disableNativeToken && NATIVE_TOKEN_ADDRESS
+                            ? [NATIVE_TOKEN_ADDRESS, ...(FixedTokenListProps?.blacklist ?? [])]
+                            : [...(FixedTokenListProps?.blacklist ?? [])]
+                    }
+                    targetChainId={targetChainId}
+                    disabledSearch={disableSearchBar}
                     FixedSizeListProps={{
-                        height: disableSearchBar ? 350 : 288,
                         itemSize: rowSize,
-                        overscanCount: 4,
-                        ...FixedTokenListProps?.FixedSizeListProps,
                     }}
                 />
             </DialogContent>

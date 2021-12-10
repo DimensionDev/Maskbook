@@ -27,6 +27,8 @@ export interface MaskSearchableListProps<T> {
     /** The hook when search */
     onSearch?(key: string): void
     textFieldProps?: MaskTextFieldProps
+    /** Show search bar */
+    disableSearch?: boolean
 }
 
 /**
@@ -52,6 +54,7 @@ export function SearchableList<T>({
     placeholder,
     onSelect,
     onSearch,
+    disableSearch,
     searchKey,
     itemRender,
     FixedSizeListProps = {},
@@ -88,22 +91,24 @@ export function SearchableList<T>({
 
     return (
         <div className={classes.container}>
-            <Box pt={0.5}>
-                <MaskTextField
-                    placeholder="Search"
-                    autoFocus
-                    fullWidth
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <Search />
-                            </InputAdornment>
-                        ),
-                    }}
-                    onChange={(e) => handleSearch(e.currentTarget.value)}
-                    {...textFieldProps}
-                />
-            </Box>
+            {!disableSearch && (
+                <Box pt={0.5}>
+                    <MaskTextField
+                        placeholder="Search"
+                        autoFocus
+                        fullWidth
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <Search />
+                                </InputAdornment>
+                            ),
+                        }}
+                        onChange={(e) => handleSearch(e.currentTarget.value)}
+                        {...textFieldProps}
+                    />
+                </Box>
+            )}
             {placeholder}
             {!placeholder && (
                 <div className={classes.list}>

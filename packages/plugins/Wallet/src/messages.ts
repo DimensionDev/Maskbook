@@ -126,20 +126,6 @@ export type SelectTokenDialogEvent =
            */
           token?: FungibleTokenDetailed
       }
-export type SelectERC20TokenDialogEvent =
-    | {
-          open: true
-          props?: {
-              whitelist?: string[]
-              blacklist?: string[]
-              tokens?: FungibleTokenDetailed[]
-              selectedTokens?: string[]
-              onSelect?(token: FungibleTokenDetailed | null): void
-          }
-      }
-    | {
-          open: false
-      }
 
 export type SelectNftContractDialogEvent = {
     open: boolean
@@ -216,11 +202,6 @@ export interface WalletMessage {
      * Restore Legacy Wallet Dialog
      */
     restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
-
-    /**
-     * Select token dialog
-     */
-    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void
