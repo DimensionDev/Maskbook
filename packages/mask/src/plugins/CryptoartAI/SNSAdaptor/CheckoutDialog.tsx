@@ -149,11 +149,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (!isVerified) return t('plugin_collectible_check_tos_document')
-        if (
-            new BigNumber(asset?.value?.latestBidVo?.priceInEth).gt(
-                formatBalance(balance.value, token?.value?.decimals, 4),
-            )
-        ) {
+        if (new BigNumber(asset?.value?.priceInEth).gt(formatBalance(balance.value, token?.value?.decimals, 4))) {
             return t('plugin_collectible_insufficient_balance')
         }
         return ''
