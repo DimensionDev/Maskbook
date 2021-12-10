@@ -114,8 +114,14 @@ function reset() {
 }
 
 function getStyle() {
+    let height = ''
     const eleTab = searchProfileTabSelector().evaluate()?.querySelector('div') as Element
     const style = eleTab ? window.getComputedStyle(eleTab) : EMPTY_STYLE
+    height = style.height
+    if (eleTab.parentElement) {
+        const _style = window.getComputedStyle(eleTab.parentElement)
+        height = _style.height
+    }
     const eleNewTweetButton = searchNewTweetButtonSelector().evaluate()
     const newTweetButtonColorStyle = eleNewTweetButton ? window.getComputedStyle(eleNewTweetButton) : EMPTY_STYLE
     const eleBackButton = searchAppBarBackSelector().evaluate()
@@ -126,7 +132,7 @@ function getStyle() {
         font: style.font,
         fontSize: style.fontSize,
         padding: style.paddingBottom,
-        height: style.height,
+        height,
         hover: backButtonColorStyle.color,
         line: newTweetButtonColorStyle.backgroundColor,
     } as StyleProps
