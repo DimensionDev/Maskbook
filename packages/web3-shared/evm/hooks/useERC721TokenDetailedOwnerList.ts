@@ -67,16 +67,18 @@ export function useERC721TokenDetailedOwnerList(
 
         // lazy load token info after set loading status to false
         const allRequest = allListRef.current.map(async (nft) => {
-            // there's no tokenURI or info already existed.
-            if (!nft.info.tokenURI || nft.info.name || nft.info.image || nft.info.description) return nft
+            // there's no tokenURI or info already loaded.
+            if (!nft.info.tokenURI || !nft.info.loading) return nft
             const info = await getERC721TokenAssetFromChain(nft.info.tokenURI)
-            if (info) nft.info = { ...info, ...nft.info }
+            if (info) nft.info = { ...info, ...nft.info, loading: false, name: info.name ?? nft.info.name }
             return nft
         })
 
-        allListRef.current = (await Promise.allSettled(allRequest)).map((x, i) =>
-            x.status === 'fulfilled' ? x.value : allListRef.current[i],
-        )
+        allListRef.current = (await Promise.allSettled(allRequest)).map((x, i) => {
+            if (x.status === 'fulfilled') return x.value
+            allListRef.current[i].info.loading = false
+            return allListRef.current[i]
+        })
 
         return
     }, [GET_ASSETS_URL, contractDetailed, owner, offset, chainId])
@@ -107,7 +109,7 @@ async function getERC721TokenDetailedOwnerListFromChain(
 
     const allRequest = Array.from({ length: min([Number(balance), queryLimit])! }).map(async (_v, i) => {
         const tokenId = await safeNonPayableTransactionCall(
-            erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i + offset),
+            erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i + offset * queryLimit),
         )
 
         if (!tokenId) {

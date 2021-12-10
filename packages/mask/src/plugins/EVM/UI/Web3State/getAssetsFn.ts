@@ -132,7 +132,13 @@ export const getNonFungibleTokenFn =
                     if (!contract) return null
                     const tokenDetailed = await getERC721TokenDetailedFromChain(x.contractDetailed, contract, x.tokenId)
                     const info = await getERC721TokenAssetFromChain(tokenDetailed?.info.tokenURI)
-                    if (tokenDetailed && info) tokenDetailed.info = { ...info, ...tokenDetailed.info }
+                    if (tokenDetailed && info)
+                        tokenDetailed.info = {
+                            ...info,
+                            ...tokenDetailed.info,
+                            loading: false,
+                            name: info.name ?? tokenDetailed.info.image,
+                        }
                     return tokenDetailed
                 }
                 return null

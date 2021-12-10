@@ -38,7 +38,13 @@ export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractD
 
         const info = await getERC721TokenAssetFromChain(tokenDetailedFromChain?.info.tokenURI)
 
-        if (info && tokenDetailedFromChain) tokenDetailedFromChain.info = { ...info, ...tokenDetailedFromChain.info }
+        if (info && tokenDetailedFromChain)
+            tokenDetailedFromChain.info = {
+                ...info,
+                ...tokenDetailedFromChain.info,
+                loading: false,
+                name: info.name ?? tokenDetailedFromChain.info.name,
+            }
 
         return tokenDetailedFromChain
     }, [

@@ -150,9 +150,20 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: 'transparent',
     },
     imgWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         height: 160,
         width: '100%',
         overflow: 'hidden',
+    },
+    fallbackNftImg: {
+        width: 64,
+        height: 64,
+        transform: 'translateY(10px)',
+    },
+    loadingNftImg: {
+        transform: 'translateY(20px)',
     },
     selectWrapperImg: {
         maxWidth: '100%',
@@ -377,7 +388,19 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     return (
                                         <ListItem className={classes.selectWrapper} key={i.toString()}>
                                             <div className={classes.imgWrapper}>
-                                                <img className={classes.selectWrapperImg} src={token?.info.image} />
+                                                {token.info.loading ? (
+                                                    <CircularProgress size={20} className={classes.loadingNftImg} />
+                                                ) : token?.info.image ? (
+                                                    <img className={classes.selectWrapperImg} src={token?.info.image} />
+                                                ) : (
+                                                    <img
+                                                        className={classes.fallbackNftImg}
+                                                        src={new URL(
+                                                            './assets/nft_token_fallback.png',
+                                                            import.meta.url,
+                                                        ).toString()}
+                                                    />
+                                                )}
                                             </div>
                                             <div className={classes.selectWrapperNftNameWrapper}>
                                                 <Typography

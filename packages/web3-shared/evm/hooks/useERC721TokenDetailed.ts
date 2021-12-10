@@ -44,7 +44,12 @@ export function useERC721TokenDetailed(
         const info = await getERC721TokenAssetFromChain(tokenDetailedRef.current?.info.tokenURI)
 
         if (info && tokenDetailedRef.current)
-            tokenDetailedRef.current.info = { ...info, ...tokenDetailedRef.current?.info }
+            tokenDetailedRef.current.info = {
+                ...info,
+                ...tokenDetailedRef.current.info,
+                loading: false,
+                name: info.name ?? tokenDetailedRef.current.info.name,
+            }
 
         return
     }, [erc721TokenContract, tokenId])
@@ -91,7 +96,7 @@ export async function getERC721TokenDetailedFromChain(
     try {
         const tokenURI = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
         const owner = await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))
-        const tokenInfo = { owner, tokenURI }
+        const tokenInfo = { owner, tokenURI, name: `#${tokenId}`, loading: true }
         return createERC721Token(contractDetailed, tokenInfo, tokenId)
     } catch (err) {
         return

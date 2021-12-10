@@ -165,6 +165,8 @@ export interface ERC721TokenInfo {
     tokenURI?: string
     image?: string
     owner?: string
+    // loading tokenURI
+    loading?: boolean
 }
 
 export interface ERC721TokenDetailed {
