@@ -28,10 +28,12 @@ export function isLessThanOrEqualTo(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).isLessThanOrEqualTo(b)
 }
 
+/** a > 0 */
 export function isPositive(n: BigNumber.Value) {
     return new BigNumber(n).isPositive()
 }
 
+/** a * b */
 export function multipliedBy(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).multipliedBy(b)
 }
@@ -41,12 +43,12 @@ export function pow10(n: BigNumber.Value) {
     return new BigNumber(10).pow(n)
 }
 
-/** n << m */
+/** n * (10 ** m) */
 export function rightShift(n: BigNumber.Value, m: number | undefined | null) {
     return new BigNumber(n).shiftedBy(+(m ?? 0))
 }
 
-/** n >> m */
+/** n / (10 ** m) */
 export function leftShift(n: BigNumber.Value, m: number | undefined | null) {
     return new BigNumber(n).shiftedBy(-(m ?? 0))
 }
