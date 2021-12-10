@@ -62,6 +62,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
             pluginIDSettings.value = undeterminedPluginID
         }
         closeDialog()
+        WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
     }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog])
 
     // not available for the native app
