@@ -15,6 +15,6 @@ interface NavigationVersionFooterProps extends React.PropsWithChildren<{}> {
 
 export const NavigationVersionFooter = memo((props: NavigationVersionFooterProps) => {
     const t = useDashboardI18N()
-    const version = props.version ?? '2.2.0'
-    return <VersionContainer>{t.version_of_stable({ version })}</VersionContainer>
+    const version = props.version ?? globalThis.browser?.runtime.getManifest()?.version ?? process.env.TAG_NAME.slice(1)
+    return <VersionContainer>{version && t.version_of_stable({ version })}</VersionContainer>
 })
