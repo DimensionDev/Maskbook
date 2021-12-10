@@ -1,4 +1,3 @@
-//#region Polyfills
 import '../background/setup'
 import './extension/service' // setup Services.*
 import './utils/native-rpc' // setup Android and iOS API server
