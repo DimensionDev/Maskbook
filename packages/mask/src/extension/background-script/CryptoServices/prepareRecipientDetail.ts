@@ -1,7 +1,7 @@
 import { ProfileIdentifier } from '../../../database/type'
 import { queryPublicKey } from '../../../database'
 import { IdentifierMap } from '../../../database/IdentifierMap'
-import type { RecipientDetail, RecipientReason } from '../../../database/post'
+import type { RecipientDetail, RecipientReason } from '../../../../background/database/post'
 import type { EC_Public_JsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
 
 export async function prepareRecipientDetail(to: ProfileIdentifier[]) {

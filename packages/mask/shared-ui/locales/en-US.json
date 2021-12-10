@@ -343,7 +343,7 @@
     "plugin_red_packet_description_refund": "You could refund {{balance}} {{symbol}}.",
     "plugin_red_packet_description_empty": "The Lucky Drop is empty.",
     "plugin_red_packet_description_broken": "The Lucky Drop is broken.",
-    "plugin_red_packet_description_failover": "From {{name}} / {{shares}} shares / {{total}} {{symbol}}",
+    "plugin_red_packet_description_failover": "{{shares}} shares / {{total}} {{symbol}}",
     "plugin_red_packet_claiming_from": "Claiming Lucky Drop from {{name}}",
     "plugin_red_packet_refunding_for": "Refunding Lucky Drop for {{balance}} {{symbol}}",
     "plugin_red_packet_amount_per_share": "Amount per Share",

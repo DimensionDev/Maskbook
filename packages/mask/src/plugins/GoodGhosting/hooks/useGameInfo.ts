@@ -1,10 +1,15 @@
-import { useAccount, useGoodGhostingConstants, useSingleContractMultipleData } from '@masknet/web3-shared-evm'
+import {
+    isSameAddress,
+    useAccount,
+    useGoodGhostingConstants,
+    useSingleContractMultipleData,
+} from '@masknet/web3-shared-evm'
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GameMetaData, GoodGhostingInfo, Player, TimelineEvent } from '../types'
-import { ZERO_ADDRESS } from '../constants'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import addSeconds from 'date-fns/addSeconds'
 import Services from '../../../extension/service'
@@ -96,7 +101,7 @@ export function useGameInfo(gameData: GameMetaData) {
             adaiTokenAddress: adaiToken,
             lendingPoolAddress: lendingPool,
             earlyWithdrawalFee,
-            currentPlayer: player && player.addr !== ZERO_ADDRESS ? player : undefined,
+            currentPlayer: !isSameAddress(player?.addr, ZERO_ADDRESS) ? player : undefined,
             gameHasEnded: Number.parseInt(currentSegment, 10) > Number.parseInt(lastSegment, 10),
             refresh: asyncResult.retry,
         } as GoodGhostingInfo

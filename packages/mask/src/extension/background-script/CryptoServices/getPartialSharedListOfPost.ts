@@ -1,6 +1,6 @@
 import { Profile, queryProfile } from '../../../database'
 import { ProfileIdentifier, Identifier, PostIVIdentifier } from '../../../database/type'
-import { queryPostDB } from '../../../database/post'
+import { queryPostDB } from '../../../../background/database/post'
 import { GunAPI } from '../../../network/gun'
 //#endregion
 //#region Append Recipients in future

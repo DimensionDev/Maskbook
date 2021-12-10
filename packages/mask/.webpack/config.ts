@@ -161,6 +161,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     ...runtime,
                     ...getGitInfo(reproducibleBuild),
                     channel: normalizedFlags.channel,
+                    manifest: String(runtime.manifest),
                 }
                 if (mode === 'development') return EnvironmentPluginCache(runtimeValues)
                 return EnvironmentPluginNoCache(runtimeValues)
@@ -275,7 +276,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     } else {
         entries.background = normalizeEntryDescription(join(__dirname, '../src/background-service.ts'))
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
-        plugins.push(addHTMLEntry({ chunks: ['background'], filename: 'background.html' }))
+        plugins.push(addHTMLEntry({ chunks: ['background'], filename: 'background.html', secp256k1: true }))
     }
     for (const entry in entries) {
         withReactDevTools(entries[entry])
@@ -297,10 +298,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-function addHTMLEntry(options: HTMLPlugin.Options = {}) {
+function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean } = {}) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
-    if (options.chunks?.includes('background')) {
-        templateContent.replace(`<!-- background -->`, '<script src="/polyfill/secp256k1.js"></script>')
+    if (options.secp256k1) {
+        templateContent = templateContent.replace(
+            `<!-- secp256k1 -->`,
+            '<script src="/polyfill/secp256k1.js"></script>',
+        )
     }
     return new HTMLPlugin({
         templateContent,

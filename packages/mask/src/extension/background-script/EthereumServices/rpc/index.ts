@@ -6,7 +6,7 @@ import {
     EthereumRpcType,
     EthereumMethodType,
     getChainDetailedCAIP,
-    getTokenConstants,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
@@ -15,8 +15,6 @@ import { readABI } from './abi'
 
 // fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder
-
-const { ZERO_ADDRESS = '' } = getTokenConstants()
 
 function isEmptyHex(hex: string) {
     return !hex || ['0x', '0x0'].includes(hex)

@@ -5,7 +5,7 @@ import {
     getBackupPreviewInfo,
 } from '../../../utils/type-transform/BackupFormat/JSON/latest'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../../database/Persona/Persona.db'
-import { queryPostsDB } from '../../../database/post'
+import { queryPostsDB } from '../../../../background/database/post'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'

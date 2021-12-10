@@ -6,7 +6,7 @@ import { deconstructPayload, Payload } from '../../../utils/type-transform/Paylo
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
-import { PostRecord, queryPostDB, updatePostDB } from '../../../database/post'
+import { PostRecord, queryPostDB, updatePostDB } from '../../../../background/database/post'
 import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
 import type { PersonaRecord } from '../../../database/Persona/Persona.db'

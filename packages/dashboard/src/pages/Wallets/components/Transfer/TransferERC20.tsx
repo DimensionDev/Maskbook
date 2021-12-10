@@ -8,7 +8,6 @@ import {
     isEIP1559Supported,
     isGreaterThan,
     isZero,
-    pow10,
     TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
@@ -76,7 +75,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     //#endregion
 
     // transfer amount
-    const transferAmount = new BigNumber(amount || '0').multipliedBy(pow10(selectedToken.decimals)).toFixed()
+    const transferAmount = new BigNumber(amount || '0').shiftedBy(selectedToken.decimals).toFixed()
     const erc20GasLimit = useGasLimit(
         selectedToken.type,
         selectedToken.address,
@@ -121,7 +120,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     //#region validation
     const validationMessage = useMemo(() => {
         if (!transferAmount || isZero(transferAmount)) return t.wallets_transfer_error_amount_absence()
-        if (isGreaterThan(new BigNumber(amount).multipliedBy(pow10(selectedToken.decimals)).toFixed(), maxAmount))
+        if (isGreaterThan(new BigNumber(amount).shiftedBy(selectedToken.decimals).toFixed(), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
         if (!EthereumAddress.isValid(address)) return t.wallets_transfer_error_invalid_address()

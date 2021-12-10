@@ -13,7 +13,6 @@ import {
     formatBalance,
     FungibleTokenDetailed,
     isNative,
-    pow10,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
@@ -297,14 +296,12 @@ export function SwapDialog(props: SwapDialogProps) {
                 token={swapToken}
                 onAmountChange={(value) => {
                     const val =
-                        value === '' || value === '0'
-                            ? ZERO
-                            : new BigNumber(value).multipliedBy(pow10(swapToken.decimals))
+                        value === '' || value === '0' ? ZERO : new BigNumber(value).shiftedBy(swapToken.decimals)
                     const isMax = value === formatBalance(maxAmount, swapToken.decimals) && !val.isEqualTo(0)
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
-                        isMax ? tokenAmount.multipliedBy(ratio).dividedBy(pow10(swapToken.decimals)).toString() : value,
+                        isMax ? tokenAmount.multipliedBy(ratio).shiftedBy(-swapToken.decimals).toString() : value,
                     )
                     setTokenAmount(tokenAmount.dp(0))
                     setSwapAmount(swapAmount)

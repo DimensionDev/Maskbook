@@ -9,7 +9,7 @@ import {
     EventBasedChannel,
 } from 'async-call-rpc/full'
 import { isEnvironment, Environment, WebExtensionMessage, MessageTarget } from '@dimensiondev/holoflows-kit'
-import { serializer, getLocalImplementation } from '@masknet/shared'
+import { serializer, getLocalImplementation } from '@masknet/shared-base'
 
 const SERVICE_HMR_EVENT = 'service-hmr'
 const message = new WebExtensionMessage<Record<string, any>>({ domain: 'services' })
@@ -35,7 +35,7 @@ export const Services = {
 export default Services
 export const ServicesWithProgress = add(() => import('./service-generator'), 'ServicesWithProgress', true)
 
-if (import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
+if (process.env.manifest === '2' && import.meta.webpackHot && isEnvironment(Environment.ManifestBackground)) {
     import.meta.webpackHot.accept(
         [
             './background-script/CryptoService',
@@ -63,9 +63,13 @@ function add<T>(impl: () => Promise<T>, key: string, generator = false): T {
 
     const isBackground = isEnvironment(Environment.ManifestBackground)
     const RPC: (impl: any, opts: AsyncCallOptions) => T = (generator ? AsyncGeneratorCall : AsyncCall) as any
-    const load = () => getLocalImplementation(`Services.${key}`, impl, channel)
+    const load = () => getLocalImplementation(isBackground, `Services.${key}`, impl, channel)
     const localImplementation = load()
-    isBackground && import.meta.webpackHot && document.addEventListener(SERVICE_HMR_EVENT, load)
+    // No HMR support in MV3
+    process.env.manifest === '2' &&
+        isBackground &&
+        import.meta.webpackHot &&
+        document.addEventListener(SERVICE_HMR_EVENT, load)
     const service = RPC(localImplementation, {
         key,
         serializer,

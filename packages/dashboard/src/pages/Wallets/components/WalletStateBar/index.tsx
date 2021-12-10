@@ -141,7 +141,7 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = ({
                 <Box sx={{ userSelect: 'none' }}>
                     {provider.type !== ProviderType.MaskWallet ? (
                         <Box fontSize={16} display="flex" alignItems="center">
-                            {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : wallet.name}
+                            {domain && Utils?.formatDomainName ? Utils.formatDomainName(domain) : provider.name}
                         </Box>
                     ) : (
                         <Box fontSize={16} display="flex" alignItems="center">

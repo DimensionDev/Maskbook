@@ -2,7 +2,6 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    pow10,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -58,9 +57,9 @@ export interface DonateDialogProps extends withClasses<never> {}
 export function DonateDialog(props: DonateDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
+    const [postLink, setPostLink] = useState<string | URL>('')
 
     // context
     const account = useAccount()
@@ -75,6 +74,7 @@ export function DonateDialog(props: DonateDialogProps) {
             if (!ev.open) return
             setTitle(ev.title)
             setAddress(ev.address)
+            setPostLink(ev.postLink)
         },
     )
     //#endregion
@@ -112,7 +112,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
     //#endregion
 
     //#region blocking
@@ -120,6 +120,7 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region transaction dialog
+
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -135,6 +136,7 @@ export function DonateDialog(props: DonateDialogProps) {
                               : ''
                       }`,
                       '#mask_io',
+                      postLink,
                   ].join('\n')
                 : '',
         )
