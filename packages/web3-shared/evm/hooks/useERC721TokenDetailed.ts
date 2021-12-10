@@ -1,6 +1,7 @@
 import { useAsyncRetry } from 'react-use'
+import { useRef } from 'react'
 import { noop } from 'lodash-unified'
-import type { ERC721ContractDetailed, ERC721TokenInfo } from '../types'
+import type { ERC721ContractDetailed, ERC721TokenInfo, ERC721TokenDetailed } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { safeNonPayableTransactionCall, createERC721Token } from '../utils'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
@@ -12,21 +13,43 @@ export function useERC721TokenDetailed(
 ) {
     const { GET_SINGLE_ASSET_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
-    return useAsyncRetry(async () => {
+    const tokenDetailedRef = useRef<ERC721TokenDetailed | undefined>()
+    let tokenDetailedFromOpensea: ERC721TokenDetailed | null
+    let tokenDetailedFromChain: ERC721TokenDetailed | undefined
+    const asyncRetry = useAsyncRetry(async () => {
         if (!erc721TokenContract || !contractDetailed || !tokenId) return
-        if (!GET_SINGLE_ASSET_URL)
-            return getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
+        if (!GET_SINGLE_ASSET_URL) {
+            tokenDetailedFromChain = await getERC721TokenDetailedFromChain(
+                contractDetailed,
+                erc721TokenContract,
+                tokenId,
+            )
+        } else {
+            tokenDetailedFromOpensea = await getERC721TokenDetailedFromOpensea(
+                contractDetailed,
+                tokenId,
+                GET_SINGLE_ASSET_URL,
+            )
+        }
+        // no need to query tokenURI further more.
+        if (tokenDetailedFromOpensea) {
+            tokenDetailedRef.current = tokenDetailedFromOpensea
+            return
+        }
 
-        const tokenDetailedFromOpensea = await getERC721TokenDetailedFromOpensea(
-            contractDetailed,
-            tokenId,
-            GET_SINGLE_ASSET_URL,
-        )
+        tokenDetailedRef.current =
+            tokenDetailedFromChain ??
+            (await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId))
 
-        return (
-            tokenDetailedFromOpensea ?? getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
-        )
+        const info = await getERC721TokenAssetFromChain(tokenDetailedRef.current?.info.tokenURI)
+
+        if (info && tokenDetailedRef.current)
+            tokenDetailedRef.current.info = { ...info, ...tokenDetailedRef.current?.info }
+
+        return
     }, [erc721TokenContract, tokenId])
+
+    return { asyncRetry, tokenDetailed: tokenDetailedRef.current }
 }
 
 export async function getERC721TokenDetailedFromOpensea(
@@ -68,8 +91,7 @@ export async function getERC721TokenDetailedFromChain(
     try {
         const tokenURI = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenURI(tokenId))
         const owner = await safeNonPayableTransactionCall(erc721TokenContract.methods.ownerOf(tokenId))
-        const asset = await getERC721TokenAssetFromChain(tokenURI)
-        const tokenInfo = { owner, ...asset }
+        const tokenInfo = { owner, tokenURI }
         return createERC721Token(contractDetailed, tokenInfo, tokenId)
     } catch (err) {
         return
@@ -83,7 +105,7 @@ const BASE64_PREFIX = 'data:application/json;base64,'
 const HTTP_PREFIX = 'http'
 // Todo: replace this temporary proxy.
 const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
-async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721TokenInfo | void> {
+export async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721TokenInfo | void> {
     if (!tokenURI) return
 
     if (assetCache[tokenURI]) {

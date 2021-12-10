@@ -267,11 +267,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         )
     }, [payload])
 
-    const {
-        value: erc721TokenDetailed,
-        retry: retryERC721TokenDetailed,
-        error: ERC721TokenDetailedError,
-    } = useERC721TokenDetailed(
+    const { asyncRetry, tokenDetailed: erc721TokenDetailed } = useERC721TokenDetailed(
         availability
             ? ({
                   type: EthereumTokenType.ERC721,
@@ -285,6 +281,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             : undefined,
         availability?.claimed_id,
     )
+
+    const { retry: retryERC721TokenDetailed, error: ERC721TokenDetailedError } = asyncRetry
     const isFailedToLoading = Boolean(availabilityError || ERC721TokenDetailedError)
 
     const onErrorRetry = useCallback(() => {

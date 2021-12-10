@@ -5,7 +5,7 @@ import { useOpenseaAPIConstants } from '../constants'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { safeNonPayableTransactionCall } from '../utils'
 import { ERC721ContractDetailed, ERC721TokenDetailed, EthereumTokenType, ChainId } from '../types'
-import { getERC721TokenDetailedFromChain } from './useERC721TokenDetailed'
+import { getERC721TokenDetailedFromChain, getERC721TokenAssetFromChain } from './useERC721TokenDetailed'
 import { useEffect, useRef, useState } from 'react'
 import { min, uniqBy } from 'lodash-unified'
 import urlcat from 'urlcat'
@@ -22,6 +22,7 @@ export function useERC721TokenDetailedOwnerList(
     const chainId = useChainId()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     const allListRef = useRef<ERC721TokenDetailed[]>([])
+    const loadMore = useRef<boolean>(false)
     const [refreshing, setRefreshing] = useState(false)
 
     useEffect(() => {
@@ -45,29 +46,48 @@ export function useERC721TokenDetailedOwnerList(
         if (!GET_ASSETS_URL) {
             lists = await getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner, offset)
             allListRef.current = uniqBy<ERC721TokenDetailed>([...allListRef.current, ...lists], 'tokenId')
-            setRefreshing(false)
-            return { tokenDetailedOwnerList: allListRef.current, loadMore: lists.length > 0 }
+        } else {
+            const tokenDetailedOwnerListFromOpensea = await getERC721TokenDetailedOwnerListFromOpensea(
+                contractDetailed,
+                owner,
+                GET_ASSETS_URL,
+                offset,
+                chainId,
+            )
+
+            lists =
+                tokenDetailedOwnerListFromOpensea ??
+                (await getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner, offset))
+
+            allListRef.current = allListRef.current.concat(lists)
         }
 
-        const tokenDetailedOwnerListFromOpensea = await getERC721TokenDetailedOwnerListFromOpensea(
-            contractDetailed,
-            owner,
-            GET_ASSETS_URL,
-            offset,
-            chainId,
-        )
-
-        lists =
-            tokenDetailedOwnerListFromOpensea ??
-            (await getERC721TokenDetailedOwnerListFromChain(erc721TokenContract, contractDetailed, owner, offset))
-
-        allListRef.current = allListRef.current.concat(lists)
+        loadMore.current = lists.length > 0
         setRefreshing(false)
 
-        return { tokenDetailedOwnerList: allListRef.current, loadMore: lists.length > 0 }
+        // lazy load token info after set loading status to false
+        const allRequest = allListRef.current.map(async (nft) => {
+            // there's no tokenURI or info already existed.
+            if (!nft.info.tokenURI || nft.info.name || nft.info.image || nft.info.description) return nft
+            const info = await getERC721TokenAssetFromChain(nft.info.tokenURI)
+            if (info) nft.info = { ...info, ...nft.info }
+            return nft
+        })
+
+        allListRef.current = (await Promise.allSettled(allRequest)).map((x, i) =>
+            x.status === 'fulfilled' ? x.value : allListRef.current[i],
+        )
+
+        return
     }, [GET_ASSETS_URL, contractDetailed, owner, offset, chainId])
     const clearTokenDetailedOwnerList = () => (allListRef.current = [])
-    return { asyncRetry, clearTokenDetailedOwnerList, refreshing }
+    return {
+        asyncRetry,
+        tokenDetailedOwnerList: allListRef.current,
+        loadMore: loadMore.current,
+        clearTokenDetailedOwnerList,
+        refreshing,
+    }
 }
 
 async function getERC721TokenDetailedOwnerListFromChain(

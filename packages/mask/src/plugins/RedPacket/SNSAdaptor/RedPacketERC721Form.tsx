@@ -151,11 +151,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const [message, setMessage] = useState('Best Wishes!')
     const [offset, setOffset] = useState(0)
     const {
-        asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList = [],
+        loadMore,
         clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(contract, account, offset)
-
-    const { tokenDetailedOwnerList, loadMore } = value
 
     const addOffset = useCallback(() => (loadMore ? setOffset(offset + 1) : void 0), [offset, loadMore])
 

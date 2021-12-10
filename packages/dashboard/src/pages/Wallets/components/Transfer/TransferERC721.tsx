@@ -169,10 +169,11 @@ export const TransferERC721 = memo(() => {
     )
 
     const {
-        asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList = [],
+        loadMore = false,
         refreshing,
     } = useERC721TokenDetailedOwnerList(contract, account, offset)
-    const { tokenDetailedOwnerList, loadMore } = value
 
     const addOffset = useCallback(() => (loadMore ? setOffset(offset + 8) : void 0), [offset, loadMore])
 
