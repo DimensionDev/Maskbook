@@ -19,14 +19,29 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
 
-const useStyles = makeStyles()(() => ({
+interface StyleProps {
+    width: number
+    size: number
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
         position: 'absolute',
         bottom: '-10px !important',
-        left: 0,
         textAlign: 'center',
         color: 'white',
         minWidth: 134,
+        zIndex: 2,
+
+        left: -1 * (props.width - 7),
+        top: -1 * (props.width - 7),
+        width: props.size - 4,
+        height: props.size - 4,
+
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            left: -27,
+            top: -1 * props.width,
+        },
     },
     update: {
         position: 'absolute',
@@ -47,17 +62,18 @@ const useStyles = makeStyles()(() => ({
 }))
 
 function NFTAvatarInTwitter() {
-    const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
     const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
     const ele = searchTwitterAvatarLinkSelector().evaluate()
     let size = 170
+    const width = 15
     if (ele) {
         const style = window.getComputedStyle(ele)
-        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 6
+        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 9
     }
+    const { classes } = useStyles({ size: size + width * 2, width })
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const onUpdate = (data: NFTAvatarEvent) => {

@@ -8,26 +8,11 @@ import { useUserOwnerAddress } from '../hooks/useUserOwnerAddress'
 import type { AvatarMetaDB } from '../types'
 import { NFTAvatarRing } from './NFTAvatarRing'
 
-interface StyleProps {
-    width: number
-    size: number
-}
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
+const useStyles = makeStyles()((theme) => ({
     root: {
-        position: 'absolute',
-        left: -1 * (props.width - 4),
-        top: -1 * (props.width - 4),
-        width: props.size - 4,
-        height: props.size - 4,
-
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            left: -27,
-            top: -1 * props.width,
-        },
-        zIndex: 2,
     },
     image: {
         position: 'absolute',
@@ -56,7 +41,7 @@ function formatText(symbol: string, length: number) {
 
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, size = 140, width = 15 } = props
-    const classes = useStylesExtends(useStyles({ size: size + width * 2, width }), props)
+    const classes = useStylesExtends(useStyles(/*{ size: size + width * 2, width }*/), props)
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
         avatar.address,
