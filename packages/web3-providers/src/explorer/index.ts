@@ -26,6 +26,10 @@ export async function getLatestTransactions(
             apikey,
         }),
     )
-    const rawTransactions = (await response.json()) as Transaction[]
-    return rawTransactions.map(toTransaction)
+    const rawTransactions = (await response.json()) as {
+        message: string
+        result?: Transaction[]
+        status: '0' | '1'
+    }
+    return rawTransactions.result?.map(toTransaction) ?? []
 }

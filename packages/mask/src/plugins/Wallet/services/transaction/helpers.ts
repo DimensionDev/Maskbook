@@ -1,4 +1,4 @@
-import { sha3 } from 'web3-utils'
+import { sha3, toHex } from 'web3-utils'
 import type { Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import {
@@ -43,7 +43,7 @@ export function getPayloadId(payload: JsonRpcPayload) {
 export function getTransactionId(transaction: Transaction | null) {
     if (!transaction) return ''
     const { from, to, input, value } = transaction
-    return sha3([from, to, input || '0x0', value || '0x0'].join('_')) ?? ''
+    return sha3([from, to, input, toHex(value)].join('_')) ?? ''
 }
 
 export function getReceiptStatus(receipt: TransactionReceipt | null) {

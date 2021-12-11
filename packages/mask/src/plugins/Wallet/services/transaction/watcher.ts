@@ -161,7 +161,7 @@ async function checkTransaction() {
     try {
         await checkReceipt(chainId)
         await checkAccount(chainId, account)
-    } catch {
+    } catch (error) {
         // do nothing
     }
 
@@ -173,12 +173,7 @@ async function checkTransaction() {
 
     // kick to next the round
     if (timer !== null) clearTimeout(timer)
-    timer = setTimeout(() => {
-        const chainId = currentChainIdSettings.value
-        const account = currentAccountSettings.value
-        checkReceipt(chainId)
-        checkAccount(chainId, account)
-    }, WATCHED_TRANSACTION_CHECK_DELAY)
+    timer = setTimeout(checkTransaction, WATCHED_TRANSACTION_CHECK_DELAY)
 }
 
 export async function getReceipt(chainId: ChainId, hash: string) {
