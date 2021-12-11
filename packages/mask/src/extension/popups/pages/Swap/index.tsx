@@ -1,4 +1,4 @@
-import { makeStyles } from '@masknet/theme'
+import { Appearance, applyMaskColorVars, makeStyles } from '@masknet/theme'
 import { TransactionStatusType, useChainId, useWallet, Web3Provider } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { useCallback } from 'react'
@@ -74,6 +74,8 @@ export default function SwapPage() {
     }, [chainId])
 
     const { value: domain } = useReverseAddress(wallet?.address, NetworkPluginID.PLUGIN_EVM)
+
+    applyMaskColorVars(document.body, Appearance.light)
 
     return (
         <Web3Provider value={SwapWeb3Context}>
