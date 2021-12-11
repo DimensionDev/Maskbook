@@ -312,7 +312,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <img className={classes.nftImg} src={tokenDetailed.info.image} />
+                                <img className={classes.nftImg} src={tokenDetailed.info.mediaUrl} />
                                 <div className={classes.nftNameWrapper}>
                                     <Typography className={classes.nftName} color="textSecondary">
                                         {tokenDetailed.info.name}
@@ -362,7 +362,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : tokenDetailed?.info.name ? (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <img className={classes.nftImg} src={tokenDetailed?.info.image} />
+                                <img className={classes.nftImg} src={tokenDetailed?.info.mediaUrl} />
                                 <div className={classes.nftNameWrapper}>
                                     <Typography className={classes.nftName} color="textSecondary">
                                         {tokenDetailed?.info.name}
@@ -377,7 +377,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     return (
                                         <ListItem className={classes.selectWrapper} key={i.toString()}>
                                             <div className={classes.imgWrapper}>
-                                                <img className={classes.selectWrapperImg} src={token?.info.image} />
+                                                <img className={classes.selectWrapperImg} src={token?.info.mediaUrl} />
                                             </div>
                                             <div className={classes.selectWrapperNftNameWrapper}>
                                                 <Typography
