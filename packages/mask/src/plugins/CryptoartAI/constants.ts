@@ -1,4 +1,4 @@
-import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_NAME = 'CRYPTOART.AI'
 export const PLUGIN_ICON = '🖼️'
@@ -7,6 +7,7 @@ export const PLUGIN_IDENTIFIER = 'com.maskbook.cryptoartai'
 export const PLUGIN_META_KEY = 'com.maskbook.cryptoartai:1'
 
 export const prefixPath = '/gallery/detail'
+export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export const mainNetwork = {
     contractAddress: '0x3AD503084f1bD8d15A7F5EbE7A038C064e1E3Fa1',

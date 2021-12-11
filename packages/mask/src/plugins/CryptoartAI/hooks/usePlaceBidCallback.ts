@@ -1,6 +1,5 @@
 import { useCallback } from 'react'
 import BigNumber from 'bignumber.js'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
     TransactionEventType,
@@ -10,6 +9,8 @@ import {
     useChainId,
 } from '@masknet/web3-shared-evm'
 import { useCryptoArtAI_Contract } from './useCryptoArtAI_Contract'
+
+const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export function usePlaceBidCallback(is24Auction: boolean, editionNumber: string) {
     const account = useAccount()
