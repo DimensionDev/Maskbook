@@ -54,9 +54,9 @@ export function CollectibleCard(props: CollectibleCardProps) {
     const chainId = useChainId()
 
     const { loading, value } = useAsyncRetry(async () => {
-        if (!token.info.image) return
+        if (!token.info.mediaUrl) return
 
-        const blob = await (await fetch(token.info.image)).blob()
+        const blob = await (await fetch(token.info.mediaUrl)).blob()
         return blob
     }, [token])
 
@@ -73,21 +73,21 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         {readonly || !wallet ? null : (
                             <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                         )}
-                        {token.info.image ? (
+                        {token.info.mediaUrl ? (
                             isVideo ? (
                                 <Video
-                                    src={value ?? token.info.image}
+                                    src={value ?? token.info.mediaUrl}
                                     VideoProps={{ className: classes.video, autoPlay: true, loop: true }}
                                 />
                             ) : isHtml ? (
-                                <iframe src={token.info.image} />
+                                <iframe src={token.info.mediaUrl} />
                             ) : (
                                 <Image
                                     component="img"
                                     width={172}
                                     height={172}
                                     style={{ objectFit: 'cover' }}
-                                    src={value ?? token.info.image}
+                                    src={value ?? token.info.mediaUrl}
                                 />
                             )
                         ) : (
