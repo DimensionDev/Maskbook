@@ -10,7 +10,6 @@ import {
     MnemonicGenerationInformation,
 } from '../../../utils/mnemonic-code'
 import type { MnemonicWordDetail } from '../interfaces/interface.blockchain'
-import 'webcrypto-liner'
 
 const ECDH = getKeyParameter('ecdh')[0]
 const ECDSA = getKeyParameter('ecdsa')[0]

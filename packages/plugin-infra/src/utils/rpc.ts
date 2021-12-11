@@ -18,7 +18,12 @@ export function createPluginRPC<T extends Record<string, (...args: any) => Promi
 ): T {
     const isBackground = isEnvironment(Environment.ManifestBackground)
     return AsyncCall<T>(
-        (exoticImplementation ? getLocalImplementationExotic : getLocalImplementation)(`Plugin(${key})`, impl, message),
+        (exoticImplementation ? getLocalImplementationExotic : getLocalImplementation)(
+            isBackground,
+            `Plugin(${key})`,
+            impl,
+            message,
+        ),
         {
             key,
             channel: message.bind(MessageTarget.Broadcast),
@@ -38,7 +43,7 @@ export function createPluginRPCGenerator<
     T extends Record<string, (...args: any[]) => Generator<any> | AsyncGenerator<any>>,
 >(key: string, impl: () => Promise<T>, message: UnboundedRegistry<any>): T {
     const isBackground = isEnvironment(Environment.ManifestBackground)
-    return AsyncGeneratorCall<T>(getLocalImplementation(`Plugin(${key})`, impl, message), {
+    return AsyncGeneratorCall<T>(getLocalImplementation(isBackground, `Plugin(${key})`, impl, message), {
         channel: message.bind(MessageTarget.Broadcast),
         preferLocalImplementation: isBackground,
         serializer,

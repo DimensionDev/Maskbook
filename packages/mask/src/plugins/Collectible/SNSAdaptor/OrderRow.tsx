@@ -7,10 +7,10 @@ import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import {
     ChainId,
     formatBalance,
-    isZero,
     NonFungibleAssetProvider,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'

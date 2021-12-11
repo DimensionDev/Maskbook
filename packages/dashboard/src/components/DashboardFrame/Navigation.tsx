@@ -34,6 +34,7 @@ import {
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
 import { RoutePaths } from '../../type'
+import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -126,6 +127,7 @@ export function Navigation({ onClose }: NavigationProps) {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
+    const currentPluginId = usePluginIDContext()
 
     const onExpand = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
@@ -155,12 +157,16 @@ export function Navigation({ onClose }: NavigationProps) {
                     <ListItemLink to={RoutePaths.Wallets}>
                         <ListSubTextItem inset primary={t.wallets_assets()} />
                     </ListItemLink>
-                    <ListItemLink to={RoutePaths.WalletsTransfer}>
-                        <ListSubTextItem inset primary={t.wallets_transfer()} />
-                    </ListItemLink>
-                    <ListItemLink to={RoutePaths.WalletsHistory}>
-                        <ListSubTextItem inset primary={t.wallets_history()} />
-                    </ListItemLink>
+                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                        <ListItemLink to={RoutePaths.WalletsTransfer}>
+                            <ListSubTextItem inset primary={t.wallets_transfer()} />
+                        </ListItemLink>
+                    )}
+                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                        <ListItemLink to={RoutePaths.WalletsHistory}>
+                            <ListSubTextItem inset primary={t.wallets_history()} />
+                        </ListItemLink>
+                    )}
                 </List>
             </Collapse>
             <ListItemLink to={RoutePaths.Labs}>

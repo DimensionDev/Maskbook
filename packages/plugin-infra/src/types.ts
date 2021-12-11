@@ -106,8 +106,6 @@ export namespace Plugin.Shared {
         declareWeb3Networks?: Web3Plugin.NetworkDescriptor[]
         /** Introduce wallet providers information. */
         declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
-        /** Introduce application information. */
-        declareApplications?: Web3Plugin.ApplicationDescriptor[]
         /** Introduce application category information. */
         declareApplicationCategories?: Web3Plugin.ApplicationCategoryDescriptor[]
     }
@@ -203,6 +201,8 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
         ToolbarEntry?: ToolbarEntry
+        /** This UI will be rendered as an entry in the wallet status dialog */
+        ApplicationEntry?: ApplicationEntry
     }
     //#region Composition entry
     /**
@@ -279,6 +279,29 @@ export namespace Plugin.SNSAdaptor {
         onClick: 'openCompositionEntry'
     }
     //#endregion
+
+    export interface ApplicationEntry {
+        /**
+         * The icon image URL
+         */
+        icon: URL
+        /**
+         * The name of the application
+         */
+        label: I18NStringField | string
+        /**
+         * Also an entrance in a sub-folder
+         */
+        categoryID?: string
+        /**
+         * Used to order the applications on the board
+         */
+        priority: number
+        /**
+         * What to do if the application icon is clicked.
+         */
+        onClick(): void
+    }
 }
 
 /** This part runs in the dashboard */
@@ -464,6 +487,12 @@ export interface Pagination {
     size?: number
     /** The page index. */
     page?: number
+}
+
+export interface Pageable<T> {
+    currentPage: number
+    hasNextPage: boolean
+    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

@@ -30,10 +30,11 @@ import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPa
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
-import { toAsset, toUnixTimestamp } from '../helpers'
+import { toAsset } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
-import type { useAsset } from '../../EVM/hooks/useAsset'
+import getUnixTime from 'date-fns/getUnixTime'
+import type { useAsset } from '../../EVM/hooks'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -92,25 +93,18 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
-        try {
-            await PluginCollectibleRPC.createBuyOrder({
-                asset: toAsset({
-                    tokenId: asset.value.token_id,
-                    tokenAddress: asset.value.token_address,
-                    schemaName: asset.value.asset_contract?.schemaName,
-                }),
-                accountAddress: account,
-                startAmount: Number.parseFloat(amount),
-                expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
-                paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
-            })
-        } catch (error) {
-            if (error instanceof Error) {
-                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
-            }
-            throw error
-        }
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, showSnackbar])
+        await PluginCollectibleRPC.createBuyOrder({
+            asset: toAsset({
+                tokenId: asset.value.token_id,
+                tokenAddress: asset.value.token_address,
+                schemaName: asset.value.asset_contract?.schemaName,
+            }),
+            accountAddress: account,
+            startAmount: Number.parseFloat(amount),
+            expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
+            paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
+        })
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 

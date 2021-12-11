@@ -16,6 +16,7 @@
     "build": "node ./builder.mjs"
   },
   "dependencies": {
+    "buffer": "^6.0.3",
     "clipboard-polyfill": "^3.0.3",
     "core-js": "^3.19.1",
     "elliptic": "^6.5.4",

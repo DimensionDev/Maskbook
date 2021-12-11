@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { ValueRef } from '@dimensiondev/holoflows-kit'
 import { ProfileIdentifier, useValueRef } from '@masknet/shared'
 import type { Profile } from '../../database'
-import { currentSelectedIdentity } from '../../settings/settings'
 import type { SocialNetworkUI } from '../../social-network'
 import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 
@@ -27,6 +26,6 @@ export function useMyIdentities() {
 }
 export function useCurrentIdentity(noDefault?: boolean): Profile | null {
     const all = useMyIdentities()
-    const current = useValueRef(currentSelectedIdentity[activatedSocialNetworkUI.networkIdentifier])
-    return all.find((i) => i.identifier.toText() === current) || (noDefault ? null : all[0])
+    const current = useLastRecognizedIdentity()
+    return all.find((i) => i.identifier.toText() === current.identifier.toText()) || (noDefault ? null : all[0])
 }

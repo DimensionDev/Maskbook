@@ -1,4 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
+import { leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
     Asset,
     ChainId,
@@ -14,7 +15,6 @@ import {
     isChainIdMainnet,
     NetworkType,
     FungibleAssetProvider,
-    pow10,
     getChainShortName,
     getChainIdFromNetworkType,
     ERC721TokenCollectionInfo,
@@ -146,12 +146,12 @@ function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType
                               y.symbol,
                               y.logo_url ? [y.logo_url] : undefined,
                           ),
-                balance: new BigNumber(y.amount).multipliedBy(pow10(y.decimals)).toFixed(),
+                balance: rightShift(y.amount, y.decimals).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
                 value: {
-                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).multipliedBy(new BigNumber(y.amount)).toFixed(),
+                    [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
                 },
                 logoURI: y.logo_url,
             }
@@ -163,7 +163,7 @@ function formatAssetsFromZerion(
     scope: SocketRequestAssetScope,
 ) {
     return data.map(({ asset, quantity }) => {
-        const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
+        const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
         const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
 
@@ -183,7 +183,7 @@ function formatAssetsFromZerion(
                 usd: new BigNumber(value).toString(),
             },
             value: {
-                usd: new BigNumber(balance).multipliedBy(value).toString(),
+                usd: multipliedBy(balance, value).toString(),
             },
             logoURI: asset.icon_url,
         }

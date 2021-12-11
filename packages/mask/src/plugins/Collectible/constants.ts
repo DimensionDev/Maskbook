@@ -18,7 +18,6 @@ export const OpenSeaAccountURL = 'https://opensea.io/accounts/'
 export const OpenSeaTraitURL =
     '/assets/known-origin?search[stringTraits][0][name]=Tag&search[stringTraits][0][values][0]='
 export const NullAddress = 'NullAddress'
-export const NullContractAddress = '0x0000000000000000000000000000000000000000'
 export const ReferrerAddress = ''
 
 export const RaribleURL = 'https://api.rarible.com/'

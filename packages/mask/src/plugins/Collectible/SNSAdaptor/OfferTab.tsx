@@ -8,7 +8,8 @@ import { CollectibleTab } from './CollectibleTab'
 import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { LoadingTable } from './LoadingTable'
-import { isZero, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {

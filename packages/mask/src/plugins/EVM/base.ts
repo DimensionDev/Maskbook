@@ -6,7 +6,6 @@ import {
     PLUGIN_DESCRIPTION,
     PLUGIN_PROVIDERS,
     PLUGIN_NETWORKS,
-    PLUGIN_APPLICATIONS,
     PLUGIN_APPLICATION_CATEGORIES,
 } from './constants'
 
@@ -22,9 +21,7 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
-    declareApplications: PLUGIN_APPLICATIONS,
     declareApplicationCategories: PLUGIN_APPLICATION_CATEGORIES,
     declareWeb3Networks: PLUGIN_NETWORKS,
     declareWeb3Providers: PLUGIN_PROVIDERS,
 }
-;('')

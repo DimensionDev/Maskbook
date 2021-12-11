@@ -18,6 +18,7 @@ import {
     useERC20TokenDetailed,
     useERC721ContractDetailed,
     useMaskBoxConstants,
+    ZERO_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
@@ -31,8 +32,7 @@ import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
 import { useHeartBit } from './useHeartBit'
 import { useIsWhitelisted } from './useIsWhitelisted'
-
-const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
+import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy } from '@masknet/web3-shared-base'
 
 function useContext(initialState?: { boxId: string }) {
     const heartBit = useHeartBit()
@@ -137,9 +137,8 @@ function useContext(initialState?: { boxId: string }) {
         if (!maskBoxInfo || !maskBoxStatus || !boxInfo) return BoxState.NOT_FOUND
         if (maskBoxStatus.canceled) return BoxState.CANCELED
         const now = new Date()
-        if (new BigNumber(boxInfo.tokenIdsPurchased.length).isGreaterThanOrEqualTo(boxInfo.personalLimit))
-            return BoxState.DRAWED_OUT
-        if (new BigNumber(boxInfo.remaining).isLessThanOrEqualTo(0)) return BoxState.SOLD_OUT
+        if (isGreaterThanOrEqualTo(boxInfo.tokenIdsPurchased.length, boxInfo.personalLimit)) return BoxState.DRAWED_OUT
+        if (isLessThanOrEqualTo(boxInfo.remaining, 0)) return BoxState.SOLD_OUT
         if (boxInfo.startAt > now) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
@@ -156,7 +155,7 @@ function useContext(initialState?: { boxId: string }) {
     const { value: holderTokenBalance = '0' } = useERC20TokenBalance(holderToken?.address)
     const holderMinTokenAmountBN = new BigNumber(boxInfo?.holderMinTokenAmount ?? 0)
     const isQualified =
-        (holderMinTokenAmountBN.eq(0) || holderMinTokenAmountBN.lte(holderTokenBalance)) && isQualifiedByContract
+        (isZero(holderMinTokenAmountBN) || holderMinTokenAmountBN.lte(holderTokenBalance)) && isQualifiedByContract
     //#endregion
 
     const boxStateMessage = useMemo(() => {
@@ -224,7 +223,7 @@ function useContext(initialState?: { boxId: string }) {
     const paymentTokenIndex =
         boxInfo?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1
     const paymentTokenPrice = paymentTokenInfo?.price ?? '0'
-    const costAmount = new BigNumber(paymentTokenPrice).multipliedBy(paymentCount)
+    const costAmount = multipliedBy(paymentTokenPrice, paymentCount)
     const isNativeToken = isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
     const paymentTokenBalance = isNativeToken ? paymentNativeTokenBalance : paymentERC20TokenBalance
     const paymentTokenDetailed = paymentTokenInfo?.token ?? null

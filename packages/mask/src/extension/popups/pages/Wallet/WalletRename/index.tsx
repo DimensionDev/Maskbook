@@ -52,7 +52,7 @@ const WalletRename = memo(() => {
         handleSubmit,
         formState: { errors, isValid },
         schema,
-    } = useSetWalletNameForm()
+    } = useSetWalletNameForm(wallet?.name)
 
     const [{ loading }, renameWallet] = useAsyncFn(
         async ({ name }: zod.infer<typeof schema>) => {

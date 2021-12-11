@@ -8,6 +8,7 @@ import {
 } from './constants'
 import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
 import type { AssetEvent } from './types'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -72,7 +73,7 @@ export function getOrderUSDPrice(currentPrice?: string, usdPrice?: string, decim
     const price = formatBalance(usdPrice, 0)
     const quantity = formatBalance(currentPrice, decimals)
 
-    return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1).toString()
+    return multipliedBy(price, quantity).toFixed(2, 1).toString()
 }
 
 export function getLastSalePrice(lastSale: AssetEvent | null) {

@@ -165,7 +165,6 @@ export function RedPacket(props: RedPacketProps) {
         return t('plugin_red_packet_description_failover', {
             total: formatBalance(payload.total, token.decimals),
             symbol: token.symbol,
-            name: payload.sender.name ?? '-',
             shares: payload.shares ?? '-',
         })
     }, [availability, canRefund, token, t, payload, listOfStatus])

@@ -14,6 +14,7 @@ import { TradeProvider } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     trade: {
@@ -75,7 +76,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const { targetChainId } = TargetChainIdContext.useContainer()
 
     //#region refresh pools
-    const { loading: updateBalancerPoolsLoading } = useAsyncRetry(async () => {
+    useAsyncRetry(async () => {
         // force update balancer's pools each time user enters into the swap tab
         if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true, targetChainId)
     }, [trade.provider, targetChainId])
@@ -85,9 +86,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const tokenPrice = useNativeTokenPrice(targetChainId)
 
     const gasFee = useMemo(() => {
-        return trade.gas.value && gasPrice
-            ? new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
-            : 0
+        return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : 0
     }, [trade.gas?.value, gasPrice])
 
     const feeValueUSD = useMemo(
@@ -95,7 +94,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         [gasFee, tokenPrice],
     )
 
-    if ((trade.loading && trade.value) || updateBalancerPoolsLoading || trade.gas.loading)
+    if (trade.loading)
         return (
             <Box className={classes.trade} display="flex" justifyContent="center" style={{ padding: 24 }}>
                 <CircularProgress />
