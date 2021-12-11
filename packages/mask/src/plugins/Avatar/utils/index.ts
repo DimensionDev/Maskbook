@@ -64,7 +64,7 @@ export async function createNFT(address: string, tokenId: string) {
         {
             name: asset.name,
             description: asset.description,
-            image: asset.image_url ?? asset.image_preview_url ?? '',
+            mediaUrl: asset.image_url ?? asset.image_preview_url ?? '',
             owner: asset.top_ownerships[0].owner.address,
         },
         tokenId,
