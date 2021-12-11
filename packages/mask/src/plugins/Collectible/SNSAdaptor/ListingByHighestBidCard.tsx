@@ -75,7 +75,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schema_name,
+                schemaName: asset.value.asset_contract?.schemaName,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
