@@ -190,7 +190,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                             title: 'Token Amount',
                                             inputMode: 'decimal',
                                             min: 0,
-                                            max: 999,
+                                            max: 255,
                                             minLength: 1,
                                             pattern: '^[0-9]*[.,]?[0-9]*$',
                                             spellCheck: false,
