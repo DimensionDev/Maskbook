@@ -13,6 +13,7 @@ import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 
+const offset = 10
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
     startWatch(watcher, signal)
@@ -33,10 +34,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minWidth: 134,
         zIndex: 2,
 
-        left: -1 * (props.width - 7),
-        top: -1 * (props.width - 7),
-        width: props.size - 4,
-        height: props.size - 4,
+        left: -1 * props.width + offset / 2,
+        top: -1 * props.width + offset / 2,
+        width: props.size,
+        height: props.size,
 
         [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
             left: -27,
@@ -71,7 +72,7 @@ function NFTAvatarInTwitter() {
     const width = 15
     if (ele) {
         const style = window.getComputedStyle(ele)
-        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 10
+        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - offset
     }
     const { classes } = useStyles({ size: size + width * 2, width })
 

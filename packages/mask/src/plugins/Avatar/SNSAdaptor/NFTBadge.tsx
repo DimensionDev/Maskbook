@@ -41,7 +41,7 @@ function formatText(symbol: string, length: number) {
 
 export function NFTBadge(props: NFTBadgeProps) {
     const { avatar, size = 140, width = 15 } = props
-    const classes = useStylesExtends(useStyles(/*{ size: size + width * 2, width }*/), props)
+    const classes = useStylesExtends(useStyles(), props)
 
     const { value = { amount: '0', symbol: 'ETH', name: '', owner: '' }, loading } = useNFT(
         avatar.address,
