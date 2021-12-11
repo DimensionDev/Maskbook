@@ -63,6 +63,8 @@ export function useRemoteControlledDialog<T extends { open: boolean }>(
         onUpdateByLocal({ open: false } as T)
     }, [])
 
+    useEffect(() => closeDialog, [])
+
     return {
         open,
         openDialog,

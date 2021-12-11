@@ -24,11 +24,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const gasPrice = customGasPrice || defaultGasPrice
     const { gasOptions } = useGasOptions()
 
-    const { setDialog: setGasSettingDialog, closeDialog } = useRemoteControlledDialog(
-        WalletMessages.events.gasSettingDialogUpdated,
-    )
-
-    useEffect(() => closeDialog, [closeDialog])
+    const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
 
     useEffect(() => {
         setGasLimit_(gasLimit)
