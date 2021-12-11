@@ -32,10 +32,10 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const rainbow_animation = keyframes`
     0% {
-        background-position: '100% 0%';
+        background-position: 100% 0%;
     }
     100% {
-        background-position: '0 100%';
+        background-position: 0 100%;
     }
 `
 
@@ -71,6 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         background:
             'linear-gradient(40deg,#ff9304,#ff04ea 10%,#9b4beb 20%,#0e8dd6 30%,#0bc6df 40%,#07d464 50%,#dfd105 60%,#ff04ab 78%,#8933eb 90%,#3b89ff)',
         webkitBackgroundClip: 'text',
+        backgroundClip: 'text',
         color: 'transparent',
         animation: `${rainbow_animation} 6s linear infinite`,
         backgroundSize: '600% 600%',
