@@ -48,20 +48,26 @@ export interface CollectibleCardProps {
     readonly?: boolean
 }
 
+const videoTypeRe = /\.(mp4|mp3|m4v|ogg)$/i
+const videoMimeRe = /^video/
+const htmlMimeRe = /^text/
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token, provider, readonly } = props
     const { classes } = useStyles()
     const chainId = useChainId()
 
+    const mediaUrl = token.info.mediaUrl
     const { loading, value } = useAsyncRetry(async () => {
-        if (!token.info.mediaUrl) return
+        if (!mediaUrl) return
 
-        const blob = await (await fetch(token.info.mediaUrl)).blob()
+        const blob = await (await fetch(mediaUrl)).blob()
         return blob
-    }, [token])
+    }, [mediaUrl])
 
-    const isVideo = value?.type.match(/^video/)?.[0]
-    const isHtml = !!value?.type.match(/^text/)?.[0]
+    const mimeType = value?.type || ''
+    // some video resources response content-type not video, e.g. application/octet-stream
+    const isVideo = mediaUrl ? videoTypeRe.test(mediaUrl) || mimeType.startsWith('video') : undefined
+    const isHtml = mimeType.startsWith('text')
 
     return (
         <>

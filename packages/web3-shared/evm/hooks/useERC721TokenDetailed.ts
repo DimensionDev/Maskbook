@@ -24,7 +24,7 @@ export function useERC721TokenDetailed(
         )
 
         return (
-            tokenDetailedFromOpensea ?? getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
+            tokenDetailedFromOpensea || getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
         )
     }, [erc721TokenContract, tokenId])
 }
