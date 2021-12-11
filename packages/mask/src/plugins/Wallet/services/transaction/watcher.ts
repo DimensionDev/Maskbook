@@ -109,7 +109,7 @@ async function checkAccount(chainId: ChainId, account: string) {
     for (const latestTransaction of latestTransactions) {
         const [watchedHash, watchedTransaction] =
             watchedTransactions.find(([hash, transaction]) => {
-                // the transation hash exact matched
+                // the transaction hash exact matched
                 if (latestTransaction.hash === hash) return true
 
                 // the transaction signature id exact matched
@@ -141,6 +141,7 @@ async function checkAccount(chainId: ChainId, account: string) {
         removeTransaction(chainId, watchedHash)
         setTransaction(chainId, latestTransaction.hash, {
             ...watchedTransaction,
+            payload: helpers.toPayload(latestTransaction),
             receipt: getTransactionReceipt(chainId, latestTransaction.hash),
         })
     }
@@ -165,13 +166,13 @@ async function checkTransaction() {
         // do nothing
     }
 
-    // check if all transaction receipt were loaded
+    // check if all transaction receipts were found
     const allSettled = await Promise.allSettled(
         getWatchedTransactions(chainId).map(([, transaction]) => transaction.receipt),
     )
     if (allSettled.every((x) => x.status === 'fulfilled' && x.value)) return
 
-    // kick to next the round
+    // kick to the next round
     if (timer !== null) clearTimeout(timer)
     timer = setTimeout(checkTransaction, WATCHED_TRANSACTION_CHECK_DELAY)
 }

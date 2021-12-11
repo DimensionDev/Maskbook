@@ -1,4 +1,3 @@
-import { first } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { toHex } from 'web3-utils'
 import type { HttpProvider } from 'web3-core'
@@ -18,7 +17,6 @@ import {
     getPayloadHash,
     getPayloadConfig,
     getPayloadChainId,
-    getPayloadNonce,
     getTransactionHash,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'

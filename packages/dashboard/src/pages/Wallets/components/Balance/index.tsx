@@ -107,7 +107,7 @@ export const Balance = memo<BalanceCardProps>(
                             {t.wallets_balance()} {selectedNetwork?.name ?? t.wallets_balance_all_chain()}
                         </BalanceTitle>
                         <BalanceContent sx={{ py: 1.5 }}>
-                            {isNaN(balance)
+                            {Number.isNaN(balance)
                                 ? '-'
                                 : balance.toLocaleString('en', {
                                       style: 'currency',

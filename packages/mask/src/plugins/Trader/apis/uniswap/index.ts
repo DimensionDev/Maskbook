@@ -17,7 +17,7 @@ import {
     fetchBlockNumbersObjectByTimestamps,
 } from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
-import { isGreaterThan } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isLessThanOrEqualTo } from '@masknet/web3-shared-base'
 
 type Value = string | number | BigNumber | undefined
 
@@ -378,9 +378,7 @@ export async function getPriceStats(
     }
 
     if (latestBlock) {
-        blocks = blocks.filter(
-            (block) => block.blockNumber && new BigNumber(block?.blockNumber).isLessThanOrEqualTo(latestBlock),
-        )
+        blocks = blocks.filter((block) => block.blockNumber && isLessThanOrEqualTo(block?.blockNumber, latestBlock))
     }
 
     const prices = await fetchPricesByBlocks(id, blocks)

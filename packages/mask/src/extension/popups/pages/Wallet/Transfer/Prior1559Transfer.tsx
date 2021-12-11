@@ -10,14 +10,13 @@ import {
     formatGweiToWei,
     formatWeiToGwei,
     formatEthereumAddress,
-    isGreaterThan,
-    isZero,
     useChainId,
     useGasLimit,
     useTokenTransferCallback,
     useWallet,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
+import { isZero, isGreaterThan, isGreaterThanOrEqualTo, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { Controller, FormProvider, useForm, useFormContext } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useAsync, useAsyncFn, useUpdateEffect } from 'react-use'
@@ -155,18 +154,18 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
             amount: zod
                 .string()
                 .refine((amount) => {
-                    const transferAmount = new BigNumber(amount || '0').shiftedBy(selectedAsset?.token.decimals ?? 0)
+                    const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
                     return !!transferAmount || !isZero(transferAmount)
                 }, t('wallet_transfer_error_amount_absence'))
                 .refine((amount) => {
-                    const transferAmount = new BigNumber(amount || '0').shiftedBy(selectedAsset?.token.decimals ?? 0)
+                    const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
                     return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
                 }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
             gasLimit: zod
                 .string()
                 .min(1, t('wallet_transfer_error_gas_limit_absence'))
                 .refine(
-                    (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimitContext),
+                    (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
                     t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
                 ),
             gasPrice: zod.string().min(1, t('wallet_transfer_error_gas_price_absence')),
@@ -206,7 +205,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
     const { value: minGasLimit, error } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
-        new BigNumber(!!amount ? amount : 0).shiftedBy(selectedAsset?.token.decimals ?? 0).toFixed(),
+        rightShift(!!amount ? amount : 0, selectedAsset?.token.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : '',
     )
     //#endregion
@@ -220,7 +219,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         let amount_ = new BigNumber(tokenBalance || '0')
         amount_ =
             selectedAsset?.token.type === EthereumTokenType.Native
-                ? amount_.minus(new BigNumber(30000).multipliedBy(gasPrice))
+                ? amount_.minus(multipliedBy(30000, gasPrice))
                 : amount_
 
         return amount_.toFixed()
@@ -246,9 +245,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
 
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            const transferAmount = new BigNumber(data.amount || '0')
-                .shiftedBy(selectedAsset?.token.decimals || 0)
-                .toFixed()
+            const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
             await transferCallback(transferAmount, data.address, {
                 gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
                 gas: new BigNumber(data.gasLimit).toNumber(),

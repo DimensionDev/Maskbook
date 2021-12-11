@@ -338,7 +338,16 @@
         "findtruman",
         "uaddr",
         "consts",
-        "txreceipt"
+        "txreceipt",
+        "cryptoartai",
+        "cryptoart",
+        "avator",
+        "testweb",
+        "metadate",
+        "AICANFT",
+        "CANFT",
+        "Kodav",
+        "koda"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

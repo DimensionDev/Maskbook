@@ -8,6 +8,8 @@ export function getInjectNodeInfo(ele: HTMLElement) {
     if (!nftDom) return
 
     nftDom.style.overflow = 'unset'
+    const avatarParent = nftDom.parentElement
+    if (avatarParent) avatarParent.style.clipPath = 'unset'
 
     const width = Number(window.getComputedStyle(nftDom).width.replace('px', '') ?? 0)
     const height = Number(window.getComputedStyle(nftDom).height.replace('px', '') ?? 0)

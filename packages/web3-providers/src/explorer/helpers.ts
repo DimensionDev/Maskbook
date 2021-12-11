@@ -6,18 +6,18 @@ export function toTransaction(transaction: Transaction): Web3Transaction & {
     confirmations: number
 } {
     return {
-        status: transaction.txreceipt_status,
+        nonce: Number.parseInt(transaction.nonce, 10),
         blockHash: transaction.blockHash,
         blockNumber: Number.parseInt(transaction.blockNumber, 10),
-        confirmations: Number.parseInt(transaction.confirmations, 10),
         from: transaction.from,
         to: transaction.to,
         gas: Number.parseInt(transaction.gas, 10),
         gasPrice: transaction.gasPrice,
         hash: transaction.hash,
         input: transaction.input,
-        nonce: Number.parseInt(transaction.nonce, 10),
         transactionIndex: Number.parseInt(transaction.transactionIndex, 10),
         value: transaction.value,
+        status: transaction.txreceipt_status,
+        confirmations: Number.parseInt(transaction.confirmations, 10),
     }
 }

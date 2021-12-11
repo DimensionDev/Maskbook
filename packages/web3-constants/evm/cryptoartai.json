@@ -1,0 +1,44 @@
+{
+    "KNOWN_ORIGIN_DIGITAL_ASSET_V2": {
+        "Mainnet": "0x3AD503084f1bD8d15A7F5EbE7A038C064e1E3Fa1",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "0x54395e6c737734d3de29fc62c10a3ed51efa2e8a",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "ARTIST_ACCEPTING_BIDS_V2": {
+        "Mainnet": "0x78C889749f29D2965a76Ede3BBb232A9729Ccf0b",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "0x7bd41f5c8cb6225e7415f1406e117701a40626e0",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    },
+    "CANFT_MARKET": {
+        "Mainnet": "0x72d081953957723e540780a0C6bA31725469238E",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "0xf690444aae2371da6f83af442f52535530702ab4",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": ""
+    }
+}

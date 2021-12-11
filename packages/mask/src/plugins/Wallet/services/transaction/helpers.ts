@@ -1,6 +1,6 @@
 import { sha3, toHex } from 'web3-utils'
-import type { Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { Transaction, TransactionConfig, TransactionReceipt } from 'web3-core'
 import {
     isSameAddress,
     TransactionState,
@@ -23,6 +23,27 @@ export function toReceipt(status: '0' | '1', transaction: Transaction): Transact
         gasUsed: 0,
         logs: [],
         logsBloom: '',
+    }
+}
+
+// the payload that derives from transaction only for generating transaction signature
+export function toPayload(transaction: Transaction): JsonRpcPayload {
+    return {
+        jsonrpc: '2.0',
+        // the payload id is not related to the transaction signature
+        id: '0',
+        method: EthereumMethodType.ETH_SEND_TRANSACTION,
+        params: [
+            {
+                from: transaction.from,
+                to: transaction.to,
+                value: transaction.value,
+                gas: transaction.gas,
+                gasPrice: transaction.gasPrice,
+                data: transaction.input,
+                nonce: transaction.nonce,
+            },
+        ],
     }
 }
 
