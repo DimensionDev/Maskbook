@@ -10,6 +10,8 @@ import { SwapWeb3Context } from '../../../../web3/context'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils'
 import { NetworkPluginID, useReverseAddress } from '@masknet/plugin-infra'
+import { TargetChainIdContext } from '../../../../plugins/Trader/trader/useTargetChainIdContext'
+import { AllProviderTradeContext } from '../../../../plugins/Trader/trader/useAllProviderTradeContext'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -50,6 +52,10 @@ const useStyles = makeStyles()((theme) => {
         },
         main: {
             width: 520,
+            overflowY: 'scroll',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
     }
 })
@@ -87,7 +93,11 @@ export default function SwapPage() {
                         <Typography variant="h1" className={classes.title}>
                             {t('plugin_trader_swap')}
                         </Typography>
-                        <SwapBox />
+                        <TargetChainIdContext.Provider>
+                            <AllProviderTradeContext.Provider>
+                                <SwapBox />
+                            </AllProviderTradeContext.Provider>
+                        </TargetChainIdContext.Provider>
                     </main>
                 </div>
             </div>
