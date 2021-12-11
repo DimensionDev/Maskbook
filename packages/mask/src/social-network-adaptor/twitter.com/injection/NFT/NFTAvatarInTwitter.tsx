@@ -71,7 +71,7 @@ function NFTAvatarInTwitter() {
     const width = 15
     if (ele) {
         const style = window.getComputedStyle(ele)
-        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 9
+        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 10
     }
     const { classes } = useStyles({ size: size + width * 2, width })
 
