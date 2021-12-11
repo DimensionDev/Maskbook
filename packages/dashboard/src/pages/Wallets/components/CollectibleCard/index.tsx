@@ -1,4 +1,5 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
+import { useHoverDirty } from 'react-use'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
 import {
     ERC721TokenDetailed,
@@ -8,7 +9,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
-import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon } from '@masknet/shared'
 import { ChangeNetworkTip } from '../TokenTableRow/ChangeNetworkTip'
@@ -92,14 +92,14 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                 <Box className={classes.chainIcon}>
                     <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
                 </Box>
-                {token.info.image ? (
+                {token.info.mediaUrl ? (
                     <Link
                         target="_blank"
                         rel="noopener noreferrer"
                         href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
                         <div className={classes.imgContainer}>
                             <img
-                                src={token.info.image}
+                                src={token.info.mediaUrl}
                                 style={{ objectFit: 'contain', width: '100%', height: '100%' }}
                             />
                         </div>

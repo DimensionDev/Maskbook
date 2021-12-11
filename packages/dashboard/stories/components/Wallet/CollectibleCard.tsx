@@ -18,7 +18,8 @@ export const CollectibleCard = of({
                 symbol: '',
             },
             {
-                image: 'https://lh3.googleusercontent.com/gqxP0KlEJOXKiu8Qhxtk3lBU5dJqTyol8OgiDZjPB8HD5m-Rc_aLaLQ37j8gXhdgOueaB-qZ__1p7_8PZ3l0mkKOjN9uW0sBgt9n9Q',
+                mediaUrl:
+                    'https://lh3.googleusercontent.com/gqxP0KlEJOXKiu8Qhxtk3lBU5dJqTyol8OgiDZjPB8HD5m-Rc_aLaLQ37j8gXhdgOueaB-qZ__1p7_8PZ3l0mkKOjN9uW0sBgt9n9Q',
                 name: 'Dumb Stray Cats - #7',
             },
             '608932',
