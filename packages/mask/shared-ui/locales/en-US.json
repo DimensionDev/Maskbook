@@ -276,6 +276,7 @@
     "plugin_wallet_transaction_confirmed": "Your transaction was confirmed!",
     "plugin_wallet_transaction_reverted": "Transaction was reverted!",
     "plugin_wallet_transaction_rejected": "Transaction was rejected!",
+    "plugin_wallet_transaction_underpriced": "Transaction underpriced.",
     "plugin_wallet_transaction_server_error": "Transaction was failed due to an internal JSON-RPC server error.",
     "plugin_wallet_view_on_explorer": "View on Explorer",
     "plugin_ito_placeholder_when_token_unselected": "Please Select a Token first",
