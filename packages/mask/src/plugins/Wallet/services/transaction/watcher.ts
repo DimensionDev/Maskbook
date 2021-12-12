@@ -18,6 +18,7 @@ import { WalletRPC } from '../../messages'
 
 interface TransactionRecord {
     at: number
+    limits: number
     payload?: JsonRpcPayload
     receipt: Promise<TransactionReceipt | null> | null
 }
@@ -26,6 +27,7 @@ let timer: NodeJS.Timer | null = null
 const WATCHED_TRANSACTION_CHECK_DELAY = 15 * 1000 // 15s
 const WATCHED_TRANSACTION_MAP = new Map<ChainId, Map<string, TransactionRecord>>()
 const WATCHED_TRANSACTIONS_SIZE = 40
+const MAX_CHECK_TIMES = 30
 
 function getMap(chainId: ChainId) {
     if (!WATCHED_TRANSACTION_MAP.has(chainId)) WATCHED_TRANSACTION_MAP.set(chainId, new Map())
@@ -187,6 +189,7 @@ export async function watchTransaction(chainId: ChainId, hash: string, payload?:
         setTransaction(chainId, hash, {
             at: Date.now(),
             payload,
+            limits: MAX_CHECK_TIMES,
             receipt: getTransactionReceipt(chainId, hash),
         })
     }

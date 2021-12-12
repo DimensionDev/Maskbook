@@ -1,6 +1,6 @@
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
-import { ChainId, getPayloadNonce, TransactionStatusType } from '@masknet/web3-shared-evm'
+import type { ChainId, TransactionStatusType } from '@masknet/web3-shared-evm'
 import { getSendTransactionComputedPayload } from '../../../../extension/background-script/EthereumService'
 import * as database from './database'
 import * as watcher from './watcher'
@@ -51,7 +51,6 @@ export async function getRecentTransactions(chainId: ChainId, address: string): 
     const allSettled = await Promise.allSettled(
         transactions.map<Promise<RecentTransaction>>(
             async ({ at, hash, hashReplacement, payload, payloadReplacement }) => {
-                const nonce = getPayloadNonce(payload)
                 const receipt =
                     (await watcher.getReceipt(chainId, hash)) ||
                     (await (hashReplacement ? watcher.getReceipt(chainId, hashReplacement) : null))

@@ -75,6 +75,8 @@ export function getReceiptStatus(receipt: TransactionReceipt | null) {
         if (isSameAddress(receipt.from, receipt.to)) return TransactionStatusType.CANCELLED
         return TransactionStatusType.SUCCEED
     }
+    // mask only
+    if (receipt.status === '0xff') return TransactionStatusType.TIMEOUT
     return TransactionStatusType.NOT_DEPEND
 }
 
@@ -121,6 +123,12 @@ export function getTransactionState(receipt: TransactionReceipt): TransactionSta
                     type: TransactionStateType.FAILED,
                     receipt,
                     error: new Error('CANCELLED'),
+                }
+            case TransactionStatusType.TIMEOUT:
+                return {
+                    type: TransactionStateType.FAILED,
+                    receipt,
+                    error: new Error('TIMEOUT'),
                 }
             default:
                 unreachable(status)
