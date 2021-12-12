@@ -35,6 +35,7 @@ import { toAsset } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
+import type { Coin } from '../../Trader/types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -106,7 +107,23 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         })
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+
+    const onConvertClick = useCallback(() => {
+        if (!token?.value) return
+        openSwapDialog({
+            open: true,
+            traderProps: {
+                coin: {
+                    id: token.value.address,
+                    name: token.value.name ?? '',
+                    symbol: token.value.symbol ?? '',
+                    contract_address: token.value.address,
+                    decimals: token.value.decimals,
+                } as Coin,
+            },
+        })
+    }, [token.value, openSwapDialog])
 
     useEffect(() => {
         setAmount('')
@@ -244,7 +261,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                         className={classes.button}
                                         variant="contained"
                                         size="large"
-                                        onClick={openSwapDialog}>
+                                        onClick={onConvertClick}>
                                         Convert ETH
                                     </ActionButton>
                                 ) : null}
