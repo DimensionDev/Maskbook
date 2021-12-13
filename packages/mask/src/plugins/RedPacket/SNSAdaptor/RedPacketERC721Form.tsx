@@ -149,26 +149,21 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [existTokenDetailedList, setExistTokenDetailedList] = useState<ERC721TokenDetailed[]>([])
     const [message, setMessage] = useState('Best Wishes!')
-    const [offset, setOffset] = useState(0)
     const {
         asyncRetry: { loading: loadingOwnerList },
         tokenDetailedOwnerList = [],
-        loadMore,
         clearTokenDetailedOwnerList,
-    } = useERC721TokenDetailedOwnerList(contract, account, offset)
-
-    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 1) : void 0), [offset, loadMore])
+    } = useERC721TokenDetailedOwnerList(contract, account)
 
     const removeToken = useCallback((token: ERC721TokenDetailed) => {
         setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])
 
     const clearToken = useCallback(() => {
-        setOffset(0)
         setExistTokenDetailedList([])
         clearTokenDetailedOwnerList()
         setOpenConfirmDialog(false)
-    }, [clearTokenDetailedOwnerList, setOffset])
+    }, [clearTokenDetailedOwnerList])
 
     const clearContract = useCallback(() => {
         setContract(undefined)
@@ -257,7 +252,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     setExistTokenDetailedList={setExistTokenDetailedList}
                     tokenDetailedOwnerList={tokenDetailedOwnerList}
                     loadingOwnerList={loadingOwnerList}
-                    addOffset={addOffset}
                 />
             ) : null}
             {openConfirmDialog && contract ? (

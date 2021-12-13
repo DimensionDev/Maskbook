@@ -67,7 +67,6 @@ export const TransferERC721 = memo(() => {
     const [popoverOpen, setPopoverOpen] = useState(false)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
@@ -163,7 +162,6 @@ export const TransferERC721 = memo(() => {
                 setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
                 setContract(ev.contract)
                 setValue('tokenId', '')
-                setOffset(0)
             }
         },
     )
@@ -171,11 +169,8 @@ export const TransferERC721 = memo(() => {
     const {
         asyncRetry: { loading: loadingOwnerList },
         tokenDetailedOwnerList = [],
-        loadMore = false,
         refreshing,
-    } = useERC721TokenDetailedOwnerList(contract, account, offset)
-
-    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 8) : void 0), [offset, loadMore])
+    } = useERC721TokenDetailedOwnerList(contract, account)
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.HASH) {
@@ -345,7 +340,6 @@ export const TransferERC721 = memo(() => {
                                 control={control}
                                 render={(field) => (
                                     <SelectNFTList
-                                        onScroll={addOffset}
                                         onSelect={(value) => setValue('tokenId', value)}
                                         list={
                                             defaultToken
@@ -354,7 +348,6 @@ export const TransferERC721 = memo(() => {
                                         }
                                         selectedTokenId={field.field.value}
                                         loading={loadingOwnerList}
-                                        loadMore={loadMore}
                                     />
                                 )}
                                 name="tokenId"
