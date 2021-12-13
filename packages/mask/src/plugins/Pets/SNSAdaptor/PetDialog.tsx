@@ -15,6 +15,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
     },
+    des: {
+        color: '#7b8192',
+        fontSize: '12px',
+    },
     input: {
         margin: theme.spacing(2, 0, 0),
     },
@@ -196,7 +200,7 @@ export function PetDialog() {
                         Confirm
                     </Button>
                     <Box className={classes.desBox}>
-                        <Typography className={classes.des}>Powered by MintTeam</Typography>
+                        <Typography className={classes.des}>Powered by: MintTeam</Typography>
                         <Typography className={classes.des}>Support By: RSS3</Typography>
                     </Box>
                 </DialogContent>
