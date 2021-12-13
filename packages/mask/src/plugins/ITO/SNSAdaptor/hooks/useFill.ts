@@ -88,15 +88,8 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             return
         }
 
-        const { gas, params, paramsObj, gasError } = paramResult
+        const { params, paramsObj } = paramResult
 
-        if (gasError) {
-            setFillState({
-                type: TransactionStateType.FAILED,
-                error: gasError,
-            })
-            return
-        }
         if (!checkParams(paramsObj, setFillState)) return
 
         // error: unable to sign password
@@ -132,7 +125,18 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         const config = {
             from: account,
-            gas,
+            gas: (await (ITO_Contract as ITO2).methods
+                .fill_pool(...params)
+                .estimateGas({
+                    from: account,
+                })
+                .catch((error: Error) => {
+                    setFillState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    return
+                })) as number | undefined,
         }
 
         // send transaction and wait for hash
@@ -261,17 +265,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
             ]),
         ) as Parameters<ITO2['methods']['fill_pool']>
 
-        let gasError = null as Error | null
-        const gas = (await (ITO_Contract as ITO2).methods
-            .fill_pool(...params)
-            .estimateGas({
-                from: account,
-            })
-            .catch((error: Error) => {
-                gasError = error
-            })) as number | undefined
-
-        return { gas, params, paramsObj, gasError }
+        return { params, paramsObj }
     }, [poolSettings]).value
 }
 
