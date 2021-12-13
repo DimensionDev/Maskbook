@@ -54,7 +54,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
     selectedTokenChip: {
         borderRadius: `22px!important`,
         height: 'auto',
-        backgroundColor: isDashboard ? MaskColorVar.input : MaskColorVar.twitterInput,
+        backgroundColor: isDashboard ? MaskColorVar.input : theme.palette.background.input,
         [`& .${chipClasses.label}`]: {
             paddingTop: 10,
             paddingBottom: 10,

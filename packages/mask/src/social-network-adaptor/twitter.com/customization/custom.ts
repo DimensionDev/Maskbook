@@ -203,6 +203,10 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         backgroundColor: theme.palette.background.default,
                         color: theme.palette.text.strong,
                     },
+                    colorPrimary: {
+                        backgroundColor: theme.palette.primary.main,
+                        color: theme.palette.common.white,
+                    },
                 },
             }
             theme.components.MuiBackdrop = {

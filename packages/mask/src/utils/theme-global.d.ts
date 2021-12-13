@@ -12,5 +12,8 @@ declare module '@mui/material/styles/createPalette.d' {
         bgHover: string
         mask: string
     }
+    export interface TypeBackground {
+        input: string
+    }
 }
 export {}

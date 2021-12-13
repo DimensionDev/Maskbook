@@ -13,7 +13,8 @@
             "buttonText": "#FFFFFF"
         },
         "background": {
-            "default": "#F6F8F8"
+            "default": "#F6F8F8",
+            "input": "#EDF1F2"
         },
         "divider": "#EFF3F4",
         "divider2": "#CFD9DE",
@@ -37,7 +38,8 @@
             "buttonText": "#FFFFFF"
         },
         "background": {
-            "default": "#F6F8F8"
+            "default": "#F6F8F8",
+            "input": "#EDF1F2"
         },
         "divider": "#EFF3F4",
         "divider2": "#CFD9DE",
@@ -61,7 +63,8 @@
             "buttonText": "#0F1419"
         },
         "background": {
-            "default": "#18232E"
+            "default": "#18232E",
+            "input": "#212D39"
         },
         "divider": "#38444D",
         "divider2": "#38444D",
@@ -87,7 +90,8 @@
         "divider": "#38444D",
         "divider2": "#38444D",
         "background": {
-            "default": "#18232E"
+            "default": "#18232E",
+            "input": "#212D39"
         },
         "action": {
             "buttonHover": "#D7DBDC",
@@ -109,7 +113,8 @@
             "buttonText": "#0F1419"
         },
         "background": {
-            "default": "#15171A"
+            "default": "#15171A",
+            "input": "#1D2023"
         },
         "divider": "#2F3336",
         "divider2": "#2F3336",
@@ -135,7 +140,8 @@
         "divider": "#2F3336",
         "divider2": "#2F3336",
         "background": {
-            "default": "#15171A"
+            "default": "#15171A",
+            "input": "#1D2023"
         },
         "action": {
             "buttonHover": "#D7dBDC",
