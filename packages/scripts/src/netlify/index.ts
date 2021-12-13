@@ -30,5 +30,5 @@ const icons = series(
         return from.pipe(to)
     },
 )
-export const buildNetlify = series(codegen, icons, themeSB)
+export const buildNetlify = series(codegen, icons, dashboardSB, themeSB)
 task(buildNetlify, 'build-ci-netlify', 'Build for Netlify')
