@@ -1,14 +1,16 @@
-import { CardContent, Grid, Typography, Box } from '@mui/material'
+import { CardContent, Grid, Typography, Box, Divider } from '@mui/material'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import type { UserStoryStatus } from '../types'
 import { BorderLinearProgress } from './ResultCard'
-import { useI18N } from '../../../utils'
+import { useContext } from 'react'
+import { FindTrumanContext } from '../context'
 
 interface StageCardProps {
     userStoryStatus?: UserStoryStatus
 }
 export default function StageCard(props: StageCardProps) {
     const { userStoryStatus } = props
-    const { t } = useI18N()
+    const { t } = useContext(FindTrumanContext)
 
     const renderProgress = (total: number, success: number, color: 'primary' | 'secondary' | 'success') => {
         return (
@@ -86,6 +88,13 @@ export default function StageCard(props: StageCardProps) {
                     </Grid>
                 </Grid>
             )}
+            <Divider sx={{ marginTop: 2, marginBottom: 2 }} variant="middle" />
+            <Box padding="0 24px">
+                <Typography sx={{ display: 'flex', alignItems: 'center' }} variant="body2" color="textSecondary">
+                    <InfoOutlinedIcon sx={{ fontSize: '16px', mr: '4px' }} />
+                    {t('plugin_find_truman_status_critical_desc')}
+                </Typography>
+            </Box>
         </CardContent>
     )
 }

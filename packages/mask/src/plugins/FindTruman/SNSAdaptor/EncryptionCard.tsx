@@ -1,68 +1,95 @@
 import { Alert, CardContent, Typography, Divider } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { useContext, useEffect, useState } from 'react'
-import { fetchSecretKey } from '../Worker/apis'
+import { fetchClue } from '../Worker/apis'
 import { FindTrumanContext } from '../context'
 import NoNftCard from './NoNftCard'
-import { useI18N } from '../../../utils'
+import type { FindTrumanI18nFunction, PuzzleCondition } from '../types'
+
+const useStyles = makeStyles()((theme) => {
+    return {
+        root: {
+            color: 'inherit',
+            fontSize: 'inherit',
+            fontFamily: 'sans-serif',
+            '& p': {
+                margin: 0,
+            },
+            '& p + p': {
+                marginTop: theme.spacing(0.5),
+            },
+            '& h1, & h2, & h3, & h4, & h5, & h6': {
+                fontSize: 14,
+            },
+            '& img': {
+                maxWidth: '100%',
+            },
+            '& a': {
+                color: theme.palette.text.primary,
+            },
+        },
+    }
+})
+
+const getEncryptionError = (t: FindTrumanI18nFunction, errorCode: number) => {
+    switch (errorCode) {
+        case 102:
+            return t('plugin_find_truman_decrypt_102')
+        case 1004:
+            return t('plugin_find_truman_decrypt_1004')
+        default:
+            return ''
+    }
+}
 
 interface EncryptionCardProps {
-    payload: string
+    clueId: string
 }
 export default function EncryptionCard(props: EncryptionCardProps) {
-    const { payload } = props
+    const { clueId } = props
 
-    const { t } = useI18N()
-    const { address } = useContext(FindTrumanContext)
-    const [failed, setFailed] = useState<boolean>(false)
-    const [message, setMessage] = useState<string>('')
+    const { classes } = useStyles()
+    const { address, t } = useContext(FindTrumanContext)
+    const [condition, setCondition] = useState<PuzzleCondition>()
+    const [content, setContent] = useState<string>('')
     const [err, setErr] = useState<{
         code: number
         data: any
     }>()
 
     useEffect(() => {
-        setFailed(false)
-        try {
-            const raw = JSON.parse(Buffer.from(payload, 'base64').toString())
-            if (!!raw.cid && !!raw.data) {
-                fetchSecretKey(raw.cid, address)
-                    .then(async (res) => {
-                        setMessage(raw.data)
-                    })
-                    .catch((error) => {
-                        setErr(error)
-                    })
-            }
-        } catch (error) {
-            setFailed(true)
+        setErr(undefined)
+        setCondition(undefined)
+        if (!!clueId) {
+            fetchClue(clueId, address)
+                .then((res) => {
+                    if (res.decrypted) {
+                        setContent(res.content || '')
+                    } else {
+                        setCondition(res.condition)
+                    }
+                })
+                .catch((error) => {
+                    setErr(error)
+                })
         }
-    }, [payload])
+    }, [clueId])
 
     return (
         <CardContent>
-            {!!message && (
+            {!!content && (
                 <>
                     <Typography variant="body1" color="text.secondary">
                         {t('plugin_find_truman_decrypted_by')}
                     </Typography>
                     <Divider sx={{ margin: '8px 0' }} />
-                    <Typography variant="h6" color="text.primary">
-                        {message}
-                    </Typography>
+                    <CardContent>
+                        <div dangerouslySetInnerHTML={{ __html: content }} className={classes.root} />
+                    </CardContent>
                 </>
             )}
-            {failed && <Alert severity="error">{t('plugin_find_truman_decrypted_failed')}</Alert>}
-            {err && (
-                <Alert severity="info" sx={{ mb: 1 }}>
-                    {t('plugin_find_truman_decrypt_102')}
-                </Alert>
-            )}
-            {err && err.data.type === 'erc721' && <NoNftCard conditions={[err.data]} />}
-            {err && err.data.type === 'erc20' && (
-                <Alert severity="info">
-                    {t('plugin_find_truman_insufficient_erc20', { minAmount: err.data.minAmount })}
-                </Alert>
-            )}
+            {condition && <NoNftCard conditions={[condition]} />}
+            {err && <Alert severity="info">{getEncryptionError(t, err.code)}</Alert>}
         </CardContent>
     )
 }

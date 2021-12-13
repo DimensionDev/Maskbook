@@ -5,7 +5,7 @@ import { Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
+import { extractTextFromTypedMessage } from '@masknet/shared-base'
 import { parseURL } from '../../../utils/utils'
 import { PostInspector } from './PostInspector'
 
@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 /**
- * https://findtruman.io/#/encryption?payload={Base64({cid, data})}
+ * https://findtruman.io/#/encryption?clueId={clueId}
  * https://findtruman.io/#/findtruman/stories/{storyId}
  * https://findtruman.io/#/findtruman/stories/{storyId}/puzzles/{puzzleId}
  * https://findtruman.io/#/findtruman/stories/{storyId}/polls/{pollId}
@@ -30,7 +30,7 @@ const useStyles = makeStyles()((theme) => {
  */
 const isFindTrumanURL = (x: string): boolean =>
     // eslint-disable-next-line
-    /^https:\/\/findtruman.io\/#\/(findtruman\/stories\/[a-zA-Z0-9]+(\/|\/(puzzles|polls|puzzle_result|poll_result)\/[a-zA-Z0-9]+\/?)?|encryption\?payload=.+)$/i.test(
+    /^https:\/\/findtruman.io\/#\/(findtruman\/stories\/[a-zA-Z0-9]+(\/|\/(puzzles|polls|puzzle_result|poll_result)\/[a-zA-Z0-9]+\/?)?|encryption\?clueId=[a-zA-Z0-9]+)$/i.test(
         x,
     )
 

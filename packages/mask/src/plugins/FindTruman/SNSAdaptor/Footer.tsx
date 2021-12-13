@@ -1,6 +1,5 @@
 import { Avatar, Box, Chip, Link, Stack, Tooltip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
 
@@ -24,7 +23,6 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export default function Footer() {
-    const { t } = useI18N()
     const { const: consts } = useContext(FindTrumanContext)
     const { classes } = useStyles()
     return (

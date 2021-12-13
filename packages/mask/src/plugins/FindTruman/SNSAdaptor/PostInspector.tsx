@@ -3,6 +3,7 @@ import { LoadingFailCard } from './LoadingFailCard'
 import { FindTruman } from './FindTruman'
 import {
     FindTrumanConst,
+    FindTrumanI18nFunction,
     FindTrumanPostType,
     PollResult,
     PuzzleResult,
@@ -26,6 +27,7 @@ import {
 } from '../Worker/apis'
 import { FindTruman_Const } from '../constants'
 import { useI18N } from '../../../utils'
+import { FindTrumanI18n } from '../i18n'
 
 export interface PostInspectorProps {
     url: string
@@ -52,6 +54,9 @@ export function PostInspector(props: PostInspectorProps) {
         ? FindTrumanPostType.PollResult
         : FindTrumanPostType.Status
 
+    const [findTrumanI18n, setFindTrumanI18n] = useState<FindTrumanI18nFunction>(
+        () => (key: string, options: any) => key,
+    )
     const [storyInfo, setStoryInfo] = useState<StoryInfo>()
     const [userStoryStatus, setUserStoryStatus] = useState<UserStoryStatus>()
     const [userPuzzleStatus, setUserPuzzleStatus] = useState<UserPuzzleStatus>()
@@ -59,14 +64,14 @@ export function PostInspector(props: PostInspectorProps) {
     const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>()
     const [pollResult, setPollResult] = useState<PollResult>()
     const [consts, setConsts] = useState<FindTrumanConst>()
-    const [encryptionPayload, setEncryptionPayload] = useState<string>('')
+    const [clueId, setClueId] = useState<string>('')
 
     useEffect(() => {
         if (!FindTruman_Const.initialized) {
             FindTruman_Const.init((resolve, reject) => {
                 fetchConst(i18n.language)
                     .then((res) => {
-                        resolve(res)
+                        resolve({ ...res, t: new FindTrumanI18n(res.locales || {}).t })
                     })
                     .catch((error) => {
                         reject(error)
@@ -75,6 +80,7 @@ export function PostInspector(props: PostInspectorProps) {
         }
         FindTruman_Const.then((res) => {
             setConsts(res)
+            res && setFindTrumanI18n(() => res.t)
         })
     }, [])
 
@@ -90,8 +96,8 @@ export function PostInspector(props: PostInspectorProps) {
         switch (postType) {
             case FindTrumanPostType.Encryption:
                 const searchParams = new URLSearchParams(url.split('?')[1])
-                const payload = searchParams.get('payload') || ''
-                setEncryptionPayload(payload)
+                const payload = searchParams.get('clueId') || ''
+                setClueId(payload)
                 break
             case FindTrumanPostType.Status:
                 !!account &&
@@ -170,7 +176,12 @@ export function PostInspector(props: PostInspectorProps) {
     }
 
     return (
-        <FindTrumanContext.Provider value={{ address: account, const: consts }}>
+        <FindTrumanContext.Provider
+            value={{
+                address: account,
+                const: consts,
+                t: findTrumanI18n,
+            }}>
             <LoadingFailCard
                 title=""
                 isFullPluginDown={true}
@@ -179,7 +190,7 @@ export function PostInspector(props: PostInspectorProps) {
                 }}>
                 <FindTruman
                     storyInfo={storyInfo}
-                    encryptionPayload={encryptionPayload}
+                    clueId={clueId}
                     userStoryStatus={userStoryStatus}
                     userPuzzleStatus={userPuzzleStatus}
                     userPollStatus={userPollStatus}

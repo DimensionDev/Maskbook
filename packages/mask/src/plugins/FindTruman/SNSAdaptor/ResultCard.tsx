@@ -13,8 +13,8 @@ import {
 import { Adjust, CheckCircle } from '@mui/icons-material'
 import type { PollResult, PuzzleResult, UserPollStatus, UserPuzzleStatus } from '../types'
 import { FindTrumanPostType } from '../types'
-import { useState } from 'react'
-import { useI18N } from '../../../utils'
+import { useContext, useState } from 'react'
+import { FindTrumanContext } from '../context'
 
 export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => ({
     height: 10,
@@ -36,7 +36,7 @@ export default function ResultCard(props: ResultViewProps) {
     const { type, userStatus, result } = props
     const [choice] = useState<number>(userStatus ? userStatus.choice : -1)
 
-    const { t } = useI18N()
+    const { t } = useContext(FindTrumanContext)
 
     const total =
         result?.count && result.count.length > 0
@@ -64,7 +64,7 @@ export default function ResultCard(props: ResultViewProps) {
             )}
             {answer !== -1 && result && (
                 <>
-                    <Typography color="textPrimary" marginBottom={2}>
+                    <Typography variant="h6" color="textPrimary" paddingLeft={1} paddingRight={1} marginBottom={2}>
                         {result.question}
                     </Typography>
                     {result.options.map((option, index) => {

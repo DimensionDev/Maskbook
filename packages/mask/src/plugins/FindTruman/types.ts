@@ -7,9 +7,12 @@ export enum FindTrumanPostType {
     Encryption = 'encryption',
 }
 
+export type FindTrumanI18nFunction = (id: string, options?: { [key: string]: string | number }) => string
+
 export interface ProposalIdentifier {
     address: string
     const?: FindTrumanConst
+    t: FindTrumanI18nFunction
 }
 
 export interface Stage {
@@ -51,6 +54,8 @@ export interface FindTrumanConst {
     }[]
     discoveryUrl: string
     discoveryLabel: string
+    locales: { [id: string]: string }
+    t: FindTrumanI18nFunction
 }
 
 export interface UserStoryStatus {
@@ -83,6 +88,8 @@ export interface UserPuzzleStatus {
     }[]
     choice: number
     conditions: PuzzleCondition[]
+    notMeetConditions: PuzzleCondition[]
+    critical: boolean
 }
 
 export interface UserPollStatus {
@@ -98,6 +105,8 @@ export interface UserPollStatus {
     }[]
     choice: number
     conditions: PuzzleCondition[]
+    notMeetConditions: PuzzleCondition[]
+    critical: boolean
 }
 
 export interface PuzzleResult {
@@ -137,4 +146,10 @@ export interface SubmitPollParams {
     from: string
     timestamp: number // in seconds
     choice: number
+}
+
+export interface DecryptedClue {
+    decrypted: boolean
+    condition?: PuzzleCondition
+    content?: string
 }

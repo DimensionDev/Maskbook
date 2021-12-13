@@ -1,11 +1,11 @@
 import type { PuzzleCondition, UserPollStatus, UserPuzzleStatus } from '../types'
 import { FindTrumanPostType } from '../types'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
 import {
     Alert,
     Box,
+    Button,
     Card,
     CardContent,
     Chip,
@@ -94,19 +94,15 @@ export default function OptionsCard(props: OptionsViewProps) {
 
     const { classes } = useOptionsStyles()
     const chainId = useChainId()
-    const { address: account } = useContext(FindTrumanContext)
+    const { address: account, t } = useContext(FindTrumanContext)
     const web3 = useWeb3(false)
-    const { t } = useI18N()
     const ref = useRef<HTMLDivElement | null>(null)
     const parentRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        checkCondition()
-    }, [chainId, userStatus])
-
-    useEffect(() => {
         setChoice(userStatus ? userStatus.choice : -1)
         setSelected(userStatus ? userStatus.choice !== -1 : true)
+        setUnmeetCondition(userStatus ? userStatus.notMeetConditions : [])
         setTimeout(() => {
             type === FindTrumanPostType.Poll &&
                 ref?.current?.scrollTo({
@@ -197,6 +193,8 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 color="primary"
                                 label={t('plugin_find_truman_selected')}
                             />
+                        ) : selected ? (
+                            <></>
                         ) : (
                             <Chip
                                 sx={{ cursor: 'pointer' }}
@@ -251,25 +249,31 @@ export default function OptionsCard(props: OptionsViewProps) {
     const renderSubmitButton = (userStatus: UserPuzzleStatus | UserPollStatus) => {
         return (
             <div style={{ textAlign: 'right', marginTop: '8px', paddingBottom: '8px' }}>
-                <LoadingButton
-                    disabled={userStatus.status === 0 || choice === -1}
-                    onClick={() => {
-                        setSubmitting(true)
-                        onSubmit(choice)
-                            .then((res) => {
-                                setSubmitting(false)
-                            })
-                            .catch((error) => {
-                                setSnackVisible(true)
-                                setSubmitting(false)
-                            })
-                    }}
-                    endIcon={<Send />}
-                    loading={submitting}
-                    loadingPosition="end"
-                    variant="contained">
-                    {t(userStatus.status === 0 ? 'plugin_find_truman_vote_finish' : 'plugin_find_truman_submit')}
-                </LoadingButton>
+                {selected ? (
+                    <Button variant="contained" disabled={true} color="success" endIcon={<DoneOutlined />}>
+                        {t('plugin_find_truman_submitted')}
+                    </Button>
+                ) : (
+                    <LoadingButton
+                        disabled={userStatus.status === 0 || choice === -1}
+                        onClick={() => {
+                            setSubmitting(true)
+                            onSubmit(choice)
+                                .then((res) => {
+                                    setSubmitting(false)
+                                })
+                                .catch((error) => {
+                                    setSnackVisible(true)
+                                    setSubmitting(false)
+                                })
+                        }}
+                        endIcon={<Send />}
+                        loading={submitting}
+                        loadingPosition="end"
+                        variant="contained">
+                        {t(userStatus.status === 0 ? 'plugin_find_truman_vote_finish' : 'plugin_find_truman_submit')}
+                    </LoadingButton>
+                )}
             </div>
         )
     }
@@ -348,7 +352,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 </StepLabel>
                                 <StepContent>
                                     {renderOptions(userStatus)}
-                                    {!error && !selected && renderSubmitButton(userStatus)}
+                                    {!error && renderSubmitButton(userStatus)}
                                 </StepContent>
                             </Step>
                         ) : (
@@ -359,7 +363,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                                             {userStatus.question}
                                         </Typography>
                                         {renderOptions(userStatus)}
-                                        {!error && !selected && renderSubmitButton(userStatus)}
+                                        {!error && renderSubmitButton(userStatus)}
                                     </Box>
                                 </StepLabel>
                             </Step>
@@ -383,10 +387,13 @@ export default function OptionsCard(props: OptionsViewProps) {
             </Snackbar>
             {userStatus && (
                 <>
+                    <Typography variant="h6" color="textPrimary" paddingLeft={1} paddingRight={1} marginBottom={2}>
+                        {userStatus.question}
+                    </Typography>
                     {(type === FindTrumanPostType.Puzzle || type === FindTrumanPostType.Poll) && (
                         <>
                             {renderOptions(userStatus)}
-                            {!error && !selected && renderSubmitButton(userStatus)}
+                            {!error && renderSubmitButton(userStatus)}
                         </>
                     )}
                     {error === 'unsupported-chain' && (

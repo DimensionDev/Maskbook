@@ -9,6 +9,7 @@ import type {
     UserPollStatus,
     StoryInfo,
     FindTrumanConst,
+    DecryptedClue,
 } from '../../types'
 
 const FIND_TRUMAN_API_PREFIX = 'https://findtruman.io/api'
@@ -127,8 +128,8 @@ export function fetchUserParticipatedStoryStatus(address: string): Promise<UserS
     })
 }
 
-export function fetchSecretKey(cid: string, address: string): Promise<{ key: string; iv: string }> {
-    return request<{ key: string; iv: string }>(`${FIND_TRUMAN_API_PREFIX}/clue_key?cid=${cid}&uaddr=${address}`, {
+export function fetchClue(clueId: string, address: string): Promise<DecryptedClue> {
+    return request<DecryptedClue>(`${FIND_TRUMAN_API_PREFIX}/clues/${clueId}?uaddr=${address}`, {
         method: 'GET',
     })
 }

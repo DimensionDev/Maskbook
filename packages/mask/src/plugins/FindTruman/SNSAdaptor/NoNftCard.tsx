@@ -1,7 +1,8 @@
 import { Box, CardMedia, Typography, Card, CardContent, CardActions, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N } from '../../../utils'
 import type { PuzzleCondition } from '../types'
+import { useContext } from 'react'
+import { FindTrumanContext } from '../context'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -27,7 +28,7 @@ interface NoNftCardProps {
 export default function NoNftCard(props: NoNftCardProps) {
     const { conditions } = props
     const { classes } = useStyles()
-    const { t } = useI18N()
+    const { t } = useContext(FindTrumanContext)
 
     const renderNftCard = (title: string, img: string, url: string, count: number, address: string) => {
         return (
@@ -42,12 +43,7 @@ export default function NoNftCard(props: NoNftCardProps) {
                     </Typography>
                 </CardContent>
                 <CardActions sx={{ justifyContent: 'flex-end' }} className={classes.content}>
-                    <Button
-                        component="a"
-                        href={url}
-                        variant="contained"
-                        target="_blank"
-                        size={conditions.length > 1 ? 'small' : 'medium'}>
+                    <Button component="a" href={url} variant="contained" target="_blank" size="small">
                         {t('plugin_find_truman_buy')}
                     </Button>
                 </CardActions>
