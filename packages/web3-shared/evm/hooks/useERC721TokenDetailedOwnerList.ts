@@ -20,7 +20,7 @@ export function useERC721TokenDetailedOwnerList(
 ) {
     const { GET_ASSETS_URL } = useOpenseaAPIConstants()
     const chainId = useChainId()
-    const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
+    const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '', true)
     const allListRef = useRef<ERC721TokenDetailed[]>([])
     const loadMore = useRef<boolean>(false)
     const [refreshing, setRefreshing] = useState(false)
