@@ -1,15 +1,12 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { Typography, Box } from '@mui/material'
 import { getAssetAsBlobURL } from '../../../utils'
 import Drag from './drag'
-import AnimatedMessage from './animatedMsg'
-import Tip from './tooltip'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-
-import { ChainId } from '@masknet/web3-shared-evm'
-import { useAccount, useChainId, useCollectibles } from '@masknet/web3-shared-evm'
-import { useValueRef } from '@masknet/shared'
-import { currentNonFungibleAssetDataProviderSettings } from '../../Wallet/settings'
+import { useUser, useCurrentVisitingUser } from '../hooks/useUser'
+import { useNfts } from '../hooks/useNfts'
+import { useEssay } from '../hooks/useEssay'
+import { useDefaultEssay } from '../hooks/useEssay'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -17,13 +14,16 @@ const useStyles = makeStyles()(() => ({
         top: 0,
         left: 0,
     },
-    img: {
+    imgContent: {
         zIndex: 999,
         width: '100%',
         height: '100%',
-        backgroundSize: 'contain',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    imgBox: {
+        width: '70%',
     },
     close: {
         width: 15,
@@ -32,71 +32,143 @@ const useStyles = makeStyles()(() => ({
         backgroundSize: 'contain',
         position: 'absolute',
         top: 0,
-        right: -10,
+        right: 0,
+    },
+    wordContent: {
+        display: 'flex',
+        justifyContent: 'center',
+    },
+    wordBox: {
+        position: 'absolute',
+        maxWidth: 150,
+        maxHeight: 80,
+        bottom: 150,
+        backgroundColor: '#fff',
+        borderRadius: '12px',
+        boxShadow: '0 0 8px #ddd',
+        opacity: 1,
+        pointerEvents: 'none',
+        transition: 'all 200ms',
+        padding: '12px',
+        textAlign: 'left',
+        animation: 'word-show 0.9s both',
+        '&:before': {
+            content: '""',
+            width: '8px',
+            height: '8px',
+            backgroundColor: '#fff',
+            position: 'absolute',
+            bottom: '-4px',
+            left: '50%',
+            boxShadow: '3px 3px 6px #ccc',
+            transform: 'translateX(-50%) rotate(45deg)',
+        },
+        '@keyframes word-show': {
+            '0%': {
+                opacity: '0',
+                transform: 'scale3d(1, 1, 1)',
+            },
+            '30%': {
+                transform: 'scale3d(1.25, 0.75, 1)',
+            },
+            '40%': {
+                transform: 'scale3d(0.75, 1.25, 1)',
+            },
+            '50%': {
+                transform: 'scale3d(1.15, 0.85, 1)',
+            },
+            '65%': {
+                transform: 'scale3d(0.95, 1.05, 1)',
+            },
+            '75%': {
+                transform: 'scale3d(1.05, 0.95, 1)',
+            },
+            '100%': {
+                transform: 'scale3d(1, 1, 1)',
+            },
+        },
+    },
+    word: {
+        fontSize: '12px',
+        fontFamily: 'TwitterChirp',
+        lineHeight: '16px',
+        color: '#222',
     },
 }))
 
 const AnimatePic = () => {
     const classes = useStylesExtends(useStyles(), {})
-    const Background = getAssetAsBlobURL(new URL('../assets/loot.gif', import.meta.url))
+    // const Background = getAssetAsBlobURL(new URL('../assets/loot.gif', import.meta.url))
     const Close = getAssetAsBlobURL(new URL('../assets/close.png', import.meta.url))
 
-    const [show, setShow] = useState(false)
+    const [start, setStart] = useState(true)
+
+    const user = useUser()
+    const userMeta = useEssay(user, start)
+    const vister = useCurrentVisitingUser()
+    const viNfts = useNfts(vister)
+    const viMeta = useEssay(vister, start)
+    const defMeta = useDefaultEssay(viNfts)
+
+    const [showMeta, setShowMeta] = useState<{ image: string; word: string } | undefined>(undefined)
+    const [show, setShow] = useState(true)
     const [infoShow, setInfoShow] = useState(false)
 
-    const identity = useCurrentVisitingIdentity()
     useEffect(() => {
-        const userId = identity.identifier.userId
-        const maskId = 'realMaskNetwork'
-        setShow(userId === maskId)
-    }, [identity])
+        let meta
+        if (user.userId === vister.userId) {
+            meta = userMeta ?? defMeta
+        } else {
+            meta = viMeta ?? defMeta
+        }
+        setShowMeta({ image: meta?.image ?? '', word: meta?.word ?? '' })
+    }, [userMeta, viMeta, defMeta])
 
     const handleClose = () => setShow(false)
     const handleMouseEnter = () => setInfoShow(true)
     const handleMouseLeave = () => setInfoShow(false)
 
-    const [NFT, setNFT] = useState('')
-    const account = useAccount()
-    const chainId = useChainId()
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
-    const {
-        value = {
-            collectibles: [],
-            hasNextPage: false,
-        },
-        loading,
-        retry,
-        error,
-    } = useCollectibles(account, ChainId.Mainnet, provider, 0, 50)
-    const { collectibles, hasNextPage } = value
-    console.log('collectibles', collectibles, hasNextPage)
-
     useEffect(() => {
-        collectibles.forEach((item: any, idx: number) => {
-            if (idx === 0) {
-                setNFT(item.info.image)
-            }
-        })
-    }, [JSON.stringify(collectibles)])
+        let count = 0
+        const timer = setInterval(() => {
+            const check = count % 9 < 5
+            setStart(check)
+            count = count + 1
+        }, 1000 * 1)
+        return () => {
+            clearInterval(timer)
+        }
+    }, [])
 
+    if (!show || !showMeta?.image) return <></>
     return (
         <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {show ? (
-                <Drag>
-                    <AnimatedMessage />
-                    <div className={classes.img} style={{ backgroundImage: `url(${NFT})` }} />
-                    {infoShow ? (
-                        <>
-                            <Tip />
-                            <div
-                                className={classes.close}
-                                onClick={handleClose}
-                                style={{ backgroundImage: `url(${Close})` }}
-                            />
-                        </>
-                    ) : null}
-                </Drag>
-            ) : null}
+            <Drag>
+                {start ? (
+                    <Box className={classes.wordContent}>
+                        <Box className={classes.wordBox}>
+                            <Typography className={classes.word}>{showMeta?.word}</Typography>
+                        </Box>
+                    </Box>
+                ) : null}
+                <Box className={classes.imgContent}>
+                    <div className={classes.imgBox}>
+                        <img
+                            src={showMeta?.image}
+                            style={{
+                                objectFit: 'contain',
+                                maxWidth: '100%',
+                                maxHeight: '100%',
+                                borderRadius: 10,
+                                alignSelf: 'center',
+                            }}
+                        />
+                    </div>
+                </Box>
+                {infoShow ? (
+                    <div className={classes.close} onClick={handleClose} style={{ backgroundImage: `url(${Close})` }} />
+                ) : null}
+            </Drag>
         </div>
     )
 }

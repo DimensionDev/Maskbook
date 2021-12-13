@@ -3,18 +3,7 @@ import RSS3 from 'rss3-next'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { personalSign } from '../../../extension/background-script/EthereumService'
 import { RSS3_APP } from '../constants'
-
-interface EssayRSSNode {
-    address: string
-    signature: string
-    essay: EssayMeta
-}
-
-interface EssayMeta {
-    userId: string
-    word: string
-    updateFlag?: boolean
-}
+import type { EssayRSSNode, PetMetaDB } from '../types'
 
 export async function createRSS3(address: string) {
     return new RSS3({
@@ -26,7 +15,7 @@ export async function createRSS3(address: string) {
     })
 }
 
-const cache = new Map<string, Promise<EssayMeta | undefined>>()
+const cache = new Map<string, Promise<PetMetaDB | undefined>>()
 
 export async function getCustomEssayFromRSS(address: string) {
     let f = cache.get(address)
@@ -38,7 +27,7 @@ export async function getCustomEssayFromRSS(address: string) {
     return essay
 }
 
-async function _getCustomEssayFromRSS(address: string) {
+async function _getCustomEssayFromRSS(address: string): Promise<PetMetaDB | undefined> {
     const rss = await createRSS3(address)
     const file = await rss.files.get(rss.account.address)
     const essay = Object.getOwnPropertyDescriptor(file, '_pet')
@@ -51,14 +40,11 @@ async function _getCustomEssayFromRSS(address: string) {
     return data.essay
 }
 
-export async function saveCustomEssayToRSS(address: string, essay: EssayMeta, signature: string) {
-    console.log('saveCustomEssayToRSS', address, essay, signature)
+export async function saveCustomEssayToRSS(address: string, essay: PetMetaDB, signature: string) {
     const rss = await createRSS3(address)
-    console.log('rss', rss)
     if (!rss) return
 
     const file = await rss.files.get(rss.account.address)
-    console.log('file', file)
     if (!file) throw new Error('The account was not found.')
 
     rss.files.set(
@@ -69,12 +55,8 @@ export async function saveCustomEssayToRSS(address: string, essay: EssayMeta, si
             },
         }),
     )
-    console.log('saveCustomEssayToRSS', 2)
     await rss.files.sync()
-    console.log('saveCustomEssayToRSS', 3)
-    // clear cache
     if (cache.has(address)) cache.delete(address)
-    console.log('saveCustomEssayToRSS', 4)
     return essay
 }
 

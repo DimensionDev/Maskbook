@@ -9,7 +9,7 @@ interface StateProps {
     rel: any
 }
 
-const contentWidth = 96
+const contentWidth = 150
 const contentHeight = 150
 const startPosition = {
     x: 50,

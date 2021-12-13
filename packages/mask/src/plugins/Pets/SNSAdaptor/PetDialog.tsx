@@ -1,23 +1,20 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useAccount } from '@masknet/web3-shared-evm'
-import { Button, TextField, Typography, DialogContent, Grid, MenuItem, Snackbar } from '@mui/material'
+import { useChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { PluginPetMessages } from '../messages'
+import { Button, TextField, Typography, Box, DialogContent, Grid, MenuItem, Snackbar } from '@mui/material'
+import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { TWITTER } from '../constants'
-import PreviewBox from './previewBox'
+import { initMeta, initCollection } from '../constants'
+import { PreviewBox } from './previewBox'
+import type { PetMetaDB, FilterContract, CollectionNFT } from '../types'
+import { useUser } from '../hooks/useUser'
+import { useNfts } from '../hooks/useNfts'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
         display: 'flex',
         justifyContent: 'space-between',
-    },
-    des: {
-        paddingBottom: '-12px',
-        color: '#7b8192',
-        fontSize: '12px !important',
     },
     input: {
         margin: theme.spacing(2, 0, 0),
@@ -47,173 +44,142 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const selectMock = [
-    {
-        value: '1728',
-        label: 'Baby Unifairy #1728',
-        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
-    },
-    {
-        value: '1729',
-        label: 'Baby Unifairy #1728',
-        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
-    },
-    {
-        value: '1730',
-        label: 'Baby Unifairy #1728',
-        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
-    },
-    {
-        value: '1731',
-        label: 'Baby Unifairy #1728',
-        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
-    },
-    {
-        value: '1732',
-        label: 'Baby Unifairy #1728',
-        url: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format',
-    },
-]
 export function PetDialog() {
     const classes = useStylesExtends(useStyles(), {})
-    const account = useAccount()
-    const myPersonas = useMyPersonas()
-    // const [input, setInput] = useState('')
+    const chainId = useChainId()
+    const user = useUser()
+    const nfts = useNfts(user)
+    console.log('nfts', nfts)
+    const [extraData, setExtraData] = useState<CollectionNFT[]>([])
+    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
 
-    const [user, setUser] = useState<{ userId: string; address: string }>({
-        userId: '',
-        address: '',
-    })
+    const [collection, setCollection] = useState<FilterContract>(initCollection)
+    const [isCollectionsError, setCollectionsError] = useState(false)
+
+    const [metaData, setMetaData] = useState<PetMetaDB>(initMeta)
+    const [isImageError, setImageError] = useState(false)
+    const [isTipShow, setTipShow] = useState(false)
 
     useEffect(() => {
-        myPersonas.forEach((persona) => {
-            const identifiers: Array<string> = []
-            ;[...persona.linkedProfiles].forEach(([key]) => {
-                if (key.network === TWITTER) {
-                    identifiers.push(key.userId)
-                }
-            })
-            if (identifiers.length) setUser({ userId: identifiers[0], address: account })
+        if (!open) {
+            setMetaData(initMeta)
+            setCollection(initCollection)
+        }
+    }, [open])
+
+    useEffect(() => {
+        Promise.all(nfts.map((i) => PluginPetRPC.getAssetContract(i.contract, chainId))).then((lists) => {
+            setExtraData(lists)
         })
-    }, [JSON.stringify(myPersonas)])
+    }, [nfts])
 
     const saveHandle = async () => {
-        // if (!input) return
-        // await PluginPetRPC.saveEssay(user.address, input, user.userId)
-        if (!collectionsValue) {
+        if (!collection.name) {
             setCollectionsError(true)
             return
         }
-
-        if (!imageValue) {
+        if (!metaData.image) {
             setImageError(true)
             return
         }
-
+        const chosedToken = collection.tokens.find((item) => item.image === metaData.image)
+        const meta = { ...metaData }
+        meta.userId = user.userId
+        meta.contract = collection.contract
+        meta.tokenId = chosedToken?.tokenId ?? ''
+        await PluginPetRPC.saveEssay(user?.address, meta, user?.userId ?? '')
         setTipShow(true)
         closeDialog()
         setTimeout(() => {
             setTipShow(false)
         }, 2000)
-        // if(wordResult && wordResult.userId) {
-        // }
     }
 
-    const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, (ev) => {
-        // if (ev?.traderProps) setTraderProps(ev.traderProps)
-        console.log('ev', ev)
-    })
-
-    const [collectionsValue, setCollectionsValue] = useState<string>()
-    const [isCollectionsError, setCollectionsError] = useState(false)
-    const onCollectionsChage = (v: string) => {
-        setCollectionsValue(v)
+    const onCollectionChange = (v: string) => {
+        nfts.forEach((y) => {
+            if (y.name === v) {
+                setCollection(y)
+            }
+        })
         setCollectionsError(false)
     }
 
-    const [imageValue, setImageValue] = useState<string>()
-    const [isImageError, setImageError] = useState(false)
     const onImageChange = (v: string) => {
-        setImageValue(v)
+        setMetaData({ ...metaData, image: v })
         setImageError(false)
     }
 
-    const [msgValue, setMsgValue] = useState<string>()
     const setMsgValueCheck = (v: string) => {
-        if (v.length > 20) {
-            return
+        if (v.length <= 100) {
+            setMetaData({ ...metaData, word: v })
         }
-        setMsgValue(v)
     }
 
     const imageChose = useMemo(() => {
-        const imageChosed = selectMock.find((item) => item.value === imageValue)
-        return imageChosed?.url
-    }, [imageValue])
-
-    const [isTipShow, setTipShow] = useState(false)
+        if (!metaData.image) return ''
+        const imageChosed = collection.tokens.find((item) => item.image === metaData.image)
+        return imageChosed?.image
+    }, [metaData.image])
 
     return (
         <>
-            <InjectedDialog open={open} onClose={closeDialog} title="Set up your NFT pet">
+            <InjectedDialog open={open} onClose={closeDialog} title="Non-Fungible Friends">
                 <DialogContent>
-                    <Typography className={classes.des}>Can customize pet image and language</Typography>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
-                            <PreviewBox message={msgValue} imageUrl={imageChose} />
+                            <PreviewBox message={metaData.word} imageUrl={imageChose} />
                         </Grid>
                         <Grid item xs={8}>
                             <TextField
                                 className={classes.input}
-                                label="Collections"
+                                label="NFT Contract"
                                 fullWidth
                                 select
                                 required
-                                value={collectionsValue}
+                                value={collection.name}
                                 error={isCollectionsError}
                                 variant="outlined"
-                                onChange={(e) => onCollectionsChage(e.target.value)}>
-                                <MenuItem key="Traveloggers" value="Traveloggers">
-                                    Traveloggers
-                                </MenuItem>
-                                <MenuItem key="MIRROR" value="MIRROR">
-                                    MIRROR
-                                </MenuItem>
+                                onChange={(e) => onCollectionChange(e.target.value)}>
+                                {nfts.map((y, idx) => (
+                                    <MenuItem key={y.name} value={y.name} disabled={!y.tokens.length}>
+                                        <Box className={classes.itemFix}>
+                                            <img className={classes.thumbnail} src={extraData[idx]?.image_url ?? ''} />
+                                            <Typography>{y.name}</Typography>
+                                        </Box>
+                                    </MenuItem>
+                                ))}
                             </TextField>
                             <TextField
                                 className={classes.input}
-                                label="Image"
+                                label="Token ID"
                                 fullWidth
                                 select
                                 required
-                                value={imageValue}
+                                value={metaData.image}
                                 error={isImageError}
                                 variant="outlined"
-                                disabled={!collectionsValue}
+                                disabled={!collection.name}
                                 maxRows={2}
                                 onChange={(e) => onImageChange(e.target.value)}>
-                                {selectMock.map((item, index) => {
+                                {collection.tokens.map((item, index) => {
                                     return (
-                                        <MenuItem key={item.value} value={item.value}>
-                                            <Typography className={classes.itemFix}>
-                                                <img
-                                                    className={classes.thumbnail}
-                                                    src="https://images.unsplash.com/photo-1516802273409-68526ee1bdd6?w=164&h=164&fit=crop&auto=format"
-                                                />
-                                                {item.label}
-                                            </Typography>
+                                        <MenuItem key={`${item.name}${index}`} value={item.image}>
+                                            <Box className={classes.itemFix}>
+                                                <img className={classes.thumbnail} src={item.image} />
+                                                <Typography>{item.name}</Typography>
+                                            </Box>
                                         </MenuItem>
                                     )
                                 })}
                             </TextField>
                             <TextField
                                 className={classes.input}
-                                label="Pet preset copy (Optional)"
+                                label="message (Optional, 100 characters max.)"
                                 fullWidth
                                 multiline
                                 rows={3}
-                                disabled={!collectionsValue}
-                                value={msgValue}
+                                disabled={!collection.name}
+                                value={metaData.word}
                                 onChange={(e) => setMsgValueCheck(e.target.value)}
                             />
                         </Grid>
@@ -222,10 +188,10 @@ export function PetDialog() {
                     <Button className={classes.btn} variant="contained" size="large" fullWidth onClick={saveHandle}>
                         Confirm Add
                     </Button>
-                    <Typography className={classes.desBox}>
-                        <Typography className={classes.des}>Support By: Mask</Typography>
+                    <Box className={classes.desBox}>
+                        <Typography className={classes.des}>Support By: MintTeam</Typography>
                         <Typography className={classes.des}>RSS3</Typography>
-                    </Typography>
+                    </Box>
                 </DialogContent>
             </InjectedDialog>
             <Snackbar

@@ -1,10 +1,6 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import classNames from 'classnames'
-interface Props {
-    message?: string | undefined
-    imageUrl?: string | undefined
-}
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -97,7 +93,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function PreviewBox(props: Props) {
+interface Props {
+    message?: string | undefined
+    imageUrl?: string | undefined
+}
+
+export function PreviewBox(props: Props) {
     const classes = useStylesExtends(useStyles(), {})
 
     return (
@@ -121,5 +122,3 @@ function PreviewBox(props: Props) {
         </div>
     )
 }
-
-export default PreviewBox
