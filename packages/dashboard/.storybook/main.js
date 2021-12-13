@@ -23,6 +23,7 @@ module.exports = {
             http: false,
             https: false,
             buffer: 'buffer',
+            path: 'path-browserify',
         }
         config.module.rules.push({
             test: /\.m?js$/,

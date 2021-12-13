@@ -7,9 +7,6 @@ import {
     formatEthereumAddress,
     formatGweiToEther,
     formatGweiToWei,
-    isGreaterThan,
-    isZero,
-    pow10,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
@@ -17,6 +14,16 @@ import {
     useTokenTransferCallback,
     useWallet,
 } from '@masknet/web3-shared-evm'
+import {
+    isZero,
+    isGreaterThan,
+    isGreaterThanOrEqualTo,
+    isPositive,
+    isLessThan,
+    isLessThanOrEqualTo,
+    multipliedBy,
+    rightShift,
+} from '@masknet/web3-shared-base'
 import { z as zod } from 'zod'
 import { EthereumAddress } from 'wallet.ts'
 import BigNumber from 'bignumber.js'
@@ -190,40 +197,33 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                 amount: zod
                     .string()
                     .refine((amount) => {
-                        const transferAmount = new BigNumber(amount || '0').multipliedBy(
-                            pow10(selectedAsset?.token.decimals ?? 0),
-                        )
+                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
                         return !!transferAmount || !isZero(transferAmount)
                     }, t('wallet_transfer_error_amount_absence'))
                     .refine((amount) => {
-                        const transferAmount = new BigNumber(amount || '0').multipliedBy(
-                            pow10(selectedAsset?.token.decimals ?? 0),
-                        )
+                        const transferAmount = rightShift(amount || '0', selectedAsset?.token.decimals)
                         return !isGreaterThan(transferAmount, selectedAsset?.balance ?? 0)
                     }, t('wallet_transfer_error_insufficient_balance', { token: selectedAsset?.token.symbol })),
                 gasLimit: zod
                     .string()
                     .min(1, t('wallet_transfer_error_gas_limit_absence'))
                     .refine(
-                        (gasLimit) => new BigNumber(gasLimit).isGreaterThanOrEqualTo(minGasLimitContext),
+                        (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimitContext),
                         t('popups_wallet_gas_fee_settings_min_gas_limit_tips', { limit: minGasLimitContext }),
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
                     .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                    .refine(
-                        (value) => new BigNumber(value).isPositive(),
-                        t('wallet_transfer_error_max_priority_gas_fee_positive'),
-                    )
+                    .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
                     .refine((value) => {
-                        return new BigNumber(value).isGreaterThanOrEqualTo(
-                            estimateGasFees?.low.suggestedMaxPriorityFeePerGas ?? 0,
-                        )
+                        return isGreaterThanOrEqualTo(value, estimateGasFees?.low.suggestedMaxPriorityFeePerGas ?? 0)
                     }, t('wallet_transfer_error_max_priority_gas_fee_too_low'))
                     .refine(
                         (value) =>
-                            new BigNumber(value).isLessThan(
-                                new BigNumber(estimateGasFees?.high.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
+                            isLessThan(
+                                value,
+                                multipliedBy(
+                                    estimateGasFees?.high.suggestedMaxPriorityFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
@@ -233,23 +233,22 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_max_fee_absence'))
                     .refine(
-                        (value) =>
-                            new BigNumber(value).isGreaterThanOrEqualTo(
-                                estimateGasFees?.low.suggestedMaxFeePerGas ?? 0,
-                            ),
+                        (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.low.suggestedMaxFeePerGas ?? 0),
                         t('wallet_transfer_error_max_fee_too_low'),
                     )
                     .refine(
                         (value) =>
-                            new BigNumber(value).isLessThan(
-                                new BigNumber(estimateGasFees?.high.suggestedMaxFeePerGas ?? 0).multipliedBy(
+                            isLessThan(
+                                value,
+                                multipliedBy(
+                                    estimateGasFees?.high.suggestedMaxFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
                         t('wallet_transfer_error_max_fee_too_high'),
                     ),
             })
-            .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
+            .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
                 message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
                 path: ['maxFeePerGas'],
             })
@@ -296,7 +295,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     const { value: minGasLimit } = useGasLimit(
         selectedAsset?.token.type,
         selectedAsset?.token.address,
-        new BigNumber(amount ?? 0).multipliedBy(pow10(selectedAsset?.token.decimals ?? 0)).toFixed(),
+        rightShift(amount ?? 0, selectedAsset?.token.decimals).toFixed(),
         EthereumAddress.isValid(address) ? address : registeredAddress,
     )
     //#endregion
@@ -345,9 +344,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     const [{ loading }, onSubmit] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
-            const transferAmount = new BigNumber(data.amount || '0')
-                .multipliedBy(pow10(selectedAsset?.token.decimals || 0))
-                .toFixed()
+            const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
 
             //If input address is ens domain, use registeredAddress to transfer
             if (Utils?.isValidDomain?.(data.address)) {

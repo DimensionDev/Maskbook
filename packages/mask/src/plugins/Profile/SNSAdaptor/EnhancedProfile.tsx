@@ -36,8 +36,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const [show, setShow] = useState(false)
     const classes = useStylesExtends(useStyles(), props)
     const identity = useCurrentVisitingIdentity()
-    const userId = identity.identifier.userId.toLowerCase()
-    const { value: daoPayload } = useDao(userId)
+    const { value: daoPayload } = useDao(identity.identifier)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
     useLocationChange(() => {
         MaskMessages.events.profileNFTsTabUpdated.sendToLocal('reset')
@@ -58,7 +57,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.DonationTag:
                 return <DonationPage />
             case PageTags.DAOTag:
-                return <DAOPage payload={daoPayload} userId={userId} />
+                return <DAOPage payload={daoPayload} identifier={identity.identifier} />
             default:
                 unreachable(currentTag)
         }

@@ -1,5 +1,5 @@
 import { Result, Ok, Err } from 'ts-results'
-import type { TypedMessage } from './types'
+import type { TypedMessage } from '@masknet/shared-base'
 import z_schema from 'z-schema'
 import produce, { enableMapSet, Draft } from 'immer'
 enableMapSet()

@@ -1,5 +1,5 @@
 import { story } from '@masknet/storybook-shared'
-import { TokenTableUI as C } from '../../../src/pages/Wallets/components/TokenTable'
+import { TokenTableUI as C } from '../../../src/pages/Wallets/components/FungibleTokenTable'
 
 const { meta, of } = story(C)
 

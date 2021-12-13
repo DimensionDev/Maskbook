@@ -1,5 +1,10 @@
 import { CryptoWorker } from '../workers'
-import type { PBKDF2UnknownKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey, JsonWebKeyPair } from './interfaces/utils'
+import type {
+    PBKDF2UnknownKey,
+    EC_Public_JsonWebKey,
+    EC_Private_JsonWebKey,
+    JsonWebKeyPair,
+} from '@masknet/shared-base'
 
 export function derive_AES_GCM_256_Key_From_PBKDF2(
     pbkdf: PBKDF2UnknownKey,

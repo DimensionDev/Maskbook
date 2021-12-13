@@ -1,4 +1,4 @@
-import { first, groupBy } from 'lodash-unified'
+import { first, groupBy, uniq } from 'lodash-unified'
 import type { Coin, Currency, Stat, TagType, Trending } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import * as coinGeckoAPI from '../coingecko'
@@ -209,7 +209,9 @@ async function getCoinTrending(id: string, currency: Currency, dataProvider: Dat
                     ].filter(Boolean),
                     source_code_urls: Object.values(info.links.repos_url).flatMap((x) => x),
                     home_urls: info.links.homepage.filter(Boolean),
-                    blockchain_urls: [platform_url, ...info.links.blockchain_site].filter(Boolean),
+                    blockchain_urls: uniq(
+                        [platform_url, ...info.links.blockchain_site].filter(Boolean).map((url) => url.toLowerCase()),
+                    ),
                     platform_url,
                     facebook_url,
                     twitter_url,

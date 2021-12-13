@@ -1,4 +1,5 @@
-import { selectElementContents, delay } from '../../../utils/utils'
+import { selectElementContents } from '../../../utils/utils'
+import { delay } from '@masknet/shared-base'
 import { isMobileFacebook } from '../utils/isMobile'
 import { MaskMessages } from '../../../utils/messages'
 import type { PostInfo } from '../../../social-network/PostInfo'

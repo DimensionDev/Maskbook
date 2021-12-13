@@ -100,7 +100,7 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
     const info = result.value.info
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
-            <img className={classes.media} src={info.image} alt={info.name} />
+            <img className={classes.media} src={info.mediaUrl} alt={info.name} />
             <Typography className={classes.name}>{info.name}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
         </div>

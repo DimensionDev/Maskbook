@@ -1,4 +1,5 @@
 import { noop } from 'lodash-unified'
+import { ValueRef } from '@dimensiondev/holoflows-kit'
 import type { Subscription } from 'use-subscription'
 
 export function createConstantSubscription<T>(value: T) {
@@ -67,4 +68,24 @@ export function mapSubscription<T, Q>(sub: Subscription<T>, mapper: (val: T) => 
         },
         subscribe: sub.subscribe,
     }
+}
+
+export function SubscriptionFromValueRef<T>(ref: ValueRef<T>): Subscription<T> {
+    return SubscriptionDebug({
+        getCurrentValue: () => ref.value,
+        subscribe: (sub) => ref.addListener(sub),
+    })
+}
+export function SubscriptionDebug<T>(x: Subscription<T>): Subscription<T> {
+    Object.defineProperty(x, '_value', {
+        configurable: true,
+        get: () => x.getCurrentValue(),
+    })
+    return x
+}
+
+export function ValueRefFromSubscription<T>(sub: Subscription<T>, eq?: (a: T, b: T) => boolean): ValueRef<T> {
+    const ref = new ValueRef(sub.getCurrentValue(), eq)
+    sub.subscribe(() => (ref.value = sub.getCurrentValue()))
+    return ref
 }
