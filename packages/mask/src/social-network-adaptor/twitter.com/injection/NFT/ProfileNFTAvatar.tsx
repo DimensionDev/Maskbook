@@ -67,8 +67,8 @@ function NFTAvatarInTwitter() {
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 
     const onChange = async (token: ERC721TokenDetailed) => {
-        if (!token.info.image) return
-        const image = await toPNG(token.info.image)
+        if (!token.info.mediaUrl) return
+        const image = await toPNG(token.info.mediaUrl)
         if (!image) return
         changeImageToActiveElements(image)
 

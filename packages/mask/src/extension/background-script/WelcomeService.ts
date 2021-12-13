@@ -2,13 +2,13 @@ import { encodeText } from '@dimensiondev/kit'
 import { delay } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
-import { attachProfileDB, LinkedProfileDetails } from '../../database/Persona/Persona.db'
+import { attachProfileDB, LinkedProfileDetails } from '../../../background/database/persona/db'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
 import type { PersonaIdentifier, ProfileIdentifier } from '../../database/type'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { requestExtensionPermission } from './HelperService/extensionPermission'
-import { saveFileFromBuffer } from '../../../shared/helpers/download'
+import { saveFileFromBuffer } from '../../../shared'
 import {
     BackupJSONFileLatest,
     getBackupPreviewInfo,

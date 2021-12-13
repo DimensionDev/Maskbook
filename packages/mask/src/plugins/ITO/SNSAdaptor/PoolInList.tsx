@@ -5,13 +5,13 @@ import {
     FungibleToken,
     getChainDetailed,
     isSameAddress,
-    isZero,
     TransactionStateType,
     useAccount,
     useFungibleTokenDetailed,
     useFungibleTokensDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,

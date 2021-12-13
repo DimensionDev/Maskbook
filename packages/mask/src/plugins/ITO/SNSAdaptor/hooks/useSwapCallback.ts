@@ -7,7 +7,6 @@ import {
     currySameAddress,
     EthereumTokenType,
     FungibleTokenDetailed,
-    isZero,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -16,6 +15,7 @@ import {
     isSameAddress,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
+import { isPositive, isZero } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
@@ -74,7 +74,7 @@ export function useSwapCallback(
         }
 
         // error: invalid swap amount
-        if (!new BigNumber(total).isPositive()) {
+        if (!isPositive(total)) {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Invalid swap amount.'),

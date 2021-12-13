@@ -3,7 +3,7 @@ import * as wallet from 'wallet.ts'
 import { decompressSecp256k1Key } from '../type-transform/SECP256k1-Compression'
 import { Convert } from 'pvtsutils'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
-import type { PersonaRecord } from '../../database/Persona/Persona.db'
+import type { PersonaRecord } from '../../../background/database/persona/db'
 import type {
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,

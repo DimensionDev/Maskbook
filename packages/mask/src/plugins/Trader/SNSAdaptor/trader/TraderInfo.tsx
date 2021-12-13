@@ -14,6 +14,7 @@ import { TradeProvider } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     trade: {
@@ -85,9 +86,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const tokenPrice = useNativeTokenPrice(targetChainId)
 
     const gasFee = useMemo(() => {
-        return trade.gas.value && gasPrice
-            ? new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
-            : 0
+        return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : 0
     }, [trade.gas?.value, gasPrice])
 
     const feeValueUSD = useMemo(

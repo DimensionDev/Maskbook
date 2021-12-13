@@ -18,7 +18,7 @@ import {
     updatePersonaDB,
     createOrUpdatePersonaDB,
     queryProfilesPagedDB,
-} from './Persona.db'
+} from '../../../background/database/persona/db'
 import { IdentifierMap } from '../IdentifierMap'
 import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
 import {
