@@ -8,7 +8,7 @@ import type { PersonaIdentifier, ProfileIdentifier } from '../../database/type'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { requestExtensionPermission } from './HelperService/extensionPermission'
-import { saveFileFromBuffer } from '../../../shared/helpers/download'
+import { saveFileFromBuffer } from '../../../shared'
 import {
     BackupJSONFileLatest,
     getBackupPreviewInfo,

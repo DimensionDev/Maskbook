@@ -1,7 +1,7 @@
 // No meaning for this module to support hmr but I don't want to invalidate dependencies module by this reason.
-import { Flags } from '../../../../shared'
+import { Flags } from '../../shared'
 import { DashboardRoutes } from '@masknet/shared-base'
-export default function (signal: AbortSignal) {
+export default function onInstalled(signal: AbortSignal) {
     const onInstalled = (detail: { reason: browser.runtime.OnInstalledReason }) => {
         if (Flags.has_native_welcome_ui) return
         if (detail.reason === 'install')

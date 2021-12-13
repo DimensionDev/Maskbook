@@ -46,7 +46,7 @@ export function PageInspector(props: PageInspectorProps) {
                                   vertical: 'bottom',
                                   horizontal: 'center',
                               }
-                            : { horizontal: 'left', vertical: 'bottom' },
+                            : { horizontal: 'right', vertical: 'top' },
                         key,
                         action: <></>,
                     },

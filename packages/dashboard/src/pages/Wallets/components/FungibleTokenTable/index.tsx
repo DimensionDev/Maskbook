@@ -178,7 +178,7 @@ export const TokenTableUI = memo<TokenTableUIProps>(({ onSwap, onSend, isLoading
                                         Utils?.formatBalance?.(second.balance, second.token.decimals) ?? '',
                                     )
 
-                                    if (firstValue.eq(secondValue)) return 0
+                                    if (firstValue.isEqualTo(secondValue)) return 0
 
                                     return Number(firstValue.lt(secondValue))
                                 })

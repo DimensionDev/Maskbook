@@ -22,6 +22,7 @@
     "@masknet/shared-base": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
     "@masknet/theme": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@msgpack/msgpack": "^2.7.1",
     "@servie/events": "^3.0.0",

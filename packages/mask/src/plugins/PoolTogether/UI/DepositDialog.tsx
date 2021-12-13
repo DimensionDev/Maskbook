@@ -3,15 +3,14 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isZero,
     TransactionStateType,
     useAccount,
     ZERO_ADDRESS,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
+import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { keyframes, makeStyles } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -33,10 +32,10 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const rainbow_animation = keyframes`
     0% {
-        background-position: '100% 0%';
+        background-position: 100% 0%;
     }
     100% {
-        background-position: '0 100%';
+        background-position: 0 100%;
     }
 `
 
@@ -72,6 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         background:
             'linear-gradient(40deg,#ff9304,#ff04ea 10%,#9b4beb 20%,#0e8dd6 30%,#0bc6df 40%,#07d464 50%,#dfd105 60%,#ff04ab 78%,#8933eb 90%,#3b89ff)',
         webkitBackgroundClip: 'text',
+        backgroundClip: 'text',
         color: 'transparent',
         animation: `${rainbow_animation} 6s linear infinite`,
         backgroundSize: '600% 600%',
@@ -129,7 +129,7 @@ export function DepositDialog() {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
