@@ -753,7 +753,7 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
-            {hasLockTime && !isUnlocked ? (
+            {hasLockTime && !isUnlocked && unlockTime > Date.now() ? (
                 <Typography className={classes.claimDate}>
                     {t('plugin_ito_wait_unlock_time', {
                         unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
