@@ -4,6 +4,7 @@ import ActionButton from '../../../extension/options-page/DashboardComponents/Ac
 import BigNumber from 'bignumber.js'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
+import { pow10 } from '@masknet/web3-shared-base'
 import {
     EthereumTokenType,
     useAccount,
@@ -12,7 +13,6 @@ import {
     ChainId,
     useChainId,
     formatBalance,
-    pow10,
     useNativeTokenDetailed,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'

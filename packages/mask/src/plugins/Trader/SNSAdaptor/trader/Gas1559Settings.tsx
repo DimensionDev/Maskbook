@@ -14,6 +14,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { fromWei, toHex } from 'web3-utils'
 import { isEmpty } from 'lodash-unified'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { isGreaterThan, isLessThan, isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     option: {
@@ -120,13 +121,10 @@ function defineSchema(t: I18NFunction) {
             maxPriorityFeePerGas: zod
                 .string()
                 .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                .refine(
-                    (value) => new BigNumber(value).isPositive(),
-                    t('wallet_transfer_error_max_priority_fee_absence'),
-                ),
+                .refine(isPositive, t('wallet_transfer_error_max_priority_fee_absence')),
             maxFeePerGas: zod.string().min(1, t('wallet_transfer_error_max_fee_absence')),
         })
-        .refine((data) => new BigNumber(data.maxPriorityFeePerGas).isLessThanOrEqualTo(data.maxFeePerGas), {
+        .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
             message: t('wallet_transfer_error_max_priority_gas_fee_imbalance'),
             path: ['maxFeePerGas'],
         })
@@ -193,13 +191,12 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
     //#region These are additional form rules that need to be prompted for but do not affect the validation of the form
     const maxPriorFeeHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (new BigNumber(maxPriorityFeePerGas).isLessThan(gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
+        if (isLessThan(maxPriorityFeePerGas, gasOptions?.low?.suggestedMaxPriorityFeePerGas ?? 0))
             return t('wallet_transfer_error_max_priority_gas_fee_too_low')
         if (
-            new BigNumber(maxPriorityFeePerGas).isGreaterThan(
-                new BigNumber(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0).multipliedBy(
-                    HIGH_FEE_WARNING_MULTIPLIER,
-                ),
+            isGreaterThan(
+                maxPriorityFeePerGas,
+                multipliedBy(gasOptions?.high?.suggestedMaxPriorityFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
             return t('wallet_transfer_error_max_priority_gas_fee_too_high')
@@ -208,11 +205,12 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
 
     const maxFeeGasHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
-        if (new BigNumber(maxFeePerGas).isLessThan(gasOptions?.estimatedBaseFee ?? 0))
+        if (isLessThan(maxFeePerGas, gasOptions?.estimatedBaseFee ?? 0))
             return t('wallet_transfer_error_max_fee_too_low')
         if (
-            new BigNumber(maxFeePerGas).isGreaterThan(
-                new BigNumber(gasOptions?.high?.suggestedMaxFeePerGas ?? 0).multipliedBy(HIGH_FEE_WARNING_MULTIPLIER),
+            isGreaterThan(
+                maxFeePerGas,
+                multipliedBy(gasOptions?.high?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
             return t('wallet_transfer_error_max_fee_too_high')

@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import { useContainer } from 'unstated-next'
 import { makeStyles } from '@masknet/theme'
 import { Add, Remove } from '@mui/icons-material'
@@ -23,6 +22,7 @@ import type { BoxInfo } from '../../type'
 import { GasSettingBar } from '../../../Wallet/SNSAdaptor/GasSettingDialog/GasSettingBar'
 import { TokenPrice } from '../../../../components/shared/TokenPrice'
 import { Context } from '../../hooks/useContext'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -132,7 +132,7 @@ export function DrawDialog(props: DrawDialogProps) {
                         <Typography color="textPrimary">
                             <span className={classes.value}>
                                 <FormattedBalance
-                                    value={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount)}
+                                    value={multipliedBy(paymentTokenPrice, paymentCount)}
                                     decimals={paymentTokenDetailed?.decimals ?? 0}
                                     formatter={formatBalance}
                                     significant={6}
@@ -190,7 +190,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                             title: 'Token Amount',
                                             inputMode: 'decimal',
                                             min: 0,
-                                            max: 999,
+                                            max: 255,
                                             minLength: 1,
                                             pattern: '^[0-9]*[.,]?[0-9]*$',
                                             spellCheck: false,
@@ -267,7 +267,7 @@ export function DrawDialog(props: DrawDialogProps) {
 
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC20TokenApprovedBoundary
-                        amount={new BigNumber(paymentTokenPrice).multipliedBy(paymentCount).toFixed()}
+                        amount={multipliedBy(paymentTokenPrice, paymentCount).toFixed()}
                         spender={MASK_BOX_CONTRACT_ADDRESS}
                         token={
                             paymentTokenDetailed?.type === EthereumTokenType.ERC20 ? paymentTokenDetailed : undefined

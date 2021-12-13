@@ -34,6 +34,7 @@
         "unicorn/prefer-add-event-listener": "error",
         "unicorn/prefer-date-now": "error",
         "unicorn/prefer-dom-node-dataset": "error",
+        "unicorn/prefer-number-properties": "error",
         "unicorn/throw-new-error": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-for-in-array": "error",

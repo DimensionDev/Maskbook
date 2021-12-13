@@ -25,6 +25,7 @@ import { Navigation } from '../DashboardFrame/Navigation'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
 import { RoutePaths } from '../../type'
+import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
 const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
 
@@ -66,9 +67,13 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
     [`& > .${paperClasses.root}`]: {
         width: 232,
         top: theme.mixins.toolbar.minHeight,
-        paddingTop: theme.spacing(7.5),
+        paddingTop: '28px',
         background: new Color(theme.palette.background.paper).alpha(0.8).toString(),
         backdropFilter: 'blur(4px)',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        paddingBottom: `calc( 22px + ${theme.mixins.toolbar.minHeight}px)`,
     },
 }))
 
@@ -164,6 +169,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                         variant="temporary"
                         elevation={0}>
                         <Navigation onClose={toggleDrawer} />
+                        <NavigationVersionFooter />
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>

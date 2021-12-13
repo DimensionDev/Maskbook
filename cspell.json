@@ -242,7 +242,8 @@
         "NFTRSS",
         "solana",
         "Görli",
-        "resizer"
+        "resizer",
+        "Pageable"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -336,7 +337,16 @@
         "isfacebook",
         "findtruman",
         "uaddr",
-        "consts"
+        "consts",
+        "cryptoartai",
+        "cryptoart",
+        "avator",
+        "testweb",
+        "metadate",
+        "AICANFT",
+        "CANFT",
+        "Kodav",
+        "koda"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

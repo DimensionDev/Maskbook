@@ -3,13 +3,12 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isGreaterThan,
-    isZero,
     useAccount,
     useNativeTokenDetailed,
     useRedPacketConstants,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { omit } from 'lodash-unified'
 import { FormControl, InputLabel, MenuItem, MenuProps, Select, TextField } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -145,11 +144,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             ? formatBalance(origin?.total, origin.token?.decimals ?? 0)
             : formatBalance(new BigNumber(origin?.total ?? '0').div(origin?.shares ?? 1), origin?.token?.decimals ?? 0),
     )
-    const amount = new BigNumber(rawAmount ?? '0').shiftedBy(token?.decimals ?? 0)
-    const totalAmount = useMemo(
-        () => (isRandom ? new BigNumber(amount) : new BigNumber(amount).multipliedBy(shares ?? '0')),
-        [amount, shares],
-    )
+    const amount = rightShift(rawAmount ?? '0', token?.decimals)
+    const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares])
 
     // balance
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(

@@ -11,7 +11,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
@@ -28,6 +27,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
+import { rightShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -57,9 +57,9 @@ export interface DonateDialogProps extends withClasses<never> {}
 export function DonateDialog(props: DonateDialogProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
-
     const [title, setTitle] = useState('')
     const [address, setAddress] = useState('')
+    const [postLink, setPostLink] = useState<string | URL>('')
 
     // context
     const account = useAccount()
@@ -74,6 +74,7 @@ export function DonateDialog(props: DonateDialogProps) {
             if (!ev.open) return
             setTitle(ev.title)
             setAddress(ev.address)
+            setPostLink(ev.postLink)
         },
     )
     //#endregion
@@ -111,7 +112,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     //#endregion
 
     //#region blocking
@@ -119,6 +120,7 @@ export function DonateDialog(props: DonateDialogProps) {
     //#endregion
 
     //#region transaction dialog
+
     const cashTag = isTwitter(activatedSocialNetworkUI) ? '$' : ''
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
@@ -134,6 +136,7 @@ export function DonateDialog(props: DonateDialogProps) {
                               : ''
                       }`,
                       '#mask_io',
+                      postLink,
                   ].join('\n')
                 : '',
         )

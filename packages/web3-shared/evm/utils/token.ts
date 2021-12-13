@@ -36,9 +36,9 @@ export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
 export function createERC20Token(
     chainId: ChainId,
     address: string,
-    decimals: number,
-    name: string,
-    symbol: string,
+    decimals = 0,
+    name = 'Unknown Token',
+    symbol = 'UNKNOWN',
     logoURI?: string[],
 ): ERC20TokenDetailed {
     return {
@@ -55,8 +55,8 @@ export function createERC20Token(
 export function createERC721ContractDetailed(
     chainId: ChainId,
     address: string,
-    name: string,
-    symbol: string,
+    name = 'Unknown Token',
+    symbol = 'UNKNOWN',
     baseURI?: string,
     iconURL?: string,
 ): ERC721ContractDetailed {
@@ -155,7 +155,7 @@ export function parseStringOrBytes32(
 
 //#region asset sort
 export const getTokenUSDValue = (token: Asset) => (token.value ? Number.parseFloat(token.value[CurrencyType.USD]) : 0)
-export const getBalanceValue = (asset: Asset) => parseFloat(formatBalance(asset.balance, asset.token.decimals))
+export const getBalanceValue = (asset: Asset) => Number.parseFloat(formatBalance(asset.balance, asset.token.decimals))
 export const getTokenChainIdValue = (asset: Asset) =>
     asset.token.type === EthereumTokenType.Native ? 1 / asset.token.chainId : 0
 

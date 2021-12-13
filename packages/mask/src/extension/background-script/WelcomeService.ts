@@ -8,7 +8,7 @@ import type { PersonaIdentifier, ProfileIdentifier } from '../../database/type'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { requestExtensionPermission } from './HelperService/extensionPermission'
-import { saveAsFileFromBuffer } from './HelperService/saveAsFile'
+import { saveFileFromBuffer } from '../../../shared'
 import {
     BackupJSONFileLatest,
     getBackupPreviewInfo,
@@ -63,7 +63,7 @@ export async function restoreNewIdentityWithMnemonicWord(
 
 export async function downloadBackup<T>(obj: T, type?: 'txt' | 'json') {
     const { buffer, mimeType, fileName } = await createBackupInfo(obj, type)
-    saveAsFileFromBuffer(buffer, mimeType, fileName)
+    saveFileFromBuffer(buffer, mimeType, fileName)
     return obj
 }
 
@@ -75,7 +75,7 @@ export async function downloadBackupV2(buffer: ArrayBuffer) {
         .padStart(2, '0')}`
     const fileName = `mask-network-keystore-backup-${today}.bin`
 
-    saveAsFileFromBuffer(buffer, 'application/octet-stream', fileName)
+    saveFileFromBuffer(buffer, 'application/octet-stream', fileName)
 }
 
 export async function createBackupFile(

@@ -139,6 +139,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/storybook-shared': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       '@msgpack/msgpack': ^2.7.1
       '@servie/events': ^3.0.0
@@ -190,6 +191,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/storybook-shared': link:../storybook-shared
       '@masknet/theme': link:../theme
+      '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@msgpack/msgpack': 2.7.1
       '@servie/events': 3.0.0
@@ -302,6 +304,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-contracts': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       '@msgpack/msgpack': ^2.7.1
       '@nice-labs/emit-file-webpack-plugin': ^1.1.2
@@ -439,6 +442,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
       '@masknet/web3-contracts': link:../web3-contracts
+      '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@msgpack/msgpack': 2.7.1
       '@servie/events': 3.0.0
@@ -600,6 +604,8 @@ importers:
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-flow': workspace:*
       bignumber.js: ^9.0.1
       lodash-es: ^4.17.21
@@ -611,6 +617,8 @@ importers:
       '@masknet/shared': link:../../shared
       '@masknet/shared-base': link:../../shared-base
       '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
       bignumber.js: 9.0.1
       lodash-es: 4.17.21
@@ -855,19 +863,29 @@ importers:
 
   packages/web3-providers:
     specifiers:
+      '@masknet/plugin-infra': workspace:*
       json-stable-stringify: ^1.0.1
       lodash-unified: 1.0.1
       urlcat: ^2.0.4
     dependencies:
+      '@masknet/plugin-infra': link:../plugin-infra
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
       urlcat: 2.0.4
+
+  packages/web3-shared/base:
+    specifiers:
+      bignumber.js: 9.0.1
+    dependencies:
+      bignumber.js: 9.0.1
 
   packages/web3-shared/evm:
     specifiers:
       '@ensdomains/address-encoder': ^0.2.6
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
+      '@masknet/web3-shared-base': workspace:*
+      '@types/ethereum-blockies': ^0.1.0
       '@types/punycode': ^2.1.0
       '@types/use-subscription': ^1.0.0
       '@unstoppabledomains/resolution': ^5.0.1
@@ -889,6 +907,8 @@ importers:
       '@ensdomains/address-encoder': 0.2.6
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts
+      '@masknet/web3-shared-base': link:../base
+      '@types/ethereum-blockies': 0.1.0
       '@types/punycode': 2.1.0
       '@unstoppabledomains/resolution': 5.0.1
       bignumber.js: 9.0.1
@@ -9376,6 +9396,10 @@ packages:
   /@types/estree/0.0.50:
     resolution: {integrity: sha512-C6N5s2ZFtuZRj54k2/zyRhNDjJwwcViAM3Nbm8zjBpbqAdZ00mr0CFxvSKeO8Y/e03WVFLpQMdHYVfUd6SB+Hw==}
     dev: true
+
+  /@types/ethereum-blockies/0.1.0:
+    resolution: {integrity: sha512-yQgqv9dqnFm9pHmCPUBPGu4NRIGSD/hihO+BwcuzxaxmMX3juD97vRvwUB3uY/MUBQ+7pWvUWDPYSAcZ1dIQDA==}
+    dev: false
 
   /@types/expect/1.20.4:
     resolution: {integrity: sha512-Q5Vn3yjTDyCMV50TB6VRIbQNxSE4OmZR86VSbGaNpfUolm0iePBB4KdEEHmxoY5sT2+2DIvXW0rvMDP2nHZ4Mg==}
