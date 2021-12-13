@@ -46,7 +46,7 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
 
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
-
+    const isDashboard = location.href.includes('dashboard.html')
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
@@ -62,8 +62,9 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
             pluginIDSettings.value = undeterminedPluginID
         }
         closeDialog()
-        WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
-    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog])
+
+        if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
+    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard])
 
     // not available for the native app
     if (hasNativeAPI) return null
