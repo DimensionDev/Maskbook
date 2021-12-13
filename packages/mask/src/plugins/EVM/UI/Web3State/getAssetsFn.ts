@@ -137,7 +137,7 @@ export const getNonFungibleTokenFn =
                             ...info,
                             ...tokenDetailed.info,
                             loading: false,
-                            name: info.name ?? tokenDetailed.info.image,
+                            name: info.name ?? tokenDetailed.info.name,
                         }
                     return tokenDetailed
                 }
