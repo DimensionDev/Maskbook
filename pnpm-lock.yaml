@@ -162,6 +162,7 @@ importers:
       i18next-browser-languagedetector: ^6.1.2
       json-stable-stringify: ^1.0.1
       lodash-es: ^4.17.21
+      path-browserify: ^1.0.1
       react-avatar-editor: ^12.0.0
       react-hook-form: ^7.20.2
       react-router: ^6.0.0-beta.0
@@ -229,6 +230,7 @@ importers:
       '@storybook/react': 6.4.9_b3b0e4ec79ecd1161d9324158ad5d26d
       babel-loader: 8.2.3_d888b76bb52891dbb46d1b9f7384ff34
       buffer: 6.0.3
+      path-browserify: 1.0.1
       stream-browserify: 3.0.0
       webpack: 5.64.4
 
