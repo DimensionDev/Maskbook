@@ -163,7 +163,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateY(10px)',
     },
     loadingNftImg: {
-        transform: 'translateY(20px)',
+        marginTop: 20,
     },
     selectWrapperImg: {
         maxWidth: '100%',

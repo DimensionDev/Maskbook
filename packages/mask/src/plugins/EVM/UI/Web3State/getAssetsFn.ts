@@ -15,8 +15,7 @@ import {
     NonFungibleAssetProvider,
     Web3ProviderType,
 } from '@masknet/web3-shared-evm'
-import type { Web3Plugin } from '@masknet/plugin-infra'
-import { Pageable, Pagination, TokenType } from '@masknet/plugin-infra'
+import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { AbiItem } from 'web3-utils'
