@@ -5,6 +5,7 @@
   "scripts": {},
   "dependencies": {
     "@balancer-labs/sor": "^1.0.0",
+    "@cyberlab/cyberconnect": "^2.6.1",
     "@dimensiondev/common-protocols": "1.6.0-20210723072221-8f46a92",
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
@@ -62,6 +63,7 @@
     "async-call-rpc": "^6.0.1",
     "bignumber.js": "^9.0.1",
     "bip39": "^3.0.2",
+    "boring-avatars": "^1.5.8",
     "buffer": "^6.0.3",
     "classnames": "^2.3.1",
     "clipboard-polyfill": "^3.0.3",
