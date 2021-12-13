@@ -1,6 +1,5 @@
 import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { FormattedAddress, useRemoteControlledDialog } from '@masknet/shared'
@@ -12,16 +11,16 @@ import {
     EthereumTokenType,
     formatBalance,
     formatEthereumAddress,
-    isGreaterThan,
-    pow10,
     resolveAddressLinkOnExplorer,
     useChainId,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
+import { isGreaterThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
+import { Trans } from 'react-i18next'
 
 function isMoreThanMillion(allowance: string, decimals: number) {
     return isGreaterThan(allowance, `100000000000e${decimals}`) // 100 billion
@@ -79,13 +78,13 @@ export function UnlockDialog(props: UnlockDialogProps) {
     //#endregion
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         token?.type ?? EthereumTokenType.Native,
         token?.address ?? '',
     )
     //#endregion
-    if (!tokens.length) return <Typography>No need to unlock any token on this ITO.</Typography>
+    if (!tokens.length) return <Typography>{t('plugin_ito_empty_token')}</Typography>
     return (
         <div className={classes.root}>
             <TokenAmountPanel
@@ -103,14 +102,27 @@ export function UnlockDialog(props: UnlockDialogProps) {
             />
             {ITO2_CONTRACT_ADDRESS ? (
                 <Typography className={classes.tip} variant="body2" color="textSecondary">
-                    Allow the contract{' '}
-                    <Link
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}>
-                        <FormattedAddress address={ITO2_CONTRACT_ADDRESS} size={4} formatter={formatEthereumAddress} />
-                    </Link>{' '}
-                    to use your {token.symbol ?? 'Token'} tokens when a new ITO round starts later.
+                    <Trans
+                        components={{
+                            link: (
+                                <Link
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href={resolveAddressLinkOnExplorer(chainId, ITO2_CONTRACT_ADDRESS)}
+                                />
+                            ),
+                            address: (
+                                <FormattedAddress
+                                    address={ITO2_CONTRACT_ADDRESS}
+                                    size={4}
+                                    formatter={formatEthereumAddress}
+                                />
+                            ),
+                        }}
+                        values={{
+                            symbol: token.symbol ?? 'Unknown',
+                        }}
+                    />
                 </Typography>
             ) : null}
             <EthereumWalletConnectedBoundary>

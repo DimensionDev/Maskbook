@@ -6,9 +6,8 @@ import type {
     SwapRouteSuccessResponse,
 } from '../../types/dodo'
 import { DODO_BASE_URL } from '../../constants/dodo'
-import BigNumber from 'bignumber.js'
-import { pow10 } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
+import { leftShift } from '@masknet/web3-shared-base'
 
 export async function swapRoute(request: SwapRouteRequest) {
     const response = await fetch(
@@ -32,7 +31,7 @@ export async function swapRoute(request: SwapRouteRequest) {
 
     return {
         ...(payload as SwapRouteSuccessResponse).data,
-        fromAmount: new BigNumber(request.fromAmount).dividedBy(pow10(request.fromToken.decimals ?? 0)).toNumber(),
+        fromAmount: leftShift(request.fromAmount, request.fromToken.decimals).toNumber(),
         value: request.isNativeSellToken ? request.fromAmount : '0',
         slippage: request.slippage,
         fromTokenSymbol: request.fromToken.symbol,

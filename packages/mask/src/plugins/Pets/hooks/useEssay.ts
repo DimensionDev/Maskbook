@@ -16,7 +16,7 @@ export function useDefaultEssay(nfts: FilterContract[]) {
     useEffect(() => {
         const filter = nfts.filter((y) => y.tokens.length > 0)
         if (filter.length) {
-            setEssayMeta({ image: filter[0].tokens[0]?.image ?? '', word: DEFAULT_WORD })
+            setEssayMeta({ image: filter[0].tokens[0]?.mediaUrl ?? '', word: DEFAULT_WORD })
         }
     }, [nfts])
     return essayMeta

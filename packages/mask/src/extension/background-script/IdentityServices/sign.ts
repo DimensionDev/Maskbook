@@ -13,7 +13,7 @@ import { Convert } from 'pvtsutils'
 import { stringToBuffer } from 'arweave/web/lib/utils'
 import { constructSignRequestURL } from '../../popups'
 import { delay, PersonaIdentifier } from '@masknet/shared-base'
-import { queryPersonasWithPrivateKey } from '../../../database/Persona/Persona.db'
+import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db'
 export interface SignRequest {
     /** The message to be signed. */
     message: string

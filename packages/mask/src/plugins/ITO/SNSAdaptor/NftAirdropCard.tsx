@@ -209,7 +209,7 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
         </Box>
     ) : (
         <Box className={classes.root}>
-            <Typography className={classes.title}>SocialFi Launch Campaign</Typography>
+            <Typography className={classes.title}>{t('plugin_ito_launch_campaign')}</Typography>
             <div className={classes.claimTimeWrapper}>
                 <Typography className={classes.text}>{t('wallet_airdrop_nft_unclaimed_title')}</Typography>
 
@@ -233,7 +233,8 @@ export function NftAirdropCard(props: NftAirdropCardProps) {
                 })}
             </div>
             <Typography className={classes.text}>
-                Total: {`${claimableCount} ${claimableCount > 1 ? 'items' : 'item'}`}
+                {t('plugin_ito_total_claimable_count')}
+                {`${claimableCount} ${claimableCount > 1 ? 'items' : 'item'}`},
             </Typography>
 
             <Typography className={classes.subText}>{t('plugin_airdrop_nft_check_address')}</Typography>

@@ -11,15 +11,15 @@ import {
     TypedMessageTuple,
     TypedMessageUnknown,
     TypedMessagePromise,
-    registerTypedMessageRenderer,
     TypedMessageEmpty,
     makeTypedMessageText,
-} from '../../protocols/typed-message'
+} from '@masknet/shared-base'
 import { Image } from '../shared/Image'
 import { useAsync } from 'react-use'
-import { getRendererOfTypedMessage } from '../../protocols/typed-message'
+import { getRendererOfTypedMessage, registerTypedMessageRenderer } from '../../protocols/typed-message'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { PayloadReplacer } from './PayloadReplacer'
+import { useI18N } from '../../utils'
 
 interface MetadataRendererProps {
     metadata: TypedMessage['meta']
@@ -113,15 +113,12 @@ registerTypedMessageRenderer('image', {
 export const DefaultTypedMessageTupleRenderer = memo(function DefaultTypedMessageTupleRenderer(
     props: TypedMessageRendererProps<TypedMessageTuple>,
 ) {
+    const { t } = useI18N()
     try {
         JSON.stringify(props.message.items)
     } catch (error) {
         if (error instanceof Error && error.message.includes('circular structure')) {
-            return (
-                <Typography>
-                    The TypedMessage has a circular structure so it can't be rendered on the screen.
-                </Typography>
-            )
+            return <Typography>{t('typed_message_can_not_be_rendered')}</Typography>
         }
     }
     return (
@@ -152,7 +149,9 @@ registerTypedMessageRenderer('empty', {
 export const DefaultTypedMessageUnknownRenderer = memo(function DefaultTypedMessageUnknownRenderer(
     props: TypedMessageRendererProps<TypedMessageUnknown>,
 ) {
-    return renderWithMetadata(props, <Typography color="textPrimary">Unknown message</Typography>)
+    const { t } = useI18N()
+
+    return renderWithMetadata(props, <Typography color="textPrimary">{`${t('unknown')} ${t('message')}`}</Typography>)
 })
 registerTypedMessageRenderer('unknown', {
     component: DefaultTypedMessageUnknownRenderer,

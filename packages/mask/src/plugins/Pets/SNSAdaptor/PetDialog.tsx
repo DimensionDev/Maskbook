@@ -9,6 +9,7 @@ import { initMeta, initCollection } from '../constants'
 import { PreviewBox } from './previewBox'
 import type { PetMetaDB, FilterContract, CollectionNFT } from '../types'
 import { useUser, useNfts } from '../hooks'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -48,6 +49,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function PetDialog() {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
     const chainId = useChainId()
     const user = useUser()
@@ -85,7 +87,7 @@ export function PetDialog() {
             setImageError(true)
             return
         }
-        const chosedToken = collection.tokens.find((item) => item.image === metaData.image)
+        const chosedToken = collection.tokens.find((item) => item.mediaUrl === metaData.image)
         const meta = { ...metaData }
         meta.userId = user.userId
         meta.contract = collection.contract
@@ -120,13 +122,13 @@ export function PetDialog() {
 
     const imageChose = useMemo(() => {
         if (!metaData.image) return ''
-        const imageChosed = collection.tokens.find((item) => item.image === metaData.image)
-        return imageChosed?.image
+        const imageChosed = collection.tokens.find((item) => item.mediaUrl === metaData.image)
+        return imageChosed?.mediaUrl
     }, [metaData.image])
 
     return (
         <>
-            <InjectedDialog open={open} onClose={closeDialog} title="Non-Fungible Friends">
+            <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_pets_dialog_title')}>
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
@@ -135,7 +137,7 @@ export function PetDialog() {
                         <Grid item xs={8}>
                             <TextField
                                 className={classes.input}
-                                label="NFT Contract"
+                                label={t('plugin_pets_dialog_contract')}
                                 fullWidth
                                 select
                                 required
@@ -154,7 +156,7 @@ export function PetDialog() {
                             </TextField>
                             <TextField
                                 className={classes.input}
-                                label="Token ID"
+                                label={t('plugin_pets_dialog_token')}
                                 fullWidth
                                 select
                                 required
@@ -166,9 +168,9 @@ export function PetDialog() {
                                 onChange={(e) => onImageChange(e.target.value)}>
                                 {collection.tokens.map((item, index) => {
                                     return (
-                                        <MenuItem key={`${item.name}${index}`} value={item.image}>
+                                        <MenuItem key={`${item.name}${index}`} value={item.mediaUrl}>
                                             <Box className={classes.itemFix}>
-                                                <img className={classes.thumbnail} src={item.image} />
+                                                <img className={classes.thumbnail} src={item.mediaUrl} />
                                                 <Typography>{item.name}</Typography>
                                             </Box>
                                         </MenuItem>
@@ -177,7 +179,9 @@ export function PetDialog() {
                             </TextField>
                             <TextField
                                 className={classes.input}
-                                label={holderChange ? 'Optional, 100 characters max.' : 'Greeting message'}
+                                label={
+                                    holderChange ? t('plugin_pets_dialog_msg_optional') : t('plugin_pets_dialog_msg')
+                                }
                                 fullWidth
                                 multiline
                                 rows={3}
@@ -197,18 +201,18 @@ export function PetDialog() {
                         fullWidth
                         onClick={saveHandle}
                         disabled={!collection.name || !metaData.image}>
-                        Confirm
+                        {t('plugin_pets_dialog_btn')}
                     </Button>
                     <Box className={classes.desBox}>
-                        <Typography className={classes.des}>Powered by: MintTeam</Typography>
-                        <Typography className={classes.des}>Support By: RSS3</Typography>
+                        <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
+                        <Typography className={classes.des}>{t('plugin_pets_dialog_powerd')}</Typography>
                     </Box>
                 </DialogContent>
             </InjectedDialog>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={isTipShow}
-                message="Your Non-Fungible Friend has been set up successFully"
+                message={t('plugin_pets_dialog_success')}
             />
         </>
     )

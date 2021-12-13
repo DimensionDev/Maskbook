@@ -13,6 +13,7 @@ import { LoadingButton } from '@mui/lab'
 import { PopupRoutes } from '@masknet/shared-base'
 import { currentAccountSettings, currentMaskWalletAccountSettings } from '../../../../../plugins/Wallet/settings'
 import { first } from 'lodash-unified'
+import type { Search } from 'history'
 
 const useStyles = makeStyles()({
     container: {
@@ -72,14 +73,14 @@ const useStyles = makeStyles()({
 })
 
 const AddDeriveWallet = memo(() => {
-    const indexes = useRef(new Set())
+    const indexes = useRef(new Set<number>())
     const { t } = useI18N()
     const history = useHistory()
-    const location = useLocation()
+    const location = useLocation() as { state: { mnemonic: string }; search: Search }
     const { classes } = useStyles()
-    const wallets = useWallets()
-    const mnemonic = new URLSearchParams(location.search).get('mnemonic')
+    const wallets = useWallets(ProviderType.MaskWallet)
     const walletName = new URLSearchParams(location.search).get('name')
+    const { mnemonic } = location.state
 
     const [page, setPage] = useState(0)
 
@@ -100,7 +101,7 @@ const AddDeriveWallet = memo(() => {
             })
         }
         return []
-    }, [mnemonic, wallets, page])
+    }, [mnemonic, wallets.length, page])
 
     const onCheck = useCallback(
         async (checked, index) => {
@@ -116,29 +117,41 @@ const AddDeriveWallet = memo(() => {
     const [{ loading: confirmLoading }, onConfirm] = useAsyncFn(async () => {
         const unDeriveWallets = Array.from(indexes.current)
         if (!mnemonic) return
-        const wallets = await Promise.all(
-            unDeriveWallets.map(async (pathIndex) =>
-                WalletRPC.recoverWalletFromMnemonic(
-                    `${walletName}${pathIndex}` ?? '',
-                    mnemonic,
-                    `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
-                ),
-            ),
-        )
 
-        if (!currentMaskWalletAccountSettings.value && wallets.length) {
-            await WalletRPC.updateMaskAccount({
-                account: first(wallets),
-            })
+        if (unDeriveWallets.length) {
+            const firstPath = first(unDeriveWallets)
+            const firstWallet = await WalletRPC.recoverWalletFromMnemonic(
+                `${walletName}${firstPath!}`,
+                mnemonic,
+                `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${firstPath}`,
+            )
 
-            if (!currentAccountSettings.value)
+            const wallets = await Promise.all(
+                unDeriveWallets
+                    .slice(1)
+                    .map(async (pathIndex) =>
+                        WalletRPC.recoverWalletFromMnemonic(
+                            `${walletName}${pathIndex}`,
+                            mnemonic,
+                            `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${pathIndex}`,
+                        ),
+                    ),
+            )
+
+            if (!currentMaskWalletAccountSettings.value) {
+                await WalletRPC.updateMaskAccount({
+                    account: firstWallet,
+                })
+            }
+            if (!currentAccountSettings.value) {
                 await WalletRPC.updateAccount({
-                    account: first(wallets),
+                    account: firstWallet,
                     providerType: ProviderType.MaskWallet,
                 })
+            }
         }
         history.replace(PopupRoutes.Wallet)
-    }, [mnemonic, walletName])
+    }, [mnemonic, walletName, wallets.length])
 
     return (
         <div className={classes.container}>

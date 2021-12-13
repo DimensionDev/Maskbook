@@ -1,10 +1,10 @@
 import { first } from 'lodash-unified'
+import { defer } from '@masknet/shared-base'
 import Web3 from 'web3'
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { EVM_Messages } from '../../../../plugins/EVM/messages'
-import { defer } from '@masknet/shared-base'
 import { currentChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
 import { updateAccount } from '../../../../plugins/Wallet/services'
 

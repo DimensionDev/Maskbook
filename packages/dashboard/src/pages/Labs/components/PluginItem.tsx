@@ -1,4 +1,4 @@
-import { SettingsIcon } from '@masknet/icons'
+import { SettingsIcon, TutorialIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, ListItem, ListItemAvatar, ListItemText, styled, listItemTextClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -13,9 +13,8 @@ const useStyles = makeStyles()((theme) => ({
     root: {
         background: MaskColorVar.secondaryBackground,
         borderRadius: 16,
-        width: 355,
+        minWidth: 355,
         minHeight: 158,
-        margin: theme.spacing(1),
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -25,17 +24,23 @@ const useStyles = makeStyles()((theme) => ({
         background: MaskColorVar.primaryBackground,
         width: '44px',
         height: '44px',
+        '> *': {
+            width: 28,
+            height: 28,
+        },
     },
     settings: {
         alignSelf: 'flex-start',
         paddingTop: theme.spacing(1),
+        marginLeft: theme.spacing(1),
         cursor: 'pointer',
+        color: MaskColorVar.textSecondary,
     },
     actions: {
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center',
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
     },
 }))
 
@@ -58,6 +63,7 @@ export interface PluginItemProps {
     onFacebook?: (id: string) => void
     onExplore?: (id: string) => void
     onSetting?: (id: string) => void
+    onTutorial: (id: string) => void
 }
 
 export function PluginItemPlaceholder() {
@@ -66,7 +72,7 @@ export function PluginItemPlaceholder() {
 }
 
 export default function PluginItem(props: PluginItemProps) {
-    const { id, title, desc, icon, enabled, onSwitch, onTwitter, onFacebook, onExplore, onSetting } = props
+    const { id, title, desc, icon, enabled, onSwitch, onTwitter, onFacebook, onExplore, onSetting, onTutorial } = props
     const { classes } = useStyles()
     return (
         <Box className={classes.root}>
@@ -75,6 +81,9 @@ export default function PluginItem(props: PluginItemProps) {
                     <Avatar className={classes.avatar}>{icon}</Avatar>
                 </ListItemAvatar>
                 <TextWrapper primary={title} secondary={desc} />
+                <Box className={classes.settings}>
+                    <TutorialIcon onClick={() => onTutorial(id)} />
+                </Box>
                 {onSetting ? (
                     <Box className={classes.settings}>
                         <SettingsIcon onClick={() => onSetting(id)} />

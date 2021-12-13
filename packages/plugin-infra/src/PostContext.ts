@@ -1,13 +1,12 @@
+import { useObservableValues, useValueRef } from '@masknet/shared'
 import {
     ObservableMap,
     ObservableSet,
-    Payload,
-    PostIdentifier,
-    ProfileIdentifier,
-    TypedMessageTuple,
-    useObservableValues,
-    useValueRef,
-} from '@masknet/shared'
+    type Payload,
+    type PostIdentifier,
+    type ProfileIdentifier,
+    type TypedMessageTuple,
+} from '@masknet/shared-base'
 import { ValueRef, LiveSelector, DOMProxy } from '@dimensiondev/holoflows-kit'
 import type { Result } from 'ts-results'
 import { Context, createContext, createElement, memo, useContext } from 'react'

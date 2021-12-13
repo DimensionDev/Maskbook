@@ -3,6 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import { BALANCER_SWAP_TYPE } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
 import { SwapResponse, TradeStrategy } from '../../types'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -12,7 +13,8 @@ export function useTrade(
     outputToken?: FungibleTokenDetailed,
 ) {
     const blockNumber = useBlockNumber()
-    const { WNATIVE_ADDRESS } = useTokenConstants()
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const { WNATIVE_ADDRESS } = useTokenConstants(targetChainId)
 
     return useAsyncRetry(async () => {
         if (!WNATIVE_ADDRESS) return null
@@ -28,6 +30,7 @@ export function useTrade(
             buyToken,
             isExactIn ? BALANCER_SWAP_TYPE.EXACT_IN : BALANCER_SWAP_TYPE.EXACT_OUT,
             isExactIn ? inputAmount : outputAmount,
+            targetChainId,
         )
         // no pool found
         if (!swaps[0].length) return null
@@ -35,6 +38,7 @@ export function useTrade(
     }, [
         WNATIVE_ADDRESS,
         strategy,
+        targetChainId,
         inputAmount,
         outputAmount,
         inputToken?.address,

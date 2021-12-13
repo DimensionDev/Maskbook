@@ -3,15 +3,14 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isZero,
-    pow10,
     TransactionStateType,
     useAccount,
+    ZERO_ADDRESS,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
+import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent, Grid, Typography } from '@mui/material'
 import { keyframes, makeStyles } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -25,7 +24,6 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { PluginTraderMessages } from '../../Trader/messages'
 import type { Coin } from '../../Trader/types'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
-import { ADDRESS_ZERO } from '../constants'
 import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
@@ -34,10 +32,10 @@ import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const rainbow_animation = keyframes`
     0% {
-        background-position: '100% 0%';
+        background-position: 100% 0%;
     }
     100% {
-        background-position: '0 100%';
+        background-position: 0 100%;
     }
 `
 
@@ -73,6 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         background:
             'linear-gradient(40deg,#ff9304,#ff04ea 10%,#9b4beb 20%,#0e8dd6 30%,#0bc6df 40%,#07d464 50%,#dfd105 60%,#ff04ab 78%,#8933eb 90%,#3b89ff)',
         webkitBackgroundClip: 'text',
+        backgroundClip: 'text',
         color: 'transparent',
         animation: `${rainbow_animation} 6s linear infinite`,
         backgroundSize: '600% 600%',
@@ -130,7 +129,7 @@ export function DepositDialog() {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').multipliedBy(pow10(token?.decimals ?? 0))
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
@@ -155,7 +154,7 @@ export function DepositDialog() {
         pool?.prizePool.address ?? '',
         amount.toFixed(),
         pool?.tokens.ticket.address ?? '',
-        ADDRESS_ZERO, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
+        ZERO_ADDRESS, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
         token,
     )
     //#endregion

@@ -9,10 +9,11 @@ import {
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
+import fromUnixTime from 'date-fns/fromUnixTime'
 import { first, head, uniqBy } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import { OpenSeaAccountURL } from '../constants'
-import { toDate, toTokenDetailed, toTokenIdentifier } from '../helpers'
+import { toTokenDetailed, toTokenIdentifier } from '../helpers'
 import { PluginCollectibleRPC } from '../messages'
 import { CollectibleProvider, CollectibleToken } from '../types'
 import { getOrderUnitPrice } from '../utils'
@@ -91,7 +92,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     end_time: openSeaResponse.endTime
                         ? new Date(openSeaResponse.endTime)
                         : desktopOrder
-                        ? toDate(Number.parseInt(desktopOrder.listing_time as unknown as string, 10))
+                        ? fromUnixTime(desktopOrder.listing_time)
                         : null,
                     order_payment_tokens: desktopOrder?.payment_token_contract
                         ? [toTokenDetailed(chainId, desktopOrder.payment_token_contract)]

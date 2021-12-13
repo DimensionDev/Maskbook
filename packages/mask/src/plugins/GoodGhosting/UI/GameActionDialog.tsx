@@ -7,7 +7,7 @@ import type { GoodGhostingInfo } from '../types'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { useI18N } from '../../../utils'
 import { useGameToken } from '../hooks/usePoolData'
-import BigNumber from 'bignumber.js'
+import { isGreaterThanOrEqualTo } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -57,9 +57,7 @@ export function GameActionDialog(props: GameActionDialogProps) {
     } = useERC20TokenBalance(gameToken.address)
 
     const hasSufficientBalance =
-        !loadingTokenBalance &&
-        !errorTokenBalance &&
-        new BigNumber(tokenBalance).isGreaterThanOrEqualTo(info.segmentPayment)
+        !loadingTokenBalance && !errorTokenBalance && isGreaterThanOrEqualTo(tokenBalance, info.segmentPayment)
 
     let action = (
         <div className={classes.actionSection}>

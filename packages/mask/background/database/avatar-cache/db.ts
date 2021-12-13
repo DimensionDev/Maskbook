@@ -1,4 +1,4 @@
-import { openDB, DBSchema } from 'idb/with-async-ittr-cjs'
+import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { Identifier, IdentifierMap, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import { createDBAccess, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
 

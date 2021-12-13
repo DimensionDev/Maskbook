@@ -23,16 +23,16 @@ import { noop } from 'lodash-unified'
 import { useValueRef } from '@masknet/shared'
 import { useI18N, MaskMessages, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
+import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
 import Services from '../../extension/service'
 
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
-    SayHelloWorld = 'say-hello-world',
+    Close = 'close',
 }
 
 //#region wizard dialog
@@ -446,15 +446,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
     const ui = activatedSocialNetworkUI
-    const [step, setStep] = useState(
-        userGuideStatus[ui.networkIdentifier].value === 'completed' ? SetupGuideStep.FindUsername : '',
-    )
+    const [step, setStep] = useState(SetupGuideStep.FindUsername)
 
     //#region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
-    const userGuideStatusRef = userGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
-    const userGuideStatusVal = useValueRef(userGuideStatusRef)
     const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
@@ -463,11 +459,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         }
     }, [lastState_])
     useEffect(() => {
-        // check user guide status
-        if (ui.networkIdentifier === 'twitter.com' && userGuideStatusVal !== 'completed') return
-        if (!lastState.status) return
-        setStep(lastState.status)
-    }, [step, setStep, lastState, userGuideStatusVal])
+        setStep(lastState.status ?? SetupGuideStep.Close)
+    }, [step, setStep, lastState])
     //#endregion
 
     //#region setup username
@@ -501,7 +494,6 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onClose = () => {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
-        props.onClose?.()
     }
 
     return step === SetupGuideStep.FindUsername ? (
