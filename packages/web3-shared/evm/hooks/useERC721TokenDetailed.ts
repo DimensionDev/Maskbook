@@ -111,7 +111,7 @@ const lazyVoid = Promise.resolve()
 const BASE64_PREFIX = 'data:application/json;base64,'
 const HTTP_PREFIX = 'http'
 // Todo: replace this temporary proxy.
-const CORS_PROXY = 'https://whispering-harbor-49523.herokuapp.com'
+const CORS_PROXY = 'https://cors.r2d2.to'
 export async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721TokenInfo | void> {
     if (!tokenURI) return
 
@@ -135,7 +135,7 @@ export async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<E
     if (promise === lazyVoid) {
         try {
             // for some NFT tokens return an URL refers to a JSON file
-            promise = fetch(tokenURI.startsWith(HTTP_PREFIX) ? `${CORS_PROXY}/${tokenURI}` : tokenURI).then(
+            promise = fetch(tokenURI.startsWith(HTTP_PREFIX) ? `${CORS_PROXY}/?${tokenURI}` : tokenURI).then(
                 async (r) => {
                     const json = await r.json()
                     return {
