@@ -4,7 +4,7 @@ import {
     patchNonBreakingUpgradeForBackupJSONFileVersion1,
     upgradeFromBackupJSONFileVersion0,
 } from './version-1'
-import type { ProfileIdentifier } from '../../../../database/type'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { isBackupJSONFileVersion0 } from './version-0'
 import {
     BackupJSONFileVersion2,

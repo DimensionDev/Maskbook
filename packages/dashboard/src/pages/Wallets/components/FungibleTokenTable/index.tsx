@@ -9,7 +9,7 @@ import { useWeb3State } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import {
@@ -107,7 +107,7 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
     }, [])
 
     const onSend = useCallback(
-        (token: Web3Plugin.FungibleToken) => navigate(RoutePaths.WalletsTransfer, { state: { token } }),
+        (token: Web3Plugin.FungibleToken) => navigate(DashboardRoutes.WalletsTransfer, { state: { token } }),
         [],
     )
 

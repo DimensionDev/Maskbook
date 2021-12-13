@@ -1,6 +1,6 @@
 import { Environment, isEnvironment, MessageTarget, UnboundedRegistry } from '@dimensiondev/holoflows-kit'
 import { AsyncCall, AsyncCallLogLevel, AsyncGeneratorCall } from 'async-call-rpc/full'
-import { serializer, getLocalImplementation, getLocalImplementationExotic } from '@masknet/shared'
+import { serializer, getLocalImplementation, getLocalImplementationExotic } from '@masknet/shared-base'
 const log: AsyncCallLogLevel = {
     beCalled: true,
     localError: true,

@@ -1,5 +1,5 @@
 import { Profile, queryProfile } from '../../../database'
-import { ProfileIdentifier, Identifier, PostIVIdentifier } from '../../../database/type'
+import { ProfileIdentifier, Identifier, PostIVIdentifier } from '@masknet/shared-base'
 import { queryPostDB } from '../../../../background/database/post'
 import { GunAPI } from '../../../network/gun'
 //#endregion

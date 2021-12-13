@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
 import { injectPostCommentsDefault } from '../../social-network/defaults'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'

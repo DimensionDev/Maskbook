@@ -23,7 +23,8 @@ import {
     useReverseAddress,
 } from '@masknet/plugin-infra'
 import { useCallback, useMemo } from 'react'
-import { useRemoteControlledDialog, WalletIcon, ProfileIdentifier, DashboardRoutes } from '@masknet/shared'
+import { useRemoteControlledDialog, WalletIcon } from '@masknet/shared'
+import { ProfileIdentifier, DashboardRoutes } from '@masknet/shared-base'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
 import { useRecentTransactions } from '../../plugins/Wallet/hooks/useRecentTransactions'

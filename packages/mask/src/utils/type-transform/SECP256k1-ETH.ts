@@ -1,13 +1,9 @@
 import secp256k1 from 'tiny-secp256k1'
 import { ec as EC } from 'elliptic'
 import { EthereumAddress } from 'wallet.ts'
-import type {
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_JsonWebKey,
-} from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { Convert, combine } from 'pvtsutils'
 import { Buffer } from 'buffer'
+import type { EC_Public_JsonWebKey, EC_Private_JsonWebKey, EC_JsonWebKey } from '@masknet/shared-base'
 
 export function keyToJWK(key: string, type: 'public'): EC_Public_JsonWebKey
 export function keyToJWK(key: string, type: 'private'): EC_Private_JsonWebKey

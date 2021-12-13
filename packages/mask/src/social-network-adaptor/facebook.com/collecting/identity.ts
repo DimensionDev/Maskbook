@@ -3,7 +3,7 @@ import type { SocialNetworkUI } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
 import { getProfileIdentifierAtFacebook, getUserID } from '../utils/getProfileIdentifier'
 import { isMobileFacebook } from '../utils/isMobile'
-import { ProfileIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '@masknet/shared-base'
 
 export const IdentityProviderFacebook: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     hasDeprecatedPlaceholderName: true,

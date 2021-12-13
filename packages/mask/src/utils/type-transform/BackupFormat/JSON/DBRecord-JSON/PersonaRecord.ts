@@ -1,7 +1,6 @@
 import type { BackupJSONFileLatest } from '../latest'
 import type { PersonaRecord } from '../../../../../../background/database/persona/db'
-import { Identifier, ECKeyIdentifier, ProfileIdentifier } from '../../../../../database/type'
-import { IdentifierMap } from '../../../../../database/IdentifierMap'
+import { Identifier, ECKeyIdentifier, IdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
 export function PersonaRecordToJSONFormat(persona: PersonaRecord): BackupJSONFileLatest['personas'][0] {
     return {
         createdAt: persona.createdAt.getTime(),
