@@ -26,7 +26,6 @@ export function useNfts(user: User) {
     useEffect(() => {
         if (collectibles.length === 0) return
         const total = [...fetchTotal, ...collectibles]
-        console.log('total', total)
         setFetchtotal(total)
         const tempNfts: FilterContract[] = initContracts()
         total.forEach((x) => {

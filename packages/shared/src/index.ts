@@ -16,5 +16,4 @@ export interface DashboardPluginMessages {
 export interface DashboardPluginServices {
     Wallet: unknown
     Swap: unknown
-    Pets: unknown
 }

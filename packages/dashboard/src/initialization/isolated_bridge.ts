@@ -29,7 +29,6 @@ function installPluginService() {
     setPluginServices({
         Wallet: initRPCBridge(PluginMessages.Wallet.events.rpc),
         Swap: initRPCBridge(PluginMessages.Swap.rpc),
-        Pets: initRPCBridge(PluginMessages.Pets.rpc),
     })
 }
 

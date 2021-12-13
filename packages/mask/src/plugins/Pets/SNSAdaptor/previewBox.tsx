@@ -115,8 +115,7 @@ export function PreviewBox(props: Props) {
             {props.imageUrl && <img className={classes.image} src={props.imageUrl} />}
             {!(props.message || props.imageUrl) && (
                 <div className={classes.noData}>
-                    <Typography>Set up to preview</Typography>
-                    <Typography>your brand new pet</Typography>
+                    <Typography>Preview</Typography>
                 </div>
             )}
         </div>

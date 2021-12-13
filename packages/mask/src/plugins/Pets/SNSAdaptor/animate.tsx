@@ -3,10 +3,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { getAssetAsBlobURL } from '../../../utils'
 import Drag from './drag'
-import { useUser, useCurrentVisitingUser } from '../hooks/useUser'
-import { useNfts } from '../hooks/useNfts'
-import { useEssay } from '../hooks/useEssay'
-import { useDefaultEssay } from '../hooks/useEssay'
+import { useUser, useNfts, useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -44,21 +41,21 @@ const useStyles = makeStyles()(() => ({
         maxHeight: 80,
         bottom: 150,
         backgroundColor: '#fff',
-        borderRadius: '12px',
+        borderRadius: 12,
         boxShadow: '0 0 8px #ddd',
         opacity: 1,
         pointerEvents: 'none',
         transition: 'all 200ms',
-        padding: '12px',
+        padding: 12,
         textAlign: 'left',
         animation: 'word-show 0.9s both',
         '&:before': {
             content: '""',
-            width: '8px',
-            height: '8px',
+            width: 8,
+            height: 8,
             backgroundColor: '#fff',
             position: 'absolute',
-            bottom: '-4px',
+            bottom: -4,
             left: '50%',
             boxShadow: '3px 3px 6px #ccc',
             transform: 'translateX(-50%) rotate(45deg)',
@@ -98,7 +95,6 @@ const useStyles = makeStyles()(() => ({
 
 const AnimatePic = () => {
     const classes = useStylesExtends(useStyles(), {})
-    // const Background = getAssetAsBlobURL(new URL('../assets/loot.gif', import.meta.url))
     const Close = getAssetAsBlobURL(new URL('../assets/close.png', import.meta.url))
 
     const [start, setStart] = useState(true)

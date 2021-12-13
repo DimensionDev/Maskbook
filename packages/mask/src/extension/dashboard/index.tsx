@@ -4,7 +4,7 @@ import Services from '../service'
 import { WalletRPC, WalletMessages } from '../../plugins/Wallet/messages'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginTraderMessages, PluginTraderRPC } from '../../plugins/Trader/messages'
-import { PluginPetMessages, PluginPetRPC } from '../../plugins/Pets/messages'
+import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { MaskMessages } from '../../utils/messages'
 import { startPluginDashboard } from '@masknet/plugin-infra'
 import { createPluginHost } from '../../plugin-infra/host'
@@ -22,7 +22,6 @@ const msg: DashboardPluginMessages = {
 const rpc: DashboardPluginServices = {
     Wallet: WalletRPC,
     Swap: PluginTraderRPC,
-    Pets: PluginPetRPC,
 }
 // @ts-ignore To avoid build failure due to the circular project reference
 setService(Services)

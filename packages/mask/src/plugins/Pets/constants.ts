@@ -39,6 +39,10 @@ export const PetCollections = [
         name: 'CryptoPunks',
         contract: '0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb',
     },
+    {
+        name: 'Pudgy Penguins',
+        contract: '0xbd3531da5cf5857e7cfaa92426877b022e612cf8',
+    },
 ]
 
 export const initMeta = {

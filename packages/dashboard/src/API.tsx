@@ -15,7 +15,6 @@ export let PluginMessages: PluginMessages = null!
 export interface PluginServices extends DashboardPluginServices {
     Wallet: typeof import('../../mask/dist/src/plugins/Wallet/messages').WalletRPC
     Swap: typeof import('../../mask/dist/src/plugins/Trader/messages').PluginTraderRPC
-    Pets: typeof import('../../mask/dist/src/plugins/Pets/messages').PluginPetRPC
 }
 export interface PluginMessages extends DashboardPluginMessages {
     Wallet: typeof WalletMessages

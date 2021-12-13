@@ -8,8 +8,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { initMeta, initCollection } from '../constants'
 import { PreviewBox } from './previewBox'
 import type { PetMetaDB, FilterContract, CollectionNFT } from '../types'
-import { useUser } from '../hooks/useUser'
-import { useNfts } from '../hooks/useNfts'
+import { useUser, useNfts } from '../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -23,12 +22,12 @@ const useStyles = makeStyles()((theme) => ({
         margin: theme.spacing(4, 0),
     },
     thumbnail: {
-        width: '25px',
-        height: '25px',
+        width: 25,
+        height: 25,
         objectFit: 'cover',
         margin: theme.spacing(0, 1, 0, 0),
         display: 'inline-block',
-        borderRadius: '4px',
+        borderRadius: 4,
     },
     itemFix: {
         display: 'flex',
@@ -37,10 +36,10 @@ const useStyles = makeStyles()((theme) => ({
     prevBox: {
         margin: theme.spacing(2, 0, 0),
         border: '1px dashed #ccc',
-        borderRadius: '4px',
+        borderRadius: 4,
         height: 'calc(100% - 16px)',
         boxSizing: 'border-box',
-        padding: '4px',
+        padding: 4,
     },
 }))
 
@@ -49,7 +48,6 @@ export function PetDialog() {
     const chainId = useChainId()
     const user = useUser()
     const nfts = useNfts(user)
-    console.log('nfts', nfts)
     const [extraData, setExtraData] = useState<CollectionNFT[]>([])
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
 
@@ -59,6 +57,7 @@ export function PetDialog() {
     const [metaData, setMetaData] = useState<PetMetaDB>(initMeta)
     const [isImageError, setImageError] = useState(false)
     const [isTipShow, setTipShow] = useState(false)
+    const [holderChange, setHolderChange] = useState(true)
 
     useEffect(() => {
         if (!open) {
@@ -174,30 +173,38 @@ export function PetDialog() {
                             </TextField>
                             <TextField
                                 className={classes.input}
-                                label="message (Optional, 100 characters max.)"
+                                label={holderChange ? 'Optional, 100 characters max.' : 'Greeting message'}
                                 fullWidth
                                 multiline
                                 rows={3}
                                 disabled={!collection.name}
                                 value={metaData.word}
                                 onChange={(e) => setMsgValueCheck(e.target.value)}
+                                onBlur={() => setHolderChange(true)}
+                                onFocus={() => setHolderChange(false)}
                             />
                         </Grid>
                     </Grid>
 
-                    <Button className={classes.btn} variant="contained" size="large" fullWidth onClick={saveHandle}>
-                        Confirm Add
+                    <Button
+                        className={classes.btn}
+                        variant="contained"
+                        size="large"
+                        fullWidth
+                        onClick={saveHandle}
+                        disabled={!collection.name || !metaData.image}>
+                        Confirm
                     </Button>
                     <Box className={classes.desBox}>
-                        <Typography className={classes.des}>Support By: MintTeam</Typography>
-                        <Typography className={classes.des}>RSS3</Typography>
+                        <Typography className={classes.des}>Powered by MintTeam</Typography>
+                        <Typography className={classes.des}>Support By: RSS3</Typography>
                     </Box>
                 </DialogContent>
             </InjectedDialog>
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={isTipShow}
-                message="Your new pet has been successFully set up"
+                message="Your Non-Fungible Friend has been set up successFully"
             />
         </>
     )
