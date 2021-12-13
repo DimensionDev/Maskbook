@@ -36,15 +36,15 @@ export function OtherPlayersView(props: OtherPlayersViewProps) {
     if (loading) {
         return (
             <Typography variant="h6" color="textSecondary">
-                Loading other players' stats
+                {t('plugin_good_ghosting_loading_other_player_stats')}
             </Typography>
         )
     } else if (error || !players) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Typography color="textPrimary">{t('go_wrong')}</Typography>
                 <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
-                    Retry
+                    {t('retry')}
                 </Button>
             </Box>
         )

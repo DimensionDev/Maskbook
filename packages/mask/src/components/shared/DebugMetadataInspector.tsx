@@ -17,6 +17,7 @@ import { Autocomplete } from '@mui/material'
 import { isDataMatchJSONSchema, metadataSchemaStoreReadonly } from '../../protocols/typed-message'
 import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootComponents'
 import { useState } from 'react'
+import { useI18N } from '../../utils'
 
 export interface DebugMetadataInspectorProps {
     meta: ReadonlyMap<string, any>
@@ -29,6 +30,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
     const { meta, onExit, onDeleteMeta, onNewMeta } = props
     const [field, setField] = useState('')
     const [content, setContent] = useState('{}')
+    const { t } = useI18N()
 
     const knownMetadata = [...metadataSchemaStoreReadonly.keys()]
     const result = isValid(content)
@@ -37,7 +39,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
         <Card variant="outlined">
             <CardContent>
                 <Typography color="textSecondary" gutterBottom>
-                    Add new metadata or replace existing metadata
+                    {t('debug_metadata_title')}
                 </Typography>
                 <form>
                     <Autocomplete
@@ -84,7 +86,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                     size="small"
                     variant="contained"
                     disabled={isInvalid || field?.length <= 3}>
-                    Put metadata
+                    {t('debug_metadata_put_metadata')}
                 </Button>
                 <Button
                     onClick={() => {
@@ -93,7 +95,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                     }}
                     size="small"
                     variant="text">
-                    Clear
+                    {t('clear')}
                 </Button>
             </CardActions>
         </Card>
@@ -118,7 +120,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                                                 setField(key)
                                                 setContent(JSON.stringify(content, undefined, 4))
                                             }}>
-                                            Edit
+                                            {t('edit')}
                                         </Button>
                                     ) : null}
 
@@ -128,7 +130,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
                                             size="small"
                                             color="secondary"
                                             onClick={() => onDeleteMeta(key)}>
-                                            Delete
+                                            {t('delete')}
                                         </Button>
                                     ) : null}
                                 </Typography>

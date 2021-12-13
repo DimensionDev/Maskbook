@@ -5,6 +5,7 @@ import {
     formatBalance,
     getChainDetailed,
     getChainIdFromName,
+    useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { base } from '../base'
@@ -48,21 +49,14 @@ const sns: Plugin.SNSAdaptor.Definition = {
         [
             RedPacketMetaKey,
             (_payload) => {
-                const payload = _payload as RedPacketJSONPayload
-                const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
-                const chainDetailed = getChainDetailed(chainId)
-                const tokenDetailed =
-                    payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token
-                return `🧧 A Lucky Drop with ${formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $${
-                    tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'
-                } from ${payload.sender.name}`
+                return { text: <ERC20RedpacketBadge payload={_payload as RedPacketJSONPayload} /> }
             },
         ],
         [
             RedPacketNftMetaKey,
             (_payload) => {
                 const payload = _payload as RedPacketNftJSONPayload
-                return payload.message ? `🧧 ${payload.message}` : '🧧 An NFT Lucky Drop'
+                return { text: <>{payload.message ? `🧧 ${payload.message}` : '🧧 An NFT Lucky Drop'}</> }
             },
         ],
     ]),
@@ -74,6 +68,24 @@ const sns: Plugin.SNSAdaptor.Definition = {
         ...ToolIconURLs.redpacket,
         onClick: 'openCompositionEntry',
     },
+}
+interface ERC20RedpacketBadgeProps {
+    payload: RedPacketJSONPayload
+}
+
+function ERC20RedpacketBadge(props: ERC20RedpacketBadgeProps) {
+    const { payload } = props
+    const { value: fetchedToken } = useERC20TokenDetailed(payload.token?.address ?? payload.token_address)
+    const chainId = getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet
+    const chainDetailed = getChainDetailed(chainId)
+    const tokenDetailed =
+        payload.token?.type === EthereumTokenType.Native ? chainDetailed?.nativeCurrency : payload.token ?? fetchedToken
+    return (
+        <>
+            🧧 A Lucky Drop with {formatBalance(payload.total, tokenDetailed?.decimals ?? 0)} $
+            {tokenDetailed?.symbol ?? tokenDetailed?.name ?? 'Token'} from {payload.sender.name}
+        </>
+    )
 }
 
 export default sns

@@ -14,6 +14,7 @@
     "async-call-rpc": "^6.0.1",
     "bignumber.js": "^9.0.1",
     "lodash-es": "^4.17.21",
+    "react-use": "^17.3.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   }

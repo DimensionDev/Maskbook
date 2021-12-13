@@ -39,11 +39,8 @@ export function CoinSafetyAlert(props: CoinSafetyAlertProps) {
     return (
         <Paper className={classes.root} elevation={0}>
             <Alert variant="outlined" severity="error">
-                <AlertTitle>Token Safety Alert</AlertTitle>
-                Anyone can create and name any ERC20 token on Ethereum, including creating fake versions of existing
-                tokens and tokens that claim to represent projects that do not have a token. Similar to Etherscan, this
-                site automatically tracks analytics for all ERC20 tokens independent of token integrity. Please do your
-                own research before interacting with any ERC20 token.
+                <AlertTitle>{t('plugin_trader_safety_alert_title')}</AlertTitle>
+                {t('plugin_trader_safety_alert')}
                 <Box display="flex" alignItems="center" justifyContent="space-between">
                     <Link
                         color="primary"
@@ -54,10 +51,10 @@ export function CoinSafetyAlert(props: CoinSafetyAlertProps) {
                             address: coin.contract_address,
                             chainId: ChainId.Mainnet,
                         })}>
-                        View on Etherscan
+                        {t('plugin_trader_view_on_etherscan')}
                     </Link>
                     <Button variant="contained" className={classes.approve} onClick={onApprove}>
-                        I understand
+                        {t('plugin_trader_safety_agree')}
                     </Button>
                 </Box>
             </Alert>

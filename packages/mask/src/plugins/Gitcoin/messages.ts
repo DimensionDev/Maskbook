@@ -6,6 +6,7 @@ type DonationDialogUpdated =
           open: true
           title: string
           address: string
+          postLink: string | URL
       }
     | {
           open: false

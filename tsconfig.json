@@ -13,6 +13,7 @@
     // Tests
     { "path": "./packages/backup-format/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
+    { "path": "./packages/shared-base/tsconfig.tests.json" },
     // All plugins should be type checked too
     { "path": "./packages/plugins" }
   ],
@@ -57,7 +58,7 @@
 
     // Language and Environment
     "jsx": "react-jsx",
-    "lib": ["ES2020"], // don't add "DOM", we use @types/web
+    "lib": ["ES2022"], // don't add "DOM", we use @types/web
     "target": "ES2019",
     "useDefineForClassFields": true,
 

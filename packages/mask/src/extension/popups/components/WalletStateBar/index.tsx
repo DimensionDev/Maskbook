@@ -2,7 +2,7 @@ import { FC, memo } from 'react'
 import { LoadingIcon } from '@masknet/icons'
 import { FormattedAddress, WalletIcon } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
+import { NetworkPluginID, useProviderDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { formatEthereumAddress, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Stack, StackProps, Typography } from '@mui/material'
 import { NetworkSelector } from '../../components/NetworkSelector'
@@ -32,13 +32,15 @@ interface WalletStateBarUIProps extends StackProps {
     isPending: boolean
     walletName?: string
     walletAddress?: string
+    domain?: string
     openConnectWalletDialog(): void
 }
 
 export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
-    ({ isPending, walletAddress, walletName, openConnectWalletDialog, children, ...rest }) => {
+    ({ isPending, walletAddress, walletName, openConnectWalletDialog, children, domain, ...rest }) => {
         const { t } = useI18N()
         const { classes } = useStyles()
+        const { Utils } = useWeb3State()
         const providerDescriptor = useProviderDescriptor(ProviderType.MaskWallet, NetworkPluginID.PLUGIN_EVM)
 
         if (!providerDescriptor) return null
@@ -66,7 +68,14 @@ export const WalletStateBarUI: FC<WalletStateBarUIProps> = memo(
                         <WalletIcon providerIcon={providerDescriptor.icon} inverse size={38} />
                     </Stack>
                     <Box sx={{ userSelect: 'none' }}>
-                        <Box fontSize={16}>{walletName ?? '-'}</Box>
+                        <Box fontSize={16} display="flex" alignItems="center">
+                            {walletName ?? '-'}
+                            {domain ? (
+                                <Typography fontSize={14} marginLeft={1}>
+                                    {Utils?.formatDomainName?.(domain)}
+                                </Typography>
+                            ) : null}
+                        </Box>
                         <Box fontSize={12}>
                             <FormattedAddress
                                 address={walletAddress ?? '-'}

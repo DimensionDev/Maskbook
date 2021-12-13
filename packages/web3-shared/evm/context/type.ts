@@ -10,12 +10,13 @@ import type {
     ProviderType,
     Asset,
     Wallet,
-    PortfolioProvider,
-    CollectibleProvider,
+    FungibleAssetProvider,
+    NonFungibleAssetProvider,
     Transaction,
     AddressName,
     AddressNameType,
     CryptoPrice,
+    BalanceOfChains,
     ERC721TokenCollectionInfo,
 } from '../types'
 
@@ -24,6 +25,7 @@ export interface Web3ProviderType {
     chainId: Subscription<ChainId>
     account: Subscription<string>
     balance: Subscription<string>
+    balances: Subscription<BalanceOfChains>
     blockNumber: Subscription<number>
     provider: Subscription<Provider>
     networkType: Subscription<NetworkType>
@@ -31,22 +33,21 @@ export interface Web3ProviderType {
     tokenPrices: Subscription<CryptoPrice>
     wallets: Subscription<Wallet[]>
     walletPrimary: Subscription<Wallet | null>
-
     erc20Tokens: Subscription<ERC20TokenDetailed[]>
     erc721Tokens: Subscription<ERC721TokenDetailed[]>
     erc1155Tokens: Subscription<ERC1155TokenDetailed[]>
-    portfolioProvider: Subscription<PortfolioProvider>
+    portfolioProvider: Subscription<FungibleAssetProvider>
 
     addToken: (token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     removeToken: (token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     trustToken: (address: string, token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
     blockToken: (address: string, token: ERC20TokenDetailed | NonFungibleTokenDetailed) => Promise<void>
 
-    getAssetsList: (address: string, provider: PortfolioProvider, network?: NetworkType) => Promise<Asset[]>
+    getAssetsList: (address: string, provider: FungibleAssetProvider, network?: NetworkType) => Promise<Asset[]>
     getAssetsListNFT: (
         address: string,
         chainId: ChainId,
-        provider: CollectibleProvider,
+        provider: NonFungibleAssetProvider,
         page?: number,
         size?: number,
         collection?: string,
@@ -54,7 +55,7 @@ export interface Web3ProviderType {
     getCollectionsNFT: (
         address: string,
         chainId: ChainId,
-        provider: CollectibleProvider,
+        provider: NonFungibleAssetProvider,
         page?: number,
         size?: number,
     ) => Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }>
@@ -62,7 +63,7 @@ export interface Web3ProviderType {
     getTransactionList: (
         address: string,
         network: NetworkType,
-        provider: PortfolioProvider,
+        provider: FungibleAssetProvider,
         page?: number,
         size?: number,
     ) => Promise<{

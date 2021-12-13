@@ -3,6 +3,8 @@ import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import {
+    getChainIdFromNetworkType,
+    isFortmaticSupported,
     isInjectedProvider,
     NetworkType,
     ProviderType,
@@ -53,6 +55,7 @@ export function ProviderIconClickBait({
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
+            case ProviderType.Fortmatic:
                 setConnectWalletDialog({
                     open: true,
                     providerType,
@@ -67,11 +70,12 @@ export function ProviderIconClickBait({
         onClick?.(network, provider)
     }, [network, provider, wallets, injectedProviderReady, injectedProviderType, onClick])
 
-    // temporary hide inject providers
-    if (isInjectedProvider(providerType)) return null
-
     // hide injected provider in dashboard
     if (isInjectedProvider(providerType) && location.href.includes('dashboard.html')) return null
+
+    // hide fortmatic for some networks because of incomplete supporting
+    if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
+        return null
 
     // coinbase and mathwallet are blocked by CSP
     if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null

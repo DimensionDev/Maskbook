@@ -1,5 +1,5 @@
-import { NetworkType, pow10, PortfolioProvider } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
+import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
+import { NetworkType, FungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { isNil } from 'lodash-unified'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
@@ -16,14 +16,14 @@ import {
 export async function getTransactionList(
     address: string,
     network: NetworkType,
-    provider: PortfolioProvider,
+    provider: FungibleAssetProvider,
     page?: number,
     size = 30,
 ): Promise<{
     transactions: Transaction[]
     hasNextPage: boolean
 }> {
-    if (provider === PortfolioProvider.DEBANK) {
+    if (provider === FungibleAssetProvider.DEBANK) {
         const name = resolveDebankChainName(network)
         if (!name)
             return {
@@ -36,7 +36,7 @@ export async function getTransactionList(
             transactions: fromDeBank(data),
             hasNextPage: false,
         }
-    } else if (provider === PortfolioProvider.ZERION) {
+    } else if (provider === FungibleAssetProvider.ZERION) {
         const scope = resolveZerionTransactionsScopeName(network)
         if (!scope)
             return {
@@ -103,8 +103,8 @@ function fromZerion(data: ZerionTransactionItem[]) {
     return data
         .filter(({ type }) => type !== ZerionRBDTransactionType.AUTHORIZE)
         .map((transaction) => {
-            const ethGasFee = new BigNumber(transaction.fee?.value ?? 0).dividedBy(pow10(18)).toString()
-            const usdGasFee = new BigNumber(ethGasFee).multipliedBy(transaction.fee?.price ?? 0).toString()
+            const ethGasFee = leftShift(transaction.fee?.value ?? 0, 18).toString()
+            const usdGasFee = multipliedBy(ethGasFee, transaction.fee?.price ?? 0).toString()
 
             return {
                 type: transaction.type,
@@ -119,7 +119,7 @@ function fromZerion(data: ZerionTransactionItem[]) {
                             symbol: asset.symbol,
                             address: asset.asset_code,
                             direction,
-                            amount: Number(new BigNumber(value).dividedBy(pow10(asset.decimals)).toString()),
+                            amount: leftShift(value, asset.decimals).toNumber(),
                             logoURI: asset.icon_url,
                         }
                     }) ?? [],

@@ -3,7 +3,8 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { getAssetAsBlobURL, useI18N } from '../../../utils'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { formatBalance, isZero, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { formatBalance, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import type { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles()((theme) => ({

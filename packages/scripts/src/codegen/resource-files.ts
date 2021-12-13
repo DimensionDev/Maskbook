@@ -1,12 +1,16 @@
 import { watchTask } from '../utils'
 import { join } from 'path'
-import { src, dest, watch, series } from 'gulp'
+import { src, dest, watch, series, parallel, TaskFunction } from 'gulp'
 
 const Shared = join(__dirname, '../../../shared/')
-export function resourceCopy() {
-    return src('./src/**/*.png', { cwd: Shared }).pipe(dest('./dist', { cwd: Shared }))
-}
+const Flow = join(__dirname, '../../../plugins/Flow')
+
+const CopyShared = () => src('./src/**/*.png', { cwd: Shared }).pipe(dest('./dist', { cwd: Shared }))
+const CopyFlow = () => src('./src/**/*.png', { cwd: Flow }).pipe(dest('./dist', { cwd: Flow }))
+
+export const resourceCopy: TaskFunction = parallel(CopyShared, CopyFlow)
 export function resourceCopyWatch() {
-    return watch('./src/**/*.png', { cwd: Shared }, series(resourceCopy))
+    watch('./src/**/*.png', { cwd: Flow }, CopyFlow)
+    return watch('./src/**/*.png', { cwd: Shared }, CopyShared)
 }
 watchTask(resourceCopy, resourceCopyWatch, 'resource-copy', 'Copy resources')

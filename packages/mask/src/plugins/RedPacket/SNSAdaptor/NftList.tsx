@@ -3,6 +3,7 @@ import { ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-sh
 import { List, ListItem, ListProps, Skeleton, Typography } from '@mui/material'
 import classnames from 'classnames'
 import type { FC, HTMLProps } from 'react'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -86,6 +87,7 @@ interface NftItemProps extends HTMLProps<HTMLDivElement> {
 }
 
 export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claimed, ...rest }) => {
+    const { t } = useI18N()
     const result = useERC721TokenDetailed(contract, tokenId)
     const { classes } = useStyles()
     if (!result.value || !contract) {
@@ -98,9 +100,9 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
     const info = result.value.info
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
-            <img className={classes.media} src={info.image} alt={info.name} />
+            <img className={classes.media} src={info.mediaUrl} alt={info.name} />
             <Typography className={classes.name}>{info.name}</Typography>
-            {claimed && <Typography className={classes.claimedBadge}>Claimed</Typography>}
+            {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
         </div>
     )
 }

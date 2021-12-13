@@ -16,7 +16,7 @@ export interface TypedMessage {
      */
     readonly type: string
 }
-export type SerializableTypedMessages = SerializableTypedMessage<number> | NonSerializableWithToJSONTypedMessage
+export type SerializableTypedMessages = SerializableTypedMessage<number> | NonSerializableWithAltTypedMessage
 /**
  * A TypedMessage which can be serialized safely into a JSON.
  * If it containing a inner message, it must be serializable too.
@@ -29,9 +29,9 @@ export interface SerializableTypedMessage<Version extends number> extends TypedM
 /**
  * A TypedMessage that is _not_ serializable but it provides a fallback which _is_ serializable.
  */
-export interface NonSerializableWithToJSONTypedMessage extends TypedMessage {
+export interface NonSerializableWithAltTypedMessage extends TypedMessage {
     readonly serializable: false
-    readonly toJSON: SerializableTypedMessages
+    readonly alt: SerializableTypedMessages
 }
 /**
  * A TypedMessage is _not_ serializable (not prepared or not intended to be).

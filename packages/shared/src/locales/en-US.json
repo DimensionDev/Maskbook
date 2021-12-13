@@ -6,6 +6,6 @@
     "snackbar_done": "Done",
     "import": "Import",
     "balance": "Balance",
-    "select_token": "Select Token",
+    "select_token": "Select a Token",
     "erc20_token_list_placeholder": "Token name or contract address"
 }

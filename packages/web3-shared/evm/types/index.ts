@@ -24,6 +24,16 @@ export interface CryptoPrice {
     [token: string]: PriceRecord
 }
 
+export interface BalanceOfChainRecord {
+    [chainId: number]: string
+}
+
+export interface BalanceOfChains {
+    [provider: string]: {
+        [chainId: number]: string
+    }
+}
+
 // bigint is not in our list. iOS doesn't support that.
 export type Primitive = string | number | boolean | symbol | undefined | null
 
@@ -57,6 +67,7 @@ export enum ProviderType {
     MaskWallet = 'Maskbook',
     MetaMask = 'MetaMask',
     WalletConnect = 'WalletConnect',
+    Fortmatic = 'Fortmatic',
     Coin98 = 'Coin98',
     MathWallet = 'MathWallet',
     WalletLink = 'WalletLink',
@@ -96,6 +107,8 @@ export interface Wallet {
     erc1155_token_whitelist: Set<string>
     /** A list of untrusted ERC1155 contract address */
     erc1155_token_blacklist: Set<string>
+    /** yep: removable, nope: unremovable */
+    configurable: boolean
     /** yep: Mask Wallet, nope: External Wallet */
     hasStoredKeyInfo: boolean
     /** yep: Derivable Wallet. nope: UnDerivable Wallet */
@@ -149,7 +162,7 @@ export interface ERC721ContractDetailed extends ERC721Token {
 export interface ERC721TokenInfo {
     name?: string
     description?: string
-    image?: string
+    mediaUrl?: string
     owner?: string
 }
 
@@ -274,6 +287,12 @@ export type PriorEIP1559GasConfig = {
 
 export type GasConfig = EIP1559GasConfig | PriorEIP1559GasConfig
 
+export type GasOptionConfig = {
+    maxFeePerGas?: number | string
+    maxPriorityFeePerGas?: number | string
+    gasPrice?: number | string
+}
+
 // Learn more for a full list of supported JSON RPC methods
 // https://eth.wiki/json-rpc/API#json-rpc-methods
 export enum EthereumMethodType {
@@ -284,6 +303,7 @@ export enum EthereumMethodType {
     WALLET_SWITCH_ETHEREUM_CHAIN = 'wallet_switchEthereumChain',
     ETH_CHAIN_ID = 'eth_chainId',
     ETH_ACCOUNTS = 'eth_accounts',
+    ETH_REQUEST_ACCOUNTS = 'eth_requestAccounts',
     ETH_SEND_TRANSACTION = 'eth_sendTransaction',
     ETH_SEND_RAW_TRANSACTION = 'eth_sendRawTransaction',
     ETH_GET_CODE = 'eth_getCode',
@@ -307,6 +327,8 @@ export enum EthereumMethodType {
     // only for mask
     MASK_GET_TRANSACTION_RECEIPT = 'mask_getTransactionReceipt',
     MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
+    MASK_LOGIN_FORTMATIC = 'mask_loginFortmatic',
+    MASK_LOGOUT_FORTMATIC = 'mask_logoutFortmatic',
 }
 
 export enum EthereumErrorType {
@@ -514,12 +536,12 @@ export enum DomainProvider {
     UNS = 'UNS',
 }
 
-export enum PortfolioProvider {
+export enum FungibleAssetProvider {
     ZERION = 'Zerion',
     DEBANK = 'Debank',
 }
 
-export enum CollectibleProvider {
+export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
 }
 

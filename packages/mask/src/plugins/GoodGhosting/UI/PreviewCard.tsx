@@ -11,6 +11,7 @@ import type { GameMetaData, GoodGhostingInfo } from '../types'
 import { usePoolAssets, usePoolData } from '../hooks/usePoolData'
 import { useOtherPlayerInfo } from '../hooks/useOtherPlayerInfo'
 import { TimelineTimer } from './TimelineTimer'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -46,17 +47,18 @@ interface PreviewCardProps {
 
 export function PreviewCard(props: PreviewCardProps) {
     const { value: addressInfo, error, loading, retry } = useGameContractAddress(props.id)
+    const { t } = useI18N()
 
     if (loading) {
-        return <Typography color="textPrimary">Loading...</Typography>
+        return <Typography color="textPrimary">{t('loading')}</Typography>
     }
 
     if (error || !addressInfo?.contractAddress) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Typography color="textPrimary">{t('go_wrong')}</Typography>
                 <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
-                    Retry
+                    {t('retry')}
                 </Button>
             </Box>
         )
@@ -70,17 +72,18 @@ interface PreviewCardWithGameAddressProps {
 
 export function PreviewCardWithGameAddress(props: PreviewCardWithGameAddressProps) {
     const { value: info, error, loading, retry } = useGameInfo(props.gameData)
+    const { t } = useI18N()
 
     if (loading) {
-        return <Typography color="textPrimary">Loading...</Typography>
+        return <Typography color="textPrimary">{t('loading')}</Typography>
     }
 
     if (error || !info) {
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Typography color="textPrimary">{t('go_wrong')}</Typography>
                 <Button sx={{ marginTop: 1 }} size="small" onClick={retry}>
-                    Retry
+                    {t('retry')}
                 </Button>
             </Box>
         )

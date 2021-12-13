@@ -1,5 +1,4 @@
 import { ProfileIdentifier } from '../../database/type'
-import { currentSelectedIdentity } from '../../settings/settings'
 import { globalUIState, SocialNetworkUI, stateCreator } from '../../social-network'
 import { injectPostCommentsDefault } from '../../social-network/defaults'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
@@ -171,7 +170,6 @@ const mindsUI: SocialNetworkUI.Definition = {
                 return new ProfileIdentifier(
                     'minds.com',
                     ProfileIdentifier.getUserName(IdentityProviderMinds.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(currentSelectedIdentity[mindsBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),
                 ).toText()

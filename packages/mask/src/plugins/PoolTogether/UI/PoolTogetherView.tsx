@@ -189,7 +189,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                     </Link>
                 </Typography>
                 <Typography className={classes.footnote} color={DarkColor.textSecondary} variant="subtitle2">
-                    <span>Supported by</span>
+                    <span>{t('supported_by')}</span>
                     <Link
                         className={classes.footLink}
                         target="_blank"

@@ -1,4 +1,4 @@
-import { ChainId, CollectibleProvider, ERC721TokenCollectionInfo, ERC721TokenDetailed } from '../types'
+import { ChainId, NonFungibleAssetProvider, ERC721TokenCollectionInfo, ERC721TokenDetailed } from '../types'
 import { useAsyncRetry } from 'react-use'
 import { useWeb3Context } from '../context'
 import { uniqWith } from 'lodash-unified'
@@ -8,7 +8,7 @@ import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 export function useCollections(
     address: string,
     chainId: ChainId | null,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     page: number,
     size: number,
 ): AsyncStateRetry<{
@@ -34,7 +34,7 @@ export function useCollections(
 export function useCollectibles(
     address: string,
     chainId: ChainId | null,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     page: number,
     size: number,
     collection?: string,
