@@ -69,6 +69,7 @@ export default function Plugins() {
         [PLUGIN_IDS.MASK_BOX]: true,
         [PLUGIN_IDS.GOOD_GHOSTING]: true,
         [PLUGIN_IDS.POOL_TOGETHER]: true,
+        [PLUGIN_IDS.CRYPTOARTAI]: true,
     })
 
     useEffect(
@@ -179,6 +180,13 @@ export default function Plugins() {
             desc: t.labs_pool_together_desc(),
             icon: <PoolTogetherIcon />,
             enabled: pluginStatus[PLUGIN_IDS.POOL_TOGETHER],
+        },
+        {
+            id: PLUGIN_IDS.POOL_TOGETHER,
+            title: t.labs_cryptoartai(),
+            desc: t.labs_cryptoartai_desc(),
+            icon: <PoolTogetherIcon />,
+            enabled: pluginStatus[PLUGIN_IDS.CRYPTOARTAI],
         },
     ]
 

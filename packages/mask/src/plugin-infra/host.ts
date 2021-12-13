@@ -6,8 +6,8 @@ import { Emitter } from '@servie/events'
 // Do not export from '../utils/' to prevent initialization failure
 import { MaskMessages } from '../utils/messages'
 import i18nNextInstance from '../../shared-ui/locales_legacy'
-import { createI18NBundle } from '@masknet/shared'
 import Services from '../extension/service'
+import { createI18NBundle } from '@masknet/shared-base'
 
 export function createPluginHost<Context>(
     signal: AbortSignal | undefined,

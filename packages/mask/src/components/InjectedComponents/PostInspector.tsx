@@ -3,15 +3,18 @@ import { useAsync } from 'react-use'
 import { DecryptPost, DecryptPostProps } from './DecryptedPost/DecryptedPost'
 import { AddToKeyStore, AddToKeyStoreProps } from './AddToKeyStore'
 import Services from '../../extension/service'
-import { ProfileIdentifier } from '../../database/type'
+import {
+    ProfileIdentifier,
+    type TypedMessageTuple,
+    type PayloadAlpha40_Or_Alpha39,
+    type PayloadAlpha38,
+} from '@masknet/shared-base'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { useValueRef } from '@masknet/shared'
 import { debugModeSetting } from '../../settings/settings'
 import { DebugList } from '../DebugModeUI/DebugList'
-import type { TypedMessageTuple } from '@masknet/shared'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
-import type { PayloadAlpha40_Or_Alpha39, PayloadAlpha38 } from '../../utils/type-transform/Payload'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'

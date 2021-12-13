@@ -107,6 +107,8 @@ export interface Wallet {
     erc1155_token_whitelist: Set<string>
     /** A list of untrusted ERC1155 contract address */
     erc1155_token_blacklist: Set<string>
+    /** yep: removable, nope: unremovable */
+    configurable: boolean
     /** yep: Mask Wallet, nope: External Wallet */
     hasStoredKeyInfo: boolean
     /** yep: Derivable Wallet. nope: UnDerivable Wallet */
@@ -160,7 +162,7 @@ export interface ERC721ContractDetailed extends ERC721Token {
 export interface ERC721TokenInfo {
     name?: string
     description?: string
-    image?: string
+    mediaUrl?: string
     owner?: string
 }
 

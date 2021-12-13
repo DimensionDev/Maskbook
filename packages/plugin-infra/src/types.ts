@@ -1,6 +1,6 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared'
+import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 
@@ -591,6 +591,12 @@ export interface Pagination {
     size?: number
     /** The page index. */
     page?: number
+}
+
+export interface Pageable<T> {
+    currentPage: number
+    hasNextPage: boolean
+    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

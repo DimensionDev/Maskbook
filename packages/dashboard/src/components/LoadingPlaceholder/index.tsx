@@ -20,8 +20,8 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: theme.spacing(2.5),
     },
     icon: {
-        width: 60,
-        height: 60,
+        width: 30,
+        height: 30,
         fill: MaskColorVar.primary,
     },
 }))

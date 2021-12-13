@@ -387,16 +387,16 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
                         <div className={classes.tokenImgWrapper}>
-                            {erc721TokenDetailed?.info.image ? null : (
+                            {erc721TokenDetailed?.info.mediaUrl ? null : (
                                 <CircularProgress className={classes.tokenImgSpinner} />
                             )}
 
                             <img
                                 className={classNames(
                                     classes.tokenImg,
-                                    erc721TokenDetailed?.info.image ? '' : classes.loadingTokenImg,
+                                    erc721TokenDetailed?.info.mediaUrl ? '' : classes.loadingTokenImg,
                                 )}
-                                src={erc721TokenDetailed?.info.image ?? previewNftImg}
+                                src={erc721TokenDetailed?.info.mediaUrl ?? previewNftImg}
                             />
                         </div>
                         <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>

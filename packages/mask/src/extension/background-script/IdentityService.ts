@@ -14,13 +14,7 @@ import {
     queryProfilesWithQuery,
     storeAvatar,
 } from '../../database'
-import {
-    ECKeyIdentifier,
-    ECKeyIdentifierFromJsonWebKey,
-    Identifier,
-    PersonaIdentifier,
-    ProfileIdentifier,
-} from '../../database/type'
+import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
     attachProfileDB,
@@ -38,14 +32,14 @@ import {
     queryRelationsPagedDB,
     RelationRecord,
     updateRelationDB,
-} from '../../database/Persona/Persona.db'
+} from '../../../background/database/persona/db'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared'
+import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
 import type { PostIVIdentifier } from '@masknet/shared-base'
@@ -53,6 +47,7 @@ import { RelationFavor } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
+import { ECKeyIdentifierFromJsonWebKey } from '../../database/type'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -221,7 +216,7 @@ export async function attachProfile(
     }
     return attachProfileDB(source, target, data)
 }
-export { detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
+export { detachProfileDB as detachProfile } from '../../../background/database/persona/db'
 //#endregion
 
 //#region Post

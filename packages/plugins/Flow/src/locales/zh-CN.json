@@ -1,1 +1,6 @@
-{}
+{
+    "button_log_in": "登录",
+    "button_log_out": "注销",
+    "button_sign_up": "注册",
+    "card_state_text_no_profile": "缺乏个人资料"
+}

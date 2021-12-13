@@ -6,8 +6,6 @@ import { pasteImage } from '@masknet/injected-script'
 import { isNull } from 'lodash-unified'
 import Services from '../extension/service'
 import { blobToArrayBuffer } from '@dimensiondev/kit'
-export { parseURL } from '@masknet/shared'
-export { timeout, delay } from '@masknet/shared'
 /**
  * Download given url return as Blob
  */

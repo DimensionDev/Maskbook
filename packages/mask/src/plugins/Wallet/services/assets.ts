@@ -1,4 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
+import { leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
     Asset,
     ChainId,
@@ -88,9 +89,10 @@ export async function getAssetsListNFT(
                             address: x.asset_contract.address,
                         },
                         {
+                            owner: address,
                             name: x.name || x.asset_contract.name,
                             description: x.description || x.asset_contract.symbol,
-                            image: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
+                            mediaUrl: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
                         },
                         x.token_id,
                     ),
@@ -171,12 +173,12 @@ function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType
                               y.symbol,
                               y.logo_url ? [y.logo_url] : undefined,
                           ),
-                balance: new BigNumber(y.amount).shiftedBy(y.decimals).toFixed(),
+                balance: rightShift(y.amount, y.decimals).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
                 value: {
-                    [CurrencyType.USD]: new BigNumber(y.price ?? 0).multipliedBy(new BigNumber(y.amount)).toFixed(),
+                    [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
                 },
                 logoURI: y.logo_url,
             }
@@ -190,7 +192,7 @@ function formatAssetsFromZerion(
     scope: SocketRequestAssetScope,
 ) {
     return data.map(({ asset, quantity }) => {
-        const balance = new BigNumber(quantity).shiftedBy(-asset.decimals).toNumber()
+        const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
         const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
 
@@ -210,7 +212,7 @@ function formatAssetsFromZerion(
                 usd: new BigNumber(value).toString(),
             },
             value: {
-                usd: new BigNumber(balance).multipliedBy(value).toString(),
+                usd: multipliedBy(balance, value).toString(),
             },
             logoURI: asset.icon_url,
         }
