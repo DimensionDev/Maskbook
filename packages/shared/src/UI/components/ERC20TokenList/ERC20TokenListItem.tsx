@@ -26,7 +26,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     list: {
         maxHeight: '100%',
-        paddingLeft: theme.spacing(1),
+        padding: theme.spacing(1.5),
         borderRadius: theme.spacing(1),
     },
     text: {
@@ -44,15 +44,13 @@ const useStyles = makeStyles()((theme) => ({
     name: {
         display: 'block',
         lineHeight: '20px',
-        fontSize: 12,
-    },
-    secondary: {
-        fontSize: 14,
-        textAlign: 'right',
+        fontSize: 15,
+        // TODO: Should align dashboard and twitter theme in common component
+        color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
     },
     symbol: {
         lineHeight: '20px',
-        fontSize: 14,
+        fontSize: 15,
     },
     import: {
         '&:before': {
@@ -120,12 +118,12 @@ export const getERC20TokenListItem =
                     {t.import()}
                 </MaskLoadingButton>
             )
-        }, [info, isNotAdded, isAdded])
+        }, [info, isNotAdded, isAdded, data.balance])
 
         return (
             <ListItem
                 button
-                className={classes.list}
+                className={`${classes.list} dashboard token-list`}
                 onClick={handleTokenSelect}
                 disabled={selectedTokens.some(currySameAddress(address))}>
                 <ListItemIcon>
@@ -137,7 +135,7 @@ export const getERC20TokenListItem =
                         color="textPrimary"
                         component="span">
                         <span className={classes.symbol}>{symbol}</span>
-                        <span className={classes.name}>
+                        <span className={`${classes.name} dashboard token-list-symbol`}>
                             {name}
                             {isAdded && <span> • Added By User</span>}
                         </span>

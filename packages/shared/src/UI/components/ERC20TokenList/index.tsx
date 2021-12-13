@@ -19,7 +19,7 @@ import {
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
-import { MaskFixedSizeListProps, SearchableList } from '@masknet/theme'
+import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 
@@ -32,10 +32,11 @@ export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'>
     disableSearch?: boolean
     onSelect?(token: FungibleTokenDetailed | null): void
     FixedSizeListProps?: Partial<MaskFixedSizeListProps>
+    SearchTextFieldProps?: MaskTextFieldProps
 }
 
-const Placeholder = memo(({ message }: { message: string }) => (
-    <Stack minHeight={300} justifyContent="center" alignContent="center">
+const Placeholder = memo(({ message, height }: { message: string; height?: number | string }) => (
+    <Stack minHeight={height ?? 300} justifyContent="center" alignContent="center">
         <Typography color="textSecondary" textAlign="center">
             {message}
         </Typography>
@@ -108,16 +109,18 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
             : [...assets].sort(makeSortAssertFn(chainId, { isMaskBoost: true }))
 
     const getPlaceHolder = () => {
-        if (erc20TokensDetailedLoading) return <Placeholder message="Loading token lists..." />
-        if (searchedTokenLoading) return <Placeholder message="Loading token..." />
-        if (!renderAssets.length) return <Placeholder message="No token found" />
+        if (erc20TokensDetailedLoading)
+            return <Placeholder height={FixedSizeListProps?.height} message="Loading token lists..." />
+        if (searchedTokenLoading) return <Placeholder height={FixedSizeListProps?.height} message="Loading token..." />
+        if (!renderAssets.length) return <Placeholder height={FixedSizeListProps?.height} message="No token found" />
         return null
     }
 
     return (
         <SearchableList<Asset>
-            textFieldProps={{
+            SearchFieldProps={{
                 placeholder: t.erc20_token_list_placeholder(),
+                ...props.SearchTextFieldProps,
             }}
             onSelect={(asset) => onSelect?.(asset.token)}
             disableSearch={!!props.disableSearch}

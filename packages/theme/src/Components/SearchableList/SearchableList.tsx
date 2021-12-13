@@ -26,7 +26,8 @@ export interface MaskSearchableListProps<T> {
     onSelect(selected: T): void
     /** The hook when search */
     onSearch?(key: string): void
-    textFieldProps?: MaskTextFieldProps
+    /** Props for search box */
+    SearchFieldProps?: MaskTextFieldProps
     /** Show search bar */
     disableSearch?: boolean
 }
@@ -58,11 +59,13 @@ export function SearchableList<T>({
     searchKey,
     itemRender,
     FixedSizeListProps = {},
-    textFieldProps,
+    SearchFieldProps,
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const { classes } = useStyles()
     const { height, itemSize, ...rest } = FixedSizeListProps
+    const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
+
     //#region fuse
     const fuse = useMemo(
         () =>
@@ -103,9 +106,10 @@ export function SearchableList<T>({
                                     <Search />
                                 </InputAdornment>
                             ),
+                            ...InputProps,
                         }}
                         onChange={(e) => handleSearch(e.currentTarget.value)}
-                        {...textFieldProps}
+                        {...textFieldPropsRest}
                     />
                 </Box>
             )}
@@ -133,7 +137,7 @@ export function SearchableList<T>({
 const useStyles = makeStyles()((theme) => ({
     container: {},
     list: {
-        marginTop: theme.spacing(1),
+        marginTop: theme.spacing(1.5),
         '& > div::-webkit-scrollbar': {
             width: '7px',
         },

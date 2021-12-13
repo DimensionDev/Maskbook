@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { DialogContent } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../../Wallet/messages'
@@ -19,7 +19,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         ...(snsId === MINDS_ID ? { minWidth: 552 } : {}),
     },
     list: {
-        marginTop: 16,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -30,6 +29,10 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         height: 288,
         paddingTop: theme.spacing(14),
         boxSizing: 'border-box',
+    },
+    search: {
+        backgroundColor: 'transparent',
+        border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
     },
 }))
 
@@ -52,9 +55,9 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     useEffect(() => {
         try {
             const fontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
-            setRowSize(fontSize * 3.6)
+            setRowSize(fontSize * 4)
         } catch {
-            setRowSize(54)
+            setRowSize(60)
         }
     }, [])
 
@@ -102,6 +105,14 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                     disableSearch={disableSearchBar}
                     FixedSizeListProps={{
                         itemSize: rowSize,
+                        height: 503,
+                    }}
+                    SearchTextFieldProps={{
+                        InputProps: {
+                            classes: {
+                                root: classes.search,
+                            },
+                        },
                     }}
                 />
             </DialogContent>
