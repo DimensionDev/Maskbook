@@ -174,7 +174,7 @@ export const getNonFungibleTokenFn =
                             description: x.info.description ?? '',
                             mediaType: 'Unknown',
                             iconURL: x.contractDetailed.iconURL,
-                            assetURL: x.info.image,
+                            assetURL: x.info.mediaUrl,
                         },
                     } as Web3Plugin.NonFungibleToken),
             )

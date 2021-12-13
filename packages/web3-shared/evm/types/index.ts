@@ -163,7 +163,7 @@ export interface ERC721TokenInfo {
     name?: string
     description?: string
     tokenURI?: string
-    image?: string
+    mediaUrl?: string
     owner?: string
     // loading tokenURI
     loading?: boolean

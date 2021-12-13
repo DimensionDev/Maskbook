@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
-import { createERC20Token, EthereumTokenType, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared-evm'
+import { createERC20Token, EthereumTokenType, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { ZERO } from '@masknet/web3-shared-base'
 import { TradeProvider } from '@masknet/public-api'
 import type { SwapQuoteResponse, TradeComputed } from '../types'
 import { useGetTradeContext } from './useGetTradeContext'

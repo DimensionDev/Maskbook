@@ -323,7 +323,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <img className={classes.nftImg} src={tokenDetailed.info.image} />
+                                <img className={classes.nftImg} src={tokenDetailed.info.mediaUrl} />
                                 <div className={classes.nftNameWrapper}>
                                     <Typography className={classes.nftName} color="textSecondary">
                                         {tokenDetailed.info.name}
@@ -373,7 +373,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : tokenDetailed?.info.name ? (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <img className={classes.nftImg} src={tokenDetailed?.info.image} />
+                                <img className={classes.nftImg} src={tokenDetailed?.info.mediaUrl} />
                                 <div className={classes.nftNameWrapper}>
                                     <Typography className={classes.nftName} color="textSecondary">
                                         {tokenDetailed?.info.name}
@@ -390,8 +390,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                             <div className={classes.imgWrapper}>
                                                 {token.info.loading ? (
                                                     <CircularProgress size={20} className={classes.loadingNftImg} />
-                                                ) : token?.info.image ? (
-                                                    <img className={classes.selectWrapperImg} src={token?.info.image} />
+                                                ) : token?.info.mediaUrl ? (
+                                                    <img
+                                                        className={classes.selectWrapperImg}
+                                                        src={token?.info.mediaUrl}
+                                                    />
                                                 ) : (
                                                     <img
                                                         className={classes.fallbackNftImg}

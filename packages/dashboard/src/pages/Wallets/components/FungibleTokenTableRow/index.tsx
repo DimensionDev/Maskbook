@@ -15,6 +15,7 @@ import {
 import { useDashboardI18N } from '../../../../locales'
 import { ChangeNetworkTip } from './ChangeNetworkTip'
 import { getTokenUSDValue } from '../../utils/getTokenUSDValue'
+import { pow10 } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -111,7 +112,7 @@ export const FungibleTokenTableRow = memo<TokenTableRowProps>(({ asset, onSend, 
             <TableCell className={classes.cell} align="center" variant="body">
                 <Typography>
                     {asset.price?.[CurrencyType.USD]
-                        ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(new BigNumber(10).pow(-6))
+                        ? new BigNumber(asset.price[CurrencyType.USD] ?? '').gt(pow10(-6))
                             ? Utils?.formatCurrency?.(Number.parseFloat(asset.price[CurrencyType.USD] ?? ''), '$')
                             : '<0.000001'
                         : '-'}

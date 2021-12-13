@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
+import { ERC721ContractDetailed, NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { Typography, CircularProgress } from '@mui/material'
-import { NonFungibleAssetProvider, ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { memo } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,7 +22,7 @@ export interface TokenCardProps {
     contractDetailed: ERC721ContractDetailed
 }
 
-export function TokenCard(props: TokenCardProps) {
+export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
     const { contractDetailed, tokenId } = props
     const { classes } = useStyles()
     const { tokenDetailed } = useERC721TokenDetailed(contractDetailed, tokenId)
@@ -38,4 +39,4 @@ export function TokenCard(props: TokenCardProps) {
     ) : (
         <CircularProgress />
     )
-}
+})

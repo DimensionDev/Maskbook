@@ -281,7 +281,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             {tokenList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
                                     <div className={classes.imgWrapper}>
-                                        <img className={classes.nftImg} src={value.info.image} />
+                                        <img className={classes.nftImg} src={value.info.mediaUrl} />
                                     </div>
                                     <div className={classes.nftNameWrapper}>
                                         <Typography className={classes.nftName} color="textSecondary">

@@ -63,10 +63,12 @@ export async function getERC721TokenDetailedFromOpensea(
     apiUrl: string,
 ) {
     const response = await fetch(`${apiUrl}/${contractDetailed.address}/${tokenId}`)
+    // https://docs.opensea.io/docs/metadata-standards
     type openseaTokenData = {
         name: string
         description: string
         image_url: string
+        animation_url: string
         top_ownerships: { owner: { address: string } }[]
     }
 
@@ -78,7 +80,7 @@ export async function getERC721TokenDetailedFromOpensea(
             {
                 name: data.name,
                 description: data.description,
-                image: data.image_url,
+                mediaUrl: data.image_url || data.animation_url,
                 owner: data.top_ownerships[0].owner.address,
             },
             tokenId,
@@ -134,7 +136,13 @@ export async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<E
         try {
             // for some NFT tokens return an URL refers to a JSON file
             promise = fetch(tokenURI.startsWith(HTTP_PREFIX) ? `${CORS_PROXY}/${tokenURI}` : tokenURI).then(
-                (r) => r.json() as ERC721TokenInfo,
+                async (r) => {
+                    const json = await r.json()
+                    return {
+                        ...json,
+                        mediaUrl: json.image || json.animation_url,
+                    } as ERC721TokenInfo
+                },
                 noop,
             )
             assetCache[tokenURI] = promise as Promise<ERC721TokenInfo>
