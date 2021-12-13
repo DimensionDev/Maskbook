@@ -96,6 +96,8 @@
     "user_guide_tip_2": "Click here to have a quick start.",
     "create_persona": "Create persona",
     "connect_persona": "Connect persona",
+    "please_create_persona": "Please create persona",
+    "please_connect_persona": "Please connect persona",
     "mask_network": "Mask Network",
     "import": "Import",
     "no_search_result": "No result",
