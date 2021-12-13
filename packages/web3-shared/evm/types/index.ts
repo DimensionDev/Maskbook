@@ -496,7 +496,6 @@ export enum TransactionStatusType {
     SUCCEED = 1,
     FAILED = 2,
     CANCELLED = 3,
-    TIMEOUT = 4,
 }
 
 export type GasOptions = {

@@ -59,7 +59,8 @@ export async function getRecentTransactions(chainId: ChainId, address: string): 
                 // in case the user just refreshed the background page
                 if (!receipt) {
                     watcher.watchTransaction(chainId, hash, payload)
-                    if (hashReplacement) watcher.watchTransaction(chainId, hashReplacement, payloadReplacement)
+                    if (hashReplacement && payloadReplacement)
+                        watcher.watchTransaction(chainId, hashReplacement, payloadReplacement)
                 }
 
                 return {

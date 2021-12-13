@@ -26,11 +26,9 @@ export function toReceipt(status: '0' | '1', transaction: Transaction): Transact
     }
 }
 
-// the payload that derives from transaction only for generating transaction signature
 export function toPayload(transaction: Transaction): JsonRpcPayload {
     return {
         jsonrpc: '2.0',
-        // the payload id is not related to the transaction signature
         id: '0',
         method: EthereumMethodType.ETH_SEND_TRANSACTION,
         params: [
@@ -61,6 +59,16 @@ export function getPayloadId(payload: JsonRpcPayload) {
     return sha3([from, to, data, value].join('_')) ?? ''
 }
 
+export function getPayloadFrom(payload: JsonRpcPayload) {
+    const config = getPayloadConfig(payload)
+    return config?.from as string | undefined
+}
+
+export function getPayloadTo(payload: JsonRpcPayload) {
+    const config = getPayloadConfig(payload)
+    return config?.to as string | undefined
+}
+
 export function getTransactionId(transaction: Transaction | null) {
     if (!transaction) return ''
     const { from, to, input, value } = transaction
@@ -75,8 +83,6 @@ export function getReceiptStatus(receipt: TransactionReceipt | null) {
         if (isSameAddress(receipt.from, receipt.to)) return TransactionStatusType.CANCELLED
         return TransactionStatusType.SUCCEED
     }
-    // mask only
-    if (receipt.status === '0xff') return TransactionStatusType.TIMEOUT
     return TransactionStatusType.NOT_DEPEND
 }
 
@@ -123,12 +129,6 @@ export function getTransactionState(receipt: TransactionReceipt): TransactionSta
                     type: TransactionStateType.FAILED,
                     receipt,
                     error: new Error('CANCELLED'),
-                }
-            case TransactionStatusType.TIMEOUT:
-                return {
-                    type: TransactionStateType.FAILED,
-                    receipt,
-                    error: new Error('TIMEOUT'),
                 }
             default:
                 unreachable(status)
