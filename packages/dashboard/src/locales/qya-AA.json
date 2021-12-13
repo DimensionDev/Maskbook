@@ -285,6 +285,8 @@
     "settings_dialogs_backup_to_cloud": "crwdns9027:0crwdne9027:0",
     "settings_dialogs_merge_to_local_data": "crwdns7875:0crwdne7875:0",
     "settings_dialogs_backup_action_desc": "crwdns7879:0crwdne7879:0",
+    "settings_dialogs_backup_to_cloud_action": "crwdns10601:0crwdne10601:0",
+    "settings_dialogs_backup_merge_cloud": "crwdns10603:0crwdne10603:0",
     "settings_dialogs_backup_merged_tip": "crwdns9029:0crwdne9029:0",
     "settings_label_backup_password": "crwdns7711:0crwdne7711:0",
     "settings_label_new_backup_password": "crwdns7713:0crwdne7713:0",
