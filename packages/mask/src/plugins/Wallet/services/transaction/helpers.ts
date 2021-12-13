@@ -26,11 +26,9 @@ export function toReceipt(status: '0' | '1', transaction: Transaction): Transact
     }
 }
 
-// the payload that derives from transaction only for generating transaction signature
 export function toPayload(transaction: Transaction): JsonRpcPayload {
     return {
         jsonrpc: '2.0',
-        // the payload id is not related to the transaction signature
         id: '0',
         method: EthereumMethodType.ETH_SEND_TRANSACTION,
         params: [
@@ -59,6 +57,16 @@ export function getPayloadId(payload: JsonRpcPayload) {
     const { from, to, data = '0x0', value = '0x0' } = config
     if (!from || !to) return ''
     return sha3([from, to, data, value].join('_')) ?? ''
+}
+
+export function getPayloadFrom(payload: JsonRpcPayload) {
+    const config = getPayloadConfig(payload)
+    return config?.from as string | undefined
+}
+
+export function getPayloadTo(payload: JsonRpcPayload) {
+    const config = getPayloadConfig(payload)
+    return config?.to as string | undefined
 }
 
 export function getTransactionId(transaction: Transaction | null) {

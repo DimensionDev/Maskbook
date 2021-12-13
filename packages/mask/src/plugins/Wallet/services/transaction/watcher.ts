@@ -13,49 +13,73 @@ import {
 import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import * as progress from './progress'
 import * as helpers from './helpers'
-import { currentAccountSettings, currentChainIdSettings } from '../../settings'
+import { currentChainIdSettings } from '../../settings'
 import { WalletRPC } from '../../messages'
 
-interface TransactionRecord {
+interface StorageItem {
     at: number
-    payload?: JsonRpcPayload
+    limits: number
+    payload: JsonRpcPayload
     receipt: Promise<TransactionReceipt | null> | null
 }
 
+class Storage {
+    static SIZE = 40
+
+    private map = new Map<ChainId, Map<string, StorageItem>>()
+
+    private getStorage(chainId: ChainId) {
+        if (!this.map.has(chainId)) this.map.set(chainId, new Map())
+        return this.map.get(chainId)!
+    }
+
+    public hasItem(chainId: ChainId, hash: string) {
+        return this.getStorage(chainId).has(hash)
+    }
+
+    public getItem(chainId: ChainId, hash: string) {
+        return this.getStorage(chainId).get(hash)
+    }
+
+    public setItem(chainId: ChainId, hash: string, transaction: StorageItem) {
+        this.getStorage(chainId).set(hash, transaction)
+    }
+
+    public removeItem(chainId: ChainId, hash: string) {
+        this.getStorage(chainId).delete(hash)
+    }
+
+    public getItems(chainId: ChainId) {
+        const map = this.getStorage(chainId)
+        return map ? [...map.entries()].sort(([, a], [, z]) => z.at - a.at) : []
+    }
+
+    public getWatched(chainId: ChainId) {
+        return this.getItems(chainId).slice(0, Storage.SIZE)
+    }
+
+    public getUnwatched(chainId: ChainId) {
+        return this.getItems(chainId).slice(Storage.SIZE)
+    }
+
+    public getWatchedAccounts(chainId: ChainId) {
+        return this.getWatched(chainId)
+            .map(([_, transaction]) => helpers.getPayloadFrom(transaction.payload))
+            .filter(Boolean) as string[]
+    }
+
+    public getUnwatchedAccounts(chainId: ChainId) {
+        return this.getUnwatched(chainId)
+            .map(([_, transaction]) => helpers.getPayloadFrom(transaction.payload))
+            .filter(Boolean) as string[]
+    }
+}
+
 let timer: NodeJS.Timer | null = null
-const WATCHED_TRANSACTION_CHECK_DELAY = 15 * 1000 // 15s
-const WATCHED_TRANSACTION_MAP = new Map<ChainId, Map<string, TransactionRecord>>()
-const WATCHED_TRANSACTIONS_SIZE = 40
-
-function getMap(chainId: ChainId) {
-    if (!WATCHED_TRANSACTION_MAP.has(chainId)) WATCHED_TRANSACTION_MAP.set(chainId, new Map())
-    return WATCHED_TRANSACTION_MAP.get(chainId)!
-}
-
-function getTransaction(chainId: ChainId, hash: string) {
-    return getMap(chainId).get(hash)
-}
-
-function setTransaction(chainId: ChainId, hash: string, transaction: TransactionRecord) {
-    getMap(chainId).set(hash, transaction)
-}
-
-function removeTransaction(chainId: ChainId, hash: string) {
-    getMap(chainId).delete(hash)
-}
-
-function getTransactions(chainId: ChainId) {
-    const map = getMap(chainId)
-    return map ? [...map.entries()].sort(([, a], [, z]) => z.at - a.at) : []
-}
-
-function getWatchedTransactions(chainId: ChainId) {
-    return getTransactions(chainId).slice(0, WATCHED_TRANSACTIONS_SIZE)
-}
-
-function getUnwatchedTransactions(chainId: ChainId) {
-    return getTransactions(chainId).slice(WATCHED_TRANSACTIONS_SIZE)
-}
+const storage = new Storage()
+const CHECK_TIMES = 30
+const CHECK_DELAY = 30 * 1000 // seconds
+const CHECK_LATEST_SIZE = 5
 
 async function getTransactionReceipt(chainId: ChainId, hash: string) {
     try {
@@ -85,10 +109,10 @@ async function getTransactionReceipt(chainId: ChainId, hash: string) {
 
 async function checkReceipt(chainId: ChainId) {
     await Promise.allSettled(
-        getWatchedTransactions(chainId).map(async ([hash, transaction]) => {
-            const receipt = await getTransaction(chainId, hash)?.receipt
+        storage.getWatched(chainId).map(async ([hash, transaction]) => {
+            const receipt = await storage.getItem(chainId, hash)?.receipt
             if (receipt) return
-            setTransaction(chainId, hash, {
+            storage.setItem(chainId, hash, {
                 ...transaction,
                 receipt: getTransactionReceipt(chainId, hash),
             })
@@ -100,9 +124,9 @@ async function checkAccount(chainId: ChainId, account: string) {
     const API_URL = resolveExplorerAPI(chainId)
     const { API_KEYS = [] } = getExplorerConstants(chainId)
 
-    const watchedTransactions = getWatchedTransactions(chainId)
+    const watchedTransactions = storage.getWatched(chainId)
     const latestTransactions = await getLatestTransactions(account, API_URL, {
-        offset: 5,
+        offset: CHECK_LATEST_SIZE,
         apikey: first(API_KEYS),
     })
 
@@ -138,8 +162,8 @@ async function checkAccount(chainId: ChainId, account: string) {
         )
 
         // update receipt in cache
-        removeTransaction(chainId, watchedHash)
-        setTransaction(chainId, latestTransaction.hash, {
+        storage.removeItem(chainId, watchedHash)
+        storage.setItem(chainId, latestTransaction.hash, {
             ...watchedTransaction,
             payload: helpers.toPayload(latestTransaction),
             receipt: getTransactionReceipt(chainId, latestTransaction.hash),
@@ -147,54 +171,68 @@ async function checkAccount(chainId: ChainId, account: string) {
     }
 }
 
-async function checkTransaction() {
-    if (timer !== null) {
-        clearTimeout(timer)
-        timer = null
-    }
+async function check() {
+    // stop any pending task
+    stopCheck()
 
     const chainId = currentChainIdSettings.value
-    const account = currentAccountSettings.value
 
-    // unwatch legacy transactions in the map
-    getUnwatchedTransactions(chainId).forEach(([hash]) => unwatchTransaction(chainId, hash))
+    // unwatch legacy transactions
+    storage.getUnwatched(chainId).forEach(([hash]) => unwatchTransaction(chainId, hash))
+
+    // update limits
+    storage.getWatched(chainId).forEach(([hash, transaction]) => {
+        storage.setItem(chainId, hash, {
+            ...transaction,
+            limits: Math.max(0, transaction.limits - 1),
+        })
+    })
 
     try {
         await checkReceipt(chainId)
-        await checkAccount(chainId, account)
+        for (const account of storage.getWatchedAccounts(chainId)) await checkAccount(chainId, account)
     } catch (error) {
         // do nothing
     }
 
     // check if all transaction receipts were found
     const allSettled = await Promise.allSettled(
-        getWatchedTransactions(chainId).map(([, transaction]) => transaction.receipt),
+        storage.getWatched(chainId).map(([, transaction]) => transaction.receipt),
     )
     if (allSettled.every((x) => x.status === 'fulfilled' && x.value)) return
 
     // kick to the next round
+    startCheck(true)
+}
+
+function startCheck(force: boolean) {
+    if (force) stopCheck()
+    if (timer === null) {
+        timer = setTimeout(check, CHECK_DELAY)
+    }
+}
+
+function stopCheck() {
     if (timer !== null) clearTimeout(timer)
-    timer = setTimeout(checkTransaction, WATCHED_TRANSACTION_CHECK_DELAY)
+    timer = null
 }
 
 export async function getReceipt(chainId: ChainId, hash: string) {
-    return getTransaction(chainId, hash)?.receipt ?? null
+    return storage.getItem(chainId, hash)?.receipt ?? null
 }
 
-export async function watchTransaction(chainId: ChainId, hash: string, payload?: JsonRpcPayload) {
-    const transaction = getTransaction(chainId, hash)
-    if (!transaction) {
-        setTransaction(chainId, hash, {
+export async function watchTransaction(chainId: ChainId, hash: string, payload: JsonRpcPayload) {
+    if (!storage.hasItem(chainId, hash)) {
+        storage.setItem(chainId, hash, {
             at: Date.now(),
             payload,
-            receipt: getTransactionReceipt(chainId, hash),
+            limits: CHECK_TIMES,
+            receipt: Promise.resolve(null),
         })
     }
-    if (timer === null) {
-        timer = setTimeout(checkTransaction, WATCHED_TRANSACTION_CHECK_DELAY)
-    }
+    startCheck(false)
 }
 
 export function unwatchTransaction(chainId: ChainId, hash: string) {
-    removeTransaction(chainId, hash)
+    storage.removeItem(chainId, hash)
 }
