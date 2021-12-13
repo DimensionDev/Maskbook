@@ -15,6 +15,7 @@ import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
+import { setupShadowRootPortal } from '../utils'
 import { InMemoryStorages, PersistentStorages } from '../../shared'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
@@ -103,6 +104,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             }
         }),
     )
+
+    setupShadowRootPortal()
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}

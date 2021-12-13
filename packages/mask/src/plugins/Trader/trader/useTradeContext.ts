@@ -1,7 +1,7 @@
 import { createContext, useMemo } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import { TradeProvider } from '@masknet/public-api'
-import { getTraderConstants, useChainId } from '@masknet/web3-shared-evm'
+import { getTraderConstants } from '@masknet/web3-shared-evm'
 import {
     PANCAKESWAP_BASE_AGAINST_TOKENS,
     PANCAKESWAP_CUSTOM_BASES,
@@ -15,11 +15,12 @@ import {
     UNISWAP_CUSTOM_BASES,
 } from '../constants'
 import type { TradeContext as TradeContext_ } from '../types'
+import { TargetChainIdContext } from './useTargetChainIdContext'
 
 export const TradeContext = createContext<TradeContext_ | null>(null)
 
 export function useTradeContext(tradeProvider: TradeProvider) {
-    const chainId = useChainId()
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     return useMemo<TradeContext_>(() => {
         switch (tradeProvider) {
             case TradeProvider.UNISWAP_V2:

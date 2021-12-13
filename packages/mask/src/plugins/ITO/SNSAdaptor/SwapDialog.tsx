@@ -13,16 +13,15 @@ import {
     formatBalance,
     FungibleTokenDetailed,
     isNative,
-    pow10,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
-    ZERO,
     useFungibleTokenDetailed,
     isSameAddress,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
+import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
 import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { useSwapCallback } from './hooks/useSwapCallback'
@@ -155,7 +154,7 @@ export function SwapDialog(props: SwapDialogProps) {
                 setTokenAmount(initAmount)
                 setSwapAmount(initAmount.multipliedBy(ratio))
                 setInputAmountForUI(
-                    initAmount.isEqualTo(0) ? '' : formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals),
+                    initAmount.isZero() ? '' : formatBalance(initAmount.multipliedBy(ratio), ev.token.decimals),
                 )
             },
             [
@@ -258,7 +257,7 @@ export function SwapDialog(props: SwapDialogProps) {
     //#endregion
 
     const validationMessage = useMemo(() => {
-        if (swapAmount.isEqualTo(0)) return t('plugin_ito_error_enter_amount')
+        if (swapAmount.isZero()) return t('plugin_ito_error_enter_amount')
         if (swapAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: swapToken?.symbol })
         if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_swap_exceed_wallet_limit')
         return ''
@@ -296,15 +295,12 @@ export function SwapDialog(props: SwapDialogProps) {
                 balance={tokenBalance}
                 token={swapToken}
                 onAmountChange={(value) => {
-                    const val =
-                        value === '' || value === '0'
-                            ? ZERO
-                            : new BigNumber(value).multipliedBy(pow10(swapToken.decimals))
-                    const isMax = value === formatBalance(maxAmount, swapToken.decimals) && !val.isEqualTo(0)
+                    const val = value === '' || value === '0' ? ZERO : rightShift(value, swapToken.decimals)
+                    const isMax = value === formatBalance(maxAmount, swapToken.decimals) && !val.isZero()
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
-                        isMax ? tokenAmount.multipliedBy(ratio).dividedBy(pow10(swapToken.decimals)).toString() : value,
+                        isMax ? leftShift(tokenAmount.multipliedBy(ratio), swapToken.decimals).toString() : value,
                     )
                     setTokenAmount(tokenAmount.dp(0))
                     setSwapAmount(swapAmount)

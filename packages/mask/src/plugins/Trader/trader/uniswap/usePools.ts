@@ -1,11 +1,14 @@
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
-import { MulticallStateType, useChainId, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
+import { MulticallStateType, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
-import { TradeContext } from '../useTradeContext'
+import type { TradeProvider } from '@masknet/public-api'
+import { useGetTradeContext } from '../useGetTradeContext'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { useTargetBlockNumber } from '../useTargetBlockNumber'
 
 export enum PoolState {
     LOADING = 0,
@@ -15,10 +18,11 @@ export enum PoolState {
 }
 
 export function usePools(
+    tradeProvider: TradeProvider,
     poolKeys: [Currency | undefined, Currency | undefined, FeeAmount | undefined][],
 ): [PoolState, Pool | null][] {
-    const chainId = useChainId()
-    const context = useContext(TradeContext)
+    const { targetChainId: chainId } = TargetChainIdContext.useContainer()
+    const context = useGetTradeContext(tradeProvider)
 
     const transformed: ([Token, Token, FeeAmount] | null)[] = useMemo(() => {
         return poolKeys.map(([currencyA, currencyB, feeAmount]) => {
@@ -45,17 +49,23 @@ export function usePools(
         })
     }, [chainId, transformed, context?.FACTORY_CONTRACT_ADDRESS])
 
-    const poolContracts = usePoolContracts(poolAddresses)
+    const poolContracts = usePoolContracts(poolAddresses, chainId)
+
+    const { value: targetBlockNumber } = useTargetBlockNumber(chainId)
 
     const [slot0s, slot0sCalls, slot0sState, slot0sCallback] = useMultipleContractSingleData(
         poolContracts,
         Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
         [],
+        chainId,
+        targetBlockNumber,
     )
     const [liquidities, liquiditiesCalls, liquiditiesState, liquiditiesCallback] = useMultipleContractSingleData(
         poolContracts,
         Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
         [],
+        chainId,
+        targetBlockNumber,
     )
 
     useAsyncRetry(() => slot0sCallback(slot0sCalls), [slot0sCallback, slot0sCalls])
@@ -92,6 +102,7 @@ export function usePools(
 }
 
 export function usePool(
+    tradeProvider: TradeProvider,
     currencyA: Currency | undefined,
     currencyB: Currency | undefined,
     feeAmount: FeeAmount | undefined,
@@ -101,5 +112,5 @@ export function usePool(
         [currencyA, currencyB, feeAmount],
     )
 
-    return usePools(poolKeys)[0]
+    return usePools(tradeProvider, poolKeys)[0]
 }

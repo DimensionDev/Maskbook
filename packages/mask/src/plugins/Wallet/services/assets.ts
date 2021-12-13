@@ -1,8 +1,9 @@
 import { unreachable } from '@dimensiondev/kit'
+import { leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
     Asset,
     ChainId,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
     createERC20Token,
     createERC721Token,
     createNativeToken,
@@ -14,8 +15,7 @@ import {
     getTokenConstants,
     isChainIdMainnet,
     NetworkType,
-    PortfolioProvider,
-    pow10,
+    FungibleAssetProvider,
     getChainShortName,
     getChainIdFromNetworkType,
     ERC721TokenCollectionInfo,
@@ -28,8 +28,8 @@ import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
 import { resolveChainByScope, resolveZerionAssetsScopeName } from '../pipes'
 import type {
-    BalanceRecord,
     SocketRequestAssetScope,
+    WalletTokenRecord,
     ZerionAddressAsset,
     ZerionAddressCovalentAsset,
     ZerionAsset,
@@ -39,11 +39,11 @@ import type {
 export async function getCollectionsNFT(
     address: string,
     chainId: ChainId,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     page?: number,
     size?: number,
 ): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
-    if (provider === CollectibleProvider.OPENSEA) {
+    if (provider === NonFungibleAssetProvider.OPENSEA) {
         const { collections } = await OpenSeaAPI.getCollections(address, { chainId, page, size })
 
         return {
@@ -65,12 +65,12 @@ export async function getCollectionsNFT(
 export async function getAssetsListNFT(
     address: string,
     chainId: ChainId,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     page?: number,
     size?: number,
     collection?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
-    if (provider === CollectibleProvider.OPENSEA) {
+    if (provider === NonFungibleAssetProvider.OPENSEA) {
         const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size, collection })
         return {
             assets: assets
@@ -89,9 +89,10 @@ export async function getAssetsListNFT(
                             address: x.asset_contract.address,
                         },
                         {
+                            owner: address,
                             name: x.name || x.asset_contract.name,
                             description: x.description || x.asset_contract.symbol,
-                            image: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
+                            mediaUrl: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
                         },
                         x.token_id,
                     ),
@@ -107,12 +108,12 @@ export async function getAssetsListNFT(
 
 export async function getAssetsList(
     address: string,
-    provider: PortfolioProvider,
+    provider: FungibleAssetProvider,
     network?: NetworkType,
 ): Promise<Asset[]> {
     if (!EthereumAddress.isValid(address)) return []
     switch (provider) {
-        case PortfolioProvider.ZERION:
+        case FungibleAssetProvider.ZERION:
             let result: Asset[] = []
             //xdai-assets is not support
             const scopes = network
@@ -143,16 +144,15 @@ export async function getAssetsList(
             }
 
             return result
-        case PortfolioProvider.DEBANK:
-            const { data = [], error_code } = await DebankAPI.getAssetsList(address)
-            if (error_code === 0) return formatAssetsFromDebank(data, network)
-            return []
+        case FungibleAssetProvider.DEBANK:
+            const data = await DebankAPI.getAssetsList(address)
+            return formatAssetsFromDebank(data, network)
         default:
             unreachable(provider)
     }
 }
 
-function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
+function formatAssetsFromDebank(data: WalletTokenRecord[], network?: NetworkType) {
     return data
         .filter((x) => !network || getChainIdFromName(x.chain) === getChainIdFromNetworkType(network))
         .filter((x) => x.is_verified)
@@ -173,14 +173,12 @@ function formatAssetsFromDebank(data: BalanceRecord[], network?: NetworkType) {
                               y.symbol,
                               y.logo_url ? [y.logo_url] : undefined,
                           ),
-                balance: new BigNumber(y.balance).toFixed(),
+                balance: rightShift(y.amount, y.decimals).toFixed(),
                 price: {
                     [CurrencyType.USD]: new BigNumber(y.price ?? 0).toFixed(),
                 },
                 value: {
-                    [CurrencyType.USD]: new BigNumber(y.price ?? 0)
-                        .multipliedBy(new BigNumber(y.balance).dividedBy(pow10(y.decimals)))
-                        .toFixed(),
+                    [CurrencyType.USD]: multipliedBy(y.price ?? 0, y.amount).toFixed(),
                 },
                 logoURI: y.logo_url,
             }
@@ -194,7 +192,7 @@ function formatAssetsFromZerion(
     scope: SocketRequestAssetScope,
 ) {
     return data.map(({ asset, quantity }) => {
-        const balance = Number(new BigNumber(quantity).dividedBy(pow10(asset.decimals)).toString())
+        const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
         const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
 
@@ -214,7 +212,7 @@ function formatAssetsFromZerion(
                 usd: new BigNumber(value).toString(),
             },
             value: {
-                usd: new BigNumber(balance).multipliedBy(value).toString(),
+                usd: multipliedBy(balance, value).toString(),
             },
             logoURI: asset.icon_url,
         }

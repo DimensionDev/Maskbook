@@ -55,7 +55,7 @@ export function NFTImage(props: NFTImageProps) {
         <div className={classes.imgBackground}>
             <img
                 onClick={() => onChange(token)}
-                src={token.info.image}
+                src={token.info.mediaUrl}
                 className={classNames(classes.image, isSameNFT(token, selectedToken) ? classes.selected : '')}
             />
         </div>

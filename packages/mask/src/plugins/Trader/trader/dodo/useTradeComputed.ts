@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
-import { FungibleTokenDetailed, pow10 } from '@masknet/web3-shared-evm'
-import { ZERO } from '@masknet/web3-shared-evm'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SwapRouteData, TradeComputed, TradeStrategy } from '../../types'
 
 export function useTradeComputed(
@@ -15,9 +15,9 @@ export function useTradeComputed(
         if (!inputToken || !outputToken) return null
         const isExactIn = strategy === TradeStrategy.ExactIn
         if (!isExactIn) return null
-        const inputAmount = new BigNumber(trade.fromAmount).multipliedBy(pow10(inputToken.decimals)).integerValue()
+        const inputAmount = rightShift(trade.fromAmount, inputToken.decimals).integerValue()
         const executionPrice = new BigNumber(trade.resPricePerToToken)
-        const outputAmount = new BigNumber(trade.resAmount).multipliedBy(pow10(outputToken.decimals)).integerValue()
+        const outputAmount = rightShift(trade.resAmount, outputToken.decimals).integerValue()
         const priceImpact = new BigNumber(trade.priceImpact)
         return {
             strategy,
@@ -31,7 +31,7 @@ export function useTradeComputed(
             minimumReceived: new BigNumber(trade.fromAmount)
                 .multipliedBy(trade.resPricePerFromToken)
                 .multipliedBy(1 - trade.slippage / 100)
-                .multipliedBy(pow10(outputToken.decimals)),
+                .shiftedBy(outputToken.decimals),
 
             // minimumProtocolFee
             priceImpact,

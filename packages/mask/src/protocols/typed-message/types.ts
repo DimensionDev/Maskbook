@@ -1,4 +1,4 @@
-import { isTypedMessageAnchor, isTypedMessageText, TypedMessage } from '@masknet/shared'
+import { isTypedMessageAnchor, isTypedMessageText, TypedMessage } from '@masknet/shared-base'
 
 export type {
     TypedMessage,
@@ -12,7 +12,7 @@ export type {
     TypedMessageImageV1,
     TypedMessageTextV1,
     TypedMessageTupleSerializable,
-} from '@masknet/shared'
+} from '@masknet/shared-base'
 export {
     isTypedMessageText,
     isTypedMessageAnchor,
@@ -37,7 +37,7 @@ export {
     makeTypedMessageUnknown,
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
-} from '@masknet/shared'
+} from '@masknet/shared-base'
 export function getTypedMessageContent(message: TypedMessage): string {
     if (isTypedMessageText(message)) return message.content
     if (isTypedMessageAnchor(message)) return message.href

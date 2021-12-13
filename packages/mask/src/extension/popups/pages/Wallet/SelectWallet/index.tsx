@@ -1,8 +1,6 @@
 import { memo, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { first } from 'lodash-unified'
-import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
-import { FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
@@ -12,14 +10,13 @@ import {
     useAccount,
     useChainIdValid,
     useWallets,
-    formatEthereumAddress,
 } from '@masknet/web3-shared-evm'
-import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { Button, List, Typography } from '@mui/material'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
-import { CopyIconButton } from '../../../components/CopyIconButton'
 import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../../utils'
 import Services from '../../../../service'
+import { WalletItem } from './WalletItem'
 
 const useStyles = makeStyles()({
     content: {
@@ -65,36 +62,6 @@ const useStyles = makeStyles()({
         padding: 0,
         height: 'calc(100vh - 168px)',
         overflow: 'auto',
-    },
-    item: {
-        padding: 10,
-        borderBottom: '1px solid #F7F9FA',
-        cursor: 'pointer',
-    },
-    address: {
-        fontSize: 12,
-        color: '#1C68F3',
-        display: 'flex',
-        alignItems: 'center',
-    },
-    copy: {
-        fontSize: 12,
-        stroke: '#1C68F3',
-        marginLeft: 4,
-        cursor: 'pointer',
-    },
-    name: {
-        fontSize: 14,
-        color: '#1C68F3',
-        fontWeight: 500,
-    },
-    text: {
-        marginLeft: 4,
-    },
-    listItem: {
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
     },
     controller: {
         display: 'grid',
@@ -174,25 +141,12 @@ const SelectWallet = memo(() => {
                 </div>
                 <List dense className={classes.list}>
                     {wallets.map((item, index) => (
-                        <ListItem className={classes.item} key={index} onClick={() => setSelected(item.address)}>
-                            <MaskWalletIcon />
-                            <ListItemText className={classes.text}>
-                                <div className={classes.listItem}>
-                                    <div>
-                                        <Typography className={classes.name}>{item.name}</Typography>
-                                        <Typography className={classes.address}>
-                                            <FormattedAddress
-                                                address={item.address}
-                                                size={12}
-                                                formatter={formatEthereumAddress}
-                                            />
-                                            <CopyIconButton className={classes.copy} text={item.address} />
-                                        </Typography>
-                                    </div>
-                                    {isSameAddress(item.address, selected) ? <SuccessIcon /> : null}
-                                </div>
-                            </ListItemText>
-                        </ListItem>
+                        <WalletItem
+                            key={index}
+                            wallet={item}
+                            onClick={() => setSelected(item.address)}
+                            isSelected={isSameAddress(item.address, selected)}
+                        />
                     ))}
                 </List>
             </div>

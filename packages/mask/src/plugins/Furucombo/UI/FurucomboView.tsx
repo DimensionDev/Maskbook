@@ -85,7 +85,7 @@ export function FurucomboView(props: PoolViewProps) {
 
     const { value, loading, error } = useFetchPools()
 
-    if (loading) return <Typography align="center">Loading...</Typography>
+    if (loading) return <Typography align="center">{t('loading')}</Typography>
 
     if (error || !value)
         return (
@@ -98,7 +98,7 @@ export function FurucomboView(props: PoolViewProps) {
 
     const investable = investables.find(
         (investable: Investable) =>
-            isSameAddress(investable.token.address, props.address) &&
+            isSameAddress(investable.address, props.address) &&
             investable.chainId === currentChainId &&
             investable.category === props.category,
     )
@@ -142,7 +142,7 @@ export function FurucomboView(props: PoolViewProps) {
                     </Link>
                 </Typography>
                 <Typography className={classes.footnote} variant="subtitle2">
-                    <span>Supported by</span>
+                    <span>{t('supported_by')}</span>
                     <Link
                         className={classes.footLink}
                         target="_blank"
@@ -151,7 +151,7 @@ export function FurucomboView(props: PoolViewProps) {
                         title="Furucombo"
                         href="https://furucombo.app">
                         <FurucomboIcon className={classes.furucombo} />
-                        Furucombo
+                        {t('plugin_furucombo_name')}
                     </Link>
                 </Typography>
             </CardActions>

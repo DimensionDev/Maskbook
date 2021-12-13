@@ -5,7 +5,7 @@ import {
     useChainId,
     ERC721TokenDetailed,
     resolveCollectibleLink,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
 } from '@masknet/web3-shared-evm'
 import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
@@ -42,26 +42,32 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CollectibleCardProps {
-    provider: CollectibleProvider
+    provider: NonFungibleAssetProvider
     wallet?: Wallet
     token: ERC721TokenDetailed
     readonly?: boolean
 }
 
+const videoTypeRe = /\.(mp4|mp3|m4v|ogg)$/i
+const videoMimeRe = /^video/
+const htmlMimeRe = /^text/
 export function CollectibleCard(props: CollectibleCardProps) {
     const { wallet, token, provider, readonly } = props
     const { classes } = useStyles()
     const chainId = useChainId()
 
+    const mediaUrl = token.info.mediaUrl
     const { loading, value } = useAsyncRetry(async () => {
-        if (!token.info.image) return
+        if (!mediaUrl) return
 
-        const blob = await (await fetch(token.info.image)).blob()
+        const blob = await (await fetch(mediaUrl)).blob()
         return blob
-    }, [token])
+    }, [mediaUrl])
 
-    const isVideo = value?.type.match(/^video/)?.[0]
-    const isHtml = !!value?.type.match(/^text/)?.[0]
+    const mimeType = value?.type || ''
+    // some video resources response content-type not video, e.g. application/octet-stream
+    const isVideo = mediaUrl ? videoTypeRe.test(mediaUrl) || mimeType.startsWith('video') : undefined
+    const isHtml = mimeType.startsWith('text')
 
     return (
         <>
@@ -73,21 +79,21 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         {readonly || !wallet ? null : (
                             <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                         )}
-                        {token.info.image ? (
+                        {token.info.mediaUrl ? (
                             isVideo ? (
                                 <Video
-                                    src={value ?? token.info.image}
+                                    src={value ?? token.info.mediaUrl}
                                     VideoProps={{ className: classes.video, autoPlay: true, loop: true }}
                                 />
                             ) : isHtml ? (
-                                <iframe src={token.info.image} />
+                                <iframe src={token.info.mediaUrl} />
                             ) : (
                                 <Image
                                     component="img"
                                     width={172}
                                     height={172}
                                     style={{ objectFit: 'cover' }}
-                                    src={value ?? token.info.image}
+                                    src={value ?? token.info.mediaUrl}
                                 />
                             )
                         ) : (

@@ -144,7 +144,7 @@ export async function vote(identifier: ProposalIdentifier, choice: number, addre
 
     const sig = await Services.Ethereum.personalSign(msg, address)
 
-    const response = await fetch(`https://hub.snapshot.page/api/message`, {
+    const response = await fetch(`https://hub.snapshot.org/api/msg`, {
         method: 'POST',
         headers: {
             Accept: 'application/json',

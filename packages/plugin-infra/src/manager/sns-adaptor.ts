@@ -3,6 +3,7 @@ import { useSubscription, Subscription } from 'use-subscription'
 import { createManager } from './manage'
 import { getPluginDefine } from './store'
 import type { CurrentSNSNetwork, Plugin } from '../types'
+import type { NetworkPluginID } from '..'
 
 const { events, activated, startDaemon } = createManager((def) => def.SNSAdaptor)
 
@@ -19,11 +20,15 @@ export function useActivatedPluginSNSAdaptor(pluginID: string) {
     return plugins.find((x) => x.ID === pluginID)
 }
 
-export function useActivatedPluginSNSAdaptor_withSupportOperateChain(chainId: number) {
+export function useActivatedPluginSNSAdaptor_Web3Supported(chainId: number, pluginID: string) {
     const plugins = useActivatedPluginsSNSAdaptor()
     return plugins.reduce<Record<string, boolean>>((acc, cur) => {
-        const operatingSupportedChains = cur.enableRequirement.web3?.supportedOperationalChains
-        acc[cur.ID] = !Boolean(operatingSupportedChains) || Boolean(operatingSupportedChains?.includes(chainId))
+        if (!cur.enableRequirement.web3) {
+            acc[cur.ID] = true
+            return acc
+        }
+        const supportedChainIds = cur.enableRequirement.web3?.[pluginID as NetworkPluginID]?.supportedChainIds
+        acc[cur.ID] = supportedChainIds?.includes(chainId) ?? false
         return acc
     }, {})
 }

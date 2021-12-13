@@ -55,7 +55,7 @@ export function GameStatsView(props: GameStatsViewProps) {
     if ((loading && !financialData) || otherPlayerLoading || poolAssetsLoading) {
         return (
             <Typography variant="h6" color="textSecondary">
-                Loading game stats
+                {t('plugin_good_ghosting_loading_game_stats')}
             </Typography>
         )
     } else if (error || !financialData || otherPlayerError || !otherPlayerData || poolAssetsError || !poolAssetsValue) {
@@ -66,9 +66,9 @@ export function GameStatsView(props: GameStatsViewProps) {
         }
         return (
             <Box display="flex" flexDirection="column" alignItems="center">
-                <Typography color="textPrimary">Something went wrong.</Typography>
+                <Typography color="textPrimary">{t('go_wrong')}</Typography>
                 <Button sx={{ marginTop: 1 }} size="small" onClick={retryFailed}>
-                    Retry
+                    {t('retry')}
                 </Button>
             </Box>
         )

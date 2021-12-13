@@ -2,7 +2,7 @@
 // packages/dashboard/src/initialization/plugins.ts
 
 import '@masknet/plugin-example'
-// import '@masknet/plugin-flow'
+import '@masknet/plugin-flow'
 import '../plugins/Wallet'
 import '../plugins/EVM'
 import '../plugins/RedPacket'
@@ -28,3 +28,6 @@ import '../plugins/Pets'
 import '../plugins/CyberConnect'
 // import '../plugins/NFT'
 // import '../plugins/Airdrop'
+import '../plugins/CryptoartAI'
+import '../plugins/FindTruman'
+

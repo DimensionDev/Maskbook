@@ -1,5 +1,6 @@
 import { ThirdPartyPluginPermission } from '../../background-script/ThirdPartyPlugin/types'
-
+import { useI18N } from '../../../utils'
+import { Trans } from 'react-i18next'
 export interface ThirdPartyRequestPermissionProps {
     pluginURL: string
     pluginName: string
@@ -7,16 +8,20 @@ export interface ThirdPartyRequestPermissionProps {
     onGrant(permissions: ThirdPartyPluginPermission[]): void
 }
 export function ThirdPartyRequestPermission(props: ThirdPartyRequestPermissionProps) {
+    const { t } = useI18N()
     return (
         <main>
-            The plugin "{props.pluginName}" (hosted on {props.pluginURL}) is going to request the following permissions:
+            <Trans
+                i18nKey="popups_following_permissions"
+                values={{ pluginName: props.pluginName, pluginURL: props.pluginURL }}
+            />
             <ul>
                 {props.permissions.map((x) => (
                     <li key={x}>{ThirdPartyPluginPermission[x]}</li>
                 ))}
             </ul>
-            <button onClick={() => window.close()}>Cancel</button>
-            <button onClick={() => props.onGrant(props.permissions)}>Grant</button>
+            <button onClick={() => window.close()}>{t('cancel')}</button>
+            <button onClick={() => props.onGrant(props.permissions)}>{t('popups_grant')}</button>
         </main>
     )
 }
