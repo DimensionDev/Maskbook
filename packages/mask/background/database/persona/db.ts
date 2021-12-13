@@ -1,23 +1,20 @@
-/// <reference path="../global.d.ts" />
 import Fuse from 'fuse.js'
-import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '../type'
 import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
-import { IdentifierMap } from '../IdentifierMap'
-import { PrototypeLess, restorePrototype } from '../../../utils-pure'
-import { MaskMessages } from '../../utils/messages'
-import {
-    createDBAccessWithAsyncUpgrade,
-    createTransaction,
-    IDBPSafeTransaction,
-} from '../../../background/database/utils/openDB'
+import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype } from '../../../utils-pure'
+import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
 import { assertPersonaDBConsistency } from './consistency'
-import type {
+import {
     AESJsonWebKey,
+    ECKeyIdentifier,
     EC_Private_JsonWebKey,
     EC_Public_JsonWebKey,
-} from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { CryptoKeyToJsonWebKey } from '../../utils/type-transform/CryptoKey-JsonWebKey'
-import { RelationFavor } from '@masknet/shared-base'
+    Identifier,
+    IdentifierMap,
+    PersonaIdentifier,
+    ProfileIdentifier,
+    RelationFavor,
+} from '@masknet/shared-base'
+import { MaskMessages } from '../../../shared'
 
 /**
  * Database structure:
@@ -119,7 +116,7 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
             const b = await t.objectStore('profiles').getAll()
             for (const rec of [...a, ...b]) {
                 if (!rec.localKey) continue
-                map.data.set(rec.identifier, await CryptoKeyToJsonWebKey(rec.localKey as any))
+                map.data.set(rec.identifier, (await CryptoKeyToJsonWebKey(rec.localKey as any)) as any)
             }
             return map
         }
@@ -128,7 +125,6 @@ const db = createDBAccessWithAsyncUpgrade<PersonaDB, Knowledge>(
 )
 type V1To2 = { version: 2; data: Map<string, AESJsonWebKey> }
 type Knowledge = V1To2
-export const createPersonaDBAccess = db
 export type FullPersonaDBTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
     PersonaDB,
     ['personas', 'profiles', 'relations'],
@@ -151,7 +147,7 @@ export type RelationTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSaf
     Mode
 >
 
-export async function createRelationsTransaction(storeNames?: string[]) {
+export async function createRelationsTransaction() {
     const database = await db()
     return createTransaction(database, 'readwrite')('relations')
 }
@@ -779,10 +775,6 @@ function relationRecordOutDB(x: RelationRecordDB): RelationRecord {
         profile: Identifier.fromString(x.profile, ProfileIdentifier).unwrap(),
         linked: Identifier.fromString(x.linked, ECKeyIdentifier).unwrap(),
     }
-}
-
-function findRelationRecordWithLinked(x: RelationRecordDB, linked: PersonaIdentifier) {
-    return linked.equals(Identifier.fromString(x.linked, ECKeyIdentifier).unwrap())
 }
 
 //#endregion

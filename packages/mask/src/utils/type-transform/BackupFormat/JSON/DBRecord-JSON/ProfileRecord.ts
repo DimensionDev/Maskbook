@@ -1,4 +1,4 @@
-import type { ProfileRecord } from '../../../../../database/Persona/Persona.db'
+import type { ProfileRecord } from '../../../../../../background/database/persona/db'
 import type { BackupJSONFileLatest } from '../latest'
 import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../../../database/type'
 

@@ -38,7 +38,7 @@ import {
     queryRelationsPagedDB,
     RelationRecord,
     updateRelationDB,
-} from '../../database/Persona/Persona.db'
+} from '../../../background/database/persona/db'
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
@@ -221,7 +221,7 @@ export async function attachProfile(
     }
     return attachProfileDB(source, target, data)
 }
-export { detachProfileDB as detachProfile } from '../../database/Persona/Persona.db'
+export { detachProfileDB as detachProfile } from '../../../background/database/persona/db'
 //#endregion
 
 //#region Post

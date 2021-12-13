@@ -1,5 +1,5 @@
 import type { BackupJSONFileLatest } from '../latest'
-import type { PersonaRecord } from '../../../../../database/Persona/Persona.db'
+import type { PersonaRecord } from '../../../../../../background/database/persona/db'
 import { Identifier, ECKeyIdentifier, ProfileIdentifier } from '../../../../../database/type'
 import { IdentifierMap } from '../../../../../database/IdentifierMap'
 export function PersonaRecordToJSONFormat(persona: PersonaRecord): BackupJSONFileLatest['personas'][0] {
