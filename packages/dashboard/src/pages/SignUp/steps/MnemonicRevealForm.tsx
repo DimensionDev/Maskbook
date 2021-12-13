@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Stack, Box } from '@mui/material'
 import RefreshIcon from '@mui/icons-material/Refresh'
 import { useCustomSnackbar } from '@masknet/theme'
-import { RoutePaths } from '../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskAlert } from '../../../components/MaskAlert'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import {
@@ -52,7 +52,7 @@ export const MnemonicRevealForm = memo(() => {
         <ColumnContentLayout>
             <Header
                 title={t.create_account_identity_title()}
-                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
+                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(DashboardRoutes.SignIn) }}
             />
             <Body>
                 <PersonaLogoBox>

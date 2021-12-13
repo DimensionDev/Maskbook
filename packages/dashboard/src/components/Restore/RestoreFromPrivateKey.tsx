@@ -11,7 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller } from 'react-hook-form'
 import { z } from 'zod'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
 import { delay } from '@masknet/shared-base'
 type FormInputs = {
@@ -46,9 +46,9 @@ export const RestoreFromPrivateKey = memo(() => {
                 await changeCurrentPersona(persona.identifier)
                 // Waiting persona changed event notify
                 await delay(100)
-                navigate(RoutePaths.Personas)
+                navigate(DashboardRoutes.Personas)
             } else {
-                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
                     replace: false,
                     state: { privateKey: data.privateKey },
                 })

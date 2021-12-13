@@ -1,4 +1,4 @@
-import { parseURL } from '../../utils/utils'
+import { parseURL } from '@masknet/shared-base'
 import { foundationPathnameRegexMatcher } from './constants'
 import { ChainId } from '@masknet/web3-shared-evm'
 

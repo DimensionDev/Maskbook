@@ -1,6 +1,5 @@
 import { createPluginMessage } from '@masknet/plugin-infra'
-import type { TypedMessage } from '@masknet/shared-base'
-import Serialization from '../../utils/type-transform/Serialization'
+import { TypedMessage, serializer } from '@masknet/shared-base'
 import type { MaskSDK_SNS_ContextIdentifier } from './sns-context'
 
 // Make TS happy
@@ -17,4 +16,4 @@ export interface ExternalPluginMessage {
     }
 }
 
-export const ExternalPluginMessages = createPluginMessage<ExternalPluginMessage>('io.mask.external', Serialization)
+export const ExternalPluginMessages = createPluginMessage<ExternalPluginMessage>('io.mask.external', serializer)
