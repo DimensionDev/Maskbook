@@ -22,11 +22,6 @@ export function getLastSalePrice(total_price?: string, decimals?: number) {
     return price
 }
 
-export function toDate(timestamp: number) {
-    if (timestamp === 0) return null
-    return new Date(timestamp * 1000)
-}
-
 export function toTokenDetailed(
     chainId: ChainId,
     token: { address: string; decimals: number; name: string; symbol: string },

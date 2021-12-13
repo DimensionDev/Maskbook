@@ -3,7 +3,8 @@ import type { OpenSeaAssetContract, OpenSeaAssetEvent, OpenSeaResponse, OpenSeaC
 import urlcat from 'urlcat'
 import { head, uniqBy } from 'lodash-unified'
 import type { AssetCollection, AssetOrder, NFTAsset, NFTHistory, OrderSide } from '../types'
-import { getOrderUnitPrice, getOrderUSDPrice, toDate, toTokenDetailed } from '../utils'
+import { getOrderUnitPrice, getOrderUSDPrice, toTokenDetailed } from '../utils'
+import fromUnixTime from 'date-fns/fromUnixTime'
 
 import BigNumber from 'bignumber.js'
 import {
@@ -40,7 +41,13 @@ export async function getNFTsPaged(from: string, opts: { chainId?: ChainId; page
     const asset = await fetchAsset(`${OpenSea_API_URL}/api/v1/assets?${params.toString()}`, chainId)
     if (!asset) return []
 
-    return asset.assets.map((asset: OpenSeaResponse) => createERC721TokenAsset(from, asset.token_id, chainId, asset))
+    return asset.assets
+        .filter(
+            (x: OpenSeaResponse) =>
+                ['non-fungible', 'semi-fungible'].includes(x.asset_contract.type) ||
+                ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
+        )
+        .map((asset: OpenSeaResponse) => createERC721TokenAsset(from, asset.token_id, chainId, asset))
 }
 
 function createERC721ContractDetailedFromAssetContract(
@@ -151,7 +158,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId) {
         end_time: asset.endTime
             ? new Date(asset.endTime)
             : desktopOrder
-            ? toDate(Number.parseInt(desktopOrder.listing_time as unknown as string, 10))
+            ? fromUnixTime(Number.parseInt(desktopOrder.listing_time as unknown as string, 10))
             : null,
         order_payment_tokens: desktopOrder?.payment_token_contract
             ? [toTokenDetailed(chainId, desktopOrder.payment_token_contract)]
@@ -262,18 +269,17 @@ async function fetchOrder(
     params.append('side', side.toString())
     params.append('offset', page.toString())
     params.append('limit', size.toString())
-    const response = await (
-        await fetch(`${OpenSea_API_URL}/wyvern/v1/orders?${params.toString()}`, {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                Accept: 'application/json',
-                'x-api-key': OPENSEA_API_KEY,
-            },
-        })
-    ).json()
+    const response = await fetch(`${OpenSea_API_URL}/wyvern/v1/orders?${params.toString()}`, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            Accept: 'application/json',
+            'x-api-key': OPENSEA_API_KEY,
+        },
+    })
 
-    const { orders }: { orders: AssetOrder[] } = response
+    if (!response.ok) return []
+    const { orders = [] }: { orders: AssetOrder[] } = await response.json()
     return orders
 }
 
@@ -285,6 +291,7 @@ export async function getOrder(address: string, tokenId: string, side: OrderSide
     let order
     do {
         order = await fetchOrder(address, tokenId, side, page, size, chainId)
+        if (order.length === 0) break
         orders = orders.concat(order ?? [])
         page = page + 1
     } while (order.length === size)

@@ -26,5 +26,5 @@ export function useAsset(address: string, token_id: string, provider: NonFungibl
                     isSameAddress(item.owner.address, account),
                 ) ?? false,
         }
-    }, [account, chainId, WNATIVE_ADDRESS])
+    }, [account, chainId, WNATIVE_ADDRESS, address, token_id, provider])
 }

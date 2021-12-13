@@ -203,8 +203,6 @@ export async function getHistory(tokenAddress: string, tokenId: string): Promise
     })
 }
 
-//#region new code
-
 function createERC721TokenAsset(
     tokenAddress: string,
     tokenId: string,
@@ -329,25 +327,8 @@ export async function getNFTs(from: string, chainId: ChainId) {
 }
 
 export async function getContractBalance(from: string, contract_address: string, chainId: ChainId) {
-    /*
-    const balanceResponse = await fetchFromRarible<{
-        contract: string
-        owner: string
-        balance: string
-        decimalBalance: string
-    }>(RaribleMainnetURL, `/ethereum/erc20/balances/${contract_address}/${from}`, {})
-
-    return formatBalance(
-        new BigNumber(balanceResponse.balance),
-        new BigNumber(balanceResponse.decimalBalance).toNumber(),
-    )
-    */
     const assets = await getNFTs(from, chainId)
     return assets.filter((asset) => isSameAddress(asset.contractDetailed.address, contract_address)).length
-}
-
-export async function getContract(from: string, contract_address: string, chainId: ChainId) {
-    return
 }
 
 export async function getNFTsPaged(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
