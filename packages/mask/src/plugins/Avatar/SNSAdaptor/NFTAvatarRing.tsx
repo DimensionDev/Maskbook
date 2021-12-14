@@ -29,7 +29,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
 
     return (
         <RainbowBox width={R} height={R}>
-            <svg className={classes.root} width={R} height={R} viewBox={`0 0 ${R} ${R}`} id={id}>
+            <svg className={classes.root} width={width} height={width} viewBox={`0 0 ${R} ${R}`} id={id}>
                 <defs>
                     <path
                         id={`${id}-path`}
