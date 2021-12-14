@@ -53,6 +53,6 @@ export function ToBeListened(): ToBeListedSettings {
         binanceNetworkTradeProviderSettings,
         arbitrumNetworkTradeProviderSettings,
         xdaiNetworkTradeProviderSettings,
-        fantomNetworkTradeProviderSettings
+        fantomNetworkTradeProviderSettings,
     }
 }

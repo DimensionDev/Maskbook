@@ -47,6 +47,7 @@ export function useAllTradeComputed(
     )
 
     const nativeTradeGasLimit = useNativeTradeGasLimit(nativeToken, targetChainId)
+
     //uniswap-v2
     const uniswapV2_ = useUniswapV2Trade(
         TradeProvider.UNISWAP_V2,
@@ -61,26 +62,17 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.UNISWAP_V2) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.UNISWAP_V2) ? outputToken : undefined,
     )
+    const uniswapV2EstimateGas = useUniswapTradeGasLimit(uniswapV2, TradeProvider.UNISWAP_V2)
 
-    const uniswapEstimateGas = useUniswapTradeGasLimit(uniswapV2, TradeProvider.UNISWAP_V2)
-
-    const containSushiSwap = tradeProviders.some((x) => x === TradeProvider.SUSHISWAP)
     // sushi swap
     const sushiSwap_ = useUniswapV2Trade(
         TradeProvider.SUSHISWAP,
         TradeStrategy.ExactIn,
         inputAmount_,
         '0',
-        containSushiSwap ? inputToken : undefined,
-        containSushiSwap ? outputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.SUSHISWAP) ? inputToken : undefined,
+        tradeProviders.some((x) => x === TradeProvider.SUSHISWAP) ? outputToken : undefined,
     )
-    console.log('containSushiSwap', {
-        inputAmount_,
-        containSushiSwap,
-        inputToken,
-        outputToken,
-        swapValue: sushiSwap_.value,
-    })
     const sushiSwap = useUniswapTradeComputed(sushiSwap_.value, inputToken, outputToken)
     const sushiSwapEstimateGas = useUniswapTradeGasLimit(sushiSwap, TradeProvider.SUSHISWAP)
 
@@ -179,13 +171,11 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.BANCOR) ? inputToken : undefined,
         tradeProviders.some((x) => x === TradeProvider.BANCOR) ? outputToken : undefined,
     )
-
     const bancor = useBancorTradeComputed(bancor_.value ?? null, TradeStrategy.ExactIn, inputToken, outputToken)
-
     const bancorSwapEstimateGas = useBancorTradeGasLimit(bancor)
 
     const allTradeResult = [
-        { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapEstimateGas },
+        { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
         { provider: TradeProvider.SASHIMISWAP, ...sashimiSwap_, value: sashimiSwap, gas: sashimiSwapEstimateGas },
         { provider: TradeProvider.QUICKSWAP, ...quickSwap_, value: quickSwap, gas: quickSwapEstimateGas },
