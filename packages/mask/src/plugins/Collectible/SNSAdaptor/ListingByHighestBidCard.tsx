@@ -4,12 +4,11 @@ import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
-    isLessThan,
     isNative,
-    isZero,
     FungibleTokenWatched,
     useAccount,
 } from '@masknet/web3-shared-evm'
+import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -18,7 +17,8 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
-import { toAsset, toUnixTimestamp } from '../helpers'
+import { toAsset } from '../helpers'
+import getUnixTime from 'date-fns/getUnixTime'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -79,7 +79,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
-            expirationTime: toUnixTimestamp(expirationDateTime),
+            expirationTime: getUnixTime(expirationDateTime),
             englishAuctionReservePrice: Number.parseFloat(reservePrice),
             waitForHighestBid: true,
             paymentTokenAddress: token.value.address, // english auction must be erc20 token

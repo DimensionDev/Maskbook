@@ -51,9 +51,12 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
             if (!pluginDataHasValidKeyPath(data)) throw new TypeError("Data doesn't have a valid key path")
             if (await t.store.get(key(data))) await t.store.put(toStore(plugin_id, data))
             else await t.store.add(toStore(plugin_id, data))
+            t.commit()
         },
         async remove(type, id) {
-            ;(await c('rw')).store.delete(key({ type, id }))
+            const t = await c('rw')
+            await t.store.delete(key({ type, id }))
+            t.commit()
         },
         async *iterate(type) {
             const db = await c('r')

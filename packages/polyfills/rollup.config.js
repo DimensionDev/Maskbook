@@ -56,6 +56,6 @@ function plugins() {
             exclude: ['node_modules/**'],
             transforms: ['typescript'],
         }),
-        terser(),
+        terser({ mangle: false }),
     ]
 }

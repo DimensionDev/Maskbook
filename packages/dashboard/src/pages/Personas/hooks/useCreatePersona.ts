@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { Messages, Services } from '../../../API'
-import { delay } from '@masknet/shared'
+import { delay } from '@masknet/shared-base'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
 
 export function useCreatePersona(): AsyncFnReturn<(nickName: string) => Promise<void>> {

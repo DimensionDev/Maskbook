@@ -42,7 +42,7 @@ export function SwapBox() {
 
     return (
         <TradeContext.Provider value={tradeContext}>
-            <Trader coin={coin} />
+            <Trader coin={coin} chainId={chainId} />
         </TradeContext.Provider>
     )
 }

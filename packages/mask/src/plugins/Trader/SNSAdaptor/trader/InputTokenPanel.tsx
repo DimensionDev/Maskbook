@@ -1,14 +1,13 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
 import { FormattedBalance, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ZERO_ADDRESS, ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FormattedCurrency } from '@masknet/shared'
-import { ZERO_ADDRESS } from '../../../GoodGhosting/constants'
 import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
@@ -74,10 +73,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         [`& .${chipClasses.label}`]: {
             paddingTop: 9,
             paddingBottom: 9,
-            fontSize: 13,
+            fontSize: 10,
             lineHeight: '18px',
             color: theme.palette.primary.contrastText,
-            marginRight: 10,
+            marginRight: 0,
         },
     },
 }))
@@ -118,7 +117,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
 
         const tokenPrice = useTokenPrice(
             chainId,
-            token?.address !== ZERO_ADDRESS ? token?.address.toLowerCase() : undefined,
+            !isSameAddress(token?.address, ZERO_ADDRESS) ? token?.address.toLowerCase() : undefined,
         )
 
         const tokenValueUSD = useMemo(

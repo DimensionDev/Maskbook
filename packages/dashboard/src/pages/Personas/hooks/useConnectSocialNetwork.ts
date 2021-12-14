@@ -1,6 +1,6 @@
 import { useAsyncFn } from 'react-use'
 import { Services } from '../../../API'
-import type { ProfileIdentifier } from '@masknet/shared'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import type { AsyncFnReturn } from 'react-use/lib/useAsyncFn'
 
 export function useConnectSocialNetwork() {

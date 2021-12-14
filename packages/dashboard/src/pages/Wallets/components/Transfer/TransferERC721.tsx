@@ -28,10 +28,9 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import TuneIcon from '@mui/icons-material/Tune'
-import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-unified'
@@ -39,6 +38,7 @@ import { TransferTab } from './types'
 import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { NetworkType } from '@masknet/public-api'
 import { useUpdateEffect } from 'react-use'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -144,7 +144,7 @@ export const TransferERC721 = memo(() => {
     // gas price
     const { value: defaultGasPrice = '0' } = useGasPrice()
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
-    const gasFee = useMemo(() => new BigNumber(gasLimit).multipliedBy(gasPrice), [gasLimit, gasPrice])
+    const gasFee = useMemo(() => multipliedBy(gasLimit, gasPrice), [gasLimit, gasPrice])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
     // dialog
@@ -178,7 +178,7 @@ export const TransferERC721 = memo(() => {
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.HASH) {
-            navigate(RoutePaths.WalletsHistory)
+            navigate(DashboardRoutes.WalletsHistory)
         }
     }, [transferState])
 

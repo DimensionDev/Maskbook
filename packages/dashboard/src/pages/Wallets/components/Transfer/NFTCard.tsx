@@ -84,7 +84,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
                 background: (theme) => (theme.palette.mode === 'dark' ? getMaskColor(theme).white : '#F9F9FA'),
             }}
             className={isDisabled ? classes.disabled : ''}>
-            {loadFailed || !token.info.image ? (
+            {loadFailed || !token.info.mediaUrl ? (
                 <div className={classes.container}>
                     <div className={classes.placeholder}>
                         <MiniMaskIcon viewBox="0 0 48 48" sx={{ fontSize: 48 }} />
@@ -93,7 +93,7 @@ export const NFTCard = memo<NFTCardProps>(({ token, selectedTokenId, onSelect })
             ) : (
                 <img
                     onError={() => setLoadFailed(true)}
-                    src={token.info.image}
+                    src={token.info.mediaUrl}
                     style={{ width: '100%', height: '100%', borderRadius: '8px 8px 0px 0px', objectFit: 'cover' }}
                 />
             )}

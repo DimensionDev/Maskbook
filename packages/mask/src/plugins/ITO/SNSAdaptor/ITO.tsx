@@ -6,17 +6,14 @@ import {
     getChainDetailed,
     isSameAddress,
     currySameAddress,
-    isZero,
-    pow10,
     resolveLinkOnExplorer,
     TransactionStateType,
     useAccount,
     useChainId,
     useChainIdValid,
     useTokenConstants,
-    ZERO,
-    isGreaterThan,
 } from '@masknet/web3-shared-evm'
+import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Card, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OpenInNewIcon from '@mui/icons-material/OpenInNew'
@@ -591,8 +588,8 @@ export function ITO(props: ITO_Props) {
                                     price={formatBalance(
                                         new BigNumber(exchange_amounts[i * 2])
                                             .dividedBy(exchange_amounts[i * 2 + 1])
-                                            .multipliedBy(pow10(token.decimals - exchangeToken.decimals))
-                                            .multipliedBy(pow10(exchangeToken.decimals))
+                                            .shiftedBy(token.decimals - exchangeToken.decimals)
+                                            .shiftedBy(exchangeToken.decimals)
                                             .integerValue(),
                                         exchangeToken.decimals,
                                     )}

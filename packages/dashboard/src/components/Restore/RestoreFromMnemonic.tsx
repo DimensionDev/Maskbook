@@ -8,7 +8,7 @@ import { MaskAlert } from '../MaskAlert'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { SignUpRoutePath } from '../../pages/SignUp/routePath'
@@ -36,9 +36,9 @@ export const RestoreFromMnemonic = () => {
             const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
             if (persona) {
                 await changeCurrentPersona(persona.identifier)
-                navigate(RoutePaths.Personas, { replace: true })
+                navigate(DashboardRoutes.Personas, { replace: true })
             } else {
-                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
                     replace: false,
                     state: { mnemonic: values },
                 })
