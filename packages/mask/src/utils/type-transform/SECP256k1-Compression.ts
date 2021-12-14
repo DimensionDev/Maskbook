@@ -2,7 +2,7 @@ import secp256k1 from 'tiny-secp256k1'
 import { Convert, combine } from 'pvtsutils'
 import { encodeArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
 import { Buffer } from 'buffer'
-import type { EC_JsonWebKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
+import type { EC_JsonWebKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
 /**
  * Compress x & y into a single x
  */
@@ -29,16 +29,11 @@ function decompressSecp256k1Point(point: ArrayBuffer): { x: string; y: string } 
     return { x: Convert.ToBase64Url(x), y: Convert.ToBase64Url(y) }
 }
 
-export function compressSecp256k1Key(key: EC_JsonWebKey, type: 'public' | 'private'): string {
-    if (type === 'private' && !key.d) throw new Error('Private key does not contain secret')
+export function compressSecp256k1Key(key: EC_JsonWebKey): string {
     const arr = compressSecp256k1Point(key.x!, key.y!)
-    return encodeArrayBuffer(arr) + (type === 'private' ? '🙈' + key.d! : '')
+    return encodeArrayBuffer(arr)
 }
-export function decompressSecp256k1Key(compressed: string, type: 'public'): EC_Public_JsonWebKey
-export function decompressSecp256k1Key(compressed: string, type: 'private'): EC_Private_JsonWebKey
-export function decompressSecp256k1Key(compressed: string, type: 'public' | 'private'): EC_JsonWebKey {
-    const [compressedPublic, privateKey] = compressed.split('🙈')
-    if (type === 'private' && privateKey.length < 1) throw new Error('Private key does not contain secret')
+export function decompressSecp256k1Key(compressedPublic: string): EC_Public_JsonWebKey {
     const arr = decodeArrayBuffer(compressedPublic)
     const key = decompressSecp256k1Point(arr)
     const jwk: JsonWebKey = {
@@ -48,7 +43,6 @@ export function decompressSecp256k1Key(compressed: string, type: 'public' | 'pri
         y: key.y,
         key_ops: ['deriveKey', 'deriveBits'],
         kty: 'EC',
-        d: type === 'private' ? privateKey : undefined,
     }
-    return jwk as EC_JsonWebKey
+    return jwk as EC_Public_JsonWebKey
 }

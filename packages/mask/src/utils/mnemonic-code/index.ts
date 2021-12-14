@@ -59,7 +59,7 @@ export async function recover_ECDH_256k1_KeyPair_ByMnemonicWord(
 export const validateMnemonic = bip39.validateMnemonic
 
 function HDKeyToJwk(hdk: wallet.HDKey): JsonWebKey {
-    const jwk = decompressSecp256k1Key(encodeArrayBuffer(hdk.publicKey), 'public')
+    const jwk = decompressSecp256k1Key(encodeArrayBuffer(hdk.publicKey))
     jwk.d = hdk.privateKey ? Convert.ToBase64Url(hdk.privateKey) : undefined
     return jwk
 }
