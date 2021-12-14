@@ -1,5 +1,5 @@
 import Fuse from 'fuse.js'
-import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
+import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype } from '../../../utils-pure'
 import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
 import { assertPersonaDBConsistency } from './consistency'

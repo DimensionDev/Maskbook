@@ -30,7 +30,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import TuneIcon from '@mui/icons-material/Tune'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-unified'
@@ -178,7 +178,7 @@ export const TransferERC721 = memo(() => {
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.HASH) {
-            navigate(RoutePaths.WalletsHistory)
+            navigate(DashboardRoutes.WalletsHistory)
         }
     }, [transferState])
 

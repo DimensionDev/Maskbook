@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { parseURL } from '../../utils/utils'
+import { parseURL } from '@masknet/shared-base'
 import {
     openseaHostnames,
     openseaPathnameRegexMatcher,

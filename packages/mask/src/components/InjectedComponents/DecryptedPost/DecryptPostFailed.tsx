@@ -4,7 +4,7 @@ import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostCont
 import { NotSetupYetPrompt } from '../../shared/NotSetupYetPrompt'
 import type { BannerProps } from '../../Welcomes/Banner'
 import { DecryptFailedReason } from '../../../utils/constants'
-import type { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 export interface DecryptPostFailedProps {
     error: Error

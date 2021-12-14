@@ -18,5 +18,5 @@ export const languages = {
     'zh-CN': zh_CN,
     zh: zh_TW,
 }
-import { createI18NBundle } from '@masknet/shared'
+import { createI18NBundle } from '@masknet/shared-base'
 export const addDO_NOT_USEI18N = createI18NBundle('DO_NOT_USE', languages)

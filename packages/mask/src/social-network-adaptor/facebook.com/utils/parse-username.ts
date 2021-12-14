@@ -1,4 +1,4 @@
-import type { ProfileIdentifier, PostIdentifier } from '../../../database/type'
+import type { ProfileIdentifier, PostIdentifier } from '@masknet/shared-base'
 import { isMobileFacebook } from './isMobile'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 
