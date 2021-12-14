@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px',
     },
     msgBox: {
-        width: '96%',
+        width: '85%',
         backgroundColor: '#fff',
         borderRadius: '12px',
         boxShadow: '0 0 8px #ddd',
@@ -69,6 +69,10 @@ const useStyles = makeStyles()((theme) => ({
     },
     wordShow: {
         animation: 'word-show 0.9s both;',
+        fontSize: '12px',
+        fontFamily: 'TwitterChirp',
+        lineHeight: '16px',
+        color: '#222',
     },
     image: {
         borderRadius: '4px',

@@ -105,6 +105,7 @@ const AnimatePic = () => {
     const viNfts = useNfts(vister)
     const viMeta = useEssay(vister, start)
     const defMeta = useDefaultEssay(viNfts)
+    console.log('animate', user, userMeta, vister, viNfts, viMeta, defMeta)
 
     const [showMeta, setShowMeta] = useState<{ image: string; word: string } | undefined>(undefined)
     const [show, setShow] = useState(true)

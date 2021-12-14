@@ -10,6 +10,7 @@ import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
 import { FileServicePluginID } from '../../plugins/FileService/constants'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
+import { PluginPetMessages } from '../../plugins/Pets/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
@@ -135,6 +136,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
 
     //#region Fiat on/off ramp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
+    //#endregion
+
+    const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated)
     //#endregion
 
     //#region second level entry dialog
@@ -269,6 +273,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                 ),
             undefined,
             isFlow,
+        ),
+        createEntry(
+            'Non-F Friends',
+            new URL('./assets/mintTeam.png', import.meta.url).toString(),
+            () => setPetDialog({ open: true }),
+            undefined,
+            false,
+            false,
         ),
         createEntry(
             'Investment',

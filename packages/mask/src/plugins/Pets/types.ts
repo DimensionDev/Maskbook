@@ -34,4 +34,5 @@ export interface CollectionNFT {
     schema_name: string
     image_url: string
     symbol: string
+    address: string
 }

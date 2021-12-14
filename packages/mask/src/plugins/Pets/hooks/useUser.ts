@@ -2,30 +2,17 @@ import { useEffect, useState } from 'react'
 import { useAccount, useEthereumAddress } from '@masknet/web3-shared-evm'
 import type { User } from '../types'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
-import { useMyPersonas } from '../../../components/DataSource/useMyPersonas'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 
 export function useUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const account = useAccount()
-    const myPersonas = useMyPersonas()
+    const whoAmI = useLastRecognizedIdentity()
     useEffect(() => {
-        const identifiers: Array<string> = []
-        // myPersonas.forEach((persona) => {
-        //     ;[...persona.linkedProfiles].forEach(([key]) => {
-        //         if (key.network === TWITTER) {
-        //             identifiers.push(key.userId)
-        //         }
-        //     })
-        // })
-        // if (identifiers.length === 0) return
-        // const userId = identifiers[0]
-        // setUser({ userId, address: account })
-        // // sometimes rpc no call back
-        // PluginNFTAvatarRPC.getAddress(userId).then((address) => {
-        //     setUser({ userId, address: address ?? account })
-        // })
-    }, [myPersonas])
+        if (account && whoAmI?.identifier?.userId) {
+            setUser({ userId: whoAmI?.identifier?.userId, address: account })
+        }
+    }, [account, whoAmI])
     return user
 }
 
