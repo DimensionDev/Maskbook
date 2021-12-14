@@ -61,10 +61,6 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
-        insufficientError: {
-            paddingTop: theme.spacing(1),
-            color: 'red',
-        },
     }
 })
 
