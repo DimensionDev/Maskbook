@@ -29,7 +29,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : getMaskColor(theme).twitterBackground,
+        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
     },

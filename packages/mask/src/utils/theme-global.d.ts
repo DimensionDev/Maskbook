@@ -14,6 +14,7 @@ declare module '@mui/material/styles/createPalette.d' {
     }
     export interface TypeBackground {
         input: string
+        tipMask: string
     }
 }
 export {}

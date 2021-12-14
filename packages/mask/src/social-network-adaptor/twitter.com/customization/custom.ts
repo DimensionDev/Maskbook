@@ -207,6 +207,9 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     colorPrimary: {
                         backgroundColor: theme.palette.primary.main,
                         color: theme.palette.common.white,
+                        '&:hover': {
+                            backgroundColor: parseColor(theme.palette.text.primary).setAlpha(0.1).toRgbString(),
+                        },
                     },
                 },
             }
@@ -214,6 +217,18 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 styleOverrides: {
                     root: {
                         backgroundColor: theme.palette.action.mask,
+                    },
+                },
+            }
+            theme.components.MuiTooltip = {
+                styleOverrides: {
+                    tooltip: {
+                        backgroundColor: theme.palette.background.tipMask,
+                        color: theme.palette.text.buttonText,
+                        borderRadius: 8,
+                    },
+                    tooltipArrow: {
+                        backgroundColor: theme.palette.background.tipMask,
                     },
                 },
             }

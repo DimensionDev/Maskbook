@@ -144,17 +144,11 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             },
         },
         tooltip: {
-            backgroundColor: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
-            color: theme.palette.mode === 'dark' ? '#7B8192' : '#ffffff',
-            borderRadius: 8,
             padding: 16,
             textAlign: 'left',
             fontSize: 16,
             lineHeight: '22px',
             fontWeight: 500,
-        },
-        tooltipArrow: {
-            color: theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
         },
         dropIcon: {
             width: 20,
@@ -488,7 +482,6 @@ export const TradeForm = memo<AllTradeFormProps>(
                                             <Tooltip
                                                 classes={{
                                                     tooltip: classes.tooltip,
-                                                    arrow: classes.tooltipArrow,
                                                 }}
                                                 PopperProps={{
                                                     disablePortal: true,

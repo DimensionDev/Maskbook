@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import classNames from 'classnames'
 import { Typography } from '@mui/material'
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
         borderRadius: '8px',
         cursor: 'pointer',
         height: 100,
