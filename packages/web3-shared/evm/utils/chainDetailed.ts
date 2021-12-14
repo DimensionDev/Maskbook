@@ -26,6 +26,10 @@ export function isInjectedProvider(providerType: ProviderType) {
     return [ProviderType.Coin98, ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)
 }
 
+export function isFortmaticSupported(chainId: ChainId) {
+    return [ChainId.Mainnet, ChainId.BSC].includes(chainId)
+}
+
 export function getChainDetailed(chainId = ChainId.Mainnet) {
     return CHAINS.find((x) => x.chainId === chainId)
 }

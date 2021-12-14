@@ -5,7 +5,7 @@ import type {
     IDBPTransaction,
     IDBPObjectStore,
     IDBPCursorWithValueIteratorValue,
-} from 'idb/with-async-ittr-cjs'
+} from 'idb/with-async-ittr'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { MaskMessages } from '../../../shared'
 
@@ -31,7 +31,8 @@ export function createDBAccess<DBSchema>(opener: () => Promise<IDBPDatabase<DBSc
         if (db) {
             try {
                 // try if the db still open
-                db.transaction([], 'readonly', {})
+                const t = db.transaction([db.objectStoreNames[0]], 'readonly', {})
+                t.commit()
                 return db
             } catch {
                 clean()

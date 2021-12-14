@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import Services from '../../../extension/service'
 import type { Profile } from '../../../database'
 import { getCurrentIdentifier } from '../../utils'

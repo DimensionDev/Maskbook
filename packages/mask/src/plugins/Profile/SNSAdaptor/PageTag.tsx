@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import classNames from 'classnames'
+import { useI18N } from '../../../utils'
 import { PageTags } from '../types'
 import type { Dao_Payload } from './hooks/useDao'
 
@@ -51,6 +52,7 @@ interface PageTagProps {
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
     const { onChange, tag, isOwned, daoPayload } = props
+    const { t } = useI18N()
     return (
         <div className={classes.root}>
             <Button
@@ -58,21 +60,21 @@ export function PageTag(props: PageTagProps) {
                 className={classNames(classes.hidden, tag === PageTags.WalletTag ? classes.selected : classes.button)}
                 onClick={() => onChange(PageTags.WalletTag)}
                 size="medium">
-                Wallets
+                {t('wallets')}
             </Button>
             <Button
                 variant="outlined"
                 className={tag === PageTags.NFTTag ? classes.selected : classes.button}
                 onClick={() => onChange(PageTags.NFTTag)}
                 size="medium">
-                NFTs
+                {t('nfts')}
             </Button>
             <Button
                 variant="outlined"
                 className={tag === PageTags.DonationTag ? classes.selected : classes.button}
                 onClick={() => onChange(PageTags.DonationTag)}
                 size="medium">
-                Donations
+                {t('donations')}
             </Button>
             <Button
                 variant="outlined"
@@ -87,7 +89,7 @@ export function PageTag(props: PageTagProps) {
                     className={tag === PageTags.DAOTag ? classes.selected : classes.button}
                     onClick={() => onChange(PageTags.DAOTag)}
                     size="medium">
-                    DAO
+                    {t('dao')}
                 </Button>
             ) : null}
             {isOwned ? (

@@ -28,6 +28,7 @@ import { useAsyncFn } from 'react-use'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
 import Services from '../../../../service'
+import { isPositive, multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()({
     container: {
@@ -96,10 +97,7 @@ const ReplaceTransaction = memo(() => {
                 ? zod
                       .string()
                       .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
-                      .refine(
-                          (value) => new BigNumber(value).isPositive(),
-                          t('wallet_transfer_error_max_priority_gas_fee_positive'),
-                      )
+                      .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
                 : zod.string().optional(),
             maxFeePerGas: is1559
                 ? zod.string().min(1, t('wallet_transfer_error_max_fee_absence'))
@@ -135,8 +133,7 @@ const ReplaceTransaction = memo(() => {
     const gasPriceEIP1559 = new BigNumber(maxFeePerGas ? maxFeePerGas : 0)
     const gasPricePrior1559 = new BigNumber(gasPrice ? gasPrice : 0)
 
-    const gasFee = new BigNumber(is1559 ? gasPriceEIP1559 : gasPricePrior1559)
-        .multipliedBy(gas ?? 0)
+    const gasFee = multipliedBy(is1559 ? gasPriceEIP1559 : gasPricePrior1559, gas ?? 0)
         .integerValue()
         .toFixed()
 

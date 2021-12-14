@@ -88,22 +88,28 @@ const ID_ADDRESS_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
+const NETWORK_ID_MAP: Record<DataProvider, Record<NetworkType, string>> = {
     [DataProvider.COIN_GECKO]: {
-        ethereum: NetworkType.Ethereum,
-        'binance-smart-chain': NetworkType.Binance,
-        'polygon-pos': NetworkType.Polygon,
-        'arbitrum-one': NetworkType.Arbitrum,
-        xdai: NetworkType.xDai,
+        [NetworkType.Ethereum]: 'ethereum',
+        [NetworkType.Binance]: 'binance-smart-chain',
+        [NetworkType.Polygon]: 'polygon-pos',
+        [NetworkType.Arbitrum]: 'arbitrum-one',
+        [NetworkType.xDai]: 'xdai',
     },
     [DataProvider.COIN_MARKET_CAP]: {
-        '1027': NetworkType.Ethereum,
-        '1839': NetworkType.Binance,
-        '3890': NetworkType.Polygon,
-        '11841': NetworkType.Arbitrum,
-        '5601': NetworkType.xDai,
+        [NetworkType.Ethereum]: '1027',
+        [NetworkType.Binance]: '1839',
+        [NetworkType.Polygon]: '3890',
+        [NetworkType.Arbitrum]: '11841',
+        [NetworkType.xDai]: '5601',
     },
-    [DataProvider.UNISWAP_INFO]: {},
+    [DataProvider.UNISWAP_INFO]: {
+        [NetworkType.Ethereum]: '',
+        [NetworkType.Binance]: '',
+        [NetworkType.Polygon]: '',
+        [NetworkType.Arbitrum]: '',
+        [NetworkType.xDai]: '',
+    },
 }
 
 export function resolveAlias(keyword: string, dataProvider: DataProvider) {
@@ -121,7 +127,8 @@ export function resolveCoinAddress(id: string, dataProvider: DataProvider) {
 
 export function resolveNetworkType(id: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UNISWAP_INFO) return NetworkType.Ethereum
-    return ID_NETWORK_MAP[dataProvider][id]
+    const networks = NETWORK_ID_MAP[dataProvider]
+    return Object.entries(networks).find(([_, key]) => key === id)?.[0]
 }
 
 export function isBlockedId(id: string, dataProvider: DataProvider) {

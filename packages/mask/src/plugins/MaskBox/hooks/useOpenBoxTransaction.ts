@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
-import BigNumber from 'bignumber.js'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { EthereumTokenType, FungibleTokenDetailed, useAccount } from '@masknet/web3-shared-evm'
 import { useMaskBoxContract } from './useMaskBoxContract'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 export function useOpenBoxTransaction(
     boxId: string,
@@ -22,7 +22,7 @@ export function useOpenBoxTransaction(
                 from: account,
                 value:
                     paymentTokenDetailed?.type === EthereumTokenType.Native
-                        ? new BigNumber(paymentTokenPrice).multipliedBy(amount).toFixed()
+                        ? multipliedBy(paymentTokenPrice, amount).toFixed()
                         : undefined,
             },
             method: maskBoxContract.methods.openBox(boxId, amount, paymentTokenIndex, '0x0'),

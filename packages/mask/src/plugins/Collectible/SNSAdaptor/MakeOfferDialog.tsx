@@ -31,9 +31,10 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import type { useAsset } from '../hooks/useAsset'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
-import { toAsset, toUnixTimestamp } from '../helpers'
+import { toAsset } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
+import getUnixTime from 'date-fns/getUnixTime'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -73,7 +74,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
-    const paymentTokens = (isAuction ? asset?.value?.order_payment_tokens : asset?.value?.offer_payment_tokens) ?? []
+    const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
     const selectedPaymentToken = first(paymentTokens)
 
     const { t } = useI18N()
@@ -100,7 +101,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
-            expirationTime: !isAuction ? toUnixTimestamp(expirationDateTime) : undefined,
+            expirationTime: !isAuction ? getUnixTime(expirationDateTime) : undefined,
             paymentTokenAddress: token.value.type === EthereumTokenType.Native ? undefined : token.value.address,
         })
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction])

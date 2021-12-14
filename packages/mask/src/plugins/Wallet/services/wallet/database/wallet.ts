@@ -1,5 +1,5 @@
 import { omit, pick } from 'lodash-unified'
-import type { api } from '@dimensiondev/mask-wallet-core/proto'
+import { api } from '@dimensiondev/mask-wallet-core/proto'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import {
     currySameAddress,
@@ -21,6 +21,7 @@ import type { WalletRecord } from '../type'
 function WalletRecordOutDB(record: WalletRecord) {
     return {
         ...omit(record, 'type'),
+        configurable: record.storedKeyInfo?.type ? record.storedKeyInfo.type !== api.StoredKeyType.Mnemonic : true,
         hasStoredKeyInfo: !!record.storedKeyInfo,
         hasDerivationPath: !!record.derivationPath,
     }

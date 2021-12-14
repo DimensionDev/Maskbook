@@ -1,7 +1,7 @@
 import { SocialNetworkUI, creator } from '../../../social-network'
-import { ProfileIdentifier } from '@masknet/shared'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { instagramBase } from '../base'
-import { openDB } from 'idb'
+import { openDB } from 'idb/with-async-ittr'
 export const IdentityProviderInstagram: SocialNetworkUI.CollectingCapabilities.IdentityResolveProvider = {
     async start(signal) {
         const ref = this.recognized

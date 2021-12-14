@@ -5,14 +5,13 @@ import {
     FungibleToken,
     getChainDetailed,
     isSameAddress,
-    isZero,
-    pow10,
     TransactionStateType,
     useAccount,
     useFungibleTokenDetailed,
     useFungibleTokensDetailed,
     useTokenConstants,
 } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import {
     Box,
     Card,
@@ -339,10 +338,8 @@ export function PoolInList(props: PoolInListProps) {
                                                 {formatBalance(
                                                     new BigNumber(pool.exchange_amounts[index * 2])
                                                         .dividedBy(pool.exchange_amounts[index * 2 + 1])
-                                                        .multipliedBy(
-                                                            pow10(poolToken.decimals - exchangeTokens[index].decimals),
-                                                        )
-                                                        .multipliedBy(pow10(exchangeTokens[index].decimals))
+                                                        .shiftedBy(poolToken.decimals - exchangeTokens[index].decimals)
+                                                        .shiftedBy(exchangeTokens[index].decimals)
                                                         .integerValue(),
                                                     token.decimals,
                                                     6,

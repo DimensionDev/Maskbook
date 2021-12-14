@@ -8,12 +8,14 @@
   "dependencies": {
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
     "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@servie/events": "^3.0.0",
     "@types/use-subscription": "^1.0.0",
     "async-call-rpc": "^6.0.1",
     "bignumber.js": "^9.0.1",
     "lodash-es": "^4.17.21",
+    "react-use": "^17.3.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   }

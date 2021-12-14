@@ -1,4 +1,4 @@
-import type { TypedMessage } from '../../../protocols/typed-message'
+import type { TypedMessage } from '@masknet/shared-base'
 import { Button, Typography } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useI18N } from '../../../utils'
@@ -80,12 +80,12 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
             ? renderWithUnlockProtocolMetadata(props.message.meta, (r) => {
                   return (
                       <MaskPluginWrapper width={300} pluginName="Unlock Protocol">
-                          <Typography color="textPrimary">"You don't have access to this content"</Typography>
+                          <Typography color="textPrimary">"{t('plugin_unlockprotocol_no_access')}"</Typography>
                           <br />
-                          <Typography color="textPrimary">"Please look for and buy an active lock"</Typography>
+                          <Typography color="textPrimary">"{t('plugin_unlockprotocol_buy_lock_alert')}"</Typography>
                           <br />
                           <Button target="_blank" href={redirectUrl}>
-                              Buy Lock
+                              {t('plugin_unlockprotocol_buy_lock')}
                           </Button>
                       </MaskPluginWrapper>
                   )
@@ -99,7 +99,7 @@ export default function UnlockProtocolInPost(props: UnlockProtocolInPostProps) {
                   return (
                       <MaskPluginWrapper width={300} pluginName="Unlock Protocol">
                           <EthereumChainBoundary chainId={chain} noSwitchNetworkTip={false}>
-                              <Typography color="textPrimary">"Loading..."</Typography>
+                              <Typography color="textPrimary">"{t('loading')}"</Typography>
                               <br />
                           </EthereumChainBoundary>
                       </MaskPluginWrapper>

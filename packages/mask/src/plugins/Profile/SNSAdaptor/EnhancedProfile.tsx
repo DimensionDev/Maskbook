@@ -51,12 +51,8 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const currentAccountAddress = currentAccount?.address ?? ''
     //#endregion
 
-    //#region DAO
-    const userId = identity.identifier.userId.toLowerCase()
-    const { value: daoPayload } = useDao(userId)
-    //#endregion
-
     const [hidden, setHidden] = useState(true)
+    const { value: daoPayload } = useDao(identity.identifier)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
 
     const [isConnected, setConnected] = useState(false)
@@ -104,7 +100,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.ConnectRSS3:
                 return <ConnectRSS3Page isOwned={isOwned} />
             case PageTags.DAOTag:
-                return <DAOPage payload={daoPayload} userId={userId} />
+                return <DAOPage payload={daoPayload} identifier={identity.identifier} />
             default:
                 unreachable(currentTag)
         }

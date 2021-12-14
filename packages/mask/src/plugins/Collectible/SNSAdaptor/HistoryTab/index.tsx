@@ -68,14 +68,6 @@ export function HistoryTab(props: HistoryTabProps) {
                         </TableCell>
                     </TableRow>
                 </TableBody>
-                <TableListPagination
-                    handlePrevClick={() => setEventPage((prev) => prev - 1)}
-                    handleNextClick={() => setEventPage((prev) => prev + 1)}
-                    prevDisabled={eventPage === 0}
-                    nextDisabled={!events.value?.hasNextPage}
-                    page={eventPage}
-                    pageCount={10}
-                />
             </Table>
         )
 

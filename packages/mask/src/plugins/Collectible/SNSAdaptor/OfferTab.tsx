@@ -9,7 +9,7 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { isZero } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -80,14 +80,6 @@ export function OfferTab() {
                         </TableCell>
                     </TableRow>
                 </TableBody>
-                <TableListPagination
-                    handlePrevClick={() => setOfferPage((prev) => prev - 1)}
-                    handleNextClick={() => setOfferPage((prev) => prev + 1)}
-                    prevDisabled={offerPage === 0}
-                    nextDisabled={dataSource.length < 10}
-                    page={offerPage}
-                    pageCount={10}
-                />
             </Table>
         )
 

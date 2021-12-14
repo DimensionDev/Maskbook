@@ -1,13 +1,12 @@
 import { memo, useEffect, useMemo, useRef, useState } from 'react'
 import { Box, Button, Link, Tooltip, Typography } from '@mui/material'
-import { ERC721TokenDetailed, ChainId, CollectibleProvider, resolveCollectibleLink } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { CollectiblePlaceholder } from '../CollectiblePlaceHolder'
 import { useHoverDirty } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
 import { WalletIcon } from '@masknet/shared'
-import { ChangeNetworkTip } from '../TokenTableRow/ChangeNetworkTip'
-import { useNetworkDescriptor } from '@masknet/plugin-infra'
+import { ChangeNetworkTip } from '../FungibleTokenTableRow/ChangeNetworkTip'
+import { useNetworkDescriptor, useWeb3State, Web3Plugin } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -62,20 +61,20 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface CollectibleCardProps {
-    chainId: ChainId
-    provider: CollectibleProvider
-    token: ERC721TokenDetailed
+    chainId: number
+    token: Web3Plugin.NonFungibleToken
     onSend(): void
 }
 
-export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, token, onSend }) => {
+export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, token, onSend }) => {
     const t = useDashboardI18N()
+    const { Utils } = useWeb3State()
     const { classes } = useStyles()
     const ref = useRef(null)
     const [isHoveringTooltip, setHoveringTooltip] = useState(false)
     const isHovering = useHoverDirty(ref)
-    const networkDescriptor = useNetworkDescriptor(token.contractDetailed.chainId)
-    const isOnCurrentChain = useMemo(() => chainId === token.contractDetailed.chainId, [chainId, token])
+    const networkDescriptor = useNetworkDescriptor(token.contract?.chainId)
+    const isOnCurrentChain = useMemo(() => chainId === token.contract?.chainId, [chainId, token])
 
     useEffect(() => {
         setHoveringTooltip(false)
@@ -87,21 +86,27 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                 <Box className={classes.chainIcon}>
                     <WalletIcon networkIcon={networkDescriptor?.icon} size={20} />
                 </Box>
-                {token.info.image ? (
+                {(token.metadata?.assetURL || token.metadata?.iconURL) && token.contract ? (
                     <Link
                         target="_blank"
                         rel="noopener noreferrer"
-                        href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
+                        href={
+                            Utils?.resolveNonFungibleTokenLink?.(
+                                token.contract?.chainId,
+                                token.contract.address,
+                                token.tokenId,
+                            ) ?? '#'
+                        }>
                         <div className={classes.imgContainer}>
                             <img
-                                src={token.info.image}
+                                src={token.metadata.assetURL || token.metadata.iconURL}
                                 style={{ objectFit: 'contain', width: '100%', height: '100%' }}
                             />
                         </div>
                     </Link>
                 ) : (
                     <Box>
-                        <CollectiblePlaceholder chainId={token.contractDetailed.chainId} />
+                        <CollectiblePlaceholder chainId={token.contract?.chainId} />
                     </Box>
                 )}
                 <Box className={classes.description} py={1} px={3}>
@@ -111,7 +116,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                                 onOpen={() => setHoveringTooltip(true)}
                                 onClose={() => setHoveringTooltip(false)}
                                 disableHoverListener={isOnCurrentChain}
-                                title={<ChangeNetworkTip chainId={token.contractDetailed.chainId} />}
+                                title={<ChangeNetworkTip chainId={token.contract?.chainId} />}
                                 placement="top"
                                 classes={{ tooltip: classes.tip, arrow: classes.tipArrow }}
                                 arrow>
@@ -131,7 +136,7 @@ export const CollectibleCard = memo<CollectibleCardProps>(({ chainId, provider, 
                         </Box>
                     ) : (
                         <Typography className={classes.name} color="textPrimary" variant="body2" onClick={onSend}>
-                            {token.info.name || token.tokenId}
+                            {token.name || token.tokenId}
                         </Typography>
                     )}
                 </Box>

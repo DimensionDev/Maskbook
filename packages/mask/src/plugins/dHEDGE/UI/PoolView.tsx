@@ -137,7 +137,7 @@ export function PoolView(props: PoolViewProps) {
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_smt_wrong')}
                 <br />
-                {error?.message || errorAllowedTokens?.message}
+                {(error as any)?.message || errorAllowedTokens?.message}
                 <br />
                 <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryAllowedTokens} />
             </Typography>
@@ -181,7 +181,7 @@ export function PoolView(props: PoolViewProps) {
                         </Link>
                     </Typography>
                     <Typography className={classes.footnote} variant="subtitle2">
-                        <span>Supported by</span>
+                        <span>{t('supported_by')}</span>
                         <Link
                             className={classes.footLink}
                             target="_blank"
@@ -190,7 +190,7 @@ export function PoolView(props: PoolViewProps) {
                             title="dHEDGE"
                             href="https://dhedge.org">
                             <img className={classes.dhedge} src="https://app.dhedge.org/favicon.ico" />
-                            dHEDGE
+                            {t('plugin_dhedge_dhedge')}
                         </Link>
                     </Typography>
                 </CardActions>

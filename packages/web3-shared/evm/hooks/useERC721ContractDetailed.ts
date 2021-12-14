@@ -13,14 +13,31 @@ export function useERC721ContractDetailed(address?: string) {
     const erc721TokenContract = useERC721TokenContract(address)
     return useAsyncRetry(async () => {
         if (!address || !EthereumAddress.isValid(address) || !erc721TokenContract) return
-        if (!GET_CONTRACT_URL) return getERC721ContractDetailedFromChain(address, chainId, erc721TokenContract)
+
+        const erc721ContractDetailedFromChain = await getERC721ContractDetailedFromChain(
+            address,
+            chainId,
+            erc721TokenContract,
+        )
+
+        if (!GET_CONTRACT_URL) return erc721ContractDetailedFromChain
+
         const contractDetailedFromOpensea = await getERC721ContractDetailedFromOpensea(
             address,
             chainId,
             GET_CONTRACT_URL,
         )
 
-        return contractDetailedFromOpensea ?? getERC721ContractDetailedFromChain(address, chainId, erc721TokenContract)
+        // We prefer to use `name` and `symbol` from chain rather than opensea since,
+        //  these two data on opensea is sometimes incorrect. Meanwhile there's often
+        //   a lack of `iconURL` from chain, which exists on opensea.
+        return contractDetailedFromOpensea
+            ? {
+                  ...contractDetailedFromOpensea,
+                  name: erc721ContractDetailedFromChain.name,
+                  symbol: erc721ContractDetailedFromChain.symbol,
+              }
+            : erc721ContractDetailedFromChain
     }, [address, chainId, erc721TokenContract])
 }
 

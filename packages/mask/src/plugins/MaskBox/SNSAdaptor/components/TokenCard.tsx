@@ -1,6 +1,7 @@
 import { makeStyles } from '@masknet/theme'
+import { ERC721ContractDetailed, NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { CollectibleProvider, ERC721ContractDetailed, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { memo } from 'react'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
@@ -21,7 +22,7 @@ export interface TokenCardProps {
     contractDetailed: ERC721ContractDetailed
 }
 
-export function TokenCard(props: TokenCardProps) {
+export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
     const { contractDetailed, tokenId } = props
     const { classes } = useStyles()
     const {
@@ -34,7 +35,7 @@ export function TokenCard(props: TokenCardProps) {
 
     return (
         <>
-            <CollectibleCard readonly provider={CollectibleProvider.OPENSEA} token={tokenDetailed} />
+            <CollectibleCard readonly provider={NonFungibleAssetProvider.OPENSEA} token={tokenDetailed} />
             <div className={classes.title}>
                 <Typography className={classes.name} color="textSecondary" variant="body2">
                     {tokenDetailed.info.name ?? tokenId}
@@ -42,4 +43,4 @@ export function TokenCard(props: TokenCardProps) {
             </div>
         </>
     )
-}
+})

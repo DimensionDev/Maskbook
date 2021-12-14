@@ -4,15 +4,15 @@ import {
     createLookupTableResolver,
     FilterTransactionType,
     NetworkType,
-    PortfolioProvider,
+    FungibleAssetProvider,
 } from '@masknet/web3-shared-evm'
 import type { SocketRequestAssetScope } from '../types'
 
-export function resolvePortfolioDataProviderName(provider: PortfolioProvider) {
+export function resolvePortfolioDataProviderName(provider: FungibleAssetProvider) {
     switch (provider) {
-        case PortfolioProvider.ZERION:
+        case FungibleAssetProvider.ZERION:
             return 'Zerion'
-        case PortfolioProvider.DEBANK:
+        case FungibleAssetProvider.DEBANK:
             return 'Debank'
         default:
             unreachable(provider)
