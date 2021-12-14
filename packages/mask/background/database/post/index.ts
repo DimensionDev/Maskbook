@@ -10,7 +10,7 @@ import {
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import { DBSchema, IDBPTransaction, openDB } from 'idb/with-async-ittr-cjs'
+import { DBSchema, IDBPTransaction, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype, restorePrototypeArray } from '../../../utils-pure'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 

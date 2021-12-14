@@ -1,7 +1,7 @@
 import { story } from '@masknet/storybook-shared'
 import { ConnectedPersonaLine as C } from '../../../src/pages/Personas/components/PersonaLine'
 import { action } from '@storybook/addon-actions'
-import { ProfileIdentifier } from '@masknet/shared'
+import { ProfileIdentifier } from '@masknet/shared-base'
 
 const { meta, of } = story(C)
 

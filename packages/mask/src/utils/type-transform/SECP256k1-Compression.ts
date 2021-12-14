@@ -1,12 +1,8 @@
 import secp256k1 from 'tiny-secp256k1'
 import { Convert, combine } from 'pvtsutils'
 import { encodeArrayBuffer, decodeArrayBuffer } from '@dimensiondev/kit'
-import type {
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_JsonWebKey,
-} from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { Buffer } from 'buffer'
+import type { EC_JsonWebKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
 /**
  * Compress x & y into a single x
  */

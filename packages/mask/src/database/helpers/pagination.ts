@@ -1,4 +1,4 @@
-import type { DBSchema, IDBPCursorWithValueIteratorValue, StoreNames } from 'idb'
+import type { DBSchema, IDBPCursorWithValueIteratorValue, StoreNames } from 'idb/with-async-ittr'
 import type { IDBPSafeTransaction } from '../../../background/database/utils/openDB'
 
 export async function queryTransactionPaged<

@@ -15,7 +15,8 @@ import {
     useAllowTestnet,
     useChainId,
 } from '@masknet/web3-shared-evm'
-import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
+import { useValueRef, useRemoteControlledDialog } from '@masknet/shared'
+import { delay } from '@masknet/shared-base'
 import ActionButton, {
     ActionButtonPromise,
     ActionButtonPromiseProps,
