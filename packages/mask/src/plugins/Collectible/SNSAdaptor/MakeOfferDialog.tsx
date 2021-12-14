@@ -35,6 +35,7 @@ import { toAsset } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
+import { pow10 } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -119,10 +120,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [open])
 
     const validationMessage = useMemo(() => {
-        const amountWithDecimal = Number(amount) * 10 ** Number(token.value?.decimals ?? 0)
-        const amount_ = new BigNumber(amountWithDecimal || '0')
+        const amount_ = new BigNumber(pow10(token.value?.decimals ?? 0).multipliedBy(amount) || '0')
         const balance_ = new BigNumber(balance.value ?? '0')
-
         if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
