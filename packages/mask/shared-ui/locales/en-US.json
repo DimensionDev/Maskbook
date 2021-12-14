@@ -633,7 +633,7 @@
     "plugin_collectible_no_history": "No History",
     "plugin_collectible_ensure_unreviewed_item": "Please ensure unreviewed item",
     "plugin_collectible_check_tos_document": "Please check ToS document",
-    "plugin_collectible_insufficient_offer": "Insufficient  Offer",
+    "plugin_collectible_insufficient_offer": "Insufficient Offer",
     "plugin_collectible_not_been_reviewed_by_opensea": "This item has not been reviewed by OpenSea.",
     "plugin_collectible_reviewed_tips": "You should proceed with extra caution. Anyone can create a digital item on a blockchain with any\n                        name, including fake versions of existing items. Please take extra caution and do your research\n                        when interacting with this item to ensure it's what it chains to be.",
     "plugin_collectible_total": "Total",
