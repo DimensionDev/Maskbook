@@ -1,4 +1,5 @@
 import { encodeArrayBuffer } from '@dimensiondev/kit'
+import type { DecryptProgress, DecryptProgressKind } from '@masknet/encryption'
 import {
     AESCryptoKey,
     EC_Public_CryptoKey,
@@ -11,19 +12,43 @@ import { decryptByLocalKey, deriveAESByECDH, hasLocalKeyOf } from '../../databas
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
 
+export type DecryptionInfo = {
+    type: DecryptProgressKind.Info
+    iv?: Uint8Array
+}
+export type DecryptionProgress = DecryptProgress | DecryptionInfo
 export async function* decryption(payload: string | Uint8Array, network: string) {
     // This module required to be loaded async because it contains WebAssembly import.
     // If it join the sync module graph of the whole application, it will fail due to unknown reason.
-    const { decrypt, parsePayload } = await import('@masknet/encryption')
+    const { decrypt, parsePayload, DecryptProgressKind, PublicKeyAlgorithmEnum } = await import('@masknet/encryption')
+
+    // TODO: read in-memory cache to avoid db lookup
 
     const parse = await parsePayload(payload)
     if (parse.err) return null
 
+    //#region post IV
     const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
-    if (!iv) return null
+    {
+        if (!iv) return null
+        // iv is required to identify the post and it also used in comment encryption.
+        const info: DecryptionInfo = { type: DecryptProgressKind.Info, iv }
+        yield info
+    }
     const id = new PostIVIdentifier(network, encodeArrayBuffer(iv.buffer))
+    //#endregion
 
-    yield* decrypt(
+    //#region Store author public key
+    try {
+        const author = parse.unwrap().author.unwrap().unwrap()
+        const authorPub = parse.unwrap().authorPublicKey.unwrap().unwrap()
+        // TODO: should only store public key when author equals to the decryption hint for security reason.
+
+        if (authorPub.algr !== PublicKeyAlgorithmEnum.secp256k1) throw new Error('TODO: support other curves')
+    } catch {}
+    //#endregion
+
+    const progress = decrypt(
         { message: parse.val },
         {
             getPostKeyCache: getPostKeyCache.bind(null, id),
@@ -70,7 +95,9 @@ export async function* decryption(payload: string | Uint8Array, network: string)
             },
         },
     )
-    return
+
+    yield* progress
+    return null
 }
 async function getPostKeyCache(id: PostIVIdentifier) {
     const post = await queryPostDB(id)
