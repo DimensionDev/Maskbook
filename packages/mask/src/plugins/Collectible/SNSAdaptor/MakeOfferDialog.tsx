@@ -128,7 +128,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
             return t('plugin_collectible_invalid_expiration_date')
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
-        if (!isVerified && !ToS_Checked) return t('plugin_collectible_check_tos_document')
+        if (!ToS_Checked) return t('plugin_collectible_check_tos_document')
         if (leastPrice.isGreaterThan(amount_)) {
             return t('plugin_collectible_insufficient_offer')
         }
@@ -176,9 +176,35 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 fullWidth
                             />
                         ) : null}
-
-                        {isVerified ? null : (
-                            <Box sx={{ padding: 2, paddingBottom: 0 }}>
+                        <FormControlLabel
+                            className={classes.label}
+                            control={
+                                <Checkbox
+                                    color="primary"
+                                    checked={ToS_Checked}
+                                    onChange={(ev: ChangeEvent<HTMLInputElement>) => setToS_Checked(ev.target.checked)}
+                                />
+                            }
+                            label={
+                                <Typography variant="body2">
+                                    <Trans
+                                        i18nKey="plugin_collectible_legal_text"
+                                        components={{
+                                            terms: (
+                                                <Link
+                                                    color="primary"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    href="https://opensea.io/tos"
+                                                />
+                                            ),
+                                        }}
+                                    />
+                                </Typography>
+                            }
+                        />
+                        <Box sx={{ padding: 2, paddingBottom: 0 }}>
+                            {isVerified ? null : (
                                 <FormControlLabel
                                     className={classes.label}
                                     control={
@@ -196,37 +222,8 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                         </Typography>
                                     }
                                 />
-                                <FormControlLabel
-                                    className={classes.label}
-                                    control={
-                                        <Checkbox
-                                            color="primary"
-                                            checked={ToS_Checked}
-                                            onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                                                setToS_Checked(ev.target.checked)
-                                            }
-                                        />
-                                    }
-                                    label={
-                                        <Typography variant="body2">
-                                            <Trans
-                                                i18nKey="plugin_collectible_legal_text"
-                                                components={{
-                                                    terms: (
-                                                        <Link
-                                                            color="primary"
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            href="https://opensea.io/tos"
-                                                        />
-                                                    ),
-                                                }}
-                                            />
-                                        </Typography>
-                                    }
-                                />
-                            </Box>
-                        )}
+                            )}
+                        </Box>
                     </CardContent>
                     <CardActions className={classes.footer}>
                         <EthereumWalletConnectedBoundary>
