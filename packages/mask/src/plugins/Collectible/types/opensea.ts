@@ -188,6 +188,7 @@ export interface AssetOrder {
     quantity: string
     expiration_time: number
     order_hash: string
+    base_price?: string
 }
 
 export interface OpenSeaResponse extends Asset {

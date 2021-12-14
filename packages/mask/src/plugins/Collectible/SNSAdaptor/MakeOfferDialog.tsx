@@ -61,6 +61,10 @@ const useStyles = makeStyles()((theme) => {
             flex: 1,
             margin: `${theme.spacing(1.5)} ${theme.spacing(0.5)} 0`,
         },
+        insufficientError: {
+            paddingTop: theme.spacing(1),
+            color: 'red',
+        },
     }
 })
 
@@ -74,6 +78,11 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
+    const leastPrice =
+        asset?.value && asset.value.orders?.length
+            ? new BigNumber(asset.value.orders[0].base_price ?? '0')
+            : new BigNumber('0')
+
     const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
     const selectedPaymentToken = first(paymentTokens)
 
@@ -117,12 +126,16 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         const amountWithDecimal = Number(amount) * 10 ** Number(token.value?.decimals ?? 0)
         const amount_ = new BigNumber(amountWithDecimal || '0')
         const balance_ = new BigNumber(balance.value ?? '0')
+
         if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
             return t('plugin_collectible_invalid_expiration_date')
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
         if (!isVerified && !ToS_Checked) return t('plugin_collectible_check_tos_document')
+        if (leastPrice.isGreaterThan(amount_)) {
+            return t('plugin_collectible_insufficient_offer')
+        }
         return ''
     }, [amount, balance.value, expirationDateTime, isVerified, isAuction, unreviewedChecked, ToS_Checked])
 
@@ -156,6 +169,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 whitelist: paymentTokens.map((x) => x.address),
                             }}
                         />
+
                         {!isAuction ? (
                             <DateTimePanel
                                 label={t('plugin_collectible_expiration_date')}
@@ -166,58 +180,57 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 fullWidth
                             />
                         ) : null}
-                        <Box sx={{ padding: 2, paddingBottom: 0 }}>
-                            {isVerified ? null : (
-                                <>
-                                    <FormControlLabel
-                                        className={classes.label}
-                                        control={
-                                            <Checkbox
-                                                color="primary"
-                                                checked={unreviewedChecked}
-                                                onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                                                    setUnreviewedChecked(ev.target.checked)
-                                                }
+
+                        {isVerified ? null : (
+                            <Box sx={{ padding: 2, paddingBottom: 0 }}>
+                                <FormControlLabel
+                                    className={classes.label}
+                                    control={
+                                        <Checkbox
+                                            color="primary"
+                                            checked={unreviewedChecked}
+                                            onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                                                setUnreviewedChecked(ev.target.checked)
+                                            }
+                                        />
+                                    }
+                                    label={
+                                        <Typography variant="body2">
+                                            {t('plugin_collectible_approved_by_open_sea')}
+                                        </Typography>
+                                    }
+                                />
+                                <FormControlLabel
+                                    className={classes.label}
+                                    control={
+                                        <Checkbox
+                                            color="primary"
+                                            checked={ToS_Checked}
+                                            onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                                                setToS_Checked(ev.target.checked)
+                                            }
+                                        />
+                                    }
+                                    label={
+                                        <Typography variant="body2">
+                                            <Trans
+                                                i18nKey="plugin_collectible_legal_text"
+                                                components={{
+                                                    terms: (
+                                                        <Link
+                                                            color="primary"
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            href="https://opensea.io/tos"
+                                                        />
+                                                    ),
+                                                }}
                                             />
-                                        }
-                                        label={
-                                            <Typography variant="body2">
-                                                {t('plugin_collectible_approved_by_open_sea')}
-                                            </Typography>
-                                        }
-                                    />
-                                    <FormControlLabel
-                                        className={classes.label}
-                                        control={
-                                            <Checkbox
-                                                color="primary"
-                                                checked={ToS_Checked}
-                                                onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                                                    setToS_Checked(ev.target.checked)
-                                                }
-                                            />
-                                        }
-                                        label={
-                                            <Typography variant="body2">
-                                                <Trans
-                                                    i18nKey="plugin_collectible_legal_text"
-                                                    components={{
-                                                        terms: (
-                                                            <Link
-                                                                color="primary"
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                href="https://opensea.io/tos"
-                                                            />
-                                                        ),
-                                                    }}
-                                                />
-                                            </Typography>
-                                        }
-                                    />
-                                </>
-                            )}
-                        </Box>
+                                        </Typography>
+                                    }
+                                />
+                            </Box>
+                        )}
                     </CardContent>
                     <CardActions className={classes.footer}>
                         <EthereumWalletConnectedBoundary>
