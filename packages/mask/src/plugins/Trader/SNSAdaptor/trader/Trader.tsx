@@ -76,6 +76,7 @@ export function Trader(props: TraderProps) {
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
+    console.log(tokenDetailed)
     //#region trade state
     const {
         tradeState: [
@@ -94,6 +95,24 @@ export function Trader(props: TraderProps) {
             token: chainId === ChainId.Mainnet && coin?.is_mirrored ? UST[ChainId.Mainnet] : createNativeToken(chainId),
         })
     }, [chainId, chainIdValid])
+    //#endregion
+
+    //#region if tokenDetailed be changed, update input token
+    useEffect(() => {
+        if (!tokenDetailed || currentChainId !== targetChainId) return
+
+        if (!inputToken && !outputToken) {
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
+                token: tokenDetailed,
+            })
+
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+                token: createNativeToken(chainId),
+            })
+        }
+    }, [tokenDetailed, decimals, chainId, outputToken, currentChainId, targetChainId, NATIVE_TOKEN_ADDRESS])
     //#endregion
 
     //#region if coin be changed, update output token

@@ -106,7 +106,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         })
     }, [asset?.value, token, account, amount, expirationDateTime, isAuction])
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+    const { setDialog: setSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
     useEffect(() => {
         setAmount('')
@@ -244,7 +244,14 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                         className={classes.button}
                                         variant="contained"
                                         size="large"
-                                        onClick={openSwapDialog}>
+                                        onClick={() =>
+                                            setSwapDialog({
+                                                open: true,
+                                                traderProps: {
+                                                    tokenDetailed: token.value as FungibleTokenDetailed,
+                                                },
+                                            })
+                                        }>
                                         Convert ETH
                                     </ActionButton>
                                 ) : null}
