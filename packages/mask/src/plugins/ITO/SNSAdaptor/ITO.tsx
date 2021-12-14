@@ -458,13 +458,13 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_out_of_stock_hit')
         }
 
-        const _text = new BigNumber(availability?.swapped ?? '0').isGreaterThan(0)
+        const _text = new BigNumber(availability?.swapped || 0).isGreaterThan(0)
             ? t('plugin_ito_your_swapped_amount', {
-                  amount: formatBalance(availability?.swapped ?? 0, token.decimals),
+                  amount: formatBalance(availability?.swapped || 0, token.decimals),
                   symbol: token.symbol,
               })
             : t('plugin_ito_your_claimed_amount', {
-                  amount: formatBalance(tradeInfo?.buyInfo?.amount_bought ?? 0, token.decimals),
+                  amount: formatBalance(tradeInfo?.buyInfo?.amount_bought || 0, token.decimals),
                   symbol: token.symbol,
               })
 
