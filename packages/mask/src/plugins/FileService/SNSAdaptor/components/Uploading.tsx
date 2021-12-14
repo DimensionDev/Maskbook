@@ -43,6 +43,7 @@ interface RouteState {
     block: Uint8Array
     checksum: string
     useCDN: boolean
+    useProvider: string
 }
 
 export const Uploading: React.FC = () => {
@@ -59,6 +60,7 @@ export const Uploading: React.FC = () => {
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
+        console.log('useProvider', state.useProvider)
         const payloadTxID = await timeout(
             PluginFileServiceRPC.makeAttachment({
                 key: state.key,

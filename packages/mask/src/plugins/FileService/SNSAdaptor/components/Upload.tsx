@@ -1,6 +1,6 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { blobToArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
-import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
+import { Checkbox, Radio, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-unified'
 import { useState } from 'react'
@@ -59,6 +59,7 @@ export const Upload: React.FC = () => {
     const history = useHistory()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)
+    const [useProvider, setUseProvider] = useState('arweave')
     const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
     const onFile = async (file: File) => {
         let key: string | undefined = undefined
@@ -77,6 +78,7 @@ export const Upload: React.FC = () => {
                 block,
                 checksum,
                 useCDN,
+                useProvider
             })
         } else {
             history.replace(FileRouter.uploaded, item)
@@ -110,6 +112,39 @@ export const Upload: React.FC = () => {
                     }
                     className={classes.usedCDN}
                     label={t('plugin_file_service_use_cdn')}
+                />
+            </section>
+
+            <section className={classes.checkItems}>
+                <FormControlLabel
+                    control={
+                        <Radio
+                            color="secondary"
+                            checked={useProvider == 'arweave'}
+                            onChange={(event) => setUseProvider('arweave')}
+                        />
+                    }
+                    label={t('plugin_file_service_provider_arweave')}
+                />
+                <FormControlLabel
+                    control={
+                        <Radio
+                            color="secondary"
+                            checked={useProvider == "ipfs"}
+                            onChange={(event) => setUseProvider('ipfs')}
+                        />
+                    }
+                    label={t('plugin_file_service_provider_ipfs')}
+                />
+                <FormControlLabel
+                    control={
+                        <Radio
+                            color="secondary"
+                            checked={useProvider == "swarm"}
+                            onChange={(event) => setUseProvider('swarm')}
+                        />
+                    }
+                    label={t('plugin_file_service_provider_swarm')}
                 />
             </section>
             <section className={classes.legal}>
