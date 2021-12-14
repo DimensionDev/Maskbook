@@ -76,7 +76,6 @@ export function Trader(props: TraderProps) {
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
 
-    console.log(tokenDetailed)
     //#region trade state
     const {
         tradeState: [
@@ -112,7 +111,7 @@ export function Trader(props: TraderProps) {
                 token: createNativeToken(chainId),
             })
         }
-    }, [tokenDetailed, decimals, chainId, outputToken, currentChainId, targetChainId, NATIVE_TOKEN_ADDRESS])
+    }, [tokenDetailed, chainId, inputToken, outputToken, currentChainId, targetChainId])
     //#endregion
 
     //#region if coin be changed, update output token
