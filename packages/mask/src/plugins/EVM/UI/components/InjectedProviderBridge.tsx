@@ -1,8 +1,7 @@
 import { useEffect, useCallback } from 'react'
 import { useMount } from 'react-use'
-import { unreachable } from '@dimensiondev/kit'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
-import { ProviderType, isInjectedProvider, isFortmaticSupported, ChainId } from '@masknet/web3-shared-evm'
+import { ProviderType, isInjectedProvider, ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
 import { EVM_Messages } from '../../messages'
 import Services from '../../../../extension/service'
@@ -15,33 +14,13 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
     const providerType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
 
     const onMounted = useCallback(async () => {
-        const updateAccount = (connected: { account?: string; chainId: ChainId }) =>
-            WalletRPC.updateAccount({
-                account: connected.account,
-                chainId: connected.chainId,
-                providerType,
-            })
-
-        switch (providerType) {
-            case ProviderType.MaskWallet:
-            case ProviderType.MetaMask:
-            case ProviderType.WalletConnect:
-            case ProviderType.MathWallet:
-            case ProviderType.WalletLink:
-                break
-            case ProviderType.Fortmatic:
-                await updateAccount(
-                    await Services.Ethereum.connectFortmatic(isFortmaticSupported(chainId) ? chainId : ChainId.Mainnet),
-                )
-                break
-            case ProviderType.Coin98:
-                await updateAccount(await Services.Ethereum.connectInjected())
-                break
-            case ProviderType.CustomNetwork:
-                break
-            default:
-                unreachable(providerType)
-        }
+        if (providerType !== ProviderType.Coin98) return
+        const connected = await Services.Ethereum.connectInjected()
+        await WalletRPC.updateAccount({
+            account: connected.account,
+            chainId: connected.chainId,
+            providerType,
+        })
     }, [chainId, providerType])
 
     useEffect(() => {
@@ -79,9 +58,7 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
         })
     }, [providerType])
 
-    useMount(() => {
-        onMounted()
-    })
+    useMount(onMounted)
 
     return null
 }
