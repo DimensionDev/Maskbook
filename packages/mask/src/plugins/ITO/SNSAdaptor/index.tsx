@@ -62,7 +62,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             icon: new URL('../assets/token.png', import.meta.url),
             label: 'ITO',
             priority: 3,
-            conduct: { type: ApplicationEntryConduct.Encryptedmsg, id: ITO_PluginID },
+            conduct: { type: ApplicationEntryConduct.EncryptedMessage, id: ITO_PluginID },
             supportedNetworkList: [
                 { network: NetworkPluginID.PLUGIN_EVM, chainIdList: PLUGIN_NETWORKS.map((network) => network.chainId) },
             ],

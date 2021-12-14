@@ -195,7 +195,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             p.ApplicationEntries?.map((entry) => {
                 let handle
                 switch (entry.conduct.type) {
-                    case ApplicationEntryConduct.Encryptedmsg:
+                    case ApplicationEntryConduct.EncryptedMessage:
                         handle = () =>
                             openEncryptedMessage(
                                 (entry.conduct as Plugin.SNSAdaptor.ApplicationEntryForEncryptedmsg).id,

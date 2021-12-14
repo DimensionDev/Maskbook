@@ -282,7 +282,7 @@ export namespace Plugin.SNSAdaptor {
 
     export type ApplicationEntryForLink = { type: ApplicationEntryConduct.Link; url: string }
 
-    export type ApplicationEntryForEncryptedmsg = { type: ApplicationEntryConduct.Encryptedmsg; id: string }
+    export type ApplicationEntryForEncryptedmsg = { type: ApplicationEntryConduct.EncryptedMessage; id: string }
 
     export type ApplicationEntryForCustomConduct = { type: ApplicationEntryConduct.Custom }
 
@@ -491,7 +491,7 @@ export type I18NFieldOrReactNode = I18NStringField | React.ReactNode
 
 export enum ApplicationEntryConduct {
     Link = 'Link',
-    Encryptedmsg = 'Encryptedmsg',
+    EncryptedMessage = 'EncryptedMessage',
     Custom = 'custom',
 }
 

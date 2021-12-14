@@ -74,7 +74,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             icon: new URL('./assets/lucky_drop.png', import.meta.url),
             label: 'Lucky Drop',
             priority: 1,
-            conduct: { type: ApplicationEntryConduct.Encryptedmsg, id: RedPacketPluginID },
+            conduct: { type: ApplicationEntryConduct.EncryptedMessage, id: RedPacketPluginID },
             supportedNetworkList: [
                 { network: NetworkPluginID.PLUGIN_EVM, chainIdList: PLUGIN_NETWORKS.map((network) => network.chainId) },
             ],
