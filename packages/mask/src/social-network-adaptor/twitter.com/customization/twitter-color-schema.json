@@ -17,6 +17,9 @@
             "input": "#EDF1F2",
             "tipMask": "rgba(0, 0, 0, 0.85)"
         },
+        "error": {
+            "main": "#FF5555"
+        },
         "divider": "#EFF3F4",
         "divider2": "#CFD9DE",
         "action": {
@@ -42,6 +45,9 @@
             "default": "#F6F8F8",
             "input": "#EDF1F2",
             "tipMask": "rgba(0, 0, 0, 0.85)"
+        },
+        "error": {
+            "main": "#FF5555"
         },
         "divider": "#EFF3F4",
         "divider2": "#CFD9DE",
@@ -69,6 +75,9 @@
             "input": "#212D39",
             "tipMask": "rgba(255, 255, 255, 0.85)"
         },
+        "error": {
+            "main": "#FF5555"
+        },
         "divider": "#38444D",
         "divider2": "#38444D",
         "action": {
@@ -89,6 +98,9 @@
             "secondary": "#8899A6",
             "strong": "#FFFFFF",
             "buttonText": "#0F1419"
+        },
+        "error": {
+            "main": "#FF5555"
         },
         "divider": "#38444D",
         "divider2": "#38444D",
@@ -121,6 +133,9 @@
             "input": "#1D2023",
             "tipMask": "rgba(255, 255, 255, 0.85)"
         },
+        "error": {
+            "main": "#FF5555"
+        },
         "divider": "#2F3336",
         "divider2": "#2F3336",
         "action": {
@@ -141,6 +156,9 @@
             "secondary": "#6E767D",
             "strong": "#EFF3F4",
             "buttonText": "#0F1419"
+        },
+        "error": {
+            "main": "#FF5555"
         },
         "divider": "#2F3336",
         "divider2": "#2F3336",

@@ -13,12 +13,15 @@ import {
 } from './hooks/useExchangeTokenAmountstate'
 import { ExchangeTokenPanel } from './ExchangeTokenPanel'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     arrow: {
         display: 'flex',
         justifyContent: 'center',
     },
-})
+    adornment: {
+        color: theme.palette.text.secondary,
+    },
+}))
 
 export interface ExchangeTokenPanelGroupProps {
     token: FungibleTokenDetailed | undefined
@@ -104,7 +107,9 @@ export function ExchangeTokenPanelGroup(props: ExchangeTokenPanelGroupProps) {
                                 InputProps: idx
                                     ? {
                                           startAdornment: props.token ? (
-                                              <InputAdornment position="start">1{props.token?.symbol}=</InputAdornment>
+                                              <InputAdornment position="start" className={classes.adornment}>
+                                                  1{props.token?.symbol}=
+                                              </InputAdornment>
                                           ) : (
                                               ''
                                           ),
