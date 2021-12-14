@@ -151,7 +151,7 @@ export async function getERC721TokenDetailedOwnerListFromOpensea(
             },
             info: {
                 name: asset.name,
-                image: asset.image_url,
+                mediaUrl: asset.image_url,
                 owner,
             },
         }),

@@ -1,6 +1,5 @@
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { pow10 } from '@masknet/web3-shared-evm'
-import BigNumber from 'bignumber.js'
+import { multipliedBy, pow10 } from '@masknet/web3-shared-base'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
 import { TagType, TradeInfo, TradeStrategy } from '../types'
@@ -31,7 +30,9 @@ export function useAllTradeComputed(
 ): TradeInfo[] {
     const { targetChainId } = TargetChainIdContext.useContainer()
     const inputTokenProduct = pow10(inputToken?.decimals ?? 0)
-    const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
+    const inputAmount_ = multipliedBy(inputAmount || '0', inputTokenProduct)
+        .integerValue()
+        .toFixed()
     const { value: tradeProviders = [] } = useAvailableTraderProviders(TagType.CASH, 'MASK', targetChainId)
 
     // NATIVE-WNATIVE pair

@@ -1,9 +1,9 @@
 import { PersonaContext } from './pages/Personas/hooks/usePersonaContext'
 import { Navigate, Route } from 'react-router-dom'
-import type { RoutePaths } from './type'
+import type { DashboardRoutes } from '@masknet/shared-base'
 
 interface GuardRouteProps {
-    path: RoutePaths
+    path: DashboardRoutes
     element?: JSX.Element
     redirectTo?: string
 }

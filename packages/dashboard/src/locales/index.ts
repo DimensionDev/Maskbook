@@ -18,5 +18,5 @@ export const languages = {
     'zh-CN': zh_CN,
     zh: zh_TW,
 }
-import { createI18NBundle } from '@masknet/shared'
+import { createI18NBundle } from '@masknet/shared-base'
 export const addDashboardI18N = createI18NBundle('dashboard', languages)

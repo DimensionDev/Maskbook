@@ -4,19 +4,18 @@ import {
     BackupPreview,
     getBackupPreviewInfo,
 } from '../../../utils/type-transform/BackupFormat/JSON/latest'
-import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../../database/Persona/Persona.db'
+import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../../../background/database/persona/db'
 import { queryPostsDB } from '../../../../background/database/post'
 import { PersonaRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { Identifier, PersonaIdentifier, ProfileIdentifier } from '../../../database/type'
+import { Identifier, PersonaIdentifier, ProfileIdentifier, timeout } from '@masknet/shared-base'
 import { exportMnemonic, exportPrivateKey, getLegacyWallets, getWallets } from '../../../plugins/Wallet/services'
 import {
     LegacyWalletRecordToJSONFormat,
     WalletRecordToJSONFormat,
 } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import { activatedPluginsWorker } from '@masknet/plugin-infra'
-import { timeout } from '@masknet/shared'
 import { RelationRecordToJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 
 export type { BackupPreview } from '../../../utils/type-transform/BackupFormat/JSON/latest'

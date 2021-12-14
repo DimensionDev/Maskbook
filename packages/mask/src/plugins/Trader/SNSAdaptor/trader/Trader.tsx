@@ -10,7 +10,6 @@ import {
     FungibleTokenDetailed,
     GasOptionConfig,
     getNetworkTypeFromChainId,
-    isGreaterThan,
     isSameAddress,
     TransactionStateType,
     useChainId,
@@ -19,10 +18,12 @@ import {
     useTokenConstants,
     useWallet,
 } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import { delay } from '@masknet/shared-base'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
-import { delay, useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { MINIMUM_AMOUNT, UST } from '../../constants'
@@ -403,7 +404,7 @@ export function Trader(props: TraderProps) {
                         isGreaterThan(trade.value.outputAmount, MINIMUM_AMOUNT) &&
                         trade.gas.value
                     ) {
-                        const gasFee = new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
+                        const gasFee = multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed()
 
                         const gasFeeUSD = new BigNumber(formatBalance(gasFee ?? 0, outputToken.decimals)).times(
                             nativeTokenPrice,
@@ -424,8 +425,8 @@ export function Trader(props: TraderProps) {
                 })
                 .filter(({ finalPrice }) => !!finalPrice)
                 .sort(({ finalPrice: a }, { finalPrice: b }) => {
-                    if (a && b && new BigNumber(a).isGreaterThan(b)) return -1
-                    if (a && b && new BigNumber(a).isLessThan(b)) return 1
+                    if (a && b && isGreaterThan(a, b)) return -1
+                    if (a && b && isLessThan(a, b)) return 1
                     return 0
                 })
         }

@@ -1,4 +1,4 @@
-import { ProfileIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { untilDocumentReady, untilElementAvailable } from '../../../utils/dom'
 import { mindsBase } from '../base'

@@ -1,6 +1,6 @@
 import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
+import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-flow'
-import BigNumber from 'bignumber.js'
 
 export function createFungibleToken(
     chainId: ChainId,
@@ -29,13 +29,11 @@ export function createFungibleAsset(
     return {
         id: token.address,
         chainId: token.chainId,
-        balance: new BigNumber(balance).shiftedBy(-8).toFixed(),
+        balance: leftShift(balance, 8).toFixed(),
         token,
         logoURI,
         value: {
-            [CurrencyType.USD]: new BigNumber(price?.usd ?? 0)
-                .multipliedBy(new BigNumber(balance).shiftedBy(-8))
-                .toFixed(),
+            [CurrencyType.USD]: multipliedBy(price?.usd ?? 0, leftShift(balance, 8)).toFixed(),
         },
         price,
     }

@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage } from '@masknet/shared-base'
-import { parseURL } from '../../../utils/utils'
+import { parseURL } from '@masknet/shared-base'
 import { PostInspector } from './PostInspector'
 
 const useStyles = makeStyles()((theme) => {

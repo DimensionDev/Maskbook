@@ -4,7 +4,8 @@ import type en from '../locales/en-US.json'
 import Detector from 'i18next-browser-languagedetector'
 
 import { addMaskI18N } from '../locales'
-import { addSharedI18N, fallbackLng } from '@masknet/shared'
+import { addSharedI18N } from '@masknet/shared'
+import { fallbackLng } from '@masknet/shared-base'
 // @ts-ignore in case circle dependency make typescript complains
 import { addDashboardI18N } from '@masknet/dashboard'
 
