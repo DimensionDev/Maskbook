@@ -1,13 +1,30 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
+import { useMount } from 'react-use'
 import { first } from 'lodash-unified'
-import { useChainId, ChainId, EthereumMethodType, isFortmaticSupported } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumMethodType, isFortmaticSupported, ProviderType } from '@masknet/web3-shared-evm'
 import * as Fortmatic from '@masknet/web3-shared-evm/providers/Fortmatic'
+import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
 import { EVM_Messages } from '../../messages'
+import { WalletRPC } from '../../../Wallet/messages'
+import Services from '../../../../extension/service'
 
 export interface FortmaticProviderBridgeProps {}
 
 export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
-    const chainId = useChainId()
+    const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
+    const providerType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
+
+    const onMounted = useCallback(async () => {
+        if (providerType !== ProviderType.Fortmatic) return
+        const connected = await Services.Ethereum.connectFortmatic(
+            isFortmaticSupported(chainId) ? chainId : ChainId.Mainnet,
+        )
+        await WalletRPC.updateAccount({
+            account: connected.account,
+            chainId: connected.chainId,
+            providerType,
+        })
+    }, [chainId, providerType])
 
     useEffect(() => {
         return EVM_Messages.events.FORTMATIC_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
@@ -52,6 +69,8 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
             }
         })
     }, [chainId])
+
+    useMount(onMounted)
 
     return null
 }

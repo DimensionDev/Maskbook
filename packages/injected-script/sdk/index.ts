@@ -43,15 +43,12 @@ document.addEventListener(CustomEventId, (e) => {
         case 'ethBridgeSendRequest':
         case 'ethBridgePrimitiveAccess':
         case 'ethBridgeRequestListen':
-
         case 'coin98BridgeSendRequest':
         case 'coin98BridgePrimitiveAccess':
         case 'coin98BridgeRequestListen':
-
         case 'solanaBridgeSendRequest':
         case 'solanaBridgePrimitiveAccess':
         case 'solanaBridgeRequestListen':
-
         case 'input':
         case 'paste':
         case 'pasteImage':
