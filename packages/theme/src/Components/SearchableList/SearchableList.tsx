@@ -4,10 +4,10 @@ import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-unified'
 import { Box, InputAdornment } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
-import { Search } from '@mui/icons-material'
 import { MaskColorVar } from '../../constants'
 import { MaskSearchableItemInList } from './MaskSearchableItemInList'
 import { MaskTextField, MaskTextFieldProps } from '../TextField'
+import { SearchIcon } from '@masknet/icons'
 
 export interface MaskSearchableListProps<T> {
     /** The list data should be render */
@@ -103,7 +103,7 @@ export function SearchableList<T>({
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
-                                    <Search />
+                                    <SearchIcon />
                                 </InputAdornment>
                             ),
                             ...InputProps,

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { DialogContent } from '@mui/material'
+import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
 import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -17,6 +17,7 @@ interface StyleProps {
 const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     content: {
         ...(snsId === MINDS_ID ? { minWidth: 552 } : {}),
+        padding: theme.spacing(3),
     },
     list: {
         scrollbarWidth: 'none',
@@ -31,7 +32,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         boxSizing: 'border-box',
     },
     search: {
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent !important',
         border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
     },
 }))
@@ -43,6 +44,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
+    const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 
     const [id, setId] = useState('')
     const [targetChainId, setChainId] = useState<ChainId | undefined>(chainId)
@@ -89,8 +91,12 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
     }, [id, setDialog])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')}>
-            <DialogContent className={classes.content}>
+        <InjectedDialog
+            titleBarIconStyle="back"
+            open={open}
+            onClose={onClose}
+            title={t('plugin_wallet_select_a_token')}>
+            <DialogContent classes={{ root: classes.content }}>
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     onSelect={onSubmit}
@@ -105,7 +111,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                     disableSearch={disableSearchBar}
                     FixedSizeListProps={{
                         itemSize: rowSize,
-                        height: 503,
+                        height: isMdScreen ? 300 : 503,
                     }}
                     SearchTextFieldProps={{ InputProps: { classes: { root: classes.search } } }}
                 />

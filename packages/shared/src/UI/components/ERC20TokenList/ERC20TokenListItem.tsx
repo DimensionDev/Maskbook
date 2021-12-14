@@ -44,13 +44,13 @@ const useStyles = makeStyles()((theme) => ({
     name: {
         display: 'block',
         lineHeight: '20px',
-        fontSize: 15,
+        fontSize: 16,
         // TODO: Should align dashboard and twitter theme in common component, depend twitter theme
         color: theme.palette.mode === 'dark' ? '#6E767D' : '#536471',
     },
     symbol: {
         lineHeight: '20px',
-        fontSize: 15,
+        fontSize: 16,
     },
     import: {
         '&:before': {

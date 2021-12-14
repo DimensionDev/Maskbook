@@ -112,9 +112,11 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
 
     const getPlaceHolder = () => {
         if (erc20TokensDetailedLoading)
-            return <Placeholder height={FixedSizeListProps?.height} message="Loading token lists..." />
-        if (searchedTokenLoading) return <Placeholder height={FixedSizeListProps?.height} message="Loading token..." />
-        if (!renderAssets.length) return <Placeholder height={FixedSizeListProps?.height} message="No token found" />
+            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_token_list_loading()} />
+        if (searchedTokenLoading)
+            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_token_loading()} />
+        if (!renderAssets.length)
+            return <Placeholder height={FixedSizeListProps?.height} message={t.erc20_search_not_token_found()} />
         return null
     }
 
