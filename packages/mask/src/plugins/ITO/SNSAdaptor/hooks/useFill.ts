@@ -140,14 +140,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             ;(ITO_Contract as ITO2).methods
                 .fill_pool(...params)
                 .send(config as NonPayableTx)
-                .on(TransactionEventType.RECEIPT, (receipt) => {
-                    setFillState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    resolve()
-                })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setFillState({
                         type: TransactionStateType.CONFIRMED,
