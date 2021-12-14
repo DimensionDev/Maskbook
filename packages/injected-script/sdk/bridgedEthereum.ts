@@ -1,5 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { EthereumProvider } from '../shared'
 import { createPromise, sendEvent } from './utils'
 
 function request(data: RequestArguments) {
@@ -27,7 +28,7 @@ function send(payload: JsonRpcPayload, callback: (error: Error | null, result?: 
 }
 
 /** Interact with the current ethereum provider */
-export const bridgedEthereumProvider: BridgedEthereumProvider = {
+export const bridgedEthereumProvider: EthereumProvider = {
     request,
     send,
     sendAsync: send,
@@ -43,31 +44,11 @@ export const bridgedEthereumProvider: BridgedEthereumProvider = {
     getProperty(key) {
         return createPromise((id) => sendEvent('ethBridgePrimitiveAccess', id, key))
     },
-    isConnected() {
-        return createPromise((id) => sendEvent('ethBridgeIsConnected', id))
-    },
     untilAvailable() {
         return createPromise((id) => sendEvent('untilEthBridgeOnline', id))
     },
 }
-export interface BridgedEthereumProvider {
-    /** Wait for window.ethereum object appears. */
-    untilAvailable(): Promise<true>
-    /** Send JSON RPC to the eth provider. */
-    request(data: RequestArguments): Promise<unknown>
-    /** Send JSON RPC  */
-    send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
-    /** Async send JSON RPC  */
-    sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
-    /** Add event listener */
-    on(event: string, callback: (...args: any) => void): () => void
-    /** Access primitive property on the window.ethereum object. */
-    getProperty(
-        key: 'isMaskWallet' | 'isMetaMask' | 'isCoin98' | 'isMathWallet' | 'isWalletLink',
-    ): Promise<boolean | undefined>
-    /** Call window.ethereum.isConnected() */
-    isConnected(): Promise<boolean>
-}
+
 const bridgedEthereum = new Map<string, Set<Function>>()
 /** @internal */
 export function onEthEvent(event: string, data: unknown[]) {

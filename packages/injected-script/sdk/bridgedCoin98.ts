@@ -1,5 +1,6 @@
 import type { RequestArguments } from 'web3-core'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
+import type { EthereumProvider } from '../shared'
 import { createPromise, sendEvent } from './utils'
 
 function request(data: RequestArguments) {
@@ -27,7 +28,7 @@ function send(payload: JsonRpcPayload, callback: (error: Error | null, result?: 
 }
 
 /** Interact with the current ethereum provider */
-export const bridgedCoin98Provider: BridgedCoin98Provider = {
+export const bridgedCoin98Provider: EthereumProvider = {
     request,
     send,
     sendAsync: send,
@@ -43,29 +44,11 @@ export const bridgedCoin98Provider: BridgedCoin98Provider = {
     getProperty(key) {
         return createPromise((id) => sendEvent('coin98BridgePrimitiveAccess', id, key))
     },
-    isConnected() {
-        return createPromise((id) => sendEvent('coin98BridgeIsConnected', id))
-    },
     untilAvailable() {
         return createPromise((id) => sendEvent('untilCoin98BridgeOnline', id))
     },
 }
-export interface BridgedCoin98Provider {
-    /** Wait for window.coin98 object appears. */
-    untilAvailable(): Promise<true>
-    /** Send JSON RPC to the coin98 provider. */
-    request(data: RequestArguments): Promise<unknown>
-    /** Send JSON RPC  */
-    send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
-    /** Async send JSON RPC  */
-    sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
-    /** Add event listener */
-    on(event: string, callback: (...args: any) => void): () => void
-    /** Access primitive property on the window.coin98 object. */
-    getProperty(key: 'isCoin98'): Promise<boolean | undefined>
-    /** Call window.coin98.provider.isConnected() */
-    isConnected(): Promise<boolean>
-}
+
 const bridgedCoin98 = new Map<string, Set<Function>>()
 /** @internal */
 export function onCoin98Event(event: string, data: unknown[]) {
