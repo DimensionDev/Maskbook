@@ -7,7 +7,6 @@ import { dispatchPasteImage } from './EventListenerPatch/dispatchPasteImage'
 import {
     ethBridgeSendRequest,
     ethBridgeIsConnected,
-    ethBridgeMetaMaskIsUnlocked,
     ethBridgePrimitiveAccess,
     ethBridgeWatchEvent,
     untilEthereumOnline,
@@ -41,6 +40,7 @@ document.addEventListener(CustomEventId, (e) => {
         case 'resolvePromise':
             return
 
+        // solana
         case 'solanaBridgeRequestListen':
             return apply(solanaBridgeWatchEvent, null, r[1])
         case 'solanaBridgeSendRequest':
@@ -54,20 +54,34 @@ document.addEventListener(CustomEventId, (e) => {
         case 'solanaBridgeOnEvent':
             return
 
+        // ethereum
         case 'ethBridgeRequestListen':
-            return apply(ethBridgeWatchEvent, null, r[1])
+            return apply(ethBridgeWatchEvent.bind(null, 'ethereum'), null, r[1])
         case 'ethBridgeSendRequest':
-            return apply(ethBridgeSendRequest, null, r[1])
+            return apply(ethBridgeSendRequest.bind(null, 'ethereum'), null, r[1])
         case 'ethBridgeIsConnected':
-            return apply(ethBridgeIsConnected, null, r[1])
-        case 'ethBridgeMetaMaskIsUnlocked':
-            return apply(ethBridgeMetaMaskIsUnlocked, null, r[1])
+            return apply(ethBridgeIsConnected.bind(null, 'ethereum'), null, r[1])
         case 'ethBridgePrimitiveAccess':
-            return apply(ethBridgePrimitiveAccess, null, r[1])
+            return apply(ethBridgePrimitiveAccess.bind(null, 'ethereum'), null, r[1])
         case 'untilEthBridgeOnline':
-            return apply(untilEthereumOnline, null, r[1])
+            return apply(untilEthereumOnline.bind(null, 'ethereum'), null, r[1])
         case 'ethBridgeOnEvent':
             return
+
+        // coin98
+        case 'coin98BridgeRequestListen':
+            return apply(ethBridgeWatchEvent.bind(null, 'coin98.provider'), null, r[1])
+        case 'coin98BridgeSendRequest':
+            return apply(ethBridgeSendRequest.bind(null, 'coin98.provider'), null, r[1])
+        case 'coin98BridgeIsConnected':
+            return apply(ethBridgeIsConnected.bind(null, 'coin98.provider'), null, r[1])
+        case 'coin98BridgePrimitiveAccess':
+            return apply(ethBridgePrimitiveAccess.bind(null, 'coin98.provider'), null, r[1])
+        case 'untilCoin98BridgeOnline':
+            return apply(untilEthereumOnline.bind(null, 'coin98'), null, r[1])
+        case 'coin98BridgeOnEvent':
+            return
+
         default:
             const neverEvent: never = r[0]
             warn('[@masknet/injected-script]', neverEvent, 'not handled')

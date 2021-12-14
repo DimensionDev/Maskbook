@@ -15,7 +15,8 @@ const sns: Plugin.SNSAdaptor.Definition = {
     GlobalInjection() {
         return (
             <>
-                <InjectedProviderBridge />
+                <InjectedProviderBridge type="ethereum" />
+                <InjectedProviderBridge type="coin98" />
                 <FortmaticProviderBridge />
             </>
         )

@@ -3,12 +3,12 @@ import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import { createPromise, sendEvent } from './utils'
 
 function request(data: RequestArguments) {
-    return createPromise((id) => sendEvent('ethBridgeSendRequest', id, data))
+    return createPromise((id) => sendEvent('coin98BridgeSendRequest', id, data))
 }
 
 function send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {
     createPromise((id) =>
-        sendEvent('ethBridgeSendRequest', id, {
+        sendEvent('coin98BridgeSendRequest', id, {
             method: payload.method,
             params: payload.params,
         }),
@@ -27,33 +27,33 @@ function send(payload: JsonRpcPayload, callback: (error: Error | null, result?: 
 }
 
 /** Interact with the current ethereum provider */
-export const bridgedEthereumProvider: BridgedEthereumProvider = {
+export const bridgedCoin98Provider: BridgedCoin98Provider = {
     request,
     send,
     sendAsync: send,
     on(event, callback) {
-        if (!bridgedEthereum.has(event)) {
-            bridgedEthereum.set(event, new Set())
-            sendEvent('ethBridgeRequestListen', event)
+        if (!bridgedCoin98.has(event)) {
+            bridgedCoin98.set(event, new Set())
+            sendEvent('coin98BridgeRequestListen', event)
         }
-        const map = bridgedEthereum.get(event)!
+        const map = bridgedCoin98.get(event)!
         map.add(callback)
         return () => void map.delete(callback)
     },
     getProperty(key) {
-        return createPromise((id) => sendEvent('ethBridgePrimitiveAccess', id, key))
+        return createPromise((id) => sendEvent('coin98BridgePrimitiveAccess', id, key))
     },
     isConnected() {
-        return createPromise((id) => sendEvent('ethBridgeIsConnected', id))
+        return createPromise((id) => sendEvent('coin98BridgeIsConnected', id))
     },
     untilAvailable() {
-        return createPromise((id) => sendEvent('untilEthBridgeOnline', id))
+        return createPromise((id) => sendEvent('untilCoin98BridgeOnline', id))
     },
 }
-export interface BridgedEthereumProvider {
-    /** Wait for window.ethereum object appears. */
+export interface BridgedCoin98Provider {
+    /** Wait for window.coin98 object appears. */
     untilAvailable(): Promise<true>
-    /** Send JSON RPC to the eth provider. */
+    /** Send JSON RPC to the coin98 provider. */
     request(data: RequestArguments): Promise<unknown>
     /** Send JSON RPC  */
     send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
@@ -61,17 +61,15 @@ export interface BridgedEthereumProvider {
     sendAsync(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void): void
     /** Add event listener */
     on(event: string, callback: (...args: any) => void): () => void
-    /** Access primitive property on the window.ethereum object. */
-    getProperty(
-        key: 'isMaskWallet' | 'isMetaMask' | 'isCoin98' | 'isMathWallet' | 'isWalletLink',
-    ): Promise<boolean | undefined>
-    /** Call window.ethereum.isConnected() */
+    /** Access primitive property on the window.coin98 object. */
+    getProperty(key: 'isCoin98'): Promise<boolean | undefined>
+    /** Call window.coin98.provider.isConnected() */
     isConnected(): Promise<boolean>
 }
-const bridgedEthereum = new Map<string, Set<Function>>()
+const bridgedCoin98 = new Map<string, Set<Function>>()
 /** @internal */
-export function onEthEvent(event: string, data: unknown[]) {
-    for (const f of bridgedEthereum.get(event) || []) {
+export function onCoin98Event(event: string, data: unknown[]) {
+    for (const f of bridgedCoin98.get(event) || []) {
         try {
             Reflect.apply(f, null, data)
         } catch {}

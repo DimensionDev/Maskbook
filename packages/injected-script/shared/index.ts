@@ -15,6 +15,7 @@ export interface InternalEvents {
      * Call this event, then invoke the file selector (SNS). It will invoke click on some input, then let's replace with the result.
      */
     hookInputUploadOnce: [format: string, fileName: string, file: number[]]
+
     //#region Eth inpage provider bridge
     /** Request the bridge to listen on an event. */
     ethBridgeRequestListen: [eventName: string]
@@ -26,10 +27,23 @@ export interface InternalEvents {
     ethBridgePrimitiveAccess: [req_id: number, property: string]
     /** Call window.ethereum.isConnected() */
     ethBridgeIsConnected: [req_id: number]
-    /** Call window.ethereum._metamask.isUnlocked() */
-    ethBridgeMetaMaskIsUnlocked: [req_id: number]
     /** Wait until window.ethereum appears */
     untilEthBridgeOnline: [req_id: number]
+    //#endregion
+
+    //#region Eth inpage provider bridge
+    /** Request the bridge to listen on an event. */
+    coin98BridgeRequestListen: [eventName: string]
+    /** When a event happened. */
+    coin98BridgeOnEvent: [eventName: string, data: unknown[]]
+    /** Send JSON RPC request. */
+    coin98BridgeSendRequest: [req_id: number, request: unknown]
+    /** Access primitive property on the window.ethereum object. */
+    coin98BridgePrimitiveAccess: [req_id: number, property: string]
+    /** Call window.ethereum.isConnected() */
+    coin98BridgeIsConnected: [req_id: number]
+    /** Wait until window.ethereum appears */
+    untilCoin98BridgeOnline: [req_id: number]
     //#endregion
 
     //#region Solana inpage provider bridge
