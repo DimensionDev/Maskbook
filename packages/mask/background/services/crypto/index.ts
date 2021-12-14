@@ -1,6 +1,13 @@
 import { encodeArrayBuffer } from '@dimensiondev/kit'
-import { AESCryptoKey, IdentifierMap, PostIVIdentifier, ProfileIdentifier } from '@masknet/shared-base'
-import { decryptByLocalKey, hasLocalKeyOf } from '../../database/persona/helper'
+import {
+    AESCryptoKey,
+    EC_Public_CryptoKey,
+    IdentifierMap,
+    PostIVIdentifier,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
+import { queryPersonaByProfileDB } from '../../database/persona/db'
+import { decryptByLocalKey, deriveAESByECDH, hasLocalKeyOf } from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
 
@@ -33,11 +40,21 @@ export async function* decryption(payload: string | Uint8Array, network: string)
             },
             hasLocalKeyOf: hasLocalKeyOf,
             decryptByLocalKey: decryptByLocalKey,
-            async deriveAESKey() {
-                throw 'TODO'
+            async deriveAESKey(pub) {
+                return Array.from((await deriveAESByECDH(pub)).values())
             },
-            async queryAuthorPublicKey() {
-                throw 'TODO'
+            async queryAuthorPublicKey(author, signal) {
+                // TODO: should use decrypt hint as the value
+                if (!author) return null
+                const persona = await queryPersonaByProfileDB(author)
+                if (!persona) return null
+                return (await crypto.subtle.importKey(
+                    'jwk',
+                    persona.publicKey,
+                    { name: 'ECDH', namedCurve: persona.publicKey.crv! } as EcKeyAlgorithm,
+                    false,
+                    ['deriveKey'],
+                )) as EC_Public_CryptoKey
             },
             async *queryPostKey_version37() {
                 throw 'TODO'

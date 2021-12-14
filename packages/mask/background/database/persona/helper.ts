@@ -1,7 +1,16 @@
-import type { AESJsonWebKey, ProfileIdentifier } from '@masknet/shared-base'
+import {
+    AESCryptoKey,
+    AESJsonWebKey,
+    ECKeyIdentifier,
+    EC_Private_JsonWebKey,
+    EC_Public_CryptoKey,
+    IdentifierMap,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
 import type { IDBPSafeTransaction } from '../utils/openDB'
 import { createReadonlyPersonaTransaction, PersonaDB } from './db'
 
+//#region Local key helpers
 /**
  * If has local key of a profile in the database.
  * @param id Profile Identifier
@@ -62,6 +71,51 @@ async function getLocalKeyOf(
     const persona = await tx.objectStore('personas').get(profile.linkedPersona.toText())
     return persona?.localKey
 }
+//#endregion
+
+//#region ECDH
+export async function deriveAESByECDH(pub: EC_Public_CryptoKey) {
+    const curve = (pub.algorithm as EcKeyAlgorithm).namedCurve || ''
+    const sameCurvePrivateKeys = new Map<string, EC_Private_JsonWebKey>()
+
+    db: {
+        const t = (await createReadonlyPersonaTransaction())('personas')
+        const hasPriv = await t.objectStore('personas').index('hasPrivateKey').openCursor(IDBKeyRange.only('yes'))
+        if (hasPriv === null) break db
+        for await (const { value } of hasPriv) {
+            if (!value.privateKey) continue
+            if (value.privateKey.crv !== curve) continue
+            sameCurvePrivateKeys.set(value.identifier, value.privateKey)
+        }
+    }
+
+    const deriveResult = new Map<string, AESCryptoKey>()
+    const result = await Promise.allSettled(
+        [...sameCurvePrivateKeys].map(async ([id, key]) => {
+            const k = await crypto.subtle.importKey(
+                'jwk',
+                key,
+                { name: 'ECDH', namedCurve: key.crv! } as EcKeyAlgorithm,
+                false,
+                ['deriveKey'],
+            )
+            const result = await crypto.subtle.deriveKey(
+                { name: 'ECDH', public: pub },
+                k,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt', 'decrypt'],
+            )
+            deriveResult.set(id, result as AESCryptoKey)
+        }),
+    )
+    const failed = result.filter((x): x is PromiseRejectedResult => x.status === 'rejected')
+    if (failed.length) {
+        console.warn('Failed to ECDH', ...failed.map((x) => x.reason))
+    }
+    return new IdentifierMap<ECKeyIdentifier, AESCryptoKey>(deriveResult, ECKeyIdentifier)
+}
+//#endregion
 
 function abort() {
     throw new Error('Cancelled')
