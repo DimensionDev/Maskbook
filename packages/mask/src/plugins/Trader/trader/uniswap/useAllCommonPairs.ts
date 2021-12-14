@@ -32,7 +32,6 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
     const combinations = useMemo(() => {
         if (!tokenA || !tokenB) return []
 
-        debugger
         return [
             // the direct pair
             [tokenA, tokenB],
@@ -64,13 +63,11 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
                 return true
             })
     }, [tokenA?.address, tokenB?.address, bases, basePairs, chainId, chainIdValid])
-    debugger
     return combinations
 }
 
 export function useAllCommonPairs(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {
     const allCurrencyCombinations = useAllCurrencyCombinations(tradeProvider, currencyA, currencyB)
-    debugger
 
     const { value: allPairs, ...asyncResult } = usePairs(tradeProvider, allCurrencyCombinations)
 

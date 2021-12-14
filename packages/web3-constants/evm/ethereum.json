@@ -25,9 +25,7 @@
             "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/421611/tokens.json"
         ],
         "xDai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/100/tokens.json"],
-        "Fantom": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/feat/add-fantom/dist/v0.0.22/250/tokens.json"
-        ]
+        "Fantom": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/250/tokens.json"]
     },
     "BALANCE_CHECKER_ADDRESS": {
         "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",

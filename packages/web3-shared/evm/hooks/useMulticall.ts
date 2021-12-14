@@ -139,7 +139,6 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                                 )
                             } catch (err) {
                                 console.log({ err })
-                                debugger
                             }
                         }),
                     )
@@ -173,7 +172,6 @@ export function useMulticallStateDecoded<
     const web3 = useWeb3(false, chainId)
     type Result = { succeed: boolean; gasUsed: string } & ({ error: any; value: null } | { error: null; value: R })
     return useMemo(() => {
-        debugger
         if (state.type !== MulticallStateType.SUCCEED) return []
         if (contracts.length !== state.results.length) return []
         return state.results.map(([succeed, gasUsed, result], index): Result => {

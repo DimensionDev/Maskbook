@@ -65,7 +65,6 @@ export function useAllTradeComputed(
     const uniswapEstimateGas = useUniswapTradeGasLimit(uniswapV2, TradeProvider.UNISWAP_V2)
 
     const containSushiSwap = tradeProviders.some((x) => x === TradeProvider.SUSHISWAP)
-    debugger
     // sushi swap
     const sushiSwap_ = useUniswapV2Trade(
         TradeProvider.SUSHISWAP,

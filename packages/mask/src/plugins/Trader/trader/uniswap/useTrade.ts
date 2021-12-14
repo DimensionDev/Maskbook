@@ -14,7 +14,6 @@ function useTrade(
     inputToken?: FungibleTokenDetailed,
     outputToken?: FungibleTokenDetailed,
 ) {
-    debugger
     const isExactIn = strategy === TradeStrategy.ExactIn
     const isTradable = !isZero(inputAmount) // || !isZero(outputAmount)
     const isNotAvailable =
@@ -41,7 +40,6 @@ function useTrade(
         isExactIn ? inputToken : outputToken,
         isExactIn ? inputAmount : outputAmount,
     )
-    debugger
     return {
         isNotAvailable,
         isExactIn,
@@ -67,7 +65,6 @@ export function useV2Trade(
         outputToken,
     )
 
-    debugger
     //#region v2
     const v2BestTradeExactIn = useV2BestTradeExactIn(tradeProvider, isExactIn ? tradeAmount : undefined, outputCurrency)
     const v2BestTradeExactOut = useV2BestTradeExactOut(
@@ -77,7 +74,6 @@ export function useV2Trade(
     )
     //#endregion
 
-    debugger
     const v2Trade = isExactIn ? v2BestTradeExactIn : v2BestTradeExactOut
 
     if (isNotAvailable)
