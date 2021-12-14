@@ -12,6 +12,7 @@ export * from './watcher'
 export interface RecentTransaction {
     at: Date
     hash: string
+    hashReplacement?: string
     status: TransactionStatusType
     receipt?: TransactionReceipt | null
     payload?: JsonRpcPayload
@@ -65,7 +66,8 @@ export async function getRecentTransactions(chainId: ChainId, address: string): 
 
                 return {
                     at,
-                    hash: receipt?.transactionHash ?? hash,
+                    hash,
+                    hashReplacement,
                     status: helpers.getReceiptStatus(receipt),
                     receipt,
                     payload,

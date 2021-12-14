@@ -70,7 +70,9 @@ export async function replaceRecentTransaction(
     if (!transaction) throw new Error('Failed to find the old transaction.')
     if (transaction.hash === newHash) return
     transaction.hashReplacement = newHash
-    transaction.payloadReplacement = newPayload
+    if (newPayload) {
+        transaction.payloadReplacement = newPayload
+    }
     await PluginDB.add({
         type: 'recent-transactions',
         id: recordId,

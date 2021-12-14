@@ -396,12 +396,14 @@ export async function INTERNAL_send(
     async function getTransactionReceipt() {
         const [hash] = payload.params as [string]
 
+        // redirect receipt queries to tx watcher
+        const transaction = await WalletRPC.getRecentTransaction(chainIdFinally, account, hash)
+
         try {
             callback(null, {
                 id: payload.id,
                 jsonrpc: payload.jsonrpc,
-                // redirect receipt queries to tx watcher
-                result: await WalletRPC.getReceipt(chainIdFinally, hash),
+                result: transaction?.receipt ?? null,
             } as JsonRpcResponse)
         } catch {
             callback(null, {

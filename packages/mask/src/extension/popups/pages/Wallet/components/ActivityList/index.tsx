@@ -140,7 +140,10 @@ export const ActivityListUI = memo<ActivityListUIProps>(({ dataSource, chainId }
                     const toAddress = getToAddress(transaction.receipt, transaction.computedPayload)
                     return (
                         <Link
-                            href={resolveTransactionLinkOnExplorer(chainId, transaction.hash)}
+                            href={resolveTransactionLinkOnExplorer(
+                                chainId,
+                                transaction.receipt?.transactionHash ?? transaction.hash,
+                            )}
                             target="_blank"
                             rel="noopener noreferrer"
                             key={index}

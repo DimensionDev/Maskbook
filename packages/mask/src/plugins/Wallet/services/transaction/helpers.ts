@@ -72,7 +72,7 @@ export function getPayloadTo(payload: JsonRpcPayload) {
 export function getTransactionId(transaction: Transaction | null) {
     if (!transaction) return ''
     const { from, to, input, value } = transaction
-    return sha3([from, to, input, toHex(value)].join('_')) ?? ''
+    return sha3([from, to, input || '0x0', toHex(value || '0x0')].join('_')) ?? ''
 }
 
 export function getReceiptStatus(receipt: TransactionReceipt | null) {
