@@ -19,6 +19,7 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const { classes } = useStyles()
     const { stroke, strokeWidth, fontSize, text, width, id } = props
 
+    const avatarSize = width + 3
     const R = width + 2 * strokeWidth - 4
     const r = R / 2 - strokeWidth
     const path_r = R / 2 - strokeWidth + fontSize / 2
@@ -28,8 +29,8 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const y2 = y1
 
     return (
-        <RainbowBox width={width} height={width}>
-            <svg className={classes.root} width={width} height={width} viewBox={`0 0 ${R} ${R}`} id={id}>
+        <RainbowBox width={avatarSize} height={avatarSize}>
+            <svg className={classes.root} width={avatarSize} height={avatarSize} viewBox={`0 0 ${R} ${R}`} id={id}>
                 <defs>
                     <path
                         id={`${id}-path`}
