@@ -239,7 +239,7 @@ export function Trader(props: TraderProps) {
                 open: true,
                 uuid: String(type),
                 disableNativeToken: false,
-                FixedTokenListProps: {
+                FungibleTokenListProps: {
                     selectedTokens: excludeTokens,
                 },
             })

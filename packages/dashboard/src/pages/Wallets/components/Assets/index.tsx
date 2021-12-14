@@ -88,7 +88,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                         ? setSelectToken({
                                               open: true,
                                               uuid: id,
-                                              FixedTokenListProps: { whitelist: [] },
+                                              FungibleTokenListProps: { whitelist: [] },
                                           })
                                         : setAddCollectibleOpen(true)
                                 }>

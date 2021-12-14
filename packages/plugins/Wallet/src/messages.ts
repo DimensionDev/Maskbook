@@ -109,7 +109,7 @@ export type SelectTokenDialogEvent =
           chainId?: ChainId
           disableNativeToken?: boolean
           disableSearchBar?: boolean
-          FixedTokenListProps?: {
+          FungibleTokenListProps?: {
               keyword?: string
               whitelist?: string[]
               blacklist?: string[]

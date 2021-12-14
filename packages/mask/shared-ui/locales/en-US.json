@@ -172,8 +172,6 @@
     "wallet_rename": "Rename Wallet",
     "wallet_add_nft_invalid_owner": "The collectible does not belong to you.",
     "wallet_add_nft_already_added": "The collectible has already been added.",
-    "wallet_loading_assets": "Loading token assets...",
-    "wallet_loading_list": "Loading token lists...",
     "wallet_loading_token": "Loading token...",
     "wallet_loading_nft_contract": "Loading NFT contract...",
     "wallet_search_contract_no_result": "No results or contract address does not meet the query criteria.",

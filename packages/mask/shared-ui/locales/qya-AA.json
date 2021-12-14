@@ -172,8 +172,6 @@
     "wallet_rename": "crwdns4489:0crwdne4489:0",
     "wallet_add_nft_invalid_owner": "crwdns7723:0crwdne7723:0",
     "wallet_add_nft_already_added": "crwdns8131:0crwdne8131:0",
-    "wallet_loading_assets": "crwdns10137:0crwdne10137:0",
-    "wallet_loading_list": "crwdns10139:0crwdne10139:0",
     "wallet_loading_token": "crwdns8133:0crwdne8133:0",
     "wallet_loading_nft_contract": "crwdns8135:0crwdne8135:0",
     "wallet_search_contract_no_result": "crwdns8137:0crwdne8137:0",

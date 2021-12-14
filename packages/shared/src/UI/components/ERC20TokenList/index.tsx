@@ -23,6 +23,8 @@ import { MaskFixedSizeListProps, MaskTextFieldProps, SearchableList } from '@mas
 import { Stack, Typography } from '@mui/material'
 import { useSharedI18N } from '../../../locales'
 
+const DEFAULT_LIST_HEIGHT = 300
+
 export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'> {
     targetChainId?: ChainId
     whitelist?: string[]
@@ -36,7 +38,7 @@ export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'>
 }
 
 const Placeholder = memo(({ message, height }: { message: string; height?: number | string }) => (
-    <Stack minHeight={height ?? 300} justifyContent="center" alignContent="center">
+    <Stack minHeight={height ?? DEFAULT_LIST_HEIGHT} justifyContent="center" alignContent="center">
         <Typography color="textSecondary" textAlign="center">
             {message}
         </Typography>

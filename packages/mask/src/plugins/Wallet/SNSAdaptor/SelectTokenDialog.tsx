@@ -5,7 +5,7 @@ import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { ERC20TokenList, ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
@@ -50,7 +50,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
 
     const [disableNativeToken, setDisableNativeToken] = useState(true)
     const [disableSearchBar, setDisableSearchBar] = useState(false)
-    const [FixedTokenListProps, setFixedTokenListProps] = useState<ERC20TokenListProps | null>(null)
+    const [FungibleTokenListProps, setFungibleTokenListProps] = useState<ERC20TokenListProps | null>(null)
 
     useEffect(() => {
         try {
@@ -66,7 +66,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         setId(ev.uuid)
         setDisableNativeToken(ev.disableNativeToken ?? true)
         setDisableSearchBar(ev.disableSearchBar ?? false)
-        setFixedTokenListProps(ev.FixedTokenListProps ?? null)
+        setFungibleTokenListProps(ev.FungibleTokenListProps ?? null)
         setChainId(ev.chainId ?? undefined)
     })
     const onSubmit = useCallback(
@@ -94,12 +94,12 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                 <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
                     onSelect={onSubmit}
-                    {...FixedTokenListProps}
-                    tokens={[...(FixedTokenListProps?.tokens ?? [])]}
+                    {...FungibleTokenListProps}
+                    tokens={[...(FungibleTokenListProps?.tokens ?? [])]}
                     blacklist={
                         disableNativeToken && NATIVE_TOKEN_ADDRESS
-                            ? [NATIVE_TOKEN_ADDRESS, ...(FixedTokenListProps?.blacklist ?? [])]
-                            : [...(FixedTokenListProps?.blacklist ?? [])]
+                            ? [NATIVE_TOKEN_ADDRESS, ...(FungibleTokenListProps?.blacklist ?? [])]
+                            : [...(FungibleTokenListProps?.blacklist ?? [])]
                     }
                     targetChainId={targetChainId}
                     disableSearch={disableSearchBar}
@@ -107,13 +107,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                         itemSize: rowSize,
                         height: 503,
                     }}
-                    SearchTextFieldProps={{
-                        InputProps: {
-                            classes: {
-                                root: classes.search,
-                            },
-                        },
-                    }}
+                    SearchTextFieldProps={{ InputProps: { classes: { root: classes.search } } }}
                 />
             </DialogContent>
         </InjectedDialog>
