@@ -14,7 +14,19 @@ import {
     queryProfilesWithQuery,
     storeAvatar,
 } from '../../database'
-import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    Identifier,
+    PersonaIdentifier,
+    ProfileIdentifier,
+    ECKeyIdentifierFromJsonWebKey,
+    EC_JsonWebKey,
+    EC_Private_JsonWebKey,
+    PersonaInformation,
+    ProfileInformation,
+    PostIVIdentifier,
+    RelationFavor,
+} from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
     attachProfileDB,
@@ -39,15 +51,11 @@ import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
 import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
-import type { PostIVIdentifier } from '@masknet/shared-base'
-import { RelationFavor } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { ECKeyIdentifierFromJsonWebKey } from '../../database/type'
 
 assertEnvironment(Environment.ManifestBackground)
 

@@ -241,13 +241,9 @@ importers:
     specifiers:
       '@masknet/shared-base': workspace:*
       '@msgpack/msgpack': ^2.7.0
-      pvtsutils: ^1.2.0
-      tiny-secp256k1: ^2.1.2
     dependencies:
       '@masknet/shared-base': link:../shared-base
       '@msgpack/msgpack': 2.7.1
-      pvtsutils: 1.2.1
-      tiny-secp256k1: 2.1.2
 
   packages/external-plugin-previewer:
     specifiers:
@@ -327,7 +323,6 @@ importers:
       '@types/react-window': ^1.8.4
       '@types/remarkable': ^2.0.3
       '@types/socket.io-client': ^1.4.36
-      '@types/tiny-secp256k1': ^1.0.0
       '@types/use-subscription': ^1.0.0
       '@types/uuid': ^8.3.3
       '@types/webpack-dev-server': ^4.5.0
@@ -376,7 +371,6 @@ importers:
       opensea-js: ^1.1.11
       promievent: ^0.1.4
       protobufjs: ^6.11.2
-      pvtsutils: ^1.0.14
       react-devtools-core: ^4.21.0
       react-draggable: ^4.4.4
       react-feather: ^2.0.9
@@ -397,7 +391,6 @@ importers:
       stream-browserify: ^3.0.0
       stream-http: ^2.8.3
       swc-loader: ^0.1.15
-      tiny-secp256k1: ^1.1.5
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
       use-subscription: ^1.5.1
@@ -462,7 +455,6 @@ importers:
       '@types/react-window': 1.8.5
       '@types/remarkable': 2.0.3
       '@types/socket.io-client': 1.4.36
-      '@types/tiny-secp256k1': 1.0.0
       '@types/use-subscription': 1.0.0
       '@types/uuid': 8.3.3
       '@uniswap/sdk-core': 3.0.1
@@ -506,7 +498,6 @@ importers:
       opensea-js: 1.1.11
       promievent: 0.1.5
       protobufjs: 6.11.2
-      pvtsutils: 1.1.7
       react-draggable: 4.4.4_757a802188413a36d4f24237d13b8e90
       react-feather: 2.0.9_react@18.0.0-rc.0
       react-highlight-words: 0.17.0_react@18.0.0-rc.0
@@ -523,7 +514,6 @@ importers:
       socket.io-client: 2.4.0
       stream-browserify: 3.0.0
       stream-http: 2.8.3
-      tiny-secp256k1: 1.1.6
       unstated-next: 1.1.0
       urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
@@ -761,7 +751,9 @@ importers:
       bignumber.js: ^9.0.1
       immer: ^9.0.7
       lodash-es: ^4.17.21
+      pvtsutils: ^1.2.1
       react: ../empty
+      tiny-secp256k1: ^2.1.2
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
       use-subscription: ^1.5.1
@@ -779,7 +771,9 @@ importers:
       bignumber.js: 9.0.1
       immer: 9.0.7
       lodash-es: 4.17.21
+      pvtsutils: 1.2.1
       react: link:../empty
+      tiny-secp256k1: 2.1.2
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
       use-subscription: 1.5.1_react@18.0.0-rc.0
@@ -7832,12 +7826,6 @@ packages:
     resolution: {integrity: sha512-ipixuVrh2OdNmauvtT51o3d8z12p6LtFW9in7U79der/kwejjdNchQC5UMn5u/KxNoM7VHHOs/l8KS8uHxhODQ==}
     dev: true
 
-  /@types/tiny-secp256k1/1.0.0:
-    resolution: {integrity: sha512-IW3dFGNyVkVLC1MCMogVWQaKH/ZtjPQdOW9c3X128o5lVpFYNsq/l3Qo1pV7sfTmvDzWEXR3QTxg1TMy1pyaAQ==}
-    dependencies:
-      '@types/node': 16.11.10
-    dev: false
-
   /@types/tinycolor2/1.4.3:
     resolution: {integrity: sha512-Kf1w9NE5HEgGxCRyIcRXR/ZYtDv0V8FVPtYHwLxl0O+maGX0erE77pQlD0gpP+/KByMZ87mOA79SjifhSB3PjQ==}
     dev: false
@@ -10143,6 +10131,7 @@ packages:
     requiresBuild: true
     dependencies:
       file-uri-to-path: 1.0.0
+    optional: true
 
   /bintrees/1.0.2:
     resolution: {integrity: sha1-SfiW1uhYpKSZ34XDj7OZua/4QPg=}
@@ -13895,6 +13884,7 @@ packages:
   /file-uri-to-path/1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
     requiresBuild: true
+    optional: true
 
   /filesize/6.1.0:
     resolution: {integrity: sha512-LpCHtPQ3sFx67z+uh2HnSyWSLLu5Jxo21795uRDuar/EOuYWXib5EmPaGIBuSnRqH2IODiKA2k5re/K9OnN/Yg==}
@@ -18118,10 +18108,6 @@ packages:
       object-assign: 4.1.1
       thenify-all: 1.6.0
     dev: true
-
-  /nan/2.14.2:
-    resolution: {integrity: sha512-M2ufzIiINKCuDfBSAUr1vWQ+vuVcA9kqx8JJUsbQi6yf1uGRyb7HfpdfUr5qLXf3B/t8dPvcjhKMmlfnP47EzQ==}
-    dev: false
 
   /nan/2.15.0:
     resolution: {integrity: sha512-8ZtvEnA2c5aYCZYd1cvgdnU6cqwixRoYg70xPLWUws5ORTa/lnw+u4amixRS/Ac5U5mQVgp9pnlSUnbNWFaWZQ==}
@@ -22370,18 +22356,6 @@ packages:
 
   /tiny-invariant/1.1.0:
     resolution: {integrity: sha512-ytxQvrb1cPc9WBEI/HSeYYoGD0kWnGEOR8RY6KomWLBVhqz0RgTwVO9dLrGz7dC+nN9llyI7OKAgRq8Vq4ZBSw==}
-    dev: false
-
-  /tiny-secp256k1/1.1.6:
-    resolution: {integrity: sha512-FmqJZGduTyvsr2cF3375fqGHUovSwDi/QytexX1Se4BPuPZpTE5Ftp5fg+EFSuEf3lhZqgCRjEG3ydUQ/aNiwA==}
-    engines: {node: '>=6.0.0'}
-    requiresBuild: true
-    dependencies:
-      bindings: 1.5.0
-      bn.js: 4.12.0
-      create-hmac: 1.1.7
-      elliptic: 6.5.4
-      nan: 2.14.2
     dev: false
 
   /tiny-secp256k1/2.1.2:

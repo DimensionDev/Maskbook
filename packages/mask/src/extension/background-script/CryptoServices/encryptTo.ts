@@ -8,9 +8,14 @@ import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { createPostDB, PostRecord } from '../../../../background/database/post'
 import { queryPersonaByProfileDB } from '../../../../background/database/persona/db'
-import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
 import { i18n } from '../../../../shared-ui/locales_legacy'
-import { isTypedMessageText, TypedMessage, TypedMessageText, PayloadLatest } from '@masknet/shared-base'
+import {
+    isTypedMessageText,
+    TypedMessage,
+    TypedMessageText,
+    PayloadLatest,
+    compressSecp256k1Key,
+} from '@masknet/shared-base'
 import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 
 type EncryptedText = string
