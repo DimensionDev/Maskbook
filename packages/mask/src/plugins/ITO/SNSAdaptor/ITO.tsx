@@ -127,11 +127,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         bottom: theme.spacing(2),
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'self-end',
     },
     fromText: {
         opacity: 0.6,
-        transform: 'translateY(5px)',
     },
     rationWrap: {
         marginBottom: theme.spacing(1),
@@ -462,16 +461,15 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_out_of_stock_hit')
         }
 
-        const _text =
-            Number(availability?.swapped) > 0
-                ? t('plugin_ito_your_swapped_amount', {
-                      amount: formatBalance(availability?.swapped ?? 0, token.decimals),
-                      symbol: token.symbol,
-                  })
-                : t('plugin_ito_your_claimed_amount', {
-                      amount: formatBalance(tradeInfo?.buyInfo?.amount_bought ?? 0, token.decimals),
-                      symbol: token.symbol,
-                  })
+        const _text = new BigNumber(availability?.swapped ?? '0').isGreaterThan(0)
+            ? t('plugin_ito_your_swapped_amount', {
+                  amount: formatBalance(availability?.swapped ?? 0, token.decimals),
+                  symbol: token.symbol,
+              })
+            : t('plugin_ito_your_claimed_amount', {
+                  amount: formatBalance(tradeInfo?.buyInfo?.amount_bought ?? 0, token.decimals),
+                  symbol: token.symbol,
+              })
 
         if (refundAmount.isZero() || refundAmount.isLessThan(0)) {
             return `${_text}.`
@@ -513,6 +511,16 @@ export function ITO(props: ITO_Props) {
             <>
                 <Typography variant="body1">{swapResultText}</Typography>
                 {footerEndTime}
+                {hasLockTime &&
+                !isUnlocked &&
+                unlockTime > Date.now() &&
+                new BigNumber(availability?.swapped ?? '0').isGreaterThan(0) ? (
+                    <Typography>
+                        {t('plugin_ito_wait_unlock_time', {
+                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
+                        })}
+                    </Typography>
+                ) : null}
             </>
         ),
         [footerEndTime, swapResultText],
@@ -753,13 +761,7 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
-            {hasLockTime && !isUnlocked && unlockTime > Date.now() ? (
-                <Typography className={classes.claimDate}>
-                    {t('plugin_ito_wait_unlock_time', {
-                        unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
-                    })}
-                </Typography>
-            ) : null}
+
             <SwapGuide
                 status={claimDialogStatus}
                 total_remaining={total_remaining}

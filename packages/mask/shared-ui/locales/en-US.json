@@ -522,7 +522,7 @@
     "plugin_ito_sell_total_amount": "Input",
     "plugin_ito_allocation_per_wallet": "Swap Limit {{limit}} {{token}}",
     "plugin_ito_begin_time": "Start Time {{zone}}",
-    "plugin_ito_wait_unlock_time": "You can only claim after {{unlockTime}} (UTC+8)",
+    "plugin_ito_wait_unlock_time": "Claim after {{unlockTime}} (UTC+8)",
     "plugin_ito_claim": "Claim",
     "plugin_ito_claiming": "Claiming...",
     "plugin_ito_claim_all": "Claim All",
