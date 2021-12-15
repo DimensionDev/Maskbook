@@ -1,6 +1,5 @@
-import type { ProfileRecord, PersonaRecord, LinkedProfileDetails } from './Persona.db'
-import type { ReadonlyIdentifierMap } from '../IdentifierMap'
-import type { ProfileIdentifier } from '../type'
+import type { ReadonlyIdentifierMap, ProfileIdentifier } from '@masknet/shared-base'
+import type { ProfileRecord, PersonaRecord, LinkedProfileDetails } from '../../../background/database/persona/db'
 
 type TypedOmit<T, Q extends keyof T> = Omit<T, Q>
 export interface Profile extends Readonly<TypedOmit<ProfileRecord, 'localKey' | 'linkedPersona'>> {

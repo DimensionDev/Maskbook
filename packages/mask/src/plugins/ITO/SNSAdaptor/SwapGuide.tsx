@@ -1,11 +1,5 @@
-import {
-    ERC20TokenDetailed,
-    useAccount,
-    useChainId,
-    ZERO,
-    isSameAddress,
-    useTokenConstants,
-} from '@masknet/web3-shared-evm'
+import { ERC20TokenDetailed, useAccount, useChainId, isSameAddress, useTokenConstants } from '@masknet/web3-shared-evm'
+import { ZERO } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'

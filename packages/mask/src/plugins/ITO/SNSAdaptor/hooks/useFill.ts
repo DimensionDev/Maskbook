@@ -6,8 +6,6 @@ import Web3Utils from 'web3-utils'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
-    isGreaterThan,
-    ONE,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -19,6 +17,7 @@ import {
     TransactionState,
     FAKE_SIGN_PASSWORD,
 } from '@masknet/web3-shared-evm'
+import { isGreaterThan, ONE } from '@masknet/web3-shared-base'
 import { useITO_Contract } from './useITO_Contract'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'

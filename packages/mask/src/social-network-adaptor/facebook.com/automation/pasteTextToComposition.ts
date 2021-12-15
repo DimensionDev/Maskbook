@@ -1,5 +1,5 @@
 import { IntervalWatcher, LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { delay, timeout } from '../../../utils/utils'
+import { delay, timeout } from '@masknet/shared-base'
 import { isMobileFacebook } from '../utils/isMobile'
 import type { SocialNetworkUI } from '../../../social-network/types'
 import { untilDocumentReady } from '../../../utils/dom'

@@ -3,8 +3,7 @@ import { memo } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../../type'
-import type { PersonaIdentifier } from '@masknet/shared'
+import { PersonaIdentifier, DashboardRoutes } from '@masknet/shared-base'
 import { useExportPrivateKey } from '../../hooks/useExportPrivateKey'
 import { useCopyToClipboard } from 'react-use'
 
@@ -40,7 +39,7 @@ export const ExportPrivateKeyDialog = memo<ExportPrivateKeyDialogProps>(({ open,
                         <Button
                             variant="text"
                             sx={{ fontSize: 12, py: 0 }}
-                            onClick={() => navigate(RoutePaths.Settings)}>
+                            onClick={() => navigate(DashboardRoutes.Settings)}>
                             {t.settings_global_backup_title()}
                         </Button>
                     </Typography>

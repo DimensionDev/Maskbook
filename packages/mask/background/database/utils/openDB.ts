@@ -5,7 +5,7 @@ import type {
     IDBPTransaction,
     IDBPObjectStore,
     IDBPCursorWithValueIteratorValue,
-} from 'idb/with-async-ittr-cjs'
+} from 'idb/with-async-ittr'
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { MaskMessages } from '../../../shared'
 

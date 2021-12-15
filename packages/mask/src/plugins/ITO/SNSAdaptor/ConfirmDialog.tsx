@@ -5,12 +5,12 @@ import {
     formatEthereumAddress,
     FungibleTokenDetailed,
     isNative,
-    ONE,
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
     useChainId,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
+import { ONE } from '@masknet/web3-shared-base'
 import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'

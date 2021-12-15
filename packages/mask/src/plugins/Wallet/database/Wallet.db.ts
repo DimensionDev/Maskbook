@@ -1,4 +1,4 @@
-import { DBSchema, openDB } from 'idb/with-async-ittr-cjs'
+import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { createDBAccess } from '../../../../background/database/utils/openDB'
 import type {
     ERC1155TokenRecordInDatabase,

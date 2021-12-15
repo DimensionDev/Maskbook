@@ -20,6 +20,7 @@ import { TokenIcon } from '@masknet/shared'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
+import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
@@ -118,7 +119,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const tokenPrice = useNativeTokenPrice(chainId)
 
     const gasFee = useMemo(() => {
-        return gas && gasPrice ? new BigNumber(gasPrice).multipliedBy(gas).integerValue().toFixed() : '0'
+        return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'
     }, [gas, gasPrice])
 
     const feeValueUSD = useMemo(

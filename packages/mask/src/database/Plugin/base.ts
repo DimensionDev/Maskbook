@@ -1,5 +1,4 @@
-/// <reference path="../global.d.ts" />
-import { openDB, DBSchema } from 'idb/with-async-ittr-cjs'
+import { openDB, DBSchema } from 'idb/with-async-ittr'
 import { createDBAccess } from '../../../background/database/utils/openDB'
 
 type InStore = {
