@@ -366,6 +366,7 @@
     "plugin_red_packet_nft_total_amount": "Total Amount",
     "plugin_red_packet_completed": "Completed",
     "plugin_red_packet_expired": "Expired",
+    "plugin_red_packet_indivisible": "The minimum amount for each share is {{amount}} {{symbol}}",
     "plugin_nft_red_packet_data_broken": "The Lucky Drop can’t be sent due to data damage.",
     "plugin_gitcoin_readme": "By using this service, you will also be contributing 5% of your contribution to the <fund>Gitcoin grants development fund</fund>.",
     "plugin_gitcoin_readme_fund_link": "https://gitcoin.co/grants/86/gitcoin-sustainability-fund",
