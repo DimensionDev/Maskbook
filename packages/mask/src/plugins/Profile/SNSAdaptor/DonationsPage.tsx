@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react'
-import DonationCard from './components/DonationCard'
-import type { GeneralAssetWithTags } from './common/types'
-import { Typography } from '@mui/material'
-import config from './common/config'
-import Button from './components/Button'
-import { COLORS } from './common/variables'
 import { makeStyles } from '@masknet/theme'
-import formatter from './common/address'
-import { CircularProgress } from '@mui/material'
-import utils from './common/utils'
+import { CircularProgress, Link, Typography } from '@mui/material'
+import urlcat from 'urlcat'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import config from './common/config'
+import type { GeneralAssetWithTags } from './common/types'
+import { COLORS } from './common/variables'
+import Button from './components/Button'
+import DonationCard from './components/DonationCard'
+import { useDonations } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     msg: {
@@ -17,98 +16,92 @@ const useStyles = makeStyles()((theme) => ({
     primaryText: {
         color: theme.palette.primary.main,
     },
+    link: {
+        '&:hover': {
+            textDecoration: 'none',
+        },
+    },
 }))
 interface DonationPageProps {
     address: string
     isOwned: boolean
     isConnected: boolean
 }
+const getDonationLink = (address: string, asset: GeneralAssetWithTags) => {
+    return urlcat(`https://rss3.bio/:address/singlegitcoin/:platform/:identity/:id/:type`, {
+        ...asset,
+        address,
+    })
+}
 export function DonationPage(props: DonationPageProps) {
     const { address, isOwned, isConnected } = props
     const { classes } = useStyles()
 
-    const [listedDonation, setlistedDonation] = useState<GeneralAssetWithTags[]>([])
-    const [isLoading, setLoading] = useState(true)
+    const { donations, loading } = useDonations()
 
-    const toSingleDonation = (platform: string, identity: string, id: string, type: string) => {
-        window.open(
-            `https://rss3.bio/${address}/singlegitcoin/${platform}/${identity}/${id}/${type}`,
-            '_blank',
-            'noopener noreferrer',
+    if (!address) {
+        return (
+            <div className="text-center my-8">
+                <Typography className={classes.msg} variant="body1">
+                    {isOwned
+                        ? 'Please connect an Ethereum compatible wallet.'
+                        : 'This user has not connected any Ethereum compatible wallet.'}
+                </Typography>
+            </div>
         )
     }
-
-    const loadDonations = async () => {
-        const { listed } = await utils.initAssets('Gitcoin-Donation')
-        setLoading(false)
-        setlistedDonation(listed)
+    if (!isConnected) {
+        return (
+            <div className="text-center my-8">
+                <Typography className={classes.msg} variant="body1">
+                    {isOwned ? 'Please connect your RSS3 profile.' : 'This user has not connected with RSS3 yet.'}
+                </Typography>
+            </div>
+        )
     }
-
-    useEffect(() => {
-        loadDonations()
-    }, [])
-
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center">
+                <CircularProgress />
+            </div>
+        )
+    }
     return (
-        <>
-            {address !== '' ? (
-                isConnected ? (
-                    isLoading ? (
-                        <div className="flex justify-center items-center">
-                            <CircularProgress />
-                        </div>
-                    ) : (
-                        <div>
-                            <section className="flex flex-row justify-between items-center w-full gap-4">
-                                <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary">
-                                    {formatter(address)}
-                                </Typography>
-                                {isOwned ? (
-                                    <Button
-                                        isOutlined={true}
-                                        color={COLORS.donation}
-                                        text="Edit"
-                                        onClick={() => {
-                                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
-                                        }}
-                                    />
-                                ) : (
-                                    ''
-                                )}
-                            </section>
-                            <section className="grid grid-cols-1 gap-4 py-4">
-                                {listedDonation.map((asset, index) => (
-                                    <DonationCard
-                                        key={index}
-                                        imageUrl={asset.info.image_preview_url || config.undefinedImageAlt}
-                                        name={asset.info.title || 'Inactive Project'}
-                                        contribCount={asset.info.total_contribs || 0}
-                                        contribDetails={asset.info.token_contribs || []}
-                                        clickEvent={() => {
-                                            toSingleDonation(asset.platform, asset.identity, asset.id, asset.type)
-                                        }}
-                                    />
-                                ))}
-                            </section>
-                        </div>
-                    )
+        <div>
+            <section className="flex flex-row justify-between items-center w-full gap-4">
+                <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary" title={address}>
+                    {formatEthereumAddress(address, 6)}
+                </Typography>
+                {isOwned ? (
+                    <Button
+                        isOutlined={true}
+                        color={COLORS.donation}
+                        text="Edit"
+                        onClick={() => {
+                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
+                        }}
+                    />
                 ) : (
-                    <div className="text-center my-8">
-                        <Typography className={classes.msg} variant="body1">
-                            {isOwned
-                                ? 'Please connect your RSS3 profile.'
-                                : 'This user has not connected with RSS3 yet.'}
-                        </Typography>
-                    </div>
-                )
-            ) : (
-                <div className="text-center my-8">
-                    <Typography className={classes.msg} variant="body1">
-                        {isOwned
-                            ? 'Please connect an Ethereum compatible wallet.'
-                            : 'This user has not connected any Ethereum compatible wallet.'}
-                    </Typography>
-                </div>
-            )}
-        </>
+                    ''
+                )}
+            </section>
+            <section className="grid grid-cols-1 gap-4 py-4">
+                {donations.map((asset) => (
+                    <Link
+                        className={classes.link}
+                        href={getDonationLink(address, asset)}
+                        key={asset.id}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <DonationCard
+                            imageUrl={asset.info.image_preview_url || config.undefinedImageAlt}
+                            name={asset.info.title || 'Inactive Project'}
+                            contribCount={asset.info.total_contribs || 0}
+                            contribDetails={asset.info.token_contribs || []}
+                        />
+                    </Link>
+                ))}
+            </section>
+        </div>
     )
 }

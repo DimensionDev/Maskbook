@@ -7,14 +7,11 @@ interface DonationCardProps {
         token: string
         amount: string
     }[]
-    clickEvent?: () => void
 }
 
-const DonationCard = ({ imageUrl, name, contribCount, contribDetails, clickEvent = () => {} }: DonationCardProps) => {
+const DonationCard = ({ imageUrl, name, contribCount, contribDetails }: DonationCardProps) => {
     return (
-        <div
-            className="flex flex-row items-center justify-start w-full border-2 rounded cursor-pointer text-body-text bg-body-bg border-donation-bg"
-            onClick={clickEvent}>
+        <div className="flex flex-row items-center justify-start w-full border-2 rounded cursor-pointer text-body-text bg-body-bg border-donation-bg">
             <img
                 className="flex-shrink m-0.5 w-32 md:w-64 h-32 bg-cover bg-center bg-no-repeat rounded object-cover"
                 src={imageUrl}

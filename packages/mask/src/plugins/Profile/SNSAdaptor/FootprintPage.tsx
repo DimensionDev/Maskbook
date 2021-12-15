@@ -1,14 +1,13 @@
-import { useState, useEffect } from 'react'
-import FootprintCard from './components/FootprintCard'
-import type { GeneralAssetWithTags } from './common/types'
-import config from './common/config'
-import Button from './components/Button'
-import { COLORS } from './common/variables'
-import { Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import formatter from './common/address'
-import { CircularProgress } from '@mui/material'
-import utils from './common/utils'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { CircularProgress, Link, Typography } from '@mui/material'
+import urlcat from 'urlcat'
+import config from './common/config'
+import type { GeneralAssetWithTags } from './common/types'
+import { COLORS } from './common/variables'
+import Button from './components/Button'
+import FootprintCard from './components/FootprintCard'
+import { useFootprints } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     msg: {
@@ -16,6 +15,11 @@ const useStyles = makeStyles()((theme) => ({
     },
     primaryText: {
         color: theme.palette.primary.main,
+    },
+    link: {
+        '&:hover': {
+            textDecoration: 'none',
+        },
     },
 }))
 interface FootprintPageProps {
@@ -25,95 +29,84 @@ interface FootprintPageProps {
     isConnected: boolean
 }
 
+const getFootprintLink = (address: string, asset: GeneralAssetWithTags) => {
+    return urlcat(`https://rss3.bio/:address/singlefootprint/:platform/:identity/:id/:type`, {
+        ...asset,
+        address,
+    })
+}
+
 export function FootprintPage(props: FootprintPageProps) {
     const { username, address, isOwned, isConnected } = props
     const { classes } = useStyles()
 
-    const [listedFootprint, setListedFootprint] = useState<GeneralAssetWithTags[]>([])
-    const [isLoading, setLoading] = useState(true)
+    const { footprints, loading } = useFootprints()
 
-    const toSingleFootprint = (platform: string, identity: string, id: string, type: string) => {
-        window.open(
-            `https://rss3.bio/${address}/singlefootprint/${platform}/${identity}/${id}/${type}`,
-            '_blank',
-            'noopener noreferrer',
+    if (!address) {
+        return (
+            <div className="text-center my-8">
+                <Typography className={classes.msg} variant="body1">
+                    {isOwned
+                        ? 'Please connect an Ethereum compatible wallet.'
+                        : 'This user has not connected any Ethereum compatible wallet.'}
+                </Typography>
+            </div>
+        )
+    }
+    if (!isConnected) {
+        return (
+            <div className="text-center my-8">
+                <Typography className={classes.msg} variant="body1">
+                    {isOwned ? 'Please connect your RSS3 profile.' : 'This user has not connected with RSS3 yet.'}
+                </Typography>
+            </div>
+        )
+    }
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center">
+                <CircularProgress />
+            </div>
         )
     }
 
-    const loadFootprints = async () => {
-        const { listed } = await utils.initAssets('POAP')
-        setLoading(false)
-        setListedFootprint(listed)
-    }
-
-    useEffect(() => {
-        loadFootprints()
-    }, [isLoading])
-
     return (
-        <>
-            {address !== '' ? (
-                isConnected ? (
-                    isLoading ? (
-                        <div className="flex justify-center items-center">
-                            <CircularProgress />
-                        </div>
-                    ) : (
-                        <div>
-                            <section className="flex flex-row justify-between items-center w-full gap-4">
-                                <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary">
-                                    {formatter(address)}
-                                </Typography>
-                                {isOwned ? (
-                                    <Button
-                                        isOutlined={true}
-                                        color={COLORS.footprint}
-                                        text="Edit"
-                                        onClick={() => {
-                                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
-                                        }}
-                                    />
-                                ) : (
-                                    ''
-                                )}
-                            </section>
-                            <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
-                                {listedFootprint.map((asset, index) => (
-                                    <FootprintCard
-                                        key={index}
-                                        imageUrl={asset.info.image_preview_url || config.undefinedImageAlt}
-                                        startDate={asset.info.start_date}
-                                        endDate={asset.info.end_date}
-                                        city={asset.info.country}
-                                        country={asset.info.city}
-                                        username={username}
-                                        activity={asset.info.title || ''}
-                                        clickEvent={() => {
-                                            toSingleFootprint(asset.platform, asset.identity, asset.id, asset.type)
-                                        }}
-                                    />
-                                ))}
-                            </section>
-                        </div>
-                    )
-                ) : (
-                    <div className="text-center my-8">
-                        <Typography className={classes.msg} variant="body1">
-                            {isOwned
-                                ? 'Please connect your RSS3 profile.'
-                                : 'This user has not connected with RSS3 yet.'}
-                        </Typography>
-                    </div>
-                )
-            ) : (
-                <div className="text-center my-8">
-                    <Typography className={classes.msg} variant="body1">
-                        {isOwned
-                            ? 'Please connect an Ethereum compatible wallet.'
-                            : 'This user has not connected any Ethereum compatible wallet.'}
-                    </Typography>
-                </div>
-            )}
-        </>
+        <div>
+            <section className="flex flex-row justify-between items-center w-full gap-4">
+                <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary" title={address}>
+                    {formatEthereumAddress(address, 6)}
+                </Typography>
+                {isOwned ? (
+                    <Button
+                        isOutlined={true}
+                        color={COLORS.footprint}
+                        text="Edit"
+                        onClick={() => {
+                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
+                        }}
+                    />
+                ) : null}
+            </section>
+            <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
+                {footprints.map((asset) => (
+                    <Link
+                        className={classes.link}
+                        href={getFootprintLink(address, asset)}
+                        key={asset.id}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <FootprintCard
+                            imageUrl={asset.info.image_preview_url || config.undefinedImageAlt}
+                            startDate={asset.info.start_date}
+                            endDate={asset.info.end_date}
+                            city={asset.info.country}
+                            country={asset.info.city}
+                            username={username}
+                            activity={asset.info.title || ''}
+                        />
+                    </Link>
+                ))}
+            </section>
+        </div>
     )
 }

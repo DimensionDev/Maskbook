@@ -15,7 +15,7 @@ import { unreachable } from '@dimensiondev/kit'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useEthereumAddress } from '@masknet/web3-shared-evm'
 import type { RSS3Index } from 'rss3-next/types/rss3'
-import { useDao } from './hooks/useDao'
+import { useDao } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -79,13 +79,12 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             setHidden(!data.show)
         })
     }, [identity, currentAccountAddress, isConnected])
-
     const content = useMemo(() => {
         switch (currentTag) {
             case PageTags.WalletTag:
                 return <WalletsPage />
             case PageTags.NFTTag:
-                return <NFTPage address={currentAccountAddress} isOwned={isOwned} isConnected={isConnected} />
+                return <NFTPage />
             case PageTags.DonationTag:
                 return <DonationPage address={currentAccountAddress} isOwned={isOwned} isConnected={isConnected} />
             case PageTags.FootprintTag:

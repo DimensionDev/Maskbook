@@ -3,7 +3,7 @@ import { Button } from '@mui/material'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import { PageTags } from '../types'
-import type { Dao_Payload } from './hooks/useDao'
+import { useDonations, useFootprints, Dao_Payload } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -53,6 +53,12 @@ export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
     const { onChange, tag, isOwned, daoPayload } = props
     const { t } = useI18N()
+
+    const { donations } = useDonations()
+    const { footprints } = useFootprints()
+    const hasDonations = donations.length > 0
+    const hasFootprints = footprints.length > 0
+
     return (
         <div className={classes.root}>
             <Button
@@ -69,20 +75,24 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 {t('nfts')}
             </Button>
-            <Button
-                variant="outlined"
-                className={tag === PageTags.DonationTag ? classes.selected : classes.button}
-                onClick={() => onChange(PageTags.DonationTag)}
-                size="medium">
-                {t('donations')}
-            </Button>
-            <Button
-                variant="outlined"
-                className={classNames(classes.button, tag === PageTags.FootprintTag ? classes.selected : '')}
-                onClick={() => onChange(PageTags.FootprintTag)}
-                size="medium">
-                Footprints
-            </Button>
+            {hasDonations ? (
+                <Button
+                    variant="outlined"
+                    className={tag === PageTags.DonationTag ? classes.selected : classes.button}
+                    onClick={() => onChange(PageTags.DonationTag)}
+                    size="medium">
+                    {t('donations')}
+                </Button>
+            ) : null}
+            {hasFootprints ? (
+                <Button
+                    variant="outlined"
+                    className={classNames(classes.button, tag === PageTags.FootprintTag ? classes.selected : '')}
+                    onClick={() => onChange(PageTags.FootprintTag)}
+                    size="medium">
+                    Footprints
+                </Button>
+            ) : null}
             {daoPayload ? (
                 <Button
                     variant="outlined"

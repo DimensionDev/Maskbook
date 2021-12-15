@@ -10,23 +10,13 @@ interface FootprintProps {
     country: string | undefined
     username: string
     activity: string
-    clickEvent?: () => void
 }
 
 const formatDate = (ts: string): string => {
-    return new Date(parseInt(ts, 16) * 1000).toLocaleDateString('en-US')
+    return new Date(Number.parseInt(ts, 16) * 1000).toLocaleDateString('en-US')
 }
 
-const FootprintCard = ({
-    imageUrl,
-    startDate,
-    endDate,
-    city,
-    country,
-    username,
-    activity,
-    clickEvent = () => {},
-}: FootprintProps) => {
+const FootprintCard = ({ imageUrl, startDate, endDate, city, country, username, activity }: FootprintProps) => {
     // Calc display date
     let displayDate
     if (startDate && endDate) {
@@ -42,12 +32,12 @@ const FootprintCard = ({
     const location = city || country || 'Metaverse'
 
     return (
-        <div className="flex flex-row justify-start gap-2 p-4 cursor-pointer" onClick={clickEvent}>
+        <div className="flex flex-row justify-start gap-2 p-4 cursor-pointer">
             <section className="flex flex-row flex-shrink-0 w-max h-max">
                 <ImageHolder imageUrl={imageUrl} isFullRound={true} size={76} />
             </section>
             <section className="flex flex-col justify-around flex-1 text-sm leading-normal text-body-text">
-                <div className="flex flex-row items-center gap-2">
+                <div className="flex flex-row items-center gap-2 no-underline">
                     <EventRoundedIcon className="text-footprint" fontSize="small" />
                     <Typography variant="body1" color="textPrimary">
                         {displayDate}

@@ -11,10 +11,9 @@ const getTaggedOrder = (tagged: TypesWithTag): number => {
     if (!tagged.tags) {
         return -1
     }
-    // const orderPattern = /^pass:order:(-?\d+)$/i;
     for (const tag of tagged.tags) {
         if (orderPattern.test(tag)) {
-            return parseInt(orderPattern.exec(tag)?.[1] || '-1', 10)
+            return Number.parseInt(orderPattern.exec(tag)?.[1] || '-1', 10)
         }
     }
     return -1
@@ -24,7 +23,6 @@ const setTaggedOrder = (tagged: TypesWithTag, order?: number): void => {
     if (!tagged.tags) {
         tagged.tags = []
     } else {
-        // const orderPattern = /^pass:order:(-?\d+)$/i;
         const oldIndex = tagged.tags.findIndex((tag) => orderPattern.test(tag))
         if (oldIndex !== -1) {
             tagged.tags.splice(oldIndex, 1)
@@ -64,27 +62,27 @@ const setHiddenTag = async (taggeds: TypesWithTag[]): Promise<TypesWithTag[]> =>
 
 const mergeAssetsTags = async (assetsInRSS3File: RSS3Asset[], assetsGrabbed: GeneralAsset[]) => {
     return Promise.all(
-        (assetsGrabbed || []).map(async (ag: GeneralAssetWithTags) => {
-            const origType = ag.type
+        (assetsGrabbed || []).map(async (asset: GeneralAssetWithTags) => {
+            const origType = asset.type
             if (config.hideUnlistedAsstes) {
-                ag.type = 'Invalid' // Using as a match mark
+                asset.type = 'Invalid' // Using as a match mark
             }
-            for (const airf of assetsInRSS3File) {
+            for (const assetInRSS3 of assetsInRSS3File) {
                 if (
-                    airf.platform === ag.platform &&
-                    airf.identity === ag.identity &&
-                    airf.id === ag.id &&
-                    airf.type === origType
+                    assetInRSS3.platform === asset.platform &&
+                    assetInRSS3.identity === asset.identity &&
+                    assetInRSS3.id === asset.id &&
+                    assetInRSS3.type === origType
                 ) {
                     // Matched
-                    ag.type = origType // Recover type
-                    if (airf.tags) {
-                        ag.tags = airf.tags
+                    asset.type = origType // Recover type
+                    if (assetInRSS3.tags) {
+                        asset.tags = assetInRSS3.tags
                     }
                     break
                 }
             }
-            return ag
+            return asset
         }),
     )
 }

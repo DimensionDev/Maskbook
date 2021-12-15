@@ -1978,6 +1978,9 @@ video {
 .hover\:opacity-90:hover {
     opacity: 0.9;
 }
+.hover\:no-underline:hover {
+    text-decoration: none;
+}
 
 @media (min-width: 640px) {
     .sm\:grid-cols-3 {
