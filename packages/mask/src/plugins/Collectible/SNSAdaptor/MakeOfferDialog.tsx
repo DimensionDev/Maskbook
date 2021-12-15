@@ -118,7 +118,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [open])
 
     const validationMessage = useMemo(() => {
-        const amount_ = new BigNumber(rightShift(amount, token.value?.decimals) ?? '0')
+        const amount_ = rightShift(amount, token.value?.decimals)
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isNaN() || amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
