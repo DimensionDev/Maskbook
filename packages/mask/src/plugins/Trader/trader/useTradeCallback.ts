@@ -9,6 +9,7 @@ import type {
     SwapBancorRequest,
     SwapRouteSuccessResponse,
     TradeComputed,
+    SwapOOSuccessResponse,
 } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
@@ -16,6 +17,7 @@ import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallba
 import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCallback'
 import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback'
 import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback'
+import { useTradeCallback as useOpenOceanCallback } from './openocean/useTradeCallback'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
@@ -48,7 +50,9 @@ export function useTradeCallback(
         ? (tradeComputed as TradeComputed<SwapRouteSuccessResponse>)
         : null
     const tradeComputedForBancor = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapBancorRequest>) : null
-
+    const tradeComputedForOpenOcean = !isNativeTokenWrapper_
+        ? (tradeComputed as TradeComputed<SwapOOSuccessResponse>)
+        : null
     // uniswap like providers
     const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig)
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig)
@@ -66,6 +70,7 @@ export function useTradeCallback(
     const zrx = useZrxCallback(provider === TradeProvider.ZRX ? tradeComputedForZRX : null, gasConfig)
     const dodo = useDODOCallback(provider === TradeProvider.DODO ? tradeComputedForDODO : null, gasConfig)
     const bancor = useBancorCallback(provider === TradeProvider.BANCOR ? tradeComputedForBancor : null, gasConfig)
+    const openocean = useOpenOceanCallback(provider === TradeProvider.OPENOCEAN ? tradeComputedForOpenOcean : null)
 
     // the trade is an ETH-WETH pair
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
@@ -96,6 +101,8 @@ export function useTradeCallback(
             return dodo
         case TradeProvider.BANCOR:
             return bancor
+        case TradeProvider.OPENOCEAN:
+            return openocean
         default:
             if (provider) unreachable(provider)
             return []
