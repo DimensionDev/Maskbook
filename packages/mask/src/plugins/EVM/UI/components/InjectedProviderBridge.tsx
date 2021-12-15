@@ -1,15 +1,27 @@
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
+import { useMount } from 'react-use'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
-import { useValueRef } from '@masknet/shared'
-import { isInjectedProvider } from '@masknet/web3-shared-evm'
+import { ProviderType, isInjectedProvider, ChainId } from '@masknet/web3-shared-evm'
+import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
 import { EVM_Messages } from '../../messages'
-import { currentProviderSettings } from '../../../Wallet/settings'
 import Services from '../../../../extension/service'
+import { WalletRPC } from '../../../Wallet/messages'
 
 export interface InjectedProviderBridgeProps {}
 
 export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
-    const providerType = useValueRef(currentProviderSettings)
+    const chainId = useChainId<ChainId>(NetworkPluginID.PLUGIN_EVM)
+    const providerType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
+
+    const onMounted = useCallback(async () => {
+        if (providerType !== ProviderType.Coin98) return
+        const connected = await Services.Ethereum.connectInjected()
+        await WalletRPC.updateAccount({
+            account: connected.account,
+            chainId: connected.chainId,
+            providerType,
+        })
+    }, [chainId, providerType])
 
     useEffect(() => {
         return EVM_Messages.events.INJECTED_PROVIDER_RPC_REQUEST.on(async ({ payload }) => {
@@ -45,6 +57,8 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
             Services.Ethereum.notifyInjectedEvent('chainChanged', event, providerType)
         })
     }, [providerType])
+
+    useMount(onMounted)
 
     return null
 }
