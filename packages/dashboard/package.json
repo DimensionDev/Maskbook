@@ -63,6 +63,6 @@
     "buffer": "^6.0.3",
     "path-browserify": "^1.0.1",
     "stream-browserify": "^3.0.0",
-    "webpack": "^5.64.4"
+    "webpack": "^5.65.0"
   }
 }
