@@ -38,7 +38,7 @@ export interface ERC20TokenListProps extends withClasses<'list' | 'placeholder'>
 }
 
 const Placeholder = memo(({ message, height }: { message: string; height?: number | string }) => (
-    <Stack minHeight={height ?? DEFAULT_LIST_HEIGHT} justifyContent="center" alignContent="center">
+    <Stack minHeight={height ?? DEFAULT_LIST_HEIGHT} justifyContent="center" alignContent="center" marginTop="12px">
         <Typography color="textSecondary" textAlign="center">
             {message}
         </Typography>
