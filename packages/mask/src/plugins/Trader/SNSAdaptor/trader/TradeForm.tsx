@@ -27,6 +27,7 @@ import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
     return {
@@ -206,7 +207,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         onSwitch,
     }) => {
         const userSelected = useRef(false)
-        const isDashboard = location.href.includes('dashboard.html')
+        const isDashboard = isDashboardPage()
 
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard })
