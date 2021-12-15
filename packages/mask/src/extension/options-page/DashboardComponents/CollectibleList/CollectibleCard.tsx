@@ -70,7 +70,10 @@ export function CollectibleCard(props: CollectibleCardProps) {
                     <CircularProgress />
                 </Card>
             ) : (
-                <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
+                <Link
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={resolveCollectibleLink(token.contractDetailed.chainId, provider, token)}>
                     <Card className={classes.root}>
                         {readonly || !wallet ? null : (
                             <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
