@@ -58,7 +58,12 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                 <MaskPluginWrapper
                     key={x.ID}
                     pluginName={t('plugin_not_enabled', { plugin: x.name.fallback })}
-                    action={<Switch onChange={() => Services.Settings.setPluginEnabled(x.ID, true)} />}
+                    action={
+                        <Switch
+                            sx={{ marginRight: '-12px' }}
+                            onChange={() => Services.Settings.setPluginEnabled(x.ID, true)}
+                        />
+                    }
                 />
             ))}
         </>
