@@ -60,9 +60,14 @@ export const Uploading: React.FC = () => {
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
+        // PluginFileServiceRPC.getRecentFiles
+        // PluginFileServiceRPC
+        // PluginFileServiceRPC.
+        const currentProvier = state.useProvider
+        // const ProviderRPC = PluginFileServiceRPC.providers[state.useProvider]
         console.log('useProvider', state.useProvider)
         const payloadTxID = await timeout(
-            PluginFileServiceRPC.makeAttachment({
+            PluginFileServiceRPC.makeAttachment(currentProvier, {
                 key: state.key,
                 block: state.block,
                 type: state.type,
@@ -70,11 +75,11 @@ export const Uploading: React.FC = () => {
             60000, // ≈ 1 minute
         )
         setPreparing(false)
-        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
-            setSendSize(state.size * (pctComplete / 100))
-        }
+        // for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
+        //     setSendSize(state.size * (pctComplete / 100))
+        // }
         const landingTxID = await timeout(
-            PluginFileServiceRPC.uploadLandingPage({
+            PluginFileServiceRPC.uploadLandingPage(currentProvier, {
                 name: state.name,
                 size: state.size,
                 txId: payloadTxID,
@@ -86,17 +91,17 @@ export const Uploading: React.FC = () => {
         )
         const item: FileInfo = {
             type: 'file',
-            provider: 'arweave',
+            provider: currentProvier,
             id: state.checksum,
-
             name: state.name,
             size: state.size,
             createdAt: new Date(startedAt),
             key: state.key,
             payloadTxID: payloadTxID,
-            landingTxID: landingTxID,
+            landingTxID: landingTxID
         }
         await PluginFileServiceRPC.setFileInfo(item)
+        console.log('item', item)
         history.replace(FileRouter.uploaded, item)
     }, [])
     useEffect(() => {

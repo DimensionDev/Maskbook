@@ -56,7 +56,17 @@ export function Preview({ info }: { info: FileInfo }) {
             {t('plugin_file_service_unencrypted')}
         </Typography>
     )
-    const link = `https://arweave.net/${info.landingTxID}`
+
+    let linkPrefix = null
+    if (info.provider == 'arweave') {
+        linkPrefix = 'https://arweave.net/';
+    } else if (info.provider == 'ipfs') {
+        linkPrefix = 'https://infura-ipfs.io/ipfs/';
+    } else if (info.provider == 'swarm') {
+        linkPrefix = 'https://bee-2.gateway.ethswarm.org/bzz/';
+    }
+
+    const link = `${linkPrefix}${info.landingTxID}`
     const onClick = (event: React.MouseEvent) => {
         event.preventDefault()
         event.stopPropagation()

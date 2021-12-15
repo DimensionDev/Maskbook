@@ -4,7 +4,11 @@ import { create } from 'ipfs-http-client'
 import { isEmpty, isNil } from 'lodash-unified'
 import { landing } from '../constants'
 
-const client = create('https://ipfs.infura.io:5001')
+const client = create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+})
 
 export interface AttachmentOptions {
     key?: string | null
@@ -26,9 +30,6 @@ export async function makeAttachment(options: AttachmentOptions) {
 // import { ServicesWithProgress } from 'src/extension/service.ts'
 // ServicesWithProgress.pluginArweaveUpload
 export async function* upload(id: string) {
-    // for await (const uploader of instance.transactions.upload(stage[id])) {
-    //     yield uploader.pctComplete
-    // }
 }
 
 export interface LandingPageMetadata {
@@ -41,7 +42,7 @@ export interface LandingPageMetadata {
 }
 
 export async function uploadLandingPage(metadata: LandingPageMetadata) {
-    let linkPrefix: string = 'https://ipfs.infura.io/ipfs/'
+    let linkPrefix: string = 'https://ipfs.infura.io/ipfs'
     const encodedMetadata = JSON.stringify({
         name: metadata.name,
         size: metadata.size,
@@ -51,15 +52,18 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
     })
     const response = await fetch(landing)
     const text = await response.text()
-    const replaced = text.replace('__METADATA__', encodedMetadata)
+    const replaced = text
+        .replace('Arweave', 'IPFS')
+        .replace('Over Arweave', "Over IPFS")
+        .replace('__METADATA__', encodedMetadata)
     const data = encodeText(replaced)
     const fileHash = await makePayload(data, 'text/html')
     return fileHash
 }
 
 async function makePayload(data: Uint8Array, type: string) {
-    const files = await client.add(data)
-    return files[0].hash
+    const file = await client.add(data)
+    return file.cid.toString()
 }
 
 async function makeFileKeySigned(fileKey: string | undefined | null) {

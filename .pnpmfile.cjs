@@ -22,6 +22,7 @@ const approvedList = new Map([
     ['async-eventemitter', 'github:ahultgren/async-eventemitter#fa06e39e56786ba541c180061dbf2c0a5bbf951c'],
     // !!! Relative path
     ['xhr2-cookies', 'link:./package-overrides/xhr2-cookies'],
+    ['node-fetch', 'https://registry.npmjs.org/@achingbrain/node-fetch/-/node-fetch-2.6.7.tgz']
 ])
 
 /**

@@ -9,10 +9,11 @@ const BEE_HOSTS: string[] =  "https://bee-0.gateway.ethswarm.org,https://bee-1.g
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 const POSTAGE_STAMP = '0000000000000000000000000000000000000000000000000000000000000000'
-const GATEWAY_URL = 'https://gateway.ethswarm.org/';
+// const GATEWAY_URL = 'https://gateway.ethswarm.org/';
 
 export interface AttachmentOptions {
     key?: string | null
+    name: string
     type: string
     block: Uint8Array
 }
@@ -24,13 +25,13 @@ export async function makeAttachment(options: AttachmentOptions) {
         mime: isEmpty(options.type) ? 'application/octet-stream' : options.type,
         metadata: null,
     })
-    const fileHash = await makePayload(encoded, 'application/octet-stream')
+    const fileHash = await makePayload(encoded, 'application/octet-stream', options.name)
     return fileHash
 }
 
 // import { ServicesWithProgress } from 'src/extension/service.ts'
 // ServicesWithProgress.pluginArweaveUpload
-export async function* upload(id: Transaction['id']) {
+export async function* upload(id: string) {
     // for await (const uploader of instance.transactions.upload(stage[id])) {
     //     yield uploader.pctComplete
     // }
@@ -46,7 +47,7 @@ export interface LandingPageMetadata {
 }
 
 export async function uploadLandingPage(metadata: LandingPageMetadata) {
-    let linkPrefix: string = 'https://gateway.ethswarm.org/access/'
+    let linkPrefix: string = 'https://bee-2.gateway.ethswarm.org/bzz'
     const encodedMetadata = JSON.stringify({
         name: metadata.name,
         size: metadata.size,
@@ -56,9 +57,13 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
     })
     const response = await fetch(landing)
     const text = await response.text()
-    const replaced = text.replace('__METADATA__', encodedMetadata)
+    const replaced = text
+        .replace('Arweave', 'Swarm')
+        .replace('Over Arweave', "Over Swarm")
+        .replace('__METADATA__', encodedMetadata)
     const data = encodeText(replaced)
-    const fileHash = await makePayload(data, 'text/html')
+    const fileHash = await makePayload(data, 'text/html', metadata.name)
+    console.log('uploadLandingPage', fileHash)
     return fileHash
 }
 
@@ -67,18 +72,14 @@ function hashToIndex(hash: Reference | string) {
   return n % BEE_HOSTS.length
 }
 
-async function makePayload(data: Uint8Array, type: string) {
-    const files = [
-        {
-            arrayBuffer: () => data.buffer
-        }
-    ]
-    const { reference } = await randomBee.uploadFiles(POSTAGE_STAMP, files)
-    const hashIndex = hashToIndex(reference)
-     if (hashIndex !== randomIndex) {
-      const bee = new Bee(BEE_HOSTS[hashIndex])
-      await bee.uploadFiles(POSTAGE_STAMP, files)
-    }
+async function makePayload(data: Uint8Array, type: string, name: string) {
+    const { reference } = await randomBee.uploadFile(POSTAGE_STAMP, data, name, {
+        encrypt: false,
+        size: data.length,
+        contentType: type,
+        indexDocument: type == 'text/html'
+    })
+    console.log('reference', reference, type)
     return reference
 }
 

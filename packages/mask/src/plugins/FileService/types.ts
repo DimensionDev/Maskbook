@@ -1,6 +1,6 @@
 export interface FileInfo {
     type: 'file'
-    provider: 'arweave'
+    provider: string
     id: string
 
     name: string

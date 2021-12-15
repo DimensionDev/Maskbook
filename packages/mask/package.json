@@ -123,6 +123,8 @@
     "web3-eth-contract": "1.5.2",
     "web3-utils": "1.5.2",
     "webextension-polyfill": "^0.8.0",
+    "ipfs-http-client": "^54.0.2",
+    "@ethersphere/bee-js": "^3.1.0",
     "z-schema": "^5.0.2",
     "zod": "3.11.6"
   },
