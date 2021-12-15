@@ -29,7 +29,7 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
         [bases],
     )
 
-    const combinations = useMemo(() => {
+    return useMemo(() => {
         if (!tokenA || !tokenB) return []
 
         return [
@@ -63,7 +63,6 @@ export function useAllCurrencyCombinations(tradeProvider: TradeProvider, currenc
                 return true
             })
     }, [tokenA?.address, tokenB?.address, bases, basePairs, chainId, chainIdValid])
-    return combinations
 }
 
 export function useAllCommonPairs(tradeProvider: TradeProvider, currencyA?: Currency, currencyB?: Currency) {

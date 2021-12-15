@@ -1,4 +1,4 @@
-import type { Asset, ChainId, FungibleTokenDetailed } from '../types'
+import type { ChainId, FungibleTokenDetailed } from '../types'
 import { useWallet } from './useWallet'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 import { useAssetsFromChain } from './useAssetsFromChain'
@@ -7,7 +7,7 @@ import { useCallback, useMemo } from 'react'
 import { useAssetsMerged } from './useAssetsMerged'
 import { formatEthereumAddress } from '../utils'
 
-const emptyList: Asset[] = []
+const EMPTY_LIST: never[] = []
 export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | 'all') {
     const wallet = useWallet()
     const {
@@ -18,14 +18,14 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
     } = useNativeTokenDetailed(chainId === 'all' ? undefined : chainId)
 
     const {
-        value: assetsFromChain = emptyList,
+        value: assetsFromChain = EMPTY_LIST,
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
     } = useAssetsFromChain(nativeTokenDetailed ? [nativeTokenDetailed, ...tokens] : tokens)
 
     const {
-        value: assetsFromProvider = emptyList,
+        value: assetsFromProvider = EMPTY_LIST,
         loading: assetsDetailedProviderLoading,
         error: assetsDetailedProviderError,
         retry: retryAssetsDetailedDebank,

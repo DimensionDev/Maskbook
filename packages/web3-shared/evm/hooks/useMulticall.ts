@@ -132,14 +132,10 @@ export function useMulticallCallback(targetChainId?: ChainId, targetBlockNumber?
                     await Promise.all(
                         chunkArray(unresolvedCalls).map(async (chunk) => {
                             // we don't mind the actual block number of the current call
-                            try {
-                                const { returnData } = await multicallContract.methods.multicall(chunk).call(overrides)
-                                returnData.forEach((result, index) =>
-                                    setCallResult(chunk[index], result, chainId, blockNumber),
-                                )
-                            } catch (err) {
-                                console.log({ err })
-                            }
+                            const { returnData } = await multicallContract.methods.multicall(chunk).call(overrides)
+                            returnData.forEach((result, index) =>
+                                setCallResult(chunk[index], result, chainId, blockNumber),
+                            )
                         }),
                     )
                 }
