@@ -63,9 +63,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         minHeight: 405,
         boxSizing: 'border-box',
         backgroundAttachment: 'local',
-        backgroundPosition: '0 0',
+        backgroundPosition: '-40px 0',
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
+        backgroundColor: '#FF5238',
         borderRadius: theme.spacing(1),
         paddingLeft: theme.spacing(4),
         paddingRight: theme.spacing(1),
@@ -90,7 +91,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         whiteSpace: 'nowrap',
     },
     status: {
-        background: 'rgba(20, 23, 26, 0.6)',
+        background: theme.palette.mode === 'light' ? 'rgba(20, 23, 26, 0.6)' : 'rgba(239, 243, 244, 0.6)',
         padding: '5px 16px',
         whiteSpace: 'nowrap',
         borderRadius: 10,
@@ -98,10 +99,11 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     totalText: {
         display: 'flex',
         alignItems: 'center',
+        fontSize: 12,
     },
     tokenLink: {
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'self-start',
         color: '#fff',
     },
     tokenIcon: {
@@ -109,7 +111,9 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         height: 24,
     },
     totalIcon: {
-        marginLeft: theme.spacing(1),
+        marginLeft: theme.spacing(0.5),
+        width: 16,
+        height: 16,
         cursor: 'pointer',
     },
     progressWrap: {
@@ -124,11 +128,14 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         bottom: theme.spacing(2),
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: 'self-end',
+    },
+    footerInfo: {
+        fontSize: 12,
     },
     fromText: {
         opacity: 0.6,
-        transform: 'translateY(5px)',
+        fontSize: 14,
     },
     rationWrap: {
         marginBottom: theme.spacing(1),
@@ -136,8 +143,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         alignItems: 'center',
         '& > span': {
             marginLeft: theme.spacing(1),
-            fontSize: 14,
-            '& > b': {
+            fontSize: 12,
+            '& > strong': {
                 fontSize: 16,
                 fontWeight: 'bold',
             },
@@ -175,6 +182,10 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     textInOneLine: {
         whiteSpace: 'nowrap',
+    },
+    claimDate: {
+        marginTop: 16,
+        color: '#F4212E',
     },
 }))
 
@@ -308,9 +319,10 @@ export function ITO(props: ITO_Props) {
         () =>
             isAccountSeller &&
             !tradeInfo?.destructInfo &&
+            !loadingTradeInfo &&
             !availability?.exchanged_tokens.every((t) => t === '0') &&
             (listOfStatus.includes(ITO_Status.expired) || noRemain),
-        [tradeInfo, listOfStatus, isAccountSeller, noRemain],
+        [tradeInfo, listOfStatus, isAccountSeller, noRemain, loadingTradeInfo],
     )
 
     const refundAmount = useMemo(() => {
@@ -341,8 +353,8 @@ export function ITO(props: ITO_Props) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            if (claimState.type !== TransactionStateType.CONFIRMED) return
             resetClaimCallback()
+            if (claimState.type !== TransactionStateType.CONFIRMED) return
             retryITOCard()
         },
     )
@@ -416,7 +428,7 @@ export function ITO(props: ITO_Props) {
     }, [endTime, listOfStatus])
 
     useEffect(() => {
-        if (destructState.type === TransactionStateType.UNKNOWN) return
+        if (destructState.type === TransactionStateType.UNKNOWN || !canWithdraw) return
         let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
             summary += ' ' + formatBalance(total_remaining, token.decimals) + ' ' + token.symbol
@@ -433,7 +445,7 @@ export function ITO(props: ITO_Props) {
             state: destructState,
             summary,
         })
-    }, [destructState])
+    }, [destructState, canWithdraw])
 
     const onWithdraw = useCallback(async () => {
         destructCallback(payload.pid)
@@ -455,16 +467,15 @@ export function ITO(props: ITO_Props) {
             return t('plugin_ito_out_of_stock_hit')
         }
 
-        const _text =
-            Number(availability?.swapped) > 0
-                ? t('plugin_ito_your_swapped_amount', {
-                      amount: formatBalance(availability?.swapped ?? 0, token.decimals),
-                      symbol: token.symbol,
-                  })
-                : t('plugin_ito_your_claimed_amount', {
-                      amount: formatBalance(tradeInfo?.buyInfo?.amount_bought ?? 0, token.decimals),
-                      symbol: token.symbol,
-                  })
+        const _text = new BigNumber(availability?.swapped || 0).isGreaterThan(0)
+            ? t('plugin_ito_your_swapped_amount', {
+                  amount: formatBalance(availability?.swapped || 0, token.decimals),
+                  symbol: token.symbol,
+              })
+            : t('plugin_ito_your_claimed_amount', {
+                  amount: formatBalance(tradeInfo?.buyInfo?.amount_bought || 0, token.decimals),
+                  symbol: token.symbol,
+              })
 
         if (refundAmount.isZero() || refundAmount.isLessThan(0)) {
             return `${_text}.`
@@ -486,7 +497,7 @@ export function ITO(props: ITO_Props) {
 
     const footerStartTime = useMemo(() => {
         return (
-            <Typography variant="body1">
+            <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_list_start_date', { date: formatDateTime(startTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         )
@@ -494,7 +505,7 @@ export function ITO(props: ITO_Props) {
 
     const footerEndTime = useMemo(
         () => (
-            <Typography variant="body1">
+            <Typography variant="body1" className={classes.footerInfo}>
                 {t('plugin_ito_swap_end_date', { date: formatDateTime(endTime, 'yyyy-MM-dd HH:mm') })}
             </Typography>
         ),
@@ -504,8 +515,20 @@ export function ITO(props: ITO_Props) {
     const footerSwapInfo = useMemo(
         () => (
             <>
-                <Typography variant="body1">{swapResultText}</Typography>
+                <Typography variant="body1" className={classes.footerInfo}>
+                    {swapResultText}
+                </Typography>
                 {footerEndTime}
+                {hasLockTime &&
+                !isUnlocked &&
+                unlockTime > Date.now() &&
+                new BigNumber(availability?.swapped || 0).isGreaterThan(0) ? (
+                    <Typography className={classes.footerInfo}>
+                        {t('plugin_ito_wait_unlock_time', {
+                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
+                        })}
+                    </Typography>
+                ) : null}
             </>
         ),
         [footerEndTime, swapResultText],
@@ -514,7 +537,7 @@ export function ITO(props: ITO_Props) {
     const footerNormal = useMemo(
         () => (
             <>
-                <Typography variant="body1">
+                <Typography variant="body1" className={classes.footerInfo}>
                     {t('plugin_ito_allocation_per_wallet', {
                         limit: formatBalance(limit, token.decimals),
                         token: token.symbol,
@@ -562,6 +585,7 @@ export function ITO(props: ITO_Props) {
                 </Typography>
                 <Box className={classes.progressWrap}>
                     <StyledLinearProgress
+                        barColor="#fff"
                         variant="determinate"
                         value={Number(sold.multipliedBy(100).dividedBy(total))}
                     />
@@ -588,7 +612,7 @@ export function ITO(props: ITO_Props) {
                         ))}
                 </Box>
                 <Box className={classes.footer}>
-                    <div>
+                    <div className={classes.footerInfo}>
                         {isBuyer
                             ? footerSwapInfo
                             : listOfStatus.includes(ITO_Status.expired)
@@ -678,9 +702,7 @@ export function ITO(props: ITO_Props) {
                                         disabled
                                         size="large"
                                         className={classNames(classes.actionButton, classes.textInOneLine)}>
-                                        {t('plugin_ito_wait_unlock_time', {
-                                            unlockTime: formatDateTime(unlockTime!, 'yyyy-MM-dd HH:mm'),
-                                        })}
+                                        {t('plugin_ito_claim')}
                                     </ActionButton>
                                 )}
                             </Grid>
@@ -748,6 +770,7 @@ export function ITO(props: ITO_Props) {
                     </ActionButton>
                 ) : null}
             </Box>
+
             <SwapGuide
                 status={claimDialogStatus}
                 total_remaining={total_remaining}
