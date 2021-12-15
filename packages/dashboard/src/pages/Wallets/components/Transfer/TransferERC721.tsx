@@ -118,15 +118,23 @@ export const TransferERC721 = memo(() => {
 
     const allFormFields = watch()
 
+    //#region resolve ENS domain
+    const {
+        value: registeredAddress = '',
+        error: resolveDomainError,
+        loading: resolveDomainLoading,
+    } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
+    //#endregion
+
     //#region check contract address and account address
     useAsync(async () => {
         const recipient = allFormFields.recipient
         setRecipientError(null)
-        if (!recipient) return
-        if (!isValidAddress(recipient)) return
+        if (!recipient && !registeredAddress) return
+        if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
 
         clearErrors()
-        if (isSameAddress(recipient, account)) {
+        if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
             setRecipientError({
                 type: 'account',
                 message: t.wallets_transfer_error_same_address_with_current_account(),
@@ -139,15 +147,7 @@ export const TransferERC721 = memo(() => {
                 message: t.wallets_transfer_error_is_contract_address(),
             })
         }
-    }, [allFormFields.recipient, clearErrors])
-    //#endregion
-
-    //#region resolve ENS domain
-    const {
-        value: registeredAddress = '',
-        error: resolveDomainError,
-        loading: resolveDomainLoading,
-    } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
+    }, [allFormFields.recipient, clearErrors, registeredAddress])
     //#endregion
 
     const erc721GasLimit = useGasLimit(
