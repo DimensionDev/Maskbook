@@ -16,6 +16,7 @@ module.exports = {
         fastRefresh: true,
     },
     webpackFinal: async (config) => {
+        config.experiments = { asyncWebAssembly: true }
         config.resolve.fallback = {
             crypto: false,
             stream: 'stream-browserify',
