@@ -202,27 +202,25 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 </Typography>
                             }
                         />
-                        <Box sx={{ padding: 2, paddingBottom: 0 }}>
-                            {isVerified ? null : (
-                                <FormControlLabel
-                                    className={classes.label}
-                                    control={
-                                        <Checkbox
-                                            color="primary"
-                                            checked={unreviewedChecked}
-                                            onChange={(ev: ChangeEvent<HTMLInputElement>) =>
-                                                setUnreviewedChecked(ev.target.checked)
-                                            }
-                                        />
-                                    }
-                                    label={
-                                        <Typography variant="body2">
-                                            {t('plugin_collectible_approved_by_open_sea')}
-                                        </Typography>
-                                    }
-                                />
-                            )}
-                        </Box>
+                        {isVerified ? null : (
+                            <FormControlLabel
+                                className={classes.label}
+                                control={
+                                    <Checkbox
+                                        color="primary"
+                                        checked={unreviewedChecked}
+                                        onChange={(ev: ChangeEvent<HTMLInputElement>) =>
+                                            setUnreviewedChecked(ev.target.checked)
+                                        }
+                                    />
+                                }
+                                label={
+                                    <Typography variant="body2">
+                                        {t('plugin_collectible_approved_by_open_sea')}
+                                    </Typography>
+                                }
+                            />
+                        )}
                     </CardContent>
                     <CardActions className={classes.footer}>
                         <EthereumWalletConnectedBoundary>
