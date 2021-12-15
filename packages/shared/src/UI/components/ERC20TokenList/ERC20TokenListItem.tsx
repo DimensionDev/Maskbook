@@ -140,7 +140,7 @@ export const getERC20TokenListItem =
                             {isAdded && <span> • Added By User</span>}
                         </span>
                     </Typography>
-                    <Typography sx={{ fontSize: 14 }} color="textSecondary" component="span">
+                    <Typography sx={{ fontSize: 16 }} color="textSecondary" component="span">
                         {action}
                     </Typography>
                 </ListItemText>

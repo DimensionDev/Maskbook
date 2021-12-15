@@ -14,12 +14,14 @@ import { activatedSocialNetworkUI } from '../../../social-network'
 
 interface StyleProps {
     snsId: string
+    isDashboard: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { snsId, isDashboard }) => ({
     content: {
         ...(snsId === MINDS_ID ? { minWidth: 552 } : {}),
         padding: theme.spacing(3),
+        paddingTop: isDashboard ? 0 : theme.spacing(2.8),
     },
     list: {
         scrollbarWidth: 'none',
@@ -43,7 +45,11 @@ export interface SelectTokenDialogProps extends withClasses<never> {}
 
 export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
+    const isDashboard = location.href.includes('dashboard.html')
+    const classes = useStylesExtends(
+        useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier, isDashboard }),
+        props,
+    )
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     // eslint-disable-next-line import/no-deprecated
@@ -95,7 +101,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
 
     return (
         <InjectedDialog
-            titleBarIconStyle="back"
+            titleBarIconStyle={isDashboard ? 'close' : 'back'}
             open={open}
             onClose={onClose}
             title={t('plugin_wallet_select_a_token')}>
