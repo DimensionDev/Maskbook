@@ -17,7 +17,7 @@ export class FindTrumanI18n {
             if (m && m.length > 0) {
                 for (const k in options) {
                     const regexpStr = `${this.nestingPrefix}${k}${this.nestingSuffix}`
-                    key = key.replace(regexpStr, `${options[k]}`)
+                    key = key.replaceAll(regexpStr, `${options[k]}`)
                 }
             }
         }

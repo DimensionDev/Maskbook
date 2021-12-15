@@ -193,7 +193,9 @@ export function FindTruman(props: FindTrumanProps) {
                             )
                         }
                     />
-                    {postType === FindTrumanPostType.Status && <StageCard userStoryStatus={userStoryStatus} />}
+                    {postType === FindTrumanPostType.Status && userStoryStatus && (
+                        <StageCard userStoryStatus={userStoryStatus} />
+                    )}
                     {postType === FindTrumanPostType.Puzzle && userPuzzleStatus && (
                         <OptionsCard
                             type={FindTrumanPostType.Puzzle}

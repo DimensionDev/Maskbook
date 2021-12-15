@@ -100,17 +100,27 @@ export default function OptionsCard(props: OptionsViewProps) {
     const parentRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
+        checkChain()
+    }, [chainId, userStatus])
+
+    useEffect(() => {
         setChoice(userStatus ? userStatus.choice : -1)
         setSelected(userStatus ? userStatus.choice !== -1 : true)
-        setUnmeetCondition(userStatus ? userStatus.notMeetConditions : [])
-        setTimeout(() => {
-            type === FindTrumanPostType.Poll &&
-                ref?.current?.scrollTo({
-                    left: ref.current.scrollWidth,
-                    behavior: 'smooth',
-                })
-        }, 500)
     }, [userStatus])
+
+    const checkChain = () => {
+        setError('')
+        setUnmeetCondition([])
+        if (userStatus) {
+            for (const condition of userStatus.conditions) {
+                if (condition.chainId !== chainId) {
+                    setError('unsupported-chain')
+                    return
+                }
+            }
+            setUnmeetCondition(userStatus ? userStatus.notMeetConditions : [])
+        }
+    }
 
     const checkCondition = async () => {
         setError('')

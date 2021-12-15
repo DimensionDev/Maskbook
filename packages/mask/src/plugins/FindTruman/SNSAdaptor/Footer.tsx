@@ -1,4 +1,4 @@
-import { Avatar, Box, Chip, Link, Stack, Tooltip } from '@mui/material'
+import { Avatar, Box, Chip, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
@@ -28,22 +28,14 @@ export default function Footer() {
     return (
         <Box className={classes.footer}>
             {consts && (
-                <Tooltip
-                    PopperProps={{
-                        disablePortal: true,
-                    }}
-                    title={consts.faqDesc}
-                    placement="top"
-                    arrow>
-                    <Link
-                        component="a"
-                        target="_blank"
-                        href={consts.faqUrl}
-                        variant="body2"
-                        sx={{ fontWeight: 'bold', fontSize: '12px' }}>
-                        {consts.faqLabel}
-                    </Link>
-                </Tooltip>
+                <Link
+                    component="a"
+                    target="_blank"
+                    href={consts.faqUrl}
+                    variant="body2"
+                    sx={{ fontWeight: 'bold', fontSize: '12px' }}>
+                    {consts.faqLabel}
+                </Link>
             )}
             <Stack flexWrap="wrap" rowGap={1} direction="row">
                 {consts?.icons.map((e) => (
