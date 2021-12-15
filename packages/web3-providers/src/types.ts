@@ -71,7 +71,7 @@ export interface AssetCollection {
 export interface NFTAsset {
     is_verified: boolean
     collection: AssetCollection | null
-    is_auction: boolean
+    isAuction: boolean
     image_url: string
     asset_contract: { name: string; description: string; schemaName: string } | null
     current_price: number | null

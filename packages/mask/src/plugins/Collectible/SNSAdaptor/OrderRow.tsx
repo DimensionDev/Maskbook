@@ -3,19 +3,19 @@ import BigNumber from 'bignumber.js'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
-import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import {
     ChainId,
     formatBalance,
     NonFungibleAssetProvider,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
-import { isZero } from '@masknet/web3-shared-base'
+import { isZero, multipliedBy } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 import type { AssetOrder } from '@masknet/web3-providers'
+import fromUnixTime from 'date-fns/fromUnixTime'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -156,14 +156,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                             <Typography className={classes.content}>
                                 {order.expiration_time &&
                                     !isZero(order.expiration_time) &&
-                                    formatDistanceToNow(
-                                        new Date(
-                                            new BigNumber(order.expiration_time ?? 0).multipliedBy(1000).toNumber(),
-                                        ),
-                                        {
-                                            addSuffix: true,
-                                        },
-                                    )}
+                                    fromUnixTime(multipliedBy(order.expiration_time, 1000).toNumber())}
                             </Typography>
                         </TableCell>
                     ) : null}

@@ -1,7 +1,7 @@
 import type { Asset, OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
 import { ChainId, createERC20Token, createNativeToken } from '@masknet/web3-shared-evm'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '../../protocols/typed-message'
-import { PLUGIN_META_KEY, RaribleIPFSURL } from './constants'
+import { PLUGIN_META_KEY } from './constants'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types'
 import schema from './schema.json'
 import type BigNumber from 'bignumber.js'
@@ -33,9 +33,4 @@ export function toTokenIdentifier(token?: CollectibleToken) {
 
 export function toDecimalAmount(weiAmount: BigNumber.Value, decimals: number) {
     return leftShift(weiAmount, decimals).toNumber()
-}
-
-export function toRaribleImage(url?: string) {
-    if (!url) return ''
-    return `${RaribleIPFSURL}${url.replace('ipfs://ipfs/', '')}`
 }

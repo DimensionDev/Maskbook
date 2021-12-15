@@ -60,7 +60,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
         {
             name: json.name ?? 'unknown name',
             description: json.description ?? 'unknown symbol',
-            image: json.image || '',
+            mediaUrl: json.image || '',
             owner: asset.nft_holder ?? '',
         },
         asset.token_id,
@@ -97,7 +97,7 @@ async function getContractsAndBalance(address: string) {
         .sort((a, b) => a.balance - b.balance)
 }
 
-export async function getNFT(address: string, tokenId: string, chainId = ChainId.Mainnet) {
+export async function getNFT(address: string, tokenId: string, chainId: ChainId) {
     const response = await fetchAsset('getSingleNft', {
         body: JSON.stringify({
             nft_address: address,
@@ -111,14 +111,14 @@ export async function getNFT(address: string, tokenId: string, chainId = ChainId
     return createERC721TokenAsset(data)
 }
 
-export async function getNFTs(from: string, chainId = ChainId.Mainnet) {
+export async function getNFTs(from: string, chainId: ChainId) {
     let tokens: ERC721TokenDetailed[] = []
     let page = 0
     let assets
     const size = 50
     do {
         assets = await getNFTsPaged(from, { chainId, page, size })
-        if (!assets) return []
+        if (assets.length === 0) break
         tokens = tokens.concat(assets)
         page = page + 1
     } while (assets.length === size)
@@ -145,11 +145,11 @@ export async function getNFTsPaged(from: string, opts: { chainId: ChainId; page?
     return data.content.map((asset) => createERC721TokenAsset(asset))
 }
 
-export async function getContractBalance(address: string, contract_address: string, chainId: ChainId) {
+export async function getContractBalance(address: string, contractAddress: string, chainId: ChainId) {
     const response = await getContractsAndBalance(address)
     if (!response) return
 
-    return response.find((x) => isSameAddress(x.contractDetailed.address, contract_address))?.balance
+    return response.find((x) => isSameAddress(x.contractDetailed.address, contractAddress))?.balance
 }
 
 export async function getAsset(address: string, tokenId: string, chainId: ChainId) {

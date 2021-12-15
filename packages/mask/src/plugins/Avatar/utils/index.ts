@@ -24,8 +24,7 @@ export async function getNFT(address: string, tokenId: string) {
 }
 
 export async function createNFT(address: string, tokenId: string) {
-    const nft = await EVM_RPC.getNFT(address, tokenId, ChainId.Mainnet)
-    return nft
+    return EVM_RPC.getNFT(address, tokenId, ChainId.Mainnet)
 }
 
 export async function getImage(image: string): Promise<string> {

@@ -72,7 +72,7 @@ export interface MakeOfferDialogProps {
 
 export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
-    const isAuction = asset?.value?.is_auction ?? false
+    const isAuction = asset?.value?.isAuction ?? false
     const isVerified = asset?.value?.is_verified ?? false
     const paymentTokens = (isAuction ? asset?.value?.order_payment_tokens : asset?.value?.offer_payment_tokens) ?? []
     const selectedPaymentToken = first(paymentTokens)
@@ -239,7 +239,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {(isAuction ? asset.value?.is_collection_weth : asset.value?.is_order_weth) ? (
+                                {(isAuction ? asset.value?.isCollectionWeth : asset.value?.isOrderWeth) ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"

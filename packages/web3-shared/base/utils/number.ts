@@ -52,3 +52,8 @@ export function rightShift(n: BigNumber.Value, m: number | undefined | null) {
 export function leftShift(n: BigNumber.Value, m: number | undefined | null) {
     return new BigNumber(n).shiftedBy(-(m ?? 0))
 }
+
+/** a / b */
+export function dividedBy(a: BigNumber.Value, b: BigNumber.Value) {
+    return new BigNumber(a).dividedBy(b)
+}

@@ -12,7 +12,6 @@ function useCollectibleState(token?: CollectibleToken) {
 
     currentCollectibleProviderSettings.value = token?.provider ?? NonFungibleAssetProvider.OPENSEA
 
-    //const provider = useValueRef(currentCollectibleProviderSettings)
     const asset = useAsset(
         token?.contractAddress ?? '',
         token?.tokenId ?? '',

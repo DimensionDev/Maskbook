@@ -219,7 +219,7 @@ function createERC721TokenAsset(
         info: {
             name: asset?.meta.name ?? '',
             description: asset?.meta.description ?? '',
-            image: toRaribleImage(asset?.meta.image.url.ORIGINAL ?? asset?.meta.image.url.PREVIEW ?? ''),
+            mediaUrl: toRaribleImage(asset?.meta.image.url.ORIGINAL ?? asset?.meta.image.url.PREVIEW ?? ''),
             owner: asset?.owners[0],
         },
         tokenId: tokenId,
@@ -231,7 +231,7 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId) {
     const creator = first(asset?.creators)
     return {
         is_verified: false,
-        is_auction: false,
+        isAuction: false,
         token_address: asset.contract,
         image_url: toRaribleImage(asset?.meta.image.url.ORIGINAL),
         asset_contract: null,
@@ -314,7 +314,7 @@ export async function getNFTs(from: string, chainId: ChainId) {
     params.append('owner', from)
     const assetResponse = await fetchFromRarible<{ total: number; items: RaribleNFTItemMapResponse[] }>(
         RaribleChainURL,
-        `/v0.1/nft/items/byOwner?${params.toString()}`,
+        urlcat(`/v0.1/nft/items/byOwner?owner=:from}`, { from }),
         {
             method: 'GET',
             mode: 'cors',
@@ -326,21 +326,21 @@ export async function getNFTs(from: string, chainId: ChainId) {
     return assetResponse.items.map((asset) => createERC721TokenAsset(asset.contract, asset.tokenId, asset))
 }
 
-export async function getContractBalance(from: string, contract_address: string, chainId: ChainId) {
+export async function getContractBalance(from: string, contractAddress: string, chainId: ChainId) {
     const assets = await getNFTs(from, chainId)
-    return assets.filter((asset) => isSameAddress(asset.contractDetailed.address, contract_address)).length
+    return assets.filter((asset) => isSameAddress(asset.contractDetailed.address, contractAddress)).length
 }
 
 export async function getNFTsPaged(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
-    const params = new URLSearchParams()
-
-    params.append('owner', from)
-    params.append('size', (opts.size ?? '0').toString())
     const asset = await fetchFromRarible<{
         total: number
         continuation: string
         items: RaribleNFTItemMapResponse[]
-    }>(RaribleMainnetAPI_URL, `/ethereum/nft/items/byOwner?${params.toString()}`, {})
+    }>(
+        RaribleMainnetAPI_URL,
+        urlcat(`/ethereum/nft/items/byOwner?owner=:from&size=:size}`, { from, size: opts.size }),
+        {},
+    )
     if (!asset) return [] as ERC721TokenDetailed[]
 
     return asset.items.map((asset) => createERC721TokenAsset(asset.contract, asset.tokenId, asset))

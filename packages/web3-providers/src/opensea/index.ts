@@ -9,8 +9,8 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import BigNumber from 'bignumber.js'
 import {
     ChainId,
-    createERC721ContractDetailed,
     createERC721Token,
+    ERC721ContractDetailed,
     ERC721TokenDetailed,
     EthereumTokenType,
     isSameAddress,
@@ -33,12 +33,15 @@ async function fetchAsset(url: string, chainId: ChainId) {
 
 export async function getNFTsPaged(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
     const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
-    const params = new URLSearchParams()
-    params.append('owner', from.toLowerCase())
-    params.append('limit', String(size))
-    params.append('offset', String(size * page))
 
-    const asset = await fetchAsset(`${OpenSea_API_URL}/api/v1/assets?${params.toString()}`, chainId)
+    const asset = await fetchAsset(
+        urlcat(`${OpenSea_API_URL}/api/v1/assets?owner=:from&limit=:limit&offset=:offset}`, {
+            from,
+            offset: opts.page,
+            limit: opts.size,
+        }),
+        chainId,
+    )
     if (!asset) return []
 
     return asset.assets
@@ -50,21 +53,33 @@ export async function getNFTsPaged(from: string, opts: { chainId?: ChainId; page
         .map((asset: OpenSeaResponse) => createERC721TokenAsset(from, asset.token_id, chainId, asset))
 }
 
-function createERC721ContractDetailedFromAssetContract(
+function createERC721ContractDetailedAsset(
     address: string,
     chainId: ChainId,
     assetContract?: OpenSeaAssetContract,
-) {
-    return createERC721ContractDetailed(chainId, address, assetContract?.name ?? 'unknown name', '')
+): ERC721ContractDetailed {
+    return {
+        address,
+        chainId,
+        name: assetContract?.name ?? 'Unknown Token',
+        symbol: assetContract?.token_symbol ?? 'UNKNOWN',
+        baseURI: assetContract?.image_url,
+        type: EthereumTokenType.ERC721,
+    }
 }
 
-function createERC721TokenAsset(address: string, tokenId: string, chainId: ChainId, asset?: OpenSeaResponse) {
+function createERC721TokenAsset(
+    address: string,
+    tokenId: string,
+    chainId: ChainId,
+    asset?: OpenSeaResponse,
+): ERC721TokenDetailed {
     return createERC721Token(
-        createERC721ContractDetailed(chainId, address, asset?.name ?? 'unknown name', ''),
+        createERC721ContractDetailedAsset(address, chainId, asset?.asset_contract),
         {
             name: asset?.name ?? asset?.asset_contract.name ?? 'unknown name',
             description: asset?.description ?? '',
-            image: asset?.image_url_original ?? asset?.image_url ?? asset?.image_preview_url ?? '',
+            mediaUrl: asset?.image_url_original ?? asset?.image_url ?? asset?.image_preview_url ?? '',
             owner: asset?.owner.address ?? '',
         },
         tokenId,
@@ -79,10 +94,10 @@ async function _getAsset(address: string, tokenId: string, chainId: ChainId) {
     return asset
 }
 
-export async function getContract(address: string, chainId = ChainId.Mainnet) {
+export async function getContract(address: string, chainId: ChainId) {
     const assetContract = await fetchAsset(`${OpenSea_API_URL}/api/v1/asset_contract/${address}`, chainId)
 
-    return createERC721ContractDetailedFromAssetContract(address, chainId, assetContract)
+    return createERC721ContractDetailedAsset(address, chainId, assetContract)
 }
 
 export async function getNFT(address: string, tokenId: string, chainId: ChainId) {
@@ -104,10 +119,10 @@ export async function getNFTs(from: string, chainId: ChainId) {
     return tokens
 }
 
-export async function getContractBalance(address: string, contract_address: string, chainId: ChainId) {
+export async function getContractBalance(address: string, contractAddress: string, chainId: ChainId) {
     const assets = await getNFTs(address, chainId)
 
-    return assets.filter((x) => isSameAddress(x.contractDetailed.address, contract_address)).length
+    return assets.filter((x) => isSameAddress(x.contractDetailed.address, contractAddress)).length
 }
 
 function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId) {
@@ -122,7 +137,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId) {
     return {
         is_verified: ['approved', 'verified'].includes(asset.collection?.safelist_request_status ?? ''),
         // it's an IOS string as my inspection
-        is_auction: Date.parse(`${asset.endTime ?? ''}Z`) > Date.now(),
+        isAuction: Date.parse(`${asset.endTime ?? ''}Z`) > Date.now(),
         image_url: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
         asset_contract: {
             name: asset.asset_contract.name,
@@ -183,19 +198,22 @@ export async function getAsset(address: string, tokenId: string, chainId: ChainI
 }
 
 export async function getHistory(address: string, tokenId: string, chainId: ChainId) {
-    const params = new URLSearchParams()
-    params.append('asset_contract_address', address)
-    params.append('token_id', tokenId)
-    params.append('offset', '0')
-    params.append('limit', '100')
-
     const fetchResponse = await (
-        await fetch(`${OpenSea_API_URL}/api/v1/events?${params.toString()}`, {
-            mode: 'cors',
-            headers: {
-                'x-api-key': OPENSEA_API_KEY,
+        await fetch(
+            urlcat(
+                `${OpenSea_API_URL}/api/v1/events?asset_contract_address=:address&token_id=:tokenId&offset=0&limit=100`,
+                {
+                    address,
+                    tokenId,
+                },
+            ),
+            {
+                mode: 'cors',
+                headers: {
+                    'x-api-key': OPENSEA_API_KEY,
+                },
             },
-        })
+        )
     ).json()
 
     const { asset_events }: { asset_events: OpenSeaAssetEvent[] } = fetchResponse
@@ -263,20 +281,26 @@ async function fetchOrder(
     size: number,
     chainId: ChainId,
 ) {
-    const params = new URLSearchParams()
-    params.append('asset_contract_address', address)
-    params.append('token_id', tokenId)
-    params.append('side', side.toString())
-    params.append('offset', page.toString())
-    params.append('limit', size.toString())
-    const response = await fetch(`${OpenSea_API_URL}/wyvern/v1/orders?${params.toString()}`, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            Accept: 'application/json',
-            'x-api-key': OPENSEA_API_KEY,
+    const response = await fetch(
+        urlcat(
+            `${OpenSea_API_URL}/wyvern/v1/orders?asset_contract_address=:address&token_id=:tokenId&side=:side&offset=:offset&limit=:limit`,
+            {
+                address,
+                tokenId,
+                size,
+                offset: page,
+                limit: size,
+            },
+        ),
+        {
+            method: 'GET',
+            mode: 'cors',
+            headers: {
+                Accept: 'application/json',
+                'x-api-key': OPENSEA_API_KEY,
+            },
         },
-    })
+    )
 
     if (!response.ok) return []
     const { orders = [] }: { orders: AssetOrder[] } = await response.json()
@@ -300,16 +324,18 @@ export async function getOrder(address: string, tokenId: string, side: OrderSide
 }
 
 export async function getCollections(address: string, opts: { chainId: ChainId; page?: number; size?: number }) {
-    const params = new URLSearchParams()
-    params.append('offset', `${opts.page ?? '0'}`)
-    params.append('limit', `${opts.size ?? '50'}`)
-
     const { collections }: { collections: OpenSeaCollection[] } = await (
-        await fetch(`${OpenSea_API_URL}/api/v1/collections?${params.toString()}`, {
-            headers: {
-                'x-api-key': OPENSEA_API_KEY,
+        await fetch(
+            urlcat(`${OpenSea_API_URL}/api/v1/collections?offset=:offset&limit=:limit`, {
+                offset: opts.page,
+                limit: opts.size,
+            }),
+            {
+                headers: {
+                    'x-api-key': OPENSEA_API_KEY,
+                },
             },
-        })
+        )
     ).json()
 
     return collections.map((x) => ({

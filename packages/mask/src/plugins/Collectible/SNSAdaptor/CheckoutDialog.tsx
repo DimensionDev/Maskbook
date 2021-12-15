@@ -62,7 +62,7 @@ export interface CheckoutDialogProps {
 
 export function CheckoutDialog(props: CheckoutDialogProps) {
     const { asset, open, onClose, order } = props
-    const isAuction = asset?.value?.is_auction ?? false
+    const isAuction = asset?.value?.isAuction ?? false
     const isVerified = asset?.value?.is_verified ?? false
     const { showSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
@@ -182,7 +182,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {asset?.value?.is_order_weth ? (
+                                {asset?.value?.isOrderWeth ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"

@@ -866,6 +866,7 @@ importers:
   packages/web3-providers:
     specifiers:
       '@masknet/plugin-infra': workspace:*
+      '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       bignumber.js: ^9.0.1
       date-fns: ^2.27.0
@@ -874,6 +875,7 @@ importers:
       urlcat: ^2.0.4
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       bignumber.js: 9.0.1
       date-fns: 2.27.0

@@ -5,20 +5,20 @@ import { currentChainIdSettings } from '../../../Wallet/settings'
 
 export async function getNFTBalance(
     address: string,
-    contract_address: string,
+    contractAddress: string,
     chainId = currentChainIdSettings.value,
     provider = NonFungibleAssetProvider.OPENSEA,
 ) {
     let balance
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            balance = await OpenSeaApi.getContractBalance(address, contract_address, chainId)
+            balance = await OpenSeaApi.getContractBalance(address, contractAddress, chainId)
             return balance
         case NonFungibleAssetProvider.NFTSCAN:
-            balance = await NFTScanApi.getContractBalance(address, contract_address, chainId)
+            balance = await NFTScanApi.getContractBalance(address, contractAddress, chainId)
             return balance
         case NonFungibleAssetProvider.RARIBLE:
-            balance = await RaribleApi.getContractBalance(address, contract_address, chainId)
+            balance = await RaribleApi.getContractBalance(address, contractAddress, chainId)
             return balance
         default:
             unreachable(provider)

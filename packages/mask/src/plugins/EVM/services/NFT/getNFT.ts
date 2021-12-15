@@ -15,7 +15,7 @@ export async function getNFT(
             token = await OpenSeaApi.getNFT(address, tokenId, chainId)
             return token
         case NonFungibleAssetProvider.NFTSCAN:
-            token = await NFTScanApi.getNFT(address, tokenId)
+            token = await NFTScanApi.getNFT(address, tokenId, chainId)
             return token
         case NonFungibleAssetProvider.RARIBLE:
             token = await RaribleApi.getNFT(address, tokenId)

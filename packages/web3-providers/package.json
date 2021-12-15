@@ -6,6 +6,7 @@
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "bignumber.js": "^9.0.1",
     "date-fns": "^2.27.0",
     "json-stable-stringify": "^1.0.1",
