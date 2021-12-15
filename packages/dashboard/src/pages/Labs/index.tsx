@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { Box } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { PageFrame } from '../../components/PageFrame'
@@ -20,11 +21,9 @@ import {
 import { useDashboardI18N } from '../../locales'
 import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
-import { Messages, PluginMessages } from '../../API'
+import { Messages, Services, PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { Services } from '../../API'
 import { PLUGIN_IDS, TUTORIAL_URLS_EN } from './constants'
-import { useLocation } from 'react-router-dom'
 import { ContentContainer } from '../../components/ContentContainer'
 import { WalletStateBar } from '../Wallets/components/WalletStateBar'
 import { PoolTogetherURL } from '../../assets'
@@ -68,7 +67,6 @@ export default function Plugins() {
         [PLUGIN_IDS.MASK_BOX]: true,
         [PLUGIN_IDS.GOOD_GHOSTING]: true,
         [PLUGIN_IDS.POOL_TOGETHER]: true,
-        [PLUGIN_IDS.CRYPTOARTAI]: true,
     })
 
     useEffect(
@@ -180,13 +178,6 @@ export default function Plugins() {
             desc: t.labs_pool_together_desc(),
             icon: <PoolTogetherIcon />,
             enabled: pluginStatus[PLUGIN_IDS.POOL_TOGETHER],
-        },
-        {
-            id: PLUGIN_IDS.POOL_TOGETHER,
-            title: t.labs_cryptoartai(),
-            desc: t.labs_cryptoartai_desc(),
-            icon: <PoolTogetherIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.CRYPTOARTAI],
         },
     ]
 

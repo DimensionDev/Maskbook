@@ -103,6 +103,10 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
                 network: chainId,
             }).reverse(address)
 
+            if (isSameAddress(domain, ZERO_ADDRESS) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                return undefined
+            }
+
             if (domain)
                 await getStorage().domainAddressBook.setValue({
                     ...domainAddressBook,
