@@ -216,14 +216,14 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .min(1, t('wallet_transfer_error_max_priority_fee_absence'))
                     .refine(isPositive, t('wallet_transfer_error_max_priority_gas_fee_positive'))
                     .refine((value) => {
-                        return isGreaterThanOrEqualTo(value, estimateGasFees?.low.suggestedMaxPriorityFeePerGas ?? 0)
+                        return isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxPriorityFeePerGas ?? 0)
                     }, t('wallet_transfer_error_max_priority_gas_fee_too_low'))
                     .refine(
                         (value) =>
                             isLessThan(
                                 value,
                                 multipliedBy(
-                                    estimateGasFees?.high.suggestedMaxPriorityFeePerGas ?? 0,
+                                    estimateGasFees?.high?.suggestedMaxPriorityFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
@@ -233,7 +233,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                     .string()
                     .min(1, t('wallet_transfer_error_max_fee_absence'))
                     .refine(
-                        (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.low.suggestedMaxFeePerGas ?? 0),
+                        (value) => isGreaterThanOrEqualTo(value, estimateGasFees?.low?.suggestedMaxFeePerGas ?? 0),
                         t('wallet_transfer_error_max_fee_too_low'),
                     )
                     .refine(
@@ -241,7 +241,7 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
                             isLessThan(
                                 value,
                                 multipliedBy(
-                                    estimateGasFees?.high.suggestedMaxFeePerGas ?? 0,
+                                    estimateGasFees?.high?.suggestedMaxFeePerGas ?? 0,
                                     HIGH_FEE_WARNING_MULTIPLIER,
                                 ),
                             ),
@@ -324,10 +324,13 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
     //#region set default Max priority gas fee and max fee
     useUpdateEffect(() => {
         if (estimateGasFees) {
-            methods.setValue('maxFeePerGas', new BigNumber(estimateGasFees.medium.suggestedMaxFeePerGas).toString())
+            methods.setValue(
+                'maxFeePerGas',
+                new BigNumber(estimateGasFees.medium?.suggestedMaxFeePerGas ?? 0).toString(),
+            )
             methods.setValue(
                 'maxPriorityFeePerGas',
-                new BigNumber(estimateGasFees.medium.suggestedMaxPriorityFeePerGas).toString(),
+                new BigNumber(estimateGasFees.medium?.suggestedMaxPriorityFeePerGas ?? 0).toString(),
             )
         }
     }, [estimateGasFees, methods.setValue])
