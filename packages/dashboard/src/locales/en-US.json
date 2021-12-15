@@ -86,6 +86,8 @@
     "wallet_transfer_error_no_address_has_been_set_name": "The address of the receiver is invalid.",
     "wallet_transfer_error_no_ens_support": "Network does not support ENS.",
     "wallets_transfer_error_insufficient_balance": "Insufficient {{symbol}} balance",
+    "wallets_transfer_error_same_address_with_current_account": "This receiving address is the same as the sending address. Please check again.",
+    "wallets_transfer_error_is_contract_address": "The receiving address is contract address. Please check again.",
     "wallets_transfer_send": "Send",
     "wallets_transfer_memo_placeholder": "Optional message",
     "wallets_transfer_contract": "Contract",
