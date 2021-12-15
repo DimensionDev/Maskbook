@@ -30,9 +30,13 @@ interface FootprintPageProps {
 }
 
 const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
+    const { platform, identity, id, type } = footprint
     return urlcat(`https://rss3.bio/:address/singlefootprint/:platform/:identity/:id/:type`, {
-        ...footprint,
         address,
+        platform,
+        identity,
+        id,
+        type,
     })
 }
 

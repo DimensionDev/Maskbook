@@ -109,7 +109,7 @@ export function ConnectRSS3Page(props: ConnectRSS3PageProps) {
                                 <div>
                                     <Typography className={classes.msg} variant="body2" gutterBottom>
                                         By clicking the button above, you agree to the{' '}
-                                        <Link href="https://rss3.io/#privacy" target="_blank">
+                                        <Link href="https://rss3.io#privacy" target="_blank">
                                             privacy policy
                                         </Link>{' '}
                                         provided by{' '}
