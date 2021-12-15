@@ -1,5 +1,6 @@
 import { omit } from 'lodash-unified'
 import {
+    ChainId,
     ERC1155TokenDetailed,
     ERC20TokenDetailed,
     ERC721TokenDetailed,
@@ -10,7 +11,6 @@ import { unreachable } from '@dimensiondev/kit'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { PluginDB } from '../../../database/Plugin.db'
 import { asyncIteratorToArray } from '../../../../../utils'
-import { currentChainIdSettings } from '../../../settings'
 import type { ERC20TokenRecord, ERC721TokenRecord, ERC1155TokenRecord } from '../type'
 import * as walletDB from './wallet'
 
@@ -20,8 +20,8 @@ type DatabaseTokenRecord = ERC20TokenRecord | ERC721TokenRecord | ERC1155TokenRe
 
 const MAX_TOKEN_COUNT = 49
 
-function getRecordId(address: string, tokenId?: string) {
-    const recordId = `${currentChainIdSettings.value}_${address}`
+function getRecordId(chainId: ChainId, address: string, tokenId?: string) {
+    const recordId = `${chainId}_${address}`
     return tokenId ? `${recordId}_${tokenId}` : recordId
 }
 
@@ -86,12 +86,12 @@ function TokenRecordOutDatabase(type: DatabaseTokenType, token: DatabaseTokenRec
     }
 }
 
-export async function hasToken(type: DatabaseTokenType, address: string, tokenId?: string) {
-    return PluginDB.has(getDatabaseType(type), getRecordId(address, tokenId))
+export async function hasToken(chainId: ChainId, type: DatabaseTokenType, address: string, tokenId?: string) {
+    return PluginDB.has(getDatabaseType(type), getRecordId(chainId, address, tokenId))
 }
 
-export async function getToken(type: DatabaseTokenType, address: string, tokenId?: string) {
-    return PluginDB.get(getDatabaseType(type), getRecordId(address, tokenId))
+export async function getToken(chainId: ChainId, type: DatabaseTokenType, address: string, tokenId?: string) {
+    return PluginDB.get(getDatabaseType(type), getRecordId(chainId, address, tokenId))
 }
 
 export async function getTokens<T extends DatabaseTokenDetailed>(type: DatabaseTokenType) {
@@ -123,12 +123,12 @@ export async function addToken(token: DatabaseTokenDetailed) {
     const type = getTokenType(token)
     const tokenId = getTokenId(token)
     const address = getTokenAddress(token)
-    if (await hasToken(type, address)) throw new Error(`Token ${address} already exists.`)
+    if (await hasToken(token.chainId, type, address)) throw new Error(`Token ${address} already exists.`)
     const now = new Date()
     // @ts-ignore
     await PluginDB.add({
         ...token,
-        id: getRecordId(address, tokenId),
+        id: getRecordId(token.chainId, address, tokenId),
         type: getDatabaseType(type),
         createdAt: now,
         updatedAt: now,
@@ -140,8 +140,8 @@ export async function removeToken(token: DatabaseTokenDetailed) {
     const type = getTokenType(token)
     const tokenId = getTokenId(token)
     const address = getTokenAddress(token)
-    if (!(await hasToken(type, address, tokenId))) throw new Error(`Failed to remove token ${address}.`)
-    await PluginDB.remove(getDatabaseType(type), getRecordId(address, tokenId))
+    if (!(await hasToken(token.chainId, type, address, tokenId))) throw new Error(`Failed to remove token ${address}.`)
+    await PluginDB.remove(getDatabaseType(type), getRecordId(token.chainId, address, tokenId))
     getEventMessage(type).sendToAll()
 }
 

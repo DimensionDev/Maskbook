@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { InputBase, Box } from '@mui/material'
 import { useI18N } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
+import { SocialNetworkID } from '../../../shared'
 
 interface StyleProps {
     snsId: string
@@ -13,7 +13,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         flex: 1,
         fontSize: 13,
         background: '#3a3b3c',
-        width: snsId === MINDS_ID ? '96%' : '100%',
+        width: snsId === SocialNetworkID.Minds ? '96%' : '100%',
         height: 34,
         borderRadius: 20,
         padding: '2px 1em',

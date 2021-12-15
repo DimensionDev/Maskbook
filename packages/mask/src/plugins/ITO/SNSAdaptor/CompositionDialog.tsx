@@ -19,8 +19,8 @@ import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-unified'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
-import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { SocialNetworkID } from '../../../../shared'
 
 interface StyleProps {
     snsId: string
@@ -28,7 +28,7 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     content: {
-        ...(snsId === MINDS_ID ? { minWidth: 600 } : {}),
+        ...(snsId === SocialNetworkID.Minds ? { minWidth: 600 } : {}),
         position: 'relative',
         paddingTop: 50,
     },

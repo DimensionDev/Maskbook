@@ -1,9 +1,9 @@
+import { SocialNetworkID } from '../../../shared'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
-export const MINDS_ID = 'minds.com'
 const origins = ['https://www.minds.com/*', 'https://minds.com/*', 'https://cdn.minds.com/*']
 export const mindsBase: SocialNetwork.Base = {
-    networkIdentifier: MINDS_ID,
+    networkIdentifier: SocialNetworkID.Minds,
     name: 'minds',
     declarativePermissions: { origins },
     shouldActivate(location) {
@@ -12,7 +12,7 @@ export const mindsBase: SocialNetwork.Base = {
 }
 
 export function isMinds(ui: SocialNetwork.Base) {
-    return ui.networkIdentifier === MINDS_ID
+    return ui.networkIdentifier === SocialNetworkID.Minds
 }
 
 export const mindsWorkerBase: SocialNetworkWorker.WorkerBase & SocialNetwork.Base = {

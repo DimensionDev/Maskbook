@@ -29,9 +29,11 @@ export interface BalanceOfChainRecord {
 }
 
 export interface BalanceOfChains {
-    [provider: string]: {
-        [chainId: number]: string
-    }
+    [chainId: string]: string
+}
+
+export interface BlockNumberOfChains {
+    [chainId: string]: number
 }
 
 // bigint is not in our list. iOS doesn't support that.
@@ -170,6 +172,7 @@ export interface ERC721TokenDetailed {
     tokenId: string
     info: ERC721TokenInfo
     contractDetailed: ERC721ContractDetailed
+    chainId: ChainId
 }
 
 export interface ERC721TokenRecordInDatabase extends ERC721TokenDetailed {

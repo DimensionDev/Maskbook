@@ -4,6 +4,7 @@ import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import {
     EthereumTokenType,
     isSameAddress,
+    useChainId,
     useERC721ContractDetailed,
     useERC721TokenDetailedCallback,
     useWallet,
@@ -32,6 +33,7 @@ enum FormErrorType {
 
 export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onClose }) => {
     const wallet = useWallet()
+    const chainId = useChainId()
     const [address, setAddress] = useState('')
     const { value: contractDetailed, loading: contractDetailLoading } = useERC721ContractDetailed(address)
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contractDetailed)
@@ -39,7 +41,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const onSubmit = useCallback(async () => {
         if (contractDetailLoading || !wallet) return
 
-        const tokenInDB = await PluginServices.Wallet.getToken(EthereumTokenType.ERC721, address, tokenId)
+        const tokenInDB = await PluginServices.Wallet.getToken(chainId, EthereumTokenType.ERC721, address, tokenId)
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
         const tokenDetailed = await erc721TokenDetailedCallback()

@@ -1,5 +1,5 @@
-import { FACEBOOK_ID } from '../base'
+import { SocialNetworkID } from '../../../../shared'
 
 export function resolveFacebookLink(link: string, id: string) {
-    return id === FACEBOOK_ID ? link.replace(/\?fbclid=[\S\s]*#/, '#') : link
+    return id === SocialNetworkID.Facebook ? link.replace(/\?fbclid=[\S\s]*#/, '#') : link
 }

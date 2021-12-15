@@ -41,9 +41,9 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
 import { startCase } from 'lodash-unified'
-import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { SocialNetworkID } from '../../../../shared'
 
 export interface IconProps {
     size?: number
@@ -77,8 +77,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'end',
-        width: props.snsId === FACEBOOK_ID ? '98%' : '100%',
-        maxWidth: props.snsId === FACEBOOK_ID ? 'auto' : 470,
+        width: props.snsId === SocialNetworkID.Facebook ? '98%' : '100%',
+        maxWidth: props.snsId === SocialNetworkID.Facebook ? 'auto' : 470,
     },
     title: {
         fontSize: props.titleLength! > 31 ? '1.3rem' : '1.6rem',
@@ -124,7 +124,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     footer: {
         position: 'absolute',
         width: '90%',
-        maxWidth: props.snsId === FACEBOOK_ID ? 'auto' : 470,
+        maxWidth: props.snsId === SocialNetworkID.Facebook ? 'auto' : 470,
         bottom: theme.spacing(2),
         display: 'flex',
         justifyContent: 'space-between',

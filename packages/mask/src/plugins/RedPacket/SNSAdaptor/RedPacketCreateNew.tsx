@@ -3,10 +3,10 @@ import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 import { useI18N } from '../../../utils'
-import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 
 import { IconURLs } from './IconURL'
+import { SocialNetworkID } from '../../../../shared'
 
 interface StyleProps {
     snsId: string
@@ -21,7 +21,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     tabs: {
         height: 36,
         minHeight: 36,
-        margin: `0 ${snsId === MINDS_ID ? '12px' : 'auto'}`,
+        margin: `0 ${snsId === SocialNetworkID.Minds ? '12px' : 'auto'}`,
         borderRadius: 4,
         backgroundColor: theme.palette.background.default,
         '& .Mui-selected': {

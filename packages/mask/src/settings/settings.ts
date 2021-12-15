@@ -1,10 +1,11 @@
-import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
+import { createGlobalSettings, createSocialNetworkSettings, SocialNetworkSettings } from './createSettings'
 import { i18n } from '../../shared-ui/locales_legacy'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
 import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
 import { PLUGIN_ID } from '../plugins/EVM/constants'
+import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 
 /**
  * Does the debug mode on
@@ -43,28 +44,21 @@ export const pluginIDSettings = createGlobalSettings<string>('pluginID', PLUGIN_
 //#endregion
 
 //#region network setting
+export const currentSelectedIdentity: SocialNetworkSettings<string> = createSocialNetworkSettings(
+    'currentSelectedIdentity',
+    '',
+)
 
-/**
- * Expected Usage：export const currentImagePayloadStatus = createNetworkSettings('currentImagePayloadStatus')
- *
- * Work around the issue:
- *      https://github.com/microsoft/TypeScript/issues/42873
- *      https://github.com/microsoft/TypeScript/issues/30858
- *
- * References:
- *      PluginGitcoinMessages: packages/mask/src/plugins/Gitcoin/messages.ts
- *      PluginTraderMessages: packages/mask/src/plugins/Trader/messages.ts
- *      PluginTransakMessages: packages/mask/src/plugins/Transak/messages.ts
- */
-export const currentImagePayloadStatus: NetworkSettings<string> = createNetworkSettings('currentImagePayloadStatus', '')
-export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSettings('currentSelectedIdentity', '')
 export function getCurrentSelectedIdentity(network: string) {
     return Identifier.fromString<ProfileIdentifier>(currentSelectedIdentity[network].value, ProfileIdentifier).unwrapOr(
         ProfileIdentifier.unknown,
     )
 }
-export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
-export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('userGuideStatus', '')
+export const currentSetupGuideStatus: SocialNetworkSettings<string> = createSocialNetworkSettings(
+    'currentSetupGuideStatus',
+    '',
+)
+export const userGuideStatus: SocialNetworkSettings<string> = createSocialNetworkSettings('userGuideStatus', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
@@ -73,7 +67,29 @@ export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('u
  * use `useActivatedPluginsSNSAdaptor().find((x) => x.ID === PLUGIN_ID)` or
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  */
-export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
+export const currentPluginEnabledStatus: SocialNetworkSettings<boolean> = createSocialNetworkSettings(
+    'pluginsEnabled',
+    true,
+)
+//#endregion
+
+//#region web3 network settings
+export const currentAccountSettings: SocialNetworkSettings<string> = createSocialNetworkSettings(
+    'currentAccountSettings',
+    '',
+)
+export const currentChainIdSettings: SocialNetworkSettings<number> = createSocialNetworkSettings(
+    'currentChainIdSettings',
+    ChainId.Mainnet,
+)
+export const currentNetworkSettings: SocialNetworkSettings<string> = createSocialNetworkSettings(
+    'currentNetworkSettings',
+    NetworkType.Ethereum,
+)
+export const currentProviderSettings: SocialNetworkSettings<string> = createSocialNetworkSettings(
+    'currentProviderSettings',
+    ProviderType.MaskWallet,
+)
 //#endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {

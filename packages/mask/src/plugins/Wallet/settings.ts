@@ -10,6 +10,7 @@ import {
     ProviderType,
     LockStatus,
     BalanceOfChains,
+    BlockNumberOfChains,
 } from '@masknet/web3-shared-evm'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-unified'
@@ -60,6 +61,11 @@ export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDE
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
+export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
+    primary: () => i18n.t('settings_choose_eth_network'),
+    secondary: () => 'This only affects the built-in wallet.',
+})
+
 export const currentNetworkSettings = createGlobalSettings<NetworkType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletNetwork`,
     NetworkType.Ethereum,
@@ -94,14 +100,18 @@ export const currentNonFungibleAssetDataProviderSettings = createGlobalSettings<
     },
 )
 
-export const currentChainIdSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+chainId`, ChainId.Mainnet, {
-    primary: () => i18n.t('settings_choose_eth_network'),
-    secondary: () => 'This only affects the built-in wallet.',
-})
-
 export const currentBlockNumberSettings = createGlobalSettings<number>(`${PLUGIN_IDENTIFIER}+blockNumber`, 0, {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
+
+export const currentBlockNumbersSettings = createGlobalSettings<BlockNumberOfChains>(
+    `${PLUGIN_IDENTIFIER}+blockNumbers`,
+    {},
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+    (a, b) => isEqual(a, b),
+)
 
 export const currentBalanceSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+balance`, '0', {
     primary: () => 'DO NOT DISPLAY IT IN UI',

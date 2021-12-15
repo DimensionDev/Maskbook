@@ -1,9 +1,9 @@
+import { SocialNetworkID } from '../../../shared'
 import type { SocialNetwork, SocialNetworkWorker } from '../../social-network/types'
 
-const id = 'twitter.com'
 const origins = ['https://mobile.twitter.com/*', 'https://twitter.com/*']
 export const twitterBase: SocialNetwork.Base = {
-    networkIdentifier: id,
+    networkIdentifier: SocialNetworkID.Twitter,
     name: 'twitter',
     declarativePermissions: { origins },
     shouldActivate(location) {
@@ -12,7 +12,7 @@ export const twitterBase: SocialNetwork.Base = {
 }
 
 export function isTwitter(ui: SocialNetwork.Base) {
-    return ui.networkIdentifier === id
+    return ui.networkIdentifier === SocialNetworkID.Twitter
 }
 
 export const twitterWorkerBase: SocialNetworkWorker.WorkerBase & SocialNetwork.Base = {

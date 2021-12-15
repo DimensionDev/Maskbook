@@ -2,7 +2,6 @@ import { uniqBy } from 'lodash-unified'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { currentChainIdSettings } from '../../settings'
 import { PluginDB } from '../../database/Plugin.db'
 
 export const MAX_RECENT_TRANSACTIONS_SIZE = 20
@@ -90,7 +89,7 @@ export async function removeRecentTransaction(chainId: ChainId, address: string,
     await PluginDB.add({
         type: 'recent-transactions',
         id: recordId,
-        chainId: currentChainIdSettings.value,
+        chainId,
         address: formatEthereumAddress(address),
         transactions: chunk.transactions.filter((x) => x.hash !== hash),
         createdAt: chunk.createdAt,

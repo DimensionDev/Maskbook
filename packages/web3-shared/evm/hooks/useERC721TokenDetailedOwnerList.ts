@@ -140,6 +140,7 @@ export async function getERC721TokenDetailedOwnerListFromOpensea(
 
     return assets.map(
         (asset): ERC721TokenDetailed => ({
+            chainId,
             tokenId: asset.token_id,
             contractDetailed: contractDetailed ?? {
                 type: EthereumTokenType.ERC721,

@@ -1,9 +1,9 @@
+import { useRef, useState } from 'react'
+import classNames from 'classnames'
 import { useScrollBottomEvent } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography } from '@mui/material'
-import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
@@ -77,7 +77,7 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
     const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
-    const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
+    const { histories, fetchMore, loading } = useNftRedPacketHistory(chainId, account)
     const containerRef = useRef(null)
     const [popperText, setPopperText] = useState('')
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)

@@ -80,6 +80,7 @@ export function createERC721Token(
         contractDetailed,
         info,
         tokenId,
+        chainId: contractDetailed.chainId,
     }
 }
 

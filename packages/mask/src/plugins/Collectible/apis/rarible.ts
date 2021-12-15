@@ -1,4 +1,5 @@
-import { RaribleChainURL, RaribleMainnetURL } from '../constants'
+import urlcat from 'urlcat'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { compact } from 'lodash-unified'
 import { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
@@ -10,10 +11,10 @@ import {
     RaribleOfferResponse,
     RaribleProfileResponse,
 } from '../types'
+import { RaribleChainURL, RaribleMainnetURL } from '../constants'
 import { toRaribleImage } from '../helpers'
 import { resolveRaribleUserNetwork } from '../pipes'
 import { currentChainIdSettings } from '../../Wallet/settings'
-import urlcat from 'urlcat'
 
 async function fetchFromRarible<T>(root: string, subPath: string, config = {} as RequestInit) {
     const response = await (
@@ -54,7 +55,11 @@ export async function getNFTItem(tokenAddress: string, tokenId: string) {
     return assetResponse
 }
 
-export async function getOffersFromRarible(tokenAddress: string, tokenId: string) {
+export async function getOffersFromRarible(
+    chainId: ChainId.Mainnet | ChainId.Ropsten,
+    tokenAddress: string,
+    tokenId: string,
+) {
     const orders = await fetchFromRarible<RaribleOfferResponse[]>(
         RaribleMainnetURL,
         `items/${tokenAddress}:${tokenId}/offers`,
@@ -67,7 +72,6 @@ export async function getOffersFromRarible(tokenAddress: string, tokenId: string
         },
     )
     const profiles = await getProfilesFromRarible(orders.map((item) => item.maker))
-    const chainId = currentChainIdSettings.value
     return orders.map((order) => {
         const ownerInfo = profiles.find((owner) => owner.id === order.maker)
         return {
@@ -107,10 +111,15 @@ export async function getListingsFromRarible(tokenAddress: string, tokenId: stri
     })
 }
 
-export async function getOrderFromRarible(tokenAddress: string, tokenId: string, side: OrderSide) {
+export async function getOrderFromRarible(
+    chainId: ChainId.Mainnet | ChainId.Ropsten,
+    tokenAddress: string,
+    tokenId: string,
+    side: OrderSide,
+) {
     switch (side) {
         case OrderSide.Buy:
-            return getOffersFromRarible(tokenAddress, tokenId)
+            return getOffersFromRarible(chainId, tokenAddress, tokenId)
         case OrderSide.Sell:
             return getListingsFromRarible(tokenAddress, tokenId)
         default:

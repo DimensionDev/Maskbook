@@ -9,8 +9,8 @@ import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
 import { ERC20TokenList, ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
-import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
+import { SocialNetworkID } from '../../../../shared'
 
 interface StyleProps {
     snsId: string
@@ -19,7 +19,7 @@ interface StyleProps {
 
 const useStyles = makeStyles<StyleProps>()((theme, { snsId, isDashboard }) => ({
     content: {
-        ...(snsId === MINDS_ID ? { minWidth: 552 } : {}),
+        ...(snsId === SocialNetworkID.Minds ? { minWidth: 552 } : {}),
         padding: theme.spacing(3),
         paddingTop: isDashboard ? 0 : theme.spacing(2.8),
     },

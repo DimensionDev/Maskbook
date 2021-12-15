@@ -20,8 +20,7 @@ import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
-import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'
+import { SocialNetworkID } from '../../../shared'
 
 interface StyleProps {
     snsId: string
@@ -41,7 +40,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         color: theme.palette.text.primary,
     },
     paper: {
-        ...(snsId === MINDS_ID || snsId === FACEBOOK_ID ? { width: 'auto', backgroundImage: 'none' } : {}),
+        ...(snsId === SocialNetworkID.Minds || snsId === SocialNetworkID.Facebook
+            ? { width: 'auto', backgroundImage: 'none' }
+            : {}),
     },
 }))
 

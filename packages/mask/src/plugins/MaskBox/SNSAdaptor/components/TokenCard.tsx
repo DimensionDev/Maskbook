@@ -1,7 +1,12 @@
-import { makeStyles } from '@masknet/theme'
-import { ERC721ContractDetailed, NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { Typography } from '@mui/material'
 import { memo } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { Typography } from '@mui/material'
+import {
+    ChainId,
+    ERC721ContractDetailed,
+    NonFungibleAssetProvider,
+    useERC721TokenDetailed,
+} from '@masknet/web3-shared-evm'
 import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,6 +32,8 @@ export const TokenCard = memo<TokenCardProps>((props: TokenCardProps) => {
     const { classes } = useStyles()
     const {
         value: tokenDetailed = {
+            // TODO: read from currentChainIdSettings
+            chainId: ChainId.Mainnet,
             tokenId,
             contractDetailed,
             info: {},

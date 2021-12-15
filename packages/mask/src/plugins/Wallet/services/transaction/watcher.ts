@@ -4,7 +4,6 @@ import { ChainId, TransactionStateType } from '@masknet/web3-shared-evm'
 import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import * as progress from './progress'
 import * as helpers from './helpers'
-import { currentChainIdSettings } from '../../settings'
 
 let timer: NodeJS.Timer | null = null
 const WATCHED_TRANSACTION_CHECK_DELAY = 15 * 1000 // 15s
@@ -51,13 +50,12 @@ async function getTransactionReceipt(chainId: ChainId, hash: string) {
     }
 }
 
-async function checkReceipt() {
+async function checkReceipt(chainId: ChainId) {
     if (timer !== null) {
         clearTimeout(timer)
         timer = null
     }
 
-    const chainId = currentChainIdSettings.value
     const map = getTransactionMap(chainId)
     const transactions = [...map.entries()].sort(([, a], [, z]) => z.at - a.at)
     const watchedTransactions = transactions.slice(0, WATCHED_TRANSACTIONS_SIZE)
@@ -78,7 +76,7 @@ async function checkReceipt() {
 
     if (checkResult.every((x) => x.status === 'fulfilled' && x.value)) return
     if (timer !== null) clearTimeout(timer)
-    timer = setTimeout(checkReceipt, WATCHED_TRANSACTION_CHECK_DELAY)
+    timer = setTimeout(() => checkReceipt(chainId), WATCHED_TRANSACTION_CHECK_DELAY)
 }
 
 export async function getReceipt(chainId: ChainId, hash: string) {
@@ -93,7 +91,7 @@ export async function watchTransaction(chainId: ChainId, hash: string) {
             receipt: getTransactionReceipt(chainId, hash),
         })
     }
-    if (timer === null) timer = setTimeout(checkReceipt, WATCHED_TRANSACTION_CHECK_DELAY)
+    if (timer === null) timer = setTimeout(() => checkReceipt(chainId), WATCHED_TRANSACTION_CHECK_DELAY)
 }
 
 export function unwatchTransaction(chainId: ChainId, hash: string) {

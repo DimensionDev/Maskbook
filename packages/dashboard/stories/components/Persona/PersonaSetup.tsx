@@ -1,6 +1,7 @@
 import { story } from '@masknet/storybook-shared'
 import { PersonaSetup as C } from '../../../src/pages/Personas/components/PersonaSetup'
 import { action } from '@storybook/addon-actions'
+import { SocialNetworkID } from '../../../../mask/shared'
 
 const { meta, of } = story(C)
 
@@ -10,7 +11,7 @@ export default meta({
 
 export const PersonaSetup = of({
     args: {
-        networkIdentifier: 'twitter.com',
+        networkIdentifier: SocialNetworkID.Twitter,
         onConnect: action('onConnect'),
     },
 })

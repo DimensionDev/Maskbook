@@ -1,38 +1,35 @@
-import { throttle } from 'lodash-unified'
-import { BalanceOfChains, ProviderType } from '@masknet/web3-shared-evm'
+import { uniq, throttle } from 'lodash-unified'
+import { BalanceOfChains, BlockNumberOfChains, ProviderType } from '@masknet/web3-shared-evm'
 import { pollingTask } from '@masknet/shared-base'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../../utils-pure'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
-import {
-    currentMaskWalletAccountSettings,
-    currentAccountSettings,
-    currentBalanceSettings,
-    currentBlockNumberSettings,
-    currentChainIdSettings,
-    currentMaskWalletBalanceSettings,
-    currentMaskWalletChainIdSettings,
-    currentProviderSettings,
-    currentBalancesSettings,
-} from '../settings'
+import { currentBlockNumbersSettings, currentBalancesSettings } from '../settings'
+import { currentChainIdSettings, currentAccountSettings, currentProviderSettings } from '../../../settings/settings'
 
 let beats = 0
 const { run } = startEffects(import.meta.webpackHot)
 
-export async function kickToUpdateChainState() {
-    beats += 1
+const currentChainIds = [...Object.values(currentChainIdSettings)]
+const currentAccounts = [...Object.values(currentAccountSettings)]
+const currentProviders = [...Object.values(currentProviderSettings)]
+
+export async function updateBalances(updates: BalanceOfChains) {
+    currentBalancesSettings.value = {
+        ...currentBalancesSettings.value,
+        ...updates,
+    }
 }
 
-export async function updateBalances(data: BalanceOfChains) {
-    const balancesOfChains = { ...currentBalancesSettings.value }
-    for (const [key, value] of Object.entries(data)) {
-        balancesOfChains[key] = {
-            ...balancesOfChains[key],
-            ...value,
-        }
+export async function updateBlockNumbers(updates: BlockNumberOfChains) {
+    currentBlockNumbersSettings.value = {
+        ...currentBlockNumbersSettings.value,
+        ...updates,
     }
+}
 
-    currentBalancesSettings.value = balancesOfChains
+export async function kickToUpdateChainState() {
+    beats += 1
 }
 
 export async function updateChainState() {
@@ -44,29 +41,57 @@ export async function updateChainState() {
 
     // update chain state
     try {
-        ;[currentBlockNumberSettings.value, currentBalanceSettings.value, currentMaskWalletBalanceSettings.value] =
-            await Promise.all([
-                getBlockNumber(),
-                currentAccountSettings.value
-                    ? getBalance(currentAccountSettings.value, {
-                          chainId: currentChainIdSettings.value,
-                          providerType: currentProviderSettings.value,
-                      }).then((value) => {
-                          updateBalances({
-                              [currentProviderSettings.value]: {
-                                  [currentChainIdSettings.value]: value,
-                              },
-                          })
-                          return value
-                      })
-                    : currentBalanceSettings.value,
-                currentMaskWalletAccountSettings.value
-                    ? getBalance(currentMaskWalletAccountSettings.value, {
-                          chainId: currentMaskWalletChainIdSettings.value,
-                          providerType: ProviderType.MaskWallet,
-                      })
-                    : currentMaskWalletBalanceSettings.value,
-            ])
+        const chainIds = currentChainIds.map((x) => x.value)
+        const accounts = currentAccounts.map((x) => x.value)
+        const providers = currentProviders.map((x) => x.value)
+        const overrides = chainIds.map((_, index) => ({
+            chainId: chainIds[index],
+            provider: providers[index],
+        }))
+
+        // TODO:
+        // reduce rpc requests
+        const allSettled = await Promise.allSettled(
+            chainIds.map(async (_, index) => {
+                const [balance, blockNumber] = await Promise.all([
+                    getBalance(accounts[index], overrides[index]),
+                    getBlockNumber(overrides[index]),
+                ])
+                return {
+                    chainId: chainIds[index],
+                    provider: providers[index],
+                    balance,
+                    blockNumber,
+                }
+            }),
+        )
+
+        const { balances, blockNumbers } = allSettled.reduce(
+            (
+                updates: {
+                    balances: BalanceOfChains
+                    blockNumbers: BlockNumberOfChains
+                },
+                result,
+            ) => {
+                if (result.status === 'rejected') return updates
+                const { chainId, balance, blockNumber } = result.value
+                return {
+                    balances: {
+                        ...updates.balances,
+                        [chainId]: balance,
+                    },
+                    blockNumbers: {
+                        ...updates.blockNumbers,
+                        [chainId]: blockNumber,
+                    },
+                }
+            },
+            { balances: {}, blockNumbers: {} },
+        )
+
+        currentBalancesSettings.value = balances
+        currentBlockNumbersSettings.value = blockNumbers
     } catch {
         // do nothing
     } finally {
@@ -99,19 +124,16 @@ run(() => {
 })
 
 // revalidate chain state if the chainId of current provider was changed
-run(() =>
-    currentChainIdSettings.addListener(() => {
-        updateChainStateThrottled()
-        if (currentProviderSettings.value === ProviderType.MaskWallet) resetAllNonce()
-    }),
-)
-run(() =>
-    currentMaskWalletChainIdSettings.addListener(() => {
-        updateChainStateThrottled()
-        resetAllNonce()
-    }),
-)
+currentChainIds.forEach((settings, index) => {
+    run(() =>
+        settings.addListener(() => {
+            updateChainStateThrottled()
+            if (currentProviders[index].value === ProviderType.MaskWallet) resetAllNonce()
+        }),
+    )
+})
 
 // revalidate chain state if the current wallet was changed
-run(() => currentAccountSettings.addListener(() => updateChainStateThrottled()))
-run(() => currentMaskWalletAccountSettings.addListener(() => updateChainStateThrottled()))
+currentAccounts.forEach((settings) => {
+    run(() => settings.addListener(() => updateChainStateThrottled()))
+})

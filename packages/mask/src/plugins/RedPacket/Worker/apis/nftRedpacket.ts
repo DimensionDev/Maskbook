@@ -1,8 +1,7 @@
-import { EthereumTokenType, getChainName, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
+import { ChainId, EthereumTokenType, getChainName, getNftRedPacketConstants } from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first, pick } from 'lodash-unified'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
-import { currentChainIdSettings } from '../../../Wallet/settings'
 import type {
     NftRedPacketHistory,
     NftRedPacketJSONPayload,
@@ -62,8 +61,8 @@ const RED_PACKET_FIELDS = `
     }
 `
 
-async function fetchFromNFTRedPacketSubgraph<T>(query: string) {
-    const subgraphURL = getNftRedPacketConstants(currentChainIdSettings.value).SUBGRAPH_URL
+async function fetchFromNFTRedPacketSubgraph<T>(chainId: ChainId, query: string) {
+    const subgraphURL = getNftRedPacketConstants(chainId).SUBGRAPH_URL
     if (!subgraphURL) return null
     const response = await fetch(subgraphURL, {
         method: 'POST',
@@ -76,20 +75,25 @@ async function fetchFromNFTRedPacketSubgraph<T>(query: string) {
     return data
 }
 
-export async function getNftRedPacketTxid(rpid: string) {
-    const data = await fetchFromNFTRedPacketSubgraph<{ redPackets: NftRedPacketSubgraphOutMask[] }>(`
+export async function getNftRedPacketTxid(chainId: ChainId, rpid: string) {
+    const data = await fetchFromNFTRedPacketSubgraph<{ redPackets: NftRedPacketSubgraphOutMask[] }>(
+        chainId,
+        `
     {
         nftredPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
             ${RED_PACKET_FIELDS}
         }
     }
-    `)
+    `,
+    )
     return first(data?.redPackets)?.txid
 }
 
 const PAGE_SIZE = 5
-export async function getNftRedPacketHistory(address: string, page: number) {
-    const data = await fetchFromNFTRedPacketSubgraph<{ nftredPackets: NftRedPacketSubgraphOutMask[] }>(`
+export async function getNftRedPacketHistory(chainId: ChainId, address: string, page: number) {
+    const data = await fetchFromNFTRedPacketSubgraph<{ nftredPackets: NftRedPacketSubgraphOutMask[] }>(
+        chainId,
+        `
     {
         nftredPackets (
           where: { creator: "${address.toLowerCase()}" },
@@ -101,7 +105,8 @@ export async function getNftRedPacketHistory(address: string, page: number) {
             ${RED_PACKET_FIELDS}
         }
     }
-    `)
+    `,
+    )
     if (!data?.nftredPackets) return []
     return data.nftredPackets.map((x) => {
         const nftRedPacketSubgraphInMask = {

@@ -2,6 +2,8 @@ import { ValueRef, isEnvironment, Environment } from '@dimensiondev/holoflows-ki
 import Services from '../extension/service'
 import { MaskMessages } from '../utils/messages'
 import { defer } from '@masknet/shared-base'
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { SocialNetworkID } from '../../shared/types'
 
 export interface SettingsTexts {
     primary: () => string
@@ -99,17 +101,29 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     return settings
 }
 
-export interface NetworkSettings<T> {
+export interface SocialNetworkSettings<T> {
     [networkKey: string]: ValueRef<T> & { ready: boolean; readyPromise: Promise<T> }
 }
 
-export function createNetworkSettings<T extends browser.storage.StorageValue>(settingsKey: string, defaultValue: T) {
-    const cached: NetworkSettings<T> = {}
+export function createSocialNetworkSettings<T extends browser.storage.StorageValue>(
+    settingsKey: string,
+    defaultValue: T,
+) {
+    const cached: SocialNetworkSettings<T> = {}
+
+    // setup inital value
+    getEnumAsArray(SocialNetworkID).forEach(({ value }) => {
+        cached[value] = createInternalSettings(`${value}+${settingsKey}`, defaultValue)
+    })
+
+    // sync by remote updates
     MaskMessages.events.createNetworkSettingsReady.on((networkKey) => {
         if (networkKey.startsWith('plugin:') || settingsKey === 'pluginsEnabled') return
         if (!(networkKey in cached))
             cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
     })
+
+    // get or set by local updates
     return new Proxy(cached, {
         get(target, networkKey: string) {
             if (!(networkKey in target)) {

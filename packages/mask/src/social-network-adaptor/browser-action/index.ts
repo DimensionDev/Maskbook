@@ -1,9 +1,10 @@
-import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI, SocialNetwork } from '../../social-network'
-import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
 import { IdentifierMap } from '@masknet/shared-base'
+import { isEnvironment, Environment, ValueRef } from '@dimensiondev/holoflows-kit'
+import { SocialNetworkID } from '../../../shared'
+import { defineSocialNetworkUI, definedSocialNetworkUIs, SocialNetworkUI, SocialNetwork } from '../../social-network'
 
 const base: SocialNetwork.Base = {
-    networkIdentifier: 'localhost',
+    networkIdentifier: SocialNetworkID.BrowserAction,
     name: '',
     declarativePermissions: { origins: [] },
     shouldActivate(location) {
@@ -35,7 +36,7 @@ const define: SocialNetworkUI.Definition = {
         if (activeTab === undefined) return state
         const location = new URL(activeTab.url || globalThis.location.href)
         for (const ui of definedSocialNetworkUIs.values()) {
-            if (ui.shouldActivate(location) && ui.networkIdentifier !== 'localhost') {
+            if (ui.shouldActivate(location) && ui.networkIdentifier !== SocialNetworkID.BrowserAction) {
                 const _ = (await ui.load()).default
                 if (signal.aborted) return state
                 // TODO: heck, this is not what we expected.

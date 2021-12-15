@@ -193,20 +193,15 @@ export function Trader(props: TraderProps) {
         }
 
         if (chainId && currentProvider && currentAccount) {
-            const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
+            let balance = currentBalancesSettings.value[chainId]
 
-            let balance: string
-
-            if (cacheBalance) balance = cacheBalance
-            else {
+            if (!balance) {
                 balance = await Services.Ethereum.getBalance(currentAccount, {
                     chainId: chainId,
                     providerType: currentProvider,
                 })
                 await WalletRPC.updateBalances({
-                    [currentProvider]: {
-                        [chainId]: balance,
-                    },
+                    [chainId]: balance,
                 })
             }
 

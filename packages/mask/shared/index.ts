@@ -1,4 +1,5 @@
 export * from './messages'
+export * from './types'
 export * from './flags'
 export { InMemoryStorages, PersistentStorages } from './kv-storage'
 export * from './helpers/download'
