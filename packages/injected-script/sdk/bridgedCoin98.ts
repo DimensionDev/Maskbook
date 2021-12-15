@@ -4,12 +4,12 @@ import type { EthereumProvider } from '../shared'
 import { createPromise, sendEvent } from './utils'
 
 function request(data: RequestArguments) {
-    return createPromise((id) => sendEvent('ethBridgeSendRequest', id, data))
+    return createPromise((id) => sendEvent('coin98BridgeSendRequest', id, data))
 }
 
 function send(payload: JsonRpcPayload, callback: (error: Error | null, result?: JsonRpcResponse) => void) {
     createPromise((id) =>
-        sendEvent('ethBridgeSendRequest', id, {
+        sendEvent('coin98BridgeSendRequest', id, {
             method: payload.method,
             params: payload.params,
         }),
@@ -28,31 +28,31 @@ function send(payload: JsonRpcPayload, callback: (error: Error | null, result?: 
 }
 
 /** Interact with the current ethereum provider */
-export const bridgedEthereumProvider: EthereumProvider = {
+export const bridgedCoin98Provider: EthereumProvider = {
     request,
     send,
     sendAsync: send,
     on(event, callback) {
-        if (!bridgedEthereum.has(event)) {
-            bridgedEthereum.set(event, new Set())
-            sendEvent('ethBridgeRequestListen', event)
+        if (!bridgedCoin98.has(event)) {
+            bridgedCoin98.set(event, new Set())
+            sendEvent('coin98BridgeRequestListen', event)
         }
-        const map = bridgedEthereum.get(event)!
+        const map = bridgedCoin98.get(event)!
         map.add(callback)
         return () => void map.delete(callback)
     },
     getProperty(key) {
-        return createPromise((id) => sendEvent('ethBridgePrimitiveAccess', id, key))
+        return createPromise((id) => sendEvent('coin98BridgePrimitiveAccess', id, key))
     },
     untilAvailable() {
-        return createPromise((id) => sendEvent('untilEthBridgeOnline', id))
+        return createPromise((id) => sendEvent('untilCoin98BridgeOnline', id))
     },
 }
 
-const bridgedEthereum = new Map<string, Set<Function>>()
+const bridgedCoin98 = new Map<string, Set<Function>>()
 /** @internal */
-export function onEthEvent(event: string, data: unknown[]) {
-    for (const f of bridgedEthereum.get(event) || []) {
+export function onCoin98Event(event: string, data: unknown[]) {
+    for (const f of bridgedCoin98.get(event) || []) {
         try {
             Reflect.apply(f, null, data)
         } catch {}
