@@ -10,9 +10,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 
-export function toReceipt(status: '0' | '1', transaction: Transaction): TransactionReceipt {
+export function toReceipt(status: true | string, transaction: Transaction): TransactionReceipt {
     return {
-        status: status === '1',
+        status: ['1', '0x1', true].includes(status),
         transactionHash: transaction.hash,
         transactionIndex: transaction.transactionIndex ?? 0,
         blockHash: transaction.blockHash ?? '',
@@ -62,8 +62,8 @@ export function getPayloadTo(payload: JsonRpcPayload) {
 }
 
 export function getPayloadId(payload: JsonRpcPayload) {
-    if (!payload.id || payload.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return ''
-    const [config] = payload.params as [TransactionConfig]
+    const config = getPayloadConfig(payload)
+    if (!config) return ''
     const { from, to, data = '0x0', value = '0x0' } = config
     if (!from || !to) return ''
     return sha3([from, to, data, value].join('_')) ?? ''
