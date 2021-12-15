@@ -6,7 +6,6 @@ import { WalletsPage } from './WalletsPage'
 import { NFTPage } from './NFTPage'
 import { DonationPage } from './DonationsPage'
 import { FootprintPage } from './FootprintPage'
-import { ConnectRSS3Page } from './ConnectRSS3'
 import { DAOPage } from './DAOPage'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
@@ -65,7 +64,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         const rss3Username = (await (apiUser.persona as IRSS3).profile.get(pageOwner.address)).name
         setUsername(rss3Username || '')
         const rss3Sign = ((await (apiUser.persona as IRSS3).files.get(pageOwner.address)) as RSS3Index).signature
-        setConnected(rss3Sign === '' ? false : true)
+        setConnected(rss3Sign !== '')
     }
 
     useLocationChange(() => {
@@ -96,8 +95,6 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                         isConnected={isConnected}
                     />
                 )
-            case PageTags.ConnectRSS3:
-                return <ConnectRSS3Page isOwned={isOwned} />
             case PageTags.DAOTag:
                 return <DAOPage payload={daoPayload} identifier={identity.identifier} />
             default:

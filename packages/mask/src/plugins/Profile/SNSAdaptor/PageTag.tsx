@@ -102,14 +102,6 @@ export function PageTag(props: PageTagProps) {
                     {t('dao')}
                 </Button>
             ) : null}
-            {isOwned ? (
-                <Button
-                    variant="contained"
-                    className={classes.connectRSS3}
-                    onClick={() => onChange(PageTags.ConnectRSS3)}>
-                    Connect RSS3
-                </Button>
-            ) : null}
         </div>
     )
 }
