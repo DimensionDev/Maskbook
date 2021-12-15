@@ -150,7 +150,7 @@ async function checkAccount(chainId: ChainId, account: string) {
                 )
             }) ?? []
 
-        if (!watchedHash || !watchedTransaction?.payload || watchedHash !== latestTransaction.hash) continue
+        if (!watchedHash || !watchedTransaction?.payload || watchedHash === latestTransaction.hash) continue
 
         // replace the original transaction in DB
         await WalletRPC.replaceRecentTransaction(
