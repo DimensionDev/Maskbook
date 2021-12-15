@@ -60,12 +60,7 @@ export const Uploading: React.FC = () => {
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
-        // PluginFileServiceRPC.getRecentFiles
-        // PluginFileServiceRPC
-        // PluginFileServiceRPC.
         const currentProvier = state.useProvider
-        // const ProviderRPC = PluginFileServiceRPC.providers[state.useProvider]
-        console.log('useProvider', state.useProvider)
         const payloadTxID = await timeout(
             PluginFileServiceRPC.makeAttachment(currentProvier, {
                 key: state.key,
@@ -101,7 +96,6 @@ export const Uploading: React.FC = () => {
             landingTxID: landingTxID
         }
         await PluginFileServiceRPC.setFileInfo(item)
-        console.log('item', item)
         history.replace(FileRouter.uploaded, item)
     }, [])
     useEffect(() => {

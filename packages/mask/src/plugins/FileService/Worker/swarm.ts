@@ -63,7 +63,6 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
         .replace('__METADATA__', encodedMetadata)
     const data = encodeText(replaced)
     const fileHash = await makePayload(data, 'text/html', metadata.name)
-    console.log('uploadLandingPage', fileHash)
     return fileHash
 }
 
@@ -79,7 +78,6 @@ async function makePayload(data: Uint8Array, type: string, name: string) {
         contentType: type,
         indexDocument: type == 'text/html'
     })
-    console.log('reference', reference, type)
     return reference
 }
 
