@@ -170,7 +170,7 @@ export function Trader(props: TraderProps) {
     // Query the balance of native tokens on target chain
     useAsync(async () => {
         if (chainId && currentProvider && currentAccount) {
-            const cacheBalance = currentBalancesSettings.value[currentProvider][chainId]
+            const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
 
             let balance: string
 
