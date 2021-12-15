@@ -6,11 +6,7 @@ import {
     generateOthersAESKeyEncrypted as generateOthersAESKeyEncryptedV40,
     encrypt1ToN as encrypt1ToN40,
 } from './crypto-alpha-40'
-import type {
-    AESJsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_Public_JsonWebKey,
-} from '../modules/CryptoAlgorithm/interfaces/utils'
+import type { AESJsonWebKey, EC_Private_JsonWebKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
 export type PublishedAESKey = { encryptedKey: string; salt: string }
 export type PublishedAESKeyRecordV39OrV38 = {
     aesKey: PublishedAESKey

@@ -3,10 +3,9 @@ import { memo, useCallback } from 'react'
 import { getMaskColor, makeStyles, MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
-import type { PersonaIdentifier } from '@masknet/shared'
+import { PersonaIdentifier, DashboardRoutes } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../../type'
 import { WarningIcon } from '@masknet/icons'
 import { LoadingButton } from '@mui/lab'
 
@@ -38,7 +37,7 @@ export const LogoutPersonaDialog = memo<LogoutPersonaDialogProps>(({ open, onClo
             onClose()
         } else {
             onClose()
-            navigate(RoutePaths.Setup)
+            navigate(DashboardRoutes.Setup)
         }
     }, [identifier, onClose])
 

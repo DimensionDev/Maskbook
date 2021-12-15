@@ -1,12 +1,12 @@
 import { uniq } from 'lodash-unified'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { getTypedMessageContent } from '../../../protocols/typed-message'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_NAME } from '../constants'
 import type { PayloadType } from '../types'
+import { getTypedMessageContent } from '../../../protocols/typed-message'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,

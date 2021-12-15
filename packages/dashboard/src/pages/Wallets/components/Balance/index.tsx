@@ -6,7 +6,7 @@ import { CardIcon, DownloadIcon, MaskWalletIcon, SendIcon, SwapIcon } from '@mas
 import { MiniNetworkSelector } from '@masknet/shared'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useDashboardI18N } from '../../../../locales'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { NetworkPluginID } from '@masknet/plugin-infra'
 
 const BalanceContainer = styled('div')(
@@ -84,8 +84,8 @@ export const Balance = memo<BalanceCardProps>(
     ({ balance, onSend, onBuy, onSwap, onReceive, onSelectNetwork, networks, selectedNetwork, pluginId }) => {
         const t = useDashboardI18N()
 
-        const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
-        const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
+        const isWalletTransferPath = useMatch(DashboardRoutes.WalletsTransfer)
+        const isWalletHistoryPath = useMatch(DashboardRoutes.WalletsHistory)
 
         const [renderNetworks, setRenderNetworks] = useState<Web3Plugin.NetworkDescriptor[]>([])
 

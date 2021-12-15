@@ -12,7 +12,9 @@
                     { "name": "lodash", "message": "Please use lodash-unified instead." },
                     { "name": "lodash-es", "message": "Please use lodash-unified instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
-                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." }
+                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
+                    { "name": "idb", "message": "Please use idb/with-async-ittr instead." },
+                    { "name": "idb/with-async-ittr-cjs", "message": "Please use idb/with-async-ittr instead." }
                 ]
             }
         ],

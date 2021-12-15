@@ -20,9 +20,10 @@ import {
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import { delay } from '@masknet/shared-base'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
-import { delay, useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { MINIMUM_AMOUNT, UST } from '../../constants'
@@ -169,7 +170,7 @@ export function Trader(props: TraderProps) {
     // Query the balance of native tokens on target chain
     useAsync(async () => {
         if (chainId && currentProvider && currentAccount) {
-            const cacheBalance = currentBalancesSettings.value[currentProvider][chainId]
+            const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
 
             let balance: string
 

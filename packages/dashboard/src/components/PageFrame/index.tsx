@@ -24,10 +24,14 @@ import { DashboardContext } from '../DashboardFrame/context'
 import { Navigation } from '../DashboardFrame/Navigation'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { NavigationVersionFooter } from '../NavigationVersionFooter'
 
-const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
+const featurePromotionsEnabled = [
+    DashboardRoutes.Wallets,
+    DashboardRoutes.WalletsTransfer,
+    DashboardRoutes.WalletsHistory,
+]
 
 const MaskLogo = styled(Grid)`
     flex-basis: 212px;

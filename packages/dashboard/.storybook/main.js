@@ -23,12 +23,13 @@ module.exports = {
             http: false,
             https: false,
             buffer: 'buffer',
+            path: 'path-browserify',
         }
         config.module.rules.push({
             test: /\.m?js$/,
             type: 'javascript/auto',
             resolve: {
-                fullySpecified: false, // disable the behaviour
+                fullySpecified: false,
             },
         })
 
