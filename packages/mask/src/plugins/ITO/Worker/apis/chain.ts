@@ -143,7 +143,7 @@ export async function getAllPoolsAsSeller(
                 chainId,
             )
 
-            entity.payload.total_remaining = new BigNumber(data.remaining).toFixed()
+            entity.payload.total_remaining = new BigNumber(data.remaining).toString()
 
             return {
                 pool: entity.payload,

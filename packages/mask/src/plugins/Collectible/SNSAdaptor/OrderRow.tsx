@@ -109,7 +109,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                         <Typography className={classes.content}>
                             <FormattedBalance
                                 value={order.quantity ?? 0}
-                                decimals={new BigNumber(order.quantity ?? 0).toFixed() !== '1' ? 8 : 0}
+                                decimals={new BigNumber(order.quantity ?? 0).toString() !== '1' ? 8 : 0}
                                 formatter={formatBalance}
                             />
                         </Typography>

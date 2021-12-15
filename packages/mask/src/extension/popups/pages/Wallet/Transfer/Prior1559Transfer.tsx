@@ -196,7 +196,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         const gasPrice = methods.getValues('gasPrice')
         if (gasOptions && !gasPrice) {
             const gasPrice = new BigNumber(gasOptions.data.fast.price)
-            methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toFixed())
+            methods.setValue('gasPrice', formatWeiToGwei(gasPrice).toString())
         }
     }, [methods.setValue, methods.getValues, chainId])
     //#endregion
@@ -247,7 +247,7 @@ export const Prior1559Transfer = memo<Prior1559TransferProps>(({ selectedAsset, 
         async (data: zod.infer<typeof schema>) => {
             const transferAmount = rightShift(data.amount || '0', selectedAsset?.token.decimals).toFixed()
             await transferCallback(transferAmount, data.address, {
-                gasPrice: toHex(formatGweiToWei(data.gasPrice).toFixed()),
+                gasPrice: toHex(formatGweiToWei(data.gasPrice).toString()),
                 gas: new BigNumber(data.gasLimit).toNumber(),
             })
         },

@@ -143,15 +143,15 @@ const ReplaceTransaction = memo(() => {
                 if (transaction?.payload) {
                     const config = transaction.payload.params.map((param) => ({
                         ...param,
-                        gas: toHex(new BigNumber(data.gas).toFixed()),
+                        gas: toHex(new BigNumber(data.gas).toString()),
                         ...(is1559
                             ? {
                                   maxPriorityFeePerGas: toHex(
-                                      formatGweiToWei(data.maxPriorityFeePerGas ?? 0).toFixed(),
+                                      formatGweiToWei(data.maxPriorityFeePerGas ?? 0).toString(),
                                   ),
-                                  maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toFixed()),
+                                  maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas ?? 0).toString()),
                               }
-                            : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toFixed()) }),
+                            : { gasPrice: toHex(formatGweiToWei(data.gasPrice ?? 0).toString()) }),
                     }))
 
                     if (type === ReplaceType.CANCEL) {

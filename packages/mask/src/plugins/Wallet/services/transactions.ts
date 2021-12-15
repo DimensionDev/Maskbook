@@ -103,8 +103,8 @@ function fromZerion(data: ZerionTransactionItem[]) {
     return data
         .filter(({ type }) => type !== ZerionRBDTransactionType.AUTHORIZE)
         .map((transaction) => {
-            const ethGasFee = leftShift(transaction.fee?.value ?? 0, 18).toFixed()
-            const usdGasFee = multipliedBy(ethGasFee, transaction.fee?.price ?? 0).toFixed()
+            const ethGasFee = leftShift(transaction.fee?.value ?? 0, 18).toString()
+            const usdGasFee = multipliedBy(ethGasFee, transaction.fee?.price ?? 0).toString()
 
             return {
                 type: transaction.type,

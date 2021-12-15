@@ -62,7 +62,7 @@ export function getAssetInfoFromURL(url?: string) {
 export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quantity?: string) {
     if (!currentPrice || !decimals || !quantity) return
     const price = formatBalance(currentPrice, decimals)
-    const _quantity = formatBalance(quantity, new BigNumber(quantity).toFixed() !== '1' ? 8 : 0)
+    const _quantity = formatBalance(quantity, new BigNumber(quantity).toString() !== '1' ? 8 : 0)
     return new BigNumber(price).dividedBy(_quantity).toFixed(4, 1).toString()
 }
 
