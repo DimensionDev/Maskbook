@@ -1,10 +1,6 @@
 /* eslint-disable import/no-deprecated */
 
-import type {
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-    AESJsonWebKey,
-} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { EC_Public_JsonWebKey, EC_Private_JsonWebKey, AESJsonWebKey } from '@masknet/shared-base'
 
 /**
  * @deprecated History JSON backup file

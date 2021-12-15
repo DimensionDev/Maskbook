@@ -32,10 +32,7 @@ export async function syncLanguages() {
         code += `}\n`
         // Non-plugin i18n files
         if (!namespace.includes('.')) {
-            let target = `@masknet/shared`
-            if (namespace === 'shared') {
-                target += '-base'
-            }
+            const target = `@masknet/shared-base`
             code += `import { createI18NBundle } from '${target}'\n`
             code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', languages)\n`
         }

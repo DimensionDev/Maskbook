@@ -1,7 +1,6 @@
-import { consistentPersonaDBWriteAccess } from '../../../../database/Persona/Persona.db'
+import { consistentPersonaDBWriteAccess } from '../database/persona/db'
 import { IdentifierMap, Identifier, ProfileIdentifier } from '@masknet/shared-base'
-import { untilDocumentReady } from '../../../../utils'
-import { cleanAvatarDB } from '../../../../../background/database/avatar-cache/cleanup'
+import { cleanAvatarDB } from '../database/avatar-cache/cleanup'
 
 async function cleanRelationDB(anotherList: IdentifierMap<ProfileIdentifier, undefined>) {
     await consistentPersonaDBWriteAccess(async (t) => {
@@ -13,7 +12,6 @@ async function cleanRelationDB(anotherList: IdentifierMap<ProfileIdentifier, und
 }
 
 export default async function cleanProfileWithNoLinkedPersona(signal: AbortSignal) {
-    await untilDocumentReady()
     const timeout = setTimeout(cleanProfileWithNoLinkedPersona, 1000 * 60 * 60 * 24 /** 1 day */)
     signal.addEventListener('abort', () => clearTimeout(timeout))
 

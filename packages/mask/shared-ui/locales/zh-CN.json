@@ -303,7 +303,7 @@
     "plugin_wallet_settings_non_fungible_data_source_primary": "收藏品数据源",
     "plugin_wallet_settings_non_fungible_data_source_secondary": "选择收藏品的数据源。",
     "plugin_wallet_name_placeholder": "输入1-12 个字符",
-    "plugin_wallet_fail_to_sign": "密码签名失败。",
+    "plugin_wallet_fail_to_sign": "无法签名密码。",
     "plugin_wallet_cancel_sign": "签名已取消。",
     "plugin_red_packet_display_name": "插件：红包",
     "plugin_red_packet_claimed": "已认领",

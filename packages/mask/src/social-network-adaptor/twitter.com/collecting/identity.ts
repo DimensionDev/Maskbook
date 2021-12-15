@@ -1,7 +1,7 @@
 import { isNil } from 'lodash-unified'
 import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { selfInfoSelectors, searchAvatarSelector, searchAvatarMetaSelector } from '../utils/selector'
-import { ProfileIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
 import { twitterBase } from '../base'
 import { getAvatar, getBioDescription, getNickname, getTwitterId } from '../utils/user'

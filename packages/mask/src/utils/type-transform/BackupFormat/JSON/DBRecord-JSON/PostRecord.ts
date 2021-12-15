@@ -1,17 +1,17 @@
 import type { PostRecord, RecipientDetail, RecipientReason } from '../../../../../../background/database/post'
 import type { BackupJSONFileLatest } from '../latest'
 import type { RecipientReasonJSON } from '../version-2'
+import { encodeArrayBuffer, decodeArrayBuffer, unreachable } from '@dimensiondev/kit'
+import { encode, decode } from '@msgpack/msgpack'
 import {
+    type TypedMessage,
+    IdentifierMap,
     ECKeyIdentifier,
     GroupIdentifier,
     Identifier,
     PostIVIdentifier,
     ProfileIdentifier,
-} from '../../../../../database/type'
-import { IdentifierMap } from '../../../../../database/IdentifierMap'
-import { encodeArrayBuffer, decodeArrayBuffer, unreachable } from '@dimensiondev/kit'
-import { encode, decode } from '@msgpack/msgpack'
-import type { TypedMessage } from '@masknet/shared-base'
+} from '@masknet/shared-base'
 
 export function PostRecordToJSONFormat(post: PostRecord): BackupJSONFileLatest['posts'][0] {
     return {

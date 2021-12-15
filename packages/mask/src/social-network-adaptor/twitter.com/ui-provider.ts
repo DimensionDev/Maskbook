@@ -22,7 +22,7 @@ import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
-import { ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { injectEnhancedProfileTabAtTwitter } from './injection/EnhancedProfileTab'
 import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'

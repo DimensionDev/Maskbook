@@ -7,7 +7,7 @@ import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
-} from '../../../database/Persona/Persona.db'
+} from '../../../../background/database/persona/db'
 import { currySameAddress } from '@masknet/web3-shared-evm'
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
