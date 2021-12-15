@@ -1,10 +1,12 @@
 import { Alert, CardContent, Typography, Divider } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { fetchClue } from '../Worker/apis'
 import { FindTrumanContext } from '../context'
 import NoNftCard from './NoNftCard'
-import type { FindTrumanI18nFunction, PuzzleCondition } from '../types'
+import type { DecryptedClue, FindTrumanI18nFunction } from '../types'
+import { EncryptionErrorType } from '../types'
+import { useAsync } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -31,11 +33,11 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const getEncryptionError = (t: FindTrumanI18nFunction, errorCode: number) => {
+const getEncryptionError = (t: FindTrumanI18nFunction, errorCode: EncryptionErrorType) => {
     switch (errorCode) {
-        case 102:
+        case EncryptionErrorType.INSUFFICIENT_NFT:
             return t('plugin_find_truman_decrypt_102')
-        case 1004:
+        case EncryptionErrorType.ERROR_CLUE_ID:
             return t('plugin_find_truman_decrypt_1004')
         default:
             return ''
@@ -50,46 +52,30 @@ export default function EncryptionCard(props: EncryptionCardProps) {
 
     const { classes } = useStyles()
     const { address, t } = useContext(FindTrumanContext)
-    const [condition, setCondition] = useState<PuzzleCondition>()
-    const [content, setContent] = useState<string>('')
-    const [err, setErr] = useState<{
-        code: number
-        data: any
-    }>()
 
-    useEffect(() => {
-        setErr(undefined)
-        setCondition(undefined)
+    const { value: clue, error } = useAsync(async () => {
+        let clue: DecryptedClue = { decrypted: false }
         if (!!clueId) {
-            fetchClue(clueId, address)
-                .then((res) => {
-                    if (res.decrypted) {
-                        setContent(res.content || '')
-                    } else {
-                        setCondition(res.condition)
-                    }
-                })
-                .catch((error) => {
-                    setErr(error)
-                })
+            clue = await fetchClue(clueId, address)
         }
+        return clue
     }, [clueId])
 
     return (
         <CardContent>
-            {!!content && (
+            {clue?.decrypted && (
                 <>
                     <Typography variant="body1" color="text.secondary">
                         {t('plugin_find_truman_decrypted_by')}
                     </Typography>
                     <Divider sx={{ margin: '8px 0' }} />
                     <CardContent>
-                        <div dangerouslySetInnerHTML={{ __html: content }} className={classes.root} />
+                        <div dangerouslySetInnerHTML={{ __html: clue.content || '' }} className={classes.root} />
                     </CardContent>
                 </>
             )}
-            {condition && <NoNftCard conditions={[condition]} />}
-            {err && <Alert severity="info">{getEncryptionError(t, err.code)}</Alert>}
+            {clue?.condition && <NoNftCard conditions={[clue.condition]} />}
+            {error && <Alert severity="info">{getEncryptionError(t, (error as any).code)}</Alert>}
         </CardContent>
     )
 }

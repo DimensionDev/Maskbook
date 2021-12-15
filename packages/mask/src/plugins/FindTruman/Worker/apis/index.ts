@@ -11,6 +11,7 @@ import type {
     FindTrumanConst,
     DecryptedClue,
 } from '../../types'
+import urlcat from 'urlcat'
 
 const FIND_TRUMAN_API_PREFIX = 'https://findtruman.io/api'
 
@@ -39,43 +40,52 @@ function request<T>(url: string, options: any, params?: any): Promise<T> {
 }
 
 export function fetchConst(lang: string): Promise<FindTrumanConst> {
-    return request<FindTrumanConst>(`${FIND_TRUMAN_API_PREFIX}/consts?l=${lang}`, {
+    return request<FindTrumanConst>(urlcat(FIND_TRUMAN_API_PREFIX, '/consts', { lang }), {
         method: 'GET',
     })
 }
 
 export function fetchStoryInfo(storyId: string): Promise<StoryInfo> {
-    return request<StoryInfo>(`${FIND_TRUMAN_API_PREFIX}/stories/${storyId}`, {
+    return request<StoryInfo>(urlcat(FIND_TRUMAN_API_PREFIX, '/stories/:storyId', { storyId }), {
         method: 'GET',
     })
 }
 
 export function fetchUserStoryStatus(storyId: string, address: string): Promise<UserStoryStatus> {
-    return request<UserStoryStatus>(`${FIND_TRUMAN_API_PREFIX}/stories/${storyId}/status?uaddr=${address}`, {
-        method: 'GET',
-    })
+    return request<UserStoryStatus>(
+        urlcat(FIND_TRUMAN_API_PREFIX, '/stories/:storyId/status', { storyId, uaddr: address }),
+        {
+            method: 'GET',
+        },
+    )
 }
 
 export function fetchUserPuzzleStatus(puzzleId: string, address: string): Promise<UserPuzzleStatus> {
-    return request<UserPuzzleStatus>(`${FIND_TRUMAN_API_PREFIX}/puzzles/${puzzleId}/status?uaddr=${address}`, {
-        method: 'GET',
-    })
+    return request<UserPuzzleStatus>(
+        urlcat(FIND_TRUMAN_API_PREFIX, '/puzzles/:puzzleId/status', { puzzleId, uaddr: address }),
+        {
+            method: 'GET',
+        },
+    )
 }
 
 export function fetchUserPollStatus(pollId: string, address: string): Promise<UserPollStatus> {
-    return request<UserPollStatus>(`${FIND_TRUMAN_API_PREFIX}/polls/${pollId}/status?uaddr=${address}`, {
-        method: 'GET',
-    })
+    return request<UserPollStatus>(
+        urlcat(FIND_TRUMAN_API_PREFIX, '/polls/:pollId/status', { pollId, uaddr: address }),
+        {
+            method: 'GET',
+        },
+    )
 }
 
 export function fetchPuzzleResult(puzzleId: string): Promise<PuzzleResult> {
-    return request<PuzzleResult>(`${FIND_TRUMAN_API_PREFIX}/puzzles/${puzzleId}/result`, {
+    return request<PuzzleResult>(urlcat(FIND_TRUMAN_API_PREFIX, '/puzzles/:puzzleId/result', { puzzleId }), {
         method: 'GET',
     })
 }
 
 export function fetchPollResult(pollId: string): Promise<PollResult> {
-    return request<PollResult>(`${FIND_TRUMAN_API_PREFIX}/polls/${pollId}/result`, {
+    return request<PollResult>(urlcat(FIND_TRUMAN_API_PREFIX, '/polls/:pollId/result', { pollId }), {
         method: 'GET',
     })
 }
@@ -85,7 +95,7 @@ export function submitPuzzle(address: string, param: SubmitPuzzleParams): Promis
         try {
             const sig = await Services.Ethereum.personalSign(JSON.stringify(param), address)
             const res = await request<string>(
-                `${FIND_TRUMAN_API_PREFIX}/puzzles/submit`,
+                urlcat(FIND_TRUMAN_API_PREFIX, '/puzzles/submit'),
                 {
                     method: 'POST',
                 },
@@ -106,7 +116,7 @@ export function submitPoll(address: string, param: SubmitPollParams): Promise<st
         try {
             const sig = await Services.Ethereum.personalSign(JSON.stringify(param), address)
             const res = await request<string>(
-                `${FIND_TRUMAN_API_PREFIX}/polls/submit`,
+                urlcat(FIND_TRUMAN_API_PREFIX, '/polls/submit'),
                 {
                     method: 'POST',
                 },
@@ -123,13 +133,16 @@ export function submitPoll(address: string, param: SubmitPollParams): Promise<st
 }
 
 export function fetchUserParticipatedStoryStatus(address: string): Promise<UserStoryStatus[]> {
-    return request<UserStoryStatus[]>(`${FIND_TRUMAN_API_PREFIX}/participated_story_status?uaddr=${address}`, {
-        method: 'GET',
-    })
+    return request<UserStoryStatus[]>(
+        urlcat(FIND_TRUMAN_API_PREFIX, '/participated_story_status', { uaddr: address }),
+        {
+            method: 'GET',
+        },
+    )
 }
 
 export function fetchClue(clueId: string, address: string): Promise<DecryptedClue> {
-    return request<DecryptedClue>(`${FIND_TRUMAN_API_PREFIX}/clues/${clueId}?uaddr=${address}`, {
+    return request<DecryptedClue>(urlcat(FIND_TRUMAN_API_PREFIX, '/clues/:clueId', { clueId, uaddr: address }), {
         method: 'GET',
     })
 }

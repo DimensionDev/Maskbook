@@ -153,3 +153,8 @@ export interface DecryptedClue {
     condition?: PuzzleCondition
     content?: string
 }
+
+export enum EncryptionErrorType {
+    INSUFFICIENT_NFT = 102,
+    ERROR_CLUE_ID = 1004,
+}

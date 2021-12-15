@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import {
     Alert,
     Box,
-    Button,
     Card,
     CardContent,
     Chip,
@@ -16,8 +15,7 @@ import {
     Typography,
     Snackbar,
 } from '@mui/material'
-import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send } from '@mui/icons-material'
-import LoadingButton from '@mui/lab/LoadingButton'
+import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
 import NoNftCard from './NoNftCard'
 import { createContract, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import { FindTrumanContext } from '../context'
@@ -26,6 +24,7 @@ import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { AbiItem } from 'web3-utils'
 import { BorderLinearProgress } from './ResultCard'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
+import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useOptionsStyles = makeStyles()((theme) => {
     return {
@@ -258,33 +257,33 @@ export default function OptionsCard(props: OptionsViewProps) {
     }
 
     const renderSubmitButton = (userStatus: UserPuzzleStatus | UserPollStatus) => {
+        const isClosed = userStatus.status === 0
         return (
             <div style={{ textAlign: 'right', marginTop: '8px', paddingBottom: '8px' }}>
-                {selected ? (
-                    <Button variant="contained" disabled={true} color="success" endIcon={<DoneOutlined />}>
-                        {t('plugin_find_truman_submitted')}
-                    </Button>
-                ) : (
-                    <LoadingButton
-                        disabled={userStatus.status === 0 || choice === -1}
-                        onClick={() => {
-                            setSubmitting(true)
-                            onSubmit(choice)
-                                .then((res) => {
-                                    setSubmitting(false)
-                                })
-                                .catch((error) => {
-                                    setSnackVisible(true)
-                                    setSubmitting(false)
-                                })
-                        }}
-                        endIcon={<Send />}
-                        loading={submitting}
-                        loadingPosition="end"
-                        variant="contained">
-                        {t(userStatus.status === 0 ? 'plugin_find_truman_vote_finish' : 'plugin_find_truman_submit')}
-                    </LoadingButton>
-                )}
+                <ActionButtonPromise
+                    color={selected ? 'success' : 'primary'}
+                    variant="contained"
+                    disabled={selected || isClosed || choice === -1}
+                    init={t(
+                        selected
+                            ? 'plugin_find_truman_submitted'
+                            : isClosed
+                            ? 'plugin_find_truman_vote_finish'
+                            : 'plugin_find_truman_submit',
+                    )}
+                    waiting={t('plugin_find_truman_submitting')}
+                    failed={t('plugin_find_truman_submit_failed')}
+                    complete={t('plugin_find_truman_submitted')}
+                    executor={async () => {
+                        setSubmitting(true)
+                        await onSubmit(choice)
+                        setSubmitting(false)
+                    }}
+                    failedOnClick="use executor"
+                    startIcon={isClosed || submitting || selected ? undefined : <Send />}
+                    completeIcon={<DoneOutlined />}
+                    failIcon={<RefreshOutlined />}
+                />
             </div>
         )
     }
