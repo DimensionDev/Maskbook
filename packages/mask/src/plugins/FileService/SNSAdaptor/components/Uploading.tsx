@@ -12,6 +12,7 @@ import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../../Worke
 import { useExchange } from '../hooks/Exchange'
 import { FileName } from './FileName'
 import { ProgressBar } from './ProgressBar'
+import { useProvider } from '../../../EVM/hooks'
 
 const useStyles = makeStyles()({
     container: {
@@ -86,7 +87,7 @@ export const Uploading: React.FC = () => {
         )
         const item: FileInfo = {
             type: 'file',
-            provider: currentProvier,
+            provider: currentProvier as any,
             id: state.checksum,
             name: state.name,
             size: state.size,
@@ -95,6 +96,7 @@ export const Uploading: React.FC = () => {
             payloadTxID: payloadTxID,
             landingTxID: landingTxID
         }
+        console.log(item)
         await PluginFileServiceRPC.setFileInfo(item)
         history.replace(FileRouter.uploaded, item)
     }, [])
