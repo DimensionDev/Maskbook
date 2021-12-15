@@ -20,7 +20,7 @@ module.exports = {
             test: /\.m?js$/,
             type: 'javascript/auto',
             resolve: {
-                fullySpecified: false, // disable the behaviour
+                fullySpecified: false,
             },
         })
         return config
