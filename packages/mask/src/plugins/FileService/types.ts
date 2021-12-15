@@ -1,6 +1,6 @@
 export interface FileInfo {
     type: 'file'
-    provider: string
+    provider: 'arweave' | 'ipfs' | 'swarm'
     id: string
 
     name: string
