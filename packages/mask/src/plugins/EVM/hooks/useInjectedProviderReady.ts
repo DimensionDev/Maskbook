@@ -1,9 +1,10 @@
 import { useAsyncRetry } from 'react-use'
-import { bridgedEthereumProvider } from '@masknet/injected-script'
+import { useBridgedProvider } from './useBridgedProvider'
 
-export function useInjectedProviderReady() {
+export function useInjectedProviderReady(type: 'ethereum' | 'coin98') {
+    const bridgedProvider = useBridgedProvider(type)
     const { value: available = false } = useAsyncRetry(async () => {
-        return bridgedEthereumProvider.untilAvailable()
-    }, [])
+        return bridgedProvider.untilAvailable()
+    }, [bridgedProvider])
     return available
 }
