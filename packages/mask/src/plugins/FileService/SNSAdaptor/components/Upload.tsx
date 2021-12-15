@@ -59,7 +59,7 @@ export const Upload: React.FC = () => {
     const history = useHistory()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)
-    const [useProvider, setUseProvider] = useState('arweave')
+    const [provider, setProvider] = useState('arweave')
     const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
     const onFile = async (file: File) => {
         let key: string | undefined = undefined
@@ -78,7 +78,7 @@ export const Upload: React.FC = () => {
                 block,
                 checksum,
                 useCDN,
-                useProvider
+                provider
             })
         } else {
             history.replace(FileRouter.uploaded, item)
@@ -120,8 +120,8 @@ export const Upload: React.FC = () => {
                     control={
                         <Radio
                             color="secondary"
-                            checked={useProvider == 'arweave'}
-                            onChange={(event) => setUseProvider('arweave')}
+                            checked={provider == 'arweave'}
+                            onChange={() => setProvider('arweave')}
                         />
                     }
                     label={t('plugin_file_service_provider_arweave')}
@@ -130,8 +130,8 @@ export const Upload: React.FC = () => {
                     control={
                         <Radio
                             color="secondary"
-                            checked={useProvider == "ipfs"}
-                            onChange={(event) => setUseProvider('ipfs')}
+                            checked={provider == "ipfs"}
+                            onChange={() => setProvider('ipfs')}
                         />
                     }
                     label={t('plugin_file_service_provider_ipfs')}
@@ -140,8 +140,8 @@ export const Upload: React.FC = () => {
                     control={
                         <Radio
                             color="secondary"
-                            checked={useProvider == "swarm"}
-                            onChange={(event) => setUseProvider('swarm')}
+                            checked={provider == "swarm"}
+                            onChange={() => setProvider('swarm')}
                         />
                     }
                     label={t('plugin_file_service_provider_swarm')}

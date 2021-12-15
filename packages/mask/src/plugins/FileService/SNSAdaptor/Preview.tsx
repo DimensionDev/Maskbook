@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { DownloadCloud, File } from 'react-feather'
 import { useI18N } from '../../../utils'
 import { CopyableCode } from './components/Copyable'
-import type { FileInfo } from '../types'
+import type { FileInfo, Provider } from '../types'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,6 +45,17 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+function getGatewayAPI(provider: Provider) {
+    if (provider == 'arweave') {
+        return 'https://arweave.net/';
+    } else if (provider == 'ipfs') {
+        return 'https://infura-ipfs.io/ipfs/';
+    } else if (provider == 'swarm') {
+        return 'https://bee-2.gateway.ethswarm.org/bzz/';
+    }
+    throw new Error('unsupported provider')
+}
+
 export function Preview({ info }: { info: FileInfo }) {
     const { t } = useI18N()
     const { classes } = useStyles()
@@ -57,16 +69,9 @@ export function Preview({ info }: { info: FileInfo }) {
         </Typography>
     )
 
-    let linkPrefix = null
-    if (info.provider == 'arweave') {
-        linkPrefix = 'https://arweave.net/';
-    } else if (info.provider == 'ipfs') {
-        linkPrefix = 'https://infura-ipfs.io/ipfs/';
-    } else if (info.provider == 'swarm') {
-        linkPrefix = 'https://bee-2.gateway.ethswarm.org/bzz/';
-    }
+    let linkPrefix = getGatewayAPI(info.provider);
+    const link = urlcat(linkPrefix, '/:txId', { txId: info.landingTxID })
 
-    const link = `${linkPrefix}${info.landingTxID}`
     const onClick = (event: React.MouseEvent) => {
         event.preventDefault()
         event.stopPropagation()

@@ -7,12 +7,11 @@ import { useAsync } from 'react-use'
 import { useI18N } from '../../../../utils'
 import { timeout } from '@masknet/shared-base'
 import { FileRouter } from '../../constants'
-import type { FileInfo } from '../../types'
+import type { FileInfo, Provider } from '../../types'
 import { PluginFileServiceRPC, PluginFileServiceRPCGenerator } from '../../Worker/rpc'
 import { useExchange } from '../hooks/Exchange'
 import { FileName } from './FileName'
 import { ProgressBar } from './ProgressBar'
-import { useProvider } from '../../../EVM/hooks'
 
 const useStyles = makeStyles()({
     container: {
@@ -44,7 +43,7 @@ interface RouteState {
     block: Uint8Array
     checksum: string
     useCDN: boolean
-    useProvider: string
+    provider: Provider
 }
 
 export const Uploading: React.FC = () => {
@@ -61,7 +60,7 @@ export const Uploading: React.FC = () => {
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
-        const currentProvier = state.useProvider
+        const currentProvier = state.provider
         const payloadTxID = await timeout(
             PluginFileServiceRPC.makeAttachment(currentProvier, {
                 key: state.key,
@@ -71,9 +70,9 @@ export const Uploading: React.FC = () => {
             60000, // ≈ 1 minute
         )
         setPreparing(false)
-        // for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
-        //     setSendSize(state.size * (pctComplete / 100))
-        // }
+        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
+            setSendSize(state.size * (pctComplete / 100))
+        }
         const landingTxID = await timeout(
             PluginFileServiceRPC.uploadLandingPage(currentProvier, {
                 name: state.name,
@@ -87,7 +86,7 @@ export const Uploading: React.FC = () => {
         )
         const item: FileInfo = {
             type: 'file',
-            provider: currentProvier as any,
+            provider: currentProvier as Provider,
             id: state.checksum,
             name: state.name,
             size: state.size,
@@ -96,7 +95,6 @@ export const Uploading: React.FC = () => {
             payloadTxID: payloadTxID,
             landingTxID: landingTxID
         }
-        console.log(item)
         await PluginFileServiceRPC.setFileInfo(item)
         history.replace(FileRouter.uploaded, item)
     }, [])

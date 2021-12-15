@@ -1,6 +1,12 @@
+export enum Provider {
+    arweave = 'arweave',
+    ipfs = 'ipfs',
+    swarm = 'swarm'
+}
+
 export interface FileInfo {
     type: 'file'
-    provider: 'arweave' | 'ipfs' | 'swarm'
+    provider: Provider
     id: string
 
     name: string

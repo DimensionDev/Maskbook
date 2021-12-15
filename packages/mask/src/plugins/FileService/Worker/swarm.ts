@@ -1,15 +1,27 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
-import { Bee, Data, FileData, Reference } from '@ethersphere/bee-js'
-
+import { Bee, Reference } from '@ethersphere/bee-js'
+import urlcat from 'urlcat'
 import { isEmpty, isNil } from 'lodash-unified'
-import { landing, mesonPrefix } from '../constants'
+import { landing } from '../constants'
 
-const BEE_HOSTS: string[] =  "https://bee-0.gateway.ethswarm.org,https://bee-1.gateway.ethswarm.org,https://bee-2.gateway.ethswarm.org,https://bee-3.gateway.ethswarm.org,https://bee-4.gateway.ethswarm.org,https://bee-5.gateway.ethswarm.org,https://bee-6.gateway.ethswarm.org,https://bee-7.gateway.ethswarm.org,https://bee-8.gateway.ethswarm.org,https://bee-9.gateway.ethswarm.org".split(',')
+const BEE_HOSTS: string[] =  [
+    "https://bee-0.gateway.ethswarm.org",
+    "https://bee-1.gateway.ethswarm.org",
+    "https://bee-2.gateway.ethswarm.org",
+    "https://bee-3.gateway.ethswarm.org",
+    "https://bee-4.gateway.ethswarm.org",
+    "https://bee-5.gateway.ethswarm.org",
+    "https://bee-6.gateway.ethswarm.org",
+    "https://bee-7.gateway.ethswarm.org",
+    "https://bee-8.gateway.ethswarm.org",
+    "https://bee-9.gateway.ethswarm.org"
+]
+
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
 const randomBee = new Bee(BEE_HOSTS[randomIndex])
 const POSTAGE_STAMP = '0000000000000000000000000000000000000000000000000000000000000000'
-// const GATEWAY_URL = 'https://gateway.ethswarm.org/';
+const providerName = 'IPFS'
 
 export interface AttachmentOptions {
     key?: string | null
@@ -25,16 +37,11 @@ export async function makeAttachment(options: AttachmentOptions) {
         mime: isEmpty(options.type) ? 'application/octet-stream' : options.type,
         metadata: null,
     })
-    const fileHash = await makePayload(encoded, 'application/octet-stream', options.name)
-    return fileHash
+    return makePayload(encoded, 'application/octet-stream', options.name)
 }
 
-// import { ServicesWithProgress } from 'src/extension/service.ts'
-// ServicesWithProgress.pluginArweaveUpload
 export async function* upload(id: string) {
-    // for await (const uploader of instance.transactions.upload(stage[id])) {
-    //     yield uploader.pctComplete
-    // }
+    return 100
 }
 
 export interface LandingPageMetadata {
@@ -51,23 +58,22 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
     const encodedMetadata = JSON.stringify({
         name: metadata.name,
         size: metadata.size,
-        link: `${linkPrefix}/${metadata.txId}`,
+        link: urlcat(linkPrefix, '/:txId', { txId: metadata.txId }),
         signed: await makeFileKeySigned(metadata.key),
         createdAt: new Date().toISOString(),
     })
     const response = await fetch(landing)
     const text = await response.text()
     const replaced = text
-        .replace('Arweave', 'Swarm')
-        .replace('Over Arweave', "Over Swarm")
+        .replace('Arweave', providerName)
+        .replace('Over Arweave', `Over ${providerName}`)
         .replace('__METADATA__', encodedMetadata)
     const data = encodeText(replaced)
-    const fileHash = await makePayload(data, 'text/html', metadata.name)
-    return fileHash
+    return makePayload(data, 'text/html', metadata.name)
 }
 
 function hashToIndex(hash: Reference | string) {
-  const n = parseInt(hash.slice(0, 8), 16)
+  const n = Number.parseInt(hash.slice(0, 8), 16)
   return n % BEE_HOSTS.length
 }
 
@@ -76,7 +82,7 @@ async function makePayload(data: Uint8Array, type: string, name: string) {
         encrypt: false,
         size: data.length,
         contentType: type,
-        indexDocument: type == 'text/html'
+        indexDocument: type === 'text/html'
     })
     return reference
 }
