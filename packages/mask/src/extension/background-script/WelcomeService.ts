@@ -15,7 +15,7 @@ import {
 } from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { convertBackupFileToObject, extraPermissions, fixBackupFilePermission } from '../../utils'
+import { decompressBackupFile, extraPermissions } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 import { openPopupWindow } from './HelperService'
@@ -118,7 +118,7 @@ export async function openOptionsPage(route?: DashboardRoutes, search?: string) 
 export { createPersonaByMnemonic } from '../../database'
 
 export function parseBackupStr(str: string) {
-    const json = fixBackupFilePermission(UpgradeBackupJSONFile(convertBackupFileToObject(str)))
+    const json = UpgradeBackupJSONFile(decompressBackupFile(str))
     if (json) {
         const info = getBackupPreviewInfo(json)
         const id = uuid()

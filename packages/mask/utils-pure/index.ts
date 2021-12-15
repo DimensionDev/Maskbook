@@ -1,3 +1,4 @@
+export * from './convert'
 export * from './type'
 export * from './assertion'
 export * from './memoize'

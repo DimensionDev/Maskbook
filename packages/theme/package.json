@@ -43,6 +43,7 @@
     "@storybook/builder-webpack5": "^6.4.9",
     "@storybook/manager-webpack5": "^6.4.9",
     "@storybook/react": "^6.4.9",
-    "babel-loader": "^8.2.3"
+    "babel-loader": "^8.2.3",
+    "webpack": "^5.64.4"
   }
 }
