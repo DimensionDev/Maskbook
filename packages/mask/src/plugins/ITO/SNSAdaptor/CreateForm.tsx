@@ -184,7 +184,7 @@ export function CreateForm(props: CreateFormProps) {
     )
 
     const RE_MATCH_WHOLE_AMOUNT = useMemo(
-        () => new RegExp(`^\\d*\\.?\\d{0,${tokenAndAmount?.token?.decimals}}$`), // d.ddd...d
+        () => new RegExp(`^\\d*\\.?\\d{0,${tokenAndAmount?.token?.decimals ?? 18}}$`), // d.ddd...d
         [tokenAndAmount?.token?.decimals],
     )
 
