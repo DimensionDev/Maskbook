@@ -60,6 +60,8 @@ export interface DonationInfo {
     amount: string
     symbol?: string
     decimals?: number
+    // cspell:ignore formated
+    // formated, a typo in API schema
     formatedAmount?: string
     timeStamp: string
     txHash: string
@@ -95,6 +97,7 @@ export interface POAPResponse {
     data: POAP
 }
 
+// cspell:ignore contribs
 // used in api response
 export interface GeneralAsset {
     platform: string

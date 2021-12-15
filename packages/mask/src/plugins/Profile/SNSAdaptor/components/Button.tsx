@@ -1,4 +1,4 @@
-import { COLORS, COLORTOSTYLE } from '../common/variables'
+import { COLORS, COLOR_TO_STYLE } from '../common/variables'
 import type { ReactNode } from 'react'
 import { Typography } from '@mui/material'
 
@@ -56,13 +56,13 @@ const Button = ({
     let hoverBgStyle = ''
 
     if (typeof color !== 'undefined') {
-        bgDefaultStyle = COLORTOSTYLE[color].bgDefault
-        bgAltStyle = COLORTOSTYLE[color].bgAlt
-        textStyle = COLORTOSTYLE[color].text
-        borderStyle = COLORTOSTYLE[color].border
-        hoverTextStyle = COLORTOSTYLE[color].hoverText
-        hoverBorderStyle = COLORTOSTYLE[color].hoverBorder
-        hoverBgStyle = COLORTOSTYLE[color].hoverBg
+        bgDefaultStyle = COLOR_TO_STYLE[color].bgDefault
+        bgAltStyle = COLOR_TO_STYLE[color].bgAlt
+        textStyle = COLOR_TO_STYLE[color].text
+        borderStyle = COLOR_TO_STYLE[color].border
+        hoverTextStyle = COLOR_TO_STYLE[color].hoverText
+        hoverBorderStyle = COLOR_TO_STYLE[color].hoverBorder
+        hoverBgStyle = COLOR_TO_STYLE[color].hoverBg
     }
 
     // default = simple button filled with specified color

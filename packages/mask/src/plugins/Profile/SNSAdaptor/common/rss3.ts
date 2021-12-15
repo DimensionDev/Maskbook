@@ -1,4 +1,5 @@
 /* eslint-disable import/no-anonymous-default-export */
+// cspell:ignore: IRSS
 import { ethers } from 'ethers'
 import RSS3 from 'rss3-next'
 import { fetch } from './middleware'

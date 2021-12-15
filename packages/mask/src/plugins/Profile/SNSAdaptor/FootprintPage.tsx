@@ -29,9 +29,9 @@ interface FootprintPageProps {
     isConnected: boolean
 }
 
-const getFootprintLink = (address: string, asset: GeneralAssetWithTags) => {
+const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
     return urlcat(`https://rss3.bio/:address/singlefootprint/:platform/:identity/:id/:type`, {
-        ...asset,
+        ...footprint,
         address,
     })
 }
@@ -88,21 +88,21 @@ export function FootprintPage(props: FootprintPageProps) {
                 ) : null}
             </section>
             <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
-                {footprints.map((asset) => (
+                {footprints.map((footprint) => (
                     <Link
                         className={classes.link}
-                        href={getFootprintLink(address, asset)}
-                        key={asset.id}
+                        href={getFootprintLink(address, footprint)}
+                        key={footprint.id}
                         target="_blank"
                         rel="noopener noreferrer">
                         <FootprintCard
-                            imageUrl={asset.info.image_preview_url || config.undefinedImageAlt}
-                            startDate={asset.info.start_date}
-                            endDate={asset.info.end_date}
-                            city={asset.info.country}
-                            country={asset.info.city}
+                            imageUrl={footprint.info.image_preview_url || config.undefinedImageAlt}
+                            startDate={footprint.info.start_date}
+                            endDate={footprint.info.end_date}
+                            city={footprint.info.country}
+                            country={footprint.info.city}
                             username={username}
-                            activity={asset.info.title || ''}
+                            activity={footprint.info.title || ''}
                         />
                     </Link>
                 ))}

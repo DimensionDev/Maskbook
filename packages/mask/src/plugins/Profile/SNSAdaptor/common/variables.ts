@@ -27,7 +27,7 @@ interface colorToStyleInterface {
     hoverBorder: string
 }
 
-export const COLORTOSTYLE: { [key: string]: colorToStyleInterface } = {
+export const COLOR_TO_STYLE: { [key: string]: colorToStyleInterface } = {
     primary: {
         name: 'primary',
         bgDefault: 'bg-primary',

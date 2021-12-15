@@ -35,36 +35,36 @@ const setTaggedOrder = (tagged: TypesWithTag, order?: number): void => {
     }
 }
 
-function sortByOrderTag<T extends TypesWithTag>(taggeds: T[]): T[] {
-    taggeds.sort((a, b) => {
+function sortByOrderTag<T extends TypesWithTag>(taggedList: T[]): T[] {
+    taggedList.sort((a, b) => {
         return getTaggedOrder(a) - getTaggedOrder(b)
     })
-    return taggeds
+    return taggedList
 }
 
-const setOrderTag = async (taggeds: TypesWithTag[]): Promise<TypesWithTag[]> => {
+const setOrderTag = async (taggedList: TypesWithTag[]): Promise<TypesWithTag[]> => {
     await Promise.all(
-        taggeds.map(async (tagged, index) => {
+        taggedList.map(async (tagged, index) => {
             setTaggedOrder(tagged, index)
         }),
     )
-    return taggeds
+    return taggedList
 }
 
-const setHiddenTag = async (taggeds: TypesWithTag[]): Promise<TypesWithTag[]> => {
+const setHiddenTag = async (taggedList: TypesWithTag[]): Promise<TypesWithTag[]> => {
     await Promise.all(
-        taggeds.map(async (tagged) => {
+        taggedList.map(async (tagged) => {
             setTaggedOrder(tagged)
         }),
     )
-    return taggeds
+    return taggedList
 }
 
 const mergeAssetsTags = async (assetsInRSS3File: RSS3Asset[], assetsGrabbed: GeneralAsset[]) => {
     return Promise.all(
         (assetsGrabbed || []).map(async (asset: GeneralAssetWithTags) => {
             const origType = asset.type
-            if (config.hideUnlistedAsstes) {
+            if (config.hideUnlistedAssets) {
                 asset.type = 'Invalid' // Using as a match mark
             }
             for (const assetInRSS3 of assetsInRSS3File) {

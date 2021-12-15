@@ -27,12 +27,13 @@ interface DonationPageProps {
     isOwned: boolean
     isConnected: boolean
 }
-const getDonationLink = (address: string, asset: GeneralAssetWithTags) => {
+const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
     return urlcat(`https://rss3.bio/:address/singlegitcoin/:platform/:identity/:id/:type`, {
-        ...asset,
+        ...donation,
         address,
     })
 }
+// cspell:ignore contribs
 export function DonationPage(props: DonationPageProps) {
     const { address, isOwned, isConnected } = props
     const { classes } = useStyles()
@@ -81,23 +82,21 @@ export function DonationPage(props: DonationPageProps) {
                             window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
                         }}
                     />
-                ) : (
-                    ''
-                )}
+                ) : null}
             </section>
             <section className="grid grid-cols-1 gap-4 py-4">
-                {donations.map((asset) => (
+                {donations.map((donation) => (
                     <Link
                         className={classes.link}
-                        href={getDonationLink(address, asset)}
-                        key={asset.id}
+                        href={getDonationLink(address, donation)}
+                        key={donation.id}
                         target="_blank"
                         rel="noopener noreferrer">
                         <DonationCard
-                            imageUrl={asset.info.image_preview_url || config.undefinedImageAlt}
-                            name={asset.info.title || 'Inactive Project'}
-                            contribCount={asset.info.total_contribs || 0}
-                            contribDetails={asset.info.token_contribs || []}
+                            imageUrl={donation.info.image_preview_url || config.undefinedImageAlt}
+                            name={donation.info.title || 'Inactive Project'}
+                            contribCount={donation.info.total_contribs || 0}
+                            contribDetails={donation.info.token_contribs || []}
                         />
                     </Link>
                 ))}

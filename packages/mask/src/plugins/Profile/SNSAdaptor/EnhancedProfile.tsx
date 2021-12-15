@@ -41,13 +41,13 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     //#region identity
     const identity = useCurrentVisitingIdentity()
-    const lastRegonizedIdentity = useLastRecognizedIdentity()
+    const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { value: currentAccount } = useEthereumAddress(
         identity.nickname ?? '',
         identity.identifier.userId,
         identity.bio ?? '',
     )
-    const isOwned = lastRegonizedIdentity.identifier.equals(identity.identifier)
+    const isOwned = lastRecognizedIdentity.identifier.equals(identity.identifier)
     const currentAccountAddress = currentAccount?.address ?? ''
     //#endregion
 
