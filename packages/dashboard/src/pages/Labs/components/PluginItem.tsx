@@ -78,7 +78,7 @@ export default function PluginItem(props: PluginItemProps) {
         title,
         desc,
         icon,
-        enabled,
+        enabled = false,
         hideSwitch,
         onSwitch,
         onTwitter,
