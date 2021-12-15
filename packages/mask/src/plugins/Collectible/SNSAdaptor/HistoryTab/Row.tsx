@@ -90,6 +90,7 @@ export function Row({ event, isDifferenceToken }: Props) {
                             <FormattedBalance
                                 value={event.price?.quantity ?? 0}
                                 decimals={event.price?.asset?.decimals ?? 0}
+                                formatter={formatBalance}
                             />
                         </Typography>
                     </TableCell>

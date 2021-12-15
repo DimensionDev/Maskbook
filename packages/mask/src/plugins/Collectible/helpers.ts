@@ -13,11 +13,11 @@ export const CollectibleMetadataReader = createTypedMessageMetadataReader<Collec
 )
 export const renderWithCollectibleMetadata = createRenderWithMetadata(CollectibleMetadataReader)
 
-export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaName?: string }): Asset {
+export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaName?: WyvernSchemaName }): Asset {
     return {
         tokenId: asset.tokenId,
         tokenAddress: asset.tokenAddress,
-        schemaName: asset.schemaName as WyvernSchemaName,
+        schemaName: asset.schemaName,
     }
 }
 

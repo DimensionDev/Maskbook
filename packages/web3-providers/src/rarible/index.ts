@@ -13,7 +13,6 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
-    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import {
     RaribleUserURL,
@@ -123,7 +122,7 @@ export async function getListings(tokenAddress: string, tokenId: string, chainId
     })
 }
 
-export async function getOrder(tokenAddress: string, tokenId: string, side: OrderSide, chainId: ChainId) {
+export async function getOrders(tokenAddress: string, tokenId: string, side: OrderSide, chainId: ChainId) {
     switch (side) {
         case OrderSide.Buy:
             return getOffers(tokenAddress, tokenId, chainId)
@@ -226,12 +225,12 @@ function createERC721TokenAsset(
     }
 }
 
-function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId) {
+function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): NFTAsset {
     const owner = first(asset?.owners)
     const creator = first(asset?.creators)
     return {
         is_verified: false,
-        isAuction: false,
+        is_auction: false,
         token_address: asset.contract,
         image_url: toRaribleImage(asset?.meta.image.url.ORIGINAL),
         asset_contract: null,
@@ -272,10 +271,12 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId) {
                       },
                   },
               ]
-            : null,
+            : [],
         slug: '',
         response_: asset,
-    } as NFTAsset
+        token_id: asset.tokenId,
+        safelist_request_status: '',
+    }
 }
 
 async function _getAsset(address: string, tokenId: string) {
@@ -309,38 +310,12 @@ export async function getNFT(tokenAddress: string, tokenId: string) {
     return createERC721TokenAsset(tokenAddress, tokenId, asset)
 }
 
-export async function getNFTs(from: string, chainId: ChainId) {
-    const params = new URLSearchParams()
-    params.append('owner', from)
-    const assetResponse = await fetchFromRarible<{ total: number; items: RaribleNFTItemMapResponse[] }>(
-        RaribleChainURL,
-        urlcat(`/v0.1/nft/items/byOwner?owner=:from}`, { from }),
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'content-type': 'application/json',
-            },
-        },
-    )
-    return assetResponse.items.map((asset) => createERC721TokenAsset(asset.contract, asset.tokenId, asset))
-}
-
-export async function getContractBalance(from: string, contractAddress: string, chainId: ChainId) {
-    const assets = await getNFTs(from, chainId)
-    return assets.filter((asset) => isSameAddress(asset.contractDetailed.address, contractAddress)).length
-}
-
 export async function getNFTsPaged(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
     const asset = await fetchFromRarible<{
         total: number
         continuation: string
         items: RaribleNFTItemMapResponse[]
-    }>(
-        RaribleMainnetAPI_URL,
-        urlcat(`/ethereum/nft/items/byOwner?owner=:from&size=:size}`, { from, size: opts.size }),
-        {},
-    )
+    }>(RaribleMainnetAPI_URL, urlcat('/ethereum/nft/items/byOwner', { owner: from, size: opts.size }), {})
     if (!asset) return [] as ERC721TokenDetailed[]
 
     return asset.items.map((asset) => createERC721TokenAsset(asset.contract, asset.tokenId, asset))

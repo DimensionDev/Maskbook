@@ -1,12 +1,11 @@
 import { OpenSeaApi } from '@masknet/web3-providers'
-import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { currentChainIdSettings } from '../../../Wallet/settings'
+import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 
 export async function getCollections(
     address: string,
-    chainId = currentChainIdSettings.value,
-    provider = NonFungibleAssetProvider.OPENSEA,
+    chainId: ChainId,
+    provider: NonFungibleAssetProvider,
     page?: number,
     size?: number,
 ) {

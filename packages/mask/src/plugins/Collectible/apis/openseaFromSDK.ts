@@ -34,8 +34,7 @@ async function createOpenSeaPort(chainId?: ChainId) {
 
 export async function getAssetFromSDK(tokenAddress: string, tokenId: string, chainId?: ChainId) {
     const _chainId = chainId ?? currentChainIdSettings.value
-    const sdkResponse = await (await createOpenSeaPort(_chainId)).api.getAsset({ tokenAddress, tokenId })
-    return sdkResponse
+    return (await createOpenSeaPort(_chainId)).api.getAsset({ tokenAddress, tokenId })
 }
 
 export async function createBuyOrder(payload: Parameters<OpenSeaPort['createBuyOrder']>[0]) {

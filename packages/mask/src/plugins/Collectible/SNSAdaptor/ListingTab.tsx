@@ -45,12 +45,12 @@ export function ListingTab() {
     const isDifferenceToken = useMemo(() => {
         if (provider === NonFungibleAssetProvider.OPENSEA) {
             return (
-                orders.value?.some(
+                orders.value?.data.some(
                     (item) =>
                         (item.payment_token_contract?.symbol !== 'WETH' &&
                             item.payment_token_contract?.symbol !== 'ETH') ||
                         (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
-                ) && orders.value?.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
+                ) && orders.value?.data.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {
             return false
@@ -58,8 +58,8 @@ export function ListingTab() {
     }, [provider, orders])
 
     const dataSource = useMemo(() => {
-        if (!orders.value || !orders.value?.length) return []
-        return orders.value.sort((a, b) => {
+        if (!orders.value || !orders.value?.data.length) return []
+        return orders.value.data.sort((a, b) => {
             const current = new BigNumber(a.current_price ?? 0)
             const next = new BigNumber(b.current_price ?? 0)
             if (current.isLessThan(next)) return -1

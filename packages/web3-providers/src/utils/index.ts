@@ -5,7 +5,7 @@ export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quan
     if (!currentPrice || !decimals || !quantity) return
     const price = formatBalance(currentPrice, decimals)
     const _quantity = formatBalance(quantity, new BigNumber(quantity).toString() !== '1' ? 8 : 0)
-    return new BigNumber(price).dividedBy(_quantity).toFixed(4, 1).toString()
+    return new BigNumber(price).dividedBy(_quantity).toFixed(4, 1)
 }
 
 export function getOrderUSDPrice(currentPrice?: string, usdPrice?: string, decimals?: number) {
@@ -13,7 +13,7 @@ export function getOrderUSDPrice(currentPrice?: string, usdPrice?: string, decim
     const price = formatBalance(usdPrice, 0)
     const quantity = formatBalance(currentPrice, decimals)
 
-    return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1).toString()
+    return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1)
 }
 
 export function getLastSalePrice(total_price?: string, decimals?: number) {

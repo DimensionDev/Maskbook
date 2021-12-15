@@ -44,13 +44,13 @@ export function HistoryTab(props: HistoryTabProps) {
     //#region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
         if (provider === NonFungibleAssetProvider.OPENSEA)
-            return events.value?.some((item) => item.price?.asset?.asset_contract.symbol !== 'ETH')
+            return events.value?.data.some((item) => item.price?.asset?.asset_contract.symbol !== 'ETH')
         else return false
     }, [events.value, provider])
     //#endregion
 
     if (events.loading) return <LoadingTable />
-    if (!events.value || events.error || !events.value?.length)
+    if (!events.value || !events.value?.data || events.error || !events.value?.data.length)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>
@@ -91,16 +91,16 @@ export function HistoryTab(props: HistoryTabProps) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {events.value.map((order) => (
+                    {events.value.data.map((order) => (
                         <Row key={order.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === NonFungibleAssetProvider.OPENSEA && events.value.length) || eventPage > 0 ? (
+                {(provider === NonFungibleAssetProvider.OPENSEA && events.value.data.length) || eventPage > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setEventPage((prev) => prev - 1)}
                         handleNextClick={() => setEventPage((prev) => prev + 1)}
                         prevDisabled={eventPage === 0}
-                        nextDisabled={false}
+                        nextDisabled={!events.value.hasNextPage}
                         page={eventPage}
                         pageCount={10}
                     />

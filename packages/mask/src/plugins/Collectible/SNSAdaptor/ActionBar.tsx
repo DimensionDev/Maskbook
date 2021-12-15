@@ -46,7 +46,7 @@ export function ActionBar(props: ActionBarProps) {
 
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
-            {!asset.value.isOwner && asset.value.isAuction ? (
+            {!asset.value.isOwner && asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -56,7 +56,7 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_place_bid')}
                 </ActionButton>
             ) : null}
-            {!asset.value.isOwner && !asset.value.isAuction && asset.value?.desktopOrder ? (
+            {!asset.value.isOwner && !asset.value.is_auction && asset.value?.desktopOrder ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -65,7 +65,7 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_buy_now')}
                 </ActionButton>
             ) : null}
-            {!asset.value.isOwner && !asset.value.isAuction ? (
+            {!asset.value.isOwner && !asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"

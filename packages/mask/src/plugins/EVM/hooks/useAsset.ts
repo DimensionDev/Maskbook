@@ -21,10 +21,7 @@ export function useAsset(address: string, tokenId: string, provider: NonFungible
             ...asset,
             isOrderWeth: isSameAddress(asset?.desktopOrder?.payment_token ?? '', WNATIVE_ADDRESS) ?? false,
             isCollectionWeth: asset?.collection?.payment_tokens?.some(currySameAddress(WNATIVE_ADDRESS)) ?? false,
-            isOwner:
-                asset?.top_ownerships.some((item: { owner: { address: string | undefined } }) =>
-                    isSameAddress(item.owner.address, account),
-                ) ?? false,
+            isOwner: asset?.top_ownerships.some((item) => isSameAddress(item.owner.address, account)) ?? false,
         }
     }, [account, chainId, WNATIVE_ADDRESS, address, tokenId, provider])
 }

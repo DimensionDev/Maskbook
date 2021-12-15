@@ -25,6 +25,9 @@ function useCollectibleState(token?: CollectibleToken) {
     //#region offers
     const [offerPage, setOfferPage] = useState(0)
     const offers = useOrders(
+        currentCollectibleProviderSettings.value,
+        offerPage,
+        50,
         tabIndex === CollectibleTab.OFFER ? token?.contractAddress : undefined,
         tabIndex === CollectibleTab.OFFER ? token?.tokenId : undefined,
         OrderSide.Buy,
@@ -34,6 +37,9 @@ function useCollectibleState(token?: CollectibleToken) {
     //#region orders
     const [orderPage, setOrderPage] = useState(0)
     const orders = useOrders(
+        currentCollectibleProviderSettings.value,
+        orderPage,
+        50,
         tabIndex === CollectibleTab.LISTING ? token?.contractAddress : undefined,
         tabIndex === CollectibleTab.LISTING ? token?.tokenId : undefined,
         OrderSide.Sell,
@@ -44,6 +50,9 @@ function useCollectibleState(token?: CollectibleToken) {
     const [eventPage, setEventPage] = useState(0)
     const cursors = useRef<string[]>([])
     const events = useHistory(
+        currentCollectibleProviderSettings.value,
+        eventPage,
+        50,
         tabIndex === CollectibleTab.HISTORY ? token?.contractAddress : undefined,
         tabIndex === CollectibleTab.HISTORY ? token?.tokenId : undefined,
     )

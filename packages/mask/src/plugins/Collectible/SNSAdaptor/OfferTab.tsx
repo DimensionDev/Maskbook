@@ -44,12 +44,12 @@ export function OfferTab() {
     const isDifferenceToken = useMemo(() => {
         if (provider === NonFungibleAssetProvider.OPENSEA) {
             return (
-                offers.value?.some(
+                offers.value?.data.some(
                     (item) =>
                         (item.payment_token_contract?.symbol !== 'WETH' &&
                             item.payment_token_contract?.symbol !== 'ETH') ||
                         (item.quantity && new BigNumber(item.quantity).toString() !== '1'),
-                ) && offers.value.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
+                ) && offers.value.data.filter((item) => isZero(item.expiration_time ?? 0)).length === 0
             )
         } else {
             return false
@@ -57,12 +57,12 @@ export function OfferTab() {
     }, [provider, offers])
 
     const dataSource = useMemo(() => {
-        if (!offers.value?.length) return []
-        return offers.value
+        if (!offers.value?.data.length) return []
+        return offers.value.data
     }, [offers])
 
     if (asset.loading) return <LoadingTable />
-    if (!offers.value?.length || asset.error || !dataSource.length)
+    if (!offers.value?.data.length || asset.error || !dataSource.length)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>

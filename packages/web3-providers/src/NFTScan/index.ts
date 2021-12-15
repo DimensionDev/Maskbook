@@ -1,41 +1,40 @@
 import { NFTSCAN_BASE_API, NFTSCAN_ID, NFTSCAN_SECRET, NFTSCAN_URL } from './constants'
 import type { NFTScanAsset, NFT_Assets } from './types'
-import {
-    createERC721ContractDetailed,
-    ChainId,
-    createERC721Token,
-    ERC721ContractDetailed,
-    EthereumTokenType,
-    ERC721TokenDetailed,
-    isSameAddress,
-} from '@masknet/web3-shared-evm'
+import { createERC721ContractDetailed, ChainId, createERC721Token } from '@masknet/web3-shared-evm'
 import type { NFTAsset, OrderSide } from '../types'
+import urlcat from 'urlcat'
+import addSeconds from 'date-fns/addSeconds'
 
-let token: string = ''
-let token_expiration: number = 0
+const tokenCache = new Map<'token', { token: string; expiration: number }>()
 
 async function getToken() {
-    const params = new URLSearchParams()
-    params.append('apiKey', NFTSCAN_ID)
-    params.append('apiSecret', NFTSCAN_SECRET)
-    const response = await fetch(`${NFTSCAN_URL}/gw/token?${params.toString()}`, {
-        mode: 'cors',
-    })
+    const token = tokenCache.get('token')
+    if (token && Date.now() <= token.expiration) return token.token
+
+    const response = await fetch(
+        urlcat(NFTSCAN_URL, '/gw/token', {
+            apiKey: NFTSCAN_ID,
+            apiSecret: NFTSCAN_SECRET,
+        }),
+        {
+            mode: 'cors',
+        },
+    )
 
     const { data }: { data: { accessToken: string; expiration: number } } = await response.json()
-    token = data.accessToken
-    token_expiration = Date.now() + data.expiration * 1000
+    tokenCache.set('token', {
+        token: data.accessToken,
+        expiration: addSeconds(Date.now(), data.expiration).getTime(),
+    })
+    return data.accessToken
 }
 
-async function fetchAsset(path: string, config = {} as RequestInit) {
-    if (token === '' || Date.now() > token_expiration) {
-        await getToken()
-    }
+async function fetchAsset(path: string, config: Partial<RequestInit> = {}) {
     const response = await fetch(`${NFTSCAN_BASE_API}/${path}`, {
         method: 'POST',
         ...config,
         headers: {
-            'Access-Token': token,
+            'Access-Token': await getToken(),
         },
     })
 
@@ -58,8 +57,8 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
     return createERC721Token(
         createERC721ContractDetailedFromAssetContract(asset),
         {
-            name: json.name ?? 'unknown name',
-            description: json.description ?? 'unknown symbol',
+            name: json.name ?? '',
+            description: json.description ?? '',
             mediaUrl: json.image || '',
             owner: asset.nft_holder ?? '',
         },
@@ -67,7 +66,7 @@ function createERC721TokenAsset(asset: NFTScanAsset) {
     )
 }
 
-async function getContractsAndBalance(address: string) {
+export async function getContractBalance(address: string) {
     const response = await fetchAsset('getGroupByNftContract', {
         body: JSON.stringify({
             erc: 'erc721',
@@ -80,13 +79,12 @@ async function getContractsAndBalance(address: string) {
 
     return data
         .map((x) => {
-            const contractDetailed: ERC721ContractDetailed = {
-                name: x.nft_platform_name,
-                symbol: '',
-                address: x.nft_contract_address,
-                chainId: ChainId.Mainnet,
-                type: EthereumTokenType.ERC721,
-            }
+            const contractDetailed = createERC721ContractDetailed(
+                ChainId.Mainnet,
+                x.nft_contract_address,
+                x.nft_platform_name,
+            )
+
             const balance = x.nft_asset.length
 
             return {
@@ -111,21 +109,6 @@ export async function getNFT(address: string, tokenId: string, chainId: ChainId)
     return createERC721TokenAsset(data)
 }
 
-export async function getNFTs(from: string, chainId: ChainId) {
-    let tokens: ERC721TokenDetailed[] = []
-    let page = 0
-    let assets
-    const size = 50
-    do {
-        assets = await getNFTsPaged(from, { chainId, page, size })
-        if (assets.length === 0) break
-        tokens = tokens.concat(assets)
-        page = page + 1
-    } while (assets.length === size)
-
-    return tokens
-}
-
 export async function getNFTsPaged(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
     const { size = 50, page = 0 } = opts
 
@@ -139,17 +122,16 @@ export async function getNFTsPaged(from: string, opts: { chainId: ChainId; page?
     })
     if (!response) return []
 
-    const { data }: { data: { content: NFTScanAsset[]; page_index: number; page_size: number; total: number } } =
-        response
+    type ResponseData = {
+        content: NFTScanAsset[]
+        page_index: number
+        page_size: number
+        total: number
+    }
 
-    return data.content.map((asset) => createERC721TokenAsset(asset))
-}
+    const { data }: { data: ResponseData } = response
 
-export async function getContractBalance(address: string, contractAddress: string, chainId: ChainId) {
-    const response = await getContractsAndBalance(address)
-    if (!response) return
-
-    return response.find((x) => isSameAddress(x.contractDetailed.address, contractAddress))?.balance
+    return data.content.map(createERC721TokenAsset)
 }
 
 export async function getAsset(address: string, tokenId: string, chainId: ChainId) {
@@ -164,7 +146,7 @@ export async function getListings(address: string, tokenId: string, chainId: Cha
     return []
 }
 
-export async function getOrder(address: string, tokenId: string, side: OrderSide, chainId: ChainId) {
+export async function getOrders(address: string, tokenId: string, side: OrderSide, chainId: ChainId) {
     return []
 }
 

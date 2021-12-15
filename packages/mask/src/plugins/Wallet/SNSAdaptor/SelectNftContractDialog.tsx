@@ -21,7 +21,7 @@ import Fuse from 'fuse.js'
 import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { unionBy } from 'lodash-unified'
-import { useNFTs } from '../../EVM/hooks/useNFTs'
+import { useNFTBalance } from '../../EVM/hooks'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -151,7 +151,7 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
     }, [id, setDialog])
     //#endregion
 
-    const { value: assets } = useNFTs(account, !open)
+    const { value: assets } = useNFTBalance(account, !open)
 
     const erc721InDb = useERC721Tokens()
     const allContractsInDb = unionBy(

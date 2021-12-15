@@ -9,13 +9,13 @@ import {
     NonFungibleAssetProvider,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
-import { isZero, multipliedBy } from '@masknet/web3-shared-base'
+import { isZero } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 import type { AssetOrder } from '@masknet/web3-providers'
-import fromUnixTime from 'date-fns/fromUnixTime'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -156,7 +156,9 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                             <Typography className={classes.content}>
                                 {order.expiration_time &&
                                     !isZero(order.expiration_time) &&
-                                    fromUnixTime(multipliedBy(order.expiration_time, 1000).toNumber())}
+                                    formatDistanceToNow(new Date(order.expiration_time * 1000), {
+                                        addSuffix: true,
+                                    })}
                             </Typography>
                         </TableCell>
                     ) : null}

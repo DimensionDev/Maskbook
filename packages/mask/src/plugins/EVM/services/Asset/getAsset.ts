@@ -1,26 +1,16 @@
-import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-import { currentChainIdSettings } from '../../../Wallet/settings'
+import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 import { unreachable } from '@dimensiondev/kit'
 import { NFTScanApi, OpenSeaApi, RaribleApi } from '@masknet/web3-providers'
 
-export async function getAsset(
-    address: string,
-    tokenId: string,
-    chainId = currentChainIdSettings.value,
-    provider = NonFungibleAssetProvider.OPENSEA,
-) {
-    let asset
+export async function getAsset(address: string, tokenId: string, chainId: ChainId, provider: NonFungibleAssetProvider) {
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            asset = await OpenSeaApi.getAsset(address, tokenId, chainId)
-            return asset
+            return OpenSeaApi.getAsset(address, tokenId, chainId)
         case NonFungibleAssetProvider.NFTSCAN:
-            asset = await NFTScanApi.getAsset(address, tokenId, chainId)
-            return asset
+            return NFTScanApi.getAsset(address, tokenId, chainId)
         case NonFungibleAssetProvider.RARIBLE:
-            asset = await RaribleApi.getAsset(address, tokenId, chainId)
-            return asset
+            return RaribleApi.getAsset(address, tokenId, chainId)
         default:
             unreachable(provider)
     }

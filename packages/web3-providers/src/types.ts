@@ -70,8 +70,8 @@ export interface AssetCollection {
 
 export interface NFTAsset {
     is_verified: boolean
-    collection: AssetCollection | null
-    isAuction: boolean
+    collection?: AssetCollection
+    is_auction: boolean
     image_url: string
     asset_contract: { name: string; description: string; schemaName: string } | null
     current_price: number | null
@@ -85,12 +85,12 @@ export interface NFTAsset {
     description: string
     name: string
     collection_name: string
-    animation_url: string
+    animation_url?: string
     end_time: Date | null
     order_payment_tokens: (ERC20TokenDetailed | NativeTokenDetailed)[]
     offer_payment_tokens: (ERC20TokenDetailed | NativeTokenDetailed)[]
     slug: string | null
-    desktopOrder: AssetOrder | null
+    desktopOrder?: AssetOrder
     top_ownerships: {
         owner: NFTAssetOwner
     }[]

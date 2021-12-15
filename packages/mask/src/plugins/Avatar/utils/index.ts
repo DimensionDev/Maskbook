@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js'
 import { isNull } from 'lodash-unified'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../EVM/messages'
 import Services from '../../../extension/service'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 
 export async function getNFT(address: string, tokenId: string) {
-    const asset = await EVM_RPC.getAsset(address, tokenId, ChainId.Mainnet)
+    const asset = await EVM_RPC.getAsset(address, tokenId, ChainId.Mainnet, NonFungibleAssetProvider.OPENSEA)
 
     return {
         amount: new BigNumber(
@@ -24,7 +24,7 @@ export async function getNFT(address: string, tokenId: string) {
 }
 
 export async function createNFT(address: string, tokenId: string) {
-    return EVM_RPC.getNFT(address, tokenId, ChainId.Mainnet)
+    return EVM_RPC.getNFT(address, tokenId, ChainId.Mainnet, NonFungibleAssetProvider.OPENSEA)
 }
 
 export async function getImage(image: string): Promise<string> {

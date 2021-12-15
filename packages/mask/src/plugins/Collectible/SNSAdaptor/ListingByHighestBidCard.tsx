@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardActions, CardContent } from '@mui/material'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
@@ -19,6 +19,7 @@ import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '../../EVM/hooks'
+import type { WyvernSchemaName } from 'opensea-js/lib/types'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -49,7 +50,6 @@ export interface ListingByHighestBidCardProps {
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
-    const { showSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -75,7 +75,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract?.schemaName,
+                schemaName: asset.value.asset_contract?.schemaName as WyvernSchemaName,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),

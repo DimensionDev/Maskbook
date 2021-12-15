@@ -10,7 +10,7 @@ import {
     Typography,
     Link,
 } from '@mui/material'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -62,9 +62,8 @@ export interface CheckoutDialogProps {
 
 export function CheckoutDialog(props: CheckoutDialogProps) {
     const { asset, open, onClose, order } = props
-    const isAuction = asset?.value?.isAuction ?? false
+    const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
-    const { showSnackbar } = useCustomSnackbar()
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -77,22 +76,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!order.value) return
-        try {
-            await PluginCollectibleRPC.fulfillOrder({
-                order: order.value,
-                accountAddress: account,
-                recipientAddress: account,
-            })
-        } catch (error) {
-            if (error instanceof Error) {
-                showSnackbar(error.message, {
-                    variant: 'error',
-                    preventDuplicate: true,
-                })
-            }
-            throw error
-        }
-    }, [asset?.value, account, showSnackbar, order?.value])
+
+        await PluginCollectibleRPC.fulfillOrder({
+            order: order.value,
+            accountAddress: account,
+            recipientAddress: account,
+        })
+    }, [asset?.value, account, order?.value])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
