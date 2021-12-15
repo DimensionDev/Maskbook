@@ -2,6 +2,7 @@ import ImageHolder from './ImageHolder'
 import { Typography } from '@mui/material'
 import EventRoundedIcon from '@mui/icons-material/EventRounded'
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
+import fromUnixTime from 'date-fns/fromUnixTime'
 interface FootprintProps {
     imageUrl: string
     startDate: string | undefined
@@ -13,7 +14,7 @@ interface FootprintProps {
 }
 
 const formatDate = (ts: string): string => {
-    return new Date(Number.parseInt(ts, 16) * 1000).toLocaleDateString('en-US')
+    return fromUnixTime(Number.parseInt(ts, 16) * 1000).toLocaleDateString('en-US')
 }
 
 const FootprintCard = ({ imageUrl, startDate, endDate, city, country, username, activity }: FootprintProps) => {

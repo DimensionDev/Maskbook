@@ -76,7 +76,6 @@ function dispatchEvent(event: string, detail: any) {
         composed: true,
     })
     document.dispatchEvent(evt)
-    console.log(event, detail)
 }
 
 export default {
