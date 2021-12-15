@@ -16,7 +16,10 @@ import {
     PossiblePluginSuggestionUI,
 } from '../DisabledPluginSuggestion'
 
-const PluginRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.DecryptedInspector)
+const PluginRenderer = createInjectHooksRenderer(
+    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    (x) => x.DecryptedInspector,
+)
 function PluginRendererWithSuggestion(props: MetadataRendererProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata || new Map())
     const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])

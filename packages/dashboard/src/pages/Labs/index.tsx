@@ -72,11 +72,10 @@ export default function Plugins() {
     })
 
     useEffect(
-        () => Messages.events.pluginEnabled.on((id) => setPluginStatus({ ...pluginStatus, [id]: true })),
-        [pluginStatus],
-    )
-    useEffect(
-        () => Messages.events.pluginDisabled.on((id) => setPluginStatus({ ...pluginStatus, [id]: false })),
+        () =>
+            Messages.events.pluginMinimalModeChanged.on(([id, newValue]) =>
+                setPluginStatus({ ...pluginStatus, [id]: newValue }),
+            ),
         [pluginStatus],
     )
 
@@ -207,7 +206,7 @@ export default function Plugins() {
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     async function onSwitch(id: string, checked: boolean) {
-        await Services.Settings.setPluginEnabled(id, checked)
+        await Services.Settings.setPluginMinimalModeEnabled(id, checked)
         setPluginStatus({ ...pluginStatus, [id]: checked })
     }
 
@@ -233,7 +232,7 @@ export default function Plugins() {
 
     useEffect(() => {
         Object.values(PLUGIN_IDS).forEach(async (id) => {
-            const enabled = await Services.Settings.getPluginEnabled(id)
+            const enabled = await Services.Settings.getPluginMinimalModeEnabled(id)
             setPluginStatus((status) => ({ ...status, [id]: enabled }))
         })
     }, [])

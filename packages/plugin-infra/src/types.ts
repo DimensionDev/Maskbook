@@ -101,8 +101,6 @@ export namespace Plugin.Shared {
          * This does not affect if the plugin enable or not.
          */
         experimentalMark?: boolean
-        /** Configuration of how this plugin is managed by the Mask Network. */
-        management?: ManagementProperty
         /** i18n resources of this plugin */
         i18n?: I18NResource
         /** Introduce networks information. */
@@ -117,6 +115,8 @@ export namespace Plugin.Shared {
          * Declare this field properly so Mask Network can suggest your plugin when needed.
          */
         contribution?: Contribution
+        /** Declare ability this plugin supported. */
+        ability?: Ability
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
@@ -162,18 +162,6 @@ export namespace Plugin.Shared {
         /** The Web3 Network this plugin supports */
         web3?: Web3Plugin.EnableRequirement
     }
-    export interface ManagementProperty {
-        /** This plugin should not displayed in the plugin management page. */
-        internal?: boolean
-        /**
-         * This plugin should not allow to be "disabled" in the plugin management page.
-         *
-         * This property is for the Wallet plugin. It's the core of almost all other plugins.
-         *
-         * It should be replaced by "dependency" management in the future (if there are more cases than the Wallet one).
-         */
-        alwaysOn?: boolean
-    }
     export interface SupportedNetworksDeclare {
         /**
          * opt-in means the listed networks is supported.
@@ -191,6 +179,19 @@ export namespace Plugin.Shared {
         metadataKeys?: ReadonlySet<string>
         /** This plugin can recognize and enhance the post that matches the following matchers. */
         postContent?: ReadonlySet<RegExp | string>
+    }
+    export interface Ability {
+        /**
+         * Declare that this plugin supports minimal mode.
+         * In this mode, the automated minimal mode is not applied to this plugin.
+         *
+         * The plugin MUST follow the design guide to behave like it is in the automated minimal mode, e.g.:
+         *
+         * - Do not display full UI in PostInspector
+         * - Do not display full UI in DecryptedPostInspector
+         */
+        // TODO: implement this flag when there is use case.
+        // UX_NEED_APPROVAL_manualMinimalMode?: boolean
     }
 }
 
@@ -604,7 +605,22 @@ export interface Pageable<T> {
 // ---------------------------------------------------
 export namespace Plugin.__Host {
     export interface Host<Context = undefined> {
+        /**
+         * Control if the plugin is enabled or not.
+         *
+         * Note: This API currently is not in use.
+         *
+         * The "enabled/disabled" UI in the dashboard actually reflects to the "minimalMode" below.
+         */
         enabled: EnabledStatusReporter
+        /**
+         * Control if the plugin is in the minimal mode.
+         *
+         * If it is in the minimal mode, it will be omitted in some cases.
+         *
+         * Plugin can use
+         */
+        minimalMode: EnabledStatusReporter
         addI18NResource(pluginID: string, resources: Plugin.Shared.I18NResource): void
         createContext(id: string, signal: AbortSignal): Context
         signal?: AbortSignal

@@ -5,7 +5,10 @@ import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@maskn
 import { useMatchXS, MaskMessages, useI18N } from '../../utils'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog'
 
-const PluginRender = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => x.GlobalInjection)
+const PluginRender = createInjectHooksRenderer(
+    useActivatedPluginsSNSAdaptor.visibility.useAnyMode,
+    (x) => x.GlobalInjection,
+)
 
 export interface PageInspectorProps {}
 

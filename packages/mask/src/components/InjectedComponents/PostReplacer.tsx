@@ -29,7 +29,7 @@ export function PostReplacer(props: PostReplacerProps) {
     const postPayload = usePostInfoDetails.postPayload()
     const allPostReplacement = useValueRef(allPostReplacementSettings)
 
-    const plugins = useActivatedPluginsSNSAdaptor()
+    const plugins = useActivatedPluginsSNSAdaptor(false)
     const processedPostMessage = useMemo(
         () =>
             plugins.reduce((x, plugin) => {

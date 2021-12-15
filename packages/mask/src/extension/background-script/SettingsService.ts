@@ -122,14 +122,13 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
 }
-export async function getPluginEnabled(id: string) {
+export async function getPluginMinimalModeEnabled(id: string) {
     return currentPluginEnabledStatus['plugin:' + id].value
 }
-export async function setPluginEnabled(id: string, enabled: boolean) {
+export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) {
     currentPluginEnabledStatus['plugin:' + id].value = enabled
 
-    if (enabled) MaskMessages.events.pluginEnabled.sendToAll(id)
-    else MaskMessages.events.pluginDisabled.sendToAll(id)
+    MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
 }
 
 export async function openTab(url: string) {

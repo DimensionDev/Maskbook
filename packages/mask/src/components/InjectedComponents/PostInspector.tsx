@@ -19,7 +19,10 @@ import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion'
 
-const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
+const PluginHooksRenderer = createInjectHooksRenderer(
+    useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
+    (plugin) => plugin.PostInspector,
+)
 
 export interface PostInspectorProps {
     onDecrypted(post: TypedMessageTuple): void

@@ -13,17 +13,24 @@ export function createPluginHost<Context>(
     signal: AbortSignal | undefined,
     createContext: (plugin: string, signal: AbortSignal) => Context,
 ): Plugin.__Host.Host<Context> {
-    const enabled: Plugin.__Host.EnabledStatusReporter = {
-        isEnabled: Services.Settings.getPluginEnabled,
+    const minimalMode: Plugin.__Host.EnabledStatusReporter = {
+        isEnabled: Services.Settings.getPluginMinimalModeEnabled,
         events: new Emitter(),
     }
-    const a = MaskMessages.events.pluginDisabled.on((x) => enabled.events.emit('disabled', x))
-    const b = MaskMessages.events.pluginEnabled.on((x) => enabled.events.emit('enabled', x))
-    signal?.addEventListener('abort', () => [a(), b()])
+    const removeListener = MaskMessages.events.pluginMinimalModeChanged.on(([id, val]) =>
+        minimalMode.events.emit(val ? 'enabled' : 'disabled', id),
+    )
+    signal?.addEventListener('abort', removeListener)
 
     return {
         signal,
-        enabled,
+        // Due to MASK-391, we don't have a user configurable "disabled" plugin.
+        // All plugins are always loaded but it might be displayed in the summary mode.
+        enabled: {
+            events: new Emitter(),
+            isEnabled: () => true,
+        },
+        minimalMode,
         addI18NResource(plugin, resource) {
             createI18NBundle(plugin, resource)(i18nNextInstance)
         },

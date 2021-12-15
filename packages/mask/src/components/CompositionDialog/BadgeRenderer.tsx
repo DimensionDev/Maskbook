@@ -11,7 +11,7 @@ export interface BadgeRendererProps {
 }
 
 export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererProps) {
-    const plugins = useActivatedPluginsSNSAdaptor()
+    const plugins = useActivatedPluginsSNSAdaptor('any')
     const i18n = usePluginI18NField()
     const { t } = useI18N()
     if (!meta) return null

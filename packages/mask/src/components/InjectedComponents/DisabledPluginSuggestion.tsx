@@ -12,8 +12,9 @@ import MaskPluginWrapper from '../../plugins/MaskPluginWrapper'
 import { useI18N } from '../../utils'
 
 function useDisabledPlugins() {
-    const activated = new Set(useActivatedPluginsSNSAdaptor().map((x) => x.ID))
-    const disabledPlugins = [...registeredPlugins].filter((x) => !activated.has(x.ID))
+    const activated = new Set(useActivatedPluginsSNSAdaptor('any').map((x) => x.ID))
+    const minimalMode = new Set(useActivatedPluginsSNSAdaptor(true).map((x) => x.ID))
+    const disabledPlugins = [...registeredPlugins].filter((x) => !activated.has(x.ID) || minimalMode.has(x.ID))
     return disabledPlugins
 }
 
@@ -61,7 +62,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                     action={
                         <Switch
                             sx={{ marginRight: '-12px' }}
-                            onChange={() => Services.Settings.setPluginEnabled(x.ID, true)}
+                            onChange={() => Services.Settings.setPluginMinimalModeEnabled(x.ID, true)}
                         />
                     }
                 />

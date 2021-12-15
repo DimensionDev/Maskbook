@@ -29,7 +29,7 @@ export const PluginEntryRender = memo(
         const chainId = useChainId()
         const pluginID = usePluginIDContext()
         const operatingSupportedChainMapping = useActivatedPluginSNSAdaptor_Web3Supported(chainId, pluginID)
-        const result = [...useActivatedPluginsSNSAdaptor()]
+        const result = [...useActivatedPluginsSNSAdaptor('any')]
             .sort((plugin) => {
                 // TODO: support priority order
                 if (plugin.ID === RedPacketPluginID || plugin.ID === ITO_PluginID) return -1
