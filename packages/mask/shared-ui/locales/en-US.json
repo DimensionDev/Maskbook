@@ -884,6 +884,7 @@
     "plugin_pets_dialog_msg": "Greeting message",
     "plugin_pets_dialog_msg_optional": "Optional, 100 characters max.",
     "plugin_pets_dialog_btn": "Confirm",
+    "plugin_pets_dialog_preview": "Preview",
     "plugin_pets_dialog_created": "Created by MintTeam",
     "plugin_pets_dialog_powerd": "Powered by RSS3",
     "plugin_pets_dialog_success": "Your Non-Fungible Friend has been set up successfully",

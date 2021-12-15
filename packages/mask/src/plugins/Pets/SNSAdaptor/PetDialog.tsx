@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, ReactNode } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -45,6 +45,9 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: theme.spacing(1),
         padding: theme.spacing(2),
     },
+    menuItem: {
+        width: '100%',
+    },
     btn: {
         margin: theme.spacing(8, 0, 4),
     },
@@ -57,8 +60,10 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     itemFix: {
+        // flex: 1,
         display: 'flex',
         alignItems: 'center',
+        width: '100%',
     },
     itemTxt: {
         flex: 1,
@@ -156,10 +161,24 @@ export function PetDialog() {
         return <img className={classes.thumbnail} src={imgItem[0]?.image_url ?? ''} />
     }
 
-    console.log('Nfts', nfts, extraData)
+    const paperComponent = (children: ReactNode | undefined) => (
+        <Box
+            style={{
+                boxShadow: '0 0 5px #ccc',
+                backgroundColor: '#FFFFFF',
+                marginBottom: 10,
+            }}>
+            {children}
+        </Box>
+    )
+
     return (
         <>
-            <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_pets_dialog_title')}>
+            <InjectedDialog
+                open={open}
+                onClose={closeDialog}
+                title={t('plugin_pets_dialog_title')}
+                style={{ boxShadow: '0 0 5px #ccc' }}>
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
@@ -173,18 +192,14 @@ export function PetDialog() {
                                 onChange={(_event, newValue) => onCollectionChange(newValue?.name ?? '')}
                                 getOptionLabel={(option) => option.name}
                                 PopperComponent={ShadowRootPopper}
+                                PaperComponent={({ children }) => paperComponent(children)}
                                 renderOption={(props, option) => (
                                     <MenuItem
                                         key={option.name}
                                         value={option.name}
                                         disabled={!option.tokens.length}
-                                        style={{ width: 370 }}
-                                        divider={true}>
-                                        <Box
-                                            component="li"
-                                            className={classes.itemFix}
-                                            {...props}
-                                            style={{ width: 370 }}>
+                                        className={classes.menuItem}>
+                                        <Box {...props} component="li" className={classes.itemFix}>
                                             {renderImg(option.contract)}
                                             <Typography className={classes.itemTxt}>{option.name}</Typography>
                                         </Box>
@@ -198,14 +213,6 @@ export function PetDialog() {
                                         className={classes.input}
                                         inputProps={{ ...params.inputProps }}
                                         InputProps={{ ...params.InputProps, classes: { root: classes.inputBorder } }}
-                                        //         spellCheck={false}
-                                        // autoCapitalize="off"
-                                        // autoComplete="off"
-                                        // autoCorrect="off"
-                                        // fullWidth
-                                        // label="Metadata Key"
-                                        // margin="normal"
-                                        // variant="standard"
                                     />
                                 )}
                             />
@@ -215,6 +222,7 @@ export function PetDialog() {
                                 options={collection.tokens}
                                 onChange={(_event, newValue) => onImageChange(newValue?.mediaUrl ?? '')}
                                 getOptionLabel={(option) => option.name ?? ''}
+                                PaperComponent={({ children }) => paperComponent(children)}
                                 renderOption={(props, option) => (
                                     <Box component="li" className={classes.itemFix} {...props}>
                                         <img className={classes.thumbnail} src={option.mediaUrl} />
@@ -232,57 +240,6 @@ export function PetDialog() {
                                     />
                                 )}
                             />
-
-                            {/* <TextField
-                                className={classes.input}
-                                id="outlined-select-nfts"
-                                label={t('plugin_pets_dialog_contract')}
-                                fullWidth
-                                select
-                                required
-                                value={collection.name}
-                                error={isCollectionsError}
-                                variant="outlined"
-                                onChange={(e) => onCollectionChange(e.target.value)}
-                            >
-                                {nfts.map((y, idx) => (
-                                    <MenuItem key={y.name} value={y.name} disabled={!y.tokens.length}>
-                                        <Box 
-                                        // className={classes.itemFix}
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                        }}
-                                        >
-                                            <img className={classes.thumbnail} src={extraData[idx]?.image_url ?? ''} />
-                                            <Typography>{y.name}</Typography>
-                                        </Box>
-                                    </MenuItem>
-                                ))}
-                            </TextField> */}
-                            {/* <TextField
-                                className={classes.input}
-                                label={t('plugin_pets_dialog_token')}
-                                fullWidth
-                                select
-                                required
-                                value={metaData.image}
-                                error={isImageError}
-                                variant="outlined"
-                                disabled={!collection.name}
-                                maxRows={2}
-                                onChange={(e) => onImageChange(e.target.value)}>
-                                {collection.tokens.map((item, index) => {
-                                    return (
-                                        <MenuItem key={`${item.name}${index}`} value={item.mediaUrl}>
-                                            <Box className={classes.itemFix}>
-                                                <img className={classes.thumbnail} src={item.mediaUrl} />
-                                                <Typography>{item.name}</Typography>
-                                            </Box>
-                                        </MenuItem>
-                                    )
-                                })}
-                            </TextField> */}
                             <TextField
                                 className={classes.inputOptl}
                                 InputProps={{ classes: { root: classes.inputArea } }}

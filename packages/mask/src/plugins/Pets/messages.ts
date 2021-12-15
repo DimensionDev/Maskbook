@@ -1,30 +1,8 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { PetsPluginID } from './constants'
-
-interface CashTagEvent {
-    name: string
-    element: HTMLAnchorElement | null
-}
-
-interface PetsDialogEvent {
-    open: boolean
-}
-
-interface PetsConfirmationEvent {
-    open: boolean
-}
+import type { PetsDialogEvent } from './types'
 
 export interface PetMessage {
-    /**
-     * View a cash tag
-     */
-    cashTagObserved: CashTagEvent
-
-    /**
-     * Confirm swap dialog
-     */
-    essayConfirmationUpdated: PetsConfirmationEvent
-
     /**
      * Pets essay set dialog
      */

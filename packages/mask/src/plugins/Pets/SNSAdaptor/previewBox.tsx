@@ -1,6 +1,7 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import classNames from 'classnames'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -104,7 +105,7 @@ interface Props {
 
 export function PreviewBox(props: Props) {
     const classes = useStylesExtends(useStyles(), {})
-
+    const { t } = useI18N()
     return (
         <div className={classes.box}>
             {props.message && (
@@ -119,7 +120,7 @@ export function PreviewBox(props: Props) {
             {props.imageUrl && <img className={classes.image} src={props.imageUrl} />}
             {!(props.message || props.imageUrl) && (
                 <div className={classes.noData}>
-                    <Typography>Preview</Typography>
+                    <Typography>{t('plugin_pets_dialog_preview')}</Typography>
                 </div>
             )}
         </div>

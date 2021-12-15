@@ -1,5 +1,9 @@
 import type { ERC721TokenInfo } from '@masknet/web3-shared-evm'
 
+export interface PetsDialogEvent {
+    open: boolean
+}
+
 export interface EssayRSSNode {
     address: string
     signature: string

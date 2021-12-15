@@ -15,7 +15,6 @@ export async function getAssetContract(contract_address: string, chainId: ChainI
             headers: { 'x-api-key': OpenSeaAPI_Key },
         })
     ).json()
-    console.log('collection', fetchResponse)
     const collection = fetchResponse as CollectionNFT
     return collection
 }
