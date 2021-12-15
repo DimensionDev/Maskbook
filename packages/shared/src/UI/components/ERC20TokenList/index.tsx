@@ -140,6 +140,7 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
                         : { from: 'search', inList: false }
                     : { from: 'defaultList', inList: true },
                 selectedTokens,
+                assetsLoading,
                 account,
             )}
             placeholder={getPlaceHolder()}

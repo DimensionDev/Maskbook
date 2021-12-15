@@ -75,6 +75,7 @@ export const getERC20TokenListItem =
             inList: boolean
         },
         selectedTokens: string[],
+        loadingAsset: boolean,
         account?: string,
     ) =>
     ({ data, onSelect }: MaskSearchableListItemProps<Asset>) => {
@@ -106,7 +107,7 @@ export const getERC20TokenListItem =
 
         const action = useMemo(() => {
             return !isNotAdded || isAdded || (info.inList && info.from === 'search') ? (
-                <span>{data.balance ? formatBalance(data.balance, token.decimals, 6) : <LoadingAnimation />}</span>
+                <span>{loadingAsset ? <LoadingAnimation /> : formatBalance(data.balance ?? 0, token.decimals, 6)}</span>
             ) : (
                 <MaskLoadingButton
                     variant="rounded"
