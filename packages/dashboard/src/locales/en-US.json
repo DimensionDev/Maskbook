@@ -47,7 +47,7 @@
     "create_account_persona_successfully": "Create persona successfully",
     "create_account_connect_social_media_title": "Connect Social Media",
     "create_account_failed": "Create Account Failed",
-    "sign_in_account_identity_title": "Recovery your Persona",
+    "sign_in_account_identity_title": "Recover your persona",
     "sign_in_account_tab_identity": "Identity",
     "sign_in_account_sign_up_button": "Sign Up",
     "sign_in_account_identity_warning": "The digital identity code can only recover your digital identity. It can encrypt and decrypt the social information signed and sent by this digital identity.",

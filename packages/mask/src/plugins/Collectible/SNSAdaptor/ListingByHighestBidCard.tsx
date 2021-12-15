@@ -111,7 +111,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                             helperText: t('plugin_collectible_set_starting_bid_price'),
                         },
                     }}
-                    FixedTokenListProps={{
+                    FungibleTokenListProps={{
                         selectedTokens: token.value ? [token.value.address] : [],
                         tokens: paymentTokens,
                         whitelist: paymentTokens.map((x) => x.address),

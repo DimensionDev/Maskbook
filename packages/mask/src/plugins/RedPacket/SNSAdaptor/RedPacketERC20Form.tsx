@@ -110,7 +110,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             open: true,
             uuid: id,
             disableNativeToken: false,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
             },
         })
