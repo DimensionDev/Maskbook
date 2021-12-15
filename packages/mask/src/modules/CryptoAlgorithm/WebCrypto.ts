@@ -5,7 +5,7 @@ import {
     CryptoKeyToJsonWebKey,
 } from '../../utils/type-transform/CryptoKey-JsonWebKey'
 import type { AESName } from './interfaces/interface.aes'
-import type { AESJsonWebKey, PBKDF2UnknownKey } from './interfaces/utils'
+import type { AESJsonWebKey, PBKDF2UnknownKey } from '@masknet/shared-base'
 
 export type WebCryptoSupportedMethods = Pick<
     CryptoAlgorithmProviderMethods,

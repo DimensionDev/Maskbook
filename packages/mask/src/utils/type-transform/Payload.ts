@@ -2,17 +2,9 @@ import type { SocialNetwork } from '../../social-network'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { i18n } from '../../../shared-ui/locales_legacy'
 import { Result, Ok, Err } from 'ts-results'
-import { Identifier, ProfileIdentifier } from '../../database/type'
 import { decodeTextPayloadUI, encodeTextPayloadUI } from '../../social-network/utils/text-payload-ui'
 
-import type { Payload, PayloadAlpha38 } from '@masknet/shared'
-export type {
-    Payload,
-    PayloadAlpha38,
-    PayloadAlpha40_Or_Alpha39,
-    PayloadLatest,
-    PayloadVersions as Versions,
-} from '@masknet/shared'
+import { Identifier, Payload, PayloadAlpha38, ProfileIdentifier } from '@masknet/shared-base'
 
 /**
  * Detect if there is version -40, -39 or -38 payload

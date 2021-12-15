@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { MoreHoriz } from '@mui/icons-material'
 import { EditIcon, MaskWalletIcon } from '@masknet/icons'
 import { FormattedAddress } from '@masknet/shared'
-import { useHistory, useRouteMatch } from 'react-router-dom'
+import { useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { formatEthereumAddress, useWallet } from '@masknet/web3-shared-evm'
 import { CopyIconButton } from '../../../../components/CopyIconButton'
@@ -66,8 +66,9 @@ const useStyles = makeStyles()({
 export const WalletInfo = memo(() => {
     const wallet = useWallet()
     const history = useHistory()
+    const address = new URLSearchParams(useLocation().search).get('address')
 
-    const { value: domain } = useReverseAddress(wallet?.address, NetworkPluginID.PLUGIN_EVM)
+    const { value: domain } = useReverseAddress(address ?? wallet?.address, NetworkPluginID.PLUGIN_EVM)
     const { Utils } = useWeb3State()
 
     const excludePath = useRouteMatch({

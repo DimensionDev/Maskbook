@@ -16,7 +16,7 @@ import {
     Button,
     Typography,
 } from '@mui/material'
-import type { AutoPasteFailedEvent } from '@masknet/shared'
+import type { AutoPasteFailedEvent } from '@masknet/shared-base'
 import { Image } from '../shared/Image'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'

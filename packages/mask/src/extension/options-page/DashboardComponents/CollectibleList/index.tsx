@@ -277,7 +277,8 @@ export function CollectionList({ address }: { address: string }) {
                             color="textPrimary"
                             variant="body2"
                             sx={{ fontSize: '16px' }}>
-                            {x.name}({counts[i]})
+                            {x.name}
+                            {counts[i] ? `(${counts[i]})` : null}
                         </Typography>
                     </Box>
                     <CollectibleListAddress

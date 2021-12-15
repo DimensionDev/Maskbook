@@ -2,11 +2,10 @@ import { definedSocialNetworkUIs, getNetworkWorker, loadSocialNetworkUI } from '
 import { Flags } from '../../../shared'
 import { requestSNSAdaptorPermission } from '../../social-network/utils/permissions'
 
-import { delay } from '../../utils/utils'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import stringify from 'json-stable-stringify'
 import { SetupGuideStep } from '../../components/InjectedComponents/SetupGuide'
-import type { PersonaIdentifier } from '@masknet/shared'
+import { PersonaIdentifier, delay } from '@masknet/shared-base'
 
 export async function getDefinedSocialNetworkUIs() {
     return [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {

@@ -21,6 +21,8 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
         position: 'relative',
         backgroundColor: theme.palette.background.paper,
+        width: 172,
+        height: 172,
     },
     icon: {
         top: theme.spacing(1),
@@ -72,10 +74,12 @@ export function CollectibleCard(props: CollectibleCardProps) {
     return (
         <>
             {loading ? (
-                <CircularProgress />
+                <Card className={classes.root}>
+                    <CircularProgress />
+                </Card>
             ) : (
                 <Link target="_blank" rel="noopener noreferrer" href={resolveCollectibleLink(chainId, provider, token)}>
-                    <Card className={classes.root} style={{ width: 172, height: 172 }}>
+                    <Card className={classes.root}>
                         {readonly || !wallet ? null : (
                             <ActionsBarNFT classes={{ more: classes.icon }} wallet={wallet} token={token} />
                         )}

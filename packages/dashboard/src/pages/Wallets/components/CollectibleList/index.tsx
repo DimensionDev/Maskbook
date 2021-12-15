@@ -7,7 +7,7 @@ import { CollectibleCard } from '../CollectibleCard'
 import { useDashboardI18N } from '../../../../locales'
 import { PluginMessages } from '../../../../API'
 import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { TransferTab } from '../Transfer'
 import { useNetworkDescriptor, useWeb3State as useWeb3PluginState, Web3Plugin, useAccount } from '@masknet/plugin-infra'
 import { useAsyncRetry } from 'react-use'
@@ -53,7 +53,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     const onSend = useCallback(
         (detail: Web3Plugin.NonFungibleToken) =>
-            navigate(RoutePaths.WalletsTransfer, {
+            navigate(DashboardRoutes.WalletsTransfer, {
                 state: {
                     type: TransferTab.Collectibles,
                     erc721Token: detail,

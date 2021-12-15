@@ -11,7 +11,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
-import type { PersonaInformation } from '@masknet/shared'
+import type { PersonaInformation } from '@masknet/shared-base'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()

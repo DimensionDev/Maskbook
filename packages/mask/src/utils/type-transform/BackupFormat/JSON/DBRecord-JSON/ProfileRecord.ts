@@ -1,6 +1,6 @@
 import type { ProfileRecord } from '../../../../../../background/database/persona/db'
 import type { BackupJSONFileLatest } from '../latest'
-import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../../../../database/type'
+import { ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
 
 export function ProfileRecordToJSONFormat(profile: ProfileRecord): BackupJSONFileLatest['profiles'][0] {
     return {

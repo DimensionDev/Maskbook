@@ -1,8 +1,8 @@
-import { ProfileIdentifier, Identifier, PersonaIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../database/type'
+import { ECKeyIdentifierFromJsonWebKey } from '../../database/type'
 import { compressSecp256k1Key, decompressSecp256k1Key } from './SECP256k1-Compression'
 import type { BackupJSONFileLatest } from './BackupFormat/JSON/latest'
 import type { ProfileRecord } from '../../../background/database/persona/db'
-import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
+import { ProfileIdentifier, type PersonaIdentifier, Identifier, type AESJsonWebKey } from '@masknet/shared-base'
 
 export type BackupJSONFileLatestShort = [
     string, // version, should be "1"

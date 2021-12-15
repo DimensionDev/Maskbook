@@ -1,6 +1,6 @@
 import { useAsyncRetry } from 'react-use'
 import type BigNumber from 'bignumber.js'
-import type { ProfileIdentifier } from '@masknet/shared'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 
 export type Dao_Payload = {
     // timestamp
