@@ -125,12 +125,7 @@ export function getCoingeckoPlatformId(chainId: ChainId) {
 }
 
 export function getCoingeckoCoinId(chainId: ChainId) {
-    const coin = COINGECKO_COIN_LIST.find((coin) => coin.chainId === chainId)
-    if (!coin) {
-        console.log(new Error(`No coin config found for ${chainId}`))
-        return
-    }
-    return coin.id
+    return COINGECKO_COIN_LIST.find((coin) => coin.chainId === chainId)?.id
 }
 
 export function getNetworkName(chainId: ChainId) {

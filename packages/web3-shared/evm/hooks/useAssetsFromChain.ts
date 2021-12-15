@@ -8,7 +8,7 @@ import { useProviderType } from './useProviderType'
 import { useBalances } from './useBalances'
 import { useMemo } from 'react'
 
-const emptyList = [] as const
+const EMPTY_LIST: never[] = []
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
     const providerType = useProviderType()
     const balances = useBalances()
@@ -24,7 +24,7 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
     const erc20Tokens = useMemo(() => tokens.filter((x) => x.type === EthereumTokenType.ERC20), [tokens])
     const erc20TokenAddresses = useMemo(() => erc20Tokens.map((x) => x.address), [erc20Tokens])
 
-    const { value: listOfBalance = emptyList, loading, error, retry } = useTokensBalance(erc20TokenAddresses, chainId)
+    const { value: listOfBalance = EMPTY_LIST, loading, error, retry } = useTokensBalance(erc20TokenAddresses, chainId)
 
     const assets = useMemo(() => {
         return [
