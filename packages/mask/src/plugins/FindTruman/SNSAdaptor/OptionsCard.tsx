@@ -119,6 +119,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                 }
             }
             setUnmeetCondition(userStatus ? userStatus.notMeetConditions : [])
+            userStatus?.notMeetConditions.length > 0 && setError('insufficient-nft')
         }
     }
 
@@ -420,10 +421,10 @@ export default function OptionsCard(props: OptionsViewProps) {
                             />
                         </Alert>
                     )}
-                    {error === 'insufficient-nft' && (
+                    {unmeetCondition.length > 0 && (
                         <Alert severity="info">{t('plugin_find_truman_insufficient_nft')}</Alert>
                     )}
-                    {error === 'insufficient-nft' && <NoNftCard conditions={unmeetCondition} />}
+                    {unmeetCondition.length > 0 && <NoNftCard conditions={unmeetCondition} />}
                 </>
             )}
         </CardContent>
