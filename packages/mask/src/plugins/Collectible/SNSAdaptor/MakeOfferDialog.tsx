@@ -35,7 +35,7 @@ import { toAsset } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
-import { pow10 } from '@masknet/web3-shared-base'
+import { rightShift, ZERO } from '@masknet/web3-shared-base/utils/number'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -76,9 +76,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
     const leastPrice =
-        asset?.value && asset.value.orders?.length
-            ? new BigNumber(asset.value.orders[0].base_price ?? '0')
-            : new BigNumber('0')
+        asset?.value && asset.value.orders?.length ? new BigNumber(asset.value.orders[0].base_price ?? '0') : ZERO
 
     const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
     const selectedPaymentToken = first(paymentTokens)
@@ -120,7 +118,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [open])
 
     const validationMessage = useMemo(() => {
-        const amount_ = new BigNumber(pow10(token.value?.decimals ?? 0).multipliedBy(amount) ?? '0')
+        const amount_ = new BigNumber(rightShift(amount, token.value?.decimals) ?? '0')
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isNaN() || amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
