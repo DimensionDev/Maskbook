@@ -1,123 +1,137 @@
-import { useState, useEffect } from 'react'
-import NFTItem from './components/NFTItem'
-import NFTBadges from './components/NFTBadges'
-import Button from './components/Button'
-import type { GeneralAssetWithTags } from './common/types'
-import { COLORS } from './common/variables'
-import { Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import formatter from './common/address'
-import { CircularProgress } from '@mui/material'
-import utils from './common/utils'
+import { getMaskColor, makeStyles, useStylesExtends } from '@masknet/theme'
+import {
+    formatEthereumAddress,
+    resolveAddressLinkOnExplorer,
+    ChainId,
+    EthereumNameType,
+    useEthereumAddress,
+} from '@masknet/web3-shared-evm'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import { Box, Link, Typography, CircularProgress, Tooltip } from '@mui/material'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { useI18N } from '../../../utils'
+import { useUserOwnerAddress } from '../../Avatar/hooks/useUserOwnerAddress'
 
 const useStyles = makeStyles()((theme) => ({
-    msg: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
+    root: {
+        position: 'relative',
     },
-    primaryText: {
-        color: theme.palette.primary.main,
+    note: {
+        padding: `0 ${theme.spacing(1)}`,
+        textAlign: 'right',
+    },
+    text: {
+        paddingTop: 36,
+        paddingBottom: 36,
+        '& > p': {
+            color: getMaskColor(theme).textPrimary,
+        },
+    },
+    icon: {
+        color: getMaskColor(theme).textPrimary,
+    },
+    iconContainer: {
+        display: 'inherit',
+    },
+    tipList: {
+        listStyleType: 'decimal',
+        paddingLeft: 16,
     },
 }))
-interface NFTPageProps {
-    address: string
-    isOwned: boolean
-    isConnected: boolean
-}
+
+interface NFTPageProps extends withClasses<'text' | 'button'> {}
 
 export function NFTPage(props: NFTPageProps) {
-    const { address, isOwned, isConnected } = props
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
+    const identity = useCurrentVisitingIdentity()
+    const { loading: loadingENS, value } = useEthereumAddress(
+        identity.nickname ?? '',
+        identity.identifier.userId,
+        identity.bio ?? '',
+    )
+    const { type, name, address } = value ?? {}
+    const { loading: loadingWalletGun, value: walletAddressGun } = useUserOwnerAddress(identity.identifier.userId)
 
-    const [listedNFT, setlistedNFT] = useState<GeneralAssetWithTags[]>([])
-    const [isLoading, setLoading] = useState(true)
+    const rulesTipMap = [
+        t('plugin_profile_binding_rule1'),
+        t('plugin_profile_binding_rule2'),
+        t('plugin_profile_binding_rule3', { suffix: `".eth"` }),
+        t('plugin_profile_binding_rule4'),
+    ]
 
-    const toSingleFootprint = (platform: string, identity: string, id: string, type: string) => {
-        window.open(
-            `https://rss3.bio/${address}/singlenft/${platform}/${identity}/${id}/${type}`,
-            '_blank',
-            'noopener noreferrer',
+    const tooltipRender = (
+        <div style={{ textAlign: 'left' }}>
+            <Typography variant="body2">{t('plugin_profile_binding_rules_title')}</Typography>
+            <ul className={classes.tipList}>
+                {rulesTipMap.map((item, index) => {
+                    return <li key={index}>{item}</li>
+                })}
+            </ul>
+        </div>
+    )
+
+    if (!address && !walletAddressGun)
+        return (
+            <div className={classes.root}>
+                <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
+                    <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
+                </Box>
+            </div>
         )
-    }
-
-    const loadNFTs = async () => {
-        const { listed } = await utils.initAssets('NFT')
-        setLoading(false)
-        setlistedNFT(listed)
-    }
-
-    useEffect(() => {
-        loadNFTs()
-    }, [isConnected])
-
     return (
-        <>
-            {address !== '' ? (
-                isConnected ? (
-                    isLoading ? (
-                        <div className="flex justify-center items-center">
-                            <CircularProgress />
-                        </div>
-                    ) : (
-                        <div>
-                            <section className="flex flex-row justify-between items-center w-full gap-4">
-                                <div className="text-nft">
-                                    <Typography className={classes.primaryText} variant="subtitle1">
-                                        {formatter(address)}
-                                    </Typography>
-                                </div>
-                                {isOwned ? (
-                                    <Button
-                                        isOutlined={true}
-                                        color={COLORS.nft}
-                                        text="Edit"
-                                        onClick={() => {
-                                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
-                                        }}
-                                    />
-                                ) : (
-                                    ''
-                                )}
-                            </section>
-                            <section className="grid gap-4 py-4 grid-cols-2 md:grid-cols-3 justify-items-center">
-                                {listedNFT.map((asset, index) => (
-                                    <div
-                                        key={index}
-                                        className="relative cursor-pointer w-full"
-                                        onClick={() => {
-                                            toSingleFootprint(asset.platform, asset.identity, asset.id, asset.type)
-                                        }}>
-                                        <NFTItem
-                                            previewUrl={asset.info.image_preview_url}
-                                            detailUrl={asset.info.animation_url}
-                                        />
-                                        <NFTBadges
-                                            location="overlay"
-                                            chain={asset.type.split('-')[0]}
-                                            collectionImg={asset.info.collection_icon}
-                                        />
-                                    </div>
-                                ))}
-                            </section>
-                        </div>
-                    )
-                ) : (
-                    <div className="text-center my-8">
-                        <Typography className={classes.msg} variant="body1">
-                            {isOwned
-                                ? 'Please connect your RSS3 profile.'
-                                : 'This user has not connected with RSS3 yet.'}
-                        </Typography>
-                    </div>
-                )
+        <div className={classes.root}>
+            {loadingWalletGun || loadingENS ? (
+                <Box className={classes.note} display="flex" alignItems="center" justifyContent="center">
+                    <CircularProgress />
+                </Box>
             ) : (
-                <div className="text-center my-8">
-                    <Typography className={classes.msg} variant="body1">
-                        {isOwned
-                            ? 'Please connect an Ethereum compatible wallet.'
-                            : 'This user has not connected any Ethereum compatible wallet.'}
-                    </Typography>
-                </div>
+                <>
+                    <Box
+                        className={classes.note}
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="flex-end"
+                        flexWrap="wrap">
+                        <Box display="flex" alignItems="center">
+                            <Typography color="textPrimary" component="span">
+                                {t('plugin_profile_current_display_of', { type: type })}
+                                <Link
+                                    href={resolveAddressLinkOnExplorer(
+                                        ChainId.Mainnet,
+                                        (address?.length === 0 ? walletAddressGun : address) ?? '',
+                                    )}
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    {type === EthereumNameType.DEFAULT
+                                        ? formatEthereumAddress(
+                                              (address?.length === 0 ? walletAddressGun : address) ?? '',
+                                              4,
+                                          )
+                                        : name}
+                                </Link>
+                            </Typography>
+                            <div className={classes.iconContainer}>
+                                <Tooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={tooltipRender}
+                                    arrow
+                                    placement="top">
+                                    <InfoOutlinedIcon
+                                        fontSize="small"
+                                        className={classes.icon}
+                                        sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
+                                    />
+                                </Tooltip>
+                            </div>
+                        </Box>
+                    </Box>
+                    <CollectionList address={(address?.length === 0 ? walletAddressGun : address) ?? ''} />
+                </>
             )}
-        </>
+        </div>
     )
 }
