@@ -6,13 +6,15 @@ const hasListened: Record<string, boolean> = { __proto__: null! }
 const { has } = Reflect
 const { Promise, setTimeout } = window
 const { resolve } = Promise
+const { split } = String.prototype
+const { shift } = Array.prototype
 
-const read = (path: string) => {
-    const fragments = path.split('.')
-    let result = window as any
+function read(path: string) {
+    const fragments = apply(split, path, ['.' as any])
+    let result: any = window
     while (true) {
         if (fragments.length === 0) return result
-        const key = fragments.shift()
+        const key = apply(shift, fragments, [])
         result = key ? result[key] : result
     }
 }
@@ -28,8 +30,6 @@ export function callRequest(path: string, id: number, request: unknown) {
 export function bindEvent(path: string, bridgeEvent: keyof InternalEvents, event: string) {
     if (hasListened[event]) return
     hasListened[event] = true
-    // Todo: wait until ethereum appears
-    // Note: DO NOT use intrinsics here because ethereum is not.
     read(path).on(
         event,
         clone_into((...args: any[]) => {
@@ -50,5 +50,5 @@ function untilInner(name: string) {
 }
 
 export function until(path: string, id: number) {
-    handlePromise(id, untilInner.bind(null, path))
+    handlePromise(id, () => untilInner(path))
 }
