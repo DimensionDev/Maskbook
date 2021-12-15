@@ -20,8 +20,6 @@ export enum PairState {
 
 export type TokenPair = [Token, Token]
 
-const EMPTY_LIST: never[] = []
-
 export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly TokenPair[]) {
     const context = useGetTradeContext(tradeProvider)
 

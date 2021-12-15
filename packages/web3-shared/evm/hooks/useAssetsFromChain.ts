@@ -1,4 +1,5 @@
 import { first } from 'lodash-unified'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { Asset, ChainId, EthereumTokenType, FungibleTokenDetailed } from '../types'
 import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
@@ -8,7 +9,6 @@ import { useProviderType } from './useProviderType'
 import { useBalances } from './useBalances'
 import { useMemo } from 'react'
 
-const EMPTY_LIST: never[] = []
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
     const providerType = useProviderType()
     const balances = useBalances()
