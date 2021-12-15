@@ -16,7 +16,6 @@ module.exports = {
         fastRefresh: true,
     },
     webpackFinal: async (config) => {
-        config.experiments = { asyncWebAssembly: true }
         config.resolve.fallback = {
             crypto: false,
             stream: 'stream-browserify',
@@ -30,7 +29,7 @@ module.exports = {
             test: /\.m?js$/,
             type: 'javascript/auto',
             resolve: {
-                fullySpecified: false,
+                fullySpecified: false, // disable the behaviour
             },
         })
 

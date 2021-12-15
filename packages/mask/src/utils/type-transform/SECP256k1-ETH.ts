@@ -1,15 +1,9 @@
+import secp256k1 from 'tiny-secp256k1'
 import { ec as EC } from 'elliptic'
 import { EthereumAddress } from 'wallet.ts'
-import {
-    toBase64URL,
-    fromBase64URL,
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_JsonWebKey,
-    isSecp256k1Point,
-    isSecp256k1PrivateKey,
-} from '@masknet/shared-base'
-import { concatArrayBufferSync } from '@dimensiondev/kit'
+import { Convert, combine } from 'pvtsutils'
+import { Buffer } from 'buffer'
+import type { EC_Public_JsonWebKey, EC_Private_JsonWebKey, EC_JsonWebKey } from '@masknet/shared-base'
 
 export function keyToJWK(key: string, type: 'public'): EC_Public_JsonWebKey
 export function keyToJWK(key: string, type: 'private'): EC_Private_JsonWebKey
@@ -29,23 +23,26 @@ export function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
         d: type === 'private' ? base64(privKey.toArray()) : undefined,
     }
     function base64(nums: number[]) {
-        return toBase64URL(new Uint8Array(nums).buffer)
+        return Convert.ToBase64Url(new Uint8Array(nums).buffer)
     }
 }
 
 export function JWKToKey(jwk: EC_JsonWebKey, type: 'public' | 'private'): string {
     const ec = new EC('secp256k1')
     if (type === 'public' && jwk.x && jwk.y) {
-        const xb = fromBase64URL(jwk.x)
-        const yb = fromBase64URL(jwk.y)
-        const point = new Uint8Array(concatArrayBufferSync(new Uint8Array([0x04]), xb, yb))
-        if (isSecp256k1Point(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
+        const xb = ab(jwk.x)
+        const yb = ab(jwk.y)
+        const point = Buffer.from(combine(new Uint8Array([0x04]), xb, yb))
+        if (secp256k1.isPoint(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
     }
     if (type === 'private' && jwk.d) {
-        const db = fromBase64URL(jwk.d)
-        if (isSecp256k1PrivateKey(db)) return `0x${ec.keyFromPrivate(db).getPrivate('hex')}`
+        const db = Buffer.from(ab(jwk.d))
+        if (secp256k1.isPrivate(db)) return `0x${ec.keyFromPrivate(db).getPrivate('hex')}`
     }
     throw new Error('invalid private key')
+    function ab(base64: string) {
+        return Convert.FromBase64Url(base64)
+    }
 }
 
 export function keyToAddr(key: string, type: 'public' | 'private'): string {
