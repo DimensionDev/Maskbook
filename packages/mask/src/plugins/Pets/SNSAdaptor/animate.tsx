@@ -38,7 +38,7 @@ const useStyles = makeStyles()(() => ({
     wordBox: {
         position: 'absolute',
         maxWidth: 150,
-        maxHeight: 80,
+        maxHeight: 85,
         bottom: 150,
         backgroundColor: '#fff',
         borderRadius: 12,
@@ -90,6 +90,7 @@ const useStyles = makeStyles()(() => ({
         fontFamily: 'TwitterChirp',
         lineHeight: '16px',
         color: '#222',
+        wordBreak: 'break-all',
     },
 }))
 
@@ -101,11 +102,10 @@ const AnimatePic = () => {
 
     const user = useUser()
     const userMeta = useEssay(user, start)
-    const vister = useCurrentVisitingUser()
-    const viNfts = useNfts(vister)
-    const viMeta = useEssay(vister, start)
-    const defMeta = useDefaultEssay(viNfts)
-    console.log('animate', user, userMeta, vister, viNfts, viMeta, defMeta)
+    const visitor = useCurrentVisitingUser()
+    const visitorNfts = useNfts(visitor)
+    const visitorMeta = useEssay(visitor, start)
+    const defMeta = useDefaultEssay(visitorNfts)
 
     const [showMeta, setShowMeta] = useState<{ image: string; word: string } | undefined>(undefined)
     const [show, setShow] = useState(true)
@@ -113,13 +113,13 @@ const AnimatePic = () => {
 
     useEffect(() => {
         let meta
-        if (user.userId === vister.userId) {
+        if (user.userId === visitor.userId) {
             meta = userMeta ?? defMeta
         } else {
-            meta = viMeta ?? defMeta
+            meta = visitorMeta ?? defMeta
         }
         setShowMeta({ image: meta?.image ?? '', word: meta?.word ?? '' })
-    }, [userMeta, viMeta, defMeta])
+    }, [userMeta, visitorMeta, defMeta])
 
     const handleClose = () => setShow(false)
     const handleMouseEnter = () => setInfoShow(true)
@@ -141,7 +141,7 @@ const AnimatePic = () => {
     return (
         <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             <Drag>
-                {start ? (
+                {start && showMeta?.word ? (
                     <Box className={classes.wordContent}>
                         <Box className={classes.wordBox}>
                             <Typography className={classes.word}>{showMeta?.word}</Typography>

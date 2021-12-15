@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo, ReactNode } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { useChainId, isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     Button,
@@ -60,7 +60,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 4,
     },
     itemFix: {
-        // flex: 1,
         display: 'flex',
         alignItems: 'center',
         width: '100%',
@@ -75,6 +74,11 @@ const useStyles = makeStyles()((theme) => ({
         height: 'calc(100% - 16px)',
         boxSizing: 'border-box',
         padding: 4,
+    },
+    boxPaper: {
+        backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : '#FFFFFF',
+        marginBottom: 10,
+        boxShadow: theme.palette.mode === 'dark' ? '0 0 5px #FFFFFF' : '0 0 5px #CCCCCC',
     },
 }))
 
@@ -108,6 +112,7 @@ export function PetDialog() {
         })
     }, [nfts])
 
+    let timer: NodeJS.Timeout
     const saveHandle = async () => {
         if (!collection.name) {
             setCollectionsError(true)
@@ -117,15 +122,16 @@ export function PetDialog() {
             setImageError(true)
             return
         }
-        const chosedToken = collection.tokens.find((item) => item.mediaUrl === metaData.image)
+        const chosenToken = collection.tokens.find((item) => item.mediaUrl === metaData.image)
         const meta = { ...metaData }
         meta.userId = user.userId
         meta.contract = collection.contract
-        meta.tokenId = chosedToken?.tokenId ?? ''
+        meta.tokenId = chosenToken?.tokenId ?? ''
         await PluginPetRPC.saveEssay(user?.address, meta, user?.userId ?? '')
         setTipShow(true)
         closeDialog()
-        setTimeout(() => {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
             setTipShow(false)
         }, 2000)
     }
@@ -152,33 +158,20 @@ export function PetDialog() {
 
     const imageChose = useMemo(() => {
         if (!metaData.image) return ''
-        const imageChosed = collection.tokens.find((item) => item.mediaUrl === metaData.image)
-        return imageChosed?.mediaUrl
+        const imageChosen = collection.tokens.find((item) => item.mediaUrl === metaData.image)
+        return imageChosen?.mediaUrl
     }, [metaData.image])
 
-    const renderImg = (contract: string) => {
-        const imgItem = extraData.filter((i) => i.address.toLowerCase() === contract.toLowerCase())
+    const renderImg = (address: string) => {
+        const imgItem = extraData.filter((i) => isSameAddress(i.address, address))
         return <img className={classes.thumbnail} src={imgItem[0]?.image_url ?? ''} />
     }
 
-    const paperComponent = (children: ReactNode | undefined) => (
-        <Box
-            style={{
-                boxShadow: '0 0 5px #ccc',
-                backgroundColor: '#FFFFFF',
-                marginBottom: 10,
-            }}>
-            {children}
-        </Box>
-    )
+    const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>
 
     return (
         <>
-            <InjectedDialog
-                open={open}
-                onClose={closeDialog}
-                title={t('plugin_pets_dialog_title')}
-                style={{ boxShadow: '0 0 5px #ccc' }}>
+            <InjectedDialog open={open} onClose={closeDialog} title={t('plugin_pets_dialog_title')}>
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
@@ -269,7 +262,7 @@ export function PetDialog() {
                     </Button>
                     <Box className={classes.desBox}>
                         <Typography className={classes.des}>{t('plugin_pets_dialog_created')}</Typography>
-                        <Typography className={classes.des}>{t('plugin_pets_dialog_powerd')}</Typography>
+                        <Typography className={classes.des}>{t('plugin_pets_dialog_powered')}</Typography>
                     </Box>
                 </DialogContent>
             </InjectedDialog>

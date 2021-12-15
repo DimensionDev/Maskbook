@@ -5,11 +5,9 @@ export * from './opensea'
 
 export async function saveEssay(address: string, petMeta: PetMetaDB, userId: string): Promise<PetMetaDB | undefined> {
     const signature = await personalSign(userId, address)
-    const result = await saveCustomEssayToRSS(address, petMeta, signature)
-    return result
+    return saveCustomEssayToRSS(address, petMeta, signature)
 }
 
-export async function getEssay(address: string): Promise<PetMetaDB | undefined> {
-    const result = await getCustomEssayFromRSS(address)
-    return result
+export function getEssay(address: string): Promise<PetMetaDB | undefined> {
+    return getCustomEssayFromRSS(address)
 }

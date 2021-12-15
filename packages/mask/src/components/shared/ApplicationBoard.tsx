@@ -138,6 +138,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     //#endregion
 
+    //#region pet friends
     const { setDialog: setPetDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated)
     //#endregion
 

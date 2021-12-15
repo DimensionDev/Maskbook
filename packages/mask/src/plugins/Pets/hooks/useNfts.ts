@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useValueRef } from '@masknet/shared'
-import { useChainId, useCollectibles, ERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { useChainId, useCollectibles, ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
 import type { User, FilterContract } from '../types'
 import { PetCollections } from '../constants'
 import { currentNonFungibleAssetDataProviderSettings } from '../../Wallet/settings'
@@ -24,17 +24,18 @@ export function useNfts(user: User) {
     )
     const { collectibles = [], hasNextPage } = value
     useEffect(() => {
-        if (collectibles.length === 0) return
-        const total = [...fetchTotal, ...collectibles]
-        setFetchtotal(total)
         const tempNfts: FilterContract[] = initContracts()
-        total.forEach((x) => {
-            tempNfts.forEach((y, idx) => {
-                if (y.contract.toLowerCase() === x.contractDetailed.address.toLowerCase()) {
-                    tempNfts[idx].tokens.push({ ...x.info, tokenId: x.tokenId })
-                }
+        if (collectibles.length) {
+            const total = [...fetchTotal, ...collectibles]
+            setFetchtotal(total)
+            total.forEach((x) => {
+                tempNfts.forEach((y, idx) => {
+                    if (isSameAddress(y.contract, x.contractDetailed.address)) {
+                        tempNfts[idx].tokens.push({ ...x.info, tokenId: x.tokenId })
+                    }
+                })
             })
-        })
+        }
         setNfts(tempNfts)
         if (hasNextPage) {
             const timer = setTimeout(() => {
@@ -45,6 +46,6 @@ export function useNfts(user: User) {
             }
         }
         return () => {}
-    }, [collectibles])
+    }, [user, collectibles])
     return nfts
 }
