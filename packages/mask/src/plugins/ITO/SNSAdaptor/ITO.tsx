@@ -428,7 +428,6 @@ export function ITO(props: ITO_Props) {
     }, [endTime, listOfStatus])
 
     useEffect(() => {
-        console.log({ state: destructState.type, canWithdraw })
         if (destructState.type === TransactionStateType.UNKNOWN || !canWithdraw) return
         let summary = t('plugin_ito_withdraw')
         if (!noRemain) {
