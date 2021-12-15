@@ -222,7 +222,7 @@ export const GasSetting1559 = memo(() => {
         mode: 'onChange',
         resolver: zodResolver(schema),
         defaultValues: {
-            gasLimit: new BigNumber(gas).toString(),
+            gasLimit: new BigNumber(gas).toFixed(),
             maxPriorityFeePerGas: '',
             maxFeePerGas: '0',
         },
@@ -241,10 +241,7 @@ export const GasSetting1559 = memo(() => {
             if (value?.computedPayload._tx.maxFeePerGas && value?.computedPayload._tx.maxPriorityFeePerGas) {
                 setValue(
                     'maxPriorityFeePerGas',
-                    fromWei(
-                        new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toString(),
-                        'gwei',
-                    ).toString(),
+                    fromWei(new BigNumber(value.computedPayload._tx.maxPriorityFeePerGas).toFixed(), 'gwei').toString(),
                 )
                 setValue(
                     'maxFeePerGas',
@@ -259,7 +256,7 @@ export const GasSetting1559 = memo(() => {
 
     //#region Set gas on tx to form data
     useUpdateEffect(() => {
-        if (gas) setValue('gasLimit', new BigNumber(gas).toString())
+        if (gas) setValue('gasLimit', new BigNumber(gas).toFixed())
     }, [gas, setValue])
     //#endregion
 
@@ -268,11 +265,11 @@ export const GasSetting1559 = memo(() => {
         if (selected !== null) {
             setValue(
                 'maxPriorityFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
+                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toFixed() ?? '',
             )
             setValue(
                 'maxFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
+                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toFixed() ?? '',
             )
         }
     }, [selected, setValue, options])
@@ -283,9 +280,9 @@ export const GasSetting1559 = memo(() => {
             if (value) {
                 const config = value.payload.params.map((param) => ({
                     ...param,
-                    gas: toHex(new BigNumber(data.gasLimit).toString()),
-                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toString()),
-                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toString()),
+                    gas: toHex(new BigNumber(data.gasLimit).toFixed()),
+                    maxPriorityFeePerGas: toHex(formatGweiToWei(data.maxPriorityFeePerGas).toFixed()),
+                    maxFeePerGas: toHex(formatGweiToWei(data.maxFeePerGas).toFixed()),
                 }))
 
                 await WalletRPC.updateUnconfirmedRequest({

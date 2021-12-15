@@ -300,7 +300,7 @@ export function SwapDialog(props: SwapDialogProps) {
                     const tokenAmount = isMax ? maxSwapAmount : val.dividedBy(ratio)
                     const swapAmount = isMax ? tokenAmount.multipliedBy(ratio) : val.dp(0)
                     setInputAmountForUI(
-                        isMax ? leftShift(tokenAmount.multipliedBy(ratio), swapToken.decimals).toString() : value,
+                        isMax ? leftShift(tokenAmount.multipliedBy(ratio), swapToken.decimals).toFixed() : value,
                     )
                     setTokenAmount(tokenAmount.dp(0))
                     setSwapAmount(swapAmount)

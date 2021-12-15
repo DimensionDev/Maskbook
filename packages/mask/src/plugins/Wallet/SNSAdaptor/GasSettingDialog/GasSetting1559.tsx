@@ -100,7 +100,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
             mode: 'onChange',
             resolver: zodResolver(schema),
             defaultValues: {
-                gasLimit: new BigNumber(gasLimit ?? 0).toString(),
+                gasLimit: new BigNumber(gasLimit ?? 0).toFixed(),
                 maxPriorityFeePerGas: '',
                 maxFeePerGas: '0',
             },
@@ -112,7 +112,7 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
 
         //#region Set gas on tx to form data
         useUpdateEffect(() => {
-            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toFixed())
         }, [gasLimit, setValue])
         //#endregion
 
@@ -122,11 +122,11 @@ export const GasSetting1559: FC<GasSettingProps> = memo(
                 clearErrors(['maxPriorityFeePerGas', 'maxFeePerGas'])
                 setValue(
                     'maxPriorityFeePerGas',
-                    new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toString() ?? '',
+                    new BigNumber(currentGasOption?.content?.suggestedMaxPriorityFeePerGas ?? 0).toFixed() ?? '',
                 )
                 setValue(
                     'maxFeePerGas',
-                    new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toString() ?? '',
+                    new BigNumber(currentGasOption?.content?.suggestedMaxFeePerGas ?? 0).toFixed() ?? '',
                 )
             }
         }, [currentGasOption, setValue, options])

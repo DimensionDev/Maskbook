@@ -342,14 +342,14 @@ export function Trader(props: TraderProps) {
             if (gasConfig) {
                 return new BigNumber(
                     (network === NetworkType.Ethereum ? gasConfig.maxFeePerGas : gasConfig.gasPrice) ?? 0,
-                ).toString()
+                ).toFixed()
             } else {
                 if (network === NetworkType.Ethereum) {
                     const response = await WalletRPC.getEstimateGasFees(chainId)
-                    const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toString()
+                    const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toFixed()
                     const maxPriorityFeePerGas = formatGweiToWei(
                         response?.medium?.suggestedMaxPriorityFeePerGas ?? 0,
-                    ).toString()
+                    ).toFixed()
                     setGasConfig({
                         maxFeePerGas,
                         maxPriorityFeePerGas,
@@ -358,7 +358,7 @@ export function Trader(props: TraderProps) {
                     return maxFeePerGas
                 } else {
                     const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
-                    const gasPrice = new BigNumber(response?.data.normal.price ?? 0).toString()
+                    const gasPrice = new BigNumber(response?.data.normal.price ?? 0).toFixed()
                     setGasConfig({
                         gasPrice,
                     })

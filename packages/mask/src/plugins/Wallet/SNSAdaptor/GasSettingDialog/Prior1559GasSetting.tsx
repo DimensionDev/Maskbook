@@ -89,7 +89,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
             mode: 'onChange',
             resolver: zodResolver(schema),
             defaultValues: {
-                gasLimit: new BigNumber(gasLimit ?? 0).toString(),
+                gasLimit: new BigNumber(gasLimit ?? 0).toFixed(),
                 gasPrice: '',
             },
             context: {
@@ -100,12 +100,12 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
         const [inputGasLimit] = watch(['gasLimit'])
 
         useUpdateEffect(() => {
-            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toFixed())
         }, [gasLimit, setValue])
 
         useEffect(() => {
             if (currentGasOption) {
-                setValue('gasPrice', formatWeiToGwei(currentGasOption.gasPrice).toString())
+                setValue('gasPrice', formatWeiToGwei(currentGasOption.gasPrice).toFixed())
             }
         }, [currentGasOption, setValue])
 
@@ -131,7 +131,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                             onClick={() => setGasOption(gasOption)}
                             className={selectedGasOption === gasOption ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
-                            <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
+                            <Typography>{formatWeiToGwei(gasPrice ?? 0).toFixed()} Gwei</Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
                                     usd: formatWeiToEther(gasPrice)
