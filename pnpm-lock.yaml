@@ -178,7 +178,6 @@ importers:
       wallet.ts: ^1.0.1
       web3-core-helpers: 1.5.2
       web3-utils: ^1.5.3
-      webpack: ^5.65.0
       zod: ^3.11.6
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
@@ -234,7 +233,6 @@ importers:
       buffer: 6.0.3
       path-browserify: 1.0.1
       stream-browserify: 3.0.0
-      webpack: 5.65.0
 
   packages/empty:
     specifiers: {}
@@ -812,7 +810,6 @@ importers:
       tss-react: ^2.1.1
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
-      webpack: ^5.65.0
     dependencies:
       '@masknet/icons': link:../icons
       '@masknet/storybook-shared': link:../storybook-shared
@@ -836,7 +833,6 @@ importers:
       '@storybook/manager-webpack5': 6.4.9_f34427d7dbc706e5de14aabe8c678add
       '@storybook/react': 6.4.9_b3b0e4ec79ecd1161d9324158ad5d26d
       babel-loader: 8.2.3_8dd2b11efd9b7265f9b7da54f0e73ab1
-      webpack: 5.65.0
 
   packages/web3-constants:
     specifiers: {}

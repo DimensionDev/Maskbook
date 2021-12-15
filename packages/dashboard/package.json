@@ -62,7 +62,6 @@
     "babel-loader": "^8.2.3",
     "buffer": "^6.0.3",
     "path-browserify": "^1.0.1",
-    "stream-browserify": "^3.0.0",
-    "webpack": "^5.65.0"
+    "stream-browserify": "^3.0.0"
   }
 }
