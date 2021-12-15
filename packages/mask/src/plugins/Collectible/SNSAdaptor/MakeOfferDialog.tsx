@@ -120,9 +120,9 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [open])
 
     const validationMessage = useMemo(() => {
-        const amount_ = new BigNumber(pow10(token.value?.decimals ?? 0).multipliedBy(amount) || '0')
+        const amount_ = new BigNumber(pow10(token.value?.decimals ?? 0).multipliedBy(amount) ?? '0')
         const balance_ = new BigNumber(balance.value ?? '0')
-        if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
+        if (amount_.isNaN() || amount_.isZero()) return t('plugin_collectible_enter_a_price')
         if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
             return t('plugin_collectible_invalid_expiration_date')
