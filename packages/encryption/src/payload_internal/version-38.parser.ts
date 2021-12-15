@@ -17,17 +17,12 @@ import {
     importAsymmetryKeyFromJsonWebKeyOrSPKI,
     JSONParseF,
 } from '../utils'
+import { Convert } from 'pvtsutils'
+import { isPoint, isPointCompressed, pointCompress } from 'tiny-secp256k1'
 import type { PayloadParserResult } from '.'
 import { get_v38PublicSharedCryptoKey } from './shared'
 import { encodeText } from '@dimensiondev/kit'
-import {
-    andThenAsync,
-    CheckedError,
-    Identifier,
-    OptionalResult,
-    ProfileIdentifier,
-    decompressSecp256k1Point,
-} from '@masknet/shared-base'
+import { andThenAsync, CheckedError, Identifier, OptionalResult, ProfileIdentifier } from '@masknet/shared-base'
 
 const decodeUint8Array = decodeUint8ArrayF(PayloadException.InvalidPayload, PayloadException.DecodeFailed)
 const decodeUint8ArrayCrypto = decodeUint8ArrayF(CryptoException.InvalidCryptoKey, CryptoException.InvalidCryptoKey)
@@ -134,14 +129,10 @@ async function decodePublicSharedAESKey(
 async function decodeECDHPublicKey(
     compressedPublic: string,
 ): Promise<OptionalResult<AsymmetryCryptoKey, CryptoException>> {
-    const key = decodeUint8ArrayCrypto(compressedPublic).andThen((val) =>
-        Result.wrap(() => decompressSecp256k1Point(val)).mapErr(
-            (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
-        ),
-    )
+    const key = decodeUint8ArrayCrypto(compressedPublic).andThen(decompressK256Point)
 
     if (key.err) return key
-    const { x, y } = key.val
+    const [x, y] = key.val
     const jwk: JsonWebKey = {
         crv: 'K-256',
         ext: true,
@@ -156,4 +147,13 @@ async function decodeECDHPublicKey(
         algr: PublicKeyAlgorithmEnum.secp256k1,
         key: imported.val,
     })
+}
+
+function decompressK256Point(point: Uint8Array) {
+    if (!isPoint(point)) return new CheckedError(CryptoException.InvalidCryptoKey, null).toErr()
+    const uncompressed: Uint8Array = isPointCompressed(point) ? pointCompress(point, false) : point
+    const len = (uncompressed.length - 1) / 2
+    const x = uncompressed.slice(1, len + 1)
+    const y = uncompressed.slice(len + 1)
+    return Ok([Convert.ToBase64Url(x), Convert.ToBase64Url(y)] as readonly [x: string, y: string])
 }
