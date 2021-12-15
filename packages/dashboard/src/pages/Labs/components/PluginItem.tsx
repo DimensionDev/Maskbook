@@ -58,6 +58,7 @@ export interface PluginItemProps {
     desc: string
     icon?: ReactNode
     enabled?: boolean
+    hideSwitch?: boolean
     onSwitch: (id: string, checked: boolean) => void
     onTwitter?: (id: string) => void
     onFacebook?: (id: string) => void
@@ -72,7 +73,20 @@ export function PluginItemPlaceholder() {
 }
 
 export default function PluginItem(props: PluginItemProps) {
-    const { id, title, desc, icon, enabled, onSwitch, onTwitter, onFacebook, onExplore, onSetting, onTutorial } = props
+    const {
+        id,
+        title,
+        desc,
+        icon,
+        enabled,
+        hideSwitch,
+        onSwitch,
+        onTwitter,
+        onFacebook,
+        onExplore,
+        onSetting,
+        onTutorial,
+    } = props
     const { classes } = useStyles()
     return (
         <Box className={classes.root}>
@@ -98,7 +112,7 @@ export default function PluginItem(props: PluginItemProps) {
                         {onExplore ? <Explore onClick={() => onExplore(id)} /> : null}
                     </Box>
                 ) : null}
-                {id ? (
+                {!hideSwitch ? (
                     <SettingSwitch
                         size="small"
                         checked={enabled}

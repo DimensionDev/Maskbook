@@ -26,7 +26,6 @@ import { Services } from '../../API'
 import { PLUGIN_IDS, TUTORIAL_URLS_EN } from './constants'
 import { useLocation } from 'react-router-dom'
 import { ContentContainer } from '../../components/ContentContainer'
-import { useLanguage } from '../Settings/api'
 import { WalletStateBar } from '../Wallets/components/WalletStateBar'
 import { PoolTogetherURL } from '../../assets'
 import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
@@ -117,6 +116,7 @@ export default function Plugins() {
             icon: <SwapServiceIcon />,
             enabled: pluginStatus[PLUGIN_IDS.SWAP],
             setting: true,
+            hideSwitch: true,
         },
         {
             id: PLUGIN_IDS.TRANSAK,
@@ -124,6 +124,7 @@ export default function Plugins() {
             desc: t.labs_transak_desc(),
             icon: <TransakIcon />,
             enabled: pluginStatus[PLUGIN_IDS.TRANSAK],
+            hideSwitch: true,
         },
         {
             id: PLUGIN_IDS.COLLECTIBLES,
@@ -189,8 +190,6 @@ export default function Plugins() {
             enabled: pluginStatus[PLUGIN_IDS.CRYPTOARTAI],
         },
     ]
-
-    const language = useLanguage()
 
     const account = useAccount()
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
@@ -266,6 +265,7 @@ export default function Plugins() {
                             onSwitch={onSwitch}
                             onTutorial={onTutorial}
                             onSetting={p.setting ? onSetting : undefined}
+                            hideSwitch={p.hideSwitch}
                         />
                     ))}
                 </Box>
