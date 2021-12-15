@@ -245,7 +245,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
             if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
             if (!trades.length) return t('plugin_trader_error_insufficient_lp')
-            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount.plus(focusedTrade?.value?.fee ?? 0)))
+            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
                 return t('plugin_trader_error_insufficient_balance', {
                     symbol: inputToken?.symbol,
                 })
