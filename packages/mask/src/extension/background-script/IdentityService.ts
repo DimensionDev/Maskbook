@@ -48,7 +48,7 @@ import {
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
-import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
+import { convertBackupFileToObject, fixBackupFilePermission } from '../../utils/type-transform/BackupFile'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import { getCurrentPersonaIdentifier } from './SettingsService'
@@ -203,7 +203,7 @@ export async function restoreFromBase64(base64: string): Promise<Persona | null>
     return restoreFromObject(JSON.parse(decodeText(decodeArrayBuffer(base64))) as BackupJSONFileLatest)
 }
 export async function restoreFromBackup(backup: string): Promise<Persona | null> {
-    return restoreFromObject(UpgradeBackupJSONFile(decompressBackupFile(backup)))
+    return restoreFromObject(fixBackupFilePermission(UpgradeBackupJSONFile(convertBackupFileToObject(backup))))
 }
 //#endregion
 

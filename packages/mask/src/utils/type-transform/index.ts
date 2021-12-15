@@ -1,5 +1,5 @@
 export * from './asyncIteratorHelpers'
-export * from './BackupFileShortRepresentation'
+export * from './BackupFile'
 export * from './BackupFormat'
 export * from './CryptoKey-JsonWebKey'
 export * from './Payload'
