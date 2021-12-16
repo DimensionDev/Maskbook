@@ -63,7 +63,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
         .map((transaction) => {
             let type = transaction.tx?.name
             if (!type && !isNil(transaction.cate_id)) {
-                type = cate_dict[transaction.cate_id].en
+                type = cate_dict[transaction.cate_id].name
             } else if (type === '') {
                 type = 'contract interaction'
             }
