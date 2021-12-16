@@ -26,9 +26,9 @@ export interface AttachmentOptions {
 }
 
 export interface ProviderAgent {
-    makeAttachment(options: AttachmentOptions) : Promise<string>
-    upload(id: string) : AsyncGenerator<number>
-    uploadLandingPage(metadata: LandingPageMetadata) : Promise<string>
+    makeAttachment(options: AttachmentOptions): Promise<string>
+    upload(id: string): AsyncGenerator<number>
+    uploadLandingPage(metadata: LandingPageMetadata): Promise<string>
 }
 
 export interface FileInfo {

@@ -2,10 +2,10 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@dimensiondev/kit'
 import { Bee, CollectionEntry } from '@ethersphere/bee-js'
 import urlcat from 'urlcat'
-import { isEmpty, isNil } from 'lodash-unified'
+import { isEmpty } from 'lodash-unified'
 import { landing } from '../constants'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
-import { makeFileKeySigned }  from '../helpers'
+import { makeFileKeySigned } from '../helpers'
 
 const POSTAGE_STAMP = '0000000000000000000000000000000000000000000000000000000000000000'
 const BEE_HOSTS: string[] = [
@@ -21,18 +21,17 @@ const BEE_HOSTS: string[] = [
     'https://bee-9.gateway.ethswarm.org',
 ]
 
-function createBee() : Bee {
+function createBee(): Bee {
     const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
     return new Bee(BEE_HOSTS[randomIndex])
 }
 
 export class SwarmAgent implements ProviderAgent {
-
-    static providerName = "IPFS"
-    bee: Bee;
+    static providerName = 'Swarm'
+    bee: Bee
 
     constructor() {
-        this.bee = createBee();
+        this.bee = createBee()
     }
 
     async makePayload(data: Uint8Array, type: string, name: string) {
@@ -55,7 +54,6 @@ export class SwarmAgent implements ProviderAgent {
         })
         return reference
     }
-    
 
     async makeAttachment(options: AttachmentOptions) {
         const passphrase = options.key ? encodeText(options.key) : undefined
@@ -67,7 +65,7 @@ export class SwarmAgent implements ProviderAgent {
         return this.makePayload(encoded, 'application/octet-stream', options.name)
     }
 
-    async * upload(id: string) {
+    async *upload(id: string) {
         return 100
     }
 
@@ -83,8 +81,8 @@ export class SwarmAgent implements ProviderAgent {
         const response = await fetch(landing)
         const text = await response.text()
         const replaced = text
-            .replace('Arweave', Swarm.providerName)
-            .replace('Over Arweave', `Over ${Swarm.providerName}`)
+            .replace('Arweave', SwarmAgent.providerName)
+            .replace('Over Arweave', `Over ${SwarmAgent.providerName}`)
             .replace('__METADATA__', encodedMetadata)
         const data = encodeText(replaced)
         return this.makePayload(data, 'text/html', 'landing.html')

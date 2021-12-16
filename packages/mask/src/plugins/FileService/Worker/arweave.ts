@@ -1,17 +1,15 @@
 import { Attachment } from '@dimensiondev/common-protocols'
-import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
+import { encodeText } from '@dimensiondev/kit'
 import Arweave from 'arweave/web'
 import type Transaction from 'arweave/web/lib/transaction'
-import { isEmpty, isNil } from 'lodash-unified'
+import { isEmpty } from 'lodash-unified'
 import { landing, mesonPrefix } from '../constants'
 import { sign } from './remote-signing'
 import TOKEN from './arweave-token.json'
-
-import type { ProviderAgent, LandingPageMetadata, AttachmentOptions, Provider } from '../types'
-import { makeFileKeySigned }  from '../helpers'
+import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
+import { makeFileKeySigned } from '../helpers'
 
 export class ArweaveAgent implements ProviderAgent {
-
     instance: Arweave
     stage: Record<Transaction['id'], Transaction> = {}
 
@@ -56,7 +54,7 @@ export class ArweaveAgent implements ProviderAgent {
         return transaction.id
     }
 
-    async * upload(id: Transaction['id']) {
+    async *upload(id: Transaction['id']) {
         for await (const uploader of this.instance.transactions.upload(this.stage[id])) {
             yield uploader.pctComplete
         }

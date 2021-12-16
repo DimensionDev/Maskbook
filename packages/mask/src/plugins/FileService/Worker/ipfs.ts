@@ -1,11 +1,11 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@dimensiondev/kit'
-import { create, IPFSHTTPClient} from 'ipfs-http-client'
+import { create, IPFSHTTPClient } from 'ipfs-http-client'
 import { isEmpty } from 'lodash-unified'
 import { landing } from '../constants'
 import urlcat from 'urlcat'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
-import { makeFileKeySigned }  from '../helpers'
+import { makeFileKeySigned } from '../helpers'
 
 function creatClient(): IPFSHTTPClient {
     return create({
@@ -16,10 +16,8 @@ function creatClient(): IPFSHTTPClient {
 }
 
 export class IPFSAgent implements ProviderAgent {
-
     client: IPFSHTTPClient
-    static providerName: "IPFS"
-
+    static providerName: 'IPFS'
     constructor() {
         this.client = creatClient()
     }
@@ -34,7 +32,7 @@ export class IPFSAgent implements ProviderAgent {
         return this.makePayload(encoded, 'application/octet-stream')
     }
 
-    async * upload(id: string) {
+    async *upload(id: string) {
         return 100
     }
 
@@ -50,8 +48,8 @@ export class IPFSAgent implements ProviderAgent {
         const response = await fetch(landing)
         const text = await response.text()
         const replaced = text
-            .replace('Arweave', IPFS.providerName)
-            .replace('Over Arweave', `Over ${IPFS.providerName}`)
+            .replace('Arweave', IPFSAgent.providerName)
+            .replace('Over Arweave', `Over ${IPFSAgent.providerName}`)
             .replace('__METADATA__', encodedMetadata)
         const data = encodeText(replaced)
         return this.makePayload(data, 'text/html')
