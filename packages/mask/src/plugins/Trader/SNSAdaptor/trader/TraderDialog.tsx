@@ -11,7 +11,7 @@ import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
-import { useAsync } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
 import { isDashboardPage } from '@masknet/shared-base'
 
@@ -91,6 +91,12 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
     useEffect(() => {
         if (!chainIdValid) closeDialog()
     }, [chainIdValid, closeDialog])
+
+    useUpdateEffect(() => {
+        if (currentChainId) {
+            setChainId(currentChainId)
+        }
+    }, [currentChainId])
 
     return (
         <TargetChainIdContext.Provider>
