@@ -63,6 +63,7 @@ export const Uploading: React.FC = () => {
         const currentProvier = state.provider
         const payloadTxID = await timeout(
             PluginFileServiceRPC.makeAttachment(currentProvier, {
+                name: state.name,
                 key: state.key,
                 block: state.block,
                 type: state.type,

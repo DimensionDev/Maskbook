@@ -69,7 +69,7 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
         .replace('Over Arweave', `Over ${providerName}`)
         .replace('__METADATA__', encodedMetadata)
     const data = encodeText(replaced)
-    return makePayload(data, 'text/html', metadata.name)
+    return makePayload(data, 'text/html', 'landing.html')
 }
 
 function hashToIndex(hash: Reference | string) {
@@ -78,13 +78,22 @@ function hashToIndex(hash: Reference | string) {
 }
 
 async function makePayload(data: Uint8Array, type: string, name: string) {
-    const file: CollectionEntry<Uint8Array> = {
-        path: name,
-        data: data,
+    const isHTML = type === 'text/html'
+    if (isHTML) {
+        const file: CollectionEntry<Uint8Array> = {
+            path: name,
+            data: data,
+        }
+        const { reference } = await randomBee.uploadCollection(POSTAGE_STAMP, [file], {
+            encrypt: false,
+            indexDocument: name,
+        })
+        return reference
     }
-    const { reference } = await randomBee.uploadCollection(POSTAGE_STAMP, [file], {
+    const { reference } = await randomBee.uploadFile(POSTAGE_STAMP, data, name, {
         encrypt: false,
-        indexDocument: type === 'text/html' ? name : undefined
+        size: data.length,
+        contentType: type,
     })
     return reference
 }
