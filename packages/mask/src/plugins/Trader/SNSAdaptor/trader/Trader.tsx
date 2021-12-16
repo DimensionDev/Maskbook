@@ -28,7 +28,7 @@ import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
 import { MINIMUM_AMOUNT, UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useAsync, useUnmount, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
@@ -98,14 +98,8 @@ export function Trader(props: TraderProps) {
 
     //#region if coin be changed, update output token
     useEffect(() => {
-        if (currentChainId !== targetChainId) return
-        if (!coin) {
-            dispatchTradeStore({
-                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-                token: undefined,
-            })
-            return
-        }
+        if (!coin || currentChainId !== targetChainId) return
+
         // if coin be native token and input token also be native token, reset it
         if (
             isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
@@ -415,7 +409,7 @@ export function Trader(props: TraderProps) {
     const nativeTokenPrice = useNativeTokenPrice(chainId)
     const outputTokenPrice = useTokenPrice(chainId, outputToken?.address.toLowerCase())
     const sortedAllTradeComputed = useMemo(() => {
-        if (outputToken && outputTokenPrice) {
+        if (outputToken && (outputTokenPrice || nativeTokenPrice)) {
             return allTradeComputed
                 .map((trade) => {
                     if (
@@ -451,7 +445,7 @@ export function Trader(props: TraderProps) {
                 })
         }
         return allTradeComputed
-            .filter(({ value }) => !!value)
+            .filter(({ value }) => !!value && !value.outputAmount.isZero())
             .sort(({ value: a }, { value: b }) => {
                 if (a?.outputAmount.isGreaterThan(b?.outputAmount ?? 0)) return -1
                 if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
@@ -490,6 +484,13 @@ export function Trader(props: TraderProps) {
             if (event.gasConfig) setGasConfig(event.gasConfig)
         })
     }, [])
+
+    useUnmount(() => {
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+            token: undefined,
+        })
+    })
 
     return (
         <div className={classes.root}>
