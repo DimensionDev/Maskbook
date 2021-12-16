@@ -15,6 +15,7 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { PluginAaveMessages } from '../../plugins/Aave/messages
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -137,6 +138,10 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)
     //#endregion
 
+    //#region Aave
+    const { setDialog: setAaveBuyDialog } = useRemoteControlledDialog(PluginAaveMessages.buyTokenDialogUpdated)
+    //#endregion
+
     //#region second level entry dialog
     const {
         open: isSecondLevelEntryDialogOpen,
@@ -242,6 +247,16 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             false,
             false,
         ),
+
+        createEntry(
+            'Aave',
+            new URL('./assets/aave.png', import.meta.url).toString(),
+            () => setAaveBuyDialog({ open: true, address: account }),
+            undefined,
+            false,
+            false,
+        ),
+
         createEntry(
             'NFTs',
             new URL('./assets/nft.png', import.meta.url).toString(),

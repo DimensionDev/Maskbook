@@ -286,6 +286,7 @@ importers:
       '@ethersproject/address': ^5.0.4
       '@ethersproject/providers': ^5.0.9
       '@ethersproject/solidity': ^5.0.4
+      '@ethersproject/units': ^5.0.4
       '@hookform/resolvers': 2.8.3
       '@masknet/dashboard': workspace:*
       '@masknet/encryption': workspace:^0.0.0
@@ -420,6 +421,7 @@ importers:
       '@ethersproject/address': 5.4.0
       '@ethersproject/providers': 5.4.2
       '@ethersproject/solidity': 5.4.0
+      '@ethersproject/units': 5.4.0
       '@hookform/resolvers': 2.8.3_react-hook-form@7.20.2
       '@masknet/dashboard': link:../dashboard
       '@masknet/encryption': link:../encryption
