@@ -5,7 +5,7 @@ import {
     appearanceSettings,
     currentPersonaIdentifier,
     languageSettings,
-    currentPluginEnabledStatus,
+    currentPluginMinimalModeNOTEnabled,
     pluginIDSettings,
 } from '../../settings/settings'
 import {
@@ -123,10 +123,10 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     currentPersonaIdentifier.value = x.toText()
 }
 export async function getPluginMinimalModeEnabled(id: string) {
-    return currentPluginEnabledStatus['plugin:' + id].value
+    return !currentPluginMinimalModeNOTEnabled['plugin:' + id].value
 }
 export async function setPluginMinimalModeEnabled(id: string, enabled: boolean) {
-    currentPluginEnabledStatus['plugin:' + id].value = enabled
+    currentPluginMinimalModeNOTEnabled['plugin:' + id].value = !enabled
 
     MaskMessages.events.pluginMinimalModeChanged.sendToAll([id, enabled])
 }
