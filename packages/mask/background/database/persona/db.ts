@@ -193,6 +193,10 @@ export async function consistentPersonaDBWriteAccess(
     }
 }
 
+export async function createReadonlyPersonaTransaction() {
+    return createTransaction(await db(), 'readonly')
+}
+
 //#region Plain methods
 /** Create a new Persona. */
 export async function createPersonaDB(record: PersonaRecord, t: PersonasTransaction<'readwrite'>): Promise<void> {
