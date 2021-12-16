@@ -5,8 +5,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import config from './common/config'
 import type { GeneralAssetWithTags } from './common/types'
 import { COLORS } from './common/variables'
-import Button from './components/Button'
-import DonationCard from './components/DonationCard'
+import { Button, DonationCard } from './components'
 import { useDonations } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({

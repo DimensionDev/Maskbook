@@ -5,8 +5,7 @@ import urlcat from 'urlcat'
 import config from './common/config'
 import type { GeneralAssetWithTags } from './common/types'
 import { COLORS } from './common/variables'
-import Button from './components/Button'
-import FootprintCard from './components/FootprintCard'
+import { Button, FootprintCard } from './components'
 import { useFootprints } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,7 +30,7 @@ interface FootprintPageProps {
 
 const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = footprint
-    return urlcat(`https://rss3.bio/:address/singlefootprint/:platform/:identity/:id/:type`, {
+    return urlcat('https://rss3.bio/:address/singlefootprint/:platform/:identity/:id/:type', {
         address,
         platform,
         identity,
@@ -82,11 +81,11 @@ export function FootprintPage(props: FootprintPageProps) {
                 </Typography>
                 {isOwned ? (
                     <Button
-                        isOutlined={true}
+                        isOutlined
                         color={COLORS.footprint}
                         text="Edit"
                         onClick={() => {
-                            window.open(`https://rss3.bio/`, '_blank', 'noopener noreferrer')
+                            window.open('https://rss3.bio/', '_blank', 'noopener noreferrer')
                         }}
                     />
                 ) : null}

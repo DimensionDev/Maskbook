@@ -1,4 +1,4 @@
-import ImageHolder from './ImageHolder'
+import { ImageHolder } from './ImageHolder'
 import { Typography } from '@mui/material'
 import EventRoundedIcon from '@mui/icons-material/EventRounded'
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
@@ -17,7 +17,7 @@ const formatDate = (ts: string): string => {
     return fromUnixTime(Number.parseInt(ts, 16) * 1000).toLocaleDateString('en-US')
 }
 
-const FootprintCard = ({ imageUrl, startDate, endDate, city, country, username, activity }: FootprintProps) => {
+export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, username, activity }: FootprintProps) => {
     // Calc display date
     let displayDate
     if (startDate && endDate) {
@@ -62,5 +62,3 @@ const FootprintCard = ({ imageUrl, startDate, endDate, city, country, username, 
         </div>
     )
 }
-
-export default FootprintCard

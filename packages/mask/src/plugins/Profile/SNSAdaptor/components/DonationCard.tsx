@@ -9,7 +9,7 @@ interface DonationCardProps {
     }[]
 }
 
-const DonationCard = ({ imageUrl, name, contribCount, contribDetails }: DonationCardProps) => {
+export const DonationCard = ({ imageUrl, name, contribCount, contribDetails }: DonationCardProps) => {
     return (
         <div className="flex flex-row items-center justify-start w-full border-2 rounded cursor-pointer text-body-text bg-body-bg border-donation-bg">
             <img
@@ -37,5 +37,3 @@ const DonationCard = ({ imageUrl, name, contribCount, contribDetails }: Donation
         </div>
     )
 }
-
-export default DonationCard

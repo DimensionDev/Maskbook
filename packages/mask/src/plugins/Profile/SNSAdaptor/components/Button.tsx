@@ -35,7 +35,7 @@ interface ButtonInterface {
  * @example
  * <Button text={"Edit Profile"} color={COLORS.nft} isOutlined={true}/>
  */
-const Button = ({
+export const Button = ({
     color,
     text,
     children,
@@ -103,4 +103,3 @@ const Button = ({
         </div>
     )
 }
-export default Button

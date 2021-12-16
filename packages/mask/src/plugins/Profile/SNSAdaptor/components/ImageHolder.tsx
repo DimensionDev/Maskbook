@@ -1,5 +1,3 @@
-import React from 'react'
-
 interface ImageProps {
     imageUrl: string
     title?: string
@@ -7,7 +5,7 @@ interface ImageProps {
     size: number
 }
 
-const ImageHolder = ({ imageUrl, title, isFullRound, size }: ImageProps) => {
+export const ImageHolder = ({ imageUrl, title, isFullRound, size }: ImageProps) => {
     const roundedStyleString = isFullRound ? 'rounded-full' : 'rounded'
     const containerStyles = {
         width: `${size}px`,
@@ -20,5 +18,3 @@ const ImageHolder = ({ imageUrl, title, isFullRound, size }: ImageProps) => {
         </div>
     )
 }
-
-export default ImageHolder
