@@ -197,7 +197,7 @@ export default function Plugins() {
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
 
     async function onSwitch(id: string, checked: boolean) {
-        await Services.Settings.setPluginMinimalModeEnabled(id, checked)
+        await Services.Settings.setPluginMinimalModeEnabled(id, !checked)
         setPluginStatus({ ...pluginStatus, [id]: checked })
     }
 
