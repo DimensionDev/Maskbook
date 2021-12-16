@@ -98,7 +98,14 @@ export function Trader(props: TraderProps) {
 
     //#region if coin be changed, update output token
     useEffect(() => {
-        if (!coin || currentChainId !== targetChainId) return
+        if (currentChainId !== targetChainId) return
+        if (!coin) {
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+                token: undefined,
+            })
+            return
+        }
         // if coin be native token and input token also be native token, reset it
         if (
             isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
@@ -110,7 +117,7 @@ export function Trader(props: TraderProps) {
                 token: undefined,
             })
         }
-        if (!inputToken && !outputToken) {
+        if (!outputToken) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
                 token: coin.contract_address
@@ -169,6 +176,18 @@ export function Trader(props: TraderProps) {
 
     // Query the balance of native tokens on target chain
     useAsync(async () => {
+        if (!wallet) {
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+                balance: '0',
+            })
+
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
+                balance: '0',
+            })
+        }
+
         if (chainId && currentProvider && currentAccount) {
             const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
 

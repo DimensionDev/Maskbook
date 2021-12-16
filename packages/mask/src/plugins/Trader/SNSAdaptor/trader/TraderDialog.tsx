@@ -99,6 +99,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                     open={open || remoteOpen}
                     onClose={() => {
                         onClose?.()
+                        setTraderProps(undefined)
                         closeDialog()
                     }}
                     title={t('plugin_trader_swap')}>
