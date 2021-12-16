@@ -10,6 +10,7 @@ import {
     useNetworkType,
     useWeb3UI,
 } from '@masknet/plugin-infra'
+import { isDashboardPage } from '@masknet/shared-base/src/utils/detect'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -44,9 +45,9 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
     }, [open])
     //#endregion
 
+    const isDashboard = isDashboardPage()
     const networks = getRegisteredWeb3Networks()
     const providers = getRegisteredWeb3Providers()
-
     const pluginID = useValueRef(pluginIDSettings) as NetworkPluginID
     const network = useNetworkDescriptor()
     const [undeterminedPluginID, setUndeterminedPluginID] = useState(pluginID)
@@ -62,7 +63,9 @@ export function SelectProviderDialog(props: SelectProviderDialogProps) {
             pluginIDSettings.value = undeterminedPluginID
         }
         closeDialog()
-    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog])
+
+        if (isDashboard) WalletMessages.events.walletStatusDialogUpdated.sendToLocal({ open: false })
+    }, [networkType, undeterminedNetwork?.type, undeterminedPluginID, closeDialog, isDashboard])
 
     // not available for the native app
     if (hasNativeAPI) return null
