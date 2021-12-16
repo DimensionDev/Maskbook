@@ -1,9 +1,11 @@
-import { Typography, SnackbarContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Typography, SnackbarContent, Button } from '@mui/material'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'
-import { Suspense, ReactNode } from 'react'
+import { Suspense, ReactNode, useMemo } from 'react'
 import { isTwitter } from '../social-network-adaptor/twitter.com/base'
+import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
+import { useI18N } from '../utils'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     pluginName: string
@@ -48,12 +50,43 @@ const useStyles = makeStyles()((theme) => {
             borderTop: `1px solid ${theme.palette.divider}`,
             padding: theme.spacing(2),
         },
+        button: {
+            color: MaskColorVar.twitterButtonText,
+            '&,&:hover': {
+                background: MaskColorVar.twitterButton,
+            },
+        },
     }
 })
 
 export default function MaskPluginWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
     const { pluginName, children, action } = props
+    const personaConnectStatus = usePersonaConnectStatus()
+    const { t } = useI18N()
+
+    const renderChildren = useMemo(() => {
+        return personaConnectStatus.connected && children
+    }, [personaConnectStatus, children])
+
+    const name = useMemo(() => {
+        return !personaConnectStatus.hasPersona
+            ? t('please_create_persona')
+            : !personaConnectStatus.connected
+            ? t('please_connect_persona')
+            : pluginName
+    }, [personaConnectStatus, pluginName])
+
+    const actionButton = useMemo(() => {
+        if (!personaConnectStatus.action) return null
+
+        const button = personaConnectStatus.hasPersona ? t('connect_persona') : t('create_persona')
+        return (
+            <Button variant="contained" className={classes.button} onClick={personaConnectStatus.action}>
+                {button}
+            </Button>
+        )
+    }, [personaConnectStatus])
 
     const inner = (
         <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
@@ -64,12 +97,12 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
                         Mask Plugin
                     </Typography>
                     <Typography variant="h6" fontSize="14px">
-                        {pluginName}
+                        {name}
                     </Typography>
                 </div>
-                <div className={classes.action}>{action}</div>
+                <div className={classes.action}>{actionButton || action}</div>
             </div>
-            {children ? <div className={classes.body}>{children}</div> : null}
+            {renderChildren ? <div className={classes.body}>{children}</div> : null}
         </div>
     )
     return <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />} children={inner} />
