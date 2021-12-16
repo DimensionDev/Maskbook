@@ -176,7 +176,7 @@ export function Trader(props: TraderProps) {
 
     // Query the balance of native tokens on target chain
     useAsync(async () => {
-        if (!wallet) {
+        if (!currentAccount) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: '0',
@@ -186,6 +186,7 @@ export function Trader(props: TraderProps) {
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
                 balance: '0',
             })
+            return
         }
 
         if (chainId && currentProvider && currentAccount) {
