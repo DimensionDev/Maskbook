@@ -26,6 +26,7 @@ export const LoadingButton = memo<DashboardLoadingButtonProps>((props) => {
             variant="contained"
             loadingPosition="end"
             soloLoading={false}
+            fullWidth
             loadingIndicator={<LoadingAnimation />}
             onClick={onClick}
             {...rest}>
