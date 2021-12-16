@@ -70,7 +70,7 @@ export const Uploading: React.FC = () => {
             60000, // ≈ 1 minute
         )
         setPreparing(false)
-        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(payloadTxID)) {
+        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(currentProvier, payloadTxID)) {
             setSendSize(state.size * (pctComplete / 100))
         }
         const landingTxID = await timeout(

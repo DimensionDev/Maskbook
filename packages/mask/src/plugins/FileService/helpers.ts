@@ -1,6 +1,6 @@
 import { createTypedMessageMetadataReader } from '../../protocols/typed-message/metadata'
 import { META_KEY_1, META_KEY_2 } from './constants'
-import type { FileInfo, FileInfoV1 } from './types'
+import type { FileInfo, FileInfoV1, Provider } from './types'
 import schemaV1 from './schema-v1.json'
 import schemaV2 from './schema-v2.json'
 import type { Result } from 'ts-results'
@@ -16,5 +16,5 @@ export function FileInfoMetadataReader(meta: TypedMessage['meta']): Result<FileI
 }
 
 export function FileInfoV1ToV2(info: FileInfoV1): FileInfo {
-    return { ...info, type: 'file', provider: 'arweave' }
+    return { ...info, type: 'file', provider: 'arweave' as Provider }
 }
