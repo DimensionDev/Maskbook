@@ -1,6 +1,6 @@
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeArrayBuffer, encodeText } from '@dimensiondev/kit'
-import { Bee, Reference } from '@ethersphere/bee-js'
+import { Bee, Reference, CollectionEntry } from '@ethersphere/bee-js'
 import urlcat from 'urlcat'
 import { isEmpty, isNil } from 'lodash-unified'
 import { landing } from '../constants'
@@ -78,11 +78,13 @@ function hashToIndex(hash: Reference | string) {
 }
 
 async function makePayload(data: Uint8Array, type: string, name: string) {
-    const { reference } = await randomBee.uploadFile(POSTAGE_STAMP, data, name, {
+    const file: CollectionEntry<Uint8Array> = {
+        path: name,
+        data: data,
+    }
+    const { reference } = await randomBee.uploadCollection(POSTAGE_STAMP, [file], {
         encrypt: false,
-        size: data.length,
-        contentType: type,
-        indexDocument: type === 'text/html'
+        indexDocument: type === 'text/html' ? name : undefined
     })
     return reference
 }
