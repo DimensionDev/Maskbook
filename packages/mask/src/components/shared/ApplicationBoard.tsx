@@ -15,7 +15,8 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
-import { PluginAaveMessages } from '../../plugins/Aave/messages
+import { PluginAaveMessages } from '../../plugins/Aave/messages'
+import { PluginYearnFinanceMessages } from '../../plugins/YearnFinance/messages'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -142,6 +143,8 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const { setDialog: setAaveBuyDialog } = useRemoteControlledDialog(PluginAaveMessages.buyTokenDialogUpdated)
     //#endregion
 
+    const { setDialog: setYearnBuyDialog } = useRemoteControlledDialog(PluginYearnFinanceMessages.vaultListDialogUpdated)
+
     //#region second level entry dialog
     const {
         open: isSecondLevelEntryDialogOpen,
@@ -252,6 +255,15 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             'Aave',
             new URL('./assets/aave.png', import.meta.url).toString(),
             () => setAaveBuyDialog({ open: true, address: account }),
+            undefined,
+            false,
+            false,
+        ),
+
+        createEntry(
+            'Yearn',
+            new URL('./assets/yearn.png', import.meta.url).toString(),
+            () => setYearnBuyDialog({ open: true, address: account }),
             undefined,
             false,
             false,

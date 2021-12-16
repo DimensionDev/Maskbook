@@ -56,6 +56,7 @@
     "@uniswap/v2-sdk": "3.0.0-alpha.2",
     "@uniswap/v3-sdk": "^3.3.2",
     "@walletconnect/client": "^1.2.2",
+    "@yfi/sdk": "^1.0.12",
     "anchorme": "^2.1.2",
     "arweave": "1.10.13",
     "assert": "^2.0.0",
