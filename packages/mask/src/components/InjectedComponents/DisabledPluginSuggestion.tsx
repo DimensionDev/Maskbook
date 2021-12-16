@@ -62,7 +62,7 @@ export function PossiblePluginSuggestionUI(props: { plugins: Plugin.DeferredDefi
                     action={
                         <Switch
                             sx={{ marginRight: '-12px' }}
-                            onChange={() => Services.Settings.setPluginMinimalModeEnabled(x.ID, true)}
+                            onChange={() => Services.Settings.setPluginMinimalModeEnabled(x.ID, false)}
                         />
                     }
                 />
