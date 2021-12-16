@@ -5,6 +5,8 @@ import { createNativeToken, formatBalance, formatWeiToEther } from '@masknet/web
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
+import { isDashboardPage } from '@masknet/shared-base'
+import { multipliedBy } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import classnames from 'classnames'
 import { BestTradeIcon } from '@masknet/icons'
@@ -69,13 +71,14 @@ export interface TraderInfoProps {
 }
 
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
+    const isDashboard = isDashboardPage()
+
     const { t } = useI18N()
-    const isDashboard = location.href.includes('dashboard.html')
     const { classes } = useStyles({ isDashboard })
     const { targetChainId } = TargetChainIdContext.useContainer()
 
     //#region refresh pools
-    const { loading: updateBalancerPoolsLoading } = useAsyncRetry(async () => {
+    useAsyncRetry(async () => {
         // force update balancer's pools each time user enters into the swap tab
         if (trade.provider === TradeProvider.BALANCER) await PluginTraderRPC.updatePools(true, targetChainId)
     }, [trade.provider, targetChainId])
@@ -85,9 +88,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
     const tokenPrice = useNativeTokenPrice(targetChainId)
 
     const gasFee = useMemo(() => {
-        return trade.gas.value && gasPrice
-            ? new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
-            : 0
+        return trade.gas.value && gasPrice ? multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed() : 0
     }, [trade.gas?.value, gasPrice])
 
     const feeValueUSD = useMemo(
@@ -95,7 +96,7 @@ export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onCl
         [gasFee, tokenPrice],
     )
 
-    if ((trade.loading && trade.value) || updateBalancerPoolsLoading || trade.gas.loading)
+    if (trade.loading)
         return (
             <Box className={classes.trade} display="flex" justifyContent="center" style={{ padding: 24 }}>
                 <CircularProgress />

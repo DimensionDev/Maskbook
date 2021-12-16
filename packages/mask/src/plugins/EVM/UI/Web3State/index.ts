@@ -1,5 +1,6 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import {
+    ChainId,
     formatBalance,
     formatCurrency,
     formatEthereumAddress,
@@ -8,12 +9,13 @@ import {
     isSameAddress,
     isValidAddress,
     NetworkType,
-    FungibleAssetProvider,
+    NonFungibleAssetProvider,
     resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveChainColor,
     resolveChainFullName,
     resolveChainName,
+    resolveCollectibleLink,
     resolveTransactionLinkOnExplorer,
     Web3ProviderType,
     isValidDomain,
@@ -23,10 +25,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import Ens from 'ethjs-ens'
 import { getStorage } from '../../storage'
+import { getFungibleAssetsFn, getNonFungibleTokenFn } from './getAssetsFn'
 
 const ZERO_X_ERROR_ADDRESS = '0x'
-
-export const Web3State: Web3Plugin.ObjectCapabilities.Capabilities = {}
 
 export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities, context?: Web3ProviderType) {
     if (!state || !context) return
@@ -43,27 +44,8 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         wallets: context.wallets,
     }
     state.Asset = state.Asset ?? {
-        getFungibleAssets: async (address, providerType, network, pagination) => {
-            if (!network) return []
-            const assets = await context.getAssetsList(
-                address,
-                providerType as unknown as FungibleAssetProvider,
-                network.type as unknown as NetworkType,
-            )
-            return assets.map((x) => ({
-                id: x.token.address,
-                chainId: x.token.chainId,
-                balance: x.balance,
-                price: x.price,
-                value: x.value,
-                logoURI: x.logoURI,
-                token: {
-                    ...x.token,
-                    id: x.token.address,
-                    chainId: x.token.chainId,
-                },
-            }))
-        },
+        getFungibleAssets: getFungibleAssetsFn(context),
+        getNonFungibleAssets: getNonFungibleTokenFn(context),
     }
     state.NameService = state.NameService ?? {
         lookup: async (domain: string) => {
@@ -121,6 +103,10 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
                 network: chainId,
             }).reverse(address)
 
+            if (isSameAddress(domain, ZERO_ADDRESS) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                return undefined
+            }
+
             if (domain)
                 await getStorage().domainAddressBook.setValue({
                     ...domainAddressBook,
@@ -151,6 +137,11 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
         isValidDomain,
         resolveDomainLink,
         formatDomainName,
+        resolveNonFungibleTokenLink: (chainId: number, address: string, tokenId: string) =>
+            resolveCollectibleLink(chainId as ChainId, NonFungibleAssetProvider.OPENSEA, {
+                contractDetailed: { address: address },
+                tokenId: tokenId,
+            } as unknown as any),
     }
     return state
 }

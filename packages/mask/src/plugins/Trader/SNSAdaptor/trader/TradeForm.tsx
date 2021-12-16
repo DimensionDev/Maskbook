@@ -4,7 +4,8 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel'
 import { Box, chipClasses, Collapse, IconButton, Tooltip, Typography } from '@mui/material'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { EthereumTokenType, formatBalance, formatPercentage, isLessThan } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, formatBalance, formatPercentage } from '@masknet/web3-shared-evm'
+import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { TokenPanelType, TradeInfo, WarningLevel } from '../../types'
 import BigNumber from 'bignumber.js'
 import { first, noop } from 'lodash-unified'
@@ -26,6 +27,7 @@ import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
     return {
@@ -205,7 +207,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         onSwitch,
     }) => {
         const userSelected = useRef(false)
-        const isDashboard = location.href.includes('dashboard.html')
+        const isDashboard = isDashboardPage()
 
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard })
@@ -234,7 +236,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         //#endregion
 
         //#region form controls
-        const inputTokenTradeAmount = new BigNumber(inputAmount || '0').shiftedBy(inputToken?.decimals ?? 0)
+        const inputTokenTradeAmount = rightShift(inputAmount || '0', inputToken?.decimals)
         //#endregion
 
         //#region UI logic
@@ -244,7 +246,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
             if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
             if (!trades.length) return t('plugin_trader_error_insufficient_lp')
-            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount.plus(focusedTrade?.value?.fee ?? 0)))
+            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
                 return t('plugin_trader_error_insufficient_balance', {
                     symbol: inputToken?.symbol,
                 })
@@ -347,7 +349,13 @@ export const TradeForm = memo<AllTradeFormProps>(
                     SelectTokenChip={{
                         ChipProps: {
                             onClick: () => onTokenChipClick(TokenPanelType.Input),
-                            deleteIcon: <DropIcon className={classes.dropIcon} />,
+                            deleteIcon: (
+                                <DropIcon
+                                    className={classes.dropIcon}
+                                    style={{ fill: !inputToken ? '#ffffff' : undefined }}
+                                />
+                            ),
+                            onDelete: noop,
                         },
                     }}
                 />

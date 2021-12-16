@@ -9,7 +9,7 @@ import { usePostInfoDetails, usePostInfo, PostInfoProvider } from '../../../comp
 import { noop } from 'lodash-unified'
 import { MaskMessages } from '../../../utils/messages'
 import { startWatch } from '../../../utils/watcher'
-import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
+import { extractTextFromTypedMessage } from '@masknet/shared-base'
 
 const defaultOnPasteToCommentBox = async (
     encryptedComment: string,

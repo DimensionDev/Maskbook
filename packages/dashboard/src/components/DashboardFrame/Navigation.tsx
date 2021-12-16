@@ -33,7 +33,8 @@ import {
 } from '@masknet/icons'
 import { useDashboardI18N } from '../../locales'
 import { MaskColorVar } from '@masknet/theme'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
 const ListItemLinkUnStyled = ({ to, ...props }: ListItemProps & { to: string }) => {
     const navigate = useNavigate()
@@ -117,15 +118,16 @@ export interface NavigationProps {
 }
 export function Navigation({ onClose }: NavigationProps) {
     const { expanded, toggleNavigationExpand } = useContext(DashboardContext)
-    const isWalletPath = useMatch(RoutePaths.Wallets)
-    const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
-    const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
+    const isWalletPath = useMatch(DashboardRoutes.Wallets)
+    const isWalletTransferPath = useMatch(DashboardRoutes.WalletsTransfer)
+    const isWalletHistoryPath = useMatch(DashboardRoutes.WalletsHistory)
 
     // see https://github.com/import-js/eslint-plugin-import/issues/2288
     // eslint-disable-next-line import/no-deprecated
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const t = useDashboardI18N()
     const mode = useTheme().palette.mode
+    const currentPluginId = usePluginIDContext()
 
     const onExpand = (e: React.MouseEvent<HTMLElement>) => {
         e.stopPropagation()
@@ -135,11 +137,13 @@ export function Navigation({ onClose }: NavigationProps) {
     return (
         <List onClick={() => onClose?.()}>
             {isLargeScreen && <LogoItem>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</LogoItem>}
-            <ListItemLink to={RoutePaths.Personas}>
-                <ItemIcon>{useMatch(RoutePaths.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}</ItemIcon>
+            <ListItemLink to={DashboardRoutes.Personas}>
+                <ItemIcon>
+                    {useMatch(DashboardRoutes.Personas) ? <MenuPersonasActiveIcon /> : <MenuPersonasIcon />}
+                </ItemIcon>
                 <ListItemText primary={t.personas()} />
             </ListItemLink>
-            <ListItemLink to="" selected={!!useMatch(RoutePaths.Wallets)} onClick={onExpand}>
+            <ListItemLink to="" selected={!!useMatch(DashboardRoutes.Wallets)} onClick={onExpand}>
                 <ItemIcon>
                     {isWalletPath || isWalletHistoryPath || isWalletTransferPath ? (
                         <MenuWalletsActiveIcon />
@@ -152,24 +156,28 @@ export function Navigation({ onClose }: NavigationProps) {
             </ListItemLink>
             <Collapse in={expanded}>
                 <List disablePadding>
-                    <ListItemLink to={RoutePaths.Wallets}>
+                    <ListItemLink to={DashboardRoutes.Wallets}>
                         <ListSubTextItem inset primary={t.wallets_assets()} />
                     </ListItemLink>
-                    <ListItemLink to={RoutePaths.WalletsTransfer}>
-                        <ListSubTextItem inset primary={t.wallets_transfer()} />
-                    </ListItemLink>
-                    <ListItemLink to={RoutePaths.WalletsHistory}>
-                        <ListSubTextItem inset primary={t.wallets_history()} />
-                    </ListItemLink>
+                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                        <ListItemLink to={DashboardRoutes.WalletsTransfer}>
+                            <ListSubTextItem inset primary={t.wallets_transfer()} />
+                        </ListItemLink>
+                    )}
+                    {currentPluginId === NetworkPluginID.PLUGIN_EVM && (
+                        <ListItemLink to={DashboardRoutes.WalletsHistory}>
+                            <ListSubTextItem inset primary={t.wallets_history()} />
+                        </ListItemLink>
+                    )}
                 </List>
             </Collapse>
-            <ListItemLink to={RoutePaths.Labs}>
-                <ItemIcon>{useMatch(RoutePaths.Labs) ? <MenuLabsActiveIcon /> : <MenuLabsIcon />}</ItemIcon>
+            <ListItemLink to={DashboardRoutes.Labs}>
+                <ItemIcon>{useMatch(DashboardRoutes.Labs) ? <MenuLabsActiveIcon /> : <MenuLabsIcon />}</ItemIcon>
                 <ListItemText primary={t.labs()} />
             </ListItemLink>
-            <ListItemLink to={RoutePaths.Settings}>
+            <ListItemLink to={DashboardRoutes.Settings}>
                 <ItemIcon sx={{ fontSize: 36 }}>
-                    {useMatch(RoutePaths.Settings) ? <MenuSettingsActiveIcon /> : <MenuSettingsIcon />}
+                    {useMatch(DashboardRoutes.Settings) ? <MenuSettingsActiveIcon /> : <MenuSettingsIcon />}
                 </ItemIcon>
                 <ListItemText primary={t.settings()} />
             </ListItemLink>

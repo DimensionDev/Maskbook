@@ -1,7 +1,6 @@
 {
     "add_to_key_store_success": "해당 공개 키가 이미 키스토어에서 추가되었습니다",
     "add_token": "토큰 추가",
-    "add_token_search_hint": "토큰 검색",
     "add_nft_contract_search_hint": "NFT 컨트렉트 이름이나 주소를 검색하기",
     "additional_post_box__encrypted_post_pre": "#mask_io로 이 게시물을 해독하기. {{encrypted}}",
     "additional_post_box__encrypted_post_pre_red_packet_twitter_official_account": "레드 패킷을 수령하고 #mask_io @{{account}} {{encrypted}} 하세요.",

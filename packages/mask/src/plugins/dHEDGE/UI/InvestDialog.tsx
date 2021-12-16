@@ -2,14 +2,13 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isZero,
     TransactionStateType,
     useAccount,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
+import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -94,7 +93,7 @@ export function InvestDialog() {
             open: true,
             uuid: id,
             disableNativeToken: true,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 whitelist: allowedTokens,
             },
         })
@@ -103,7 +102,7 @@ export function InvestDialog() {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,

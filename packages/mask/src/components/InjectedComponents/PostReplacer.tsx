@@ -1,11 +1,11 @@
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { useValueRef } from '@masknet/shared'
 import {
     isTypedMessagePromise,
     isTypedMessageTuple,
     isWellKnownTypedMessages,
     makeTypedMessageTuple,
-    useValueRef,
-} from '@masknet/shared'
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useEffect, useMemo } from 'react'
 import { Result } from 'ts-results'

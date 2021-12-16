@@ -22,6 +22,7 @@
     "@masknet/shared-base": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
     "@masknet/theme": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "@msgpack/msgpack": "^2.7.1",
     "@servie/events": "^3.0.0",
@@ -52,15 +53,15 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
-    "@storybook/addon-actions": "^6.4.0-alpha.38",
-    "@storybook/addon-essentials": "^6.4.0-alpha.38",
-    "@storybook/addon-links": "^6.4.0-alpha.38",
-    "@storybook/builder-webpack5": "^6.4.0-alpha.38",
-    "@storybook/manager-webpack5": "^6.4.0-alpha.38",
-    "@storybook/react": "^6.3.12",
+    "@storybook/addon-actions": "^6.4.9",
+    "@storybook/addon-essentials": "^6.4.9",
+    "@storybook/addon-links": "^6.4.9",
+    "@storybook/builder-webpack5": "^6.4.9",
+    "@storybook/manager-webpack5": "^6.4.9",
+    "@storybook/react": "^6.4.9",
     "babel-loader": "^8.2.3",
     "buffer": "^6.0.3",
-    "stream-browserify": "^3.0.0",
-    "webpack": "^5.64.4"
+    "path-browserify": "^1.0.1",
+    "stream-browserify": "^3.0.0"
   }
 }

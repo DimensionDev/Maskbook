@@ -11,7 +11,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { v4 as uuid } from 'uuid'
@@ -28,6 +27,7 @@ import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { useDonateCallback } from '../hooks/useDonateCallback'
 import { PluginGitcoinMessages } from '../messages'
+import { rightShift } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -103,7 +103,7 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             uuid: id,
             disableNativeToken: false,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
             },
         })
@@ -112,7 +112,7 @@ export function DonateDialog(props: DonateDialogProps) {
 
     //#region amount
     const [rawAmount, setRawAmount] = useState('')
-    const amount = new BigNumber(rawAmount || '0').shiftedBy(token?.decimals ?? 0)
+    const amount = rightShift(rawAmount || '0', token?.decimals)
     //#endregion
 
     //#region blocking

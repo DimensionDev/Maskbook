@@ -6,8 +6,6 @@ import Web3Utils from 'web3-utils'
 import type { ITO2 } from '@masknet/web3-contracts/types/ITO2'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import {
-    isGreaterThan,
-    ONE,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -19,6 +17,7 @@ import {
     TransactionState,
     FAKE_SIGN_PASSWORD,
 } from '@masknet/web3-shared-evm'
+import { isGreaterThan, ONE } from '@masknet/web3-shared-base'
 import { useITO_Contract } from './useITO_Contract'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
@@ -89,15 +88,8 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             return
         }
 
-        const { gas, params, paramsObj, gasError } = paramResult
+        const { params, paramsObj } = paramResult
 
-        if (gasError) {
-            setFillState({
-                type: TransactionStateType.FAILED,
-                error: gasError,
-            })
-            return
-        }
         if (!checkParams(paramsObj, setFillState)) return
 
         // error: unable to sign password
@@ -133,7 +125,18 @@ export function useFillCallback(poolSettings?: PoolSettings) {
 
         const config = {
             from: account,
-            gas,
+            gas: (await (ITO_Contract as ITO2).methods
+                .fill_pool(...params)
+                .estimateGas({
+                    from: account,
+                })
+                .catch((error: Error) => {
+                    setFillState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    return
+                })) as number | undefined,
         }
 
         // send transaction and wait for hash
@@ -141,14 +144,6 @@ export function useFillCallback(poolSettings?: PoolSettings) {
             ;(ITO_Contract as ITO2).methods
                 .fill_pool(...params)
                 .send(config as NonPayableTx)
-                .on(TransactionEventType.RECEIPT, (receipt) => {
-                    setFillState({
-                        type: TransactionStateType.CONFIRMED,
-                        no: 0,
-                        receipt,
-                    })
-                    resolve()
-                })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setFillState({
                         type: TransactionStateType.CONFIRMED,
@@ -262,17 +257,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
             ]),
         ) as Parameters<ITO2['methods']['fill_pool']>
 
-        let gasError = null as Error | null
-        const gas = (await (ITO_Contract as ITO2).methods
-            .fill_pool(...params)
-            .estimateGas({
-                from: account,
-            })
-            .catch((error: Error) => {
-                gasError = error
-            })) as number | undefined
-
-        return { gas, params, paramsObj, gasError }
+        return { params, paramsObj }
     }, [poolSettings]).value
 }
 

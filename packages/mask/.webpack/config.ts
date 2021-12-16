@@ -39,7 +39,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         devtool: sourceMapKind,
         target: ['web', 'es2019'],
         entry: {},
-        experiments: { backCompat: false },
+        experiments: { backCompat: false, asyncWebAssembly: true, topLevelAwait: true },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -161,6 +161,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     ...runtime,
                     ...getGitInfo(reproducibleBuild),
                     channel: normalizedFlags.channel,
+                    manifest: String(runtime.manifest),
                 }
                 if (mode === 'development') return EnvironmentPluginCache(runtimeValues)
                 return EnvironmentPluginNoCache(runtimeValues)

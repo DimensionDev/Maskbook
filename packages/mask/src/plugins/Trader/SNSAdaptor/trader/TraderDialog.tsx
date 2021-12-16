@@ -13,6 +13,7 @@ import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useAsync } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     walletStatusBox: {
@@ -55,6 +56,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
             display: 'none',
         },
     },
+    tradeRoot: {
+        width: 535,
+        margin: 'auto',
+    },
 }))
 
 interface TraderDialogProps {
@@ -63,8 +68,8 @@ interface TraderDialogProps {
 }
 
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
+    const isDashboard = isDashboardPage()
     const { t } = useI18N()
-    const isDashboard = location.href.includes('dashboard.html')
     const { classes } = useStyles({ isDashboard })
     const currentChainId = useChainId()
     const chainIdValid = useChainIdValid()
@@ -111,7 +116,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                                 chains={chains ?? []}
                             />
                         </div>
-                        <Trader {...traderProps} chainId={chainId} />
+                        <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
                     </DialogContent>
                 </InjectedDialog>
             </AllProviderTradeContext.Provider>

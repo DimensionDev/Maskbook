@@ -23,7 +23,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: MaskColorVar.primaryBackground,
     },
     footer: {
-        flex: 1,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -70,6 +69,7 @@ export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
             isLoading={transactionLoading}
             isEmpty={!!transactionError || !transactions.length}
             dataSource={transactions}
+            selectedChainId={selectedChainId}
         />
     )
 })
@@ -81,10 +81,11 @@ export interface HistoryTableUIProps {
     isLoading: boolean
     isEmpty: boolean
     dataSource: Transaction[]
+    selectedChainId: ChainId
 }
 
 export const HistoryTableUI = memo<HistoryTableUIProps>(
-    ({ isLoading, isEmpty, dataSource, page, onPageChange, hasNextPage }) => {
+    ({ isLoading, isEmpty, dataSource, page, onPageChange, hasNextPage, selectedChainId }) => {
         const t = useDashboardI18N()
         const { classes } = useStyles()
         return (
@@ -114,7 +115,11 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                             {dataSource.length ? (
                                 <TableBody>
                                     {dataSource.map((transaction, index) => (
-                                        <HistoryTableRow key={index} transaction={transaction} />
+                                        <HistoryTableRow
+                                            key={index}
+                                            transaction={transaction}
+                                            selectedChainId={selectedChainId}
+                                        />
                                     ))}
                                 </TableBody>
                             ) : null}
@@ -122,27 +127,29 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                     )}
                 </TableContainer>
 
-                {!(page === 0 && dataSource.length === 0) && !isLoading ? (
-                    <TablePagination
-                        count={-1}
-                        component="div"
-                        onPageChange={noop}
-                        page={page}
-                        rowsPerPage={30}
-                        rowsPerPageOptions={[30]}
-                        labelDisplayedRows={() => null}
-                        backIconButtonProps={{
-                            onClick: () => onPageChange((prev) => prev - 1),
-                            size: 'small',
-                            disabled: page === 0,
-                        }}
-                        nextIconButtonProps={{
-                            onClick: () => onPageChange((prev) => prev + 1),
-                            disabled: !hasNextPage,
-                            size: 'small',
-                        }}
-                        sx={{ overflow: 'hidden' }}
-                    />
+                {!(page === 0 && !hasNextPage) && !isLoading ? (
+                    <Box className={classes.footer}>
+                        <TablePagination
+                            count={-1}
+                            component="div"
+                            onPageChange={noop}
+                            page={page}
+                            rowsPerPage={30}
+                            rowsPerPageOptions={[30]}
+                            labelDisplayedRows={() => null}
+                            backIconButtonProps={{
+                                onClick: () => onPageChange((prev) => prev - 1),
+                                size: 'small',
+                                disabled: page === 0,
+                            }}
+                            nextIconButtonProps={{
+                                onClick: () => onPageChange((prev) => prev + 1),
+                                disabled: !hasNextPage,
+                                size: 'small',
+                            }}
+                            sx={{ overflow: 'hidden' }}
+                        />
+                    </Box>
                 ) : null}
             </>
         )

@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
+import fromUnixTime from 'date-fns/fromUnixTime'
+import addDays from 'date-fns/addDays'
+import subDays from 'date-fns/subDays'
 import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
@@ -32,6 +35,7 @@ import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
 import { useHeartBit } from './useHeartBit'
 import { useIsWhitelisted } from './useIsWhitelisted'
+import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy } from '@masknet/web3-shared-base'
 
 function useContext(initialState?: { boxId: string }) {
     const heartBit = useHeartBit()
@@ -79,28 +83,25 @@ function useContext(initialState?: { boxId: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (
-            !maskBoxInfo ||
-            !maskBoxStatus ||
-            isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS) ||
-            !maskBoxCreationSuccessEvent
-        )
+        if (!maskBoxInfo || !maskBoxStatus || isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS))
             return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10)
         const sold = Number.parseInt(maskBoxStatus.total, 10) - remaining
         const personalRemaining = Math.max(0, personalLimit - purchasedTokens.length)
+        const startAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.start_time ?? '0', 10)
+        const endAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.end_time ?? '0', 10)
         const info: BoxInfo = {
             boxId,
             creator: maskBoxInfo.creator,
             name: maskBoxInfo.name,
-            sellAll: maskBoxCreationSuccessEvent.returnValues.sell_all,
+            sellAll: maskBoxCreationSuccessEvent?.returnValues.sell_all ?? false,
             personalLimit: personalLimit,
             personalRemaining,
             remaining,
             availableAmount: Math.min(personalRemaining, remaining),
-            startAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.start_time, 10) * 1000),
-            endAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.end_time, 10) * 1000),
+            startAt: startAt === 0 ? subDays(new Date(), 1) : fromUnixTime(startAt),
+            endAt: endAt === 0 ? addDays(new Date(), 1) : fromUnixTime(endAt),
             total: maskBoxStatus.total,
             sold,
             canceled: maskBoxStatus.canceled,
@@ -136,9 +137,8 @@ function useContext(initialState?: { boxId: string }) {
         if (!maskBoxInfo || !maskBoxStatus || !boxInfo) return BoxState.NOT_FOUND
         if (maskBoxStatus.canceled) return BoxState.CANCELED
         const now = new Date()
-        if (new BigNumber(boxInfo.tokenIdsPurchased.length).isGreaterThanOrEqualTo(boxInfo.personalLimit))
-            return BoxState.DRAWED_OUT
-        if (new BigNumber(boxInfo.remaining).isLessThanOrEqualTo(0)) return BoxState.SOLD_OUT
+        if (isGreaterThanOrEqualTo(boxInfo.tokenIdsPurchased.length, boxInfo.personalLimit)) return BoxState.DRAWED_OUT
+        if (isLessThanOrEqualTo(boxInfo.remaining, 0)) return BoxState.SOLD_OUT
         if (boxInfo.startAt > now) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
@@ -155,7 +155,7 @@ function useContext(initialState?: { boxId: string }) {
     const { value: holderTokenBalance = '0' } = useERC20TokenBalance(holderToken?.address)
     const holderMinTokenAmountBN = new BigNumber(boxInfo?.holderMinTokenAmount ?? 0)
     const isQualified =
-        (holderMinTokenAmountBN.eq(0) || holderMinTokenAmountBN.lte(holderTokenBalance)) && isQualifiedByContract
+        (isZero(holderMinTokenAmountBN) || holderMinTokenAmountBN.lte(holderTokenBalance)) && isQualifiedByContract
     //#endregion
 
     const boxStateMessage = useMemo(() => {
@@ -223,7 +223,7 @@ function useContext(initialState?: { boxId: string }) {
     const paymentTokenIndex =
         boxInfo?.payments.findIndex((x) => isSameAddress(x.token.address ?? '', paymentTokenAddress)) ?? -1
     const paymentTokenPrice = paymentTokenInfo?.price ?? '0'
-    const costAmount = new BigNumber(paymentTokenPrice).multipliedBy(paymentCount)
+    const costAmount = multipliedBy(paymentTokenPrice, paymentCount)
     const isNativeToken = isSameAddress(paymentTokenAddress, NATIVE_TOKEN_ADDRESS)
     const paymentTokenBalance = isNativeToken ? paymentNativeTokenBalance : paymentERC20TokenBalance
     const paymentTokenDetailed = paymentTokenInfo?.token ?? null

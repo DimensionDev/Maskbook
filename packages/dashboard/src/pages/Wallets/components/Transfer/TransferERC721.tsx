@@ -8,6 +8,7 @@ import {
     EthereumTokenType,
     formatWeiToEther,
     isSameAddress,
+    isValidAddress,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -28,17 +29,18 @@ import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import TuneIcon from '@mui/icons-material/Tune'
-import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { useLocation } from 'react-router-dom'
 import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
 import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { NetworkType } from '@masknet/public-api'
-import { useUpdateEffect } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
+import { multipliedBy } from '@masknet/web3-shared-base'
+import { Services } from '../../../../API'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -65,6 +67,10 @@ export const TransferERC721 = memo(() => {
     const [defaultToken, setDefaultToken] = useState<ERC721TokenDetailed | null>(null)
     const navigate = useNavigate()
     const [popoverOpen, setPopoverOpen] = useState(false)
+    const [recipientError, setRecipientError] = useState<{
+        type: 'account' | 'contractAddress'
+        message: string
+    } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [offset, setOffset] = useState(0)
@@ -120,6 +126,30 @@ export const TransferERC721 = memo(() => {
     } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
     //#endregion
 
+    //#region check contract address and account address
+    useAsync(async () => {
+        const recipient = allFormFields.recipient
+        setRecipientError(null)
+        if (!recipient && !registeredAddress) return
+        if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
+
+        clearErrors()
+        if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
+            setRecipientError({
+                type: 'account',
+                message: t.wallets_transfer_error_same_address_with_current_account(),
+            })
+        }
+        const result = await Services.Ethereum.getCode(recipient)
+        if (result !== '0x') {
+            setRecipientError({
+                type: 'contractAddress',
+                message: t.wallets_transfer_error_is_contract_address(),
+            })
+        }
+    }, [allFormFields.recipient, clearErrors, registeredAddress])
+    //#endregion
+
     const erc721GasLimit = useGasLimit(
         EthereumTokenType.ERC721,
         contract?.address,
@@ -144,7 +174,7 @@ export const TransferERC721 = memo(() => {
     // gas price
     const { value: defaultGasPrice = '0' } = useGasPrice()
     const gasPrice = gasConfig.gasPrice || defaultGasPrice
-    const gasFee = useMemo(() => new BigNumber(gasLimit).multipliedBy(gasPrice), [gasLimit, gasPrice])
+    const gasFee = useMemo(() => multipliedBy(gasLimit, gasPrice), [gasLimit, gasPrice])
     const gasFeeInUsd = formatWeiToEther(gasFee).multipliedBy(nativeTokenPrice)
 
     // dialog
@@ -178,7 +208,7 @@ export const TransferERC721 = memo(() => {
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.HASH) {
-            navigate(RoutePaths.WalletsHistory)
+            navigate(DashboardRoutes.WalletsHistory)
         }
     }, [transferState])
 
@@ -275,8 +305,11 @@ export const TransferERC721 = memo(() => {
                                     {...field}
                                     required
                                     onChange={(e) => setValue('recipient', e.currentTarget.value)}
-                                    helperText={errors.recipient?.message}
-                                    error={!!errors.recipient}
+                                    helperText={errors.recipient?.message || recipientError?.message}
+                                    error={
+                                        !!errors.recipient ||
+                                        (!!recipientError && recipientError.type === 'contractAddress')
+                                    }
                                     value={field.field.value}
                                     InputProps={{
                                         onClick: (event) => {
