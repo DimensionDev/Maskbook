@@ -14,7 +14,9 @@ export async function makeAttachment(provider: Provider, options: any) {
 }
 
 export async function* upload(provider: Provider, id: any) {
-    return allProviders[provider]?.upload(id)
+    for await (const percent of allProviders[provider].upload(id)) {
+        yield percent
+    }
 }
 
 export async function uploadLandingPage(provider: Provider, metadata: any) {

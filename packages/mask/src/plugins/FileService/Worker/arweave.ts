@@ -11,7 +11,7 @@ import { makeFileKeySigned } from '../helpers'
 
 export class ArweaveAgent implements ProviderAgent {
     instance: Arweave
-    stage: Record<Transaction['id'], Transaction> = {}
+    static stage: Record<Transaction['id'], Transaction> = {}
 
     constructor() {
         this.instance = Arweave.init({
@@ -29,7 +29,8 @@ export class ArweaveAgent implements ProviderAgent {
             metadata: null,
         })
         const transaction = await this.makePayload(encoded, 'application/octet-stream')
-        this.stage[transaction.id] = transaction
+        ArweaveAgent.stage[transaction.id] = transaction
+        await this.instance.transactions.post(transaction)
         return transaction.id
     }
 
@@ -55,7 +56,7 @@ export class ArweaveAgent implements ProviderAgent {
     }
 
     async *upload(id: Transaction['id']) {
-        for await (const uploader of this.instance.transactions.upload(this.stage[id])) {
+        for await (const uploader of this.instance.transactions.upload(ArweaveAgent.stage[id])) {
             yield uploader.pctComplete
         }
     }
