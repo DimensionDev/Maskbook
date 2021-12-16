@@ -1,10 +1,9 @@
 import type { SwapOOData, SwapOORequest } from '../../types/openocean'
 import { OPENOCEAN_BASE_URL } from '../../constants/openocean'
-import BigNumber from 'bignumber.js'
-import { pow10 } from '@masknet/web3-shared-base'
+import { leftShift } from '@masknet/web3-shared-base'
 import urlcat from 'urlcat'
 
-export async function swapOO(request: SwapOORequest) {
+export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
     const response = await fetch(
         urlcat(OPENOCEAN_BASE_URL, `/${request.chainId}/swap`, {
             inTokenSymbol: request.toToken?.symbol,
@@ -23,8 +22,10 @@ export async function swapOO(request: SwapOORequest) {
     //     throw new Error((payload as SwapOOErrorResponse).data ?? 'Unknown Error')
     // }
     const { data, outAmount, minOutAmount, to, value } = payload
-    const _resAmount = new BigNumber(outAmount).dividedBy(pow10(request.toToken.decimals ?? 0)).toNumber()
-    const _fromAmount = new BigNumber(request.fromAmount).dividedBy(pow10(request.fromToken.decimals ?? 0)).toNumber()
+    // const _resAmount = new BigNumber(outAmount).dividedBy(pow10(request.toToken.decimals ?? 0)).toNumber()
+    // const _fromAmount = new BigNumber(request.fromAmount).dividedBy(pow10(request.fromToken.decimals ?? 0)).toNumber()
+    const _resAmount = leftShift(outAmount, request.toToken.decimals).toNumber()
+    const _fromAmount = leftShift(request.fromAmount, request.fromToken.decimals).toNumber()
     return {
         data,
         targetApproveAddr: request.fromToken.address,
