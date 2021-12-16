@@ -223,7 +223,7 @@ export default function Plugins() {
 
     useEffect(() => {
         Object.values(PLUGIN_IDS).forEach(async (id) => {
-            const enabled = await Services.Settings.getPluginMinimalModeEnabled(id)
+            const enabled = !(await Services.Settings.getPluginMinimalModeEnabled(id))
             setPluginStatus((status) => ({ ...status, [id]: enabled }))
         })
     }, [])
