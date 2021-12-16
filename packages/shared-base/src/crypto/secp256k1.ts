@@ -8,7 +8,7 @@ import type { EC_CryptoKey } from '.'
 // Loading tiny-secp256k1 will instantiate a WebAssembly module which is not allowed in the content script for unknown reason and fail the whole module graph.
 
 // TODO: switch to holoflows-kit
-const isExtension = globalThis?.location.protocol.includes('extension')
+const isExtension = globalThis?.location?.protocol?.includes('extension')
 let secp256k1!: typeof import('tiny-secp256k1')
 if (isExtension) {
     secp256k1 = await import('tiny-secp256k1')
