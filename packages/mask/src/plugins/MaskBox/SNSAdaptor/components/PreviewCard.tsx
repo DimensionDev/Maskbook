@@ -118,10 +118,12 @@ export function PreviewCard(props: PreviewCardProps) {
         refreshLastPurchasedTokenIds()
         try {
             await openBoxCallback()
+            retryBoxInfo()
+            retryMaskBoxTokensForSale()
             setOpenDrawDialog(false)
         } catch {}
         setDrawing(false)
-    }, [openBoxCallback, refreshLastPurchasedTokenIds])
+    }, [openBoxCallback, refreshLastPurchasedTokenIds, retryBoxInfo, retryMaskBoxTokensForSale])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
