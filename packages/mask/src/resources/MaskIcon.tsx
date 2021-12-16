@@ -13,7 +13,7 @@ const MaskSmileFaceSVG = ({ size = 24 }: { size?: number }) => (
     </svg>
 )
 
-const MaskSmileFaceSharpSVG = ({ size = 20 }: { size?: number }) => (
+const MaskSmileFaceSharpSVG = ({ size = 19 }: { size?: number }) => (
     <svg width={size} height={size} viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg">
         <path
             fillRule="evenodd"
@@ -97,7 +97,7 @@ export function MaskIconOutlined(props: SvgIconProps) {
 
 export function MaskSharpIcon(props: SvgIconProps) {
     return (
-        <SvgIcon style={{ transform: 'translate(2px, 1.5px)' }} {...props}>
+        <SvgIcon style={{ transform: 'translate(2px, 2px)', width: '19px', height: '19px' }} {...props}>
             <MaskSmileFaceSharpSVG />
         </SvgIcon>
     )

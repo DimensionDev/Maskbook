@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { IconButton } from '@mui/material'
+import { alpha, IconButton } from '@mui/material'
 import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import type { BannerProps } from '../Welcomes/Banner'
@@ -18,6 +18,9 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
         padding: isMobileFacebook ? 0 : '8px',
+        '&:hover': {
+            background: alpha(theme.palette.primary.main, 0.1),
+        },
     },
     text: {
         fontSize: 14,
