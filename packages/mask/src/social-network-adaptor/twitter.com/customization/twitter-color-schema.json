@@ -15,7 +15,8 @@
         "background": {
             "default": "#F6F8F8",
             "input": "#EDF1F2",
-            "tipMask": "rgba(0, 0, 0, 0.85)"
+            "tipMask": "rgba(0, 0, 0, 0.85)",
+            "messageShadow": "rgba(101, 119, 134, 0.2)"
         },
         "error": {
             "main": "#FF5555"
@@ -44,7 +45,8 @@
         "background": {
             "default": "#F6F8F8",
             "input": "#EDF1F2",
-            "tipMask": "rgba(0, 0, 0, 0.85)"
+            "tipMask": "rgba(0, 0, 0, 0.85)",
+            "messageShadow": "rgba(101, 119, 134, 0.2)"
         },
         "error": {
             "main": "#FF5555"
@@ -73,7 +75,8 @@
         "background": {
             "default": "#18232E",
             "input": "#212D39",
-            "tipMask": "rgba(255, 255, 255, 0.85)"
+            "tipMask": "rgba(255, 255, 255, 0.85)",
+            "messageShadow": "rgba(136, 153, 166, 0.2)"
         },
         "error": {
             "main": "#FF5555"
@@ -107,7 +110,8 @@
         "background": {
             "default": "#18232E",
             "input": "#212D39",
-            "tipMask": "rgba(255, 255, 255, 0.85)"
+            "tipMask": "rgba(255, 255, 255, 0.85)",
+            "messageShadow": "rgba(136, 153, 166, 0.2)"
         },
         "action": {
             "buttonHover": "#D7DBDC",
@@ -131,7 +135,8 @@
         "background": {
             "default": "#15171A",
             "input": "#1D2023",
-            "tipMask": "rgba(255, 255, 255, 0.85)"
+            "tipMask": "rgba(255, 255, 255, 0.85)",
+            "messageShadow": "rgba(255, 255, 255, 0.2)"
         },
         "error": {
             "main": "#FF5555"
@@ -165,7 +170,8 @@
         "background": {
             "default": "#15171A",
             "input": "#1D2023",
-            "tipMask": "rgba(255, 255, 255, 0.85)"
+            "tipMask": "rgba(255, 255, 255, 0.85)",
+            "messageShadow": "rgba(255, 255, 255, 0.2)"
         },
         "action": {
             "buttonHover": "#D7dBDC",

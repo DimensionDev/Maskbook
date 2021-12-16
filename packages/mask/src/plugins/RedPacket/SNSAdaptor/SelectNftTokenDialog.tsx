@@ -24,7 +24,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 550,
     },
     tokenBox: {
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.background.default,
         width: 530,
         minHeight: 270,
         borderRadius: 12,
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: 10,
     },
     ownerTokenBox: {
-        background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
+        background: theme.palette.background.default,
         width: '96%',
         height: 450,
         borderRadius: 12,
@@ -160,7 +160,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     selectWrapperNftNameWrapper: {
         width: '100%',
-        background: theme.palette.mode === 'light' ? 'none' : '#2F3336',
+        background: theme.palette.background.default,
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
         overflow: 'hidden',

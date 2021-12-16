@@ -232,6 +232,13 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                 },
             }
+            theme.components.MuiSnackbar = {
+                styleOverrides: {
+                    root: {
+                        filter: `drop-shadow(0px 0px 16px ${theme.palette.background.messageShadow});`,
+                    },
+                },
+            }
         })
         setAutoFreeze(true)
         return unstable_createMuiStrictModeTheme(TwitterTheme)
