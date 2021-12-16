@@ -1,5 +1,6 @@
 import type { HistoryResponse, GasPriceDictResponse, WalletTokenRecord } from './type'
 import urlcat from 'urlcat'
+import { formatAssets } from './format'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 const DEBANK_API = 'https://api.debank.com'
@@ -10,12 +11,13 @@ export async function getTransactionList(address: string, chain: string) {
     return (await response.json()) as HistoryResponse
 }
 
-export async function getAssetsList(address: string) {
+export async function getDebankAssetsList(address: string) {
     const response = await fetch(
         `${DEBANK_OPEN_API}/v1/user/token_list?is_all=true&has_balance=true&id=${address.toLowerCase()}`,
     )
     try {
-        return ((await response.json()) ?? []) as WalletTokenRecord[]
+        const result = ((await response.json()) ?? []) as WalletTokenRecord[]
+        return formatAssets(result)
     } catch {
         return []
     }

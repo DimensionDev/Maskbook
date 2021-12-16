@@ -132,6 +132,7 @@ export async function checkPermissionsAndRestore(id: string) {
 
 export async function checkPermissionAndOpenWalletRecovery(id: string) {
     const json = await getUnconfirmedBackup(id)
+    console.log(json)
     if (json) {
         const permissions = await extraPermissions(json.grantedHostPermissions)
         if (permissions.length) {
