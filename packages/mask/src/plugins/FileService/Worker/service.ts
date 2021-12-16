@@ -1,9 +1,9 @@
-import { Provider } from '../types'
-import * as arweave from './arweave'
-import * as ipfs from './ipfs'
-import * as swarm from './swarm'
+import { Provider, ProviderAgent } from '../types'
+import arweave from './arweave'
+import ipfs from './ipfs'
+import swarm from './swarm'
 
-const allProviders: Record<Provider, any> = {
+const allProviders: Record<Provider, ProviderAgent> = {
     [Provider.arweave]: arweave,
     [Provider.ipfs]: ipfs,
     [Provider.swarm]: swarm,
