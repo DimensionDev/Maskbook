@@ -133,7 +133,7 @@ async function* decryptFromPayloadWithProgress_raw(
         if (post.version !== -38) break latest
         // Let's try the new infra!
         const { DecryptProgressKind } = await import('@masknet/encryption')
-        for await (const progress of decryption(constructAlpha38(post), authorNetworkHint)) {
+        for await (const progress of decryption(constructAlpha38(post), authorNetworkHint, whoAmI)) {
             if (progress.type === DecryptProgressKind.Success) {
                 console.log('Decrypted by the new infra!', progress.content)
             }

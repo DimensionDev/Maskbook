@@ -1,5 +1,5 @@
 import Gun from 'gun/gun'
-import { gunServers } from '../../gun-servers'
+import { gunServers } from '../../../../background/network/gun'
 
 export type PersonOnGun2 = {
     /** @deprecated if you want to use it, cast it to string. */
