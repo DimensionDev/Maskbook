@@ -10,7 +10,7 @@ import {
     useNetworkType,
     useWeb3UI,
 } from '@masknet/plugin-infra'
-import { isDashboardPage } from '@masknet/shared-base/src/utils/detect'
+import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N } from '../../../../utils/i18n-next-ui'
 import { WalletMessages } from '../../messages'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
