@@ -5,7 +5,7 @@ import urlcat from 'urlcat'
 import { isEmpty, isNil } from 'lodash-unified'
 import { landing } from '../constants'
 
-const BEE_HOSTS: string[] =  [
+const BEE_HOSTS: string[] = [
     'https://bee-0.gateway.ethswarm.org',
     'https://bee-1.gateway.ethswarm.org',
     'https://bee-2.gateway.ethswarm.org',
@@ -15,7 +15,7 @@ const BEE_HOSTS: string[] =  [
     'https://bee-6.gateway.ethswarm.org',
     'https://bee-7.gateway.ethswarm.org',
     'https://bee-8.gateway.ethswarm.org',
-    'https://bee-9.gateway.ethswarm.org'
+    'https://bee-9.gateway.ethswarm.org',
 ]
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
@@ -73,8 +73,8 @@ export async function uploadLandingPage(metadata: LandingPageMetadata) {
 }
 
 function hashToIndex(hash: Reference | string) {
-  const n = Number.parseInt(hash.slice(0, 8), 16)
-  return n % BEE_HOSTS.length
+    const n = Number.parseInt(hash.slice(0, 8), 16)
+    return n % BEE_HOSTS.length
 }
 
 async function makePayload(data: Uint8Array, type: string, name: string) {

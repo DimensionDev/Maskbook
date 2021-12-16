@@ -4,6 +4,11 @@ export enum Provider {
     swarm = 'swarm',
 }
 
+export interface ProviderConfig {
+    provider: Provider
+    key: string
+}
+
 export interface FileInfo {
     type: 'file'
     provider: Provider

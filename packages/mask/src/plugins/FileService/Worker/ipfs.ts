@@ -42,7 +42,7 @@ export interface LandingPageMetadata {
 }
 
 export async function uploadLandingPage(metadata: LandingPageMetadata) {
-    let linkPrefix: string = 'https://ipfs.infura.io/ipfs'
+    const linkPrefix: string = 'https://ipfs.infura.io/ipfs'
     const encodedMetadata = JSON.stringify({
         name: metadata.name,
         size: metadata.size,

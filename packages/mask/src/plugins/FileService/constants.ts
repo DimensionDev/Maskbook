@@ -1,3 +1,6 @@
+import type { ProviderConfig } from './types'
+import { Provider } from './types'
+
 export const FileServicePluginID = 'com.maskbook.fileservice'
 export const META_KEY_1 = 'com.maskbook.fileservice:1'
 export const META_KEY_2 = 'com.maskbook.fileservice:2'
@@ -13,3 +16,18 @@ export const enum FileRouter {
     uploading = '/uploading',
     uploaded = '/uploaded',
 }
+
+export const allProviders: ProviderConfig[] = [
+    {
+        provider: Provider.arweave,
+        key: 'plugin_file_service_provider_arweave',
+    },
+    {
+        provider: Provider.ipfs,
+        key: 'plugin_file_service_provider_ipfs',
+    },
+    {
+        provider: Provider.swarm,
+        key: 'plugin_file_service_provider_swarm',
+    },
+]

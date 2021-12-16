@@ -47,11 +47,11 @@ const useStyles = makeStyles()((theme) => ({
 
 function getGatewayAPI(provider: Provider) {
     if (provider === 'arweave') {
-        return 'https://arweave.net/';
+        return 'https://arweave.net/'
     } else if (provider === 'ipfs') {
-        return 'https://infura-ipfs.io/ipfs/';
+        return 'https://infura-ipfs.io/ipfs/'
     } else if (provider === 'swarm') {
-        return 'https://bee-2.gateway.ethswarm.org/bzz/';
+        return 'https://bee-2.gateway.ethswarm.org/bzz/'
     }
     throw new Error('unsupported provider')
 }

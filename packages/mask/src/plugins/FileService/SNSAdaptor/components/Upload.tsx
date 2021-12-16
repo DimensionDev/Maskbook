@@ -9,10 +9,12 @@ import { useHistory } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { useI18N } from '../../../../utils'
 import { makeFileKey } from '../../file-key'
-import { FileRouter, MAX_FILE_SIZE } from '../../constants'
+import type { ProviderConfig } from '../../types'
+import { FileRouter, MAX_FILE_SIZE, allProviders } from '../../constants'
 import { PluginFileServiceRPC } from '../../Worker/rpc'
 import { RecentFiles } from './RecentFiles'
 import { UploadDropArea } from './UploadDropArea'
+import { Provider } from '../../types'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -84,6 +86,37 @@ export const Upload: React.FC = () => {
             history.replace(FileRouter.uploaded, item)
         }
     }
+
+    const allProviderdOptions = allProviders.map((config: ProviderConfig) => (
+        <FormControlLabel
+            control={
+                <Radio
+                    color="secondary"
+                    checked={provider === config.provider}
+                    onChange={() => setProvider(config.provider)}
+                />
+            }
+            label={t(config.key)}
+        />
+    ))
+
+    let cdnButton = null
+    if (provider === Provider.arweave) {
+        cdnButton = (
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        color="secondary"
+                        checked={useCDN}
+                        onChange={(event) => setUseCDN(event.target.checked)}
+                    />
+                }
+                className={classes.usedCDN}
+                label={t('plugin_file_service_use_cdn')}
+            />
+        )
+    }
+
     return (
         <section className={classes.container}>
             <section className={classes.upload}>
@@ -102,46 +135,9 @@ export const Upload: React.FC = () => {
                     className={classes.encrypted}
                     label={t('plugin_file_service_on_encrypt_it')}
                 />
-                {
-                    provider === "arweave" ? <FormControlLabel
-                        control={
-                            <Checkbox
-                                color="secondary"
-                                checked={useCDN}
-                                onChange={(event) => setUseCDN(event.target.checked)}
-                            />
-                        }
-                        className={classes.usedCDN}
-                        label={t('plugin_file_service_use_cdn')}
-                    /> : null
-                }
+                {cdnButton}
             </section>
-            <section className={classes.checkItems}>
-                <FormControlLabel
-                    control={
-                        <Radio
-                            color="secondary" checked={provider === 'arweave'} onChange={() => setProvider('arweave')}
-                        />
-                    }
-                    label={t('plugin_file_service_provider_arweave')}
-                />
-                <FormControlLabel
-                    control={
-                        <Radio
-                            color="secondary" checked={provider === "ipfs"} onChange={() => setProvider('ipfs')}
-                        />
-                    }
-                    label={t('plugin_file_service_provider_ipfs')}
-                />
-                <FormControlLabel
-                    control={
-                        <Radio
-                            color="secondary" checked={provider === "swarm"} onChange={() => setProvider('swarm')}
-                        />
-                    }
-                    label={t('plugin_file_service_provider_swarm')}
-                />
-            </section>
+            <section className={classes.checkItems}>{allProviderdOptions}</section>
             <section className={classes.legal}>
                 <Typography className={classes.legalText}>
                     <Trans
