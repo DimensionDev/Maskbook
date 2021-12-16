@@ -1,7 +1,7 @@
 export enum Provider {
     arweave = 'arweave',
     ipfs = 'ipfs',
-    swarm = 'swarm'
+    swarm = 'swarm',
 }
 
 export interface FileInfo {

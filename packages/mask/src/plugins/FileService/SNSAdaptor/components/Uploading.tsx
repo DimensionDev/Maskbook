@@ -94,7 +94,7 @@ export const Uploading: React.FC = () => {
             createdAt: new Date(startedAt),
             key: state.key,
             payloadTxID: payloadTxID,
-            landingTxID: landingTxID
+            landingTxID: landingTxID,
         }
         await PluginFileServiceRPC.setFileInfo(item)
         history.replace(FileRouter.uploaded, item)

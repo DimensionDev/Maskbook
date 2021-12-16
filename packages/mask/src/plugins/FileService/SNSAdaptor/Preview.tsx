@@ -46,11 +46,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function getGatewayAPI(provider: Provider) {
-    if (provider == 'arweave') {
+    if (provider === 'arweave') {
         return 'https://arweave.net/';
-    } else if (provider == 'ipfs') {
+    } else if (provider === 'ipfs') {
         return 'https://infura-ipfs.io/ipfs/';
-    } else if (provider == 'swarm') {
+    } else if (provider === 'swarm') {
         return 'https://bee-2.gateway.ethswarm.org/bzz/';
     }
     throw new Error('unsupported provider')
@@ -69,7 +69,7 @@ export function Preview({ info }: { info: FileInfo }) {
         </Typography>
     )
 
-    let linkPrefix = getGatewayAPI(info.provider);
+    const linkPrefix = getGatewayAPI(info.provider)
     const link = urlcat(linkPrefix, '/:txId', { txId: info.landingTxID })
 
     const onClick = (event: React.MouseEvent) => {

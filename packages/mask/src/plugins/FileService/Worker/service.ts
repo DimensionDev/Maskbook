@@ -1,4 +1,3 @@
-
 import type { Provider } from '../types'
 import * as arweave from './arweave'
 import * as ipfs from './ipfs'
@@ -7,7 +6,7 @@ import * as swarm from './swarm'
 const allProviders: Record<Provider, any> = {
   arweave,
   ipfs,
-  swarm
+  swarm,
 }
 
 export async function makeAttachment(provider: Provider, options: any) {

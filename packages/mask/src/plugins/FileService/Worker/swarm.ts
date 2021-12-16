@@ -6,16 +6,16 @@ import { isEmpty, isNil } from 'lodash-unified'
 import { landing } from '../constants'
 
 const BEE_HOSTS: string[] =  [
-    "https://bee-0.gateway.ethswarm.org",
-    "https://bee-1.gateway.ethswarm.org",
-    "https://bee-2.gateway.ethswarm.org",
-    "https://bee-3.gateway.ethswarm.org",
-    "https://bee-4.gateway.ethswarm.org",
-    "https://bee-5.gateway.ethswarm.org",
-    "https://bee-6.gateway.ethswarm.org",
-    "https://bee-7.gateway.ethswarm.org",
-    "https://bee-8.gateway.ethswarm.org",
-    "https://bee-9.gateway.ethswarm.org"
+    'https://bee-0.gateway.ethswarm.org',
+    'https://bee-1.gateway.ethswarm.org',
+    'https://bee-2.gateway.ethswarm.org',
+    'https://bee-3.gateway.ethswarm.org',
+    'https://bee-4.gateway.ethswarm.org',
+    'https://bee-5.gateway.ethswarm.org',
+    'https://bee-6.gateway.ethswarm.org',
+    'https://bee-7.gateway.ethswarm.org',
+    'https://bee-8.gateway.ethswarm.org',
+    'https://bee-9.gateway.ethswarm.org'
 ]
 
 const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
@@ -54,7 +54,7 @@ export interface LandingPageMetadata {
 }
 
 export async function uploadLandingPage(metadata: LandingPageMetadata) {
-    let linkPrefix: string = 'https://bee-2.gateway.ethswarm.org/bzz'
+    const linkPrefix: string = 'https://bee-2.gateway.ethswarm.org/bzz'
     const encodedMetadata = JSON.stringify({
         name: metadata.name,
         size: metadata.size,

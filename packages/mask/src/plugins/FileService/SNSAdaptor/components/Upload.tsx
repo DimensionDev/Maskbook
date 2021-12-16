@@ -78,7 +78,7 @@ export const Upload: React.FC = () => {
                 block,
                 checksum,
                 useCDN,
-                provider
+                provider,
             })
         } else {
             history.replace(FileRouter.uploaded, item)
@@ -120,9 +120,7 @@ export const Upload: React.FC = () => {
                 <FormControlLabel
                     control={
                         <Radio
-                            color="secondary"
-                            checked={provider == 'arweave'}
-                            onChange={() => setProvider('arweave')}
+                            color="secondary" checked={provider === 'arweave'} onChange={() => setProvider('arweave')}
                         />
                     }
                     label={t('plugin_file_service_provider_arweave')}
@@ -130,9 +128,7 @@ export const Upload: React.FC = () => {
                 <FormControlLabel
                     control={
                         <Radio
-                            color="secondary"
-                            checked={provider == "ipfs"}
-                            onChange={() => setProvider('ipfs')}
+                            color="secondary" checked={provider === "ipfs"} onChange={() => setProvider('ipfs')}
                         />
                     }
                     label={t('plugin_file_service_provider_ipfs')}
@@ -140,9 +136,7 @@ export const Upload: React.FC = () => {
                 <FormControlLabel
                     control={
                         <Radio
-                            color="secondary"
-                            checked={provider == "swarm"}
-                            onChange={() => setProvider('swarm')}
+                            color="secondary" checked={provider === "swarm"} onChange={() => setProvider('swarm')}
                         />
                     }
                     label={t('plugin_file_service_provider_swarm')}
