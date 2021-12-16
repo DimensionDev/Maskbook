@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Button, Link, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
+import { isDashboardPage } from '@masknet/shared-base'
 import {
     useAccount,
     useWeb3State,
@@ -98,7 +99,7 @@ interface WalletStatusBox {
 export function WalletStatusBox(props: WalletStatusBox) {
     const { t } = useI18N()
 
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
     const chainId = useChainId()
     const account = useAccount()
