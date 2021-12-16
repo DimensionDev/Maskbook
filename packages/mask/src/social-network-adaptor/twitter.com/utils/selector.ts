@@ -89,7 +89,7 @@ export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () 
     querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
-        '[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3) > div:first-child > div:first-child [role="button"][aria-label]:nth-child(6)',
+        '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3) > div:first-child > div:first-child [role="button"][aria-label]:nth-child(6)',
     )
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
