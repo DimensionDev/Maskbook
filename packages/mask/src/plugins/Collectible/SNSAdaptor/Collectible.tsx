@@ -54,6 +54,10 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             padding: '0 !important',
         },
+        head: {
+            maxHeight: 110,
+            overflowY: 'auto',
+        },
         body: {
             flex: 1,
             overflow: 'auto',
@@ -189,6 +193,7 @@ export function Collectible(props: CollectibleProps) {
         <>
             <CollectibleCard classes={classes}>
                 <CardHeader
+                    className={classes.head}
                     avatar={
                         <Link
                             href={asset.value.owner?.link}
