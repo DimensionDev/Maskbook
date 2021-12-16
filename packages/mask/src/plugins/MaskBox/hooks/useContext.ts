@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
+import fromUnixTime from 'date-fns/fromUnixTime'
+import addDays from 'date-fns/addDays'
+import subDays from 'date-fns/subDays'
 import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
@@ -80,28 +83,25 @@ function useContext(initialState?: { boxId: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (
-            !maskBoxInfo ||
-            !maskBoxStatus ||
-            isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS) ||
-            !maskBoxCreationSuccessEvent
-        )
+        if (!maskBoxInfo || !maskBoxStatus || isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS))
             return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10)
         const sold = Number.parseInt(maskBoxStatus.total, 10) - remaining
         const personalRemaining = Math.max(0, personalLimit - purchasedTokens.length)
+        const startAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.start_time ?? '0', 10)
+        const endAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.end_time ?? '0', 10)
         const info: BoxInfo = {
             boxId,
             creator: maskBoxInfo.creator,
             name: maskBoxInfo.name,
-            sellAll: maskBoxCreationSuccessEvent.returnValues.sell_all,
+            sellAll: maskBoxCreationSuccessEvent?.returnValues.sell_all ?? false,
             personalLimit: personalLimit,
             personalRemaining,
             remaining,
             availableAmount: Math.min(personalRemaining, remaining),
-            startAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.start_time, 10) * 1000),
-            endAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.end_time, 10) * 1000),
+            startAt: startAt === 0 ? subDays(new Date(), 1) : fromUnixTime(startAt),
+            endAt: endAt === 0 ? addDays(new Date(), 1) : fromUnixTime(endAt),
             total: maskBoxStatus.total,
             sold,
             canceled: maskBoxStatus.canceled,
