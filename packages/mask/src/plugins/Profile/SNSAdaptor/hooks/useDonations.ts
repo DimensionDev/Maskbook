@@ -1,23 +1,14 @@
-import { useEffect, useState } from 'react'
-import type { GeneralAssetWithTags } from '../common/types'
+import { useAsync } from 'react-use'
 import utils from '../common/utils'
 
 export function useDonations() {
-    const [donations, setDonations] = useState<GeneralAssetWithTags[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        setIsLoading(true)
-        utils
-            .initAssets('Gitcoin-Donation')
-            .then(({ listed }) => {
-                setDonations(listed)
-            })
-            .finally(() => setIsLoading(false))
+    const { value: donations = [], loading } = useAsync(async () => {
+        const { listed } = await utils.initAssets('Gitcoin-Donation')
+        return listed
     }, [])
 
     return {
         donations,
-        loading: isLoading,
+        loading,
     }
 }

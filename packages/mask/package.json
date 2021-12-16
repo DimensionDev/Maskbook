@@ -13,8 +13,10 @@
     "@dimensiondev/stego-js": "=0.11.1-20201027083223-8ab41be",
     "@ethersproject/abi": "^5.4.0",
     "@ethersproject/address": "^5.0.4",
+    "@ethersproject/bytes": "^5.5.0",
     "@ethersproject/providers": "^5.0.9",
     "@ethersproject/solidity": "^5.0.4",
+    "@ethersproject/strings": "^5.5.0",
     "@hookform/resolvers": "2.8.3",
     "@masknet/dashboard": "workspace:*",
     "@masknet/encryption": "workspace:^0.0.0",
@@ -124,8 +126,7 @@
     "web3-utils": "1.5.2",
     "webextension-polyfill": "^0.8.0",
     "z-schema": "^5.0.2",
-    "zod": "3.11.6",
-    "ethers": "^5.5.1"
+    "zod": "3.11.6"
   },
   "devDependencies": {
     "@dimensiondev/webextension-shim": "0.0.3-20210823035705-4257e12",

@@ -1,6 +1,7 @@
 /* eslint-disable import/no-anonymous-default-export */
 // cspell:ignore: IRSS
-import { ethers } from 'ethers'
+import { hexlify } from '@ethersproject/bytes'
+import { toUtf8Bytes } from '@ethersproject/strings'
 import RSS3 from 'rss3-next'
 import { fetch } from './middleware'
 import type { GitcoinResponse, GeneralAsset, NFTResponse, POAPResponse } from './types'
@@ -35,8 +36,7 @@ async function connect(address: string, skipSignSync: boolean = false) {
         endpoint: config.hubEndpoint,
         address: address,
         agentSign: true,
-        sign: (data: string) =>
-            Services.Ethereum.personalSign(ethers.utils.hexlify(ethers.utils.toUtf8Bytes(data)), address.toLowerCase()),
+        sign: (data: string) => Services.Ethereum.personalSign(hexlify(toUtf8Bytes(data)), address.toLowerCase()),
     })
     await initUser(RSS3LoginUser, skipSignSync)
 

@@ -1,23 +1,14 @@
-import { useEffect, useState } from 'react'
-import type { GeneralAssetWithTags } from '../common/types'
+import { useAsync } from 'react-use'
 import utils from '../common/utils'
 
 export function useFootprints() {
-    const [footprints, setFootprints] = useState<GeneralAssetWithTags[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        setIsLoading(true)
-        utils
-            .initAssets('POAP')
-            .then(({ listed }) => {
-                setFootprints(listed)
-            })
-            .finally(() => setIsLoading(false))
+    const { value: footprints = [], loading } = useAsync(async () => {
+        const { listed } = await utils.initAssets('POAP')
+        return listed
     }, [])
 
     return {
         footprints,
-        loading: isLoading,
+        loading,
     }
 }
