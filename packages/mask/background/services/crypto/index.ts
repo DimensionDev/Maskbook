@@ -1,5 +1,11 @@
 import { encodeArrayBuffer } from '@dimensiondev/kit'
-import type { DecryptProgress, DecryptProgressKind } from '@masknet/encryption'
+import {
+    decrypt,
+    parsePayload,
+    DecryptProgressKind,
+    PublicKeyAlgorithmEnum,
+    DecryptProgress,
+} from '@masknet/encryption'
 import {
     AESCryptoKey,
     EC_Public_CryptoKey,
@@ -18,10 +24,6 @@ export type DecryptionInfo = {
 }
 export type DecryptionProgress = DecryptProgress | DecryptionInfo
 export async function* decryption(payload: string | Uint8Array, network: string) {
-    // This module required to be loaded async because it contains WebAssembly import.
-    // If it join the sync module graph of the whole application, it will fail due to unknown reason.
-    const { decrypt, parsePayload, DecryptProgressKind, PublicKeyAlgorithmEnum } = await import('@masknet/encryption')
-
     // TODO: read in-memory cache to avoid db lookup
 
     const parse = await parsePayload(payload)
