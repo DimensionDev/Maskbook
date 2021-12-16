@@ -29,7 +29,7 @@ interface DonationPageProps {
 }
 const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = donation
-    return urlcat(`https://rss3.bio/:address/singlegitcoin/:platform/:identity/:id/:type`, {
+    return urlcat('https://rss3.bio/:address/singlegitcoin/:platform/:identity/:id/:type', {
         address,
         platform,
         identity,
@@ -83,7 +83,7 @@ export function DonationPage(props: DonationPageProps) {
                         color={COLORS.donation}
                         text="Edit"
                         onClick={() => {
-                            window.open(`https://rss3.bio`, '_blank', 'noopener noreferrer')
+                            window.open('https://rss3.bio', '_blank', 'noopener noreferrer')
                         }}
                     />
                 ) : null}
