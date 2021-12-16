@@ -11,6 +11,7 @@ import {
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { bridgedEthereumProvider } from '@masknet/injected-script'
+import { isPopupPage } from '@masknet/shared-base'
 import {
     currentBlockNumberSettings,
     currentBalanceSettings,
@@ -68,7 +69,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const account = isMask ? currentMaskWalletAccountSettings.value : currentAccountSettings.value
                 const providerType = currentProviderSettings.value
 
-                if (location.href.includes('popups.html')) return account
+                if (isPopupPage()) return account
                 if (providerType === ProviderType.Fortmatic) return account
                 if (!isInjectedProvider(providerType)) return account
 
