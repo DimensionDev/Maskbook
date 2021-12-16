@@ -60,9 +60,9 @@ export const Uploading: React.FC = () => {
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
-        const currentProvier = state.provider
+        const currentProvider = state.provider
         const payloadTxID = await timeout(
-            PluginFileServiceRPC.makeAttachment(currentProvier, {
+            PluginFileServiceRPC.makeAttachment(currentProvider, {
                 name: state.name,
                 key: state.key,
                 block: state.block,
@@ -71,11 +71,11 @@ export const Uploading: React.FC = () => {
             60000, // ≈ 1 minute
         )
         setPreparing(false)
-        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(currentProvier, payloadTxID)) {
+        for await (const pctComplete of PluginFileServiceRPCGenerator.upload(currentProvider, payloadTxID)) {
             setSendSize(state.size * (pctComplete / 100))
         }
         const landingTxID = await timeout(
-            PluginFileServiceRPC.uploadLandingPage(currentProvier, {
+            PluginFileServiceRPC.uploadLandingPage(currentProvider, {
                 name: state.name,
                 size: state.size,
                 txId: payloadTxID,
@@ -87,7 +87,7 @@ export const Uploading: React.FC = () => {
         )
         const item: FileInfo = {
             type: 'file',
-            provider: currentProvier as Provider,
+            provider: currentProvider as Provider,
             id: state.checksum,
             name: state.name,
             size: state.size,
