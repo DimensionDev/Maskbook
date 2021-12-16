@@ -16,18 +16,3 @@ export const enum FileRouter {
     uploading = '/uploading',
     uploaded = '/uploaded',
 }
-
-export const allProviders: ProviderConfig[] = [
-    {
-        provider: Provider.arweave,
-        key: 'plugin_file_service_provider_arweave',
-    },
-    {
-        provider: Provider.ipfs,
-        key: 'plugin_file_service_provider_ipfs',
-    },
-    {
-        provider: Provider.swarm,
-        key: 'plugin_file_service_provider_swarm',
-    },
-]

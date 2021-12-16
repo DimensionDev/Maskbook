@@ -63,6 +63,21 @@ export const Upload: React.FC = () => {
     const [useCDN, setUseCDN] = useState(false)
     const [provider, setProvider] = useState('arweave')
     const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
+    const allProviders: ProviderConfig[] = [
+        {
+            provider: Provider.arweave,
+            name: t('plugin_file_service_provider_arweave'),
+        },
+        {
+            provider: Provider.ipfs,
+            name: t('plugin_file_service_provider_ipfs'),
+        },
+        {
+            provider: Provider.swarm,
+            name: t('plugin_file_service_provider_swarm'),
+        },
+    ]
+
     const onFile = async (file: File) => {
         let key: string | undefined = undefined
         if (encrypted) {
@@ -96,7 +111,7 @@ export const Upload: React.FC = () => {
                     onChange={() => setProvider(config.provider)}
                 />
             }
-            label={t(config.key)}
+            label={config.name}
         />
     ))
 

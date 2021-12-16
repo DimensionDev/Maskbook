@@ -6,7 +6,7 @@ export enum Provider {
 
 export interface ProviderConfig {
     provider: Provider
-    key: string
+    name: string
 }
 
 export interface LandingPageMetadata {
