@@ -15,6 +15,7 @@ module.exports = {
         fastRefresh: true,
     },
     webpackFinal: async (config) => {
+        config.experiments = { asyncWebAssembly: true, topLevelAwait: true }
         config.module.rules.push({
             test: /\.m?js$/,
             type: 'javascript/auto',
