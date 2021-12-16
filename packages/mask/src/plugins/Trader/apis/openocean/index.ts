@@ -18,12 +18,7 @@ export async function swapOO(request: SwapOORequest): Promise<SwapOOData> {
         }),
     )
     const payload = await response.json()
-    // if (payload.status !== 200) {
-    //     throw new Error((payload as SwapOOErrorResponse).data ?? 'Unknown Error')
-    // }
     const { data, outAmount, minOutAmount, to, value } = payload
-    // const _resAmount = new BigNumber(outAmount).dividedBy(pow10(request.toToken.decimals ?? 0)).toNumber()
-    // const _fromAmount = new BigNumber(request.fromAmount).dividedBy(pow10(request.fromToken.decimals ?? 0)).toNumber()
     const _resAmount = leftShift(outAmount, request.toToken.decimals).toNumber()
     const _fromAmount = leftShift(request.fromAmount, request.fromToken.decimals).toNumber()
     return {
