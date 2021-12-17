@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => {
             padding: '0 !important',
         },
         head: {
-            maxHeight: 110,
+            maxHeight: 100,
             overflow: 'auto',
         },
         body: {
