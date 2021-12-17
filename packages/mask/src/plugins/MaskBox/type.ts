@@ -43,7 +43,7 @@ export interface BoxInfo {
     payments: PaymentInfo[]
     remaining: number
     availableAmount: number
-    total: string
+    total: number
     sold: number
     startAt: Date
     endAt: Date
