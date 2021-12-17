@@ -76,6 +76,7 @@ export function PreviewCard(props: PreviewCardProps) {
         setOpenBoxTransactionOverrides,
 
         // retry
+        retryMaskBoxStatus,
         retryMaskBoxInfo,
         retryBoxInfo,
         retryMaskBoxCreationSuccessEvent,
@@ -118,12 +119,11 @@ export function PreviewCard(props: PreviewCardProps) {
         refreshLastPurchasedTokenIds()
         try {
             await openBoxCallback()
-            retryBoxInfo()
-            retryMaskBoxTokensForSale()
+            retryMaskBoxStatus()
             setOpenDrawDialog(false)
         } catch {}
         setDrawing(false)
-    }, [openBoxCallback, refreshLastPurchasedTokenIds, retryBoxInfo, retryMaskBoxTokensForSale])
+    }, [openBoxCallback, refreshLastPurchasedTokenIds, retryMaskBoxStatus])
 
     const { setDialog: setTransactionDialog } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
