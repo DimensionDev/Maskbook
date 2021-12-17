@@ -437,7 +437,7 @@ export function Trader(props: TraderProps) {
                     }
                     return trade
                 })
-                .filter(({ finalPrice }) => !!finalPrice)
+                .filter(({ value }) => !!value && !value.outputAmount.isZero())
                 .sort(({ finalPrice: a }, { finalPrice: b }) => {
                     if (a && b && isGreaterThan(a, b)) return -1
                     if (a && b && isLessThan(a, b)) return 1
