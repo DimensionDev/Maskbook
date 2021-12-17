@@ -1,0 +1,53 @@
+name: Publish Porxy Package
+
+on:
+  push:
+    branches: [feat/api-provider-proxy*]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Get cache date
+        id: get-date
+        run: echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+        shell: bash
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: '6.23.1'
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'pnpm'
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: packages/mask/node_modules/.cache/
+          key: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
+          restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
+      - run: pnpm install
+      - run: pnpm build
+      - name: Run Install
+        working-directory: ./packages/provider-proxy
+        run: pnpm install && pnpm build
+  publish-gpr:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          registry-url: https://npm.pkg.github.com/
+      - name: Run Install
+        working-directory: ./packages/provider-proxy
+        run: npm publish --scope=@nikomaniac --registry=https://npm.pkg.github.com
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}

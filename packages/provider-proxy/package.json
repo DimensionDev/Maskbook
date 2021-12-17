@@ -4,11 +4,13 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "rollup --config"
+    "build": "rollup -c -w"
   },
   "dependencies": {
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
+    "@masknet/web3-shared-base": "workspace:*",
     "urlcat": "^2.0.4"
   },
   "devDependencies": {
@@ -17,6 +19,7 @@
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-typescript": "^8.3.0",
     "rollup": "^2.60.1",
+    "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-typescript2": "^0.31.1"
   }
 }

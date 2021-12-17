@@ -2,9 +2,13 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": "./src/",
-    "outDir": "./dist/",
-    "tsBuildInfoFile": "./dist/.tsbuildinfo"
+    "outDir": "./dist/"
   },
   "include": ["./src", "./src/**/*.json"],
-  "references": [{ "path": "../plugin-infra" }, { "path": "../web3-providers" }]
+  "references": [
+    { "path": "../plugin-infra" },
+    { "path": "../web3-providers" },
+    { "path": "../web3-shared/base" },
+    { "path": "../web3-shared/evm" }
+  ]
 }

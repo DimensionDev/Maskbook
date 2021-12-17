@@ -3,8 +3,6 @@ import fungibleTokenProducer from './producers/fungibleTokenAsset'
 
 // TODO: unit test
 
-const producers = {
+export const producers = {
     fungibleTokenAsset: fungibleTokenProducer,
 }
-
-export default producers
