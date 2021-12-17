@@ -4,7 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import { DownloadCloud, File } from 'react-feather'
 import { useI18N } from '../../../utils'
 import { CopyableCode } from './components/Copyable'
-import type { FileInfo, Provider } from '../types'
+import type { FileInfo } from '../types'
+import { getGatewayAPI } from '../helpers'
 import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
@@ -44,17 +45,6 @@ const useStyles = makeStyles()((theme) => ({
         cursor: 'pointer',
     },
 }))
-
-function getGatewayAPI(provider: Provider) {
-    if (provider === 'arweave') {
-        return 'https://arweave.net/'
-    } else if (provider === 'ipfs') {
-        return 'https://infura-ipfs.io/ipfs/'
-    } else if (provider === 'swarm') {
-        return 'https://bee-2.gateway.ethswarm.org/bzz/'
-    }
-    throw new Error('unsupported provider')
-}
 
 export function Preview({ info }: { info: FileInfo }) {
     const { t } = useI18N()

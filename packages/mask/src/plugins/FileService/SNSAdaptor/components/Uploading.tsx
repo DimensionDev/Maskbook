@@ -60,7 +60,7 @@ export const Uploading: React.FC = () => {
         return () => onUploading(false)
     }, [onUploading])
     const { error } = useAsync(async () => {
-        const currentProvider = state.provider
+        const currentProvider = state.provider as Provider
         const payloadTxID = await timeout(
             PluginFileServiceRPC.makeAttachment(currentProvider, {
                 name: state.name,
@@ -87,7 +87,7 @@ export const Uploading: React.FC = () => {
         )
         const item: FileInfo = {
             type: 'file',
-            provider: currentProvider as Provider,
+            provider: currentProvider,
             id: state.checksum,
             name: state.name,
             size: state.size,

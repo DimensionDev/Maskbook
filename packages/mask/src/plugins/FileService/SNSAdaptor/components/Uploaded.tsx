@@ -10,6 +10,8 @@ import { useI18N } from '../../../../utils'
 import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
 import { FileName } from './FileName'
+import { getGatewayAPI } from '../../helpers'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()({
     container: {
@@ -65,7 +67,9 @@ export const Uploaded: React.FC = () => {
         if (!event.shiftKey) {
             return
         }
-        const link = `https://arweave.net/${state.landingTxID}`
+
+        const linkPrefix = getGatewayAPI(state.provider)
+        const link = urlcat(linkPrefix, '/:txId', { txId: state.landingTxID })
         open(state.key ? `${link}#${state.key}` : link)
     }
     return (
