@@ -18,7 +18,6 @@ import {
 } from '../settings'
 import { getWallets, hasWallet, updateWallet } from './wallet'
 import { hasNativeAPI, nativeAPI } from '../../../utils'
-import { Flags } from '../../../../shared'
 
 export async function updateAccount(
     options: {
@@ -115,14 +114,4 @@ export async function setDefaultWallet() {
             account: address,
             providerType: ProviderType.MaskWallet,
         })
-}
-
-export async function getSupportedNetworks() {
-    return [
-        NetworkType.Ethereum,
-        Flags.bsc_enabled ? NetworkType.Binance : undefined,
-        Flags.polygon_enabled ? NetworkType.Polygon : undefined,
-        Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
-        Flags.xdai_enabled ? NetworkType.xDai : undefined,
-    ].filter(Boolean) as NetworkType[]
 }

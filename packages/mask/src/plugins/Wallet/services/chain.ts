@@ -1,4 +1,4 @@
-import { uniq, throttle } from 'lodash-unified'
+import { throttle } from 'lodash-unified'
 import { BalanceOfChains, BlockNumberOfChains, ProviderType } from '@masknet/web3-shared-evm'
 import { pollingTask } from '@masknet/shared-base'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { ChainId, getChainIdFromNetworkType, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
+import { useUpdateEffect } from 'react-use'
+import { ChainId, getChainIdFromNetworkType, NetworkType, useChainId, useChainIdValid } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -11,9 +12,8 @@ import { useI18N } from '../../../../utils'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { WalletRPC } from '../../../Wallet/messages'
 import { isDashboardPage } from '@masknet/shared-base'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     walletStatusBox: {
@@ -68,8 +68,8 @@ interface TraderDialogProps {
 }
 
 export function TraderDialog({ open, onClose }: TraderDialogProps) {
-    const isDashboard = isDashboardPage()
     const { t } = useI18N()
+    const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
     const currentChainId = useChainId()
     const chainIdValid = useChainIdValid()
@@ -82,11 +82,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
             if (ev?.traderProps) setTraderProps(ev.traderProps)
         },
     )
-
-    const { value: chains } = useAsync(async () => {
-        const networks = await WalletRPC.getSupportedNetworks()
-        return networks.map((network) => getChainIdFromNetworkType(network))
-    }, [])
+    const chains = getEnumAsArray(NetworkType).map(({ value }) => getChainIdFromNetworkType(value))
 
     useEffect(() => {
         if (!chainIdValid) closeDialog()
