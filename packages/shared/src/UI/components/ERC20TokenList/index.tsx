@@ -48,9 +48,10 @@ const Placeholder = memo(({ message, height }: { message: string; height?: numbe
 export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
     const t = useSharedI18N()
     const account = useAccount()
-    const chainId = useChainId()
+    const currentChainId = useChainId()
+    const chainId = props.targetChainId ?? currentChainId
     const trustedERC20Tokens = useTrustedERC20Tokens()
-    const { value: nativeToken } = useNativeTokenDetailed(props.targetChainId ?? chainId)
+    const { value: nativeToken } = useNativeTokenDetailed(chainId)
     const [keyword, setKeyword] = useState('')
 
     const {
@@ -62,13 +63,14 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         selectedTokens = [],
     } = props
 
-    const { ERC20_TOKEN_LISTS } = useEthereumConstants()
+    const { ERC20_TOKEN_LISTS } = useEthereumConstants(chainId)
 
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(
             ERC20_TOKEN_LISTS,
             keyword,
             nativeToken ? [...trustedERC20Tokens, nativeToken] : trustedERC20Tokens,
+            chainId,
         )
 
     //#region add token by address
@@ -95,7 +97,10 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         loading: assetsLoading,
         error: assetsError,
         retry: retryLoadAsset,
-    } = useAssetsByTokenList(renderTokens.filter((x) => isValidAddress(x.address)))
+    } = useAssetsByTokenList(
+        renderTokens.filter((x) => isValidAddress(x.address)),
+        chainId,
+    )
 
     useEffect(() => {
         if (assetsError) retryLoadAsset()
