@@ -25,7 +25,7 @@ export {
     getToken,
     getTokens,
     getTokensCount,
-    getTokensPaged,
+    getTokensByPagination,
     hasToken,
     addToken,
     removeToken,

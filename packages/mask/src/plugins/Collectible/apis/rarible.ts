@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { compact } from 'lodash-unified'
 import { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
@@ -14,7 +14,6 @@ import {
 import { RaribleChainURL, RaribleMainnetURL } from '../constants'
 import { toRaribleImage } from '../helpers'
 import { resolveRaribleUserNetwork } from '../pipes'
-import { currentChainIdSettings } from '../../Wallet/settings'
 
 async function fetchFromRarible<T>(root: string, subPath: string, config = {} as RequestInit) {
     const response = await (
@@ -27,7 +26,8 @@ async function fetchFromRarible<T>(root: string, subPath: string, config = {} as
     return response as T
 }
 
-export async function getProfilesFromRarible(addresses: (string | undefined)[]) {
+export async function getProfilesFromRarible(chainId: ChainId, addresses: (string | undefined)[]) {
+    if (chainId !== ChainId.Mainnet) return []
     return fetchFromRarible<RaribleProfileResponse[]>(RaribleMainnetURL, 'profiles/list', {
         method: 'POST',
         body: stringify(addresses),
@@ -37,7 +37,8 @@ export async function getProfilesFromRarible(addresses: (string | undefined)[]) 
     })
 }
 
-export async function getNFTItem(tokenAddress: string, tokenId: string) {
+export async function getNFTItem(chainId: ChainId, tokenAddress: string, tokenId: string) {
+    if (chainId !== ChainId.Mainnet) return []
     const assetResponse = await fetchFromRarible<RaribleNFTItemMapResponse>(
         RaribleChainURL,
         urlcat('/v0.1/nft/items/:tokenAddress::tokenId', {
@@ -55,11 +56,8 @@ export async function getNFTItem(tokenAddress: string, tokenId: string) {
     return assetResponse
 }
 
-export async function getOffersFromRarible(
-    chainId: ChainId.Mainnet | ChainId.Ropsten,
-    tokenAddress: string,
-    tokenId: string,
-) {
+export async function getOffersFromRarible(chainId: ChainId, tokenAddress: string, tokenId: string) {
+    if (chainId !== ChainId.Mainnet) return []
     const orders = await fetchFromRarible<RaribleOfferResponse[]>(
         RaribleMainnetURL,
         `items/${tokenAddress}:${tokenId}/offers`,
@@ -89,11 +87,14 @@ export async function getOffersFromRarible(
     })
 }
 
-export async function getListingsFromRarible(tokenAddress: string, tokenId: string) {
+export async function getListingsFromRarible(chainId: ChainId, tokenAddress: string, tokenId: string) {
+    if (chainId !== ChainId.Mainnet) return []
     const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, `items/${tokenAddress}:${tokenId}/ownerships`)
     const listings = assets.filter((x) => x.selling)
-    const profiles = await getProfilesFromRarible(listings.map((x) => x.owner))
-    const chainId = currentChainIdSettings.value
+    const profiles = await getProfilesFromRarible(
+        chainId,
+        listings.map((x) => x.owner),
+    )
     return listings.map((asset) => {
         const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
         return {
@@ -111,24 +112,20 @@ export async function getListingsFromRarible(tokenAddress: string, tokenId: stri
     })
 }
 
-export async function getOrderFromRarible(
-    chainId: ChainId.Mainnet | ChainId.Ropsten,
-    tokenAddress: string,
-    tokenId: string,
-    side: OrderSide,
-) {
+export async function getOrderFromRarible(chainId: ChainId, tokenAddress: string, tokenId: string, side: OrderSide) {
+    if (chainId !== ChainId.Mainnet) return []
     switch (side) {
         case OrderSide.Buy:
             return getOffersFromRarible(chainId, tokenAddress, tokenId)
         case OrderSide.Sell:
-            return getListingsFromRarible(tokenAddress, tokenId)
+            return getListingsFromRarible(chainId, tokenAddress, tokenId)
         default:
             return []
     }
 }
 
-export async function getHistoryFromRarible(tokenAddress: string, tokenId: string) {
-    let histories = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, `activity`, {
+export async function getHistoryFromRarible(chainId: ChainId, tokenAddress: string, tokenId: string) {
+    const result = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, `activity`, {
         method: 'POST',
         body: stringify({
             // types: ['BID', 'BURN', 'BUY', 'CANCEL', 'CANCEL_BID', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],
@@ -144,11 +141,9 @@ export async function getHistoryFromRarible(tokenAddress: string, tokenId: strin
         },
     })
 
-    if (histories.length) {
-        histories = histories.filter((x) => Object.values(RaribleEventType).includes(x['@type']))
-    }
-
+    const histories = result.length ? result.filter((x) => Object.values(RaribleEventType).includes(x['@type'])) : []
     const profiles = await getProfilesFromRarible(
+        chainId,
         compact([
             ...histories.map((history) => history.owner),
             ...histories.map((history) => history.buyer),

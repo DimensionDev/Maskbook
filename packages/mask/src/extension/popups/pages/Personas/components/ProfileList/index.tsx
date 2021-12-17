@@ -69,7 +69,7 @@ export const ProfileList = memo(() => {
 
     const definedSocialNetworks = compact(
         [...definedSocialNetworkUIs.values()].map(({ networkIdentifier }) => {
-            if (networkIdentifier.includes('localhost')) return null
+            if (networkIdentifier.startsWith('localhost')) return null
             return networkIdentifier
         }),
     )

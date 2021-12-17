@@ -94,26 +94,27 @@ export async function getToken(chainId: ChainId, type: DatabaseTokenType, addres
     return PluginDB.get(getDatabaseType(type), getRecordId(chainId, address, tokenId))
 }
 
-export async function getTokens<T extends DatabaseTokenDetailed>(type: DatabaseTokenType) {
+export async function getTokens<T extends DatabaseTokenDetailed>(chainId: ChainId, type: DatabaseTokenType) {
     const tokens = await asyncIteratorToArray(PluginDB.iterate(getDatabaseType(type)))
     return tokens
         .map((x) => x.value)
+        .filter((y) => y.chainId === chainId)
         .sort((a, z) => z.createdAt.getTime() - a.createdAt.getTime())
         .slice(0, MAX_TOKEN_COUNT)
         .map((x) => TokenRecordOutDatabase(type, x) as T)
 }
 
-export async function getTokensCount(type: DatabaseTokenType) {
-    return (await getTokens(type)).length
+export async function getTokensCount(chainId: ChainId, type: DatabaseTokenType) {
+    return (await getTokens(chainId, type)).length
 }
 
-export async function getTokensPaged(type: DatabaseTokenType, index: number, count: number) {
+export async function getTokensByPagination(chainId: ChainId, type: DatabaseTokenType, index: number, count: number) {
     let read = 0
     const records: DatabaseTokenRecord[] = []
     for await (const { value: record } of PluginDB.iterate(getDatabaseType(type))) {
         if (read > (index + 1) * count) break
         if (read < index * count) continue
-        records.push(record)
+        if (record.chainId === chainId) records.push(record)
         read += 1
     }
     return records.map((x) => TokenRecordOutDatabase(type, x))

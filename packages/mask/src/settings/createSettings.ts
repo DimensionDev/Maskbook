@@ -111,7 +111,7 @@ export function createSocialNetworkSettings<T extends browser.storage.StorageVal
 ) {
     const cached: SocialNetworkSettings<T> = {}
 
-    // setup inital value
+    // setup initial value
     getEnumAsArray(SocialNetworkID).forEach(({ value }) => {
         cached[value] = createInternalSettings(`${value}+${settingsKey}`, defaultValue)
     })
