@@ -29,7 +29,7 @@ const cache = new Map<
 export async function getNFTAvatarFromRSS(userId: string, address: string) {
     let v = cache.get(address)
     if (!v || Date.now() > v[1]) {
-        cache.set(address, [_getNFTAvatarFromRSS(address), addSeconds(Date.now(), 5 * 60).getTime()])
+        cache.set(address, [_getNFTAvatarFromRSS(address), addSeconds(Date.now(), 60).getTime()])
     }
 
     v = cache.get(address)
