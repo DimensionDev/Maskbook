@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { alpha, IconButton } from '@mui/material'
-import { useStylesExtends, makeStyles } from '@masknet/theme'
+import { alpha, IconButton, Tooltip } from '@mui/material'
+import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import type { BannerProps } from '../Welcomes/Banner'
 import { useValueRef } from '@masknet/shared'
@@ -34,15 +34,28 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 10px',
         borderBottom: '1px solid #dadde1',
     },
+    tooltip: {
+        marginTop: '2px !important',
+        borderRadius: 2,
+        padding: 4,
+        background: MaskColorVar.twitterTooltipBg,
+    },
 }))
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStylesExtends(useStyles(), props)
 
     return (
-        <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
-            <MaskSharpIcon color="primary" />
-        </IconButton>
+        <Tooltip
+            title="Mask Network"
+            classes={{ tooltip: classes.tooltip }}
+            PopperProps={{
+                disablePortal: true,
+            }}>
+            <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
+                <MaskSharpIcon color="primary" />
+            </IconButton>
+        </Tooltip>
     )
 })
 
