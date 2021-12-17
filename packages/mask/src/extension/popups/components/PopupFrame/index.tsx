@@ -1,9 +1,8 @@
 import { memo } from 'react'
-import { useLocation } from 'react-router-dom'
+import { NavLink, useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
-import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
@@ -100,7 +99,7 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     })
 
     const matchRecovery = useRouteMatch({
-        path: PopupRoutes.WalletRecovered,
+        path: [PopupRoutes.WalletRecovered, PopupRoutes.Unlock],
         exact: true,
     })
 

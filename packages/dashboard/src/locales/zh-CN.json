@@ -86,6 +86,7 @@
     "wallet_transfer_error_no_address_has_been_set_name": "接收人地址无效。",
     "wallet_transfer_error_no_ens_support": "网络不支持 ENS。",
     "wallets_transfer_error_insufficient_balance": "{{symbol}} 余额不足",
+    "wallets_transfer_error_same_address_with_current_account": "此接收地址与发送地址相同，请重新检查。",
     "wallets_transfer_send": "发送",
     "wallets_transfer_memo_placeholder": "可选填信息",
     "wallets_transfer_contract": "合约",
