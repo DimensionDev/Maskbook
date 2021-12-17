@@ -86,7 +86,9 @@ export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, tr
     )
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
+    querySelector<E>(
+        '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3)',
+    )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
         '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3) > div:first-child > div:first-child [role="button"][aria-label]:nth-child(6)',
