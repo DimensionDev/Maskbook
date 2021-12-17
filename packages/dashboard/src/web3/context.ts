@@ -30,7 +30,7 @@ export const Web3Context: Web3ProviderType = {
     account: createSubscriptionFromAsync(
         async () => {
             const providerType = await Services.Settings.getCurrentSelectedWalletProvider()
-            if (isInjectedProvider(providerType)) return ''
+            if (isInjectedProvider(providerType) || providerType === ProviderType.Fortmatic) return ''
             return Services.Settings.getSelectedWalletAddress()
         },
         '',

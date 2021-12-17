@@ -86,8 +86,10 @@ function useContext(initialState?: { boxId: string }) {
         if (!maskBoxInfo || !maskBoxStatus || isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS))
             return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
-        const remaining = Number.parseInt(maskBoxStatus.remaining, 10)
-        const sold = Number.parseInt(maskBoxStatus.total, 10) - remaining
+        const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
+        const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box
+        const totalComputed = total && remaining && remaining > total ? remaining : total
+        const sold = Math.max(0, totalComputed - remaining)
         const personalRemaining = Math.max(0, personalLimit - purchasedTokens.length)
         const startAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.start_time ?? '0', 10)
         const endAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.end_time ?? '0', 10)
@@ -102,7 +104,7 @@ function useContext(initialState?: { boxId: string }) {
             availableAmount: Math.min(personalRemaining, remaining),
             startAt: startAt === 0 ? subDays(new Date(), 1) : fromUnixTime(startAt),
             endAt: endAt === 0 ? addDays(new Date(), 1) : fromUnixTime(endAt),
-            total: maskBoxStatus.total,
+            total: totalComputed,
             sold,
             canceled: maskBoxStatus.canceled,
             tokenIds: allTokens,
