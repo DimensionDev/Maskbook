@@ -146,7 +146,7 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
         case NonFungibleAssetProvider.RARIBLE:
             return 'https://rarible.com'
         case NonFungibleAssetProvider.NFTSCAN:
-            return 'https:/nftscan.com'
+            return 'https://nftscan.com'
         default:
             unreachable(provider)
     }

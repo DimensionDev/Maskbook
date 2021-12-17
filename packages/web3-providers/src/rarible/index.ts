@@ -310,7 +310,7 @@ export async function getNFT(tokenAddress: string, tokenId: string) {
     return createERC721TokenAsset(tokenAddress, tokenId, asset)
 }
 
-export async function getNFTsPaged(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
+export async function getNFTsByPaginations(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
     const asset = await fetchFromRarible<{
         total: number
         continuation: string

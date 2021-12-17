@@ -35,12 +35,9 @@ interface NumericalTraitStats {
     min: number
     max: number
 }
-interface StringTraitStats {
-    [key: string]: number
-}
 
 interface OpenSeaTraitStats {
-    [traitName: string]: NumericalTraitStats | StringTraitStats
+    [traitName: string]: NumericalTraitStats | Record<string, number>
 }
 
 interface OpenSeaFungibleToken {

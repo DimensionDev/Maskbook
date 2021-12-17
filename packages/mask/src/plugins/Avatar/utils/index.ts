@@ -6,7 +6,12 @@ import Services from '../../../extension/service'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 
 export async function getNFT(address: string, tokenId: string) {
-    const asset = await EVM_RPC.getAsset(address, tokenId, ChainId.Mainnet, NonFungibleAssetProvider.OPENSEA)
+    const asset = await EVM_RPC.getAsset({
+        address,
+        tokenId,
+        chainId: ChainId.Mainnet,
+        provider: NonFungibleAssetProvider.OPENSEA,
+    })
 
     return {
         amount: new BigNumber(
@@ -24,7 +29,7 @@ export async function getNFT(address: string, tokenId: string) {
 }
 
 export async function createNFT(address: string, tokenId: string) {
-    return EVM_RPC.getNFT(address, tokenId, ChainId.Mainnet, NonFungibleAssetProvider.OPENSEA)
+    return EVM_RPC.getNFT({ address, tokenId, chainId: ChainId.Mainnet, provider: NonFungibleAssetProvider.OPENSEA })
 }
 
 export async function getImage(image: string): Promise<string> {

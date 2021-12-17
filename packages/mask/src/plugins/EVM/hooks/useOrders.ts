@@ -20,7 +20,15 @@ export function useOrders(
                 data: [],
                 hasNextPage: false,
             }
-        const orders = await EVM_RPC.getOrders(address, tokenId, side ?? OrderSide.Sell, chainId, provider, page, size)
+        const orders = await EVM_RPC.getOrders({
+            address,
+            tokenId,
+            side: side ?? OrderSide.Sell,
+            chainId,
+            provider,
+            page,
+            size,
+        })
         return {
             data: orders,
             hasNextPage: orders.length === size,

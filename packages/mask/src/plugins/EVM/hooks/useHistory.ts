@@ -18,7 +18,7 @@ export function useHistory(
                 data: [],
                 hasNextPage: false,
             }
-        const histories = await EVM_RPC.getHistory(address, tokenId, chainId, provider, page, size)
+        const histories = await EVM_RPC.getHistory({ address, tokenId, chainId, provider, page, size })
         return {
             data: histories,
             hasNextPage: histories.length === size,

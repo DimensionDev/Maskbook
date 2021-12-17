@@ -37,7 +37,7 @@ import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '../../EVM/hooks'
 import { rightShift, ZERO } from '@masknet/web3-shared-base/utils/number'
 import type { Coin } from '../../Trader/types'
-import type { WyvernSchemaName } from 'opensea-js/lib/types'
+import { WyvernSchemaName } from 'opensea-js/lib/types'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -102,7 +102,11 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract?.schemaName as WyvernSchemaName,
+                schemaName: Object.values(WyvernSchemaName).includes(
+                    asset.value.asset_contract?.schemaName as WyvernSchemaName,
+                )
+                    ? (asset.value.asset_contract?.schemaName as WyvernSchemaName)
+                    : undefined,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),

@@ -1,4 +1,3 @@
-import { OpenSeaAccountURL, OPENSEA_API_KEY, OpenSea_API_URL } from './constants'
 import type { OpenSeaAssetContract, OpenSeaAssetEvent, OpenSeaResponse, OpenSeaCollection } from './types'
 import urlcat from 'urlcat'
 import { head, uniqBy } from 'lodash-unified'
@@ -15,28 +14,31 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
 } from '@masknet/web3-shared-evm'
+
+const OpenSeaAccountURL = 'https://opensea.io/accounts/'
+const OPENSEA_API_KEY = 'c38fe2446ee34f919436c32db480a2e3'
+const OpenSea_API_URL = 'https://api.opensea.io'
+
 async function fetchAsset<T>(url: string, chainId: ChainId) {
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId)) return
 
-    const response = await (
-        await fetch(url, {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'x-api-key': OPENSEA_API_KEY,
-            },
-        })
-    ).json()
+    const response = await fetch(url, {
+        method: 'GET',
+        mode: 'cors',
+        headers: {
+            'x-api-key': OPENSEA_API_KEY,
+        },
+    })
 
-    return response as T
+    return response.json() as Promise<T>
 }
 
-export async function getNFTsPaged(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
+export async function getNFTsByPaginations(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
     const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
 
     const asset = await fetchAsset<{ assets: OpenSeaResponse[] }>(
-        urlcat(`${OpenSea_API_URL}/api/v1/assets?owner=:from&limit=:limit&offset=:offset}`, {
-            from,
+        urlcat(OpenSea_API_URL, '/api/v1/assets', {
+            owner: from,
             offset: opts.page,
             limit: opts.size,
         }),
@@ -81,14 +83,14 @@ function createERC721TokenAsset(
 
 async function _getAsset(address: string, tokenId: string, chainId: ChainId) {
     return fetchAsset<OpenSeaResponse>(
-        urlcat(`${OpenSea_API_URL}/api/v1/asset/:address/:tokenId`, { address, tokenId }),
+        urlcat(OpenSea_API_URL, `/api/v1/asset/:address/:tokenId`, { address, tokenId }),
         chainId,
     )
 }
 
 export async function getContract(address: string, chainId: ChainId) {
     const assetContract = await fetchAsset<OpenSeaAssetContract>(
-        `${OpenSea_API_URL}/api/v1/asset_contract/${address}`,
+        urlcat(OpenSea_API_URL, '/api/v1/asset_contract/:address', { address }),
         chainId,
     )
 
