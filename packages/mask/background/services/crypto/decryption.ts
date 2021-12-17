@@ -17,7 +17,7 @@ import { queryPersonaByProfileDB } from '../../database/persona/db'
 import { decryptByLocalKey, deriveAESByECDH, hasLocalKeyOf } from '../../database/persona/helper'
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
-import { GUN_queryPostKey_version40 } from '../../network/gun/encryption/queryPostKey'
+import { GUN_queryPostKey_version39Or38, GUN_queryPostKey_version40 } from '../../network/gun/encryption/queryPostKey'
 import type { GunRoot } from '../../network/gun/utils'
 
 export type DecryptionInfo = {
@@ -90,11 +90,25 @@ export async function* decryption(payload: string | Uint8Array, network: string,
             async *queryPostKey_version37() {
                 throw 'TODO'
             },
-            async *queryPostKey_version38() {
-                throw 'TODO'
+            async *queryPostKey_version38(iv, signal) {
+                yield* GUN_queryPostKey_version39Or38(
+                    {} as GunRoot,
+                    -38,
+                    iv,
+                    {} as any,
+                    '',
+                    signal || new AbortController().signal,
+                )
             },
-            async *queryPostKey_version39() {
-                throw 'TODO'
+            async *queryPostKey_version39(iv, signal) {
+                yield* GUN_queryPostKey_version39Or38(
+                    {} as GunRoot,
+                    -39,
+                    iv,
+                    {} as any,
+                    '',
+                    signal || new AbortController().signal,
+                )
             },
             async queryPostKey_version40(iv) {
                 if (!whoAmIHint) return null

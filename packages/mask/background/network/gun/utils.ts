@@ -12,7 +12,7 @@ export function getGunData(gun: GunRoot, ...path: string[]) {
     })
 }
 
-export async function* subscribeGunData<T>(
+export async function* subscribeGunMapData<T>(
     gun: GunRoot,
     path: string[],
     isT: (x: unknown) => x is T,
@@ -29,7 +29,7 @@ export async function* subscribeGunData<T>(
 
         const resultNode = path.reduce((gun, path) => gun.get(path as never), gun)
 
-        resultNode.on((data) => {
+        resultNode.map().on((data) => {
             if (listenerClosed) return
             if (isT(data)) queue.push(data)
         })
