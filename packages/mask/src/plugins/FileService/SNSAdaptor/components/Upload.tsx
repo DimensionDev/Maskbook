@@ -116,19 +116,20 @@ export const Upload: React.FC = () => {
         />
     ))
 
-    const cdnButton = provider === Provider.arweave ? (
-        <FormControlLabel
-            control={
-                <Checkbox
-                    color="secondary"
-                    checked={useCDN}
-                    onChange={(event) => setUseCDN(event.target.checked)}
-                />
-            }
-            className={classes.usedCDN}
-            label={t('plugin_file_service_use_cdn')}
-        />
-    ) : null
+    const cdnButton =
+        provider === Provider.arweave ? (
+            <FormControlLabel
+                control={
+                    <Checkbox
+                        color="secondary"
+                        checked={useCDN}
+                        onChange={(event) => setUseCDN(event.target.checked)}
+                    />
+                }
+                className={classes.usedCDN}
+                label={t('plugin_file_service_use_cdn')}
+            />
+        ) : null
 
     return (
         <section className={classes.container}>

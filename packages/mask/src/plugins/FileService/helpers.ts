@@ -35,9 +35,13 @@ export async function makeFileKeySigned(fileKey: string | undefined | null) {
 
 export function getGatewayAPI(provider: Provider) {
     switch (provider) {
-        case Provider.arweave: return 'https://arweave.net'
-        case Provider.ipfs: return 'https://infura-ipfs.io/ipfs'
-        case Provider.swarm: return 'https://bee-2.gateway.ethswarm.org/bzz'
-        default: throw new Error('unsupported provider')
+        case Provider.arweave:
+            return 'https://arweave.net'
+        case Provider.ipfs:
+            return 'https://infura-ipfs.io/ipfs'
+        case Provider.swarm:
+            return 'https://bee-2.gateway.ethswarm.org/bzz'
+        default:
+            throw new Error('unsupported provider')
     }
 }
