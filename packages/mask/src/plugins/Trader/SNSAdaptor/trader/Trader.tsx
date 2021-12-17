@@ -130,8 +130,11 @@ export function Trader(props: TraderProps) {
 
     //#region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
-        inputToken?.type ?? EthereumTokenType.Native,
+        isSameAddress(inputToken?.address, NATIVE_TOKEN_ADDRESS)
+            ? EthereumTokenType.Native
+            : inputToken?.type ?? EthereumTokenType.Native,
         inputToken?.address ?? '',
+        chainId,
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
@@ -153,7 +156,12 @@ export function Trader(props: TraderProps) {
                 type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
                 balance: inputTokenBalance_,
             })
-        if (outputToken && outputTokenBalance_ && !loadingOutputTokenBalance) {
+        if (
+            outputToken &&
+            outputToken?.type !== EthereumTokenType.Native &&
+            outputTokenBalance_ &&
+            !loadingOutputTokenBalance
+        ) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
                 balance: outputTokenBalance_,
@@ -166,6 +174,7 @@ export function Trader(props: TraderProps) {
         outputTokenBalance_,
         loadingInputTokenBalance,
         loadingOutputTokenBalance,
+        NATIVE_TOKEN_ADDRESS,
     ])
 
     // Query the balance of native tokens on target chain
@@ -285,11 +294,6 @@ export function Trader(props: TraderProps) {
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
             token: outputToken,
-        })
-
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-            balance: '',
         })
 
         dispatchTradeStore({
