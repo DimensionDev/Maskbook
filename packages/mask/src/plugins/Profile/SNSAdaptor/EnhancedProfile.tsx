@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { MaskMessages } from '../../../utils'
 import { useLocationChange } from '../../../utils/hooks/useLocationChange'
@@ -15,6 +15,7 @@ import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../
 import { useEthereumAddress } from '@masknet/web3-shared-evm'
 import type { RSS3Index } from 'rss3-next/types/rss3'
 import { useDao } from './hooks'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -100,7 +101,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             default:
                 unreachable(currentTag)
         }
-    }, [currentTag, currentAccountAddress, isOwned, isConnected, username, daoPayload])
+    }, [currentTag, currentAccountAddress, isOwned, isConnected, username, daoPayload, identity.identifier])
+
+    useUpdateEffect(() => {
+        setCurrentTag(PageTags.NFTTag)
+    }, [identity.identifier])
 
     if (hidden) return null
 

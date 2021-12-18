@@ -69,7 +69,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             if (
                 isSameAddress(address, ZERO_ADDRESS) ||
                 isSameAddress(address, ZERO_X_ERROR_ADDRESS) ||
-                isValidAddress(address)
+                !isValidAddress(address)
             ) {
                 return undefined
             }
@@ -102,6 +102,10 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
                 provider,
                 network: chainId,
             }).reverse(address)
+
+            if (isSameAddress(domain, ZERO_ADDRESS) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                return undefined
+            }
 
             if (domain)
                 await getStorage().domainAddressBook.setValue({

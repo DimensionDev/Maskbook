@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
+import { ExternalLink } from 'react-feather'
+import BigNumber from 'bignumber.js'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { FormattedAddress, FormattedBalance, useValueRef } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -15,12 +16,12 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon } from '@masknet/icons'
-import { ExternalLink } from 'react-feather'
 import { TokenIcon } from '@masknet/shared'
+import { multipliedBy } from '@masknet/web3-shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
-import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     section: {
@@ -96,7 +97,7 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
     const currentSlippage = useValueRef(currentSlippageSettings)
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const classes = useStylesExtends(useStyles({ isDashboard }), props)
     const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice } = props
     const { inputAmount, outputAmount } = trade

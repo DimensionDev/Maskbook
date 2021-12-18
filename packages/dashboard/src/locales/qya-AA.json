@@ -86,6 +86,8 @@
     "wallet_transfer_error_no_address_has_been_set_name": "crwdns10429:0crwdne10429:0",
     "wallet_transfer_error_no_ens_support": "crwdns10431:0crwdne10431:0",
     "wallets_transfer_error_insufficient_balance": "crwdns8017:0{{symbol}}crwdne8017:0",
+    "wallets_transfer_error_same_address_with_current_account": "crwdns10617:0crwdne10617:0",
+    "wallets_transfer_error_is_contract_address": "crwdns10619:0crwdne10619:0",
     "wallets_transfer_send": "crwdns8019:0crwdne8019:0",
     "wallets_transfer_memo_placeholder": "crwdns8021:0crwdne8021:0",
     "wallets_transfer_contract": "crwdns9335:0crwdne9335:0",

@@ -68,6 +68,7 @@ export const LightColor = {
     main: '#1C68F3',
     errorBackground: 'rgba(255, 95, 95, 0.15)',
     tooltipBackground: '#ffffff',
+    warningBackground: 'rgba(255, 185, 21, 0.1)',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -138,6 +139,7 @@ export const DarkColor: typeof LightColor = {
     main: '#D4D4D4',
     errorBackground: 'rgba(255, 95, 95, 0.1)',
     tooltipBackground: '#1A1D20',
+    warningBackground: 'rgba(255, 185, 21, 0.1)',
 }
 
 export type Color = typeof LightColor

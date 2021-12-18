@@ -19,46 +19,48 @@ function injectEnhancedProfilePageState(signal: AbortSignal) {
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<EnhancedProfilePageAtTwitter />)
 }
+
 export function injectEnhancedProfileAtTwitter(signal: AbortSignal) {
     injectEnhancedProfilePageForEmptyState(signal)
     injectEnhancedProfilePageState(signal)
 }
 
-const EMPTY_STYLE = {} as CSSStyleDeclaration
-interface StyleProps {
-    backgroundColor: string
-    fontFamily: string
+function getStyleProps() {
+    const newTweetButton = searchNewTweetButtonSelector().evaluate()
+    return {
+        backgroundColor: newTweetButton ? window.getComputedStyle(newTweetButton).backgroundColor : undefined,
+        fontFamily: newTweetButton?.firstChild
+            ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement).fontFamily
+            : undefined,
+    }
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, props) => ({
-    text: {
-        paddingTop: 29,
-        paddingBottom: 29,
-        '& > p': {
-            fontSize: 28,
-            fontFamily: props.fontFamily,
-            fontWeight: 700,
-            color: getMaskColor(theme).textPrimary,
+const useStyles = makeStyles()((theme) => {
+    const props = getStyleProps()
+
+    return {
+        text: {
+            paddingTop: 29,
+            paddingBottom: 29,
+            '& > p': {
+                fontSize: 28,
+                fontFamily: props.fontFamily,
+                fontWeight: 700,
+                color: getMaskColor(theme).textPrimary,
+            },
         },
-    },
-    button: {
-        backgroundColor: props.backgroundColor,
-        color: 'white',
-        marginTop: 18,
-        '&:hover': {
+        button: {
             backgroundColor: props.backgroundColor,
+            color: 'white',
+            marginTop: 18,
+            '&:hover': {
+                backgroundColor: props.backgroundColor,
+            },
         },
-    },
-}))
+    }
+})
 
 export function EnhancedProfilePageAtTwitter() {
-    const newTweetButton = searchNewTweetButtonSelector().evaluate()
-    const style = newTweetButton ? window.getComputedStyle(newTweetButton) : EMPTY_STYLE
-    const fontStyle = newTweetButton?.firstChild
-        ? window.getComputedStyle(newTweetButton.firstChild as HTMLElement)
-        : EMPTY_STYLE
-
-    const { classes } = useStyles({ backgroundColor: style.backgroundColor, fontFamily: fontStyle.fontFamily })
-
+    const { classes } = useStyles()
     return <EnhancedProfilePage classes={classes} />
 }
