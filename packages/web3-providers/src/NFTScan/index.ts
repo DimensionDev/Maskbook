@@ -109,7 +109,7 @@ export async function getNFT(address: string, tokenId: string, chainId: ChainId)
     return createERC721TokenAsset(data)
 }
 
-export async function getNFTsByPaginations(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
+export async function getNFTsByPagination(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
     const { size = 50, page = 0 } = opts
 
     const response = await fetchAsset('getAllNftByUserAddress', {

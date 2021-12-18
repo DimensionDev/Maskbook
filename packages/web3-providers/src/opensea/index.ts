@@ -33,7 +33,7 @@ async function fetchAsset<T>(url: string, chainId: ChainId) {
     return response.json() as Promise<T>
 }
 
-export async function getNFTsByPaginations(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
+export async function getNFTsByPagination(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
     const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
 
     const asset = await fetchAsset<{ assets: OpenSeaResponse[] }>(

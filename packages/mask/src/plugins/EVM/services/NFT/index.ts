@@ -21,7 +21,7 @@ export interface ContractOption {
     provider: NonFungibleAssetProvider
 }
 
-export interface NFTsByPaginationsOption {
+export interface NFTsByPaginationOption {
     from: string
     chainId: ChainId
     provider: NonFungibleAssetProvider
@@ -69,15 +69,15 @@ export async function getNFTContract(options: ContractOption) {
     }
 }
 
-export async function getNFTsByPaginations(options: NFTsByPaginationsOption) {
+export async function getNFTsByPagination(options: NFTsByPaginationOption) {
     const { provider, from, chainId, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSeaApi.getNFTsByPaginations(from, { chainId, page, size })
+            return OpenSeaApi.getNFTsByPagination(from, { chainId, page, size })
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScanApi.getNFTsByPaginations(from, { chainId, page, size })
+            return NFTScanApi.getNFTsByPagination(from, { chainId, page, size })
         case NonFungibleAssetProvider.RARIBLE:
-            return RaribleApi.getNFTsByPaginations(from, { chainId, page, size })
+            return RaribleApi.getNFTsByPagination(from, { chainId, page, size })
         default:
             unreachable(provider)
     }
