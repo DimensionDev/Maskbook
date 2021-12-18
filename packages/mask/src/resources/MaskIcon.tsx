@@ -97,7 +97,7 @@ export function MaskIconOutlined(props: SvgIconProps) {
 
 export function MaskSharpIcon(props: SvgIconProps) {
     return (
-        <SvgIcon style={{ transform: 'translate(2px, 2px)', width: '19px', height: '19px' }} {...props}>
+        <SvgIcon style={{ transform: 'translate(2px, 2px)', width: 20, height: 20 }} {...props}>
             <MaskSmileFaceSharpSVG />
         </SvgIcon>
     )
