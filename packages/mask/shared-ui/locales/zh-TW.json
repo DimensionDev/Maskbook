@@ -492,6 +492,7 @@
     "plugin_collectible_post_listing": "上架",
     "plugin_collectible_description": "目前的價格是 <strong>{{price}} {{symbol}}</strong>。",
     "plugin_collectible_article": "文章",
+    "plugin_collectible_overview": "總覽",
     "plugin_collectible_details": "詳細資訊",
     "plugin_collectible_offers": "報價",
     "plugin_collectible_listing": "上架的物品",
