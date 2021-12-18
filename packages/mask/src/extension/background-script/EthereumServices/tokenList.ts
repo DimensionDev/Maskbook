@@ -102,7 +102,7 @@ async function fetchERC20TokensFromTokenList(urls: string[], chainId = ChainId.M
         }
 
         const tokens = await fetchCommonERC20TokensFromTokenList(x, chainId)
-        return { tokens, weight: x.includes('https://tokens.r2d2.to') ? 1 : 0 }
+        return { tokens, weight: x.startsWith('https://tokens.r2d2.to') ? 1 : 0 }
     })
 
     const allListResponse = await Promise.allSettled(allRequest)
