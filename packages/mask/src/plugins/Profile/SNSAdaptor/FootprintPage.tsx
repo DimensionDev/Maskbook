@@ -52,7 +52,7 @@ export function FootprintPage(props: FootprintPageProps) {
         <div>
             <section className="flex flex-row justify-between items-center w-full gap-4">
                 <Typography className={classes.address} variant="subtitle1" color="textPrimary" title={address}>
-                    {formatEthereumAddress(address, 6)}
+                    {formatEthereumAddress(address, 4)}
                 </Typography>
             </section>
             <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">

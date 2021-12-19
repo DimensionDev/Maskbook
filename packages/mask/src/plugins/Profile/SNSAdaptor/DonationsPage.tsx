@@ -50,7 +50,7 @@ export function DonationPage(props: DonationPageProps) {
         <div>
             <section className="flex flex-row justify-between items-center w-full gap-4">
                 <Typography className={classes.address} variant="subtitle1" color="textPrimary" title={address}>
-                    {formatEthereumAddress(address, 6)}
+                    {formatEthereumAddress(address, 4)}
                 </Typography>
             </section>
             <section className="grid grid-cols-1 gap-4 py-4">
