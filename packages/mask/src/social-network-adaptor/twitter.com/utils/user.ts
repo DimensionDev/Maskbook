@@ -1,6 +1,11 @@
 import { isNull } from 'lodash-unified'
 import type { SocialNetwork } from '../../../social-network'
-import { bioDescriptionSelector, searchAvatarSelector, searchNickNameSelector } from './selector'
+import {
+    bioDescriptionSelector,
+    searchAvatarSelector,
+    searchNickNameSelector,
+    personalHomepageSelector,
+} from './selector'
 import { collectNodeText } from '../../../utils'
 
 /**
@@ -39,7 +44,12 @@ export const getTwitterId = () => {
 
 export const getBioDescription = () => {
     const node = bioDescriptionSelector().evaluate()
-    return node ? collectNodeText(node) : ''
+    return node ? collectNodeText(node) || '' : ''
+}
+
+export const getPersonalHomepage = () => {
+    const node = personalHomepageSelector().evaluate()
+    return node?.getAttribute('href') || ''
 }
 
 export const getAvatar = () => {

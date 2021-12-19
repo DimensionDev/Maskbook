@@ -126,3 +126,9 @@ export interface GeneralAsset {
 export interface GeneralAssetWithTags extends GeneralAsset {
     tags?: string[]
 }
+
+export interface RSS3Profile {
+    avatar: string[]
+    bio: string
+    name: string
+}

@@ -13,7 +13,7 @@ import { DAOPage } from './DAOPage'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useDao } from './hooks'
+import { useDao, useAddressByRss3ProfileLink, useRss3Profile } from './hooks'
 import { PluginProfileRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,21 +45,19 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         identity.identifier.userId,
         identity.bio ?? '',
     )
-    const currentAccountAddress = currentAccount?.address ?? ''
+    const { address: addressByRssProfile } = useAddressByRss3ProfileLink(identity.homepage)
+    const currentAccountAddress = currentAccount?.address || addressByRssProfile || ''
     //#endregion
 
     const [hidden, setHidden] = useState(true)
     const { value: daoPayload } = useDao(identity.identifier)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
 
-    const [username, setUsername] = useState<string>('')
-
     const init = async (account: string) => {
         await PluginProfileRPC.setPageOwner(account)
-        const apiUser = await PluginProfileRPC.getAPIUser()
-        const rss3Username = (await apiUser.persona?.profile.get(account))?.name ?? ''
-        setUsername(rss3Username)
     }
+    const { profile } = useRss3Profile(currentAccountAddress)
+    const username = profile.name
 
     useLocationChange(() => {
         setCurrentTag(PageTags.NFTTag)
