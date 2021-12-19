@@ -1,12 +1,12 @@
+import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
 import { CircularProgress, Link, Typography } from '@mui/material'
-import urlcat from 'urlcat'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import config from './common/config'
-import type { GeneralAssetWithTags } from './common/types'
 import { COLORS } from './common/variables'
 import { Button, DonationCard } from './components'
 import { useDonations } from './hooks'
+import config from '../apis/config'
+import type { GeneralAssetWithTags } from '../apis/types'
 
 const useStyles = makeStyles()((theme) => ({
     msg: {
@@ -40,7 +40,6 @@ const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
 export function DonationPage(props: DonationPageProps) {
     const { address, isOwned, isConnected } = props
     const { classes } = useStyles()
-
     const { donations, loading } = useDonations()
 
     if (!address) {

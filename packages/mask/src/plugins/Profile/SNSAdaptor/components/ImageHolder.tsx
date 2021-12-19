@@ -1,4 +1,4 @@
-interface ImageProps {
+export interface ImageProps {
     imageUrl: string
     title?: string
     isFullRound: boolean

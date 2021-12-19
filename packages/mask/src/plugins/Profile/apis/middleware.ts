@@ -1,4 +1,4 @@
-import Services from '../../../../extension/service'
+import { fetchJSON } from '../../../extension/background-script/HelperService'
 
 export async function fetch(
     url: string,
@@ -9,7 +9,7 @@ export async function fetch(
         urlObj.searchParams.set(key, options.params[key])
     }
     try {
-        const res = await Services.Helper.fetchJSON(urlObj.href)
+        const res = await fetchJSON(urlObj.href)
         return {
             data: res,
         }

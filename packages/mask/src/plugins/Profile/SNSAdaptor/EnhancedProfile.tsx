@@ -1,5 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { unreachable } from '@dimensiondev/kit'
+import type { RSS3Index } from 'rss3-next/types/rss3'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { useEthereumAddress } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../../../utils'
 import { useLocationChange } from '../../../utils/hooks/useLocationChange'
 import { WalletsPage } from './WalletsPage'
@@ -9,13 +13,9 @@ import { FootprintPage } from './FootprintPage'
 import { DAOPage } from './DAOPage'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
-import RSS3, { IRSS3 } from './common/rss3'
-import { unreachable } from '@dimensiondev/kit'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useEthereumAddress } from '@masknet/web3-shared-evm'
-import type { RSS3Index } from 'rss3-next/types/rss3'
 import { useDao } from './hooks'
-import { useUpdateEffect } from 'react-use'
+import { PluginProfileRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -59,12 +59,12 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const [username, setUsername] = useState<string>('')
 
     const init = async (account: string) => {
-        await RSS3.setPageOwner(account)
-        const pageOwner = RSS3.getPageOwner()
-        const apiUser = RSS3.getAPIUser()
-        const rss3Username = (await (apiUser.persona as IRSS3).profile.get(pageOwner.address)).name
-        setUsername(rss3Username || '')
-        const rss3Sign = ((await (apiUser.persona as IRSS3).files.get(pageOwner.address)) as RSS3Index).signature
+        await PluginProfileRPC.setPageOwner(account)
+        const pageOwner = await PluginProfileRPC.getPageOwner()
+        const apiUser = await PluginProfileRPC.getAPIUser()
+        const rss3Username = (await apiUser.persona?.profile.get(pageOwner.address))?.name ?? ''
+        setUsername(rss3Username)
+        const rss3Sign = ((await apiUser.persona?.files.get(pageOwner.address)) as RSS3Index).signature
         setConnected(rss3Sign !== '')
     }
 
@@ -79,6 +79,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             setHidden(!data.show)
         })
     }, [identity, currentAccountAddress, isConnected])
+
     const content = useMemo(() => {
         switch (currentTag) {
             case PageTags.WalletTag:

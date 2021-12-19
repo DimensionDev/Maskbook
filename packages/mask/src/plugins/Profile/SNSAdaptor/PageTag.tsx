@@ -1,6 +1,6 @@
+import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
-import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 import { PageTags } from '../types'
 import { useDonations, useFootprints, Dao_Payload } from './hooks'

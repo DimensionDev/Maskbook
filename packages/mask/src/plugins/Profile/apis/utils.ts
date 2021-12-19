@@ -1,7 +1,8 @@
+import RSS3 from 'rss3-next'
 import type { RSS3Account, RSS3Asset } from 'rss3-next/types/rss3'
 import type { GeneralAsset, GeneralAssetWithTags } from './types'
 import config from './config'
-import RSS3, { IRSS3 } from './rss3'
+import { getAPIUser, getAssetProfile, getPageOwner } from '.'
 
 const orderPattern = new RegExp(`^${config.tags.prefix}:order:(-?\\d+)$`, 'i')
 
@@ -96,9 +97,9 @@ async function initAssets(type: string, limit?: number) {
     const listed: GeneralAssetWithTags[] = []
     const unlisted: GeneralAssetWithTags[] = []
 
-    const pageOwner = RSS3.getPageOwner()
-    const apiUser = RSS3.getAPIUser().persona as IRSS3
-    const assetInRSS3 = await apiUser.assets.get(pageOwner.address)
+    const pageOwner = await getPageOwner()
+    const apiUser = (await getAPIUser()).persona
+    const assetInRSS3 = (await apiUser?.assets.get(pageOwner.address)) ?? []
     const assetInAssetProfile = await getAssetProfileWaitTillSuccess(pageOwner.address, type)
     const allAssets = await utils.mergeAssetsTags(assetInRSS3, assetInAssetProfile)
 
@@ -122,7 +123,7 @@ async function getAssetProfileWaitTillSuccess(address: string, type: string, del
     return new Promise<GeneralAsset[]>(async (resolve, reject) => {
         const tryReq = async () => {
             try {
-                const assetProfileRes = await RSS3.getAssetProfile(address, type)
+                const assetProfileRes = await getAssetProfile(address, type)
                 if (assetProfileRes?.status) {
                     resolve(assetProfileRes?.assets || [])
                 }
@@ -147,9 +148,9 @@ async function initAccounts() {
     const listed: RSS3Account[] = []
     const unlisted: RSS3Account[] = []
 
-    const pageOwner = RSS3.getPageOwner()
-    const apiUser = RSS3.getAPIUser().persona as IRSS3
-    const allAccounts = await apiUser.accounts.get(pageOwner.address)
+    const pageOwner = await getPageOwner()
+    const apiUser = (await getAPIUser()).persona
+    const allAccounts = (await apiUser?.accounts.get(pageOwner.address)) ?? []
 
     for (const account of allAccounts) {
         if (account.tags?.includes(`${config.tags.prefix}:${config.tags.hiddenTag}`)) {

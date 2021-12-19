@@ -1,6 +1,6 @@
-import { COLORS, COLOR_TO_STYLE } from '../common/variables'
 import type { ReactNode } from 'react'
 import { Typography } from '@mui/material'
+import { COLORS, COLOR_TO_STYLE } from '../common/variables'
 
 interface ButtonInterface {
     color: string

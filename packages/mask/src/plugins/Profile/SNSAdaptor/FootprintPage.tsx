@@ -1,12 +1,12 @@
+import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CircularProgress, Link, Typography } from '@mui/material'
-import urlcat from 'urlcat'
-import config from './common/config'
-import type { GeneralAssetWithTags } from './common/types'
+import config from '../apis/config'
+import type { GeneralAssetWithTags } from '../apis/types'
+import { useFootprints } from './hooks'
 import { COLORS } from './common/variables'
 import { Button, FootprintCard } from './components'
-import { useFootprints } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     msg: {
