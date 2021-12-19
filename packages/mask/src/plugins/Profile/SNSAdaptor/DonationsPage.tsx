@@ -35,26 +35,14 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface DonationPageProps {
     address: string
-    isOwned: boolean
 }
 
 // cspell:ignore contribs
 export function DonationPage(props: DonationPageProps) {
-    const { address, isOwned } = props
+    const { address } = props
     const { classes } = useStyles()
-    const { donations, loading } = useDonations()
+    const { donations, loading } = useDonations(address)
 
-    if (!address) {
-        return (
-            <div className="text-center my-8">
-                <Typography className={classes.msg} variant="body1">
-                    {isOwned
-                        ? 'Please connect an Ethereum compatible wallet.'
-                        : 'This user has not connected any Ethereum compatible wallet.'}
-                </Typography>
-            </div>
-        )
-    }
     if (loading) {
         return (
             <div className="flex justify-center items-center">
@@ -68,16 +56,6 @@ export function DonationPage(props: DonationPageProps) {
                 <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary" title={address}>
                     {formatEthereumAddress(address, 6)}
                 </Typography>
-                {isOwned ? (
-                    <Button
-                        isOutlined={true}
-                        color={COLORS.donation}
-                        text="Edit"
-                        onClick={() => {
-                            window.open('https://rss3.bio', '_blank', 'noopener noreferrer')
-                        }}
-                    />
-                ) : null}
             </section>
             <section className="grid grid-cols-1 gap-4 py-4">
                 {donations.map((donation) => (

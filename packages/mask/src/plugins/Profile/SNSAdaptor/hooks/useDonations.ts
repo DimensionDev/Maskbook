@@ -1,12 +1,11 @@
 import { useAsync } from 'react-use'
 import { PluginProfileRPC } from '../../messages'
 
-export function useDonations() {
+export function useDonations(address: string) {
     const { value: donations = [], loading } = useAsync(async () => {
-        const pageOwner = await PluginProfileRPC.getPageOwner()
-        const rsp = await PluginProfileRPC.getDonations(pageOwner.address)
+        const rsp = await PluginProfileRPC.getDonations(address)
         return rsp.status ? rsp.assets : []
-    }, [])
+    }, [address])
 
     return {
         donations,

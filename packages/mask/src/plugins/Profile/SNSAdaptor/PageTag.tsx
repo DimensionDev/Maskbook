@@ -44,22 +44,20 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface PageTagProps {
     tag: PageTags
-    isOwned: boolean
+    address: string
     daoPayload: Dao_Payload | undefined
     onChange: (tag: PageTags) => void
 }
 
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
-    const { onChange, tag, isOwned, daoPayload } = props
+    const { onChange, tag, address, daoPayload } = props
     const { t } = useI18N()
 
-    const { donations } = useDonations()
-    const { footprints } = useFootprints()
+    const { donations } = useDonations(address)
+    const { footprints } = useFootprints(address)
     const hasDonations = donations.length > 0
     const hasFootprints = footprints.length > 0
-
-    console.log({ hasDonations, hasFootprints })
 
     return (
         <div className={classes.root}>

@@ -36,26 +36,14 @@ const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
 export interface FootprintPageProps {
     username: string
     address: string
-    isOwned: boolean
 }
 
 export function FootprintPage(props: FootprintPageProps) {
-    const { username, address, isOwned } = props
+    const { username, address } = props
     const { classes } = useStyles()
 
-    const { footprints, loading } = useFootprints()
+    const { footprints, loading } = useFootprints(address)
 
-    if (!address) {
-        return (
-            <div className="text-center my-8">
-                <Typography className={classes.msg} variant="body1">
-                    {isOwned
-                        ? 'Please connect an Ethereum compatible wallet.'
-                        : 'This user has not connected any Ethereum compatible wallet.'}
-                </Typography>
-            </div>
-        )
-    }
     if (loading) {
         return (
             <div className="flex justify-center items-center">
@@ -70,16 +58,6 @@ export function FootprintPage(props: FootprintPageProps) {
                 <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary" title={address}>
                     {formatEthereumAddress(address, 6)}
                 </Typography>
-                {isOwned ? (
-                    <Button
-                        isOutlined
-                        color={COLORS.footprint}
-                        text="Edit"
-                        onClick={() => {
-                            window.open('https://rss3.bio/', '_blank', 'noopener noreferrer')
-                        }}
-                    />
-                ) : null}
             </section>
             <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
                 {footprints.map((footprint) => (

@@ -12,7 +12,7 @@ import { FootprintPage } from './FootprintPage'
 import { DAOPage } from './DAOPage'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
+import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useDao } from './hooks'
 import { PluginProfileRPC } from '../messages'
 
@@ -40,13 +40,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     //#region identity
     const identity = useCurrentVisitingIdentity()
-    const lastRecognizedIdentity = useLastRecognizedIdentity()
     const { value: currentAccount } = useEthereumAddress(
         identity.nickname ?? '',
         identity.identifier.userId,
         identity.bio ?? '',
     )
-    const isOwned = lastRecognizedIdentity.identifier.equals(identity.identifier)
     const currentAccountAddress = currentAccount?.address ?? ''
     //#endregion
 
@@ -83,15 +81,15 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.NFTTag:
                 return <NFTPage />
             case PageTags.DonationTag:
-                return <DonationPage address={currentAccountAddress} isOwned={isOwned} />
+                return <DonationPage address={currentAccountAddress} />
             case PageTags.FootprintTag:
-                return <FootprintPage username={username} address={currentAccountAddress} isOwned={isOwned} />
+                return <FootprintPage username={username} address={currentAccountAddress} />
             case PageTags.DAOTag:
                 return <DAOPage payload={daoPayload} identifier={identity.identifier} />
             default:
                 unreachable(currentTag)
         }
-    }, [currentTag, currentAccountAddress, isOwned, username, daoPayload, identity.identifier])
+    }, [currentTag, currentAccountAddress, username, daoPayload, identity.identifier])
 
     useUpdateEffect(() => {
         setCurrentTag(PageTags.NFTTag)
@@ -105,10 +103,10 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             <div className={classes.root}>
                 <div className={classes.tags}>
                     <PageTag
+                        address={currentAccountAddress}
                         daoPayload={daoPayload}
                         tag={currentTag}
-                        isOwned={isOwned}
-                        onChange={(tag) => setCurrentTag(tag)}
+                        onChange={setCurrentTag}
                     />
                 </div>
                 <div className={classes.content}>{content}</div>
