@@ -1,9 +1,9 @@
 import { useAsync } from 'react-use'
-import utils from '../../apis/utils'
+import { PluginProfileRPC } from '../../messages'
 
 export function useFootprints() {
     const { value: footprints = [], loading } = useAsync(async () => {
-        const { listed } = await utils.initAssets('POAP')
+        const { listed } = await PluginProfileRPC.initAssets('POAP')
         return listed
     }, [])
 

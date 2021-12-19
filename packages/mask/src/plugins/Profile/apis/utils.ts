@@ -1,4 +1,3 @@
-import RSS3 from 'rss3-next'
 import type { RSS3Account, RSS3Asset } from 'rss3-next/types/rss3'
 import type { GeneralAsset, GeneralAssetWithTags } from './types'
 import config from './config'
@@ -88,84 +87,6 @@ const mergeAssetsTags = async (assetsInRSS3File: RSS3Asset[], assetsGrabbed: Gen
     )
 }
 
-interface AssetsList {
-    listed: GeneralAssetWithTags[]
-    unlisted: GeneralAssetWithTags[]
-}
-
-async function initAssets(type: string, limit?: number) {
-    const listed: GeneralAssetWithTags[] = []
-    const unlisted: GeneralAssetWithTags[] = []
-
-    const pageOwner = await getPageOwner()
-    const apiUser = (await getAPIUser()).persona
-    const assetInRSS3 = (await apiUser?.assets.get(pageOwner.address)) ?? []
-    const assetInAssetProfile = await getAssetProfileWaitTillSuccess(pageOwner.address, type)
-    const allAssets = await utils.mergeAssetsTags(assetInRSS3, assetInAssetProfile)
-
-    for (const asset of allAssets) {
-        if (asset.type.endsWith(type)) {
-            if (asset.tags?.includes(`${config.tags.prefix}:${config.tags.hiddenTag}`)) {
-                unlisted.push(asset)
-            } else {
-                listed.push(asset)
-            }
-        }
-    }
-
-    return {
-        listed: utils.sortByOrderTag(listed).slice(0, limit),
-        unlisted: unlisted.slice(0, limit),
-    }
-}
-
-async function getAssetProfileWaitTillSuccess(address: string, type: string, delay: number = 500) {
-    return new Promise<GeneralAsset[]>(async (resolve, reject) => {
-        const tryReq = async () => {
-            try {
-                const assetProfileRes = await getAssetProfile(address, type)
-                if (assetProfileRes?.status) {
-                    resolve(assetProfileRes?.assets || [])
-                }
-                return true
-            } catch (error) {
-                reject(error)
-            }
-            return false
-        }
-
-        if (!(await tryReq())) {
-            const iv = setInterval(async () => {
-                if (await tryReq()) {
-                    clearInterval(iv)
-                }
-            }, delay)
-        }
-    })
-}
-
-async function initAccounts() {
-    const listed: RSS3Account[] = []
-    const unlisted: RSS3Account[] = []
-
-    const pageOwner = await getPageOwner()
-    const apiUser = (await getAPIUser()).persona
-    const allAccounts = (await apiUser?.accounts.get(pageOwner.address)) ?? []
-
-    for (const account of allAccounts) {
-        if (account.tags?.includes(`${config.tags.prefix}:${config.tags.hiddenTag}`)) {
-            unlisted.push(account)
-        } else {
-            listed.push(account)
-        }
-    }
-
-    return {
-        listed: utils.sortByOrderTag(listed),
-        unlisted,
-    }
-}
-
 function extractEmbedFields(raw: string, fieldsEmbed: string[]) {
     const fieldPattern = /<([a-z]+?)#(.+?)>/gi
     const fields = raw.match(fieldPattern) || []
@@ -187,14 +108,50 @@ function extractEmbedFields(raw: string, fieldsEmbed: string[]) {
     }
 }
 
-const utils = {
-    sortByOrderTag,
-    setOrderTag,
-    setHiddenTag,
-    mergeAssetsTags,
-    initAssets,
-    initAccounts,
-    extractEmbedFields,
+export async function initAssets(type: string, limit?: number) {
+    const listed: GeneralAssetWithTags[] = []
+    const unlisted: GeneralAssetWithTags[] = []
+
+    const pageOwner = await getPageOwner()
+    const apiUser = (await getAPIUser()).persona
+    const assetInRSS3 = (await apiUser?.assets.get(pageOwner.address)) ?? []
+    const assetInAssetProfile = await getAssetProfile(pageOwner.address, type)
+    const allAssets = await mergeAssetsTags(assetInRSS3, assetInAssetProfile?.assets ?? [])
+
+    for (const asset of allAssets) {
+        if (asset.type.endsWith(type)) {
+            if (asset.tags?.includes(`${config.tags.prefix}:${config.tags.hiddenTag}`)) {
+                unlisted.push(asset)
+            } else {
+                listed.push(asset)
+            }
+        }
+    }
+
+    return {
+        listed: sortByOrderTag(listed).slice(0, limit),
+        unlisted: unlisted.slice(0, limit),
+    }
 }
 
-export default utils
+export async function initAccounts() {
+    const listed: RSS3Account[] = []
+    const unlisted: RSS3Account[] = []
+
+    const pageOwner = await getPageOwner()
+    const apiUser = (await getAPIUser()).persona
+    const allAccounts = (await apiUser?.accounts.get(pageOwner.address)) ?? []
+
+    for (const account of allAccounts) {
+        if (account.tags?.includes(`${config.tags.prefix}:${config.tags.hiddenTag}`)) {
+            unlisted.push(account)
+        } else {
+            listed.push(account)
+        }
+    }
+
+    return {
+        listed: sortByOrderTag(listed),
+        unlisted,
+    }
+}

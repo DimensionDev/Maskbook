@@ -1,9 +1,9 @@
 import { useAsync } from 'react-use'
-import utils from '../../apis/utils'
+import { PluginProfileRPC } from '../../messages'
 
 export function useDonations() {
     const { value: donations = [], loading } = useAsync(async () => {
-        const { listed } = await utils.initAssets('Gitcoin-Donation')
+        const { listed } = await PluginProfileRPC.initAssets('Gitcoin-Donation')
         return listed
     }, [])
 
