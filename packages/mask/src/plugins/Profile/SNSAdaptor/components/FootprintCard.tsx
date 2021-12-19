@@ -3,7 +3,11 @@ import { Typography } from '@mui/material'
 import EventRoundedIcon from '@mui/icons-material/EventRounded'
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
 import fromUnixTime from 'date-fns/fromUnixTime'
-interface FootprintProps {
+
+const formatDate = (ts: string): string => {
+    return fromUnixTime(Number.parseInt(ts, 16)).toLocaleDateString('en-US')
+}
+export interface FootprintProps {
     imageUrl: string
     startDate: string | undefined
     endDate: string | undefined
@@ -11,10 +15,6 @@ interface FootprintProps {
     country: string | undefined
     username: string
     activity: string
-}
-
-const formatDate = (ts: string): string => {
-    return fromUnixTime(Number.parseInt(ts, 16) * 1000).toLocaleDateString('en-US')
 }
 
 export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, username, activity }: FootprintProps) => {

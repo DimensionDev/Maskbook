@@ -34,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {}
+export interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {}
 
 export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const classes = useStylesExtends(useStyles(), props)

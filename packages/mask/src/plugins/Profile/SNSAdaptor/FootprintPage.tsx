@@ -21,12 +21,6 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
-interface FootprintPageProps {
-    username: string
-    address: string
-    isOwned: boolean
-    isConnected: boolean
-}
 
 const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = footprint
@@ -37,6 +31,13 @@ const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
         id,
         type,
     })
+}
+
+export interface FootprintPageProps {
+    username: string
+    address: string
+    isOwned: boolean
+    isConnected: boolean
 }
 
 export function FootprintPage(props: FootprintPageProps) {

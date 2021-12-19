@@ -8,6 +8,17 @@ import { useDonations } from './hooks'
 import config from '../apis/config'
 import type { GeneralAssetWithTags } from '../apis/types'
 
+const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
+    const { platform, identity, id, type } = donation
+    return urlcat('https://rss3.bio/:address/singlegitcoin/:platform/:identity/:id/:type', {
+        address,
+        platform,
+        identity,
+        id,
+        type,
+    })
+}
+
 const useStyles = makeStyles()((theme) => ({
     msg: {
         color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
@@ -21,21 +32,13 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
-interface DonationPageProps {
+
+export interface DonationPageProps {
     address: string
     isOwned: boolean
     isConnected: boolean
 }
-const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
-    const { platform, identity, id, type } = donation
-    return urlcat('https://rss3.bio/:address/singlegitcoin/:platform/:identity/:id/:type', {
-        address,
-        platform,
-        identity,
-        id,
-        type,
-    })
-}
+
 // cspell:ignore contribs
 export function DonationPage(props: DonationPageProps) {
     const { address, isOwned, isConnected } = props

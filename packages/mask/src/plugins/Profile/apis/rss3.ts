@@ -66,10 +66,12 @@ export async function isValidRSS3() {
 }
 
 export async function connectUser(address: string) {
-    if (await connect(address)) {
-        return RSS3LoginUser
+    try {
+        if (await connect(address)) return RSS3LoginUser
+        return null
+    } catch {
+        return null
     }
-    return null
 }
 
 export async function getAPIUser(): Promise<RSS3DetailPersona> {
@@ -119,7 +121,7 @@ export async function getAssetProfile(
         const data = res?.data
         if (data) assetsProfileCache.set(address + type, data)
         return data
-    } catch (error) {
+    } catch {
         return null
     }
 }
@@ -143,7 +145,7 @@ export async function getNFTDetails(
             },
         })
         return res?.data || null
-    } catch (error) {
+    } catch {
         return null
     }
 }
@@ -166,7 +168,7 @@ export async function getGitcoinDonation(
             },
         })
         return res?.data || null
-    } catch (error) {
+    } catch {
         return null
     }
 }
@@ -189,7 +191,7 @@ export async function getFootprintDetail(
             },
         })
         return res?.data || null
-    } catch (error) {
+    } catch {
         return null
     }
 }

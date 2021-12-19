@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material'
-interface DonationCardProps {
+
+export interface DonationCardProps {
     imageUrl: string
     name: string
     contribCount: number

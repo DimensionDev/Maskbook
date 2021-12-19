@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface PageTagProps {
+export interface PageTagProps {
     tag: PageTags
     isOwned: boolean
     daoPayload: Dao_Payload | undefined
