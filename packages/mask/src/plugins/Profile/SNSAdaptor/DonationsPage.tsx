@@ -36,12 +36,11 @@ const useStyles = makeStyles()((theme) => ({
 export interface DonationPageProps {
     address: string
     isOwned: boolean
-    isConnected: boolean
 }
 
 // cspell:ignore contribs
 export function DonationPage(props: DonationPageProps) {
-    const { address, isOwned, isConnected } = props
+    const { address, isOwned } = props
     const { classes } = useStyles()
     const { donations, loading } = useDonations()
 
@@ -52,15 +51,6 @@ export function DonationPage(props: DonationPageProps) {
                     {isOwned
                         ? 'Please connect an Ethereum compatible wallet.'
                         : 'This user has not connected any Ethereum compatible wallet.'}
-                </Typography>
-            </div>
-        )
-    }
-    if (!isConnected) {
-        return (
-            <div className="text-center my-8">
-                <Typography className={classes.msg} variant="body1">
-                    {isOwned ? 'Please connect your RSS3 profile.' : 'This user has not connected with RSS3 yet.'}
                 </Typography>
             </div>
         )

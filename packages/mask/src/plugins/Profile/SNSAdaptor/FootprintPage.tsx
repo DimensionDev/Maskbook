@@ -37,11 +37,10 @@ export interface FootprintPageProps {
     username: string
     address: string
     isOwned: boolean
-    isConnected: boolean
 }
 
 export function FootprintPage(props: FootprintPageProps) {
-    const { username, address, isOwned, isConnected } = props
+    const { username, address, isOwned } = props
     const { classes } = useStyles()
 
     const { footprints, loading } = useFootprints()
@@ -53,15 +52,6 @@ export function FootprintPage(props: FootprintPageProps) {
                     {isOwned
                         ? 'Please connect an Ethereum compatible wallet.'
                         : 'This user has not connected any Ethereum compatible wallet.'}
-                </Typography>
-            </div>
-        )
-    }
-    if (!isConnected) {
-        return (
-            <div className="text-center my-8">
-                <Typography className={classes.msg} variant="body1">
-                    {isOwned ? 'Please connect your RSS3 profile.' : 'This user has not connected with RSS3 yet.'}
                 </Typography>
             </div>
         )

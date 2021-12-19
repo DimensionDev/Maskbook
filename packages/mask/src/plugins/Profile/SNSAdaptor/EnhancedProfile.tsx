@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { unreachable } from '@dimensiondev/kit'
-import type { RSS3Index } from 'rss3-next/types/rss3'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useEthereumAddress } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../../../utils'
@@ -55,7 +54,6 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const { value: daoPayload } = useDao(identity.identifier)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
 
-    const [isConnected, setConnected] = useState(false)
     const [username, setUsername] = useState<string>('')
 
     const init = async (account: string) => {
@@ -64,8 +62,6 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         const apiUser = await PluginProfileRPC.getAPIUser()
         const rss3Username = (await apiUser.persona?.profile.get(pageOwner.address))?.name ?? ''
         setUsername(rss3Username)
-        const rss3Sign = ((await apiUser.persona?.files.get(pageOwner.address)) as RSS3Index).signature
-        setConnected(rss3Sign !== '')
     }
 
     useLocationChange(() => {
@@ -78,7 +74,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [identity, currentAccountAddress, isConnected])
+    }, [identity, currentAccountAddress])
 
     const content = useMemo(() => {
         switch (currentTag) {
@@ -87,22 +83,15 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.NFTTag:
                 return <NFTPage />
             case PageTags.DonationTag:
-                return <DonationPage address={currentAccountAddress} isOwned={isOwned} isConnected={isConnected} />
+                return <DonationPage address={currentAccountAddress} isOwned={isOwned} />
             case PageTags.FootprintTag:
-                return (
-                    <FootprintPage
-                        username={username}
-                        address={currentAccountAddress}
-                        isOwned={isOwned}
-                        isConnected={isConnected}
-                    />
-                )
+                return <FootprintPage username={username} address={currentAccountAddress} isOwned={isOwned} />
             case PageTags.DAOTag:
                 return <DAOPage payload={daoPayload} identifier={identity.identifier} />
             default:
                 unreachable(currentTag)
         }
-    }, [currentTag, currentAccountAddress, isOwned, isConnected, username, daoPayload, identity.identifier])
+    }, [currentTag, currentAccountAddress, isOwned, username, daoPayload, identity.identifier])
 
     useUpdateEffect(() => {
         setCurrentTag(PageTags.NFTTag)

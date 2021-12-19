@@ -59,6 +59,8 @@ export function PageTag(props: PageTagProps) {
     const hasDonations = donations.length > 0
     const hasFootprints = footprints.length > 0
 
+    console.log({ hasDonations, hasFootprints })
+
     return (
         <div className={classes.root}>
             <Button
