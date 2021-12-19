@@ -16,7 +16,7 @@ export const BUTTON_ICONS = {
     loading: 'loading',
 }
 
-interface colorToStyleInterface {
+interface ColorToStyleInterface {
     name: string
     bgDefault: string
     bgAlt: string
@@ -27,7 +27,7 @@ interface colorToStyleInterface {
     hoverBorder: string
 }
 
-export const COLOR_TO_STYLE: Record<string, colorToStyleInterface> = {
+export const COLOR_TO_STYLE: Record<string, ColorToStyleInterface> = {
     primary: {
         name: 'primary',
         bgDefault: 'bg-primary',

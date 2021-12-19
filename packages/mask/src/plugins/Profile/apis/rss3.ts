@@ -1,8 +1,7 @@
 import RSS3 from 'rss3-next'
-import { fetch } from './middleware'
-import type { GeneralAsset } from './types'
-import config from './config'
 import { EthereumAddress } from 'wallet.ts'
+import config from './config'
+import type { GeneralAsset } from './types'
 
 const EMPTY_RSS3_DP: RSS3DetailPersona = {
     persona: null,
@@ -12,7 +11,6 @@ const EMPTY_RSS3_DP: RSS3DetailPersona = {
 
 const RSS3PageOwner: RSS3DetailPersona = Object.create(EMPTY_RSS3_DP)
 const RSS3LoginUser: RSS3DetailPersona = Object.create(EMPTY_RSS3_DP)
-const assetsProfileCache: Map<string, IAssetProfile> = new Map()
 
 export interface IAssetProfile {
     assets: GeneralAsset[]
@@ -69,28 +67,4 @@ export async function setPageOwner(addrOrName: string) {
 
 export async function getPageOwner() {
     return RSS3PageOwner
-}
-
-export async function getAssetProfile(
-    address: string,
-    type: string,
-    refresh: boolean = false,
-): Promise<IAssetProfile | null> {
-    if (assetsProfileCache.has(address + type) && !refresh) {
-        return assetsProfileCache.get(address + type) ?? null
-    }
-    try {
-        const res = await fetch(`/assets/list`, {
-            baseURL: config.hubEndpoint,
-            params: {
-                personaID: address,
-                type: type,
-            },
-        })
-        const data = res?.data
-        if (data) assetsProfileCache.set(address + type, data)
-        return data
-    } catch {
-        return null
-    }
 }

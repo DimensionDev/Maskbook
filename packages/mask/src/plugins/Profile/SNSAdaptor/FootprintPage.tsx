@@ -1,18 +1,14 @@
-import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CircularProgress, Link, Typography } from '@mui/material'
+import urlcat from 'urlcat'
 import config from '../apis/config'
 import type { GeneralAssetWithTags } from '../apis/types'
+import { FootprintCard } from './components'
 import { useFootprints } from './hooks'
-import { COLORS } from './common/variables'
-import { Button, FootprintCard } from './components'
 
 const useStyles = makeStyles()((theme) => ({
-    msg: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
-    },
-    primaryText: {
+    address: {
         color: theme.palette.primary.main,
     },
     link: {
@@ -55,7 +51,7 @@ export function FootprintPage(props: FootprintPageProps) {
     return (
         <div>
             <section className="flex flex-row justify-between items-center w-full gap-4">
-                <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary" title={address}>
+                <Typography className={classes.address} variant="subtitle1" color="textPrimary" title={address}>
                     {formatEthereumAddress(address, 6)}
                 </Typography>
             </section>

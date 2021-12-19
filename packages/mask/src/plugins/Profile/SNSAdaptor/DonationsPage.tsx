@@ -1,12 +1,11 @@
-import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
-import { CircularProgress, Link, Typography } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { COLORS } from './common/variables'
-import { Button, DonationCard } from './components'
-import { useDonations } from './hooks'
+import { CircularProgress, Link, Typography } from '@mui/material'
+import urlcat from 'urlcat'
 import config from '../apis/config'
 import type { GeneralAssetWithTags } from '../apis/types'
+import { DonationCard } from './components'
+import { useDonations } from './hooks'
 
 const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = donation
@@ -20,10 +19,7 @@ const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
 }
 
 const useStyles = makeStyles()((theme) => ({
-    msg: {
-        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(0, 0, 0)',
-    },
-    primaryText: {
+    address: {
         color: theme.palette.primary.main,
     },
     link: {
@@ -53,7 +49,7 @@ export function DonationPage(props: DonationPageProps) {
     return (
         <div>
             <section className="flex flex-row justify-between items-center w-full gap-4">
-                <Typography className={classes.primaryText} variant="subtitle1" color="textPrimary" title={address}>
+                <Typography className={classes.address} variant="subtitle1" color="textPrimary" title={address}>
                     {formatEthereumAddress(address, 6)}
                 </Typography>
             </section>

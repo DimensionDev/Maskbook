@@ -56,9 +56,8 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     const init = async (account: string) => {
         await PluginProfileRPC.setPageOwner(account)
-        const pageOwner = await PluginProfileRPC.getPageOwner()
         const apiUser = await PluginProfileRPC.getAPIUser()
-        const rss3Username = (await apiUser.persona?.profile.get(pageOwner.address))?.name ?? ''
+        const rss3Username = (await apiUser.persona?.profile.get(account))?.name ?? ''
         setUsername(rss3Username)
     }
 
