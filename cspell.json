@@ -243,7 +243,8 @@
         "solana",
         "Görli",
         "resizer",
-        "Pageable"
+        "Pageable",
+        "plusplus"
     ],
     "ignoreWords": [
         "cryptopunks",

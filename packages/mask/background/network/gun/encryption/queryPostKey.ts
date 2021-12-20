@@ -44,6 +44,7 @@ namespace Version38Or39 {
         const minePublicKeyJWK = await CryptoKeyToJsonWebKey(minePublicKey)
         const { keyHash, postHash } = await calculatePostKeyPartition(version, networkHint, iv, minePublicKeyJWK)
 
+        /* cspell:disable-next-line */
         // ? In this step we get something like ["jzarhbyjtexiE7aB1DvQ", "jzarhuse6xlTAtblKRx9"]
         const internalNodeNames = Object.keys((await getGunData(gun, postHash, keyHash)) || {}).filter((x) => x !== '_')
         // ? In this step we get all keys in this category (gun2[postHash][keyHash])
@@ -107,7 +108,7 @@ namespace Version38Or39 {
     }
 
     // The difference between V38 and V39 is: V39 is not stable (JSON.stringify)
-    // it's an implementaton bug but for backward compatibility, it cannot be changed.
+    // it's an implementation bug but for backward compatibility, it cannot be changed.
     // Therefore we upgraded the version and use a stable hash.
     async function hashKey39(key: EC_Public_JsonWebKey) {
         const hashPair = `10198a2f-205f-45a6-9987-3488c80113d0`
@@ -126,7 +127,7 @@ namespace Version38Or39 {
         return hash.substring(0, N)
     }
 
-    // This is a self contained Gun.SEA.work implementaton that only contains code path we used.
+    // This is a self contained Gun.SEA.work implementation that only contains code path we used.
     async function work(data: string, salt: string) {
         const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(data), { name: 'PBKDF2' }, false, [
             'deriveBits',
