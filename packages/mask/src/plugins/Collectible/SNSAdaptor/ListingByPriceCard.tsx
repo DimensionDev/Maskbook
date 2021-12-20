@@ -163,7 +163,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                                 : t('plugin_collectible_ending_price_tip'),
                         },
                     }}
-                    FixedTokenListProps={{
+                    FungibleTokenListProps={{
                         selectedTokens: token.value ? [token.value.address] : [],
                         tokens: paymentTokens,
                         whitelist: paymentTokens.map((x) => x.address),

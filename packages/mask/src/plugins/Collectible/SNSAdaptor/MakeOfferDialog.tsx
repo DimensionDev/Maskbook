@@ -177,7 +177,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             TokenAmountPanelProps={{
                                 label: t('plugin_collectible_price'),
                             }}
-                            FixedTokenListProps={{
+                            FungibleTokenListProps={{
                                 selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
                                 tokens: paymentTokens,
                                 whitelist: paymentTokens.map((x) => x.address),

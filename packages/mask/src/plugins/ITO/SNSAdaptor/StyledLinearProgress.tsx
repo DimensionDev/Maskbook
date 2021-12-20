@@ -17,7 +17,7 @@ const useStyles = makeStyles<StyledLinearProgress>()((_theme, props) => ({
     },
 }))
 
-export function StyledLinearProgress({ backgroundColor, barColor, ...props }: StyledLinearProgress) {
+export function StyledLinearProgress(props: StyledLinearProgress) {
     const { classes } = useStyles(props)
     return <LinearProgress classes={classes} {...props} />
 }

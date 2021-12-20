@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 
 import { MaskMessages } from '../../../utils'
@@ -12,6 +12,7 @@ import { PageTags } from '../types'
 import { unreachable } from '@dimensiondev/kit'
 import { PageTag } from './PageTag'
 import { useDao } from './hooks/useDao'
+import { useUpdateEffect } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -61,7 +62,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             default:
                 unreachable(currentTag)
         }
-    }, [currentTag])
+    }, [currentTag, daoPayload, identity.identifier])
+
+    useUpdateEffect(() => {
+        setCurrentTag(PageTags.NFTTag)
+    }, [identity.identifier])
 
     if (!show) return null
 

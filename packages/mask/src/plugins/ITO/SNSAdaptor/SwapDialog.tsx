@@ -174,7 +174,7 @@ export function SwapDialog(props: SwapDialogProps) {
             uuid: id,
             disableNativeToken: !exchangeTokens.some((x) => isNative(x.address)),
             disableSearchBar: true,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 whitelist: exchangeTokens.map((x) => x.address),
             },
         })

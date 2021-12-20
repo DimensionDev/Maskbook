@@ -13,45 +13,7 @@ import { makeStyles, ShowSnackbarOptions, SnackbarKey, SnackbarMessage, useCusto
 import { WalletMessages } from '../../messages'
 import { RecentTransactionDescription } from '../WalletStatusDialog/TransactionDescription'
 import Services from '../../../../extension/service'
-
-export const resolveSnackbarConfig = createLookupTableResolver<
-    TransactionStateType,
-    Pick<ShowSnackbarOptions, 'message' | 'processing' | 'variant'>
->(
-    {
-        [TransactionStateType.WAIT_FOR_CONFIRMING]: {
-            processing: true,
-            variant: 'default',
-            message: 'Confirm this transaction in your wallet',
-        },
-        [TransactionStateType.HASH]: {
-            processing: true,
-            variant: 'default',
-            message: 'Transaction Submitted',
-        },
-        [TransactionStateType.CONFIRMED]: {
-            processing: false,
-            variant: 'success',
-            message: 'Transaction Confirmed',
-        },
-        [TransactionStateType.RECEIPT]: {
-            processing: false,
-            variant: 'success',
-            message: 'Transaction Confirmed',
-        },
-        [TransactionStateType.FAILED]: {
-            processing: false,
-            variant: 'error',
-            message: 'Transaction Failed',
-        },
-        [TransactionStateType.UNKNOWN]: {
-            processing: false,
-            variant: 'error',
-            message: '',
-        },
-    },
-    {},
-)
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()({
     link: {
@@ -64,8 +26,46 @@ export function TransactionSnackbar() {
     const chainId = useChainId()
     const { classes } = useStyles()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
+    const { t } = useI18N()
     const snackbarKeyRef = useRef<SnackbarKey>()
-
+    const resolveSnackbarConfig = createLookupTableResolver<
+        TransactionStateType,
+        Pick<ShowSnackbarOptions, 'message' | 'processing' | 'variant'>
+    >(
+        {
+            [TransactionStateType.WAIT_FOR_CONFIRMING]: {
+                processing: true,
+                variant: 'default',
+                message: t('plugin_wallet_snackbar_wait_for_confirming'),
+            },
+            [TransactionStateType.HASH]: {
+                processing: true,
+                variant: 'default',
+                message: t('plugin_wallet_snackbar_hash'),
+            },
+            [TransactionStateType.CONFIRMED]: {
+                processing: false,
+                variant: 'success',
+                message: t('plugin_wallet_snackbar_confirmed'),
+            },
+            [TransactionStateType.RECEIPT]: {
+                processing: false,
+                variant: 'success',
+                message: t('plugin_wallet_snackbar_success'),
+            },
+            [TransactionStateType.FAILED]: {
+                processing: false,
+                variant: 'error',
+                message: t('plugin_wallet_snackbar_failed'),
+            },
+            [TransactionStateType.UNKNOWN]: {
+                processing: false,
+                variant: 'error',
+                message: '',
+            },
+        },
+        {},
+    )
     const showSingletonSnackbar = useCallback(
         (title: SnackbarMessage, options: ShowSnackbarOptions) => {
             if (snackbarKeyRef.current !== undefined) closeSnackbar(snackbarKeyRef.current)
@@ -117,7 +117,7 @@ export function TransactionSnackbar() {
                 )
             ) {
                 if (progress.state.type === TransactionStateType.CONFIRMED) {
-                    showSingletonSnackbar('Successfully swapped Token', {
+                    showSingletonSnackbar(t('plugin_wallet_snackbar_swap_successful'), {
                         ...config,
                         ...{ message: getFullMessage(getTitle(progress.state, payload, hash), hash) },
                     })
@@ -125,7 +125,7 @@ export function TransactionSnackbar() {
                 }
 
                 if (progress.state.type === TransactionStateType.FAILED) {
-                    showSingletonSnackbar('Swap Token', {
+                    showSingletonSnackbar(t('plugin_wallet_snackbar_swap_token'), {
                         ...config,
                         ...{ message: getFullMessage('Transaction rejected', hash) },
                     })
