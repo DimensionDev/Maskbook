@@ -93,7 +93,6 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             PopupRoutes.GasSetting,
             PopupRoutes.SelectWallet,
             PopupRoutes.WalletRecovered,
-            PopupRoutes.Unlock,
         ],
         exact: true,
     })
