@@ -9,6 +9,8 @@ import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
+import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
+import classNames from 'classnames'
 
 export interface PostDialogHintUIProps extends withClasses<'buttonTransform'> {
     onHintButtonClicked: () => void
@@ -18,6 +20,11 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
         padding: isMobileFacebook ? 0 : '8px',
+        '&:hover': {
+            background: 'none',
+        },
+    },
+    buttonBg: {
         '&:hover': {
             background: alpha(theme.palette.primary.main, 0.1),
         },
@@ -44,15 +51,20 @@ const useStyles = makeStyles()((theme) => ({
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
     const classes = useStylesExtends(useStyles(), props)
+    const isTwitterNetwork = isTwitter(activatedSocialNetworkUI)
 
     return (
         <Tooltip
             title="Mask Network"
             classes={{ tooltip: classes.tooltip }}
+            disableHoverListener={!isTwitterNetwork}
             PopperProps={{
                 disablePortal: true,
             }}>
-            <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
+            <IconButton
+                size="large"
+                className={classNames(classes.button, isTwitterNetwork ? classes.buttonBg : null)}
+                onClick={props.onHintButtonClicked}>
                 <MaskSharpIcon color="primary" />
             </IconButton>
         </Tooltip>
