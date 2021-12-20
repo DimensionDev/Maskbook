@@ -236,7 +236,6 @@ export default function Plugins() {
                 <Box className={classes.root}>
                     {plugins.map((p) => (
                         <PluginItem
-                            key={p.id}
                             id={p.id}
                             title={p.title}
                             desc={p.desc}
