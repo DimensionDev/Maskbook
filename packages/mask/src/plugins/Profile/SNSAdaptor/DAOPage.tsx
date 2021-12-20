@@ -2,7 +2,7 @@ import { useState } from 'react'
 import IframeResizer from 'iframe-resizer-react'
 import { useTheme } from '@mui/material'
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import type { Dao_Payload } from './hooks/useDao'
+import type { Dao_Payload } from './hooks'
 
 interface DAOPageProps {
     payload: Dao_Payload | undefined

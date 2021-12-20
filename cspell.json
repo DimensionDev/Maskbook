@@ -245,7 +245,9 @@
         "resizer",
         "Pageable",
         "metaverse",
-        "hexlify"
+        "hexlify",
+        "contribs",
+        "contrib"
     ],
     "ignoreWords": [
         "cryptopunks",

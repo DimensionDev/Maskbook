@@ -1,6 +1,6 @@
 import { useAsync } from 'react-use'
 import { PluginProfileRPC } from '../../messages'
-import type { RSS3Profile } from '../../apis/types'
+import type { RSS3Profile } from '../../types'
 
 export function useRss3Profile(address: string) {
     const { value: profile = {} as RSS3Profile, loading } = useAsync(async () => {

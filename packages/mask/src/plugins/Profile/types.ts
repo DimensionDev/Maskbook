@@ -10,8 +10,6 @@ export interface Asset {
     chain: string
 }
 
-// cspell:ignore contribs
-// used in api response
 export interface GeneralAsset {
     platform: string
     identity: string

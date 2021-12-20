@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CircularProgress, Link, Typography } from '@mui/material'
 import urlcat from 'urlcat'
-import type { GeneralAssetWithTags } from '../apis/types'
+import type { GeneralAssetWithTags } from '../types'
 import { RSS3_DEFAULT_IMAGE } from '../constants'
 import { DonationCard } from './components'
 import { useDonations } from './hooks'
@@ -33,7 +33,6 @@ export interface DonationPageProps {
     address: string
 }
 
-// cspell:ignore contribs
 export function DonationPage(props: DonationPageProps) {
     const { address } = props
     const { classes } = useStyles()

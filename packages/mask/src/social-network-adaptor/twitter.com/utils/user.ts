@@ -44,7 +44,7 @@ export const getTwitterId = () => {
 
 export const getBioDescription = () => {
     const node = bioDescriptionSelector().evaluate()
-    return node ? collectNodeText(node) || '' : ''
+    return node ? collectNodeText(node) : ''
 }
 
 export const getPersonalHomepage = () => {
