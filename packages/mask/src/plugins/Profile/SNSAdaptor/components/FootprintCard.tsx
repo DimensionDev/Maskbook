@@ -3,6 +3,7 @@ import { Typography } from '@mui/material'
 import EventRoundedIcon from '@mui/icons-material/EventRounded'
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
 import fromUnixTime from 'date-fns/fromUnixTime'
+import { useI18N } from '../../../../utils'
 
 const formatDate = (ts: string): string => {
     return fromUnixTime(Number.parseInt(ts, 16)).toLocaleDateString('en-US')
@@ -18,6 +19,7 @@ export interface FootprintProps {
 }
 
 export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, username, activity }: FootprintProps) => {
+    const { t } = useI18N()
     // Calc display date
     let displayDate: string
     if (startDate && endDate) {
@@ -26,7 +28,7 @@ export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, use
             displayDate += ` ~ ${formatDate(endDate)}`
         }
     } else {
-        displayDate = 'No activity time'
+        displayDate = t('plugin_profile_rss3_no_activity_time')
     }
 
     // Calc location
@@ -52,7 +54,7 @@ export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, use
                 </div>
                 <div className="flex flex-row gap-2 font-medium">
                     <Typography variant="body1" className="capitalize" style={{ color: 'rgba(255, 180, 38, 1)' }}>
-                        {username} attended
+                        {t('plugin_profile_rss3_attended', { username })}
                     </Typography>
                     <Typography variant="body1" color="textPrimary">
                         {activity}

@@ -1009,5 +1009,8 @@
     "plugin_profile_binding_rule3": "Twitter ID + {{suffix}} is ENS.",
     "plugin_profile_binding_rule4": "Address used to sign the avatar.",
     "plugin_profile_current_display_of": "Current display of {{type}}: ",
+    "plugin_profile_rss3_inactive_project": "Inactive Project",
+    "plugin_profile_rss3_no_activity_time": "No activity time",
+    "plugin_profile_rss3_attended": "{{username}} attended",
     "plugin_vcent_last_offer_at": "LATEST OFFER at"
 }

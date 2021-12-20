@@ -6,6 +6,7 @@ import type { GeneralAssetWithTags } from '../types'
 import { RSS3_DEFAULT_IMAGE } from '../constants'
 import { DonationCard } from './components'
 import { useDonations } from './hooks'
+import { useI18N } from '../../../utils'
 
 const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = donation
@@ -37,6 +38,7 @@ export function DonationPage(props: DonationPageProps) {
     const { address } = props
     const { classes } = useStyles()
     const { donations, loading } = useDonations(address)
+    const { t } = useI18N()
 
     if (loading) {
         return (
@@ -62,7 +64,7 @@ export function DonationPage(props: DonationPageProps) {
                         rel="noopener noreferrer">
                         <DonationCard
                             imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                            name={donation.info.title || 'Inactive Project'}
+                            name={donation.info.title || t('plugin_profile_rss3_inactive_project')}
                             contribCount={donation.info.total_contribs || 0}
                             contribDetails={donation.info.token_contribs || []}
                         />
