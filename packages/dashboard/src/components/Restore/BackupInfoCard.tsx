@@ -15,7 +15,7 @@ export const BackupInfoCard = memo(({ info }: BackupInfoProps) => {
         if (str.length < 30) return <div>{str}</div>
         return (
             <Tooltip title={str} placement="top" arrow>
-                <div>{str.substr(0, 30) + '...' + '(' + str.split(',').length + ')'}</div>
+                <div>{str.slice(0, 30) + '...' + '(' + str.split(',').length + ')'}</div>
             </Tooltip>
         )
     }

@@ -20,7 +20,7 @@ export function swapErrorToUserReadableMessage(error: any): string {
         error = error.error ?? error.data?.originalError
     }
 
-    if (reason?.startsWith('execution reverted: ')) reason = reason.substr('execution reverted: '.length)
+    if (reason?.startsWith('execution reverted: ')) reason = reason.slice('execution reverted: '.length)
 
     switch (reason) {
         case 'UniswapV2Router: EXPIRED':

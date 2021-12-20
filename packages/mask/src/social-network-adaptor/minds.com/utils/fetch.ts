@@ -14,7 +14,7 @@ const parseNameArea = (nameArea: HTMLAnchorElement) => {
     const displayNameNode = nameArea.querySelector('strong')
     return {
         name: displayNameNode && assertNonNull(displayNameNode) ? displayNameNode.innerText : nameArea.innerText,
-        handle: nameArea.href.substring(8).split('/')[1],
+        handle: nameArea.href.slice(8).split('/')[1],
     }
 }
 

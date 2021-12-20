@@ -31,7 +31,7 @@ export const hashPostSalt = memoizePromise(
         const N = 2
 
         const hash = (await Gun.SEA.work(postSalt, hashPair))!
-        return networkHint + hash.substring(0, N)
+        return networkHint + hash.slice(0, Math.max(0, N))
     },
     (x, y) => x + y,
 )
@@ -45,7 +45,7 @@ export const hashCryptoKeyUnstable = memoizePromise(async function (key: EC_Publ
 
     const jwk = JSON.stringify(key)
     const hash = (await Gun.SEA.work(jwk, hashPair))!
-    return hash.substring(0, N)
+    return hash.slice(0, Math.max(0, N))
 }, undefined)
 
 /**
@@ -58,5 +58,5 @@ export const hashCryptoKey = memoizePromise(async function (key: EC_Public_JsonW
     const jwk = key
     if (!jwk.x || !jwk.y) throw new Error('Invalid key')
     const hash = (await Gun.SEA.work(jwk.x! + jwk.y!, hashPair))!
-    return hash.substring(0, N)
+    return hash.slice(0, Math.max(0, N))
 }, undefined)

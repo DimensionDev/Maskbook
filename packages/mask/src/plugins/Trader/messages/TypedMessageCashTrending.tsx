@@ -18,7 +18,7 @@ export function makeTypedMessageCashTrending(message: TypedMessageAnchor) {
     return {
         ...message,
         type: 'x-cash-trending',
-        name: message.content.substr(1).toLowerCase(),
+        name: message.content.slice(1).toLowerCase(),
     } as TypedMessageCashTrending
 }
 
