@@ -3,6 +3,7 @@
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "sideEffects": false,
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
     "@masknet/shared-base": "workspace:*",
