@@ -22,3 +22,13 @@ export {
     type DecryptProgress,
     type DecryptSuccess,
 } from './encryption'
+
+export {
+    type DecodeImageOptions,
+    type EncodeImageOptions,
+    type ImageTemplateTypes,
+    type SteganographyIO,
+    steganographyDecodeImageUrl,
+    steganographyEncodeImage,
+    GrayscaleAlgorithm,
+} from './image-steganography'
