@@ -1,9 +1,9 @@
-import BigNumber from 'bignumber.js'
 import { isNull } from 'lodash-unified'
 import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../../EVM/messages'
 import Services from '../../../extension/service'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
+import { ONE } from '@masknet/web3-shared-base'
 
 export async function getNFT(address: string, tokenId: string) {
     const asset = await EVM_RPC.getAsset({
@@ -12,15 +12,14 @@ export async function getNFT(address: string, tokenId: string) {
         chainId: ChainId.Mainnet,
         provider: NonFungibleAssetProvider.OPENSEA,
     })
-
+    const amount =
+        getOrderUnitPrice(
+            asset?.desktopOrder?.current_price,
+            asset?.desktopOrder?.payment_token_contract?.decimals ?? 0,
+            asset?.desktopOrder?.quantity ?? '1',
+        ) ?? ONE
     return {
-        amount: new BigNumber(
-            getOrderUnitPrice(
-                asset?.desktopOrder?.current_price,
-                asset?.desktopOrder?.payment_token_contract?.decimals ?? 0,
-                asset?.desktopOrder?.quantity ?? '1',
-            ) ?? 0,
-        ).toFixed(),
+        amount: amount.toFixed(),
         name: asset?.name ?? '',
         symbol: asset?.desktopOrder?.payment_token_contract?.symbol ?? 'ETH',
         image: asset?.image_url ?? '',

@@ -66,15 +66,14 @@ export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quan
     if (!currentPrice || !decimals || !quantity) return
     const price = formatBalance(currentPrice, decimals)
     const _quantity = formatBalance(quantity, new BigNumber(quantity).toString() !== '1' ? 8 : 0)
-    return new BigNumber(price).dividedBy(_quantity).toFixed(4, 1).toString()
+    return new BigNumber(price).dividedBy(_quantity).decimalPlaces(4, 1)
 }
 
 export function getOrderUSDPrice(currentPrice?: string, usdPrice?: string, decimals?: number) {
     if (!currentPrice || !decimals) return
     const price = formatBalance(usdPrice, 0)
     const quantity = formatBalance(currentPrice, decimals)
-
-    return multipliedBy(price, quantity).toFixed(2, 1).toString()
+    return multipliedBy(price, quantity).decimalPlaces(2, 1)
 }
 
 export function getLastSalePrice(lastSale: AssetEvent | null) {
