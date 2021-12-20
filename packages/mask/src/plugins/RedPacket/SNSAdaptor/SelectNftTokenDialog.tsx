@@ -9,6 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
 import { SearchIcon } from '@masknet/icons'
@@ -141,6 +142,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         borderRadius: 6,
         height: 180,
+        userSelect: 'none',
         width: 120,
     },
     loadingWrapper: {
@@ -199,9 +201,9 @@ export interface SelectNftTokenDialogProps extends withClasses<never> {
     loadingOwnerList: boolean
     onClose: () => void
     contract: ERC721ContractDetailed | undefined
-    existTokenDetailedList: ERC721TokenDetailed[]
-    tokenDetailedOwnerList: ERC721TokenDetailed[]
-    setExistTokenDetailedList: React.Dispatch<React.SetStateAction<ERC721TokenDetailed[]>>
+    existTokenDetailedList: (ERC721TokenDetailed & { index: number })[]
+    tokenDetailedOwnerList: (ERC721TokenDetailed & { index: number })[]
+    setExistTokenDetailedList: React.Dispatch<React.SetStateAction<(ERC721TokenDetailed & { index: number })[]>>
 }
 
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
@@ -217,10 +219,10 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     } = props
     const { t } = useI18N()
     const account = useAccount()
-    const [tokenDetailed, setTokenDetailed] = useState<ERC721TokenDetailed>()
+    const [tokenDetailed, setTokenDetailed] = useState<ERC721TokenDetailed & { index: number }>()
     const [searched, setSearched] = useState(false)
     const [tokenDetailedSelectedList, setTokenDetailedSelectedList] =
-        useState<ERC721TokenDetailed[]>(existTokenDetailedList)
+        useState<(ERC721TokenDetailed & { index: number })[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contract)
 
@@ -237,11 +239,48 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     }, [tokenDetailedOwnerList])
 
     const selectToken = useCallback(
-        (token: ERC721TokenDetailed, findToken: ERC721TokenDetailed | undefined) => {
-            if (findToken) {
-                setTokenDetailedSelectedList(tokenDetailedSelectedList.filter((v) => v.tokenId !== findToken.tokenId))
+        (
+            token: ERC721TokenDetailed & { index: number },
+            findToken: (ERC721TokenDetailed & { index: number }) | undefined,
+            shiftKey: boolean,
+            index: number,
+        ) => {
+            if (!shiftKey) {
+                if (findToken) {
+                    setTokenDetailedSelectedList(
+                        tokenDetailedSelectedList.filter((v) => v.tokenId !== findToken.tokenId),
+                    )
+                } else {
+                    setTokenDetailedSelectedList(tokenDetailedSelectedList.concat({ ...token, index }))
+                }
             } else {
-                setTokenDetailedSelectedList(tokenDetailedSelectedList.concat(token))
+                const tokenDetailedSelectedListSorted = tokenDetailedSelectedList.sort(
+                    (a, b) => (b.index ?? 0) - (a.index ?? 0),
+                )
+                if (findToken) {
+                    const unselectedTokenIdList: string[] = []
+                    let nextToken: (ERC721TokenDetailed & { index: number }) | undefined = findToken
+                    while (nextToken) {
+                        unselectedTokenIdList.push(nextToken.tokenId)
+                        const nextTokenIndex: number = (nextToken?.index ?? 0) + 1
+                        nextToken = tokenDetailedSelectedListSorted.find((v) => (v.index ?? 0) === nextTokenIndex)
+                    }
+                    setTokenDetailedSelectedList(
+                        tokenDetailedSelectedList.filter((v) => !unselectedTokenIdList.includes(v.tokenId)),
+                    )
+                } else {
+                    const lastSelectedToken = tokenDetailedSelectedListSorted.filter((v) => (v?.index ?? 0) < index)[0]
+
+                    const lastSelectedTokenIndex = findLastIndex(
+                        tokenDetailedOwnerList,
+                        (v, i) => v.tokenId === lastSelectedToken?.tokenId && i < index,
+                    )
+                    setTokenDetailedSelectedList(
+                        tokenDetailedSelectedList.concat(
+                            tokenDetailedOwnerList.slice(lastSelectedTokenIndex + 1, index + 1),
+                        ),
+                    )
+                }
             }
         },
         [tokenDetailedSelectedList, setTokenDetailedSelectedList],
@@ -250,7 +289,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const onSearch = useCallback(async () => {
         setLoadingToken(true)
         const _tokenDetailed = await erc721TokenDetailedCallback()
-        setTokenDetailed(_tokenDetailed?.info.owner ? _tokenDetailed : undefined)
+        setTokenDetailed(_tokenDetailed?.info.owner ? { ..._tokenDetailed, index: 0 } : undefined)
         setSearched(true)
         setLoadingToken(false)
     }, [erc721TokenDetailedCallback])
@@ -259,6 +298,10 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         setTokenDetailed(undefined)
         setSearched(false)
     }, [tokenId])
+
+    useEffect(() => {
+        if (tokenDetailedOwnerList.length > 0) setTokenDetailed(undefined)
+    }, [tokenDetailedOwnerList])
 
     const isOwner = isSameAddress(account, tokenDetailed?.info.owner) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
@@ -272,7 +315,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     }, [tokenDetailed, tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')} maxWidth="xs">
+        <InjectedDialog
+            open={open}
+            onClose={onClose}
+            title={t('plugin_red_packet_nft_select_collection')}
+            maxWidth="xs">
             {tokenDetailedOwnerList.length === 0 ? (
                 <DialogContent className={classes.dialogContent}>
                     <Box className={classes.tokenBox}>
@@ -335,7 +382,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 <SearchIcon className={classes.iconButton} />
                                 <InputBase
                                     value={tokenId}
-                                    placeholder="Input Token ID"
+                                    placeholder="Token ID separated by comma, e.g. 1224, 7873, 8948"
                                     className={classes.textField}
                                     onChange={(e) => setTokenId(e.target.value)}
                                 />
@@ -391,7 +438,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                     classes.checkbox,
                                                     findToken ? classes.checked : '',
                                                 )}
-                                                onClick={() => selectToken(token, findToken)}>
+                                                onClick={(event) => selectToken(token, findToken, event.shiftKey, i)}>
                                                 {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
                                             </div>
                                         </ListItem>
@@ -404,6 +451,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 ) : null}
                             </div>
                         )}
+                    </Box>
+                    <Box className={classes.selectAmountBox}>
+                        <QuestionMarkIcon className={classes.questionMarkIcon} />
+                        <Typography>
+                            <span className={classes.selectedTokenAmount}>
+                                {tokenDetailedSelectedList.length + ' '}
+                            </span>
+                            /<span className={classes.totalAmount}>{tokenDetailedOwnerList.length}</span>
+                        </Typography>
                     </Box>
                     <Button
                         disabled={

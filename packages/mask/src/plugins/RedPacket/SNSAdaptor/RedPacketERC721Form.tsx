@@ -150,14 +150,18 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [existTokenDetailedList, setExistTokenDetailedList] = useState<ERC721TokenDetailed[]>([])
+    const [existTokenDetailedList, setExistTokenDetailedList] = useState<(ERC721TokenDetailed & { index: number })[]>(
+        [],
+    )
     const [message, setMessage] = useState('Best Wishes!')
     const {
         asyncRetry: { loading: loadingOwnerList },
-        tokenDetailedOwnerList = [],
+        tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
         clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(contract, account)
-
+    const tokenDetailedOwnerList = _tokenDetailedOwnerList.map(
+        (v, index) => ({ ...v, index } as ERC721TokenDetailed & { index: number }),
+    )
     const removeToken = useCallback((token: ERC721TokenDetailed) => {
         setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])
