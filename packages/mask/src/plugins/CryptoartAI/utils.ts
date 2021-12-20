@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import type { AssetEvent, Order } from 'opensea-js/lib/types'
-import { parseURL } from '../../utils/utils'
+import { parseURL } from '@masknet/shared-base'
 import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
 import { escapeRegExp } from 'lodash-unified'
 import { prefixPath, mainNetwork, testNetwork } from './constants'

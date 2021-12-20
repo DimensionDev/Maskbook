@@ -9,7 +9,7 @@ import { Transfer } from './components/Transfer'
 import { History } from './components/History'
 import { PageFrame } from '../../components/PageFrame'
 import { ReceiveDialog } from './components/ReceiveDialog'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../API'
 import { WalletStateBar } from './components/WalletStateBar'
@@ -40,9 +40,9 @@ function Wallets() {
     const network = useNetworkDescriptor()
 
     const { pathname } = useLocation()
-    const isWalletPath = useMatch(RoutePaths.Wallets)
-    const isWalletTransferPath = useMatch(RoutePaths.WalletsTransfer)
-    const isWalletHistoryPath = useMatch(RoutePaths.WalletsHistory)
+    const isWalletPath = useMatch(DashboardRoutes.Wallets)
+    const isWalletTransferPath = useMatch(DashboardRoutes.WalletsTransfer)
+    const isWalletHistoryPath = useMatch(DashboardRoutes.WalletsHistory)
 
     const [receiveOpen, setReceiveOpen] = useState(false)
 
@@ -75,8 +75,15 @@ function Wallets() {
     }, [pathname])
 
     const balance = useMemo(() => {
-        return BigNumber.sum.apply(null, detailedTokens?.map((asset) => getTokenUSDValue(asset.value)) ?? []).toNumber()
-    }, [detailedTokens])
+        return BigNumber.sum
+            .apply(
+                null,
+                detailedTokens
+                    ?.filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))
+                    ?.map((y) => getTokenUSDValue(y.value)) ?? [],
+            )
+            .toNumber()
+    }, [selectedNetwork, detailedTokens])
 
     const pateTitle = useMemo(() => {
         if (wallets.length === 0) return t.create_wallet_form_title()
@@ -96,7 +103,7 @@ function Wallets() {
                 <>
                     <Balance
                         balance={balance}
-                        onSend={() => navigate(RoutePaths.WalletsTransfer)}
+                        onSend={() => navigate(DashboardRoutes.WalletsTransfer)}
                         onBuy={openBuyDialog}
                         onSwap={openSwapDialog}
                         onReceive={() => setReceiveOpen(true)}

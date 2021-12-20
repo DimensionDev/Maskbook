@@ -22,7 +22,7 @@ import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
 import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
-import { ProfileIdentifier } from '@masknet/shared'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
 

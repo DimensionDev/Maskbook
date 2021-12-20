@@ -1,11 +1,17 @@
-import type { FullPersonaDBTransaction } from './Persona.db'
-import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '../type'
-import type { IdentifierMap } from '../IdentifierMap'
-import { restorePrototype } from '../../../utils-pure'
 import { unreachable } from '@dimensiondev/kit'
+import {
+    type IdentifierMap,
+    ProfileIdentifier,
+    type PersonaIdentifier,
+    Identifier,
+    ECKeyIdentifier,
+} from '@masknet/shared-base'
+import { restorePrototype } from '../../../utils-pure'
+import type { FullPersonaDBTransaction } from './db'
 
 type ReadwriteFullPersonaDBTransaction = FullPersonaDBTransaction<'readwrite'>
 
+/** @internal */
 export async function assertPersonaDBConsistency(
     behavior: 'fix' | 'throw',
     ...[checkRange, t]: Parameters<typeof checkFullPersonaDBConsistency>

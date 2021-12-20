@@ -27,6 +27,7 @@ import { HelpOutline, ArrowDownward } from '@mui/icons-material'
 import { EthereumChainBoundary } from '../../../../web3/UI/EthereumChainBoundary'
 import { useUpdateEffect } from 'react-use'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => {
     return {
@@ -206,7 +207,7 @@ export const TradeForm = memo<AllTradeFormProps>(
         onSwitch,
     }) => {
         const userSelected = useRef(false)
-        const isDashboard = location.href.includes('dashboard.html')
+        const isDashboard = isDashboardPage()
 
         const { t } = useI18N()
         const { classes } = useStyles({ isDashboard })
@@ -245,7 +246,7 @@ export const TradeForm = memo<AllTradeFormProps>(
             if (isLessThan(inputAmount, MINIMUM_AMOUNT)) return t('plugin_trade_error_input_amount_less_minimum_amount')
             if (!inputToken || !outputToken) return t('plugin_trader_error_amount_absence')
             if (!trades.length) return t('plugin_trader_error_insufficient_lp')
-            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount.plus(focusedTrade?.value?.fee ?? 0)))
+            if (inputTokenBalanceAmount.isLessThan(inputTokenTradeAmount))
                 return t('plugin_trader_error_insufficient_balance', {
                     symbol: inputToken?.symbol,
                 })

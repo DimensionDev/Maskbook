@@ -1,10 +1,12 @@
 import { CustomEventId, decodeEvent } from '../shared'
 import { onEthEvent } from './bridgedEthereum'
+import { onCoin98Event } from './bridgedCoin98'
 import { onSolanaEvent } from './bridgedSolana'
 import { sendEvent, rejectPromise, resolvePromise } from './utils'
 
 export { bridgedEthereumProvider } from './bridgedEthereum'
-export type { BridgedEthereumProvider } from './bridgedEthereum'
+export { bridgedCoin98Provider } from './bridgedCoin98'
+
 export function pasteText(text: string) {
     sendEvent('paste', text)
 }
@@ -26,21 +28,25 @@ document.addEventListener(CustomEventId, (e) => {
     if (r[1].length < 1) return
 
     switch (r[0]) {
-        case 'ethBridgeOnEvent':
-            return onEthEvent(...r[1])
-        case 'solanaBridgeOnEvent':
-            return onSolanaEvent(...r[1])
         case 'resolvePromise':
             return resolvePromise(...r[1])
         case 'rejectPromise':
             return rejectPromise(...r[1])
+
+        case 'ethBridgeOnEvent':
+            return onEthEvent(...r[1])
+        case 'coin98BridgeOnEvent':
+            return onCoin98Event(...r[1])
+        case 'solanaBridgeOnEvent':
+            return onSolanaEvent(...r[1])
+
         case 'ethBridgeSendRequest':
-        case 'ethBridgeIsConnected':
-        case 'ethBridgeMetaMaskIsUnlocked':
         case 'ethBridgePrimitiveAccess':
         case 'ethBridgeRequestListen':
+        case 'coin98BridgeSendRequest':
+        case 'coin98BridgePrimitiveAccess':
+        case 'coin98BridgeRequestListen':
         case 'solanaBridgeSendRequest':
-        case 'solanaBridgeIsConnected':
         case 'solanaBridgePrimitiveAccess':
         case 'solanaBridgeRequestListen':
         case 'input':
@@ -48,6 +54,7 @@ document.addEventListener(CustomEventId, (e) => {
         case 'pasteImage':
         case 'instagramUpload':
         case 'untilEthBridgeOnline':
+        case 'untilCoin98BridgeOnline':
         case 'untilSolanaBridgeOnline':
         case 'hookInputUploadOnce':
             break

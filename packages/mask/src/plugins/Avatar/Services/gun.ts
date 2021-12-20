@@ -1,4 +1,4 @@
-import { delay } from '@masknet/shared'
+import { delay } from '@masknet/shared-base'
 import { gun2 } from '../../../network/gun/version.2'
 import { NFT_AVATAR_GUN_SERVER } from '../constants'
 

@@ -1,16 +1,21 @@
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { GunAPI as Gun2 } from '../../../network/gun'
 import { encodeArrayBuffer } from '@dimensiondev/kit'
-import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
+import { constructAlpha38 } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
-import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
+import { ProfileIdentifier, PostIVIdentifier } from '@masknet/shared-base'
 import { prepareRecipientDetail } from './prepareRecipientDetail'
 import { getNetworkWorker } from '../../../social-network/worker'
 import { createPostDB, PostRecord } from '../../../../background/database/post'
-import { queryPersonaByProfileDB } from '../../../database/Persona/Persona.db'
-import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Compression'
+import { queryPersonaByProfileDB } from '../../../../background/database/persona/db'
 import { i18n } from '../../../../shared-ui/locales_legacy'
-import { isTypedMessageText, TypedMessage, TypedMessageText } from '../../../protocols/typed-message'
+import {
+    isTypedMessageText,
+    TypedMessage,
+    TypedMessageText,
+    PayloadLatest,
+    compressSecp256k1Key,
+} from '@masknet/shared-base'
 import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 
 type EncryptedText = string
@@ -72,7 +77,7 @@ export async function encryptTo(
     }
     try {
         const publicKey = (await queryPersonaByProfileDB(whoAmI))?.publicKey
-        if (publicKey) payload.authorPublicKey = compressSecp256k1Key(publicKey, 'public')
+        if (publicKey) payload.authorPublicKey = compressSecp256k1Key(publicKey)
     } catch {
         // ignore
     }

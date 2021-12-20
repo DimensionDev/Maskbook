@@ -10,9 +10,9 @@ import {
     PostIVIdentifier,
     ProfileIdentifier,
 } from '@masknet/shared-base'
-import { DBSchema, IDBPTransaction, openDB } from 'idb/with-async-ittr-cjs'
+import { DBSchema, openDB } from 'idb/with-async-ittr'
 import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype, restorePrototypeArray } from '../../../utils-pure'
-import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
+import { createDBAccessWithAsyncUpgrade, createTransaction, IDBPSafeTransaction } from '../utils/openDB'
 
 type UpgradeKnowledge = { version: 4; data: Map<string, AESJsonWebKey> } | undefined
 const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
@@ -188,19 +188,20 @@ const db = createDBAccessWithAsyncUpgrade<PostDB, UpgradeKnowledge>(
 )
 export const PostDBAccess = db
 
-type PostTransaction = IDBPTransaction<PostDB, ['post']>
+type PostReadOnlyTransaction = IDBPSafeTransaction<PostDB, ['post'], 'readonly'>
+type PostReadWriteTransaction = IDBPSafeTransaction<PostDB, ['post'], 'readwrite'>
 
-export async function createPostDB(record: PostRecord, t?: PostTransaction) {
-    t = t || (await db()).transaction('post', 'readwrite')
+export async function createPostDB(record: PostRecord, t?: PostReadWriteTransaction) {
+    t ||= createTransaction(await db(), 'readwrite')('post')
     const toSave = postToDB(record)
     await t.objectStore('post').add(toSave)
 }
 export async function updatePostDB(
     updateRecord: Partial<PostRecord> & Pick<PostRecord, 'identifier'>,
     mode: 'append' | 'override',
-    t?: PostTransaction,
+    t?: PostReadWriteTransaction,
 ): Promise<void> {
-    t = t || (await db()).transaction('post', 'readwrite')
+    t ||= createTransaction(await db(), 'readwrite')('post')
     const emptyRecord: PostRecord = {
         identifier: updateRecord.identifier,
         recipients: new IdentifierMap(new Map()),
@@ -233,24 +234,20 @@ export async function updatePostDB(
     const nextRecordInDBType = postToDB(nextRecord)
     await t.objectStore('post').put(nextRecordInDBType)
 }
-export async function createOrUpdatePostDB(record: PostRecord, mode: 'append' | 'override', t?: PostTransaction) {
-    t = t || (await db()).transaction('post', 'readwrite')
-    if (await t.objectStore('post').get(record.identifier.toText())) return updatePostDB(record, mode, t)
-    else return createPostDB(record, t)
-}
-export async function queryPostDB(record: PostIVIdentifier, t?: PostTransaction): Promise<PostRecord | null> {
-    t = t || (await db()).transaction('post')
+
+export async function queryPostDB(record: PostIVIdentifier, t?: PostReadOnlyTransaction): Promise<PostRecord | null> {
+    t ||= createTransaction(await db(), 'readonly')('post')
     const result = await t.objectStore('post').get(record.toText())
     if (result) return postOutDB(result)
     return null
 }
 export async function queryPostsDB(
     query: string | ((data: PostRecord, id: PostIVIdentifier) => boolean),
-    t?: PostTransaction,
+    t?: PostReadOnlyTransaction,
 ): Promise<PostRecord[]> {
-    t = t || (await db()).transaction('post')
+    t ||= createTransaction(await db(), 'readonly')('post')
     const selected: PostRecord[] = []
-    for await (const { value } of t.store) {
+    for await (const { value } of t.objectStore('post')) {
         const idResult = Identifier.fromString(value.identifier, PostIVIdentifier)
         if (idResult.err) {
             console.warn(idResult.val.message)
@@ -265,10 +262,6 @@ export async function queryPostsDB(
         }
     }
     return selected
-}
-export async function deletePostCryptoKeyDB(record: PostIVIdentifier, t?: PostTransaction) {
-    t = t || (await db()).transaction('post', 'readwrite')
-    await t.objectStore('post').delete(record.toText())
 }
 
 /**

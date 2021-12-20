@@ -1,4 +1,3 @@
-import { ProfileIdentifier, PersonaIdentifier, ECKeyIdentifierFromJsonWebKey } from '../type'
 import type { Profile, Persona } from './types'
 import {
     ProfileRecord,
@@ -18,20 +17,23 @@ import {
     updatePersonaDB,
     createOrUpdatePersonaDB,
     queryProfilesPagedDB,
-} from './Persona.db'
-import { IdentifierMap } from '../IdentifierMap'
+} from '../../../background/database/persona/db'
 import { queryAvatarDataURL } from '../../../background/database/avatar-cache/avatar'
 import {
     generate_ECDH_256k1_KeyPair_ByMnemonicWord,
     recover_ECDH_256k1_KeyPair_ByMnemonicWord,
 } from '../../utils/mnemonic-code'
 import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGenerate'
-import type {
-    EC_Public_JsonWebKey,
-    AESJsonWebKey,
-    EC_Private_JsonWebKey,
-} from '../../modules/CryptoAlgorithm/interfaces/utils'
 import { validateMnemonic } from 'bip39'
+import {
+    ProfileIdentifier,
+    type PersonaIdentifier,
+    IdentifierMap,
+    type EC_Public_JsonWebKey,
+    type EC_Private_JsonWebKey,
+    type AESJsonWebKey,
+    ECKeyIdentifierFromJsonWebKey,
+} from '@masknet/shared-base'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }

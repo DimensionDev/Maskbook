@@ -10,9 +10,9 @@ import {
 } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
 
-export function toReceipt(status: '0' | '1', transaction: Transaction): TransactionReceipt {
+export function toReceipt(status: true | string, transaction: Transaction): TransactionReceipt {
     return {
-        status: status === '1',
+        status: ['1', '0x1', true].includes(status),
         transactionHash: transaction.hash,
         transactionIndex: transaction.transactionIndex ?? 0,
         blockHash: transaction.blockHash ?? '',
@@ -51,14 +51,6 @@ export function getPayloadConfig(payload: JsonRpcPayload) {
     return config
 }
 
-export function getPayloadId(payload: JsonRpcPayload) {
-    const config = getPayloadConfig(payload)
-    if (!config) return ''
-    const { from, to, data = '0x0', value = '0x0' } = config
-    if (!from || !to) return ''
-    return sha3([from, to, data, value].join('_')) ?? ''
-}
-
 export function getPayloadFrom(payload: JsonRpcPayload) {
     const config = getPayloadConfig(payload)
     return config?.from as string | undefined
@@ -69,10 +61,18 @@ export function getPayloadTo(payload: JsonRpcPayload) {
     return config?.to as string | undefined
 }
 
+export function getPayloadId(payload: JsonRpcPayload) {
+    const config = getPayloadConfig(payload)
+    if (!config) return ''
+    const { from, to, data = '0x0', value = '0x0' } = config
+    if (!from || !to) return ''
+    return sha3([from, to, data, value].join('_')) ?? ''
+}
+
 export function getTransactionId(transaction: Transaction | null) {
     if (!transaction) return ''
     const { from, to, input, value } = transaction
-    return sha3([from, to, input || '0x0', toHex(value || '0x0')].join('_')) ?? ''
+    return sha3([from, to, input || '0x0', toHex(value) || '0x0'].join('_')) ?? ''
 }
 
 export function getReceiptStatus(receipt: TransactionReceipt | null) {
