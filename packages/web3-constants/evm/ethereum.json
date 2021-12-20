@@ -1,6 +1,6 @@
 {
     "ERC20_TOKEN_LISTS": {
-        "Mainnet": ["https://tokens.r2d2.to/latest/1/tokens.json", "https://api.1inch.exchange/v3.0/1/tokens"],
+        "Mainnet": ["https://tokens.r2d2.to/latest/1/tokens.json"],
         "Ropsten": ["https://tokens.r2d2.to/latest/3/tokens.json"],
         "Rinkeby": ["https://tokens.r2d2.to/latest/4/tokens.json"],
         "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
