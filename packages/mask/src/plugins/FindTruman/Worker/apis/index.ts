@@ -144,5 +144,7 @@ export function fetchUserParticipatedStoryStatus(address: string): Promise<UserS
 export function fetchClue(clueId: string, address: string): Promise<DecryptedClue> {
     return request<DecryptedClue>(urlcat(FIND_TRUMAN_API_PREFIX, '/clues/:clueId', { clueId, uaddr: address }), {
         method: 'GET',
+    }).catch((error) => {
+        throw new Error(error.code)
     })
 }

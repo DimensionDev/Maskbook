@@ -4,7 +4,7 @@ import { useContext } from 'react'
 import { fetchClue } from '../Worker/apis'
 import { FindTrumanContext } from '../context'
 import NoNftCard from './NoNftCard'
-import type { DecryptedClue, FindTrumanI18nFunction } from '../types'
+import type { FindTrumanI18nFunction } from '../types'
 import { EncryptionErrorType } from '../types'
 import { useAsync } from 'react-use'
 
@@ -33,7 +33,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-const getEncryptionError = (t: FindTrumanI18nFunction, errorCode: EncryptionErrorType) => {
+const getEncryptionError = (t: FindTrumanI18nFunction, errorCode: string) => {
     switch (errorCode) {
         case EncryptionErrorType.INSUFFICIENT_NFT:
             return t('plugin_find_truman_decrypt_102')
@@ -54,11 +54,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
     const { address, t } = useContext(FindTrumanContext)
 
     const { value: clue, error } = useAsync(async () => {
-        let clue: DecryptedClue = { decrypted: false }
-        if (!!clueId) {
-            clue = await fetchClue(clueId, address)
-        }
-        return clue
+        return clueId ? fetchClue(clueId, address) : { decrypted: false, condition: undefined, content: undefined }
     }, [clueId])
 
     return (
@@ -75,7 +71,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                 </>
             )}
             {clue?.condition && <NoNftCard conditions={[clue.condition]} />}
-            {error && <Alert severity="info">{getEncryptionError(t, (error as any).code)}</Alert>}
+            {error && <Alert severity="info">{getEncryptionError(t, error.message)}</Alert>}
         </CardContent>
     )
 }

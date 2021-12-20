@@ -1,23 +1,22 @@
 export class FindTrumanI18n {
     nestingPrefix = '{{'
     nestingSuffix = '}}'
-    nestingRegexpStr = `${this.nestingPrefix}(.+?)${this.nestingSuffix}`
-    nestingRegexp = new RegExp(this.nestingRegexpStr, 'g')
+    nestingPattern = new RegExp(`${this.nestingPrefix}(.+?)${this.nestingSuffix}`, 'g')
 
-    locales: { [id: string]: string } = {}
+    locales: Record<string, string> = {}
 
-    constructor(locales: { [id: string]: string }) {
+    constructor(locales: Record<string, string>) {
         this.locales = locales
     }
 
     t = (id: string, options?: { [key: string]: string | number }) => {
         let key = this.locales[id]
         if (!!key && options && Object.keys(options).length > 0) {
-            const m = key.match(this.nestingRegexp)
+            const m = key.match(this.nestingPattern)
             if (m && m.length > 0) {
                 for (const k in options) {
-                    const regexpStr = `${this.nestingPrefix}${k}${this.nestingSuffix}`
-                    key = key.replaceAll(regexpStr, `${options[k]}`)
+                    const pattern = new RegExp(`${this.nestingPrefix}${k}${this.nestingSuffix}`)
+                    key = key.replaceAll(pattern, `${options[k]}`)
                 }
             }
         }

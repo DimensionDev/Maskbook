@@ -99,15 +99,6 @@ export default function OptionsCard(props: OptionsViewProps) {
     const parentRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
-        checkChain()
-    }, [chainId, userStatus])
-
-    useEffect(() => {
-        setChoice(userStatus ? userStatus.choice : -1)
-        setSelected(userStatus ? userStatus.choice !== -1 : true)
-    }, [userStatus])
-
-    const checkChain = () => {
         setError('')
         setUnmeetCondition([])
         if (userStatus) {
@@ -120,7 +111,12 @@ export default function OptionsCard(props: OptionsViewProps) {
             setUnmeetCondition(userStatus ? userStatus.notMeetConditions : [])
             userStatus?.notMeetConditions.length > 0 && setError('insufficient-nft')
         }
-    }
+    }, [chainId, userStatus])
+
+    useEffect(() => {
+        setChoice(userStatus ? userStatus.choice : -1)
+        setSelected(userStatus ? userStatus.choice !== -1 : true)
+    }, [userStatus])
 
     const checkCondition = async () => {
         setError('')

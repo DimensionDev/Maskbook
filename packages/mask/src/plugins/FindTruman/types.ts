@@ -54,7 +54,7 @@ export interface FindTrumanConst {
     }[]
     discoveryUrl: string
     discoveryLabel: string
-    locales: { [id: string]: string }
+    locales: Record<string, string>
     t: FindTrumanI18nFunction
 }
 
@@ -155,6 +155,6 @@ export interface DecryptedClue {
 }
 
 export enum EncryptionErrorType {
-    INSUFFICIENT_NFT = 102,
-    ERROR_CLUE_ID = 1004,
+    INSUFFICIENT_NFT = '102',
+    ERROR_CLUE_ID = '1004',
 }
