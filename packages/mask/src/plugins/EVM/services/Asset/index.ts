@@ -28,7 +28,7 @@ export interface ListOption {
     provider: NonFungibleAssetProvider
 }
 
-export interface HistoryOtpion {
+export interface HistoryOption {
     address: string
     tokenId: string
     chainId: ChainId
@@ -86,7 +86,7 @@ export async function getListings(options: ListOption) {
     }
 }
 
-export async function getHistory(options: HistoryOtpion) {
+export async function getHistory(options: HistoryOption) {
     const { address, tokenId, chainId, provider, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
