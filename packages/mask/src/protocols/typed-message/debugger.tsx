@@ -27,8 +27,8 @@ class TypedMessageFormatter {
         return (
             <div style={{ maxWidth: '95vw', overflow: 'break-word' }}>
                 <ol>
-                    {obj.items.map((x) => (
-                        <li>{display(x)}</li>
+                    {obj.items.map((x, i) => (
+                        <li key={i}>{display(x)}</li>
                     ))}
                 </ol>
             </div>
@@ -43,8 +43,8 @@ class TypedMessageFormatter {
                 </tr>
                 {Object.keys(obj)
                     .filter((x) => x !== 'type' && x !== 'meta' && x !== 'version')
-                    .map((x) => (
-                        <tr>
+                    .map((x, i) => (
+                        <tr key={i}>
                             <td>{x}</td>
                             {display((obj as any)[x])}
                         </tr>
