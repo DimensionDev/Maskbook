@@ -54,7 +54,6 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             padding: '0 !important',
         },
-
         body: {
             flex: 1,
             overflow: 'auto',
