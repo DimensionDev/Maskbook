@@ -8,12 +8,12 @@ const Encryption = join(__dirname, '../../../encryption')
 
 const CopyShared = () => src('./src/**/*.png', { cwd: Shared }).pipe(dest('./dist', { cwd: Shared }))
 const CopyFlow = () => src('./src/**/*.png', { cwd: Flow }).pipe(dest('./dist', { cwd: Flow }))
-const CoypEncryption = () => src('./src/**/*.png', { cwd: Encryption }).pipe(dest('./dist', { cwd: Encryption }))
+const ColfEncryption = () => src('./src/**/*.png', { cwd: Encryption }).pipe(dest('./dist', { cwd: Encryption }))
 
-export const resourceCopy: TaskFunction = parallel(CopyShared, CopyFlow, CoypEncryption)
+export const resourceCopy: TaskFunction = parallel(CopyShared, CopyFlow, ColfEncryption)
 export function resourceCopyWatch() {
     watch('./src/**/*.png', { cwd: Flow }, CopyFlow)
-    watch('./src/**/*.png', { cwd: Encryption }, CoypEncryption)
+    watch('./src/**/*.png', { cwd: Encryption }, ColfEncryption)
     return watch('./src/**/*.png', { cwd: Shared }, CopyShared)
 }
 watchTask(resourceCopy, resourceCopyWatch, 'resource-copy', 'Copy resources')
