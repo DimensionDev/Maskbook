@@ -23,3 +23,5 @@ export {
     type DecryptProgress,
     type DecryptSuccess,
 } from './encryption'
+
+export { TwitterDecoder, __TwitterEncoder } from './social-network-encode-decode'

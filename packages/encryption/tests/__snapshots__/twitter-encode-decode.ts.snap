@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Can decode Twitter text payload: Twitter example 1`] = `Some("🎼4/4|mFXgbxPDrAD6PYRHWJW5IVlHObuFYs/LUyd08kkUkKimTx4opjHXjrgorrsyTPidL0lkeqdXnW3EzEacdlPJChko+Q5Wy113UMHYy1aV1Wheqwy/vM3PLMVaoKW/HyIL/SjJtim75bWMSHmj+vzMYwV59jLJqlTjJqhz5ObdZhAsWwRJGYIzEkg+|SKlWOvMpyF9T1jL2pr95kA==|ehROC4d3QudYHEABcBTpSuxLvxM=|_|Aq/bVWAKvodJuURGk3enjE1gUiu2SELM8IIKIlNGqOWM|1|dHdpdHRlci5jb20vd2lsbHlvbnRvdXI=:||")`;

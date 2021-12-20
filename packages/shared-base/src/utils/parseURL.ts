@@ -1,6 +1,8 @@
 import parser from 'anchorme'
 export function parseURL(text: string) {
-    return parser
+    const lib = (parser as any as { default: typeof parser }).default || parser
+    // CJS-ESM compatibility
+    return lib
         .list(text)
         .map((x) => x.string)
         .filter((y) => {

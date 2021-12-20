@@ -36,10 +36,16 @@ export interface DecryptionContext {
 }
 export type SocialNetworkEncodedPayload =
     | { type: 'text'; text: string }
-    | { type: 'image'; text: string }
-    | { type: 'text'; text: string }
+    | { type: 'image'; image: Uint8Array }
+    | { type: 'image-url'; url: string }
 
-export async function* decryptionWithSocialNetworkDecoding(context: DecryptionContext) {}
+export async function* decryptionWithSocialNetworkDecoding(
+    encoded: SocialNetworkEncodedPayload,
+    context: DecryptionContext,
+) {
+    let decoded!: string | Uint8Array
+    return yield* decryption(decoded, context)
+}
 export async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
     const { currentSocialNetwork, postURL } = context
     let { currentProfile, authorHint } = context
