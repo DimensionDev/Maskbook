@@ -89,7 +89,7 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 12,
             marginRight: theme.spacing(0.5),
             maxHeight: '3.5rem',
-            overflow: 'auto',
+            overflow: 'hidden',
             wordBreak: 'break-word',
         },
         description: {
