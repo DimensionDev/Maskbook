@@ -10,18 +10,15 @@ const tokenCache = new Map<'token', { token: string; expiration: number }>()
 async function getToken() {
     const token = tokenCache.get('token')
     if (token && Date.now() <= token.expiration) return token.token
-
-    const response = await fetch(
-        urlcat(NFTSCAN_URL, '/gw/token', {
-            apiKey: NFTSCAN_ID,
-            apiSecret: NFTSCAN_SECRET,
-        }),
-        {
-            mode: 'cors',
-        },
-    )
-
-    const { data }: { data: { accessToken: string; expiration: number } } = await response.json()
+    const requestPath = urlcat(NFTSCAN_URL, '/gw/token', {
+        apiKey: NFTSCAN_ID,
+        apiSecret: NFTSCAN_SECRET,
+    })
+    const response = await fetch(requestPath, { mode: 'cors' })
+    interface Payload {
+        data: { accessToken: string; expiration: number }
+    }
+    const { data }: Payload = await response.json()
     tokenCache.set('token', {
         token: data.accessToken,
         expiration: addSeconds(Date.now(), data.expiration).getTime(),
@@ -44,12 +41,7 @@ async function fetchAsset(path: string, config: Partial<RequestInit> = {}) {
 }
 
 function createERC721ContractDetailedFromAssetContract(asset: NFTScanAsset) {
-    return createERC721ContractDetailed(
-        ChainId.Mainnet,
-        asset.trade_contract,
-        'unknown name',
-        asset.trade_symbol ?? 'unknown symbol',
-    )
+    return createERC721ContractDetailed(ChainId.Mainnet, asset.trade_contract, undefined, asset.trade_symbol)
 }
 
 function createERC721TokenAsset(asset: NFTScanAsset) {

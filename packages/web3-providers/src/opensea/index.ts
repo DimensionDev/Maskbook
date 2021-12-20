@@ -15,35 +15,28 @@ import {
     EthereumTokenType,
 } from '@masknet/web3-shared-evm'
 
-const OpenSeaAccountURL = 'https://opensea.io/accounts/'
+const OPENSEA_ACCOUNT_URL = 'https://opensea.io/accounts/'
 const OPENSEA_API_KEY = 'c38fe2446ee34f919436c32db480a2e3'
-const OpenSea_API_URL = 'https://api.opensea.io'
+const OPENSEA_API_URL = 'https://api.opensea.io'
 
 async function fetchAsset<T>(url: string, chainId: ChainId) {
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId)) return
-
-    const response = await fetch(url, {
+    const response = await fetch(urlcat(OPENSEA_API_URL, url), {
         method: 'GET',
         mode: 'cors',
-        headers: {
-            'x-api-key': OPENSEA_API_KEY,
-        },
+        headers: { 'x-api-key': OPENSEA_API_KEY },
     })
-
     return response.json() as Promise<T>
 }
 
 export async function getNFTsByPagination(from: string, opts: { chainId?: ChainId; page?: number; size?: number }) {
     const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
-
-    const asset = await fetchAsset<{ assets: OpenSeaResponse[] }>(
-        urlcat(OpenSea_API_URL, '/api/v1/assets', {
-            owner: from,
-            offset: opts.page,
-            limit: opts.size,
-        }),
-        chainId,
-    )
+    const requestPath = urlcat('/api/v1/assets', {
+        owner: from,
+        offset: page,
+        limit: size,
+    })
+    const asset = await fetchAsset<{ assets: OpenSeaResponse[] }>(requestPath, chainId)
     if (!asset) return []
 
     return asset.assets
@@ -82,18 +75,13 @@ function createERC721TokenAsset(
 }
 
 async function _getAsset(address: string, tokenId: string, chainId: ChainId) {
-    return fetchAsset<OpenSeaResponse>(
-        urlcat(OpenSea_API_URL, `/api/v1/asset/:address/:tokenId`, { address, tokenId }),
-        chainId,
-    )
+    const requestPath = urlcat(`/api/v1/asset/:address/:tokenId`, { address, tokenId })
+    return fetchAsset<OpenSeaResponse>(requestPath, chainId)
 }
 
 export async function getContract(address: string, chainId: ChainId) {
-    const assetContract = await fetchAsset<OpenSeaAssetContract>(
-        urlcat(OpenSea_API_URL, '/api/v1/asset_contract/:address', { address }),
-        chainId,
-    )
-
+    const requestPath = urlcat('/api/v1/asset_contract/:address', { address })
+    const assetContract = await fetchAsset<OpenSeaAssetContract>(requestPath, chainId)
     return createERC721ContractDetailedAsset(address, chainId, assetContract)
 }
 
@@ -133,11 +121,11 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NFTAsset {
         current_symbol: desktopOrder?.payment_token_contract?.symbol ?? 'ETH',
         owner: {
             ...asset.owner,
-            link: `${OpenSeaAccountURL}${asset.owner?.user?.username ?? asset.owner.address ?? ''}`,
+            link: `${OPENSEA_ACCOUNT_URL}${asset.owner?.user?.username ?? asset.owner.address ?? ''}`,
         },
         creator: {
             ...asset.creator,
-            link: `${OpenSeaAccountURL}${asset.creator?.user?.username ?? asset.creator?.address ?? ''}`,
+            link: `${OPENSEA_ACCOUNT_URL}${asset.creator?.user?.username ?? asset.creator?.address ?? ''}`,
         },
         token_id: asset.token_id,
         token_address: asset.token_address,
@@ -161,15 +149,13 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NFTAsset {
         ).filter((x) => x.type === EthereumTokenType.ERC20),
         slug: asset.collection.slug,
         desktopOrder,
-        top_ownerships: asset.top_ownerships.map((x) => ({
+        top_ownerships: asset.top_ownerships.map((x): { owner: NFTAssetOwner } => ({
             owner: {
                 address: x.owner.address,
                 profile_img_url: x.owner.profile_img_url,
-                user: {
-                    username: x.owner.user?.username ?? '',
-                },
+                user: { username: x.owner.user?.username ?? '' },
                 link: '',
-            } as NFTAssetOwner,
+            },
         })),
         collection: asset.collection as unknown as AssetCollection,
         response_: asset as any,
@@ -184,29 +170,26 @@ export async function getAsset(address: string, tokenId: string, chainId: ChainI
 }
 
 export async function getHistory(address: string, tokenId: string, chainId: ChainId, page: number, size: number) {
-    const fetchResponse = await (
-        await fetch(
-            urlcat(OpenSea_API_URL, '/api/v1/events', {
-                asset_contract_address: address,
-                token_id: tokenId,
-                offset: page,
-                limit: size,
-            }),
-            {
-                mode: 'cors',
-                headers: {
-                    'x-api-key': OPENSEA_API_KEY,
-                },
-            },
-        )
-    ).json()
-
-    const { asset_events }: { asset_events: OpenSeaAssetEvent[] } = fetchResponse
-
+    const requestPath = urlcat(OPENSEA_API_URL, '/api/v1/events', {
+        asset_contract_address: address,
+        token_id: tokenId,
+        offset: page,
+        limit: size,
+    })
+    const response = await fetch(requestPath, {
+        mode: 'cors',
+        headers: { 'x-api-key': OPENSEA_API_KEY },
+    })
+    interface Payload {
+        asset_events: OpenSeaAssetEvent[]
+    }
+    const { asset_events }: Payload = await response.json()
     return asset_events.map(createNFTHistory)
 }
 
 function createNFTHistory(event: OpenSeaAssetEvent): NFTHistory {
+    const makeLink = (account?: OpenSeaAssetEvent['seller']) =>
+        urlcat(OPENSEA_ACCOUNT_URL, '/:address', { address: account?.user?.username ?? account?.address })
     const accountPair =
         event.event_type === 'successful'
             ? {
@@ -214,15 +197,13 @@ function createNFTHistory(event: OpenSeaAssetEvent): NFTHistory {
                       username: event.seller?.user?.username,
                       address: event.seller?.address,
                       imageUrl: event.seller?.profile_img_url,
-                      link: `${OpenSeaAccountURL}${event.seller?.user?.username ?? event.seller?.address}`,
+                      link: makeLink(event.seller),
                   },
                   to: {
                       username: event.winner_account?.user?.username,
                       address: event.winner_account?.address,
                       imageUrl: event.winner_account?.profile_img_url,
-                      link: `${OpenSeaAccountURL}${
-                          event.winner_account?.user?.username ?? event.winner_account?.address
-                      }`,
+                      link: makeLink(event.winner_account),
                   },
               }
             : {
@@ -230,13 +211,13 @@ function createNFTHistory(event: OpenSeaAssetEvent): NFTHistory {
                       username: event.from_account?.user?.username,
                       address: event.from_account?.address,
                       imageUrl: event.from_account?.profile_img_url,
-                      link: `${OpenSeaAccountURL}${event.from_account?.user?.username ?? event.from_account?.address}`,
+                      link: makeLink(event.from_account),
                   },
                   to: {
                       username: event.to_account?.user?.username,
                       address: event.to_account?.address,
                       imageUrl: event.to_account?.profile_img_url,
-                      link: `${OpenSeaAccountURL}${event.to_account?.user?.username ?? event.to_account?.address}`,
+                      link: makeLink(event.to_account),
                   },
               }
     return {
@@ -266,27 +247,24 @@ async function fetchOrders(
     page: number,
     size: number,
 ) {
-    const response = await fetch(
-        urlcat(OpenSea_API_URL, '/wyvern/v1/orders', {
-            asset_contract_address: address,
-            token_id: tokenId,
-            side,
-            offset: page,
-            limit: size,
-        }),
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                Accept: 'application/json',
-                'x-api-key': OPENSEA_API_KEY,
-            },
-        },
-    )
-
+    const requestPath = urlcat(OPENSEA_API_URL, '/wyvern/v1/orders', {
+        asset_contract_address: address,
+        token_id: tokenId,
+        side,
+        offset: page,
+        limit: size,
+    })
+    const response = await fetch(requestPath, {
+        method: 'GET',
+        mode: 'cors',
+        headers: { Accept: 'application/json', 'x-api-key': OPENSEA_API_KEY },
+    })
     if (!response.ok) return []
-    const { orders = [] }: { orders: AssetOrder[] } = await response.json()
-    return orders
+    interface Payload {
+        orders: AssetOrder[]
+    }
+    const payload: Payload = await response.json()
+    return payload.orders ?? []
 }
 
 export async function getOrders(
@@ -301,20 +279,16 @@ export async function getOrders(
 }
 
 export async function getCollections(address: string, opts: { chainId: ChainId; page?: number; size?: number }) {
-    const { collections }: { collections: OpenSeaCollection[] } = await (
-        await fetch(
-            urlcat(OpenSea_API_URL, '/api/v1/collections', {
-                offset: opts.page,
-                limit: opts.size,
-            }),
-            {
-                headers: {
-                    'x-api-key': OPENSEA_API_KEY,
-                },
-            },
-        )
-    ).json()
-
+    const requestPath = urlcat(OPENSEA_API_URL, '/api/v1/collections', {
+        address,
+        offset: opts.page,
+        limit: opts.size,
+    })
+    const response = await fetch(requestPath, { headers: { 'x-api-key': OPENSEA_API_KEY } })
+    interface Payload {
+        collections: OpenSeaCollection[]
+    }
+    const { collections }: Payload = await response.json()
     return collections.map((x) => ({
         name: x.name,
         image: x.image_url || undefined,

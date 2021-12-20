@@ -16,6 +16,7 @@ import { FormattedBalance } from '@masknet/shared'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
 import type { AssetOrder } from '@masknet/web3-providers'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -68,7 +69,7 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
 
     const link = useMemo(() => {
         return provider === NonFungibleAssetProvider.OPENSEA
-            ? `https://opensea.io/accounts/${address}`
+            ? urlcat('https://opensea.io/accounts/:address', { address })
             : order.maker_account?.link
     }, [order, provider])
 

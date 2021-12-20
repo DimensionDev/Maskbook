@@ -9,6 +9,7 @@ import {
 import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
 import type { AssetEvent } from './types'
 import { multipliedBy } from '@masknet/web3-shared-base'
+import { WyvernSchemaName } from 'opensea-js/lib/types'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
@@ -80,4 +81,15 @@ export function getLastSalePrice(lastSale: AssetEvent | null) {
     if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
     const price = formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
     return price
+}
+
+export function isWyvernSchemaName(name: unknown): name is WyvernSchemaName {
+    const schemas: unknown[] = [
+        WyvernSchemaName.ERC20,
+        WyvernSchemaName.ERC721,
+        WyvernSchemaName.ERC1155,
+        WyvernSchemaName.LegacyEnjin,
+        WyvernSchemaName.ENSShortNameAuction,
+    ]
+    return schemas.includes(name)
 }

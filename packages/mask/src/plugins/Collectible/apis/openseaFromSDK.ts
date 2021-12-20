@@ -18,14 +18,11 @@ function createExternalProvider() {
 }
 
 async function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
-    return new OpenSeaPort(
-        createExternalProvider(),
-        {
-            networkName: resolveOpenSeaNetwork(chainId),
-            apiKey: OpenSeaAPI_Key,
-        },
-        console.log,
-    )
+    const config = {
+        networkName: resolveOpenSeaNetwork(chainId),
+        apiKey: OpenSeaAPI_Key,
+    }
+    return new OpenSeaPort(createExternalProvider(), config, console.log)
 }
 
 async function createOpenSeaPort(chainId?: ChainId) {

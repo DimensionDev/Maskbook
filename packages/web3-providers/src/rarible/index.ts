@@ -14,15 +14,9 @@ import {
     EthereumTokenType,
     FungibleTokenDetailed,
 } from '@masknet/web3-shared-evm'
-import {
-    RaribleUserURL,
-    RaribleRopstenUserURL,
-    RaribleMainnetURL,
-    RaribleMainnetAPI_URL,
-    RaribleChainURL,
-} from './constants'
+import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL } from './constants'
 import urlcat from 'urlcat'
-import { AssetOrder, NFTAsset, NFTAssetOwner, NFTHistory, OrderSide } from '../types'
+import { AssetOrder, NFTAsset, NFTHistory, OrderSide } from '../types'
 import { compact, first } from 'lodash-unified'
 import { toRaribleImage } from './helpers'
 
@@ -34,19 +28,17 @@ export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainn
     RaribleUserURL,
 )
 
-export async function fetchFromRarible<T>(root: string, subPath: string, config = {} as RequestInit) {
-    const response = await (
-        await fetch(urlcat(root, subPath), {
-            mode: 'cors',
-            ...config,
-        })
-    ).json()
+export async function fetchFromRarible<T>(path: string, init?: RequestInit) {
+    const response = await fetch(urlcat(RaribleMainnetURL, path), {
+        mode: 'cors',
+        ...init,
+    })
 
-    return response as T
+    return response.json() as Promise<T>
 }
 
 export async function getProfilesFromRarible(addresses: (string | undefined)[]) {
-    return fetchFromRarible<RaribleProfileResponse[]>(RaribleMainnetURL, 'profiles/list', {
+    return fetchFromRarible<RaribleProfileResponse[]>('/profiles/list', {
         method: 'POST',
         body: JSON.stringify(addresses),
         headers: {
@@ -56,25 +48,19 @@ export async function getProfilesFromRarible(addresses: (string | undefined)[]) 
 }
 
 export async function getOffers(tokenAddress: string, tokenId: string, chainId: ChainId): Promise<AssetOrder[]> {
-    const orders = await fetchFromRarible<RaribleOfferResponse[]>(
-        RaribleMainnetURL,
-        `items/${tokenAddress}:${tokenId}/offers`,
-        {
-            method: 'POST',
-            body: JSON.stringify({ size: 20 }),
-            headers: {
-                'content-type': 'application/json',
-            },
-        },
-    )
+    const requestPath = urlcat('/items/:tokenAddress::tokenId/offers', { tokenAddress, tokenId })
+    const orders = await fetchFromRarible<RaribleOfferResponse[]>(requestPath, {
+        method: 'POST',
+        body: JSON.stringify({ size: 20 }),
+        headers: { 'content-type': 'application/json' },
+    })
     const profiles = await getProfilesFromRarible(orders.map((item) => item.maker))
-    return orders.map((order) => {
+    return orders.map((order): AssetOrder => {
         const ownerInfo = profiles.find((owner) => owner.id === order.maker)
         return {
             created_time: order.updateDate,
             current_price: order.buyPriceEth,
             current_bounty: order.fee,
-
             payment_token: order.token,
             listing_time: 0,
             side: OrderSide.Buy,
@@ -83,22 +69,21 @@ export async function getOffers(tokenAddress: string, tokenId: string, chainId: 
             order_hash: order.signature,
             approved_on_chain: false,
             maker_account: {
-                user: {
-                    username: ownerInfo?.name ?? '',
-                },
+                user: { username: ownerInfo?.name ?? '' },
                 address: ownerInfo?.id ?? '',
                 profile_img_url: toRaribleImage(ownerInfo?.image),
                 link: `${resolveRaribleUserNetwork(chainId as number)}${ownerInfo?.id ?? ''}`,
-            } as NFTAssetOwner,
-        } as AssetOrder
+            },
+        }
     })
 }
 
 export async function getListings(tokenAddress: string, tokenId: string, chainId: ChainId): Promise<AssetOrder[]> {
-    const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, `items/${tokenAddress}:${tokenId}/ownerships`)
+    const requestPath = urlcat('/items/:tokenAddress::tokenId/ownerships', { tokenAddress, tokenId })
+    const assets = await fetchFromRarible<Ownership[]>(requestPath)
     const listings = assets.filter((x) => x.selling)
     const profiles = await getProfilesFromRarible(listings.map((x) => x.owner))
-    return listings.map((asset) => {
+    return listings.map((asset): AssetOrder => {
         const ownerInfo = profiles.find((owner) => owner.id === asset.owner)
         return {
             created_time: asset.date,
@@ -111,13 +96,11 @@ export async function getListings(tokenAddress: string, tokenId: string, chainId
             expiration_time: 0,
             order_hash: asset.signature,
             maker_account: {
-                user: {
-                    username: ownerInfo?.name ?? '',
-                },
+                user: { username: ownerInfo?.name ?? '' },
                 address: ownerInfo?.id ?? '',
                 profile_img_url: toRaribleImage(ownerInfo?.image),
                 link: `${resolveRaribleUserNetwork(chainId as number)}${ownerInfo?.id ?? ''}`,
-            } as NFTAssetOwner,
+            },
         }
     })
 }
@@ -134,7 +117,7 @@ export async function getOrders(tokenAddress: string, tokenId: string, side: Ord
 }
 
 export async function getHistory(tokenAddress: string, tokenId: string): Promise<NFTHistory[]> {
-    let histories = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, `activity`, {
+    let histories = await fetchFromRarible<RaribleHistory[]>(`/activity`, {
         method: 'POST',
         body: JSON.stringify({
             // types: ['BID', 'BURN', 'BUY', 'CANCEL', 'CANCEL_BID', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],
@@ -280,21 +263,16 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): NFT
 }
 
 async function _getAsset(address: string, tokenId: string) {
-    const assetResponse = await fetchFromRarible<RaribleNFTItemMapResponse>(
-        RaribleChainURL,
-        urlcat('/v0.1/nft/items/:address::tokenId', {
-            includeMeta: true,
-            address,
-            tokenId,
-        }),
-        {
-            method: 'GET',
-            mode: 'cors',
-            headers: {
-                'content-type': 'application/json',
-            },
-        },
-    )
+    const requestPath = urlcat('/v0.1/nft/items/:address::tokenId', {
+        includeMeta: true,
+        address,
+        tokenId,
+    })
+    const assetResponse = await fetchFromRarible<RaribleNFTItemMapResponse>(requestPath, {
+        method: 'GET',
+        mode: 'cors',
+        headers: { 'content-type': 'application/json' },
+    })
     return assetResponse
 }
 
@@ -310,25 +288,27 @@ export async function getNFT(tokenAddress: string, tokenId: string) {
     return createERC721TokenAsset(tokenAddress, tokenId, asset)
 }
 
-export async function getNFTsByPagination(from: string, opts: { chainId: ChainId; page?: number; size?: number }) {
-    const asset = await fetchFromRarible<{
+export async function getNFTsByPagination(
+    from: string,
+    opts: { chainId: ChainId; page?: number; size?: number },
+): Promise<ERC721TokenDetailed[]> {
+    const requestPath = urlcat('/ethereum/nft/items/byOwner', { owner: from, size: opts.size })
+    interface Payload {
         total: number
         continuation: string
         items: RaribleNFTItemMapResponse[]
-    }>(RaribleMainnetAPI_URL, urlcat('/ethereum/nft/items/byOwner', { owner: from, size: opts.size }), {})
-    if (!asset) return [] as ERC721TokenDetailed[]
-
+    }
+    const asset = await fetchFromRarible<Payload>(requestPath)
+    if (!asset) return []
     return asset.items.map((asset) => createERC721TokenAsset(asset.contract, asset.tokenId, asset))
 }
 
 export async function getCollections(address: string, opts: { chainId: ChainId; page?: number; size?: number }) {
-    const response = await fetchFromRarible<RaribleCollectibleResponse>(RaribleMainnetURL, `collections/${address}}`, {
+    const requestPath = urlcat('/collections/:address', { address })
+    const response = await fetchFromRarible<RaribleCollectibleResponse>(requestPath, {
         method: 'POST',
         body: JSON.stringify({ size: 20 }),
-        headers: {
-            'content-type': 'application/json',
-        },
+        headers: { 'content-type': 'application/json' },
     })
-
     return [response]
 }

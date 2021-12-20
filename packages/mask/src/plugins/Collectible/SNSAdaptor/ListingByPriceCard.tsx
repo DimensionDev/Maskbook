@@ -21,7 +21,7 @@ import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
 import type { useAsset } from '../../EVM/hooks'
-import { WyvernSchemaName } from 'opensea-js/lib/types'
+import { isWyvernSchemaName } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -101,15 +101,12 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
+        const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: Object.values(WyvernSchemaName).includes(
-                    asset.value.asset_contract?.schemaName as WyvernSchemaName,
-                )
-                    ? (asset.value.asset_contract?.schemaName as WyvernSchemaName)
-                    : undefined,
+                schemaName: isWyvernSchemaName(schemaName) ? schemaName : undefined,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
