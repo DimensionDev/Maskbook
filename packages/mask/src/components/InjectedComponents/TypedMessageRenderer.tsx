@@ -262,21 +262,18 @@ function parseText(string: string, allowTextEnlarge: boolean) {
         }
         // ? if rest have \n but no links
         if ((search1 < search2 && search1 !== -1) || search2 === -1) {
-            result.push(
-                <ParseText text={current.slice(0, Math.max(0, search1))} fontSize={fontSize} />,
-                <br key={current} />,
-            )
-            current = current.slice(Math.max(0, search1 + 1))
+            result.push(<ParseText text={current.slice(0, search1)} fontSize={fontSize} />, <br key={current} />)
+            current = current.slice(search1 + 1)
         }
         // ? if rest have links but no \n
         if ((search2 < search1 && search2 !== -1) || search1 === -1) {
             let link = links[0].string
             if (!links[0].protocol) link = 'http://' + link
             result.push(
-                <ParseText text={current.slice(0, Math.max(0, search2))} fontSize={fontSize} />,
+                <ParseText text={current.slice(0, search2)} fontSize={fontSize} />,
                 <ParseTextLink link={link} text={links[0].string} fontSize={fontSize} />,
             )
-            current = current.slice(Math.max(0, search2 + links[0].string.length))
+            current = current.slice(search2 + links[0].string.length)
             links.shift()
         }
     }

@@ -55,7 +55,7 @@ export function formatEthereumAddress(address: string, size = 0) {
     if (!EthereumAddress.isValid(address)) return address
     const address_ = EthereumAddress.checksumAddress(address)
     if (size === 0 || size >= 20) return address_
-    return `${address_.slice(0, Math.max(0, 2 + size))}...${address_.slice(-size)}`
+    return `${address_.slice(0, 2 + size)}...${address_.slice(-size)}`
 }
 
 export function formatDomainName(domain?: string, size = 4) {
@@ -63,19 +63,19 @@ export function formatDomainName(domain?: string, size = 4) {
     const [domainName, company] = domain.split('.')
     if (domainName.length < 13) return domain
 
-    return `${domainName.slice(0, Math.max(0, size))}...${domainName.slice(-size)}.${company}`
+    return `${domainName.slice(0, size)}...${domainName.slice(-size)}.${company}`
 }
 
 export function formatKeccakHash(hash: string, size = 0) {
     if (!/0x\w{64}/.test(hash)) return hash
     if (size === 0) return hash
-    return `${hash.slice(0, Math.max(0, 2 + size))}...${hash.slice(-size)}`
+    return `${hash.slice(0, 2 + size)}...${hash.slice(-size)}`
 }
 
 export function formatNumberString(str: string, size = 0) {
     if (!/\d+/.test(str)) return str
     if (size === 0) return str
-    return `${str.slice(0, Math.max(0, size))}...${str.slice(-size)}`
+    return `${str.slice(0, size)}...${str.slice(-size)}`
 }
 
 export function formatAmountPrecision(

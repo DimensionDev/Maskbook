@@ -84,7 +84,7 @@ export function Row({ event, chainId }: Props) {
             </TableCell>
             <TableCell>
                 <Typography className={classes.content} variant="body2">
-                    {event.createTime.slice(0, Math.max(0, event.createTime.length - 3))}
+                    {event.createTime.slice(0, event.createTime.length - 3)}
                 </Typography>
             </TableCell>
             <TableCell>
