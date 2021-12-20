@@ -44,16 +44,16 @@ export interface TokenIconProps extends withClasses<'icon'> {
 }
 
 export function TokenIcon(props: TokenIconProps) {
-    const { address, logoURI, name, chainId, AvatarProps, classes } = props
-    const _chainId = useChainId()
+    const currentChainId = useChainId()
+    const { address, logoURI, name, chainId = currentChainId, AvatarProps, classes } = props
     let _logoURI = logoURI
 
     if (!logoURI && isSameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS, formatEthereumAddress(address))) {
-        const nativeToken = getChainDetailed(chainId ?? _chainId)
+        const nativeToken = getChainDetailed(chainId)
         _logoURI = nativeToken?.nativeCurrency.logoURI
     }
 
-    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId ?? _chainId)
+    const { TOKEN_ASSET_BASE_URI } = useTokenAssetBaseURLConstants(chainId)
     const fallbackLogos = getFallbackIcons(address, TOKEN_ASSET_BASE_URI ?? [])
 
     const tokenBlockie = useBlockie(address)
@@ -86,7 +86,7 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
 
     return (
         <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
-            {name?.substr(0, 1).toLocaleUpperCase()}
+            {name?.slice(0, 1).toLocaleUpperCase()}
         </Avatar>
     )
 })

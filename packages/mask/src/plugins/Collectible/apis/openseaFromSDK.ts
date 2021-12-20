@@ -17,7 +17,7 @@ function createExternalProvider() {
     }
 }
 
-async function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
+function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
     const config = {
         networkName: resolveOpenSeaNetwork(chainId),
         apiKey: OpenSeaAPI_Key,
@@ -25,28 +25,28 @@ async function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby
     return new OpenSeaPort(createExternalProvider(), config, console.log)
 }
 
-async function createOpenSeaPort(chainId?: ChainId) {
+function createOpenSeaPort(chainId?: ChainId) {
     return createOpenSeaPortChain(chainId ?? currentChainIdSettings.value)
 }
 
 export async function getAssetFromSDK(tokenAddress: string, tokenId: string, chainId?: ChainId) {
-    const _chainId = chainId ?? currentChainIdSettings.value
-    return (await createOpenSeaPort(_chainId)).api.getAsset({ tokenAddress, tokenId })
+    chainId = chainId ?? currentChainIdSettings.value
+    return createOpenSeaPort(chainId).api.getAsset({ tokenAddress, tokenId })
 }
 
 export async function createBuyOrder(payload: Parameters<OpenSeaPort['createBuyOrder']>[0]) {
-    return (await createOpenSeaPort()).createBuyOrder({
+    return createOpenSeaPort().createBuyOrder({
         referrerAddress: ReferrerAddress,
         ...payload,
     })
 }
 
 export async function createSellOrder(payload: Parameters<OpenSeaPort['createSellOrder']>[0]) {
-    return (await createOpenSeaPort()).createSellOrder(payload)
+    return createOpenSeaPort().createSellOrder(payload)
 }
 
 export async function fulfillOrder(payload: Parameters<OpenSeaPort['fulfillOrder']>[0]) {
-    return (await createOpenSeaPort()).fulfillOrder({
+    return createOpenSeaPort().fulfillOrder({
         referrerAddress: ReferrerAddress,
         ...payload,
     })
