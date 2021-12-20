@@ -19,11 +19,11 @@ export interface FootprintProps {
 
 export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, username, activity }: FootprintProps) => {
     // Calc display date
-    let displayDate
+    let displayDate: string
     if (startDate && endDate) {
         displayDate = formatDate(startDate)
         if (endDate !== startDate) {
-            displayDate += ' ~ ' + formatDate(endDate)
+            displayDate += ` ~ ${formatDate(endDate)}`
         }
     } else {
         displayDate = 'No activity time'
