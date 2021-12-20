@@ -121,3 +121,12 @@ export enum SocialNetworkEnum {
     Instagram = 2,
     Minds = 3,
 }
+const SocialNetworkEnumToDomain: Record<SocialNetworkEnum, string> = {
+    [SocialNetworkEnum.Facebook]: 'facebook.com',
+    [SocialNetworkEnum.Minds]: 'minds.com',
+    [SocialNetworkEnum.Twitter]: 'twitter.com',
+    [SocialNetworkEnum.Instagram]: 'instagram.com',
+}
+export function SocialNetworkEnumToProfileDomain(x: SocialNetworkEnum) {
+    return SocialNetworkEnumToDomain[x]
+}

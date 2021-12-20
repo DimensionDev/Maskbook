@@ -5,6 +5,8 @@ import {
     DecryptProgressKind,
     PublicKeyAlgorithmEnum,
     DecryptProgress,
+    SocialNetworkEnum,
+    SocialNetworkEnumToProfileDomain,
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
@@ -25,14 +27,29 @@ export type DecryptionInfo = {
     iv?: Uint8Array
 }
 export type DecryptionProgress = DecryptProgress | DecryptionInfo
-export async function* decryption(payload: string | Uint8Array, network: string, whoAmIHint: ProfileIdentifier | null) {
-    if (whoAmIHint?.isUnknown) whoAmIHint = null
-    // TODO: read in-memory cache to avoid db lookup
+
+export interface DecryptionContext {
+    currentSocialNetwork: SocialNetworkEnum
+    currentProfile: ProfileIdentifier | null
+    authorHint: ProfileIdentifier | null
+    postURL: string | undefined
+}
+export type SocialNetworkEncodedPayload =
+    | { type: 'text'; text: string }
+    | { type: 'image'; text: string }
+    | { type: 'text'; text: string }
+
+export async function* decryptionWithSocialNetworkDecoding(context: DecryptionContext) {}
+export async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
+    const { currentSocialNetwork, postURL } = context
+    let { currentProfile, authorHint } = context
+    if (currentProfile?.isUnknown) currentProfile = null
+    if (authorHint?.isUnknown) authorHint = null
 
     const parse = await parsePayload(payload)
     if (parse.err) return null
 
-    //#region post IV
+    //#region Identify the PostIdentifier
     const iv = parse.val.encryption.unwrapOr(null)?.iv.unwrapOr(null)
     {
         if (!iv) return null
@@ -40,16 +57,24 @@ export async function* decryption(payload: string | Uint8Array, network: string,
         const info: DecryptionInfo = { type: DecryptProgressKind.Info, iv }
         yield info
     }
-    const id = new PostIVIdentifier(network, encodeArrayBuffer(iv.buffer))
+    const id = new PostIVIdentifier(
+        SocialNetworkEnumToProfileDomain(currentSocialNetwork),
+        encodeArrayBuffer(iv.buffer),
+    )
     //#endregion
+
+    // TODO: read in-memory cache to avoid db lookup
 
     //#region Store author public key
     try {
         const author = parse.unwrap().author.unwrap().unwrap()
         const authorPub = parse.unwrap().authorPublicKey.unwrap().unwrap()
-        // TODO: should only store public key when author equals to the decryption hint for security reason.
-
-        if (authorPub.algr !== PublicKeyAlgorithmEnum.secp256k1) throw new Error('TODO: support other curves')
+        if (author.equals(authorHint)) {
+            // TODO: store the public key
+            if (authorPub.algr !== PublicKeyAlgorithmEnum.secp256k1) throw new Error('TODO: support other curves')
+        } else {
+            // ! Author detected is not equal to AuthorHint. Skip store the public key because it might be a security problem.
+        }
     } catch {}
     //#endregion
 
@@ -62,10 +87,11 @@ export async function* decryption(payload: string | Uint8Array, network: string,
                     // public post will not call this function.
                     // and recipients only will be set when posting/appending recipients.
                     recipients: new IdentifierMap(new Map()),
-                    // TODO: fill this
-                    postBy: ProfileIdentifier.unknown,
-                    // TODO: fill this
-                    // url,
+                    postBy:
+                        authorHint ||
+                        parse.safeUnwrap().author.unwrapOr(null)?.unwrapOr(null) ||
+                        ProfileIdentifier.unknown,
+                    url: postURL,
                 })
             },
             hasLocalKeyOf: hasLocalKeyOf,
@@ -74,7 +100,7 @@ export async function* decryption(payload: string | Uint8Array, network: string,
                 return Array.from((await deriveAESByECDH(pub)).values())
             },
             async queryAuthorPublicKey(author, signal) {
-                // TODO: should use decrypt hint as the value
+                author ||= authorHint
                 if (!author) return null
                 const persona = await queryPersonaByProfileDB(author)
                 if (!persona) return null
@@ -111,8 +137,8 @@ export async function* decryption(payload: string | Uint8Array, network: string,
                 )
             },
             async queryPostKey_version40(iv) {
-                if (!whoAmIHint) return null
-                return GUN_queryPostKey_version40({} as GunRoot, iv, whoAmIHint)
+                if (!currentProfile) return null
+                return GUN_queryPostKey_version40({} as GunRoot, iv, currentProfile)
             },
         },
     )

@@ -4,6 +4,7 @@ export {
     AESAlgorithmEnum,
     PublicKeyAlgorithmEnum,
     SocialNetworkEnum,
+    SocialNetworkEnumToProfileDomain,
     type AESKey,
     type AsymmetryCryptoKey,
     type Signature,

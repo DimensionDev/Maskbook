@@ -2,7 +2,7 @@ import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
 import { decodeText } from '@dimensiondev/kit'
-import { constructAlpha38, deconstructPayload } from '../../../utils/type-transform/Payload'
+import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier, delay } from '@masknet/shared-base'
@@ -22,7 +22,6 @@ import { MaskMessages } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
-import { decryption } from '../../../../background/services/crypto'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
@@ -129,16 +128,6 @@ async function* decryptFromPayloadWithProgress_raw(
     whoAmI: ProfileIdentifier,
     discoverURL: string | undefined,
 ): ReturnOfDecryptPostContentWithProgress {
-    latest: if (process.env.NODE_ENV === 'development') {
-        if (post.version !== -38) break latest
-        // Let's try the new infra!
-        const { DecryptProgressKind } = await import('@masknet/encryption')
-        for await (const progress of decryption(constructAlpha38(post), authorNetworkHint, whoAmI)) {
-            if (progress.type === DecryptProgressKind.Success) {
-                console.log('Decrypted by the new infra!', progress.content)
-            }
-        }
-    }
     const cacheKey = stringify(post)
     if (successDecryptionCache.has(cacheKey)) return successDecryptionCache.get(cacheKey)!
     yield makeProgress('init')

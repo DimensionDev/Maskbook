@@ -15,12 +15,11 @@ import { createReadonlyPersonaTransaction, PersonaDB } from './db'
  * If has local key of a profile in the database.
  * @param id Profile Identifier
  */
-export async function hasLocalKeyOf(
+export function hasLocalKeyOf(
     id: ProfileIdentifier,
     tx?: IDBPSafeTransaction<PersonaDB, ['personas', 'profiles'], 'readonly'>,
 ) {
-    const result = await getLocalKeyOf(id, tx)
-    return !!result
+    return getLocalKeyOf(id, tx).then(Boolean)
 }
 
 /**
