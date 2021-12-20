@@ -1,6 +1,6 @@
 import urlcat from 'urlcat'
 import { fetchJSON } from '../../extension/background-script/HelperService'
-import type { GeneralAsset, RSS3Profile } from './types'
+import { AssetType, GeneralAsset, RSS3Profile } from './types'
 
 interface Response {
     status: boolean
@@ -20,7 +20,7 @@ interface RSS3Info {
 export function getDonations(account: string): Promise<Response> {
     const url = urlcat('https://hub.pass3.me/assets/list', {
         personaID: account,
-        type: 'Gitcoin-Donation',
+        type: AssetType.GitcoinDonation,
     })
 
     return fetchJSON(url) as Promise<Response>
@@ -29,7 +29,7 @@ export function getDonations(account: string): Promise<Response> {
 export function getFootprints(account: string): Promise<Response> {
     const url = urlcat('https://hub.pass3.me/assets/list', {
         personaID: account,
-        type: 'POAP',
+        type: AssetType.POAP,
     })
 
     return fetchJSON(url) as Promise<Response>

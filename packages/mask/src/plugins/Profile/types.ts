@@ -45,3 +45,8 @@ export interface RSS3Profile {
     bio: string
     name: string
 }
+
+export enum AssetType {
+    GitcoinDonation = 'Gitcoin-Donation',
+    POAP = 'POAP',
+}
