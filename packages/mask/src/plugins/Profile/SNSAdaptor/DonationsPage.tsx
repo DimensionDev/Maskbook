@@ -2,8 +2,8 @@ import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CircularProgress, Link, Typography } from '@mui/material'
 import urlcat from 'urlcat'
-import config from '../apis/config'
 import type { GeneralAssetWithTags } from '../apis/types'
+import { RSS3_DEFAULT_IMAGE } from '../constants'
 import { DonationCard } from './components'
 import { useDonations } from './hooks'
 
@@ -62,7 +62,7 @@ export function DonationPage(props: DonationPageProps) {
                         target="_blank"
                         rel="noopener noreferrer">
                         <DonationCard
-                            imageUrl={donation.info.image_preview_url || config.undefinedImageAlt}
+                            imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
                             name={donation.info.title || 'Inactive Project'}
                             contribCount={donation.info.total_contribs || 0}
                             contribDetails={donation.info.token_contribs || []}

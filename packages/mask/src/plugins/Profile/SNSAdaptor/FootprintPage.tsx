@@ -2,8 +2,8 @@ import { makeStyles } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CircularProgress, Link, Typography } from '@mui/material'
 import urlcat from 'urlcat'
-import config from '../apis/config'
 import type { GeneralAssetWithTags } from '../apis/types'
+import { RSS3_DEFAULT_IMAGE } from '../constants'
 import { FootprintCard } from './components'
 import { useFootprints } from './hooks'
 
@@ -64,7 +64,7 @@ export function FootprintPage(props: FootprintPageProps) {
                         target="_blank"
                         rel="noopener noreferrer">
                         <FootprintCard
-                            imageUrl={footprint.info.image_preview_url || config.undefinedImageAlt}
+                            imageUrl={footprint.info.image_preview_url || RSS3_DEFAULT_IMAGE}
                             startDate={footprint.info.start_date}
                             endDate={footprint.info.end_date}
                             city={footprint.info.country}

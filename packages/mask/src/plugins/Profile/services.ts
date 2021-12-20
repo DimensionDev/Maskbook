@@ -1,8 +1,6 @@
 import urlcat from 'urlcat'
 import { fetchJSON } from '../../extension/background-script/HelperService'
-import type { GeneralAsset, RSS3Profile } from './apis/types'
-
-export * from './apis'
+import type { GeneralAsset, RSS3Profile } from './types'
 
 interface Response {
     status: boolean

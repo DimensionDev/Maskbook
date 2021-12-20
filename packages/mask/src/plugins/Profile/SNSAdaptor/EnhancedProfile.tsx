@@ -14,7 +14,6 @@ import { PageTags } from '../types'
 import { PageTag } from './PageTag'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useDao, useAddressByRss3ProfileLink, useRss3Profile } from './hooks'
-import { PluginProfileRPC } from '../messages'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -53,9 +52,6 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const { value: daoPayload } = useDao(identity.identifier)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
 
-    const init = async (account: string) => {
-        await PluginProfileRPC.setPageOwner(account)
-    }
     const { profile } = useRss3Profile(currentAccountAddress)
     const username = profile.name
 
@@ -65,7 +61,6 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     })
 
     useEffect(() => {
-        if (currentAccountAddress) init(currentAccountAddress)
         return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
             setHidden(!data.show)
         })
