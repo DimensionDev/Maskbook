@@ -15,8 +15,9 @@ import {
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
+    useNetworkType,
 } from '@masknet/web3-shared-evm'
-import { FormattedBalance, FormattedCurrency, TokenIcon, useValueRef } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency, TokenIcon, } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -24,7 +25,6 @@ import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
-import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
@@ -136,7 +136,7 @@ const ContractInteraction = memo(() => {
     const location = useLocation()
     const history = useHistory()
     const chainId = useChainId()
-    const networkType = useValueRef(currentNetworkSettings)
+    const networkType = useNetworkType()
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
 

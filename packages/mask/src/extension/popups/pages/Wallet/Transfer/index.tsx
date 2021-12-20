@@ -1,11 +1,10 @@
 import { memo, useMemo, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { formatBalance, NetworkType, ProviderType, useWallets } from '@masknet/web3-shared-evm'
+import { formatBalance, NetworkType, ProviderType, useNetworkType, useWallets } from '@masknet/web3-shared-evm'
 import { MenuItem, Typography } from '@mui/material'
-import { FormattedBalance, TokenIcon, useMenu, useValueRef } from '@masknet/shared'
+import { FormattedBalance, TokenIcon, useMenu } from '@masknet/shared'
 import { useContainer } from 'unstated-next'
 import { WalletContext } from '../hooks/useWalletContext'
-import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import { Transfer1559 } from './Transfer1559'
 import { Prior1559Transfer } from './Prior1559Transfer'
 
@@ -26,7 +25,7 @@ const useStyles = makeStyles()({
 
 const Transfer = memo(() => {
     const { classes } = useStyles()
-    const networkType = useValueRef(currentNetworkSettings)
+    const networkType = useNetworkType()
     const wallets = useWallets(ProviderType.MaskWallet)
     const { assets, currentToken } = useContainer(WalletContext)
     const [selectedAsset, setSelectedAsset] = useState(currentToken)
