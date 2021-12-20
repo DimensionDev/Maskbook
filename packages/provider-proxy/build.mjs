@@ -22,29 +22,6 @@ const result = await build({
     external: externals.concat('electron'),
     format: 'esm',
     // minify: true,
-    plugins: [
-        {
-            name: 'everything-side-effect-free',
-            setup: (build) => {
-                build.onResolve({ filter: /.*/ }, (args) => {
-                    // if (
-                    //     !args.path.startsWith('.') &&
-                    //     (args.kind === 'import-statement' || args.kind === 'require-call')
-                    // ) {
-                    //     console.log(`[${args.importer}] import '${args.path}'`)
-                    //     if (args.path.startsWith('@masknet/')) {
-                    //         return { external: false, sideEffects: false }
-                    //     }
-                    //     return {
-                    //         external: true,
-                    //         sideEffects: false,
-                    //     }
-                    // }
-                    return { sideEffects: false }
-                })
-            },
-        },
-    ],
 })
 
 /** @param pkg {string} */
