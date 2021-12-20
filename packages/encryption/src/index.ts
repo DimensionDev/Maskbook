@@ -25,3 +25,12 @@ export {
 } from './encryption'
 
 export { TwitterDecoder, __TwitterEncoder } from './social-network-encode-decode'
+export {
+    type DecodeImageOptions,
+    type EncodeImageOptions,
+    type ImageTemplateTypes,
+    type SteganographyIO,
+    steganographyDecodeImageUrl,
+    steganographyEncodeImage,
+    GrayscaleAlgorithm,
+} from './image-steganography'
