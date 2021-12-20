@@ -1,6 +1,7 @@
 import { keyframes, makeStyles, useStylesExtends } from '@masknet/theme'
+import type { Keyframes } from '@emotion/serialize'
 
-const rainbowBorderKeyFrames = keyframes`
+export const rainbowBorderKeyFrames: Keyframes = keyframes`
 0%,to {
     border-color: #00f8ff;
     box-shadow: 0 5px 15px rgba(0,248,255,.4),0 10px 30px rgba(37,41,46,.2);
@@ -28,8 +29,8 @@ const rainbowBorderKeyFrames = keyframes`
 `
 
 interface StyleProps {
-    width: number
-    height: number
+    width?: number
+    height?: number
     radius?: string
 }
 const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '100%' }) => ({
@@ -37,7 +38,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '10
         animation: `${rainbowBorderKeyFrames} 6s linear infinite`,
         width,
         height,
-        boxShadow: 'box-shadow: 0 5px 15px rgb(0 248 255 / 40%), 0 10px 30px rgb(37 41 46 / 20%);',
+        boxShadow: '0 5px 15px rgba(0,248,255,.4),0 10px 30px rgba(37,41,46,.2)',
         transition: '.125s ease',
         borderRadius: radius,
         display: 'flex',
@@ -49,8 +50,8 @@ const useStyles = makeStyles<StyleProps>()((theme, { width, height, radius = '10
 }))
 
 interface RainbowBoxProps extends withClasses<'root'> {
-    width: number
-    height: number
+    width?: number
+    height?: number
     radius?: string
     children?: React.ReactNode
 }

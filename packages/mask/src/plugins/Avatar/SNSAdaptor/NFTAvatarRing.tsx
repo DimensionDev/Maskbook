@@ -20,24 +20,27 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const { stroke, strokeWidth, fontSize, text, width, id } = props
 
     const avatarSize = width + 3
-    const R = width + 2 * strokeWidth - 4
-    const r = R / 2 - strokeWidth
-    const path_r = R / 2 - strokeWidth + fontSize / 2
-    const x1 = R / 2 - path_r / 2
-    const y1 = R / 2 + Math.sqrt(Math.pow(path_r, 2) - Math.pow(path_r / 2, 2))
-    const x2 = R / 2 + path_r / 2
-    const y2 = y1
+    const R = avatarSize / 2
+    const path_r = R - strokeWidth + fontSize / 2
+    const x1 = R - path_r / 2
+    const y1 = R + Math.sqrt(Math.pow(path_r, 2) - Math.pow(path_r / 2, 2))
+    const x2 = R + path_r / 2
 
     return (
-        <RainbowBox width={avatarSize} height={avatarSize}>
-            <svg className={classes.root} width={avatarSize} height={avatarSize} viewBox={`0 0 ${R} ${R}`} id={id}>
+        <RainbowBox>
+            <svg
+                className={classes.root}
+                width="100%"
+                height="100%"
+                viewBox={`0 0 ${avatarSize} ${avatarSize}`}
+                id={id}>
                 <defs>
                     <path
                         id={`${id}-path`}
                         fill="none"
                         stroke="none"
                         strokeWidth="0"
-                        d={`M${x1} ${y1} A${path_r} ${path_r} 0 1 1 ${x2} ${y2}`}
+                        d={`M${x1} ${y1} A${path_r} ${path_r} 0 1 1 ${x2} ${y1}`}
                     />
                     <linearGradient id={`${id}-gradient`} x1="0%" y1="0%" x2="100%" y2="0">
                         <stop offset="0%" stopColor="#00f8ff" />
@@ -49,23 +52,16 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
                     </linearGradient>
                 </defs>
 
-                <circle
-                    cx={R / 2}
-                    cy={R / 2}
-                    r={r + strokeWidth / 2}
-                    fill="none"
-                    stroke={stroke}
-                    strokeWidth={strokeWidth}
-                />
+                <circle cx={R} cy={R} r={R - strokeWidth / 2} fill="none" stroke={stroke} strokeWidth={strokeWidth} />
                 <pattern id={`${id}-pattern`} x="0" y="0" width="300%" height="100%" patternUnits="userSpaceOnUse">
-                    <circle cx={R / 2} cy={R / 2} r={R / 2} fill={`url(#${id}-gradient)`}>
+                    <circle cx={R} cy={R} r={R} fill={`url(#${id}-gradient)`}>
                         <animateTransform
                             attributeName="transform"
                             type="rotate"
                             dur="10s"
                             repeatCount="indefinite"
-                            from={`0 ${R / 2} ${R / 2}`}
-                            to={`360 ${R / 2} ${R / 2}`}
+                            from={`0 ${R} ${R}`}
+                            to={`360 ${R} ${R}`}
                         />
                     </circle>
                 </pattern>
