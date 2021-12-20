@@ -147,7 +147,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     actionButton: {
-        color: '#fff',
         minHeight: 'auto',
         width: '100%',
     },

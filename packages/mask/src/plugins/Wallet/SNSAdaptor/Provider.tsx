@@ -1,6 +1,5 @@
 import { Typography, Card, ButtonBase, ButtonBaseProps } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { getMaskColor } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -13,7 +12,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         justifyContent: 'center',
         padding: theme.spacing(3, 1, 2),
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
     },
     logo: {
         width: 45,

@@ -1,6 +1,6 @@
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { Box, Card, CircularProgress, Typography, Paper } from '@mui/material'
-import { useStylesExtends, makeStyles, getMaskColor } from '@masknet/theme'
+import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { ImageIcon } from '@masknet/shared'
 import { NetworkPluginID, useProviderDescriptor } from '@masknet/plugin-infra'
 import { ProviderType, resolveProviderName } from '@masknet/web3-shared-evm'
@@ -11,7 +11,7 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         padding: theme.spacing(2, 4, 3),
         borderRadius: 8,
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
     },
     error: {
         fontSize: 12,
