@@ -28,17 +28,16 @@ export async function getRedPacketHistory(
     //#region
     // 1. Filter out `create_red_packet` transactions,
     // 2. Retrieve payload major data from its decoded input param.
-    const response = await fetch(
-        urlcat(EXPLORER_API, {
-            apikey: EXPLORER_API_KEY,
-            action: 'txlist',
-            module: 'account',
-            sort: 'desc',
-            startBlock,
-            endBlock,
-            address: HAPPY_RED_PACKET_ADDRESS_V4,
-        }),
-    )
+    const requestPath = urlcat(EXPLORER_API, {
+        apikey: EXPLORER_API_KEY,
+        action: 'txlist',
+        module: 'account',
+        sort: 'desc',
+        startBlock,
+        endBlock,
+        address: HAPPY_RED_PACKET_ADDRESS_V4,
+    })
+    const response = await fetch(requestPath)
 
     if (!response.ok) return []
 

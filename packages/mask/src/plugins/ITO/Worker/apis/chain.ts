@@ -24,17 +24,16 @@ export async function getAllPoolsAsSeller(
     //#region
     // 1. Filter out `Fill_Pool` transactions,
     // 2. Retrieve payload major data from its decoded input param.
-    const response = await fetch(
-        urlcat(EXPLORER_API, {
-            apikey: EXPLORER_API_KEY,
-            action: 'txlist',
-            module: 'account',
-            sort: 'desc',
-            startBlock,
-            endBlock,
-            address: ITO2_CONTRACT_ADDRESS,
-        }),
-    )
+    const requestPath = urlcat(EXPLORER_API, {
+        apikey: EXPLORER_API_KEY,
+        action: 'txlist',
+        module: 'account',
+        sort: 'desc',
+        startBlock,
+        endBlock,
+        address: ITO2_CONTRACT_ADDRESS,
+    })
+    const response = await fetch(requestPath)
     if (!response.ok) return []
 
     type TxType = {

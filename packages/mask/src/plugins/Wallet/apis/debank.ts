@@ -6,16 +6,20 @@ const DEBANK_API = 'https://api.debank.com'
 const DEBANK_OPEN_API = 'https://openapi.debank.com'
 
 export async function getTransactionList(address: string, chain: string) {
-    const response = await fetch(`${DEBANK_API}/history/list?user_addr=${address.toLowerCase()}&chain=${chain}`)
-    return (await response.json()) as HistoryResponse
+    const requestPath = urlcat(DEBANK_API, '/history/list', { user_addr: address.toLowerCase(), chain })
+    const response = await fetch(requestPath)
+    return response.json() as Promise<HistoryResponse>
 }
 
-export async function getAssetsList(address: string) {
-    const response = await fetch(
-        `${DEBANK_OPEN_API}/v1/user/token_list?is_all=true&has_balance=true&id=${address.toLowerCase()}`,
-    )
+export async function getAssetsList(address: string): Promise<WalletTokenRecord[]> {
+    const requestPath = urlcat(DEBANK_OPEN_API, '/v1/user/token_list', {
+        is_all: true,
+        has_balance: true,
+        id: address.toLowerCase(),
+    })
+    const response = await fetch(requestPath)
     try {
-        return ((await response.json()) ?? []) as WalletTokenRecord[]
+        return (await response.json()) ?? []
     } catch {
         return []
     }

@@ -6,6 +6,7 @@ import { useChainId } from './useChainId'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { createERC721ContractDetailed, safeNonPayableTransactionCall } from '../utils'
 import { useOpenseaAPIConstants } from '../constants'
+import urlcat from 'urlcat'
 
 export function useERC721ContractDetailed(address?: string) {
     const chainId = useChainId()
@@ -57,7 +58,7 @@ async function getERC721ContractDetailedFromChain(address: string, chainId: Chai
 }
 
 async function getERC721ContractDetailedFromOpensea(address: string, chainId: ChainId, apiUrl: string) {
-    const response = await fetch(`${apiUrl}/${address}`)
+    const response = await fetch(urlcat(apiUrl, '/:address', { address }))
     type DataType = {
         name: string
         symbol: string

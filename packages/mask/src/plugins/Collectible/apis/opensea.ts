@@ -1,4 +1,4 @@
-import { head, toString } from 'lodash-unified'
+import { head } from 'lodash-unified'
 import { OpenSeaPort } from 'opensea-js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { request, requestSend } from '../../../extension/background-script/EthereumService'
@@ -6,7 +6,7 @@ import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, ReferrerAddress } from '../constants'
 import { currentChainIdSettings } from '../../Wallet/settings'
 import urlcat from 'urlcat'
-import type { OpenSeaAssetEvent, OpenSeaResponse } from '../types'
+import type { AssetOrder, OpenSeaAssetEvent, OpenSeaResponse } from '../types'
 
 function createExternalProvider() {
     return {
@@ -41,52 +41,42 @@ async function createOpenSeaAPI(chainId: ChainId) {
 }
 
 export async function getAssetFromSDK(tokenAddress: string, tokenId: string, chainId?: ChainId) {
-    const _chainId = chainId ?? currentChainIdSettings.value
-    const sdkResponse = await (await createOpenSeaPort(_chainId)).api.getAsset({ tokenAddress, tokenId })
-    return sdkResponse
+    chainId = chainId ?? currentChainIdSettings.value
+    return (await createOpenSeaPort(chainId)).api.getAsset({ tokenAddress, tokenId })
 }
 
 export async function getAsset(tokenAddress: string, tokenId: string, chainId?: ChainId) {
-    const _chainId = chainId ?? currentChainIdSettings.value
-    const fetchResponse = await (
-        await fetch(
-            urlcat(await createOpenSeaAPI(_chainId), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }),
-            {
-                mode: 'cors',
-                headers: {
-                    'x-api-key': OpenSeaAPI_Key,
-                },
-            },
-        )
-    ).json()
-
-    const endTime = head<{ closing_date: Date }>(
-        fetchResponse.orders.filter((item: { side: number; closing_extendable: boolean }) => item.side === 1),
-    )?.closing_date
-
-    return {
-        ...fetchResponse,
-        endTime,
-    } as OpenSeaResponse
+    chainId = chainId ?? currentChainIdSettings.value
+    const requestPath = urlcat(await createOpenSeaAPI(chainId), '/asset/:tokenAddress/:tokenId', {
+        tokenAddress,
+        tokenId,
+    })
+    const response = await fetch(requestPath, { mode: 'cors', headers: { 'x-api-key': OpenSeaAPI_Key } })
+    const payload = await response.json()
+    interface Order extends AssetOrder {
+        closing_date: Date
+    }
+    const filtered = (payload.orders as Order[]).filter((item) => item.side === 1)
+    const endTime = head(filtered)?.closing_date
+    return { ...payload, endTime } as OpenSeaResponse
 }
 
-export async function getEvents(asset_contract_address: string, token_id: string, page?: number, size?: number) {
-    const params = new URLSearchParams()
-    params.append('asset_contract_address', asset_contract_address)
-    params.append('token_id', token_id)
-    params.append('offset', toString(page ?? 0))
-    params.append('limit', toString(size ?? 10))
-
-    const fetchResponse = await (
-        await fetch(urlcat(await createOpenSeaAPI(currentChainIdSettings.value), `events?${params.toString()}`), {
-            mode: 'cors',
-            headers: { 'x-api-key': OpenSeaAPI_Key },
-        })
-    ).json()
-
-    const { asset_events }: { asset_events: OpenSeaAssetEvent[] } = fetchResponse
-
-    return asset_events
+export async function getEvents(asset_contract_address: string, token_id: string, page = 0, size = 10) {
+    const requestPath = urlcat(await createOpenSeaAPI(currentChainIdSettings.value), '/events', {
+        asset_contract_address,
+        token_id,
+        offset: page,
+        limit: size,
+    })
+    const response = await fetch(requestPath, {
+        mode: 'cors',
+        headers: { 'x-api-key': OpenSeaAPI_Key },
+    })
+    interface Payload {
+        asset_events: OpenSeaAssetEvent[]
+    }
+    const payload: Payload = await response.json()
+    return payload.asset_events
 }
 
 export async function createBuyOrder(payload: Parameters<OpenSeaPort['createBuyOrder']>[0]) {

@@ -1,3 +1,4 @@
+import urlcat from 'urlcat'
 import {
     __deprecated__getStorage,
     __deprecated__setStorage,
@@ -25,7 +26,7 @@ export const getRiskWarningConfirmed = async (address: string) => {
 }
 
 const sendRiskWarningConfirm = (address: string, pluginId?: string) =>
-    fetch(`${COULD_BASE_URL}/v1/risk_warning/confirm`, {
+    fetch(urlcat(COULD_BASE_URL, '/v1/risk_warning/confirm'), {
         method: 'POST',
         body: JSON.stringify({
             address,

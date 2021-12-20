@@ -1,6 +1,7 @@
 import { CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../../constants'
 import { Flags } from '../../../../../shared'
 import getUnixTime from 'date-fns/getUnixTime'
+import urlcat from 'urlcat'
 
 export interface Status {
     credit_count: number
@@ -43,14 +44,13 @@ export interface Coin {
 }
 
 export async function getAllCoins() {
-    const response = await fetch(
-        `${CMC_V1_BASE_URL}/cryptocurrency/map?aux=status,platform&listing_status=active,untracked&sort=cmc_rank`,
-        { cache: 'force-cache' },
-    )
-    return response.json() as Promise<{
-        data: Coin[]
-        status: Status
-    }>
+    const requestPath = urlcat(CMC_V1_BASE_URL, '/cryptocurrency/map', {
+        aux: ['status', 'platform'].join(','),
+        listing_status: ['active', 'untracked'].join(','),
+        sort: 'cmc_rank',
+    })
+    const response = await fetch(requestPath, { cache: 'force-cache' })
+    return response.json() as Promise<{ data: Coin[]; status: Status }>
 }
 //#endregion
 
@@ -85,22 +85,19 @@ export interface QuotesInfo {
 }
 
 export async function getQuotesInfo(id: string, currency: string) {
-    const params = new URLSearchParams()
-    params.append('id', id)
-    params.append('convert', currency)
-
+    const requestPath = urlcat(THIRD_PARTY_V1_BASE_URL, '/cryptocurrency/widget', {
+        id,
+        convert: currency,
+    })
+    const cache = Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default'
     try {
-        const response = await fetch(`${THIRD_PARTY_V1_BASE_URL}/cryptocurrency/widget?${params.toString()}`, {
-            cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-        })
+        const response = await fetch(requestPath, { cache })
         return response.json() as Promise<{
             data: Record<string, QuotesInfo>
             status: Status
         }>
     } catch {
-        return {
-            data: null,
-        }
+        return { data: null }
     }
 }
 //#endregion
@@ -160,20 +157,21 @@ export interface CoinInfo {
 }
 
 export async function getCoinInfo(id: string) {
-    const params = new URLSearchParams('aux=urls,logo,description,tags,platform,date_added,notice,status')
-    params.append('id', id)
-
-    const response_ = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/info?${params.toString()}`, {
-        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    const requestPath = urlcat(CMC_V1_BASE_URL, '/cryptocurrency/info', {
+        id,
+        aux: ['urls', 'logo', 'description', 'tags', 'platform', 'date_added', 'notice,status'].join(','),
     })
-    const response = (await response_.json()) as {
+    const cache = Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default'
+    const response = await fetch(requestPath, { cache })
+    interface Payload {
         /** id, coin-info pair */
         data: Record<string, CoinInfo>
         status: Status
     }
+    const payload: Payload = await response.json()
     return {
-        data: response.data[id],
-        status: response.status,
+        data: payload.data[id],
+        status: payload.status,
     }
 }
 //#endregion
@@ -196,16 +194,16 @@ export async function getHistorical(
     endDate: Date,
     interval: string = '1d',
 ) {
-    const params = new URLSearchParams('format=chart_crypto_details')
-    params.append('convert', currency)
-    params.append('id', id)
-    params.append('interval', interval)
-    params.append('time_end', getUnixTime(endDate).toString())
-    params.append('time_start', getUnixTime(startDate).toString())
-
-    const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
-        cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
+    const requestPath = urlcat(CMC_V1_BASE_URL, '/cryptocurrency/quotes/historical', {
+        format: 'chart_crypto_details',
+        convert: currency,
+        id,
+        interval,
+        time_end: getUnixTime(endDate),
+        time_start: getUnixTime(startDate),
     })
+    const cache = Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default'
+    const response = await fetch(requestPath, { cache })
     return response.json() as Promise<{
         data: Record<string, Record<string, Stat>> | HistoricalCoinInfo
         status: Status
@@ -257,16 +255,24 @@ export interface Pair {
     }
 }
 export async function getLatestMarketPairs(id: string, currency: string) {
-    const params = new URLSearchParams(
-        'aux=num_market_pairs,market_url,price_quote,effective_liquidity,market_score,market_reputation&limit=40&sort=cmc_rank&start=1',
-    )
-    params.append('convert', currency)
-    params.append('id', id)
-
+    const requestPath = urlcat(CMC_V1_BASE_URL, '/cryptocurrency/market-pairs/latest', {
+        convert: currency,
+        id,
+        aux: [
+            'num_market_pairs',
+            'market_url',
+            'price_quote',
+            'effective_liquidity',
+            'market_score',
+            'market_reputation',
+        ].join(','),
+        limit: 40,
+        sort: 'cmc_rank',
+        start: 1,
+    })
+    const cache = Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default'
     try {
-        const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
-            cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',
-        })
+        const response = await fetch(requestPath, { cache })
         return response.json() as Promise<{
             data: {
                 id: number

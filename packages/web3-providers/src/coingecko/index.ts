@@ -1,4 +1,5 @@
 import type { CurrencyType } from '@masknet/plugin-infra'
+import urlcat from 'urlcat'
 import { COINGECKO_URL_BASE } from './constants'
 
 export interface CryptoPrice {
@@ -8,12 +9,15 @@ export interface CryptoPrice {
 }
 
 export async function getTokenPrice(tokenId: string, currency: CurrencyType) {
-    const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=${tokenId}&vs_currencies=${currency}`
-    const price = await fetch(requestPath).then((r) => r.json() as Promise<CryptoPrice>)
-    return price[tokenId]
+    const prices = await getTokensPrice([tokenId], currency)
+    return prices[tokenId]
 }
 
 export async function getTokensPrice(tokenIds: string[], currency: CurrencyType) {
-    const requestPath = `${COINGECKO_URL_BASE}/simple/price?ids=${tokenIds}&vs_currencies=${currency}`
-    return fetch(requestPath).then((r) => r.json() as Promise<CryptoPrice>)
+    const requestPath = urlcat(COINGECKO_URL_BASE, '/simple/price', {
+        ids: tokenIds.join(','),
+        vs_currencies: currency,
+    })
+    const response = await fetch(requestPath)
+    return response.json() as Promise<CryptoPrice>
 }

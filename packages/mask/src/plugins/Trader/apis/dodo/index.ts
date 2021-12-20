@@ -10,19 +10,18 @@ import urlcat from 'urlcat'
 import { leftShift } from '@masknet/web3-shared-base'
 
 export async function swapRoute(request: SwapRouteRequest) {
-    const response = await fetch(
-        urlcat(DODO_BASE_URL, '/dodoapi/getdodoroute', {
-            chainId: request.chainId,
-            slippage: request.slippage,
-            fromTokenAddress: request.fromToken?.address,
-            fromTokenDecimals: request.fromToken.decimals,
-            toTokenAddress: request.toToken?.address,
-            toTokenDecimals: request.toToken.decimals,
-            fromAmount: request.fromAmount,
-            userAddr: request.userAddr,
-            rpc: request.rpc,
-        }),
-    )
+    const requestPath = urlcat(DODO_BASE_URL, '/dodoapi/getdodoroute', {
+        chainId: request.chainId,
+        slippage: request.slippage,
+        fromTokenAddress: request.fromToken?.address,
+        fromTokenDecimals: request.fromToken.decimals,
+        toTokenAddress: request.toToken?.address,
+        toTokenDecimals: request.toToken.decimals,
+        fromAmount: request.fromAmount,
+        userAddr: request.userAddr,
+        rpc: request.rpc,
+    })
+    const response = await fetch(requestPath)
     const payload: SwapRouteResponse = await response.json()
 
     if (payload.status !== 200) {

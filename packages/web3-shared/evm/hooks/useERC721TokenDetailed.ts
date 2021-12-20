@@ -5,6 +5,7 @@ import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { safeNonPayableTransactionCall, createERC721Token } from '../utils'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 import { useOpenseaAPIConstants } from '../constants'
+import urlcat from 'urlcat'
 
 export function useERC721TokenDetailed(
     contractDetailed: ERC721ContractDetailed | undefined,
@@ -34,7 +35,7 @@ export async function getERC721TokenDetailedFromOpensea(
     tokenId: string,
     apiUrl: string,
 ) {
-    const response = await fetch(`${apiUrl}/${contractDetailed.address}/${tokenId}`)
+    const response = await fetch(urlcat(apiUrl, '/:address/:tokenId', { address: contractDetailed.address, tokenId }))
     // https://docs.opensea.io/docs/metadata-standards
     type openseaTokenData = {
         name: string
