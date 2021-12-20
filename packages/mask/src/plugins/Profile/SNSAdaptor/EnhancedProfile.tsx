@@ -13,7 +13,7 @@ import { DAOPage } from './DAOPage'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useDao, useAddressByRss3ProfileLink, useRss3Profile } from './hooks'
+import { useDao, useAddressByRss3, useRss3Profile } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -44,7 +44,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         identity.identifier.userId,
         identity.bio ?? '',
     )
-    const { address: addressByRssProfile } = useAddressByRss3ProfileLink(identity.homepage)
+    const { address: addressByRssProfile } = useAddressByRss3(identity.homepage ?? '', identity.nickname ?? '')
     const currentAccountAddress = currentAccount?.address || addressByRssProfile || ''
     //#endregion
 

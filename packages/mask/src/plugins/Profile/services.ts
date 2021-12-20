@@ -35,12 +35,8 @@ export function getFootprints(account: string): Promise<Response> {
     return fetchJSON(url) as Promise<Response>
 }
 
-export async function getAddressByRss3ProfileLink(profileUrl: string) {
-    const matched = profileUrl.match(/^https?:\/\/(\w+)\.rss3\.bio/)
-    if (!matched) {
-        return ''
-    }
-    const url = urlcat('https://rss3.domains/name/:id', { id: matched[1] })
+export async function getAddressByRss3Id(id: string) {
+    const url = urlcat('https://rss3.domains/name/:id', { id })
     const rsp = (await fetchJSON(url)) as NameInfo
     return rsp.address
 }
