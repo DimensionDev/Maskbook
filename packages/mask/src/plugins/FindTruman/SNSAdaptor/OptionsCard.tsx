@@ -97,8 +97,8 @@ export default function OptionsCard(props: OptionsViewProps) {
     const { address: account } = useContext(FindTrumanContext)
     const web3 = useWeb3(false)
     const { t } = useI18N()
-    const ref = useRef<HTMLElement | null>(null)
-    const parentRef = useRef<HTMLElement | null>(null)
+    const ref = useRef<HTMLDivElement | null>(null)
+    const parentRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
         checkCondition()
