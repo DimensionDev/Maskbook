@@ -302,7 +302,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                         alternativeLabel={!vertical}>
                         {(userStatus as UserPollStatus).history.map((e, index) => {
                             return vertical ? (
-                                <Step key={index} completed={false} expanded={true}>
+                                <Step key={index} completed={false} expanded>
                                     <StepLabel>
                                         <Typography variant="h6" color="text.primary" gutterBottom={false}>
                                             {e.poll}
@@ -338,10 +338,10 @@ export default function OptionsCard(props: OptionsViewProps) {
                             )
                         })}
                         {vertical ? (
-                            <Step key="latest" completed={false} expanded={true}>
+                            <Step key="latest" completed={false} expanded>
                                 <StepLabel>
                                     <Box>
-                                        <Typography variant="h6" color="text.primary" gutterBottom={true}>
+                                        <Typography variant="h6" color="text.primary" gutterBottom>
                                             {userStatus.question}
                                         </Typography>
                                     </Box>
@@ -355,7 +355,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                             <Step key="latest" completed={false}>
                                 <StepLabel>
                                     <Box>
-                                        <Typography variant="h6" color="text.primary" gutterBottom={true}>
+                                        <Typography variant="h6" color="text.primary" gutterBottom>
                                             {userStatus.question}
                                         </Typography>
                                         {renderOptions(userStatus)}
@@ -397,10 +397,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                             <div>{`${t('plugin_find_truman_unsupported_chain', {
                                 chain: userStatus.conditions[0]?.chain || '',
                             })}`}</div>
-                            <EthereumChainBoundary
-                                noSwitchNetworkTip={true}
-                                chainId={userStatus.conditions[0]?.chainId}
-                            />
+                            <EthereumChainBoundary noSwitchNetworkTip chainId={userStatus.conditions[0]?.chainId} />
                         </Alert>
                     )}
                     {error === 'insufficient-nft' && (

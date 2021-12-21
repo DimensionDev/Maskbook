@@ -101,7 +101,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
             </DialogContent>
             <DialogActions>
                 <EthereumWalletConnectedBoundary
-                    offChain={true}
+                    offChain
                     classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}>
                     <Button
                         classes={{ root: classes.button }}
