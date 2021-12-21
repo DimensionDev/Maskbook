@@ -81,10 +81,10 @@ export function fetchUserParticipatedStoryStatus(uaddr: string) {
     return request<UserStoryStatus[]>(urlcat('/participated_story_status', { uaddr }))
 }
 
-export function fetchSecretKey(cid: string, address: string) {
+export function fetchSecretKey(cid: string, uaddr: string) {
     type SecretKey = {
         key: string
         iv: string
     }
-    return request<SecretKey>(urlcat('/clue_key', { cid, uaddr: address }))
+    return request<SecretKey>(urlcat('/clue_key', { cid, uaddr }))
 }
