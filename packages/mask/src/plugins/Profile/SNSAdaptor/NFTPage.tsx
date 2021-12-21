@@ -1,7 +1,8 @@
 import { getMaskColor, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
+import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectionList'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -36,7 +37,7 @@ export function NFTPage(props: NFTPageProps) {
 
     return (
         <div className={classes.root}>
-            <CollectionList address={address} />
+            <CollectionList chainId={ChainId.Mainnet} address={address} />
         </div>
     )
 }

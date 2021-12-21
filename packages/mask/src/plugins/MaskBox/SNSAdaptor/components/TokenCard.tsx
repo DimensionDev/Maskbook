@@ -1,8 +1,8 @@
-import { makeStyles } from '@masknet/theme'
-import { ERC721ContractDetailed, NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import { Typography } from '@mui/material'
 import { memo } from 'react'
-import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectibleList/CollectibleCard'
+import { makeStyles } from '@masknet/theme'
+import { Typography } from '@mui/material'
+import { ERC721ContractDetailed, NonFungibleAssetProvider, useERC721TokenDetailed } from '@masknet/web3-shared-evm'
+import { CollectibleCard } from '../../../../extension/options-page/DashboardComponents/CollectionList/CollectibleCard'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

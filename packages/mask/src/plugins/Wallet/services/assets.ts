@@ -37,8 +37,8 @@ import type {
 } from '../types'
 
 export async function getCollectionsNFT(
-    address: string,
     chainId: ChainId,
+    address: string,
     provider: NonFungibleAssetProvider,
     page?: number,
     size?: number,
@@ -63,8 +63,8 @@ export async function getCollectionsNFT(
 }
 
 export async function getAssetsListNFT(
-    address: string,
     chainId: ChainId,
+    address: string,
     provider: NonFungibleAssetProvider,
     page?: number,
     size?: number,

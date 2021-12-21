@@ -44,16 +44,16 @@ export interface Web3ProviderType {
 
     getAssetsList: (address: string, provider: FungibleAssetProvider, network?: NetworkType) => Promise<Asset[]>
     getAssetsListNFT: (
-        address: string,
         chainId: ChainId,
+        address: string,
         provider: NonFungibleAssetProvider,
         page?: number,
         size?: number,
         collection?: string,
     ) => Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }>
     getCollectionsNFT: (
-        address: string,
         chainId: ChainId,
+        address: string,
         provider: NonFungibleAssetProvider,
         page?: number,
         size?: number,

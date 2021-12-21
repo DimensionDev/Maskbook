@@ -13,7 +13,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { MaskIconOutlined } from '../../../../resources/MaskIcon'
-import { CollectibleContext } from '../../DashboardComponents/CollectibleList'
+import { CollectibleContext } from '../../DashboardComponents/CollectionList'
 // eslint-disable-next-line import/no-deprecated
 import { DashboardDialogCore, DashboardDialogWrapper, WrappedDialogProps } from '../Base'
 

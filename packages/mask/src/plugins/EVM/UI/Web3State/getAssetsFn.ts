@@ -139,8 +139,8 @@ export const getNonFungibleTokenFn =
         }
 
         const tokenFromProvider = await context.getAssetsListNFT(
-            address.toLowerCase(),
             network?.chainId ?? ChainId.Mainnet,
+            address.toLowerCase(),
             NonFungibleAssetProvider.OPENSEA,
             pagination?.page ?? 0,
             pagination?.size ?? 20,
