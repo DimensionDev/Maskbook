@@ -27,7 +27,14 @@ export function ArticleTab(props: ArticleTabProps) {
         <CollectibleTab>
             <div className={classes.body}>
                 {resourceUrl ? (
-                    <AssetPlayer url={resourceUrl} AudioProps={{ autoPlay: true }} VideoProps={{ autoPlay: true }} />
+                    <AssetPlayer
+                        url={resourceUrl}
+                        options={{
+                            autoPlay: true,
+                            loop: true,
+                            playsInline: true,
+                        }}
+                    />
                 ) : null}
             </div>
         </CollectibleTab>

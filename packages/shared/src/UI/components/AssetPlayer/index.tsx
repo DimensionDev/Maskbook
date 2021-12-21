@@ -1,4 +1,4 @@
-import { memo, useRef, DetailedHTMLProps, AudioHTMLAttributes, VideoHTMLAttributes, useCallback } from 'react'
+import { memo, useRef, useCallback } from 'react'
 import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
 import { mediaViewerUrl } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
@@ -6,27 +6,27 @@ import { useUpdateEffect } from 'react-use'
 interface AssetPlayerProps {
     url: string
     type?: string
-    AudioProps?: DetailedHTMLProps<AudioHTMLAttributes<HTMLAudioElement>, HTMLAudioElement>
-    VideoProps?: DetailedHTMLProps<VideoHTMLAttributes<HTMLVideoElement>, HTMLVideoElement>
+    options: {
+        autoPlay?: boolean
+        controls?: boolean
+        playsInline?: boolean
+        loop?: boolean
+    }
 }
 
 //TODO: fallback placeholder when source can't load or gh server be drop
-export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, AudioProps, VideoProps }) => {
+export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options }) => {
     const ref = useRef<IFrameComponent | null>(null)
 
     const setIframe = useCallback(() => {
         if (!ref.current) return
 
-        let mediaOption = {}
-        if ((type?.includes('audio') || /\.(mp3|wav|flac|aac)$/.test(url)) && AudioProps) mediaOption = AudioProps
-        else if ((type?.startsWith('video') || /\.(mp4|av1|webm)$/.test(url)) && VideoProps) mediaOption = VideoProps
-
         ref.current.iFrameResizer.sendMessage({
             url,
             type,
-            ...mediaOption,
+            ...options,
         })
-    }, [url, type, AudioProps, VideoProps])
+    }, [url, type, options])
 
     useUpdateEffect(() => {
         setIframe()
@@ -41,6 +41,8 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, AudioProps, Vide
             }}
             checkOrigin={false}
             frameBorder="0"
+            allow="autoplay"
+            allowFullScreen
         />
     )
 })
