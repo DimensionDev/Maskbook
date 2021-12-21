@@ -14,6 +14,9 @@ const useStyles = makeStyles()((theme) => {
         root: {
             overflow: 'auto',
         },
+        head: {
+            wordBreak: 'keep-all',
+        },
         content: {
             padding: '0 !important',
         },
@@ -79,7 +82,7 @@ export function HistoryTab(props: HistoryTabProps) {
     return (
         <CollectibleTab classes={{ root: classes.root, content: classes.content }}>
             <Table size="small" stickyHeader>
-                <TableHead>
+                <TableHead className={classes.head}>
                     <TableRow>
                         <TableCell>{t('plugin_collectible_event')}</TableCell>
                         {isDifferenceToken ? (

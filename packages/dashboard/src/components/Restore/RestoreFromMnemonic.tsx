@@ -1,5 +1,5 @@
 import { DesktopMnemonicConfirm } from '../Mnemonic'
-import { useAsyncFn, useList } from 'react-use'
+import { useList } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
@@ -47,7 +47,6 @@ export const RestoreFromMnemonic = () => {
             setError(t.sign_in_account_mnemonic_confirm_failed())
         }
     }
-    const [{ loading }, onConfirmClick] = useAsyncFn(() => handleImport())
 
     return (
         <>
@@ -70,9 +69,8 @@ export const RestoreFromMnemonic = () => {
                 <LoadingButton
                     variant="rounded"
                     size="large"
-                    onClick={onConfirmClick}
-                    disabled={some(values, (value) => !value)}
-                    loading={loading}>
+                    onClick={handleImport}
+                    disabled={some(values, (value) => !value)}>
                     {t.confirm()}
                 </LoadingButton>
             </ButtonContainer>
