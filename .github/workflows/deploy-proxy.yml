@@ -7,6 +7,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-20.04
+    permissions:
+      packages: write
+      contents: read
     steps:
       - name: Get cache date
         id: get-date
@@ -31,23 +34,10 @@ jobs:
           restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
       - run: pnpm install
       - run: pnpm build
-      - name: Run Install
+      - name: Run provider-proxy package build
         working-directory: ./packages/provider-proxy
         run: pnpm install && pnpm build
-  publish-gpr:
-    needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-          registry-url: https://npm.pkg.github.com/
       - name: Publish to github npm pkg
-        working-directory: ./packages/provider-proxy/dist
-        run: npm publish --scope=@dimensiondev --registry=https://npm.pkg.github.com
+        run: npm publish ./packages/provider-proxy/dist
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
