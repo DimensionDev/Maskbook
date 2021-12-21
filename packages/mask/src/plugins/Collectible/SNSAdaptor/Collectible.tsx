@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { FC, ReactElement, useCallback } from 'react'
 import {
     Avatar,
     Box,
@@ -195,6 +195,18 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
     ]
 
+    const CollectibleTabsRouter: FC<{ tabIndex: number }> = ({ tabIndex }) => {
+        const tabMap: { [index: number]: ReactElement } = {
+            [CollectibleTab.ARTICLE]: <ArticleTab />,
+            [CollectibleTab.TOKEN]: <TokenTab />,
+            [CollectibleTab.OFFER]: <OfferTab />,
+            [CollectibleTab.LISTING]: <ListingTab />,
+            [CollectibleTab.HISTORY]: <HistoryTab />,
+        }
+
+        return tabMap[tabIndex] || null
+    }
+
     const endDate = asset.value?.end_time
     return (
         <>
@@ -280,15 +292,7 @@ export function Collectible(props: CollectibleProps) {
                             <div className={classes.loading}>
                                 <LoadingAnimation />
                             </div>
-                        )) || (
-                            <div>
-                                {tabIndex === CollectibleTab.ARTICLE ? <ArticleTab /> : null}
-                                {tabIndex === CollectibleTab.TOKEN ? <TokenTab /> : null}
-                                {tabIndex === CollectibleTab.OFFER ? <OfferTab /> : null}
-                                {tabIndex === CollectibleTab.LISTING ? <ListingTab /> : null}
-                                {tabIndex === CollectibleTab.HISTORY ? <HistoryTab /> : null}
-                            </div>
-                        )}
+                        )) || <div>{CollectibleTabsRouter({ tabIndex })}</div>}
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>
