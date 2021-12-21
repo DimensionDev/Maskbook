@@ -331,6 +331,7 @@ importers:
       '@uniswap/sdk-core': ^3.0.1
       '@uniswap/v2-sdk': 3.0.0-alpha.2
       '@uniswap/v3-sdk': ^3.3.2
+      '@unstoppabledomains/resolution': ^5.0.1
       '@walletconnect/client': ^1.2.2
       anchorme: ^2.1.2
       arweave: 1.10.13
@@ -459,6 +460,7 @@ importers:
       '@uniswap/sdk-core': 3.0.1
       '@uniswap/v2-sdk': 3.0.0-alpha.2
       '@uniswap/v3-sdk': 3.3.2
+      '@unstoppabledomains/resolution': 5.0.1
       '@walletconnect/client': 1.4.1
       anchorme: 2.1.2
       arweave: 1.10.13
@@ -880,6 +882,7 @@ importers:
   packages/web3-shared/evm:
     specifiers:
       '@ensdomains/address-encoder': ^0.2.6
+      '@masknet/shared-base': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -903,6 +906,7 @@ importers:
       web3-utils: 1.5.2
     dependencies:
       '@ensdomains/address-encoder': 0.2.6
+      '@masknet/shared-base': link:../../shared-base
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts
       '@masknet/web3-shared-base': link:../base
