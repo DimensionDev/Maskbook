@@ -55,6 +55,35 @@ describe('Proxy websocket', () => {
         expect(mockNotifyCallback?.mock.calls[1]).toEqual([id])
     })
 
+    test('should cache divide data when server push different response', async () => {
+        const requestID1 = 'fetchAsset1'
+        const requestID2 = 'fetchAsset2'
+        const testMethod1 = { method: requestID1, params: [], id: requestID1 }
+        const testMethod2 = { method: requestID1, params: [], id: requestID2 }
+        client.send(testMethod1)
+        client.send(testMethod2)
+        const mockData1 = { id: requestID1, result: ['eth', 'bsc'] }
+        const mockData2 = { id: requestID2, result: [1] }
+        const mockData3 = { id: requestID1, result: ['matic'] }
+        pushToClientMockData(mockData1)
+        pushToClientMockData(mockData2)
+        pushToClientMockData(mockData3)
+
+        // @ts-ignore
+        await expect(server).toReceiveMessage(testMethod1)
+        // @ts-ignore
+        await expect(server).toReceiveMessage(testMethod2)
+
+        const request1Data = client.getResult<string>(requestID1)
+        expect(request1Data).toEqual(['eth', 'bsc', 'matic'])
+        const request2Data = client.getResult<string>(requestID2)
+        expect(request2Data).toEqual([1])
+        expect(mockNotifyCallback?.mock.calls.length).toBe(3)
+        expect(mockNotifyCallback?.mock.calls[0]).toEqual([requestID1])
+        expect(mockNotifyCallback?.mock.calls[1]).toEqual([requestID2])
+        expect(mockNotifyCallback?.mock.calls[2]).toEqual([requestID1])
+    })
+
     xtest('should merge cache data when server push two times data and uniq', async () => {
         const id = 'fetchAsset3'
         const testMethod = { method: 'fetchAsset2', params: [], id }
