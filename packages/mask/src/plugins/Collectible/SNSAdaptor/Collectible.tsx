@@ -29,7 +29,6 @@ import { HistoryTab } from './HistoryTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
-import { PluginSkeleton } from './PluginSkeleton'
 import { CollectibleProvider, CollectibleTab } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
@@ -39,6 +38,7 @@ import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
+import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -131,6 +131,13 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: '#eb5757',
             padding: theme.spacing(0.5, 2),
         },
+        loading: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            padding: theme.spacing(8, 0),
+        },
     }
 })
 
@@ -157,7 +164,6 @@ export function Collectible(props: CollectibleProps) {
     )
     //#endregion
 
-    if (asset.loading) return <PluginSkeleton />
     if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -262,11 +268,19 @@ export function Collectible(props: CollectibleProps) {
                         {tabs}
                     </Tabs>
                     <Paper className={classes.body}>
-                        {tabIndex === CollectibleTab.ARTICLE ? <ArticleTab /> : null}
-                        {tabIndex === CollectibleTab.TOKEN ? <TokenTab /> : null}
-                        {tabIndex === CollectibleTab.OFFER ? <OfferTab /> : null}
-                        {tabIndex === CollectibleTab.LISTING ? <ListingTab /> : null}
-                        {tabIndex === CollectibleTab.HISTORY ? <HistoryTab /> : null}
+                        {(asset.loading && (
+                            <div className={classes.loading}>
+                                <LoadingAnimation />
+                            </div>
+                        )) || (
+                            <div>
+                                {tabIndex === CollectibleTab.ARTICLE ? <ArticleTab /> : null}
+                                {tabIndex === CollectibleTab.TOKEN ? <TokenTab /> : null}
+                                {tabIndex === CollectibleTab.OFFER ? <OfferTab /> : null}
+                                {tabIndex === CollectibleTab.LISTING ? <ListingTab /> : null}
+                                {tabIndex === CollectibleTab.HISTORY ? <HistoryTab /> : null}
+                            </div>
+                        )}
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>
