@@ -83,51 +83,30 @@ export function PostInspector(props: PostInspectorProps) {
     }, [account])
 
     const fetchData = async () => {
-        postType !== FindTrumanPostType.Encryption &&
-            (await fetchStoryInfo(storyId).then((res) => {
-                setStoryInfo(res)
-            }))
+        if (postType === FindTrumanPostType.Encryption) {
+            const searchParams = new URLSearchParams(url.split('?')[1])
+            const payload = searchParams.get('payload') || ''
+            setEncryptionPayload(payload)
+            return
+        }
+        setStoryInfo(await fetchStoryInfo(storyId))
         switch (postType) {
-            case FindTrumanPostType.Encryption:
-                const searchParams = new URLSearchParams(url.split('?')[1])
-                const payload = searchParams.get('payload') || ''
-                setEncryptionPayload(payload)
-                break
             case FindTrumanPostType.Status:
-                !!account &&
-                    (await fetchUserStoryStatus(storyId, account).then((res) => {
-                        setUserStoryStatus(res)
-                    }))
+                !!account && setUserStoryStatus(await fetchUserStoryStatus(storyId, account))
                 break
             case FindTrumanPostType.Puzzle:
-                !!account &&
-                    (await fetchUserPuzzleStatus(targetId, account).then((res) => {
-                        setUserPuzzleStatus(res)
-                    }))
+                !!account && setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
                 break
             case FindTrumanPostType.Poll:
-                !!account &&
-                    (await fetchUserPollStatus(targetId, account).then((res) => {
-                        setUserPollStatus(res)
-                    }))
+                !!account && setUserPollStatus(await fetchUserPollStatus(targetId, account))
                 break
             case FindTrumanPostType.PuzzleResult:
-                !!account &&
-                    (await fetchUserPuzzleStatus(targetId, account).then((res) => {
-                        setUserPuzzleStatus(res)
-                    }))
-                await fetchPuzzleResult(targetId).then((res) => {
-                    setPuzzleResult(res)
-                })
+                !!account && setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
+                setPuzzleResult(await fetchPuzzleResult(targetId))
                 break
             case FindTrumanPostType.PollResult:
-                !!account &&
-                    (await fetchUserPollStatus(targetId, account).then((res) => {
-                        setUserPollStatus(res)
-                    }))
-                await fetchPollResult(targetId).then((res) => {
-                    setPollResult(res)
-                })
+                !!account && setUserPollStatus(await fetchUserPollStatus(targetId, account))
+                setPollResult(await fetchPollResult(targetId))
                 break
         }
     }
