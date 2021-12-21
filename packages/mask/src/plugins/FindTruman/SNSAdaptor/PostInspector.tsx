@@ -132,41 +132,22 @@ export function PostInspector(props: PostInspectorProps) {
         }
     }
 
-    const handleSubmit = (choice: number) => {
-        return new Promise<boolean>((resolve, reject) => {
-            switch (postType) {
-                case FindTrumanPostType.Puzzle:
-                    submitPuzzle(account, {
-                        target: userPuzzleStatus?.id || '',
-                        from: account,
-                        timestamp: Math.floor(Date.now() / 1000),
-                        choice,
-                    })
-                        .then(async (res) => {
-                            await fetchData()
-                            resolve(true)
-                        })
-                        .catch((error) => {
-                            reject(false)
-                        })
-                    break
-                case FindTrumanPostType.Poll:
-                    submitPoll(account, {
-                        target: userPollStatus?.id || '',
-                        from: account,
-                        timestamp: Math.floor(Date.now() / 1000),
-                        choice,
-                    })
-                        .then(async (res) => {
-                            await fetchData()
-                            resolve(true)
-                        })
-                        .catch((error) => {
-                            reject(false)
-                        })
-                    break
+    const handleSubmit = async (choice: number) => {
+        const from = account
+        const timestamp = Math.floor(Date.now() / 1000)
+        try {
+            if (postType === FindTrumanPostType.Puzzle) {
+                const target = userPuzzleStatus?.id ?? ''
+                await submitPuzzle(account, { target, from, timestamp, choice })
+            } else if (postType === FindTrumanPostType.Poll) {
+                const target = userPollStatus?.id ?? ''
+                await submitPoll(account, { target, from, timestamp, choice })
             }
-        })
+            await fetchData()
+            return true
+        } catch {
+            return false
+        }
     }
 
     return (
