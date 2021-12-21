@@ -102,7 +102,6 @@ export const RestoreFromLocal = memo(() => {
     }, [currentPersona, changeCurrentPersona])
 
     const restoreDB = useCallback(async () => {
-        console.log(json)
         try {
             // If json has wallets, restore in popup.
             if (json?.wallets) {

@@ -34,7 +34,6 @@ describe('Proxy websocket', () => {
         await expect(server).toReceiveMessage(testMethod)
 
         const data = client.getResult<string>(id)
-        console.log(data)
         expect(data).toEqual(['eth', 'bsc'])
         expect(mockNotifyCallback?.mock.calls.length).toBe(1)
         expect(mockNotifyCallback?.mock.calls[0]).toEqual([id])
