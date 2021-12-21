@@ -107,9 +107,9 @@ export function getAllCoins() {
     throw new Error('For uniswap all coins are available by default.')
 }
 
-export async function getAllCoinsByKeyword(keyword: string) {
-    const keyword_ = keyword.toLocaleLowerCase()
-    if (keyword_ === 'mask') {
+export async function getAllCoinsByKeyword(keyword: string): Promise<Coin[]> {
+    keyword = keyword.toLowerCase()
+    if (keyword === 'mask') {
         return [
             {
                 decimals: 18,
@@ -118,22 +118,19 @@ export async function getAllCoinsByKeyword(keyword: string) {
                 name: 'Mask Network',
                 symbol: 'MASK',
                 contract_address: '0x69af81e73a73b40adf4f3d4223cd9b1ece623074',
-            } as Coin,
+            },
         ]
     }
 
     const tokens = await fetchTokensByKeyword(keyword)
 
-    const coins = tokens.map(
-        (x) =>
-            ({
-                ...x,
-                address: x.id,
-                contract_address: x.id,
-            } as Coin),
-    )
+    const coins: Coin[] = tokens.map((x) => ({
+        ...x,
+        address: x.id,
+        contract_address: x.id,
+    }))
 
-    if (keyword.toLowerCase() === 'eth') {
+    if (keyword === 'eth') {
         coins.unshift({
             id: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
@@ -141,8 +138,8 @@ export async function getAllCoinsByKeyword(keyword: string) {
             contract_address: '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
             symbol: 'eth',
             decimals: 18,
-        } as Coin)
-    } else if (keyword.toLowerCase() === 'nrge') {
+        })
+    } else if (keyword === 'nrge') {
         coins.unshift({
             id: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
@@ -150,7 +147,7 @@ export async function getAllCoinsByKeyword(keyword: string) {
             contract_address: '0x1416946162b1c2c871a73b07e932d2fb6c932069',
             symbol: 'NRGT',
             decimals: 18,
-        } as Coin)
+        })
     }
     return coins
 }

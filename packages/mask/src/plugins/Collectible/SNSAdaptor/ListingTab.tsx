@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => {
         },
         emptyCell: {
             borderStyle: 'none',
+            textAlign: 'center',
         },
         button: {
             marginLeft: theme.spacing(1),

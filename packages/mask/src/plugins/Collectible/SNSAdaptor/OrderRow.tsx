@@ -105,11 +105,12 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                     )}
                                 </Link>
                             ) : null}
-                            {`${getOrderUnitPrice(
+                            {getOrderUnitPrice(
                                 order.current_price,
                                 order.payment_token_contract?.decimals,
                                 order.quantity,
-                            )} ${order.payment_token_contract?.symbol}`}
+                            )}{' '}
+                            {order.payment_token_contract?.symbol}
                         </Typography>
                     </TableCell>
                     <TableCell>
@@ -141,15 +142,14 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                     )}
                                 </Link>
                             ) : null}
-                            {`${getOrderUnitPrice(
+                            {getOrderUnitPrice(
                                 order.current_price,
                                 order.payment_token_contract?.decimals,
                                 order.quantity,
-                            )} ${
-                                provider === NonFungibleAssetProvider.OPENSEA
-                                    ? order.payment_token_contract?.symbol ?? ''
-                                    : 'ETH'
-                            }`}
+                            )}{' '}
+                            {provider === NonFungibleAssetProvider.OPENSEA
+                                ? order.payment_token_contract?.symbol ?? ''
+                                : 'ETH'}
                         </Typography>
                     </TableCell>
                     {provider === NonFungibleAssetProvider.OPENSEA ? (

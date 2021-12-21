@@ -78,7 +78,9 @@ function Badge({ payload }: BadgeProps) {
     return loadingToken ? null : (
         <div className={classes.root}>
             <ItoLabelIcon size={14} />
-            <span className={classes.span}>{`A ITO with ${balance} $${symbol} from ${sellerName}`}</span>
+            <span className={classes.span}>
+                A ITO with {balance} ${symbol} from {sellerName}
+            </span>
         </div>
     )
 }

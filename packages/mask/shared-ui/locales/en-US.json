@@ -18,7 +18,6 @@
     "sign": "Sign",
     "reload": "Reload",
     "load": "Load",
-    "donation": "Donation",
     "load_all": "Load All",
     "supported_by": "Supported by",
     "no_data": "No Data",
@@ -1010,5 +1009,15 @@
     "plugin_profile_binding_rule3": "Twitter ID + {{suffix}} is ENS.",
     "plugin_profile_binding_rule4": "Address used to sign the avatar.",
     "plugin_profile_current_display_of": "Current display of {{type}}: ",
+    "plugin_profile_loading": "Loading...",
+    "plugin_profile_error_no_address": "Failed to find any valid address.",
+    "plugin_profile_address_name_ens": "ENS",
+    "plugin_profile_address_name_uns": "UNS",
+    "plugin_profile_address_name_dns": "DNS",
+    "plugin_profile_address_name_rns": "RNS",
+    "plugin_profile_address_name_address": "address",
+    "plugin_profile_rss3_inactive_project": "Inactive Project",
+    "plugin_profile_rss3_no_activity_time": "No activity time",
+    "plugin_profile_rss3_attended": "Attended",
     "plugin_vcent_last_offer_at": "LATEST OFFER at"
 }
