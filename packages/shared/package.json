@@ -11,10 +11,12 @@
     "anchorme": "^2.1.2",
     "bignumber.js": "^9.0.1",
     "classnames": "^2.3.1",
+    "iframe-resizer-react": "^1.1.0",
     "lodash-es": "^4.17.21",
     "qrcode": "^1.5.0",
     "react-feather": "^2.0.9",
     "react-use": "^17.3.1",
+    "urlcat": "^2.0.4",
     "use-subscription": "^1.5.1",
     "uuid": "^8.3.2"
   }
