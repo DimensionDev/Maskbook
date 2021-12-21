@@ -389,6 +389,17 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                                     <img
                                                         className={classes.selectWrapperImg}
                                                         src={token?.info.mediaUrl}
+                                                        onError={(e) => {
+                                                            ;(e.target as any).src = new URL(
+                                                                './assets/nft_token_fallback.png',
+                                                                import.meta.url,
+                                                            ).toString()
+                                                            ;(e.target as any).style.minHeight = 0
+                                                            ;(e.target as any).style.maxWidth = 'none'
+                                                            ;(e.target as any).style.transform = 'translateY(10px)'
+                                                            ;(e.target as any).style.width = '64px'
+                                                            ;(e.target as any).style.height = '64px'
+                                                        }}
                                                     />
                                                 ) : (
                                                     <img
