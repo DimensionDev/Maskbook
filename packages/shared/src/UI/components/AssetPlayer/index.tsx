@@ -1,5 +1,5 @@
 import { memo, useRef, DetailedHTMLProps, AudioHTMLAttributes, VideoHTMLAttributes, useCallback } from 'react'
-import IframeResizer, { IFrameComponent, IFrameObject } from 'iframe-resizer-react'
+import IframeResizer, { IFrameComponent } from 'iframe-resizer-react'
 import { mediaViewerUrl } from '../../../constants'
 import { useUpdateEffect } from 'react-use'
 
