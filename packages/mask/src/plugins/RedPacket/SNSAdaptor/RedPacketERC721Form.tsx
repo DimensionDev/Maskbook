@@ -52,6 +52,9 @@ const useStyles = makeStyles()((theme) => {
         },
         imgWrapper: {
             height: 160,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
             width: '100%',
             overflow: 'hidden',
         },
@@ -104,6 +107,11 @@ const useStyles = makeStyles()((theme) => {
         },
         addIcon: {
             color: '#AFC3E1',
+        },
+        fallbackNftImg: {
+            width: 64,
+            height: 64,
+            transform: 'translateY(10px)',
         },
         closeIconWrapperBack: {
             position: 'absolute',
@@ -201,7 +209,31 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                             {existTokenDetailedList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
                                     <div className={classes.imgWrapper}>
-                                        <img className={classes.nftImg} src={value.info.mediaUrl} />
+                                        {value.info.mediaUrl ? (
+                                            <img
+                                                className={classes.nftImg}
+                                                src={value.info.mediaUrl}
+                                                onError={(e) => {
+                                                    ;(e.target as any).src = new URL(
+                                                        './assets/nft_token_fallback.png',
+                                                        import.meta.url,
+                                                    ).toString()
+                                                    ;(e.target as any).style.minHeight = 0
+                                                    ;(e.target as any).style.maxWidth = 'none'
+                                                    ;(e.target as any).style.transform = 'translateY(10px)'
+                                                    ;(e.target as any).style.width = '64px'
+                                                    ;(e.target as any).style.height = '64px'
+                                                }}
+                                            />
+                                        ) : (
+                                            <img
+                                                className={classes.fallbackNftImg}
+                                                src={new URL(
+                                                    './assets/nft_token_fallback.png',
+                                                    import.meta.url,
+                                                ).toString()}
+                                            />
+                                        )}
                                     </div>
                                     <div className={classes.nftNameWrapper}>
                                         <Typography className={classes.nftName} color="textSecondary">
