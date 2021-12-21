@@ -170,7 +170,7 @@ export function FindTruman(props: FindTrumanProps) {
                                             PopperProps={{
                                                 disablePortal: true,
                                             }}
-                                            arrow={true}
+                                            arrow
                                             placement="top"
                                             title={
                                                 isCritical

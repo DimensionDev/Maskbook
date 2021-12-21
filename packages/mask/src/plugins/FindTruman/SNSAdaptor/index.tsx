@@ -37,7 +37,7 @@ const isFindTrumanURL = (input: string): boolean => {
         return false
     }
     if (hash.startsWith('#/encryption')) {
-        return /^#\/encryption\?clueId=[\da-z]+$/i.test(hash)
+        return /^#\/encryption\?clueid=[\da-z]+$/i.test(hash)
     }
     if (hash.startsWith('#/findtruman/stories')) {
         return /^#\/findtruman\/stories\/[\da-z]+(\/|\/(puzzle|poll)(s|_result)\/[\da-z]+\/?)?$/i.test(hash)

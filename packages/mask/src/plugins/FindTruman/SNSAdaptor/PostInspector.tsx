@@ -184,7 +184,7 @@ export function PostInspector(props: PostInspectorProps) {
             }}>
             <LoadingFailCard
                 title=""
-                isFullPluginDown={true}
+                isFullPluginDown
                 retry={() => {
                     fetchData()
                 }}>
