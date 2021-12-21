@@ -1,41 +1,55 @@
 // @ts-check
-import { build } from 'esbuild'
-import { join, dirname } from 'path'
+import { spawn } from 'child_process'
+import { readFile, writeFile } from 'fs/promises'
+import { join, resolve } from 'path'
 import { fileURLToPath } from 'url'
-import { readdir } from 'fs/promises'
 
-// @ts-ignore
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const externals = [
-    // @ts-ignore
-    ...new Set((await readdir(join(__dirname, '../../node_modules/.pnpm'))).map(resolvePackageName)),
-].filter(isExternal)
+const __file = fileURLToPath(import.meta.url)
+const __dirname = resolve(__file, '../')
 
-// @ts-ignore
-const result = await build({
-    absWorkingDir: __dirname,
-    bundle: true,
-    entryPoints: [join(__dirname, './src/index.ts')],
-    treeShaking: true,
-    outfile: join(__dirname, './dist/out.js'),
-    platform: 'node',
-    external: externals.concat('electron'),
-    format: 'esm',
-    // minify: true,
-})
-
-/** @param pkg {string} */
-function resolvePackageName(pkg) {
-    if (pkg.startsWith('@')) {
-        return `@` + pkg.slice(1).split('@')[0].replace('+', '/')
-    }
-    return pkg.split('@')[0]
+function awaitChildProcess(child) {
+    return new Promise((resolve, reject) => {
+        child.on('error', () => reject(child.exitCode || 0))
+        child.on('exit', (code) => resolve(code || 0))
+    })
 }
-/** @param pkg {string} */
-function isExternal(pkg) {
-    // Monorepo packages
-    if (pkg.startsWith('@masknet')) return false
-    // Some of @dimensiondev packages are published on the Github registry which is not convenient to use.
-    if (pkg.startsWith('@dimensiondev')) return false
-    return true
+
+const rollup = awaitChildProcess(
+    spawn('pnpm run build:rollup', {
+        cwd: __dirname,
+        shell: true,
+        stdio: 'inherit',
+    }),
+)
+await rollup
+const version = JSON.parse(await readFile(join(__dirname, './package.json'), 'utf-8')).version
+const now = new Date()
+const packageJSON = {
+    name: '@dimensiondev/provider-proxy',
+    version: `${version}-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2)}${String(now.getDate()).padStart(
+        2,
+    )}-${String(now.getHours()).padStart(2)}${String(now.getMinutes()).padStart(2)}`,
+    dependencies: {
+        'wallet.ts': '1.0.1',
+        'bignumber.js': '9.0.1',
+    },
+    main: './output.js',
 }
+await writeFile(join(__dirname, './dist/package.json'), JSON.stringify(packageJSON, undefined, 4))
+
+const out = join(__dirname, './dist')
+// validate if there is dependency missing
+await awaitChildProcess(
+    spawn('npm install', {
+        cwd: out,
+        shell: true,
+        stdio: 'inherit',
+    }),
+)
+await awaitChildProcess(
+    spawn('node output.js', {
+        cwd: out,
+        shell: true,
+        stdio: 'inherit',
+    }),
+)
