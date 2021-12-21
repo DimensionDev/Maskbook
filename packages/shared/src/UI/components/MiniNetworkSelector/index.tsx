@@ -77,6 +77,7 @@ export const MiniNetworkSelector = memo<NetworkSelectorMinProps>(
                             width: size,
                             height: size,
                             minWidth: size,
+                            minHeight: size,
                             lineHeight: `${size}px`,
                         }}
                         onClick={() => onSelect(null)}>

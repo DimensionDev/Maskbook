@@ -1,3 +1,4 @@
+import type { Web3Plugin } from '@masknet/plugin-infra'
 import { getMaskColor, makeStyles, useStylesExtends } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -19,12 +20,15 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface NFTPageProps extends withClasses<'text' | 'button'> {
     address: string
+    network: Web3Plugin.NetworkDescriptor | null
 }
 
 export function NFTPage(props: NFTPageProps) {
-    const { address } = props
+    const { address, network } = props
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
+
+    console.log(network)
 
     if (!address)
         return (

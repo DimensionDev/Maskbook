@@ -14,8 +14,10 @@ import { DAOPage } from './DAOPage'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
 import { AddressViewer } from './components/AddressViewer'
+import { NetworkSelector } from './components/NetworkSelector'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useDao } from './hooks'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -28,7 +30,12 @@ const useStyles = makeStyles()((theme) => ({
     tags: {
         padding: theme.spacing(2),
     },
-    metadata: {},
+    metadata: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: theme.spacing(1),
+    },
     content: {
         position: 'relative',
         padding: theme.spacing(1),
@@ -49,6 +56,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const [hidden, setHidden] = useState(true)
     const { value: daoPayload } = useDao(identity.identifier)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
+    const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(null)
 
     useLocationChange(() => {
         setCurrentTag(PageTags.NFTTag)
@@ -98,7 +106,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.WalletTag:
                 return <WalletsPage />
             case PageTags.NFTTag:
-                return <NFTPage address={address} />
+                return <NFTPage address={address} network={selectedNetwork} />
             case PageTags.DonationTag:
                 return <DonationPage address={address} />
             case PageTags.FootprintTag:
@@ -108,7 +116,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             default:
                 unreachable(currentTag)
         }
-    }, [address, currentTag, daoPayload, identity.identifier])
+    }, [address, currentTag, daoPayload, identity.identifier, selectedNetwork])
 
     if (hidden) return null
 
@@ -145,6 +153,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                 <PageTag address={address} daoPayload={daoPayload} tag={currentTag} onChange={setCurrentTag} />
             </div>
             <div className={classes.metadata}>
+                <NetworkSelector onSelectNetwork={setSelectedNetwork} />
                 <AddressViewer addressName={addressName} />
             </div>
             <div className={classes.content}>{content}</div>
