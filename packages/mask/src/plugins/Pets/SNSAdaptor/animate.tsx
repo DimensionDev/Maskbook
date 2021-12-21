@@ -5,6 +5,9 @@ import Drag from './drag'
 import AnimatedMessage from './animatedMsg'
 import Tip from './tooltip'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { PetsPluginID } from '../constants'
+import { currentPluginMinimalModeNOTEnabled } from '../../../settings/settings'
+import { useValueRef } from '@masknet/shared'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -36,13 +39,14 @@ const AnimatePic = () => {
 
     const [show, setShow] = useState(false)
     const [infoShow, setInfoShow] = useState(false)
+    const enabled = useValueRef(currentPluginMinimalModeNOTEnabled['plugin:' + PetsPluginID])
 
     const identity = useCurrentVisitingIdentity()
     useEffect(() => {
         const userId = identity.identifier.userId
         const maskId = 'realMaskNetwork'
-        setShow(userId === maskId)
-    }, [identity])
+        setShow(enabled && userId === maskId)
+    }, [identity, enabled])
 
     const handleClose = () => setShow(false)
     const handleMouseEnter = () => setInfoShow(true)
