@@ -1,5 +1,4 @@
 import { EthereumAddress } from 'wallet.ts'
-import { memoizePromise } from '@dimensiondev/kit'
 import { Resolution } from '@unstoppabledomains/resolution'
 import {
     AddressName,
@@ -16,8 +15,8 @@ import { PluginNFTAvatarRPC } from '../../Avatar/messages'
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
-const RSS3_URL_RE = /https?:\/\/(?<name>\w+)\.rss3\.bio/
-const RSS3_RNS_RE = /(?<name>\w+)\.rss3/
+const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.rss3\.bio/
+const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
 function isValidAddress(address: string) {
     return address && EthereumAddress.isValid(address) && !isSameAddress(address, ZERO_ADDRESS)
