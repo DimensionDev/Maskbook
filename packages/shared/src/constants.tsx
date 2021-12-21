@@ -7,3 +7,5 @@ export const SOCIAL_MEDIA_ICON_MAPPING: Record<string, ReactNode> = {
     'minds.com': <MindsIcon />,
     'instagram.com': <InstagramColoredIcon />,
 }
+
+export const mediaViewerUrl = 'https://dimensiondev.github.io/Media-Viewer/index.html'

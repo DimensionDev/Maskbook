@@ -25,7 +25,11 @@ export function ArticleTab(props: ArticleTabProps) {
     const resourceUrl = asset.value.animation_url || asset.value.image_url
     return (
         <CollectibleTab>
-            <div className={classes.body}>{resourceUrl ? <AssetPlayer url={resourceUrl} /> : null}</div>
+            <div className={classes.body}>
+                {resourceUrl ? (
+                    <AssetPlayer url={resourceUrl} AudioProps={{ autoPlay: true }} VideoProps={{ autoPlay: true }} />
+                ) : null}
+            </div>
         </CollectibleTab>
     )
 }
