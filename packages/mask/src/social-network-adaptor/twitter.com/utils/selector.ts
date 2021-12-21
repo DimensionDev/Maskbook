@@ -123,6 +123,8 @@ export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideN
 
 export const bioDescriptionSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
 
+export const personalHomepageSelector = () => querySelector<HTMLDivElement>('[data-testid="UserUrl"]')
+
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
         .map((x) => x.parentElement?.parentElement?.previousElementSibling)

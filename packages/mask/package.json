@@ -55,6 +55,7 @@
     "@uniswap/sdk-core": "^3.0.1",
     "@uniswap/v2-sdk": "3.0.0-alpha.2",
     "@uniswap/v3-sdk": "^3.3.2",
+    "@unstoppabledomains/resolution": "^5.0.1",
     "@walletconnect/client": "^1.2.2",
     "anchorme": "^2.1.2",
     "arweave": "1.10.13",
