@@ -51,7 +51,7 @@ function NFTAvatarInTwitter() {
         const ele = searchTwitterAvatarSelector().evaluate()
         if (ele) {
             const style = window.getComputedStyle(ele)
-            return Number(style.width.replace('px', '') ?? 0)
+            return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
         }
         return 0
     }, [windowSize])
