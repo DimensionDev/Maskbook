@@ -1,7 +1,7 @@
 import { useScrollBottomEvent } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { ERC721ContractDetailed, useAccount, useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
@@ -92,6 +92,14 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
         setAnchorEl(null)
     }
 
+    if (chainId === ChainId.BSC) {
+        return (
+            <Typography className={classes.placeholder} color="textSecondary">
+                {t('plugin_chain_not_supported', { chain: 'Binance Smart Chain' })}
+            </Typography>
+        )
+    }
+
     if (loading) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
@@ -99,8 +107,13 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
             </Typography>
         )
     }
+
     if (!histories?.length) {
-        return null
+        return (
+            <Typography className={classes.placeholder} color="textSecondary">
+                {t('no_data')}
+            </Typography>
+        )
     }
 
     return (
