@@ -28,7 +28,7 @@ const packageJSON = {
     name: '@dimensiondev/provider-proxy',
     version: `${version}-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2)}${String(now.getDate()).padStart(
         2,
-    )}-${String(now.getHours()).padStart(2)}${String(now.getMinutes()).padStart(2)}`,
+    )}-${String(now.getHours()).padStart(2)}${String(now.getMinutes()).padStart(2)}`.replace(' ', '0'),
     dependencies: {
         'wallet.ts': '1.0.1',
         'bignumber.js': '9.0.1',

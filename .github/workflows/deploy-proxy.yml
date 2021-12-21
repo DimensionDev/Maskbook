@@ -46,8 +46,8 @@ jobs:
         with:
           node-version: 16
           registry-url: https://npm.pkg.github.com/
-      - name: Run Install
-        working-directory: ./packages/provider-proxy
-        run: npm publish --scope=@nikomaniac --registry=https://npm.pkg.github.com
+      - name: Publish to github npm pkg
+        working-directory: ./packages/provider-proxy/dist
+        run: npm publish --scope=@dimensiondev --registry=https://npm.pkg.github.com
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
