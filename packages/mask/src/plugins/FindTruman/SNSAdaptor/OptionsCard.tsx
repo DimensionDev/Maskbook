@@ -199,9 +199,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                                 color="primary"
                                 label={t('plugin_find_truman_selected')}
                             />
-                        ) : selected ? (
-                            <></>
-                        ) : (
+                        ) : selected ? null : (
                             <Chip
                                 sx={{ cursor: 'pointer' }}
                                 icon={<RadioButtonUnchecked />}

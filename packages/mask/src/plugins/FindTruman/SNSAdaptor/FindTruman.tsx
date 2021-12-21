@@ -179,13 +179,10 @@ export function FindTruman(props: FindTrumanProps) {
                                                     ? t('plugin_find_truman_status_noncritical')
                                                     : ''
                                             }>
-                                            {isCritical ? (
-                                                <Avatar className={classes.c}>C</Avatar>
-                                            ) : isNoncritical ? (
-                                                <Avatar className={classes.n}>N</Avatar>
-                                            ) : (
-                                                <></>
-                                            )}
+                                            <Box>
+                                                {isCritical && <Avatar className={classes.c}>C</Avatar>}
+                                                {isNoncritical && <Avatar className={classes.n}>N</Avatar>}
+                                            </Box>
                                         </Tooltip>
                                         <Chip color="primary" size="small" label={getPostTypeTitle(t, postType)} />
                                     </Box>

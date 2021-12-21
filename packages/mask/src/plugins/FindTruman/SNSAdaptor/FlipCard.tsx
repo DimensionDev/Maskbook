@@ -1,9 +1,18 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
+
+enum FlipCardChildType {
+    FRONT = 0,
+    BACK = 1,
+}
+const FlipCardRotateDegree = {
+    noFlipped: 0,
+    frontRotate: 180,
+    backRotate: -180,
+}
 
 interface ReactFlipCardProps {
     cardZIndex?: string
     containerStyle?: {}
-    containerClassName?: string
     isFlipped?: boolean
     flipSpeedBackToFront?: number
     flipSpeedFrontToBack?: number
@@ -17,7 +26,6 @@ const FlipCard: React.FC<ReactFlipCardProps> = (props) => {
         cardStyles,
         cardZIndex,
         containerStyle,
-        containerClassName,
         flipDirection,
         flipSpeedFrontToBack,
         flipSpeedBackToFront,
@@ -25,34 +33,39 @@ const FlipCard: React.FC<ReactFlipCardProps> = (props) => {
     } = props
 
     const [isFlipped, setFlipped] = useState(props.isFlipped)
-    const [rotation, setRotation] = useState(0)
+    const [rotation, setRotation] = useState(FlipCardRotateDegree.noFlipped)
 
     useEffect(() => {
         if (props.isFlipped !== isFlipped) {
             setFlipped(props.isFlipped)
-            setRotation((c) => c + 180)
+            setRotation((c) => c + FlipCardRotateDegree.frontRotate)
         }
     }, [props.isFlipped])
 
-    const getContainerClassName = useMemo(() => {
-        let className = 'react-card-flip'
-        if (containerClassName) {
-            className += ` ${containerClassName}`
-        }
-        return className
-    }, [containerClassName])
-
-    const getComponent = (key: 0 | 1) => {
-        if (props.children.length !== 2) {
-            throw new Error('Component FlipCard requires 2 children to function')
-        }
+    const getComponent = (key: FlipCardChildType) => {
         return props.children[key]
     }
 
-    const frontRotateY = `rotateY(${infinite ? rotation : isFlipped ? 180 : 0}deg)`
-    const backRotateY = `rotateY(${infinite ? rotation + 180 : isFlipped ? 0 : -180}deg)`
-    const frontRotateX = `rotateX(${infinite ? rotation : isFlipped ? 180 : 0}deg)`
-    const backRotateX = `rotateX(${infinite ? rotation + 180 : isFlipped ? 0 : -180}deg)`
+    const frontRotateY = `rotateY(${
+        infinite ? rotation : isFlipped ? FlipCardRotateDegree.frontRotate : FlipCardRotateDegree.noFlipped
+    }deg)`
+    const backRotateY = `rotateY(${
+        infinite
+            ? rotation + FlipCardRotateDegree.frontRotate
+            : isFlipped
+            ? FlipCardRotateDegree.noFlipped
+            : FlipCardRotateDegree.backRotate
+    }deg)`
+    const frontRotateX = `rotateX(${
+        infinite ? rotation : isFlipped ? FlipCardRotateDegree.frontRotate : FlipCardRotateDegree.noFlipped
+    }deg)`
+    const backRotateX = `rotateX(${
+        infinite
+            ? rotation + FlipCardRotateDegree.frontRotate
+            : isFlipped
+            ? FlipCardRotateDegree.noFlipped
+            : FlipCardRotateDegree.backRotate
+    }deg)`
 
     const styles: any = {
         back: {
@@ -94,15 +107,10 @@ const FlipCard: React.FC<ReactFlipCardProps> = (props) => {
     }
 
     return (
-        <div className={getContainerClassName} style={{ ...styles.container, ...containerStyle }}>
-            <div className="react-card-flipper" style={styles.flipper}>
-                <div className="react-card-front" style={styles.front}>
-                    {getComponent(0)}
-                </div>
-
-                <div className="react-card-back" style={styles.back}>
-                    {getComponent(1)}
-                </div>
+        <div style={{ ...styles.container, ...containerStyle }}>
+            <div style={styles.flipper}>
+                <div style={styles.front}>{getComponent(FlipCardChildType.FRONT)}</div>
+                <div style={styles.back}>{getComponent(FlipCardChildType.BACK)}</div>
             </div>
         </div>
     )

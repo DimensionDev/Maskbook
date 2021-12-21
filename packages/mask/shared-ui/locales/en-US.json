@@ -749,7 +749,6 @@
     "plugin_find_truman_buy": "BUY",
     "plugin_find_truman_unsupported_chain": "The chain is expected to be {{chain}} so that we are able to verify your NFT assets on it.",
     "plugin_find_truman_decrypted_by": "Decrypted by FindTruman:",
-    "plugin_find_truman_decrypt_102": "The following specific NFTs are needed for decryption.",
     "plugin_find_truman_insufficient_nft": "The following specific NFTs are needed for this vote.",
     "plugin_find_truman_buy_nft_tip": "At least {{count}} copy of this NFT is required.",
     "plugin_find_truman_buy_nfts_tip": "At least {{count}} copies of this NFT are required.",

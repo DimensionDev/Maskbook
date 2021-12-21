@@ -37,9 +37,9 @@ const useStyles = makeStyles()((theme) => {
 const getEncryptionError = (t: FindTrumanI18nFunction, errorCode: string) => {
     switch (errorCode) {
         case EncryptionErrorType.INSUFFICIENT_NFT:
-            return t('plugin_find_truman_decrypt_102')
+            return t('plugin_find_truman_decrypt_insufficient_nft')
         case EncryptionErrorType.ERROR_CLUE_ID:
-            return t('plugin_find_truman_decrypt_1004')
+            return t('plugin_find_truman_decrypt_error_clue_id')
         default:
             return ''
     }
@@ -60,7 +60,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
         return clueId
             ? fetchClue(clueId, address)
             : { decrypted: false, condition: undefined, frontImg: '', backImg: '' }
-    }, [clueId])
+    }, [clueId, address])
 
     return (
         <CardContent>
@@ -97,9 +97,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                                         onClick={() => setFlipped(false)}
                                         conditions={[clue.condition]}
                                     />
-                                ) : (
-                                    <div />
-                                )}
+                                ) : null}
                             </FlipCard>
                         </div>
                     </CardContent>

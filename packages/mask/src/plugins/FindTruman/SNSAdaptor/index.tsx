@@ -28,11 +28,24 @@ const useStyles = makeStyles()((theme) => {
  * https://findtruman.io/#/findtruman/stories/{storyId}/puzzle_result/{pollId}
  * https://findtruman.io/#/findtruman/stories/{storyId}/poll_result/{pollId}
  */
-const isFindTrumanURL = (x: string): boolean =>
-    // eslint-disable-next-line
-    /^https:\/\/findtruman.io\/#\/(findtruman\/stories\/[a-zA-Z0-9]+(\/|\/(puzzles|polls|puzzle_result|poll_result)\/[a-zA-Z0-9]+\/?)?|encryption\?clueId=[a-zA-Z0-9]+)$/i.test(
-        x,
-    )
+const isFindTrumanURL = (input: string): boolean => {
+    if (!input.startsWith('https://findtruman.io')) {
+        return false
+    }
+    const { pathname, hash } = new URL(input)
+    if (pathname !== '/') {
+        return false
+    }
+    if (hash.startsWith('#/encryption')) {
+        return /^#\/encryption\?clueid=[\da-z]+$/i.test(hash)
+    }
+    if (hash.startsWith('#/findtruman/stories')) {
+        return /^#\/findtruman\/stories\/[\da-z]+(\/|\/(puzzles|polls|puzzle_result|poll_result)\/[\da-z]+\/?)?$/i.test(
+            hash,
+        )
+    }
+    return false
+}
 
 function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()

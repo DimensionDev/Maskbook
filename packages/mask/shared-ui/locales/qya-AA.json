@@ -749,7 +749,6 @@
     "plugin_find_truman_buy": "crwdns10393:0crwdne10393:0",
     "plugin_find_truman_unsupported_chain": "crwdns10395:0{{chain}}crwdne10395:0",
     "plugin_find_truman_decrypted_by": "crwdns10397:0crwdne10397:0",
-    "plugin_find_truman_decrypt_102": "crwdns10401:0crwdne10401:0",
     "plugin_find_truman_insufficient_nft": "crwdns10405:0crwdne10405:0",
     "plugin_find_truman_buy_nft_tip": "crwdns10407:0{{count}}crwdne10407:0",
     "plugin_find_truman_buy_nfts_tip": "crwdns10409:0{{count}}crwdne10409:0",
