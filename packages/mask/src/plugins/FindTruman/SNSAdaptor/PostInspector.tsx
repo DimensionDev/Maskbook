@@ -3,7 +3,7 @@ import { LoadingFailCard } from './LoadingFailCard'
 import { FindTruman } from './FindTruman'
 import {
     FindTrumanConst,
-    FindTrumanPostType,
+    PostType,
     PollResult,
     PuzzleResult,
     StoryInfo,
@@ -41,17 +41,17 @@ export function PostInspector(props: PostInspectorProps) {
     const storyId = _storyId ? _storyId : ''
     const targetId = _targetId ? _targetId : ''
 
-    const postType: FindTrumanPostType = url.includes('/encryption?')
-        ? FindTrumanPostType.Encryption
+    const postType: PostType = url.includes('/encryption?')
+        ? PostType.Encryption
         : url.includes('/puzzles/')
-        ? FindTrumanPostType.Puzzle
+        ? PostType.Puzzle
         : url.includes('/polls/')
-        ? FindTrumanPostType.Poll
+        ? PostType.Poll
         : url.includes('/puzzle_result')
-        ? FindTrumanPostType.PuzzleResult
+        ? PostType.PuzzleResult
         : url.includes('/poll_result/')
-        ? FindTrumanPostType.PollResult
-        : FindTrumanPostType.Status
+        ? PostType.PollResult
+        : PostType.Status
 
     const [storyInfo, setStoryInfo] = useState<StoryInfo>()
     const [userStoryStatus, setUserStoryStatus] = useState<UserStoryStatus>()
@@ -84,7 +84,7 @@ export function PostInspector(props: PostInspectorProps) {
     }, [account])
 
     const fetchData = async () => {
-        if (postType === FindTrumanPostType.Encryption) {
+        if (postType === PostType.Encryption) {
             const searchParams = new URLSearchParams(url.split('?')[1])
             const payload = searchParams.get('payload') || ''
             setEncryptionPayload(payload)
@@ -92,17 +92,17 @@ export function PostInspector(props: PostInspectorProps) {
         }
         setStoryInfo(await fetchStoryInfo(storyId))
         if (account) {
-            if (postType === FindTrumanPostType.Status) {
+            if (postType === PostType.Status) {
                 setUserStoryStatus(await fetchUserStoryStatus(storyId, account))
-            } else if (postType === FindTrumanPostType.Puzzle || postType === FindTrumanPostType.PuzzleResult) {
+            } else if (postType === PostType.Puzzle || postType === PostType.PuzzleResult) {
                 setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
-            } else if (postType === FindTrumanPostType.Poll || postType === FindTrumanPostType.PollResult) {
+            } else if (postType === PostType.Poll || postType === PostType.PollResult) {
                 setUserPollStatus(await fetchUserPollStatus(targetId, account))
             }
         }
-        if (postType === FindTrumanPostType.PuzzleResult) {
+        if (postType === PostType.PuzzleResult) {
             setPuzzleResult(await fetchPuzzleResult(targetId))
-        } else if (postType === FindTrumanPostType.PollResult) {
+        } else if (postType === PostType.PollResult) {
             setPollResult(await fetchPollResult(targetId))
         }
     }
@@ -111,10 +111,10 @@ export function PostInspector(props: PostInspectorProps) {
         const from = account
         const timestamp = getUnixTime(Date.now())
         try {
-            if (postType === FindTrumanPostType.Puzzle) {
+            if (postType === PostType.Puzzle) {
                 const target = userPuzzleStatus?.id ?? ''
                 await submitPuzzle(account, { target, from, timestamp, choice })
-            } else if (postType === FindTrumanPostType.Poll) {
+            } else if (postType === PostType.Poll) {
                 const target = userPollStatus?.id ?? ''
                 await submitPoll(account, { target, from, timestamp, choice })
             }

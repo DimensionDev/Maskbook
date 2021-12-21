@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { FindTrumanContext } from '../context'
 import { Alert, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Typography } from '@mui/material'
 import type { PollResult, PuzzleResult, StoryInfo, UserPollStatus, UserPuzzleStatus, UserStoryStatus } from '../types'
-import { FindTrumanPostType } from '../types'
+import { PostType } from '../types'
 import { I18NFunction, useI18N } from '../../../utils'
 import ResultCard from './ResultCard'
 import OptionsCard from './OptionsCard'
@@ -71,7 +71,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface FindTrumanProps {
-    postType: FindTrumanPostType
+    postType: PostType
     encryptionPayload: string
     storyInfo?: StoryInfo
     userStoryStatus?: UserStoryStatus
@@ -82,17 +82,17 @@ interface FindTrumanProps {
     onSubmit: (choice: number) => Promise<boolean>
 }
 
-function getPostTypeTitle(t: I18NFunction, postType: FindTrumanPostType) {
+function getPostTypeTitle(t: I18NFunction, postType: PostType) {
     switch (postType) {
-        case FindTrumanPostType.Poll:
+        case PostType.Poll:
             return t('plugin_find_truman_status_poll')
-        case FindTrumanPostType.Puzzle:
+        case PostType.Puzzle:
             return t('plugin_find_truman_status_puzzle')
-        case FindTrumanPostType.PuzzleResult:
+        case PostType.PuzzleResult:
             return t('plugin_find_truman_status_puzzle_result')
-        case FindTrumanPostType.PollResult:
+        case PostType.PollResult:
             return t('plugin_find_truman_status_poll_result')
-        case FindTrumanPostType.Status:
+        case PostType.Status:
             return t('plugin_find_truman_status_result')
         default:
             return ''
@@ -124,7 +124,7 @@ export function FindTruman(props: FindTrumanProps) {
 
     return (
         <Card className={classes.root} elevation={0}>
-            {postType !== FindTrumanPostType.Encryption ? (
+            {postType !== PostType.Encryption ? (
                 <>
                     <CardMedia
                         onLoad={() => {
@@ -175,18 +175,14 @@ export function FindTruman(props: FindTrumanProps) {
                             )
                         }
                     />
-                    {postType === FindTrumanPostType.Status && <StageCard userStoryStatus={userStoryStatus} />}
-                    {postType === FindTrumanPostType.Puzzle && userPuzzleStatus && (
-                        <OptionsCard
-                            type={FindTrumanPostType.Puzzle}
-                            onSubmit={onSubmit}
-                            userStatus={userPuzzleStatus}
-                        />
+                    {postType === PostType.Status && <StageCard userStoryStatus={userStoryStatus} />}
+                    {postType === PostType.Puzzle && userPuzzleStatus && (
+                        <OptionsCard type={PostType.Puzzle} onSubmit={onSubmit} userStatus={userPuzzleStatus} />
                     )}
-                    {postType === FindTrumanPostType.Poll && userPollStatus && (
-                        <OptionsCard type={FindTrumanPostType.Poll} onSubmit={onSubmit} userStatus={userPollStatus} />
+                    {postType === PostType.Poll && userPollStatus && (
+                        <OptionsCard type={PostType.Poll} onSubmit={onSubmit} userStatus={userPollStatus} />
                     )}
-                    {(postType === FindTrumanPostType.PuzzleResult || postType === FindTrumanPostType.PollResult) &&
+                    {(postType === PostType.PuzzleResult || postType === PostType.PollResult) &&
                         (puzzleResult || pollResult) && (
                             <ResultCard
                                 type={postType}

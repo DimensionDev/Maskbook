@@ -1,5 +1,5 @@
 import type { PuzzleCondition, UserPollStatus, UserPuzzleStatus } from '../types'
-import { FindTrumanPostType } from '../types'
+import { PostType } from '../types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useI18N } from '../../../utils'
 import { makeStyles } from '@masknet/theme'
@@ -79,7 +79,7 @@ const useOptionsStyles = makeStyles()((theme) => {
     }
 })
 interface OptionsViewProps {
-    type: FindTrumanPostType
+    type: PostType
     userStatus?: UserPuzzleStatus | UserPollStatus
     onSubmit: (choice: number) => Promise<boolean>
 }
@@ -108,7 +108,7 @@ export default function OptionsCard(props: OptionsViewProps) {
         setChoice(userStatus ? userStatus.choice : -1)
         setSelected(userStatus ? userStatus.choice !== -1 : true)
         setTimeout(() => {
-            type === FindTrumanPostType.Poll &&
+            type === PostType.Poll &&
                 ref?.current?.scrollTo({
                     left: ref.current.scrollWidth,
                     behavior: 'smooth',
@@ -383,7 +383,7 @@ export default function OptionsCard(props: OptionsViewProps) {
             </Snackbar>
             {userStatus && (
                 <>
-                    {(type === FindTrumanPostType.Puzzle || type === FindTrumanPostType.Poll) && (
+                    {(type === PostType.Puzzle || type === PostType.Poll) && (
                         <>
                             {renderOptions(userStatus)}
                             {!error && !selected && renderSubmitButton(userStatus)}

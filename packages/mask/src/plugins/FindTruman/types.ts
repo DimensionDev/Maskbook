@@ -1,4 +1,4 @@
-export enum FindTrumanPostType {
+export enum PostType {
     Status = 'result',
     Puzzle = 'puzzle',
     Poll = 'poll',
