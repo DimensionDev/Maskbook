@@ -1,134 +1,90 @@
+import urlcat from 'urlcat'
 import Services from '../../../../extension/service'
-import type {
+import {
+    FindTrumanConst,
+    FindTrumanRemoteError,
     PollResult,
     PuzzleResult,
+    StoryInfo,
     SubmitPollParams,
-    UserPuzzleStatus,
-    UserStoryStatus,
     SubmitPuzzleParams,
     UserPollStatus,
-    StoryInfo,
-    FindTrumanConst,
+    UserPuzzleStatus,
+    UserStoryStatus,
 } from '../../types'
 
-const FIND_TRUMAN_API_PREFIX = 'https://findtruman.io/api'
+const PREFIX = 'https://findtruman.io/api'
 
-function request<T>(url: string, options: any, params?: any): Promise<T> {
-    return new Promise<T>(async (resolve, reject) => {
-        try {
-            const response = await fetch(url, {
-                mode: 'cors',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                ...options,
-                body: params ? JSON.stringify(params) : null,
-            })
-            const { data, code, msg } = await response.json()
-            if (code === 0) {
-                resolve(data)
-            } else {
-                reject({ code, msg, data })
-            }
-        } catch (error) {
-            reject(-1)
-        }
+async function request<T>(url: string, options?: RequestInit) {
+    const response = await fetch(urlcat(PREFIX, url), {
+        mode: 'cors',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        ...options,
+    })
+    interface Payload {
+        data: T
+        code: number
+        msg: string
+    }
+    const { data, code, msg }: Payload = await response.json()
+    if (code !== 0) {
+        throw new FindTrumanRemoteError(msg, code, data)
+    }
+    return data
+}
+
+export function fetchConst(lang: string) {
+    return request<FindTrumanConst>(urlcat('/consts', { l: lang }))
+}
+
+export function fetchStoryInfo(storyId: string) {
+    return request<StoryInfo>(urlcat('/stories/:storyId', { storyId }))
+}
+
+export function fetchUserStoryStatus(storyId: string, uaddr: string) {
+    return request<UserStoryStatus>(urlcat('/stories/:storyId/status', { storyId, uaddr }))
+}
+
+export function fetchUserPuzzleStatus(puzzleId: string, uaddr: string) {
+    return request<UserPuzzleStatus>(urlcat('/puzzles/:puzzleId/status', { puzzleId, uaddr }))
+}
+
+export function fetchUserPollStatus(pollId: string, uaddr: string) {
+    return request<UserPollStatus>(urlcat('/polls/:pollId/status', { pollId, uaddr }))
+}
+
+export function fetchPuzzleResult(puzzleId: string) {
+    return request<PuzzleResult>(urlcat('/puzzles/:puzzleId/result', { puzzleId }))
+}
+
+export function fetchPollResult(pollId: string) {
+    return request<PollResult>(urlcat('/polls/:pollId/result', { pollId }))
+}
+
+export async function submitPuzzle(address: string, data: SubmitPuzzleParams) {
+    const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
+    return request<string>('/puzzles/submit', {
+        method: 'POST',
+        body: JSON.stringify({ data, sig }),
     })
 }
 
-export function fetchConst(lang: string): Promise<FindTrumanConst> {
-    return request<FindTrumanConst>(`${FIND_TRUMAN_API_PREFIX}/consts?l=${lang}`, {
-        method: 'GET',
+export async function submitPoll(address: string, data: SubmitPollParams) {
+    const sig = await Services.Ethereum.personalSign(JSON.stringify(data), address)
+    return request<string>('/polls/submit', {
+        method: 'POST',
+        body: JSON.stringify({ data, sig }),
     })
 }
 
-export function fetchStoryInfo(storyId: string): Promise<StoryInfo> {
-    return request<StoryInfo>(`${FIND_TRUMAN_API_PREFIX}/stories/${storyId}`, {
-        method: 'GET',
-    })
+export function fetchUserParticipatedStoryStatus(uaddr: string) {
+    return request<UserStoryStatus[]>(urlcat('/participated_story_status', { uaddr }))
 }
 
-export function fetchUserStoryStatus(storyId: string, address: string): Promise<UserStoryStatus> {
-    return request<UserStoryStatus>(`${FIND_TRUMAN_API_PREFIX}/stories/${storyId}/status?uaddr=${address}`, {
-        method: 'GET',
-    })
-}
-
-export function fetchUserPuzzleStatus(puzzleId: string, address: string): Promise<UserPuzzleStatus> {
-    return request<UserPuzzleStatus>(`${FIND_TRUMAN_API_PREFIX}/puzzles/${puzzleId}/status?uaddr=${address}`, {
-        method: 'GET',
-    })
-}
-
-export function fetchUserPollStatus(pollId: string, address: string): Promise<UserPollStatus> {
-    return request<UserPollStatus>(`${FIND_TRUMAN_API_PREFIX}/polls/${pollId}/status?uaddr=${address}`, {
-        method: 'GET',
-    })
-}
-
-export function fetchPuzzleResult(puzzleId: string): Promise<PuzzleResult> {
-    return request<PuzzleResult>(`${FIND_TRUMAN_API_PREFIX}/puzzles/${puzzleId}/result`, {
-        method: 'GET',
-    })
-}
-
-export function fetchPollResult(pollId: string): Promise<PollResult> {
-    return request<PollResult>(`${FIND_TRUMAN_API_PREFIX}/polls/${pollId}/result`, {
-        method: 'GET',
-    })
-}
-
-export function submitPuzzle(address: string, param: SubmitPuzzleParams): Promise<string> {
-    return new Promise<string>(async (resolve, reject) => {
-        try {
-            const sig = await Services.Ethereum.personalSign(JSON.stringify(param), address)
-            const res = await request<string>(
-                `${FIND_TRUMAN_API_PREFIX}/puzzles/submit`,
-                {
-                    method: 'POST',
-                },
-                {
-                    data: param,
-                    sig,
-                },
-            )
-            resolve(res)
-        } catch (error) {
-            reject(error)
-        }
-    })
-}
-
-export function submitPoll(address: string, param: SubmitPollParams): Promise<string> {
-    return new Promise<string>(async (resolve, reject) => {
-        try {
-            const sig = await Services.Ethereum.personalSign(JSON.stringify(param), address)
-            const res = await request<string>(
-                `${FIND_TRUMAN_API_PREFIX}/polls/submit`,
-                {
-                    method: 'POST',
-                },
-                {
-                    data: param,
-                    sig,
-                },
-            )
-            resolve(res)
-        } catch (error) {
-            reject(error)
-        }
-    })
-}
-
-export function fetchUserParticipatedStoryStatus(address: string): Promise<UserStoryStatus[]> {
-    return request<UserStoryStatus[]>(`${FIND_TRUMAN_API_PREFIX}/participated_story_status?uaddr=${address}`, {
-        method: 'GET',
-    })
-}
-
-export function fetchSecretKey(cid: string, address: string): Promise<{ key: string; iv: string }> {
-    return request<{ key: string; iv: string }>(`${FIND_TRUMAN_API_PREFIX}/clue_key?cid=${cid}&uaddr=${address}`, {
-        method: 'GET',
-    })
+export function fetchSecretKey(cid: string, address: string) {
+    type SecretKey = {
+        key: string
+        iv: string
+    }
+    return request<SecretKey>(urlcat('/clue_key', { cid, uaddr: address }))
 }
