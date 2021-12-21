@@ -17,18 +17,18 @@ interface RSS3Info {
     profile: RSS3Profile
 }
 
-export function getDonations(account: string) {
+export function getDonations(address: string) {
     const url = urlcat('https://hub.pass3.me/assets/list', {
-        personaID: account,
+        personaID: address,
         type: AssetType.GitcoinDonation,
     })
 
     return fetchJSON<Response>(url)
 }
 
-export function getFootprints(account: string): Promise<Response> {
+export function getFootprints(address: string): Promise<Response> {
     const url = urlcat('https://hub.pass3.me/assets/list', {
-        personaID: account,
+        personaID: address,
         type: AssetType.POAP,
     })
 
@@ -36,12 +36,14 @@ export function getFootprints(account: string): Promise<Response> {
 }
 
 export async function getRSS3AddressById(id: string) {
+    if (!id) return ''
     const url = urlcat('https://rss3.domains/name/:id', { id })
     const rsp = await fetchJSON<NameInfo>(url)
     return rsp.address
 }
 
 export async function getRSS3ProfileByAddress(address: string) {
+    if (!address) return
     const url = urlcat('https://hub.pass3.me/:address', { address })
     const rsp = await fetchJSON<RSS3Info>(url)
     return rsp?.profile

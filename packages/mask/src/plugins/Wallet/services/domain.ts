@@ -14,9 +14,6 @@ import { createWeb3 } from '../../../extension/background-script/EthereumService
 import { PluginProfileRPC } from '../../Profile/messages'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
 
-const fetchAddressNamesByTwitterIdCached = memoizePromise(ENS.fetchAddressNamesByTwitterId, (twitterId) => twitterId)
-const fetchUserOwnerAddressByTwitterIdCached = memoizePromise(PluginNFTAvatarRPC.getAddress, (twitterId) => twitterId)
-
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
 const RSS3_URL_RE = /https?:\/\/(?<name>\w+)\.rss3\.bio/
@@ -79,10 +76,10 @@ export async function getAddressNames(identity: {
         getResolvedENS(ethereumName),
         getResolvedUNS(ethereumName),
         PluginProfileRPC.getRSS3AddressById(RSS3Id),
-        fetchAddressNamesByTwitterIdCached(twitterId?.toLowerCase() ?? '').then(
+        ENS.fetchAddressNamesByTwitterId(twitterId?.toLowerCase() ?? '').then(
             (result) => result.find((x) => x.owner)?.owner ?? '',
         ),
-        fetchUserOwnerAddressByTwitterIdCached(twitterId?.toLowerCase() ?? ''),
+        PluginNFTAvatarRPC.getAddress(twitterId ?? ''),
     ])
 
     const getSettledAddress = (result: PromiseSettledResult<string>) => {
