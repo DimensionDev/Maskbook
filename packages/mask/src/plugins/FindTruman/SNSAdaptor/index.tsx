@@ -40,9 +40,7 @@ const isFindTrumanURL = (input: string): boolean => {
         return /^#\/encryption\?clueid=[\da-z]+$/i.test(hash)
     }
     if (hash.startsWith('#/findtruman/stories')) {
-        return /^#\/findtruman\/stories\/[\da-z]+(\/|\/(puzzles|polls|puzzle_result|poll_result)\/[\da-z]+\/?)?$/i.test(
-            hash,
-        )
+        return /^#\/findtruman\/stories\/[\da-z]+(\/|\/(puzzle|poll)(s|_result)\/[\da-z]+\/?)?$/i.test(hash)
     }
     return false
 }
