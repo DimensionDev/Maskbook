@@ -196,7 +196,7 @@ export function Collectible(props: CollectibleProps) {
     ]
 
     const CollectibleTabsRouter: FC<{ tabIndex: number }> = ({ tabIndex }) => {
-        const tabMap: { [index: number]: ReactElement } = {
+        const tabMap: Record<number, ReactElement> = {
             [CollectibleTab.ARTICLE]: <ArticleTab />,
             [CollectibleTab.TOKEN]: <TokenTab />,
             [CollectibleTab.OFFER]: <OfferTab />,
