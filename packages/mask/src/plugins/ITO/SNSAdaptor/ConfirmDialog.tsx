@@ -1,6 +1,5 @@
 import { FormattedAddress, FormattedBalance } from '@masknet/shared'
 import {
-    formatAmountPrecision,
     formatBalance,
     formatEthereumAddress,
     FungibleTokenDetailed,
@@ -316,12 +315,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item lg={6} xs={12} className={classes.button}>
                     <ActionButton className={classes.buttonText} fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
-                            total: formatAmountPrecision(
-                                poolSettings?.total,
-                                poolSettings?.token?.decimals,
-                                undefined,
-                                poolSettings?.token?.decimals,
-                            ),
+                            total: formatBalance(poolSettings?.total, poolSettings?.token?.decimals),
                             symbol: poolSettings?.token?.symbol,
                         })}
                     </ActionButton>
