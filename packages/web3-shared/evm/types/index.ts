@@ -166,7 +166,7 @@ export interface ERC721TokenInfo {
     mediaUrl?: string
     owner?: string
     // loading tokenURI
-    loading?: boolean
+    hasTokenDetailed?: boolean
 }
 
 export interface ERC721TokenDetailed {

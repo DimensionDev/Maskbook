@@ -43,15 +43,15 @@ export function useERC721TokenDetailedOwnerList(contractDetailed: ERC721Contract
         // lazy load token info after set loading status to false
         const allRequest = allListRef.current.map(async (nft) => {
             // there's no tokenURI or info already loaded.
-            if (!nft.info.tokenURI || !nft.info.loading) return nft
+            if (!nft.info.tokenURI || nft.info.hasTokenDetailed) return nft
             const info = await getERC721TokenAssetFromChain(nft.info.tokenURI)
-            if (info) nft.info = { ...info, ...nft.info, loading: false, name: info.name ?? nft.info.name }
+            if (info) nft.info = { ...info, ...nft.info, hasTokenDetailed: true, name: info.name ?? nft.info.name }
             return nft
         })
 
         allListRef.current = (await Promise.allSettled(allRequest)).map((x, i) => {
             if (x.status === 'fulfilled') return x.value
-            allListRef.current[i].info.loading = false
+            allListRef.current[i].info.hasTokenDetailed = true
             return allListRef.current[i]
         })
 

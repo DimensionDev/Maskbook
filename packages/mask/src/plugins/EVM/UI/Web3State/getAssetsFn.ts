@@ -135,7 +135,7 @@ export const getNonFungibleTokenFn =
                         tokenDetailed.info = {
                             ...info,
                             ...tokenDetailed.info,
-                            loading: false,
+                            hasTokenDetailed: true,
                             name: info.name ?? tokenDetailed.info.name,
                         }
                     return tokenDetailed

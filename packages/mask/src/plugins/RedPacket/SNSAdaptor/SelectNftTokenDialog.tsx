@@ -383,7 +383,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                     return (
                                         <ListItem className={classes.selectWrapper} key={i.toString()}>
                                             <div className={classes.imgWrapper}>
-                                                {token.info.loading ? (
+                                                {!token.info.hasTokenDetailed ? (
                                                     <CircularProgress size={20} className={classes.loadingNftImg} />
                                                 ) : token?.info.mediaUrl ? (
                                                     <img

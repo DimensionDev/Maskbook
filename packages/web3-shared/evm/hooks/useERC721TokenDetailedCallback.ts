@@ -42,7 +42,7 @@ export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractD
             tokenDetailedFromChain.info = {
                 ...info,
                 ...tokenDetailedFromChain.info,
-                loading: false,
+                hasTokenDetailed: true,
                 name: info.name ?? tokenDetailedFromChain.info.name,
             }
 
