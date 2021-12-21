@@ -131,6 +131,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     tokenImgWrapper: {
         position: 'relative',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         width: 120,
         height: 180,
         overflow: 'hidden',
@@ -395,6 +398,12 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     erc721TokenDetailed?.info.mediaUrl ? '' : classes.loadingTokenImg,
                                 )}
                                 src={erc721TokenDetailed?.info.mediaUrl ?? previewNftImg}
+                                onError={(e) => {
+                                    ;(e.target as any).src = new URL(
+                                        './assets/nft-preview.png',
+                                        import.meta.url,
+                                    ).toString()
+                                }}
                             />
                         </div>
                         <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>
