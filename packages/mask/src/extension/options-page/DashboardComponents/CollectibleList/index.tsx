@@ -226,7 +226,7 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             loading={collectiblesLoading}
             collectiblesRetry={collectiblesRetry}
             error={collectiblesError}
-            readonly={true}
+            readonly
             hasRetry={!!address}
         />
     )
