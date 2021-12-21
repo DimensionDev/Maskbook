@@ -255,16 +255,14 @@ export default function OptionsCard(props: OptionsViewProps) {
             <div style={{ textAlign: 'right', marginTop: '8px', paddingBottom: '8px' }}>
                 <LoadingButton
                     disabled={userStatus.status === 0 || choice === -1}
-                    onClick={() => {
+                    onClick={async () => {
                         setSubmitting(true)
-                        onSubmit(choice)
-                            .then((res) => {
-                                setSubmitting(false)
-                            })
-                            .catch((error) => {
-                                setSnackVisible(true)
-                                setSubmitting(false)
-                            })
+                        try {
+                            await onSubmit(choice)
+                        } catch {
+                            setSnackVisible(true)
+                        }
+                        setSubmitting(false)
                     }}
                     endIcon={<Send />}
                     loading={submitting}
