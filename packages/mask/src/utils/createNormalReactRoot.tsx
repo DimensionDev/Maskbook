@@ -15,7 +15,7 @@ export function createNormalReactRoot(jsx: JSX.Element, container?: HTMLElement)
     }
 
     return ReactDOM.createRoot(container).render(
-        <NoEffectUsePortalShadowRootContext.Provider value={true}>
+        <NoEffectUsePortalShadowRootContext.Provider value>
             <ErrorBoundary>{jsx}</ErrorBoundary>
         </NoEffectUsePortalShadowRootContext.Provider>,
     )

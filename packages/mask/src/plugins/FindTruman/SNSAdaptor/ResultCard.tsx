@@ -128,7 +128,9 @@ export default function ResultCard(props: ResultViewProps) {
                                         <BorderLinearProgress value={Number(percent)} variant="determinate" />
                                     </Box>
                                     <Box sx={{ width: 54 }}>
-                                        <Typography variant="body2" color="text.secondary">{`${percent}%`}</Typography>
+                                        <Typography variant="body2" color="text.secondary">
+                                            {percent}%
+                                        </Typography>
                                     </Box>
                                 </Box>
                             </Card>

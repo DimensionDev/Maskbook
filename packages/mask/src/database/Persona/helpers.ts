@@ -32,8 +32,8 @@ import {
     type EC_Public_JsonWebKey,
     type EC_Private_JsonWebKey,
     type AESJsonWebKey,
+    ECKeyIdentifierFromJsonWebKey,
 } from '@masknet/shared-base'
-import { ECKeyIdentifierFromJsonWebKey } from '../type'
 
 export async function profileRecordToProfile(record: ProfileRecord): Promise<Profile> {
     const rec = { ...record }

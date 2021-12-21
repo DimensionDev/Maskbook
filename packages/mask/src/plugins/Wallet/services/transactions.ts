@@ -63,7 +63,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
         .map((transaction) => {
             let type = transaction.tx?.name
             if (!type && !isNil(transaction.cate_id)) {
-                type = cate_dict[transaction.cate_id].en
+                type = cate_dict[transaction.cate_id].name
             } else if (type === '') {
                 type = 'contract interaction'
             }
@@ -75,20 +75,20 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                 failed: transaction.tx?.status === 0,
                 pairs: [
                     ...transaction.sends.map(({ amount, token_id }) => ({
-                        name: token_dict[token_id].name,
-                        symbol: token_dict[token_id].optimized_symbol,
+                        name: token_dict[token_id]?.name,
+                        symbol: token_dict[token_id]?.optimized_symbol,
                         address: token_id,
                         direction: DebankTransactionDirection.SEND,
                         amount,
                         logoURI: token_dict[token_id].logo_url,
                     })),
                     ...transaction.receives.map(({ amount, token_id }) => ({
-                        name: token_dict[token_id].name,
-                        symbol: token_dict[token_id].optimized_symbol,
+                        name: token_dict[token_id]?.name,
+                        symbol: token_dict[token_id]?.optimized_symbol,
                         address: token_id,
                         direction: DebankTransactionDirection.RECEIVE,
                         amount,
-                        logoURI: token_dict[token_id].logo_url,
+                        logoURI: token_dict[token_id]?.logo_url,
                     })),
                 ],
                 gasFee: transaction.tx

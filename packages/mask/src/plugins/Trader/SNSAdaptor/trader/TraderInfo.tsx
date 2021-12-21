@@ -5,6 +5,8 @@ import { createNativeToken, formatBalance, formatWeiToEther } from '@masknet/web
 import { Box, CircularProgress, TextField, Typography } from '@mui/material'
 import { resolveTradeProviderName } from '../../pipes'
 import { FormattedBalance } from '@masknet/shared'
+import { isDashboardPage } from '@masknet/shared-base'
+import { multipliedBy } from '@masknet/web3-shared-base'
 import { useI18N } from '../../../../utils'
 import classnames from 'classnames'
 import { BestTradeIcon } from '@masknet/icons'
@@ -14,7 +16,6 @@ import { TradeProvider } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
-import { multipliedBy } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     trade: {
@@ -70,8 +71,9 @@ export interface TraderInfoProps {
 }
 
 export const TraderInfo = memo<TraderInfoProps>(({ trade, gasPrice, isBest, onClick, isFocus }) => {
+    const isDashboard = isDashboardPage()
+
     const { t } = useI18N()
-    const isDashboard = location.href.includes('dashboard.html')
     const { classes } = useStyles({ isDashboard })
     const { targetChainId } = TargetChainIdContext.useContainer()
 

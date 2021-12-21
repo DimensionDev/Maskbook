@@ -89,6 +89,9 @@ const Unlock = memo(() => {
                     <PasswordField
                         value={password}
                         type="password"
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') handleUnlock()
+                        }}
                         onChange={(e) => setPassword(e.target.value)}
                         error={verified === false}
                         helperText={verified === false ? t('popups_wallet_unlock_error_password') : ''}

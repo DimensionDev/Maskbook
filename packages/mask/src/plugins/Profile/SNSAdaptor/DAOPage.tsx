@@ -18,7 +18,7 @@ export function DAOPage(props: DAOPageProps) {
             log
             checkOrigin={false}
             heightCalculationMethod="lowestElement"
-            enablePublicMethods={true}
+            enablePublicMethods
             src={`https://dimensiondev.github.io/DAO-Interface/?mode=${mode}&userId=${props.identifier.userId.toLowerCase()}`}
             frameBorder={0}
             onResized={onResized}
