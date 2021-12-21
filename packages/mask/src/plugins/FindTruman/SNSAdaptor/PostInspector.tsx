@@ -26,6 +26,7 @@ import {
 } from '../Worker/apis'
 import { FindTruman_Const } from '../constants'
 import { useI18N } from '../../../utils'
+import getUnixTime from 'date-fns/getUnixTime'
 
 export interface PostInspectorProps {
     url: string
@@ -90,30 +91,25 @@ export function PostInspector(props: PostInspectorProps) {
             return
         }
         setStoryInfo(await fetchStoryInfo(storyId))
-        switch (postType) {
-            case FindTrumanPostType.Status:
-                !!account && setUserStoryStatus(await fetchUserStoryStatus(storyId, account))
-                break
-            case FindTrumanPostType.Puzzle:
-                !!account && setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
-                break
-            case FindTrumanPostType.Poll:
-                !!account && setUserPollStatus(await fetchUserPollStatus(targetId, account))
-                break
-            case FindTrumanPostType.PuzzleResult:
-                !!account && setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
-                setPuzzleResult(await fetchPuzzleResult(targetId))
-                break
-            case FindTrumanPostType.PollResult:
-                !!account && setUserPollStatus(await fetchUserPollStatus(targetId, account))
-                setPollResult(await fetchPollResult(targetId))
-                break
+        if (account) {
+            if (postType === FindTrumanPostType.Status) {
+                setUserStoryStatus(await fetchUserStoryStatus(storyId, account))
+            } else if (postType === FindTrumanPostType.Puzzle || postType === FindTrumanPostType.PuzzleResult) {
+                setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
+            } else if (postType === FindTrumanPostType.Poll || postType === FindTrumanPostType.PollResult) {
+                setUserPollStatus(await fetchUserPollStatus(targetId, account))
+            }
+        }
+        if (postType === FindTrumanPostType.PuzzleResult) {
+            setPuzzleResult(await fetchPuzzleResult(targetId))
+        } else if (postType === FindTrumanPostType.PollResult) {
+            setPollResult(await fetchPollResult(targetId))
         }
     }
 
     const handleSubmit = async (choice: number) => {
         const from = account
-        const timestamp = Math.floor(Date.now() / 1000)
+        const timestamp = getUnixTime(Date.now())
         try {
             if (postType === FindTrumanPostType.Puzzle) {
                 const target = userPuzzleStatus?.id ?? ''
