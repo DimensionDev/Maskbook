@@ -35,7 +35,7 @@ export class ArweaveAgent implements ProviderAgent {
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
-        let linkPrefix: string = 'https://arweave.net'
+        let linkPrefix = 'https://arweave.net'
         if (metadata.useCDN) {
             linkPrefix = mesonPrefix
         }

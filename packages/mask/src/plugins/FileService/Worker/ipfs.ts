@@ -32,6 +32,7 @@ export class IPFSAgent implements ProviderAgent {
         return this.makePayload(encoded, 'application/octet-stream')
     }
 
+    // currently not native support progress track
     async *upload(id: string) {
         return 100
     }

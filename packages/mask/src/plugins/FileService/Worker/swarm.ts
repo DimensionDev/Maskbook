@@ -2,28 +2,16 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@dimensiondev/kit'
 import { Bee, CollectionEntry } from '@ethersphere/bee-js'
 import urlcat from 'urlcat'
-import { isEmpty } from 'lodash-unified'
+import { isEmpty, times, sample } from 'lodash-unified'
 import { landing } from '../constants'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
 import { makeFileKeySigned } from '../helpers'
 
 const POSTAGE_STAMP = '0000000000000000000000000000000000000000000000000000000000000000'
-const BEE_HOSTS: string[] = [
-    'https://bee-0.gateway.ethswarm.org',
-    'https://bee-1.gateway.ethswarm.org',
-    'https://bee-2.gateway.ethswarm.org',
-    'https://bee-3.gateway.ethswarm.org',
-    'https://bee-4.gateway.ethswarm.org',
-    'https://bee-5.gateway.ethswarm.org',
-    'https://bee-6.gateway.ethswarm.org',
-    'https://bee-7.gateway.ethswarm.org',
-    'https://bee-8.gateway.ethswarm.org',
-    'https://bee-9.gateway.ethswarm.org',
-]
+const BEE_HOSTS: string[] = times(10, (n) => `https://bee-${n}.gateway.ethswarm.org`)
 
 function createBee(): Bee {
-    const randomIndex = Math.floor(Math.random() * BEE_HOSTS.length)
-    return new Bee(BEE_HOSTS[randomIndex])
+    return new Bee(sample(BEE_HOSTS) as string)
 }
 
 export class SwarmAgent implements ProviderAgent {
@@ -65,12 +53,14 @@ export class SwarmAgent implements ProviderAgent {
         return this.makePayload(encoded, 'application/octet-stream', options.name)
     }
 
+    // currently not native support progress track
     async *upload(id: string) {
         return 100
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
-        const linkPrefix: string = 'https://bee-2.gateway.ethswarm.org/bzz'
+        const BEE_HOST: string = sample(BEE_HOSTS) as string
+        const linkPrefix: string = `${BEE_HOST}/bzz`
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
