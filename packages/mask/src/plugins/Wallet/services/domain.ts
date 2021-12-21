@@ -63,7 +63,7 @@ export async function getAddressNames(identity: {
         userId: string
         network: string
     }
-    avatra?: string
+    avatar?: string
     bio?: string
     nickname?: string
     homepage?: string
