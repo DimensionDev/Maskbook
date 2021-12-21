@@ -1,7 +1,6 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
-import { getMaskColor, makeStyles, useStylesExtends } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectionList'
 
@@ -18,17 +17,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface NFTPageProps extends withClasses<'text' | 'button'> {
+export interface NFTPageProps {
     address: string
-    network: Web3Plugin.NetworkDescriptor | null
+    chainId: ChainId
 }
 
 export function NFTPage(props: NFTPageProps) {
-    const { address, network } = props
+    const { address, chainId } = props
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
-
-    console.log(network)
+    const { classes } = useStyles()
 
     if (!address)
         return (
@@ -41,7 +38,7 @@ export function NFTPage(props: NFTPageProps) {
 
     return (
         <div className={classes.root}>
-            <CollectionList chainId={ChainId.Mainnet} address={address} />
+            <CollectionList address={address} chainId={chainId} />
         </div>
     )
 }

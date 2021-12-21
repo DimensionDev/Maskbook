@@ -1,5 +1,4 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { getMaskColor, makeStyles } from '@masknet/theme'
 import { EnhancedProfilePage } from '../../../plugins/Profile/SNSAdaptor/EnhancedProfile'
 import { createReactRootShadowed, startWatch } from '../../../utils'
 import {
@@ -35,32 +34,6 @@ function getStyleProps() {
     }
 }
 
-const useStyles = makeStyles()((theme) => {
-    const props = getStyleProps()
-
-    return {
-        text: {
-            paddingTop: 29,
-            paddingBottom: 29,
-            '& > p': {
-                fontSize: 28,
-                fontFamily: props.fontFamily,
-                fontWeight: 700,
-                color: getMaskColor(theme).textPrimary,
-            },
-        },
-        button: {
-            backgroundColor: props.backgroundColor,
-            color: 'white',
-            marginTop: 18,
-            '&:hover': {
-                backgroundColor: props.backgroundColor,
-            },
-        },
-    }
-})
-
 export function EnhancedProfilePageAtTwitter() {
-    const { classes } = useStyles()
-    return <EnhancedProfilePage classes={classes} />
+    return <EnhancedProfilePage  />
 }

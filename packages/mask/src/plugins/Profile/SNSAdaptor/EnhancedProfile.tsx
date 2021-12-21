@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
+import { makeStyles } from '@masknet/theme'
+import { AddressNameType, ChainId, useAddressNames } from '@masknet/web3-shared-evm'
 import { MaskMessages, useI18N } from '../../../utils'
 import { useLocationChange } from '../../../utils/hooks/useLocationChange'
 import { WalletsPage } from './WalletsPage'
@@ -42,11 +42,11 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {}
+export interface EnhancedProfilePageProps {}
 
 export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles(), props)
+    const { classes } = useStyles()
 
     //#region identity
     const identity = useCurrentVisitingIdentity()
@@ -60,6 +60,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     useLocationChange(() => {
         setCurrentTag(PageTags.NFTTag)
+        setSelectedNetwork(null)
         MaskMessages.events.profileNFTsTabUpdated.sendToLocal('reset')
     })
 
@@ -106,7 +107,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.WalletTag:
                 return <WalletsPage />
             case PageTags.NFTTag:
-                return <NFTPage address={address} network={selectedNetwork} />
+                return <NFTPage address={address} chainId={selectedNetwork?.chainId ?? ChainId.Mainnet} />
             case PageTags.DonationTag:
                 return <DonationPage address={address} />
             case PageTags.FootprintTag:
@@ -153,7 +154,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                 <PageTag address={address} daoPayload={daoPayload} tag={currentTag} onChange={setCurrentTag} />
             </div>
             <div className={classes.metadata}>
-                <NetworkSelector onSelectNetwork={setSelectedNetwork} />
+                {currentTag === PageTags.NFTTag ? <NetworkSelector onSelectNetwork={setSelectedNetwork} /> : <div />}
                 <AddressViewer addressName={addressName} />
             </div>
             <div className={classes.content}>{content}</div>

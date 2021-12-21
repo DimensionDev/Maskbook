@@ -84,7 +84,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
-    WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry)
+    useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
 
     if (loading)
         return (

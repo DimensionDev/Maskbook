@@ -7,8 +7,8 @@ export interface NetworkSelectorProps {
 }
 
 export function NetworkSelector({ onSelectNetwork }: NetworkSelectorProps) {
-    const networks = getRegisteredWeb3Networks()
     const pluginId = usePluginIDContext()
+    const networks = getRegisteredWeb3Networks()
     const networkDescriptor = useNetworkDescriptor()
     const [selectedNetwork, setSelectedNetwork] = useState<Web3Plugin.NetworkDescriptor | null>(
         networkDescriptor ?? null,

@@ -1,12 +1,11 @@
 import { createContext, useState, useEffect } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { useValueRef } from '@masknet/shared'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ChainId, ERC721TokenCollectionInfo, useCollections } from '@masknet/web3-shared-evm'
-import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
+import { ChainId, ERC721TokenCollectionInfo, NonFungibleAssetProvider, useCollections } from '@masknet/web3-shared-evm'
 import { Image } from '../../../../components/shared/Image'
 import { CollectibleList } from './CollectibleList'
+import { useI18N } from '../../../../utils'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -79,18 +78,25 @@ export interface CollectionListProps {
 }
 
 export function CollectionList({ address, chainId }: CollectionListProps) {
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
-    const [page, setPage] = useState(0)
+    const { t } = useI18N()
     const { classes } = useStyles()
+    const [page, setPage] = useState(0)
     const [counts, setCounts] = useState<number[]>([])
     const [rendCollections, setRendCollections] = useState<ERC721TokenCollectionInfo[]>([])
 
-    const { value = { collections: [], hasNextPage: false } } = useCollections(chainId, address, provider, page, 3)
+    const { value = { collections: [], hasNextPage: false } } = useCollections(
+        chainId,
+        address,
+        NonFungibleAssetProvider.OPENSEA,
+        page,
+        3,
+    )
     const { collections = [], hasNextPage } = value
 
     useUpdateEffect(() => {
         setPage(0)
-    }, [provider, address])
+        setRendCollections([])
+    }, [address, chainId])
 
     useEffect(() => {
         if (!collections.length) return
@@ -103,6 +109,14 @@ export function CollectionList({ address, chainId }: CollectionListProps) {
             clearTimeout(timer)
         }
     }, [collections])
+
+    if (!collections.length) {
+        return (
+            <Box display="flex" alignItems="center" justifyContent="center" sx={{ paddingTop: 2, paddingBottom: 2 }}>
+                <Typography color="textPrimary">{t('dashboard_no_collection_found')}</Typography>
+            </Box>
+        )
+    }
 
     return (
         <Box>
