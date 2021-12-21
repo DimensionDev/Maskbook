@@ -102,7 +102,7 @@ export const Upload: React.FC = () => {
         }
     }
 
-    const allProviderdOptions = allProviders.map((config: ProviderConfig) => (
+    const allProviderOptions = allProviders.map((config: ProviderConfig) => (
         <FormControlLabel
             key={config.provider}
             control={
@@ -151,7 +151,7 @@ export const Upload: React.FC = () => {
                 />
                 {cdnButton}
             </section>
-            <section className={classes.checkItems}>{allProviderdOptions}</section>
+            <section className={classes.checkItems}>{allProviderOptions}</section>
             <section className={classes.legal}>
                 <Typography className={classes.legalText}>
                     <Trans
