@@ -76,7 +76,7 @@ export function CoinMetadataTable(props: CoinMetadataTableProps) {
                                     {t('plugin_trader_market_cap')}
                                 </Typography>
                             </TableCell>
-                            <TableCell>{`Rank #${trending.coin.market_cap_rank}`}</TableCell>
+                            <TableCell>Rank #{trending.coin.market_cap_rank}</TableCell>
                         </TableRow>
                     ) : null}
                     {metadataLinks.map(([label, links], i) => {

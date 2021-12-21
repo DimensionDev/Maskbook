@@ -80,7 +80,9 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                     />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Typography variant="body2" color="text.secondary">{`${success}/${total}`}</Typography>
+                    <Typography variant="body2" color="text.secondary">
+                        {success}/{total}
+                    </Typography>
                 </Box>
             </Box>
         )
@@ -106,25 +108,22 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                                             {t('plugin_find_truman_status_puzzle')}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary" gutterBottom>
-                                            {`${t('plugin_find_truman_puzzle_rate')}${
-                                                puzzles.total > 0
-                                                    ? ((puzzles.solved * 100) / puzzles.total).toFixed(2)
-                                                    : '0.00'
-                                            }%`}
+                                            {t('plugin_find_truman_puzzle_rate')}{' '}
+                                            {puzzles.total > 0
+                                                ? ((puzzles.solved * 100) / puzzles.total).toFixed(2)
+                                                : '0.00'}
+                                            %
                                         </Typography>
                                         {renderProgress(puzzles.total, puzzles.solved, 'success')}
                                         {puzzles.waiting === 1 && (
-                                            <Typography variant="caption" color="text.secondary" gutterBottom>{`${
-                                                puzzles.waiting
-                                            } ${t('plugin_find_truman_puzzle_to_be_revealed')}`}</Typography>
+                                            <Typography variant="caption" color="text.secondary" gutterBottom>
+                                                {puzzles.waiting} {t('plugin_find_truman_puzzle_to_be_revealed')}
+                                            </Typography>
                                         )}
                                         {puzzles.waiting > 1 && (
-                                            <Typography
-                                                variant="caption"
-                                                color="text.secondary"
-                                                gutterBottom={false}>{`${puzzles.waiting} ${t(
-                                                'plugin_find_truman_puzzles_to_be_revealed',
-                                            )}`}</Typography>
+                                            <Typography variant="caption" color="text.secondary" gutterBottom={false}>
+                                                {puzzles.waiting} {t('plugin_find_truman_puzzles_to_be_revealed')}
+                                            </Typography>
                                         )}
                                     </Box>
                                 </Grid>
@@ -134,23 +133,19 @@ const FindTrumanDialog: React.FC<Props> = (props) => {
                                             {t('plugin_find_truman_status_poll')}
                                         </Typography>
                                         <Typography variant="body2" color="text.secondary" gutterBottom>
-                                            {`${t('plugin_find_truman_voting_rate')}${
-                                                polls.total > 0 ? ((polls.hit * 100) / polls.total).toFixed(2) : '0.00'
-                                            }%`}
+                                            {t('plugin_find_truman_voting_rate')}{' '}
+                                            {polls.total > 0 ? ((polls.hit * 100) / polls.total).toFixed(2) : '0.00'}%
                                         </Typography>
                                         {renderProgress(polls.total, polls.hit, 'secondary')}
                                         {polls.waiting === 1 && (
-                                            <Typography variant="caption" color="text.secondary" gutterBottom>{`${
-                                                polls.waiting
-                                            } ${t('plugin_find_truman_poll_to_be_revealed')}`}</Typography>
+                                            <Typography variant="caption" color="text.secondary" gutterBottom>
+                                                {polls.waiting} {t('plugin_find_truman_poll_to_be_revealed')}
+                                            </Typography>
                                         )}
                                         {polls.waiting > 1 && (
-                                            <Typography
-                                                variant="caption"
-                                                color="text.secondary"
-                                                gutterBottom={false}>{`${polls.waiting} ${t(
-                                                'plugin_find_truman_polls_to_be_revealed',
-                                            )}`}</Typography>
+                                            <Typography variant="caption" color="text.secondary" gutterBottom={false}>
+                                                {polls.waiting} {t('plugin_find_truman_polls_to_be_revealed')}
+                                            </Typography>
                                         )}
                                     </Box>
                                 </Grid>

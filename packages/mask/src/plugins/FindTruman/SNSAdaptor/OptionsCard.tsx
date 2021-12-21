@@ -212,7 +212,9 @@ export default function OptionsCard(props: OptionsViewProps) {
                             <BorderLinearProgress value={Number(percent)} variant="determinate" />
                         </Box>
                         <Box sx={{ width: 54 }}>
-                            <Typography variant="body2" color="text.secondary">{`${percent}%`}</Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {percent}%
+                            </Typography>
                         </Box>
                     </Box>
                 </Card>
@@ -394,9 +396,11 @@ export default function OptionsCard(props: OptionsViewProps) {
                             icon={false}
                             severity="info"
                             sx={{ marginTop: 1, justifyContent: 'center', textAlign: 'center' }}>
-                            <div>{`${t('plugin_find_truman_unsupported_chain', {
-                                chain: userStatus.conditions[0]?.chain || '',
-                            })}`}</div>
+                            <div>
+                                {t('plugin_find_truman_unsupported_chain', {
+                                    chain: userStatus.conditions[0]?.chain || '',
+                                })}
+                            </div>
                             <EthereumChainBoundary noSwitchNetworkTip chainId={userStatus.conditions[0]?.chainId} />
                         </Alert>
                     )}

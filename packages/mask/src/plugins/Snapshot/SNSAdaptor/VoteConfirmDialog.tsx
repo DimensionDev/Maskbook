@@ -93,7 +93,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                                 </Link>
                             </InfoField>
                             <InfoField title={t('plugin_snapshot_vote_power')}>
-                                {`${millify(power, { precision: 2, lowercase: true })} ${space.toUpperCase()}`}
+                                {millify(power, { precision: 2, lowercase: true })} {space.toUpperCase()}
                             </InfoField>
                         </Box>
                     </CardContent>
