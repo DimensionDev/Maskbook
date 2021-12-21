@@ -1,8 +1,8 @@
-import { ImageHolder } from './ImageHolder'
 import { Typography } from '@mui/material'
 import EventRoundedIcon from '@mui/icons-material/EventRounded'
 import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded'
 import fromUnixTime from 'date-fns/fromUnixTime'
+import { ImageHolder } from './ImageHolder'
 import { useI18N } from '../../../../utils'
 
 const formatDate = (ts: string): string => {
@@ -37,7 +37,7 @@ export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, use
     return (
         <div className="flex flex-row justify-start gap-2 p-4 cursor-pointer">
             <section className="flex flex-row flex-shrink-0 w-max h-max">
-                <ImageHolder url={imageUrl} isFullRound={true} size={76} />
+                <ImageHolder url={imageUrl} isFullRound size={76} />
             </section>
             <section className="flex flex-col justify-around flex-1 text-sm leading-normal text-body-text">
                 <div className="flex flex-row items-center gap-2 no-underline">
