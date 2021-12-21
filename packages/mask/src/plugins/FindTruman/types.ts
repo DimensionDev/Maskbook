@@ -151,7 +151,8 @@ export interface SubmitPollParams {
 export interface DecryptedClue {
     decrypted: boolean
     condition?: PuzzleCondition
-    content?: string
+    frontImg: string
+    backImg: string
 }
 
 export enum EncryptionErrorType {

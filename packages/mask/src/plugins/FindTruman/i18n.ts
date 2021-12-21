@@ -15,7 +15,7 @@ export class FindTrumanI18n {
             const m = key.match(this.nestingPattern)
             if (m && m.length > 0) {
                 for (const k in options) {
-                    const pattern = new RegExp(`${this.nestingPrefix}${k}${this.nestingSuffix}`)
+                    const pattern = new RegExp(`${this.nestingPrefix}${k}${this.nestingSuffix}`, 'g')
                     key = key.replaceAll(pattern, `${options[k]}`)
                 }
             }

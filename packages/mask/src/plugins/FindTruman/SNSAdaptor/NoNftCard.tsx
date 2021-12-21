@@ -1,8 +1,9 @@
-import { Box, CardMedia, Typography, Card, CardContent, CardActions, Button } from '@mui/material'
+import { Box, CardMedia, Typography, Card, CardContent, CardActions, Button, Theme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { PuzzleCondition } from '../types'
 import { useContext } from 'react'
 import { FindTrumanContext } from '../context'
+import type { SxProps } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -11,8 +12,12 @@ const useStyles = makeStyles()((theme) => {
             ':not(:last-child)': {
                 marginBottom: '8px',
             },
+            display: 'flex',
+            flexDirection: 'column',
         },
-        content: {},
+        content: {
+            flex: 1,
+        },
         title: {
             fontSize: '16px',
             fontWeight: 'bold',
@@ -23,16 +28,29 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface NoNftCardProps {
+    cardHeight?: number
     conditions: PuzzleCondition[]
+    sx?: SxProps<Theme>
+    onClick?: () => void
 }
 export default function NoNftCard(props: NoNftCardProps) {
-    const { conditions } = props
+    const { cardHeight, conditions, sx, onClick } = props
     const { classes } = useStyles()
     const { t } = useContext(FindTrumanContext)
 
     const renderNftCard = (title: string, img: string, url: string, count: number, address: string) => {
         return (
-            <Card key={address} className={classes.card} variant="outlined">
+            <Card
+                sx={{
+                    cursor: onClick ? 'pointer' : 'auto',
+                    height: cardHeight || 'auto',
+                }}
+                onClick={() => {
+                    onClick?.()
+                }}
+                key={address}
+                className={classes.card}
+                variant="outlined">
                 <CardMedia component="img" image={img} />
                 <CardContent className={classes.content}>
                     <Typography gutterBottom variant="h5" component="div">
@@ -42,8 +60,16 @@ export default function NoNftCard(props: NoNftCardProps) {
                         {t(count > 1 ? 'plugin_find_truman_buy_nfts_tip' : 'plugin_find_truman_buy_nft_tip', { count })}
                     </Typography>
                 </CardContent>
-                <CardActions sx={{ justifyContent: 'flex-end' }} className={classes.content}>
-                    <Button component="a" href={url} variant="contained" target="_blank" size="small">
+                <CardActions sx={{ width: '100%', justifyContent: 'flex-end' }}>
+                    <Button
+                        onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                            e.stopPropagation()
+                        }}
+                        component="a"
+                        href={url}
+                        variant="contained"
+                        target="_blank"
+                        size="small">
                         {t('plugin_find_truman_buy')}
                     </Button>
                 </CardActions>
@@ -52,7 +78,7 @@ export default function NoNftCard(props: NoNftCardProps) {
     }
 
     return (
-        <Box sx={{ marginTop: 1 }}>
+        <Box sx={{ marginTop: 1, ...(sx || {}) }}>
             {conditions.map((condition) =>
                 renderNftCard(condition.name, condition.img, condition.url, condition.minAmount, condition.address),
             )}
