@@ -615,7 +615,7 @@ export enum AddressNameType {
     DNS = 4,
     RSS3 = 5,
     GUN = 6,
-    THE_GRAPH = 7
+    THE_GRAPH = 7,
 }
 
 export interface AddressName {

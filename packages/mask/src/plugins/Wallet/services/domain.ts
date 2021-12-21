@@ -35,7 +35,7 @@ function getEthereumName(twitterId: string, nickname: string, bio: string) {
 function getRSS3Id(nickname: string, profileURL: string, bio: string) {
     const matched =
         nickname.match(RSS3_RNS_RE) || profileURL.match(RSS3_URL_RE) || bio.match(RSS3_URL_RE) || bio.match(RSS3_RNS_RE)
-    return matched ? matched.groups?.name ?? '' : ''
+    return matched?.groups?.name ?? ''
 }
 
 function getAddress(text: string) {

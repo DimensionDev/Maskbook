@@ -10,6 +10,6 @@ export function useUserOwnerAddress(userId: string): AsyncState<string | undefin
         if (!cache.has(userId)) {
             cache.set(userId, PluginNFTAvatarRPC.getAddress(userId))
         }
-        return await cache.get(userId)
+        return cache.get(userId)
     }, [userId])
 }

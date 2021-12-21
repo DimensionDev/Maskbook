@@ -5,9 +5,6 @@
     "outDir": "../dist/evm",
     "tsBuildInfoFile": "../dist/evm.tsbuildinfo"
   },
-  "include": [
-    "./",
-    "./**/*.json"
-  ],
+  "include": ["./", "./**/*.json"],
   "references": [{ "path": "../../injected-script/sdk" }]
 }
