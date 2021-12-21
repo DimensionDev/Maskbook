@@ -117,25 +117,33 @@ export function FindTruman(props: FindTrumanProps) {
 
     const [loadImg, setLoadImg] = useState<boolean>(true)
 
-    const voted =
-        (userPuzzleStatus && userPuzzleStatus.choice !== -1) || (userPollStatus && userPollStatus.choice !== -1)
-    const notVoted =
-        (userPuzzleStatus && userPuzzleStatus.choice === -1) || (userPollStatus && userPollStatus.choice === -1)
+    const voted = userPuzzleStatus?.choice !== -1 || userPollStatus?.choice !== -1
+    const notVoted = userPuzzleStatus?.choice === -1 || userPollStatus?.choice === -1
+
+    const renderCard = () => {
+        if (postType === PostType.Status) {
+            return <StageCard userStoryStatus={userStoryStatus} />
+        } else if (postType === PostType.Puzzle && userPuzzleStatus) {
+            return <OptionsCard type={PostType.Puzzle} onSubmit={onSubmit} userStatus={userPuzzleStatus} />
+        } else if (postType === PostType.Poll && userPollStatus) {
+            return <OptionsCard type={PostType.Poll} onSubmit={onSubmit} userStatus={userPollStatus} />
+        } else if (postType === PostType.PuzzleResult && puzzleResult) {
+            return <ResultCard type={PostType.PuzzleResult} userStatus={userPuzzleStatus} result={puzzleResult} />
+        } else if (postType === PostType.PollResult && pollResult) {
+            return <ResultCard type={PostType.PollResult} userStatus={userPollStatus} result={pollResult} />
+        }
+        return null
+    }
 
     return (
         <Card className={classes.root} elevation={0}>
             {postType !== PostType.Encryption ? (
                 <>
                     <CardMedia
-                        onLoad={() => {
-                            setLoadImg(false)
-                        }}
-                        alt=""
+                        onLoad={() => setLoadImg(false)}
                         component="img"
                         height={140}
-                        sx={{
-                            visibility: loadImg ? 'hidden' : 'unset',
-                        }}
+                        sx={{ visibility: loadImg ? 'hidden' : 'unset' }}
                         image={storyInfo?.img}
                     />
                     {loadImg && (
@@ -175,21 +183,7 @@ export function FindTruman(props: FindTrumanProps) {
                             )
                         }
                     />
-                    {postType === PostType.Status && <StageCard userStoryStatus={userStoryStatus} />}
-                    {postType === PostType.Puzzle && userPuzzleStatus && (
-                        <OptionsCard type={PostType.Puzzle} onSubmit={onSubmit} userStatus={userPuzzleStatus} />
-                    )}
-                    {postType === PostType.Poll && userPollStatus && (
-                        <OptionsCard type={PostType.Poll} onSubmit={onSubmit} userStatus={userPollStatus} />
-                    )}
-                    {(postType === PostType.PuzzleResult || postType === PostType.PollResult) &&
-                        (puzzleResult || pollResult) && (
-                            <ResultCard
-                                type={postType}
-                                userStatus={userPuzzleStatus || userPollStatus}
-                                result={puzzleResult || pollResult}
-                            />
-                        )}
+                    {renderCard()}
                 </>
             ) : (
                 <EncryptionCard payload={encryptionPayload} />
