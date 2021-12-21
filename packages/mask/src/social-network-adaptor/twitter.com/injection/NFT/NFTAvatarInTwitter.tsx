@@ -1,5 +1,5 @@
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
-import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
+import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useMemo } from 'react'
@@ -12,8 +12,7 @@ import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
-import { useMount, useWindowSize } from 'react-use'
-import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
+import { useWindowSize } from 'react-use'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -57,7 +56,6 @@ function NFTAvatarInTwitter() {
         return 0
     }, [windowSize])
 
-    console.log(rainbowBorderKeyFrames)
     const { classes } = useStyles()
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
@@ -103,33 +101,6 @@ function NFTAvatarInTwitter() {
     useEffect(() => {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [onUpdate])
-
-    useMount(() => {
-        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
-
-        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
-            // remove useless border
-            linkDom.removeChild(linkDom.firstElementChild)
-
-            console.log(linkDom.firstElementChild.tagName)
-            // create rainbow shadow border
-            if (linkDom.firstElementChild.tagName !== 'style') {
-                const style = document.createElement('style')
-                style.innerText = `
-                ${rainbowBorderKeyFrames.styles}
-
-                .rainbowBorder {
-                    animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
-                    box-shadow: 0 5px 15px rgba(0,248,255,.4),0 10px 30px rgba(37,41,46,.2);
-                    transition: .125s ease;
-                    border: 2px solid #00f8ff;
-                }
-            `
-                linkDom.firstElementChild.classList.add('rainbowBorder')
-                linkDom.insertBefore(style, linkDom.firstChild)
-            }
-        }
-    })
 
     if (!avatar || !size) return null
 

@@ -1,5 +1,7 @@
 import { makeStyles } from '@masknet/theme'
-import { RainbowBox } from './RainbowBox'
+import { rainbowBorderKeyFrames, RainbowBox } from './RainbowBox'
+import { useMount } from 'react-use'
+import { searchTwitterAvatarLinkSelector } from '../../../social-network-adaptor/twitter.com/utils/selector'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -25,6 +27,36 @@ export function NFTAvatarRing(props: NFTAvatarRingProps) {
     const x1 = R - path_r / 2
     const y1 = R + Math.sqrt(Math.pow(path_r, 2) - Math.pow(path_r / 2, 2))
     const x2 = R + path_r / 2
+
+    useMount(() => {
+        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
+
+        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
+            const linkParentDom = linkDom.closest('div')
+
+            if (linkParentDom) linkParentDom.style.overflow = 'visible'
+
+            // remove useless border
+            linkDom.removeChild(linkDom.firstElementChild)
+
+            // create rainbow shadow border
+            if (linkDom.firstElementChild.tagName !== 'style') {
+                const style = document.createElement('style')
+                style.innerText = `
+                ${rainbowBorderKeyFrames.styles}
+
+                .rainbowBorder {
+                    animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
+                    box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
+                    transition: .125s ease;
+                    border: 2px solid #00f8ff;
+                }
+            `
+                linkDom.firstElementChild.classList.add('rainbowBorder')
+                linkDom.insertBefore(style, linkDom.firstChild)
+            }
+        }
+    })
 
     return (
         <RainbowBox>
