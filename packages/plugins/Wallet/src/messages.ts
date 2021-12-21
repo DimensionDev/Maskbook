@@ -218,6 +218,8 @@ export interface WalletMessage {
     erc1155TokensUpdated: void
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
+    /** request id */
+    websocketDataUpdate: string
 
     rpc: unknown
 }

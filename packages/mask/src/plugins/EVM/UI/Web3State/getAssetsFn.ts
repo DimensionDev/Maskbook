@@ -5,7 +5,6 @@ import {
     createNativeToken,
     ERC721TokenDetailed,
     formatEthereumAddress,
-    FungibleAssetProvider,
     getERC721TokenDetailedFromChain,
     getERC721TokenAssetFromChain,
     getEthereumConstants,
@@ -27,6 +26,7 @@ import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
 export const getFungibleAssetsFn =
     (context: Web3ProviderType) =>
     async (address: string, providerType: string, network: Web3Plugin.NetworkDescriptor, pagination?: Pagination) => {
+        const ws = await context.providerSocketInstance
         const chainId = context.chainId.getCurrentValue()
         const provider = context.provider.getCurrentValue()
         const wallet = context.wallets.getCurrentValue().find((x) => isSameAddress(x.address, address))
@@ -38,8 +38,16 @@ export const getFungibleAssetsFn =
         const web3 = new Web3(provider)
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
-        const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
-        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
+        const socketId = 'fetchFungibleTokenAsset' + address + network.chainId
+        await ws.send({
+            id: socketId,
+            method: 'fetchFungibleTokenAsset',
+            params: {
+                pageSize: 10,
+            },
+        })
+        const dataFromProvider = ws.getResult<Web3Plugin.Asset<Web3Plugin.FungibleToken>>(socketId)
+        const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x: any) => ({
             id: x.token.address,
             chainId: x.token.chainId,
             balance: x.balance,

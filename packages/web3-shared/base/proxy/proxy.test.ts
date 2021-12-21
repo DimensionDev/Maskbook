@@ -1,6 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach, xtest, jest } from '@jest/globals'
-import { ProviderProxy } from './index'
+import { PollItem, ProviderProxy } from './index'
 import * as mockWS from 'jest-websocket-mock'
+import addSeconds from 'date-fns/addSeconds'
 
 const POINT = 'ws://localhost:1235'
 
@@ -16,13 +17,15 @@ describe('Proxy websocket', () => {
         mockNotifyCallback = jest.fn()
         server = new mockWS.WS(POINT, { jsonProtocol: true })
         client = new ProviderProxy(POINT, mockNotifyCallback)
+        await client.waitingOpen()
+        client.registerMessage()
 
         await server.connected
     })
 
     test('should cache data by request id', async () => {
         const id = 'fetchAsset'
-        const mockData = { id, result: ['eth', 'bsc'] }
+        const mockData = { id, results: ['eth', 'bsc'] }
         const testMethod = { method: 'fetchAsset', params: [], id }
         client.send(testMethod)
         pushToClientMockData(mockData)
@@ -31,6 +34,7 @@ describe('Proxy websocket', () => {
         await expect(server).toReceiveMessage(testMethod)
 
         const data = client.getResult<string>(id)
+        console.log(data)
         expect(data).toEqual(['eth', 'bsc'])
         expect(mockNotifyCallback?.mock.calls.length).toBe(1)
         expect(mockNotifyCallback?.mock.calls[0]).toEqual([id])
@@ -40,8 +44,8 @@ describe('Proxy websocket', () => {
         const id = 'fetchAsset2'
         const testMethod = { method: 'fetchAsset2', params: [], id }
         client.send(testMethod)
-        const mockData1 = { id, result: ['eth', 'bsc'] }
-        const mockData2 = { id, result: ['matic'] }
+        const mockData1 = { id, results: ['eth', 'bsc'] }
+        const mockData2 = { id, results: ['matic'] }
         pushToClientMockData(mockData1)
         pushToClientMockData(mockData2)
 
@@ -62,9 +66,9 @@ describe('Proxy websocket', () => {
         const testMethod2 = { method: requestID1, params: [], id: requestID2 }
         client.send(testMethod1)
         client.send(testMethod2)
-        const mockData1 = { id: requestID1, result: ['eth', 'bsc'] }
-        const mockData2 = { id: requestID2, result: [1] }
-        const mockData3 = { id: requestID1, result: ['matic'] }
+        const mockData1 = { id: requestID1, results: ['eth', 'bsc'] }
+        const mockData2 = { id: requestID2, results: [1] }
+        const mockData3 = { id: requestID1, results: ['matic'] }
         pushToClientMockData(mockData1)
         pushToClientMockData(mockData2)
         pushToClientMockData(mockData3)
@@ -82,6 +86,17 @@ describe('Proxy websocket', () => {
         expect(mockNotifyCallback?.mock.calls[0]).toEqual([requestID1])
         expect(mockNotifyCallback?.mock.calls[1]).toEqual([requestID2])
         expect(mockNotifyCallback?.mock.calls[2]).toEqual([requestID1])
+    })
+
+    test('should use cache when last pick within 30 second', async () => {
+        const id = 'fetchAsset'
+        const testMethod = { method: 'fetchAsset', params: [], id }
+        client.send(testMethod)
+        const mockData = { id, results: ['matic'] }
+        pushToClientMockData(mockData)
+
+        // @ts-ignore
+        await expect(server).toReceiveMessage(testMethod)
     })
 
     xtest('should merge cache data when server push two times data and uniq', async () => {
@@ -103,5 +118,43 @@ describe('Proxy websocket', () => {
     afterEach(() => {
         server?.close()
         client?.socket?.close()
+    })
+})
+
+describe('Proxy websocket unit', () => {
+    test('should expired when pick before 30s', () => {
+        const client = new ProviderProxy(POINT, () => {})
+        const item = {
+            pickedAt: addSeconds(new Date(), -31),
+        }
+        const isExpired = client.isExpired(item as PollItem)
+        expect(isExpired).toBe(true)
+    })
+
+    test('should not expired when pick within 30s', () => {
+        const client = new ProviderProxy(POINT, () => {})
+        const item = {
+            pickedAt: addSeconds(new Date(), -20),
+        }
+        const isExpired = client.isExpired(item as PollItem)
+        expect(isExpired).toBe(false)
+    })
+
+    test('should not expired when update before 30s', () => {
+        const client = new ProviderProxy(POINT, () => {})
+        const item = {
+            updatedAt: addSeconds(new Date(), -20),
+        }
+        const isExpired = client.isExpired(item as PollItem)
+        expect(isExpired).toBe(false)
+    })
+
+    test('should not expired when update within 30s', () => {
+        const client = new ProviderProxy(POINT, () => {})
+        const item = {
+            updatedAt: addSeconds(new Date(), -20),
+        }
+        const isExpired = client.isExpired(item as PollItem)
+        expect(isExpired).toBe(false)
     })
 })

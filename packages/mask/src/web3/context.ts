@@ -32,6 +32,7 @@ import type { InternalSettings } from '../settings/createSettings'
 import { Flags } from '../../shared'
 import { createExternalProvider } from './helpers'
 import Services from '../extension/service'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderType {
     const Web3Provider = createExternalProvider(
@@ -134,6 +135,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         getAddressNamesList: WalletRPC.getAddressNames,
         getTransactionList: WalletRPC.getTransactionList,
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+        providerSocketInstance: getProxyWebsocketInstance(WalletMessages.events.websocketDataUpdate.sendToLocal),
     }
 }
 
