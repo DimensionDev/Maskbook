@@ -35,7 +35,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         const payload = ITO_MetadataReader(props.message.meta)
         if (!payload.ok) return null
         return (
-            <MaskPluginWrapper pluginName="ITO">
+            <MaskPluginWrapper pluginName="ITO" publisher={base.publisher}>
                 <EthereumChainBoundary chainId={payload.val.chain_id}>
                     <PostInspector payload={set(payloadIntoMask(payload.val), 'token', payload.val.token)} />
                 </EthereumChainBoundary>

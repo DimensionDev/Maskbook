@@ -1,4 +1,4 @@
-import { Typography, SnackbarContent, Button } from '@mui/material'
+import { Typography, SnackbarContent, Button, Link } from '@mui/material'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { activatedSocialNetworkUI } from '../social-network'
 import { MaskIcon } from '../resources/MaskIcon'
@@ -6,11 +6,14 @@ import { Suspense, ReactNode, useMemo } from 'react'
 import { isTwitter } from '../social-network-adaptor/twitter.com/base'
 import { usePersonaConnectStatus } from '../components/DataSource/usePersonaConnectStatus'
 import { useI18N } from '../utils'
+import { Box } from '@mui/system'
+import type { Plugin } from '@masknet/plugin-infra'
 
 interface PluginWrapperProps extends React.PropsWithChildren<{}> {
     pluginName: string
     width?: number
     action?: ReactNode
+    publisher?: Plugin.Shared.Publisher
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -61,7 +64,7 @@ const useStyles = makeStyles()((theme) => {
 
 export default function MaskPluginWrapper(props: PluginWrapperProps) {
     const { classes } = useStyles()
-    const { pluginName, children, action } = props
+    const { pluginName, children, action, publisher } = props
     const personaConnectStatus = usePersonaConnectStatus()
     const { t } = useI18N()
 
@@ -88,19 +91,35 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
         )
     }, [personaConnectStatus])
 
+    const publisherInfo = useMemo(() => {
+        if (!publisher) return null
+        return (
+            <Box>
+                <Typography variant="h6" fontSize="1.2rem" color={MaskColorVar.textSecondary}>
+                    Provided by
+                </Typography>
+                <Link href={publisher.link} underline="none" target="_blank" rel="noopener">
+                    <Typography variant="h6" fontSize="1.2rem" color={MaskColorVar.textPrimary}>
+                        {publisher.name.fallback}
+                    </Typography>
+                </Link>
+            </Box>
+        )
+    }, [publisher])
+
     const inner = (
         <div className={classes.card} onClick={(ev) => ev.stopPropagation()}>
             <div className={classes.header}>
-                <MaskIcon size={36} />
+                <MaskIcon size={45} />
                 <div className={classes.title}>
-                    <Typography variant="h6" fontSize="14px">
+                    <Typography variant="h6" fontSize="1.2rem">
                         Mask Plugin
                     </Typography>
-                    <Typography variant="h6" fontSize="14px">
+                    <Typography variant="h6" fontSize="1.2rem">
                         {name}
                     </Typography>
                 </div>
-                <div className={classes.action}>{actionButton || action}</div>
+                <div className={classes.action}>{actionButton || action || publisherInfo}</div>
             </div>
             {renderChildren ? <div className={classes.body}>{children}</div> : null}
         </div>

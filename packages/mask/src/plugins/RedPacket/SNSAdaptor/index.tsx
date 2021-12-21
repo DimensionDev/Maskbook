@@ -28,7 +28,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     DecryptedInspector(props) {
         if (RedPacketMetadataReader(props.message.meta).ok)
             return (
-                <MaskPluginWrapper pluginName="Lucky Drop">
+                <MaskPluginWrapper pluginName="Lucky Drop" publisher={base.publisher}>
                     {renderWithRedPacketMetadata(props.message.meta, (r) => (
                         <RedPacketInPost payload={r} />
                     ))}
