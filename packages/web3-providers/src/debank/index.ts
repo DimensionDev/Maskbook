@@ -11,7 +11,7 @@ export async function getTransactionList(address: string, chain: string) {
     return (await response.json()) as HistoryResponse
 }
 
-export async function getDebankAssetsList(address: string) {
+export async function getAssetListFromDebank(address: string) {
     const response = await fetch(
         `${DEBANK_OPEN_API}/v1/user/token_list?is_all=true&has_balance=true&id=${address.toLowerCase()}`,
     )

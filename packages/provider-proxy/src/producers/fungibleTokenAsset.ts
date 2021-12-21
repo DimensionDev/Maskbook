@@ -1,5 +1,5 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { getDebankAssetsList } from '@masknet/web3-providers'
+import { getAssetListByZerion, getAssetListFromDebank } from '@masknet/web3-providers'
 
 export interface FungibleTokenAssetArgs extends ProducerArgBase {
     address: string
@@ -12,11 +12,15 @@ const fungibleTokenAsset = async (
 ): Promise<void> => {
     const { address } = args
     try {
-        const data = await getDebankAssetsList(address)
+        const data = await getAssetListFromDebank(address)
         await push(data)
     } catch {
-        // await zerion
-        throw new Error('Fetch failed from debank')
+        try {
+            const data = await getAssetListByZerion(address)
+            await push(data)
+        } catch {
+            throw new Error('Fetch failed from debank and zerion')
+        }
     }
 }
 
