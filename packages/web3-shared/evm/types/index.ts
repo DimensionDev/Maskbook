@@ -609,15 +609,19 @@ export interface Transaction {
 
 //#region address name
 export enum AddressNameType {
-    ENS = 'ENS',
-    UNS = 'UNS',
-    DNS = 'DNS',
+    ADDRESS = 1,
+    ENS = 2,
+    UNS = 3,
+    DNS = 4,
+    RSS3 = 5,
+    GUN = 6,
+    THE_GRAPH = 7
 }
 
 export interface AddressName {
+    type: AddressNameType
     label: string
-    ownerAddress: string
-    resolvedAddress?: string
+    resolvedAddress: string
 }
 //#endregion
 

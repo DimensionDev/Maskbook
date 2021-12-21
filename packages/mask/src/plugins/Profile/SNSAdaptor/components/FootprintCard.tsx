@@ -54,7 +54,7 @@ export const FootprintCard = ({ imageUrl, startDate, endDate, city, country, use
                 </div>
                 <div className="flex flex-row gap-2 font-medium">
                     <Typography variant="body1" className="capitalize" style={{ color: 'rgba(255, 180, 38, 1)' }}>
-                        {t('plugin_profile_rss3_attended', { username })}
+                        {t('plugin_profile_rss3_attended')}
                     </Typography>
                     <Typography variant="body1" color="textPrimary">
                         {activity}

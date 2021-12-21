@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { CircularProgress, Link, Typography } from '@mui/material'
+import { CircularProgress, Link } from '@mui/material'
 import urlcat from 'urlcat'
 import type { GeneralAssetWithTags } from '../types'
 import { RSS3_DEFAULT_IMAGE } from '../constants'
@@ -48,29 +47,22 @@ export function DonationPage(props: DonationPageProps) {
         )
     }
     return (
-        <div>
-            <section className="flex flex-row justify-between items-center w-full gap-4">
-                <Typography className={classes.address} variant="subtitle1" color="textPrimary" title={address}>
-                    {formatEthereumAddress(address, 4)}
-                </Typography>
-            </section>
-            <section className="grid grid-cols-1 gap-4 py-4">
-                {donations.map((donation) => (
-                    <Link
-                        className={classes.link}
-                        href={getDonationLink(address, donation)}
-                        key={donation.id}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <DonationCard
-                            imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
-                            name={donation.info.title || t('plugin_profile_rss3_inactive_project')}
-                            contribCount={donation.info.total_contribs || 0}
-                            contribDetails={donation.info.token_contribs || []}
-                        />
-                    </Link>
-                ))}
-            </section>
-        </div>
+        <section className="grid grid-cols-1 gap-4 py-4">
+            {donations.map((donation) => (
+                <Link
+                    className={classes.link}
+                    href={getDonationLink(address, donation)}
+                    key={donation.id}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <DonationCard
+                        imageUrl={donation.info.image_preview_url || RSS3_DEFAULT_IMAGE}
+                        name={donation.info.title || t('plugin_profile_rss3_inactive_project')}
+                        contribCount={donation.info.total_contribs || 0}
+                        contribDetails={donation.info.token_contribs || []}
+                    />
+                </Link>
+            ))}
+        </section>
     )
 }

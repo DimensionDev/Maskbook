@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
+import { Box, Typography } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useEthereumAddress } from '@masknet/web3-shared-evm'
-import { MaskMessages } from '../../../utils'
+import { AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
+import { MaskMessages, useI18N } from '../../../utils'
 import { useLocationChange } from '../../../utils/hooks/useLocationChange'
 import { WalletsPage } from './WalletsPage'
 import { NFTPage } from './NFTPage'
@@ -12,8 +13,9 @@ import { FootprintPage } from './FootprintPage'
 import { DAOPage } from './DAOPage'
 import { PageTags } from '../types'
 import { PageTag } from './PageTag'
+import { AddressViewer } from './components/AddressViewer'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useDao, useAddressByRss3, useRss3Profile } from './hooks'
+import { useDao } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -26,6 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     tags: {
         padding: theme.spacing(2),
     },
+    metadata: {},
     content: {
         position: 'relative',
         padding: theme.spacing(1),
@@ -35,25 +38,17 @@ const useStyles = makeStyles()((theme) => ({
 export interface EnhancedProfilePageProps extends withClasses<'text' | 'button'> {}
 
 export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
     //#region identity
     const identity = useCurrentVisitingIdentity()
-    const { value: currentAccount } = useEthereumAddress(
-        identity.nickname ?? '',
-        identity.identifier.userId,
-        identity.bio ?? '',
-    )
-    const { address: addressByRssProfile } = useAddressByRss3(identity.homepage ?? '', identity.nickname ?? '')
-    const currentAccountAddress = currentAccount?.address || addressByRssProfile || ''
+    const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
     //#endregion
 
     const [hidden, setHidden] = useState(true)
     const { value: daoPayload } = useDao(identity.identifier)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
-
-    const { profile } = useRss3Profile(currentAccountAddress)
-    const username = profile.name
 
     useLocationChange(() => {
         setCurrentTag(PageTags.NFTTag)
@@ -64,45 +59,95 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         return MaskMessages.events.profileNFTsPageUpdated.on((data) => {
             setHidden(!data.show)
         })
-    }, [identity, currentAccountAddress])
+    }, [identity])
+
+    useUpdateEffect(() => {
+        setCurrentTag(PageTags.NFTTag)
+    }, [identity.identifier])
+
+    const addressName = useMemo(() => {
+        const getAddressByType = (type: AddressNameType) => addressNames?.find((x) => x.type === type)
+
+        const addressLiteral = getAddressByType(AddressNameType.ADDRESS)
+        const addressENS = getAddressByType(AddressNameType.ENS)
+        const addressUNS = getAddressByType(AddressNameType.UNS)
+        const addressGUN = getAddressByType(AddressNameType.GUN)
+        const addressRSS3 = getAddressByType(AddressNameType.RSS3)
+        const addressTheGraph = getAddressByType(AddressNameType.THE_GRAPH)
+
+        switch (currentTag) {
+            case PageTags.WalletTag:
+                return
+            case PageTags.NFTTag:
+                return addressENS || addressUNS || addressRSS3 || addressLiteral || addressGUN || addressTheGraph
+            case PageTags.DonationTag:
+                return addressRSS3 || addressENS || addressUNS || addressLiteral || addressGUN || addressTheGraph
+            case PageTags.FootprintTag:
+                return addressRSS3 || addressENS || addressUNS || addressLiteral || addressGUN || addressTheGraph
+            case PageTags.DAOTag:
+                return
+            default:
+                unreachable(currentTag)
+        }
+    }, [currentTag, addressNames])
+
+    const address = addressName?.resolvedAddress ?? ''
 
     const content = useMemo(() => {
         switch (currentTag) {
             case PageTags.WalletTag:
                 return <WalletsPage />
             case PageTags.NFTTag:
-                return <NFTPage />
+                return <NFTPage address={address} />
             case PageTags.DonationTag:
-                return <DonationPage address={currentAccountAddress} />
+                return <DonationPage address={address} />
             case PageTags.FootprintTag:
-                return <FootprintPage username={username} address={currentAccountAddress} />
+                return <FootprintPage address={address} />
             case PageTags.DAOTag:
                 return <DAOPage payload={daoPayload} identifier={identity.identifier} />
             default:
                 unreachable(currentTag)
         }
-    }, [currentTag, currentAccountAddress, username, daoPayload, identity.identifier])
-
-    useUpdateEffect(() => {
-        setCurrentTag(PageTags.NFTTag)
-    }, [identity.identifier])
+    }, [address, currentTag, daoPayload, identity.identifier])
 
     if (hidden) return null
 
-    return (
-        <>
-            <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
+    if (loadingAddressNames)
+        return (
             <div className={classes.root}>
-                <div className={classes.tags}>
-                    <PageTag
-                        address={currentAccountAddress}
-                        daoPayload={daoPayload}
-                        tag={currentTag}
-                        onChange={setCurrentTag}
-                    />
-                </div>
-                <div className={classes.content}>{content}</div>
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    sx={{ paddingTop: 2, paddingBottom: 2 }}>
+                    <Typography color="textPrimary">{t('plugin_profile_loading')}</Typography>
+                </Box>
             </div>
-        </>
+        )
+
+    if (!addressName)
+        return (
+            <div className={classes.root}>
+                <Box
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="center"
+                    sx={{ paddingTop: 2, paddingBottom: 2 }}>
+                    <Typography color="textPrimary">{t('plugin_profile_error_no_address')}</Typography>
+                </Box>
+            </div>
+        )
+
+    return (
+        <div className={classes.root}>
+            <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
+            <div className={classes.tags}>
+                <PageTag address={address} daoPayload={daoPayload} tag={currentTag} onChange={setCurrentTag} />
+            </div>
+            <div className={classes.metadata}>
+                <AddressViewer addressName={addressName} />
+            </div>
+            <div className={classes.content}>{content}</div>
+        </div>
     )
 }

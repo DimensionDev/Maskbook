@@ -35,13 +35,13 @@ export function getFootprints(account: string): Promise<Response> {
     return fetchJSON<Response>(url)
 }
 
-export async function getAddressByRss3Id(id: string) {
+export async function getRSS3AddressById(id: string) {
     const url = urlcat('https://rss3.domains/name/:id', { id })
     const rsp = await fetchJSON<NameInfo>(url)
     return rsp.address
 }
 
-export async function getRss3Profile(address: string) {
+export async function getRSS3ProfileByAddress(address: string) {
     const url = urlcat('https://hub.pass3.me/:address', { address })
     const rsp = await fetchJSON<RSS3Info>(url)
     return rsp?.profile
