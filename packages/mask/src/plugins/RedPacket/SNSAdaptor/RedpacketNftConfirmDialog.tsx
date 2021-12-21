@@ -293,16 +293,17 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                             <img
                                                 className={classes.nftImg}
                                                 src={value.info.mediaUrl}
-                                                onError={(e) => {
-                                                    ;(e.target as any).src = new URL(
+                                                onError={(event) => {
+                                                    const target = event.target as HTMLImageElement
+                                                    target.src = new URL(
                                                         './assets/nft_token_fallback.png',
                                                         import.meta.url,
                                                     ).toString()
-                                                    ;(e.target as any).style.minHeight = 0
-                                                    ;(e.target as any).style.maxWidth = 'none'
-                                                    ;(e.target as any).style.transform = 'translateY(10px)'
-                                                    ;(e.target as any).style.width = '64px'
-                                                    ;(e.target as any).style.height = '64px'
+                                                    target.style.minHeight = '0px'
+                                                    target.style.maxWidth = 'none'
+                                                    target.style.transform = 'translateY(10px)'
+                                                    target.style.width = '64px'
+                                                    target.style.height = '64px'
                                                 }}
                                             />
                                         ) : (

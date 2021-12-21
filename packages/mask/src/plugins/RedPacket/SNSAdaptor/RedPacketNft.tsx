@@ -398,11 +398,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                     erc721TokenDetailed?.info.mediaUrl ? '' : classes.loadingTokenImg,
                                 )}
                                 src={erc721TokenDetailed?.info.mediaUrl ?? previewNftImg}
-                                onError={(e) => {
-                                    ;(e.target as any).src = new URL(
-                                        './assets/nft-preview.png',
-                                        import.meta.url,
-                                    ).toString()
+                                onError={(event) => {
+                                    const target = event.target as HTMLImageElement
+                                    target.src = new URL('./assets/nft-preview.png', import.meta.url).toString()
                                 }}
                             />
                         </div>
