@@ -119,7 +119,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ paddingTop: 2, paddingBottom: 2 }}>
+                    sx={{ paddingTop: 4, paddingBottom: 4 }}>
                     <Typography color="textPrimary">{t('plugin_profile_loading')}</Typography>
                 </Box>
             </div>
@@ -132,7 +132,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     display="flex"
                     alignItems="center"
                     justifyContent="center"
-                    sx={{ paddingTop: 2, paddingBottom: 2 }}>
+                    sx={{ paddingTop: 4, paddingBottom: 4 }}>
                     <Typography color="textPrimary">{t('plugin_profile_error_no_address')}</Typography>
                 </Box>
             </div>
