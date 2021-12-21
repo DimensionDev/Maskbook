@@ -64,7 +64,9 @@ export function AddressViewer({ addressName }: AddressViewerProps) {
         <div style={{ textAlign: 'left' }}>
             <Typography variant="body2">{t('plugin_profile_binding_rules_title')}</Typography>
             <ul className={classes.tipList}>
-                {rulesTipMap.map((item, index) => <li key={index}>{item}</li>)}
+                {rulesTipMap.map((item, index) => (
+                    <li key={index}>{item}</li>
+                ))}
             </ul>
         </div>
     )
