@@ -83,6 +83,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         textAlign: 'left',
         color: theme.palette.text.secondary,
+        wordBreak: 'keep-all',
     },
     button: {
         color: '#fff',

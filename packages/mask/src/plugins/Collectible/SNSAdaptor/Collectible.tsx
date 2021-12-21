@@ -34,11 +34,11 @@ import { CollectibleProvider, CollectibleTab } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
-import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
+import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -131,6 +131,12 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: '#eb5757',
             padding: theme.spacing(0.5, 2),
         },
+        markdown: {
+            'text-overflow': 'ellipsis',
+            display: '-webkit-box',
+            '-webkit-box-orient': 'vertical',
+            '-webkit-line-clamp': '3',
+        },
     }
 })
 
@@ -175,7 +181,6 @@ export function Collectible(props: CollectibleProps) {
                 </Button>
             </Box>
         )
-
     const tabs = [
         <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />,
         <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />,
@@ -225,7 +230,10 @@ export function Collectible(props: CollectibleProps) {
                             {asset.value.description ? (
                                 <Box display="flex" alignItems="center">
                                     <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown content={asset.value.description} />
+                                        <Markdown
+                                            classes={{ root: classes.markdown }}
+                                            content={asset.value.description}
+                                        />
                                     </Typography>
                                 </Box>
                             ) : null}
