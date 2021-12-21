@@ -1,7 +1,14 @@
 import { EthereumAddress } from 'wallet.ts'
 import { memoizePromise } from '@dimensiondev/kit'
 import { Resolution } from '@unstoppabledomains/resolution'
-import { AddressName, AddressNameType, ChainId, isSameAddress, ProviderType, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import {
+    AddressName,
+    AddressNameType,
+    ChainId,
+    isSameAddress,
+    ProviderType,
+    ZERO_ADDRESS,
+} from '@masknet/web3-shared-evm'
 import * as ENS from '../apis/ens'
 import { createWeb3 } from '../../../extension/background-script/EthereumServices/web3'
 import { PluginProfileRPC } from '../../Profile/messages'
@@ -12,8 +19,8 @@ const fetchUserOwnerAddressByTwitterIdCached = memoizePromise(PluginNFTAvatarRPC
 
 const ENS_RE = /\S{1,256}\.(eth|kred|xyz|luxe)\b/
 const ADDRESS_FULL = /0x\w+/
-const RSS3_PROFILE_URL_RE = /^https?:\/\/(?<name>\w+)\.rss3\.bio/
-const RSS3_RNS_RE = /^(?<name>\w+)\.rss3$/
+const RSS3_URL_RE = /https?:\/\/(?<name>\w+)\.rss3\.bio/
+const RSS3_RNS_RE = /(?<name>\w+)\.rss3/
 
 function isValidAddress(address: string) {
     return address && EthereumAddress.isValid(address) && !isSameAddress(address, ZERO_ADDRESS)
@@ -25,8 +32,9 @@ function getEthereumName(twitterId: string, nickname: string, bio: string) {
     return twitterId && !twitterId.endsWith('.eth') ? `${twitterId}.eth` : ''
 }
 
-function getRSS3Id(nickname: string, profileURL: string) {
-    const matched = nickname.match(RSS3_RNS_RE) || profileURL.match(RSS3_PROFILE_URL_RE)
+function getRSS3Id(nickname: string, profileURL: string, bio: string) {
+    const matched =
+        nickname.match(RSS3_RNS_RE) || profileURL.match(RSS3_URL_RE) || bio.match(RSS3_URL_RE) || bio.match(RSS3_RNS_RE)
     return matched ? matched.groups?.name ?? '' : ''
 }
 
@@ -50,29 +58,22 @@ async function getResolvedUNS(label: string) {
     return result['crypto.ETH.address']
 }
 
-export async function getAddressNames(
-    identity: {
-        identifier: {
-            userId :string
-            network: string
-        },
-        avatra?: string
-        bio?: string
-        nickname?: string
-        homepage?: string
-    },
-) {
-    const {
-        identifier,
-        bio = '',
-        nickname = '',
-        homepage = '',
-    } = identity
+export async function getAddressNames(identity: {
+    identifier: {
+        userId: string
+        network: string
+    }
+    avatra?: string
+    bio?: string
+    nickname?: string
+    homepage?: string
+}) {
+    const { identifier, bio = '', nickname = '', homepage = '' } = identity
     const twitterId = identifier.network === 'twitter.com' ? identifier.userId : ''
 
     const address = getAddress(bio)
     const ethereumName = getEthereumName(twitterId ?? '', nickname, bio)
-    const RSS3Id = getRSS3Id(nickname, homepage)
+    const RSS3Id = getRSS3Id(nickname, homepage, bio)
 
     const allSettled = await Promise.allSettled([
         getResolvedENS(ethereumName),
