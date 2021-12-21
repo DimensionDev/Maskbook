@@ -13,8 +13,8 @@ export default function EncryptionCard(props: EncryptionCardProps) {
 
     const { t } = useI18N()
     const { address } = useContext(FindTrumanContext)
-    const [failed, setFailed] = useState<boolean>(false)
-    const [message, setMessage] = useState<string>('')
+    const [failed, setFailed] = useState(false)
+    const [message, setMessage] = useState('')
     const [err, setErr] = useState<{
         code: number
         data: any

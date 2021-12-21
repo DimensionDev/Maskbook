@@ -60,7 +60,7 @@ export function PostInspector(props: PostInspectorProps) {
     const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>()
     const [pollResult, setPollResult] = useState<PollResult>()
     const [consts, setConsts] = useState<FindTrumanConst>()
-    const [encryptionPayload, setEncryptionPayload] = useState<string>('')
+    const [encryptionPayload, setEncryptionPayload] = useState('')
 
     useEffect(() => {
         if (!FindTruman_Const.initialized) {

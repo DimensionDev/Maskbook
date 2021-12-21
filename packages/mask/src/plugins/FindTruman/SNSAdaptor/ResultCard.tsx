@@ -34,7 +34,7 @@ interface ResultViewProps {
 }
 export default function ResultCard(props: ResultViewProps) {
     const { type, userStatus, result } = props
-    const [choice] = useState<number>(userStatus ? userStatus.choice : -1)
+    const [choice] = useState(userStatus ? userStatus.choice : -1)
 
     const { t } = useI18N()
 

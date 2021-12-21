@@ -115,7 +115,7 @@ export function FindTruman(props: FindTrumanProps) {
     } = props
     const { t } = useI18N()
 
-    const [loadImg, setLoadImg] = useState<boolean>(true)
+    const [loadImg, setLoadImg] = useState(true)
 
     const voted = userPuzzleStatus?.choice !== -1 || userPollStatus?.choice !== -1
     const notVoted = userPuzzleStatus?.choice === -1 || userPollStatus?.choice === -1

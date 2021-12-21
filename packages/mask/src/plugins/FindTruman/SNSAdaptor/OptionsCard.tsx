@@ -81,24 +81,24 @@ const useOptionsStyles = makeStyles()((theme) => {
 interface OptionsViewProps {
     type: PostType
     userStatus?: UserPuzzleStatus | UserPollStatus
-    onSubmit: (choice: number) => Promise<boolean>
+    onSubmit(choice: number): Promise<boolean>
 }
 export default function OptionsCard(props: OptionsViewProps) {
     const { type, userStatus, onSubmit } = props
-    const [selected, setSelected] = useState<boolean>(true)
-    const [choice, setChoice] = useState<number>(userStatus ? userStatus.choice : -1)
-    const [submitting, setSubmitting] = useState<boolean>(false)
+    const [selected, setSelected] = useState(true)
+    const [choice, setChoice] = useState(userStatus ? userStatus.choice : -1)
+    const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState<'' | 'unsupported-chain' | 'insufficient-nft'>('')
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
-    const [snackVisible, setSnackVisible] = useState<boolean>(false)
+    const [snackVisible, setSnackVisible] = useState(false)
 
     const { classes } = useOptionsStyles()
     const chainId = useChainId()
     const { address: account } = useContext(FindTrumanContext)
     const web3 = useWeb3(false)
     const { t } = useI18N()
-    const ref = useRef<HTMLDivElement | null>(null)
-    const parentRef = useRef<HTMLDivElement | null>(null)
+    const ref = useRef<HTMLElement | null>(null)
+    const parentRef = useRef<HTMLElement | null>(null)
 
     useEffect(() => {
         checkCondition()
