@@ -37,7 +37,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
         if (RedPacketNftMetadataReader(props.message.meta).ok)
             return (
-                <MaskPluginWrapper pluginName="NFT Lucky Drop">
+                <MaskPluginWrapper pluginName="NFT Lucky Drop" publisher={base.publisher}>
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
                         <RedPacketNftInPost payload={r} />
                     ))}

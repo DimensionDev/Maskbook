@@ -39,7 +39,7 @@ function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     if (!chainId || !boxId) return null
 
     return (
-        <MaskPluginWrapper pluginName="MaskBox">
+        <MaskPluginWrapper pluginName="MaskBox" publisher={base.publisher}>
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <EthereumChainBoundary chainId={Number.parseInt(chainId, 10)}>
                     <Context.Provider initialState={{ boxId }}>

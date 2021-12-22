@@ -95,11 +95,11 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
         if (!publisher) return null
         return (
             <Box>
-                <Typography variant="h6" fontSize="1.2rem" color={MaskColorVar.textSecondary}>
+                <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textSecondary}>
                     Provided by
                 </Typography>
                 <Link href={publisher.link} underline="none" target="_blank" rel="noopener">
-                    <Typography variant="h6" fontSize="1.2rem" color={MaskColorVar.textPrimary}>
+                    <Typography variant="h6" fontSize="1.1rem" fontWeight="400" color={MaskColorVar.textPrimary}>
                         {publisher.name.fallback}
                     </Typography>
                 </Link>
@@ -112,10 +112,10 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
             <div className={classes.header}>
                 <MaskIcon size={45} />
                 <div className={classes.title}>
-                    <Typography variant="h6" fontSize="1.2rem">
+                    <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
                         Mask Plugin
                     </Typography>
-                    <Typography variant="h6" fontSize="1.2rem">
+                    <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
                         {name}
                     </Typography>
                 </div>
