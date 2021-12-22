@@ -887,10 +887,10 @@
     "nft_avatar": "NFT 头像",
     "plugin_profile_no_wallets": "在此连接您的钱包。<br/>此部分将显示给您的加密朋友。<br/>显示内容包括数字艺术、捐赠、徽章<br/>和其他链上的公开信息。",
     "plugin_profile_binding_rules_title": "Web3 按如下规则展示NFTs：",
-    "plugin_profile_binding_rule1": "您的 Twitter 昵称为ENS。",
-    "plugin_profile_binding_rule2": "您的 Twitter bio 包含 ENS(例如，vitalik.eth) 或有效地址。",
-    "plugin_profile_binding_rule3": "您的 Twitter ID + {{suffix}} 是ENS。",
-    "plugin_profile_binding_rule4": "用于签署 NFT 头像的地址。",
-    "plugin_profile_current_display_of": "当前显示 {{type}}：",
-    "plugin_vcent_last_offer_at": "最新的 Offer 为"
+    "plugin_profile_binding_rule1": "您的Twitter 昵称为ENS。",
+    "plugin_profile_binding_rule2": "您的Twitter bio 包含 ENS(例如，vitalik.eth) 或有效地址。",
+    "plugin_profile_binding_rule3": "您的Twitter ID + {{suffix}} 是ENS。",
+    "plugin_profile_binding_rule4": "用于签署NFT 头像的地址。",
+    "plugin_profile_current_display_of": "当前显示 {{type}}： ",
+    "plugin_vcent_last_offer_at": "最新的OFFER为"
 }

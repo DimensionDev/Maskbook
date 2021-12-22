@@ -1009,5 +1009,15 @@
     "plugin_profile_binding_rule3": "crwdns10423:0{{suffix}}crwdne10423:0",
     "plugin_profile_binding_rule4": "crwdns10425:0crwdne10425:0",
     "plugin_profile_current_display_of": "crwdns10427:0{{type}}crwdne10427:0",
+    "plugin_profile_loading": "crwdns10669:0crwdne10669:0",
+    "plugin_profile_error_no_address": "crwdns10671:0crwdne10671:0",
+    "plugin_profile_address_name_ens": "crwdns10673:0crwdne10673:0",
+    "plugin_profile_address_name_uns": "crwdns10675:0crwdne10675:0",
+    "plugin_profile_address_name_dns": "crwdns10677:0crwdne10677:0",
+    "plugin_profile_address_name_rns": "crwdns10679:0crwdne10679:0",
+    "plugin_profile_address_name_address": "crwdns10681:0crwdne10681:0",
+    "plugin_profile_rss3_inactive_project": "crwdns10683:0crwdne10683:0",
+    "plugin_profile_rss3_no_activity_time": "crwdns10685:0crwdne10685:0",
+    "plugin_profile_rss3_attended": "crwdns10687:0crwdne10687:0",
     "plugin_vcent_last_offer_at": "crwdns10295:0crwdne10295:0"
 }
