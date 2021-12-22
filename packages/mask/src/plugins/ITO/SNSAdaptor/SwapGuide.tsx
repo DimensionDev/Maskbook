@@ -1,10 +1,4 @@
-import {
-    ERC20TokenDetailed,
-    isSameAddress,
-    NATIVE_TOKEN_ADDRESS,
-    useAccount,
-    useChainId,
-} from '@masknet/web3-shared-evm'
+import { ERC20TokenDetailed, isZeroAddress, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { ZERO } from '@masknet/web3-shared-base'
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -108,7 +102,7 @@ export function SwapGuide(props: SwapGuideProps) {
                                 <UnlockDialog
                                     tokens={
                                         payload.exchange_tokens.filter(
-                                            (x) => !isSameAddress(NATIVE_TOKEN_ADDRESS, x.address),
+                                            (x) => !isZeroAddress(x.address),
                                         ) as ERC20TokenDetailed[]
                                     }
                                 />
