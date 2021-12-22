@@ -195,8 +195,8 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
     ]
 
-    const renderTab = (tabIndex: number) => {
-        const tabMap: Record<number, ReactElement> = {
+    const renderTab = (tabIndex: CollectibleTab) => {
+        const tabMap: Record<CollectibleTab, ReactElement> = {
             [CollectibleTab.ARTICLE]: <ArticleTab />,
             [CollectibleTab.TOKEN]: <TokenTab />,
             [CollectibleTab.OFFER]: <OfferTab />,
