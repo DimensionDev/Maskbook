@@ -13,9 +13,19 @@ import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
 import { currentChainIdSettings } from '../../../Wallet/settings'
 import type { RedPacketJSONPayload } from '../../types'
 
-const TOKEN_FIELDS = `type address name symbol decimals chain_id`
+const TOKEN_FIELDS = `
+    type
+    address
+    name
+    symbol
+    decimals
+    chain_id
+`
 
-const USER_FIELDS = `address name`
+const USER_FIELDS = `
+    address
+    name
+`
 
 const RED_PACKET_FIELDS = `
     rpid
@@ -33,9 +43,15 @@ const RED_PACKET_FIELDS = `
     creation_time
     duration
     chain_id
-    token { ${TOKEN_FIELDS} }
-    creator { ${USER_FIELDS} }
-    claimers { ${USER_FIELDS} }
+    token {
+        ${TOKEN_FIELDS}
+    }
+    creator {
+        ${USER_FIELDS}
+    }
+    claimers {
+        ${USER_FIELDS}
+    }
 `
 
 type RedpacketFromSubgraphType = {
@@ -76,16 +92,24 @@ async function fetchFromRedPacketSubgraph<T>(query: string) {
 }
 
 export async function getRedPacketTxid(rpid: string) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(
-        `{ redPackets (where: { rpid: "${rpid.toLowerCase()}" }) { txid } }`,
-    )
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
+    {
+        redPackets (where: { rpid: "${rpid.toLowerCase()}" }) {
+            txid
+        }
+    }
+    `)
     return first(data?.redPackets)?.txid
 }
 
 export async function getRedPacketHistory(address: string, chainId: ChainId) {
-    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(
-        `{ redPackets (where: { creator: "${address.toLowerCase()}" }) { ${RED_PACKET_FIELDS} } }`,
-    )
+    const data = await fetchFromRedPacketSubgraph<{ redPackets: RedpacketFromSubgraphType[] }>(`
+    {
+        redPackets (where: { creator: "${address.toLowerCase()}" }) {
+            ${RED_PACKET_FIELDS}
+        }
+    }
+    `)
 
     if (!data?.redPackets) return []
 
