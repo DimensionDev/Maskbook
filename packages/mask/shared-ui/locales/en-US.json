@@ -246,6 +246,7 @@
     "relative_time_months_ago": "{{months}} months ago",
     "relative_time_seconds_ago": "{{seconds}} seconds ago",
     "relative_time_years_ago": "{{years}} years ago",
+    "plugin_chain_not_supported": "Not supported on {{chain}} yet.",
     "plugin_powered_by": "Powered by",
     "plugin_wallet_guiding_step_1": "1. Choose Network",
     "plugin_wallet_guiding_step_2": "2. Choose Wallet",

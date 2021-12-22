@@ -162,8 +162,11 @@ export interface ERC721ContractDetailed extends ERC721Token {
 export interface ERC721TokenInfo {
     name?: string
     description?: string
+    tokenURI?: string
     mediaUrl?: string
     owner?: string
+    // loading tokenURI
+    hasTokenDetailed?: boolean
 }
 
 export interface ERC721TokenDetailed {
