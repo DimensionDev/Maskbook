@@ -26,6 +26,7 @@ import { useCompositionContext } from '../../../components/CompositionDialog/Com
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -86,14 +87,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 180,
         overflow: 'hidden',
     },
-    imgWrapper: {
-        height: 160,
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        overflow: 'hidden',
-    },
     nftImg: {
         maxWidth: '100%',
     },
@@ -139,10 +132,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         transform: 'translateY(1px)',
     },
-    fallbackNftImg: {
+    loadingFailImage: {
+        minHeight: 0,
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
         width: 64,
         height: 64,
-        transform: 'translateY(10px)',
     },
 }))
 export interface RedpacketNftConfirmDialogProps {
@@ -288,34 +283,14 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <div className={classes.imgWrapper}>
-                                        {value.info.mediaUrl ? (
-                                            <img
-                                                className={classes.nftImg}
-                                                src={value.info.mediaUrl}
-                                                onError={(event) => {
-                                                    const target = event.target as HTMLImageElement
-                                                    target.src = new URL(
-                                                        './assets/nft_token_fallback.png',
-                                                        import.meta.url,
-                                                    ).toString()
-                                                    target.style.minHeight = '0px'
-                                                    target.style.maxWidth = 'none'
-                                                    target.style.transform = 'translateY(10px)'
-                                                    target.style.width = '64px'
-                                                    target.style.height = '64px'
-                                                }}
-                                            />
-                                        ) : (
-                                            <img
-                                                className={classes.fallbackNftImg}
-                                                src={new URL(
-                                                    './assets/nft_token_fallback.png',
-                                                    import.meta.url,
-                                                ).toString()}
-                                            />
-                                        )}
-                                    </div>
+                                    <NftImage
+                                        token={value}
+                                        classes={{
+                                            loadingFailImage: classes.loadingFailImage,
+                                        }}
+                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
+                                    />
+
                                     <div className={classes.nftNameWrapper}>
                                         <Typography className={classes.nftName} color="textSecondary">
                                             {value.info.name}

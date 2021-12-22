@@ -14,6 +14,7 @@ import { useCallback, useState, useEffect } from 'react'
 import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
 import { useUpdate } from 'react-use'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -148,26 +149,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: 'transparent',
     },
-    imgWrapper: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 160,
-        width: '100%',
-        overflow: 'hidden',
-    },
-    fallbackNftImg: {
-        width: 64,
-        height: 64,
-        transform: 'translateY(10px)',
-    },
-    loadingNftImg: {
-        marginTop: 20,
-    },
-    selectWrapperImg: {
-        maxWidth: '100%',
-        minHeight: 160,
-    },
     selectWrapperNftNameWrapper: {
         width: '100%',
         background: theme.palette.mode === 'light' ? 'none' : '#2F3336',
@@ -203,6 +184,13 @@ const useStyles = makeStyles()((theme) => ({
         width: 15,
         height: 15,
         color: '#1C68F3',
+    },
+    loadingFailImage: {
+        minHeight: 0,
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
     },
 }))
 
@@ -382,35 +370,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
 
                                     return (
                                         <ListItem className={classes.selectWrapper} key={i.toString()}>
-                                            <div className={classes.imgWrapper}>
-                                                {!token.info.hasTokenDetailed ? (
-                                                    <CircularProgress size={20} className={classes.loadingNftImg} />
-                                                ) : token?.info.mediaUrl ? (
-                                                    <img
-                                                        className={classes.selectWrapperImg}
-                                                        src={token?.info.mediaUrl}
-                                                        onError={(e) => {
-                                                            ;(e.target as any).src = new URL(
-                                                                './assets/nft_token_fallback.png',
-                                                                import.meta.url,
-                                                            ).toString()
-                                                            ;(e.target as any).style.minHeight = 0
-                                                            ;(e.target as any).style.maxWidth = 'none'
-                                                            ;(e.target as any).style.transform = 'translateY(10px)'
-                                                            ;(e.target as any).style.width = '64px'
-                                                            ;(e.target as any).style.height = '64px'
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <img
-                                                        className={classes.fallbackNftImg}
-                                                        src={new URL(
-                                                            './assets/nft_token_fallback.png',
-                                                            import.meta.url,
-                                                        ).toString()}
-                                                    />
-                                                )}
-                                            </div>
+                                            <NftImage
+                                                token={token}
+                                                classes={{
+                                                    loadingFailImage: classes.loadingFailImage,
+                                                }}
+                                                fallbackImage={
+                                                    new URL('./assets/nft_token_fallback.png', import.meta.url)
+                                                }
+                                            />
                                             <div className={classes.selectWrapperNftNameWrapper}>
                                                 <Typography
                                                     className={classes.selectWrapperNftName}

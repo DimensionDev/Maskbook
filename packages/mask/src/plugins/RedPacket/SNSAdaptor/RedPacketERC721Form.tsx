@@ -20,6 +20,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,14 +50,6 @@ const useStyles = makeStyles()((theme) => {
         },
         inputShrinkLabel: {
             transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-        imgWrapper: {
-            height: 160,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            width: '100%',
-            overflow: 'hidden',
         },
         input: {
             flex: 1,
@@ -108,11 +101,6 @@ const useStyles = makeStyles()((theme) => {
         addIcon: {
             color: '#AFC3E1',
         },
-        fallbackNftImg: {
-            width: 64,
-            height: 64,
-            transform: 'translateY(10px)',
-        },
         closeIconWrapperBack: {
             position: 'absolute',
             display: 'flex',
@@ -139,6 +127,13 @@ const useStyles = makeStyles()((theme) => {
             height: 14,
             cursor: 'pointer',
             color: 'rgba(255, 95, 95, 1)',
+        },
+        loadingFailImage: {
+            minHeight: 0,
+            maxWidth: 'none',
+            transform: 'translateY(10px)',
+            width: 64,
+            height: 64,
         },
     }
 })
@@ -208,34 +203,13 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <div className={classes.imgWrapper}>
-                                        {value.info.mediaUrl ? (
-                                            <img
-                                                className={classes.nftImg}
-                                                src={value.info.mediaUrl + 'dd'}
-                                                onError={(event) => {
-                                                    const target = event.target as HTMLImageElement
-                                                    target.src = new URL(
-                                                        './assets/nft_token_fallback.png',
-                                                        import.meta.url,
-                                                    ).toString()
-                                                    target.style.minHeight = '0px'
-                                                    target.style.maxWidth = 'none'
-                                                    target.style.transform = 'translateY(10px)'
-                                                    target.style.width = '64px'
-                                                    target.style.height = '64px'
-                                                }}
-                                            />
-                                        ) : (
-                                            <img
-                                                className={classes.fallbackNftImg}
-                                                src={new URL(
-                                                    './assets/nft_token_fallback.png',
-                                                    import.meta.url,
-                                                ).toString()}
-                                            />
-                                        )}
-                                    </div>
+                                    <NftImage
+                                        token={value}
+                                        classes={{
+                                            loadingFailImage: classes.loadingFailImage,
+                                        }}
+                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
+                                    />
                                     <div className={classes.nftNameWrapper}>
                                         <Typography className={classes.nftName} color="textSecondary">
                                             {value.info.name}

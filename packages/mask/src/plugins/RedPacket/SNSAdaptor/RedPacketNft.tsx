@@ -11,19 +11,7 @@ import {
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import LaunchIcon from '@mui/icons-material/Launch'
-import {
-    Grid,
-    Card,
-    CardHeader,
-    Typography,
-    Link,
-    CardMedia,
-    CardContent,
-    Button,
-    Box,
-    Skeleton,
-    CircularProgress,
-} from '@mui/material'
+import { Grid, Card, CardHeader, Typography, Link, CardMedia, CardContent, Button, Box, Skeleton } from '@mui/material'
 import { useCallback, useEffect } from 'react'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
@@ -36,6 +24,7 @@ import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -128,15 +117,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-    },
-    tokenImgWrapper: {
-        position: 'relative',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 120,
-        height: 180,
-        overflow: 'hidden',
     },
     tokenImg: {
         width: '100%',
@@ -387,23 +367,11 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
                 {availability.isClaimed ? (
                     <Box className={classes.tokenWrapper}>
-                        <div className={classes.tokenImgWrapper}>
-                            {erc721TokenDetailed?.info.mediaUrl ? null : (
-                                <CircularProgress className={classes.tokenImgSpinner} />
-                            )}
+                        <NftImage
+                            token={erc721TokenDetailed}
+                            fallbackImage={new URL('./assets/nft-preview.png', import.meta.url)}
+                        />
 
-                            <img
-                                className={classNames(
-                                    classes.tokenImg,
-                                    erc721TokenDetailed?.info.mediaUrl ? '' : classes.loadingTokenImg,
-                                )}
-                                src={erc721TokenDetailed?.info.mediaUrl ?? previewNftImg}
-                                onError={(event) => {
-                                    const target = event.target as HTMLImageElement
-                                    target.src = new URL('./assets/nft-preview.png', import.meta.url).toString()
-                                }}
-                            />
-                        </div>
                         <Typography className={classes.claimedText}>You got 1 {payload.contractName}</Typography>
                     </Box>
                 ) : (
