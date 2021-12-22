@@ -14,7 +14,7 @@ export function useERC721TokenDetailed(
     const { GET_SINGLE_ASSET_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     const tokenDetailedRef = useRef<ERC721TokenDetailed | undefined>()
-    let tokenDetailedFromOpensea: ERC721TokenDetailed | null
+    let tokenDetailedFromOpensea: ERC721TokenDetailed | undefined
     let tokenDetailedFromChain: ERC721TokenDetailed | undefined
     const asyncRetry = useAsyncRetry(async () => {
         if (!erc721TokenContract || !contractDetailed || !tokenId) return
@@ -86,7 +86,7 @@ export async function getERC721TokenDetailedFromOpensea(
             tokenId,
         )
     }
-    return null
+    return
 }
 
 export async function getERC721TokenDetailedFromChain(

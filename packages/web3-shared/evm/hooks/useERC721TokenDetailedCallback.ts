@@ -15,7 +15,7 @@ export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractD
     const erc721TokenDetailedCallback = useCallback(async () => {
         if (!erc721TokenContract || !contractDetailed || !tokenId) return
         let tokenDetailedFromChain: ERC721TokenDetailed | undefined
-        let tokenDetailedFromOpensea: ERC721TokenDetailed | null = null
+        let tokenDetailedFromOpensea: ERC721TokenDetailed | undefined
         if (!GET_SINGLE_ASSET_URL) {
             tokenDetailedFromChain = await getERC721TokenDetailedFromChain(
                 contractDetailed,
