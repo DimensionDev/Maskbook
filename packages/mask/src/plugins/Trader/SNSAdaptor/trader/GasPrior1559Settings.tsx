@@ -171,7 +171,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
             if (gasPrice.isEqualTo(gasOptions.standard)) setOption(0)
             else if (gasPrice.isEqualTo(gasOptions.fast)) setOption(1)
             else {
-                setCustomGasPrice(formatWeiToGwei(gasPrice).toString())
+                setCustomGasPrice(formatWeiToGwei(gasPrice))
                 setOption(2)
             }
         }
@@ -185,7 +185,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
                     <Typography className={classes.accordingTitle}>
                         {t('plugin_trader_gas_option', {
                             option: options[selected].title,
-                            value: formatWeiToGwei(options[selected].gasPrice ?? 0).toString(),
+                            value: formatWeiToGwei(options[selected].gasPrice ?? 0),
                         })}
                     </Typography>
                 </AccordionSummary>
@@ -227,7 +227,7 @@ export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel,
                                                 InputProps={{ classes: { root: classes.textFieldInput } }}
                                             />
                                         ) : (
-                                            formatWeiToGwei(option.gasPrice ?? 0).toString()
+                                            formatWeiToGwei(option.gasPrice ?? 0)
                                         )}
                                     </Typography>
                                     {t('wallet_transfer_gwei')}

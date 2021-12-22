@@ -113,14 +113,12 @@ const ReplaceTransaction = memo(() => {
         mode: 'onBlur',
         resolver: zodResolver(schema),
         defaultValues: {
-            gas: new BigNumber(hexToNumber(defaultGas)).toString(),
-            gasPrice: formatWeiToGwei(new BigNumber(defaultGasPrice as number, 16))
+            gas: new BigNumber(hexToNumber(defaultGas)).toFixed(),
+            gasPrice: new BigNumber(formatWeiToGwei(new BigNumber(defaultGasPrice as number, 16))).plus(1).toFixed(),
+            maxFeePerGas: new BigNumber(formatWeiToGwei(new BigNumber(defaultMaxFeePerGas as number, 16)))
                 .plus(1)
-                .toString(),
-            maxFeePerGas: formatWeiToGwei(new BigNumber(defaultMaxFeePerGas as number, 16))
-                .plus(1)
-                .toString(),
-            maxPriorityFeePerGas: formatWeiToGwei(new BigNumber(defaultMaxPriorityFeePerGas as number, 16)).toString(),
+                .toFixed(),
+            maxPriorityFeePerGas: formatWeiToGwei(new BigNumber(defaultMaxPriorityFeePerGas as number, 16)),
         },
         context: {
             is1559,

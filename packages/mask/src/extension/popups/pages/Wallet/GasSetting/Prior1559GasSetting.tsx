@@ -196,7 +196,7 @@ export const Prior1559GasSetting = memo(() => {
         ) {
             // if rpc payload contain gas price, set it to default values
             if (value?.computedPayload._tx.gasPrice) {
-                setValue('gasPrice', formatWeiToGwei(value.computedPayload._tx.gasPrice as number).toString())
+                setValue('gasPrice', formatWeiToGwei(value.computedPayload._tx.gasPrice as number))
             } else {
                 setOption(1)
             }
@@ -208,7 +208,7 @@ export const Prior1559GasSetting = memo(() => {
     }, [gas, setValue])
 
     useEffect(() => {
-        if (selected !== null) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
+        if (selected !== null) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice))
     }, [selected, setValue, options])
 
     const [{ loading }, handleConfirm] = useAsyncFn(
@@ -252,7 +252,7 @@ export const Prior1559GasSetting = memo(() => {
                         onClick={() => setOption(index)}
                         className={selected === index ? classes.selected : undefined}>
                         <Typography className={classes.optionsTitle}>{title}</Typography>
-                        <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
+                        <Typography>{formatWeiToGwei(gasPrice ?? 0)} Gwei</Typography>
                         <Typography className={classes.gasUSD}>
                             {t('popups_wallet_gas_fee_settings_usd', {
                                 usd: formatWeiToEther(gasPrice).times(nativeTokenPrice).times(21000).toPrecision(3),
