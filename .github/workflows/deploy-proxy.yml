@@ -37,7 +37,8 @@ jobs:
       - name: Run provider-proxy package build
         working-directory: ./packages/provider-proxy
         run: pnpm install && pnpm build
+      - uses: DimensionDev/github-token-action@latest
+        with:
+          registry: true
       - name: Publish to github npm pkg
         run: npm publish ./packages/provider-proxy/dist
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
