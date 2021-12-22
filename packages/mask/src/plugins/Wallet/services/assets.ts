@@ -1,3 +1,4 @@
+import { uniqBy } from 'lodash-es'
 import { unreachable } from '@dimensiondev/kit'
 import { leftShift, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import {
@@ -23,6 +24,7 @@ import {
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
+import { getTokens } from '.'
 import * as DebankAPI from '../apis/debank'
 import * as OpenSeaAPI from '../apis/opensea'
 import * as ZerionAPI from '../apis/zerion'
@@ -44,7 +46,13 @@ export async function getCollectionsNFT(
     size?: number,
 ): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
     if (provider === NonFungibleAssetProvider.OPENSEA) {
-        const { collections } = await OpenSeaAPI.getCollections(address, { chainId, page, size })
+        const collectionsFromDB = (await getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721)).map(x => ({
+            name: x.contractDetailed.name,
+            image_url: x.contractDetailed.iconURL,
+            slug: x.contractDetailed.symbol,
+        }))
+        const { collections: collectionsFromProvider } = await OpenSeaAPI.getCollections(address, { chainId, page, size })
+        const collections = uniqBy([...collectionsFromDB, ...collectionsFromProvider], (x) => x.slug)
 
         return {
             collections: collections.map((x) => ({
@@ -71,7 +79,9 @@ export async function getAssetsListNFT(
     collection?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
     if (provider === NonFungibleAssetProvider.OPENSEA) {
-        const { assets } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size, collection })
+        const tokensFromDB = (await getTokens<ERC721TokenDetailed>(EthereumTokenType.ERC721)).filter(x => x.contractDetailed.chainId === chainId && x.)
+        const { assets: tokensFromProvider } = await OpenSeaAPI.getAssetsList(address, { chainId, page, size, collection })
+        const tokens = [...tokensFromDB, ...tokensFromProvider]
         return {
             assets: assets
                 .filter(

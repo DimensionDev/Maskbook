@@ -112,7 +112,7 @@ export function CollectionList({ address, chainId }: CollectionListProps) {
 
     if (!collections.length) {
         return (
-            <Box display="flex" alignItems="center" justifyContent="center" sx={{ paddingTop: 2, paddingBottom: 2 }}>
+            <Box display="flex" alignItems="center" justifyContent="center" sx={{ paddingTop: 4, paddingBottom: 4 }}>
                 <Typography color="textPrimary">{t('dashboard_no_collection_found')}</Typography>
             </Box>
         )

@@ -163,20 +163,15 @@ export function CollectibleList(props: CollectibleListProps) {
     }, [provider, address])
 
     useEffect(() => {
-        if (collectibles.length) {
-            setRendCollectibles([...rendCollectibles, ...collectibles])
-            if (hasNextPage) {
-                const timer = setTimeout(() => {
-                    setPage(page + 1)
-                }, 1000)
-
-                return () => {
-                    clearTimeout(timer)
-                }
-            }
+        if (!collectibles.length) return
+        setRendCollectibles([...rendCollectibles, ...collectibles])
+        if (!hasNextPage) return
+        const timer = setTimeout(() => {
+            setPage(page + 1)
+        }, 1000)
+        return () => {
+            clearTimeout(timer)
         }
-
-        return () => {}
     }, [collectibles])
 
     useEffect(() => {
