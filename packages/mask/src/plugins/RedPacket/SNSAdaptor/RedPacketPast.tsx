@@ -50,9 +50,6 @@ const useStyles = makeStyles()((theme) => ({
     tabWrapper: {
         padding: theme.spacing(0, 2, 0, 2),
     },
-    wrapper: {
-        padding: theme.spacing(2),
-    },
 }))
 
 interface Props {
@@ -89,13 +86,6 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
         [senderName, onClose],
     )
 
-    if (![ChainId.Mainnet, ChainId.Matic].includes(chainId))
-        return (
-            <div className={classes.wrapper}>
-                <RedPacketHistoryList onSelect={onSelect} />{' '}
-            </div>
-        )
-
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -117,6 +107,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
                 ),
                 children: <NftRedPacketHistoryList onSend={handleSendNftRedpacket} />,
                 sx: { p: 0 },
+                disabled: ![ChainId.Mainnet, ChainId.Matic].includes(chainId),
             },
         ],
         state,

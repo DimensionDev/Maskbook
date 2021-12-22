@@ -9,11 +9,15 @@ const useStyles = makeStyles()((theme) => ({
     tabPanel: {
         marginTop: theme.spacing(1),
     },
+    disabledTab: {
+        opacity: 0.5,
+    },
 }))
 
 interface TabPanelProps extends BoxProps {
     id?: string
     label: string | React.ReactNode
+    disabled?: boolean
 }
 
 export interface AbstractTabProps
@@ -54,7 +58,12 @@ export default function AbstractTab(props: AbstractTabProps) {
                     onChange={(_: React.SyntheticEvent, newValue: number) => setValue?.(newValue)}>
                     {tabs.map((tab, i) => (
                         <Tab
-                            className={classNames(classes.tab, [index, value].includes(i) ? classes.focusTab : '')}
+                            disabled={tab.disabled}
+                            className={classNames(
+                                classes.tab,
+                                [index, value].includes(i) ? classes.focusTab : '',
+                                tab.disabled ? classes.disabledTab : '',
+                            )}
                             disableFocusRipple={tab.disableFocusRipple}
                             disableRipple={tab.disableRipple}
                             onClick={tab.cb}

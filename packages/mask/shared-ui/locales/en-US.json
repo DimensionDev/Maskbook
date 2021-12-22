@@ -1009,7 +1009,6 @@
     "plugin_profile_binding_rule3": "Twitter ID + {{suffix}} is ENS.",
     "plugin_profile_binding_rule4": "Address used to sign the avatar.",
     "plugin_profile_current_display_of": "Current display of {{type}}: ",
-    "plugin_profile_loading": "Loading...",
     "plugin_profile_error_no_address": "Failed to find any valid address.",
     "plugin_profile_address_name_ens": "ENS",
     "plugin_profile_address_name_uns": "UNS",

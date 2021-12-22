@@ -43,9 +43,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     labelWrapper: {
         display: 'flex',
     },
-    wrapper: {
-        padding: theme.spacing(2),
-    },
     tabWrapper: {
         padding: theme.spacing(0, 2, 2, 2),
     },
@@ -56,19 +53,6 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
     const { t } = useI18N()
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const chainId = useChainId()
-
-    if (![ChainId.Mainnet, ChainId.Matic].includes(chainId))
-        return (
-            <div className={classes.wrapper}>
-                <RedPacketERC20Form
-                    origin={origin}
-                    onClose={onClose}
-                    onNext={onNext}
-                    onChange={onChange}
-                    SelectMenuProps={SelectMenuProps}
-                />
-            </div>
-        )
 
     const tabProps: AbstractTabProps = {
         tabs: [
@@ -99,6 +83,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
                 ),
                 children: <RedPacketERC721Form onClose={onClose} />,
                 sx: { p: 0 },
+                disabled: ![ChainId.Mainnet, ChainId.Matic].includes(chainId),
             },
         ],
         state,
