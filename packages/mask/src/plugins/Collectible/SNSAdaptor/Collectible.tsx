@@ -292,7 +292,7 @@ export function Collectible(props: CollectibleProps) {
                             <div className={classes.loading}>
                                 <LoadingAnimation />
                             </div>
-                        )) || <div>{renderTab(tabIndex)}</div>}
+                        )) || <>{renderTab(tabIndex)}</>}
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>
