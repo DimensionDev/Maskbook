@@ -42,14 +42,14 @@ export default function StageCard(props: StageCardProps) {
                                     {t('plugin_find_truman_status_puzzle')}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
-                                    {`${t('plugin_find_truman_puzzle_rate')}${
-                                        userStoryStatus.puzzles.total > 0
-                                            ? (
-                                                  (userStoryStatus.puzzles.solved * 100) /
-                                                  userStoryStatus.puzzles.total
-                                              ).toFixed(2)
-                                            : '0.00'
-                                    }%`}
+                                    {t('plugin_find_truman_puzzle_rate')}
+                                    {userStoryStatus.puzzles.total > 0
+                                        ? (
+                                              (userStoryStatus.puzzles.solved * 100) /
+                                              userStoryStatus.puzzles.total
+                                          ).toFixed(2)
+                                        : '0.00'}
+                                    %
                                 </Typography>
                                 {renderProgress(
                                     userStoryStatus.puzzles.total,
@@ -57,14 +57,16 @@ export default function StageCard(props: StageCardProps) {
                                     'success',
                                 )}
                                 {userStoryStatus.puzzles.waiting === 1 && (
-                                    <Typography variant="body2" color="text.secondary" gutterBottom>{`${
-                                        userStoryStatus.puzzles.waiting
-                                    } ${t('plugin_find_truman_puzzle_to_be_revealed')}`}</Typography>
+                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                        {userStoryStatus.puzzles.waiting}
+                                        {t('plugin_find_truman_puzzle_to_be_revealed')}
+                                    </Typography>
                                 )}
                                 {userStoryStatus.puzzles.waiting > 1 && (
-                                    <Typography variant="body2" color="text.secondary" gutterBottom>{`${
-                                        userStoryStatus.puzzles.waiting
-                                    } ${t('plugin_find_truman_puzzles_to_be_revealed')}`}</Typography>
+                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                        {userStoryStatus.puzzles.waiting}
+                                        {t('plugin_find_truman_puzzles_to_be_revealed')}
+                                    </Typography>
                                 )}
                             </Box>
                         </Grid>
@@ -74,24 +76,24 @@ export default function StageCard(props: StageCardProps) {
                                     {t('plugin_find_truman_status_poll')}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary" gutterBottom>
-                                    {`${t('plugin_find_truman_voting_rate')}${
-                                        userStoryStatus.polls.total > 0
-                                            ? ((userStoryStatus.polls.hit * 100) / userStoryStatus.polls.total).toFixed(
-                                                  2,
-                                              )
-                                            : '0.00'
-                                    }%`}
+                                    {t('plugin_find_truman_voting_rate')}
+                                    {userStoryStatus.polls.total > 0
+                                        ? ((userStoryStatus.polls.hit * 100) / userStoryStatus.polls.total).toFixed(2)
+                                        : '0.00'}
+                                    %
                                 </Typography>
                                 {renderProgress(userStoryStatus.polls.total, userStoryStatus.polls.hit, 'secondary')}
                                 {userStoryStatus.polls.waiting === 1 && (
-                                    <Typography variant="body2" color="text.secondary" gutterBottom>{`${
-                                        userStoryStatus.polls.waiting
-                                    } ${t('plugin_find_truman_poll_to_be_revealed')}`}</Typography>
+                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                        {userStoryStatus.polls.waiting}
+                                        {t('plugin_find_truman_poll_to_be_revealed')}
+                                    </Typography>
                                 )}
                                 {userStoryStatus.polls.waiting > 1 && (
-                                    <Typography variant="body2" color="text.secondary" gutterBottom>{`${
-                                        userStoryStatus.polls.waiting
-                                    } ${t('plugin_find_truman_polls_to_be_revealed')}`}</Typography>
+                                    <Typography variant="body2" color="text.secondary" gutterBottom>
+                                        {userStoryStatus.polls.waiting}
+                                        {t('plugin_find_truman_polls_to_be_revealed')}
+                                    </Typography>
                                 )}
                             </Box>
                         </Grid>
