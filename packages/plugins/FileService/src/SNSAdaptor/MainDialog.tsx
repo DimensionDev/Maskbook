@@ -1,20 +1,20 @@
 import { Button, DialogActions, DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskDialog } from '@masknet/theme'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { isNil } from 'lodash-unified'
 import { useCustomSnackbar } from '@masknet/theme'
 import { useState } from 'react'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales/i18n_generated'
 import { WalletMessages } from '../../Wallet/messages'
-import { InjectedDialog, InjectedDialogProps } from '../../../components/shared/InjectedDialog'
 import { Entry } from './components'
 import { META_KEY_2 } from '../constants'
 import { Exchange } from './hooks/Exchange'
 import type { FileInfo } from '../types'
-import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { useCompositionContext } from '@masknet/plugin-infra'
 
-interface Props extends InjectedDialogProps {
+interface Props {
     onClose: () => void
+    open: boolean
 }
 
 const useStyles = makeStyles()({
@@ -31,7 +31,7 @@ const useStyles = makeStyles()({
     },
 })
 const FileServiceDialog: React.FC<Props> = (props) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const [uploading, setUploading] = useState(false)
@@ -57,10 +57,10 @@ const FileServiceDialog: React.FC<Props> = (props) => {
             props.onClose()
             return
         }
-        showSnackbar(t('plugin_file_service_uploading_on_cancel'))
+        showSnackbar(t.uploading_on_cancel())
     }
     return (
-        <InjectedDialog open={props.open} title={t('plugin_file_service_display_name')} onClose={onDecline}>
+        <MaskDialog open={props.open} title={t.display_name()} onClose={onDecline}>
             <DialogContent>
                 <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
@@ -72,10 +72,10 @@ const FileServiceDialog: React.FC<Props> = (props) => {
                     classes={{ root: classes.button }}
                     onClick={onInsert}
                     disabled={isNil(selectedFileInfo)}>
-                    {t('plugin_file_service_on_insert')}
+                    {t.on_insert()}
                 </Button>
             </DialogActions>
-        </InjectedDialog>
+        </MaskDialog>
     )
 }
 

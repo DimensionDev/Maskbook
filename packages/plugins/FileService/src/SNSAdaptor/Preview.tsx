@@ -2,7 +2,7 @@ import { formatFileSize } from '@dimensiondev/kit'
 import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { DownloadCloud, File } from 'react-feather'
-import { useI18N } from '../../../utils'
+import { useI18N } from '../locales/i18n_generated'
 import { CopyableCode } from './components/Copyable'
 import type { FileInfo } from '../types'
 
@@ -45,15 +45,15 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Preview({ info }: { info: FileInfo }) {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const fileKey = info.key ? (
         <Typography component="p" color="textPrimary">
-            {t('plugin_file_service_file_key')} <CopyableCode className={classes.code}>{info.key}</CopyableCode>
+            {t.file_key()} <CopyableCode className={classes.code}>{info.key}</CopyableCode>
         </Typography>
     ) : (
         <Typography component="p" color="textSecondary">
-            {t('plugin_file_service_unencrypted')}
+            {t.unencrypted()}
         </Typography>
     )
     const link = `https://arweave.net/${info.landingTxID}`

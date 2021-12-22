@@ -1,5 +1,5 @@
-import { Result, Ok, Err, Some, None, Option } from 'ts-results'
-import type { TypedMessage } from '@masknet/shared-base'
+import { Result, Ok, Err, Some, Option, None } from 'ts-results'
+import type { TypedMessage } from './base'
 import z_schema from 'z-schema'
 import produce, { enableMapSet, Draft } from 'immer'
 enableMapSet()
@@ -11,7 +11,6 @@ export function getKnownMetadataKeys() {
 export function getMetadataSchema(key: string): Option<object> {
     return metadataSchemaStore.has(key) ? Some(metadataSchemaStore.get(key)!) : None
 }
-
 /**
  * Register your metadata with a JSON Schema so Mask can validate the schema for you.
  * @param key Metadata key

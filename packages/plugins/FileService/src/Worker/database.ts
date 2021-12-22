@@ -1,4 +1,4 @@
-import { createPluginDatabase } from '../../../database/Plugin'
+import type { Plugin } from '@masknet/plugin-infra'
 import { asyncIteratorToArray } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { base } from '../base'
 import { FileInfoV1ToV2 } from '../helpers'
@@ -6,7 +6,16 @@ import type { FileInfo, FileInfoV1 } from '../types'
 
 type TaggedTypes = FileInfo | FileInfoV1
 
-const Database = createPluginDatabase<TaggedTypes>(base.ID)
+let Database: Plugin.Worker. = createPluginDatabase<TaggedTypes>(base.ID)
+
+export function setupStorage(_: typeof Database) {
+    Database = _
+}
+
+export function getStorage() {
+    return storage.storage
+}
+
 
 let migrationDone = false
 async function migrationV1_V2() {
