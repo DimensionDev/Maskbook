@@ -5,15 +5,16 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@dimensiondev/common-protocols": "1.6.0-20210723072221-8f46a92",
-    "@masknet/theme": "workspace:*",
-    "@masknet/shared-base": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
-    "react-router-dom": "5",
-    "date-fns": "^2.27.0",
-    "react-use": "^17.3.1",
-    "react-feather": "^2.0.9",
+    "@masknet/plugin-wallet": "workspace:^undefined",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
     "@msgpack/msgpack": "^2.7.1",
     "arweave": "^1.10.3",
-    "@masknet/shared": "workspace:*"
+    "date-fns": "^2.27.0",
+    "react-feather": "^2.0.9",
+    "react-router-dom": "5",
+    "react-use": "^17.3.1"
   }
 }

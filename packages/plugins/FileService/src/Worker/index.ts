@@ -1,12 +1,14 @@
 import { None, Plugin, Result, Some } from '@masknet/plugin-infra'
 import { base } from '../base'
 import type { FileInfo } from '../types'
-import { getAllFiles, setFileInfo } from './database'
+import { getAllFiles, setFileInfo, setupDatabase } from './database'
 import './rpc'
 
 const worker: Plugin.Worker.Definition = {
     ...base,
-    init(signal) {},
+    init(signal, context) {
+        setupDatabase(context.getDatabaseStorage())
+    },
     backup: {
         onBackup: async () => {
             const files = await getAllFiles()

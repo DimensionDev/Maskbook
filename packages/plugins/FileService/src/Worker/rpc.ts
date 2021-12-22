@@ -1,18 +1,18 @@
 import { createPluginMessage, createPluginRPC, createPluginRPCGenerator } from '@masknet/plugin-infra'
-import { FileServicePluginID } from '../constants'
+import { PluginID_FileService } from '@masknet/shared-base'
 
 import.meta.webpackHot && import.meta.webpackHot.accept()
 
-const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }>(FileServicePluginID)
+const PluginFileServiceMessage = createPluginMessage<{ _: unknown; _2: unknown }>(PluginID_FileService)
 
-export const PluginFileServiceRPC = createPluginRPC(
-    FileServicePluginID,
-    () => import('./service').then(({ upload, ...rest }) => rest),
+export const PluginFileServiceRPC = createPluginRPC<Omit<typeof import('./service'), 'upload' | 'setupDatabase'>>(
+    PluginID_FileService,
+    () => import('./service').then(({ upload, setupDatabase, ...rest }) => rest),
     PluginFileServiceMessage._,
 )
 
 export const PluginFileServiceRPCGenerator = createPluginRPCGenerator(
-    FileServicePluginID,
+    PluginID_FileService,
     () => import('./service').then(({ upload }) => ({ upload })),
     PluginFileServiceMessage._2,
 )
