@@ -50,7 +50,7 @@ export const searchProfileTabListSelector = () =>
 export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] > div > div > div > div > div > div > div > div > div > div')
 export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
-    const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"')
+    const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"]')
     if (q.evaluate()) return q
     return querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 }
@@ -227,17 +227,14 @@ export const searchProfessionalButtonSelector = () =>
 //#endregion
 
 //#region avatar selector
-
 export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
     querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
-export const searchTwitterAvatarSelector = () => searchTwitterAvatarLinkSelector().querySelector<E>('div')
+export const searchTwitterAvatarSelector = () =>
+    querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('img').closest<E>(1)
 //#endregion
 
 //#region twitter avatar
-export const searchAccountSwitherButtonSelector = () =>
-    querySelector<E>('[data-testid="SideNav_AccountSwitcher_Button"]')
-
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
 //#endregion
 
