@@ -3,7 +3,6 @@ import { base } from './base'
 
 registerPlugin({
     ...base,
-
     SNSAdaptor: {
         load: () => import('./UI/SNSAdaptor'),
         hotModuleReload: (hot) =>

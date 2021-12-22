@@ -50,7 +50,7 @@ interface OpenSeaFungibleToken {
     address: string
 }
 
-interface OpenSeaCustomAccount {
+export interface OpenSeaCustomAccount {
     address: string
     profile_img_url: string
     user?: {

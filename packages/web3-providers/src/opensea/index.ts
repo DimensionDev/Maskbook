@@ -1,11 +1,3 @@
-import type { OpenSeaAssetContract, OpenSeaAssetEvent, OpenSeaResponse, OpenSeaCollection } from './types'
-import urlcat from 'urlcat'
-import { head, uniqBy } from 'lodash-unified'
-import type { AssetCollection, AssetOrder, NFTAsset, NFTAssetOwner, NFTHistory, OrderSide } from '../types'
-import { getOrderUnitPrice, getOrderUSDPrice, toTokenDetailed } from '../utils'
-import fromUnixTime from 'date-fns/fromUnixTime'
-
-import BigNumber from 'bignumber.js'
 import {
     ChainId,
     createERC721ContractDetailed,
@@ -14,8 +6,22 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
 } from '@masknet/web3-shared-evm'
+import BigNumber from 'bignumber.js'
+import fromUnixTime from 'date-fns/fromUnixTime'
+import isAfter from 'date-fns/isAfter'
+import { head, uniqBy } from 'lodash-unified'
+import urlcat from 'urlcat'
+import type { AssetCollection, AssetOrder, NFTAsset, NFTAssetOwner, NFTHistory, OrderSide } from '../types'
+import { getOrderUnitPrice, getOrderUSDPrice, toTokenDetailed } from '../utils'
+import type {
+    OpenSeaAssetContract,
+    OpenSeaAssetEvent,
+    OpenSeaCollection,
+    OpenSeaCustomAccount,
+    OpenSeaResponse,
+} from './types'
 
-const OPENSEA_ACCOUNT_URL = 'https://opensea.io/accounts/'
+const OPENSEA_ACCOUNT_URL = 'https://opensea.io/accounts/:address'
 const OPENSEA_API_KEY = 'c38fe2446ee34f919436c32db480a2e3'
 const OPENSEA_API_URL = 'https://api.opensea.io'
 
@@ -75,7 +81,7 @@ function createERC721TokenAsset(
 }
 
 async function _getAsset(address: string, tokenId: string, chainId: ChainId) {
-    const requestPath = urlcat(`/api/v1/asset/:address/:tokenId`, { address, tokenId })
+    const requestPath = urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId })
     return fetchAsset<OpenSeaResponse>(requestPath, chainId)
 }
 
@@ -102,7 +108,7 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NFTAsset {
     return {
         is_verified: ['approved', 'verified'].includes(asset.collection?.safelist_request_status ?? ''),
         // it's an IOS string as my inspection
-        is_auction: Date.parse(`${asset.endTime ?? ''}Z`) > Date.now(),
+        is_auction: isAfter(Date.parse(`${asset.endTime ?? ''}Z`), Date.now()),
         image_url: asset.image_url_original ?? asset.image_url ?? asset.image_preview_url ?? '',
         asset_contract: {
             name: asset.asset_contract.name,
@@ -121,11 +127,11 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NFTAsset {
         current_symbol: desktopOrder?.payment_token_contract?.symbol ?? 'ETH',
         owner: {
             ...asset.owner,
-            link: `${OPENSEA_ACCOUNT_URL}${asset.owner?.user?.username ?? asset.owner.address ?? ''}`,
+            link: makeAssetLink(asset.owner),
         },
         creator: {
             ...asset.creator,
-            link: `${OPENSEA_ACCOUNT_URL}${asset.creator?.user?.username ?? asset.creator?.address ?? ''}`,
+            link: makeAssetLink(asset.creator),
         },
         token_id: asset.token_id,
         token_address: asset.token_address,
@@ -188,8 +194,6 @@ export async function getHistory(address: string, tokenId: string, chainId: Chai
 }
 
 function createNFTHistory(event: OpenSeaAssetEvent): NFTHistory {
-    const makeLink = (account?: OpenSeaAssetEvent['seller']) =>
-        urlcat(OPENSEA_ACCOUNT_URL, '/:address', { address: account?.user?.username ?? account?.address })
     const accountPair =
         event.event_type === 'successful'
             ? {
@@ -197,13 +201,13 @@ function createNFTHistory(event: OpenSeaAssetEvent): NFTHistory {
                       username: event.seller?.user?.username,
                       address: event.seller?.address,
                       imageUrl: event.seller?.profile_img_url,
-                      link: makeLink(event.seller),
+                      link: makeAssetLink(event.seller),
                   },
                   to: {
                       username: event.winner_account?.user?.username,
                       address: event.winner_account?.address,
                       imageUrl: event.winner_account?.profile_img_url,
-                      link: makeLink(event.winner_account),
+                      link: makeAssetLink(event.winner_account),
                   },
               }
             : {
@@ -211,13 +215,13 @@ function createNFTHistory(event: OpenSeaAssetEvent): NFTHistory {
                       username: event.from_account?.user?.username,
                       address: event.from_account?.address,
                       imageUrl: event.from_account?.profile_img_url,
-                      link: makeLink(event.from_account),
+                      link: makeAssetLink(event.from_account),
                   },
                   to: {
                       username: event.to_account?.user?.username,
                       address: event.to_account?.address,
                       imageUrl: event.to_account?.profile_img_url,
-                      link: makeLink(event.to_account),
+                      link: makeAssetLink(event.to_account),
                   },
               }
     return {
@@ -294,4 +298,10 @@ export async function getCollections(address: string, opts: { chainId: ChainId; 
         image: x.image_url || undefined,
         slug: x.slug,
     }))
+}
+
+function makeAssetLink(account: OpenSeaCustomAccount | undefined) {
+    return urlcat(OPENSEA_ACCOUNT_URL, {
+        address: account?.user?.username ?? account?.address,
+    })
 }

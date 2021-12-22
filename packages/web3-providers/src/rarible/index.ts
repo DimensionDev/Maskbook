@@ -33,11 +33,10 @@ export async function fetchFromRarible<T>(path: string, init?: RequestInit) {
         mode: 'cors',
         ...init,
     })
-
     return response.json() as Promise<T>
 }
 
-export async function getProfilesFromRarible(addresses: (string | undefined)[]) {
+export function getProfilesFromRarible(addresses: (string | undefined)[]) {
     return fetchFromRarible<RaribleProfileResponse[]>('/profiles/list', {
         method: 'POST',
         body: JSON.stringify(addresses),
@@ -117,7 +116,7 @@ export async function getOrders(tokenAddress: string, tokenId: string, side: Ord
 }
 
 export async function getHistory(tokenAddress: string, tokenId: string): Promise<NFTHistory[]> {
-    let histories = await fetchFromRarible<RaribleHistory[]>(`/activity`, {
+    let histories = await fetchFromRarible<RaribleHistory[]>('/activity', {
         method: 'POST',
         body: JSON.stringify({
             // types: ['BID', 'BURN', 'BUY', 'CANCEL', 'CANCEL_BID', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],
@@ -262,24 +261,22 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): NFT
     }
 }
 
-async function _getAsset(address: string, tokenId: string) {
+function _getAsset(address: string, tokenId: string) {
     const requestPath = urlcat('/v0.1/nft/items/:address::tokenId', {
         includeMeta: true,
         address,
         tokenId,
     })
-    const assetResponse = await fetchFromRarible<RaribleNFTItemMapResponse>(requestPath, {
+    return fetchFromRarible<RaribleNFTItemMapResponse>(requestPath, {
         method: 'GET',
         mode: 'cors',
         headers: { 'content-type': 'application/json' },
     })
-    return assetResponse
 }
 
 export async function getAsset(address: string, tokenId: string, chainId: ChainId) {
     const asset = await _getAsset(address, tokenId)
     if (!asset) return
-
     return createNFTAsset(asset, chainId)
 }
 
