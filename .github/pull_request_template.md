@@ -9,7 +9,7 @@ Closes # (NO_ISSUE)
 <!-- Please delete options that are not relevant. -->
 
 - [ ] Documentation
-- [ ] Code refactoring (Restructuring existing code w/o changing its external behavior)
+- [ ] Code refactoring (Restructuring existing code w/o changing its observable behavior)
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
 - [ ] Breaking change (a fix or feature that would make something no longer possible to do/require old user must upgrade their Mask Network to this new version)
