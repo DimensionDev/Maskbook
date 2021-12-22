@@ -14,7 +14,7 @@ const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
         platform,
         identity,
         id,
-        type,
+        type: type.replaceAll('-', '.'),
     })
 }
 
