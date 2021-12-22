@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface FootnoteMenuOption {
     name: React.ReactNode
-    value: number
+    value: string | number
 }
 
 export interface FootnoteMenuProps {

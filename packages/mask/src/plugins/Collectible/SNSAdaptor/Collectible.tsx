@@ -31,7 +31,7 @@ import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
 import { PluginSkeleton } from './PluginSkeleton'
 import { CollectibleTab } from '../types'
-import { currentCollectibleProviderSettings } from '../settings'
+import { currentNonFungibleAssetProviderSettings } from '../settings'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
 import { ActionBar } from './ActionBar'
@@ -151,13 +151,13 @@ export function Collectible(props: CollectibleProps) {
     //#region sync with settings
     const collectibleProviderOptions = getEnumAsArray(NonFungibleAssetProvider)
     const onDataProviderChange = useCallback((option: FootnoteMenuOption) => {
-        currentCollectibleProviderSettings.value = option.value as NonFungibleAssetProvider
+        currentNonFungibleAssetProviderSettings.value = option.value as NonFungibleAssetProvider
     }, [])
     //#endregion
 
     //#region provider switcher
     const CollectibleProviderSwitcher = useSettingsSwitcher(
-        currentCollectibleProviderSettings,
+        currentNonFungibleAssetProviderSettings,
         getEnumAsArray(NonFungibleAssetProvider).map((x) => x.value),
         resolveCollectibleProviderName,
     )
