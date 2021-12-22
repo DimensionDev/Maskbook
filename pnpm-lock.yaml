@@ -293,7 +293,7 @@ importers:
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
       '@masknet/plugin-example': workspace:*
-      '@masknet/plugin-file-service': workspace:^undefined
+      '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-wallet': workspace:*
@@ -596,7 +596,7 @@ importers:
     specifiers:
       '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
       '@masknet/plugin-infra': workspace:*
-      '@masknet/plugin-wallet': workspace:^undefined
+      '@masknet/plugin-wallet': workspace:*
       '@masknet/shared': workspace:*
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*

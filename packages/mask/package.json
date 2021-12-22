@@ -22,7 +22,7 @@
     "@masknet/icons": "workspace:*",
     "@masknet/injected-script": "workspace:*",
     "@masknet/plugin-example": "workspace:*",
-    "@masknet/plugin-file-service": "workspace:^undefined",
+    "@masknet/plugin-file-service": "workspace:*",
     "@masknet/plugin-flow": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
