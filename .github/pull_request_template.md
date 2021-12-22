@@ -12,7 +12,7 @@ Closes # (NO_ISSUE)
 - [ ] Code refactoring (Restructuring existing code w/o changing its external behavior)
 - [ ] Bug fix (non-breaking change which fixes an issue)
 - [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] Breaking change (a fix or feature that would make something no longer possible to do/require old user must upgrade their Mask Network to this new version)
 
 ## Previews
 
