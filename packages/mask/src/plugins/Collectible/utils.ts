@@ -60,13 +60,6 @@ export function getAssetInfoFromURL(url?: string) {
     return
 }
 
-export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quantity?: string) {
-    if (!currentPrice || !decimals || !quantity) return
-    const price = formatBalance(currentPrice, decimals)
-    const _quantity = formatBalance(quantity, new BigNumber(quantity).toString() !== '1' ? 8 : 0)
-    return new BigNumber(price).dividedBy(_quantity).decimalPlaces(4, 1)
-}
-
 export function isWyvernSchemaName(name: unknown): name is WyvernSchemaName {
     const schemas: unknown[] = [
         WyvernSchemaName.ERC20,

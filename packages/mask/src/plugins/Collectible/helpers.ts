@@ -21,11 +21,6 @@ export function toAsset(asset: { tokenId: string; tokenAddress: string; schemaNa
     }
 }
 
-export function toTokenDetailed(chainId: ChainId, token: OpenSeaFungibleToken) {
-    if (token.symbol === 'ETH') return createNativeToken(chainId)
-    return createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
-}
-
 export function toTokenIdentifier(token?: CollectibleToken) {
     if (!token) return ''
     return `${token.contractAddress}_${token.tokenId}`

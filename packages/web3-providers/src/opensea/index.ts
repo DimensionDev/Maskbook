@@ -5,6 +5,8 @@ import {
     createERC721Token,
     ERC721ContractDetailed,
     createERC721ContractDetailed,
+    createNativeToken,
+    createERC20Token,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import fromUnixTime from 'date-fns/fromUnixTime'
@@ -12,7 +14,7 @@ import isAfter from 'date-fns/isAfter'
 import { head, uniqBy } from 'lodash-unified'
 import urlcat from 'urlcat'
 import type { NonFungibleTokenAPI } from '../types'
-import { getOrderUnitPrice, getOrderUSDPrice, toTokenDetailed } from './utils'
+import { getOrderUnitPrice, getOrderUSDPrice } from './utils'
 import type {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
@@ -60,6 +62,19 @@ function createERC721TokenFromAsset(
         },
         tokenId,
     )
+}
+
+function createTokenDetailed(
+    chainId: ChainId,
+    token: {
+        address: string
+        decimals: number
+        name: string
+        symbol: string
+    },
+) {
+    if (token.symbol === 'ETH') return createNativeToken(chainId)
+    return createERC20Token(chainId, token.address, token.decimals, token.name, token.symbol)
 }
 
 function createAssetLink(account: OpenSeaCustomAccount | undefined) {
@@ -119,10 +134,10 @@ function createNFTAsset(asset: OpenSeaResponse, chainId: ChainId): NonFungibleTo
             ? fromUnixTime(desktopOrder.listing_time)
             : null,
         order_payment_tokens: desktopOrder?.payment_token_contract
-            ? [toTokenDetailed(chainId, desktopOrder.payment_token_contract)]
+            ? [createTokenDetailed(chainId, desktopOrder.payment_token_contract)]
             : [],
         offer_payment_tokens: uniqBy(
-            asset.collection.payment_tokens.map((x) => toTokenDetailed(chainId, x)),
+            asset.collection.payment_tokens.map((x) => createTokenDetailed(chainId, x)),
             (x) => x.address.toLowerCase(),
         ).filter((x) => x.type === EthereumTokenType.ERC20),
         slug: asset.collection.slug,

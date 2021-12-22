@@ -3,7 +3,6 @@ import { compact, first } from 'lodash-unified'
 import {
     ChainId,
     createLookupTableResolver,
-    ERC721ContractDetailed,
     ERC721TokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
