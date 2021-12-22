@@ -105,7 +105,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
 
         useEffect(() => {
             if (currentGasOption) {
-                setValue('gasPrice', formatWeiToGwei(currentGasOption.gasPrice))
+                setValue('gasPrice', formatWeiToGwei(currentGasOption.gasPrice).toString())
             }
         }, [currentGasOption, setValue])
 
@@ -131,7 +131,7 @@ export const Prior1559GasSetting: FC<GasSettingProps> = memo(
                             onClick={() => setGasOption(gasOption)}
                             className={selectedGasOption === gasOption ? classes.selected : undefined}>
                             <Typography className={classes.optionsTitle}>{title}</Typography>
-                            <Typography>{formatWeiToGwei(gasPrice ?? 0)} Gwei</Typography>
+                            <Typography>{formatWeiToGwei(gasPrice ?? 0).toString()} Gwei</Typography>
                             <Typography className={classes.gasUSD}>
                                 {t('popups_wallet_gas_fee_settings_usd', {
                                     usd: formatWeiToEther(gasPrice)

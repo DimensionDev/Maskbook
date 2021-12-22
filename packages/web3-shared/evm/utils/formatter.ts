@@ -107,7 +107,7 @@ export function formatAmountPrecision(
 }
 
 export function formatWeiToGwei(value: BigNumber.Value) {
-    return new BigNumber(value).shiftedBy(-9).integerValue().toFixed()
+    return new BigNumber(value).shiftedBy(-9).integerValue()
 }
 
 export function formatWeiToEther(value: BigNumber.Value) {
