@@ -41,4 +41,5 @@ jobs:
         with:
           registry: true
       - name: Publish to github npm pkg
-        run: npm publish ./packages/provider-proxy/dist
+        run: pnpm publish --no-git-checks
+        working-directory: packages/provider-proxy
