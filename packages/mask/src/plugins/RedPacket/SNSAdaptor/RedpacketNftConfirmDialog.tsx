@@ -133,7 +133,7 @@ const useStyles = makeStyles()((theme) => ({
         transform: 'translateY(1px)',
     },
     loadingFailImage: {
-        minHeight: 0,
+        minHeight: '0px !important',
         maxWidth: 'none',
         transform: 'translateY(10px)',
         width: 64,

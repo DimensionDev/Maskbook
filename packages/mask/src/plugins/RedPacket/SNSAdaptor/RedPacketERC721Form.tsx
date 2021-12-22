@@ -129,7 +129,7 @@ const useStyles = makeStyles()((theme) => {
             color: 'rgba(255, 95, 95, 1)',
         },
         loadingFailImage: {
-            minHeight: 0,
+            minHeight: '0px !important',
             maxWidth: 'none',
             transform: 'translateY(10px)',
             width: 64,
