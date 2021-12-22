@@ -7,11 +7,11 @@ import { landing } from '../constants'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
 import { makeFileKeySigned } from '../helpers'
 
-const POSTAGE_STAMP = '0000000000000000000000000000000000000000000000000000000000000000'
-const BEE_HOSTS: string[] = times(10, (n) => `https://bee-${n}.gateway.ethswarm.org`)
+const POSTAGE_STAMP = '0'.repeat(64)
+const BEE_HOSTS = times(10, (n) => `https://bee-${n}.gateway.ethswarm.org`)
 
 function createBee(): Bee {
-    return new Bee(sample(BEE_HOSTS) as string)
+    return new Bee(sample(BEE_HOSTS)!)
 }
 
 export class SwarmAgent implements ProviderAgent {
@@ -59,8 +59,7 @@ export class SwarmAgent implements ProviderAgent {
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
-        const BEE_HOST: string = sample(BEE_HOSTS) as string
-        const linkPrefix: string = `${BEE_HOST}/bzz`
+        const linkPrefix = `${sample(BEE_HOSTS)!}/bzz`
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
