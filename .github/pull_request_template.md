@@ -33,7 +33,7 @@ Closes # (NO_ISSUE)
 ### If this PR changes the dependencies of the project. What kind of change does it have?
 
 - [ ] Add a new package as dependence.
-- [ ] Upgrade the version of a dependent package.
+- [ ] Change the version of a currently using dependency.
 
 ### If this PR depends on external APIs, please do the following steps:
 
