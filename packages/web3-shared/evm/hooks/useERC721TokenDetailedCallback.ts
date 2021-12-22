@@ -34,12 +34,7 @@ export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractD
         } else {
             return getERC721TokenDetailedFromOpensea(contractDetailed, tokenId, GET_SINGLE_ASSET_URL)
         }
-    }, [
-        tokenId,
-        contractDetailed,
-        erc721TokenContract,
-        GET_SINGLE_ASSET_URL,
-    ])
+    }, [tokenId, contractDetailed, erc721TokenContract, GET_SINGLE_ASSET_URL])
 
     return [tokenId, setTokenId, erc721TokenDetailedCallback] as const
 }

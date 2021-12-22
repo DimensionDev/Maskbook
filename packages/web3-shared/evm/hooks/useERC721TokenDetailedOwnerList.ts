@@ -54,8 +54,6 @@ export function useERC721TokenDetailedOwnerList(contractDetailed: ERC721Contract
             allListRef.current[i].info.hasTokenDetailed = true
             return allListRef.current[i]
         })
-
-        return
     }, [GET_ASSETS_URL, contractDetailed, owner, chainId])
 
     const clearTokenDetailedOwnerList = () => (allListRef.current = [])
@@ -81,7 +79,7 @@ async function getERC721TokenDetailedOwnerListFromChain(
 
     if (!isEnumerable || !balance) return []
 
-    const allRequest = Array.from({ length: Number.parseInt(balance, 10) }).map(async (_v, i) => {
+    const allRequest = Array.from({ length: Number.parseInt(balance, 10) }, async (_v, i) => {
         const tokenId = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i))
 
         if (!tokenId) return
