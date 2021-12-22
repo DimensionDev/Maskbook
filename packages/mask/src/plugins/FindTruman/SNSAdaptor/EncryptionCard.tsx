@@ -40,8 +40,8 @@ export default function EncryptionCard(props: EncryptionCardProps) {
 
     const { classes } = useStyles()
     const { address, t } = useContext(FindTrumanContext)
-    const [flipped, setFlipped] = useState<boolean>(false)
-    const [backImgHeight, setBackImgHeight] = useState<number>(0)
+    const [flipped, setFlipped] = useState(false)
+    const [backImgHeight, setBackImgHeight] = useState(0)
 
     const { value: clue, error } = useAsync(async () => {
         return clueId
