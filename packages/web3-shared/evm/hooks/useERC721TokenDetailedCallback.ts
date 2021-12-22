@@ -21,21 +21,20 @@ export function useERC721TokenDetailedCallback(contractDetailed: ERC721ContractD
                 tokenId,
             )
             const info = await getERC721TokenAssetFromChain(tokenDetailedFromChain?.info.tokenURI)
-            return {
-                ...tokenDetailedFromChain,
-                info: {
+
+            if (info && tokenDetailedFromChain) {
+                tokenDetailedFromChain.info = {
                     ...info,
-                    ...tokenDetailedFromChain?.info,
+                    ...tokenDetailedFromChain.info,
                     hasTokenDetailed: true,
-                    name: info?.name ?? tokenDetailedFromChain?.info.name,
-                },
+                    name: info?.name ?? tokenDetailedFromChain?.info.name ?? '',
+                }
             }
+            return tokenDetailedFromChain
         } else {
             return getERC721TokenDetailedFromOpensea(contractDetailed, tokenId, GET_SINGLE_ASSET_URL)
         }
     }, [
-        getERC721TokenDetailedFromOpensea,
-        getERC721TokenDetailedFromChain,
         tokenId,
         contractDetailed,
         erc721TokenContract,
