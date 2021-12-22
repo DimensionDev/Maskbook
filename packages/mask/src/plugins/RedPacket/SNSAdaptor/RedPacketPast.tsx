@@ -1,3 +1,4 @@
+import { useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState } from 'react'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -46,8 +47,11 @@ const useStyles = makeStyles()((theme) => ({
     labelWrapper: {
         display: 'flex',
     },
-    wrapper: {
+    tabWrapper: {
         padding: theme.spacing(0, 2, 0, 2),
+    },
+    wrapper: {
+        padding: theme.spacing(2),
     },
 }))
 
@@ -60,6 +64,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
     const { t } = useI18N()
     const { classes } = useStyles()
     const state = useState(RpTypeTabs.ERC20)
+    const chainId = useChainId()
 
     const currentIdentity = useCurrentIdentity()
     const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname ?? 'Unknown User'
@@ -83,6 +88,14 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
         },
         [senderName, onClose],
     )
+
+    if (![ChainId.Mainnet, ChainId.Matic].includes(chainId))
+        return (
+            <div className={classes.wrapper}>
+                <RedPacketHistoryList onSelect={onSelect} />{' '}
+            </div>
+        )
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -110,7 +123,7 @@ export function RedPacketPast({ onSelect, onClose }: Props) {
         classes,
     }
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.tabWrapper}>
             <AbstractTab height={512} {...tabProps} />
         </div>
     )

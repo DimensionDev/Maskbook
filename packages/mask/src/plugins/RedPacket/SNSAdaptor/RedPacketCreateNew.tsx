@@ -1,4 +1,5 @@
 import { makeStyles } from '@masknet/theme'
+import { useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketFormProps, RedPacketERC20Form } from './RedPacketERC20Form'
 import { RedPacketERC721Form } from './RedPacketERC721Form'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
@@ -43,6 +44,9 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         display: 'flex',
     },
     wrapper: {
+        padding: theme.spacing(2),
+    },
+    tabWrapper: {
         padding: theme.spacing(0, 2, 2, 2),
     },
 }))
@@ -51,6 +55,21 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
     const { origin, onNext, onChange, onClose, SelectMenuProps, state } = props
     const { t } = useI18N()
     const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
+    const chainId = useChainId()
+
+    if (![ChainId.Mainnet, ChainId.Matic].includes(chainId))
+        return (
+            <div className={classes.wrapper}>
+                <RedPacketERC20Form
+                    origin={origin}
+                    onClose={onClose}
+                    onNext={onNext}
+                    onChange={onChange}
+                    SelectMenuProps={SelectMenuProps}
+                />
+            </div>
+        )
+
     const tabProps: AbstractTabProps = {
         tabs: [
             {
@@ -86,7 +105,7 @@ export function RedPacketCreateNew(props: RedPacketFormProps & { state: readonly
         classes,
     }
     return (
-        <div className={classes.wrapper}>
+        <div className={classes.tabWrapper}>
             <AbstractTab {...tabProps} />
         </div>
     )
