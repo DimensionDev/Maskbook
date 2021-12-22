@@ -1,7 +1,5 @@
-import BigNumber from 'bignumber.js'
-import type { AssetEvent, Order } from 'opensea-js/lib/types'
 import { parseURL } from '@masknet/shared-base'
-import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { escapeRegExp } from 'lodash-unified'
 import { prefixPath, mainNetwork, testNetwork } from './constants'
 import type { Token } from './types'
@@ -37,28 +35,6 @@ export function getAssetInfoFromURL(url?: string) {
     const token_id = matched[2]
     const contractAddress = addresses[chain_id]
     return { chain_id, creator, token_id, contractAddress }
-}
-
-export function getOrderUnitPrice(order: Order) {
-    if (!order.currentPrice || !order.paymentTokenContract?.decimals) return
-    const price = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
-    const quantity = formatBalance(order.quantity, new BigNumber(order.quantity).toString() !== '1' ? 8 : 0)
-
-    return new BigNumber(price).dividedBy(quantity).toFixed(4, 1)
-}
-
-export function getOrderUSDPrice(order: Order) {
-    if (!order.currentPrice || !order.paymentTokenContract?.decimals) return
-    const price = formatBalance(order.paymentTokenContract.usdPrice, 0)
-    const quantity = formatBalance(order.currentPrice, order.paymentTokenContract.decimals)
-
-    return new BigNumber(price).multipliedBy(quantity).toFixed(2, 1)
-}
-
-export function getLastSalePrice(lastSale: AssetEvent | null) {
-    if (!lastSale?.totalPrice || !lastSale?.paymentToken?.decimals) return
-    const price = formatBalance(lastSale.totalPrice, lastSale.paymentToken.decimals)
-    return price
 }
 
 export function toTokenIdentifier(token?: Token) {

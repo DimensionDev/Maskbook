@@ -1,4 +1,4 @@
-import { OpenSeaApi, RaribleApi, NFTScanApi } from '@masknet/web3-providers'
+import { OpenSeaAPI, RaribleAPI, NFTScanAPI } from '@masknet/web3-providers'
 import { unreachable } from '@dimensiondev/kit'
 import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
@@ -33,11 +33,11 @@ export async function getNFT(options: NFTOption) {
     const { address, tokenId, chainId, provider } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSeaApi.getNFT(address, tokenId, chainId)
+            return OpenSeaAPI.getNFT(address, tokenId, chainId)
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScanApi.getNFT(address, tokenId, chainId)
+            return NFTScanAPI.getNFT(address, tokenId, chainId)
         case NonFungibleAssetProvider.RARIBLE:
-            return RaribleApi.getNFT(address, tokenId)
+            return RaribleAPI.getNFT(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -49,7 +49,7 @@ export async function getNFTBalance(options: BalanceOption) {
         case NonFungibleAssetProvider.RARIBLE:
         case NonFungibleAssetProvider.OPENSEA:
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScanApi.getContractBalance(address)
+            return NFTScanAPI.getContractBalance(address)
 
         default:
             unreachable(provider)
@@ -61,7 +61,7 @@ export async function getNFTContract(options: ContractOption) {
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
         case NonFungibleAssetProvider.NFTSCAN:
-            return OpenSeaApi.getContract(contractAddress, chainId)
+            return OpenSeaAPI.getContract(contractAddress, chainId)
         case NonFungibleAssetProvider.RARIBLE:
             return
         default:
@@ -73,11 +73,11 @@ export async function getNFTsByPagination(options: NFTsByPaginationOption) {
     const { provider, from, chainId, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSeaApi.getNFTsByPagination(from, { chainId, page, size })
+            return OpenSeaAPI.getNFTsByPagination(from, { chainId, page, size })
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScanApi.getNFTsByPagination(from, { chainId, page, size })
+            return NFTScanAPI.getNFTsByPagination(from, { chainId, page, size })
         case NonFungibleAssetProvider.RARIBLE:
-            return RaribleApi.getNFTsByPagination(from, { chainId, page, size })
+            return RaribleAPI.getNFTsByPagination(from, { chainId, page, size })
         default:
             unreachable(provider)
     }

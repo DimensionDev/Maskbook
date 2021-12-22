@@ -7,8 +7,6 @@ import {
     rariblePathnameRegexMatcher,
 } from './constants'
 import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
-import type { AssetEvent } from './types'
-import { multipliedBy } from '@masknet/web3-shared-base'
 import { WyvernSchemaName } from 'opensea-js/lib/types'
 
 export function checkUrl(url: string): boolean {
@@ -67,19 +65,6 @@ export function getOrderUnitPrice(currentPrice?: string, decimals?: number, quan
     const price = formatBalance(currentPrice, decimals)
     const _quantity = formatBalance(quantity, new BigNumber(quantity).toString() !== '1' ? 8 : 0)
     return new BigNumber(price).dividedBy(_quantity).decimalPlaces(4, 1)
-}
-
-export function getOrderUSDPrice(currentPrice?: string, usdPrice?: string, decimals?: number) {
-    if (!currentPrice || !decimals) return
-    const price = formatBalance(usdPrice, 0)
-    const quantity = formatBalance(currentPrice, decimals)
-    return multipliedBy(price, quantity).decimalPlaces(2, 1)
-}
-
-export function getLastSalePrice(lastSale: AssetEvent | null) {
-    if (!lastSale?.total_price || !lastSale?.payment_token?.decimals) return
-    const price = formatBalance(lastSale.total_price, lastSale.payment_token.decimals)
-    return price
 }
 
 export function isWyvernSchemaName(name: unknown): name is WyvernSchemaName {

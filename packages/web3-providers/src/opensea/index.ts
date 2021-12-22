@@ -12,7 +12,7 @@ import isAfter from 'date-fns/isAfter'
 import { head, uniqBy } from 'lodash-unified'
 import urlcat from 'urlcat'
 import type { AssetCollection, AssetOrder, NFTAsset, NFTAssetOwner, NFTHistory, OrderSide } from '../types'
-import { getOrderUnitPrice, getOrderUSDPrice, toTokenDetailed } from '../utils'
+import { getOrderUnitPrice, getOrderUSDPrice, toTokenDetailed } from './utils'
 import type {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,

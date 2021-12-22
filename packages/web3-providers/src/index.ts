@@ -1,8 +1,7 @@
-export * from './coingecko'
+export * as CoinGeckoAPI from './coingecko'
+export * as OpenSeaAPI from './opensea'
+export * as RaribleAPI from './rarible'
+export * as NFTScanAPI from './NFTScan'
 
-export * as OpenSeaApi from './opensea'
-export * as RaribleApi from './rarible'
-export * as NFTScanApi from './NFTScan'
-
-export * from './utils'
 export * from './types'
+export * from './opensea/utils'
