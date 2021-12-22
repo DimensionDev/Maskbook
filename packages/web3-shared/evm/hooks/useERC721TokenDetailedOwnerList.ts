@@ -81,7 +81,7 @@ async function getERC721TokenDetailedOwnerListFromChain(
 
     if (!isEnumerable || !balance) return []
 
-    const allRequest = Array.from({ length: Number(balance) }).map(async (_v, i) => {
+    const allRequest = Array.from({ length: Number.parseInt(balance, 10) }).map(async (_v, i) => {
         const tokenId = await safeNonPayableTransactionCall(erc721TokenContract.methods.tokenOfOwnerByIndex(owner, i))
 
         if (!tokenId) return

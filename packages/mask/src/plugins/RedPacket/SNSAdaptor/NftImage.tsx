@@ -42,7 +42,7 @@ export function NftImage(props: NftImageProps) {
                     className={classes.selectWrapperImg}
                     src={token?.info.mediaUrl}
                     onError={(event) => {
-                        const target = event.target as HTMLImageElement
+                        const target = event.currentTarget
                         target.src = fallbackImage.toString()
                         target.classList.add(classes.loadingFailImage ?? '')
                     }}

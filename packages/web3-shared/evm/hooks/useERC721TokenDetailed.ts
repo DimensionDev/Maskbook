@@ -145,10 +145,8 @@ export async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<E
                 },
                 noop,
             )
-            assetCache[tokenURI] = promise as Promise<ERC721TokenInfo>
-            const result = await promise
-            assetCache[tokenURI] = result as ERC721TokenInfo
-            return result
+            assetCache[tokenURI] = await (promise as Promise<ERC721TokenInfo>)
+            return assetCache[tokenURI]
         } catch (err) {
             return
         }
