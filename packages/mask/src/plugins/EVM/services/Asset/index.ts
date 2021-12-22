@@ -1,8 +1,6 @@
-import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
-
 import { unreachable } from '@dimensiondev/kit'
-import { NFTScanAPI, OpenSeaAPI, RaribleAPI } from '@masknet/web3-providers'
-import type { OrderSide } from '@masknet/web3-providers'
+import { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { NonFungibleTokenAPI, OpenSea, Rarible } from '@masknet/web3-providers'
 
 export interface AssetOption {
     address: string
@@ -14,7 +12,7 @@ export interface AssetOption {
 export interface OrderOption {
     address: string
     tokenId: string
-    side: OrderSide
+    side: NonFungibleTokenAPI.OrderSide
     chainId: ChainId
     provider: NonFungibleAssetProvider
     page: number
@@ -48,11 +46,11 @@ export interface CollectionOption {
 export async function getAsset(options: AssetOption) {
     switch (options.provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSeaAPI.getAsset(options.address, options.tokenId, options.chainId)
+            return OpenSea.getAsset(options.address, options.tokenId, { chainId: options.chainId })
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScanAPI.getAsset(options.address, options.tokenId, options.chainId)
+            return
         case NonFungibleAssetProvider.RARIBLE:
-            return RaribleAPI.getAsset(options.address, options.tokenId, options.chainId)
+            return Rarible.getAsset(options.address, options.tokenId, { chainId: options.chainId })
         default:
             unreachable(options.provider)
     }
@@ -62,11 +60,15 @@ export async function getOrders(options: OrderOption) {
     const { provider, address, tokenId, side, chainId, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSeaAPI.getOrders(address, tokenId, side, chainId, page, size)
+            return OpenSea.getOrders(address, tokenId, side, {
+                chainId,
+                page,
+                size,
+            })
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScanAPI.getOrders(address, tokenId, side, chainId)
+            return []
         case NonFungibleAssetProvider.RARIBLE:
-            return RaribleAPI.getOrders(address, tokenId, side, chainId)
+            return Rarible.getOrders(address, tokenId, side, { chainId })
         default:
             unreachable(provider)
     }
@@ -76,11 +78,11 @@ export async function getListings(options: ListOption) {
     const { address, tokenId, chainId, provider } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSeaAPI.getListings(address, tokenId, chainId)
+            return []
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScanAPI.getListings(address, tokenId, chainId)
+            return []
         case NonFungibleAssetProvider.RARIBLE:
-            return RaribleAPI.getListings(address, tokenId, chainId)
+            return Rarible.getListings(address, tokenId, { chainId })
         default:
             unreachable(provider)
     }
@@ -90,11 +92,11 @@ export async function getHistory(options: HistoryOption) {
     const { address, tokenId, chainId, provider, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSeaAPI.getHistory(address, tokenId, chainId, page, size)
+            return OpenSea.getHistory(address, tokenId, { chainId, page, size })
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScanAPI.getHistory(address, tokenId, chainId)
+            return []
         case NonFungibleAssetProvider.RARIBLE:
-            return RaribleAPI.getHistory(address, tokenId)
+            return Rarible.getHistory(address, tokenId)
         default:
             unreachable(provider)
     }
@@ -104,7 +106,7 @@ export async function getCollections(options: CollectionOption) {
     const { address, chainId, provider, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSeaAPI.getCollections(address, { chainId, page, size })
+            return OpenSea.getCollections(address, { chainId, page, size })
         case NonFungibleAssetProvider.RARIBLE:
             return []
         case NonFungibleAssetProvider.NFTSCAN:

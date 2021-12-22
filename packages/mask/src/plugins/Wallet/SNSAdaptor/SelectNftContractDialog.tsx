@@ -22,6 +22,7 @@ import { useERC721ContractDetailed } from '@masknet/web3-shared-evm'
 import classNames from 'classnames'
 import { unionBy } from 'lodash-unified'
 import { useNFTBalance } from '../../EVM/hooks'
+import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     search: {
@@ -105,11 +106,6 @@ const useStyles = makeStyles()((theme) => ({
         right: 25,
     },
 }))
-
-type NFTAsset = {
-    contractDetailed: ERC721ContractDetailed
-    balance?: number
-}
 
 export interface SelectNftContractDialogProps extends withClasses<never> {}
 
@@ -207,8 +203,8 @@ export function SelectNftContractDialog(props: SelectNftContractDialogProps) {
 
 export interface SearchResultBoxProps extends withClasses<never> {
     keyword: string
-    contractList: NFTAsset[]
-    searchedTokenList: NFTAsset[]
+    contractList: NonFungibleTokenAPI.ContractBalance[]
+    searchedTokenList: NonFungibleTokenAPI.ContractBalance[]
     onSubmit: (contract: ERC721ContractDetailed) => void
 }
 
@@ -251,7 +247,7 @@ function SearchResultBox(props: SearchResultBoxProps) {
 }
 
 interface ContractListItemProps {
-    contract: NFTAsset
+    contract: NonFungibleTokenAPI.ContractBalance
     onSubmit: (contract: ERC721ContractDetailed) => void
 }
 

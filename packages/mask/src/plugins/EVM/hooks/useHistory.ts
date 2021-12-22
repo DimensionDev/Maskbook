@@ -1,7 +1,7 @@
-import type { NFTHistory } from '@masknet/web3-providers'
-import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import type { NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../messages'
 
 export function useHistory(
@@ -10,7 +10,7 @@ export function useHistory(
     size: number,
     address?: string,
     tokenId?: string,
-): AsyncStateRetry<{ data: NFTHistory[]; hasNextPage: boolean }> {
+): AsyncStateRetry<{ data: NonFungibleTokenAPI.History[]; hasNextPage: boolean }> {
     const chainId = useChainId()
     return useAsyncRetry(async () => {
         if (!address || !tokenId)

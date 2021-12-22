@@ -1,4 +1,5 @@
-import type { AssetOrder } from '../types'
+import type { NonFungibleTokenAPI } from '..'
+
 export interface OpenSeaFees {
     opensea_seller_fee_basis_points: number
     opensea_buyer_fee_basis_points: number
@@ -86,9 +87,9 @@ export interface OpenSeaResponse extends Asset {
     name: string
     description: string
     owner: OpenSeaCustomAccount
-    orders: AssetOrder[] | null
-    buy_orders: AssetOrder[] | null
-    sell_orders: AssetOrder[] | null
+    orders: NonFungibleTokenAPI.AssetOrder[] | null
+    buy_orders: NonFungibleTokenAPI.AssetOrder[] | null
+    sell_orders: NonFungibleTokenAPI.AssetOrder[] | null
     is_presale: boolean
     image_url: string
     image_preview_url: string
