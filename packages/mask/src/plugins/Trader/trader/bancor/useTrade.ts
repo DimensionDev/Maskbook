@@ -1,9 +1,8 @@
 import {
     FungibleTokenDetailed,
-    isNative,
+    isZeroAddress,
     useAccount,
     useBlockNumber,
-    useTokenConstants,
     useTraderConstants,
     ChainId,
 } from '@masknet/web3-shared-evm'
@@ -24,7 +23,6 @@ export function useTrade(
     const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount()
 
@@ -38,11 +36,11 @@ export function useTrade(
         if (outputAmountWei === '0' && !isExactIn) return null
         if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId)) return null
 
-        const fromToken = isNative(inputToken.address)
+        const fromToken = isZeroAddress(inputToken.address)
             ? { ...inputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : inputToken
 
-        const toToken = isNative(outputToken.address)
+        const toToken = isZeroAddress(outputToken.address)
             ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : outputToken
 
@@ -58,7 +56,6 @@ export function useTrade(
             minimumReceived: '',
         })
     }, [
-        NATIVE_TOKEN_ADDRESS,
         strategy,
         inputAmountWei,
         outputAmountWei,

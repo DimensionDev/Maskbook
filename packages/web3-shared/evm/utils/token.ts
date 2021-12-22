@@ -2,7 +2,7 @@ import type Web3 from 'web3'
 import { AbiOutput, hexToBytes, toAscii } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { getTokenConstants } from '../constants'
+import { getTokenConstants, NATIVE_TOKEN_ADDRESS } from '../constants'
 import {
     Asset,
     ChainId,
@@ -23,8 +23,6 @@ import { isSameAddress } from './address'
 export function createNativeToken(chainId: ChainId): NativeTokenDetailed {
     const chainDetailed = getChainDetailed(chainId)
     if (!chainDetailed) throw new Error('Unknown chain id.')
-    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
-    if (!NATIVE_TOKEN_ADDRESS) throw new Error('Failed to create token.')
     return {
         type: EthereumTokenType.Native,
         chainId,

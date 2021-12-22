@@ -5,6 +5,7 @@ import {
     EthereumTokenType,
     formatEthereumAddress,
     getChainDetailed,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { groupBy } from 'lodash-unified'
 
@@ -56,7 +57,7 @@ async function fetch1inchERC20TokensFromTokenList(
     const tokens = ((await fetchTokenList(url)) as TokenObject).tokens
     const _tokens = Object.values(tokens)
     return _tokens
-        .filter((x) => x.address.toLowerCase() !== NATIVE_TOKEN_ADDRESS_IN_1INCH)
+        .filter((x) => !isSameAddress(x.address, NATIVE_TOKEN_ADDRESS_IN_1INCH))
         .map((x) => ({
             type: EthereumTokenType.ERC20,
             ...x,

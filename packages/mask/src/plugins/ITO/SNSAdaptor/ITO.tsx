@@ -4,14 +4,14 @@ import {
     formatEthereumAddress,
     FungibleTokenDetailed,
     getChainDetailed,
-    isSameAddress,
     currySameAddress,
     resolveLinkOnExplorer,
     TransactionStateType,
     useAccount,
     useChainId,
     useChainIdValid,
-    useTokenConstants,
+    isZeroAddress,
+    isSameAddress,
 } from '@masknet/web3-shared-evm'
 import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Card, Grid, Link, Typography } from '@mui/material'
@@ -198,8 +198,6 @@ interface TokenItemProps {
 
 const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
     const { classes } = useStyles({})
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-
     return (
         <>
             <TokenIcon
@@ -209,7 +207,7 @@ const TokenItem = ({ price, token, exchangeToken }: TokenItemProps) => {
             />
             <Typography component="span">
                 <strong>{price}</strong>{' '}
-                {isSameAddress(exchangeToken.address, NATIVE_TOKEN_ADDRESS)
+                {isZeroAddress(exchangeToken.address)
                     ? getChainDetailed(exchangeToken.chainId)?.nativeCurrency.symbol
                     : exchangeToken.symbol}{' '}
                 / {token.symbol}
@@ -285,8 +283,7 @@ export function ITO(props: ITO_Props) {
     } = useIfQualified(qualificationAddress, payload.contract_address)
     //#endregion
 
-    const isAccountSeller =
-        payload.seller.address.toLowerCase() === account.toLowerCase() && chainId === payload.chain_id
+    const isAccountSeller = isSameAddress(payload.seller.address, account) && chainId === payload.chain_id
     const noRemain = total_remaining.isZero()
 
     //#region remote controlled select provider dialog

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Pair } from '@uniswap/v2-sdk'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
-import { useMultipleContractSingleData } from '@masknet/web3-shared-evm'
+import { isSameAddress, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { getPairAddress } from '../../helpers'
 import { usePairContracts } from '../../contracts/uniswap/usePairContract'
 import type { TradeProvider } from '@masknet/public-api'
@@ -78,8 +78,7 @@ export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly Toke
             const tokenA = tokenPairs[i][0]
             const tokenB = tokenPairs[i][1]
             if (!tokenA || !tokenB || tokenA.equals(tokenB)) return [PairState.INVALID, null]
-            const { reserve0, reserve1 } =
-                listOfReserves.find((x) => x.id.toLowerCase() === address?.toLowerCase()) ?? {}
+            const { reserve0, reserve1 } = listOfReserves.find((x) => isSameAddress(x.id, address)) ?? {}
             if (!reserve0 || !reserve1) return [PairState.NOT_EXISTS, null]
             const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
             return [

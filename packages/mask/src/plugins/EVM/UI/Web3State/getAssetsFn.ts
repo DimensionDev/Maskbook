@@ -10,8 +10,9 @@ import {
     getERC721TokenAssetFromChain,
     getEthereumConstants,
     getRPCConstants,
-    getTokenConstants,
+    isZeroAddress,
     isSameAddress,
+    NATIVE_TOKEN_ADDRESS,
     NonFungibleAssetProvider,
     Web3ProviderType,
 } from '@masknet/web3-shared-evm'
@@ -37,7 +38,6 @@ export const getFungibleAssetsFn =
 
         const web3 = new Web3(provider)
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
-        const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
         const dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
         const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x) => ({
             id: x.token.address,
@@ -89,15 +89,12 @@ export const getFungibleAssetsFn =
         const nativeTokens: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = networks
             .filter(
                 (t) =>
-                    t.isMainnet &&
-                    !allTokens.find(
-                        (x) => x.token.chainId === t.chainId && isSameAddress(x.token.id, NATIVE_TOKEN_ADDRESS),
-                    ),
+                    t.isMainnet && !allTokens.find((x) => x.token.chainId === t.chainId && isZeroAddress(x.token.id)),
             )
             .map((x) => ({
-                id: NATIVE_TOKEN_ADDRESS!,
+                id: NATIVE_TOKEN_ADDRESS,
                 chainId: x.chainId,
-                token: { ...createNativeToken(x.chainId), id: NATIVE_TOKEN_ADDRESS!, type: TokenType.Fungible },
+                token: { ...createNativeToken(x.chainId), id: NATIVE_TOKEN_ADDRESS, type: TokenType.Fungible },
                 balance: '0',
             }))
 

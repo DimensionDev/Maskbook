@@ -6,14 +6,13 @@ import {
     formatWeiToEther,
     FungibleTokenDetailed,
     isEIP1559Supported,
-    isSameAddress,
+    isZeroAddress,
     TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
     useGasPrice,
     useNativeTokenDetailed,
-    useTokenConstants,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
@@ -38,7 +37,6 @@ interface TransferERC20Props {
 const GAS_LIMIT = 30000
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const anchorEl = useRef<HTMLDivElement | null>(null)
     const [id] = useState(uuid())
     const [amount, setAmount] = useState('')
@@ -73,7 +71,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [token])
 
     // workaround: transferERC20 should support non-evm network
-    const isNativeToken = isSameAddress(selectedToken?.address, NATIVE_TOKEN_ADDRESS)
+    const isNativeToken = isZeroAddress(selectedToken?.address)
     const tokenType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
 
     // balance

@@ -12,13 +12,13 @@ import {
     ERC721TokenDetailed,
     formatEthereumAddress,
     getChainIdFromName,
-    getTokenConstants,
     isChainIdMainnet,
     NetworkType,
     FungibleAssetProvider,
     getChainShortName,
     getChainIdFromNetworkType,
     ERC721TokenCollectionInfo,
+    NATIVE_TOKEN_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { values } from 'lodash-unified'
@@ -201,7 +201,7 @@ function formatAssetsFromZerion(
                 name: asset.name,
                 symbol: asset.symbol,
                 decimals: asset.decimals,
-                address: isNativeToken(asset.symbol) ? getTokenConstants().NATIVE_TOKEN_ADDRESS : asset.asset_code,
+                address: isNativeToken(asset.symbol) ? NATIVE_TOKEN_ADDRESS : asset.asset_code,
                 chainId: resolveChainByScope(scope).chainId,
                 type: isNativeToken(asset.symbol) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 logoURI: asset.icon_url,

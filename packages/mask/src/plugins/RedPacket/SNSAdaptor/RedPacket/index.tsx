@@ -12,9 +12,8 @@ import {
     useFungibleTokenDetailed,
     useNetworkType,
     useWeb3,
-    useTokenConstants,
     EthereumTokenType,
-    isSameAddress,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import { usePostLink } from '../../../../components/DataSource/usePostInfo'
 import { activatedSocialNetworkUI } from '../../../../social-network'
@@ -52,10 +51,8 @@ export function RedPacket(props: RedPacketProps) {
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, payload)
 
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-
     const { value: tokenDetailed } = useFungibleTokenDetailed(
-        payload.token?.type ?? payload.token_type ?? isSameAddress(NATIVE_TOKEN_ADDRESS, payload.token_address)
+        payload.token?.type ?? payload.token_type ?? isZeroAddress(payload.token_address)
             ? EthereumTokenType.Native
             : EthereumTokenType.ERC20,
         payload.token?.address ?? payload.token_address ?? '',

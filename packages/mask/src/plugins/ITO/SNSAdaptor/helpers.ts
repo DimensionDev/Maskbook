@@ -1,7 +1,7 @@
 import { omit } from 'lodash-unified'
 import type BigNumber from 'bignumber.js'
 import type { Result } from 'ts-results'
-import { ChainId, isNative } from '@masknet/web3-shared-evm'
+import { ChainId, isZeroAddress } from '@masknet/web3-shared-evm'
 import type { TypedMessage } from '@masknet/shared-base'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '../../../protocols/typed-message'
 import { ITO_MetaKey_1, ITO_MetaKey_2 } from '../constants'
@@ -40,8 +40,8 @@ export function gcd(a: BigNumber, b: BigNumber) {
 export function sortTokens(tokenA: { address: string }, tokenB: { address: string }) {
     const addressA = tokenA.address.toLowerCase()
     const addressB = tokenB.address.toLowerCase()
-    if (isNative(addressA)) return -1
-    if (isNative(addressB)) return 1
+    if (isZeroAddress(addressA)) return -1
+    if (isZeroAddress(addressB)) return 1
     return addressA < addressB ? -1 : 1
 }
 

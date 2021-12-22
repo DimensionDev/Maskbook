@@ -6,8 +6,7 @@ import {
     FungibleTokenDetailed,
     FungibleToken,
     useFungibleTokensDetailed,
-    isSameAddress,
-    useTokenConstants,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { isCompactPayload } from './helpers'
@@ -22,7 +21,6 @@ export interface PostInspectorProps {
 export function PostInspector(props: PostInspectorProps) {
     const { chain_id, pid } = props.payload
     const isCompactPayload_ = isCompactPayload(props.payload)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const chainId = useChainId()
     const {
@@ -51,9 +49,7 @@ export function PostInspector(props: PostInspectorProps) {
                 (t) =>
                     ({
                         address: t.address,
-                        type: isSameAddress(t.address, NATIVE_TOKEN_ADDRESS)
-                            ? EthereumTokenType.Native
-                            : EthereumTokenType.ERC20,
+                        type: isZeroAddress(t.address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                     } as Pick<FungibleToken, 'address' | 'type'>),
             ),
         [JSON.stringify(_payload.exchange_tokens)],

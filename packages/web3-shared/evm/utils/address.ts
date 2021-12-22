@@ -1,14 +1,14 @@
 import { EthereumAddress } from 'wallet.ts'
-import { getRedPacketConstants, getTokenConstants } from '../constants'
+import { getRedPacketConstants, ZERO_ADDRESS } from '../constants'
 
-export function isSameAddress(addrA: string = '', addrB: string = '') {
+export function isSameAddress(addrA = '', addrB = '') {
     if (!addrA || !addrB) return false
     return addrA.toLowerCase() === addrB.toLowerCase()
 }
 
 export function currySameAddress(base?: string) {
-    return (target: string | { address: string }) => {
-        if (!base) return false
+    return (target: string | { address: string } | undefined | null) => {
+        if (!base || !target) return false
         if (typeof target === 'string') {
             return isSameAddress(base, target)
         } else if (typeof target === 'object' && typeof target.address === 'string') {
@@ -18,7 +18,7 @@ export function currySameAddress(base?: string) {
     }
 }
 
-export const isNative = currySameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS)
+export const isZeroAddress = currySameAddress(ZERO_ADDRESS)
 
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
     const {

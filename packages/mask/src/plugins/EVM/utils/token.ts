@@ -1,5 +1,5 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
-import { CurrencyType, formatBalance, getTokenConstants, isSameAddress } from '@masknet/web3-shared-evm'
+import { CurrencyType, formatBalance, isZeroAddress } from '@masknet/web3-shared-evm'
 
 // TODO: remove
 export const getTokenUSDValue = (token: Web3Plugin.Asset) =>
@@ -9,8 +9,7 @@ export const getBalanceValue = (asset: Web3Plugin.Asset<Web3Plugin.FungibleToken
     Number.parseFloat(formatBalance(asset.balance, asset.token.decimals))
 
 export const getTokenChainIdValue = (asset: Web3Plugin.Asset) => {
-    const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
-    return isSameAddress(asset.token.id, NATIVE_TOKEN_ADDRESS) ? 1 / asset.token.chainId : 0
+    return isZeroAddress(asset.token.id) ? 1 / asset.token.chainId : 0
 }
 
 export const makeSortAssertWithoutChainFn = () => {

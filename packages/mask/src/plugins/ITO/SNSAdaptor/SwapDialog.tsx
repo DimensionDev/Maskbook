@@ -12,14 +12,13 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isNative,
+    isZeroAddress,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
     useFungibleTokenDetailed,
-    isSameAddress,
-    useTokenConstants,
+    NATIVE_TOKEN_ADDRESS,
 } from '@masknet/web3-shared-evm'
 import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
@@ -116,14 +115,11 @@ export function SwapDialog(props: SwapDialogProps) {
 
     const chainId = useChainId()
     const classes = useStylesExtends(useStyles(), props)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [ratio, setRatio] = useState<BigNumber>(
         new BigNumber(payload.exchange_amounts[0 * 2]).dividedBy(payload.exchange_amounts[0 * 2 + 1]),
     )
     const { value: initToken } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, payload.exchange_tokens[0].address)
-            ? EthereumTokenType.Native
-            : EthereumTokenType.ERC20,
+        isZeroAddress(payload.exchange_tokens[0].address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         payload.exchange_tokens[0].address,
     )
 
@@ -172,7 +168,7 @@ export function SwapDialog(props: SwapDialogProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableNativeToken: !exchangeTokens.some((x) => isNative(x.address)),
+            disableNativeToken: !exchangeTokens.some(isZeroAddress),
             disableSearchBar: true,
             FungibleTokenListProps: {
                 whitelist: exchangeTokens.map((x) => x.address),

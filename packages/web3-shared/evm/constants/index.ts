@@ -19,7 +19,7 @@ import Chain from '@masknet/web3-constants/evm/chain.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
-export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
+export { ZERO_ADDRESS, NATIVE_TOKEN_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
 
 export const getAirdropConstants = transform(Airdrop)
 export const useAirdropConstants = hookTransform(getAirdropConstants)

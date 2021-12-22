@@ -2,7 +2,7 @@ import { useMemo, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
-    isNative,
+    isZeroAddress,
     resolveAddressLinkOnExplorer,
     useChainId,
     useWallet,
@@ -235,7 +235,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
                             ({wallet?.name}) {formatEthereumAddress(account, 4)}
-                            {isNative(wallet?.address!) ? null : (
+                            {isZeroAddress(wallet?.address!) ? null : (
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}

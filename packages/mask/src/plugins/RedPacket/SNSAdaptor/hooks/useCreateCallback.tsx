@@ -9,12 +9,12 @@ import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
+    NATIVE_TOKEN_ADDRESS,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
     useAccount,
     useChainId,
-    useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
 import { isLessThan } from '@masknet/web3-shared-base'
@@ -74,7 +74,6 @@ function checkParams(paramsObj: paramsObjType, setCreateState?: (value: Transact
 
 export function useCreateParams(redPacketSettings: RedPacketSettings | undefined, version: number, publicKey: string) {
     const redPacketContract = useRedPacketContract(version)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const account = useAccount()
     return useAsync(async () => {
         if (!redPacketSettings || !redPacketContract) return null

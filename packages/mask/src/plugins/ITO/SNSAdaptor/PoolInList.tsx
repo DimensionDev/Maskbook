@@ -4,12 +4,11 @@ import {
     formatBalance,
     FungibleToken,
     getChainDetailed,
-    isSameAddress,
+    isZeroAddress,
     TransactionStateType,
     useAccount,
     useFungibleTokenDetailed,
     useFungibleTokensDetailed,
-    useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
 import {
@@ -136,7 +135,6 @@ export function PoolInList(props: PoolInListProps) {
     const { pool, exchange_in_volumes, exchange_out_volumes, onSend, onRetry } = props
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     //#region Fetch tokens detailed
     const { value: _tokenDetailed } = useFungibleTokenDetailed(
@@ -150,7 +148,7 @@ export function PoolInList(props: PoolInListProps) {
               (v) =>
                   ({
                       address: v,
-                      type: isSameAddress(v, NATIVE_TOKEN_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                      type: isZeroAddress(v) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                   } as Pick<FungibleToken, 'address' | 'type'>),
           )
         : []
@@ -325,7 +323,7 @@ export function PoolInList(props: PoolInListProps) {
                                                 align="center"
                                                 size="small"
                                                 style={{ whiteSpace: 'nowrap' }}>
-                                                {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
+                                                {isZeroAddress(token.address)
                                                     ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
                                                     : token.symbol}
                                             </TableCell>
@@ -339,7 +337,7 @@ export function PoolInList(props: PoolInListProps) {
                                                     token.decimals,
                                                     6,
                                                 )}{' '}
-                                                {isSameAddress(token.address, NATIVE_TOKEN_ADDRESS)
+                                                {isZeroAddress(token.address)
                                                     ? getChainDetailed(token.chainId)?.nativeCurrency.symbol
                                                     : token.symbol}{' '}
                                                 / {poolToken.symbol}

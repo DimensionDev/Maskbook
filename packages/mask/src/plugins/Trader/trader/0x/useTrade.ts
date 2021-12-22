@@ -1,11 +1,10 @@
 import {
     FungibleTokenDetailed,
     getNetworkTypeFromChainId,
-    isNative,
+    isZeroAddress,
     NetworkType,
     useAccount,
     useBlockNumber,
-    useTokenConstants,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { safeUnreachable } from '@dimensiondev/kit'
@@ -18,18 +17,17 @@ import { currentNetworkSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { TradeProvider } from '@masknet/public-api'
 
+const ZRX_NATIVE_TOKEN_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
 export function getNativeTokenLabel(networkType: NetworkType) {
     switch (networkType) {
         case NetworkType.Ethereum:
             return 'ETH'
         case NetworkType.Binance:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Polygon:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Arbitrum:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.xDai:
-            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+            return ZRX_NATIVE_TOKEN_ADDRESS
         default:
             safeUnreachable(networkType)
             return ''
@@ -45,7 +43,6 @@ export function useTrade(
 ) {
     const account = useAccount()
     const { targetChainId } = TargetChainIdContext.useContainer()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(targetChainId)
     const blockNumber = useBlockNumber()
 
     const slippage = useSlippageTolerance()
@@ -56,10 +53,10 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
 
-        const sellToken = isNative(inputToken.address)
+        const sellToken = isZeroAddress(inputToken.address)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : inputToken.address
-        const buyToken = isNative(outputToken.address)
+        const buyToken = isZeroAddress(outputToken.address)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : outputToken.address
         return PluginTraderRPC.swapQuote(
@@ -76,7 +73,6 @@ export function useTrade(
             getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value,
         )
     }, [
-        NATIVE_TOKEN_ADDRESS,
         account,
         strategy,
         inputAmount,

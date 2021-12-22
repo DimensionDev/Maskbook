@@ -13,10 +13,9 @@ import {
     formatBalance,
     TransactionStateType,
     useAccount,
-    isSameAddress,
     EthereumTokenType,
     useFungibleTokenDetailed,
-    useTokenConstants,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import { TokenIcon } from '@masknet/shared'
 import { dateTimeFormat } from '../../ITO/assets/formatDate'
@@ -185,7 +184,6 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         computed: { canRefund, canSend, listOfStatus, isPasswordValid },
         retry: revalidateAvailability,
     } = useAvailabilityComputed(account, history)
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const [refundState, refundCallback, resetRefundCallback] = useRefundCallback(
         history.contract_version,
         account,
@@ -195,7 +193,7 @@ export function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
         (history as RedPacketJSONPayload).token?.address ?? (history as RedPacketJSONPayloadFromChain).token_address
 
     const { value: tokenDetailed } = useFungibleTokenDetailed(
-        isSameAddress(NATIVE_TOKEN_ADDRESS, tokenAddress) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+        isZeroAddress(tokenAddress) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
         tokenAddress ?? '',
     )
 

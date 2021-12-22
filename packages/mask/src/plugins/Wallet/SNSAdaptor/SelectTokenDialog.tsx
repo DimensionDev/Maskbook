@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 // eslint-disable-next-line import/no-deprecated
 import { DialogContent, Theme, useMediaQuery } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, useChainId, ChainId, NATIVE_TOKEN_ADDRESS } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
@@ -51,7 +51,6 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         props,
     )
     const chainId = useChainId()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
     // eslint-disable-next-line import/no-deprecated
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
 

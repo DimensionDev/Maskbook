@@ -10,12 +10,11 @@ import {
     FungibleTokenDetailed,
     GasOptionConfig,
     getNetworkTypeFromChainId,
-    isSameAddress,
+    isZeroAddress,
     TransactionStateType,
     useChainId,
     useChainIdValid,
     useFungibleTokenBalance,
-    useTokenConstants,
     useWallet,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
@@ -69,7 +68,6 @@ export function Trader(props: TraderProps) {
     const currentChainId = useChainId()
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid()
-    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const currentAccount = useAccount()
     const currentProvider = useValueRef(currentProviderSettings)
     const classes = useStylesExtends(useStyles(), props)
@@ -102,7 +100,7 @@ export function Trader(props: TraderProps) {
 
         // if coin be native token and input token also be native token, reset it
         if (
-            isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
+            isZeroAddress(coin.contract_address) &&
             inputToken?.type === EthereumTokenType.Native &&
             coin.symbol === inputToken.symbol
         ) {
@@ -119,7 +117,7 @@ export function Trader(props: TraderProps) {
                     : undefined,
             })
         }
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, decimals])
+    }, [coin, inputToken, outputToken, currentChainId, targetChainId, decimals])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
@@ -130,17 +128,13 @@ export function Trader(props: TraderProps) {
 
     //#region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
-        isSameAddress(inputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : inputToken?.type ?? EthereumTokenType.Native,
+        isZeroAddress(inputToken?.address) ? EthereumTokenType.Native : inputToken?.type ?? EthereumTokenType.Native,
         inputToken?.address ?? '',
         chainId,
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
-        isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
-            ? EthereumTokenType.Native
-            : outputToken?.type ?? EthereumTokenType.Native,
+        isZeroAddress(outputToken?.address) ? EthereumTokenType.Native : outputToken?.type ?? EthereumTokenType.Native,
         outputToken?.address ?? '',
         chainId,
     )
@@ -174,7 +168,6 @@ export function Trader(props: TraderProps) {
         outputTokenBalance_,
         loadingInputTokenBalance,
         loadingOutputTokenBalance,
-        NATIVE_TOKEN_ADDRESS,
     ])
 
     // Query the balance of native tokens on target chain
@@ -218,8 +211,7 @@ export function Trader(props: TraderProps) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
                 balance:
-                    isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS) ||
-                    outputToken?.type === EthereumTokenType.Native
+                    isZeroAddress(outputToken?.address) || outputToken?.type === EthereumTokenType.Native
                         ? balance
                         : '0',
             })

@@ -1,12 +1,11 @@
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useEffect } from 'react'
-import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, isZeroAddress, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance } from '@masknet/shared'
-import { isNative } from 'lodash-unified'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
@@ -93,7 +92,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             <Grid item xs={6}>
                 <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
                     <span>{settings?.token?.symbol}</span>
-                    {isNative(settings?.token?.address!) ? null : (
+                    {isZeroAddress(settings?.token?.address!) ? null : (
                         <Link
                             color="textPrimary"
                             className={classes.link}
