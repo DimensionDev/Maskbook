@@ -1,4 +1,4 @@
-export type ToolIconTypes = 'encryptedmsg' | 'files' | 'markets' | 'redpacket' | 'swap' | 'token' | 'claim'
+type ToolIconTypes = 'encryptedmsg' | 'markets' | 'redpacket' | 'swap' | 'token' | 'claim'
 type T = {
     image: string
     label: string
@@ -12,7 +12,6 @@ export const ToolIconURLs: Readonly<Record<ToolIconTypes, T>> = {
         priority: 1000,
     },
     redpacket: { image: new URL('./redpacket.png', import.meta.url).toString(), label: 'Lucky Drop', priority: 990 },
-    files: { image: new URL('./files.png', import.meta.url).toString(), label: 'File Service', priority: 980 },
     markets: { image: new URL('./markets.png', import.meta.url).toString(), label: 'Markets', priority: 970 },
     token: { image: new URL('./token.png', import.meta.url).toString(), label: 'Buy Cryptocurrency', priority: 960 },
     swap: { image: new URL('./swap.png', import.meta.url).toString(), label: 'Swap', priority: 950 },
