@@ -1,2 +1,45 @@
-<!-- Please refer to the related issue number -->
-closes #
+## Description
+
+<!-- Please include a summary of the change and which issue is fixed. Please also include relevant motivation and context. List any dependencies that are required for this change. -->
+
+Closes # (NO_ISSUE)
+
+## Type of change
+
+<!-- Please delete options that are not relevant. -->
+
+- [ ] Documentation
+- [ ] Code refactoring (Restructuring existing code w/o changing its external behavior)
+- [ ] Bug fix (non-breaking change which fixes an issue)
+- [ ] New feature (non-breaking change which adds functionality)
+- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
+
+## Previews
+
+<!-- Please paste screenshots to reveal changes in this PR. -->
+
+## Checklist
+
+- [ ] My code follows the style guidelines of this project.
+- [ ] I have performed a self-review of my own code.
+- [ ] I have commented on my code, particularly in hard-to-understand areas.
+- [ ] My changes generate no new CI warnings.
+- [ ] Any dependent changes have been merged and published in downstream modules.
+- [ ] I have checked my code and corrected any misspellings. (Not a spelling mistake? Add the word into `cspell.json`.)
+- [ ] I've read [Internationalization Guide](https://github.com/DimensionDev/Maskbook/blob/develop/docs/i18n-guide.md) and moved text fields to the i18n JSON file.
+
+## Questions from reviewers
+
+### If this PR changes the dependencies of the project. What kind of change does it have?
+
+- [ ] Add a new package as dependence.
+- [ ] Upgrade the version of a dependent package.
+
+### If this PR depends on external APIs, please do the following steps:
+
+- [ ] Make sure those APIs have configured CORS headers to let extension requests get passed. If you don't have permission to modify the server, please let us know it.
+  - firefox extension: `moz-extension://[id]`
+  - chrome extension: `chrome-extension://[id]`
+- [ ] Move all request methods to a background service, call them with the internal RPC bridge.
+
+
