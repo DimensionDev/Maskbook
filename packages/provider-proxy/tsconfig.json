@@ -3,11 +3,9 @@
   "compilerOptions": {
     "rootDir": "./src/",
     "outDir": "./dist/",
-    "declaration": true,
-    "declarationDir": ".",
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "emitDeclarationOnly": true
   },
-  "exclude": ["dist"],
   "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../plugin-infra" },
