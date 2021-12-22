@@ -1,5 +1,5 @@
 import type { PuzzleCondition, UserPollStatus, UserPuzzleStatus } from '../types'
-import { FindTrumanPostType } from '../types'
+import { PostType } from '../types'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
@@ -8,12 +8,12 @@ import {
     Card,
     CardContent,
     Chip,
+    Snackbar,
     Step,
     StepContent,
     StepLabel,
     Stepper,
     Typography,
-    Snackbar,
 } from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
 import NoNftCard from './NoNftCard'
@@ -78,18 +78,18 @@ const useOptionsStyles = makeStyles()((theme) => {
     }
 })
 interface OptionsViewProps {
-    type: FindTrumanPostType
+    type: PostType
     userStatus?: UserPuzzleStatus | UserPollStatus
-    onSubmit: (choice: number) => Promise<boolean>
+    onSubmit(choice: number): Promise<boolean>
 }
 export default function OptionsCard(props: OptionsViewProps) {
     const { type, userStatus, onSubmit } = props
-    const [selected, setSelected] = useState<boolean>(true)
-    const [choice, setChoice] = useState<number>(userStatus ? userStatus.choice : -1)
-    const [submitting, setSubmitting] = useState<boolean>(false)
+    const [selected, setSelected] = useState(true)
+    const [choice, setChoice] = useState(userStatus ? userStatus.choice : -1)
+    const [submitting, setSubmitting] = useState(false)
     const [error, setError] = useState<'' | 'unsupported-chain' | 'insufficient-nft'>('')
     const [unmeetCondition, setUnmeetCondition] = useState<PuzzleCondition[]>([])
-    const [snackVisible, setSnackVisible] = useState<boolean>(false)
+    const [snackVisible, setSnackVisible] = useState(false)
 
     const { classes } = useOptionsStyles()
     const chainId = useChainId()
@@ -286,7 +286,7 @@ export default function OptionsCard(props: OptionsViewProps) {
 
     const renderStepper = (userStatus: UserPuzzleStatus | UserPollStatus, vertical: boolean) => {
         return (
-            <div
+            <Box
                 ref={ref}
                 className={vertical ? classes.verticalScrollBar : classes.horizontalScrollBar}
                 style={vertical ? { overflowY: 'auto' } : { overflowX: 'auto' }}>
@@ -376,7 +376,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                         )}
                     </Stepper>
                 </div>
-            </div>
+            </Box>
         )
     }
 
@@ -396,7 +396,7 @@ export default function OptionsCard(props: OptionsViewProps) {
                     <Typography variant="h6" color="textPrimary" paddingLeft={1} paddingRight={1} marginBottom={2}>
                         {userStatus.question}
                     </Typography>
-                    {(type === FindTrumanPostType.Puzzle || type === FindTrumanPostType.Poll) && (
+                    {(type === PostType.Puzzle || type === PostType.Poll) && (
                         <>
                             {renderOptions(userStatus)}
                             {!error && renderSubmitButton(userStatus)}

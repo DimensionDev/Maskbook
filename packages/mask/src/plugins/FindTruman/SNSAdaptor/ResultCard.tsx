@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { Adjust, CheckCircle } from '@mui/icons-material'
 import type { PollResult, PuzzleResult, UserPollStatus, UserPuzzleStatus } from '../types'
-import { FindTrumanPostType } from '../types'
+import { PostType } from '../types'
 import { useContext, useState } from 'react'
 import { FindTrumanContext } from '../context'
 
@@ -28,13 +28,13 @@ export const BorderLinearProgress: any = styled(LinearProgress)(({ theme }) => (
 }))
 
 interface ResultViewProps {
-    type: FindTrumanPostType
+    type: PostType
     userStatus?: UserPuzzleStatus | UserPollStatus
     result?: PuzzleResult | PollResult
 }
 export default function ResultCard(props: ResultViewProps) {
     const { type, userStatus, result } = props
-    const [choice] = useState<number>(userStatus ? userStatus.choice : -1)
+    const [choice] = useState(userStatus ? userStatus.choice : -1)
 
     const { t } = useContext(FindTrumanContext)
 
@@ -46,7 +46,7 @@ export default function ResultCard(props: ResultViewProps) {
             : 1
 
     const answer = result
-        ? type === FindTrumanPostType.PuzzleResult
+        ? type === PostType.PuzzleResult
             ? (result as PuzzleResult).correct
             : (result as PollResult).result
         : -1
@@ -56,7 +56,7 @@ export default function ResultCard(props: ResultViewProps) {
             {answer === -1 && (
                 <Alert severity="info">
                     {t(
-                        type === FindTrumanPostType.PuzzleResult
+                        type === PostType.PuzzleResult
                             ? 'plugin_find_truman_puzzle_underway'
                             : 'plugin_find_truman_voting_underway',
                     )}
@@ -114,7 +114,7 @@ export default function ResultCard(props: ResultViewProps) {
                                                 color="success"
                                                 size="small"
                                                 label={t(
-                                                    type === FindTrumanPostType.PuzzleResult
+                                                    type === PostType.PuzzleResult
                                                         ? 'plugin_find_truman_answer'
                                                         : 'plugin_find_truman_result',
                                                 )}

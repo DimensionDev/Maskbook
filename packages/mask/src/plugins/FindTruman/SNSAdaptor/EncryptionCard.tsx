@@ -4,8 +4,6 @@ import { useContext, useState } from 'react'
 import { fetchClue } from '../Worker/apis'
 import { FindTrumanContext } from '../context'
 import NoNftCard from './NoNftCard'
-import type { FindTrumanI18nFunction } from '../types'
-import { EncryptionErrorType } from '../types'
 import { useAsync } from 'react-use'
 import FlipCard from './FlipCard'
 
@@ -33,17 +31,6 @@ const useStyles = makeStyles()((theme) => {
         },
     }
 })
-
-const getEncryptionError = (t: FindTrumanI18nFunction, errorCode: string) => {
-    switch (errorCode) {
-        case EncryptionErrorType.INSUFFICIENT_NFT:
-            return t('plugin_find_truman_decrypt_insufficient_nft')
-        case EncryptionErrorType.ERROR_CLUE_ID:
-            return t('plugin_find_truman_decrypt_error_clue_id')
-        default:
-            return ''
-    }
-}
 
 interface EncryptionCardProps {
     clueId: string
@@ -103,7 +90,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                     </CardContent>
                 </>
             )}
-            {error && <Alert severity="info">{getEncryptionError(t, error.message)}</Alert>}
+            {error && <Alert severity="info">{t('plugin_find_truman_decrypt_error_clue_id')}</Alert>}
         </CardContent>
     )
 }

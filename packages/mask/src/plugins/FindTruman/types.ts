@@ -1,4 +1,4 @@
-export enum FindTrumanPostType {
+export enum PostType {
     Status = 'result',
     Puzzle = 'puzzle',
     Poll = 'poll',
@@ -43,15 +43,17 @@ export interface StoryInfo {
     img: string
 }
 
+export interface IconResource {
+    icon: string
+    label: string
+    url: string
+}
+
 export interface FindTrumanConst {
     faqLabel: string
     faqDesc: string
     faqUrl: string
-    icons: {
-        icon: string
-        label: string
-        url: string
-    }[]
+    icons: IconResource[]
     discoveryUrl: string
     discoveryLabel: string
     locales: Record<string, string>
@@ -76,16 +78,18 @@ export interface UserStoryStatus {
     }
 }
 
+export interface UserCount {
+    choice: number
+    value: number
+}
+
 export interface UserPuzzleStatus {
     id: string
     story: StoryInfo
     status: number // 1: opening, 0: finished
     question: string
     options: string[]
-    count?: {
-        choice: number
-        value: number
-    }[]
+    count?: UserCount[]
     choice: number
     conditions: PuzzleCondition[]
     notMeetConditions: PuzzleCondition[]
@@ -99,10 +103,7 @@ export interface UserPollStatus {
     status: number // 1: opening, 0: finished
     question: string
     options: string[]
-    count?: {
-        choice: number
-        value: number
-    }[]
+    count?: UserCount[]
     choice: number
     conditions: PuzzleCondition[]
     notMeetConditions: PuzzleCondition[]
@@ -115,10 +116,7 @@ export interface PuzzleResult {
     story: StoryInfo
     options: string[]
     correct: number
-    count: {
-        choice: number
-        value: number
-    }[]
+    count: UserCount[]
 }
 
 export interface PollResult {
@@ -128,10 +126,7 @@ export interface PollResult {
     story: StoryInfo
     options: string[]
     result: number
-    count: {
-        choice: number
-        value: number
-    }[]
+    count: UserCount[]
 }
 
 export interface SubmitPuzzleParams {
@@ -155,7 +150,13 @@ export interface DecryptedClue {
     backImg: string
 }
 
-export enum EncryptionErrorType {
-    INSUFFICIENT_NFT = '102',
-    ERROR_CLUE_ID = '1004',
+export class FindTrumanRemoteError extends Error {
+    public readonly code: number
+    public readonly data: unknown
+
+    constructor(message: string, code: number, data?: unknown) {
+        super(message)
+        this.code = code
+        this.data = data
+    }
 }

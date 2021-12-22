@@ -4,8 +4,8 @@ import { FindTruman } from './FindTruman'
 import {
     FindTrumanConst,
     FindTrumanI18nFunction,
-    FindTrumanPostType,
     PollResult,
+    PostType,
     PuzzleResult,
     StoryInfo,
     UserPollStatus,
@@ -28,6 +28,7 @@ import {
 import { FindTruman_Const } from '../constants'
 import { useI18N } from '../../../utils'
 import { FindTrumanI18n } from '../i18n'
+import getUnixTime from 'date-fns/getUnixTime'
 
 export interface PostInspectorProps {
     url: string
@@ -42,17 +43,17 @@ export function PostInspector(props: PostInspectorProps) {
     const storyId = _storyId ? _storyId : ''
     const targetId = _targetId ? _targetId : ''
 
-    const postType: FindTrumanPostType = url.includes('/encryption?')
-        ? FindTrumanPostType.Encryption
+    const postType: PostType = url.includes('/encryption?')
+        ? PostType.Encryption
         : url.includes('/puzzles/')
-        ? FindTrumanPostType.Puzzle
+        ? PostType.Puzzle
         : url.includes('/polls/')
-        ? FindTrumanPostType.Poll
+        ? PostType.Poll
         : url.includes('/puzzle_result')
-        ? FindTrumanPostType.PuzzleResult
+        ? PostType.PuzzleResult
         : url.includes('/poll_result/')
-        ? FindTrumanPostType.PollResult
-        : FindTrumanPostType.Status
+        ? PostType.PollResult
+        : PostType.Status
 
     const [findTrumanI18n, setFindTrumanI18n] = useState<FindTrumanI18nFunction>(
         () => (key: string, options: any) => key,
@@ -64,7 +65,7 @@ export function PostInspector(props: PostInspectorProps) {
     const [puzzleResult, setPuzzleResult] = useState<PuzzleResult>()
     const [pollResult, setPollResult] = useState<PollResult>()
     const [consts, setConsts] = useState<FindTrumanConst>()
-    const [clueId, setClueId] = useState<string>('')
+    const [clueId, setClueId] = useState('')
 
     useEffect(() => {
         if (!FindTruman_Const.initialized) {
@@ -89,90 +90,45 @@ export function PostInspector(props: PostInspectorProps) {
     }, [account])
 
     const fetchData = async () => {
-        postType !== FindTrumanPostType.Encryption &&
-            (await fetchStoryInfo(storyId).then((res) => {
-                setStoryInfo(res)
-            }))
-        switch (postType) {
-            case FindTrumanPostType.Encryption:
-                const searchParams = new URLSearchParams(url.split('?')[1])
-                const payload = searchParams.get('clueId') || ''
-                setClueId(payload)
-                break
-            case FindTrumanPostType.Status:
-                !!account &&
-                    (await fetchUserStoryStatus(storyId, account).then((res) => {
-                        setUserStoryStatus(res)
-                    }))
-                break
-            case FindTrumanPostType.Puzzle:
-                !!account &&
-                    (await fetchUserPuzzleStatus(targetId, account).then((res) => {
-                        setUserPuzzleStatus(res)
-                    }))
-                break
-            case FindTrumanPostType.Poll:
-                !!account &&
-                    (await fetchUserPollStatus(targetId, account).then((res) => {
-                        setUserPollStatus(res)
-                    }))
-                break
-            case FindTrumanPostType.PuzzleResult:
-                !!account &&
-                    (await fetchUserPuzzleStatus(targetId, account).then((res) => {
-                        setUserPuzzleStatus(res)
-                    }))
-                await fetchPuzzleResult(targetId).then((res) => {
-                    setPuzzleResult(res)
-                })
-                break
-            case FindTrumanPostType.PollResult:
-                !!account &&
-                    (await fetchUserPollStatus(targetId, account).then((res) => {
-                        setUserPollStatus(res)
-                    }))
-                await fetchPollResult(targetId).then((res) => {
-                    setPollResult(res)
-                })
-                break
+        if (postType === PostType.Encryption) {
+            const searchParams = new URLSearchParams(url.split('?')[1])
+            const payload = searchParams.get('clueId') || ''
+            setClueId(payload)
+            return
+        }
+        setStoryInfo(await fetchStoryInfo(storyId))
+        if (account) {
+            if (postType === PostType.Status) {
+                setUserStoryStatus(await fetchUserStoryStatus(storyId, account))
+            } else if (postType === PostType.Puzzle || postType === PostType.PuzzleResult) {
+                setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
+            } else if (postType === PostType.Poll || postType === PostType.PollResult) {
+                setUserPollStatus(await fetchUserPollStatus(targetId, account))
+            }
+            if (postType === PostType.PuzzleResult) {
+                setPuzzleResult(await fetchPuzzleResult(targetId))
+            } else if (postType === PostType.PollResult) {
+                setPollResult(await fetchPollResult(targetId))
+            }
         }
     }
 
-    const handleSubmit = (choice: number) => {
-        return new Promise<boolean>((resolve, reject) => {
-            switch (postType) {
-                case FindTrumanPostType.Puzzle:
-                    submitPuzzle(account, {
-                        target: userPuzzleStatus?.id || '',
-                        from: account,
-                        timestamp: Math.floor(Date.now() / 1000),
-                        choice,
-                    })
-                        .then(async (res) => {
-                            await fetchData()
-                            resolve(true)
-                        })
-                        .catch((error) => {
-                            reject(false)
-                        })
-                    break
-                case FindTrumanPostType.Poll:
-                    submitPoll(account, {
-                        target: userPollStatus?.id || '',
-                        from: account,
-                        timestamp: Math.floor(Date.now() / 1000),
-                        choice,
-                    })
-                        .then(async (res) => {
-                            await fetchData()
-                            resolve(true)
-                        })
-                        .catch((error) => {
-                            reject(false)
-                        })
-                    break
+    const handleSubmit = async (choice: number) => {
+        const from = account
+        const timestamp = getUnixTime(Date.now())
+        try {
+            if (postType === PostType.Puzzle) {
+                const target = userPuzzleStatus?.id ?? ''
+                await submitPuzzle(account, { target, from, timestamp, choice })
+            } else if (postType === PostType.Poll) {
+                const target = userPollStatus?.id ?? ''
+                await submitPoll(account, { target, from, timestamp, choice })
             }
-        })
+            await fetchData()
+            return true
+        } catch {
+            return false
+        }
     }
 
     return (

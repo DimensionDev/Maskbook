@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { FindTrumanContext } from '../context'
 import { Alert, Box, Card, CardHeader, CardMedia, Chip, Skeleton, Tooltip, Typography, Avatar } from '@mui/material'
 import type { PollResult, PuzzleResult, StoryInfo, UserPollStatus, UserPuzzleStatus, UserStoryStatus } from '../types'
-import { FindTrumanI18nFunction, FindTrumanPostType } from '../types'
+import { FindTrumanI18nFunction, PostType } from '../types'
 import ResultCard from './ResultCard'
 import OptionsCard from './OptionsCard'
 import Footer from './Footer'
@@ -88,7 +88,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface FindTrumanProps {
-    postType: FindTrumanPostType
+    postType: PostType
     clueId: string
     storyInfo?: StoryInfo
     userStoryStatus?: UserStoryStatus
@@ -99,17 +99,17 @@ interface FindTrumanProps {
     onSubmit: (choice: number) => Promise<boolean>
 }
 
-function getPostTypeTitle(t: FindTrumanI18nFunction, postType: FindTrumanPostType) {
+function getPostTypeTitle(t: FindTrumanI18nFunction, postType: PostType) {
     switch (postType) {
-        case FindTrumanPostType.Poll:
+        case PostType.Poll:
             return t('plugin_find_truman_status_poll')
-        case FindTrumanPostType.Puzzle:
+        case PostType.Puzzle:
             return t('plugin_find_truman_status_puzzle')
-        case FindTrumanPostType.PuzzleResult:
+        case PostType.PuzzleResult:
             return t('plugin_find_truman_status_puzzle_result')
-        case FindTrumanPostType.PollResult:
+        case PostType.PollResult:
             return t('plugin_find_truman_status_poll_result')
-        case FindTrumanPostType.Status:
+        case PostType.Status:
             return t('plugin_find_truman_status_result')
         default:
             return ''
@@ -131,15 +131,30 @@ export function FindTruman(props: FindTrumanProps) {
         onSubmit,
     } = props
 
-    const [loadImg, setLoadImg] = useState<boolean>(true)
+    const [loadImg, setLoadImg] = useState(true)
 
     const isCritical = userPuzzleStatus?.critical || userPollStatus?.critical
     const isNoncritical =
         (userPuzzleStatus && !userPuzzleStatus.critical) || (userPollStatus && !userPollStatus.critical)
 
+    const renderCard = () => {
+        if (postType === PostType.Status) {
+            return <StageCard userStoryStatus={userStoryStatus} />
+        } else if (postType === PostType.Puzzle && userPuzzleStatus) {
+            return <OptionsCard type={PostType.Puzzle} onSubmit={onSubmit} userStatus={userPuzzleStatus} />
+        } else if (postType === PostType.Poll && userPollStatus) {
+            return <OptionsCard type={PostType.Poll} onSubmit={onSubmit} userStatus={userPollStatus} />
+        } else if (postType === PostType.PuzzleResult && puzzleResult) {
+            return <ResultCard type={PostType.PuzzleResult} userStatus={userPuzzleStatus} result={puzzleResult} />
+        } else if (postType === PostType.PollResult && pollResult) {
+            return <ResultCard type={PostType.PollResult} userStatus={userPollStatus} result={pollResult} />
+        }
+        return null
+    }
+
     return (
         <Card className={classes.root} elevation={0}>
-            {postType !== FindTrumanPostType.Encryption ? (
+            {postType !== PostType.Encryption ? (
                 <>
                     <CardMedia
                         onLoad={() => {
@@ -190,27 +205,7 @@ export function FindTruman(props: FindTrumanProps) {
                             )
                         }
                     />
-                    {postType === FindTrumanPostType.Status && userStoryStatus && (
-                        <StageCard userStoryStatus={userStoryStatus} />
-                    )}
-                    {postType === FindTrumanPostType.Puzzle && userPuzzleStatus && (
-                        <OptionsCard
-                            type={FindTrumanPostType.Puzzle}
-                            onSubmit={onSubmit}
-                            userStatus={userPuzzleStatus}
-                        />
-                    )}
-                    {postType === FindTrumanPostType.Poll && userPollStatus && (
-                        <OptionsCard type={FindTrumanPostType.Poll} onSubmit={onSubmit} userStatus={userPollStatus} />
-                    )}
-                    {(postType === FindTrumanPostType.PuzzleResult || postType === FindTrumanPostType.PollResult) &&
-                        (puzzleResult || pollResult) && (
-                            <ResultCard
-                                type={postType}
-                                userStatus={userPuzzleStatus || userPollStatus}
-                                result={puzzleResult || pollResult}
-                            />
-                        )}
+                    {renderCard()}
                 </>
             ) : (
                 <EncryptionCard clueId={clueId} />
