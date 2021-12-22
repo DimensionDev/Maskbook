@@ -23,9 +23,7 @@ Closes # (NO_ISSUE)
 - [ ] My code follows the style guidelines of this project.
 - [ ] I have performed a self-review of my own code.
 - [ ] I have commented on my code, particularly in hard-to-understand areas.
-- [ ] Any dependent changes have been merged and published in downstream modules.
-- [ ] I have checked my code and corrected any misspellings. (Not a spelling mistake? Add the word into `cspell.json`.)
-- [ ] I've read [Internationalization Guide](https://github.com/DimensionDev/Maskbook/blob/develop/docs/i18n-guide.md) and moved text fields to the i18n JSON file.
+- [ ] I have read [Internationalization Guide](https://github.com/DimensionDev/Maskbook/blob/develop/docs/i18n-guide.md) and moved text fields to the i18n JSON file.
 
 ## Questions from reviewers
 
@@ -37,8 +35,8 @@ Closes # (NO_ISSUE)
 ### If this PR depends on external APIs, please do the following steps:
 
 - [ ] Make sure those APIs have configured CORS headers to let extension requests get passed. If you don't have permission to modify the server, please let us know it.
-  - firefox extension: `moz-extension://[id]`
   - chrome extension: `chrome-extension://[id]`
+  - firefox extension: `moz-extension://[id]`
 - [ ] Delegate all web requests to the background service via the internal RPC bridge.
 
 
