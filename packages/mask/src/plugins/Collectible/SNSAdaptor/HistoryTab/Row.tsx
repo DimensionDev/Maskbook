@@ -8,8 +8,7 @@ import { useMemo } from 'react'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { resolveOpenSeaAssetEventType, resolveRaribleAssetEventType } from '../../pipes'
 import { Account } from '../Account'
-import type { NFTHistory } from '@masknet/web3-providers'
-import { getOrderUnitPrice } from '@masknet/web3-providers'
+import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import type { OpenSeaAssetEventType } from '../../types/opensea'
 import type { RaribleEventType } from '../../types'
 
@@ -43,7 +42,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface Props {
-    event: NFTHistory
+    event: NonFungibleTokenAPI.History
     isDifferenceToken?: boolean
 }
 

@@ -1,8 +1,7 @@
-import type { AssetOrder } from '@masknet/web3-providers'
-import { OrderSide } from '@masknet/web3-providers'
-import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
+import { NonFungibleTokenAPI } from '@masknet/web3-providers'
+import { NonFungibleAssetProvider, useChainId } from '@masknet/web3-shared-evm'
 import { EVM_RPC } from '../messages'
 
 export function useOrders(
@@ -11,8 +10,8 @@ export function useOrders(
     size: number,
     address?: string,
     tokenId?: string,
-    side?: OrderSide,
-): AsyncStateRetry<{ data: AssetOrder[]; hasNextPage: boolean }> {
+    side?: NonFungibleTokenAPI.OrderSide,
+): AsyncStateRetry<{ data: NonFungibleTokenAPI.AssetOrder[]; hasNextPage: boolean }> {
     const chainId = useChainId()
     return useAsyncRetry(async () => {
         if (!address || !tokenId)
@@ -23,7 +22,7 @@ export function useOrders(
         const orders = await EVM_RPC.getOrders({
             address,
             tokenId,
-            side: side ?? OrderSide.Sell,
+            side: side ?? NonFungibleTokenAPI.OrderSide.Sell,
             chainId,
             provider,
             page,

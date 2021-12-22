@@ -13,8 +13,7 @@ import { isZero } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
-import { getOrderUnitPrice } from '@masknet/web3-providers'
-import type { AssetOrder } from '@masknet/web3-providers'
+import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import urlcat from 'urlcat'
 
@@ -57,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface IRowProps {
-    order: AssetOrder
+    order: NonFungibleTokenAPI.AssetOrder
     isDifferenceToken?: boolean
     acceptable?: boolean
 }
