@@ -61,10 +61,10 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
 
     const approveCallback = useCallback(
         async (useExact = false) => {
+            setTransactionState({
+                type: TransactionStateType.UNKNOWN,
+            })
             if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract) {
-                setTransactionState({
-                    type: TransactionStateType.UNKNOWN,
-                })
                 return
             }
 
