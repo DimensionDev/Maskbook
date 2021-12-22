@@ -16,8 +16,9 @@ function creatClient(): IPFSHTTPClient {
 }
 
 export class IPFSAgent implements ProviderAgent {
+    static providerName = 'IPFS'
     client: IPFSHTTPClient
-    static providerName: 'IPFS'
+    
     constructor() {
         this.client = creatClient()
     }
