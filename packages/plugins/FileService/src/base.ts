@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID_FileService } from '@masknet/shared-base'
-
+import { languages } from './locales/languages'
 export const base: Plugin.Shared.Definition = {
     ID: PluginID_FileService,
     icon: '📃',
@@ -12,4 +12,5 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
     },
+    i18n: languages,
 }
