@@ -16,7 +16,7 @@ Closes # (NO_ISSUE)
 
 ## Previews
 
-<!-- Please paste screenshots to reveal changes in this PR. -->
+<!-- Please attach screenshots if there are any visual changes. -->
 
 ## Checklist
 
