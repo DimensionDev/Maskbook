@@ -30,8 +30,6 @@ export function ArticleTab(props: ArticleTabProps) {
                     <AssetPlayer
                         url={resourceUrl}
                         options={{
-                            autoPlay: true,
-                            loop: true,
                             playsInline: true,
                         }}
                     />
