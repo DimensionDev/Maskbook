@@ -6,7 +6,7 @@ Closes # (NO_ISSUE)
 
 ## Type of change
 
-<!-- Please delete options that are not relevant. -->
+<!-- Please remove options that are not relevant. -->
 
 - [ ] Documentation
 - [ ] Code refactoring (Restructuring existing code w/o changing its observable behavior)
