@@ -3,8 +3,15 @@ import node from '@rollup/plugin-node-resolve'
 import sucrase from '@rollup/plugin-sucrase'
 import json from '@rollup/plugin-json'
 import alias from '@rollup/plugin-alias'
+import typescript from '@rollup/plugin-typescript'
 
-export default {
+const typesBuildConfig = {
+    input: './src/index.ts',
+    output: [{ file: './dist/index.ts', format: 'cjs' }],
+    plugins: [typescript({ tsconfig: './tsconfig.json' })],
+}
+
+const config = {
     input: './src/index.ts',
     output: {
         file: 'dist/output.js',
@@ -30,3 +37,5 @@ export default {
     },
     treeshake: { moduleSideEffects: false, propertyReadSideEffects: false },
 }
+
+export default [config, typesBuildConfig]

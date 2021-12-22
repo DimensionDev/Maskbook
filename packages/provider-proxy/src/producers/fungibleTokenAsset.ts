@@ -1,5 +1,6 @@
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { getAssetListByZerion, getAssetListFromDebank } from '@masknet/web3-providers'
+import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RpcMethodRegistrationValue } from '../typs'
 
 export interface FungibleTokenAssetArgs extends ProducerArgBase {
     address: string
@@ -25,8 +26,9 @@ const fungibleTokenAsset = async (
 }
 
 const producer: RpcMethodRegistrationValue<Web3Plugin.Asset<Web3Plugin.FungibleToken>, FungibleTokenAssetArgs> = {
+    method: 'mask.fetchFungibleTokenAsset',
     producer: fungibleTokenAsset,
-    keyHasher: (item) => `${item.id}_${item.chainId}`,
+    distinctBy: (item) => `${item.id}_${item.chainId}`,
 }
 
 export default producer

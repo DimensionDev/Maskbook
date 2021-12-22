@@ -1,8 +1,6 @@
 {
   "name": "@dimensiondev/provider-proxy",
   "version": "0.0.1",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "build:rollup": "rollup -c",
     "build": "node ./build.mjs"
@@ -20,6 +18,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@rollup/plugin-sucrase": "^4.0.1",
+    "@rollup/plugin-typescript": "^8.3.0",
     "rollup": "^2.60.1"
   }
 }

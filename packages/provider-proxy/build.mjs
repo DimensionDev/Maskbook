@@ -1,6 +1,6 @@
 // @ts-check
 import { spawn } from 'child_process'
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile, unlink, rmdir } from 'fs/promises'
 import { join, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
@@ -35,6 +35,7 @@ const packageJSON = {
         'socket.io-client': '2.4.0',
     },
     main: './output.js',
+    types: './index.d.ts',
 }
 await writeFile(join(__dirname, './dist/package.json'), JSON.stringify(packageJSON, undefined, 4))
 
@@ -54,3 +55,6 @@ await awaitChildProcess(
         stdio: 'inherit',
     }),
 )
+
+await unlink(join(__dirname, './dist/index.ts'))
+await rmdir(join(__dirname, './dist/producers'), { recursive: true, force: true })
