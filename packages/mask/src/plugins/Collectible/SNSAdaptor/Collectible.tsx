@@ -1,4 +1,4 @@
-import { FC, ReactElement, useCallback } from 'react'
+import { ReactElement, useCallback } from 'react'
 import {
     Avatar,
     Box,
@@ -195,7 +195,7 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
     ]
 
-    const CollectibleTabsRouter: FC<{ tabIndex: number }> = ({ tabIndex }) => {
+    const renderTab = (tabIndex: number) => {
         const tabMap: Record<number, ReactElement> = {
             [CollectibleTab.ARTICLE]: <ArticleTab />,
             [CollectibleTab.TOKEN]: <TokenTab />,
@@ -292,7 +292,7 @@ export function Collectible(props: CollectibleProps) {
                             <div className={classes.loading}>
                                 <LoadingAnimation />
                             </div>
-                        )) || <div>{CollectibleTabsRouter({ tabIndex })}</div>}
+                        )) || <div>{renderTab(tabIndex)}</div>}
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>
