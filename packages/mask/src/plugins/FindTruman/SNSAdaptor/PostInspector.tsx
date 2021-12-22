@@ -97,19 +97,18 @@ export function PostInspector(props: PostInspectorProps) {
             return
         }
         setStoryInfo(await fetchStoryInfo(storyId))
-        if (account) {
-            if (postType === PostType.Status) {
-                setUserStoryStatus(await fetchUserStoryStatus(storyId, account))
-            } else if (postType === PostType.Puzzle || postType === PostType.PuzzleResult) {
-                setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
-            } else if (postType === PostType.Poll || postType === PostType.PollResult) {
-                setUserPollStatus(await fetchUserPollStatus(targetId, account))
-            }
-            if (postType === PostType.PuzzleResult) {
-                setPuzzleResult(await fetchPuzzleResult(targetId))
-            } else if (postType === PostType.PollResult) {
-                setPollResult(await fetchPollResult(targetId))
-            }
+        if (!account) return
+        if (postType === PostType.Status) {
+            setUserStoryStatus(await fetchUserStoryStatus(storyId, account))
+        } else if (postType === PostType.Puzzle || postType === PostType.PuzzleResult) {
+            setUserPuzzleStatus(await fetchUserPuzzleStatus(targetId, account))
+        } else if (postType === PostType.Poll || postType === PostType.PollResult) {
+            setUserPollStatus(await fetchUserPollStatus(targetId, account))
+        }
+        if (postType === PostType.PuzzleResult) {
+            setPuzzleResult(await fetchPuzzleResult(targetId))
+        } else if (postType === PostType.PollResult) {
+            setPollResult(await fetchPollResult(targetId))
         }
     }
 
