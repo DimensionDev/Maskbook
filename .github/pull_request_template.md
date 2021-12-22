@@ -23,7 +23,6 @@ Closes # (NO_ISSUE)
 - [ ] My code follows the style guidelines of this project.
 - [ ] I have performed a self-review of my own code.
 - [ ] I have commented on my code, particularly in hard-to-understand areas.
-- [ ] My changes generate no new CI warnings.
 - [ ] Any dependent changes have been merged and published in downstream modules.
 - [ ] I have checked my code and corrected any misspellings. (Not a spelling mistake? Add the word into `cspell.json`.)
 - [ ] I've read [Internationalization Guide](https://github.com/DimensionDev/Maskbook/blob/develop/docs/i18n-guide.md) and moved text fields to the i18n JSON file.
