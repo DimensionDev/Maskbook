@@ -1,6 +1,7 @@
 import { useAsyncRetry } from 'react-use'
 import { useRef } from 'react'
-import { noop } from 'lodash-unified'
+import urlcat from 'urlcat'
+import { first, noop } from 'lodash-unified'
 import type { ERC721ContractDetailed, ERC721TokenInfo, ERC721TokenDetailed } from '../types'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { safeNonPayableTransactionCall, createERC721Token } from '../utils'
@@ -14,33 +15,11 @@ export function useERC721TokenDetailed(
     const { GET_SINGLE_ASSET_URL } = useOpenseaAPIConstants()
     const erc721TokenContract = useERC721TokenContract(contractDetailed?.address ?? '')
     const tokenDetailedRef = useRef<ERC721TokenDetailed | undefined>()
-    let tokenDetailedFromOpensea: ERC721TokenDetailed | undefined
-    let tokenDetailedFromChain: ERC721TokenDetailed | undefined
     const asyncRetry = useAsyncRetry(async () => {
         if (!erc721TokenContract || !contractDetailed || !tokenId) return
-        if (!GET_SINGLE_ASSET_URL) {
-            tokenDetailedFromChain = await getERC721TokenDetailedFromChain(
-                contractDetailed,
-                erc721TokenContract,
-                tokenId,
-            )
-        } else {
-            tokenDetailedFromOpensea = await getERC721TokenDetailedFromOpensea(
-                contractDetailed,
-                tokenId,
-                GET_SINGLE_ASSET_URL,
-            )
-        }
-        // no need to query tokenURI further more.
-        if (tokenDetailedFromOpensea) {
-            tokenDetailedRef.current = tokenDetailedFromOpensea
-            return
-        }
-
-        tokenDetailedRef.current =
-            tokenDetailedFromChain ??
-            (await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId))
-
+        tokenDetailedRef.current = GET_SINGLE_ASSET_URL
+            ? await getERC721TokenDetailedFromOpensea(contractDetailed, tokenId, GET_SINGLE_ASSET_URL)
+            : await getERC721TokenDetailedFromChain(contractDetailed, erc721TokenContract, tokenId)
         const info = await getERC721TokenAssetFromChain(tokenDetailedRef.current?.info.tokenURI)
 
         if (info && tokenDetailedRef.current)
@@ -50,9 +29,7 @@ export function useERC721TokenDetailed(
                 hasTokenDetailed: true,
                 name: info.name ?? tokenDetailedRef.current.info.name,
             }
-
-        return
-    }, [erc721TokenContract, tokenId])
+    }, [tokenId, contractDetailed, erc721TokenContract, GET_SINGLE_ASSET_URL])
 
     return { asyncRetry, tokenDetailed: tokenDetailedRef.current }
 }
@@ -62,9 +39,14 @@ export async function getERC721TokenDetailedFromOpensea(
     tokenId: string,
     apiUrl: string,
 ) {
-    const response = await fetch(`${apiUrl}/${contractDetailed.address}/${tokenId}`)
+    const response = await fetch(
+        urlcat(`${apiUrl}/:address/:tokenId`, {
+            address: contractDetailed.address,
+            tokenId,
+        }),
+    )
     // https://docs.opensea.io/docs/metadata-standards
-    type openseaTokenData = {
+    type OpenseaTokenData = {
         name: string
         description: string
         image_url: string
@@ -73,7 +55,7 @@ export async function getERC721TokenDetailedFromOpensea(
     }
 
     if (response.ok) {
-        const data: openseaTokenData = await response.json()
+        const data: OpenseaTokenData = await response.json()
 
         return createERC721Token(
             contractDetailed,
@@ -81,7 +63,7 @@ export async function getERC721TokenDetailedFromOpensea(
                 name: data.name,
                 description: data.description,
                 mediaUrl: data.image_url || data.animation_url,
-                owner: data.top_ownerships[0].owner.address,
+                owner: first(data.top_ownerships)?.owner.address ?? '',
             },
             tokenId,
         )
@@ -110,14 +92,12 @@ const lazyVoid = Promise.resolve()
 
 const BASE64_PREFIX = 'data:application/json;base64,'
 const HTTP_PREFIX = 'http'
-// Todo: replace this temporary proxy.
 const CORS_PROXY = 'https://cors.r2d2.to'
+
 export async function getERC721TokenAssetFromChain(tokenURI?: string): Promise<ERC721TokenInfo | void> {
     if (!tokenURI) return
+    if (assetCache[tokenURI]) return assetCache[tokenURI]
 
-    if (assetCache[tokenURI]) {
-        return assetCache[tokenURI]
-    }
     let promise: Promise<ERC721TokenInfo | void> = lazyVoid
 
     try {
