@@ -10,12 +10,12 @@ export function isFinalState(type: TransactionStateType) {
 }
 
 /**
- * FAILED -> UNKNOWN
  * UNKNOWN -> WAIT_FOR_CONFIRMING
  * UNKNOWN, WAIT_FOR_CONFIRMING -> HASH
  * UNKNOWN, WAIT_FOR_CONFIRMING, HASH -> RECEIPT
  * UNKNOWN, WAIT_FOR_CONFIRMING, HASH, RECEIPT -> CONFIRMED
  * UNKNOWN, WAIT_FOR_CONFIRMING, HASH, RECEIPT -> FAILED
+ * FAILED -> UNKNOWN
  */
 export function isNextStateAvailable(type: TransactionStateType, nextType: TransactionStateType) {
     switch (nextType) {
