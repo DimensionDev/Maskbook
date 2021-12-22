@@ -92,6 +92,7 @@ export enum DecryptProgressKind {
     Started = 'started',
     Success = 'success',
     Error = 'error',
+    Info = 'info',
 }
 export type DecryptProgress = { type: DecryptProgressKind.Started } | DecryptSuccess | DecryptError
 export interface DecryptSuccess {

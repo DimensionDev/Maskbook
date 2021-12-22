@@ -213,7 +213,6 @@ export function useSwapCallback(
                 : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)
             )
                 .send(config as PayableTx)
-                .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
                 .on(TransactionEventType.ERROR, onFailed)
         })

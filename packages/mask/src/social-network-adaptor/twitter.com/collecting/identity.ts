@@ -3,8 +3,9 @@ import { LiveSelector, MutationObserverWatcher } from '@dimensiondev/holoflows-k
 import { selfInfoSelectors, searchAvatarSelector, searchAvatarMetaSelector } from '../utils/selector'
 import { ProfileIdentifier } from '@masknet/shared-base'
 import { creator, SocialNetworkUI as Next } from '../../../social-network'
+import Services from '../../../extension/service'
 import { twitterBase } from '../base'
-import { getAvatar, getBioDescription, getNickname, getTwitterId } from '../utils/user'
+import { getAvatar, getBioDescription, getNickname, getTwitterId, getPersonalHomepage } from '../utils/user'
 import { delay } from '@masknet/shared-base'
 
 function resolveLastRecognizedIdentityInner(
@@ -43,6 +44,7 @@ function resolveCurrentVisitingIdentityInner(
     const assign = async () => {
         await delay(500)
         const bio = getBioDescription()
+        const homepage = getPersonalHomepage()
         const nickname = getNickname()
         const handle = getTwitterId()
         const avatar = getAvatar()
@@ -53,6 +55,13 @@ function resolveCurrentVisitingIdentityInner(
             avatar,
             bio,
         }
+        Services.Helper.resolveTCOLink(homepage).then((link) => {
+            if (cancel?.aborted || !link) return
+            ref.value = {
+                ...ref.value,
+                homepage: link,
+            }
+        })
     }
     const createWatcher = (selector: LiveSelector<HTMLElement, boolean>) => {
         const watcher = new MutationObserverWatcher(selector)

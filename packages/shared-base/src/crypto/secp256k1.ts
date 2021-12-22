@@ -1,9 +1,19 @@
-import * as secp256k1 from 'tiny-secp256k1'
 import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBufferSync } from '@dimensiondev/kit'
 import type { EC_JsonWebKey, EC_Public_JsonWebKey } from './JWKType'
 import { fromBase64URL, toBase64URL } from '../convert'
 import { ECKeyIdentifier } from '../Identifier/type'
 import type { EC_CryptoKey } from '.'
+
+// This module is only used in background.
+// Loading tiny-secp256k1 will instantiate a WebAssembly module which is not allowed in the content script for unknown reason and fail the whole module graph.
+
+// TODO: switch to holoflows-kit
+const isExtension = globalThis?.location?.protocol?.includes('extension')
+const isTest = new URL('./is_test.json', import.meta.url).protocol === 'file:'
+let secp256k1!: typeof import('tiny-secp256k1')
+if (isExtension || isTest) {
+    import('tiny-secp256k1').then((mod) => (secp256k1 = mod))
+}
 
 /**
  * Compress x & y into a single x

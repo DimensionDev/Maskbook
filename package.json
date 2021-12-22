@@ -1,7 +1,7 @@
 {
   "name": "mask-network",
   "packageManager": "pnpm@6.23.1",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "private": true,
   "license": "AGPL-3.0-or-later",
   "scripts": {
@@ -15,7 +15,8 @@
     "preinstall": "npx only-allow pnpm",
     "postinstall": "patch-package",
     "prepare": "husky install",
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
+    "spellcheck": "cspell lint --no-must-find-files"
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",

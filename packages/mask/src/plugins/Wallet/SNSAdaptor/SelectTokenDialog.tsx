@@ -1,33 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { DialogContent } from '@mui/material'
-import { makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    FungibleTokenDetailed,
-    useNativeTokenDetailed,
-    useChainId,
-    ChainId,
-    getChainDetailed,
-} from '@masknet/web3-shared-evm'
+import { useCallback, useEffect, useState } from 'react'
+// see https://github.com/import-js/eslint-plugin-import/issues/2288
+// eslint-disable-next-line import/no-deprecated
+import { DialogContent, Theme, useMediaQuery } from '@mui/material'
+import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
+import { FungibleTokenDetailed, useChainId, ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { FixedTokenList, FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 import { WalletMessages } from '../../Wallet/messages'
 import { useI18N } from '../../../utils'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { ERC20TokenList, ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
-import { SearchInput } from '../../../extension/options-page/DashboardComponents/SearchInput'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 
 interface StyleProps {
     snsId: string
+    isDashboard: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { snsId, isDashboard }) => ({
     content: {
         ...(snsId === MINDS_ID ? { minWidth: 552 } : {}),
+        padding: theme.spacing(3),
+        paddingTop: isDashboard ? 0 : theme.spacing(2.8),
     },
     list: {
-        marginTop: 16,
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
             display: 'none',
@@ -39,37 +35,40 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         paddingTop: theme.spacing(14),
         boxSizing: 'border-box',
     },
+    search: {
+        backgroundColor: 'transparent !important',
+        border: `solid 1px ${MaskColorVar.twitterBorderLine}`,
+    },
 }))
 
 export interface SelectTokenDialogProps extends withClasses<never> {}
 
 export function SelectTokenDialog(props: SelectTokenDialogProps) {
     const { t } = useI18N()
-    const classes = useStylesExtends(useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier }), props)
+    const isDashboard = location.href.includes('dashboard.html')
+    const classes = useStylesExtends(
+        useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier, isDashboard }),
+        props,
+    )
     const chainId = useChainId()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
+    // eslint-disable-next-line import/no-deprecated
+    const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
+
     const [id, setId] = useState('')
-    const [keyword, setKeyword] = useState('')
     const [targetChainId, setChainId] = useState<ChainId | undefined>(chainId)
-
-    const chainDetailed = useMemo(() => getChainDetailed(targetChainId), [targetChainId])
-
     const [rowSize, setRowSize] = useState(54)
 
-    //#region the native token
-    const { value: nativeTokenDetailed } = useNativeTokenDetailed(targetChainId)
-    //#endregion
-
-    //#region remote controlled dialog
     const [disableNativeToken, setDisableNativeToken] = useState(true)
     const [disableSearchBar, setDisableSearchBar] = useState(false)
-    const [FixedTokenListProps, setFixedTokenListProps] = useState<FixedTokenListProps | null>(null)
+    const [FungibleTokenListProps, setFungibleTokenListProps] = useState<ERC20TokenListProps | null>(null)
 
     useEffect(() => {
         try {
             const fontSize = Number.parseFloat(getComputedStyle(document.documentElement).fontSize)
-            setRowSize(fontSize * 3.6)
+            setRowSize(fontSize * 4)
         } catch {
-            setRowSize(54)
+            setRowSize(60)
         }
     }, [])
 
@@ -78,7 +77,7 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
         setId(ev.uuid)
         setDisableNativeToken(ev.disableNativeToken ?? true)
         setDisableSearchBar(ev.disableSearchBar ?? false)
-        setFixedTokenListProps(ev.FixedTokenListProps ?? null)
+        setFungibleTokenListProps(ev.FungibleTokenListProps ?? null)
         setChainId(ev.chainId ?? undefined)
     })
     const onSubmit = useCallback(
@@ -89,9 +88,8 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
                 token,
             })
             await delay(300)
-            setKeyword('')
         },
-        [id, setDialog, setKeyword],
+        [id, setDialog],
     )
     const onClose = useCallback(async () => {
         setDialog({
@@ -99,40 +97,32 @@ export function SelectTokenDialog(props: SelectTokenDialogProps) {
             uuid: id,
         })
         await delay(300)
-        setKeyword('')
     }, [id, setDialog])
-    //#endregion
-
-    const onChange = useCallback((keyword: string) => {
-        setKeyword(keyword)
-    }, [])
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t('plugin_wallet_select_a_token')}>
-            <DialogContent className={classes.content}>
-                {!disableSearchBar ? <SearchInput label={t('add_token_search_hint')} onChange={onChange} /> : null}
-                <FixedTokenList
+        <InjectedDialog
+            titleBarIconStyle={isDashboard ? 'close' : 'back'}
+            open={open}
+            onClose={onClose}
+            title={t('plugin_wallet_select_a_token')}>
+            <DialogContent classes={{ root: classes.content }}>
+                <ERC20TokenList
                     classes={{ list: classes.list, placeholder: classes.placeholder }}
-                    keyword={keyword}
                     onSelect={onSubmit}
-                    {...{
-                        ...FixedTokenListProps,
-                        targetChainId,
-                        tokens: [
-                            ...(!disableNativeToken &&
-                            nativeTokenDetailed &&
-                            (!keyword || chainDetailed?.nativeCurrency.symbol.includes(keyword.toLowerCase()))
-                                ? [nativeTokenDetailed]
-                                : []),
-                            ...(FixedTokenListProps?.tokens ?? []),
-                        ],
-                    }}
+                    {...FungibleTokenListProps}
+                    tokens={[...(FungibleTokenListProps?.tokens ?? [])]}
+                    blacklist={
+                        disableNativeToken && NATIVE_TOKEN_ADDRESS
+                            ? [NATIVE_TOKEN_ADDRESS, ...(FungibleTokenListProps?.blacklist ?? [])]
+                            : [...(FungibleTokenListProps?.blacklist ?? [])]
+                    }
+                    targetChainId={targetChainId}
+                    disableSearch={disableSearchBar}
                     FixedSizeListProps={{
-                        height: disableSearchBar ? 350 : 288,
                         itemSize: rowSize,
-                        overscanCount: 4,
-                        ...FixedTokenListProps?.FixedSizeListProps,
+                        height: isMdScreen ? 300 : 503,
                     }}
+                    SearchTextFieldProps={{ InputProps: { classes: { root: classes.search } } }}
                 />
             </DialogContent>
         </InjectedDialog>

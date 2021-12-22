@@ -84,6 +84,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         textAlign: 'left',
         color: theme.palette.text.secondary,
+        wordBreak: 'keep-all',
     },
     button: {
         color: '#fff',
@@ -315,7 +316,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item lg={6} xs={12} className={classes.button}>
                     <ActionButton className={classes.buttonText} fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
-                            total: formatAmountPrecision(poolSettings?.total, poolSettings?.token?.decimals),
+                            total: formatAmountPrecision(
+                                poolSettings?.total,
+                                poolSettings?.token?.decimals,
+                                undefined,
+                                poolSettings?.token?.decimals,
+                            ),
                             symbol: poolSettings?.token?.symbol,
                         })}
                     </ActionButton>
