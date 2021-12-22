@@ -40,6 +40,6 @@ Closes # (NO_ISSUE)
 - [ ] Make sure those APIs have configured CORS headers to let extension requests get passed. If you don't have permission to modify the server, please let us know it.
   - firefox extension: `moz-extension://[id]`
   - chrome extension: `chrome-extension://[id]`
-- [ ] Move all request methods to a background service, call them with the internal RPC bridge.
+- [ ] Delegate all web requests to the background service via the internal RPC bridge.
 
 
