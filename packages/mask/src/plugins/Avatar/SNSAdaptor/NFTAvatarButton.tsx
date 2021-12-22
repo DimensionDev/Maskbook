@@ -40,7 +40,7 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     return (
         <div className={classes.root} onClick={onClick}>
             <Typography variant="body1" className={classes.text}>
-                {`🔥${t('nft_avatar')}`} <GearSettingsIcon className={classes.icon} />
+                🔥{t('nft_avatar')} <GearSettingsIcon className={classes.icon} />
             </Typography>
         </div>
     )

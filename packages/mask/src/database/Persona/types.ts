@@ -6,6 +6,7 @@ export interface Profile extends Readonly<TypedOmit<ProfileRecord, 'localKey' | 
     readonly linkedPersona?: Persona
     readonly avatar?: string
     readonly bio?: string
+    readonly homepage?: string
 }
 
 export interface Persona extends TypedOmit<PersonaRecord, 'localKey' | 'publicKey' | 'privateKey' | 'linkedProfiles'> {

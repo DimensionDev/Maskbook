@@ -42,7 +42,7 @@ export function useMenuConfig(
     const close = useCallback(() => setOpen(false), [])
     const Menu = useContext(useMenuContext)
     return [
-        <Menu open={status} onClose={close} onClick={close} anchorEl={anchorEl}>
+        <Menu key="menu" open={status} onClose={close} onClick={close} anchorEl={anchorEl}>
             {elements?.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
             )}
