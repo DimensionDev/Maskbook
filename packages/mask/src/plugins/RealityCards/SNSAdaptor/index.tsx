@@ -1,6 +1,5 @@
 import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
-import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
 import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
@@ -9,6 +8,7 @@ import { BASE_URL, VALID_CHAINS_ID } from '../constants'
 import { MarketView } from './MarketView'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ChainId } from '@masknet/web3-shared-evm'
+import { extractTextFromTypedMessage, parseURL } from '@masknet/shared-base'
 
 function createMatchLink() {
     return new RegExp(`https:\/\/${escapeRegExp(BASE_URL)}\/cards\/(.+)`)
