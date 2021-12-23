@@ -1,8 +1,9 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared-base'
+import type { TypedMessage, TypedMessageTuple, ScopedStorage, ProfileIdentifier } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
+import type { AddressName } from '../../shared/node_modules/@masknet/web3-shared-evm'
 
 export declare namespace Plugin {
     /**
@@ -307,6 +308,14 @@ export namespace Plugin.SNSAdaptor {
         onClick(): void
     }
 
+    export interface ProfileIdentity {
+        avatar?: string
+        bio?: string
+        homepage?: string
+        nickname?: string
+        identifier: ProfileIdentifier
+    }
+
     export interface ProfileSlider {
         ID: string
 
@@ -338,7 +347,7 @@ export namespace Plugin.SNSAdaptor {
         /**
          * The injected UI
          */
-        children: React.ReactNode
+        children: InjectUI<{ identity?: ProfileIdentity; addressNames?: AddressName[] }>
     }
 }
 

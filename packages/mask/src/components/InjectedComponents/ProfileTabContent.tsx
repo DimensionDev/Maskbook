@@ -1,18 +1,23 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
+import { first } from 'lodash-unified'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
+import { useAddressNames } from '@masknet/web3-shared-evm'
+import { createInjectHooksRenderer, Plugin } from '@masknet/plugin-infra'
+import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
-import {
-    useActivatedPlugin,
-    useActivatedPluginSNSAdaptor_Web3Supported,
-    useActivatedPluginsSNSAdaptor,
-    usePluginIDContext,
-} from '@masknet/plugin-infra'
+
+function getTabContent(tabId: string) {
+    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => {
+        const tab = x.ProfileTabs?.find((x) => x.ID === tabId)
+        if (!tab) return
+        return tab.children
+    })
+}
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -41,14 +46,18 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const identity = useCurrentVisitingIdentity()
     const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
     const activatedPlugins = useActivatedPluginsSNSAdaptor()
-    const tabs = activatedPlugins.flatMap((x) => x.ProfileTabs ?? [])
+    const tabs = activatedPlugins.flatMap((x) => x.ProfileTabs ?? []).sort((a, z) => a.priority - z.priority)
 
     const [hidden, setHidden] = useState(true)
-    const [currentTag, setCurrentTag] = useState('')
+    const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>(first(tabs))
 
     useLocationChange(() => {
-        setCurrentTag('')
+        setSelectedTab(first(tabs))
     })
+
+    useUpdateEffect(() => {
+        setSelectedTab(first(tabs))
+    }, [identity.identifier])
 
     useEffect(() => {
         return MaskMessages.events.profileTabUpdated.on((data) => {
@@ -56,17 +65,9 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         })
     }, [identity])
 
-    useUpdateEffect(() => {
-        setCurrentTag('')
-    }, [identity.identifier])
-
-    const content = useMemo(() => {
-        return <h1>HELLO WORLD</h1>
-    }, [currentTag, identity.identifier])
-
-    console.log({
-        tabs,
-    })
+    const ContentComponent = useMemo(() => {
+        return getTabContent(selectedTab?.ID ?? '')
+    }, [selectedTab, identity.identifier, addressNames])
 
     if (hidden) return null
 
@@ -83,28 +84,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             </div>
         )
 
-    // if (!addressName)
-    //     return (
-    //         <div className={classes.root}>
-    //             <Box
-    //                 display="flex"
-    //                 alignItems="center"
-    //                 justifyContent="center"
-    //                 sx={{ paddingTop: 4, paddingBottom: 4 }}>
-    //                 <Typography color="textPrimary">{t('plugin_profile_error_no_address')}</Typography>
-    //             </Box>
-    //         </div>
-    //     )
-
     return (
         <div className={classes.root}>
             <div className={classes.tags}>
-                <PageTab tabs={tabs} />
+                <PageTab tabs={tabs} selectedTab={selectedTab} onChange={setSelectedTab} />
             </div>
-            {/* <div className={classes.metadata}>
-                <AddressViewer addressName={addressName} />
-            </div> */}
-            <div className={classes.content}>{content}</div>
+            <div className={classes.content}>
+                <ContentComponent addressNames={addressNames} identity={identity} />
+            </div>
         </div>
     )
 }
