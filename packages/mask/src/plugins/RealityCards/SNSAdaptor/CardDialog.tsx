@@ -165,7 +165,7 @@ export function CardDialog(props: CardDialogProps) {
 
     const minHourlyPrice = useMemo(() => {
         return new BigNumber(card.price)
-            .multipliedBy(100 + parseFloat(market.minimumPriceIncreasePercent))
+            .multipliedBy(100 + Number.parseFloat(market.minimumPriceIncreasePercent))
             .dividedBy(100)
             .dividedBy(24)
     }, [card.price, market.minimumPriceIncreasePercent])
