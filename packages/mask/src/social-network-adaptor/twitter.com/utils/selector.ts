@@ -202,7 +202,9 @@ export const selfInfoSelectors = () => ({
 })
 
 //#region nft avatar
-export const searchProfileAvatarSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+export const searchProfileAvatarSelector = () => {
+    return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+}
 
 export const searchProfileAvatarParentSelector = () =>
     querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]').at(1).closest<HTMLDivElement>(2).evaluate()[0]
@@ -224,6 +226,9 @@ export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="P
 
 export const searchProfessionalButtonSelector = () =>
     querySelector<E>('[data-testid="ProfessionalButton_Switch_To_Professional"]')
+
+export const searchProfileSetAvatarSelector = () =>
+    searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
 //#endregion
 
 //#region avatar selector
