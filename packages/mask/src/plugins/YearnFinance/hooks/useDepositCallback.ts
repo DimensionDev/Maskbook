@@ -34,7 +34,7 @@ export function useDepositCallback(vault: Vault, amount: string) {
         })
         const txReceipt: TransactionReceipt = await tx.wait(4)
 
-        if (txReceipt && txReceipt.blockNumber) {
+        if (txReceipt?.blockNumber) {
             setDepositState({
                 type: TransactionStateType.HASH,
                 hash: txReceipt.transactionHash,

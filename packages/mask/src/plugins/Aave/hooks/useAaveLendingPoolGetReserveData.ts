@@ -46,7 +46,7 @@ export function useAaveLendingPoolGetListWithReserveData(userAddress: string) {
                 .call()
 
             result = { ...result, ...poolReserveData }
-            result.decimals = Number.parseInt(poolReserveConfigData.decimals)
+            result.decimals = Number.parseInt(poolReserveConfigData.decimals, 10)
 
             result.currentBalance = Number.parseFloat(
                 formatUnits(userReserveData.currentATokenBalance, result.decimals),

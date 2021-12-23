@@ -10,9 +10,9 @@ import {
     useERC20TokenDetailed,
     useFungibleTokenBalance,
     EthereumTokenType,
-    isZero,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import type { Wallet } from '@masknet/web3-shared-evm'
 import { formatBalance, formatEthereumAddress, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
 import TextField from '@mui/material/TextField'
@@ -112,7 +112,7 @@ export function WithdrawDialogUI(props: WithdrawDialogUIProps) {
 
     function _handleAmountToWithdrawChange(e: any) {
         let s = e.target.value ?? ''
-        if (s.trim() == '') {
+        if (s.trim() === '') {
             s = '0'
         }
         setAmountToWithdraw(s)

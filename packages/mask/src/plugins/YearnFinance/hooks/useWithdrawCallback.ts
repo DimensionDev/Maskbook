@@ -34,7 +34,7 @@ export function useWithdrawCallback(vault: Vault, amount: string) {
         })
         const txReceipt: TransactionReceipt = await tx.wait(4)
 
-        if (txReceipt && txReceipt.blockNumber) {
+        if (txReceipt?.blockNumber) {
             setWithdrawState({
                 type: TransactionStateType.HASH,
                 hash: txReceipt.transactionHash,
