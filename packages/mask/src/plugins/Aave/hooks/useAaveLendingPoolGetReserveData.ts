@@ -31,7 +31,6 @@ export function useAaveLendingPoolGetListWithReserveData(userAddress: string) {
                 currentBalance: 0,
             }
 
-            
             //@ts-ignore
             const poolReserveData: AaveReserveData = await dataProviderContract.methods
                 .getReserveData(asset.address)
@@ -42,23 +41,27 @@ export function useAaveLendingPoolGetListWithReserveData(userAddress: string) {
                 .call()
 
             //@ts-ignore
-            const userReserveData: any = await dataProviderContract.methods.getUserReserveData(asset.address, userAddress).call()
-        
-                     
+            const userReserveData: any = await dataProviderContract.methods
+                .getUserReserveData(asset.address, userAddress)
+                .call()
 
-                      
+            result = { ...result, ...poolReserveData }
+            result.decimals = Number.parseInt(poolReserveConfigData.decimals, 10)
 
-            result = {...result, ...poolReserveData };
-            result.decimals = parseInt(poolReserveConfigData.decimals)
+            result.currentBalance = Number.parseFloat(
+                formatUnits(userReserveData.currentATokenBalance, result.decimals),
+            )
 
-            result.currentBalance = parseFloat(formatUnits(userReserveData.currentATokenBalance, result.decimals))  
+            result.liquidityRate = Number.parseFloat(formatUnits(poolReserveData?.liquidityRate ?? '0', 25))
+            result.variableBorrowRate = Number.parseFloat(formatUnits(poolReserveData?.variableBorrowRate ?? '0', 25))
+            result.stableBorrowRate = Number.parseFloat(formatUnits(poolReserveData?.stableBorrowRate ?? '0', 25))
 
-            result.liquidityRate = parseFloat(formatUnits(poolReserveData?.liquidityRate ?? '0', 25))
-            result.variableBorrowRate = parseFloat(formatUnits(poolReserveData?.variableBorrowRate ?? '0', 25))
-            result.stableBorrowRate = parseFloat(formatUnits(poolReserveData?.stableBorrowRate ?? '0', 25))
-
-            result.totalVariableDebt = parseFloat(formatUnits(poolReserveData?.totalVariableDebt ?? '0', result.decimals))
-            result.totalStableDebt = parseFloat(formatUnits(poolReserveData?.totalStableDebt ?? '0', result.decimals))
+            result.totalVariableDebt = Number.parseFloat(
+                formatUnits(poolReserveData?.totalVariableDebt ?? '0', result.decimals),
+            )
+            result.totalStableDebt = Number.parseFloat(
+                formatUnits(poolReserveData?.totalStableDebt ?? '0', result.decimals),
+            )
 
             return result
         })

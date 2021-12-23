@@ -1,27 +1,30 @@
-import { useState,useEffect , useMemo, useCallback} from 'react'
-import { Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { Box, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { FormattedAddress, FormattedBalance, useValueRef } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ChainId, useChainId,  useAccount, useERC20TokenDetailed, useFungibleTokenBalance, EthereumTokenType,isZero,
+import {
+    useChainId,
+    useAccount,
+    useERC20TokenDetailed,
+    useFungibleTokenBalance,
+    EthereumTokenType,
+    isZero,
     TransactionStateType,
-    ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+} from '@masknet/web3-shared-evm'
 import type { Wallet } from '@masknet/web3-shared-evm'
 import { formatBalance, formatEthereumAddress, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField'
 import { ExternalLink } from 'react-feather'
 import { TokenIcon } from '@masknet/shared'
 import { useWithdrawCallback } from '../hooks/useWithdrawCallback'
-import {useAaveLendingPoolAssetReserveData} from '../hooks/useAaveLendingPoolAssetReserveData'
+import { useAaveLendingPoolAssetReserveData } from '../hooks/useAaveLendingPoolAssetReserveData'
 import BigNumber from 'bignumber.js'
 import { useRemoteControlledDialog } from '@masknet/shared'
 
-import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { WalletMessages } from '../../Wallet/messages'
-
 
 const useStyles = makeStyles()((theme) => ({
     section: {
@@ -61,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '22px',
         fontWeight: 600,
         padding: '13px 0',
-        borderRadius:  12,
+        borderRadius: 12,
         height: 'auto',
     },
     content: {
@@ -89,16 +92,14 @@ export interface WithdrawDialogUIProps extends withClasses<never> {
     onOpen?: () => void
     onClose?: () => void
     wallet?: Wallet
-	lendingPoolContractAddress: string
+    lendingPoolContractAddress: string
 }
 
 export function WithdrawDialogUI(props: WithdrawDialogUIProps) {
-    
-   
     const classes = useStylesExtends(useStyles(), props)
-    const { open, wallet,  inputTokenAddress,onOpen, onConfirm, onClose , lendingPoolContractAddress} = props
-	const chainId = useChainId()
-	const account = useAccount()
+    const { open, wallet, inputTokenAddress, onOpen, onConfirm, onClose, lendingPoolContractAddress } = props
+    const chainId = useChainId()
+    const account = useAccount()
     const [amountToWithdraw, setAmountToWithdraw] = useState('0')
 
     //#region pool token
@@ -111,28 +112,25 @@ export function WithdrawDialogUI(props: WithdrawDialogUIProps) {
     //#endregion
 
     function _handleAmountToWithdrawChange(e: any) {
-        let s = e.target.value??'';
-        if(s.trim()==''){
-            s='0'
+        let s = e.target.value ?? ''
+        if (s.trim() === '') {
+            s = '0'
         }
         setAmountToWithdraw(s)
     }
     const amount = new BigNumber(amountToWithdraw || '0').shiftedBy(inputToken?.decimals ?? 0)
-	
 
     const {
         value: assetReserve,
         loading: loadingAssetReserve,
         retry: retryAssetReserve,
-    }  = useAaveLendingPoolAssetReserveData(lendingPoolContractAddress, inputToken?.address ?? '')
+    } = useAaveLendingPoolAssetReserveData(lendingPoolContractAddress, inputToken?.address ?? '')
 
-    
-
-	const {
+    const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useFungibleTokenBalance(EthereumTokenType.ERC20, assetReserve?.aTokenAddress??'')
+    } = useFungibleTokenBalance(EthereumTokenType.ERC20, assetReserve?.aTokenAddress ?? '')
 
     //#region pool token
     const {
@@ -142,38 +140,41 @@ export function WithdrawDialogUI(props: WithdrawDialogUIProps) {
         error: errorAssetAToken,
     } = useERC20TokenDetailed(assetReserve?.aTokenAddress)
     //#endregion
-	
-	
-	const [withdrawState, withdrawCallback, resetWithdrawCallback] = useWithdrawCallback(lendingPoolContractAddress, assetAToken!,amount.toFixed(), '0');
-	
-	// on close transaction dialog
+
+    const [withdrawState, withdrawCallback, resetWithdrawCallback] = useWithdrawCallback(
+        lendingPoolContractAddress,
+        assetAToken!,
+        amount.toFixed(),
+        '0',
+    )
+
+    // on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
             (ev: any) => {
                 if (!ev.open) {
-                    
                     if (withdrawState.type === TransactionStateType.HASH) {
-						if(onClose){
-							onClose()
-						}
-					}
+                        if (onClose) {
+                            onClose()
+                        }
+                    }
                 }
                 if (withdrawState.type === TransactionStateType.HASH) setAmountToWithdraw('0')
                 resetWithdrawCallback()
             },
-            [ withdrawState, onClose],
+            [withdrawState, onClose],
         ),
     )
 
     // open the transaction dialog
     useEffect(() => {
-        if (!inputToken ) return
-        if (!assetAToken ) return
+        if (!inputToken) return
+        if (!assetAToken) return
         if (withdrawState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialogOpen({
             open: true,
-            
+
             state: withdrawState,
             summary: `Withdrawing ${formatBalance(amount, assetAToken.decimals)}${assetAToken.symbol} .`,
         })
@@ -184,16 +185,13 @@ export function WithdrawDialogUI(props: WithdrawDialogUIProps) {
     const validationMessage = useMemo(() => {
         if (!account) return 'Pls connect a wallet'
         if (!amount || amount.isZero()) return 'Enter Amount' //t('plugin_aave_enter_an_amount')
-        if (amount.isGreaterThan(tokenBalance))
-            return 'Insufficient balance'
+        if (amount.isGreaterThan(tokenBalance)) return 'Insufficient balance'
         return ''
     }, [account, amount.toFixed(), assetAToken, tokenBalance])
     //#endregion
 
-
-
     return (
-        <div> 
+        <div>
             <InjectedDialog open={open} onClose={onClose} title="Withdraw">
                 <DialogContent className={classes.content}>
                     <Box className={classes.section}>
@@ -216,46 +214,43 @@ export function WithdrawDialogUI(props: WithdrawDialogUIProps) {
                         </Typography>
                     </Box>
 
-                    {loadingAssetAToken && <div>Loading ...</div>
-
-                    }
-					{ assetAToken && <>
-                        <form className={classes.form} noValidate autoComplete="off">
-                            <Typography component="div" display="flex">
-                                <TokenIcon
-                                    classes={{ icon: classes.tokenIcon }}
-                                    address={assetAToken?.address??''}
-                                    logoURI={assetAToken?.logoURI}
+                    {loadingAssetAToken && <div>Loading ...</div>}
+                    {assetAToken && (
+                        <>
+                            <form className={classes.form} noValidate autoComplete="off">
+                                <Typography component="div" display="flex">
+                                    <TokenIcon
+                                        classes={{ icon: classes.tokenIcon }}
+                                        address={assetAToken?.address ?? ''}
+                                        logoURI={assetAToken?.logoURI}
+                                    />
+                                    {tokenBalance} {assetAToken.name}
+                                </Typography>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="amountToWithdraw"
+                                    label="Amount"
+                                    type="number"
+                                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                                    value={amountToWithdraw}
+                                    onChange={_handleAmountToWithdrawChange}
+                                    variant="standard"
                                 />
-                                {tokenBalance} {assetAToken.name}
-                                
-                            </Typography>
-                            <TextField
-                                autoFocus
-                                margin="dense"
-                                id="amountToWithdraw"
-                                label="Amount"
-                                type="number"
-                                
-                                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                                value={amountToWithdraw}
-                                onChange={_handleAmountToWithdrawChange}
-                                variant="standard"
-                            />
-                            <span> {assetAToken?.symbol}</span>	
-                        </form>
-                        <EthereumWalletConnectedBoundary>
-                            {isZero(tokenBalance) ? (  // swap if zero balance
-                                <ActionButton disabled
-                                    className={classes.button}
-                                    fullWidth
-                                    
-                                    variant="contained"
-                                    loading={loadingTokenBalance}>
-                                    Insufficient {assetAToken?.symbol}
-                                </ActionButton> 
-                            ) : (
-                                <ActionButton
+                                <span> {assetAToken?.symbol}</span>
+                            </form>
+                            <EthereumWalletConnectedBoundary>
+                                {isZero(tokenBalance) ? ( // swap if zero balance
+                                    <ActionButton
+                                        disabled
+                                        className={classes.button}
+                                        fullWidth
+                                        variant="contained"
+                                        loading={loadingTokenBalance}>
+                                        Insufficient {assetAToken?.symbol}
+                                    </ActionButton>
+                                ) : (
+                                    <ActionButton
                                         className={classes.button}
                                         fullWidth
                                         disabled={!!validationMessage}
@@ -264,16 +259,11 @@ export function WithdrawDialogUI(props: WithdrawDialogUIProps) {
                                         loading={loadingTokenBalance}>
                                         {validationMessage || 'Withdraw'}
                                     </ActionButton>
-                            )}
-                        </EthereumWalletConnectedBoundary>
-					
-                    </>
-
-                    }		
-						
-                    
+                                )}
+                            </EthereumWalletConnectedBoundary>
+                        </>
+                    )}
                 </DialogContent>
-                
             </InjectedDialog>
         </div>
     )

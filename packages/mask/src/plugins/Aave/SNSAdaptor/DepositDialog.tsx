@@ -1,15 +1,21 @@
-import { useState,useEffect , useMemo, useCallback} from 'react'
-import { Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
+import { useState, useEffect, useMemo, useCallback } from 'react'
+import { Box, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import { FormattedAddress, FormattedBalance, useValueRef } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ChainId, useChainId,  useAccount, useERC20TokenDetailed, useFungibleTokenBalance, EthereumTokenType,isZero,
+import {
+    useChainId,
+    useAccount,
+    useERC20TokenDetailed,
+    useFungibleTokenBalance,
+    EthereumTokenType,
     TransactionStateType,
-    ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+} from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import type { Wallet } from '@masknet/web3-shared-evm'
 import { formatBalance, formatEthereumAddress, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField'
 import { ExternalLink } from 'react-feather'
 import { TokenIcon } from '@masknet/shared'
 import { useDepositCallback } from '../hooks/useDepositCallback'
@@ -18,9 +24,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import { TokenAmountPanel } from '../../../web3/UI/TokenAmountPanel'
 import { WalletMessages } from '../../Wallet/messages'
-
 
 const useStyles = makeStyles()((theme) => ({
     section: {
@@ -60,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '22px',
         fontWeight: 600,
         padding: '13px 0',
-        borderRadius:  12,
+        borderRadius: 12,
         height: 'auto',
     },
     content: {
@@ -87,17 +91,15 @@ export interface DepositDialogUIProps extends withClasses<never> {
     onConfirm: () => void
     onClose?: () => void
     wallet?: Wallet
-    apy: any,
-	lendingPoolContractAddress: string
+    apy: any
+    lendingPoolContractAddress: string
 }
 
 export function DepositDialogUI(props: DepositDialogUIProps) {
-    
-   
     const classes = useStylesExtends(useStyles(), props)
-    const { open, wallet,apy,  inputTokenAddress, onConfirm, onClose , lendingPoolContractAddress} = props
-	const chainId = useChainId()
-	const account = useAccount()
+    const { open, wallet, apy, inputTokenAddress, onConfirm, onClose, lendingPoolContractAddress } = props
+    const chainId = useChainId()
+    const account = useAccount()
     const [amountToInvest, setAmountToInvest] = useState('0')
 
     //#region pool token
@@ -110,51 +112,53 @@ export function DepositDialogUI(props: DepositDialogUIProps) {
     //#endregion
 
     function _handleAmountToInvestChange(e: any) {
-        let s = e.target.value??'';
-        if(s.trim()==''){
-            s='0'
+        let s = e.target.value ?? ''
+        if (s.trim() === '') {
+            s = '0'
         }
         setAmountToInvest(s)
     }
-	
-		
-	const amount = new BigNumber(amountToInvest || '0').shiftedBy(inputToken?.decimals ?? 0)
-	const {
+
+    const amount = new BigNumber(amountToInvest || '0').shiftedBy(inputToken?.decimals ?? 0)
+    const {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
     } = useFungibleTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
-	
-	
-	const [depositState, depositCallback, resetDepositCallback] = useDepositCallback(lendingPoolContractAddress, inputToken!,amount.toFixed(), '0');
-	
-	// on close transaction dialog
+
+    const [depositState, depositCallback, resetDepositCallback] = useDepositCallback(
+        lendingPoolContractAddress,
+        inputToken!,
+        amount.toFixed(),
+        '0',
+    )
+
+    // on close transaction dialog
     const { setDialog: setTransactionDialogOpen } = useRemoteControlledDialog(
         WalletMessages.events.transactionDialogUpdated,
         useCallback(
             (ev: any) => {
                 if (!ev.open) {
-                    
                     if (depositState.type === TransactionStateType.HASH) {
-						if(onClose){
-							onClose()
-						}
-					}
+                        if (onClose) {
+                            onClose()
+                        }
+                    }
                 }
                 if (depositState.type === TransactionStateType.HASH) setAmountToInvest('0')
                 resetDepositCallback()
             },
-            [ depositState, onClose],
+            [depositState, onClose],
         ),
     )
 
     // open the transaction dialog
     useEffect(() => {
-        if (!inputToken ) return
+        if (!inputToken) return
         if (depositState.type === TransactionStateType.UNKNOWN) return
         setTransactionDialogOpen({
             open: true,
-            
+
             state: depositState,
             summary: `Depositing ${formatBalance(amount, inputToken.decimals)}${inputToken.symbol} .`,
         })
@@ -165,15 +169,13 @@ export function DepositDialogUI(props: DepositDialogUIProps) {
     const validationMessage = useMemo(() => {
         if (!account) return 'Pls connect a wallet'
         if (!amount || amount.isZero()) return 'Enter Amount' //t('plugin_aave_enter_an_amount')
-        if (amount.isGreaterThan(tokenBalance))
-            return 'Insufficient balance'
+        if (amount.isGreaterThan(tokenBalance)) return 'Insufficient balance'
         return ''
     }, [account, amount.toFixed(), inputToken, tokenBalance])
     //#endregion
 
-	
     return (
-        <div> 
+        <div>
             <InjectedDialog open={open} onClose={onClose} title="Deposit">
                 <DialogContent className={classes.content}>
                     <Box className={classes.section}>
@@ -195,40 +197,38 @@ export function DepositDialogUI(props: DepositDialogUIProps) {
                             ) : null}
                         </Typography>
                     </Box>
-							
-					<form className={classes.form} noValidate autoComplete="off">
-                         <Typography component="div" display="flex">
+
+                    <form className={classes.form} noValidate autoComplete="off">
+                        <Typography component="div" display="flex">
                             <TokenIcon
                                 classes={{ icon: classes.tokenIcon }}
-                                address={inputToken?.address??''}
+                                address={inputToken?.address ?? ''}
                                 logoURI={inputToken?.logoURI}
                             />
-                            
                         </Typography>
-					    <TextField
-							autoFocus
-							margin="dense"
-							id="amountToInvest"
-							label="Amount"
-							type="number"
-							
-							inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-							value={amountToInvest}
-							onChange={_handleAmountToInvestChange}
-							variant="standard"
-						/>
-						<span> {inputToken?.symbol}</span>	
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="amountToInvest"
+                            label="Amount"
+                            type="number"
+                            inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                            value={amountToInvest}
+                            onChange={_handleAmountToInvestChange}
+                            variant="standard"
+                        />
+                        <span> {inputToken?.symbol}</span>
                     </form>
                     <EthereumWalletConnectedBoundary>
-                        {isZero(tokenBalance) ? (  // swap if zero balance
-                            <ActionButton disabled
+                        {isZero(tokenBalance) ? ( // swap if zero balance
+                            <ActionButton
+                                disabled
                                 className={classes.button}
                                 fullWidth
-                                
                                 variant="contained"
                                 loading={loadingTokenBalance}>
                                 Insufficient {inputToken?.symbol}
-                            </ActionButton> 
+                            </ActionButton>
                         ) : (
                             <EthereumERC20TokenApprovedBoundary
                                 amount={amount.toFixed()}
@@ -246,10 +246,7 @@ export function DepositDialogUI(props: DepositDialogUIProps) {
                             </EthereumERC20TokenApprovedBoundary>
                         )}
                     </EthereumWalletConnectedBoundary>
-						
-                    
                 </DialogContent>
-                
             </InjectedDialog>
         </div>
     )

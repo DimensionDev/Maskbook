@@ -1,9 +1,8 @@
 //import { PluginPooltogetherRPC } from '../messages'
 import { useAaveProtocolDataProviderContract } from '../contracts/useAaveProtocolDataProvider'
 import { useAsyncRetry } from 'react-use'
-import { AAVE_ASSETS, AAVE_PROTOCOL_DATA_PROVIDER_ADDRESS } from '../constants'
-import type { AaveReserveData, AaveAssetDetails, AavePoolReserveConfigData } from '../types'
-import { formatUnits } from '@ethersproject/units'
+import { AAVE_PROTOCOL_DATA_PROVIDER_ADDRESS } from '../constants'
+import type { AavePoolReserveConfigData } from '../types'
 
 // export function usePools() {
 //     const chainId = useChainId()
@@ -15,8 +14,9 @@ export function useAaveProtocolPoolGetReserveConfig(assetAddress: string) {
 
     return useAsyncRetry(async () => {
         //@ts-ignore
-        const reserveData: AavePoolReserveConfigData = await dataProviderContract.methods.getReserveConfigurationData(assetAddress).call()
+        const reserveData: AavePoolReserveConfigData = await dataProviderContract.methods
+            .getReserveConfigurationData(assetAddress)
+            .call()
         return reserveData
     }, [])
 }
-

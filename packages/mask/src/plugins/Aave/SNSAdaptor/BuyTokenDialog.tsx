@@ -4,13 +4,11 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CloseIcon from '@mui/icons-material/Close'
 import { useState, useEffect, useCallback } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
+import { useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
 import { PluginAaveMessages } from '../messages'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { useAaveLendingPoolAddressProvider } from '../hooks/useAaveLendingPoolAddressProvider'
 import { useAaveLendingPoolGetListWithReserveData } from '../hooks/useAaveLendingPoolGetReserveData'
-import {useAaveProtocolPoolGetUserReserveBalances} from '../hooks/useAaveProtocolPoolGetUserReserves'
 import type { AaveAssetDetails } from '../types'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
@@ -19,9 +17,8 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import {DepositDialog} from './DepositDialog'
-import {WithdrawDialog} from './WithdrawDialog'
-import BigNumber from 'bignumber.js'
+import { DepositDialog } from './DepositDialog'
+import { WithdrawDialog } from './WithdrawDialog'
 
 const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
@@ -235,16 +232,16 @@ export interface BuyTokenDialogProps extends withClasses<never | 'root'> {}
 
 export function BuyTokenDialog(props: BuyTokenDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
-	
+
     const account = useAccount()
     const currentChainId = useChainId()
 
-    const [chainId, setChainId] = useState(currentChainId )
-	
-	//~ const [chainId, setChainId] = useState(
-        //~ [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
-            //~ ? currentChainId
-            //~ : ChainId.Mainnet,
+    const [chainId, setChainId] = useState(currentChainId)
+
+    //~ const [chainId, setChainId] = useState(
+    //~ [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
+    //~ ? currentChainId
+    //~ : ChainId.Mainnet,
     //~ )
 
     const {
@@ -262,64 +259,51 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
         loading: loadinginitialAssetList,
         retry: retryinitialAssetList,
     } = useAaveLendingPoolGetListWithReserveData(account)
-    
-
 
     useEffect(() => {
         setAssetList(initialAssetList)
     }, [initialAssetList])
 
-       
     //#region remote controlled buy token dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginAaveMessages.buyTokenDialogUpdated)
     //#endregion
 
-        
-	
-	const wallet = useWallet()
-	
-	
-	const [currentAPY, setCurrentAPY] = useState()
-	const [currentTokenAddress, setcurrentTokenAddress] = useState('')
-	//const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+    const wallet = useWallet()
+
+    const [currentAPY, setCurrentAPY] = useState()
+    const [currentTokenAddress, setcurrentTokenAddress] = useState('')
+    //const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
 
     const {
         open: openDepositDialog,
-        openDialog: onOpenDepositDialog ,
-        closeDialog: onCloseDepositDialog
+        openDialog: onOpenDepositDialog,
+        closeDialog: onCloseDepositDialog,
     } = useRemoteControlledDialog(PluginAaveMessages.depositTokenDialog)
 
-    const handleDeposit = useCallback((address: string | undefined, apy: any)=> {
-		setcurrentTokenAddress(address??'');
-		setCurrentAPY(apy);
-        onOpenDepositDialog();
-    },[])
-	
-	const onDepositDialogConfirm = useCallback(async () => {
-                
+    const handleDeposit = useCallback((address: string | undefined, apy: any) => {
+        setcurrentTokenAddress(address ?? '')
+        setCurrentAPY(apy)
+        onOpenDepositDialog()
     }, [])
 
-    
+    const onDepositDialogConfirm = useCallback(async () => {}, [])
+
     const {
         open: openWithdrawDialog,
-        openDialog: onOpenWithdrawDialog ,
-        closeDialog: onCloseWithdrawDialog
+        openDialog: onOpenWithdrawDialog,
+        closeDialog: onCloseWithdrawDialog,
     } = useRemoteControlledDialog(PluginAaveMessages.withdrawTokenDialog)
-	
-    const handleWithdraw = useCallback((address: string | undefined, apy: any)=> {
-		setcurrentTokenAddress(address??'');
-		setCurrentAPY(apy);
-        onOpenWithdrawDialog();
-    },[])
 
-    const onWithdrawDialogConfirm = useCallback(async () => {
-        
-        
+    const handleWithdraw = useCallback((address: string | undefined, apy: any) => {
+        setcurrentTokenAddress(address ?? '')
+        setCurrentAPY(apy)
+        onOpenWithdrawDialog()
     }, [])
+
+    const onWithdrawDialogConfirm = useCallback(async () => {}, [])
 
     return (
         <div className={classes.root}>
-					
             <InjectedDialog
                 open={open}
                 onClose={closeDialog}
@@ -364,20 +348,34 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
                                         <TableCell component="th" scope="row">
                                             {asset.name}
                                         </TableCell>
-                                        <TableCell align="right">{asset.liquidityRate?.toFixed(2) ?? 'NONE'} %</TableCell>
-                                        <TableCell align="right">{asset.stableBorrowRate?.toFixed(2) ?? 'NONE'} %</TableCell>
-                                        <TableCell align="right">{asset.variableBorrowRate?.toFixed(2) ?? 'NONE'} %</TableCell>
+                                        <TableCell align="right">
+                                            {asset.liquidityRate?.toFixed(2) ?? 'NONE'} %
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {asset.stableBorrowRate?.toFixed(2) ?? 'NONE'} %
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {asset.variableBorrowRate?.toFixed(2) ?? 'NONE'} %
+                                        </TableCell>
                                         <TableCell align="right">
                                             {asset.currentBalance} {asset.name}{' '}
                                         </TableCell>
                                         <TableCell align="right">
-                                            
+                                            <Button
+                                                variant="contained"
+                                                onClick={() =>
+                                                    handleDeposit(asset.address, asset.stableBorrowRate?.toFixed(2))
+                                                }>
+                                                Deposit
+                                            </Button>
 
-                                            <Button variant="contained" onClick={() => handleDeposit(asset.address, asset.stableBorrowRate?.toFixed(2) )}>Deposit</Button>
-
-                                            <Button variant="contained" onClick={() => handleWithdraw(asset.address, asset.stableBorrowRate?.toFixed(2) )}>Withdraw</Button>
-
-                                           
+                                            <Button
+                                                variant="contained"
+                                                onClick={() =>
+                                                    handleWithdraw(asset.address, asset.stableBorrowRate?.toFixed(2))
+                                                }>
+                                                Withdraw
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -389,18 +387,22 @@ export function BuyTokenDialog(props: BuyTokenDialogProps) {
 
             <DepositDialog
                 wallet={wallet}
-                open={ openDepositDialog  }
+                open={openDepositDialog}
                 apy={currentAPY}
-                lendingPoolContractAddress = {lendingPoolAddress}
+                lendingPoolContractAddress={lendingPoolAddress}
                 inputTokenAddress={currentTokenAddress}
-                
                 onConfirm={onDepositDialogConfirm}
                 onClose={onCloseDepositDialog}
-                
             />
 
-            <WithdrawDialog lendingPoolContractAddress = {lendingPoolAddress} wallet={wallet}
-                    inputTokenAddress={currentTokenAddress} open={openWithdrawDialog} onClose={onCloseWithdrawDialog}  onConfirm={onWithdrawDialogConfirm} />
+            <WithdrawDialog
+                lendingPoolContractAddress={lendingPoolAddress}
+                wallet={wallet}
+                inputTokenAddress={currentTokenAddress}
+                open={openWithdrawDialog}
+                onClose={onCloseWithdrawDialog}
+                onConfirm={onWithdrawDialogConfirm}
+            />
         </div>
     )
 }

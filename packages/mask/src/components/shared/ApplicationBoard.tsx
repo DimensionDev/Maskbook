@@ -15,7 +15,7 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
-import { PluginAaveMessages } from '../../plugins/Aave/messages
+import { PluginAaveMessages } from '../../plugins/Aave/messages'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
