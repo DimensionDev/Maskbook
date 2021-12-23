@@ -308,6 +308,8 @@ export namespace Plugin.SNSAdaptor {
     }
 
     export interface ProfileSlider {
+        ID: string
+
         /**
          * The name of the slider card
          */
@@ -319,10 +321,12 @@ export namespace Plugin.SNSAdaptor {
         /**
          * The injected UI
          */
-        children: InjectUI<{}>
+        children: React.ReactNode
     }
 
     export interface ProfileTab {
+        ID: string
+
         /**
          * The name of the tab
          */
@@ -334,7 +338,7 @@ export namespace Plugin.SNSAdaptor {
         /**
          * The injected UI
          */
-        children: InjectUI<{}>
+        children: React.ReactNode
     }
 }
 

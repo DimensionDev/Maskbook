@@ -3,9 +3,16 @@ import { useUpdateEffect } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
+import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
+import {
+    useActivatedPlugin,
+    useActivatedPluginSNSAdaptor_Web3Supported,
+    useActivatedPluginsSNSAdaptor,
+    usePluginIDContext,
+} from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -31,10 +38,10 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region identity
     const identity = useCurrentVisitingIdentity()
     const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
-    //#endregion
+    const activatedPlugins = useActivatedPluginsSNSAdaptor()
+    const tabs = activatedPlugins.flatMap((x) => x.ProfileTabs ?? [])
 
     const [hidden, setHidden] = useState(true)
     const [currentTag, setCurrentTag] = useState('')
@@ -53,21 +60,13 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         setCurrentTag('')
     }, [identity.identifier])
 
-    const addressMap = useMemo(() => {
-        const getAddressByType = (type: AddressNameType) => addressNames?.find((x) => x.type === type)
-        return {
-            literal: getAddressByType(AddressNameType.ADDRESS),
-            ENS: getAddressByType(AddressNameType.ENS),
-            UNS: getAddressByType(AddressNameType.UNS),
-            GUN: getAddressByType(AddressNameType.GUN),
-            RSS3: getAddressByType(AddressNameType.RSS3),
-            thegraph: getAddressByType(AddressNameType.THE_GRAPH),
-        }
-    }, [currentTag, addressNames])
-
     const content = useMemo(() => {
         return <h1>HELLO WORLD</h1>
     }, [currentTag, identity.identifier])
+
+    console.log({
+        tabs,
+    })
 
     if (hidden) return null
 
@@ -100,7 +99,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     return (
         <div className={classes.root}>
             <div className={classes.tags}>
-                <h1>Tabs</h1>
+                <PageTab tabs={tabs} />
             </div>
             {/* <div className={classes.metadata}>
                 <AddressViewer addressName={addressName} />

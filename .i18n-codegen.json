@@ -85,6 +85,18 @@
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
+        },
+        {
+            "input": "./packages/plugins/RSS3/src/locales/en-US.json",
+            "output": "./packages/plugins/RSS3/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "com.mask.rss3",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
         }
     ]
 }
