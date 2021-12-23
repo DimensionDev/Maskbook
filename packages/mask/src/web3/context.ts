@@ -7,10 +7,11 @@ import {
     EthereumTokenType,
     ProviderType,
     Web3ProviderType,
-    resolveProviderIdentityKey,
+    resolveProviderInjectedKey,
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
-import { bridgedEthereumProvider } from '@masknet/injected-script'
+import { isPopupPage } from '@masknet/shared-base'
+import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import {
     currentBlockNumberSettings,
     currentBalanceSettings,
@@ -18,12 +19,13 @@ import {
     currentNetworkSettings,
     currentProviderSettings,
     currentChainIdSettings,
-    currentPortfolioDataProviderSettings,
+    currentFungibleAssetDataProviderSettings,
     currentTokenPricesSettings,
     currentMaskWalletChainIdSettings,
     currentMaskWalletNetworkSettings,
     currentMaskWalletAccountSettings,
     currentMaskWalletBalanceSettings,
+    currentBalancesSettings,
 } from '../plugins/Wallet/settings'
 import { WalletMessages, WalletRPC } from '../plugins/Wallet/messages'
 import type { InternalSettings } from '../settings/createSettings'
@@ -67,13 +69,16 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const account = isMask ? currentMaskWalletAccountSettings.value : currentAccountSettings.value
                 const providerType = currentProviderSettings.value
 
-                if (location.href.includes('popups.html')) return account
+                if (isPopupPage()) return account
+                if (providerType === ProviderType.Fortmatic) return account
                 if (!isInjectedProvider(providerType)) return account
 
                 try {
-                    const propertyKey = resolveProviderIdentityKey(providerType)
-                    if (!propertyKey) return ''
-                    const propertyValue = await bridgedEthereumProvider.getProperty(propertyKey)
+                    const bridgedProvider =
+                        providerType === ProviderType.Coin98 ? bridgedCoin98Provider : bridgedEthereumProvider
+                    const injectedKey = resolveProviderInjectedKey(providerType)
+                    if (!injectedKey) return ''
+                    const propertyValue = await bridgedProvider.getProperty(injectedKey)
                     if (propertyValue === true) return account
                     return ''
                 } catch (error) {
@@ -89,6 +94,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             },
         ),
         balance: createSubscriptionFromSettings(isMask ? currentMaskWalletBalanceSettings : currentBalanceSettings),
+        balances: createSubscriptionFromSettings(currentBalancesSettings),
         blockNumber: createSubscriptionFromSettings(currentBlockNumberSettings),
         tokenPrices: createSubscriptionFromSettings(currentTokenPricesSettings),
         walletPrimary: createSubscriptionFromAsync(
@@ -116,8 +122,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
             [],
             WalletMessages.events.erc1155TokensUpdated.on,
         ),
-        portfolioProvider: createSubscriptionFromSettings(currentPortfolioDataProviderSettings),
-
+        portfolioProvider: createSubscriptionFromSettings(currentFungibleAssetDataProviderSettings),
         addToken: WalletRPC.addToken,
         removeToken: WalletRPC.removeToken,
         trustToken: WalletRPC.trustToken,

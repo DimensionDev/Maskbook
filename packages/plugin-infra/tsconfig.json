@@ -6,7 +6,7 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src"],
-  "references": [{ "path": "../shared/" }, { "path": "../theme" }],
+  "references": [{ "path": "../shared/" }, { "path": "../shared-base" }, { "path": "../theme" }],
   "ts-node": {
     "transpileOnly": true,
     "compilerOptions": { "module": "CommonJS" }

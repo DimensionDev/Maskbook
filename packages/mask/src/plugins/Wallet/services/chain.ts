@@ -1,6 +1,6 @@
 import { throttle } from 'lodash-unified'
-import { ProviderType } from '@masknet/web3-shared-evm'
-import { pollingTask } from '@masknet/shared'
+import { BalanceOfChains, ProviderType } from '@masknet/web3-shared-evm'
+import { pollingTask } from '@masknet/shared-base'
 import { getBalance, getBlockNumber, resetAllNonce } from '../../../extension/background-script/EthereumService'
 import { startEffects } from '../../../../utils-pure'
 import { UPDATE_CHAIN_STATE_DELAY } from '../constants'
@@ -13,6 +13,7 @@ import {
     currentMaskWalletBalanceSettings,
     currentMaskWalletChainIdSettings,
     currentProviderSettings,
+    currentBalancesSettings,
 } from '../settings'
 
 let beats = 0
@@ -20,6 +21,18 @@ const { run } = startEffects(import.meta.webpackHot)
 
 export async function kickToUpdateChainState() {
     beats += 1
+}
+
+export async function updateBalances(data: BalanceOfChains) {
+    const balancesOfChains = { ...currentBalancesSettings.value }
+    for (const [key, value] of Object.entries(data)) {
+        balancesOfChains[key] = {
+            ...balancesOfChains[key],
+            ...value,
+        }
+    }
+
+    currentBalancesSettings.value = balancesOfChains
 }
 
 export async function updateChainState() {
@@ -38,6 +51,13 @@ export async function updateChainState() {
                     ? getBalance(currentAccountSettings.value, {
                           chainId: currentChainIdSettings.value,
                           providerType: currentProviderSettings.value,
+                      }).then((value) => {
+                          updateBalances({
+                              [currentProviderSettings.value]: {
+                                  [currentChainIdSettings.value]: value,
+                              },
+                          })
+                          return value
                       })
                     : currentBalanceSettings.value,
                 currentMaskWalletAccountSettings.value

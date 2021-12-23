@@ -2,7 +2,7 @@ import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { NetworkType, ProviderType } from '@masknet/web3-shared-evm'
+import { getChainIdFromNetworkType, isFortmaticSupported, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'
 
 export function NetworkIconClickBait({
@@ -35,6 +35,7 @@ export function NetworkIconClickBait({
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
+            case ProviderType.Fortmatic:
                 setConnectWalletDialog({
                     open: true,
                     providerType,
@@ -50,6 +51,10 @@ export function NetworkIconClickBait({
     }, [network, provider, onClick])
 
     if (!providerType) return null
+
+    // hide fortmatic for some networks because of incomplete supporting
+    if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
+        return null
 
     return (
         <>

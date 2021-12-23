@@ -1,10 +1,11 @@
 import { ValueRef } from '@dimensiondev/holoflows-kit'
-import { useValueRef, SubscriptionFromValueRef } from '@masknet/shared'
+import { useValueRef } from '@masknet/shared'
+import { SubscriptionFromValueRef } from '@masknet/shared-base'
 import { Appearance, or } from '@masknet/theme'
 import { LanguageOptions, SupportedLanguages } from '@masknet/public-api'
 import { PaletteMode, unstable_createMuiStrictModeTheme } from '@mui/material'
 import { blue, green, grey, orange, red } from '@mui/material/colors'
-import { jaJP, koKR, zhTW, zhCN, esES, itIT, ruRU, faIR, frFR, enUS, Localization } from '@mui/material/locale/index'
+import { jaJP, koKR, zhTW, zhCN, enUS, Localization } from '@mui/material/locale/index'
 import { makeStyles } from '@masknet/theme'
 import type { Theme, ThemeOptions } from '@mui/material/styles/createTheme'
 import { cloneDeep, merge } from 'lodash-unified'
@@ -151,13 +152,8 @@ function useThemeLanguage(): [loc: Localization, RTL: boolean] {
         [SupportedLanguages.koKR]: koKR,
         [SupportedLanguages.zhTW]: zhTW,
         [SupportedLanguages.zhCN]: zhCN,
-        [SupportedLanguages.ruRU]: ruRU,
-        [SupportedLanguages.itIT]: itIT,
-        [SupportedLanguages.esES]: esES,
-        [SupportedLanguages.frFR]: frFR,
-        [SupportedLanguages.faIR]: faIR,
     }
-    return [langs[displayLanguage] || enUS, language === LanguageOptions.faIR]
+    return [langs[displayLanguage] || enUS, false]
 }
 
 export interface ClassicMaskFullPageThemeOptions {

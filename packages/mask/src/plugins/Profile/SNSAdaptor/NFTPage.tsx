@@ -1,31 +1,11 @@
 import { getMaskColor, makeStyles, useStylesExtends } from '@masknet/theme'
-import {
-    formatEthereumAddress,
-    resolveAddressLinkOnExplorer,
-    ChainId,
-    EthereumNameType,
-    useEthereumAddress,
-} from '@masknet/web3-shared-evm'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
-import { Box, Link, Typography, CircularProgress } from '@mui/material'
-import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
+import { Box, Typography } from '@mui/material'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 import { useI18N } from '../../../utils'
-import { useUserOwnerAddress } from '../../Avatar/hooks/useUserOwnerAddress'
-
-const RULE_TIP = [
-    '1. Twitter name or bio contains ENS (e.g. vitalik.eth);',
-    '2. Twitter bio contains valid Ethereum address;',
-    '3. The ENS or Ethereum address has NFTs in it.',
-].join('\n')
 
 const useStyles = makeStyles()((theme) => ({
     root: {
         position: 'relative',
-    },
-    note: {
-        padding: theme.spacing(1),
-        textAlign: 'right',
     },
     text: {
         paddingTop: 36,
@@ -36,21 +16,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface NFTPageProps extends withClasses<'text' | 'button'> {}
+export interface NFTPageProps extends withClasses<'text' | 'button'> {
+    address: string
+}
 
 export function NFTPage(props: NFTPageProps) {
-    const classes = useStylesExtends(useStyles(), props)
+    const { address } = props
     const { t } = useI18N()
-    const identity = useCurrentVisitingIdentity()
-    const { loading: loadingENS, value } = useEthereumAddress(
-        identity.nickname ?? '',
-        identity.identifier.userId,
-        identity.bio ?? '',
-    )
-    const { type, name, address } = value ?? {}
-    const { loading: loadingWalletGun, value: walletAddressGun } = useUserOwnerAddress(identity.identifier.userId)
+    const classes = useStylesExtends(useStyles(), props)
 
-    if (!address && !walletAddressGun)
+    if (!address)
         return (
             <div className={classes.root}>
                 <Box className={classes.text} display="flex" alignItems="center" justifyContent="center">
@@ -61,48 +36,7 @@ export function NFTPage(props: NFTPageProps) {
 
     return (
         <div className={classes.root}>
-            {loadingWalletGun || loadingENS ? (
-                <Box className={classes.note} display="flex" alignItems="center" justifyContent="center">
-                    <CircularProgress />
-                </Box>
-            ) : (
-                <>
-                    <Box
-                        className={classes.note}
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="flex-end"
-                        flexWrap="wrap">
-                        <Box display="flex" alignItems="center">
-                            <Typography color="textPrimary" component="span">
-                                Current display of {type}:{' '}
-                                <Link
-                                    href={resolveAddressLinkOnExplorer(
-                                        ChainId.Mainnet,
-                                        (address?.length === 0 ? walletAddressGun : address) ?? '',
-                                    )}
-                                    target="_blank"
-                                    rel="noopener noreferrer">
-                                    {type === EthereumNameType.DEFAULT
-                                        ? formatEthereumAddress(
-                                              (address?.length === 0 ? walletAddressGun : address) ?? '',
-                                              4,
-                                          )
-                                        : name}
-                                </Link>
-                            </Typography>
-                            <Typography
-                                sx={{ lineHeight: 1, marginLeft: 0.5, cursor: 'pointer' }}
-                                color="textPrimary"
-                                component="span"
-                                title={RULE_TIP}>
-                                <InfoOutlinedIcon color="inherit" fontSize="small" />
-                            </Typography>
-                        </Box>
-                    </Box>
-                    <CollectionList address={(address?.length === 0 ? walletAddressGun : address) ?? ''} />
-                </>
-            )}
+            <CollectionList address={address} />
         </div>
     )
 }

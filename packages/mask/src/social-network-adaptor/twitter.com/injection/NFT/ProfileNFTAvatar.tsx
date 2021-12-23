@@ -6,8 +6,8 @@ import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } fro
 import {
     searchAvatarOpenFileSelector,
     searchProfessionalButtonSelector,
-    searchProfileAvatarSelector,
     searchProfileSaveSelector,
+    searchProfileSetAvatarSelector,
 } from '../../utils/selector'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { getAvatarId } from '../../utils/user'
@@ -17,7 +17,7 @@ import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
 import { hookInputUploadOnce } from '@masknet/injected-script'
 
 export async function injectProfileNFTAvatarInTwitter(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(searchProfileAvatarSelector())
+    const watcher = new MutationObserverWatcher(searchProfileSetAvatarSelector())
     startWatch(watcher, signal)
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<NFTAvatarInTwitter />)
 }
@@ -67,8 +67,8 @@ function NFTAvatarInTwitter() {
     const [avatarEvent, setAvatarEvent] = useState<NFTAvatarEvent | undefined>()
 
     const onChange = async (token: ERC721TokenDetailed) => {
-        if (!token.info.image) return
-        const image = await toPNG(token.info.image)
+        if (!token.info.mediaUrl) return
+        const image = await toPNG(token.info.mediaUrl)
         if (!image) return
         changeImageToActiveElements(image)
 

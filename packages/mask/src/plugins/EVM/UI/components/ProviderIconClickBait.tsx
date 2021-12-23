@@ -2,15 +2,17 @@ import { useCallback, cloneElement, isValidElement } from 'react'
 import { unreachable } from '@dimensiondev/kit'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { useRemoteControlledDialog } from '@masknet/shared'
+import { isDashboardPage } from '@masknet/shared-base'
 import {
+    getChainIdFromNetworkType,
+    isFortmaticSupported,
     isInjectedProvider,
     NetworkType,
     ProviderType,
     resolveProviderDownloadLink,
-    useWallets,
 } from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../../Wallet/messages'
-import { useInjectedProviderReady, useInjectedProviderType } from '../../hooks'
+import { useInjectedProviderType } from '../../hooks'
 
 export function ProviderIconClickBait({
     network,
@@ -32,14 +34,18 @@ export function ProviderIconClickBait({
     const providerType = provider.type as ProviderType
     const networkType = network.type as NetworkType
 
-    const wallets = useWallets(ProviderType.MaskWallet)
-    const injectedProviderType = useInjectedProviderType()
-    const injectedProviderReady = useInjectedProviderReady()
+    const injectedEthereumProviderType = useInjectedProviderType('ethereum')
+    const injectedCoin98ProviderType = useInjectedProviderType('coin98')
 
     const onClickProvider = useCallback(async () => {
         // open the download page
         if (isInjectedProvider(providerType)) {
-            if (!injectedProviderReady || providerType !== injectedProviderType) {
+            const isProviderAvailable =
+                providerType === ProviderType.Coin98
+                    ? providerType === injectedCoin98ProviderType
+                    : providerType === injectedEthereumProviderType
+
+            if (!isProviderAvailable) {
                 const downloadLink = resolveProviderDownloadLink(providerType)
                 if (downloadLink) window.open(downloadLink, '_blank', 'noopener noreferrer')
                 return
@@ -53,6 +59,7 @@ export function ProviderIconClickBait({
             case ProviderType.Coin98:
             case ProviderType.WalletLink:
             case ProviderType.MathWallet:
+            case ProviderType.Fortmatic:
                 setConnectWalletDialog({
                     open: true,
                     providerType,
@@ -65,13 +72,17 @@ export function ProviderIconClickBait({
                 unreachable(providerType)
         }
         onClick?.(network, provider)
-    }, [network, provider, wallets, injectedProviderReady, injectedProviderType, onClick])
-
-    // temporary hide inject providers
-    if (isInjectedProvider(providerType)) return null
+    }, [network, provider, injectedEthereumProviderType, injectedCoin98ProviderType, onClick])
 
     // hide injected provider in dashboard
-    if (isInjectedProvider(providerType) && location.href.includes('dashboard.html')) return null
+    if (isInjectedProvider(providerType) && isDashboardPage()) return null
+
+    // hide fortmatic for some networks because of incomplete supporting
+    if (providerType === ProviderType.Fortmatic && !isFortmaticSupported(getChainIdFromNetworkType(networkType)))
+        return null
+
+    // hide fortmatic and coin98 wallets
+    if (providerType === ProviderType.Fortmatic || providerType === ProviderType.Coin98) return null
 
     // coinbase and mathwallet are blocked by CSP
     if ([ProviderType.WalletLink, ProviderType.MathWallet].includes(providerType)) return null

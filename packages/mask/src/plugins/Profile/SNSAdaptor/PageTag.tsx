@@ -1,15 +1,18 @@
+import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
-import classNames from 'classnames'
+import { useI18N } from '../../../utils'
 import { PageTags } from '../types'
-import type { Dao_Payload } from './hooks/useDao'
+import { useDonations, useFootprints, Dao_Payload } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
-        '>:nth-child(2)': {
-            marginLeft: theme.spacing(2),
-            marginRight: theme.spacing(2),
-        },
+        display: 'flex',
+        gap: '8px',
+        flexWrap: 'wrap',
+    },
+    hidden: {
+        display: 'none',
     },
     button: {
         border: `1px solid ${theme.palette.text.primary} !important`,
@@ -21,20 +24,41 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.primary.main,
         borderRadius: 9999,
     },
-    hidden: {
-        display: 'none',
+    connectRSS3: {
+        position: 'absolute',
+        right: '16px',
+        boxSizing: 'border-box',
+        height: 36,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 9999,
+        paddingLeft: theme.spacing(2),
+        paddingRight: theme.spacing(2),
+        border: '0px solid',
+        backgroundColor: theme.palette.primary.main,
+        color: 'rgb(255, 255, 255)',
+        cursor: 'pointer',
     },
 }))
 
-interface PageTagProps {
+export interface PageTagProps {
     tag: PageTags
+    address: string
     daoPayload: Dao_Payload | undefined
     onChange: (tag: PageTags) => void
 }
 
 export function PageTag(props: PageTagProps) {
     const { classes } = useStyles()
-    const { onChange, tag, daoPayload } = props
+    const { onChange, tag, address, daoPayload } = props
+    const { t } = useI18N()
+
+    const { donations } = useDonations(address)
+    const { footprints } = useFootprints(address)
+    const hasDonations = donations.length > 0
+    const hasFootprints = footprints.length > 0
+
     return (
         <div className={classes.root}>
             <Button
@@ -42,29 +66,40 @@ export function PageTag(props: PageTagProps) {
                 className={classNames(classes.hidden, tag === PageTags.WalletTag ? classes.selected : classes.button)}
                 onClick={() => onChange(PageTags.WalletTag)}
                 size="medium">
-                Wallets
+                {t('wallets')}
             </Button>
             <Button
                 variant="outlined"
                 className={tag === PageTags.NFTTag ? classes.selected : classes.button}
                 onClick={() => onChange(PageTags.NFTTag)}
                 size="medium">
-                NFTs
+                {t('nfts')}
             </Button>
-            <Button
-                variant="outlined"
-                className={classNames(classes.hidden, tag === PageTags.DonationTag ? classes.selected : classes.button)}
-                onClick={() => onChange(PageTags.DonationTag)}
-                size="medium">
-                Donations
-            </Button>
+            {hasDonations ? (
+                <Button
+                    variant="outlined"
+                    className={tag === PageTags.DonationTag ? classes.selected : classes.button}
+                    onClick={() => onChange(PageTags.DonationTag)}
+                    size="medium">
+                    {t('donations')}
+                </Button>
+            ) : null}
+            {hasFootprints ? (
+                <Button
+                    variant="outlined"
+                    className={classNames(classes.button, tag === PageTags.FootprintTag ? classes.selected : '')}
+                    onClick={() => onChange(PageTags.FootprintTag)}
+                    size="medium">
+                    Footprints
+                </Button>
+            ) : null}
             {daoPayload ? (
                 <Button
                     variant="outlined"
                     className={tag === PageTags.DAOTag ? classes.selected : classes.button}
                     onClick={() => onChange(PageTags.DAOTag)}
                     size="medium">
-                    DAO
+                    {t('dao')}
                 </Button>
             ) : null}
         </div>

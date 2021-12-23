@@ -5,7 +5,8 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonProps } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { WalletMessages } from '../../plugins/Wallet/messages'
 import { useI18N } from '../../utils'
-import { isZero, useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
+import { useAccount, useChainIdValid, useNativeTokenBalance } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import { useWalletRiskWarningDialog } from '../../plugins/Wallet/hooks/useWalletRiskWarningDialog'
 
 const useStyles = makeStyles()((theme) => ({
@@ -15,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface EthereumWalletConnectedBoundaryProps
-    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton'> {
+    extends withClasses<'connectWallet' | 'unlockMetaMask' | 'gasFeeButton' | 'invalidButton' | 'button'> {
     offChain?: boolean
     children?: React.ReactNode
     hideRiskWarningConfirmed?: boolean

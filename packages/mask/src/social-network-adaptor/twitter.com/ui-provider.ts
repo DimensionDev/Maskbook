@@ -21,9 +21,8 @@ import { injectPostBoxComposed } from './injection/inject'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
-import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
-import { ProfileIdentifier } from '../../database/type'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { unreachable } from '@dimensiondev/kit'
 import { injectEnhancedProfileTabAtTwitter } from './injection/EnhancedProfileTab'
 import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
@@ -183,7 +182,6 @@ const twitterUI: SocialNetworkUI.Definition = {
                 return new ProfileIdentifier(
                     'twitter.com',
                     ProfileIdentifier.getUserName(IdentityProviderTwitter.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(currentSelectedIdentity[twitterBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),
                 ).toText()

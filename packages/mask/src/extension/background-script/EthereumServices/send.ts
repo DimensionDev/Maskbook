@@ -11,7 +11,7 @@ import {
     EthereumMethodType,
     EthereumRpcType,
     EthereumTransactionConfig,
-    getTokenConstants,
+    ZERO_ADDRESS,
     isEIP1559Supported,
     isSameAddress,
     ProviderType,
@@ -21,6 +21,7 @@ import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
 import * as Injected from './providers/Injected'
 import * as WalletConnect from './providers/WalletConnect'
+import * as Fortmatic from './providers/Fortmatic'
 import { getWallet } from '../../../plugins/Wallet/services'
 import { createWeb3 } from './web3'
 import { commitNonce, getNonce, resetNonce } from './nonce'
@@ -137,8 +138,7 @@ async function handleTransferTransaction(chainId: ChainId, payload: JsonRpcPaylo
     const from = (computedPayload._tx.from as string) ?? ''
     const to = getTo(computedPayload)
 
-    if (!isSameAddress(from, to) && !isSameAddress(to, getTokenConstants(ChainId.Mainnet).ZERO_ADDRESS))
-        await WalletRPC.addAddress(chainId, to)
+    if (!isSameAddress(from, to) && !isSameAddress(to, ZERO_ADDRESS)) await WalletRPC.addAddress(chainId, to)
 }
 
 function handleRecentTransaction(
@@ -202,7 +202,6 @@ export async function INTERNAL_send(
         console.table(payload)
         console.debug(new Error().stack)
     }
-
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const wallet = providerType === ProviderType.MaskWallet ? await getWallet(account) : null
     const privKey = isSignableMethod(payload) && wallet ? await WalletRPC.exportPrivateKey(wallet.address) : undefined
@@ -269,6 +268,20 @@ export async function INTERNAL_send(
                         jsonrpc: '2.0',
                         id: payload.id as number,
                         result: await Injected.createProvider().request({
+                            method: EthereumMethodType.PERSONAL_SIGN,
+                            params: payload.params,
+                        }),
+                    })
+                } catch (error) {
+                    callback(getError(error, null, EthereumErrorType.ERR_SIGN_MESSAGE))
+                }
+                break
+            case ProviderType.Fortmatic:
+                try {
+                    callback(null, {
+                        jsonrpc: '2.0',
+                        id: payload.id as number,
+                        result: await Fortmatic.createProvider().request({
                             method: EthereumMethodType.PERSONAL_SIGN,
                             params: payload.params,
                         }),
@@ -409,6 +422,18 @@ export async function INTERNAL_send(
                     handleRecentTransaction(chainIdFinally, account, payload, response)
                 })
                 break
+            case ProviderType.Fortmatic:
+                Fortmatic.createProvider().send(payload, (error, response) => {
+                    callback(
+                        hasError(error, response)
+                            ? getError(error, response, EthereumErrorType.ERR_SEND_TRANSACTION)
+                            : null,
+                        response,
+                    )
+                    handleTransferTransaction(chainIdFinally, payload)
+                    handleRecentTransaction(chainIdFinally, account, payload, response)
+                })
+                break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
             default:
@@ -483,6 +508,9 @@ export async function INTERNAL_nativeSend(
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const config = getPayloadConfig(payload)
     if (config && !config.chainId) config.chainId = chainIdFinally
+    if (payload.method === EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT)
+        payload.method = EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT
+
     try {
         const response = await nativeAPI?.api.send(payload)
         callback(null, response)

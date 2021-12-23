@@ -3,7 +3,7 @@ import { createElement, memo } from 'react'
 import { useI18N } from '../../utils'
 import { AdditionalContent, AdditionalContentProps } from './AdditionalPostContent'
 import Services from '../../extension/service'
-import type { ProfileIdentifier } from '../../database/type'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 
 export interface AddToKeyStoreProps {
     provePost: string

@@ -5,12 +5,12 @@ import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
-    isGreaterThan,
     isNative,
-    isZero,
     FungibleTokenWatched,
     useAccount,
 } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
+import { isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -18,8 +18,9 @@ import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPa
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
-import { toAsset, toUnixTimestamp } from '../helpers'
+import { toAsset } from '../helpers'
 import type { useAsset } from '../hooks/useAsset'
+import getUnixTime from 'date-fns/getUnixTime'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -109,8 +110,8 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
             endAmount: endingPriceChecked && endingAmount ? Number.parseFloat(endingAmount) : undefined,
-            listingTime: futureTimeChecked ? toUnixTimestamp(scheduleTime) : undefined,
-            expirationTime: endingPriceChecked ? toUnixTimestamp(expirationTime) : undefined,
+            listingTime: futureTimeChecked ? getUnixTime(scheduleTime) : undefined,
+            expirationTime: endingPriceChecked ? getUnixTime(expirationTime) : undefined,
             buyerAddress: privacyChecked ? buyerAddress : undefined,
         })
     }, [
@@ -158,7 +159,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                                 : t('plugin_collectible_ending_price_tip'),
                         },
                     }}
-                    FixedTokenListProps={{
+                    FungibleTokenListProps={{
                         selectedTokens: token.value ? [token.value.address] : [],
                         tokens: paymentTokens,
                         whitelist: paymentTokens.map((x) => x.address),

@@ -3,12 +3,7 @@ import type { SocialNetworkUI as Next } from '../../../social-network/types'
 import { creator } from '../../../social-network/utils'
 import { isMobileFacebook } from '../utils/isMobile'
 import { getProfileIdentifierAtFacebook } from '../utils/getProfileIdentifier'
-import {
-    TypedMessage,
-    makeTypedMessageText,
-    makeTypedMessageImage,
-    makeTypedMessageTuple,
-} from '../../../protocols/typed-message'
+import { TypedMessage, makeTypedMessageText, makeTypedMessageImage, makeTypedMessageTuple } from '@masknet/shared-base'
 import { clickSeeMore } from '../injection/PostInspector'
 import { startWatch } from '../../../utils/watcher'
 import { facebookShared } from '../shared'

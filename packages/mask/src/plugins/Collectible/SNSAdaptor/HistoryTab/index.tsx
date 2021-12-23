@@ -14,6 +14,9 @@ const useStyles = makeStyles()((theme) => {
         root: {
             overflow: 'auto',
         },
+        head: {
+            wordBreak: 'keep-all',
+        },
         content: {
             padding: '0 !important',
         },
@@ -68,21 +71,13 @@ export function HistoryTab(props: HistoryTabProps) {
                         </TableCell>
                     </TableRow>
                 </TableBody>
-                <TableListPagination
-                    handlePrevClick={() => setEventPage((prev) => prev - 1)}
-                    handleNextClick={() => setEventPage((prev) => prev + 1)}
-                    prevDisabled={eventPage === 0}
-                    nextDisabled={!events.value?.hasNextPage}
-                    page={eventPage}
-                    pageCount={10}
-                />
             </Table>
         )
 
     return (
         <CollectibleTab classes={{ root: classes.root, content: classes.content }}>
             <Table size="small" stickyHeader>
-                <TableHead>
+                <TableHead className={classes.head}>
                     <TableRow>
                         <TableCell>{t('plugin_collectible_event')}</TableCell>
                         {isDifferenceToken ? (

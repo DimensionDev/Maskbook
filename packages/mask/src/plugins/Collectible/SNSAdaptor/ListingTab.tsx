@@ -9,7 +9,8 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { isZero, useAccount } from '@masknet/web3-shared-evm'
+import { useAccount } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -29,6 +30,7 @@ const useStyles = makeStyles()((theme) => {
         },
         emptyCell: {
             borderStyle: 'none',
+            textAlign: 'center',
         },
         button: {
             marginLeft: theme.spacing(1),
@@ -88,14 +90,6 @@ export function ListingTab() {
                             </TableCell>
                         </TableRow>
                     </TableBody>
-                    <TableListPagination
-                        handlePrevClick={() => setOrderPage((prev) => prev - 1)}
-                        handleNextClick={() => setOrderPage((prev) => prev + 1)}
-                        prevDisabled={orderPage === 0}
-                        nextDisabled={dataSource.length < 10}
-                        page={orderPage}
-                        pageCount={10}
-                    />
                 </Table>
             </>
         )

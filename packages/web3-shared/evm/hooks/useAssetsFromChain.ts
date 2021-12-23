@@ -4,9 +4,16 @@ import { useTokensBalance } from './useTokensBalance'
 import { useChainDetailed } from './useChainDetailed'
 import { useBalance } from './useBalance'
 import { getChainDetailed } from '../utils'
+import { useProviderType } from './useProviderType'
+import { useBalances } from './useBalances'
 
 export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: ChainId) {
-    const balance = useBalance()
+    const providerType = useProviderType()
+    const balances = useBalances()
+    const currentBalance = useBalance()
+
+    const balance =
+        chainId && balances && balances[providerType] && providerType ? balances[providerType][chainId] : currentBalance
     const chainDetailed = useChainDetailed()
     const passedChainDetailed = getChainDetailed(chainId)
 
@@ -14,7 +21,15 @@ export function useAssetsFromChain(tokens: FungibleTokenDetailed[], chainId?: Ch
     const nativeToken = first(tokens.filter((x) => x.type === EthereumTokenType.Native))
     const erc20Tokens = tokens.filter((x) => x.type === EthereumTokenType.ERC20)
 
-    const { value: listOfBalance = [], loading, error, retry } = useTokensBalance(erc20Tokens.map((x) => x.address))
+    const {
+        value: listOfBalance = [],
+        loading,
+        error,
+        retry,
+    } = useTokensBalance(
+        erc20Tokens.map((x) => x.address),
+        chainId,
+    )
 
     return {
         value: [

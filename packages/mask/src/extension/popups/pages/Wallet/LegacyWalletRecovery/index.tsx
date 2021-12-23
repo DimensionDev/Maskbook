@@ -7,7 +7,8 @@ import { PageHeader } from '../components/PageHeader'
 import { useI18N } from '../../../../../utils'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { Typography } from '@mui/material'
-import { FormattedAddress, PopupRoutes } from '@masknet/shared'
+import { FormattedAddress } from '@masknet/shared'
+import { PopupRoutes } from '@masknet/shared-base'
 import { useHasPassword } from '../../../hook/useHasPassword'
 import type { z as zod } from 'zod'
 import { usePasswordForm } from '../hooks/usePasswordForm'
@@ -197,6 +198,7 @@ const WalletRecovery = memo(() => {
             <div className={classes.controller}>
                 <LoadingButton
                     loading={restoreLegacyWalletLoading || confirmLoading}
+                    loadingPosition="end"
                     fullWidth
                     disabled={!hasPassword ? !isValid : false}
                     classes={{ root: classes.button, disabled: classes.disabled }}

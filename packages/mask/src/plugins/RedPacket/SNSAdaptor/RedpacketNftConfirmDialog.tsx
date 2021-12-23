@@ -12,6 +12,7 @@ import {
     useWeb3,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import classNames from 'classnames'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { Button, Grid, Link, Typography, DialogContent, List, ListItem } from '@mui/material'
@@ -23,7 +24,9 @@ import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCall
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 import { RedPacketNftMetaKey } from '../constants'
+import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -84,11 +87,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 180,
         overflow: 'hidden',
     },
-    imgWrapper: {
-        height: 160,
-        width: '100%',
-        overflow: 'hidden',
-    },
     nftImg: {
         maxWidth: '100%',
     },
@@ -134,6 +132,13 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         transform: 'translateY(1px)',
     },
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
+    },
 }))
 export interface RedpacketNftConfirmDialogProps {
     open: boolean
@@ -165,6 +170,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
         contract.address,
         tokenIdList,
     )
+    const { closeDialog: closeWalletStatusDialog } = useRemoteControlledDialog(
+        WalletMessages.events.walletStatusDialogUpdated,
+    )
 
     const isSending = createState.type === TransactionStateType.WAIT_FOR_CONFIRMING
     const onSendTx = useCallback(() => createCallback(publicKey), [publicKey])
@@ -184,6 +192,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 privateKey,
                 chainId: contract.chainId,
             })
+            closeWalletStatusDialog()
         },
         [duration, message, senderName, contract, privateKey, txid],
     )
@@ -274,9 +283,14 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <div className={classes.imgWrapper}>
-                                        <img className={classes.nftImg} src={value.info.image} />
-                                    </div>
+                                    <NftImage
+                                        token={value}
+                                        classes={{
+                                            loadingFailImage: classes.loadingFailImage,
+                                        }}
+                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
+                                    />
+
                                     <div className={classes.nftNameWrapper}>
                                         <Typography className={classes.nftName} color="textSecondary">
                                             {value.info.name}

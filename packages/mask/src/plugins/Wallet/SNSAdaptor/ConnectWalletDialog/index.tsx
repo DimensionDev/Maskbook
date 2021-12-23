@@ -18,7 +18,6 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { WalletMessages, WalletRPC } from '../../messages'
 import { ConnectionProgress } from './ConnectionProgress'
 import Services from '../../../../extension/service'
-import { useInjectedProviderType } from '../../../EVM/hooks'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -30,7 +29,6 @@ export interface ConnectWalletDialogProps {}
 
 export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const injectedProviderType = useInjectedProviderType()
 
     const [providerType, setProviderType] = useState<ProviderType | undefined>()
     const [networkType, setNetworkType] = useState<NetworkType | undefined>()
@@ -92,6 +90,9 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             case ProviderType.MathWallet:
                 ;({ account, chainId } = await Services.Ethereum.connectInjected())
                 break
+            case ProviderType.Fortmatic:
+                ;({ account, chainId } = await Services.Ethereum.connectFortmatic(expectedChainId))
+                break
             case ProviderType.CustomNetwork:
                 throw new Error('To be implemented.')
             default:
@@ -102,13 +103,15 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         // connection failed
         if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
-        // need to switch chain
-        if (chainId !== expectedChainId) {
+        // the coin98 wallet cannot handle add/switch RPC provider correctly
+        // it will always add a new RPC provider even if the network exists
+        if (chainId !== expectedChainId && providerType !== ProviderType.Coin98) {
             try {
                 const overrides = {
                     chainId: expectedChainId,
                     providerType,
                 }
+
                 await Promise.race([
                     (async () => {
                         await delay(30 /* seconds */ * 1000 /* milliseconds */)
@@ -135,7 +138,7 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
             providerType,
         })
         return true as const
-    }, [networkType, providerType, injectedProviderType])
+    }, [networkType, providerType])
 
     const connection = useAsyncRetry<true>(async () => {
         if (!open) return true

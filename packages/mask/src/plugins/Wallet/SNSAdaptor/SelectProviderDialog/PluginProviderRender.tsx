@@ -4,6 +4,7 @@ import type { NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
 import { getMaskColor, makeStyles } from '@masknet/theme'
 import { Box, ImageList, ImageListItem, List, ListItem, Typography } from '@mui/material'
 import { ProviderIcon } from './ProviderIcon'
+import { useI18N } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -91,13 +92,14 @@ export function PluginProviderRender({
     onSubmit,
 }: PluginProviderRenderProps) {
     const { classes } = useStyles()
+    const { t } = useI18N()
 
     return (
         <>
             <Box className={classes.root}>
                 <section className={classes.section}>
                     <Typography className={classes.title} variant="h2" component="h2">
-                        1. Choose Network
+                        {t('plugin_wallet_guiding_step_1')}
                     </Typography>
                     <List className={classes.list}>
                         {networks
@@ -128,7 +130,7 @@ export function PluginProviderRender({
                 </section>
                 <section className={classes.section}>
                     <Typography className={classes.title} variant="h2" component="h2">
-                        2. Choose Wallet
+                        {t('plugin_wallet_guiding_step_2')}
                     </Typography>
                     <ImageList className={classes.grid} gap={8} cols={3} rowHeight={130}>
                         {providers
@@ -140,12 +142,12 @@ export function PluginProviderRender({
                                         network={networks.find((x) => x.ID === undeterminedNetworkID)!}
                                         provider={provider}
                                         onSubmit={onSubmit}>
-                                        <ImageListItem>
+                                        <ImageListItem key={provider.ID}>
                                             <ProviderIcon icon={provider.icon} name={provider.name} />
                                         </ImageListItem>
                                     </ProviderIconClickBait>
                                 ) : (
-                                    <ImageListItem>
+                                    <ImageListItem key={provider.ID}>
                                         <ProviderIcon icon={provider.icon} name={provider.name} />
                                     </ImageListItem>
                                 ),

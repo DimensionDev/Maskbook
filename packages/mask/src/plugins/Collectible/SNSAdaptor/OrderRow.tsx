@@ -4,7 +4,8 @@ import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { AssetOrder, CollectibleProvider } from '../types'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
-import { ChainId, formatBalance, isZero, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { ChainId, formatBalance, resolveAddressLinkOnExplorer } from '@masknet/web3-shared-evm'
+import { isZero } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
@@ -97,11 +98,12 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                     )}
                                 </Link>
                             ) : null}
-                            {`${getOrderUnitPrice(
+                            {getOrderUnitPrice(
                                 order.current_price,
                                 order.payment_token_contract?.decimals,
                                 order.quantity,
-                            )} ${order.payment_token_contract?.symbol}`}
+                            )}{' '}
+                            {order.payment_token_contract?.symbol}
                         </Typography>
                     </TableCell>
                     <TableCell>
@@ -133,15 +135,14 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                                     )}
                                 </Link>
                             ) : null}
-                            {`${getOrderUnitPrice(
+                            {getOrderUnitPrice(
                                 order.current_price,
                                 order.payment_token_contract?.decimals,
                                 order.quantity,
-                            )} ${
-                                provider === CollectibleProvider.OPENSEA
-                                    ? order.payment_token_contract?.symbol ?? ''
-                                    : 'ETH'
-                            }`}
+                            )}{' '}
+                            {provider === CollectibleProvider.OPENSEA
+                                ? order.payment_token_contract?.symbol ?? ''
+                                : 'ETH'}
                         </Typography>
                     </TableCell>
                     {provider === CollectibleProvider.OPENSEA ? (

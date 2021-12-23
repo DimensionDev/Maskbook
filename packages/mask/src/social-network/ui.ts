@@ -6,15 +6,15 @@ import { Flags } from '../../shared'
 import i18nNextInstance from '../../shared-ui/locales_legacy'
 import type { SocialNetworkUI } from './types'
 import { managedStateCreator } from './utils'
-import { delay } from '../utils/utils'
 import { currentSetupGuideStatus } from '../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../settings/types'
-import { ECKeyIdentifier, Identifier } from '@masknet/shared'
+import { ECKeyIdentifier, Identifier, delay } from '@masknet/shared-base'
 import { Environment, assertNotEnvironment } from '@dimensiondev/holoflows-kit'
 import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
+import { setupShadowRootPortal } from '../utils'
 import { InMemoryStorages, PersistentStorages } from '../../shared'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
@@ -103,6 +103,8 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
             }
         }),
     )
+
+    setupShadowRootPortal()
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}

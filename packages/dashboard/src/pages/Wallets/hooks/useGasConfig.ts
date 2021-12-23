@@ -24,7 +24,11 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
     const gasPrice = customGasPrice || defaultGasPrice
     const { gasOptions } = useGasOptions()
 
-    const { setDialog: setGasSettingDialog } = useRemoteControlledDialog(WalletMessages.events.gasSettingDialogUpdated)
+    const { setDialog: setGasSettingDialog, closeDialog } = useRemoteControlledDialog(
+        WalletMessages.events.gasSettingDialogUpdated,
+    )
+
+    useEffect(() => closeDialog, [closeDialog])
 
     useEffect(() => {
         setGasLimit_(gasLimit)
@@ -46,15 +50,27 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
         if (is1559Supported) {
             const gasLevel = gasOptions.medium as Exclude<typeof gasOptions.medium, number>
             setMaxFee((oldVal) => {
-                return !oldVal ? formatGweiToWei(gasLevel.suggestedMaxFeePerGas) : oldVal
+                return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? 0) : oldVal
             })
             setPriorityFee((oldVal) => {
-                return !oldVal ? formatGweiToWei(gasLevel.suggestedMaxPriorityFeePerGas) : oldVal
+                return !oldVal ? formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? 0) : oldVal
             })
         } else {
             setCustomGasPrice((oldVal) => (!oldVal ? (gasOptions.medium as number) : oldVal))
         }
-    }, [is1559Supported, gasOptions])
+    }, [is1559Supported, gasOptions?.medium])
+
+    useEffect(() => {
+        if (!gasOptions) return
+
+        if (is1559Supported) {
+            const gasLevel = gasOptions.medium as Exclude<typeof gasOptions.medium, number>
+            setMaxFee(formatGweiToWei(gasLevel?.suggestedMaxFeePerGas ?? 0))
+            setPriorityFee(formatGweiToWei(gasLevel?.suggestedMaxPriorityFeePerGas ?? 0))
+        } else {
+            setCustomGasPrice(gasOptions.medium as number)
+        }
+    }, [chainId])
 
     const gasConfig = useMemo(() => {
         return is1559Supported
@@ -64,7 +80,7 @@ export const useGasConfig = (gasLimit: number, minGasLimit: number) => {
                   maxPriorityFeePerGas: toHex(new BigNumber(priorityFee).integerValue().toFixed()),
               }
             : { gas: gasLimit_, gasPrice: new BigNumber(gasPrice).toNumber() }
-    }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice])
+    }, [is1559Supported, gasLimit_, maxFee, priorityFee, gasPrice, chainId])
 
     return {
         gasConfig,

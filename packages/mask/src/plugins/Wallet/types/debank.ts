@@ -5,8 +5,7 @@ export enum DebankTransactionDirection {
 
 export interface DictItem {
     id: string
-    cn: string
-    en: string
+    name: string
 }
 
 export interface ProjectItem {
@@ -105,6 +104,24 @@ export interface BalanceRecord {
     is_core: boolean
     is_swap_common: boolean
     is_swap_hot: null
+    is_verified: boolean
+    logo_url: string
+    name: string
+    optimized_symbol: string
+    price: number
+    symbol: string
+    time_at: null
+}
+
+export interface WalletTokenRecord {
+    id: 'eth' | string
+    amount: string
+    is_wallet: boolean
+    protocol_id: string
+    chain: 'eth' | 'bsc' | string
+    decimals: number
+    display_symbol: null
+    is_core: boolean
     is_verified: boolean
     logo_url: string
     name: string

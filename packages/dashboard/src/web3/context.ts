@@ -5,7 +5,7 @@ import {
     ChainId,
     ERC1155TokenDetailed,
     ERC721TokenDetailed,
-    PortfolioProvider,
+    FungibleAssetProvider,
     ProviderType,
     ERC20TokenDetailed,
     EthereumTokenType,
@@ -30,7 +30,7 @@ export const Web3Context: Web3ProviderType = {
     account: createSubscriptionFromAsync(
         async () => {
             const providerType = await Services.Settings.getCurrentSelectedWalletProvider()
-            if (isInjectedProvider(providerType)) return ''
+            if (isInjectedProvider(providerType) || providerType === ProviderType.Fortmatic) return ''
             return Services.Settings.getSelectedWalletAddress()
         },
         '',
@@ -46,6 +46,11 @@ export const Web3Context: Web3ProviderType = {
         Messages.events.currentTokenPricesSettings.on,
     ),
     balance: createSubscriptionFromAsync(Services.Settings.getBalance, '0', Messages.events.currentBalanceSettings.on),
+    balances: createSubscriptionFromAsync(
+        Services.Settings.getBalances,
+        {},
+        Messages.events.currentBalancesSettings.on,
+    ),
     blockNumber: createSubscriptionFromAsync(
         Services.Settings.getBlockNumber,
         0,
@@ -93,8 +98,8 @@ export const Web3Context: Web3ProviderType = {
     ),
     portfolioProvider: createSubscriptionFromAsync(
         Services.Settings.getCurrentPortfolioDataProvider,
-        PortfolioProvider.DEBANK,
-        Messages.events.currentPortfolioDataProviderSettings.on,
+        FungibleAssetProvider.DEBANK,
+        Messages.events.currentFungibleAssetDataProviderSettings.on,
     ),
 
     addToken: PluginServices.Wallet.addToken,

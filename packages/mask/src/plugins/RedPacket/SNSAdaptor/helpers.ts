@@ -1,4 +1,4 @@
-import { createTypedMessageMetadataReader, createRenderWithMetadata } from '../../../protocols/typed-message/metadata'
+import { createRenderWithMetadata, createTypedMessageMetadataReader } from '../../../protocols/typed-message'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
 import schema from '../schema.json'

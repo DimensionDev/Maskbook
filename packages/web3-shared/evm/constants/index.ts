@@ -17,7 +17,10 @@ import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
 import Chain from '@masknet/web3-constants/evm/chain.json'
 import RealityCards from '@masknet/web3-constants/evm/reality-cards.json'
+import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
+
+export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
 
 export const getAirdropConstants = transform(Airdrop)
 export const useAirdropConstants = hookTransform(getAirdropConstants)
@@ -74,18 +77,10 @@ export const useOpenseaAPIConstants = hookTransform(getOpenseaAPIConstants)
 export const getChainConstants = transform(Chain)
 export const useChainConstants = hookTransform(getChainConstants)
 
+export const getCryptoArtAIConstants = transform(CryptoArtAI)
+export const useCryptoArtAIConstants = hookTransform(getCryptoArtAIConstants)
+
 export const getNftRedPacketConstants = transform(NftRedPacket)
 export const useNftRedPacketConstants = hookTransform(getNftRedPacketConstants)
-
 export const getRealityCardsConstants = transform(RealityCards)
 export const useRealityCardsConstants = hookTransform(getRealityCardsConstants)
-
-// for estimate gas
-export const FAKE_SIGN_PASSWORD = '0x75466cc969717b172b14253aaeebdc958f2b5037a852c1337650ed4978242dd9'
-
-// for ens address
-export enum EthereumNameType {
-    ENS_TYPE = 'ENS',
-    UNS_TYPE = 'UNS',
-    DEFAULT = 'address',
-}

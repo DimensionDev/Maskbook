@@ -1,12 +1,13 @@
 import { useScrollBottomEvent } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
-import { ERC721ContractDetailed, useAccount, useChainId } from '@masknet/web3-shared-evm'
+import { ERC721ContractDetailed, useAccount, useChainId, ChainId } from '@masknet/web3-shared-evm'
 import { List, Popper, Typography } from '@mui/material'
 import { useRef, useState } from 'react'
 import type { NftRedPacketHistory } from '../types'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
+import { useI18N } from '../../../utils'
 
 const useStyles = makeStyles()((theme, _, createRef) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -73,6 +74,7 @@ interface Props {
 
 export function NftRedPacketHistoryList({ onSend }: Props) {
     const { classes } = useStyles()
+    const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
     const { histories, fetchMore, loading } = useNftRedPacketHistory(account, chainId)
@@ -90,15 +92,28 @@ export function NftRedPacketHistoryList({ onSend }: Props) {
         setAnchorEl(null)
     }
 
-    if (loading) {
+    if (chainId === ChainId.BSC) {
         return (
             <Typography className={classes.placeholder} color="textSecondary">
-                Loading...
+                {t('plugin_chain_not_supported', { chain: 'Binance Smart Chain' })}
             </Typography>
         )
     }
+
+    if (loading) {
+        return (
+            <Typography className={classes.placeholder} color="textSecondary">
+                {t('loading')}
+            </Typography>
+        )
+    }
+
     if (!histories?.length) {
-        return null
+        return (
+            <Typography className={classes.placeholder} color="textSecondary">
+                {t('no_data')}
+            </Typography>
+        )
     }
 
     return (

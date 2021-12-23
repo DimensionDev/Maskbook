@@ -6,13 +6,13 @@ import type {
     ProfileIdentifier,
     ReadonlyIdentifierMap,
     ObservableWeakMap,
-} from '@masknet/shared'
+    TypedMessage,
+} from '@masknet/shared-base'
 import type { PaletteMode, Theme } from '@mui/material'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
-import type { TypedMessage } from '../protocols/typed-message'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 import type { Subscription } from 'use-subscription'
 
@@ -216,7 +216,7 @@ export namespace SocialNetworkUI {
             getSearchedKeyword?(): string
         }
         export type ProfileUI = { bioContent: string }
-        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio'>
+        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio' | 'homepage'>
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {

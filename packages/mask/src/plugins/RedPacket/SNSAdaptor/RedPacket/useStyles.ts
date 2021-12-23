@@ -93,6 +93,7 @@ to {
             textOverflow: 'ellipsis',
             overflow: 'hidden',
             width: '85%',
+            minWidth: 300,
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
                 fontSize: 14,
             },

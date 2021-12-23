@@ -1,8 +1,8 @@
 import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } from '../../../../utils'
-import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
+import { searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useWallet } from '@masknet/web3-shared-evm'
@@ -12,6 +12,7 @@ import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { useWindowSize } from 'react-use'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -22,19 +23,11 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 const useStyles = makeStyles()(() => ({
     root: {
         position: 'absolute',
-        bottom: '-10px !important',
-        left: 0,
         textAlign: 'center',
         color: 'white',
-        minWidth: 134,
-    },
-    update: {
-        position: 'absolute',
-        bottom: '-10px !important',
-        left: 55,
-        textAlign: 'center',
-        color: 'white',
-        minWidth: 134,
+        zIndex: 2,
+        width: '100%',
+        height: '100%',
     },
     text: {
         fontSize: '20px !important',
@@ -47,17 +40,23 @@ const useStyles = makeStyles()(() => ({
 }))
 
 function NFTAvatarInTwitter() {
-    const { classes } = useStyles()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
     const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
-    const ele = searchTwitterAvatarLinkSelector().evaluate()
-    let size = 170
-    if (ele) {
-        const style = window.getComputedStyle(ele)
-        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 3
-    }
+
+    const windowSize = useWindowSize()
+
+    const size = useMemo(() => {
+        const ele = searchTwitterAvatarSelector().evaluate()
+        if (ele) {
+            const style = window.getComputedStyle(ele)
+            return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
+        }
+        return 0
+    }, [windowSize])
+
+    const { classes } = useStyles()
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const onUpdate = (data: NFTAvatarEvent) => {
@@ -103,23 +102,7 @@ function NFTAvatarInTwitter() {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [onUpdate])
 
-    useEffect(() => {
-        if (!avatar || !avatar.avatarId) return
-        if (getAvatarId(identity.avatar ?? '') !== avatar.avatarId) return
-        const avatarDom = searchTwitterAvatarSelector().evaluate()?.parentElement
-        if (avatarDom) {
-            avatarDom.style.marginBottom = '10px'
-            avatarDom.style.overflow = 'unset'
-        }
-
-        const backgroundImgDom = searchTwitterAvatarSelector().evaluate()?.firstChild?.nextSibling?.firstChild
-            ?.firstChild as HTMLElement
-        if (backgroundImgDom) {
-            backgroundImgDom.style.borderRadius = '100%'
-        }
-    }, [identity, avatar, searchTwitterAvatarSelector, searchTwitterAvatarSelector])
-
-    if (!avatar) return null
+    if (!avatar || !size) return null
 
     return (
         <>

@@ -1,4 +1,4 @@
-import type { TypedMessage } from './'
+import type { TypedMessage } from '@masknet/shared-base'
 import type { TypedMessageRendererProps } from '../../components/InjectedComponents/TypedMessageRenderer'
 type Renderer<T extends TypedMessage> = React.ComponentType<TypedMessageRendererProps<T>>
 
