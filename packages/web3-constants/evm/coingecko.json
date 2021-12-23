@@ -1,0 +1,30 @@
+{
+    "PLATFORM_ID": {
+        "Mainnet": "ethereum",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "binance-smart-chain",
+        "BSCT": "",
+        "Matic": "polygon-pos",
+        "Mumbai": "",
+        "Arbitrum": "arbitrum-one",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "xdai"
+    },
+    "COIN_ID": {
+        "Mainnet": "ethereum",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "binancecoin",
+        "BSCT": "",
+        "Matic": "matic-network",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "xdai"
+    }
+}

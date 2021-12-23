@@ -19,12 +19,12 @@ It's easy to integrate an EVM-compatible chain into Mask Network. After you add 
 
 Mask Network fetches on-chain data from various data sources. Therefore, you can configure the identification data of the chain on those providers.
 
-| Provider | Configuration Path |
-| -------- | ------------------ |
-| DeBank | `packages/web3-constants/evm/debank.json` |
-| CoinGecko | `packages/web3-constants/evm/coingecko.json` |
+| Provider      | Configuration Path                               |
+| ------------- | ------------------------------------------------ |
+| DeBank        | `packages/web3-constants/evm/debank.json`        |
+| CoinGecko     | `packages/web3-constants/evm/coingecko.json`     |
 | CoinMarketCap | `packages/web3-constants/evm/coinmarketcap.json` |
-| Zerion | `packages/web3-constants/evm/zerion.json` |
+| Zerion        | `packages/web3-constants/evm/zerion.json`        |
 
 ### Token List
 
@@ -40,9 +40,9 @@ Mask Network has integrated Uniswap V2 and Uniswap V3 into the trader plugin. If
 
 For API-based DEX, please ref to how other DEXes integrated:
 
-| DEX | Pull Request Link |
-| --- | ----------------- |
-| DODO | https://github.com/DimensionDev/Maskbook/pull/3882 |
+| DEX       | Pull Request Link                                  |
+| --------- | -------------------------------------------------- |
+| DODO      | https://github.com/DimensionDev/Maskbook/pull/3882 |
 | OpenOcean | https://github.com/DimensionDev/Maskbook/pull/5198 |
 
 ### Deploy Contracts
@@ -75,6 +75,7 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 ![image](https://user-images.githubusercontent.com/52657989/144754866-9c5f389b-6eb4-4325-8f3d-ae53ee6e3b4a.png)
 
 - [ ] Trade with the DEX on the chain.
+
   - Integrate a DEX for the chain.
 
 - [ ] Send a transaction and check if the explorer links are working.
@@ -82,9 +83,9 @@ Goto `chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap/dashboard.html#/wallet
 
 ## Learn More
 
-| Chain | Pull Request Link |
-| ----- | ----------------- |
-| CELO | https://github.com/DimensionDev/Maskbook/pull/5052 |
-| Fantom | https://github.com/DimensionDev/Maskbook/pull/5036 |
-| xDai | https://github.com/DimensionDev/Maskbook/pull/4140 |
+| Chain    | Pull Request Link                                  |
+| -------- | -------------------------------------------------- |
+| CELO     | https://github.com/DimensionDev/Maskbook/pull/5052 |
+| Fantom   | https://github.com/DimensionDev/Maskbook/pull/5036 |
+| xDai     | https://github.com/DimensionDev/Maskbook/pull/4140 |
 | Arbitrum | https://github.com/DimensionDev/Maskbook/pull/3558 |
