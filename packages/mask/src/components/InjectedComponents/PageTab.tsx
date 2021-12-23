@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PageTabItem } from './PageTabItem'
@@ -13,12 +12,12 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface PageTabProps {
     tabs: Plugin.SNSAdaptor.ProfileTab[]
+    selectedTab?: Plugin.SNSAdaptor.ProfileTab
     onChange?: (tag: Plugin.SNSAdaptor.ProfileTab) => void
 }
 
 export function PageTab(props: PageTabProps) {
-    const { tabs } = props
-    const [selectedId, setSelectedId] = useState('')
+    const { tabs, selectedTab, onChange } = props
     const { classes } = useStyles()
 
     return (
@@ -26,10 +25,10 @@ export function PageTab(props: PageTabProps) {
             {tabs.map((x) => (
                 <PageTabItem
                     key={x.ID}
-                    selected={x.ID === selectedId}
+                    selected={selectedTab?.ID === x.ID}
                     tab={x}
                     onClick={(tab) => {
-                        setSelectedId(tab.ID)
+                        onChange?.(tab)
                     }}
                 />
             ))}
