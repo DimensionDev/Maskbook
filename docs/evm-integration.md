@@ -60,7 +60,7 @@ Congratulation! You have done the coding part.
 Before we ship the chain to the user, we need to do basic ability checks.
 
 - [ ] Check if the asset list and transaction history on the dashboard page work when you choose the chain as the network.
-  - Setup the chain for DEBANK API.
+  - Setup the chain for DeBank API.
 - [ ] Check if the trending view is working. Try to hover a new chain token in any tweets.
   - Setup the chain for Coingecko API.
   - Setup the chain for CoinMarketCap API.
