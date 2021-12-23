@@ -25,18 +25,9 @@ Closes # (NO_ISSUE)
 - [ ] I have commented on my code, particularly in hard-to-understand areas.
 - [ ] I have read [Internationalization Guide](https://github.com/DimensionDev/Maskbook/blob/develop/docs/i18n-guide.md) and moved text fields to the i18n JSON file.
 
-## Questions from reviewers
+If this PR depends on external APIs:
 
-### If this PR changes the dependencies of the project. What kind of change does it have?
-
-- [ ] Add a new package as a dependency.
-- [ ] Change the version of a currently using dependency.
-
-### If this PR depends on external APIs, please do the following steps:
-
-- [ ] Make sure those APIs have configured CORS headers to let extension requests get passed. If you don't have permission to modify the server, please let us know it.
+- [ ] I have configured those APIs with CORS headers to let extension requests get passed. <!-- If you don't have permission to modify the server, please let us know it. -->
   - chrome extension: `chrome-extension://[id]`
   - firefox extension: `moz-extension://[id]`
-- [ ] Delegate all web requests to the background service via the internal RPC bridge.
-
-
+- [ ] I have delegated all web requests to the background service via the internal RPC bridge.
