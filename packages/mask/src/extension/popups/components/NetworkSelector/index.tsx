@@ -2,10 +2,10 @@ import { memo, useCallback } from 'react'
 import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../../shared'
-import { ChainId, ProviderType, useAccount, useChainId, useProviderType } from '@masknet/web3-shared-evm'
+import { ChainId, ProviderType, useAccount, useChainId } from '@masknet/web3-shared-evm'
 import { getRegisteredWeb3Networks, NetworkPluginID, Web3Plugin } from '@masknet/plugin-infra'
-import { currentMaskWalletAccountSettings } from '../../../../plugins/Wallet/settings'
-import { ChainIcon, useMenu, WalletIcon } from '@masknet/shared'
+import { currentMaskWalletAccountSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import { ChainIcon, useMenu, useValueRef, WalletIcon } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
 
@@ -46,7 +46,7 @@ export const NetworkSelector = memo(() => {
     const networks = getRegisteredWeb3Networks()
     const account = useAccount()
     const chainId = useChainId()
-    const providerType = useProviderType()
+    const providerType = useValueRef(currentProviderSettings)
     const onChainChange = useCallback(
         async (chainId: ChainId) => {
             if (providerType === ProviderType.MaskWallet) {
