@@ -32,6 +32,7 @@ class NonceManager {
                     this.lock()
                     callback(
                         null,
+                        // Only mask wallets need to use Nonce
                         await getTransactionCount(this.address, {
                             providerType: ProviderType.MaskWallet,
                             chainId: currentMaskWalletChainIdSettings.value,

@@ -1,10 +1,9 @@
 import { memo, useMemo, useState } from 'react'
 import { Tab, Tabs, TextField, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { Controller, useForm } from 'react-hook-form'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { getEnumAsArray } from '@dimensiondev/kit'
 import { LoadingButton, TabContext, TabPanel } from '@mui/lab'
 import { useHistory } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -101,18 +100,12 @@ const useStyles = makeStyles()({
     },
 })
 
-enum ImportWalletTab {
-    Mnemonic = 'Mnemonic',
-    JsonFile = 'Json File',
-    PrivateKey = 'Private Key',
-}
-
 const ImportWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const chainId = useChainId()
     const { classes } = useStyles()
-    const [currentTab, setCurrentTab] = useState(ImportWalletTab.Mnemonic)
+    const [currentTab, onChange, tabs] = useTabs('mnemonic', 'json', 'privateKey')
     const [mnemonic, setMnemonic] = useState('')
     const [keyStoreContent, setKeyStoreContent] = useState('')
     const [keyStorePassword, setKeyStorePassword] = useState('')
@@ -139,23 +132,23 @@ const ImportWallet = memo(() => {
     const disabled = useMemo(() => {
         if (!isValid) return true
         switch (currentTab) {
-            case ImportWalletTab.Mnemonic:
+            case tabs.mnemonic:
                 return !mnemonic
-            case ImportWalletTab.JsonFile:
+            case tabs.json:
                 return !keyStoreContent
-            case ImportWalletTab.PrivateKey:
+            case tabs.privateKey:
                 return !privateKey
             default:
                 return true
         }
-    }, [currentTab, mnemonic, keyStorePassword, keyStoreContent, privateKey, isValid])
+    }, [currentTab, mnemonic, keyStorePassword, keyStoreContent, privateKey, isValid, tabs])
 
     const [{ loading }, onDerivedWallet] = useAsyncFn(
         async (data: zod.infer<typeof schema>) => {
             if (!disabled) {
                 try {
                     switch (currentTab) {
-                        case ImportWalletTab.Mnemonic:
+                        case tabs.mnemonic:
                             // valid the mnemonic
                             await getDerivableAccounts(mnemonic, 0, 1)
                             const params = query({ name: data.name })
@@ -165,7 +158,7 @@ const ImportWallet = memo(() => {
                                 state: { mnemonic },
                             })
                             break
-                        case ImportWalletTab.JsonFile:
+                        case tabs.json:
                             const wallet = await WalletRPC.recoverWalletFromKeyStoreJSON(
                                 data.name,
                                 keyStoreContent,
@@ -186,7 +179,7 @@ const ImportWallet = memo(() => {
                             history.replace(PopupRoutes.Wallet)
                             await Services.Helper.removePopupWindow()
                             break
-                        case ImportWalletTab.PrivateKey:
+                        case tabs.privateKey:
                             const privateKeyWallet = await WalletRPC.recoverWalletFromPrivateKey(data.name, privateKey)
                             if (!currentMaskWalletAccountSettings.value) {
                                 await WalletRPC.updateMaskAccount({
@@ -215,7 +208,7 @@ const ImportWallet = memo(() => {
                 }
             }
         },
-        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, chainId, history],
+        [mnemonic, currentTab, keyStoreContent, keyStorePassword, privateKey, disabled, chainId, history, tabs],
     )
 
     const onSubmit = handleSubmit(onDerivedWallet)
@@ -251,18 +244,13 @@ const ImportWallet = memo(() => {
                         classes={{ indicator: classes.indicator }}
                         onChange={(event, tab) => {
                             if (errorMessage) setErrorMessage('')
-                            setCurrentTab(tab)
+                            onChange(event, tab)
                         }}>
-                        {getEnumAsArray(ImportWalletTab).map(({ key, value }) => (
-                            <Tab
-                                key={key}
-                                label={key}
-                                value={value}
-                                classes={{ root: classes.tab, selected: classes.selected }}
-                            />
-                        ))}
+                        <Tab label={t('popups_wallet_name_mnemonic')} value={tabs.mnemonic} />
+                        <Tab label={t('popups_wallet_name_json_file')} value={tabs.json} />
+                        <Tab label={t('popups_wallet_name_private_key')} value={tabs.privateKey} />
                     </Tabs>
-                    <TabPanel value={ImportWalletTab.Mnemonic} className={classes.tabPanel}>
+                    <TabPanel value={tabs.mnemonic} className={classes.tabPanel}>
                         <TextField
                             variant="filled"
                             multiline
@@ -273,17 +261,17 @@ const ImportWallet = memo(() => {
                             }}
                             minRows={4}
                             maxRows={10}
-                            placeholder="Please enter 12 mnemonic words separated by spaces"
+                            placeholder={t('popups_wallet_name_mnemonic_placeholder')}
                             InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
                             className={classes.multiline}
                             inputProps={{ className: classes.textArea }}
                         />
                     </TabPanel>
-                    <TabPanel value={ImportWalletTab.JsonFile} className={classes.tabPanel}>
+                    <TabPanel value={tabs.json} className={classes.tabPanel}>
                         <JsonFileBox onChange={(content: string) => setKeyStoreContent(content)} />
                         <PasswordField
                             classes={{ root: classes.textField }}
-                            placeholder="Original Password"
+                            placeholder={t('popups_wallet_name_origin_password')}
                             onChange={(e) => {
                                 if (errorMessage) setErrorMessage('')
                                 setKeyStorePassword(e.target.value)
@@ -291,7 +279,7 @@ const ImportWallet = memo(() => {
                             value={keyStorePassword}
                         />
                     </TabPanel>
-                    <TabPanel value={ImportWalletTab.PrivateKey} className={classes.tabPanel}>
+                    <TabPanel value={tabs.privateKey} className={classes.tabPanel}>
                         <TextField
                             variant="filled"
                             multiline
@@ -301,7 +289,7 @@ const ImportWallet = memo(() => {
                                 setPrivateKey(e.target.value)
                             }}
                             rows={4}
-                            placeholder="Private Key"
+                            placeholder={t('popups_wallet_name_private_key')}
                             InputProps={{ disableUnderline: true, classes: { root: classes.multilineInput } }}
                             className={classes.multiline}
                             inputProps={{ className: classes.textArea }}
