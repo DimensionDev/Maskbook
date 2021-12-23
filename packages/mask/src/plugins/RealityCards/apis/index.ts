@@ -83,16 +83,6 @@ export async function fetchMarketBySlug(graph_url: string | undefined, slug: str
             description
             winnerCut
             version
-            payouts @skip(if: $withInvalidMarkets) {
-              id
-              amount
-              paid
-              __typename
-            }
-            payouts(where: {type: "rent-paid", account: $accountId}) @include(if: $withInvalidMarkets) {
-              id
-              __typename
-            }
             __typename
           }`,
         variables: { slug },

@@ -1,7 +1,7 @@
 import { ChainId, createERC20Tokens } from '@masknet/web3-shared-evm'
 
 export const REALITYCARDS_PLUGIN_ID = 'org.realitycards'
-export const BASE_URL = 'beta.realitycards.io'
+export const BASE_URL = 'realitycards.io'
 
 export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
 

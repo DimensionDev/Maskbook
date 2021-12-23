@@ -27,7 +27,6 @@ export interface Market {
     giveawayText?: string
     openingTime: string
     oracleResolutionTime: string
-    payouts: Payout[]
     questionId: string
     remainingCut: string
     rents: Factory[]
