@@ -11,6 +11,7 @@ interface AssetPlayerProps {
         controls?: boolean
         playsInline?: boolean
         loop?: boolean
+        muted?: boolean
     }
 }
 
