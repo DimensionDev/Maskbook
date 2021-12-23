@@ -8,6 +8,6 @@ export interface AaveLendingPool extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): AaveLendingPool
 }
 
-export function useAaveLendingPoolContract(address?: string,  chainId: ChainId=ChainId.Mainnet) {
+export function useAaveLendingPoolContract(address?: string, chainId: ChainId = ChainId.Mainnet) {
     return useContract<AaveLendingPool>(address, LendingPoolABI.abi as unknown as AbiItem[], undefined, chainId)
 }

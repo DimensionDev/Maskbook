@@ -2,9 +2,7 @@
 export const PLUGIN_IDENTIFIER = 'com.maskbook.aave'
 //#endregion
 
-
-
-export const AAVE_LENDING_POOL_ADDRESS_PROVIDER_ADDRESS = '0xb53c1a33016b2dc2ff3653530bff1848a515c8c5' //'0x88757f2f99175387ab4c6a4b3067c77a695b0349' // 
+export const AAVE_LENDING_POOL_ADDRESS_PROVIDER_ADDRESS = '0xb53c1a33016b2dc2ff3653530bff1848a515c8c5' //'0x88757f2f99175387ab4c6a4b3067c77a695b0349' //
 export const AAVE_PROTOCOL_DATA_PROVIDER_ADDRESS = '0x057835Ad21a177dbdd3090bB1CAE03EaCF78Fc6d' //'0x3c73a5e5785cac854d468f727c606c07488a29d6' //
 export const PLUGIN_META_KEY = 'com.maskbook.aave:1'
 export const PLUGIN_ID = 'com.maskbook.aave'
@@ -41,6 +39,6 @@ export const AAVE_ASSETS = [
     },
     {
         name: 'SNX',
-        address: '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F'
-    }
+        address: '0xC011a73ee8576Fb46F5E1c5751cA3B9Fe0af2a6F',
+    },
 ]

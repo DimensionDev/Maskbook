@@ -1,4 +1,3 @@
-
 export interface AaveReserveData {
     availableLiquidity: string
     totalStableDebt: string
@@ -23,30 +22,29 @@ export interface AaveAssetDetails {
     totalVariableDebt?: any
 
     availableLiquidity?: string
-    
+
     liquidityRate?: any
-    
+
     averageStableBorrowRate?: string
     liquidityIndex?: string
     variableBorrowIndex?: string
     lastUpdateTimestamp?: string
 }
 
-export interface AavePoolReserveConfigData{
-    decimals:                 string;
-    ltv:                      string;
-    liquidationThreshold:     string;
-    liquidationBonus:         string;
-    reserveFactor:            string;
-    usageAsCollateralEnabled: boolean;
-    borrowingEnabled:         boolean;
-    stableBorrowRateEnabled:  boolean;
-    isActive:                 boolean;
-    isFrozen:                 boolean;
+export interface AavePoolReserveConfigData {
+    decimals: string
+    ltv: string
+    liquidationThreshold: string
+    liquidationBonus: string
+    reserveFactor: string
+    usageAsCollateralEnabled: boolean
+    borrowingEnabled: boolean
+    stableBorrowRateEnabled: boolean
+    isActive: boolean
+    isFrozen: boolean
 }
 
-
-export interface AaveAssetReserve{
+export interface AaveAssetReserve {
     aTokenAddress: string
     stableDebtTokenAddress: string
     variableDebtTokenAddress: string

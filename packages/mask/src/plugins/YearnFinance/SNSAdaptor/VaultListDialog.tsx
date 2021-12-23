@@ -2,14 +2,12 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { Button, DialogContent, IconButton } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CloseIcon from '@mui/icons-material/Close'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { ChainId, useChainId, useAccount, useWallet, useWeb3Provider, useWeb3 } from '@masknet/web3-shared-evm'
+import { useChainId, useAccount, useWallet, useWeb3Provider } from '@masknet/web3-shared-evm'
 import { PluginYearnFinanceMessages } from '../messages'
-import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 
-import type { AaveAssetDetails } from '../types'
 import Table from '@mui/material/Table'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
@@ -17,13 +15,11 @@ import TableContainer from '@mui/material/TableContainer'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
 import Paper from '@mui/material/Paper'
-import {DepositDialog} from './DepositDialog'
-import {WithdrawDialog} from './WithdrawDialog'
-import BigNumber from 'bignumber.js'
-import {useYearnVaults} from '../hooks/useYearnVaults'
+import { DepositDialog } from './DepositDialog'
+import { WithdrawDialog } from './WithdrawDialog'
+import { useYearnVaults } from '../hooks/useYearnVaults'
 import { formatUnits } from '@ethersproject/units'
 import type { Vault } from '@yfi/sdk'
-
 
 const useStyles = makeStyles()((theme) => ({
     dialogPaper: {
@@ -231,24 +227,23 @@ const useStyles = makeStyles()((theme) => ({
     tableContent: {
         height: 250,
     },
-    vaultDisplayIcon:{
+    vaultDisplayIcon: {
         width: '25px',
         height: 'auto',
-    }
+    },
 }))
 
 export interface VaultListDialogProps extends withClasses<never | 'root'> {}
 
 export function VaultListDialog(props: VaultListDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
-	
+
     const account = useAccount()
     const currentChainId = useChainId()
-    
-    const [chainId, setChainId] = useState(currentChainId )
-   
-    const wProvider = useWeb3Provider()
 
+    const [chainId, setChainId] = useState(currentChainId)
+
+    const wProvider = useWeb3Provider()
 
     const {
         value: vaults,
@@ -257,65 +252,47 @@ export function VaultListDialog(props: VaultListDialogProps) {
         retry: retryVaults,
     } = useYearnVaults(wProvider, currentChainId)
 
+    const lendingPoolAddress = ''
 
-    const lendingPoolAddress = '';
-
-    
-
-       
     //#region remote controlled buy token dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginYearnFinanceMessages.vaultListDialogUpdated)
     //#endregion
-	
-	const wallet = useWallet()
-	
-	
-	const [currentAPY, setCurrentAPY] = useState()
-	
+
+    const wallet = useWallet()
+
+    const [currentAPY, setCurrentAPY] = useState()
+
     const [currentVault, setCurrentVault] = useState<Vault>()
-	//const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
+    //const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
 
     const {
         open: openDepositDialog,
-        openDialog: onOpenDepositDialog ,
-        closeDialog: onCloseDepositDialog
+        openDialog: onOpenDepositDialog,
+        closeDialog: onCloseDepositDialog,
     } = useRemoteControlledDialog(PluginYearnFinanceMessages.depositTokenDialog)
 
-    const handleDeposit = useCallback((vault: Vault)=> {
-		setCurrentVault(vault);
-        onOpenDepositDialog();
-    },[])
-	
-	const onDepositDialogConfirm = useCallback(async () => {
-                
+    const handleDeposit = useCallback((vault: Vault) => {
+        setCurrentVault(vault)
+        onOpenDepositDialog()
     }, [])
 
-    
+    const onDepositDialogConfirm = useCallback(async () => {}, [])
+
     const {
         open: openWithdrawDialog,
-        openDialog: onOpenWithdrawDialog ,
-        closeDialog: onCloseWithdrawDialog
+        openDialog: onOpenWithdrawDialog,
+        closeDialog: onCloseWithdrawDialog,
     } = useRemoteControlledDialog(PluginYearnFinanceMessages.withdrawTokenDialog)
 
-	const handleWithdraw = useCallback((vault: Vault)=> {
-		setCurrentVault(vault);
-        onOpenWithdrawDialog();
-    },[])
-
-    const onWithdrawDialogConfirm = useCallback(async () => {
-        
-        
+    const handleWithdraw = useCallback((vault: Vault) => {
+        setCurrentVault(vault)
+        onOpenWithdrawDialog()
     }, [])
 
+    const onWithdrawDialogConfirm = useCallback(async () => {}, [])
 
-
-
-
-    return  (
-        <div >
-
-            
-					
+    return (
+        <div>
             <InjectedDialog
                 open={open}
                 onClose={closeDialog}
@@ -340,13 +317,9 @@ export function VaultListDialog(props: VaultListDialogProps) {
                         />
                     </div> */}
 
-                    { errorVaults &&
-                        <h3 >Error Loading Vaults</h3>
-                    }
+                    {errorVaults && <h3>Error Loading Vaults</h3>}
 
-                    { loadingVaults &&
-                        <h3 >Loading All Vaults</h3>
-                    }
+                    {loadingVaults && <h3>Loading All Vaults</h3>}
 
                     <TableContainer component={Paper}>
                         <Table sx={{ minWidth: 450 }} aria-label="simple table">
@@ -358,7 +331,7 @@ export function VaultListDialog(props: VaultListDialogProps) {
                                     <TableCell align="right">Total Assets (USDC)</TableCell>
                                     <TableCell align="right">Net Apy (%)</TableCell>
                                     {/* <TableCell align="right">Deposit Limit</TableCell> */}
-                                    
+
                                     <TableCell align="right">Action &nbsp;</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -368,29 +341,38 @@ export function VaultListDialog(props: VaultListDialogProps) {
                                         key={vault.address}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                         <TableCell component="th" scope="row">
-
-                                            <img className={classes.vaultDisplayIcon} src={vault.metadata.displayIcon} />
-                                            {vault.name}  {/*({vault.symbol}) */}
+                                            <img
+                                                className={classes.vaultDisplayIcon}
+                                                src={vault.metadata.displayIcon}
+                                            />
+                                            {vault.name} {/*({vault.symbol}) */}
                                         </TableCell>
                                         {/* <TableCell align="right">{parseFloat(vault.metadata.totalAssets ?? '0').toLocaleString(undefined, {maximumFractionDigits:2})} </TableCell> */}
                                         {/* <TableCell align="right">
                                             {vault.metadata.totalSupply ?? '0'}
                                         </TableCell> */}
-                                        <TableCell align="right">$ { parseFloat(formatUnits(vault.underlyingTokenBalance.amountUsdc, 6)).toLocaleString(undefined, {maximumFractionDigits:2}) } </TableCell>
-                                        <TableCell align="right">{ (100 * (vault?.metadata.apy?.net_apy??0))  .toFixed(2)} %</TableCell>
+                                        <TableCell align="right">
+                                            ${' '}
+                                            {Number.parseFloat(
+                                                formatUnits(vault.underlyingTokenBalance.amountUsdc, 6),
+                                            ).toLocaleString(undefined, { maximumFractionDigits: 2 })}{' '}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {(100 * (vault?.metadata.apy?.net_apy ?? 0)).toFixed(2)} %
+                                        </TableCell>
                                         {/* <TableCell align="right">
                                             
                                             { parseFloat(formatUnits(vault.metadata.depositLimit, vault.decimals))} 
                                         </TableCell> */}
-                                        
+
                                         <TableCell align="right">
-                                            
+                                            <Button variant="contained" onClick={() => handleDeposit(vault)}>
+                                                Deposit
+                                            </Button>
 
-                                            <Button variant="contained" onClick={() => handleDeposit(vault )}>Deposit</Button>
-
-                                            <Button variant="contained" onClick={()=>handleWithdraw(vault)}>Withdraw</Button>
-
-                                           
+                                            <Button variant="contained" onClick={() => handleWithdraw(vault)}>
+                                                Withdraw
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -400,20 +382,25 @@ export function VaultListDialog(props: VaultListDialogProps) {
                 </DialogContent>
             </InjectedDialog>
 
-            {currentVault && <DepositDialog
-                wallet={wallet}
-                open={ openDepositDialog  }
-                vault={currentVault}
-                               
-                onConfirm={onDepositDialogConfirm}
-                onClose={onCloseDepositDialog}
-                
-            />
-            }
+            {currentVault && (
+                <DepositDialog
+                    wallet={wallet}
+                    open={openDepositDialog}
+                    vault={currentVault}
+                    onConfirm={onDepositDialogConfirm}
+                    onClose={onCloseDepositDialog}
+                />
+            )}
 
-            {currentVault && <WithdrawDialog vault={currentVault} wallet={wallet}
-                    open={openWithdrawDialog} onClose={onCloseWithdrawDialog}  onConfirm={onWithdrawDialogConfirm} />
-            }
+            {currentVault && (
+                <WithdrawDialog
+                    vault={currentVault}
+                    wallet={wallet}
+                    open={openWithdrawDialog}
+                    onClose={onCloseWithdrawDialog}
+                    onConfirm={onWithdrawDialogConfirm}
+                />
+            )}
         </div>
     )
 }

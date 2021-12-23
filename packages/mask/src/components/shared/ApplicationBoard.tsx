@@ -143,7 +143,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     const { setDialog: setAaveBuyDialog } = useRemoteControlledDialog(PluginAaveMessages.buyTokenDialogUpdated)
     //#endregion
 
-    const { setDialog: setYearnBuyDialog } = useRemoteControlledDialog(PluginYearnFinanceMessages.vaultListDialogUpdated)
+    const { setDialog: setYearnBuyDialog } = useRemoteControlledDialog(
+        PluginYearnFinanceMessages.vaultListDialogUpdated,
+    )
 
     //#region second level entry dialog
     const {

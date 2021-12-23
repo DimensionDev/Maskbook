@@ -19,4 +19,5 @@ interface PluginYearnFinanceMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginYearnFinanceMessages: PluginMessageEmitter<PluginYearnFinanceMessage> = createPluginMessage(PLUGIN_ID)
+export const PluginYearnFinanceMessages: PluginMessageEmitter<PluginYearnFinanceMessage> =
+    createPluginMessage(PLUGIN_ID)

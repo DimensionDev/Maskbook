@@ -19,10 +19,9 @@ import { useAaveLendingPoolContract } from '../contracts/useAaveLendingPool'
  */
 export function useDepositCallback(
     poolAddress: string,
-	token: FungibleTokenDetailed,
+    token: FungibleTokenDetailed,
     amount: string,
-    referrer: string
-    
+    referrer: string,
 ) {
     const poolContract = useAaveLendingPoolContract(poolAddress)
 
@@ -30,7 +29,6 @@ export function useDepositCallback(
     const [depositState, setDepositState] = useTransactionState()
 
     const depositCallback = useCallback(async () => {
-        
         if (!poolContract) {
             setDepositState({
                 type: TransactionStateType.UNKNOWN,
@@ -42,7 +40,7 @@ export function useDepositCallback(
         setDepositState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
-	
+
         // step 1: estimate gas
         const config = {
             from: account,
@@ -51,7 +49,7 @@ export function useDepositCallback(
         const estimatedGas = await poolContract.methods
             .deposit(token.address, amount, account, referrer)
             .estimateGas(config)
-            .catch((error: any ) => {
+            .catch((error: any) => {
                 setDepositState({
                     type: TransactionStateType.FAILED,
                     error,
@@ -68,7 +66,6 @@ export function useDepositCallback(
                     gas: estimatedGas,
                 })
                 .on(TransactionEventType.TRANSACTION_HASH, (hash: any) => {
-					
                     setDepositState({
                         type: TransactionStateType.HASH,
                         hash,
@@ -76,7 +73,6 @@ export function useDepositCallback(
                     resolve(hash)
                 })
                 .on(TransactionEventType.ERROR, (error: any) => {
-					
                     setDepositState({
                         type: TransactionStateType.FAILED,
                         error,

@@ -7,7 +7,7 @@ export const convertValue = (
     showUsdPrice: boolean,
     ethPrice: any,
 ) => {
-    return parseFloat(formatUnits(amountInUnits, decimals)) * toEthMultiplier * (showUsdPrice ? ethPrice : 1)
+    return Number.parseFloat(formatUnits(amountInUnits, decimals)) * toEthMultiplier * (showUsdPrice ? ethPrice : 1)
 }
 
 export const formattedValue = (

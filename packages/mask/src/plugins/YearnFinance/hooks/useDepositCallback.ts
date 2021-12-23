@@ -1,62 +1,50 @@
 import { useCallback } from 'react'
-import BigNumber from 'bignumber.js'
 import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
     useAccount,
     useTransactionState,
     TransactionStateType,
-    TransactionEventType,
     useChainId,
     useWeb3Provider,
 } from '@masknet/web3-shared-evm'
 
-import { VaultInterface, Vault,Yearn } from '@yfi/sdk'
-import { JsonRpcProvider,TransactionReceipt } from '@ethersproject/providers'
+import { VaultInterface, Vault, Yearn } from '@yfi/sdk'
+import { JsonRpcProvider, TransactionReceipt } from '@ethersproject/providers'
 
- 
 /**
  * A callback for deposit into vault
  * @param vault Vault
  * @param amount
  */
-export function useDepositCallback(
-    vault: Vault,
-    amount: string  
-) {
-        
+export function useDepositCallback(vault: Vault, amount: string) {
     const chainId = useChainId()
     const account = useAccount()
     const wProvider = useWeb3Provider()
     //@ts-ignore
-    const yearn = new Yearn(chainId, {provider: new JsonRpcProvider(wProvider.host ) });
+    const yearn = new Yearn(chainId, { provider: new JsonRpcProvider(wProvider.host) })
     //@ts-ignore
-    const vaultInterface = new VaultInterface( yearn,chainId , yearn.context) 
-    
+    const vaultInterface = new VaultInterface(yearn, chainId, yearn.context)
+
     const [depositState, setDepositState] = useTransactionState()
 
     const depositCallback = useCallback(async () => {
-        
-        const tx = await vaultInterface.deposit(vault.address, vault.token, amount,account)
+        const tx = await vaultInterface.deposit(vault.address, vault.token, amount, account)
         // pre-step: start waiting for provider to confirm tx
         setDepositState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
-        const txReceipt: TransactionReceipt = await tx.wait(4);      
-        
-        if(txReceipt && txReceipt.blockNumber){
+        const txReceipt: TransactionReceipt = await tx.wait(4)
+
+        if (txReceipt && txReceipt.blockNumber) {
             setDepositState({
                 type: TransactionStateType.HASH,
                 hash: txReceipt.transactionHash,
             })
-        }else{
+        } else {
             setDepositState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Deposit Tx failed'),
             })
         }
-        
-        
     }, [vault, amount])
 
     const resetCallback = useCallback(() => {

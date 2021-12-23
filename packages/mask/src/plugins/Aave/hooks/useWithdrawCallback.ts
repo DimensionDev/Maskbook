@@ -20,10 +20,9 @@ import { useAaveLendingPoolContract } from '../contracts/useAaveLendingPool'
  */
 export function useWithdrawCallback(
     poolAddress: string,
-	token: FungibleTokenDetailed,
+    token: FungibleTokenDetailed,
     amount: string,
-    referrer: string
-    
+    referrer: string,
 ) {
     const poolContract = useAaveLendingPoolContract(poolAddress)
 
@@ -31,7 +30,6 @@ export function useWithdrawCallback(
     const [withdrawState, setWithdrawState] = useTransactionState()
 
     const withdrawCallback = useCallback(async () => {
-        
         if (!poolContract) {
             setWithdrawState({
                 type: TransactionStateType.UNKNOWN,
@@ -43,7 +41,7 @@ export function useWithdrawCallback(
         setWithdrawState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
-	
+
         // step 1: estimate gas
         const config = {
             from: account,
@@ -52,7 +50,7 @@ export function useWithdrawCallback(
         const estimatedGas = await poolContract.methods
             .withdraw(token.address, amount, account)
             .estimateGas(config)
-            .catch((error: any ) => {
+            .catch((error: any) => {
                 setWithdrawState({
                     type: TransactionStateType.FAILED,
                     error,
@@ -69,7 +67,6 @@ export function useWithdrawCallback(
                     gas: estimatedGas,
                 })
                 .on(TransactionEventType.TRANSACTION_HASH, (hash: any) => {
-					
                     setWithdrawState({
                         type: TransactionStateType.HASH,
                         hash,
@@ -77,7 +74,6 @@ export function useWithdrawCallback(
                     resolve(hash)
                 })
                 .on(TransactionEventType.ERROR, (error: any) => {
-					
                     setWithdrawState({
                         type: TransactionStateType.FAILED,
                         error,

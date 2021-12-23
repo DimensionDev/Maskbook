@@ -8,14 +8,14 @@ import { ChainId } from '@masknet/web3-shared-evm'
 //     return useAsyncRetry(() => PluginPooltogetherRPC.fetchPools(chainId), [chainId])
 // }
 
-export function useAaveLendingPoolAddressProvider( chainId: ChainId= ChainId.Mainnet) {
+export function useAaveLendingPoolAddressProvider(chainId: ChainId = ChainId.Mainnet) {
     const address = AAVE_LENDING_POOL_ADDRESS_PROVIDER_ADDRESS
     const addrContract = useAaveLendingPoolAddressProviderContract(address, chainId)
-   
+
     return useAsyncRetry(async () => {
-		//@ts-ignore
+        //@ts-ignore
         const poolAddress = await addrContract.methods.getLendingPool().call()
-            
+
         return poolAddress
     }, [])
 }

@@ -1,5 +1,3 @@
-import { escapeRegExp } from 'lodash-unified'
-
 export const PLUGIN_ID = 'com.maskbook.yearnfinance'
 export const PLUGIN_META_KEY = 'com.maskbook.yearnfinance:1'
 export const PLUGIN_NAME = 'Yearn Finance'
