@@ -590,6 +590,30 @@ importers:
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-rc.0
 
+  packages/plugins/DAO:
+    specifiers:
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      bignumber.js: ^9.0.1
+      date-fns: ^2.27.0
+      iframe-resizer-react: ^1.1.0
+      lodash-es: ^4.17.21
+      react-use: ^17.3.1
+      urlcat: ^2.0.4
+    dependencies:
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      bignumber.js: 9.0.1
+      date-fns: 2.27.0
+      iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
+      lodash-es: 4.17.21
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
+      urlcat: 2.0.4
+
   packages/plugins/Flow:
     specifiers:
       '@blocto/fcl': ^0.0.78-alpha.8

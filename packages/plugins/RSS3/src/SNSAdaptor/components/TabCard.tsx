@@ -15,7 +15,7 @@ export interface TabCardProps {
 
 export function TabCard({ type, addressNames }: TabCardProps) {
     const addressNameRSS3 = addressNames.find((x) => x.type === AddressNameType.RSS3)
-    if (!addressNameRSS3) return
+    if (!addressNameRSS3) return null
     return (
         <>
             <link rel="stylesheet" href={new URL('../styles/tailwind.css', import.meta.url).toString()} />

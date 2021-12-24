@@ -1,0 +1,18 @@
+{
+  "name": "@masknet/plugin-dao",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/icons": "workspace:*",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "iframe-resizer-react": "^1.1.0",
+    "bignumber.js": "^9.0.1",
+    "date-fns": "^2.27.0",
+    "lodash-es": "^4.17.21",
+    "react-use": "^17.3.1",
+    "urlcat": "^2.0.4"
+  }
+}

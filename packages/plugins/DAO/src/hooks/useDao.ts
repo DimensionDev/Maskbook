@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import type BigNumber from 'bignumber.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
-export type Dao_Payload = {
+export interface DAO_Payload {
     // timestamp
     createdAt: string
     creator: string
@@ -23,19 +23,18 @@ export type Dao_Payload = {
     uri: string
     version: number
 }
+
 export function useDao(identifier: ProfileIdentifier) {
-    const api = `https://dimensiondev.github.io/Maskbook-Configuration/com.maskbook.dao-${identifier.userId.toLowerCase()}.json`
     return useAsyncRetry(async () => {
         if (identifier.isUnknown) return
         try {
-            const res = await fetch(api)
-            if (!res.ok) {
-                return
-            }
-            const r = await res.json()
-            return r as Dao_Payload
+            const repsonse = await fetch(
+                `https://dimensiondev.github.io/Maskbook-Configuration/com.maskbook.dao-${identifier.userId.toLowerCase()}.json`,
+            )
+            if (!repsonse.ok) return
+            return (await repsonse.json()) as DAO_Payload
         } catch {
             return
         }
-    }, [api, identifier])
+    }, [identifier.toText()])
 }

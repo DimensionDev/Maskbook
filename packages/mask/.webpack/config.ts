@@ -79,6 +79,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
                     '@masknet/plugin-flow': join(__dirname, '../../plugins/Flow/src/'),
                     '@masknet/plugin-rss3': join(__dirname, '../../plugins/RSS3/src/'),
+                    '@masknet/plugin-dao': join(__dirname, '../../plugins/DAO/src/'),
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),

@@ -93,7 +93,19 @@
             "generator": {
                 "type": "i18next/react-hooks",
                 "hooks": "useI18N",
-                "namespace": "com.mask.rss3",
+                "namespace": "bio.rss3",
+                "trans": "Translate",
+                "sourceMap": "inline"
+            }
+        },
+        {
+            "input": "./packages/plugins/DAO/src/locales/en-US.json",
+            "output": "./packages/plugins/DAO/src/locales/i18n_generated",
+            "parser": "i18next",
+            "generator": {
+                "type": "i18next/react-hooks",
+                "hooks": "useI18N",
+                "namespace": "money.juicebox",
                 "trans": "Translate",
                 "sourceMap": "inline"
             }
