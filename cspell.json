@@ -360,7 +360,10 @@
         "poap",
         "irss",
         "CELO",
-        "flac"
+        "flac",
+        "treeshake",
+        "xtest",
+        "irss"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

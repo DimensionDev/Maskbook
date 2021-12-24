@@ -1,5 +1,5 @@
 import { Collection, getOpenSeaCollectionList } from '@masknet/web3-providers'
-import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RpcMethodRegistrationValue } from '../typs'
+import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 import { collectAllPageDate } from '../helper/request'
 
 interface NonFungibleCollectibleAssetArgs extends ProducerArgBase {
@@ -20,7 +20,7 @@ const nonFungibleCollectibleAsset = async (
     await push(collectFromOpenSea)
 }
 
-const producer: RpcMethodRegistrationValue<Collection, NonFungibleCollectibleAssetArgs> = {
+const producer: RPCMethodRegistrationValue<Collection, NonFungibleCollectibleAssetArgs> = {
     method: 'mask.fetchNonFungibleCollectibleAsset',
     producer: nonFungibleCollectibleAsset,
     distinctBy: (item) => item.name,

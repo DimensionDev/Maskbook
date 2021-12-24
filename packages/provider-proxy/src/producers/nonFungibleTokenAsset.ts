@@ -1,6 +1,6 @@
 import { getOpenSeaNFTList } from '@masknet/web3-providers'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
-import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RpcMethodRegistrationValue } from '../typs'
+import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 
 export interface NonFungibleTokenAssetArgs extends ProducerArgBase {
     address: string
@@ -22,7 +22,7 @@ const nonFungibleTokenAsset = async (
     }
 }
 
-const producer: RpcMethodRegistrationValue<ERC721TokenDetailed, NonFungibleTokenAssetArgs> = {
+const producer: RPCMethodRegistrationValue<ERC721TokenDetailed, NonFungibleTokenAssetArgs> = {
     method: 'mask.fetchNonFungibleTokenAsset',
     producer: nonFungibleTokenAsset,
     distinctBy: (item) => `${item.tokenId}_${item.contractDetailed.address}`,

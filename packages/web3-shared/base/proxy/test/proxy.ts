@@ -1,5 +1,5 @@
 import { describe, test, expect, beforeEach, afterEach, xtest, jest } from '@jest/globals'
-import { PollItem, ProviderProxy } from './index'
+import { PoolItem, ProviderProxy } from '../index'
 import * as mockWS from 'jest-websocket-mock'
 import addSeconds from 'date-fns/addSeconds'
 
@@ -143,7 +143,7 @@ describe('Proxy websocket unit', () => {
         const item = {
             pickedAt: addSeconds(new Date(), -31),
         }
-        const isExpired = client.isExpired(item as PollItem)
+        const isExpired = client.isExpired(item as PoolItem)
         expect(isExpired).toBe(true)
     })
 
@@ -152,7 +152,7 @@ describe('Proxy websocket unit', () => {
         const item = {
             pickedAt: addSeconds(new Date(), -20),
         }
-        const isExpired = client.isExpired(item as PollItem)
+        const isExpired = client.isExpired(item as PoolItem)
         expect(isExpired).toBe(false)
     })
 
@@ -161,7 +161,7 @@ describe('Proxy websocket unit', () => {
         const item = {
             updatedAt: addSeconds(new Date(), -20),
         }
-        const isExpired = client.isExpired(item as PollItem)
+        const isExpired = client.isExpired(item as PoolItem)
         expect(isExpired).toBe(false)
     })
 
@@ -170,7 +170,7 @@ describe('Proxy websocket unit', () => {
         const item = {
             updatedAt: addSeconds(new Date(), -20),
         }
-        const isExpired = client.isExpired(item as PollItem)
+        const isExpired = client.isExpired(item as PoolItem)
         expect(isExpired).toBe(false)
     })
 })

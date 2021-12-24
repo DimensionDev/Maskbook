@@ -1,4 +1,4 @@
-name: Publish Porxy Package
+name: Publish Proxy Package
 
 on:
   push:
@@ -40,6 +40,5 @@ jobs:
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
-      - name: Publish to github npm pkg
-        run: pnpm publish --no-git-checks
-        working-directory: packages/provider-proxy
+      - name: Publish package to github npm pkg
+        run: pnpm publish packages/provider-proxy/dist

@@ -16,7 +16,7 @@ export interface PayloadMessage extends MessageBase {
     results?: unknown[]
 }
 
-export interface PollItem<T extends unknown = unknown> {
+export interface PoolItem<T extends unknown = unknown> {
     createdAt: Date
     notify: NotifyFn
     data: T[]
@@ -32,12 +32,12 @@ export type NotifyFn = (event: { id: string; done: boolean; error?: unknown }) =
 // 2. auto reconnection: double check
 export class ProviderProxy {
     private readonly _socket: WebSocket
-    private readonly _pool: Map<string, PollItem>
+    private readonly _pool: Map<string, PoolItem>
     private readonly _notify: NotifyFn
 
     constructor(point: string, notifyFn: NotifyFn) {
         this._socket = new WebSocket(point)
-        this._pool = new Map<string, PollItem>()
+        this._pool = new Map<string, PoolItem>()
         this._notify = notifyFn
     }
 
@@ -104,7 +104,7 @@ export class ProviderProxy {
      * @param item cache item
      * @returns boolean
      */
-    isExpired(item: PollItem) {
+    isExpired(item: PoolItem) {
         const now = new Date()
         // lasted update time > 30s
         if (!!item.updatedAt && differenceInSeconds(now, item.updatedAt) > 30) return true
