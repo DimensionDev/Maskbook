@@ -158,5 +158,10 @@ to {
         connectWallet: {
             marginTop: 16,
         },
+        loadingText: {
+            textAlign: 'center',
+            fontSize: 24,
+            marginTop: 210,
+        },
     }
 })

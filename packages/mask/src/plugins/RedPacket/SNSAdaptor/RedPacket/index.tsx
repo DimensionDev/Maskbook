@@ -1,7 +1,7 @@
 import classNames from 'classnames'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { Card, Skeleton, Typography } from '@mui/material'
+import { Card, Typography } from '@mui/material'
 import {
     ChainId,
     formatBalance,
@@ -174,27 +174,9 @@ export function RedPacket(props: RedPacketProps) {
         return (
             <EthereumChainBoundary chainId={getChainIdFromName(payload.network ?? '') ?? ChainId.Mainnet}>
                 <Card className={classes.root} component="article" elevation={0}>
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="30%"
-                        height={12}
-                        style={{ marginTop: 16 }}
-                    />
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="40%"
-                        height={12}
-                        style={{ marginTop: 16 }}
-                    />
-                    <Skeleton
-                        animation="wave"
-                        variant="rectangular"
-                        width="70%"
-                        height={12}
-                        style={{ marginBottom: 16 }}
-                    />
+                    <Typography className={classes.loadingText} variant="body2">
+                        {t('loading')}
+                    </Typography>
                 </Card>
             </EthereumChainBoundary>
         )
