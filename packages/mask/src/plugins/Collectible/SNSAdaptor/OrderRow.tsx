@@ -3,13 +3,19 @@ import BigNumber from 'bignumber.js'
 import { Avatar, Link, TableCell, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
-import { formatBalance, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    formatBalance,
+    NonFungibleAssetProvider,
+    resolveAddressLinkOnExplorer,
+} from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { Account } from './Account'
 import { FormattedBalance } from '@masknet/shared'
 import { getOrderUnitPrice, NonFungibleTokenAPI } from '@masknet/web3-providers'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -61,10 +67,11 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
     const address = order.maker_account?.user?.username || order.maker_account?.address || ''
 
     const link = useMemo(() => {
-        return provider === NonFungibleAssetProvider.OPENSEA ? '' : order.maker_account?.link
+        return provider === NonFungibleAssetProvider.OPENSEA
+            ? urlcat('https://opensea.io/accounts/:address', { address })
+            : order.maker_account?.link
     }, [order, provider, address])
-    console.log('+++++++++++++++++++++++')
-    console.log(order.payment_token ?? '')
+
     return (
         <TableRow>
             <TableCell>
@@ -83,7 +90,11 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                     <TableCell>
                         <Typography className={classes.content}>
                             {provider === NonFungibleAssetProvider.OPENSEA ? (
-                                <Link href="#" target="_blank" rel="noopener noreferrer" className={classes.tokenLink}>
+                                <Link
+                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={classes.tokenLink}>
                                     {order.payment_token_contract?.image_url && (
                                         <img
                                             src={order.payment_token_contract.image_url}
@@ -116,21 +127,25 @@ export function OrderRow({ order, isDifferenceToken }: IRowProps) {
                     <TableCell>
                         <Typography style={{ display: 'flex' }} className={classes.content}>
                             {provider === NonFungibleAssetProvider.OPENSEA ? (
-                                <Link href="#" target="_blank" rel="noopener noreferrer" className={classes.tokenLink}>
-                                    {order.payment_token_contract?.image_url && (
+                                <Link
+                                    href={resolveAddressLinkOnExplorer(ChainId.Mainnet, order.payment_token!)}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={classes.tokenLink}>
+                                    {order.payment_token_contract?.image_url ? (
                                         <img
                                             src={order.payment_token_contract.image_url}
                                             className={classes.token}
                                             alt={order.payment_token_contract?.symbol}
                                         />
-                                    )}
+                                    ) : null}
                                 </Link>
                             ) : null}
                             {getOrderUnitPrice(
                                 order.current_price,
                                 order.payment_token_contract?.decimals,
                                 order.quantity,
-                            )}{' '}
+                            )?.toString()}{' '}
                             {provider === NonFungibleAssetProvider.OPENSEA
                                 ? order.payment_token_contract?.symbol ?? ''
                                 : 'ETH'}

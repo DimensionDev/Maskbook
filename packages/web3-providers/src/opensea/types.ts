@@ -172,3 +172,29 @@ export interface OpenSeaAssetEvent {
     }
     created_date: string
 }
+
+export interface OpenSeaAssetOrder {
+    approved_on_chain: boolean
+    asset: OpenSeaResponse
+    listing_time: number
+    created_time?: string
+
+    current_price?: string
+    current_bounty?: string
+    maker: OpenSeaCustomAccount
+    taker: OpenSeaCustomAccount
+
+    payment_token?: string
+    payment_token_contract?: NonFungibleTokenAPI.AssetToken
+    fee_recipient?: NonFungibleTokenAPI.AssetToken
+
+    cancelled?: boolean
+    finalized?: boolean
+
+    marked_invalid?: boolean
+
+    side: number
+    quantity: string
+    expiration_time: number
+    order_hash: string
+}

@@ -18,6 +18,7 @@ import { getOrderUnitPrice, getOrderUSDPrice } from './utils'
 import type {
     OpenSeaAssetContract,
     OpenSeaAssetEvent,
+    OpenSeaAssetOrder,
     OpenSeaCollection,
     OpenSeaCustomAccount,
     OpenSeaResponse,
@@ -201,6 +202,27 @@ function createNFTHistory(event: OpenSeaAssetEvent): NonFungibleTokenAPI.History
     }
 }
 
+function createAssetOrder(order: OpenSeaAssetOrder): NonFungibleTokenAPI.AssetOrder {
+    return {
+        created_time: order.created_time,
+        current_price: order.current_price,
+        current_bounty: order.current_bounty,
+        maker_account: { ...order.maker, link: '' },
+        taker_account: { ...order.taker, link: '' },
+        payment_token: order.payment_token,
+        payment_token_contract: order.payment_token_contract,
+        fee_recipient_account: order.fee_recipient,
+        cancelled_or_finalized: order.cancelled || order.finalized,
+        marked_invalid: order.marked_invalid,
+        approved_on_chain: order.approved_on_chain,
+        listing_time: order.listing_time,
+        side: order.side,
+        quantity: order.quantity,
+        expiration_time: order.expiration_time,
+        order_hash: order.order_hash,
+    }
+}
+
 export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const requestPath = urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId })
@@ -272,9 +294,9 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             limit: size,
         })
         const response = await fetchFromOpenSea<{
-            orders: NonFungibleTokenAPI.AssetOrder[]
+            orders: OpenSeaAssetOrder[]
         }>(requestPath, chainId)
-        return response?.orders ?? []
+        return response?.orders?.map(createAssetOrder) ?? []
     }
 
     async getCollections(address: string, { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {}) {
