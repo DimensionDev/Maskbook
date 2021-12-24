@@ -68,13 +68,15 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 {t('wallets')}
             </Button>
-            <Button
-                variant="outlined"
-                className={tag === PageTags.NFTTag ? classes.selected : classes.button}
-                onClick={() => onChange(PageTags.NFTTag)}
-                size="medium">
-                {t('nfts')}
-            </Button>
+            {address ? (
+                <Button
+                    variant="outlined"
+                    className={tag === PageTags.NFTTag ? classes.selected : classes.button}
+                    onClick={() => onChange(PageTags.NFTTag)}
+                    size="medium">
+                    {t('nfts')}
+                </Button>
+            ) : null}
             {hasDonations ? (
                 <Button
                     variant="outlined"
