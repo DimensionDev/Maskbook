@@ -15,7 +15,13 @@ import {
     RaribleOfferResponse,
     RaribleProfileResponse,
 } from './types'
-import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL } from './constants'
+import {
+    RaribleUserURL,
+    RaribleRopstenUserURL,
+    RaribleMainnetURL,
+    RaribleChainURL,
+    RaribleMainnetAPI_URL,
+} from './constants'
 import { toRaribleImage } from './utils'
 import { NonFungibleTokenAPI } from '..'
 
@@ -27,8 +33,8 @@ const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | Ch
     RaribleUserURL,
 )
 
-async function fetchFromRarible<T>(path: string, init?: RequestInit) {
-    const response = await fetch(urlcat(RaribleMainnetURL, path), {
+async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
+    const response = await fetch(urlcat(url, path), {
         mode: 'cors',
         ...init,
     })
@@ -36,7 +42,7 @@ async function fetchFromRarible<T>(path: string, init?: RequestInit) {
 }
 
 function getProfilesFromRarible(addresses: (string | undefined)[]) {
-    return fetchFromRarible<RaribleProfileResponse[]>('/profiles/list', {
+    return fetchFromRarible<RaribleProfileResponse[]>(RaribleMainnetURL, '/profiles/list', {
         method: 'POST',
         body: JSON.stringify(addresses),
         headers: {
@@ -128,7 +134,7 @@ function _getAsset(address: string, tokenId: string) {
         address,
         tokenId,
     })
-    return fetchFromRarible<RaribleNFTItemMapResponse>(requestPath, {
+    return fetchFromRarible<RaribleNFTItemMapResponse>(RaribleChainURL, requestPath, {
         method: 'GET',
         mode: 'cors',
         headers: { 'content-type': 'application/json' },
@@ -154,7 +160,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
             continuation: string
             items: RaribleNFTItemMapResponse[]
         }
-        const asset = await fetchFromRarible<Payload>(requestPath)
+        const asset = await fetchFromRarible<Payload>(RaribleMainnetAPI_URL, requestPath)
         if (!asset) return []
         return asset.items.map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
     }
@@ -165,7 +171,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
         { chainId = ChainId.Mainnet }: NonFungibleTokenAPI.Options = {},
     ): Promise<NonFungibleTokenAPI.AssetOrder[]> {
         const requestPath = urlcat('/items/:tokenAddress::tokenId/offers', { tokenAddress, tokenId })
-        const orders = await fetchFromRarible<RaribleOfferResponse[]>(requestPath, {
+        const orders = await fetchFromRarible<RaribleOfferResponse[]>(RaribleMainnetURL, requestPath, {
             method: 'POST',
             body: JSON.stringify({ size: 20 }),
             headers: { 'content-type': 'application/json' },
@@ -200,7 +206,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
         { chainId = ChainId.Mainnet }: NonFungibleTokenAPI.Options = {},
     ): Promise<NonFungibleTokenAPI.AssetOrder[]> {
         const requestPath = urlcat('/items/:tokenAddress::tokenId/ownerships', { tokenAddress, tokenId })
-        const assets = await fetchFromRarible<Ownership[]>(requestPath)
+        const assets = await fetchFromRarible<Ownership[]>(RaribleMainnetURL, requestPath)
         const listings = assets.filter((x) => x.selling)
         const profiles = await getProfilesFromRarible(listings.map((x) => x.owner))
         return listings.map((asset): NonFungibleTokenAPI.AssetOrder => {
@@ -242,7 +248,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
     }
 
     async getHistory(tokenAddress: string, tokenId: string): Promise<NonFungibleTokenAPI.History[]> {
-        const response = await fetchFromRarible<RaribleHistory[]>('/activity', {
+        const response = await fetchFromRarible<RaribleHistory[]>(RaribleMainnetURL, '/activity', {
             method: 'POST',
             body: JSON.stringify({
                 // types: ['BID', 'BURN', 'BUY', 'CANCEL', 'CANCEL_BID', 'ORDER', 'MINT', 'TRANSFER', 'SALE'],

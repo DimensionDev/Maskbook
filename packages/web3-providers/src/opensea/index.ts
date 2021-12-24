@@ -30,7 +30,7 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId) {
         const response = await fetch(urlcat(OPENSEA_API_URL, url), {
             method: 'GET',
             mode: 'cors',
-            headers: { 'x-api-key': OPENSEA_API_KEY },
+            headers: { 'x-api-key': OPENSEA_API_KEY, Accept: 'application/json' },
         })
         return response.json() as Promise<T>
     } catch {
@@ -246,7 +246,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         tokenId: string,
         { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {},
     ) {
-        const requestPath = urlcat(OPENSEA_API_URL, '/api/v1/events', {
+        const requestPath = urlcat('/api/v1/events', {
             asset_contract_address: address,
             token_id: tokenId,
             offset: page,
@@ -264,7 +264,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         side: NonFungibleTokenAPI.OrderSide,
         { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {},
     ) {
-        const requestPath = urlcat(OPENSEA_API_URL, '/wyvern/v1/orders', {
+        const requestPath = urlcat('/wyvern/v1/orders', {
             asset_contract_address: address,
             token_id: tokenId,
             side,
@@ -278,7 +278,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
     }
 
     async getCollections(address: string, { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {}) {
-        const requestPath = urlcat(OPENSEA_API_URL, '/api/v1/collections', {
+        const requestPath = urlcat('/api/v1/collections', {
             address,
             offset: page,
             limit: size,
