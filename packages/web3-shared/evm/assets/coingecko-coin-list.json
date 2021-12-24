@@ -22,5 +22,11 @@
         "symbol": "matic",
         "chainId": 137,
         "name": "Polygon"
+    },
+    {
+        "id": "avalanche-network",
+        "symbol": "avax",
+        "chainId": 43114,
+        "name": "Avalanche"
     }
 ]

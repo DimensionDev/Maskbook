@@ -77,6 +77,12 @@ export const xdaiNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
     { primary: () => '' },
 )
 
+export const avalancheNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+avalanche+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]

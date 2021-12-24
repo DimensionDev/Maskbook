@@ -95,6 +95,8 @@
         "Mumbai": "",
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-arbitrum-one",
         "Arbitrum_Rinkeby": "",
-        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai"
+        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai",
+        "Avalanche": "",
+        "Avalanche_Fuji": ""
     }
 }

@@ -80,6 +80,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://aribitrum.api.0x.org/'
                 case NetworkType.xDai:
                     return 'https://xdai.api.0x.org/'
+                case NetworkType.Avalanche:
+                    return ''
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -134,6 +136,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-aribtrum.sushi.com/pairs/${address}`
                 case NetworkType.xDai:
                     return `https://analytics-xdai.sushi.com/pairs/${address}`
+                case NetworkType.Avalanche:
+                    return `` // sushiswap avax doesn't have analytics yet.
                 default:
                     safeUnreachable(networkType)
                     return ''

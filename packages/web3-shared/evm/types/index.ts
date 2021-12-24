@@ -40,6 +40,10 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    // Avalanche
+    Avalanche = 43114,
+    Avalanche_Fuji = 43113,
 }
 
 export enum ProviderType {
@@ -63,6 +67,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Avalanche = 'Avalanche',
 }
 
 export interface Wallet {

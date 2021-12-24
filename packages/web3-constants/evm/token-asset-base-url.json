@@ -38,6 +38,8 @@
         ],
         "Arbitrum": [],
         "Arbitrum_Rinkeby": [],
-        "xDai": []
+        "xDai": [],
+        "Avalanche": [],
+        "Avalanche_Fuji": []
     }
 }

@@ -11,6 +11,7 @@ import {
     polygonNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    avalancheNetworkTradeProviderSettings,
 } from './settings'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 
@@ -41,6 +42,11 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break
+        case NetworkType.Avalanche:
+            currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
+            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
+                currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
+            break
         default:
             unreachable(networkType)
     }
@@ -64,6 +70,9 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
             break
         case NetworkType.xDai:
             xdaiNetworkTradeProviderSettings.value = tradeProvider
+            break
+        case NetworkType.Avalanche:
+            avalancheNetworkTradeProviderSettings.value = tradeProvider
             break
         default:
             unreachable(networkType)

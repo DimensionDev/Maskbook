@@ -11,7 +11,9 @@
         "Mumbai": ["https://polygon-mumbai.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
-        "xDai": ["https://rpc.xdaichain.com/"]
+        "xDai": ["https://rpc.xdaichain.com/"],
+        "Avalanche": ["https://api.avax.network/ext/bc/C/rpc"],
+        "Avalanche_Fuji": ["https://api.avax-test.network/ext/bc/C/rpc"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -25,6 +27,8 @@
         "Mumbai": [0, 0, 0, 0],
         "Arbitrum": [0, 0, 0, 0],
         "Arbitrum_Rinkeby": [0, 0, 0, 0],
-        "xDai": [0, 0, 0, 0]
+        "xDai": [0, 0, 0, 0],
+        "Avalanche": [0, 0, 0, 0],
+        "Avalanche_Fuji": [0, 0, 0, 0]
     }
 }
