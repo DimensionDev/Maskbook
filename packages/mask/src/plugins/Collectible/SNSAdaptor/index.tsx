@@ -5,7 +5,7 @@ import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import type { CollectibleJSON_Payload } from '../types'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
-import { PLUGIN_NAME, PLUGIN_PROFILE_TAB_NAME } from '../constants'
+import { PLUGIN_NAME } from '../constants'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
 import { NFTPage } from './NFTPage'
 
@@ -29,7 +29,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     ProfileTabs: [
         {
             ID: PLUGIN_NAME,
-            label: PLUGIN_PROFILE_TAB_NAME,
+            label: { i18nKey: 'plugin_collectible_profile_tab_name', fallback: 'NFT' },
             priority: 1,
             children: ({ addressNames = [] }) => <NFTPage address={addressNames[0].resolvedAddress} />,
         },
