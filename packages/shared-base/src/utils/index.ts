@@ -1,5 +1,6 @@
 export * from './parseURL'
 export * from './delay'
+export * from './detect'
 export * from './timeout'
 export * from './enum'
 export * from './pollingTask'

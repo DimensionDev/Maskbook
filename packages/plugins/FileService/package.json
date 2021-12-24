@@ -1,0 +1,23 @@
+{
+  "name": "@masknet/plugin-file-service",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@dimensiondev/common-protocols": "1.6.0-20210723072221-8f46a92",
+    "@ethersphere/bee-js": "^3.1.0",
+    "@masknet/plugin-infra": "workspace:*",
+    "@masknet/plugin-wallet": "workspace:*",
+    "@masknet/shared": "workspace:*",
+    "@masknet/shared-base": "workspace:*",
+    "@masknet/theme": "workspace:*",
+    "@msgpack/msgpack": "^2.7.1",
+    "arweave": "^1.10.3",
+    "date-fns": "^2.27.0",
+    "ipfs-http-client": "^54.0.2",
+    "react-feather": "^2.0.9",
+    "react-router-dom": "5",
+    "react-use": "^17.3.1",
+    "urlcat": "^2.0.4"
+  }
+}

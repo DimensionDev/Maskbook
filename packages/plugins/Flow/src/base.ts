@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { languages } from './locales'
+import { languages } from './locales/languages'
 import { PLUGIN_ID, PLUGIN_ICON, PLUGIN_NAME, PLUGIN_DESCRIPTION, PLUGIN_PROVIDERS, PLUGIN_NETWORKS } from './constants'
 
 export const base: Plugin.Shared.Definition = {
@@ -11,7 +11,7 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
-        target: 'stable',
+        target: 'insider',
     },
     i18n: languages,
     declareApplicationCategories: [],

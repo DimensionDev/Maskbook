@@ -1,5 +1,5 @@
 import type { SocialNetworkUI } from '../../../social-network'
-import { languages } from '../locales'
+import { languages } from '../locales/languages'
 
 export const i18NOverwriteTwitter: SocialNetworkUI.Customization.I18NOverwrite = {
     mask: {},

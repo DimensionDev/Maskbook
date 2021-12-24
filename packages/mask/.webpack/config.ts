@@ -39,7 +39,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         devtool: sourceMapKind,
         target: ['web', 'es2019'],
         entry: {},
-        experiments: { backCompat: false },
+        experiments: { backCompat: false, asyncWebAssembly: true },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -79,6 +79,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
                     '@masknet/plugin-flow': join(__dirname, '../../plugins/Flow/src/'),
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
+                    '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),

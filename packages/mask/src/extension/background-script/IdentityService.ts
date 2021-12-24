@@ -14,7 +14,19 @@ import {
     queryProfilesWithQuery,
     storeAvatar,
 } from '../../database'
-import { ECKeyIdentifier, Identifier, PersonaIdentifier, ProfileIdentifier } from '@masknet/shared-base'
+import {
+    ECKeyIdentifier,
+    Identifier,
+    PersonaIdentifier,
+    ProfileIdentifier,
+    ECKeyIdentifierFromJsonWebKey,
+    EC_JsonWebKey,
+    EC_Private_JsonWebKey,
+    PersonaInformation,
+    ProfileInformation,
+    PostIVIdentifier,
+    RelationFavor,
+} from '@masknet/shared-base'
 import type { Persona, Profile } from '../../database/Persona/types'
 import {
     attachProfileDB,
@@ -36,18 +48,14 @@ import {
 import { BackupJSONFileLatest, UpgradeBackupJSONFile } from '../../utils/type-transform/BackupFormat/JSON/latest'
 import { restoreBackup } from './WelcomeServices/restoreBackup'
 import { restoreNewIdentityWithMnemonicWord } from './WelcomeService'
-import { decompressBackupFile } from '../../utils/type-transform/BackupFileShortRepresentation'
+import { convertBackupFileToObject, fixBackupFilePermission } from '../../utils/type-transform/BackupFile'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import type { EC_JsonWebKey, EC_Private_JsonWebKey, PersonaInformation, ProfileInformation } from '@masknet/shared-base'
 import { getCurrentPersonaIdentifier } from './SettingsService'
 import { MaskMessages } from '../../utils'
-import type { PostIVIdentifier } from '@masknet/shared-base'
-import { RelationFavor } from '@masknet/shared-base'
 import { split_ec_k256_keypair_into_pub_priv } from '../../modules/CryptoAlgorithm/helper'
 import { first, orderBy } from 'lodash-unified'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
-import { ECKeyIdentifierFromJsonWebKey } from '../../database/type'
 
 assertEnvironment(Environment.ManifestBackground)
 
@@ -111,7 +119,7 @@ export async function queryPersonaByMnemonic(mnemonic: string, password: '') {
     }
 
     const { key } = await recover_ECDH_256k1_KeyPair_ByMnemonicWord(mnemonic, password)
-    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey, 'public')
+    const identifier = ECKeyIdentifierFromJsonWebKey(key.privateKey)
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {
         await loginPersona(persona.identifier)
@@ -195,7 +203,7 @@ export async function restoreFromBase64(base64: string): Promise<Persona | null>
     return restoreFromObject(JSON.parse(decodeText(decodeArrayBuffer(base64))) as BackupJSONFileLatest)
 }
 export async function restoreFromBackup(backup: string): Promise<Persona | null> {
-    return restoreFromObject(UpgradeBackupJSONFile(decompressBackupFile(backup)))
+    return restoreFromObject(fixBackupFilePermission(UpgradeBackupJSONFile(convertBackupFileToObject(backup))))
 }
 //#endregion
 
@@ -375,7 +383,7 @@ export async function exportPersonaPrivateKey(identifier: PersonaIdentifier) {
 
 export async function queryPersonaByPrivateKey(privateKeyString: string) {
     const privateKey = decode(decodeArrayBuffer(privateKeyString)) as EC_JsonWebKey
-    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey, 'public')
+    const identifier = ECKeyIdentifierFromJsonWebKey(privateKey)
 
     const persona = await queryPersonaDB(identifier, undefined, true)
     if (persona) {

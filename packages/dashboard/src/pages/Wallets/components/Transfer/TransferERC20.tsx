@@ -6,26 +6,30 @@ import {
     formatWeiToEther,
     FungibleTokenDetailed,
     isEIP1559Supported,
+    isSameAddress,
     TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
     useGasPrice,
     useNativeTokenDetailed,
+    useTokenConstants,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
-import { FormattedAddress, TokenAmountPanel } from '@masknet/shared'
+import { FormattedAddress, TokenAmountPanel, useRemoteControlledDialog } from '@masknet/shared'
 import TuneIcon from '@mui/icons-material/Tune'
 import { EthereumAddress } from 'wallet.ts'
-import { SelectTokenDialog } from '../SelectTokenDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { useNativeTokenPrice } from './useNativeTokenPrice'
 import { useGasConfig } from '../../hooks/useGasConfig'
 import { NetworkType } from '@masknet/public-api'
 import { useUpdateEffect } from 'react-use'
+import { v4 as uuid } from 'uuid'
+import { PluginMessages } from '../../../../API'
+import type { SelectTokenDialogEvent } from '@masknet/plugin-wallet'
 
 interface TransferERC20Props {
     token: FungibleTokenDetailed
@@ -34,7 +38,9 @@ interface TransferERC20Props {
 const GAS_LIMIT = 30000
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const anchorEl = useRef<HTMLDivElement | null>(null)
+    const [id] = useState(uuid())
     const [amount, setAmount] = useState('')
     const [address, setAddress] = useState('')
     const [memo, setMemo] = useState('')
@@ -43,10 +49,20 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const network = useNetworkDescriptor()
     const [gasLimit_, setGasLimit_] = useState(0)
 
+    const { setDialog: setSelectToken } = useRemoteControlledDialog(
+        PluginMessages.Wallet.events.selectTokenDialogUpdated,
+        useCallback(
+            (ev: SelectTokenDialogEvent) => {
+                if (ev.open || !ev.token || ev.uuid !== id) return
+                setSelectedToken(ev.token)
+            },
+            [id],
+        ),
+    )
+
     const { value: defaultGasPrice = '0' } = useGasPrice()
 
     const [selectedToken, setSelectedToken] = useState<FungibleTokenDetailed>(token)
-    const [isOpenSelectTokenDialog, openSelectTokenDialog] = useState(false)
     const chainId = useChainId()
     const is1559Supported = useMemo(() => isEIP1559Supported(chainId), [chainId])
 
@@ -56,14 +72,17 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         setSelectedToken(token)
     }, [token])
 
+    // workaround: transferERC20 should support non-evm network
+    const isNativeToken = isSameAddress(selectedToken?.address, NATIVE_TOKEN_ADDRESS)
+    const tokenType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
+
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
-        selectedToken?.type ?? EthereumTokenType.Native,
+        tokenType,
         selectedToken?.address ?? '',
     )
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
-    const isNativeToken = selectedToken.type === EthereumTokenType.Native
 
     //#region resolve ENS domain
     const {
@@ -101,7 +120,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [tokenBalance, gasPrice, selectedToken?.type, amount])
 
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        selectedToken.type,
+        tokenType,
         selectedToken.address,
     )
 
@@ -122,7 +141,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (isGreaterThan(rightShift(amount, selectedToken.decimals), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
-        if (!EthereumAddress.isValid(address)) return t.wallets_transfer_error_invalid_address()
+        if (!(EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address)))
+            return t.wallets_transfer_error_invalid_address()
         if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
             if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
             return t.wallet_transfer_error_no_address_has_been_set_name()
@@ -256,7 +276,12 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                         SelectTokenChip={{
                             loading: false,
                             ChipProps: {
-                                onClick: () => openSelectTokenDialog(true),
+                                onClick: () =>
+                                    setSelectToken({
+                                        open: true,
+                                        uuid: id,
+                                        disableNativeToken: false,
+                                    }),
                             },
                         }}
                     />
@@ -299,16 +324,6 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
                     </Button>
                 </Box>
             </Stack>
-            {isOpenSelectTokenDialog && (
-                <SelectTokenDialog
-                    onSelect={(token) => {
-                        setSelectedToken(token!)
-                        openSelectTokenDialog(false)
-                    }}
-                    open={isOpenSelectTokenDialog}
-                    onClose={() => openSelectTokenDialog(false)}
-                />
-            )}
         </Stack>
     )
 })

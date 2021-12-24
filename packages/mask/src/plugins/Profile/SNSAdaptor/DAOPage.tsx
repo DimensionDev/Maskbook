@@ -1,8 +1,8 @@
+import { useState } from 'react'
 import IframeResizer from 'iframe-resizer-react'
 import { useTheme } from '@mui/material'
-import type { Dao_Payload } from './hooks/useDao'
-import { useState } from 'react'
 import type { ProfileIdentifier } from '@masknet/shared-base'
+import type { Dao_Payload } from './hooks'
 
 interface DAOPageProps {
     payload: Dao_Payload | undefined
@@ -18,7 +18,7 @@ export function DAOPage(props: DAOPageProps) {
             log
             checkOrigin={false}
             heightCalculationMethod="lowestElement"
-            enablePublicMethods={true}
+            enablePublicMethods
             src={`https://dimensiondev.github.io/DAO-Interface/?mode=${mode}&userId=${props.identifier.userId.toLowerCase()}`}
             frameBorder={0}
             onResized={onResized}

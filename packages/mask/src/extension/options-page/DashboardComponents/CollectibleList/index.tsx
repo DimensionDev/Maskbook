@@ -117,10 +117,11 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
 }
 function CollectibleListUI(props: CollectibleListUIProps) {
     const { provider, wallet, collectibles, loading, collectiblesRetry, error, readonly, hasRetry = true } = props
-    const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
+    const classes = useStylesExtends(useStyles(), props)
 
-    WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry)
+    useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
+
     if (loading)
         return (
             <Box className={classes.root}>
@@ -171,13 +172,13 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     )
 }
 
-export interface CollectibleListAddressProps extends withClasses<'empty' | 'button'> {
+export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     address: string
     collection?: string
     setCount: (count: number) => void
 }
 
-export function CollectibleListAddress(props: CollectibleListAddressProps) {
+export function CollectibleList(props: CollectibleListProps) {
     const { address, collection, setCount } = props
     const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const chainId = ChainId.Mainnet
@@ -198,20 +199,15 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
     }, [provider, address])
 
     useEffect(() => {
-        if (collectibles.length) {
-            setRendCollectibles([...rendCollectibles, ...collectibles])
-            if (hasNextPage) {
-                const timer = setTimeout(() => {
-                    setPage(page + 1)
-                }, 1000)
-
-                return () => {
-                    clearTimeout(timer)
-                }
-            }
+        if (!collectibles.length) return
+        setRendCollectibles([...rendCollectibles, ...collectibles])
+        if (!hasNextPage) return
+        const timer = setTimeout(() => {
+            setPage(page + 1)
+        }, 1000)
+        return () => {
+            clearTimeout(timer)
         }
-
-        return () => {}
     }, [collectibles])
 
     useEffect(() => {
@@ -226,15 +222,16 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             loading={collectiblesLoading}
             collectiblesRetry={collectiblesRetry}
             error={collectiblesError}
-            readonly={true}
+            readonly
             hasRetry={!!address}
         />
     )
 }
 
 export function CollectionList({ address }: { address: string }) {
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const chainId = ChainId.Mainnet
+    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
+    const { t } = useI18N()
     const [page, setPage] = useState(0)
     const { classes } = useStyles()
     const [counts, setCounts] = useState<number[]>([])
@@ -248,21 +245,25 @@ export function CollectionList({ address }: { address: string }) {
     }, [provider, address])
 
     useEffect(() => {
-        if (collections.length) {
-            setRendCollections([...rendCollections, ...collections])
-            if (hasNextPage) {
-                const timer = setTimeout(() => {
-                    setPage(page + 1)
-                }, 3000)
-
-                return () => {
-                    clearTimeout(timer)
-                }
-            }
+        if (!collections.length) return
+        setRendCollections([...rendCollections, ...collections])
+        if (!hasNextPage) return
+        const timer = setTimeout(() => {
+            setPage(page + 1)
+        }, 3000)
+        return () => {
+            clearTimeout(timer)
         }
-
-        return () => {}
     }, [collections])
+
+    if (!rendCollections.length)
+        return (
+            <Box display="flex" alignItems="center" justifyContent="center">
+                <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
+                    {t('dashboard_no_collectible_found')}
+                </Typography>
+            </Box>
+        )
 
     return (
         <Box>
@@ -277,10 +278,11 @@ export function CollectionList({ address }: { address: string }) {
                             color="textPrimary"
                             variant="body2"
                             sx={{ fontSize: '16px' }}>
-                            {x.name}({counts[i]})
+                            {x.name}
+                            {counts[i] ? `(${counts[i]})` : null}
                         </Typography>
                     </Box>
-                    <CollectibleListAddress
+                    <CollectibleList
                         address={address}
                         collection={x.slug}
                         setCount={(count) => {
