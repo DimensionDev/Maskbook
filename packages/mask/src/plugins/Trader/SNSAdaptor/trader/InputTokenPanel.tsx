@@ -23,6 +23,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         fontSize: 14,
         lineHeight: '20px',
         color: theme.palette.text.primary,
+        wordBreak: 'keep-all',
     },
     amount: {
         marginLeft: 10,

@@ -10,11 +10,11 @@ import {
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useCallback, useState, useEffect, useRef } from 'react'
+import { useCallback, useState, useEffect } from 'react'
 import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
-import { useScrollBottomEvent } from '@masknet/shared'
 import { useUpdate } from 'react-use'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -149,15 +149,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         backgroundColor: 'transparent',
     },
-    imgWrapper: {
-        height: 160,
-        width: '100%',
-        overflow: 'hidden',
-    },
-    selectWrapperImg: {
-        maxWidth: '100%',
-        minHeight: 160,
-    },
     selectWrapperNftNameWrapper: {
         width: '100%',
         background: theme.palette.background.default,
@@ -194,6 +185,13 @@ const useStyles = makeStyles()((theme) => ({
         height: 15,
         color: '#1C68F3',
     },
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
+    },
 }))
 
 export interface SelectNftTokenDialogProps extends withClasses<never> {
@@ -204,7 +202,6 @@ export interface SelectNftTokenDialogProps extends withClasses<never> {
     existTokenDetailedList: ERC721TokenDetailed[]
     tokenDetailedOwnerList: ERC721TokenDetailed[]
     setExistTokenDetailedList: React.Dispatch<React.SetStateAction<ERC721TokenDetailed[]>>
-    addOffset: () => void
 }
 
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
@@ -216,7 +213,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         tokenDetailedOwnerList,
         setExistTokenDetailedList,
         onClose,
-        addOffset,
         loadingOwnerList,
     } = props
     const { t } = useI18N()
@@ -227,9 +223,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         useState<ERC721TokenDetailed[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contract)
-    const containerRef = useRef<HTMLDivElement>(null)
 
-    useScrollBottomEvent(containerRef, addOffset)
     useEffect(() => {
         setTokenDetailed(undefined)
         setTokenId('')
@@ -370,15 +364,21 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 </div>
                             </Box>
                         ) : (
-                            <div className={classes.tokenSelector} ref={containerRef}>
+                            <div className={classes.tokenSelector}>
                                 {tokenDetailedOwnerList.map((token, i) => {
                                     const findToken = tokenDetailedSelectedList.find((t) => t.tokenId === token.tokenId)
 
                                     return (
                                         <ListItem className={classes.selectWrapper} key={i.toString()}>
-                                            <div className={classes.imgWrapper}>
-                                                <img className={classes.selectWrapperImg} src={token?.info.mediaUrl} />
-                                            </div>
+                                            <NftImage
+                                                token={token}
+                                                classes={{
+                                                    loadingFailImage: classes.loadingFailImage,
+                                                }}
+                                                fallbackImage={
+                                                    new URL('./assets/nft_token_fallback.png', import.meta.url)
+                                                }
+                                            />
                                             <div className={classes.selectWrapperNftNameWrapper}>
                                                 <Typography
                                                     className={classes.selectWrapperNftName}

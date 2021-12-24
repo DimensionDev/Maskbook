@@ -448,7 +448,7 @@ export const TradeForm = memo<AllTradeFormProps>(
                         <EthereumChainBoundary
                             chainId={chainId}
                             noSwitchNetworkTip
-                            disablePadding={true}
+                            disablePadding
                             ActionButtonPromiseProps={{
                                 fullWidth: true,
                                 classes: { root: classes.button, disabled: classes.disabledButton },

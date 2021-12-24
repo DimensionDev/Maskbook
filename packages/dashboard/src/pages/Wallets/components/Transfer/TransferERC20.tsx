@@ -6,12 +6,14 @@ import {
     formatWeiToEther,
     FungibleTokenDetailed,
     isEIP1559Supported,
+    isSameAddress,
     TransactionStateType,
     useChainId,
     useFungibleTokenBalance,
     useGasLimit,
     useGasPrice,
     useNativeTokenDetailed,
+    useTokenConstants,
     useTokenTransferCallback,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
@@ -36,6 +38,7 @@ interface TransferERC20Props {
 const GAS_LIMIT = 30000
 export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     const t = useDashboardI18N()
+    const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const anchorEl = useRef<HTMLDivElement | null>(null)
     const [id] = useState(uuid())
     const [amount, setAmount] = useState('')
@@ -69,14 +72,17 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         setSelectedToken(token)
     }, [token])
 
+    // workaround: transferERC20 should support non-evm network
+    const isNativeToken = isSameAddress(selectedToken?.address, NATIVE_TOKEN_ADDRESS)
+    const tokenType = isNativeToken ? EthereumTokenType.Native : EthereumTokenType.ERC20
+
     // balance
     const { value: tokenBalance = '0', retry: tokenBalanceRetry } = useFungibleTokenBalance(
-        selectedToken?.type ?? EthereumTokenType.Native,
+        tokenType,
         selectedToken?.address ?? '',
     )
     const nativeToken = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice()
-    const isNativeToken = selectedToken.type === EthereumTokenType.Native
 
     //#region resolve ENS domain
     const {
@@ -114,7 +120,7 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
     }, [tokenBalance, gasPrice, selectedToken?.type, amount])
 
     const [transferState, transferCallback, resetTransferCallback] = useTokenTransferCallback(
-        selectedToken.type,
+        tokenType,
         selectedToken.address,
     )
 
@@ -135,7 +141,8 @@ export const TransferERC20 = memo<TransferERC20Props>(({ token }) => {
         if (isGreaterThan(rightShift(amount, selectedToken.decimals), maxAmount))
             return t.wallets_transfer_error_insufficient_balance({ symbol: selectedToken.symbol ?? '' })
         if (!address) return t.wallets_transfer_error_address_absence()
-        if (!EthereumAddress.isValid(address)) return t.wallets_transfer_error_invalid_address()
+        if (!(EthereumAddress.isValid(address) || Utils?.isValidDomain?.(address)))
+            return t.wallets_transfer_error_invalid_address()
         if (Utils?.isValidDomain?.(address) && (resolveDomainError || !registeredAddress)) {
             if (network?.type !== NetworkType.Ethereum) return t.wallet_transfer_error_no_ens_support()
             return t.wallet_transfer_error_no_address_has_been_set_name()

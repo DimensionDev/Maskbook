@@ -356,7 +356,7 @@ function ClaimItem(props: ClaimItemProps) {
                 </div>
                 <div>
                     <EthereumWalletConnectedBoundary
-                        hideRiskWarningConfirmed={true}
+                        hideRiskWarningConfirmed
                         classes={{
                             connectWallet: classNames(classes.actionButton, classes.connectWallet),
                             gasFeeButton: classNames(classes.actionButton, classes.connectWallet),

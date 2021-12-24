@@ -79,7 +79,6 @@ const useStyles = makeStyles()((theme) => {
                 flexDirection: 'column',
             },
         },
-
         button: {
             borderRadius: 50,
             [smallQuery]: {
@@ -215,7 +214,7 @@ export function PoolInList(props: PoolInListProps) {
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton fullWidth size="small" variant="contained" disabled={true}>
+                    <ActionButton fullWidth size="small" variant="contained" disabled>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}

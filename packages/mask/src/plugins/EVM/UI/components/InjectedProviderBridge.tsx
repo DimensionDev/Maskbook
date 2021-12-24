@@ -2,6 +2,7 @@ import { useEffect, useCallback } from 'react'
 import { useMount } from 'react-use'
 import { ProviderType, isInjectedProvider, ChainId } from '@masknet/web3-shared-evm'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
+import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { EVM_Messages } from '../../messages'
 import Services from '../../../../extension/service'
 import { WalletRPC } from '../../../Wallet/messages'
@@ -17,6 +18,7 @@ export function InjectedProviderBridge(props: InjectedProviderBridgeProps) {
     const bridgedProvider = useBridgedProvider(props.type)
 
     const onMounted = useCallback(async () => {
+        if (isDashboardPage() || isPopupPage()) return
         if (providerType !== ProviderType.Coin98) return
         const connected = await Services.Ethereum.connectInjected()
         await WalletRPC.updateAccount({

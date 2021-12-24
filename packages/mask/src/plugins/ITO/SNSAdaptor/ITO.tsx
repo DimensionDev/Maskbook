@@ -619,7 +619,7 @@ export function ITO(props: ITO_Props) {
                             : footerNormal}
                     </div>
                     <Typography variant="body1" className={classes.fromText}>
-                        {`From: @${sellerName}`}
+                        From: @{sellerName}
                     </Typography>
                 </Box>
             </Card>

@@ -11,7 +11,7 @@ export const base: Plugin.Shared.Definition = {
     enableRequirement: {
         architecture: { app: true, web: true },
         networks: { type: 'opt-out', networks: {} },
-        target: 'stable',
+        target: 'insider',
     },
     i18n: languages,
     declareApplicationCategories: [],

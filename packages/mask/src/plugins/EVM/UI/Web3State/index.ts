@@ -69,7 +69,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
             if (
                 isSameAddress(address, ZERO_ADDRESS) ||
                 isSameAddress(address, ZERO_X_ERROR_ADDRESS) ||
-                isValidAddress(address)
+                !isValidAddress(address)
             ) {
                 return undefined
             }

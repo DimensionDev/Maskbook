@@ -9,10 +9,10 @@ import type { EC_CryptoKey } from '.'
 
 // TODO: switch to holoflows-kit
 const isExtension = globalThis?.location?.protocol?.includes('extension')
-const isTest = new URL('./is_test.txt', import.meta.url).protocol === 'file:'
+const isTest = new URL('./is_test.json', import.meta.url).protocol === 'file:'
 let secp256k1!: typeof import('tiny-secp256k1')
 if (isExtension || isTest) {
-    secp256k1 = await import('tiny-secp256k1')
+    import('tiny-secp256k1').then((mod) => (secp256k1 = mod))
 }
 
 /**
