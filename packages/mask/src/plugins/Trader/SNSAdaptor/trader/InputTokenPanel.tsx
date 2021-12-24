@@ -9,6 +9,7 @@ import { ZERO_ADDRESS, ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     filledInput: {
@@ -93,8 +94,8 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
 
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({ chainId, token, balance, onAmountChange, amount, ...props }) => {
+        const isDashboard = isDashboardPage()
         const { t } = useI18N()
-        const isDashboard = location.href.includes('dashboard.html')
         const { classes } = useStyles({ isDashboard })
 
         //#region update amount by self

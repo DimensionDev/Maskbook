@@ -12,7 +12,7 @@ import { currySameAddress } from '@masknet/web3-shared-evm'
 import { PersonaRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PersonaRecord'
 import { ProfileRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/ProfileRecord'
 import { PostRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/PostRecord'
-import { createOrUpdatePostDB, PostDBAccess } from '../../../database'
+import { createPostDB, PostDBAccess, updatePostDB } from '../../../database'
 import { WalletRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/WalletRecord'
 import {
     getDerivableAccounts,
@@ -25,6 +25,7 @@ import { addWallet } from '../../../plugins/Wallet/services/wallet/database'
 import { patchCreateNewRelation, patchCreateOrUpdateRelation } from '../IdentityService'
 import { RelationRecordFromJSONFormat } from '../../../utils/type-transform/BackupFormat/JSON/DBRecord-JSON/RelationRecord'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM } from '@masknet/plugin-wallet'
+import { createTransaction } from '../../../../background/database/utils/openDB'
 
 /**
  * Restore the backup
@@ -75,9 +76,13 @@ export async function restoreBackup(json: object, whoAmI?: ProfileIdentifier) {
         }
     }
     {
-        const postDBTransaction = (await PostDBAccess()).transaction('post', 'readwrite')
+        const t = createTransaction(await PostDBAccess(), 'readwrite')('post')
         for (const x of data.posts) {
-            await createOrUpdatePostDB(PostRecordFromJSONFormat(x), 'append', postDBTransaction)
+            const { val, err } = Result.wrap(() => PostRecordFromJSONFormat(x))
+            if (err) continue
+            if (await t.objectStore('post').get(val.identifier.toText())) {
+                await updatePostDB(val, 'append', t)
+            } else await createPostDB(val, t)
         }
     }
 

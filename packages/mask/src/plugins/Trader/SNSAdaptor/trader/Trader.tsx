@@ -170,7 +170,7 @@ export function Trader(props: TraderProps) {
     // Query the balance of native tokens on target chain
     useAsync(async () => {
         if (chainId && currentProvider && currentAccount) {
-            const cacheBalance = currentBalancesSettings.value[currentProvider][chainId]
+            const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
 
             let balance: string
 
@@ -239,7 +239,7 @@ export function Trader(props: TraderProps) {
                 open: true,
                 uuid: String(type),
                 disableNativeToken: false,
-                FixedTokenListProps: {
+                FungibleTokenListProps: {
                     selectedTokens: excludeTokens,
                 },
             })
@@ -346,9 +346,9 @@ export function Trader(props: TraderProps) {
             } else {
                 if (network === NetworkType.Ethereum) {
                     const response = await WalletRPC.getEstimateGasFees(chainId)
-                    const maxFeePerGas = formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()
+                    const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toString()
                     const maxPriorityFeePerGas = formatGweiToWei(
-                        response?.medium.suggestedMaxPriorityFeePerGas ?? 0,
+                        response?.medium?.suggestedMaxPriorityFeePerGas ?? 0,
                     ).toString()
                     setGasConfig({
                         maxFeePerGas,
