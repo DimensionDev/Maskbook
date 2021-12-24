@@ -73,8 +73,9 @@ export function SelectRecipientsUnlockDialogUI(props: SelectRecipientsUnlockDial
                             </ListItemText>
                         </ListItem>
                     ) : (
-                        itemsAfterSearch.map((item) => (
+                        itemsAfterSearch.map((item, i) => (
                             <LockInList
+                                key={i}
                                 item={item}
                                 search={search}
                                 checked={props.selected.some((x) => x.lock.address === item.lock.address)}

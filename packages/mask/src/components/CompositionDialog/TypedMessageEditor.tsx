@@ -106,7 +106,13 @@ export const TypedMessageEditor = memo(
             const reset = () => setAsText('')
             // We don't have an rich text editor yet.
             return (
-                <Alert severity="error" action={<Button onClick={reset}>{`${t('reset')} ${t('editor')}`}</Button>}>
+                <Alert
+                    severity="error"
+                    action={
+                        <Button onClick={reset}>
+                            {t('reset')} {t('editor')}
+                        </Button>
+                    }>
                     {t('typed_message_text_alert')}
                 </Alert>
             )

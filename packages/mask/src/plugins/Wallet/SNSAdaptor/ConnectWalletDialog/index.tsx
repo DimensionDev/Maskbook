@@ -103,13 +103,15 @@ export function ConnectWalletDialog(props: ConnectWalletDialogProps) {
         // connection failed
         if (!account || !networkType) throw new Error(`Failed to connect to ${resolveProviderName(providerType)}.`)
 
-        // need to switch chain
-        if (chainId !== expectedChainId) {
+        // the coin98 wallet cannot handle add/switch RPC provider correctly
+        // it will always add a new RPC provider even if the network exists
+        if (chainId !== expectedChainId && providerType !== ProviderType.Coin98) {
             try {
                 const overrides = {
                     chainId: expectedChainId,
                     providerType,
                 }
+
                 await Promise.race([
                     (async () => {
                         await delay(30 /* seconds */ * 1000 /* milliseconds */)

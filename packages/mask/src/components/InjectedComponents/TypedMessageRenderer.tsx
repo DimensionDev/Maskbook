@@ -151,7 +151,12 @@ export const DefaultTypedMessageUnknownRenderer = memo(function DefaultTypedMess
 ) {
     const { t } = useI18N()
 
-    return renderWithMetadata(props, <Typography color="textPrimary">{`${t('unknown')} ${t('message')}`}</Typography>)
+    return renderWithMetadata(
+        props,
+        <Typography color="textPrimary">
+            {t('unknown')} {t('message')}
+        </Typography>,
+    )
 })
 registerTypedMessageRenderer('unknown', {
     component: DefaultTypedMessageUnknownRenderer,
