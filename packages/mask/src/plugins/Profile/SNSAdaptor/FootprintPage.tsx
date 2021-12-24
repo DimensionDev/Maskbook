@@ -24,7 +24,7 @@ const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
         platform,
         identity,
         id,
-        type,
+        type: type.replaceAll('-', '.'),
     })
 }
 
