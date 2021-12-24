@@ -6,8 +6,7 @@ import AnimatedMessage from './animatedMsg'
 import Tip from './tooltip'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
 import { PetsPluginID } from '../constants'
-import { currentPluginMinimalModeNOTEnabled } from '../../../settings/settings'
-import { useValueRef } from '@masknet/shared'
+import { useIsMinimalMode } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -39,14 +38,14 @@ const AnimatePic = () => {
 
     const [show, setShow] = useState(false)
     const [infoShow, setInfoShow] = useState(false)
-    const enabled = useValueRef(currentPluginMinimalModeNOTEnabled['plugin:' + PetsPluginID])
+    const disabled = useIsMinimalMode(PetsPluginID)
 
     const identity = useCurrentVisitingIdentity()
     useEffect(() => {
         const userId = identity.identifier.userId
         const maskId = 'realMaskNetwork'
-        setShow(enabled && userId === maskId)
-    }, [identity, enabled])
+        setShow(!disabled && userId === maskId)
+    }, [identity, disabled])
 
     const handleClose = () => setShow(false)
     const handleMouseEnter = () => setInfoShow(true)
