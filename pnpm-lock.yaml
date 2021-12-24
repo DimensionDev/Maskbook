@@ -1011,6 +1011,7 @@ importers:
       unstated-next: ^1.1.0
       urlcat: ^2.0.4
       use-subscription: ^1.5.1
+      uuid: ^8.3.2
       wallet.ts: ^1.0.1
       web3: 1.5.2
       web3-core-helpers: 1.5.2
@@ -1033,6 +1034,7 @@ importers:
       unstated-next: 1.1.0
       urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
+      uuid: 8.3.2
       wallet.ts: 1.0.1
       web3: 1.5.2
       web3-core-helpers: 1.5.2

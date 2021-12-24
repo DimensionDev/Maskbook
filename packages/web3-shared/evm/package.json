@@ -14,6 +14,7 @@
     "@types/punycode": "^2.1.0",
     "@unstoppabledomains/resolution": "^5.0.1",
     "bignumber.js": "9.0.2",
+    "uuid": "^8.3.2",
     "ethereum-blockies": "^0.1.1",
     "fortmatic": "^2.2.1",
     "fuse.js": "^6.5.3",

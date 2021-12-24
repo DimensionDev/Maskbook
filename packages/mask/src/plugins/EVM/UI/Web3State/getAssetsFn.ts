@@ -41,8 +41,9 @@ export const getFungibleAssetsFn =
         const socketId = 'fetchFungibleTokenAsset' + address + network.chainId
         await ws.send({
             id: socketId,
-            method: 'fetchFungibleTokenAsset',
+            method: 'mask.fetchFungibleTokenAsset',
             params: {
+                address: address,
                 pageSize: 10,
             },
         })

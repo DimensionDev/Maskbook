@@ -363,7 +363,7 @@ export async function getAssetsListFromOpenSea(
     return (await response.json()) as AssetsListResponse
 }
 
-export async function getCollectionsFromOpenSea(owner: string, opts: { page?: number; size?: number }) {
+export async function getCollectionsFromOpenSea(owner: string, opts: { page?: number; size?: number }, apiKey: string) {
     const { page = 0, size = 300 } = opts
     const params = new URLSearchParams()
     params.append('asset_owner', owner.toLowerCase())
@@ -373,7 +373,7 @@ export async function getCollectionsFromOpenSea(owner: string, opts: { page?: nu
     const response = await fetch(`${OPENSEA_API}/api/v1/collections?${params.toString()}`, {
         method: 'GET',
         headers: {
-            'x-api-key': OPENSEA_API_KEY,
+            'x-api-key': apiKey ?? OPENSEA_API_KEY,
         },
     })
     const collections = (await response.json()) as AssetCollection[]
@@ -398,7 +398,7 @@ export interface Collection {
     slug: string
 }
 export async function getOpenSeaCollectionList(apiKey: string, address: string, page?: number, size?: number) {
-    const { collections } = await getCollectionsFromOpenSea(address, { page, size })
+    const { collections } = await getCollectionsFromOpenSea(address, { page, size }, apiKey)
     return {
         data: collections.map((x) => ({
             name: x.name,

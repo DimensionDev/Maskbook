@@ -1,10 +1,8 @@
-import { createContext, useState, useEffect } from 'react'
-import { useUpdateEffect } from 'react-use'
+import { createContext, useState } from 'react'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
     NonFungibleAssetProvider,
-    ERC721TokenCollectionInfo,
     ERC721TokenDetailed,
     useCollectibles,
     useCollections,
@@ -15,7 +13,6 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { currentNonFungibleAssetDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
-import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { Image } from '../../../../components/shared/Image'
 import { uniqBy } from 'lodash-unified'
 
@@ -112,7 +109,7 @@ interface CollectibleListUIProps extends withClasses<'empty' | 'button' | 'text'
     collectibles: ERC721TokenDetailed[]
     loading: boolean
     collectiblesRetry: () => void
-    error: Error | undefined
+    error: string | undefined
     readonly?: boolean
     hasRetry?: boolean
 }
@@ -121,7 +118,8 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
+    // TODO: should we listen erc721 event
+    // useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
 
     if (loading)
         return (
@@ -177,13 +175,13 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     address: string
     collection?: string
     setCount: (count: number) => void
+    collectibles: ERC721TokenDetailed[]
+    error?: string
 }
 
 export function CollectibleList(props: CollectibleListProps) {
-    const { address, collection, setCount } = props
+    const { address, collectibles, error } = props
     const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
-    const chainId = ChainId.Mainnet
-    const [page, setPage] = useState(0)
     const classes = props.classes ?? {}
 
     const {
@@ -200,15 +198,20 @@ export function CollectibleList(props: CollectibleListProps) {
     }, [provider, address])
 
     useEffect(() => {
-        if (!collectibles.length) return
-        setRendCollectibles([...rendCollectibles, ...collectibles])
-        if (!hasNextPage) return
-        const timer = setTimeout(() => {
-            setPage(page + 1)
-        }, 1000)
-        return () => {
-            clearTimeout(timer)
+        if (collectibles.length) {
+            setRendCollectibles([...rendCollectibles, ...collectibles])
+            if (hasNextPage) {
+                const timer = setTimeout(() => {
+                    setPage(page + 1)
+                }, 1000)
+
+                return () => {
+                    clearTimeout(timer)
+                }
+            }
         }
+
+        return () => {}
     }, [collectibles])
 
     useEffect(() => {
@@ -220,9 +223,10 @@ export function CollectibleList(props: CollectibleListProps) {
             classes={classes}
             provider={provider}
             collectibles={collectibles}
-            loading={collectiblesLoading}
-            collectiblesRetry={collectiblesRetry}
-            error={collectiblesError}
+            // TODO: fix loading statue
+            loading={false}
+            collectiblesRetry={() => {}}
+            error={error}
             readonly
             hasRetry={!!address}
         />
@@ -268,7 +272,7 @@ export function CollectionList({ address }: { address: string }) {
 
     return (
         <Box>
-            {rendCollections.map((x, i) => (
+            {(collections ?? []).map((x, i) => (
                 <Box key={i}>
                     <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
                         <Box className={classes.collectionWrap}>
@@ -290,6 +294,7 @@ export function CollectionList({ address }: { address: string }) {
                             counts[i] = count
                             setCounts(counts)
                         }}
+                        collectibles={collectible.filter((c) => c.collection?.slug === x.slug)}
                     />
                 </Box>
             ))}

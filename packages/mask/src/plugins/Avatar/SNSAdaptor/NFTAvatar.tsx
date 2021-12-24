@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { ChainId } from '@masknet/web3-shared-evm'
 import {
@@ -11,8 +11,7 @@ import {
     useChainId,
     useCollectibles,
 } from '@masknet/web3-shared-evm'
-import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
-import { currentNonFungibleAssetDataProviderSettings } from '../../../plugins/Wallet/settings'
+import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { AddNFT } from './AddNFT'
@@ -91,22 +90,11 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const classes = useStylesExtends(useStyles(), props)
     const account = useAccount()
     const chainId = useChainId()
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
-    const [page, setPage] = useState(0)
     const [selectedToken, setSelectedToken] = useState<ERC721TokenDetailed | undefined>()
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     const { t } = useI18N()
-    const {
-        value = {
-            collectibles: [],
-            hasNextPage: false,
-        },
-        loading,
-        retry,
-        error,
-    } = useCollectibles(account, ChainId.Mainnet, provider, page, 50)
-    const { collectibles, hasNextPage } = value
+    const { data: collectibles, error, retry } = useCollectibles(account, ChainId.Mainnet)
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
@@ -123,6 +111,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
         WalletMessages.events.selectProviderDialogUpdated,
     )
 
+    // TODO: merger loading
     const LoadStatus = Array.from({ length: 8 })
         .fill(0)
         .map((_, i) => (
@@ -157,9 +146,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 <EthereumChainBoundary chainId={chainId}>
                     <Box className={classes.galleryItem}>
                         <Box className={classes.gallery}>
-                            {loading
-                                ? LoadStatus
-                                : error || (collectibles.length === 0 && collectibles_.length === 0)
+                            {!error || (collectibles.length === 0 && collectibles_.length === 0)
                                 ? Retry
                                 : uniqBy(
                                       [...collectibles_, ...collectibles],
@@ -179,28 +166,6 @@ export function NFTAvatar(props: NFTAvatarProps) {
                                           />
                                       ))}
                         </Box>
-
-                        {hasNextPage || page > 0 ? (
-                            <TablePagination
-                                count={-1}
-                                component="div"
-                                onPageChange={() => {}}
-                                page={page}
-                                rowsPerPage={30}
-                                rowsPerPageOptions={[30]}
-                                labelDisplayedRows={() => null}
-                                backIconButtonProps={{
-                                    onClick: () => setPage(page - 1),
-                                    size: 'small',
-                                    disabled: page === 0,
-                                }}
-                                nextIconButtonProps={{
-                                    onClick: () => setPage(page + 1),
-                                    disabled: !hasNextPage,
-                                    size: 'small',
-                                }}
-                            />
-                        ) : null}
                         <Box className={classes.buttons}>
                             <Button variant="outlined" size="small" onClick={() => setOpen_(true)}>
                                 {t('nft_button_add_collectible')}

@@ -8,6 +8,7 @@ export interface MessageBase {
 export interface RequestMessage extends MessageBase {
     method: string
     params: unknown
+    notify?: NotifyFn
 }
 
 export interface PayloadMessage extends MessageBase {
@@ -16,20 +17,19 @@ export interface PayloadMessage extends MessageBase {
 }
 
 export interface PollItem<T extends unknown = unknown> {
-    pickedAt?: Date
     createdAt: Date
-    updatedAt?: Date
+    notify: NotifyFn
     data: T[]
     done?: boolean
+    updatedAt?: Date
+    pickedAt?: Date
 }
 
 export type NotifyFn = (event: { id: string; done: boolean; error?: unknown }) => void
 
 // todo:
 // 1. avoid duplicate instance
-// 2. auto reconnection
-// 3. handle data is end
-// 4. handle open status
+// 2. auto reconnection: double check
 export class ProviderProxy {
     private readonly _socket: WebSocket
     private readonly _pool: Map<string, PollItem>
@@ -41,34 +41,37 @@ export class ProviderProxy {
         this._notify = notifyFn
     }
 
-    public waitingOpen = () => {
+    waitingOpen = () => {
         return new Promise<void>((resolve, reject) => {
             this._socket.addEventListener('open', () => resolve())
             this._socket.addEventListener('error', () => reject())
         })
     }
 
-    public registerMessage = () => {
-        this._socket.addEventListener('message', (event: MessageEvent<string>) => {
-            console.debug('Message from server ', event.data)
-            const { id, results, error } = JSON.parse(event.data) as PayloadMessage
-            this.clearPool()
-            if (error || !id) {
-                this._notify({ id, done: true, error: error })
-            }
-            if (results) {
-                if (results.length === 0) {
-                    this._notify({ id, done: true })
-                    return
-                }
-                const updatedAt = new Date()
-                const itemInPoll = this._pool.get(id) ?? { data: [], createdAt: updatedAt }
-                const dataInPool = itemInPoll?.data ?? []
-                const patchData = [...dataInPool, ...(results ?? [])]
-                this._pool.set(id, { ...itemInPoll, updatedAt, data: patchData })
-                this._notify({ id, done: false })
-            }
-        })
+    onMessage = (event: MessageEvent<string>) => {
+        console.debug('Message from server ', event.data)
+        const { id, results, error } = JSON.parse(event.data) as PayloadMessage
+        this.clearPool()
+        const itemInPoll = this._pool.get(id)
+        if (!itemInPoll) return
+        if (error || !id) {
+            itemInPoll.notify({ id, done: true, error: error })
+        }
+
+        if (!results || results.length === 0) {
+            itemInPoll.notify({ id, done: true })
+            return
+        }
+        const updatedAt = new Date()
+        const dataInPool = itemInPoll?.data ?? []
+        const patchData = [...dataInPool, ...(results ?? [])]
+        this._pool.set(id, { ...itemInPoll, updatedAt, data: patchData })
+        itemInPoll.notify({ id, done: false })
+    }
+
+    registerMessage = () => {
+        this._socket.removeEventListener('message', this.onMessage)
+        this._socket.addEventListener('message', this.onMessage)
     }
 
     /**
@@ -77,10 +80,11 @@ export class ProviderProxy {
      */
     send(message: RequestMessage) {
         const cache = this._pool.get(message.id)
+        if (cache && !cache.done) return
         if (cache && !this.isExpired(cache!)) return
 
         this._socket.send(JSON.stringify(message))
-        this._pool.set(message.id, { data: [], createdAt: new Date() })
+        this._pool.set(message.id, { data: [], createdAt: new Date(), notify: message.notify || this._notify })
     }
 
     get socket(): WebSocket {
@@ -88,7 +92,6 @@ export class ProviderProxy {
     }
 
     getResult<T>(id: string): T[] {
-        // todo: update pick time
         const item = this._pool.get(id)
         if (!item) return []
         const newItem = { ...item, pickedAt: new Date() }
@@ -110,6 +113,7 @@ export class ProviderProxy {
         return !!item.pickedAt && differenceInSeconds(now, item.pickedAt) > 30
     }
 
+    // TODO: should clear all overed 10
     private clearPool() {
         const entities = Array.from(this._pool.entries())
         if (entities.length <= 10) {
