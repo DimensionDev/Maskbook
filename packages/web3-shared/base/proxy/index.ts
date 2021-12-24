@@ -1,4 +1,6 @@
 import differenceInSeconds from 'date-fns/differenceInSeconds'
+import { first } from 'lodash-unified'
+import compareAsc from 'date-fns/compareAsc'
 export interface MessageBase {
     id: string
 }
@@ -21,6 +23,8 @@ export interface PollItem<T extends unknown = unknown> {
     done?: boolean
 }
 
+export type NotifyFn = (event: { id: string; done: boolean; error?: unknown }) => void
+
 // todo:
 // 1. avoid duplicate instance
 // 2. auto reconnection
@@ -28,12 +32,12 @@ export interface PollItem<T extends unknown = unknown> {
 // 4. handle open status
 export class ProviderProxy {
     private readonly _socket: WebSocket
-    private readonly _poll: Map<string, PollItem>
-    private readonly _notify: (id: string) => void
+    private readonly _pool: Map<string, PollItem>
+    private readonly _notify: NotifyFn
 
-    constructor(point: string, notifyFn: (id: string) => void) {
+    constructor(point: string, notifyFn: NotifyFn) {
         this._socket = new WebSocket(point)
-        this._poll = new Map<string, PollItem>()
+        this._pool = new Map<string, PollItem>()
         this._notify = notifyFn
     }
 
@@ -48,16 +52,21 @@ export class ProviderProxy {
         this._socket.addEventListener('message', (event: MessageEvent<string>) => {
             console.debug('Message from server ', event.data)
             const { id, results, error } = JSON.parse(event.data) as PayloadMessage
+            this.clearPool()
             if (error || !id) {
-                // TODO: handle errors
+                this._notify({ id, done: true, error: error })
             }
             if (results) {
+                if (results.length === 0) {
+                    this._notify({ id, done: true })
+                    return
+                }
                 const updatedAt = new Date()
-                const itemInPoll = this._poll.get(id) ?? { data: [], createdAt: updatedAt }
+                const itemInPoll = this._pool.get(id) ?? { data: [], createdAt: updatedAt }
                 const dataInPool = itemInPoll?.data ?? []
                 const patchData = [...dataInPool, ...(results ?? [])]
-                this._poll.set(id, { ...itemInPoll, updatedAt, data: patchData })
-                this._notify(id)
+                this._pool.set(id, { ...itemInPoll, updatedAt, data: patchData })
+                this._notify({ id, done: false })
             }
         })
     }
@@ -67,11 +76,11 @@ export class ProviderProxy {
      * @param message
      */
     send(message: RequestMessage) {
-        const cache = this._poll.get(message.id)
+        const cache = this._pool.get(message.id)
         if (cache && !this.isExpired(cache!)) return
 
         this._socket.send(JSON.stringify(message))
-        this._poll.set(message.id, { data: [], createdAt: new Date() })
+        this._pool.set(message.id, { data: [], createdAt: new Date() })
     }
 
     get socket(): WebSocket {
@@ -80,7 +89,11 @@ export class ProviderProxy {
 
     getResult<T>(id: string): T[] {
         // todo: update pick time
-        return (this._poll.get(id)?.data ?? []) as T[]
+        const item = this._pool.get(id)
+        if (!item) return []
+        const newItem = { ...item, pickedAt: new Date() }
+        this._pool.set(id, newItem)
+        return item.data as T[]
     }
 
     /**
@@ -96,8 +109,22 @@ export class ProviderProxy {
         // lasted pick time > 30s
         return !!item.pickedAt && differenceInSeconds(now, item.pickedAt) > 30
     }
+
+    private clearPool() {
+        const entities = Array.from(this._pool.entries())
+        if (entities.length <= 10) {
+            return
+        }
+
+        const firstPick = first(
+            entities.sort((a, b) => compareAsc(a[1].pickedAt || a[1].createdAt, b[1].pickedAt || b[1].createdAt)),
+        )
+        if (!firstPick) return
+        this._pool.delete(firstPick[0])
+    }
 }
 
+// TODO: Production
 const DEV = 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
 
 enum SocketState {
@@ -107,9 +134,9 @@ enum SocketState {
     CLOSED = 3,
 }
 
-function getProxyWebsocketInstanceWrapper(): (notify: (id: string) => void) => Promise<ProviderProxy> {
+function getProxyWebsocketInstanceWrapper(): (notify: NotifyFn) => Promise<ProviderProxy> {
     let cached: ProviderProxy
-    return async (notify: (id: string) => void) => {
+    return async (notify: NotifyFn) => {
         const state = cached?.socket.readyState
         if (!cached || state === SocketState.CLOSING || state === SocketState.CLOSED) {
             cached = new ProviderProxy(DEV, notify)

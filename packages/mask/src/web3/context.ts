@@ -135,7 +135,7 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
         getAddressNamesList: WalletRPC.getAddressNames,
         getTransactionList: WalletRPC.getTransactionList,
         fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
-        providerSocketInstance: getProxyWebsocketInstance(WalletMessages.events.websocketDataUpdate.sendToLocal),
+        providerSocketInstance: getProxyWebsocketInstance(WalletMessages.events.websocketDataUpdate.sendToAll),
     }
 }
 

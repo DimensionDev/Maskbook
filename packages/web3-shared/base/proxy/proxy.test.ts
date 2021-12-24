@@ -36,7 +36,7 @@ describe('Proxy websocket', () => {
         const data = client.getResult<string>(id)
         expect(data).toEqual(['eth', 'bsc'])
         expect(mockNotifyCallback?.mock.calls.length).toBe(1)
-        expect(mockNotifyCallback?.mock.calls[0]).toEqual([id])
+        expect(mockNotifyCallback?.mock.calls[0]).toEqual([{ id, done: false }])
     })
 
     test('should merge cache data when server push two times data', async () => {
@@ -54,8 +54,8 @@ describe('Proxy websocket', () => {
         const data = client.getResult<string>(id)
         expect(data).toEqual(['eth', 'bsc', 'matic'])
         expect(mockNotifyCallback?.mock.calls.length).toBe(2)
-        expect(mockNotifyCallback?.mock.calls[0]).toEqual([id])
-        expect(mockNotifyCallback?.mock.calls[1]).toEqual([id])
+        expect(mockNotifyCallback?.mock.calls[0]).toEqual([{ id, done: false }])
+        expect(mockNotifyCallback?.mock.calls[1]).toEqual([{ id, done: false }])
     })
 
     test('should cache divide data when server push different response', async () => {
@@ -82,9 +82,9 @@ describe('Proxy websocket', () => {
         const request2Data = client.getResult<string>(requestID2)
         expect(request2Data).toEqual([1])
         expect(mockNotifyCallback?.mock.calls.length).toBe(3)
-        expect(mockNotifyCallback?.mock.calls[0]).toEqual([requestID1])
-        expect(mockNotifyCallback?.mock.calls[1]).toEqual([requestID2])
-        expect(mockNotifyCallback?.mock.calls[2]).toEqual([requestID1])
+        expect(mockNotifyCallback?.mock.calls[0]).toEqual([{ id: requestID1, done: false }])
+        expect(mockNotifyCallback?.mock.calls[1]).toEqual([{ id: requestID2, done: false }])
+        expect(mockNotifyCallback?.mock.calls[2]).toEqual([{ id: requestID1, done: false }])
     })
 
     test('should use cache when last pick within 30 second', async () => {
@@ -96,6 +96,23 @@ describe('Proxy websocket', () => {
 
         // @ts-ignore
         await expect(server).toReceiveMessage(testMethod)
+    })
+
+    test('should clear cache ', async () => {
+        Array.from({ length: 11 }, (v, i) => i).forEach((x) => {
+            const id = `mask.fetchAsset_${x}`
+            const mockData = { id, results: ['eth', 'bsc'] }
+            const testMethod = { method: 'fetchAsset', params: [], id }
+            client.send(testMethod)
+            pushToClientMockData(mockData)
+
+            // @ts-ignore
+            const data = client.getResult<string>(id)
+            expect(data).toEqual(['eth', 'bsc'])
+        })
+
+        const data = client.getResult<string>('mask.fetchAsset_0')
+        expect(data).toEqual([])
     })
 
     xtest('should merge cache data when server push two times data and uniq', async () => {

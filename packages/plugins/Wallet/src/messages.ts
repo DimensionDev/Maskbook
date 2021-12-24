@@ -137,6 +137,12 @@ export type SelectNftContractDialogEvent = {
     contract?: ERC721ContractDetailed
 }
 
+export type WebsocketDataUpdateEvent = {
+    id: string
+    done: boolean
+    error?: unknown
+}
+
 export interface WalletMessage {
     /**
      * Transaction dialog
@@ -219,7 +225,7 @@ export interface WalletMessage {
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
     /** request id */
-    websocketDataUpdate: string
+    websocketDataUpdate: WebsocketDataUpdateEvent
 
     rpc: unknown
 }

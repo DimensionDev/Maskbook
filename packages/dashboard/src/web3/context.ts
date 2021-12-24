@@ -115,8 +115,8 @@ export const Web3Context: Web3ProviderType = {
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
     // TODO: send to local
-    providerSocketInstance: getProxyWebsocketInstance((id) =>
-        PluginMessages.Wallet.events.websocketDataUpdate.sendToAll(id),
+    providerSocketInstance: getProxyWebsocketInstance((event) =>
+        PluginMessages.Wallet.events.websocketDataUpdate.sendToAll(event),
     ),
 }
 
