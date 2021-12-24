@@ -246,6 +246,7 @@
     "relative_time_months_ago": "crwdns4581:0{{months}}crwdne4581:0",
     "relative_time_seconds_ago": "crwdns4583:0{{seconds}}crwdne4583:0",
     "relative_time_years_ago": "crwdns4585:0{{years}}crwdne4585:0",
+    "plugin_chain_not_supported": "crwdns10689:0{{chain}}crwdne10689:0",
     "plugin_powered_by": "crwdns4587:0crwdne4587:0",
     "plugin_wallet_snackbar_wait_for_confirming": "crwdns10629:0crwdne10629:0",
     "plugin_wallet_snackbar_hash": "crwdns10631:0crwdne10631:0",
