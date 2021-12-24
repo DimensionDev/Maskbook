@@ -1,11 +1,11 @@
 import { PopupRoutes } from '@masknet/shared-base'
+export { fetch, fetchJSON } from '@masknet/plugin-infra'
 import urlcat from 'urlcat'
 import { currentPopupWindowId } from '../../../settings/settings'
 import { isLocked } from '../../../plugins/Wallet/services'
 
 export { __deprecated__getStorage, __deprecated__setStorage } from './storage'
 export { resolveTCOLink } from '../../../../shared'
-export { fetch, fetchJSON } from '../../../../background/services/helper/fetch'
 export { requestExtensionPermission, queryExtensionPermission } from './extensionPermission'
 
 export async function openPopupWindow(route?: PopupRoutes, params?: Record<string, any>) {

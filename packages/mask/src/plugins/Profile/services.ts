@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { fetchJSON } from '../../extension/background-script/HelperService'
+import { fetchJSON } from '@masknet/plugin-infra'
 import { AssetType, GeneralAsset, RSS3Profile } from './types'
 
 interface Response {
