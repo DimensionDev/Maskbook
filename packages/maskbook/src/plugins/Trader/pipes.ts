@@ -134,6 +134,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-aribtrum.sushi.com/pairs/${address}`
                 case NetworkType.xDai:
                     return `https://analytics-xdai.sushi.com/pairs/${address}`
+                case NetworkType.Optimistic:
+                    return ``
                 default:
                     safeUnreachable(networkType)
                     return ''

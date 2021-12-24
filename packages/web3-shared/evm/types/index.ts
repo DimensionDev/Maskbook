@@ -40,6 +40,11 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    //Optimistic
+    Optimistic = 10,
+    Optimistic_Kovan = 69,
+    Optimistic_Goerli = 420,
 }
 
 export enum ProviderType {
@@ -63,6 +68,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Optimistic = 'Optimistic',
 }
 
 export interface Wallet {

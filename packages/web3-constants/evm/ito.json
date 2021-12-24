@@ -11,7 +11,10 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
         "Mainnet": "0x86812da3A623ab9606976078588b80C315E55FA3",
@@ -25,7 +28,10 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
         "Mainnet": "0xc2CFbF22d6Dc87D0eE18d38d73733524c109Ff46",
@@ -39,7 +45,10 @@
         "Mumbai": "",
         "Arbitrum": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
         "Arbitrum_Rinkeby": "0x9b3649eC8C9f68484acC76D437B145a4e58Bf2A2",
-        "xDai": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c"
+        "xDai": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
         "Mainnet": 12766513,
@@ -53,7 +62,10 @@
         "Mumbai": 0,
         "Arbitrum": 102022,
         "Arbitrum_Rinkeby": 708696,
-        "xDai": 17865755
+        "xDai": 17865755,
+        "Optimistic": 0,
+        "Optimistic_Kovan": 0,
+        "Optimistic_Goerli": 0
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
         "Mainnet": "0x81b6ae377e360dcad63611846a2516f4ba8c88ac",
@@ -67,7 +79,10 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
         "Mainnet": "0x4dC5f343Fe57E4fbDA1B454d125D396A3181272c",
@@ -81,7 +96,10 @@
         "Mumbai": "",
         "Arbitrum": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Arbitrum_Rinkeby": "0xEbd753E66649C824241E63894301BA8Db5DBF5Bb",
-        "xDai": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9"
+        "xDai": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-mainnet",
@@ -95,6 +113,9 @@
         "Mumbai": "",
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-arbitrum-one",
         "Arbitrum_Rinkeby": "",
-        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai"
+        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     }
 }

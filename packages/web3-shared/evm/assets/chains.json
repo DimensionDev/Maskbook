@@ -335,6 +335,32 @@
         "networkId": 10
     },
     {
+        "name": "Optimistic Ethereum Testnet Kovan",
+        "chain": "KOR",
+        "network": "testnet",
+        "rpc": ["https://kovan.optimism.io/"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": { "name": "Ether", "symbol": "KOR", "decimals": 18 },
+        "infoURL": "https://optimism.io",
+        "shortName": "gor",
+        "chainId": 69,
+        "networkId": 69
+    },
+    {
+        "name": "Optimistic Ethereum Testnet Goerli",
+        "chain": "OPT",
+        "network": "testnet",
+        "rpc": ["https://goerli.optimism.io/"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": { "name": "Ether", "symbol": "GOR", "decimals": 18 },
+        "infoURL": "https://optimism.io",
+        "shortName": "gor",
+        "chainId": 420,
+        "networkId": 420
+    },
+    {
         "name": "Metadium Mainnet",
         "chain": "META",
         "network": "mainnet",

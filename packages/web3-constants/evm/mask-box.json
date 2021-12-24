@@ -11,7 +11,10 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
         "Mainnet": 13396393,
@@ -25,7 +28,10 @@
         "Mumbai": 0,
         "Arbitrum": 0,
         "Arbitrum_Rinkeby": 0,
-        "xDai": 0
+        "xDai": 0,
+        "Optimistic": 0,
+        "Optimistic_Kovan": 0,
+        "Optimistic_Goerli": 0
     },
     "MASK_BOX_TEST_NFT": {
         "Mainnet": "",
@@ -39,7 +45,10 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     },
     "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -53,7 +62,10 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     },
     "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -67,6 +79,9 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Optimistic": "",
+        "Optimistic_Kovan": "",
+        "Optimistic_Goerli": ""
     }
 }

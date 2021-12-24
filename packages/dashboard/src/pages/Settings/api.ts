@@ -34,6 +34,11 @@ export const [useXDaiNetworkTradeProvider] = createGlobalState(
     Messages.events.xdaiNetworkTradeProviderSettings.on,
 )
 
+export const [useOptimistcNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getOptimisticNetworkTradeProvider,
+    Messages.events.optimisticNetworkTradeProviderSettings.on,
+)
+
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {

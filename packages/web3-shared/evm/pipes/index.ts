@@ -29,6 +29,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Polygon]: 'polygon',
         [NetworkType.Arbitrum]: 'arbitrum',
         [NetworkType.xDai]: 'xdai',
+        [NetworkType.Optimistic]: 'optimistic',
     },
     'ethereum',
 )
@@ -40,6 +41,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Ethereum]: 'Ethereum',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
+        [NetworkType.Optimistic]: 'Optimistic',
     },
     'Unknown',
 )
@@ -68,6 +70,9 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Arbitrum]: 'rgb(36, 150, 238)',
         [ChainId.Arbitrum_Rinkeby]: 'rgb(36, 150, 238)',
         [ChainId.xDai]: 'rgb(73, 169, 166)',
+        [ChainId.Optimistic]: 'rgb(255, 3, 33)',
+        [ChainId.Optimistic_Kovan]: 'rgb(255, 3, 33)',
+        [ChainId.Optimistic_Goerli]: 'rgb(255, 3, 33)',
     },
     'rgb(214, 217, 220)',
 )

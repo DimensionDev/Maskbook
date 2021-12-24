@@ -14,6 +14,7 @@ import {
     polygonNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    optimismNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
@@ -69,6 +70,10 @@ export const [getArbitrumNetworkTradeProvider, setArbitrumNetworkTradeProvider] 
     arbitrumNetworkTradeProviderSettings,
 )
 export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create(xdaiNetworkTradeProviderSettings)
+
+export const [getOptimismNetworkTradeProvider, setOptimismNetworkTradeProvider] = create(
+    optimismNetworkTradeProviderSettings,
+)
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 

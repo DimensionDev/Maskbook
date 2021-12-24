@@ -38,6 +38,9 @@
         ],
         "Arbitrum": [],
         "Arbitrum_Rinkeby": [],
-        "xDai": []
+        "xDai": [],
+        "Optimistic": [],
+        "Optimistic_Kovan": [],
+        "Optimistic_Goerli": []
     }
 }

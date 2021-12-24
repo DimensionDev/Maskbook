@@ -9,6 +9,7 @@ import {
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
+    useOptimisticNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -45,6 +46,8 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const arbitrumOptions = [{ label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 }]
 
+    const optimisticOptions = [{ label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 }]
+
     const xDaiOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
     const t = useDashboardI18N()
@@ -79,6 +82,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useXDaiNetworkTradeProvider(),
             options: xDaiOptions,
             onChange: (value: any) => Services.Settings.setxDaiNetworkTradeProvider(+value),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Optimism' }),
+            value: useOptimisticNetworkTradeProvider(),
+            options: optimisticOptions,
+            onChange: (value: any) => Services.Settings.setOptimisticNetworkTradeProvider(+value),
         },
     ]
 
