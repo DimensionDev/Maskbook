@@ -41,13 +41,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region identity
     const identity = useCurrentVisitingIdentity()
     const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
-    //#endregion
+    const { value: daoPayload, loading: loadingDAO } = useDao(identity.identifier)
 
     const [hidden, setHidden] = useState(true)
-    const { value: daoPayload } = useDao(identity.identifier)
     const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
 
     useLocationChange(() => {
@@ -112,7 +110,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
 
     if (hidden) return null
 
-    if (loadingAddressNames)
+    if (loadingAddressNames || loadingDAO)
         return (
             <div className={classes.root}>
                 <Box
@@ -125,7 +123,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             </div>
         )
 
-    if (!addressName)
+    if (!addressName && !daoPayload)
         return (
             <div className={classes.root}>
                 <Box
