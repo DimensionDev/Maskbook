@@ -9,7 +9,7 @@ import TOKEN from './arweave-token.json'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types'
 import { makeFileKeySigned } from '../helpers'
 
-export class ArweaveAgent implements ProviderAgent {
+class ArweaveAgent implements ProviderAgent {
     instance: Arweave
     static stage: Record<Transaction['id'], Transaction> = {}
 

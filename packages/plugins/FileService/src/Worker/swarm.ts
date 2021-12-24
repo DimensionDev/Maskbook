@@ -14,7 +14,7 @@ function createBee(): Bee {
     return new Bee(sample(BEE_HOSTS)!)
 }
 
-export class SwarmAgent implements ProviderAgent {
+class SwarmAgent implements ProviderAgent {
     static providerName = 'Swarm'
     bee: Bee
 
@@ -55,7 +55,7 @@ export class SwarmAgent implements ProviderAgent {
 
     // currently not native support progress track
     async *upload(id: string) {
-        return 100
+        yield 100
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {

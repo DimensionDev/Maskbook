@@ -15,7 +15,7 @@ function creatClient(): IPFSHTTPClient {
     })
 }
 
-export class IPFSAgent implements ProviderAgent {
+class IPFSAgent implements ProviderAgent {
     static providerName = 'IPFS'
     client: IPFSHTTPClient
     constructor() {
@@ -34,7 +34,7 @@ export class IPFSAgent implements ProviderAgent {
 
     // currently not native support progress track
     async *upload(id: string) {
-        return 100
+        yield 100
     }
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
