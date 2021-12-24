@@ -1,15 +1,15 @@
+import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
-import urlcat from 'urlcat'
+import type { AddressName } from '@masknet/web3-shared-evm'
 import type { GeneralAsset, GeneralAssetWithTags } from '../types'
 import { RSS3_DEFAULT_IMAGE } from '../constants'
 import { DonationCard } from './components'
 import { useI18N } from '../../../utils'
 
-const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
+const getDonationLink = (label: string, donation: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = donation
-    return urlcat('https://rss3.bio/:address/singlegitcoin/:platform/:identity/:id/:type', {
-        address,
+    return urlcat(`https://${label}.bio/singlegitcoin/:platform/:identity/:id/:type`, {
         platform,
         identity,
         id,
@@ -29,21 +29,23 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    address: string
+    addressName?: AddressName
     donations?: GeneralAsset[]
 }
 
 export function DonationPage(props: DonationPageProps) {
-    const { address, donations = [] } = props
+    const { addressName, donations = [] } = props
     const { t } = useI18N()
     const { classes } = useStyles()
+
+    if (!addressName) return null
 
     return (
         <section className="grid grid-cols-1 gap-4 py-4">
             {donations.map((donation) => (
                 <Link
                     className={classes.link}
-                    href={getDonationLink(address, donation)}
+                    href={getDonationLink(addressName.label, donation)}
                     key={donation.id}
                     target="_blank"
                     rel="noopener noreferrer">

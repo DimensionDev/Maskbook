@@ -1,6 +1,7 @@
 import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
+import type { AddressName } from '@masknet/web3-shared-evm'
 import type { GeneralAsset, GeneralAssetWithTags } from '../types'
 import { RSS3_DEFAULT_IMAGE } from '../constants'
 import { FootprintCard } from './components'
@@ -17,10 +18,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
+const getFootprintLink = (label: string, footprint: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = footprint
-    return urlcat('https://rss3.bio/:address/singlefootprint/:platform/:identity/:id/:type', {
-        address,
+    return urlcat(`https://${label}.bio/singlefootprint/:platform/:identity/:id/:type`, {
         platform,
         identity,
         id,
@@ -29,22 +29,24 @@ const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
 }
 
 export interface FootprintPageProps {
-    address: string
+    addressName?: AddressName
     footprints?: GeneralAsset[]
 }
 
 export function FootprintPage(props: FootprintPageProps) {
-    const { address, footprints = [] } = props
+    const { addressName, footprints = [] } = props
     const { classes } = useStyles()
-    const { value: profile } = useRss3Profile(address)
+    const { value: profile } = useRss3Profile(addressName?.resolvedAddress ?? '')
     const username = profile?.name
+
+    if (!addressName) return null
 
     return (
         <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
             {footprints.map((footprint) => (
                 <Link
                     className={classes.link}
-                    href={getFootprintLink(address, footprint)}
+                    href={getFootprintLink(addressName.label, footprint)}
                     key={footprint.id}
                     target="_blank"
                     rel="noopener noreferrer">

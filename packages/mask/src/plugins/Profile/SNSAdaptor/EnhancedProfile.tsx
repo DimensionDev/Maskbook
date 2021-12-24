@@ -123,9 +123,9 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             case PageTags.NFTTag:
                 return <NFTPage address={addressNFTs?.resolvedAddress ?? ''} />
             case PageTags.DonationTag:
-                return <DonationPage address={addressRSS3?.resolvedAddress ?? ''} donations={donations} />
+                return <DonationPage addressName={addressRSS3} donations={donations} />
             case PageTags.FootprintTag:
-                return <FootprintPage address={addressRSS3?.resolvedAddress ?? ''} footprints={footprints} />
+                return <FootprintPage addressName={addressRSS3} footprints={footprints} />
             case PageTags.DAOTag:
                 return <DAOPage payload={daoPayload} identifier={identity.identifier} />
             default:
