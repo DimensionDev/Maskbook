@@ -13,7 +13,7 @@ const nonFungibleTokenAsset = async (
 ): Promise<void> => {
     const { address } = args
     // todo: key word
-    const openSeaApiKey = await getKeys('OpenSea')
+    const openSeaApiKey = await getKeys('opensea')
 
     let openSeaHasNextPage = true
     while (openSeaHasNextPage) {

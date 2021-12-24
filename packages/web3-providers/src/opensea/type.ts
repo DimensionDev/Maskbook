@@ -33,7 +33,7 @@ interface AssetOwner {
     discord_id: string | null
 }
 
-interface AssetCollection {
+export interface AssetCollection {
     banner_image_url: string | null
     chat_url: string | null
     created_date: string
