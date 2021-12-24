@@ -104,7 +104,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                 ],
                 styleOverrides: {
-                    root: {
+                    contained: {
                         borderRadius: 500,
                         textTransform: 'initial',
                         fontWeight: 'bold',
