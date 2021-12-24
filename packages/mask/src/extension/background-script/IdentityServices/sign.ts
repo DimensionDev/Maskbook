@@ -9,7 +9,6 @@ import {
     ECDSASignature,
 } from 'ethereumjs-util'
 import { MaskMessages } from '../../../utils'
-import { stringToBuffer } from 'arweave/web/lib/utils'
 import { constructSignRequestURL } from '../../popups'
 import { delay, PersonaIdentifier, fromBase64URL } from '@masknet/shared-base'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db'
@@ -79,6 +78,6 @@ export async function signWithPersona({ message, method }: SignRequest): Promise
             EIP2098: toCompactSig(signature.v, signature.r, signature.s),
         },
         address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
-        messageHex: bufferToHex(Buffer.from(stringToBuffer(message))),
+        messageHex: bufferToHex(Buffer.from(new TextEncoder().encode(message))),
     }
 }
