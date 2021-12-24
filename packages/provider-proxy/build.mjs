@@ -30,9 +30,10 @@ const packageJSON = {
     2,
   )}-${String(now.getHours()).padStart(2)}${String(now.getMinutes()).padStart(2)}`.replace(' ', '0'),
   dependencies: {
-    'wallet.ts': '1.0.1',
+    // 'wallet.ts': '1.0.1',
     'bignumber.js': '9.0.1',
     'socket.io-client': '2.4.0',
+    'lodash-unified': '1.0.1',
   },
   main: './output.js',
   types: './output.d.ts',

@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js'
 import type { WalletTokenRecord } from './type'
-import { ChainId, formatEthereumAddress, getChainIdFromName } from '@masknet/web3-shared-evm'
+import { ChainId, getChainIdFromName } from '@masknet/web3-shared-evm'
 import { CurrencyType, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import { multipliedBy, rightShift } from '@masknet/web3-shared-base'
 
@@ -11,8 +11,7 @@ export function formatAssets(data: WalletTokenRecord[]): Asset[] {
         .filter((x) => x.is_verified)
         .map((y): Asset => {
             const chainIdFromChain = getChainIdFromName(y.chain) ?? ChainId.Mainnet
-            const chainIdFromId = getChainIdFromName(y.id)
-            const address = y.id === 'eth' ? '' : formatEthereumAddress(y.id)
+            const address = y.id === 'eth' ? '' : y.id
 
             return {
                 id: address,
