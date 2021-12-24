@@ -11,11 +11,17 @@ export function createERC721Token(
     contractDetailed: ERC721ContractDetailed,
     info: ERC721TokenInfo,
     tokenId: string,
+    collection?: {
+        name: string
+        image?: string
+        slug: string
+    },
 ): ERC721TokenDetailed {
     return {
         contractDetailed,
         info,
         tokenId,
+        collection,
     }
 }
 
@@ -43,6 +49,11 @@ export function format(address: string, size: number, assets: Asset[]) {
                         mediaUrl: x.image_url || x.image_preview_url || x.asset_contract.image_url || '',
                     },
                     x.token_id,
+                    {
+                        name: x.collection.name,
+                        image: x.collection.image_url || undefined,
+                        slug: x.collection.slug,
+                    },
                 ),
             ),
         hasNextPage: assets.length === size,
