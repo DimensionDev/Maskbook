@@ -142,9 +142,11 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             <div className={classes.tags}>
                 <PageTag address={address} daoPayload={daoPayload} tag={currentTag} onChange={setCurrentTag} />
             </div>
-            <div className={classes.metadata}>
-                <AddressViewer addressName={addressName} />
-            </div>
+            {addressName ? (
+                <div className={classes.metadata}>
+                    <AddressViewer addressName={addressName} />
+                </div>
+            ) : null}
             <div className={classes.content}>{content}</div>
         </div>
     )
