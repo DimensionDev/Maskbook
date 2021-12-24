@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js'
 import { parseURL } from '@masknet/shared-base'
 import {
     openseaHostnames,
@@ -6,7 +5,7 @@ import {
     raribleHostnames,
     rariblePathnameRegexMatcher,
 } from './constants'
-import { ChainId, NonFungibleAssetProvider, formatBalance } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { WyvernSchemaName } from 'opensea-js/lib/types'
 
 export function checkUrl(url: string): boolean {
@@ -35,7 +34,6 @@ export function getAssetInfoFromURL(url?: string) {
             chain_id: _url.host.includes('testnets') ? ChainId.Rinkeby : ChainId.Mainnet,
             address: openSeaMatched[1],
             token_id: openSeaMatched[2],
-            provider: NonFungibleAssetProvider.OPENSEA,
         }
     }
     //#endregion
@@ -51,7 +49,6 @@ export function getAssetInfoFromURL(url?: string) {
                 : ChainId.Mainnet,
             address: raribleMatched[1],
             token_id: raribleMatched[2],
-            provider: NonFungibleAssetProvider.RARIBLE,
         }
     }
     //#endregion

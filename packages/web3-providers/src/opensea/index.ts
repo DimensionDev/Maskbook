@@ -79,6 +79,7 @@ function createTokenDetailed(
 }
 
 function createAssetLink(account: OpenSeaCustomAccount | undefined) {
+    if (!account) return ''
     return urlcat(OPENSEA_ACCOUNT_URL, {
         address: account?.user?.username ?? account?.address,
     })

@@ -17,7 +17,6 @@ export function PostInspector(props: PostInspectorProps) {
                     chainId: token.chain_id,
                     tokenId: token.token_id,
                     contractAddress: token.address,
-                    provider: token.provider,
                 }}>
                 <Collectible />
             </CollectibleState.Provider>

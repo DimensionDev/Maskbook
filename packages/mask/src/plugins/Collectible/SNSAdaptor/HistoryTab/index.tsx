@@ -44,6 +44,8 @@ export function HistoryTab(props: HistoryTabProps) {
     const { classes } = useStyles()
     const { provider, events, eventPage, setEventPage } = CollectibleState.useContainer()
 
+    console.log('000000000')
+    console.log(events)
     //#region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
         if (provider === NonFungibleAssetProvider.OPENSEA)

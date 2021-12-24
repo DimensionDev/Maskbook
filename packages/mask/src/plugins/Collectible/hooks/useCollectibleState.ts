@@ -1,31 +1,27 @@
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { createContainer } from 'unstated-next'
 import { OrderSide } from 'opensea-js/lib/types'
-import { currentNonFungibleAssetProviderSettings } from '../settings'
 import { CollectibleTab, CollectibleToken } from '../types'
 import { useAsset, useHistory, useOrders } from '../../EVM/hooks'
 import { useAssetOrder } from './useAssetOrder'
-import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm/types'
+import { useValueRef } from '@masknet/shared'
+import { currentNonFungibleAssetProviderSettings } from '../settings'
 
 function useCollectibleState(token?: CollectibleToken) {
     const [tabIndex, setTabIndex] = useState(CollectibleTab.ARTICLE)
 
-    currentNonFungibleAssetProviderSettings.value = token?.provider ?? NonFungibleAssetProvider.OPENSEA
+    const provider = useValueRef(currentNonFungibleAssetProviderSettings)
 
-    const asset = useAsset(
-        token?.contractAddress ?? '',
-        token?.tokenId ?? '',
-        token?.provider ?? NonFungibleAssetProvider.OPENSEA,
-    )
+    const asset = useAsset(token?.contractAddress ?? '', token?.tokenId ?? '', provider)
 
     //#region asset order from sdk
-    const assetOrder = useAssetOrder(token?.provider ?? NonFungibleAssetProvider.OPENSEA, token)
+    const assetOrder = useAssetOrder(provider, token)
     //#endregion
 
     //#region offers
     const [offerPage, setOfferPage] = useState(0)
     const offers = useOrders(
-        currentNonFungibleAssetProviderSettings.value,
+        provider,
         offerPage,
         50,
         tabIndex === CollectibleTab.OFFER ? token?.contractAddress : undefined,
@@ -37,7 +33,7 @@ function useCollectibleState(token?: CollectibleToken) {
     //#region orders
     const [orderPage, setOrderPage] = useState(0)
     const orders = useOrders(
-        currentNonFungibleAssetProviderSettings.value,
+        provider,
         orderPage,
         50,
         tabIndex === CollectibleTab.LISTING ? token?.contractAddress : undefined,
@@ -48,9 +44,8 @@ function useCollectibleState(token?: CollectibleToken) {
 
     //#region events
     const [eventPage, setEventPage] = useState(0)
-    const cursors = useRef<string[]>([])
     const events = useHistory(
-        currentNonFungibleAssetProviderSettings.value,
+        provider,
         eventPage,
         50,
         tabIndex === CollectibleTab.HISTORY ? token?.contractAddress : undefined,
@@ -61,7 +56,7 @@ function useCollectibleState(token?: CollectibleToken) {
     return {
         token,
         asset,
-        provider: token?.provider ?? NonFungibleAssetProvider.OPENSEA,
+        provider,
 
         assetOrder,
 

@@ -1,5 +1,5 @@
 import type { WyvernSchemaName } from 'opensea-js/lib/types'
-import type { ChainId, NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export * from './opensea'
 export * from './rarible'
@@ -8,7 +8,6 @@ export interface CollectibleJSON_Payload {
     chain_id: ChainId
     address: string
     token_id: string
-    provider: NonFungibleAssetProvider
 }
 
 export enum CollectibleTab {
@@ -24,5 +23,4 @@ export interface CollectibleToken {
     tokenId: string
     contractAddress: string
     schemaName?: WyvernSchemaName
-    provider: NonFungibleAssetProvider
 }
