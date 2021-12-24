@@ -66,7 +66,7 @@
     "unknown": "Unknown",
     "message": "Message",
     "dashboard_tab_collectibles": "Collectibles",
-    "dashboard_no_collectible_found": "No collectible found",
+    "dashboard_no_collectible_found": "No collectible found.",
     "days": "Every {{days}} days",
     "decrypted_postbox_add_recipients": "Append recipients",
     "decrypted_postbox_decrypting": "Mask decrypting…",

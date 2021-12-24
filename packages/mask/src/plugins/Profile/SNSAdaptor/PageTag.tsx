@@ -2,8 +2,9 @@ import classNames from 'classnames'
 import { makeStyles } from '@masknet/theme'
 import { Button } from '@mui/material'
 import { useI18N } from '../../../utils'
-import { PageTags } from '../types'
-import { useDonations, useFootprints, Dao_Payload } from './hooks'
+import { GeneralAsset, PageTags } from '../types'
+import type { AddressName } from '@masknet/web3-shared-evm'
+import type { Dao_Payload } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,21 +44,21 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface PageTagProps {
-    tag: PageTags
-    address: string
-    daoPayload: Dao_Payload | undefined
+    tag?: PageTags
+    daoPayload?: Dao_Payload
+    donations?: GeneralAsset[]
+    footprints?: GeneralAsset[]
+    addressNFTs?: AddressName
+    addressRSS3?: AddressName
     onChange: (tag: PageTags) => void
 }
 
 export function PageTag(props: PageTagProps) {
-    const { classes } = useStyles()
-    const { onChange, tag, address, daoPayload } = props
+    const { tag, daoPayload, donations, footprints, addressNFTs, addressRSS3, onChange } = props
     const { t } = useI18N()
+    const { classes } = useStyles()
 
-    const { donations } = useDonations(address)
-    const { footprints } = useFootprints(address)
-    const hasDonations = donations.length > 0
-    const hasFootprints = footprints.length > 0
+    if (!tag) return null
 
     return (
         <div className={classes.root}>
@@ -68,7 +69,7 @@ export function PageTag(props: PageTagProps) {
                 size="medium">
                 {t('wallets')}
             </Button>
-            {address ? (
+            {addressNFTs ? (
                 <Button
                     variant="outlined"
                     className={tag === PageTags.NFTTag ? classes.selected : classes.button}
@@ -77,7 +78,7 @@ export function PageTag(props: PageTagProps) {
                     {t('nfts')}
                 </Button>
             ) : null}
-            {hasDonations ? (
+            {donations?.length ? (
                 <Button
                     variant="outlined"
                     className={tag === PageTags.DonationTag ? classes.selected : classes.button}
@@ -86,7 +87,7 @@ export function PageTag(props: PageTagProps) {
                     {t('donations')}
                 </Button>
             ) : null}
-            {hasFootprints ? (
+            {footprints?.length ? (
                 <Button
                     variant="outlined"
                     className={classNames(classes.button, tag === PageTags.FootprintTag ? classes.selected : '')}

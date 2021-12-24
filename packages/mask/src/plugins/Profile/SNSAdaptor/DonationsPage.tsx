@@ -1,10 +1,9 @@
 import { makeStyles } from '@masknet/theme'
-import { CircularProgress, Link } from '@mui/material'
+import { Link } from '@mui/material'
 import urlcat from 'urlcat'
-import type { GeneralAssetWithTags } from '../types'
+import type { GeneralAsset, GeneralAssetWithTags } from '../types'
 import { RSS3_DEFAULT_IMAGE } from '../constants'
 import { DonationCard } from './components'
-import { useDonations } from './hooks'
 import { useI18N } from '../../../utils'
 
 const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
@@ -31,21 +30,14 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface DonationPageProps {
     address: string
+    donations?: GeneralAsset[]
 }
 
 export function DonationPage(props: DonationPageProps) {
-    const { address } = props
-    const { classes } = useStyles()
-    const { donations, loading } = useDonations(address)
+    const { address, donations = [] } = props
     const { t } = useI18N()
+    const { classes } = useStyles()
 
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center">
-                <CircularProgress />
-            </div>
-        )
-    }
     return (
         <section className="grid grid-cols-1 gap-4 py-4">
             {donations.map((donation) => (

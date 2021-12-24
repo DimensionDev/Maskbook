@@ -1,10 +1,10 @@
 import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
-import { CircularProgress, Link } from '@mui/material'
-import type { GeneralAssetWithTags } from '../types'
+import { Link } from '@mui/material'
+import type { GeneralAsset, GeneralAssetWithTags } from '../types'
 import { RSS3_DEFAULT_IMAGE } from '../constants'
 import { FootprintCard } from './components'
-import { useFootprints, useRss3Profile } from './hooks'
+import { useRss3Profile } from './hooks'
 
 const useStyles = makeStyles()((theme) => ({
     address: {
@@ -30,23 +30,14 @@ const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
 
 export interface FootprintPageProps {
     address: string
+    footprints?: GeneralAsset[]
 }
 
 export function FootprintPage(props: FootprintPageProps) {
-    const { address } = props
+    const { address, footprints = [] } = props
     const { classes } = useStyles()
     const { value: profile } = useRss3Profile(address)
     const username = profile?.name
-
-    const { footprints, loading } = useFootprints(address)
-
-    if (loading) {
-        return (
-            <div className="flex justify-center items-center">
-                <CircularProgress />
-            </div>
-        )
-    }
 
     return (
         <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
