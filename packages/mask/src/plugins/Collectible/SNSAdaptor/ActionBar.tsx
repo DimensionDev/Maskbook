@@ -41,9 +41,17 @@ export function ActionBar(props: ActionBarProps) {
     } = useControlledDialog()
 
     if (!asset.value) return null
-
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
+            {!asset.value.is_owner && asset.value.is_auction && assetOrder.value ? (
+                <ActionButton
+                    className={classes.button}
+                    color="primary"
+                    variant="contained"
+                    onClick={onOpenCheckoutDialog}>
+                    {t('plugin_collectible_buy_now')}
+                </ActionButton>
+            ) : null}
             {!asset.value.is_owner && asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}
@@ -54,15 +62,7 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_place_bid')}
                 </ActionButton>
             ) : null}
-            {!asset.value.is_owner && !asset.value.is_auction && assetOrder.value ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenCheckoutDialog}>
-                    {t('plugin_collectible_buy_now')}
-                </ActionButton>
-            ) : null}
+
             {!asset.value.is_owner && !asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}
