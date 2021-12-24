@@ -1,10 +1,10 @@
-import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
 import { CircularProgress, Link } from '@mui/material'
-import type { GeneralAssetWithTags } from '../types'
-import { RSS3_DEFAULT_IMAGE } from '../constants'
-import { FootprintCard } from './components'
-import { useFootprints, useRss3Profile } from './hooks'
+import urlcat from 'urlcat'
+import { RSS3_DEFAULT_IMAGE } from '../../constants'
+import type { GeneralAssetWithTags } from '../../types'
+import { FootprintCard } from '../components'
+import { useFootprints, useRss3Profile } from '../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     address: {
@@ -50,6 +50,7 @@ export function FootprintPage(props: FootprintPageProps) {
 
     return (
         <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
+            <link rel="stylesheet" href={new URL('../styles/tailwind.css', import.meta.url).toString()} />
             {footprints.map((footprint) => (
                 <Link
                     className={classes.link}

@@ -1,4 +1,5 @@
 {
-    "name": "Example Plugin",
-    "__entry__": "🤔 Example"
+    "inactive_project": "Inactive Project",
+    "no_activity_time": "No activity time",
+    "attended": "attended"
 }
