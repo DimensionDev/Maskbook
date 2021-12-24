@@ -1,4 +1,3 @@
-export const FileServicePluginID = 'com.maskbook.fileservice'
 export const META_KEY_1 = 'com.maskbook.fileservice:1'
 export const META_KEY_2 = 'com.maskbook.fileservice:2'
 

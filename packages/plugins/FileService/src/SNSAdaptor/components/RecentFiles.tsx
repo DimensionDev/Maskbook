@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import formatDateTime from 'date-fns/format'
 import { File } from 'react-feather'
 import { useHistory } from 'react-router-dom'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales/i18n_generated'
 import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
 
@@ -73,7 +73,7 @@ interface Props {
 }
 
 export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
-    const { t } = useI18N()
+    const t = useI18N()
     const history = useHistory()
     const { classes } = useStyles()
     const { classes: itemClasses } = useItemStyles()
@@ -96,11 +96,11 @@ export const RecentFiles: React.FC<Props> = ({ files, onMore }) => {
     )
     return (
         <section className={classes.container}>
-            <Typography className={classes.heading}>{t('plugin_file_service_recent_files')}</Typography>
+            <Typography className={classes.heading}>{t.recent_files()}</Typography>
             <List className={classes.listing}>{files.slice(0, 4).map(renderItem)}</List>
             {onMore && (
                 <Button className={classes.more} onClick={onMore}>
-                    {t('plugin_file_service_show_more')}
+                    {t.show_more()}
                 </Button>
             )}
         </section>

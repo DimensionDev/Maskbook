@@ -1,12 +1,14 @@
-import { createPluginDatabase } from '../../../database/Plugin'
-import { asyncIteratorToArray } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { base } from '../base'
+import type { Plugin } from '@masknet/plugin-infra'
 import { FileInfoV1ToV2 } from '../helpers'
 import type { FileInfo, FileInfoV1 } from '../types'
 
-type TaggedTypes = FileInfo | FileInfoV1
+type DatabaseTypes = FileInfo | FileInfoV1
 
-const Database = createPluginDatabase<TaggedTypes>(base.ID)
+let Database: Plugin.Worker.DatabaseStorage<DatabaseTypes>
+
+export function setupDatabase(_: typeof Database) {
+    Database = _
+}
 
 let migrationDone = false
 async function migrationV1_V2() {
@@ -20,7 +22,10 @@ async function migrationV1_V2() {
 
 export async function getAllFiles() {
     await migrationV1_V2()
-    const files: FileInfo[] = (await asyncIteratorToArray(Database.iterate('file'))).map((x) => x.value)
+    const files: FileInfo[] = []
+    for await (const { value } of Database.iterate('file')) {
+        files.push(value)
+    }
     return files.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 }
 

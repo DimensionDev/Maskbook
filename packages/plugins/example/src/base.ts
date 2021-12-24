@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { languages } from './locales'
+import { languages } from './locales/languages'
 
 export const base: Plugin.Shared.Definition = {
     ID: 'io.mask.example',
