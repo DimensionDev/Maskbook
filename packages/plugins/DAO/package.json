@@ -1,0 +1,9 @@
+{
+  "name": "@masknet/plugin-dao",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@masknet/plugin-infra": "workspace:*"
+  }
+}
