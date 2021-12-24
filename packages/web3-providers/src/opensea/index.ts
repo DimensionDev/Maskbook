@@ -339,3 +339,15 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         }
     }
 }
+
+export async function getOpenSeaNFTList(
+    apiKey: string,
+    address: string,
+    page?: number,
+    size?: number,
+    collection?: string,
+) {
+    const { assets } = await getAssetsListFromOpenSea(address, { page, size, collection }, apiKey)
+    return format(address, size ?? 50, assets)
+}
+
