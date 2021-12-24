@@ -80,6 +80,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://aribitrum.api.0x.org/'
                 case NetworkType.xDai:
                     return 'https://xdai.api.0x.org/'
+                case NetworkType.Optimistic:
+                    return 'https://optimistic.api.0x.org/'
                 default:
                     safeUnreachable(networkType)
                     return ''

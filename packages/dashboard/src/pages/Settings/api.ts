@@ -34,7 +34,7 @@ export const [useXDaiNetworkTradeProvider] = createGlobalState(
     Messages.events.xdaiNetworkTradeProviderSettings.on,
 )
 
-export const [useOptimistcNetworkTradeProvider] = createGlobalState(
+export const [useOptimisticNetworkTradeProvider] = createGlobalState(
     Services.Settings.getOptimisticNetworkTradeProvider,
     Messages.events.optimisticNetworkTradeProviderSettings.on,
 )
