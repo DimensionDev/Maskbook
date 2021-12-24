@@ -67,6 +67,8 @@
         "Mumbai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mumbai",
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-arbitrum-one",
         "Arbitrum_Rinkeby": "",
-        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai"
+        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai",
+        "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-fantom",
+        "Fantom_Testnet": ""
     }
 }

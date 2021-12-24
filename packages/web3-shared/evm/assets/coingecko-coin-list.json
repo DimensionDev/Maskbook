@@ -22,5 +22,11 @@
         "symbol": "matic",
         "chainId": 137,
         "name": "Polygon"
+    },
+    {
+        "id": "fantom-network",
+        "symbol": "ftm",
+        "chainId": 250,
+        "name": "Fantom"
     }
 ]

@@ -9,6 +9,7 @@ import {
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
+    useFantomNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -47,6 +48,8 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const xDaiOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
+    const fantomOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
+
     const t = useDashboardI18N()
 
     const items = [
@@ -79,6 +82,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useXDaiNetworkTradeProvider(),
             options: xDaiOptions,
             onChange: (value: any) => Services.Settings.setxDaiNetworkTradeProvider(+value),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Fantom' }),
+            value: useFantomNetworkTradeProvider(),
+            options: fantomOptions,
+            onChange: (value: any) => Services.Settings.setFantomNetworkTradeProvider(+value),
         },
     ]
 

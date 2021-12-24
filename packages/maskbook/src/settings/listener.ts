@@ -29,6 +29,7 @@ import {
     binanceNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
 
 export function ToBeListened() {
@@ -57,6 +58,7 @@ export function ToBeListened() {
         binanceNetworkTradeProviderSettings,
         arbitrumNetworkTradeProviderSettings,
         xdaiNetworkTradeProviderSettings,
+        fantomNetworkTradeProviderSettings,
         currentMaskWalletLockedSettings: currentMaskWalletLockStatusSettings,
     }
 }

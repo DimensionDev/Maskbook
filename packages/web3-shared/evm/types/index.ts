@@ -40,6 +40,10 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    // Fantom
+    Fantom = 250,
+    Fantom_Testnet = 4002,
 }
 
 export enum ProviderType {
@@ -63,6 +67,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Fantom = 'Fantom',
 }
 
 export interface Wallet {
