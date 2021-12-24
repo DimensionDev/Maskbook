@@ -60,7 +60,7 @@ export const Upload: React.FC = () => {
     const history = useHistory()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)
-    const [provider, setProvider] = useState('arweave')
+    const [provider, setProvider] = useState<Provider>(Provider.arweave)
     const recent = useAsync(() => PluginFileServiceRPC.getRecentFiles(), [])
     const allProviders: ProviderConfig[] = [
         {
@@ -159,6 +159,7 @@ export const Upload: React.FC = () => {
                     className={classes.usedCDN}
                     label={t.use_cdn()}
                 />
+                {cdnButton}
             </section>
             <section className={classes.checkItems}>{allProviderOptions}</section>
             <section className={classes.legal}>
