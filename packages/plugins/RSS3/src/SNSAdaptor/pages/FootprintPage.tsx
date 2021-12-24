@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { CircularProgress, Link } from '@mui/material'
+import { CircularProgress, Link, Typography } from '@mui/material'
 import urlcat from 'urlcat'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import type { GeneralAssetWithTags } from '../../types'
@@ -38,12 +38,19 @@ export function FootprintPage(props: FootprintPageProps) {
     const { value: profile } = useRss3Profile(address)
     const username = profile?.name
 
-    const { footprints, loading } = useFootprints(address)
+    const { value: footprints = [], loading } = useFootprints(address)
 
     if (loading) {
         return (
             <div className="flex justify-center items-center">
                 <CircularProgress />
+            </div>
+        )
+    }
+    if (!footprints.length) {
+        return (
+            <div className="flex justify-center items-center">
+                <Typography color="textPrimary">No data.</Typography>
             </div>
         )
     }

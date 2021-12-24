@@ -1,41 +1,43 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DonationPage, FootprintPage } from './pages'
+import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
 import { base } from '../base'
+import { PLUGIN_ID } from '../constants'
+import { TabCard, TabCardType } from './components/TabCard'
+
+function addressNameSorter(a: Plugin.SNSAdaptor.ProfileAddress, z: Plugin.SNSAdaptor.ProfileAddress) {
+    if (a.type === AddressNameType.RSS3) return -1
+    if (z.type === AddressNameType.RSS3) return 1
+    return 0
+}
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
     ProfileTabs: [
         {
-            ID: 'donations',
+            ID: `${PLUGIN_ID}_donations`,
             label: 'Donations',
             priority: 1,
-            children: ({ addressNames = [] }) => {
-                if (!addressNames.length) return null
-                const rss3Name = addressNames.find((x) => x.label.match(/\w+\.rss3$/))
-                const address = rss3Name?.resolvedAddress || addressNames[0].resolvedAddress
-                return (
-                    <>
-                        <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
-                        <DonationPage address={address} />
-                    </>
-                )
+            UI: {
+                TabContent: ({ addressNames = [] }) => {
+                    return <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Donation} />
+                },
+            },
+            Utils: {
+                addressNameSorter,
             },
         },
         {
-            ID: 'footprints',
+            ID: `${PLUGIN_ID}_footprints`,
             label: 'Footprints',
             priority: 2,
-            children: ({ addressNames = [] }) => {
-                if (!addressNames.length) return null
-                const rss3Name = addressNames.find((x) => x.label.match(/\w+\.rss3$/))
-                const address = rss3Name?.resolvedAddress || addressNames[0].resolvedAddress
-                return (
-                    <>
-                        <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
-                        <FootprintPage address={address} />
-                    </>
-                )
+            UI: {
+                TabContent: ({ addressNames = [] }) => {
+                    return <TabCard addressNames={addressNames as AddressName[]} type={TabCardType.Footprint} />
+                },
+            },
+            Utils: {
+                addressNameSorter,
             },
         },
     ],

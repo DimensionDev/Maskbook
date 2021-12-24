@@ -11,6 +11,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
+    "@masknet/web3-shared-evm": "workspace:*",
     "bignumber.js": "^9.0.1",
     "date-fns": "^2.27.0",
     "lodash-es": "^4.17.21",

@@ -349,10 +349,19 @@ export namespace Plugin.SNSAdaptor {
          * Used to order the sliders
          */
         priority: number
-        /**
-         * The injected UI
-         */
-        children: InjectUI<{ identity?: ProfileIdentity; addressNames?: ProfileAddress[] }>
+
+        UI?: {
+            /**
+             * The injected tab content
+             */
+            TabContent: InjectUI<{ identity?: ProfileIdentity; addressNames?: ProfileAddress[] }>
+        }
+        Utils?: {
+            /**
+             * Sort address name in expected order.
+             */
+            addressNameSorter?: (a: ProfileAddress, z: ProfileAddress) => number
+        }
     }
 }
 

@@ -627,6 +627,7 @@ importers:
       '@masknet/theme': workspace:*
       '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
       bignumber.js: ^9.0.1
       date-fns: ^2.27.0
       lodash-es: ^4.17.21
@@ -640,6 +641,7 @@ importers:
       '@masknet/theme': link:../../theme
       '@masknet/web3-providers': link:../../web3-providers
       '@masknet/web3-shared-base': link:../../web3-shared/base
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.1
       date-fns: 2.27.0
       lodash-es: 4.17.21

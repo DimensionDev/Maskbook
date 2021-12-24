@@ -25,8 +25,8 @@ export function PageTab(props: PageTabProps) {
             {tabs.map((x) => (
                 <PageTabItem
                     key={x.ID}
-                    selected={selectedTab?.ID === x.ID}
                     tab={x}
+                    selected={selectedTab?.ID === x.ID}
                     onClick={(tab) => {
                         onChange?.(tab)
                     }}

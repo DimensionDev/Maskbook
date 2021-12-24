@@ -10,5 +10,17 @@
     "erc20_token_list_placeholder": "Token name or contract address",
     "erc20_token_list_loading": "Loading token lists..",
     "erc20_search_token_loading": "Loading token...",
-    "erc20_search_not_token_found": "No results or contract address does not meet the query criteria."
+    "erc20_search_not_token_found": "No results or contract address does not meet the query criteria.",
+    "address_viewer_binding_rules_title": "The NFT gallary will show NFTs as below rules:",
+    "address_viewer_binding_rule1": "Twitter nickname is ENS.",
+    "address_viewer_binding_rule2": "Twitter bio contains ENS(e.g. vitalik.eth) or valid address.",
+    "address_viewer_binding_rule3": "Twitter ID + {{suffix}} is ENS.",
+    "address_viewer_binding_rule4": "Address used to sign the avatar.",
+    "address_viewer_current_display_of": "Current display of {{type}}: ",
+    "address_viewer_loading": "Loading...",
+    "address_viewer_address_name_ens": "ENS",
+    "address_viewer_address_name_uns": "UNS",
+    "address_viewer_address_name_dns": "DNS",
+    "address_viewer_address_name_rns": "RNS",
+    "address_viewer_address_name_address": "address"
 }

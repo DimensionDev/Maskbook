@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-unified'
-import { Box, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useAddressNames } from '@masknet/web3-shared-evm'
 import { createInjectHooksRenderer, Plugin } from '@masknet/plugin-infra'
@@ -15,7 +15,7 @@ function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => {
         const tab = x.ProfileTabs?.find((x) => x.ID === tabId)
         if (!tab) return
-        return tab.children
+        return tab.UI?.TabContent
     })
 }
 
@@ -43,20 +43,22 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
+    const [hidden, setHidden] = useState(true)
+    const tabs = useActivatedPluginsSNSAdaptor()
+        .flatMap((x) => x.ProfileTabs ?? [])
+        .sort((a, z) => a.priority - z.priority)
+    const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>()
+    const selectedTabComputed = selectedTab ?? first(tabs)
+
     const identity = useCurrentVisitingIdentity()
     const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
-    const activatedPlugins = useActivatedPluginsSNSAdaptor()
-    const tabs = activatedPlugins.flatMap((x) => x.ProfileTabs ?? []).sort((a, z) => a.priority - z.priority)
-
-    const [hidden, setHidden] = useState(true)
-    const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>(first(tabs))
 
     useLocationChange(() => {
-        setSelectedTab(first(tabs))
+        setSelectedTab(undefined)
     })
 
     useUpdateEffect(() => {
-        setSelectedTab(first(tabs))
+        setSelectedTab(undefined)
     }, [identity.identifier])
 
     useEffect(() => {
@@ -66,8 +68,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     }, [identity])
 
     const ContentComponent = useMemo(() => {
-        return getTabContent(selectedTab?.ID ?? '')
-    }, [selectedTab, identity.identifier, addressNames])
+        return getTabContent(selectedTabComputed?.ID ?? '')
+    }, [selectedTabComputed, identity.identifier])
+
+    console.log('DEBUG: profile tab content')
+    console.log({
+        addressNames,
+        loadingAddressNames,
+    })
 
     if (hidden) return null
 
@@ -79,7 +87,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
                     alignItems="center"
                     justifyContent="center"
                     sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    <Typography color="textPrimary">{t('plugin_profile_loading')}</Typography>
+                    <CircularProgress />
                 </Box>
             </div>
         )
@@ -87,7 +95,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     return (
         <div className={classes.root}>
             <div className={classes.tags}>
-                <PageTab tabs={tabs} selectedTab={selectedTab} onChange={setSelectedTab} />
+                <PageTab tabs={tabs} selectedTab={selectedTabComputed} onChange={setSelectedTab} />
             </div>
             <div className={classes.content}>
                 <ContentComponent addressNames={addressNames} identity={identity} />
