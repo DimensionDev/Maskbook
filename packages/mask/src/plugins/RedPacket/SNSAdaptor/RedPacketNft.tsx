@@ -285,6 +285,11 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         resetCallback()
     }, [claimState, retryAvailability])
 
+    useEffect(() => {
+        retryAvailability()
+        resetCallback()
+    }, [account])
+
     const previewNftImg = new URL('./assets/nft-preview.png', import.meta.url).toString()
     const rpNftImg = new URL('./assets/redpacket.nft.png', import.meta.url).toString()
     //#region on share

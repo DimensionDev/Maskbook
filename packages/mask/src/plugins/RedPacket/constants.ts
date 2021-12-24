@@ -12,3 +12,4 @@ export const RedPacketPluginID = 'com.maskbook.red_packet'
 export const RED_PACKET_DEFAULT_SHARES = 5
 export const RED_PACKET_MIN_SHARES = 1
 export const RED_PACKET_MAX_SHARES = 999
+export const NFT_RED_PACKET_MAX_SHARES = 50

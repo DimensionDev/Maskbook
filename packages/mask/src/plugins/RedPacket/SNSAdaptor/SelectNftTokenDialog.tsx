@@ -9,6 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { DialogContent, Box, InputBase, Paper, Button, Typography, ListItem, CircularProgress } from '@mui/material'
+import { ShadowRootTooltip } from '../../../utils'
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
@@ -17,13 +18,14 @@ import CheckIcon from '@mui/icons-material/Check'
 import { useUpdate } from 'react-use'
 import { NftImage } from './NftImage'
 import { findLastIndex } from 'lodash-unified'
+import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
         minHeight: 380,
     },
     dialogContentFixedHeight: {
-        height: 550,
+        height: 600,
     },
     tokenBox: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
@@ -184,7 +186,7 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: 'white',
     },
     checked: {
-        borderColor: '#1C68F3',
+        borderColor: '#1C68F3 !important',
     },
     checkIcon: {
         width: 15,
@@ -207,14 +209,52 @@ const useStyles = makeStyles()((theme) => ({
     selectAmountBox: {
         display: 'flex',
         flexDirection: 'row-reverse',
+        alignItems: 'center',
+        margin: '24px 0px',
     },
     questionMarkIcon: {
         padding: 2,
         width: 12,
-        border: '1px solid white',
+        border: `1px solid ${theme.palette.mode === 'light' ? '#0F1419' : '#D9D9D9'}`,
         borderRadius: 999,
+        transform: 'translateY(-1px)',
         height: 12,
         marginLeft: 5,
+        cursor: 'pointer',
+    },
+    selectBar: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 12,
+        padding: '0 8px',
+    },
+    selectAll: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 14,
+    },
+    selectAllCheckBox: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
+        width: 17,
+        height: 17,
+        borderRadius: 6,
+        marginRight: 5,
+        border: '2px solid #6E748E',
+        backgroundColor: 'white',
+    },
+    arrow: {
+        color: theme.palette.mode === 'dark' ? '#fff' : '#111418',
+        transform: 'translateX(260px) !important',
+    },
+    tooltip: {
+        transform: 'translateX(20px) !important',
+        padding: '10px 20px',
+        width: 256,
+        backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#111418',
     },
 }))
 
@@ -249,6 +289,14 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contract)
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
+    const [selectAll, setSelectAll] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (!selectAll) {
+            setTokenDetailedSelectedList([])
+        } else {
+        }
+    }, [selectAll])
 
     useEffect(() => {
         setTokenDetailed(undefined)
@@ -332,8 +380,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const isOwner = isSameAddress(account, tokenDetailed?.info.owner) || tokenDetailedSelectedList.length > 0
     const isAdded = existTokenDetailedList.map((t) => t.tokenId).includes(tokenDetailed?.tokenId ?? '')
     //#endregion
-
-    const r = /^(\s?(\d+)\s?,?)+$/.test(tokenIdListInput)
 
     const onFilter = useCallback(() => {
         if (!/^(\s?(\d+)?\s?,?)+$/.test(tokenIdListInput)) return
@@ -448,59 +494,91 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                 </div>
                             </Box>
                         ) : (
-                            <div className={classes.tokenSelector}>
-                                {tokenDetailedOwnerList.map((token, i) => {
-                                    const findToken = tokenDetailedSelectedList.find((t) => t.tokenId === token.tokenId)
-
-                                    return (
-                                        <ListItem
+                            <>
+                                <div className={classes.selectBar}>
+                                    <div className={classes.selectAll}>
+                                        <div
                                             className={classNames(
-                                                classes.selectWrapper,
-                                                tokenIdFilterList.length > 0 &&
-                                                    !tokenIdFilterList.includes(token.tokenId)
-                                                    ? classes.hide
-                                                    : '',
+                                                classes.selectAllCheckBox,
+                                                selectAll ? classes.checked : '',
                                             )}
-                                            key={i.toString()}>
-                                            <NftImage
-                                                token={token}
-                                                classes={{
-                                                    loadingFailImage: classes.loadingFailImage,
-                                                }}
-                                                fallbackImage={
-                                                    new URL('./assets/nft_token_fallback.png', import.meta.url)
-                                                }
-                                            />
-                                            <div className={classes.selectWrapperNftNameWrapper}>
-                                                <Typography
-                                                    className={classes.selectWrapperNftName}
-                                                    color="textSecondary">
-                                                    {token?.info.name}
-                                                </Typography>
-                                            </div>
-                                            <div
+                                            onClick={() => setSelectAll(!selectAll)}>
+                                            {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
+                                        </div>
+                                        <Typography>Select all</Typography>
+                                    </div>
+                                    <Typography>
+                                        You can also use <span style={{ color: '#1C68F3' }}>Shift</span> to select
+                                        multiple NFTs.
+                                    </Typography>
+                                </div>
+                                <div className={classes.tokenSelector}>
+                                    {tokenDetailedOwnerList.map((token, i) => {
+                                        const findToken = tokenDetailedSelectedList.find(
+                                            (t) => t.tokenId === token.tokenId,
+                                        )
+
+                                        return (
+                                            <ListItem
                                                 className={classNames(
-                                                    classes.checkbox,
-                                                    findToken ? classes.checked : '',
+                                                    classes.selectWrapper,
+                                                    tokenIdFilterList.length > 0 &&
+                                                        !tokenIdFilterList.includes(token.tokenId)
+                                                        ? classes.hide
+                                                        : '',
                                                 )}
-                                                onClick={(event) =>
-                                                    selectToken(token, findToken, event.shiftKey, token.index)
-                                                }>
-                                                {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
-                                            </div>
+                                                key={i.toString()}>
+                                                <NftImage
+                                                    token={token}
+                                                    classes={{
+                                                        loadingFailImage: classes.loadingFailImage,
+                                                    }}
+                                                    fallbackImage={
+                                                        new URL('./assets/nft_token_fallback.png', import.meta.url)
+                                                    }
+                                                />
+                                                <div className={classes.selectWrapperNftNameWrapper}>
+                                                    <Typography
+                                                        className={classes.selectWrapperNftName}
+                                                        color="textSecondary">
+                                                        {token?.info.name}
+                                                    </Typography>
+                                                </div>
+
+                                                <div
+                                                    className={classNames(
+                                                        classes.checkbox,
+                                                        findToken ? classes.checked : '',
+                                                    )}
+                                                    onClick={(event) =>
+                                                        selectToken(token, findToken, event.shiftKey, token.index)
+                                                    }>
+                                                    {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
+                                                </div>
+                                            </ListItem>
+                                        )
+                                    })}
+                                    {loadingOwnerList ? (
+                                        <ListItem className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
+                                            <CircularProgress size={25} />
                                         </ListItem>
-                                    )
-                                })}
-                                {loadingOwnerList ? (
-                                    <ListItem className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
-                                        <CircularProgress size={25} />
-                                    </ListItem>
-                                ) : null}
-                            </div>
+                                    ) : null}
+                                </div>
+                            </>
                         )}
                     </Box>
                     <Box className={classes.selectAmountBox}>
-                        <QuestionMarkIcon className={classes.questionMarkIcon} />
+                        <ShadowRootTooltip
+                            title={
+                                <Typography className="">
+                                    {t('plugin_red_packet_nft_max_shares', { amount: NFT_RED_PACKET_MAX_SHARES })}
+                                </Typography>
+                            }
+                            placement="top-end"
+                            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                            arrow>
+                            <QuestionMarkIcon className={classes.questionMarkIcon} />
+                        </ShadowRootTooltip>
                         <Typography>
                             <span className={classes.selectedTokenAmount}>
                                 {tokenDetailedSelectedList.length + ' '}

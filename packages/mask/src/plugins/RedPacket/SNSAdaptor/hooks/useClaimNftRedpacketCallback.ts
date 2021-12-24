@@ -25,9 +25,6 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             })
             return
         }
-        setClaimState({
-            type: TransactionStateType.WAIT_FOR_CONFIRMING,
-        })
 
         type MethodParameters = Parameters<NftRedPacket['methods']['claim']>
 
@@ -47,6 +44,10 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
             chainId,
         }
 
+        setClaimState({
+            type: TransactionStateType.WAIT_FOR_CONFIRMING,
+        })
+
         return new Promise<void>(async (resolve, reject) => {
             nftRedPacketContract.methods
                 .claim(...params)
@@ -55,14 +56,6 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
-                        receipt,
-                    })
-                    resolve()
-                })
-                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                    setClaimState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
                         receipt,
                     })
                     resolve()
@@ -81,7 +74,7 @@ export function useClaimNftRedpacketCallback(id: string, totalAmount: number | u
         setClaimState({
             type: TransactionStateType.UNKNOWN,
         })
-    }, [])
+    }, [account])
 
     return [claimState, claimCallback, resetCallback] as const
 }

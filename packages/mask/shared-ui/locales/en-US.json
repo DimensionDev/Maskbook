@@ -369,6 +369,7 @@
     "plugin_red_packet_nft_attached_message": "Attached Message",
     "plugin_red_packet_nft_total_amount": "Total Amount",
     "plugin_red_packet_nft_select_collection": "Choose your collection",
+    "plugin_red_packet_nft_max_shares": "The maximum number of NFTs to be sold in one collectioin lucky drop contract is {{amount}}.",
     "plugin_red_packet_completed": "Completed",
     "plugin_red_packet_expired": "Expired",
     "plugin_red_packet_indivisible": "The minimum amount for each share is {{amount}} {{symbol}}",
