@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { DonationPage, FootprintPage } from './pages'
 import { base } from '../base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
@@ -6,34 +7,34 @@ const sns: Plugin.SNSAdaptor.Definition = {
     init(signal) {},
     ProfileTabs: [
         {
-            ID: 'addressName',
-            label: 'Address Names',
+            ID: 'donations',
+            label: 'Donations',
             priority: 1,
             children: ({ addressNames = [] }) => {
+                if (!addressNames.length) return null
+                const rss3Name = addressNames.find((x) => x.label.match(/\w+\.rss3$/))
+                const address = rss3Name?.resolvedAddress || addressNames[0].resolvedAddress
                 return (
-                    <ul>
-                        {addressNames.map((x) => (
-                            <li key={x.type}>
-                                {x.label} - {x.resolvedAddress}
-                            </li>
-                        ))}
-                    </ul>
+                    <>
+                        <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
+                        <DonationPage address={address} />
+                    </>
                 )
             },
         },
         {
-            ID: 'identity',
-            label: 'Identity',
+            ID: 'footprints',
+            label: 'Footprints',
             priority: 2,
-            children: ({ identity }) => {
+            children: ({ addressNames = [] }) => {
+                if (!addressNames.length) return null
+                const rss3Name = addressNames.find((x) => x.label.match(/\w+\.rss3$/))
+                const address = rss3Name?.resolvedAddress || addressNames[0].resolvedAddress
                 return (
-                    <ul>
-                        <li>{identity?.avatar}</li>
-                        <li>{identity?.bio}</li>
-                        <li>{identity?.homepage}</li>
-                        <li>{identity?.nickname}</li>
-                        <li>{identity?.identifier.toText()}</li>
-                    </ul>
+                    <>
+                        <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
+                        <FootprintPage address={address} />
+                    </>
                 )
             },
         },

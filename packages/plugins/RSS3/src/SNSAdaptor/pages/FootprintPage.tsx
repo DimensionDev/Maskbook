@@ -1,10 +1,10 @@
-import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
 import { CircularProgress, Link } from '@mui/material'
-import type { GeneralAssetWithTags } from '../types'
-import { RSS3_DEFAULT_IMAGE } from '../constants'
-import { FootprintCard } from './components'
-import { useFootprints, useRss3Profile } from './hooks'
+import urlcat from 'urlcat'
+import { RSS3_DEFAULT_IMAGE } from '../../constants'
+import type { GeneralAssetWithTags } from '../../types'
+import { FootprintCard } from '../components'
+import { useFootprints, useRss3Profile } from '../hooks'
 
 const useStyles = makeStyles()((theme) => ({
     address: {
