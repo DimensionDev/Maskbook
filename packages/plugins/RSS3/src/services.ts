@@ -1,6 +1,10 @@
 import urlcat from 'urlcat'
-import { fetchJSON } from '@masknet/plugin-infra'
 import { AssetType, GeneralAsset, RSS3Profile } from './types'
+
+async function fetchJSON<T = unknown>(url: string): Promise<T> {
+    const res = await globalThis.fetch(url)
+    return res.json()
+}
 
 interface Response {
     status: boolean

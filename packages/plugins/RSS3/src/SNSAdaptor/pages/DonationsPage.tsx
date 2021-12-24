@@ -48,7 +48,6 @@ export function DonationPage(props: DonationPageProps) {
     }
     return (
         <section className="grid grid-cols-1 gap-4 py-4">
-            <link rel="stylesheet" href={new URL('../styles/tailwind.css', import.meta.url).toString()} />
             {donations.map((donation) => (
                 <Link
                     className={classes.link}

@@ -1013,8 +1013,5 @@
     "plugin_profile_address_name_dns": "DNS",
     "plugin_profile_address_name_rns": "RNS",
     "plugin_profile_address_name_address": "address",
-    "plugin_profile_rss3_inactive_project": "Inactive Project",
-    "plugin_profile_rss3_no_activity_time": "No activity time",
-    "plugin_profile_rss3_attended": "Attended",
     "plugin_vcent_last_offer_at": "LATEST OFFER at"
 }

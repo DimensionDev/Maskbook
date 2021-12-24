@@ -50,7 +50,6 @@ export function FootprintPage(props: FootprintPageProps) {
 
     return (
         <section className="grid items-center justify-start grid-cols-1 gap-2 py-4">
-            <link rel="stylesheet" href={new URL('../styles/tailwind.css', import.meta.url).toString()} />
             {footprints.map((footprint) => (
                 <Link
                     className={classes.link}

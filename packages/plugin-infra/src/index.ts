@@ -1,4 +1,3 @@
-export * from './apis'
 export * from './web3'
 export * from './types'
 export * from './web3-types'
@@ -8,7 +7,6 @@ export * from './manager/sns-adaptor'
 export * from './manager/worker'
 export * from './utils'
 export * from './PostContext'
-export * from './apis'
 export * from 'ts-results'
 export {
     getPluginDefine,

@@ -14,7 +14,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 if (!addressNames.length) return null
                 const rss3Name = addressNames.find((x) => x.label.match(/\w+\.rss3$/))
                 const address = rss3Name?.resolvedAddress || addressNames[0].resolvedAddress
-                return <DonationPage address={address} />
+                return (
+                    <>
+                        <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
+                        <DonationPage address={address} />
+                    </>
+                )
             },
         },
         {
@@ -25,7 +30,12 @@ const sns: Plugin.SNSAdaptor.Definition = {
                 if (!addressNames.length) return null
                 const rss3Name = addressNames.find((x) => x.label.match(/\w+\.rss3$/))
                 const address = rss3Name?.resolvedAddress || addressNames[0].resolvedAddress
-                return <FootprintPage address={address} />
+                return (
+                    <>
+                        <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
+                        <FootprintPage address={address} />
+                    </>
+                )
             },
         },
     ],
