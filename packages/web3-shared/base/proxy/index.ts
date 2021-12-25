@@ -49,7 +49,6 @@ export class ProviderProxy {
     }
 
     onMessage = (event: MessageEvent<string>) => {
-        console.debug('Message from server ', event.data)
         const { id, results, error } = JSON.parse(event.data) as PayloadMessage
         const itemInPoll = this._pool.get(id)
 

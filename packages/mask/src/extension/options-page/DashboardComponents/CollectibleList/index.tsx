@@ -178,10 +178,11 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     collectibles: ERC721TokenDetailed[]
     error?: string
     loading: boolean
+    retry(): void
 }
 
 export function CollectibleList(props: CollectibleListProps) {
-    const { address, collectibles, error, loading } = props
+    const { address, collectibles, error, loading, retry } = props
     const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const classes = props.classes ?? {}
 
@@ -191,7 +192,7 @@ export function CollectibleList(props: CollectibleListProps) {
             provider={provider}
             collectibles={collectibles}
             loading={loading}
-            collectiblesRetry={() => {}}
+            collectiblesRetry={retry}
             error={error}
             readonly
             hasRetry={!!address}
@@ -205,8 +206,12 @@ export function CollectionList({ address }: { address: string }) {
     const { classes } = useStyles()
     const [counts, setCounts] = useState<number[]>([])
 
-    const { data: collections } = useCollections(address, chainId)
-    const { data: collectible, done: loadingCollectibleDone } = useCollectibles(address, chainId)
+    const { data: collections, retry: retryFetchCollection } = useCollections(address, chainId)
+    const {
+        data: collectibles,
+        done: loadingCollectibleDone,
+        retry: retryFetchCollectible,
+    } = useCollectibles(address, chainId)
 
     if (!collections.length && loadingCollectibleDone)
         return (
@@ -241,8 +246,12 @@ export function CollectionList({ address }: { address: string }) {
                             counts[i] = count
                             setCounts(counts)
                         }}
-                        collectibles={collectible.filter((c) => c.collection?.slug === x.slug)}
-                        loading={loadingCollectibleDone ? false : collectible.length === 0}
+                        retry={() => {
+                            retryFetchCollectible()
+                            retryFetchCollection()
+                        }}
+                        collectibles={collectibles.filter((c) => c.collection?.slug === x.slug)}
+                        loading={loadingCollectibleDone ? false : collectibles.length === 0}
                     />
                 </Box>
             ))}

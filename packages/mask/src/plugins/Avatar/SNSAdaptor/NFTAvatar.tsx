@@ -94,7 +94,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     const { t } = useI18N()
-    const { data: collectibles, error, retry } = useCollectibles(account, ChainId.Mainnet)
+    const { data: collectibles, error, retry, done } = useCollectibles(account, ChainId.Mainnet)
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
@@ -146,7 +146,9 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 <EthereumChainBoundary chainId={chainId}>
                     <Box className={classes.galleryItem}>
                         <Box className={classes.gallery}>
-                            {error || (collectibles.length === 0 && collectibles_.length === 0)
+                            {!done && collectibles.length === 0
+                                ? LoadStatus
+                                : error || (collectibles.length === 0 && collectibles_.length === 0)
                                 ? Retry
                                 : uniqBy(
                                       [...collectibles_, ...collectibles],

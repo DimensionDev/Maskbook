@@ -164,17 +164,15 @@ export const getNonFungibleTokenFn =
             tokenInDb = fromChain.filter(Boolean) as any[]
         }
 
-        const tokenFromProvider = (
-            await context.getAssetsListNFT(
-                address.toLowerCase(),
-                network?.chainId ?? ChainId.Mainnet,
-                NonFungibleAssetProvider.OPENSEA,
-                pagination?.page ?? 0,
-                pagination?.size ?? 20,
-            )
-        ).assets
+        const tokenFromProvider = await context.getAssetsListNFT(
+            address.toLowerCase(),
+            network?.chainId ?? ChainId.Mainnet,
+            NonFungibleAssetProvider.OPENSEA,
+            pagination?.page ?? 0,
+            pagination?.size ?? 20,
+        )
 
-        const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider]
+        const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider.assets]
             .map(
                 (x) =>
                     ({
@@ -196,11 +194,11 @@ export const getNonFungibleTokenFn =
                         },
                     } as Web3Plugin.NonFungibleToken),
             )
-            // .filter((x) => isSameAddress(x.owner, address))
+            .filter((x) => isSameAddress(x.owner, address))
             .filter((x) => !network || x.chainId === network.chainId)
 
         return {
-            hasNextPage: tokenFromProvider.length === pagination?.size ?? 20,
+            hasNextPage: tokenFromProvider.assets.length === pagination?.size ?? 20,
             currentPage: pagination?.page ?? 0,
             data: allData,
         }
