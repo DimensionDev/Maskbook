@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { CircularProgress, Link, Typography } from '@mui/material'
+import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import urlcat from 'urlcat'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import type { GeneralAssetWithTags } from '../../types'
@@ -42,16 +42,16 @@ export function FootprintPage(props: FootprintPageProps) {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center">
+            <Box display="flex" alignItems="center" justifyContent="center">
                 <CircularProgress />
-            </div>
+            </Box>
         )
     }
     if (!footprints.length) {
         return (
-            <div className="flex justify-center items-center">
+            <Box display="flex" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary">No data.</Typography>
-            </div>
+            </Box>
         )
     }
 

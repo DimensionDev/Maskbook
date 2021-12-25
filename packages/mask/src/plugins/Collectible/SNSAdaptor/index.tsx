@@ -5,7 +5,7 @@ import { PostInspector } from './PostInspector'
 import { base } from '../base'
 import type { CollectibleJSON_Payload } from '../types'
 import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
-import { PLUGIN_NAME, PLUGIN_IDENTIFIER } from '../constants'
+import { PLUGIN_NAME, PLUGIN_ID } from '../constants'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
 import { NFTPage } from './NFTPage'
 
@@ -27,7 +27,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     },
     ProfileTabs: [
         {
-            ID: `${PLUGIN_IDENTIFIER}_nfts`,
+            ID: `${PLUGIN_ID}_nfts`,
             label: 'NFTs',
             priority: 1,
             UI: {

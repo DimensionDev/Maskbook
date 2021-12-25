@@ -1,7 +1,7 @@
 export const PLUGIN_NAME = 'Collectibles'
 export const PLUGIN_ICON = '🖼️'
 export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'
-export const PLUGIN_IDENTIFIER = 'com.maskbook.collectibles'
+export const PLUGIN_ID = 'com.maskbook.collectibles'
 export const PLUGIN_META_KEY = 'com.maskbook.collectibles:1'
 
 export const openseaHostnames = ['opensea.io', 'testnets.opensea.io']

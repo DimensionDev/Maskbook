@@ -1,9 +1,9 @@
 import { createGlobalSettings } from '../../settings/createSettings'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { PLUGIN_ID } from './constants'
 import { CollectibleProvider } from './types'
 
 export const currentCollectibleProviderSettings = createGlobalSettings<CollectibleProvider>(
-    `${PLUGIN_IDENTIFIER}+tradeProvider`,
+    `${PLUGIN_ID}+tradeProvider`,
     CollectibleProvider.OPENSEA,
     {
         primary: () => '',

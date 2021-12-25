@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { CircularProgress, Link, Typography } from '@mui/material'
+import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import urlcat from 'urlcat'
 import { useI18N } from '../../locales'
 import type { GeneralAssetWithTags } from '../../types'
@@ -41,16 +41,16 @@ export function DonationPage(props: DonationPageProps) {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center">
+            <Box display="flex" alignItems="center" justifyContent="center">
                 <CircularProgress />
-            </div>
+            </Box>
         )
     }
     if (!donations.length) {
         return (
-            <div className="flex justify-center items-center">
+            <Box display="flex" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary">No data.</Typography>
-            </div>
+            </Box>
         )
     }
     return (

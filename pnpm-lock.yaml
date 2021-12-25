@@ -292,9 +292,11 @@ importers:
       '@masknet/external-plugin-previewer': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
+      '@masknet/plugin-dao': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-flow': workspace:*
       '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-rss3': workspace:*
       '@masknet/plugin-wallet': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/sdk': workspace:*
@@ -427,9 +429,11 @@ importers:
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
       '@masknet/icons': link:../icons
       '@masknet/injected-script': link:../injected-script
+      '@masknet/plugin-dao': link:../plugins/DAO
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-flow': link:../plugins/Flow
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/plugin-rss3': link:../plugins/RSS3
       '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/public-api': link:../public-api
       '@masknet/sdk': link:../mask-sdk
