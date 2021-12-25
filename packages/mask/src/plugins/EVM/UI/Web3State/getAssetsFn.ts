@@ -13,6 +13,7 @@ import {
     isSameAddress,
     NonFungibleAssetProvider,
     Web3ProviderType,
+    FungibleAssetProvider,
 } from '@masknet/web3-shared-evm'
 import { Pageable, Pagination, TokenType, Web3Plugin } from '@masknet/plugin-infra'
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
@@ -38,16 +39,19 @@ export const getFungibleAssetsFn =
         const web3 = new Web3(provider)
         const { BALANCE_CHECKER_ADDRESS } = getEthereumConstants(chainId)
         const { NATIVE_TOKEN_ADDRESS } = getTokenConstants()
-        const socketId = 'fetchFungibleTokenAsset' + address + network.chainId
-        await ws.send({
+        const socketId = `mask.fetchFungibleTokenAsset_${address}`
+        let dataFromProvider = await ws.sendAsync<Web3Plugin.Asset<Web3Plugin.FungibleToken>>({
             id: socketId,
             method: 'mask.fetchFungibleTokenAsset',
             params: {
                 address: address,
-                pageSize: 10,
+                pageSize: 10000,
             },
         })
-        const dataFromProvider = ws.getResult<Web3Plugin.Asset<Web3Plugin.FungibleToken>>(socketId)
+        if (!dataFromProvider.length) {
+            // @ts-ignore getAssetList Asset[]
+            dataFromProvider = await context.getAssetsList(address, FungibleAssetProvider.DEBANK)
+        }
         const assetsFromProvider: Web3Plugin.Asset<Web3Plugin.FungibleToken>[] = dataFromProvider.map((x: any) => ({
             id: x.token.address,
             chainId: x.token.chainId,
@@ -68,15 +72,20 @@ export const getFungibleAssetsFn =
         if (!BALANCE_CHECKER_ADDRESS) return assetsFromProvider
         const balanceCheckerContract = createContract(web3, BALANCE_CHECKER_ADDRESS, BalanceCheckerABI as AbiItem[])
         if (!balanceCheckerContract) return assetsFromProvider
-        const balanceList: string[] = await balanceCheckerContract?.methods
-            .balances(
-                [address],
-                trustedTokens.map((x) => x.address),
-            )
-            .call({
-                from: undefined,
-            })
-        if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
+        let balanceList: string[]
+        try {
+            balanceList = await balanceCheckerContract?.methods
+                .balances(
+                    [address],
+                    trustedTokens.map((x) => x.address),
+                )
+                .call({
+                    from: undefined,
+                })
+            if (balanceList.length !== trustedTokens?.length) return assetsFromProvider
+        } catch {
+            balanceList = []
+        }
 
         const assetFromChain = balanceList.map(
             (balance, idx): Web3Plugin.Asset<Web3Plugin.FungibleToken> => ({
@@ -125,6 +134,7 @@ export const getNonFungibleTokenFn =
         network?: Web3Plugin.NetworkDescriptor,
     ): Promise<Pageable<Web3Plugin.NonFungibleToken>> => {
         let tokenInDb: ERC721TokenDetailed[] = []
+        const ws = await context.providerSocketInstance
 
         // validate and show trusted erc721 token in first page
         if (pagination?.page === 0) {
@@ -156,15 +166,30 @@ export const getNonFungibleTokenFn =
             tokenInDb = fromChain.filter(Boolean) as any[]
         }
 
-        const tokenFromProvider = await context.getAssetsListNFT(
-            address.toLowerCase(),
-            network?.chainId ?? ChainId.Mainnet,
-            NonFungibleAssetProvider.OPENSEA,
-            pagination?.page ?? 0,
-            pagination?.size ?? 20,
-        )
+        const socketId = `mask.fetchNonFungibleTokenAsset_${address}`
+        let tokenFromProvider = await ws.sendAsync<ERC721TokenDetailed>({
+            id: socketId,
+            method: 'mask.fetchNonFungibleTokenAsset',
+            params: {
+                address: address,
+                pageSize: 50,
+            },
+        })
 
-        const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider.assets]
+        // as websocket fallback
+        if (!tokenFromProvider.length) {
+            tokenFromProvider = (
+                await context.getAssetsListNFT(
+                    address.toLowerCase(),
+                    network?.chainId ?? ChainId.Mainnet,
+                    NonFungibleAssetProvider.OPENSEA,
+                    pagination?.page ?? 0,
+                    pagination?.size ?? 20,
+                )
+            ).assets
+        }
+
+        const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider]
             .map(
                 (x) =>
                     ({
@@ -186,11 +211,11 @@ export const getNonFungibleTokenFn =
                         },
                     } as Web3Plugin.NonFungibleToken),
             )
-            .filter((x) => isSameAddress(x.owner, address))
+            // .filter((x) => isSameAddress(x.owner, address))
             .filter((x) => !network || x.chainId === network.chainId)
 
         return {
-            hasNextPage: tokenFromProvider.assets.length === pagination?.size ?? 20,
+            hasNextPage: tokenFromProvider.length === pagination?.size ?? 20,
             currentPage: pagination?.page ?? 0,
             data: allData,
         }

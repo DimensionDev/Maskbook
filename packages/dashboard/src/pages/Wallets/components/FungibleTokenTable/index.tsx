@@ -89,11 +89,6 @@ export const FungibleTokenTable = memo<TokenTableProps>(({ selectedChainId }) =>
         PluginMessages.Wallet.events.erc20TokensUpdated.on(() =>
             setTimeout(() => setTokenUpdateCount((prev) => prev + 1), 100),
         )
-        PluginMessages.Wallet.events.websocketDataUpdate.on(() => {
-            if ('fetchFungibleTokenAsset' + account + network?.chainId) {
-                setTimeout(() => setTokenUpdateCount((prev) => prev + 1), 100)
-            }
-        })
     }, [])
 
     const onSwap = useCallback((token: Web3Plugin.FungibleToken) => {
