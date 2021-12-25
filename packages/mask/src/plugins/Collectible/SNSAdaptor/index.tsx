@@ -61,6 +61,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
 
                     return 0
                 },
+                shouldDisplay: (identity, addressNames) => {
+                    return !!addressNames?.length
+                },
             },
         },
     ],

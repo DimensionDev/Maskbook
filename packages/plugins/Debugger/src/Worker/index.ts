@@ -3,8 +3,7 @@ import { base } from '../base'
 
 const worker: Plugin.Worker.Definition = {
     ...base,
-    init(signal, context) {
-    },
+    init(signal, context) {},
 }
 
 export default worker

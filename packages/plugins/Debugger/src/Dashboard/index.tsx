@@ -3,8 +3,7 @@ import { base } from '../base'
 
 const dashboard: Plugin.Dashboard.Definition = {
     ...base,
-    init(signal) {
-    },
+    init(signal) {},
 }
 
 export default dashboard

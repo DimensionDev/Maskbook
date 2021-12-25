@@ -47,8 +47,14 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const [hidden, setHidden] = useState(true)
+    const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>()
+
+    const identity = useCurrentVisitingIdentity()
+    const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
+
     const tabs = useActivatedPluginsSNSAdaptor()
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
+        .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {
             // order those tabs from collectible first
             if (a.pluginID === PLUGIN_ID_COLLECTIBLE) return -1
@@ -64,11 +70,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
 
             return a.priority - z.priority
         })
-    const [selectedTab, setSelectedTab] = useState<Plugin.SNSAdaptor.ProfileTab | undefined>()
     const selectedTabComputed = selectedTab ?? first(tabs)
-
-    const identity = useCurrentVisitingIdentity()
-    const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
 
     useLocationChange(() => {
         setSelectedTab(undefined)
@@ -87,12 +89,6 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const ContentComponent = useMemo(() => {
         return getTabContent(selectedTabComputed?.ID ?? '')
     }, [selectedTabComputed, identity.identifier])
-
-    console.log('DEBUG: profile tab content')
-    console.log({
-        addressNames,
-        loadingAddressNames,
-    })
 
     if (hidden) return null
 

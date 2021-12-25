@@ -5,8 +5,7 @@ import { TabContent } from './components/TabContent'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
-    init(signal) {
-    },
+    init(signal) {},
     ProfileTabs: [
         {
             ID: `${PLUGIN_ID}_tabContent`,
@@ -14,9 +13,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
             priority: 99999,
             UI: {
                 TabContent,
-            }
-        }
-    ]
+            },
+        },
+    ],
 }
 
 export default sns

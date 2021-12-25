@@ -358,6 +358,11 @@ export namespace Plugin.SNSAdaptor {
         }
         Utils?: {
             /**
+             * If it returns false, this tab will not be displayed.
+             */
+            shouldDisplay?: (identity?: ProfileIdentity, addressNames?: ProfileAddress[]) => boolean
+
+            /**
              * Sort address name in expected order.
              */
             addressNameSorter?: (a: ProfileAddress, z: ProfileAddress) => number

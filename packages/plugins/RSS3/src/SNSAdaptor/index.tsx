@@ -10,6 +10,13 @@ function addressNameSorter(a: Plugin.SNSAdaptor.ProfileAddress, z: Plugin.SNSAda
     return 0
 }
 
+function shouldDisplay(
+    identity?: Plugin.SNSAdaptor.ProfileIdentity,
+    addressNames?: Plugin.SNSAdaptor.ProfileAddress[],
+) {
+    return addressNames?.some((x) => x.type === AddressNameType.RSS3) ?? false
+}
+
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
     init(signal) {},
@@ -25,6 +32,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             Utils: {
                 addressNameSorter,
+                shouldDisplay,
             },
         },
         {
@@ -38,6 +46,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
             },
             Utils: {
                 addressNameSorter,
+                shouldDisplay,
             },
         },
     ],
