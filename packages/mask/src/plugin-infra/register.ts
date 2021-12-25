@@ -2,6 +2,7 @@
 // packages/dashboard/src/initialization/plugins.ts
 
 import '@masknet/plugin-example'
+import '@masknet/plugin-debugger'
 import '@masknet/plugin-flow'
 import '@masknet/plugin-file-service'
 import '@masknet/plugin-rss3'

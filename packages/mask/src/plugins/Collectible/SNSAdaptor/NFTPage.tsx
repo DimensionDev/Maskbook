@@ -1,4 +1,5 @@
-import { getMaskColor, makeStyles, useStylesExtends } from '@masknet/theme'
+import { getMaskColor, makeStyles } from '@masknet/theme'
+import type { AddressName } from '@masknet/web3-shared-evm'
 import { CollectionList } from '../../../extension/options-page/DashboardComponents/CollectibleList'
 
 const useStyles = makeStyles()((theme) => ({
@@ -14,17 +15,19 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface NFTPageProps extends withClasses<'text' | 'button'> {
-    address: string
+export interface NFTPageProps {
+    addressName?: AddressName
 }
 
 export function NFTPage(props: NFTPageProps) {
-    const { address } = props
-    const classes = useStylesExtends(useStyles(), props)
+    const { addressName } = props
+    const { classes } = useStyles()
+
+    if (!addressName) return null
 
     return (
         <div className={classes.root}>
-            <CollectionList address={address} />
+            <CollectionList address={addressName.resolvedAddress ?? ''} />
         </div>
     )
 }

@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "references": [
     { "path": "./example/" },
+    { "path": "./Debugger/" },
     { "path": "./Flow/" },
     { "path": "./Wallet/" },
     { "path": "./FileService/" },

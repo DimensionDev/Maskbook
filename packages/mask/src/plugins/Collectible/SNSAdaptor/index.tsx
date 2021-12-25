@@ -1,4 +1,4 @@
-import { uniq } from 'lodash-unified'
+import { uniq, first } from 'lodash-unified'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PostInspector } from './PostInspector'
@@ -8,6 +8,7 @@ import { checkUrl, getAssetInfoFromURL, getRelevantUrl } from '../utils'
 import { PLUGIN_NAME, PLUGIN_ID } from '../constants'
 import { getTypedMessageContent } from '../../../protocols/typed-message'
 import { NFTPage } from './NFTPage'
+import { AddressName, AddressNameType } from '@masknet/web3-shared-evm'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -31,7 +32,35 @@ const sns: Plugin.SNSAdaptor.Definition = {
             label: 'NFTs',
             priority: 1,
             UI: {
-                TabContent: ({ addressNames = [] }) => <NFTPage address={addressNames[0].resolvedAddress} />,
+                TabContent: ({ addressNames = [] }) => (
+                    <NFTPage addressName={first(addressNames) as AddressName | undefined} />
+                ),
+            },
+            Utils: {
+                addressNameSorter: (a, z) => {
+                    if (a.type === AddressNameType.ENS) return -1
+                    if (z.type === AddressNameType.ENS) return 1
+
+                    if (a.type === AddressNameType.UNS) return -1
+                    if (z.type === AddressNameType.UNS) return 1
+
+                    if (a.type === AddressNameType.DNS) return -1
+                    if (z.type === AddressNameType.DNS) return 1
+
+                    if (a.type === AddressNameType.RSS3) return -1
+                    if (z.type === AddressNameType.RSS3) return 1
+
+                    if (a.type === AddressNameType.ADDRESS) return -1
+                    if (z.type === AddressNameType.ADDRESS) return 1
+
+                    if (a.type === AddressNameType.GUN) return -1
+                    if (z.type === AddressNameType.GUN) return 1
+
+                    if (a.type === AddressNameType.THE_GRAPH) return -1
+                    if (z.type === AddressNameType.THE_GRAPH) return 1
+
+                    return 0
+                },
             },
         },
     ],

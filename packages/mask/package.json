@@ -25,6 +25,7 @@
     "@masknet/plugin-flow": "workspace:*",
     "@masknet/plugin-rss3": "workspace:*",
     "@masknet/plugin-dao": "workspace:*",
+    "@masknet/plugin-debugger": "workspace:*",
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/plugin-wallet": "workspace:*",
     "@masknet/public-api": "workspace:*",

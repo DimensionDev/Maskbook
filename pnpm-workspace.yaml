@@ -26,6 +26,7 @@ packages:
   - 'packages/theme'
   - 'packages/plugin-infra'
   - 'packages/plugins/example'
+  - 'packages/plugins/Debugger'
   - 'packages/plugins/Wallet'
   - 'packages/plugins/Flow'
   - 'packages/plugins/FileService'

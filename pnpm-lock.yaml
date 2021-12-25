@@ -292,6 +292,7 @@ importers:
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
       '@masknet/plugin-dao': workspace:*
+      '@masknet/plugin-debugger': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
@@ -428,6 +429,7 @@ importers:
       '@masknet/icons': link:../icons
       '@masknet/injected-script': link:../injected-script
       '@masknet/plugin-dao': link:../plugins/DAO
+      '@masknet/plugin-debugger': link:../plugins/Debugger
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
@@ -612,6 +614,36 @@ importers:
       bignumber.js: 9.0.1
       date-fns: 2.27.0
       iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
+      lodash-es: 4.17.21
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
+      urlcat: 2.0.4
+
+  packages/plugins/Debugger:
+    specifiers:
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-base': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      bignumber.js: ^9.0.1
+      date-fns: ^2.27.0
+      lodash-es: ^4.17.21
+      react-use: ^17.3.1
+      urlcat: ^2.0.4
+    dependencies:
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-base': link:../../web3-shared/base
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      bignumber.js: 9.0.1
+      date-fns: 2.27.0
       lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4

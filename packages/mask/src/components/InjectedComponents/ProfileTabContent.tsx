@@ -10,6 +10,7 @@ import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
+import { PLUGIN_ID as PLUGIN_ID_DEBUGGER } from '@masknet/plugin-debugger'
 import { PLUGIN_ID as PLUGIN_ID_DAO } from '@masknet/plugin-dao'
 import { PLUGIN_ID as PLUGIN_ID_COLLECTIBLE } from '../../plugins/Collectible/constants'
 
@@ -53,7 +54,11 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
             if (a.pluginID === PLUGIN_ID_COLLECTIBLE) return -1
             if (z.pluginID === PLUGIN_ID_COLLECTIBLE) return 1
 
-            // place those tabs from DAO last
+            // place those tabs from debugger last
+            if (a.pluginID === PLUGIN_ID_DEBUGGER) return 1
+            if (z.pluginID === PLUGIN_ID_DEBUGGER) return -1
+
+            // place those tabs from dao before the last
             if (a.pluginID === PLUGIN_ID_DAO) return 1
             if (z.pluginID === PLUGIN_ID_DAO) return -1
 
