@@ -18,7 +18,6 @@ import type {
     BalanceOfChains,
     ERC721TokenCollectionInfo,
 } from '../types'
-import type { ProviderProxy } from '@masknet/web3-shared-base'
 
 export interface Web3ProviderType {
     allowTestnet: Subscription<boolean>
@@ -80,5 +79,4 @@ export interface Web3ProviderType {
         hasNextPage: boolean
     }>
     fetchERC20TokensFromTokenLists: (urls: string[], chainId: ChainId) => Promise<ERC20TokenDetailed[]>
-    providerSocketInstance: Promise<ProviderProxy>
 }

@@ -146,7 +146,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 <EthereumChainBoundary chainId={chainId}>
                     <Box className={classes.galleryItem}>
                         <Box className={classes.gallery}>
-                            {!error || (collectibles.length === 0 && collectibles_.length === 0)
+                            {error || (collectibles.length === 0 && collectibles_.length === 0)
                                 ? Retry
                                 : uniqBy(
                                       [...collectibles_, ...collectibles],

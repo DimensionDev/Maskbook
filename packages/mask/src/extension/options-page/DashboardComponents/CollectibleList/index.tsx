@@ -177,54 +177,20 @@ export interface CollectibleListProps extends withClasses<'empty' | 'button'> {
     setCount: (count: number) => void
     collectibles: ERC721TokenDetailed[]
     error?: string
+    loading: boolean
 }
 
 export function CollectibleList(props: CollectibleListProps) {
-    const { address, collectibles, error } = props
+    const { address, collectibles, error, loading } = props
     const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const classes = props.classes ?? {}
-
-    const {
-        value = { collectibles: [], hasNextPage: false },
-        loading: collectiblesLoading,
-        retry: collectiblesRetry,
-        error: collectiblesError,
-    } = useCollectibles(address, chainId, provider, page, 50, collection)
-    const { collectibles = [], hasNextPage } = value
-    const [rendCollectibles, setRendCollectibles] = useState<ERC721TokenDetailed[]>([])
-
-    useUpdateEffect(() => {
-        setPage(0)
-    }, [provider, address])
-
-    useEffect(() => {
-        if (collectibles.length) {
-            setRendCollectibles([...rendCollectibles, ...collectibles])
-            if (hasNextPage) {
-                const timer = setTimeout(() => {
-                    setPage(page + 1)
-                }, 1000)
-
-                return () => {
-                    clearTimeout(timer)
-                }
-            }
-        }
-
-        return () => {}
-    }, [collectibles])
-
-    useEffect(() => {
-        setCount(rendCollectibles.length)
-    }, [rendCollectibles])
 
     return (
         <CollectibleListUI
             classes={classes}
             provider={provider}
             collectibles={collectibles}
-            // TODO: fix loading statue
-            loading={false}
+            loading={loading}
             collectiblesRetry={() => {}}
             error={error}
             readonly
@@ -235,33 +201,14 @@ export function CollectibleList(props: CollectibleListProps) {
 
 export function CollectionList({ address }: { address: string }) {
     const chainId = ChainId.Mainnet
-    const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const { t } = useI18N()
-    const [page, setPage] = useState(0)
     const { classes } = useStyles()
     const [counts, setCounts] = useState<number[]>([])
-    const [rendCollections, setRendCollections] = useState<ERC721TokenCollectionInfo[]>([])
 
-    const { value = { collections: [], hasNextPage: false } } = useCollections(address, chainId, provider, page, 10)
-    const { collections = [], hasNextPage } = value
+    const { data: collections } = useCollections(address, chainId)
+    const { data: collectible, done: loadingCollectibleDone } = useCollectibles(address, chainId)
 
-    useUpdateEffect(() => {
-        setPage(0)
-    }, [provider, address])
-
-    useEffect(() => {
-        if (!collections.length) return
-        setRendCollections(uniqBy([...rendCollections, ...collections], (x) => x.slug))
-        if (!hasNextPage) return
-        const timer = setTimeout(() => {
-            setPage(page + 1)
-        }, 3000)
-        return () => {
-            clearTimeout(timer)
-        }
-    }, [collections])
-
-    if (!rendCollections.length)
+    if (!collections.length && loadingCollectibleDone)
         return (
             <Box display="flex" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
@@ -295,6 +242,7 @@ export function CollectionList({ address }: { address: string }) {
                             setCounts(counts)
                         }}
                         collectibles={collectible.filter((c) => c.collection?.slug === x.slug)}
+                        loading={loadingCollectibleDone ? false : collectible.length === 0}
                     />
                 </Box>
             ))}

@@ -61,6 +61,7 @@ export * from './useResolveENS'
 export * from './useResolveUNS'
 export * from './useGasLimit'
 export * from './useSocket'
+export * from './useWebSocket'
 
 // wallet plugin related
 export * from './useWalletPrimary'
