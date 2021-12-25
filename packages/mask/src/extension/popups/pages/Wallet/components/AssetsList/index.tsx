@@ -58,7 +58,6 @@ export interface AssetsListUIProps {
 
 export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }) => {
     const { classes } = useStyles()
-    console.log(dataSource)
     return (
         <List dense className={classes.list}>
             {dataSource.map((asset, index) => {
