@@ -1,11 +1,11 @@
-import { describe, test, expect, beforeEach, afterEach, xtest, jest } from '@jest/globals'
+import { describe, test, expect, beforeEach, afterEach, xtest, jest, xdescribe } from '@jest/globals'
 import { PoolItem, ProviderProxy } from '../index'
 import * as mockWS from 'jest-websocket-mock'
 import addSeconds from 'date-fns/addSeconds'
 
 const POINT = 'ws://localhost:1235'
 
-describe('Proxy websocket', () => {
+xdescribe('Proxy websocket', () => {
     let server: mockWS.WS
     let client: ProviderProxy
     let mockNotifyCallback: any

@@ -11,9 +11,9 @@ export interface RequestMessage extends MessageBase {
     notify?: NotifyFn
 }
 
-export interface PayloadMessage extends MessageBase {
+export interface PayloadMessage<T extends unknown = unknown> extends MessageBase {
     error?: unknown
-    results?: unknown[]
+    results?: T[]
 }
 
 export interface PoolItem<T extends unknown = unknown> {
@@ -193,6 +193,36 @@ function getProxyWebsocketInstanceWrapper(): (notify: NotifyFn) => Promise<Provi
 
         return cachedInstance
     }
+}
+
+export const sendMessageToProxy = async <T>(message: RequestMessage) => {
+    let data: T[] = []
+    const socket = new WebSocket(DEV)
+    const waitingOpen = () => {
+        return new Promise<void>((resolve, reject) => {
+            socket.addEventListener('open', () => resolve())
+            socket.addEventListener('error', () => reject())
+        })
+    }
+    await waitingOpen()
+    const sendPromise = () =>
+        new Promise<T[]>((resolve, reject) => {
+            socket.addEventListener('message', (event: MessageEvent<string>) => {
+                const { results = [], error } = JSON.parse(event.data) as PayloadMessage<T>
+                if (error) {
+                    socket.close()
+                    reject(error)
+                }
+                if (results.length === 0) {
+                    socket.close()
+                    resolve(data)
+                }
+                data = [...data, ...results]
+            })
+            socket.send(JSON.stringify(message))
+        })
+
+    return sendPromise()
 }
 
 export const getProxyWebsocketInstance = getProxyWebsocketInstanceWrapper()
