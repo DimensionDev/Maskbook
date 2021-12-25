@@ -28,6 +28,7 @@ packages:
   - 'packages/plugins/example'
   - 'packages/plugins/Wallet'
   - 'packages/plugins/Flow'
+  - 'packages/plugins/FileService'
   - 'packages/plugins/DAO'
   - 'packages/plugins/RSS3'
   - 'packages/external-plugin-previewer'

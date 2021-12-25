@@ -1,6 +1,7 @@
-import { makeStyles } from '@masknet/theme'
-import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import urlcat from 'urlcat'
+import { makeStyles } from '@masknet/theme'
+import type { AddressName } from '@masknet/web3-shared-evm'
+import { Box, CircularProgress, Link, Typography } from '@mui/material'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import type { GeneralAssetWithTags } from '../../types'
 import { FootprintCard } from '../components'
@@ -17,28 +18,29 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const getFootprintLink = (address: string, footprint: GeneralAssetWithTags) => {
+const getFootprintLink = (label: string, footprint: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = footprint
-    return urlcat('https://rss3.bio/:address/singlefootprint/:platform/:identity/:id/:type', {
-        address,
+    return urlcat(`https://${label}.bio/singlefootprint/:platform/:identity/:id/:type`, {
         platform,
         identity,
         id,
-        type,
+        type: type.replaceAll('-', '.'),
     })
 }
 
 export interface FootprintPageProps {
-    address: string
+    addressName?: AddressName
 }
 
 export function FootprintPage(props: FootprintPageProps) {
-    const { address } = props
+    const { addressName } = props
     const { classes } = useStyles()
-    const { value: profile } = useRss3Profile(address)
+    const { value: profile } = useRss3Profile(addressName?.resolvedAddress ?? '')
     const username = profile?.name
 
-    const { value: footprints = [], loading } = useFootprints(address)
+    const { value: footprints = [], loading } = useFootprints(addressName?.resolvedAddress ?? '')
+
+    if (!addressName) return null
 
     if (loading) {
         return (
@@ -60,7 +62,7 @@ export function FootprintPage(props: FootprintPageProps) {
             {footprints.map((footprint) => (
                 <Link
                     className={classes.link}
-                    href={getFootprintLink(address, footprint)}
+                    href={getFootprintLink(addressName.label, footprint)}
                     key={footprint.id}
                     target="_blank"
                     rel="noopener noreferrer">

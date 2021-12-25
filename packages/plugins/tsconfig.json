@@ -4,6 +4,7 @@
     { "path": "./example/" },
     { "path": "./Flow/" },
     { "path": "./Wallet/" },
+    { "path": "./FileService/" },
     { "path": "./RSS3/" },
     { "path": "./DAO/" }
   ]

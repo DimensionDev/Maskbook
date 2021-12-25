@@ -1,0 +1,23 @@
+{
+    "display_name": "プラグイン: ファイル共有",
+    "on_insert": "ファイルを使用する",
+    "uploading_preparing": "準備中",
+    "uploading_estimating_time": "転送時間を計算中...",
+    "uploading_in_minute_remaining": "残り: {{seconds}}秒",
+    "uploading_remaining": "残り: {{minutes}}分{{seconds}}秒",
+    "uploading_on_cancel": "アップロードしています…今このページを閉じないでください。",
+    "recent_files": "最近のファイル",
+    "show_more": "更に",
+    "unencrypted": "このファイルは暗号化されていません。",
+    "signing_failed": "サービスが使用できません。今しばらくお待ちください。",
+    "on_encrypt_it": "暗号化しましょう",
+    "use_cdn": "Mesonを使用して加速する",
+    "legal_text": "このプラグインを使用することで<terms>利用規約</terms>並びに<policy>プライバシーポリシー</policy>に同意したこととなります。",
+    "drop_indicator": "ファイルをドラッグ＆ドロップしてアップロード！",
+    "drop_hint_1": "ファイル容量の超過：{{limit}}",
+    "drop_hint_2": "このファイルはすぐにアップロードされ、取り消すことはできません。",
+    "drop_here": "ファイルをここにドラッグ＆ドロップ",
+    "error_101": "一つのファイルだけにしてください！",
+    "error_102": "ファイルが大きすぎます！最大容量は {{limit}} です。",
+    "on_change_file": "ファイルの変更"
+}

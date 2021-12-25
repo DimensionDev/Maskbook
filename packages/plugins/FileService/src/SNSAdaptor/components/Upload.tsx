@@ -4,10 +4,9 @@ import { Checkbox, FormControlLabel, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isNil } from 'lodash-unified'
 import { useState } from 'react'
-import { Trans } from 'react-i18next'
 import { useHistory } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import { useI18N } from '../../../../utils'
+import { useI18N, Translate } from '../../locales/i18n_generated'
 import { makeFileKey } from '../../file-key'
 import { FileRouter, MAX_FILE_SIZE } from '../../constants'
 import { PluginFileServiceRPC } from '../../Worker/rpc'
@@ -54,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Upload: React.FC = () => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const history = useHistory()
     const [encrypted, setEncrypted] = useState(true)
@@ -98,7 +97,7 @@ export const Upload: React.FC = () => {
                         />
                     }
                     className={classes.encrypted}
-                    label={t('plugin_file_service_on_encrypt_it')}
+                    label={t.on_encrypt_it()}
                 />
                 <FormControlLabel
                     control={
@@ -109,16 +108,15 @@ export const Upload: React.FC = () => {
                         />
                     }
                     className={classes.usedCDN}
-                    label={t('plugin_file_service_use_cdn')}
+                    label={t.use_cdn()}
                 />
             </section>
             <section className={classes.legal}>
                 <Typography className={classes.legalText}>
-                    <Trans
-                        i18nKey="plugin_file_service_legal_text"
+                    <Translate.legal_text
                         components={{
-                            terms: <Link target="_blank" href={t('plugin_file_service_legal_terms_link')} />,
-                            policy: <Link target="_blank" href={t('plugin_file_service_legal_policy_link')} />,
+                            terms: <Link target="_blank" href={t.legal_terms_link()} />,
+                            policy: <Link target="_blank" href={t.legal_policy_link()} />,
                         }}
                     />
                 </Typography>

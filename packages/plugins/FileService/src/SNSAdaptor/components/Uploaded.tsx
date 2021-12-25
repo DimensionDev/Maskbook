@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useExchange } from '../hooks/Exchange'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales/i18n_generated'
 import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
 import { FileName } from './FileName'
@@ -46,7 +46,7 @@ const useStyles = makeStyles()({
 })
 
 export const Uploaded: React.FC = () => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const history = useHistory()
     const { onInsert } = useExchange()
@@ -82,7 +82,7 @@ export const Uploaded: React.FC = () => {
                         <span>{formatDateTime(state.createdAt, 'yyyy-MM-dd HH:mm:ss')}</span>
                     </p>
                     <Button onClick={onBack} variant="contained">
-                        {t('plugin_file_service_on_change_file')}
+                        {t.on_change_file()}
                     </Button>
                 </Typography>
             </Grid>

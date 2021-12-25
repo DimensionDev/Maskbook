@@ -275,7 +275,6 @@ importers:
   packages/mask:
     specifiers:
       '@balancer-labs/sor': ^1.0.0
-      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
@@ -294,6 +293,7 @@ importers:
       '@masknet/injected-script': workspace:*
       '@masknet/plugin-dao': workspace:*
       '@masknet/plugin-example': workspace:*
+      '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-rss3': workspace:*
@@ -336,7 +336,6 @@ importers:
       '@unstoppabledomains/resolution': ^5.0.1
       '@walletconnect/client': ^1.2.2
       anchorme: ^2.1.2
-      arweave: 1.10.13
       assert: ^2.0.0
       async-call-rpc: ^6.0.1
       bignumber.js: ^9.0.1
@@ -413,7 +412,6 @@ importers:
       zod: 3.11.6
     dependencies:
       '@balancer-labs/sor': 1.0.0
-      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0_webextension-polyfill@0.8.0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
@@ -431,6 +429,7 @@ importers:
       '@masknet/injected-script': link:../injected-script
       '@masknet/plugin-dao': link:../plugins/DAO
       '@masknet/plugin-example': link:../plugins/example
+      '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/plugin-rss3': link:../plugins/RSS3
@@ -467,7 +466,6 @@ importers:
       '@unstoppabledomains/resolution': 5.0.1
       '@walletconnect/client': 1.4.1
       anchorme: 2.1.2
-      arweave: 1.10.13
       assert: 2.0.0
       async-call-rpc: 6.0.1
       bignumber.js: 9.0.1
@@ -617,6 +615,34 @@ importers:
       lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4
+
+  packages/plugins/FileService:
+    specifiers:
+      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-wallet': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@msgpack/msgpack': ^2.7.1
+      arweave: ^1.10.3
+      date-fns: ^2.27.0
+      react-feather: ^2.0.9
+      react-router-dom: '5'
+      react-use: ^17.3.1
+    dependencies:
+      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/plugin-wallet': link:../Wallet
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/theme': link:../../theme
+      '@msgpack/msgpack': 2.7.1
+      arweave: 1.10.13
+      date-fns: 2.27.0
+      react-feather: 2.0.9_react@18.0.0-rc.0
+      react-router-dom: 5.3.0_react@18.0.0-rc.0
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
 
   packages/plugins/Flow:
     specifiers:
@@ -815,6 +841,7 @@ importers:
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
       use-subscription: ^1.5.1
+      z-schema: ^5.0.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@msgpack/msgpack': 2.7.1
@@ -835,6 +862,7 @@ importers:
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
       use-subscription: 1.5.1_react@18.0.0-rc.0
+      z-schema: 5.0.2
 
   packages/storybook-shared:
     specifiers:

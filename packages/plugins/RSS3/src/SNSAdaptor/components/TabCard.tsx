@@ -24,9 +24,9 @@ export function TabCard({ type, addressNames }: TabCardProps) {
                 <AddressViewer addressName={addressNameRSS3} />
             </Box>
             {type === TabCardType.Donation ? (
-                <DonationPage address={addressNameRSS3.resolvedAddress} />
+                <DonationPage addressName={addressNameRSS3} />
             ) : (
-                <FootprintPage address={addressNameRSS3.resolvedAddress} />
+                <FootprintPage addressName={addressNameRSS3} />
             )}
         </>
     )

@@ -1,20 +1,20 @@
+import urlcat from 'urlcat'
 import { makeStyles } from '@masknet/theme'
 import { Box, CircularProgress, Link, Typography } from '@mui/material'
-import urlcat from 'urlcat'
+import type { AddressName } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../locales'
 import type { GeneralAssetWithTags } from '../../types'
 import { RSS3_DEFAULT_IMAGE } from '../../constants'
 import { DonationCard } from '../components'
 import { useDonations } from '../hooks'
 
-const getDonationLink = (address: string, donation: GeneralAssetWithTags) => {
+const getDonationLink = (label: string, donation: GeneralAssetWithTags) => {
     const { platform, identity, id, type } = donation
-    return urlcat('https://rss3.bio/:address/singlegitcoin/:platform/:identity/:id/:type', {
-        address,
+    return urlcat(`https://${label}.bio/singlegitcoin/:platform/:identity/:id/:type`, {
         platform,
         identity,
         id,
-        type,
+        type: type.replaceAll('-', '.'),
     })
 }
 
@@ -30,14 +30,16 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface DonationPageProps {
-    address: string
+    addressName?: AddressName
 }
 
 export function DonationPage(props: DonationPageProps) {
-    const { address } = props
+    const { addressName } = props
     const { classes } = useStyles()
-    const { value: donations = [], loading } = useDonations(address)
+    const { value: donations = [], loading } = useDonations(addressName?.resolvedAddress ?? '')
     const t = useI18N()
+
+    if (!addressName) return null
 
     if (loading) {
         return (
@@ -58,7 +60,7 @@ export function DonationPage(props: DonationPageProps) {
             {donations.map((donation) => (
                 <Link
                     className={classes.link}
-                    href={getDonationLink(address, donation)}
+                    href={getDonationLink(addressName.label, donation)}
                     key={donation.id}
                     target="_blank"
                     rel="noopener noreferrer">

@@ -56,7 +56,7 @@ export function AddressViewer({ addressName }: AddressViewerProps) {
     const rulesTipMap = [
         t.address_viewer_binding_rule1(),
         t.address_viewer_binding_rule2(),
-        t.address_viewer_binding_rule3({ suffix: `".eth"` }),
+        t.address_viewer_binding_rule3(),
         t.address_viewer_binding_rule4(),
     ]
 

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { File } from 'react-feather'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import { useI18N } from '../../../../utils'
+import { useI18N } from '../../locales/i18n_generated'
 import { timeout } from '@masknet/shared-base'
 import { FileRouter } from '../../constants'
 import type { FileInfo } from '../../types'
@@ -46,7 +46,7 @@ interface RouteState {
 }
 
 export const Uploading: React.FC = () => {
-    const { t } = useI18N()
+    const t = useI18N()
     const { classes } = useStyles()
     const history = useHistory()
     const { onUploading } = useExchange()
@@ -109,7 +109,7 @@ export const Uploading: React.FC = () => {
                     <File width={96} height={120} />
                 </Grid>
                 <Grid item>
-                    <Typography>{t('plugin_file_service_signing_failed')}</Typography>
+                    <Typography>{t.signing_failed()}</Typography>
                 </Grid>
             </Grid>
         )
