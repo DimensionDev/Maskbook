@@ -6,6 +6,7 @@ export const PLUGIN_IDS = {
     TRANSAK: 'com.maskbook.transak',
     COLLECTIBLES: 'com.maskbook.collectibles',
     SWAP: 'com.maskbook.trader',
+    SAVINGS: 'com.savings',
     SNAPSHOT: 'org.snapshot',
     MARKETS: 'com.maskbook.ito',
     VALUABLES: 'com.maskbook.tweet',

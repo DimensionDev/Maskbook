@@ -13,6 +13,7 @@ import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
+import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
 
@@ -129,6 +130,14 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
     } = useControlledDialog()
     //#endregion
 
+    //#region Savings
+    const {
+        open: isSavingsDialogOpen,
+        onOpen: onSavingsDialogOpen,
+        onClose: onSavingsDialogClose,
+    } = useControlledDialog()
+    //#endregion
+
     //#region Swap
     const { open: isSwapDialogOpen, onOpen: onSwapDialogOpen, onClose: onSwapDialogClose } = useControlledDialog()
     //#endregion
@@ -228,6 +237,13 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             false,
         ),
         createEntry(
+            'Savings',
+            new URL('./assets/savings.png', import.meta.url).toString(),
+            onSavingsDialogOpen,
+            undefined,
+            isFlow,
+        ),
+        createEntry(
             'Swap',
             new URL('./assets/swap.png', import.meta.url).toString(),
             onSwapDialogOpen,
@@ -287,7 +303,6 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             undefined,
             true,
         ),
-        createEntry('Saving', new URL('./assets/saving.png', import.meta.url).toString(), undefined, undefined, true),
         createEntry(
             'Alternative',
             new URL('./assets/more.png', import.meta.url).toString(),
@@ -341,6 +356,13 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             </section>
             {isClaimAllDialogOpen ? (
                 <ClaimAllDialog open={isClaimAllDialogOpen} onClose={onClaimAllDialogClose} />
+            ) : null}
+            {isSavingsDialogOpen ? (
+                <SavingsDialog
+                    open={isSavingsDialogOpen}
+                    onClose={onSavingsDialogClose}
+                    onSwapDialogOpen={onSwapDialogOpen}
+                />
             ) : null}
             {isSwapDialogOpen ? <TraderDialog open={isSwapDialogOpen} onClose={onSwapDialogClose} /> : null}
             {isSecondLevelEntryDialogOpen ? (

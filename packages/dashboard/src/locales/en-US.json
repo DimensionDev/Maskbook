@@ -315,6 +315,8 @@
     "labs_swap_desc": "Pop-up trading widget that allows you to instantly view prices of the hottest Crypto/Stock and trade. Can also invest in the best performing managers.",
     "labs_transak": "Fiat On-Ramp",
     "labs_transak_desc": "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support.",
+    "labs_savings": "Savings",
+    "labs_savings_desc": "Deploy your crypto into various savings protocols and watch your savings grow.",
     "labs_snapshot": "Snapshot",
     "labs_snapshot_desc": "Display and vote for proposals directly on social media.",
     "labs_market_trend": "Market Trend",
