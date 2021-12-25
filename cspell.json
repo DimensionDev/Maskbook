@@ -243,7 +243,11 @@
         "solana",
         "Görli",
         "resizer",
-        "Pageable"
+        "Pageable",
+        "metaverse",
+        "hexlify",
+        "contribs",
+        "contrib"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -347,6 +351,8 @@
         "CANFT",
         "Kodav",
         "koda",
+        "poap",
+        "irss",
         "STETHABI"
     ],
     "ignoreRegExpList": ["/@servie/"],

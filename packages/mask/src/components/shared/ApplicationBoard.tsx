@@ -7,7 +7,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { FileServicePluginID } from '../../plugins/FileService/constants'
+import { PluginID_FileService } from '@masknet/shared-base'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
@@ -201,7 +201,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         createEntry(
             'File Service',
             new URL('./assets/files.png', import.meta.url).toString(),
-            () => openEncryptedMessage(FileServicePluginID),
+            () => openEncryptedMessage(PluginID_FileService),
             undefined,
             false,
             false,

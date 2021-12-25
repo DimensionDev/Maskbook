@@ -20,25 +20,32 @@ export async function syncLanguages() {
 
         const languages = await getLanguages(inputDir)
 
-        let code = header
-        for (const [language] of languages) {
-            code += `import ${language.replace('-', '_')} from './${language}.json'\n`
+        {
+            let code = header
+            code += `\nexport * from './i18n_generated'\n`
+            code = await prettier(code)
+            await writeFile(join(inputDir, 'index.ts'), code, { encoding: 'utf8' })
         }
-        code += `\nexport * from './i18n_generated'\n`
-        code += `export const languages = {\n`
-        for (const [language, familyName] of languages) {
-            code += `    '${familyName}': ${language.replace('-', '_')},\n`
-        }
-        code += `}\n`
-        // Non-plugin i18n files
-        if (!namespace.includes('.')) {
-            const target = `@masknet/shared-base`
-            code += `import { createI18NBundle } from '${target}'\n`
-            code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', languages)\n`
-        }
-        code = await prettier(code)
 
-        await writeFile(join(inputDir, 'index.ts'), code, { encoding: 'utf8' })
+        {
+            let code = header
+            for (const [language] of languages) {
+                code += `import ${language.replace('-', '_')} from './${language}.json'\n`
+            }
+            code += `export const languages = {\n`
+            for (const [language, familyName] of languages) {
+                code += `    '${familyName}': ${language.replace('-', '_')},\n`
+            }
+            code += `}\n`
+            // Non-plugin i18n files
+            if (!namespace.includes('.')) {
+                const target = `@masknet/shared-base`
+                code += `import { createI18NBundle } from '${target}'\n`
+                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', languages)\n`
+            }
+            code = await prettier(code)
+            await writeFile(join(inputDir, 'languages.ts'), code, { encoding: 'utf8' })
+        }
     }
 }
 task(

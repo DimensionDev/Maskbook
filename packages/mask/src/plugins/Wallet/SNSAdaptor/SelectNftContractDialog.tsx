@@ -272,21 +272,19 @@ function ContractListItem(props: ContractListItemProps) {
                 </Typography>
                 {contract.balance ? <Typography className={classes.balance}>{contract.balance}</Typography> : null}
             </ListItem>
-            <Typography>
-                <div
-                    className={classNames(
-                        classes.address,
-                        contract.contractDetailed.iconURL ? '' : classes.addressNoImage,
-                    )}>
-                    <span onClick={() => onSubmit(contract.contractDetailed)}>{contract.contractDetailed.address}</span>
-                    <Link
-                        href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <OpenInNewIcon className={classes.openIcon} fontSize="small" />
-                    </Link>
-                </div>
-            </Typography>
+            <div
+                className={classNames(
+                    classes.address,
+                    contract.contractDetailed.iconURL ? '' : classes.addressNoImage,
+                )}>
+                <span onClick={() => onSubmit(contract.contractDetailed)}>{contract.contractDetailed.address}</span>
+                <Link
+                    href={resolveAddressLinkOnExplorer(chainId, contract.contractDetailed.address)}
+                    target="_blank"
+                    rel="noopener noreferrer">
+                    <OpenInNewIcon className={classes.openIcon} fontSize="small" />
+                </Link>
+            </div>
         </div>
     )
 }

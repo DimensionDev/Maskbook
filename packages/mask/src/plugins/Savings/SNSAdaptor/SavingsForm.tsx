@@ -140,9 +140,12 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                                     value: inputTokenTradeAmount,
                                     gasLimit: 2100000,
                                 })
+
+                                onClose?.()
                             } else {
                                 onClose?.()
                                 onSwapDialogOpen?.()
+
                                 /*
                                  * @TODO: Implement withdraw when stETH Beacon Chain allows for withdraws
                                  *
