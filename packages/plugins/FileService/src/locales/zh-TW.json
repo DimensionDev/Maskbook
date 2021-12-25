@@ -1,5 +1,6 @@
 {
-    "display_name": "插件：檔案服務",
+    "__display_name": "插件：檔案服務",
+    "__composition_entry": "📃 檔案服務",
     "on_insert": "使用這個檔案",
     "uploading_preparing": "準備中",
     "uploading_estimating_time": "預估時間…",

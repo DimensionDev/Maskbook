@@ -1,5 +1,6 @@
 {
-    "display_name": "플러그인: 파일 서비스",
+    "__display_name": "플러그인: 파일 서비스",
+    "__composition_entry": "📃 파일 서비스",
     "on_insert": "파일 사용",
     "uploading_preparing": "준비 중",
     "uploading_estimating_time": "남은 시간 계산 중",

@@ -1,5 +1,6 @@
 {
-    "display_name": "插件：文件服务",
+    "__display_name": "插件：文件服务",
+    "__composition_entry": "📃 文件服务",
     "on_insert": "使用该文件",
     "uploading_preparing": "准备中",
     "uploading_estimating_time": "预计时间…",
