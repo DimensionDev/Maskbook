@@ -95,6 +95,7 @@ const NETWORK_ID_MAP: Record<DataProvider, Record<NetworkType, string>> = {
         [NetworkType.Polygon]: 'polygon-pos',
         [NetworkType.Arbitrum]: 'arbitrum-one',
         [NetworkType.xDai]: 'xdai',
+        [NetworkType.Celo]: 'celo',
     },
     [DataProvider.COIN_MARKET_CAP]: {
         [NetworkType.Ethereum]: '1027',
@@ -102,6 +103,7 @@ const NETWORK_ID_MAP: Record<DataProvider, Record<NetworkType, string>> = {
         [NetworkType.Polygon]: '3890',
         [NetworkType.Arbitrum]: '11841',
         [NetworkType.xDai]: '5601',
+        [NetworkType.Celo]: '0',
     },
     [DataProvider.UNISWAP_INFO]: {
         [NetworkType.Ethereum]: '',
@@ -109,6 +111,7 @@ const NETWORK_ID_MAP: Record<DataProvider, Record<NetworkType, string>> = {
         [NetworkType.Polygon]: '',
         [NetworkType.Arbitrum]: '',
         [NetworkType.xDai]: '',
+        [NetworkType.Celo]: '',
     },
 }
 
