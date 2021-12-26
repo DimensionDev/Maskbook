@@ -1,6 +1,6 @@
-import { Box, ClickAwayListener, Skeleton, Tooltip, Typography } from '@material-ui/core'
+import { Box, ClickAwayListener, Skeleton, Tooltip, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Info as InfoIcon } from '@material-ui/icons'
+import { Info as InfoIcon } from '@mui/icons-material'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useState } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
@@ -15,14 +15,16 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { WalletMessages } from '../../Wallet/messages'
 import { useAirdropPacket } from '../hooks/useAirdropPacket'
 import { useClaimCallback } from '../hooks/useClaimCallback'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import { ClaimDialog } from './ClaimDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -79,7 +81,7 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
     const { token, onUpdateAmount, onUpdateBalance } = props
     const [showTooltip, setShowTooltip] = useState(false)
     const classes = useStylesExtends(useStyles(), props)
-
+    const { t } = useI18N()
     const account = useAccount()
     const chainId = useChainId()
     const { value: packet, error: packetError, loading: packetLoading, retry: packetRetry } = useAirdropPacket(account)
@@ -120,7 +122,13 @@ export function AirdropClaimCard(props: AirdropClaimCardProps) {
                         .multipliedBy(checkState.type === CheckStateType.YEP ? checkState.ratio : 1)
                         .dp(0)
                         .toFixed() + '.00'
-                }. Follow @realMaskbook (mask.io) to claim airdrop.`,
+                }.${
+                    isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                        ? `Follow @${
+                              isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                          } (mask.io) to claim airdrop.`
+                        : ''
+                }`,
                 postLink,
             ].join('\n'),
         )

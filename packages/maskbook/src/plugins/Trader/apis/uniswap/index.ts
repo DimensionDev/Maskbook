@@ -17,7 +17,7 @@ import {
     fetchBlockNumbersObjectByTimestamps,
 } from '../blocks'
 import { fetchLatestBlocks } from '../uniswap-health'
-import { isGreaterThan } from '@masknet/web3-shared'
+import { isGreaterThan } from '@masknet/web3-shared-evm'
 
 type Value = string | number | BigNumber | undefined
 
@@ -220,7 +220,7 @@ export async function getCoinInfo(id: string) {
         fetchTokenData(id, oneMonthBlock),
         fetchTokenData(id, oneYearBlock),
     ])
-    //#engregion
+    //#endregion
 
     //#region calculate the trade volume and the untracked volume before day ago
     const oneDayVolumeUSD = new BigNumber(token?.tradeVolumeUSD ?? 0).minus(oneDayToken?.tradeVolumeUSD ?? 0).toNumber()

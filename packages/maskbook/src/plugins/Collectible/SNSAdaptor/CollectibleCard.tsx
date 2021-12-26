@@ -1,4 +1,4 @@
-import { Card } from '@material-ui/core'
+import { Card } from '@mui/material'
 export interface CollectibleCardProps extends withClasses<'root'> {
     children?: React.ReactNode
 }

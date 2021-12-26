@@ -1,4 +1,4 @@
-import { Typography, Paper } from '@material-ui/core'
+import { Typography, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { TokenDetails } from '../types'
 

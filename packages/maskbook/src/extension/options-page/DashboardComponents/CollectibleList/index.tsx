@@ -1,23 +1,14 @@
-import { createContext, useState } from 'react'
+import { createContext, useState, useEffect } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { useStylesExtends, useValueRef } from '@masknet/shared'
-import {
-    ChainId,
-    CollectibleProvider,
-    ERC721TokenDetailed,
-    EthereumTokenType,
-    formatEthereumAddress,
-    useAccount,
-    useChainId,
-    useCollectibles,
-    Wallet,
-} from '@masknet/web3-shared'
-import { Box, Button, Skeleton, TablePagination, Typography } from '@material-ui/core'
+import { ChainId, CollectibleProvider, ERC721TokenDetailed, useCollectibles, Wallet } from '@masknet/web3-shared-evm'
+import { Box, Button, Skeleton, TablePagination, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { currentCollectibleDataProviderSettings } from '../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
+import { searchProfileTabSelector } from '../../../../social-network-adaptor/twitter.com/utils/selector'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -107,7 +98,7 @@ function CollectibleListUI(props: CollectibleListUIProps) {
     if (loading)
         return (
             <Box className={classes.root}>
-                {Array.from({ length: 8 })
+                {Array.from({ length: 12 })
                     .fill(0)
                     .map((_, i) => (
                         <Box className={classes.card} display="flex" flexDirection="column" key={i}>
@@ -138,8 +129,8 @@ function CollectibleListUI(props: CollectibleListUIProps) {
                     </Box>
                 ) : (
                     <Box className={classes.root}>
-                        {collectibles.map((x) => (
-                            <div className={classes.card} key={x.tokenId}>
+                        {collectibles.map((x, i) => (
+                            <div className={classes.card} key={i}>
                                 <CollectibleCard token={x} provider={provider} wallet={wallet} readonly={readonly} />
                                 <div className={classes.description}>
                                     <Typography className={classes.name} color="textSecondary" variant="body2">
@@ -199,6 +190,12 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
         setPage(0)
     }, [provider, address])
 
+    useEffect(() => {
+        const tab = searchProfileTabSelector().evaluate()
+        if (!tab) return
+        tab.scrollIntoView()
+    }, [page])
+
     return (
         <CollectibleListUI
             classes={classes}
@@ -213,59 +210,6 @@ export function CollectibleListAddress(props: CollectibleListAddressProps) {
             hasRetry={!!address}
             onPrevPage={() => setPage((prev) => prev - 1)}
             onNextPage={() => setPage((next) => next + 1)}
-        />
-    )
-}
-
-export interface CollectibleListProps {
-    wallet: Wallet
-    readonly?: boolean
-}
-
-export function CollectibleList({ wallet, readonly }: CollectibleListProps) {
-    const account = useAccount()
-    const chainId = useChainId()
-    const [page, setPage] = useState(0)
-    const provider = useValueRef(currentCollectibleDataProviderSettings)
-    const {
-        value = { collectibles: [], hasNextPage: false },
-        loading: collectiblesLoading,
-        retry: collectiblesRetry,
-        error: collectiblesError,
-    } = useCollectibles(account, chainId, provider, page, 50)
-
-    const { collectibles = [], hasNextPage } = value
-
-    useUpdateEffect(() => {
-        setPage(0)
-    }, [account, provider])
-
-    const dataSource = collectibles.filter((x) => {
-        const key = `${formatEthereumAddress(x.contractDetailed.address)}_${x.tokenId}`
-        switch (x.contractDetailed.type) {
-            case EthereumTokenType.ERC721:
-                return wallet.erc721_token_blacklist ? !wallet.erc721_token_blacklist.has(key) : true
-            // wallet.erc1155_token_blacklist is still unused, comment it now.
-            // case EthereumTokenType.ERC1155:
-            //     return wallet.erc1155_token_blacklist ? !wallet.erc1155_token_blacklist.has(key) : true
-            default:
-                return false
-        }
-    })
-
-    return (
-        <CollectibleListUI
-            provider={provider}
-            wallet={wallet}
-            collectibles={collectibles}
-            loading={collectiblesLoading}
-            error={collectiblesError}
-            collectiblesRetry={collectiblesRetry}
-            hasNextPage={hasNextPage}
-            readonly={readonly}
-            page={page}
-            onPrevPage={() => setPage((prev) => prev - 1)}
-            onNextPage={() => setPage((prev) => prev + 1)}
         />
     )
 }

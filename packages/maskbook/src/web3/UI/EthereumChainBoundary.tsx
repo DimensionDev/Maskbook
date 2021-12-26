@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { Box, Typography, Theme } from '@material-ui/core'
-import type { SxProps } from '@material-ui/system'
+import { Box, Typography, Theme } from '@mui/material'
+import type { SxProps } from '@mui/system'
 import {
     ChainId,
     getChainDetailedCAIP,
@@ -13,7 +13,7 @@ import {
     useAccount,
     useAllowTestnet,
     useChainId,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useValueRef, delay, useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { currentProviderSettings } from '../../plugins/Wallet/settings'
@@ -56,14 +56,14 @@ export function EthereumChainBoundary(props: EthereumChainBoundaryProps) {
         if (!chainDetailedCAIP) throw new Error('Unknown network type.')
 
         // if mask wallet was used it can switch network automatically
-        if (providerType === ProviderType.Maskbook) {
+        if (providerType === ProviderType.MaskWallet) {
             await WalletRPC.updateAccount({
                 chainId: expectedChainId,
             })
             return
         }
 
-        // request ethereum-compatiable network
+        // request ethereum-compatible network
         const networkType = getNetworkTypeFromChainId(expectedChainId)
         if (!networkType) return
         try {

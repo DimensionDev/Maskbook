@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -42,9 +42,9 @@ export const WalletConnectQRCodeDialog: React.FC = () => {
     }, [open, uri, closeDialog])
 
     let mode: QRCodeDialogProps['mode'] = 'qrcode'
-    if (process.env.architecture === 'app' && process.env.target === 'firefox') {
+    if (process.env.architecture === 'app' && process.env.engine === 'firefox') {
         mode = 'firefox'
-    } else if (process.env.architecture === 'app' && process.env.target === 'safari') {
+    } else if (process.env.architecture === 'app' && process.env.engine === 'safari') {
         mode = 'safari'
     }
     return <QRCodeDialog uri={uri} open={open} mode={mode} onClose={closeDialog} />

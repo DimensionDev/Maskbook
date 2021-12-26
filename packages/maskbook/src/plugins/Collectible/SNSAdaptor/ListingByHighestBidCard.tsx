@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useSnackbar } from '@masknet/theme'
-import { Card, CardActions, CardContent } from '@material-ui/core'
+import { useCustomSnackbar } from '@masknet/theme'
+import { Card, CardActions, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
@@ -10,7 +10,7 @@ import {
     isZero,
     FungibleTokenWatched,
     useAccount,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -53,7 +53,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -89,11 +89,11 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
             })
         } catch (error) {
             if (error instanceof Error) {
-                enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
             }
             throw error
         }
-    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime, enqueueSnackbar])
+    }, [asset?.value, token, amount, account, reservePrice, expirationDateTime, showSnackbar])
 
     useEffect(() => {
         setAmount('')

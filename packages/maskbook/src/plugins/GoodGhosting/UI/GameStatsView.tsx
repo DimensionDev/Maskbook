@@ -1,5 +1,5 @@
-import { formatBalance } from '@masknet/web3-shared'
-import { Grid, Typography, Box, Button } from '@material-ui/core'
+import { formatBalance } from '@masknet/web3-shared-evm'
+import { Grid, Typography, Box, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import type { GameAssets, GoodGhostingInfo, LendingPoolData, Player } from '../types'
@@ -38,7 +38,7 @@ export function GameStatsView(props: GameStatsViewProps) {
     const { value: financialData, loading, error, retry } = props.finDataResult
     const {
         value: otherPlayerData,
-        loading: otherPlayerloading,
+        loading: otherPlayerLoading,
         error: otherPlayerError,
         retry: otherPlayerRetry,
     } = props.otherPlayerResult
@@ -52,7 +52,7 @@ export function GameStatsView(props: GameStatsViewProps) {
     } = props.poolAssetsResult
     const { t } = useI18N()
 
-    if ((loading && !financialData) || otherPlayerloading || poolAssetsLoading) {
+    if ((loading && !financialData) || otherPlayerLoading || poolAssetsLoading) {
         return (
             <Typography variant="h6" color="textSecondary">
                 Loading game stats

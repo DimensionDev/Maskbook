@@ -1,4 +1,4 @@
-import { ListItem, ListItemText, ListItemIcon, styled, listItemTextClasses } from '@material-ui/core'
+import { ListItem, ListItemText, ListItemIcon, styled, listItemTextClasses } from '@mui/material'
 import { MaskColorVar } from '@masknet/theme'
 
 export interface SettingItemProps extends React.PropsWithChildren<{}> {
@@ -8,7 +8,7 @@ export interface SettingItemProps extends React.PropsWithChildren<{}> {
     error?: boolean
 }
 
-const IconWarpper = styled(ListItemIcon)(({ theme }) => ({
+const IconWrapper = styled(ListItemIcon)(({ theme }) => ({
     alignItems: 'center',
     justifyContent: 'center',
     width: 64,
@@ -21,6 +21,8 @@ const IconWarpper = styled(ListItemIcon)(({ theme }) => ({
 
 const TextWrapper = styled(ListItemText)(({ theme }) => ({
     [`& .${listItemTextClasses.primary}`]: {
+        fontWeight: '600',
+        fontSize: 18,
         paddingBottom: theme.spacing(2),
     },
     [`&.${listItemTextClasses.root}.error .${listItemTextClasses.secondary}`]: {
@@ -32,7 +34,7 @@ export default function SettingItem(props: SettingItemProps) {
     const { title, desc, icon, error = false } = props
     return (
         <ListItem sx={{ paddingLeft: 0 }}>
-            <IconWarpper>{icon}</IconWarpper>
+            <IconWrapper>{icon}</IconWrapper>
             <TextWrapper primary={title} secondary={desc} className={error ? 'error' : undefined} />
             {props.children}
         </ListItem>

@@ -1,12 +1,5 @@
 import { ForwardedRef, forwardRef } from 'react'
-import {
-    Box,
-    formHelperTextClasses,
-    TextField,
-    StandardTextFieldProps,
-    InputProps,
-    Typography,
-} from '@material-ui/core'
+import { Box, formHelperTextClasses, TextField, StandardTextFieldProps, InputProps, Typography } from '@mui/material'
 import { makeStyles } from '../../makeStyles'
 import { getMaskColor, MaskColorVar } from '../../constants'
 
@@ -36,22 +29,31 @@ const useStyles = makeStyles()((theme) => ({
     },
     input: {
         padding: theme.spacing(1),
-        background:
-            theme.palette.mode === 'dark' ? getMaskColor(theme).lightBackground : getMaskColor(theme).normalBackground,
-        fontSize: 12,
+        background: theme.palette.mode === 'dark' ? '#2B2E4C' : '#F6F6F8',
+        fontSize: 13,
         lineHeight: '16px',
+        borderRadius: 6,
         [`&.${formHelperTextClasses.error}`]: {
             boxShadow: `0 0 0 ${theme.spacing(0.5)} ${MaskColorVar.redMain.alpha(0.2)}`,
             border: `1px solid ${MaskColorVar.redMain.alpha(0.8)}`,
         },
     },
+    inputDisabled: {
+        opacity: 0.5,
+        color: 'rgba(255, 255, 255, 0.4)',
+    },
+    inputFocused: {
+        background: MaskColorVar.primaryBackground,
+        padding: 7,
+        boxShadow: `0 0 0 2px ${theme.palette.mode === 'dark' ? '#4F5378' : 'rgba(28, 104, 243, 0.2)'}`,
+    },
 }))
 
-type MaskTextFieldProps = Exclude<StandardTextFieldProps, 'variant'>
+export type MaskTextFieldProps = Exclude<StandardTextFieldProps, 'variant'>
 
 export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: ForwardedRef<any>) => {
     const { label, sx, required = false, ...rest } = props
-    const inputProps = (props.inputProps as InputProps) ?? {}
+    const inputProps = (props.InputProps as InputProps) ?? {}
     const { classes } = useStyles()
     return (
         <Box sx={sx}>
@@ -72,7 +74,12 @@ export const MaskTextField = forwardRef((props: MaskTextFieldProps, ref: Forward
                 classes={{ root: classes.field }}
                 variant="standard"
                 required={required}
-                InputProps={{ ...inputProps, disableUnderline: true, className: classes.input }}
+                InputProps={{
+                    disableUnderline: true,
+                    className: classes.input,
+                    classes: { disabled: classes.inputDisabled, focused: classes.inputFocused, ...inputProps.classes },
+                    ...inputProps,
+                }}
             />
         </Box>
     )

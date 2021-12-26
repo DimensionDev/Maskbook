@@ -8,8 +8,12 @@ export default function RestoreSetting() {
     const navigate = useNavigate()
 
     const onRecovery = () => {
-        navigate(RoutePaths.SignIn)
+        navigate(RoutePaths.SignIn, { state: { from: RoutePaths.Settings } })
     }
 
-    return <SettingButton onClick={onRecovery}>{t.settings_button_recovery()}</SettingButton>
+    return (
+        <SettingButton size="large" onClick={onRecovery}>
+            {t.settings_button_recovery()}
+        </SettingButton>
+    )
 }

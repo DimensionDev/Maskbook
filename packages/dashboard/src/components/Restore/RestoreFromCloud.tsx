@@ -1,24 +1,38 @@
-import { memo, useEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useDashboardI18N } from '../../locales'
-import { Box, Button } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { MaskAlert } from '../MaskAlert'
 import { CodeValidation } from './CodeValidation'
 import { fetchBackupValue } from '../../pages/Settings/api'
-import { Services } from '../../API'
+import { PluginServices, Services } from '../../API'
 import BackupPreviewCard from '../../pages/Settings/components/BackupPreviewCard'
 import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 import { Step, Stepper } from '../Stepper'
 import { LoadingCard } from './steps/LoadingCard'
+import { decryptBackup } from '@masknet/backup-format'
+import { decode, encode } from '@msgpack/msgpack'
+import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
+import { AccountType } from '../../pages/Settings/type'
+import { UserContext } from '../../pages/Settings/hooks/UserContext'
+import { ConfirmSynchronizePasswordDialog } from './ConfirmSynchronizePasswordDialog'
+import { LoadingButton } from '../LoadingButton'
+import type { BackupPreview } from '../../../../maskbook/src/utils'
+import { PopupRoutes } from '@masknet/shared'
 
 export const RestoreFromCloud = memo(() => {
     const t = useDashboardI18N()
     const navigate = useNavigate()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
+    const { user, updateUser } = useContext(UserContext)
+    const { currentPersona, changeCurrentPersona } = PersonaContext.useContainer()
+
+    const [account, setAccount] = useState<null | { type: AccountType; value: string; password: string }>(null)
     const [backupId, setBackupId] = useState('')
+    const [openSynchronizePasswordDialog, toggleSynchronizePasswordDialog] = useState(false)
     const [step, setStep] = useState<{ name: string; params: any }>({ name: 'validate', params: null })
 
     const [{ loading: fetchingBackupValue, error: fetchBackupValueError }, fetchBackupValueFn] = useAsyncFn(
@@ -27,41 +41,86 @@ export const RestoreFromCloud = memo(() => {
     )
 
     const [{ loading: decryptingBackup }, decryptBackupFn] = useAsyncFn(
-        async (account: string, password: string, encryptedValue: string) => {
-            return Services.Crypto.decryptBackup('password', 'account', encryptedValue)
+        async (account: string, password: string, encryptedValue: ArrayBuffer) => {
+            try {
+                const decrypted = await decryptBackup(encode(account + password), encryptedValue)
+                return JSON.stringify(decode(decrypted))
+            } catch {
+                return null
+            }
         },
         [],
     )
 
     useEffect(() => {
         if (!fetchBackupValueError) return
-        enqueueSnackbar(t.sign_in_account_cloud_backup_download_failed(), { variant: 'error' })
+        showSnackbar(t.sign_in_account_cloud_backup_download_failed(), { variant: 'error' })
     }, [fetchBackupValueError])
 
-    const onValidated = async (downloadLink: string, account: string, password: string) => {
-        try {
+    const onValidated = useCallback(
+        async (downloadLink: string, accountValue: string, password: string, type: AccountType) => {
             const backupValue = await fetchBackupValueFn(downloadLink)
-            const backupText = await decryptBackupFn(account, password, backupValue)
-            const backupInfo = await Services.Welcome.parseBackupStr(backupText)
+            const backupText = await decryptBackupFn(accountValue, password, backupValue)
 
+            if (!backupText) {
+                return t.sign_in_account_cloud_backup_decrypt_failed()
+            }
+
+            const backupInfo = await Services.Welcome.parseBackupStr(backupText)
             if (backupInfo) {
                 setBackupId(backupInfo.id)
-                setStep({ name: 'restore', params: { backupJson: backupInfo.info } })
+                setAccount({ type, value: accountValue, password })
+                setStep({
+                    name: 'restore',
+                    params: {
+                        backupJson: backupInfo.info,
+                        handleRestore: () => onRestore(backupInfo, { type, value: accountValue, password }),
+                    },
+                })
+                return null
             }
-            return null
-        } catch {
             return t.sign_in_account_cloud_backup_decrypt_failed()
-        }
-    }
+        },
+        [],
+    )
 
-    const onRestore = async () => {
-        try {
-            await Services.Welcome.checkPermissionsAndRestore(backupId)
-            navigate(RoutePaths.Personas, { replace: true })
-        } catch {
-            enqueueSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
-        }
-    }
+    const onRestore = useCallback(
+        async (backupInfo: { info: BackupPreview; id: string }, account: any) => {
+            try {
+                if (
+                    backupInfo.info?.wallets &&
+                    (!(await PluginServices.Wallet.hasPassword()) || (await PluginServices.Wallet.isLocked()))
+                ) {
+                    await Services.Helper.openPopupWindow(PopupRoutes.WalletRecovered, { backupId: backupInfo.id })
+                    return
+                }
+
+                await Services.Welcome.checkPermissionsAndRestore(backupInfo.id)
+
+                // Set default wallet
+                if (backupInfo.info?.wallets) PluginServices.Wallet.setDefaultWallet()
+
+                if (!currentPersona) {
+                    const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+                    if (lastedPersona) {
+                        await changeCurrentPersona(lastedPersona.identifier)
+                    }
+                }
+                if (account) {
+                    if (!user.email && account.type === AccountType.email) {
+                        updateUser({ email: account.value })
+                    }
+                    if (!user.phone && account.type === AccountType.phone) {
+                        updateUser({ phone: account.value })
+                    }
+                }
+                toggleSynchronizePasswordDialog(true)
+            } catch {
+                showSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
+            }
+        },
+        [user],
+    )
 
     const getTransition = useMemo(() => {
         if (decryptingBackup) {
@@ -79,6 +138,17 @@ export const RestoreFromCloud = memo(() => {
         return undefined
     }, [fetchingBackupValue, decryptingBackup])
 
+    const synchronizePassword = () => {
+        if (!account) return
+        updateUser({ backupPassword: account.password })
+        onCloseSynchronizePassword()
+    }
+
+    const onCloseSynchronizePassword = () => {
+        toggleSynchronizePasswordDialog(false)
+        navigate(RoutePaths.Personas, { replace: true })
+    }
+
     return (
         <>
             <Stepper transition={getTransition} defaultStep="validate" step={step}>
@@ -90,21 +160,28 @@ export const RestoreFromCloud = memo(() => {
                     )}
                 </Step>
                 <Step name="restore">
-                    {(_, { backupJson }) => (
+                    {(_, { backupJson: backupBasicInfoJson, handleRestore: handleRestore }) => (
                         <>
                             <Box sx={{ width: '100%' }}>
-                                <BackupPreviewCard json={backupJson} />
+                                <BackupPreviewCard json={backupBasicInfoJson} />
                             </Box>
                             <ButtonContainer>
-                                <Button variant="rounded" color="primary" onClick={onRestore}>
+                                <LoadingButton size="large" variant="rounded" color="primary" onClick={handleRestore}>
                                     {t.restore()}
-                                </Button>
+                                </LoadingButton>
                             </ButtonContainer>
                         </>
                     )}
                 </Step>
             </Stepper>
-            <Box sx={{ marginTop: '35px', width: '100%' }}>
+            {openSynchronizePasswordDialog && (
+                <ConfirmSynchronizePasswordDialog
+                    open={openSynchronizePasswordDialog}
+                    onClose={() => onCloseSynchronizePassword()}
+                    onConform={synchronizePassword}
+                />
+            )}
+            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_cloud_backup_warning()} />
             </Box>
         </>

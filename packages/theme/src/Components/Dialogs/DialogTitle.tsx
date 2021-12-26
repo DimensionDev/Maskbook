@@ -1,5 +1,5 @@
-import { DialogTitle, IconButton, Typography, Box, styled } from '@material-ui/core'
-import { Close, ArrowBack } from '@material-ui/icons'
+import { DialogTitle, IconButton, Typography, Box, styled } from '@mui/material'
+import { Close, ArrowBack } from '@mui/icons-material'
 import { memo } from 'react'
 
 const Title = styled(DialogTitle)(({ theme }) => ({
@@ -28,7 +28,7 @@ export const MaskDialogTitle = memo((props: MaskDialogTitleProps) => {
     return (
         <Title>
             {backButton}
-            <Typography component="span" variant="h6">
+            <Typography component="span" variant="h6" fontSize={24}>
                 {children}
             </Typography>
             <Box sx={{ flex: 1 }} />

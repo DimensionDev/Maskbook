@@ -1,8 +1,8 @@
-import type { JSON_PayloadInMask, PoolRecord } from '../types'
-import * as subgraph from './apis'
+import type { JSON_PayloadInMask, PoolRecord, PoolFromNetwork } from '../types'
+import * as subgraph from './apis/subgraph'
+import * as chain from './apis/chain'
 import * as database from './database'
-import { getChainDetailed, ChainId } from '@masknet/web3-shared'
-import { currentChainIdSettings } from '../../Wallet/settings'
+import { getChainDetailed, ChainId, getITOConstants } from '@masknet/web3-shared-evm'
 
 export async function getTradeInfo(pid: string, trader: string) {
     const tradeInfo = await subgraph.getTradeInfo(pid, trader)
@@ -16,11 +16,29 @@ export async function getPool(pid: string) {
     return poolFromChain
 }
 
-export async function getAllPoolsAsSeller(address: string, page: number) {
-    const chainId = currentChainIdSettings.value
-    const poolsFromChain = await subgraph.getAllPoolsAsSeller(address, page)
-    const poolsFromDB = await database.getPoolsFromDB(poolsFromChain.map((x) => x.pool.pid))
-    return poolsFromChain
+export async function getAllPoolsAsSeller(address: string, page: number, endBlock: number, chainId: ChainId) {
+    const { ITO2_CONTRACT_CREATION_BLOCK_HEIGHT } = getITOConstants(chainId)
+
+    //#region Get data from thegraph
+    const poolsFromSubgraph = await subgraph.getAllPoolsAsSeller(address, page, chainId)
+    //#endregion
+
+    //#region Get data from chain which has not been synced by thegraph.
+    const latestPoolFromSubgraph = poolsFromSubgraph[0]
+    const startBlockNumberFromChain = getLatestBlockNumberFromSubgraph(
+        latestPoolFromSubgraph,
+        page,
+        ITO2_CONTRACT_CREATION_BLOCK_HEIGHT,
+    )
+
+    const poolsFromChain = await chain.getAllPoolsAsSeller(chainId, startBlockNumberFromChain, endBlock, address)
+
+    //#endregion
+    const poolsFromNetwork = poolsFromChain.concat(poolsFromSubgraph)
+
+    //#region Inject password from database
+    const poolsFromDB = await database.getAllPoolsAsSeller(poolsFromNetwork.map((x) => x.pool.pid))
+    return poolsFromNetwork
         .map((x) => {
             const pool = poolsFromDB.find((y) => y.payload.pid === x.pool.pid)
             if (!pool) return x
@@ -33,6 +51,7 @@ export async function getAllPoolsAsSeller(address: string, page: number) {
             }
         })
         .filter((x) => x.pool.chain_id === chainId)
+    //#endregion
 }
 
 export async function getAllPoolsAsBuyer(address: string, chainId: ChainId) {
@@ -57,4 +76,16 @@ export async function discoverPool(from: string, payload: JSON_PayloadInMask) {
         },
     }
     await database.addPoolIntoDB(record)
+}
+
+function getLatestBlockNumberFromSubgraph(
+    poolsFromSubgraph: PoolFromNetwork | undefined,
+    page: number,
+    creationBlockNumber: number | undefined,
+) {
+    return page === 0
+        ? poolsFromSubgraph?.pool
+            ? poolsFromSubgraph.pool.block_number! + 1
+            : creationBlockNumber
+        : undefined
 }

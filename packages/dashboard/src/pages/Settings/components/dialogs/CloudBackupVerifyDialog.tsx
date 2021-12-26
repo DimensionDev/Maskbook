@@ -1,11 +1,11 @@
-import { MaskDialog, CountdownButton, useSnackbar, MaskTextField, MaskColorVar } from '@masknet/theme'
-import { MenuItem, Select, Box } from '@material-ui/core'
+import { MaskDialog, CountdownButton, useCustomSnackbar, MaskTextField, MaskColorVar } from '@masknet/theme'
+import { MenuItem, Select, Box } from '@mui/material'
 import { useDashboardI18N } from '../../../../locales'
 import { useState, useContext, useMemo, useEffect } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { fetchDownloadLink, sendCode, useLanguage, VerifyCodeRequest } from '../../api'
 import { BackupFileInfo, AccountType, Scenario, Locale } from '../../type'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 import { useAsyncFn } from 'react-use'
 
 export interface VerifyNextData {
@@ -20,10 +20,10 @@ export interface CloudBackupVerifyDialogProps {
 
 export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVerifyDialogProps) {
     const language = useLanguage()
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const t = useDashboardI18N()
     const { user } = useContext(UserContext)
-    const [mode, setMode] = useState((user.email ?? user.phone) || '')
+    const [mode, setMode] = useState(user.email || user.phone || '')
     const [code, setCode] = useState('')
     const [invalidCode, setInvalidCode] = useState(false)
 
@@ -38,12 +38,10 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
     }, [mode, code])
 
     const sendVerifyCode = async () => {
-        const res = await sendCode(params).catch((error) =>
-            snackbar.enqueueSnackbar(error.message, { variant: 'error' }),
-        )
+        const res = await sendCode(params).catch((error) => showSnackbar(error.message, { variant: 'error' }))
 
         if (res) {
-            snackbar.enqueueSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
+            showSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
         }
     }
 
@@ -87,8 +85,12 @@ export function CloudBackupVerifyDialog({ open, onClose, onNext }: CloudBackupVe
                         error={invalidCode}
                         helperText={invalidCode ? t.settings_dialogs_incorrect_code() : ''}
                     />
-                    <CountdownButton size="medium" sx={{ width: '100px', height: '40px' }} onClick={sendVerifyCode}>
-                        {t.settings_button_send()}
+                    <CountdownButton
+                        size="medium"
+                        sx={{ width: '100px', height: '40px' }}
+                        repeatContent={t.resend()}
+                        onClick={sendVerifyCode}>
+                        {t.send()}
                     </CountdownButton>
                 </Box>
 

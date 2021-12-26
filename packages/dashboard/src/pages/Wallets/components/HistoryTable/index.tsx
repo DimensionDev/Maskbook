@@ -1,30 +1,19 @@
 import { Dispatch, memo, SetStateAction, useState } from 'react'
-import { Transaction, useAccount, useChainId, useTransactions } from '@masknet/web3-shared'
+import { ChainId, Transaction, useAccount, useTransactions } from '@masknet/web3-shared-evm'
 import { useUpdateEffect } from 'react-use'
 import { useDashboardI18N } from '../../../../locales'
-import {
-    Box,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TablePagination,
-    TableRow,
-} from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
-import { LoadingPlaceholder } from '../../../../components/LoadingPlacholder'
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow } from '@mui/material'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { LoadingPlaceholder } from '../../../../components/LoadingPlaceholder'
 import { EmptyPlaceholder } from '../EmptyPlaceholder'
 import { HistoryTableRow } from '../HistoryTableRow'
 import { noop } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        height: 'calc(100% - 58px)',
         display: 'flex',
         flexDirection: 'column',
-        maxHeight: 'calc(100% - 58px)',
+        height: '100%',
     },
     header: {
         color: MaskColorVar.normalText,
@@ -54,21 +43,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const HistoryTable = memo(() => {
+interface HistoryTableProps {
+    selectedChainId: ChainId
+}
+
+export const HistoryTable = memo<HistoryTableProps>(({ selectedChainId }) => {
     const [page, setPage] = useState(0)
-    const chainId = useChainId()
     const account = useAccount()
     const {
         value = { transactions: [], hasNextPage: false },
         loading: transactionLoading,
         error: transactionError,
-    } = useTransactions(account, page, 50)
+    } = useTransactions(account, page, 50, selectedChainId)
 
     const { transactions = [], hasNextPage } = value
 
     useUpdateEffect(() => {
         setPage(0)
-    }, [account, chainId])
+    }, [account, selectedChainId])
 
     return (
         <HistoryTableUI
@@ -113,9 +105,6 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                                     <TableCell key="Value" align="center" variant="head" className={classes.header}>
                                         {t.wallets_history_value()}
                                     </TableCell>
-                                    <TableCell key="Time" align="center" variant="head" className={classes.header}>
-                                        {t.wallets_history_time()}
-                                    </TableCell>
                                     <TableCell key="Receiver" align="center" variant="head" className={classes.header}>
                                         {t.wallets_history_receiver()}
                                     </TableCell>
@@ -152,6 +141,7 @@ export const HistoryTableUI = memo<HistoryTableUIProps>(
                             disabled: !hasNextPage,
                             size: 'small',
                         }}
+                        sx={{ overflow: 'hidden' }}
                     />
                 ) : null}
             </>

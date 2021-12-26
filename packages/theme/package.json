@@ -1,7 +1,7 @@
 {
   "name": "@masknet/theme",
   "private": true,
-  "description": "@material-ui/core theme of design system of Mask Network",
+  "description": "@mui/material theme of design system of Mask Network",
   "type": "module",
   "exports": {
     ".": "./dist/src/index.js",
@@ -21,28 +21,29 @@
     "start": "dev -- start-storybook -p 6006"
   },
   "dependencies": {
+    "@masknet/icons": "workspace:*",
     "@masknet/storybook-shared": "workspace:*",
+    "@types/qrcode": "^1.4.1",
+    "@types/tinycolor2": "^1.4.3",
     "classnames": "^2.3.1",
     "fuse.js": "^6.4.6",
     "lodash-es": "^4.17.20",
-    "notistack": "1.0.6-next.2",
+    "notistack": "1.0.6-next.3",
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",
-    "tss-react": "^0.8.1",
+    "tss-react": "^0.9.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.5.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.15.0",
-    "@storybook/addon-actions": "^6.3.7",
-    "@storybook/addon-essentials": "^6.3.7",
-    "@storybook/addon-links": "^6.3.7",
-    "@storybook/addons": "^6.3.7",
-    "@storybook/react": "^6.3.7",
-    "@storybook/theming": "^6.3.7",
-    "@types/qrcode": "^1.4.1",
-    "@types/tinycolor2": "^1.4.3",
+    "@babel/core": "^7.15.5",
+    "@storybook/addon-actions": "^6.4.0-alpha.38",
+    "@storybook/addon-essentials": "^6.4.0-alpha.38",
+    "@storybook/addon-links": "^6.4.0-alpha.38",
+    "@storybook/builder-webpack5": "^6.4.0-alpha.38",
+    "@storybook/manager-webpack5": "^6.4.0-alpha.38",
+    "@storybook/react": "^6.4.0-alpha.38",
     "babel-loader": "^8.2.2",
-    "storybook-addon-matrix": "^1.6.0"
+    "webpack": "^5.53.0"
   }
 }

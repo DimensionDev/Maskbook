@@ -1,33 +1,33 @@
 import {
-    useMediaQuery,
-    Toolbar,
-    Theme,
-    Typography,
     AppBar,
+    Box,
+    Drawer,
     Grid,
     IconButton,
-    Drawer,
-    styled,
-    Box,
     paperClasses,
-} from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { Menu as MenuIcon, Close as CloseIcon } from '@material-ui/icons'
+    styled,
+    Theme,
+    Toolbar,
+    Typography,
+    useMediaQuery,
+    useTheme,
+} from '@mui/material'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material'
 import Color from 'color'
 import { ErrorBoundary } from '@masknet/shared'
-import { useState, useContext, useMemo, Suspense } from 'react'
+import { memo, Suspense, useContext, useMemo, useState } from 'react'
 import { DashboardContext } from './context'
 import { Navigation } from './Navigation'
-import { MaskNotSquareIcon } from '@masknet/icons'
-import { memo } from 'react'
+import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
 import { FeaturePromotions } from './FeaturePromotions'
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router-dom'
 import { RoutePaths } from '../../type'
 
 const featurePromotionsEnabled = [RoutePaths.Wallets, RoutePaths.WalletsTransfer, RoutePaths.WalletsHistory]
 
 const Root = styled(Grid)(({ theme }) => ({
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: MaskColorVar.primaryBackground,
 }))
 
 const LeftContainer = styled(Grid)(({ theme }) => ({
@@ -89,17 +89,19 @@ const PageTitle = styled(Grid)(({ theme }) => ({
     minHeight: 40,
     alignItems: 'center',
     paddingLeft: theme.spacing(4.25),
+    '& > h6': {
+        fontSize: '1.5rem',
+    },
     [theme.breakpoints.down('lg')]: {
         flex: 1,
     },
 }))
 
 const Containment = styled(Grid)(({ theme }) => ({
-    contain: 'strict',
+    maxWidth: '100%',
     display: 'flex',
-    [theme.breakpoints.down('lg')]: {
-        minHeight: `calc(100vh - 64px)`,
-    },
+    height: `calc(100vh - 64px)`,
+    overflow: 'hidden',
 }))
 
 const NavigationDrawer = styled(Drawer)(({ theme }) => ({
@@ -115,27 +117,34 @@ const NavigationDrawer = styled(Drawer)(({ theme }) => ({
 }))
 
 const ShapeHelper = styled('div')(({ theme }) => ({
-    height: '100%',
     padding: theme.spacing(3),
+    paddingBottom: 0,
     borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
     borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
-    backgroundColor: theme.palette.background.default,
-    overflow: 'auto',
-    flex: 1,
+    backgroundColor: theme.palette.mode === 'dark' ? '#1B1E38' : MaskColorVar.secondaryBackground,
     display: 'flex',
     flexDirection: 'column',
+    flex: 1,
+    overflow: 'auto',
 }))
 
 const ContentContainer = styled('div')(({ theme }) => ({
-    height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    borderTopLeftRadius: Number(theme.shape.borderRadius) * 5,
-    borderTopRightRadius: Number(theme.shape.borderRadius) * 5,
+    borderRadius: Number(theme.shape.borderRadius) * 5,
+    backgroundColor: 'transparent',
+    minHeight: '100%',
+    position: 'relative',
+    '&:after': {
+        content: '""',
+        display: 'block',
+        paddingTop: theme.spacing(3),
+    },
 }))
 
 const useStyle = makeStyles()((theme) => ({
     toolbarGutters: {
+        backgroundColor: MaskColorVar.primaryBackground,
         [theme.breakpoints.up('lg')]: {
             paddingLeft: theme.spacing(0),
         },
@@ -161,7 +170,9 @@ export const PageFrame = memo((props: PageFrameProps) => {
     const isLargeScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.up('lg'))
     const { drawerOpen, toggleDrawer } = useContext(DashboardContext)
     const showFeaturePromotions = featurePromotionsEnabled.some((path: string) => path === location.pathname)
+    const mode = useTheme().palette.mode
     const { classes } = useStyle()
+
     return (
         <>
             <AppBar position="relative" color="inherit" elevation={0}>
@@ -171,7 +182,7 @@ export const PageFrame = memo((props: PageFrameProps) => {
                             <MenuButton size="large" onClick={toggleDrawer}>
                                 {drawerOpen ? <CloseIcon /> : <MenuIcon />}
                             </MenuButton>
-                            <MaskNotSquareIcon />
+                            {mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}
                         </MaskLogo>
                     )}
                     <PageTitle item xs={isLargeScreen ? 12 : 10} container>
@@ -181,20 +192,24 @@ export const PageFrame = memo((props: PageFrameProps) => {
                     </PageTitle>
                 </Toolbar>
             </AppBar>
-            <Containment item xs>
+            <Containment>
                 {!isLargeScreen && (
                     <NavigationDrawer
                         open={drawerOpen}
                         onClose={toggleDrawer}
-                        hideBackdrop
+                        ModalProps={{
+                            BackdropProps: {
+                                sx: { background: 'transparent' },
+                            },
+                        }}
+                        transitionDuration={300}
                         variant="temporary"
                         elevation={0}>
-                        <Navigation />
+                        <Navigation onClose={toggleDrawer} />
                     </NavigationDrawer>
                 )}
                 <ShapeHelper>
-                    <ContentContainer
-                        className={props.noBackgroundFill ? undefined : classes.shapeContainerWithBackground}>
+                    <ContentContainer>
                         <ErrorBoundary>{props.children}</ErrorBoundary>
                     </ContentContainer>
                 </ShapeHelper>

@@ -1,45 +1,51 @@
 import { ProfileIdentifier } from '@masknet/shared-base'
-import { EthereumTokenType, isDAI, isOKB } from '@masknet/web3-shared'
 import { useCallback } from 'react'
 import Services from '../../extension/service'
 import { RedPacketMetadataReader } from '../../plugins/RedPacket/SNSAdaptor/helpers'
 import type { ImageTemplateTypes } from '../../resources/image-payload'
-import { activatedSocialNetworkUI } from '../../social-network'
+import { activatedSocialNetworkUI, globalUIState } from '../../social-network'
 import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import { i18n, useI18N } from '../../utils'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI'
 import { SteganographyTextPayload } from '../InjectedComponents/SteganographyTextPayload'
 import type { SubmitComposition } from './CompositionUI'
+import { unreachable } from '@dimensiondev/kit'
+import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { isFacebook } from '../../social-network-adaptor/facebook.com/base'
 
 export function useSubmit(onClose: () => void) {
     const { t } = useI18N()
-    const whoAmI = useCurrentIdentity()
+    const whoAmI = useLastRecognizedIdentity()
 
-    const onRequestPost = useCallback(
+    return useCallback(
         async (info: SubmitComposition) => {
             const { content, encode, target } = info
+
+            const network = activatedSocialNetworkUI.networkIdentifier
+            const currentProfile = new ProfileIdentifier(
+                network,
+                ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
+                    unreachable('Cannot figure out current profile' as never),
+            )
 
             const [encrypted, token] = await Services.Crypto.encryptTo(
                 content,
                 target === 'Everyone' ? [] : target.map((x) => x.identifier),
-                whoAmI?.identifier ?? ProfileIdentifier.unknown,
+                whoAmI?.identifier ?? currentProfile,
                 target === 'Everyone',
             )
-            const redPacketPreText = isTwitter(activatedSocialNetworkUI)
-                ? t('additional_post_box__encrypted_post_pre_red_packet_twitter', { encrypted })
-                : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
+            const redPacketPreText =
+                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? t('additional_post_box__encrypted_post_pre_red_packet_twitter_official_account', {
+                          encrypted,
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                      })
+                    : t('additional_post_box__encrypted_post_pre_red_packet', { encrypted })
 
             // TODO: move into the plugin system
             const redPacketMetadata = RedPacketMetadataReader(content.meta)
             if (encode === 'image') {
                 if (redPacketMetadata.ok) {
-                    const isErc20 =
-                        redPacketMetadata.val?.token && redPacketMetadata.val.token_type === EthereumTokenType.ERC20
-                    const isDai = isErc20 && isDAI(redPacketMetadata.val.token?.address ?? '')
-                    const isOkb = isErc20 && isOKB(redPacketMetadata.val.token?.address ?? '')
-                    const template: ImageTemplateTypes = isDai ? 'dai' : isOkb ? 'okb' : 'eth'
-                    const text = redPacketPreText.replace(encrypted, '')
-                    await pasteImage(encrypted, template, text)
+                    await pasteImage(encrypted, 'eth', redPacketPreText.replace(encrypted, ''))
                 } else {
                     await pasteImage(encrypted, 'v2', null)
                 }
@@ -50,9 +56,8 @@ export function useSubmit(onClose: () => void) {
             if (target !== 'Everyone') Services.Crypto.publishPostAESKey(token)
             onClose()
         },
-        [t, onClose],
+        [t, whoAmI, onClose],
     )
-    return onRequestPost
 }
 
 function pasteTextEncode(encrypted: string, text: string | null) {

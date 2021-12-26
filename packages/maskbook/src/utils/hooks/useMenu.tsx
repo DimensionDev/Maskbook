@@ -1,11 +1,14 @@
-import { SyntheticEvent, cloneElement, isValidElement, useCallback, useRef, useState, createElement } from 'react'
-import { Menu } from '@material-ui/core'
-import type { MenuListProps, PaperProps } from '@material-ui/core'
+import { SyntheticEvent, cloneElement, isValidElement, useCallback, useState, createElement } from 'react'
+import { Menu, PopoverOrigin } from '@mui/material'
+import type { MenuListProps, PaperProps } from '@mui/material'
 import { ShadowRootMenu } from '../shadow-root/ShadowRootComponents'
+import { useUpdate } from 'react-use'
 
 interface MenuProps {
     paperProps?: PaperProps
     menuListProps?: MenuListProps
+    anchorOrigin?: PopoverOrigin
+    transformOrigin?: PopoverOrigin
 }
 
 /**
@@ -19,18 +22,25 @@ export function useMenu(
     useShadowRoot = true,
 ) {
     const [open, setOpen] = useState(false)
-    const anchorElRef = useRef<HTMLElement>()
-    const close = () => setOpen(false)
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+    const close = () => {
+        setOpen(false)
+        setAnchorEl(null)
+    }
+    const update = useUpdate()
     return [
         createElement(
             useShadowRoot ? ShadowRootMenu : Menu,
             {
                 PaperProps: props?.paperProps,
                 MenuListProps: props?.menuListProps,
-                open: open,
-                anchorEl: anchorElRef.current,
+                open,
+                anchorEl,
                 onClose: close,
                 onClick: close,
+
+                anchorOrigin: props?.anchorOrigin,
+                transformOrigin: props?.transformOrigin,
             },
             elements?.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
@@ -46,8 +56,12 @@ export function useMenu(
 
             // when the essential content of currentTarget would be closed over,
             //  we can set the anchorEl with currentTarget's bottom sibling to avoid it.
-            anchorElRef.current = anchorSibling ? (element.nextElementSibling as HTMLElement) ?? undefined : element
+            const finalAnchor = anchorSibling ? (element.nextElementSibling as HTMLElement) ?? undefined : element
+            setAnchorEl(finalAnchor)
             setOpen(true)
+            // HACK: it seems like anchor doesn't work correctly
+            // but a force repaint can solve the problem.
+            window.requestAnimationFrame(update)
         }, []),
     ] as const
 }

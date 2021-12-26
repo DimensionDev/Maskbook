@@ -2,9 +2,9 @@ name: Bot
 
 on:
   push:
-    branches: [master, develop, released]
+    branches: [master, develop*, released]
   pull_request:
-    branches: [master, develop, released]
+    branches: [master, develop*, released]
 
 jobs:
   merge_conflict_check:

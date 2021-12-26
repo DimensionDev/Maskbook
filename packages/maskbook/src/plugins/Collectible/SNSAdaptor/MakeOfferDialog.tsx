@@ -9,10 +9,10 @@ import {
     FormControlLabel,
     Typography,
     Link,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-es'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
@@ -20,7 +20,7 @@ import {
     useAccount,
     isNative,
     useFungibleTokenWatched,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -79,7 +79,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
 
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
 
     const account = useAccount()
 
@@ -108,11 +108,11 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
             })
         } catch (error) {
             if (error instanceof Error) {
-                enqueueSnackbar(error.message, { variant: 'error', preventDuplicate: true })
+                showSnackbar(error.message, { variant: 'error', preventDuplicate: true })
             }
             throw error
         }
-    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, enqueueSnackbar])
+    }, [asset?.value, token, account, amount, expirationDateTime, isAuction, showSnackbar])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -125,7 +125,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         const amount_ = new BigNumber(amount || '0')
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isZero()) return t('plugin_collectible_enter_a_price')
-        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficent_balance')
+        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
             return t('plugin_collectible_invalid_expiration_date')
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')

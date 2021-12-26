@@ -1,12 +1,12 @@
 import { ChangeEvent, useCallback, useMemo } from 'react'
-import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@material-ui/core'
+import { Box, Chip, ChipProps, InputProps, TextField, TextFieldProps, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import classNames from 'classnames'
 import BigNumber from 'bignumber.js'
 import { SelectTokenChip, SelectTokenChipProps } from './SelectTokenChip'
 import { FormattedBalance, useStylesExtends } from '@masknet/shared'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { formatBalance } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { formatBalance } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../utils'
 
 const MIN_AMOUNT_LENGTH = 1
@@ -17,10 +17,10 @@ const useStyles = makeStyles()((theme) => {
         root: {},
         input: {
             '&::-webkit-outer-spin-button, &::-webkit-inner-spin-button': {
-                '-webkit-appearance': 'none',
+                appearance: 'none',
                 margin: 0,
             },
-            '-moz-appearance': 'textfield',
+            appearance: 'textfield',
         },
         max: {
             marginRight: theme.spacing(0.5),
@@ -49,6 +49,7 @@ const useStyles = makeStyles()((theme) => {
 export interface TokenAmountPanelProps extends withClasses<'root'> {
     amount: string
     maxAmount?: string
+    maxAmountShares?: number
     balance: string
     disableToken?: boolean
     disableBalance?: boolean
@@ -60,8 +61,6 @@ export interface TokenAmountPanelProps extends withClasses<'root'> {
     MaxChipStyle?: ChipProps['classes']
     SelectTokenChip?: Partial<SelectTokenChipProps>
     TextFieldProps?: Partial<TextFieldProps>
-    // E.g. red packet shares
-    maxAmountShares?: number
 }
 
 export function TokenAmountPanel(props: TokenAmountPanelProps) {

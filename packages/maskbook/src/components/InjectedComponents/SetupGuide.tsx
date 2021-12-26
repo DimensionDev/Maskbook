@@ -1,5 +1,4 @@
 import { useMemo, useState, useEffect, useCallback } from 'react'
-import { useCopyToClipboard } from 'react-use'
 import {
     Paper,
     Typography,
@@ -12,43 +11,40 @@ import {
     Box,
     useMediaQuery,
     Theme,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import classNames from 'classnames'
 import { ArrowRight } from 'react-feather'
-import AlternateEmailIcon from '@material-ui/icons/AlternateEmail'
-import CloseIcon from '@material-ui/icons/Close'
-import ArrowBackIosOutlinedIcon from '@material-ui/icons/ArrowBackIosOutlined'
-import stringify from 'json-stable-stringify'
-import ActionButton, { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
+import CloseIcon from '@mui/icons-material/Close'
+import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
 import { noop } from 'lodash-es'
 import { useValueRef } from '@masknet/shared'
-import { useI18N, MaskMessage, useMatchXS, extendsTheme } from '../../utils'
+import { useI18N, MaskMessages, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
 import Services from '../../extension/service'
 
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
-import { makeTypedMessageText } from '../../protocols/typed-message'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
     SayHelloWorld = 'say-hello-world',
 }
+
 //#region wizard dialog
 const wizardTheme = extendsTheme((theme: Theme) => ({
     components: {
         MuiOutlinedInput: {
             styleOverrides: {
                 input: {
-                    paddingTop: 10.5,
-                    paddingBottom: 10.5,
+                    paddingTop: 8,
+                    paddingBottom: 8,
                 },
                 multiline: {
-                    paddingTop: 10.5,
-                    paddingBottom: 10.5,
+                    paddingTop: 8,
+                    paddingBottom: 8,
                 },
             },
         },
@@ -91,11 +87,11 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
 
 const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
-        padding: '56px 20px 48px',
+        padding: '12px 16px 20px',
         position: 'relative',
         boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
         border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
-        borderRadius: 12,
+        borderRadius: 20,
         [theme.breakpoints.down('sm')]: {
             padding: '35px 20px 16px',
             position: 'fixed',
@@ -110,12 +106,13 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         },
         userSelect: 'none',
         boxSizing: 'border-box',
-        width: 320,
+        width: 260,
         overflow: 'hidden',
     },
     button: {
-        width: 200,
-        height: 40,
+        width: '100%',
+        height: 32,
+        minHeight: 32,
         marginLeft: 0,
         marginTop: 0,
         [theme.breakpoints.down('sm')]: {
@@ -140,9 +137,9 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         top: 10,
     },
     primary: {
-        fontSize: 30,
-        fontWeight: 500,
-        lineHeight: '37px',
+        fontSize: 18,
+        fontWeight: 600,
+        lineHeight: '30px',
     },
     secondary: {
         fontSize: 14,
@@ -154,9 +151,10 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         marginTop: 16,
     },
     tip: {
-        fontSize: 16,
-        lineHeight: 1.75,
-        marginBottom: 24,
+        fontSize: 14,
+        fontWeight: 600,
+        lineHeight: '20px',
+        paddingTop: 16,
     },
     textButton: {
         fontSize: 14,
@@ -181,9 +179,7 @@ const useStyles = makeStyles()({
     root: {
         alignItems: 'center',
     },
-    content: {
-        marginRight: 16,
-    },
+    content: {},
     footer: {
         marginLeft: 0,
         marginTop: 0,
@@ -226,14 +222,6 @@ function ContentUI(props: ContentUIProps) {
                 </Box>
             )
 
-        case SetupGuideStep.SayHelloWorld:
-            return (
-                <Box>
-                    <main className={classes.content}>{props.content}</main>
-                    <div>{props.tip}</div>
-                    <footer className={classes.footer}>{props.footer}</footer>
-                </Box>
-            )
         default:
             return null
     }
@@ -282,7 +270,7 @@ function WizardDialog(props: WizardDialogProps) {
                 }}>
                 <Paper className={classes.root}>
                     <header className={classes.header}>
-                        <Typography className={classes.primary} color="textPrimary" variant="h1">
+                        <Typography className={classes.primary} color="textPrimary" variant="h3">
                             {title}
                         </Typography>
                         {optional ? (
@@ -300,11 +288,6 @@ function WizardDialog(props: WizardDialogProps) {
                             value={completion}
                         />
                     ) : null}
-                    {onBack ? (
-                        <IconButton className={classes.back} size="small" onClick={onBack}>
-                            <ArrowBackIosOutlinedIcon cursor="pointer" />
-                        </IconButton>
-                    ) : null}
                     {onClose ? (
                         <IconButton className={classes.close} size="small" onClick={onClose}>
                             <CloseIcon cursor="pointer" />
@@ -320,8 +303,8 @@ function WizardDialog(props: WizardDialogProps) {
 //#region find username
 const useFindUsernameStyles = makeStyles()((theme) => ({
     input: {
-        marginTop: '45px !important',
-        marginBottom: 24,
+        marginTop: '30px !important',
+        marginBottom: 16,
     },
     inputFocus: {
         '& svg': {
@@ -333,6 +316,7 @@ const useFindUsernameStyles = makeStyles()((theme) => ({
     },
     icon: {
         color: 'inherit',
+        fontSize: 16,
     },
 }))
 
@@ -347,6 +331,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
     const { t } = useI18N()
     const ui = activatedSocialNetworkUI
     const gotoProfilePageImpl = ui.automation.redirect?.profilePage
+    const [connected, setConnected] = useState(false)
 
     const { classes } = useWizardDialogStyles()
     const { classes: findUsernameClasses } = useFindUsernameStyles()
@@ -382,6 +367,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                         <TextField
                             label={t('username')}
                             value={username}
+                            disabled={connected}
                             InputProps={{
                                 classes: {
                                     focused: findUsernameClasses.inputFocus,
@@ -412,7 +398,9 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                 <Typography
                     className={classes.tip}
                     variant="body2"
-                    dangerouslySetInnerHTML={{ __html: t('setup_guide_find_username_text') }}
+                    dangerouslySetInnerHTML={{
+                        __html: connected ? t('user_guide_tip_connected') : t('setup_guide_find_username_text'),
+                    }}
                 />
             }
             footer={
@@ -425,6 +413,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
+                    onComplete={() => setConnected(true)}
                     disabled={!username}
                     completeIcon={null}
                     failIcon={null}
@@ -433,82 +422,6 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     {t('confirm')}
                 </ActionButtonPromise>
             }
-            onClose={onClose}
-        />
-    )
-}
-//#endregion
-
-//#region say hello world
-const useSayHelloWorldStyles = makeStyles()((theme) => ({
-    primary: {
-        marginTop: 24,
-        marginBottom: 16,
-    },
-    secondary: {
-        color: theme.palette.text.secondary,
-        fontSize: 14,
-    },
-}))
-
-interface SayHelloWorldProps extends Partial<WizardDialogProps> {
-    createStatus: boolean | 'undetermined'
-    onSkip?: () => void
-    onCreate: () => Promise<void>
-}
-
-function SayHelloWorld({ createStatus, onCreate, onSkip, onBack, onClose }: SayHelloWorldProps) {
-    const { t } = useI18N()
-    const { classes } = useWizardDialogStyles()
-    const { classes: sayHelloWorldClasses } = useSayHelloWorldStyles()
-    const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
-
-    return (
-        <WizardDialog
-            completion={100}
-            dialogType={SetupGuideStep.SayHelloWorld}
-            status={createStatus}
-            optional
-            title={t('setup_guide_say_hello_title')}
-            tip={
-                <form>
-                    <Typography className={classNames(classes.tip, sayHelloWorldClasses.primary)} variant="body2">
-                        {t('setup_guide_say_hello_primary')}
-                    </Typography>
-                    <Typography className={classNames(classes.tip, sayHelloWorldClasses.secondary)} variant="body2">
-                        {t('setup_guide_say_hello_secondary')}
-                    </Typography>
-                </form>
-            }
-            footer={
-                <>
-                    <ActionButtonPromise
-                        className={classes.button}
-                        variant="contained"
-                        init={t('setup_guide_create_post_auto')}
-                        waiting={t('creating')}
-                        complete={t('done')}
-                        failed={t('setup_guide_create_post_failed')}
-                        executor={onCreate}
-                        completeOnClick={onSkip}
-                        completeIcon={null}
-                        failIcon={null}
-                        failedOnClick="use executor"
-                        data-testid="create_button"
-                    />
-                    {xsOnly ? (
-                        <ActionButton
-                            className={classes.textButton}
-                            color="inherit"
-                            variant="text"
-                            onClick={onSkip}
-                            data-testid="skip_button">
-                            {t('skip')}
-                        </ActionButton>
-                    ) : null}
-                </>
-            }
-            onBack={onBack}
             onClose={onClose}
         />
     )
@@ -524,12 +437,16 @@ interface SetupGuideUIProps {
 function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
-    const [step, setStep] = useState(SetupGuideStep.FindUsername)
     const ui = activatedSocialNetworkUI
+    const [step, setStep] = useState(
+        userGuideStatus[ui.networkIdentifier].value === 'completed' ? SetupGuideStep.FindUsername : '',
+    )
 
     //#region parse setup status
     const lastStateRef = currentSetupGuideStatus[ui.networkIdentifier]
+    const userGuideStatusRef = userGuideStatus[ui.networkIdentifier]
     const lastState_ = useValueRef(lastStateRef)
+    const userGuideStatusVal = useValueRef(userGuideStatusRef)
     const lastState = useMemo<SetupGuideCrossContextStatus>(() => {
         try {
             return JSON.parse(lastState_)
@@ -538,10 +455,11 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         }
     }, [lastState_])
     useEffect(() => {
+        // check user guide status
+        if (ui.networkIdentifier === 'twitter.com' && userGuideStatusVal !== 'completed') return
         if (!lastState.status) return
-        if (step === SetupGuideStep.FindUsername && lastState.username) setStep(lastState.status)
-        else if (step === SetupGuideStep.SayHelloWorld && !lastState.username) setStep(SetupGuideStep.FindUsername)
-    }, [step, setStep, lastState])
+        setStep(lastState.status)
+    }, [step, setStep, lastState, userGuideStatusVal])
     //#endregion
 
     //#region setup username
@@ -551,54 +469,13 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const [username, setUsername] = useState(getUsername)
     useEffect(
         () =>
-            activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized.addListener((val) => {
+            activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener((val) => {
                 if (username === '' && !val.identifier.isUnknown) setUsername(val.identifier.userId)
             }),
         [username],
     )
     //#endregion
 
-    //#region create post status
-    const [createStatus, setCreateStatus] = useState<boolean | 'undetermined'>('undetermined')
-    //#endregion
-
-    const copyToClipboard = useCopyToClipboard()[1]
-
-    const onNext = async () => {
-        switch (step) {
-            case SetupGuideStep.FindUsername:
-                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
-                    status: SetupGuideStep.SayHelloWorld,
-                    username,
-                    persona: persona.toText(),
-                } as SetupGuideCrossContextStatus)
-                if (activatedSocialNetworkUI.configuration.setupWizard?.disableSayHello) {
-                    onConnect().then(onClose)
-                } else {
-                    ui.automation.redirect?.newsFeed?.()
-                    setStep(SetupGuideStep.SayHelloWorld)
-                }
-                break
-            case SetupGuideStep.SayHelloWorld:
-                onClose()
-                break
-        }
-    }
-    const onBack = async () => {
-        switch (step) {
-            case SetupGuideStep.SayHelloWorld:
-                const username_ = getUsername()
-                currentSetupGuideStatus[ui.networkIdentifier].value = stringify({
-                    status: SetupGuideStep.FindUsername,
-                    username: '', // ensure staying find-username page
-                    persona: persona.toText(),
-                } as SetupGuideCrossContextStatus)
-                const connected = new ProfileIdentifier(ui.networkIdentifier, username_)
-                await Services.Identity.detachProfile(connected)
-                setStep(SetupGuideStep.FindUsername)
-                break
-        }
-    }
     const onConnect = async () => {
         // attach persona with SNS profile
         await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
@@ -611,45 +488,23 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         )
         if (!persona_.hasPrivateKey) throw new Error('invalid persona')
         await Services.Identity.setupPersona(persona_.identifier)
-        MaskMessage.events.personaChanged.sendToAll([{ of: persona, owned: true, reason: 'new' }])
+        MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
-    const onCreate = async () => {
-        const content = t('setup_guide_say_hello_content')
-        copyToClipboard(content)
-        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
-            target: 'Everyone',
-        })
-    }
+
     const onClose = () => {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
         props.onClose?.()
     }
 
-    switch (step) {
-        case SetupGuideStep.FindUsername:
-            return (
-                <FindUsername
-                    username={username}
-                    onUsernameChange={setUsername}
-                    onConnect={onConnect}
-                    onDone={onNext}
-                    onBack={onBack}
-                    onClose={onClose}
-                />
-            )
-        case SetupGuideStep.SayHelloWorld:
-            return (
-                <SayHelloWorld
-                    createStatus={createStatus}
-                    onCreate={onCreate}
-                    onSkip={onNext}
-                    onBack={onBack}
-                    onClose={onClose}
-                />
-            )
-        default:
-            return null
-    }
+    return step === SetupGuideStep.FindUsername ? (
+        <FindUsername
+            username={username}
+            onUsernameChange={setUsername}
+            onConnect={onConnect}
+            onDone={onClose}
+            onClose={onClose}
+        />
+    ) : null
 }
 //#endregion
 

@@ -1,5 +1,5 @@
 import { useDashboardI18N } from '../../locales'
-import { Typography } from '@material-ui/core'
+import { Typography } from '@mui/material'
 
 export const Version = ({ className }: { className?: string }) => {
     const t = useDashboardI18N()
@@ -7,11 +7,11 @@ export const Version = ({ className }: { className?: string }) => {
 
     return (
         <Typography className={className} variant="body2" component="span" color="inherit">
-            {process.env.build === 'stable'
+            {process.env.channel === 'stable'
                 ? t.version_of_stable({ version })
                 : t.version_of_unstable({
                       version,
-                      build: process.env.build ?? '',
+                      build: process.env.channel ?? '',
                       hash: process.env.COMMIT_HASH ?? '',
                   })}
         </Typography>

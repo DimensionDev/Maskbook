@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { CircularProgress, Typography } from '@material-ui/core'
+import { CircularProgress, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import RefreshIcon from '@material-ui/icons/Refresh'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import { useLineChart } from '../../hooks/useLineChart'
 import { Period, Pool } from '../types'
 import { useFetchPoolHistory } from '../hooks/usePool'
@@ -65,7 +65,7 @@ export function PerformanceChart(props: PerformanceChartProps) {
     const stats: Stat[] = perfHistory?.map((row) => [Number(row.timestamp), Number(row.performance)]) ?? []
     //#endregion
 
-    //#region make chart responisve
+    //#region make chart responsive
     const { width } = useWindowSize()
     const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
     const [responsiveHeight, setResponsiveHeight] = useState(DEFAULT_DIMENSION.height)

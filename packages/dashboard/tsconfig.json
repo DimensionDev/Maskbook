@@ -10,9 +10,10 @@
     { "path": "../public-api" },
     { "path": "../theme/" },
     { "path": "../maskbook/" },
-    { "path": "../web3-shared/" },
+    { "path": "../web3-shared/evm/" },
     { "path": "../icons/" },
     { "path": "../plugin-infra" },
-    { "path": "../plugins/Wallet/" }
+    { "path": "../plugins/Wallet/" },
+    { "path": "../backup-format/" }
   ]
 }

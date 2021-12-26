@@ -11,7 +11,7 @@ import {
     PRICE_IMPACT_NON_EXPERT_BLOCKED,
     PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN,
 } from './constants'
-import { NetworkType, createLookupTableResolver } from '@masknet/web3-shared'
+import { createLookupTableResolver, NetworkType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 
 export function resolveCurrencyName(currency: Currency) {
@@ -55,6 +55,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.QUICKSWAP]: 'QuickSwap',
         [TradeProvider.PANCAKESWAP]: 'PancakeSwap',
         [TradeProvider.DODO]: 'DODO',
+        [TradeProvider.BANCOR]: 'Bancor',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -83,7 +84,6 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     safeUnreachable(networkType)
                     return ''
             }
-
         case TradeProvider.SUSHISWAP:
             return 'https://sushiswapclassic.org/'
         case TradeProvider.SASHIMISWAP:
@@ -96,22 +96,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://exchange.pancakeswap.finance/#/swap'
         case TradeProvider.DODO:
             return 'https://app.dodoex.io'
-        case TradeProvider.ONE_INCH:
-            switch (networkType) {
-                case NetworkType.Ethereum:
-                    return 'https://api.1inch.exchange/v3.0/1/'
-                case NetworkType.Binance:
-                    return 'https://api.1inch.exchange/v3.0/56/'
-                case NetworkType.Polygon:
-                    return 'https://api.1inch.exchange/v3.0/137/'
-                case NetworkType.Arbitrum:
-                    return ''
-                case NetworkType.xDai:
-                    return ''
-                default:
-                    safeUnreachable(networkType)
-                    return ''
-            }
+        case TradeProvider.BANCOR:
+            return 'https://app.bancor.network/eth/swap'
         default:
             unreachable(tradeProvider)
     }
@@ -124,8 +110,6 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.UNISWAP_V3:
             return `https://info.uniswap.org/pair/${address}`
         case TradeProvider.ZRX:
-            return ''
-        case TradeProvider.ONE_INCH:
             return ''
         case TradeProvider.DODO: {
             if (!networkNames[networkType]) {
@@ -162,6 +146,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://info.quickswap.exchange/pair/${address}`
         case TradeProvider.PANCAKESWAP:
             return `https://pancakeswap.info/pool/${address}`
+        case TradeProvider.BANCOR:
+            // TODO - Bancor analytics should be available with V3
+            return ``
         default:
             unreachable(tradeProvider)
     }
@@ -182,22 +169,22 @@ export function resolveUniswapWarningLevel(priceImpact: BigNumber) {
     if (priceImpact_.isGreaterThan(PRICE_IMPACT_HIGH)) return WarningLevel.HIGH
     if (priceImpact_.isGreaterThan(PRICE_IMPACT_MEDIUM)) return WarningLevel.MEDIUM
     if (priceImpact_.isGreaterThan(PRICE_IMPACT_LOW)) return WarningLevel.LOW
-    return
+    return WarningLevel.LOW
 }
 
-export function resolveUniswapWarningLevelColor(warningLevel?: WarningLevel) {
-    const COLOR_MAP: Record<WarningLevel, string> = {
+export const resolveUniswapWarningLevelColor = createLookupTableResolver<WarningLevel, string>(
+    {
         [WarningLevel.LOW]: 'inherit',
         [WarningLevel.MEDIUM]: '#f3841e',
         [WarningLevel.HIGH]: '#f3841e',
         [WarningLevel.CONFIRMATION_REQUIRED]: '#ff6871',
         [WarningLevel.BLOCKED]: '#ff6871',
-    }
-    return warningLevel ? COLOR_MAP[warningLevel] : '#27ae60'
-}
+    },
+    '#27ae60',
+)
 
-export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
-    const SWAP_SOURCE_NAME_MAP: Record<ZrxTradePool, string> = {
+export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, string>(
+    {
         [ZrxTradePool.ZRX]: '0x',
         [ZrxTradePool.ACryptoS]: 'ACryptoS',
         [ZrxTradePool.ApeSwap]: 'ApeSwap',
@@ -252,6 +239,6 @@ export function resolveZrxTradePoolName(swapSource: ZrxTradePool) {
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
         [ZrxTradePool.OneInch]: '1inch',
-    }
-    return SWAP_SOURCE_NAME_MAP[swapSource] ?? 'Unknown'
-}
+    },
+    'Unknown',
+)

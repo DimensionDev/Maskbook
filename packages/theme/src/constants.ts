@@ -1,16 +1,17 @@
-import { PaletteMode, Theme, useTheme } from '@material-ui/core'
+import { PaletteMode, Theme, useTheme } from '@mui/material'
 import { kebabCase } from 'lodash-es'
 import parseColor from 'tinycolor2'
 export const LightColor = {
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
-
+    background: '#FFFFFF',
     secondary: '#e8f0fe',
     secondaryContrastText: '#1c68f3',
 
     primaryBackground: '#ffffff',
     secondaryBackground: '#f9fafa',
     lightBackground: '#F9FAFA',
+    mainBackground: '#ffffff',
     suspensionBackground: 'rgba(249, 250, 250, 0.8)',
     normalBackground: '#F3F3F4',
     twitterBackground: '#F7F9FA',
@@ -49,17 +50,21 @@ export const LightColor = {
     twitter: '#2CA4EF',
     facebook: '#4267B2',
     white: '#ffffff',
+    bottom: '#F9FAFA',
+    main: '#1C68F3',
+    errorBackground: 'rgba(255, 95, 95, 0.15)',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
     primaryContrastText: '#ffffff',
-
+    background: '#15171A',
     secondary: '#242e57',
     secondaryContrastText: '#ffffff',
 
     primaryBackground: '#212442',
     secondaryBackground: '#252846',
     lightBackground: '#2E314F',
+    mainBackground: '#111432',
     suspensionBackground: 'rgba(27, 30, 60, 0.8)',
     normalBackground: '#262947',
     twitterBackground: '#17191D',
@@ -100,6 +105,9 @@ export const DarkColor: typeof LightColor = {
     twitter: '#2CA4EF',
     facebook: '#4267B2',
     white: '#ffffff',
+    bottom: '#000000',
+    main: '#D4D4D4',
+    errorBackground: 'rgba(255, 95, 95, 0.1)',
 }
 
 export type Color = typeof LightColor

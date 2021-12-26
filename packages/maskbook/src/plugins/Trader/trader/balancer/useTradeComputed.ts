@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { ZERO } from '@masknet/web3-shared'
+import { ZERO, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { SwapResponse, TradeComputed, TradeStrategy } from '../../types'
 
 const MIN_VALUE = new BigNumber('1e-5')

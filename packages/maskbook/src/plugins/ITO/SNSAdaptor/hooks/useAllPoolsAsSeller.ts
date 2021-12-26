@@ -1,13 +1,22 @@
 import { useAsyncRetry } from 'react-use'
 import { PluginITO_RPC } from '../../messages'
-import type { PoolSubgraph } from '../../types'
-import { useRef } from 'react'
+import type { PoolFromNetwork } from '../../types'
+import { useBlockNumber, useChainId } from '@masknet/web3-shared-evm'
+import { useRef, useEffect } from 'react'
 
 export function useAllPoolsAsSeller(address: string, page: number) {
-    const allPoolsRef = useRef<PoolSubgraph[]>([])
+    const allPoolsRef = useRef<PoolFromNetwork[]>([])
+    const chainId = useChainId()
+    const blockNumber = useBlockNumber()
+
+    useEffect(() => {
+        allPoolsRef.current = []
+    }, [chainId])
+
     return useAsyncRetry(async () => {
-        const pools = await PluginITO_RPC.getAllPoolsAsSeller(address, page)
+        const _pools = await PluginITO_RPC.getAllPoolsAsSeller(address, page, blockNumber, chainId)
+        const pools = _pools.filter((a) => !allPoolsRef.current.map((b) => b.pool.pid).includes(a.pool.pid))
         allPoolsRef.current = allPoolsRef.current.concat(pools)
         return { pools: allPoolsRef.current, loadMore: pools.length > 0 }
-    }, [address, page])
+    }, [address, page, blockNumber, chainId])
 }

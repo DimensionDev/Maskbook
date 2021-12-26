@@ -2,7 +2,7 @@ import { MutationObserverWatcher, LiveSelector } from '@dimensiondev/holoflows-k
 import { postEditorToolbarSelector } from '../utils/selector'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { PostDialogIcon } from '../../../components/InjectedComponents/PostDialogIcon'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { isCompose, isMobile } from '../utils/postBox'
 import { makeStyles } from '@masknet/theme'
 import { startWatch } from '../../../utils/watcher'
@@ -21,7 +21,7 @@ function renderPostDialogIconTo<T>(ls: LiveSelector<T, true>, signal: AbortSigna
 
     createReactRootShadowed(watcher.firstDOMProxy.afterShadow, { signal }).render(<PostDialogIconAtTwitter />)
 }
-const useTwitterMaskbookIcon = makeStyles()((theme) => ({
+const useTwitterMaskIcon = makeStyles()((theme) => ({
     root: {
         width: 38,
         height: 38,
@@ -31,7 +31,7 @@ const useTwitterMaskbookIcon = makeStyles()((theme) => ({
 }))
 
 function PostDialogIconAtTwitter() {
-    const { classes } = useTwitterMaskbookIcon()
-    const onIconClicked = () => MaskMessage.events.requestComposition.sendToLocal({ reason: 'timeline', open: true })
+    const { classes } = useTwitterMaskIcon()
+    const onIconClicked = () => MaskMessages.events.requestComposition.sendToLocal({ reason: 'timeline', open: true })
     return <PostDialogIcon classes={classes} onClick={onIconClicked} />
 }

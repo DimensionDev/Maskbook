@@ -25,6 +25,79 @@ import { injectSearchResultBoxAtMinds } from './injection/SearchResult'
 import { injectSetupPromptAtMinds } from './injection/SetupPrompt'
 import { injectToolboxHintAtMinds } from './injection/ToolboxHint'
 import { mindsShared } from './shared'
+import { makeStyles } from '@masknet/theme'
+
+const useInjectedDialogClassesOverwriteMinds = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        root: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            [smallQuery]: {
+                display: 'block !important',
+            },
+        },
+        container: {
+            alignItems: 'center',
+        },
+        paper: {
+            width: '600px !important',
+            maxWidth: 'none',
+            boxShadow: 'none',
+            backgroundImage: 'none',
+            [smallQuery]: {
+                '&': {
+                    display: 'block !important',
+                    borderRadius: '0 !important',
+                },
+            },
+        },
+        dialogTitle: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: '3px 16px',
+            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            '& > h2': {
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+            },
+            [smallQuery]: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px 11px !important',
+            },
+        },
+        dialogContent: {
+            padding: 16,
+            [smallQuery]: {
+                display: 'flex',
+                flexDirection: 'column',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
+        },
+        dialogActions: {
+            padding: '6px 16px',
+            [smallQuery]: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
+        },
+        dialogBackdropRoot: {
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+        },
+    }
+})
 
 const mindsUI: SocialNetworkUI.Definition = {
     ...mindsBase,
@@ -51,6 +124,11 @@ const mindsUI: SocialNetworkUI.Definition = {
     },
     customization: {
         paletteMode: PaletteModeProviderMinds,
+        componentOverwrite: {
+            InjectedDialog: {
+                classes: useInjectedDialogClassesOverwriteMinds,
+            },
+        },
         useTheme: useThemeMindsVariant,
     },
     init(signal) {
@@ -61,7 +139,7 @@ const mindsUI: SocialNetworkUI.Definition = {
         return { friends, profiles }
     },
     injection: {
-        toolBoxInNavBar: injectToolboxHintAtMinds,
+        toolbox: injectToolboxHintAtMinds,
         pageInspector: injectPageInspectorDefault(),
         postInspector: injectPostInspectorAtMinds,
         enhancedPostRenderer: injectPostReplacerAtMinds,
@@ -78,7 +156,7 @@ const mindsUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        setupWizard: createTaskStartSetupGuideDefault('minds.com'),
+        setupWizard: createTaskStartSetupGuideDefault(),
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
             commentInspector: injectCommentBoxAtMinds(),
@@ -92,7 +170,7 @@ const mindsUI: SocialNetworkUI.Definition = {
                 // ! Change this might be a breaking change !
                 return new ProfileIdentifier(
                     'minds.com',
-                    ProfileIdentifier.getUserName(IdentityProviderMinds.lastRecognized.value.identifier) ||
+                    ProfileIdentifier.getUserName(IdentityProviderMinds.recognized.value.identifier) ||
                         ProfileIdentifier.getUserName(currentSelectedIdentity[mindsBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),

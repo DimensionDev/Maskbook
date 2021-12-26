@@ -1,7 +1,8 @@
 import { Suspense, useMemo } from 'react'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { Plugin } from '@masknet/plugin-infra'
-import { SnackbarContent } from '@material-ui/core'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import { SnackbarContent } from '@mui/material'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { extractTextFromTypedMessage } from '../../../protocols/typed-message'
 import { usePostInfoDetails } from '../../../components/DataSource/usePostInfo'
 import { PreviewCard } from './PreviewCard'
@@ -9,6 +10,7 @@ import { base } from '../base'
 import { PLUGIN_NAME, PLUGIN_META_KEY } from '../constants'
 import { DonateDialog } from './DonateDialog'
 import { parseURL } from '../../../utils/utils'
+import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 
 const isGitcoin = (x: string): boolean => /^https:\/\/gitcoin.co\/grants\/\d+/.test(x)
 
@@ -27,10 +29,9 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <DonateDialog />
     },
     PostInspector() {
-        const link = usePostInfoDetails
-            .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
-            .find(isGitcoin)
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+
+        const link = links.find(isGitcoin)
         if (!link) return null
         return <Renderer url={link} />
     },
@@ -39,11 +40,13 @@ const sns: Plugin.SNSAdaptor.Definition = {
 function Renderer(props: React.PropsWithChildren<{ url: string }>) {
     const [id = ''] = props.url.match(/\d+/) ?? []
     return (
-        <MaskbookPluginWrapper pluginName="Gitcoin">
+        <MaskPluginWrapper pluginName="Gitcoin">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
-                <PreviewCard id={id} />
+                <EthereumChainBoundary chainId={ChainId.Mainnet}>
+                    <PreviewCard id={id} />
+                </EthereumChainBoundary>
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }
 

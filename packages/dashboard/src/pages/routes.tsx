@@ -1,5 +1,5 @@
-import { Route, Routes, Navigate } from 'react-router'
 import React, { lazy, Suspense } from 'react'
+import { Route, Routes, Navigate } from 'react-router-dom'
 import { DashboardFrame } from '../components/DashboardFrame'
 import { RoutePaths } from '../type'
 import NoPersonaGuardRoute from '../GuardRoute'

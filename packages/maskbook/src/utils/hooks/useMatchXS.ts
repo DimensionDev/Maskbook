@@ -1,7 +1,7 @@
-import { Theme, useMediaQuery } from '@material-ui/core'
+import { Theme, useMediaQuery } from '@mui/material'
 
 export function useMatchXS() {
     return useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'), {
-        defaultMatches: process.env.resolution === 'mobile' ? true : undefined,
+        defaultMatches: process.env.architecture === 'app' ? true : undefined,
     })
 }

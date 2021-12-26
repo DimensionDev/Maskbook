@@ -1,4 +1,4 @@
-import { SvgIcon, SvgIconProps } from '@material-ui/core'
+import { SvgIcon, SvgIconProps } from '@mui/material'
 
 export const TrustIcon: React.FC<SvgIconProps> = (props) => (
     <SvgIcon {...props}>

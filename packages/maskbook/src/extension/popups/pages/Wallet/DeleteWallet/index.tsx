@@ -1,13 +1,16 @@
 import { memo, useCallback, useState } from 'react'
-import { Button, Typography } from '@material-ui/core'
+import { Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { WalletInfo } from '../components/WalletInfo'
-import { WarningIcon } from '@masknet/icons'
-import { StyledInput } from '../../../components/StyledInput'
+import { WalletIcon, WarningIcon } from '@masknet/icons'
 import { useHistory } from 'react-router-dom'
-import { useWallet } from '@masknet/web3-shared'
+import { ProviderType, useWallet } from '@masknet/web3-shared-evm'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import { useI18N } from '../../../../../utils'
+import { PopupRoutes } from '../../../index'
+import { first } from 'lodash-es'
+import { FormattedAddress } from '@masknet/shared'
+import { PasswordField } from '../../../components/PasswordField'
+import { currentAccountSettings } from '../../../../../plugins/Wallet/settings'
 
 const useStyles = makeStyles()({
     content: {
@@ -30,7 +33,7 @@ const useStyles = makeStyles()({
         lineHeight: '24px',
     },
     tip: {
-        color: '#7B8192',
+        color: '#FF5F5F',
         fontSize: 12,
         lineHeight: '16px',
         margin: '20px 0',
@@ -63,38 +66,96 @@ const useStyles = makeStyles()({
         lineHeight: '20px',
         backgroundColor: '#FF5F5F',
     },
+    info: {
+        display: 'flex',
+        backgroundColor: '#F7F9FA',
+        borderRadius: 8,
+        padding: '8px 16px',
+    },
+    iconContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        marginRight: 20,
+    },
+    name: {
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 14,
+        color: '#1C68F3',
+        fontWeight: 500,
+    },
+    address: {
+        fontSize: 12,
+        color: '#1C68F3',
+        display: 'flex',
+        alignItems: 'center',
+        wordBreak: 'break-all',
+    },
 })
 
-//TODO: password confirm
 const DeleteWallet = memo(() => {
     const { t } = useI18N()
     const history = useHistory()
     const wallet = useWallet()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
 
     const onConfirm = useCallback(async () => {
         if (wallet?.address) {
-            await WalletRPC.removeWallet(wallet.address)
-            await WalletRPC.resetAccount()
-            history.goBack()
+            try {
+                await WalletRPC.removeWallet(wallet.address, password)
+                const wallets = await WalletRPC.getWallets(ProviderType.MaskWallet)
+
+                await WalletRPC.updateMaskAccount({
+                    account: first(wallets)?.address ?? '',
+                })
+
+                if (currentAccountSettings.value === wallet.address) {
+                    await WalletRPC.updateAccount({
+                        account: first(wallets)?.address ?? '',
+                        providerType: ProviderType.MaskWallet,
+                    })
+                }
+                history.replace(PopupRoutes.Wallet)
+            } catch (error) {
+                if (error instanceof Error) {
+                    setErrorMessage(error.message)
+                }
+            }
         }
-    }, [wallet])
+    }, [wallet, password])
 
     return (
         <>
-            <WalletInfo />
             <div className={classes.content}>
                 <div className={classes.warning}>
                     <WarningIcon style={{ fontSize: 48 }} />
-                    <Typography className={classes.title}>Delete Wallet</Typography>
+                    <Typography className={classes.title}>{t('delete_wallet')}</Typography>
+                </div>
+                <div className={classes.info}>
+                    <div className={classes.iconContainer}>
+                        <WalletIcon />
+                    </div>
+                    <div>
+                        <Typography className={classes.name}>{wallet?.name}</Typography>
+                        <Typography className={classes.address}>
+                            <FormattedAddress address={wallet?.address} size={10} />
+                        </Typography>
+                    </div>
                 </div>
                 <Typography className={classes.tip}>{t('popups_wallet_delete_tip')}</Typography>
+
                 <Typography className={classes.label}>{t('popups_wallet_confirm_payment_password')}</Typography>
-                <StyledInput
+                <PasswordField
                     placeholder="Input your password"
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    error={!!errorMessage}
+                    helperText={errorMessage}
+                    onChange={(e) => {
+                        if (errorMessage) setErrorMessage('')
+                        setPassword(e.target.value)
+                    }}
                 />
             </div>
             <div className={classes.controller}>

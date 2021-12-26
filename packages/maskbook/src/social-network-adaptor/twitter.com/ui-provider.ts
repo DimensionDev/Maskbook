@@ -8,7 +8,7 @@ import { openComposeBoxTwitter } from './automation/openComposeBox'
 import { pasteTextToCompositionTwitter } from './automation/pasteTextToComposition'
 import { gotoNewsFeedPageTwitter } from './automation/gotoNewsFeedPage'
 import { gotoProfilePageTwitter } from './automation/gotoProfilePage'
-import { IdentityProviderTwitter } from './collecting/identity'
+import { IdentityProviderTwitter, CurrentVisitingIdentityProviderTwitter } from './collecting/identity'
 import { PostProviderTwitter } from './collecting/post'
 import { PaletteModeProviderTwitter, useThemeTwitterVariant } from './customization/custom'
 import { injectToolboxHintAtTwitter } from './injection/ToolboxHint'
@@ -19,7 +19,7 @@ import { injectPageInspectorDefault } from '../../social-network/defaults/inject
 import { injectSetupPromptAtTwitter } from './injection/SetupPrompt'
 import { injectPostBoxComposed } from './injection/inject'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
-import { injectMaskUserBadgeAtTwitter } from './injection/MaskbookIcon'
+import { injectMaskUserBadgeAtTwitter } from './injection/MaskIcon'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { injectPostInspectorAtTwitter } from './injection/PostInspector'
@@ -28,75 +28,80 @@ import { unreachable } from '@dimensiondev/kit'
 import { injectEnhancedProfileTabAtTwitter } from './injection/EnhancedProfileTab'
 import { injectEnhancedProfileAtTwitter } from './injection/EnhancedProfile'
 import { makeStyles } from '@masknet/theme'
+import { injectNFTAvatarInTwitter } from './injection/NFT/NFTAvatarInTwitter'
+import { injectProfileNFTAvatarInTwitter } from './injection/NFT/profileNFTAvatar'
+import { injectUserNFTAvatarAtTwitter } from './injection/NFT/Avatar'
+import { injectOpenNFTAvatarEditProfileButton } from './injection/NFT/NFTAvatarEditProfile'
 
-const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => ({
-    root: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'block !important',
-        },
-    },
-    container: {
-        alignItems: 'center',
-    },
-    paper: {
-        width: '600px !important',
-        maxWidth: 'none',
-        boxShadow: 'none',
-        backgroundImage: 'none',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            '&': {
+const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        root: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            [smallQuery]: {
                 display: 'block !important',
-                borderRadius: '0 !important',
             },
         },
-    },
-    dialogTitle: {
-        display: 'flex',
-        alignItems: 'center',
-        padding: '3px 15px',
-        borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
-        '& > h2': {
-            display: 'inline-block',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
+        container: {
+            alignItems: 'center',
         },
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+        paper: {
+            width: '600px !important',
+            maxWidth: 'none',
+            boxShadow: 'none',
+            backgroundImage: 'none',
+            [smallQuery]: {
+                display: 'block !important',
+                margin: 12,
+            },
+        },
+        dialogTitle: {
             display: 'flex',
-            justifyContent: 'space-between',
-            maxWidth: 600,
-            margin: '0 auto',
-            padding: '7px 14px 6px 11px !important',
+            alignItems: 'center',
+            padding: '3px 16px',
+            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            '& > h2': {
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+            },
+            [smallQuery]: {
+                display: 'flex',
+                justifyContent: 'start',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px 11px !important',
+            },
         },
-    },
-    dialogContent: {
-        padding: 16,
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'flex',
-            flexDirection: 'column',
-            maxWidth: 600,
-            margin: '0 auto',
-            padding: '7px 14px 6px !important',
+        dialogContent: {
+            padding: 16,
+            [smallQuery]: {
+                display: 'flex',
+                flexDirection: 'column',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px',
+            },
         },
-    },
-    dialogActions: {
-        padding: '3px 15px',
-        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            maxWidth: 600,
-            margin: '0 auto',
-            padding: '7px 14px 6px !important',
+        dialogActions: {
+            padding: '6px 16px',
+            [smallQuery]: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
         },
-    },
-    dialogBackdropRoot: {
-        backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
-    },
-}))
+        dialogBackdropRoot: {
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+        },
+    }
+})
 
 const twitterUI: SocialNetworkUI.Definition = {
     ...twitterBase,
@@ -118,6 +123,7 @@ const twitterUI: SocialNetworkUI.Definition = {
     },
     collecting: {
         identityProvider: IdentityProviderTwitter,
+        currentVisitingIdentityProvider: CurrentVisitingIdentityProviderTwitter,
         postsProvider: PostProviderTwitter,
         getSearchedKeyword: getSearchedKeywordAtTwitter,
     },
@@ -139,7 +145,7 @@ const twitterUI: SocialNetworkUI.Definition = {
         return { friends, profiles }
     },
     injection: {
-        toolBoxInNavBar: injectToolboxHintAtTwitter,
+        toolbox: injectToolboxHintAtTwitter,
         searchResult: injectSearchResultBoxAtTwitter,
         enhancedPostRenderer: injectPostReplacerAtTwitter,
         pageInspector: injectPageInspectorDefault(),
@@ -158,9 +164,13 @@ const twitterUI: SocialNetworkUI.Definition = {
                 image: true,
             },
         },
-        setupWizard: createTaskStartSetupGuideDefault('twitter.com'),
+        setupWizard: createTaskStartSetupGuideDefault(),
         userBadge: injectMaskUserBadgeAtTwitter,
         commentComposition: undefined,
+        userAvatar: injectUserNFTAvatarAtTwitter,
+        enhancedProfileNFTAvatar: injectProfileNFTAvatarInTwitter,
+        profileAvatar: injectNFTAvatarInTwitter,
+        openNFTAvatar: injectOpenNFTAvatarEditProfileButton,
     },
     configuration: {
         steganography: {
@@ -168,7 +178,7 @@ const twitterUI: SocialNetworkUI.Definition = {
                 // ! Change this might be a breaking change !
                 return new ProfileIdentifier(
                     'twitter.com',
-                    ProfileIdentifier.getUserName(IdentityProviderTwitter.lastRecognized.value.identifier) ||
+                    ProfileIdentifier.getUserName(IdentityProviderTwitter.recognized.value.identifier) ||
                         ProfileIdentifier.getUserName(currentSelectedIdentity[twitterBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),

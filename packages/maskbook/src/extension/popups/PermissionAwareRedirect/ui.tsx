@@ -1,4 +1,4 @@
-import { Typography, Card, CardContent, Button, CardActions } from '@material-ui/core'
+import { Typography, Card, CardContent, Button, CardActions } from '@mui/material'
 
 export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {
     if (props.granted) {
@@ -13,11 +13,22 @@ export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {
     return (
         <Card>
             <CardContent>
-                <Typography variant="h5">Mask need permission for:</Typography>
-                <Typography variant="caption">{props.url}</Typography>
+                <Typography variant="h6">Permission request</Typography>
+                <Typography variant="body1">
+                    To continue, Mask Network needs permission to access the following URL:
+                </Typography>
+                <br />
+                <Typography variant="body1">{props.url}</Typography>
+                <br />
+                <Typography variant="body1">
+                    This gives Mask Network the necessary abilities to provide the requested function properly.
+                </Typography>
             </CardContent>
-            <CardActions>
-                <Button onClick={props.onRequest}>Grant</Button>
+            <CardActions sx={{ flexDirection: 'row-reverse' }}>
+                <Button variant="contained" onClick={props.onRequest}>
+                    Grant
+                </Button>
+                <Button onClick={props.onCancel}>Cancel</Button>
             </CardActions>
         </Card>
     )
@@ -25,5 +36,6 @@ export function PermissionAwareRedirectUI(props: PermissionAwareRedirectProps) {
 export interface PermissionAwareRedirectProps {
     url: string
     onRequest(): void
+    onCancel(): void
     granted: boolean
 }

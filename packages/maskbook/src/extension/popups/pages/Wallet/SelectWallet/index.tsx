@@ -1,25 +1,70 @@
-import { memo, useMemo } from 'react'
-import { Button, List, ListItem, ListItemText, Typography } from '@material-ui/core'
+import { MaskWalletIcon, SuccessIcon } from '@masknet/icons'
+import { ChainIcon, FormattedAddress } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { WalletHeader } from '../components/WalletHeader'
-import { WalletInfo } from '../components/WalletInfo'
-import { isSameAddress, ProviderType, useWallet, useWallets } from '@masknet/web3-shared'
-import { CopyIcon, MaskWalletIcon } from '@masknet/icons'
-import { FormattedAddress } from '@masknet/shared'
-import { useHistory } from 'react-router-dom'
-import { PopupRoutes } from '../../../index'
+import {
+    ChainId,
+    getNetworkName,
+    isSameAddress,
+    ProviderType,
+    useAccount,
+    useChainIdValid,
+    useWallets,
+} from '@masknet/web3-shared-evm'
+import { Button, List, ListItem, ListItemText, Typography } from '@mui/material'
+import { first } from 'lodash-es'
+import { memo, useCallback, useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useCopyToClipboard } from 'react-use'
+import { WalletRPC } from '../../../../../plugins/Wallet/messages'
+import { CopyIconButton } from '../../../components/CopyIconButton'
+import { currentProviderSettings } from '../../../../../plugins/Wallet/settings'
 import { useI18N } from '../../../../../utils'
+import Services from '../../../../service'
 
 const useStyles = makeStyles()({
     content: {
-        flex: 1,
         backgroundColor: '#F7F9FA',
         display: 'flex',
         flexDirection: 'column',
     },
+    placeholder: {
+        flex: 1,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    header: {
+        padding: 10,
+        display: 'flex',
+        marginBottom: 1,
+        backgroundColor: '#ffffff',
+    },
+    network: {
+        minWidth: 114,
+        padding: '4px 12px 4px 4px',
+        minHeight: 28,
+        borderRadius: 18,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: '#1c68f3',
+    },
+    title: {
+        color: '#ffffff',
+        fontSize: 12,
+        lineHeight: '16px',
+    },
+    iconWrapper: {
+        width: 20,
+        height: 20,
+        borderRadius: 20,
+        marginRight: 10,
+    },
     list: {
         backgroundColor: '#ffffff',
         padding: 0,
+        height: 'calc(100vh - 168px)',
+        overflow: 'auto',
     },
     item: {
         padding: 10,
@@ -44,15 +89,26 @@ const useStyles = makeStyles()({
         fontWeight: 500,
     },
     text: {
-        marginLeft: 15,
+        marginLeft: 4,
+    },
+    listItem: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
     },
     controller: {
         display: 'grid',
         gridTemplateColumns: 'repeat(2, 1fr)',
         gap: 20,
         padding: 16,
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        width: '100%',
+        backgroundColor: '#ffffff',
     },
     button: {
+        fontWeight: 600,
         padding: '9px 0',
         borderRadius: 20,
         fontSize: 14,
@@ -63,30 +119,78 @@ const useStyles = makeStyles()({
 const SelectWallet = memo(() => {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const history = useHistory()
-    const wallet = useWallet()
-    const wallets = useWallets(ProviderType.Maskbook)
+    const location = useLocation()
+    const wallet = useAccount()
+    const wallets = useWallets(ProviderType.MaskWallet)
 
-    const walletList = useMemo(
-        () => wallets.filter((item) => isSameAddress(item.address, wallet?.address)),
-        [wallet, wallets],
+    const [selected, setSelected] = useState(wallet)
+    const [, copyToClipboard] = useCopyToClipboard()
+
+    const search = new URLSearchParams(location.search)
+
+    const chainId = Number.parseInt(search.get('chainId') ?? '0', 10) as ChainId
+    // Swap page also uses SelectWallet, but changing wallet in Swap page
+    // should not affect other pages, for example, dashboard.
+    // So we make Swap page 'internal' for popups
+    const isInternal = search.get('internal')
+
+    const chainIdValid = useChainIdValid()
+
+    const onCopy = useCallback(
+        (address: string) => {
+            copyToClipboard(address)
+        },
+        [copyToClipboard],
     )
 
-    return (
+    const handleCancel = useCallback(() => Services.Helper.removePopupWindow(), [])
+
+    const handleConfirm = useCallback(async () => {
+        await WalletRPC.updateMaskAccount({
+            chainId,
+            account: selected,
+        })
+        if (currentProviderSettings.value === ProviderType.MaskWallet || !isInternal) {
+            await WalletRPC.updateAccount({
+                chainId,
+                account: selected,
+                providerType: ProviderType.MaskWallet,
+            })
+        }
+
+        return Services.Helper.removePopupWindow()
+    }, [chainId, selected, isInternal])
+
+    useEffect(() => {
+        if (!selected && wallets.length) setSelected(first(wallets)?.address ?? '')
+    }, [selected, wallets])
+
+    return chainIdValid ? (
         <>
-            <WalletHeader />
-            <WalletInfo />
             <div className={classes.content}>
+                <div className={classes.header}>
+                    <div className={classes.network}>
+                        <div className={classes.iconWrapper}>
+                            <ChainIcon chainId={chainId} />
+                        </div>
+                        <Typography className={classes.title}>{getNetworkName(chainId)}</Typography>
+                    </div>
+                </div>
                 <List dense className={classes.list}>
-                    {walletList.map((item, index) => (
-                        <ListItem className={classes.item} key={index}>
+                    {wallets.map((item, index) => (
+                        <ListItem className={classes.item} key={index} onClick={() => setSelected(item.address)}>
                             <MaskWalletIcon />
                             <ListItemText className={classes.text}>
-                                <Typography className={classes.name}>{item.name}</Typography>
-                                <Typography className={classes.address}>
-                                    <FormattedAddress address={item.address} size={12} />
-                                    <CopyIcon className={classes.copy} />
-                                </Typography>
+                                <div className={classes.listItem}>
+                                    <div>
+                                        <Typography className={classes.name}>{item.name}</Typography>
+                                        <Typography className={classes.address}>
+                                            <FormattedAddress address={item.address} size={12} />
+                                            <CopyIconButton className={classes.copy} text={item.address} />
+                                        </Typography>
+                                    </div>
+                                    {isSameAddress(item.address, selected) ? <SuccessIcon /> : null}
+                                </div>
                             </ListItemText>
                         </ListItem>
                     ))}
@@ -96,18 +200,19 @@ const SelectWallet = memo(() => {
                 <Button
                     variant="contained"
                     className={classes.button}
-                    onClick={() => history.goBack()}
-                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}>
+                    style={{ backgroundColor: '#F7F9FA', color: '#1C68F3' }}
+                    onClick={handleCancel}>
                     {t('cancel')}
                 </Button>
-                <Button
-                    variant="contained"
-                    className={classes.button}
-                    onClick={() => history.push(PopupRoutes.CreateWallet)}>
-                    {t('import')}
+                <Button variant="contained" disabled={!selected} className={classes.button} onClick={handleConfirm}>
+                    {t('confirm')}
                 </Button>
             </div>
         </>
+    ) : (
+        <div className={classes.placeholder}>
+            <Typography>{t('popups_wallet_unsupported_network')}</Typography>
+        </div>
     )
 })
 

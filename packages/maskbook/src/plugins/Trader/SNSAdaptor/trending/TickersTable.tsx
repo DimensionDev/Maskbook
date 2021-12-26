@@ -1,7 +1,7 @@
-import { Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Link, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
-import { formatEthereumAddress } from '@masknet/web3-shared'
+import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import type { Ticker } from '../../types'
 import { DataProvider } from '@masknet/public-api'
@@ -56,10 +56,10 @@ export function TickersTable(props: TickersTableProps) {
             </TableCell>
             <TableCell className={classes.cell}>
                 {(() => {
-                    const formated = formatEthereumAddress(ticker.base_name, 2)
+                    const formatted = formatEthereumAddress(ticker.base_name, 2)
                     return (
                         <Link color="primary" target="_blank" rel="noopener noreferrer" href={ticker.trade_url}>
-                            <span title={formated !== ticker.base_name ? ticker.base_name : ''}>{formated}</span>
+                            <span title={formatted !== ticker.base_name ? ticker.base_name : ''}>{formatted}</span>
                             <span>/</span>
                             <span>{formatEthereumAddress(ticker.target_name, 2)}</span>
                         </Link>

@@ -7,7 +7,7 @@ import {
     useAccount,
     useChainId,
     useTokenConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { first, head, uniqBy } from 'lodash-es'
 import { useAsyncRetry } from 'react-use'
@@ -34,6 +34,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                             new BigNumber(getOrderUnitPrice(b) ?? 0).toNumber(),
                     ),
                 )
+
                 return {
                     is_verified: ['approved', 'verified'].includes(
                         openSeaResponse.collection?.safelist_request_status ?? '',
@@ -69,7 +70,9 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     name: openSeaResponse.name ?? openSeaResponse.collection.name,
                     collection_name: openSeaResponse.collection.name,
                     animation_url: openSeaResponse.animation_url,
-                    end_time: desktopOrder
+                    end_time: openSeaResponse.endTime
+                        ? new Date(openSeaResponse.endTime)
+                        : desktopOrder
                         ? toDate(Number.parseInt(desktopOrder.listingTime as unknown as string, 10))
                         : null,
                     order_payment_tokens: desktopOrder?.paymentTokenContract
@@ -113,7 +116,7 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                         : null,
                     traits: raribleResponse?.meta.attributes.map(({ key, value }) => ({ trait_type: key, value })),
                     description: raribleResponse?.meta.description ?? '',
-                    name: raribleResponse?.meta.name ?? 'Unkown',
+                    name: raribleResponse?.meta.name ?? 'Unknown',
                     collection_name: '',
                     animation_url: raribleResponse.meta.animation?.url.PREVIEW,
                     current_price: 0,

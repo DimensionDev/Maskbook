@@ -1,4 +1,4 @@
-import type { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { ChainId, ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 
 export interface ERC20TokenTable {
     [tokenAddress: string]: ERC20TokenDetailed[]

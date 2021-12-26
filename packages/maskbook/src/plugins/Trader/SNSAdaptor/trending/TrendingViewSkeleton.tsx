@@ -1,4 +1,4 @@
-import { CardHeader, CardContent, CardActions, Skeleton } from '@material-ui/core'
+import { CardHeader, CardContent, CardActions, Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'

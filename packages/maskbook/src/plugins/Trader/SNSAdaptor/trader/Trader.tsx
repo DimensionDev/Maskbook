@@ -2,6 +2,7 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import { useAsyncRetry, useTimeoutFn } from 'react-use'
 import { makeStyles } from '@masknet/theme'
 import type { Trade } from '@uniswap/v2-sdk'
+import { TradeProvider } from '@masknet/public-api'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
 import {
     ChainId,
@@ -13,8 +14,8 @@ import {
     TransactionStateType,
     useChainId,
     useChainIdValid,
-    useTokenBalance,
-} from '@masknet/web3-shared'
+    useFungibleTokenBalance,
+} from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { TradeForm } from './TradeForm'
 import { TradeRoute as UniswapTradeRoute } from '../uniswap/TradeRoute'
@@ -22,19 +23,21 @@ import { TradeRoute as BalancerTradeRoute } from '../balancer/TradeRoute'
 import { TradeSummary } from './TradeSummary'
 import { ConfirmDialog } from './ConfirmDialog'
 import { TradeActionType } from '../../trader/useTradeState'
-import { Coin, SwapResponse, SwapRouteData, TokenPanelType, TradeComputed, TradeProvider } from '../../types'
+import { Coin, SwapResponse, SwapRouteData, TokenPanelType, TradeComputed, SwapBancorRequest } from '../../types'
 import { TradePairViewer as UniswapPairViewer } from '../uniswap/TradePairViewer'
 import { TradePairViewer as DODOPairViewer } from '../dodo/TradePairViewer'
 import { useTradeCallback } from '../../trader/useTradeCallback'
 import { useTradeStateComputed } from '../../trader/useTradeStateComputed'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
 import { UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '../../../Wallet/messages'
 import { isNativeTokenWrapper } from '../../helpers'
 import { TradeContext } from '../../trader/useTradeContext'
 import { PluginTraderRPC } from '../../messages'
 import { delay } from '../../../../utils'
+import { useI18N } from '../../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -68,6 +71,7 @@ export function Trader(props: TraderProps) {
     const chainId = useChainId()
     const chainIdValid = useChainIdValid()
     const classes = useStylesExtends(useStyles(), props)
+    const { t } = useI18N()
 
     const context = useContext(TradeContext)
     const provider = context?.TYPE ?? TradeProvider.UNISWAP_V2
@@ -122,12 +126,12 @@ export function Trader(props: TraderProps) {
         value: inputTokenBalance_,
         loading: loadingInputTokenBalance,
         retry: retryInputTokenBalance,
-    } = useTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
+    } = useFungibleTokenBalance(inputToken?.type ?? EthereumTokenType.Native, inputToken?.address ?? '')
     const {
         value: outputTokenBalance_,
         loading: loadingOutputTokenBalance,
         retry: retryOutputTokenBalance,
-    } = useTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
+    } = useFungibleTokenBalance(outputToken?.type ?? EthereumTokenType.Native, outputToken?.address ?? '')
 
     useEffect(() => {
         if (inputTokenBalance_ && !loadingInputTokenBalance)
@@ -229,7 +233,15 @@ export function Trader(props: TraderProps) {
                           inputToken.symbol
                       } for ${formatBalance(tradeComputed.outputAmount, outputToken.decimals, 6)} ${cashTag}${
                           outputToken.symbol
-                      }. Follow @realMaskbook (mask.io) to swap cryptocurrencies on Twitter.`,
+                      }.${
+                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                              ? `Follow @${
+                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                                } (mask.io) to swap cryptocurrencies on ${
+                                    isTwitter(activatedSocialNetworkUI) ? 'Twitter' : 'Facebook'
+                                }.`
+                              : ''
+                      }`,
                       '#mask_io',
                   ].join('\n')
                 : '',
@@ -329,6 +341,9 @@ export function Trader(props: TraderProps) {
                     ) : null}
                     {TradeProvider.DODO === provider ? (
                         <DODOPairViewer trade={tradeComputed as TradeComputed<SwapRouteData>} provider={provider} />
+                    ) : null}
+                    {TradeProvider.BANCOR === provider ? (
+                        <DODOPairViewer trade={tradeComputed as TradeComputed<SwapBancorRequest>} provider={provider} />
                     ) : null}
                 </>
             ) : null}

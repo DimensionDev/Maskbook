@@ -5,7 +5,7 @@ import type { SocialNetworkUI } from '../../../social-network'
 import { getEditorContent, hasFocus, isCompose, hasEditor } from '../utils/postBox'
 import { untilElementAvailable } from '../../../utils/dom'
 import { isMobileTwitter } from '../utils/isMobile'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 
 /**
  * Wait for up to 5000 ms
@@ -44,7 +44,7 @@ export const pasteTextToCompositionTwitter: SocialNetworkUI.AutomationCapabiliti
         }
 
         const fail = (e: Error) => {
-            if (opt?.recover) MaskMessage.events.autoPasteFailed.sendToLocal({ text })
+            if (opt?.recover) MaskMessages.events.autoPasteFailed.sendToLocal({ text })
             throw e
         }
 

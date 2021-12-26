@@ -1,4 +1,5 @@
-import { useCallback } from 'react'
+import { useState, useCallback, useEffect } from 'react'
+import stringify from 'json-stable-stringify'
 import {
     Accordion,
     AccordionDetails,
@@ -11,12 +12,13 @@ import {
     Paper,
     Switch,
     Typography,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useValueRef, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { TradeProvider } from '@masknet/public-api'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { useI18N } from '../../../../utils'
-import { TradeProvider, ZrxTradePool } from '../../types'
+import { ZrxTradePool } from '../../types'
 import { SlippageSlider } from './SlippageSlider'
 import {
     currentSingleHopOnlySettings,
@@ -27,8 +29,6 @@ import {
 import { SLIPPAGE_DEFAULT } from '../../constants'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { PluginTraderMessages } from '../../messages'
-import stringify from 'json-stable-stringify'
-import { useTradeProviderSettings } from '../../trader/useTradeSettings'
 import { useSingleHopOnly } from '../../trader/uniswap/useSingleHopOnly'
 
 const useStyles = makeStyles()((theme) => {
@@ -59,11 +59,20 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const provider = useValueRef(currentTradeProviderSettings)
     const slippage = useValueRef(currentSlippageSettings)
     const singleHopOnly = useSingleHopOnly()
-    const { pools } = useTradeProviderSettings(provider)
+    const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)
 
     //#region remote controlled dialog
     const { open, closeDialog } = useRemoteControlledDialog(PluginTraderMessages.swapSettingsUpdated)
     //#endregion
+
+    useEffect(() => {
+        setUnconfirmedSlippage(slippage)
+    }, [slippage])
+
+    const onSubmit = useCallback(() => {
+        currentSlippageSettings.value = unconfirmedSlippage
+        closeDialog()
+    }, [unconfirmedSlippage, closeDialog])
 
     const onReset = useCallback(() => {
         currentSlippageSettings.value = SLIPPAGE_DEFAULT
@@ -84,15 +93,10 @@ export function SettingsDialog(props: SettingsDialogProps) {
                                     <Typography className={classes.heading}>
                                         {t('plugin_trader_slippage_tolerance')}
                                     </Typography>
-                                    <Typography>{slippage / 100}%</Typography>
+                                    <Typography>{unconfirmedSlippage / 100}%</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails className={classes.details}>
-                                    <SlippageSlider
-                                        value={slippage}
-                                        onChange={(tolerance) => {
-                                            currentSlippageSettings.value = tolerance
-                                        }}
-                                    />
+                                    <SlippageSlider value={unconfirmedSlippage} onChange={setUnconfirmedSlippage} />
                                 </AccordionDetails>
                             </Accordion>
                             {provider === TradeProvider.UNISWAP_V3 ? (
@@ -115,7 +119,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
                             ) : null}
                         </CardContent>
                         <CardActions className={classes.footer}>
-                            <Button variant="text" onClick={closeDialog}>
+                            <Button variant="text" onClick={onSubmit}>
                                 {t('confirm')}
                             </Button>
                             <Button variant="text" onClick={onReset}>

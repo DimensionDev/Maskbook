@@ -1,8 +1,8 @@
 import yargs from 'yargs'
-import type { ExtensionBuildArgs } from '..'
+import type { ExtensionBuildArgs } from '../extension'
 
 const { hideBin } = require('yargs/helpers')
-const presets = ['chromium', 'E2E', 'firefox', 'android', 'iOS', 'base'] as const
+const presets = ['chromium', 'firefox', 'android', 'iOS', 'base'] as const
 export function extensionArgsParser() {
     const opts = yargs(hideBin(process.argv))
         .options<'preset', { choices: typeof presets[number][] }>('preset', {
@@ -16,7 +16,7 @@ export function extensionArgsParser() {
         .options('insider', { type: 'boolean', description: 'Build insider version' })
         .options('reproducible', { type: 'boolean', description: 'Build a reproducible build' })
         .options('profile', { type: 'boolean', description: 'Build a profile build' })
-        .options('manifest-v3', {
+        .options('mv3', {
             type: 'boolean',
             description: 'Build in manifest-v3 mode (Not working!)',
         })
@@ -30,9 +30,8 @@ export function extensionArgsParser() {
         })
         .hide('version')
         .strict().argv
-    const extensionOpts = {
-        'manifest-v3': opts['manifest-v3'],
-        E2E: opts.preset === 'E2E',
+    const extensionOpts: ExtensionBuildArgs = {
+        mv3: opts.mv3,
         android: opts.preset === 'android',
         chromium: opts.preset === 'chromium',
         firefox: opts.preset === 'firefox',
@@ -43,7 +42,7 @@ export function extensionArgsParser() {
         readonlyCache: opts.readonlyCache,
         reproducible: opts.reproducible,
         progress: opts.progress,
-    } as ExtensionBuildArgs
+    }
     for (const i in extensionOpts) {
         if (!extensionOpts[i]) delete extensionOpts[i]
     }

@@ -1,5 +1,5 @@
 import { formatFileSize } from '@dimensiondev/kit'
-import { Paper, Typography } from '@material-ui/core'
+import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { DownloadCloud, File } from 'react-feather'
 import { useI18N } from '../../../utils'

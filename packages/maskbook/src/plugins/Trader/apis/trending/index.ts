@@ -15,7 +15,7 @@ import {
     resolveCoinId,
     resolveNetworkType,
 } from './hotfix'
-import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
+import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { currentChainIdSettings, currentNetworkSettings } from '../../../Wallet/settings'
 import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
 
@@ -23,16 +23,16 @@ import { Days } from '../../SNSAdaptor/trending/PriceChartDaysControl'
  * Get supported currencies of specific data provider
  * @param dataProvider
  */
-export async function getCurrenies(dataProvider: DataProvider): Promise<Currency[]> {
+export async function getCurrencies(dataProvider: DataProvider): Promise<Currency[]> {
     switch (dataProvider) {
         case DataProvider.COIN_GECKO:
-            const currencies = await coinGeckoAPI.getAllCurrenies()
+            const currencies = await coinGeckoAPI.getAllCurrencies()
             return currencies.map((x) => ({
                 id: x,
                 name: x.toUpperCase(),
             }))
         case DataProvider.COIN_MARKET_CAP:
-            return Object.values(coinMarketCapAPI.getAllCurrenies()).map((x) => ({
+            return Object.values(coinMarketCapAPI.getAllCurrencies()).map((x) => ({
                 id: String(x.id),
                 name: x.symbol.toUpperCase(),
                 symbol: x.token,
@@ -123,7 +123,7 @@ async function updateCache(dataProvider: DataProvider, keyword?: string) {
     }
 }
 
-function isCacheExipred(dataProvider: DataProvider) {
+function isCacheExpired(dataProvider: DataProvider) {
     const lastUpdated = coinNamespace.get(dataProvider)?.lastUpdated.getTime() ?? 0
     return Date.now() - lastUpdated > CRYPTOCURRENCY_MAP_EXPIRES_AT
 }
@@ -135,7 +135,7 @@ export async function checkAvailabilityOnDataProvider(keyword: string, type: Tag
     // cache never built before update in blocking way
     else if (!coinNamespace.has(dataProvider)) await updateCache(dataProvider)
     // data fetched before update in nonblocking way
-    else if (isCacheExipred(dataProvider)) updateCache(dataProvider)
+    else if (isCacheExpired(dataProvider)) updateCache(dataProvider)
     const symbols = coinNamespace.get(dataProvider)?.supportedSymbolsSet
     return symbols?.has(resolveAlias(keyword, dataProvider).toLowerCase()) ?? false
 }
@@ -363,7 +363,7 @@ export async function getCoinTrendingByKeyword(
     const coins = await getAvailableCoins(keyword, tagType, dataProvider)
     if (!coins.length) return null
 
-    // prefer coins on the etherenum network
+    // prefer coins on the ethereum network
     const coin = coins.find((x) => x.contract_address) ?? first(coins)
     if (!coin) return null
 

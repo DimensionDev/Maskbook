@@ -1,4 +1,4 @@
-import { ChainId, createERC20Tokens, getChainDetailed, ONE } from '@masknet/web3-shared'
+import { ChainId, createERC20Tokens, getChainDetailed, ONE } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import type { ERC20AgainstToken } from './types'
 
@@ -67,7 +67,7 @@ export const ONE_BIPS = ONE.dividedBy(BIPS_BASE)
 
 export const SLIPPAGE_MIN = 10 // bips
 export const SLIPPAGE_DEFAULT = 50 // bips
-export const SLIPPAGE_MAX = 1000 // bips
+export const SLIPPAGE_MAX = 2000 // bips
 
 export const DEFAULT_TRANSACTION_DEADLINE = 30 /* minutes */ * 60 /* seconds */
 export const L2_TRANSACTION_DEADLINE = 60 /* minutes */ * 5 /* seconds */

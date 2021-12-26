@@ -16,10 +16,10 @@ import {
     useTokenConstants,
     ZERO,
     isGreaterThan,
-} from '@masknet/web3-shared'
-import { Box, Card, Grid, Link, Typography } from '@material-ui/core'
+} from '@masknet/web3-shared-evm'
+import { Box, Card, Grid, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import OpenInNewIcon from '@mui/icons-material/OpenInNew'
 import { BigNumber } from 'bignumber.js'
 import classNames from 'classnames'
 import formatDateTime from 'date-fns/format'
@@ -44,6 +44,9 @@ import { StyledLinearProgress } from './StyledLinearProgress'
 import { SwapGuide, SwapStatus } from './SwapGuide'
 import urlcat from 'urlcat'
 import { startCase } from 'lodash-es'
+import { FACEBOOK_ID } from '../../../social-network-adaptor/facebook.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
+import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
 
 export interface IconProps {
     size?: number
@@ -52,6 +55,7 @@ export interface IconProps {
 interface StyleProps {
     titleLength?: number
     tokenNumber?: number
+    snsId?: string
 }
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     root: {
@@ -75,8 +79,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'end',
-        width: '100%',
-        maxWidth: 470,
+        width: props.snsId === FACEBOOK_ID ? '98%' : '100%',
+        maxWidth: props.snsId === FACEBOOK_ID ? 'auto' : 470,
     },
     title: {
         fontSize: props.titleLength! > 31 ? '1.3rem' : '1.6rem',
@@ -119,7 +123,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     footer: {
         position: 'absolute',
         width: '90%',
-        maxWidth: 470,
+        maxWidth: props.snsId === FACEBOOK_ID ? 'auto' : 470,
         bottom: theme.spacing(2),
         display: 'flex',
         justifyContent: 'space-between',
@@ -146,6 +150,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     actionButton: {
+        color: '#fff',
         minHeight: 'auto',
         width: '100%',
     },
@@ -235,7 +240,11 @@ export function ITO(props: ITO_Props) {
             : message.split(MSG_DELIMITER)[0]
     const title = message.split(MSG_DELIMITER)[1] ?? message
     const regions = message.split(MSG_DELIMITER)[2] ?? defaultRegions
-    const { classes } = useStyles({ titleLength: getTextUILength(title), tokenNumber: exchange_tokens.length })
+    const { classes } = useStyles({
+        titleLength: getTextUILength(title),
+        tokenNumber: exchange_tokens.length,
+        snsId: activatedSocialNetworkUI.networkIdentifier,
+    })
     //#region token detailed
     const {
         value: availability,
@@ -247,7 +256,7 @@ export function ITO(props: ITO_Props) {
 
     const { listOfStatus, startTime, unlockTime, isUnlocked, hasLockTime, endTime, qualificationAddress } =
         availabilityComputed
-    //#ednregion
+    //#endregion
 
     const total = new BigNumber(payload_total)
     const total_remaining = new BigNumber(availability?.remaining ?? '0')
@@ -285,11 +294,17 @@ export function ITO(props: ITO_Props) {
 
     const shareSuccessLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            t('plugin_ito_claim_success_share', {
-                user: sellerName,
-                link: postLink,
-                symbol: token.symbol,
-            }),
+            t(
+                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? 'plugin_ito_claim_success_share'
+                    : 'plugin_ito_claim_success_share_no_official_account',
+                {
+                    user: sellerName,
+                    link: postLink,
+                    symbol: token.symbol,
+                    account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
+                },
+            ),
         )
         .toString()
     const canWithdraw = useMemo(
@@ -350,11 +365,17 @@ export function ITO(props: ITO_Props) {
 
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
-            t('plugin_ito_claim_foreshow_share', {
-                link: postLink,
-                name: token.name,
-                symbol: token.symbol ?? 'token',
-            }),
+            t(
+                isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                    ? 'plugin_ito_claim_foreshow_share'
+                    : 'plugin_ito_claim_foreshow_share_no_official_account',
+                {
+                    link: postLink,
+                    name: token.name,
+                    symbol: token.symbol ?? 'token',
+                    account: isFacebook(activatedSocialNetworkUI) ? t('facebook_account') : t('twitter_account'),
+                },
+            ),
         )
         .toString()
     const onShare = useCallback(async () => {
@@ -726,7 +747,7 @@ export function ITO(props: ITO_Props) {
                     </Grid>
                 ) : listOfStatus.includes(ITO_Status.started) ? (
                     <ActionButton onClick={onClaim} variant="contained" size="large" className={classes.actionButton}>
-                        {t('plugin_ito_enter')}
+                        <Typography>{t('plugin_ito_enter')}</Typography>
                     </ActionButton>
                 ) : null}
             </Box>
@@ -774,7 +795,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
             elevation={0}
             style={{ backgroundImage: `url(${PoolBackground})` }}>
             <Typography variant="body1" className={classes.loadingITO}>
-                {t('plugin_ito_loading_failed')}
+                {t('loading_failed')}
             </Typography>
             <ActionButton
                 onClick={retryPoolPayload}
@@ -782,7 +803,7 @@ export function ITO_Error({ retryPoolPayload }: { retryPoolPayload: () => void }
                 size="large"
                 color="primary"
                 className={classes.loadingITO_Button}>
-                {t('plugin_ito_loading_try_again')}
+                {t('try_again')}
             </ActionButton>
         </Card>
     )

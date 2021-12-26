@@ -1,12 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "lib": ["ESNext"]
+    "lib": ["ESNext"],
+    "noEmit": true,
+    "types": ["node"]
   },
   "ts-node": {
     "compilerOptions": {
       "target": "ES2018",
-      "module": "CommonJS"
+      "module": "CommonJS",
+      "noEmit": false
     },
     "transpileOnly": true
   },

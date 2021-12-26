@@ -25,8 +25,13 @@ import {
     currentProviderSettings,
     currentChainIdSettings,
     currentPortfolioDataProviderSettings,
-    currentGasNowSettings,
+    currentGasOptionsSettings,
     currentEtherPriceSettings,
+    currentTokenPricesSettings,
+    currentMaskWalletLockStatusSettings,
+    currentMaskWalletAccountSettings,
+    currentMaskWalletChainIdSettings,
+    currentMaskWalletNetworkSettings,
 } from '../../plugins/Wallet/settings'
 import { Flags } from '../../utils'
 
@@ -47,7 +52,9 @@ export const [getChainId, setChainId] = create(currentChainIdSettings)
 export const [getBalance, setBalance] = create(currentBalanceSettings)
 export const [getBlockNumber, setBlockNumber] = create(currentBlockNumberSettings)
 export const [getEtherPrice, setEtherPrice] = create(currentEtherPriceSettings)
-export const [getGasNow, setGasNow] = create(currentGasNowSettings)
+export const [getTokenPrices, setTokenPrices] = create(currentTokenPricesSettings)
+export const [getGasOptions, setGasOptions] = create(currentGasOptionsSettings)
+export const [getGasPrice, setGasPrice] = create(currentGasOptionsSettings)
 export const [getTrendingDataSource, setTrendingDataSource] = create(currentDataProviderSettings)
 export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = create(
     ethereumNetworkTradeProviderSettings,
@@ -69,12 +76,24 @@ export const [getCurrentSelectedWalletNetwork, setCurrentSelectedWalletNetwork] 
 
 export const [getSelectedWalletAddress, setSelectedWalletAddress] = create(currentAccountSettings)
 
+export const [getSelectedMaskWalletAddress, setSelectedMaskWalletAddress] = create(currentMaskWalletAccountSettings)
+
+export const [getCurrentMaskWalletChainId, setCurrentMaskWalletChainId] = create(currentMaskWalletChainIdSettings)
+
+export const [getCurrentMaskWalletNetworkType, setCurrentMaskWalletNetworkType] = create(
+    currentMaskWalletNetworkSettings,
+)
+
 export const [getCurrentPortfolioDataProvider, setCurrentPortfolioDataProvider] = create(
     currentPortfolioDataProviderSettings,
 )
 
 export const [getCurrentCollectibleDataProvider, setCurrentCollectibleDataProvider] = create(
     currentCollectibleDataProviderSettings,
+)
+
+export const [getCurrentMaskWalletLockedSettings, setCurrentMaskWalletLockedSettings] = create(
+    currentMaskWalletLockStatusSettings,
 )
 
 export async function getWalletAllowTestChain() {
@@ -98,24 +117,13 @@ export async function setCurrentPersonaIdentifier(x: PersonaIdentifier) {
     await currentPersonaIdentifier.readyPromise
     currentPersonaIdentifier.value = x.toText()
 }
-export async function isPluginEnabled(id: string) {
+export async function getPluginEnabled(id: string) {
     return currentPluginEnabledStatus['plugin:' + id].value
 }
-export async function setPluginStatus(id: string, enabled: boolean) {
+export async function setPluginEnabled(id: string, enabled: boolean) {
     currentPluginEnabledStatus['plugin:' + id].value = enabled
 }
-const key = 'openSNSAndActivatePlugin'
-/**
- * This function will open a new web page, then open the composition dialog and activate the composition entry of the given plugin.
- * @param url URL to open
- * @param pluginID Plugin to activate
- */
-export async function openSNSAndActivatePlugin(url: string, pluginID: string) {
+
+export async function openTab(url: string) {
     await browser.tabs.create({ active: true, url })
-    sessionStorage.setItem(key, pluginID)
-}
-export async function shouldActivatePluginOnSNSStart() {
-    const val = sessionStorage.getItem(key)
-    sessionStorage.removeItem(key)
-    return val
 }

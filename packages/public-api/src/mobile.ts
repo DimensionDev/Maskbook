@@ -8,17 +8,14 @@ export interface SharedNativeAPIs {
      * Send Ethereum JSON RPC
      */
     send(payload: JsonRpcPayload): Promise<JsonRpcResponse>
+    wallet_switchBlockChain(payload: { coinId?: number; networkId: number }): Promise<void>
+    misc_openCreateWalletView(): Promise<void>
+    misc_openDashboardView(): Promise<void>
 }
 /**
  * APIs that only implemented by iOS Mask Network
  */
-export interface iOSNativeAPIs extends SharedNativeAPIs {
-    /**
-     * Open a full screen QR Code scanner.
-     * @returns The scan result
-     */
-    scanQRCode(): Promise<string>
-}
+export interface iOSNativeAPIs extends SharedNativeAPIs {}
 /**
  * APIs that only implemented by Android Mask Network
  */

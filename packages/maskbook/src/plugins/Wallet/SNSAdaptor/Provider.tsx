@@ -1,4 +1,4 @@
-import { Typography, Card, ButtonBase, ButtonBaseProps } from '@material-ui/core'
+import { Typography, Card, ButtonBase, ButtonBaseProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 import { getMaskColor } from '@masknet/theme'
@@ -46,7 +46,7 @@ export function Provider(props: ProviderProps) {
     const classes = useStylesExtends(useStyles(), props)
     return (
         <Card className={classes.root} elevation={0} onClick={props.onClick}>
-            <ButtonBase className={classes.content} {...props.ButtonBaseProps}>
+            <ButtonBase className={`${classes.content} dashboard-style`} {...props.ButtonBaseProps}>
                 <div className={classes.logo}>{props.logo}</div>
                 <Typography className={classes.name} variant="h3">
                     {props.name}

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@material-ui/core'
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../utils'
@@ -9,7 +9,7 @@ import { OrderRow } from './OrderRow'
 import { TableListPagination } from './Pagination'
 import { CollectibleProvider } from '../types'
 import { LoadingTable } from './LoadingTable'
-import { isZero, useAccount } from '@masknet/web3-shared'
+import { isZero, useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -113,7 +113,9 @@ export function ListingTab() {
                         ) : (
                             <>
                                 <TableCell>{t('plugin_collectible_price')}</TableCell>
-                                <TableCell>{t('plugin_collectible_expiration')}</TableCell>
+                                {provider === CollectibleProvider.OPENSEA ? (
+                                    <TableCell>{t('plugin_collectible_expiration')}</TableCell>
+                                ) : null}
                             </>
                         )}
                     </TableRow>

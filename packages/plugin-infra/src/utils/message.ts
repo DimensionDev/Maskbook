@@ -1,4 +1,5 @@
 import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
+import type { Serialization } from 'async-call-rpc/base'
 
 /**
  * Create a plugin message emitter
@@ -7,13 +8,18 @@ import { WebExtensionMessage } from '@dimensiondev/holoflows-kit'
  * @example
  * export const MyPluginMessage = createPluginMessage(PLUGIN_ID)
  */
-export function createPluginMessage<T = DefaultPluginMessage>(pluginID: string): PluginMessageEmitter<T> {
+export function createPluginMessage<T = DefaultPluginMessage>(
+    pluginID: string,
+    serializer?: Serialization,
+): PluginMessageEmitter<T> {
     const domain = '@plugin/' + pluginID
     if (cache.has(domain)) return cache.get(domain) as any
 
-    const m = new WebExtensionMessage<T>({ domain }).events
-    cache.set(domain, m)
-    return m
+    const messageCenter = new WebExtensionMessage<T>({ domain })
+    const events = messageCenter.events
+    if (serializer) messageCenter.serialization = serializer
+    cache.set(domain, events)
+    return events
 }
 export interface DefaultPluginMessage {
     /** This one is for plugin RPC */

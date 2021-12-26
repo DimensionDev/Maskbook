@@ -1,12 +1,13 @@
 import { FormEvent, memo, useCallback, useEffect, useState } from 'react'
 import { MaskDialog, MaskTextField } from '@masknet/theme'
-import { Box, Button, DialogActions, DialogContent } from '@material-ui/core'
+import { Box, Button, DialogActions, DialogContent } from '@mui/material'
 import {
+    EthereumTokenType,
     isSameAddress,
     useERC721ContractDetailed,
     useERC721TokenDetailedCallback,
     useWallet,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { EthereumAddress } from 'wallet.ts'
 import { useDashboardI18N } from '../../../../locales'
 import { z } from 'zod'
@@ -38,7 +39,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
     const onSubmit = useCallback(async () => {
         if (contractDetailLoading || !wallet) return
 
-        const tokenInDB = await PluginServices.Wallet.getERC721Token(address, tokenId)
+        const tokenInDB = await PluginServices.Wallet.getToken(EthereumTokenType.ERC721, address, tokenId)
         if (tokenInDB) throw new Error(FormErrorType.Added)
 
         const tokenDetailed = await erc721TokenDetailedCallback()
@@ -50,7 +51,7 @@ export const AddCollectibleDialog = memo<AddCollectibleDialogProps>(({ open, onC
         ) {
             throw new Error(FormErrorType.NotExist)
         } else {
-            await PluginServices.Wallet.addERC721Token(tokenDetailed)
+            await PluginServices.Wallet.addToken(tokenDetailed)
             onClose()
         }
     }, [contractDetailLoading, wallet, address, tokenId, erc721TokenDetailedCallback])
@@ -83,9 +84,9 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
         const schema = z.object({
             address: z
                 .string()
-                .min(1)
+                .min(1, t.wallets_collectible_field_contract_require())
                 .refine((address) => EthereumAddress.isValid(address), t.wallets_incorrect_address()),
-            tokenId: z.string().min(1),
+            tokenId: z.string().min(1, t.wallets_collectible_field_token_id_require()),
         })
 
         const {
@@ -94,7 +95,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
             setError,
             watch,
             reset,
-            formState: { errors, isSubmitting, isValid },
+            formState: { errors, isSubmitting, isDirty },
         } = useForm<FormInputs>({
             resolver: zodResolver(schema),
             defaultValues: { address: '', tokenId: '' },
@@ -127,7 +128,7 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
 
         return (
             <MaskDialog open={open} title={t.wallets_add_collectible()} onClose={handleClose}>
-                <form onSubmit={handleFormSubmit}>
+                <form noValidate onSubmit={handleFormSubmit}>
                     <DialogContent>
                         <Box>
                             <Controller
@@ -160,12 +161,12 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
                             />
                         </Box>
                     </DialogContent>
-                    <DialogActions sx={{ mt: 3 }}>
+                    <DialogActions sx={{ pt: 3 }}>
                         <Button sx={{ minWidth: 100 }} variant="outlined" color="primary" onClick={onClose}>
                             {t.cancel()}
                         </Button>
                         <Button
-                            disabled={isSubmitting || !isValid}
+                            disabled={isSubmitting || !isDirty}
                             sx={{ minWidth: 100 }}
                             color="primary"
                             type="submit">

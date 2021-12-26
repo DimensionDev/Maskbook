@@ -7,9 +7,7 @@ export interface ReadMeCardProps {}
 
 export function ReadMeCard(props: ReadMeCardProps) {
     const identifier = useContext(SnapshotContext)
-    const {
-        payload: { message },
-    } = useProposal(identifier.id)
+    const { payload: proposal } = useProposal(identifier.id)
 
-    return <Markdown content={message.payload.body} />
+    return <Markdown content={proposal.body} />
 }

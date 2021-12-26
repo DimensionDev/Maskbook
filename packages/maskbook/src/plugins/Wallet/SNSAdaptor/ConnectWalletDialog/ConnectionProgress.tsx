@@ -1,6 +1,6 @@
-import { Box, Card, CircularProgress, Typography, Paper } from '@material-ui/core'
+import { Box, Card, CircularProgress, Typography, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { resolveProviderName, ProviderType } from '@masknet/web3-shared'
+import { resolveProviderName, ProviderType } from '@masknet/web3-shared-evm'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../../utils'
 import { ProviderIcon, useStylesExtends } from '@masknet/shared'
@@ -34,7 +34,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
 
     return (
         <Paper elevation={0}>
-            <Card className={classes.content} elevation={0}>
+            <Card className={`${classes.content} dashboard-style`} elevation={0}>
                 <Box display="flex" alignItems="center">
                     <ProviderIcon providerType={providerType} />
                     <Box display="flex" flex={1} flexDirection="column" sx={{ marginLeft: 2 }}>
@@ -56,7 +56,7 @@ export function ConnectionProgress(props: ConnectionProgressProps) {
                         ) : null}
                     </Box>
                     {!connected && error ? (
-                        <ActionButton color="primary" variant="contained" onClick={retry}>
+                        <ActionButton color="primary" variant="contained" onClick={retry} disabled={loading}>
                             {t('retry')}
                         </ActionButton>
                     ) : null}

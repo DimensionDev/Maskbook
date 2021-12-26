@@ -1,10 +1,11 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import { useEffect, useState, useContext } from 'react'
-import { Box, Typography } from '@material-ui/core'
+import { Box, Typography } from '@mui/material'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
 import { passwordRegexp } from '../../regexp'
-import { MaskTextField, useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
+import PasswordField from '../../../../components/PasswordField'
 
 interface SettingPasswordDialogProps {
     open: boolean
@@ -14,7 +15,7 @@ interface SettingPasswordDialogProps {
 
 export default function SettingPasswordDialog({ open, onClose, onSet }: SettingPasswordDialogProps) {
     const t = useDashboardI18N()
-    const snackbar = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = useContext(UserContext)
     const [incorrectPassword, setIncorrectPassword] = useState(false)
     const [passwordValid, setValidState] = useState(true)
@@ -41,7 +42,7 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
 
         if (passwordValid && matched) {
             const msg = user.backupPassword ? t.settings_alert_password_updated() : t.settings_alert_password_set()
-            snackbar.enqueueSnackbar(msg, {
+            showSnackbar(msg, {
                 variant: 'success',
             })
 
@@ -78,40 +79,37 @@ export default function SettingPasswordDialog({ open, onClose, onSet }: SettingP
             open={open}
             onClose={handleClose}
             onConfirm={handleConfirm}>
-            <Box sx={{ minHeight: '160px' }}>
+            <Box sx={{ minHeight: '160px' }} py={1}>
                 {user.backupPassword ? (
-                    <MaskTextField
+                    <PasswordField
                         fullWidth
                         value={password}
                         onChange={(event) => setPassword(event.target.value)}
-                        type="password"
                         placeholder={t.settings_label_backup_password()}
-                        sx={{ marginBottom: '10px' }}
+                        sx={{ marginBottom: '16px' }}
                         error={incorrectPassword}
                         helperText={incorrectPassword ? t.settings_dialogs_incorrect_password() : ''}
                     />
                 ) : null}
-
-                <MaskTextField
+                <PasswordField
                     fullWidth
                     value={newPassword}
                     onChange={(event) => setNewPassword(event.target.value)}
                     onBlur={validCheck}
-                    type="password"
                     placeholder={
                         user.backupPassword
                             ? t.settings_label_new_backup_password()
                             : t.settings_label_backup_password()
                     }
-                    sx={{ marginBottom: '10px' }}
+                    sx={{ marginBottom: '16px' }}
                     error={!passwordValid}
                     helperText={passwordValid ? '' : passwordRule}
                 />
-                <MaskTextField
+
+                <PasswordField
                     fullWidth
                     value={repeatPassword}
                     onChange={(event) => setRepeatPassword(event.target.value)}
-                    type="password"
                     placeholder={t.settings_label_re_enter()}
                     error={!passwordMatched}
                     helperText={!passwordMatched ? t.settings_dialogs_inconsistency_password() : ''}

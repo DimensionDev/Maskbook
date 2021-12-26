@@ -1,18 +1,18 @@
-import { ProviderType } from '@masknet/web3-shared'
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
-import * as Maskbook from './providers/Maskbook'
+import * as MaskWallet from './providers/Mask'
 import * as MetaMask from './providers/MetaMask'
 import * as WalletConnect from './providers/WalletConnect'
 import { currentChainIdSettings, currentProviderSettings } from '../../../plugins/Wallet/settings'
 
-export function createWeb3({
+export async function createWeb3({
     chainId = currentChainIdSettings.value,
     providerType = currentProviderSettings.value,
     privKeys = [] as string[],
 } = {}) {
     switch (providerType) {
-        case ProviderType.Maskbook:
-            return Maskbook.createWeb3({
+        case ProviderType.MaskWallet:
+            return MaskWallet.createWeb3({
                 chainId,
                 privKeys,
             })

@@ -1,12 +1,13 @@
 import { MaskColorVar, MaskDialog } from '@masknet/theme'
-import { Box, Tooltip, Typography } from '@material-ui/core'
+import { Box, DialogContent, Tooltip, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { LocalBackupIcon, CloudBackupIcon } from '@masknet/icons'
-import { useContext } from 'react'
+import { useContext, useMemo } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
+import classNames from 'classnames'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         height: '220px',
@@ -26,7 +27,7 @@ const useStyles = makeStyles()({
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        '&:hover': {
+        '&:not(.disabled):hover': {
             background: MaskColorVar.primaryBackground,
             boxShadow: '3px 6px 15px rgba(28, 104, 243, 0.1)',
         },
@@ -45,9 +46,10 @@ const useStyles = makeStyles()({
         height: '100%',
         top: 0,
         left: 0,
-        background: 'rgba(255,255,255,.5)',
+        borderRadius: '8px',
+        background: theme.palette.mode === 'dark' ? 'rgba(0,0,0,.4)' : 'rgba(255,255,255,.4)',
     },
-})
+}))
 export interface BackupModeSelectDialogProps {
     open: boolean
     onClose(): void
@@ -58,24 +60,31 @@ export default function BackupModeSelectDialog({ open, onClose, onSelect }: Back
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const { user } = useContext(UserContext)
+
+    const cloudDisabled = useMemo(() => {
+        return !user.email && !user.phone
+    }, [user.email, user.phone])
+
     return (
         <MaskDialog title={t.settings_button_backup()} open={open} onClose={onClose}>
-            <Box className={classes.container}>
-                <Box className={classes.mode} onClick={() => onSelect('local')}>
-                    <LocalBackupIcon className={classes.icon} />
-                    <Typography className={classes.label}>Local Backup</Typography>
-                </Box>
-                <Box className={classes.mode}>
-                    {!(user.email || user.phone) ? (
-                        <Tooltip title={t.settings_dialogs_bind_email_or_phone()} placement="top" arrow>
-                            <div className={classes.mask} />
-                        </Tooltip>
-                    ) : null}
+            <DialogContent>
+                <Box className={classes.container}>
+                    <Box className={classes.mode} onClick={() => onSelect('local')}>
+                        <LocalBackupIcon className={classes.icon} />
+                        <Typography className={classes.label}>Local Backup</Typography>
+                    </Box>
+                    <Box className={classNames(classes.mode, cloudDisabled && 'disabled')}>
+                        {cloudDisabled ? (
+                            <Tooltip title={t.settings_dialogs_bind_email_or_phone()} placement="top" arrow>
+                                <div className={classes.mask} />
+                            </Tooltip>
+                        ) : null}
 
-                    <CloudBackupIcon className={classes.icon} onClick={() => onSelect('cloud')} />
-                    <Typography className={classes.label}>Cloud Backup</Typography>
+                        <CloudBackupIcon className={classes.icon} onClick={() => onSelect('cloud')} />
+                        <Typography className={classes.label}>Cloud Backup</Typography>
+                    </Box>
                 </Box>
-            </Box>
+            </DialogContent>
         </MaskDialog>
     )
 }

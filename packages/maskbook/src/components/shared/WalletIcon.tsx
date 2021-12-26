@@ -1,8 +1,6 @@
-import { ProviderIcon, useValueRef } from '@masknet/shared'
+import { NetworkIcon, ProviderIcon, useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import type { FC } from 'react'
 import { currentNetworkSettings, currentProviderSettings } from '../../plugins/Wallet/settings'
-import { NetworkIcon } from './NetworkIcon'
 
 const useStyles = makeStyles()({
     root: {
@@ -27,7 +25,7 @@ interface WalletIconProps {
     badgeSize?: number
 }
 
-export const WalletIcon: FC<WalletIconProps> = ({ size = 24, badgeSize = 14 }) => {
+export const WalletIcon = ({ size = 24, badgeSize = 14 }: WalletIconProps) => {
     const { classes } = useStyles()
     const selectedNetwork = useValueRef(currentNetworkSettings)
     const selectedWalletProvider = useValueRef(currentProviderSettings)

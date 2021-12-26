@@ -11,7 +11,7 @@ export const ToolIconURLs: Readonly<Record<ToolIconTypes, T>> = {
         label: 'Encrypted message',
         priority: 1000,
     },
-    redpacket: { image: new URL('./redpacket.png', import.meta.url).toString(), label: 'Red Packet', priority: 990 },
+    redpacket: { image: new URL('./redpacket.png', import.meta.url).toString(), label: 'Lucky Drop', priority: 990 },
     files: { image: new URL('./files.png', import.meta.url).toString(), label: 'File Service', priority: 980 },
     markets: { image: new URL('./markets.png', import.meta.url).toString(), label: 'Markets', priority: 970 },
     token: { image: new URL('./token.png', import.meta.url).toString(), label: 'Buy Cryptocurrency', priority: 960 },

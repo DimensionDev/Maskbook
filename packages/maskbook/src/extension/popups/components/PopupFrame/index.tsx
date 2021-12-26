@@ -1,5 +1,6 @@
 import { memo } from 'react'
-import { Box, Paper, GlobalStyles } from '@material-ui/core'
+import { useLocation } from 'react-router-dom'
+import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
 import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
@@ -13,11 +14,10 @@ function GlobalCss() {
         <GlobalStyles
             styles={{
                 body: {
+                    minWidth: 350,
                     overflowX: 'hidden',
-                    margin: '0 auto',
-                    width: 310,
+                    margin: '0 auto !important',
                     maxWidth: '100%',
-                    backgroundColor: 'transparent',
                     '&::-webkit-scrollbar': {
                         display: 'none',
                     },
@@ -29,15 +29,15 @@ function GlobalCss() {
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        height: 474,
+        minHeight: 550,
         overflow: 'auto',
         display: 'flex',
         flexDirection: 'column',
     },
     header: {
-        padding: '0px 10px',
+        padding: '0 10px',
         backgroundColor: theme.palette.primary.main,
-        height: 40,
+        height: 50,
         display: 'flex',
         justifyContent: 'space-between',
     },
@@ -55,8 +55,7 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'transparent',
-        borderRadius: '4px 4px 0px 0px',
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 500,
         color: theme.palette.primary.contrastText,
         textDecoration: 'none',
@@ -74,40 +73,69 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
     const { t } = useI18N()
     const history = useHistory()
     const { classes } = useStyles()
+    const location = useLocation()
     const personas = useMyPersonas()
 
     const excludePath = useRouteMatch({
-        path: [PopupRoutes.Wallet, PopupRoutes.Personas, PopupRoutes.GasSetting, PopupRoutes.WalletSignRequest],
+        path: [
+            PopupRoutes.Wallet,
+            PopupRoutes.Personas,
+            PopupRoutes.WalletSignRequest,
+            PopupRoutes.ContractInteraction,
+            PopupRoutes.Unlock,
+        ],
+        exact: true,
+    })
+
+    const excludePersonaPath = useRouteMatch({
+        path: [
+            PopupRoutes.ContractInteraction,
+            PopupRoutes.WalletSignRequest,
+            PopupRoutes.GasSetting,
+            PopupRoutes.SelectWallet,
+            PopupRoutes.WalletRecovered,
+            PopupRoutes.Unlock,
+        ],
+        exact: true,
+    })
+
+    const matchRecovery = useRouteMatch({
+        path: PopupRoutes.WalletRecovered,
         exact: true,
     })
 
     return (
         <>
             <GlobalCss />
-            <Paper elevation={0}>
+            <Paper elevation={0} style={{ height: '100vh', overflowY: 'auto', minHeight: 600, borderRadius: 0 }}>
                 <Box className={classes.header}>
                     <Box className={classes.left}>
-                        {excludePath || history.length > 1 ? (
-                            <MiniMaskIcon />
+                        {excludePath || history.length === 1 ? (
+                            <MiniMaskIcon style={{ fontSize: 30 }} />
                         ) : (
-                            <ArrowBackIcon onClick={history.goBack} style={{ fill: '#ffffff', cursor: 'pointer' }} />
+                            <ArrowBackIcon
+                                onClick={history.goBack}
+                                style={{ fill: '#ffffff', cursor: 'pointer', fontSize: 30 }}
+                            />
                         )}
                     </Box>
                     <Box className={classes.right}>
                         <NavLink
                             style={{ marginRight: 5 }}
-                            to={PopupRoutes.Wallet}
+                            to={!excludePersonaPath ? PopupRoutes.Wallet : location}
                             className={classes.nav}
                             activeClassName={classes.active}>
                             {t('wallets')}
                         </NavLink>
-                        <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
-                            {t('personas')}
-                        </NavLink>
+                        {!!excludePersonaPath ? null : (
+                            <NavLink to={PopupRoutes.Personas} className={classes.nav} activeClassName={classes.active}>
+                                {t('personas')}
+                            </NavLink>
+                        )}
                     </Box>
                 </Box>
                 <Box className={classes.container}>
-                    {personas.length === 0 ? <InitialPlaceholder /> : props.children}
+                    {personas.length === 0 && !matchRecovery ? <InitialPlaceholder /> : props.children}
                 </Box>
             </Paper>
         </>

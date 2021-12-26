@@ -5,9 +5,10 @@
   "types": "./dist/index.d.ts",
   "sideEffect": false,
   "dependencies": {
-    "@material-ui/core": "../empty",
-    "@material-ui/icons": "../empty",
-    "@material-ui/lab": "../empty",
+    "@mui/icons-material": "link:..\\empty",
+    "@mui/lab": "link:..\\empty",
+    "@mui/material": "link:..\\empty",
+    "@mui/system": "link:..\\empty",
     "@servie/events": "^3.0.0",
     "@types/react": "link:..\\empty",
     "anchorme": "^2.1.2",

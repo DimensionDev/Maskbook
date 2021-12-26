@@ -1,6 +1,8 @@
 import { unreachable } from '@dimensiondev/kit'
+import { TradeProvider } from '@masknet/public-api'
 import { makeStyles } from '@masknet/theme'
 import { BalancerIcon } from '../../../../resources/BalancerIcon'
+import { BancorIcon } from '../../../../resources/BancorIcon'
 import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'
 import { SushiSwapIcon } from '../../../../resources/SushiSwapIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
@@ -8,7 +10,6 @@ import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { DODOIcon } from '../../../../resources/DODOIcon'
 import { OneInchIcon } from '../../../../resources/OneInchIcon'
 import { resolveTradeProviderName } from '../../pipes'
-import { TradeProvider } from '../../types'
 
 const quickswapIcon = new URL('../../../../resources/quickswap.png', import.meta.url).toString()
 const pancakeswapIcon = new URL('../../../../resources/pancakeswap.png', import.meta.url).toString()
@@ -59,6 +60,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <DODOIcon classes={{ root: classes.icon }} />
         case TradeProvider.ONE_INCH:
             return <OneInchIcon classes={{ root: classes.icon }} />
+        case TradeProvider.BANCOR:
+            return <BancorIcon classes={{ root: classes.icon }} />
         default:
             unreachable(props.provider)
     }

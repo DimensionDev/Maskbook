@@ -2,7 +2,7 @@ import { head } from 'lodash-es'
 import { OpenSeaPort } from 'opensea-js'
 import type { OrderSide } from 'opensea-js/lib/types'
 import stringify from 'json-stable-stringify'
-import { ChainId, getChainName } from '@masknet/web3-shared'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { request, requestSend } from '../../../extension/background-script/EthereumService'
 import { resolveOpenSeaNetwork } from '../pipes'
 import { OpenSeaAPI_Key, OpenSeaBaseURL, OpenSeaRinkebyBaseURL, OpenSeaGraphQLURL, ReferrerAddress } from '../constants'
@@ -23,8 +23,11 @@ function createExternalProvider() {
     }
 }
 
-async function createOpenSeaPort() {
-    const chainId = currentChainIdSettings.value
+async function createOpenSeaPort(chainId?: ChainId) {
+    return createOpenSeaPortChain(chainId ?? currentChainIdSettings.value)
+}
+
+async function createOpenSeaPortChain(chainId: ChainId.Mainnet | ChainId.Rinkeby) {
     return new OpenSeaPort(
         createExternalProvider(),
         {
@@ -35,29 +38,31 @@ async function createOpenSeaPort() {
     )
 }
 
-async function createOpenSeaAPI() {
-    const chainId = currentChainIdSettings.value
-    if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId))
-        throw new Error(`${getChainName(chainId)} is not supported.`)
-    return chainId === ChainId.Mainnet ? OpenSeaBaseURL : OpenSeaRinkebyBaseURL
+async function createOpenSeaAPI(chainId: ChainId) {
+    if (chainId === ChainId.Rinkeby) return OpenSeaRinkebyBaseURL
+    return OpenSeaBaseURL
 }
 
-export async function getAsset(tokenAddress: string, tokenId: string) {
-    const sdkResponse = await (await createOpenSeaPort()).api.getAsset({ tokenAddress, tokenId })
+export async function getAsset(tokenAddress: string, tokenId: string, chainId?: ChainId) {
+    const _chainId = chainId ?? currentChainIdSettings.value
+    const sdkResponse = await (await createOpenSeaPort(_chainId)).api.getAsset({ tokenAddress, tokenId })
+
     const fetchResponse = await (
-        await fetch(urlcat(await createOpenSeaAPI(), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }), {
-            mode: 'cors',
-            headers: {
-                'x-api-key': OpenSeaAPI_Key,
+        await fetch(
+            urlcat(await createOpenSeaAPI(_chainId), '/asset/:tokenAddress/:tokenId', { tokenAddress, tokenId }),
+            {
+                mode: 'cors',
+                headers: {
+                    'x-api-key': OpenSeaAPI_Key,
+                },
             },
-        })
+        )
     ).json()
 
     const endTime = head<{ closing_date: Date }>(
-        fetchResponse.orders.filter(
-            (item: { side: number; closing_extendable: boolean }) => item.side === 1 && item.closing_extendable,
-        ),
+        fetchResponse.orders.filter((item: { side: number; closing_extendable: boolean }) => item.side === 1),
     )?.closing_date
+
     return {
         ...sdkResponse,
         ...fetchResponse,

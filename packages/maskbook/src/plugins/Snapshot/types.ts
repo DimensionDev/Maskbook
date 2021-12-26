@@ -21,9 +21,15 @@ export interface RawVote {
 
 export interface Proposal {
     address: string
+    author: string
     msg: string
-    sig: string
+    title: string
     version: string
+    end: number
+    start: number
+    snapshot: string
+    body: string
+    choices: string[]
     isStart: boolean
     isEnd: boolean
     status: string

@@ -1,13 +1,14 @@
-import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared'
-import { Grid, Link, Paper, Typography } from '@material-ui/core'
+import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isNative } from 'lodash-es'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { useI18N } from '../../../utils'
 import type { RedPacketSettings } from './hooks/useCreateCallback'
-import LaunchIcon from '@material-ui/icons/Launch'
+import LaunchIcon from '@mui/icons-material/Launch'
 import { FormattedBalance } from '@masknet/shared'
 import BigNumber from 'bignumber.js'
+import classNames from 'classnames'
 import { useEffect } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,11 +20,16 @@ const useStyles = makeStyles()((theme) => ({
         paddingTop: theme.spacing(2),
         paddingBottom: theme.spacing(2),
     },
+    gridWrapper: {
+        paddingLeft: theme.spacing(3),
+        paddingRight: theme.spacing(3),
+    },
     hit: {
         fontSize: 14,
         fontWeight: 300,
         borderRadius: 8,
-        backgroundColor: theme.palette.divider,
+        backgroundColor: '#f7f9fa',
+        color: '#15181B',
         padding: theme.spacing(1, 0),
         marginBottom: theme.spacing(1),
     },
@@ -73,7 +79,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     }, [chainId, onClose])
 
     return (
-        <Grid container spacing={2} className={classes.grid}>
+        <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
             <Grid item xs={12}>
                 <Typography variant="h4" color="textPrimary" align="center">
                     {settings?.message}
@@ -158,7 +164,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             </Grid>
             <Grid item xs={12}>
                 <Paper className={classes.hit}>
-                    <Typography variant="body1" color="textPrimary" align="center">
+                    <Typography variant="body1" align="center">
                         {t('plugin_red_packet_hint')}
                     </Typography>
                 </Paper>

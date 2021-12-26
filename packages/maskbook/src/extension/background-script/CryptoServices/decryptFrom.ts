@@ -1,7 +1,7 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
-import { decodeText } from '../../../utils/type-transform/String-ArrayBuffer'
+import { decodeText } from '@dimensiondev/kit'
 import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../utils/i18n-next'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
@@ -16,11 +16,11 @@ import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { delay } from '../../../utils/utils'
 import type { AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
-import { decodeImageUrl } from '../SteganographyService'
+import { steganographyDecodeImageUrl } from './Steganography'
 import type { TypedMessage } from '../../../protocols/typed-message'
 import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
@@ -316,7 +316,7 @@ async function* decryptFromImageUrlWithProgress_raw(
 ): ReturnOfDecryptPostContentWithProgress {
     if (successDecryptionCache.has(url)) return successDecryptionCache.get(url)!
     yield makeProgress('decode_post', true)
-    const post = await decodeImageUrl(url, {
+    const post = await steganographyDecodeImageUrl(url, {
         pass: author.toText(),
     })
     if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
@@ -368,7 +368,7 @@ async function* findAuthorPublicKey(
                     undo()
                     reject()
                 })
-                const undo = MaskMessage.events.profilesChanged.on((data) => {
+                const undo = MaskMessages.events.profilesChanged.on((data) => {
                     for (const x of data) {
                         if (x.reason === 'delete') continue
                         if (x.of.equals(by)) {

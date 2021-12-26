@@ -23,10 +23,7 @@ export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('m-composer__modal m-composer__toolbar > div > *:nth-child(4)', true)
 
 export const postEditorInTimelineSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>(
-        'm-newsfeed m-composer m-composer__toolbar > div > *:nth-child(4), m-channel__feed m-composer m-composer__toolbar > div > *:nth-child(4)',
-        true,
-    )
+    querySelector<E>('m-newsfeed m-composer', true)
 
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('.m-sidebarNavigation__list li:nth-child(11)')
@@ -35,7 +32,7 @@ export const postEditorDraftContentSelector = () => {
     return querySelector<HTMLElement>('m-composer__modal m-composer__textarea textarea.m-composerTextarea__message')
 }
 
-export const handleSelector = () => querySelector<HTMLScriptElement>('.m-user-menu ul li a:first-child')
+export const handleSelector = () => querySelector<HTMLScriptElement, true>('.m-user-menu ul li a:first-child')
 
 export const selfInfoSelectors = () => ({
     handle: handleSelector().map((x) => x.innerText.replace(/@/, '').trim()),

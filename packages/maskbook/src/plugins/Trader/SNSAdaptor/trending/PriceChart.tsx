@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { useWindowSize } from 'react-use'
-import { CircularProgress, Typography } from '@material-ui/core'
+import { CircularProgress, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import RefreshIcon from '@material-ui/icons/Refresh'
+import RefreshIcon from '@mui/icons-material/Refresh'
 import { useI18N } from '../../../../utils'
 import type { Coin, Currency, Stat } from '../../types'
 import { useDimension, Dimension } from '../../../hooks/useDimension'
@@ -63,7 +63,7 @@ export function PriceChart(props: PriceChartProps) {
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
-    //#region make chart responisve
+    //#region make chart responsive
     const { width } = useWindowSize()
     const [responsiveWidth, setResponsiveWidth] = useState(DEFAULT_DIMENSION.width)
     const [responsiveHeight, setResponsiveHeight] = useState(DEFAULT_DIMENSION.height)

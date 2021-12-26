@@ -1,4 +1,4 @@
-import { SvgIconProps, SvgIcon } from '@material-ui/core'
+import { SvgIconProps, SvgIcon } from '@mui/material'
 
 const svg = (
     <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">

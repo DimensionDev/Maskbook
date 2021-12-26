@@ -1,5 +1,5 @@
 import type { ChangeEvent } from 'react'
-import { FormGroup, FormLabel, FormControlLabel, Checkbox } from '@material-ui/core'
+import { FormGroup, FormLabel, FormControlLabel, Checkbox } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 

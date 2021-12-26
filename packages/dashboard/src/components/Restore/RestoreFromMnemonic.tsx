@@ -1,7 +1,7 @@
 import { DesktopMnemonicConfirm } from '../Mnemonic'
 import { useList } from 'react-use'
-import { Box, Button, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
+import { getMaskColor, makeStyles } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { some } from 'lodash-es'
 import { MaskAlert } from '../MaskAlert'
@@ -9,9 +9,10 @@ import { ButtonContainer } from '../RegisterFrame/ButtonContainer'
 import { Services } from '../../API'
 import { PersonaContext } from '../../pages/Personas/hooks/usePersonaContext'
 import { RoutePaths } from '../../type'
-import { useNavigate } from 'react-router'
+import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { getMaskColor } from '@masknet/theme'
+import { SignUpRoutePath } from '../../pages/SignUp/routePath'
+import { LoadingButton } from '../LoadingButton'
 
 const useStyles = makeStyles()((theme) => ({
     error: {
@@ -34,13 +35,16 @@ export const RestoreFromMnemonic = () => {
         try {
             const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
             if (persona) {
-                changeCurrentPersona(persona.identifier)
+                await changeCurrentPersona(persona.identifier)
                 navigate(RoutePaths.Personas, { replace: true })
             } else {
-                setError(t.sign_in_account_private_key_error())
+                navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.PersonaCreate}`, {
+                    replace: false,
+                    state: { mnemonic: values },
+                })
             }
         } catch {
-            setError(t.sign_in_account_private_key_error())
+            setError(t.sign_in_account_mnemonic_confirm_failed())
         }
     }
 
@@ -61,15 +65,16 @@ export const RestoreFromMnemonic = () => {
                 )}
             </Box>
             <ButtonContainer>
-                <Button
+                <LoadingButton
                     variant="rounded"
+                    size="large"
                     color="primary"
                     onClick={handleImport}
                     disabled={some(values, (value) => !value)}>
                     {t.confirm()}
-                </Button>
+                </LoadingButton>
             </ButtonContainer>
-            <Box sx={{ marginTop: '35px' }}>
+            <Box sx={{ pt: 4, pb: 2, width: '100%' }}>
                 <MaskAlert description={t.sign_in_account_identity_warning()} />
             </Box>
         </>

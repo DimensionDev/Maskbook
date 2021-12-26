@@ -1,8 +1,8 @@
 import { MaskBannerIcon } from '@masknet/icons'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { memo } from 'react'
-import { LightColor } from '@masknet/theme/constants'
-import { Container } from '@material-ui/core'
+import { Container } from '@mui/material'
+import { MaskColorVar } from '@masknet/theme'
 
 const LayoutContainer = styled('div')(
     ({ theme }) => `
@@ -10,24 +10,32 @@ const LayoutContainer = styled('div')(
     position: absolute;
     height: 100%;
     width: 100%;
+    background: ${MaskColorVar.primaryBackground}
 `,
 )
 
-const LeftSide = styled('div')(
-    ({ theme }) => `
-    padding: ${theme.spacing(5)};
-    width: 30%;
-    max-width: 500px;
-    background: ${theme.palette.primary.main};
-`,
-)
+const LeftSide = styled('div')(({ theme }) => ({
+    padding: theme.spacing(5),
+    width: '30%',
+    maxWidth: '400px',
+    background: theme.palette.primary.main,
+    [theme.breakpoints.down('md')]: {
+        width: '25%',
+        padding: theme.spacing(3),
+    },
+    [theme.breakpoints.down('sm')]: {
+        display: 'none',
+    },
+}))
 
 const RightContent = styled('div')(
     ({ theme }) => `
     flex: 1;
     display: flex;
     justify-content: center;
-    background: ${theme.palette.mode === 'dark' ? LightColor.textPrimary : theme.palette.common};
+    max-height: 100%;
+    overflow: auto;
+    background: transparent;
 `,
 )
 

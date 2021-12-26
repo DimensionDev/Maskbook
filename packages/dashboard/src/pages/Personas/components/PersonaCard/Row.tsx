@@ -1,20 +1,22 @@
-import { memo, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
-import { SettingsIcon } from '@masknet/icons'
-import { Box, IconButton, MenuItem, Stack, Typography } from '@material-ui/core'
+import { memo, useContext, useState } from 'react'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { PublicKeyIcon, SettingsIcon } from '@masknet/icons'
+import { Box, IconButton, MenuItem, Stack, Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
 import { PersonaIdentifier, ProfileIdentifier, ProfileInformation, useMenu } from '@masknet/shared'
-import { DeletePersonaDialog } from '../DeletePersonaDialog'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { RenameDialog } from '../RenameDialog'
 import type { SocialNetwork } from '../../api'
-import { PublicKeyIcon } from '@masknet/icons'
 import { useToggle } from 'react-use'
 import { UploadAvatarDialog } from '../UploadAvatarDialog'
 import { MaskAvatar } from '../../../../components/MaskAvatar'
 import { ExportPrivateKeyDialog } from '../ExportPrivateKeyDialog'
+import { RoutePaths } from '../../../../type'
+import { useNavigate } from 'react-router-dom'
+import { LogoutPersonaDialog } from '../LogoutPersonaDialog'
+import { UserContext } from '../../../Settings/hooks/UserContext'
+import { styled } from '@mui/material/styles'
 
 const useStyles = makeStyles()((theme) => ({
     setting: {
@@ -23,6 +25,10 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: '-1rem',
         top: '-1rem',
+        [theme.breakpoints.down('md')]: {
+            right: 0,
+            top: 0,
+        },
     },
     icon: {
         cursor: 'pointer',
@@ -36,6 +42,10 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
 }))
+
+const MenuText = styled('span')(`
+    font-size: 14px;
+`)
 
 export const PersonaRowCard = memo(() => {
     const { currentPersona, connectPersona, disconnectPersona, renamePersona, definedSocialNetworks } =
@@ -51,7 +61,7 @@ export const PersonaRowCard = memo(() => {
             onConnect={connectPersona}
             onDisconnect={disconnectPersona}
             onRename={renamePersona}
-            definedSocialNetworks={definedSocialNetworks.filter((x) => !x.networkIdentifier.includes('instagram'))}
+            definedSocialNetworks={definedSocialNetworks}
         />
     )
 })
@@ -63,25 +73,50 @@ export interface PersonaRowCardUIProps {
     definedSocialNetworks: SocialNetwork[]
     onConnect: (identifier: PersonaIdentifier, networkIdentifier: string) => void
     onDisconnect: (identifier: ProfileIdentifier) => void
-    onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => void
+    onRename: (identifier: PersonaIdentifier, target: string, callback?: () => void) => Promise<void>
 }
 
 export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
-    const { nickname, definedSocialNetworks, identifier, profiles } = props
-    const { onConnect, onDisconnect, onRename } = props
-    const [avatarOn, toggleAvatar] = useToggle(false)
-
+    const navigate = useNavigate()
     const t = useDashboardI18N()
     const { classes } = useStyles()
+    const { confirmPassword } = useContext(UserContext)
+
+    const { nickname, definedSocialNetworks, identifier, profiles } = props
+    const { onConnect, onDisconnect, onRename } = props
+
+    const [avatarOn, toggleAvatar] = useToggle(false)
     const [renameDialogOpen, setRenameDialogOpen] = useState(false)
-    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+    const [logoutDialogOpen, setLogoutDialogOpen] = useState(false)
     const [exportPrivateKeyDialogOpen, setExportPrivateKeyDialogOpen] = useState(false)
 
+    const logoutConfirmedPasswordCallback = () =>
+        confirmPassword(() => setLogoutDialogOpen(true), {
+            tipTitle: t.personas_logout(),
+            tipContent: t.personas_logout_confirm_password_tip(),
+            confirmTitle: t.personas_logout(),
+            force: false,
+        })
+
+    const exportPrivateKeyConfirmedPasswordCallback = () =>
+        confirmPassword(() => setExportPrivateKeyDialogOpen(true), {
+            tipTitle: t.personas_export_persona(),
+            tipContent: t.personas_export_persona_confirm_password_tip(),
+            confirmTitle: t.personas_export_persona(),
+        })
+
     const [menu, openMenu] = useMenu(
-        <MenuItem onClick={() => setRenameDialogOpen(true)}>{t.personas_edit()}</MenuItem>,
-        <MenuItem onClick={() => setExportPrivateKeyDialogOpen(true)}>{t.personas_export_private()}</MenuItem>,
-        <MenuItem onClick={() => setDeleteDialogOpen(true)} style={{ color: MaskColorVar.redMain }}>
-            {t.personas_delete()}
+        <MenuItem onClick={() => setRenameDialogOpen(true)}>
+            <MenuText>{t.personas_rename()}</MenuText>
+        </MenuItem>,
+        <MenuItem onClick={exportPrivateKeyConfirmedPasswordCallback}>
+            <MenuText>{t.personas_export_private()}</MenuText>
+        </MenuItem>,
+        <MenuItem onClick={() => navigate(RoutePaths.Settings, { state: { open: 'setting' } })}>
+            <MenuText>{t.settings_global_backup_title()}</MenuText>
+        </MenuItem>,
+        <MenuItem onClick={logoutConfirmedPasswordCallback} style={{ color: MaskColorVar.redMain }}>
+            <MenuText>{t.personas_logout()}</MenuText>
         </MenuItem>,
     )
 
@@ -106,11 +141,12 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
             </Stack>
             <Box sx={{ flex: 3 }}>
                 <Box
+                    height={22}
                     sx={{
                         display: 'inline-flex',
                         alignItems: 'center',
                     }}>
-                    <Box sx={{ mr: 1.5 }} className={classes.accountIcon}>
+                    <Box sx={{ mr: 1.5, py: '2px', height: '100%' }} className={classes.accountIcon}>
                         <PublicKeyIcon />
                     </Box>
                     <Typography variant="body1" sx={{ fontSize: 13 }} component="span">
@@ -119,46 +155,50 @@ export const PersonaRowCardUI = memo<PersonaRowCardUIProps>((props) => {
                 </Box>
                 <Box>
                     {definedSocialNetworks.map(({ networkIdentifier }) => {
-                        const profile = profiles?.find((x) => x.identifier.network === networkIdentifier)
-                        if (profile) {
+                        const currentNetworkProfiles = profiles.filter(
+                            (x) => x.identifier.network === networkIdentifier,
+                        )
+
+                        currentNetworkProfiles.map(() => {})
+                        if (!currentNetworkProfiles.length) {
                             return (
-                                <Box key={networkIdentifier} sx={{ mt: 1 }}>
-                                    <ConnectedPersonaLine
-                                        onConnect={() => onConnect(identifier, networkIdentifier)}
-                                        onDisconnect={() => onDisconnect(profile.identifier)}
-                                        userId={profile.identifier.userId}
-                                        networkIdentifier={networkIdentifier}
-                                    />
-                                </Box>
+                                <UnconnectedPersonaLine
+                                    key={networkIdentifier}
+                                    onConnect={() => onConnect(identifier, networkIdentifier)}
+                                    networkIdentifier={networkIdentifier}
+                                />
                             )
                         } else {
                             return (
-                                <Box key={networkIdentifier} sx={{ mt: 1 }}>
-                                    <UnconnectedPersonaLine
-                                        key={networkIdentifier}
-                                        onConnect={() => onConnect(identifier, networkIdentifier)}
-                                        networkIdentifier={networkIdentifier}
-                                    />
-                                </Box>
+                                <ConnectedPersonaLine
+                                    isHideOperations={false}
+                                    key={networkIdentifier}
+                                    onConnect={() => onConnect(identifier, networkIdentifier)}
+                                    onDisconnect={onDisconnect}
+                                    profileIdentifiers={currentNetworkProfiles.map((x) => x.identifier)}
+                                    networkIdentifier={networkIdentifier}
+                                />
                             )
                         }
                     })}
                 </Box>
             </Box>
             {menu}
-            <RenameDialog
-                open={renameDialogOpen}
-                nickname={nickname}
-                onClose={() => setRenameDialogOpen(false)}
-                onConfirm={(name) => {
-                    onRename(identifier, name)
-                    setRenameDialogOpen(false)
-                }}
-            />
-            <DeletePersonaDialog
-                open={deleteDialogOpen}
-                onClose={() => setDeleteDialogOpen(false)}
-                nickname={nickname}
+            {renameDialogOpen && (
+                <RenameDialog
+                    open={renameDialogOpen}
+                    nickname={nickname}
+                    onClose={() => setRenameDialogOpen(false)}
+                    onConfirm={async (name) => {
+                        await onRename(identifier, name)
+                        setRenameDialogOpen(false)
+                    }}
+                />
+            )}
+            <LogoutPersonaDialog
+                open={logoutDialogOpen}
+                identifier={identifier}
+                onClose={() => setLogoutDialogOpen(false)}
             />
             <ExportPrivateKeyDialog
                 open={exportPrivateKeyDialogOpen}

@@ -1,6 +1,5 @@
 import {
     Button,
-    Card,
     List,
     ListItem,
     ListItemText,
@@ -8,23 +7,16 @@ import {
     DialogTitle,
     DialogActions,
     DialogContent,
-} from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
+} from '@mui/material'
 
-const useStyles = makeStyles()((theme) => ({
-    root: {
-        margin: theme.spacing(2, 2, 2, 2),
-    },
-}))
 export interface RequestPermissionProps extends browser.permissions.Permissions {
     onRequestApprove(): void
     onCancel(): void
 }
 export function RequestPermission(props: RequestPermissionProps) {
-    const { classes } = useStyles()
     const { origins, permissions } = props
     return (
-        <Card className={classes.root}>
+        <>
             <DialogTitle>Mask needs the following permissions</DialogTitle>
             <DialogContent>
                 {origins?.length ? (
@@ -54,6 +46,6 @@ export function RequestPermission(props: RequestPermissionProps) {
                     Approve
                 </Button>
             </DialogActions>
-        </Card>
+        </>
     )
 }

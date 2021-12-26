@@ -6,9 +6,9 @@ import {
     pow10,
     TransactionStateType,
     useAccount,
-    useTokenBalance,
-} from '@masknet/web3-shared'
-import { DialogContent } from '@material-ui/core'
+    useFungibleTokenBalance,
+} from '@masknet/web3-shared-evm'
+import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -17,6 +17,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -108,7 +109,7 @@ export function InvestDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 
     //#region blocking
@@ -152,7 +153,13 @@ export function InvestDialog() {
                 ? [
                       `I just invested ${formatBalance(amount, token.decimals)} ${cashTag}${token.symbol} in ${
                           pool?.name
-                      }. Follow @realMaskbook (mask.io) to invest dHEDGE pools.`,
+                      }. ${
+                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                              ? `Follow @${
+                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                                } (mask.io) to invest dHEDGE pools.`
+                              : ''
+                      }`,
                       '#mask_io',
                   ].join('\n')
                 : '',
@@ -166,13 +173,12 @@ export function InvestDialog() {
             (ev) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
-                    openSwapDialog({ open: false })
                     if (investState.type === TransactionStateType.HASH) onClose()
                 }
                 if (investState.type === TransactionStateType.HASH) setRawAmount('')
                 resetInvestCallback()
             },
-            [id, investState, openSwapDialog, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
+            [id, investState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
         ),
     )
 

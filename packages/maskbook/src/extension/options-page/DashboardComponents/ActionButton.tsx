@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react'
-import { Button, CircularProgress } from '@material-ui/core'
+import { Button, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { ButtonProps } from '@material-ui/core/Button'
-import CheckIcon from '@material-ui/icons/Check'
-import ErrorIcon from '@material-ui/icons/Error'
-import { red, green } from '@material-ui/core/colors'
+import type { ButtonProps } from '@mui/material/Button'
+import CheckIcon from '@mui/icons-material/Check'
+import ErrorIcon from '@mui/icons-material/Error'
+import { red, green } from '@mui/material/colors'
 import classNames from 'classnames'
 import { useDebounce, useAsyncFn } from 'react-use'
 import { useErrorStyles } from '../../../utils/theme'
@@ -58,7 +58,7 @@ export function DebounceButton(_props: DebounceButtonProps) {
     )
 }
 
-interface ActionButtonProps extends ButtonProps {
+export interface ActionButtonProps extends ButtonProps {
     width?: number | string
     loading?: boolean
     component?: keyof JSX.IntrinsicElements | React.ComponentType<any>
@@ -92,6 +92,7 @@ interface ActionButtonPromiseProps extends ButtonProps {
     failedOnClick?: 'use executor' | (() => void)
     completeIcon?: React.ReactNode
     failIcon?: React.ReactNode
+    onComplete?: () => void
 }
 type ActionButtonPromiseState = 'init' | 'complete' | 'wait' | 'fail'
 export function ActionButtonPromise(props: ActionButtonPromiseProps) {
@@ -105,6 +106,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
         completeOnClick,
         waitingOnClick,
         failedOnClick,
+        onComplete,
         completeIcon = <CheckIcon />,
         failIcon = <ErrorIcon />,
         ...b
@@ -117,7 +119,10 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const run = () => {
         setState('wait')
         executor().then(
-            () => setState('complete'),
+            () => {
+                setState('complete')
+                onComplete?.()
+            },
             () => setState('fail'),
         )
     }
@@ -155,6 +160,7 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
 }
 const useStyles = makeStyles()({
     success: {
+        color: '#fff',
         backgroundColor: green[500],
         '&:hover': {
             backgroundColor: green[700],

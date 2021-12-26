@@ -1,4 +1,4 @@
-import { SvgIcon, SvgIconProps } from '@material-ui/core'
+import { SvgIcon, SvgIconProps } from '@mui/material'
 
 export const SwapIcon: React.FC = (props: SvgIconProps) => (
     <SvgIcon {...props}>

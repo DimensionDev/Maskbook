@@ -1,4 +1,4 @@
-import { MenuItem } from '@material-ui/core'
+import { MenuItem } from '@mui/material'
 import { useLanguage } from '../api'
 import { Services } from '../../../API'
 import SettingSelect from './SettingSelect'
@@ -12,20 +12,21 @@ export default function LanguageSetting() {
     }
     const t = useDashboardI18N()
 
+    // cspell:ignore lengua, española, française, русский язык, زبان فارسی
     // Some languages are not ready to ship to the users. Only display them in beta/insider version.
     return (
         <SettingSelect value={lang} onChange={handleChange}>
             <MenuItem value={LanguageOptions.__auto__}>{t.settings_language_auto()}</MenuItem>
             <MenuItem value={LanguageOptions.enUS}>English</MenuItem>
-            {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.zhCN}>简体中文</MenuItem>}
-            <MenuItem value={LanguageOptions.zhTW}>正體中文</MenuItem>
+            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.zhCN}>简体中文</MenuItem>}
+            <MenuItem value={LanguageOptions.zhTW}>繁体中文</MenuItem>
             <MenuItem value={LanguageOptions.jaJP}>日本語</MenuItem>
             <MenuItem value={LanguageOptions.koKR}>한국인</MenuItem>
-            {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.esES}>lengua española</MenuItem>}
-            {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.itIT}>lingua italiana</MenuItem>}
-            {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.frFR}>langue française</MenuItem>}
-            {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.ruRU}>русский язык</MenuItem>}
-            {process.env.build !== 'stable' && <MenuItem value={LanguageOptions.faIR}>زبان فارسی</MenuItem>}
+            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.esES}>lengua española</MenuItem>}
+            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.itIT}>lingua italiana</MenuItem>}
+            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.frFR}>langue française</MenuItem>}
+            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.ruRU}>русский язык</MenuItem>}
+            {process.env.channel !== 'stable' && <MenuItem value={LanguageOptions.faIR}>زبان فارسی</MenuItem>}
         </SettingSelect>
     )
 }

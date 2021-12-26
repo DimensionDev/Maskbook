@@ -1,14 +1,16 @@
-import { Typography, styled } from '@material-ui/core'
+import { Typography, styled } from '@mui/material'
+import { MaskColorVar } from '@masknet/theme'
 
 const Card = styled('div')(({ theme }) => ({
     borderRadius: Number(theme.shape.borderRadius) * 3,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: MaskColorVar.primaryBackground,
     padding: theme.spacing(5),
     marginBottom: theme.spacing(2),
 }))
 
 const CardTitle = styled(Typography)(({ theme }) => ({
     fontSize: 18,
+    fontWeight: 600,
     color: theme.palette.text.primary,
     paddingBottom: theme.spacing(4),
 }))

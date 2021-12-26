@@ -1,15 +1,14 @@
-import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
-import { useI18N } from '../../../../utils'
-import PriorityHighIcon from '@material-ui/icons/PriorityHigh'
-import { getMaskColor, useSnackbar } from '@masknet/theme'
 import { useCallback } from 'react'
-import { WalletMessages, WalletRPC } from '../../messages'
-import { useRemoteControlledDialog } from '@masknet/shared'
-import { useAccount } from '@masknet/web3-shared'
 import classnames from 'classnames'
 import { Trans } from 'react-i18next'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { formatEthereumAddress, useAccount } from '@masknet/web3-shared-evm'
+import PriorityHighIcon from '@mui/icons-material/PriorityHigh'
+import { Avatar, Button, DialogActions, DialogContent, Paper, Typography } from '@mui/material'
+import { getMaskColor, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
+import { useI18N, useMatchXS } from '../../../../utils'
+import { WalletMessages, WalletRPC } from '../../messages'
 import { ActionButtonPromise } from '../../../../extension/options-page/DashboardComponents/ActionButton'
 
 const useStyles = makeStyles()((theme) => ({
@@ -24,6 +23,9 @@ const useStyles = makeStyles()((theme) => ({
     },
     button: {
         borderRadius: 9999,
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            marginBottom: theme.spacing(2),
+        },
     },
     cancel: {
         backgroundColor: getMaskColor(theme).twitterBackground,
@@ -58,7 +60,8 @@ export function WalletRiskWarningDialog() {
     const { t } = useI18N()
     const { classes } = useStyles()
     const account = useAccount()
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
+    const isMobile = useMatchXS()
     const { open, setDialog } = useRemoteControlledDialog(WalletMessages.events.walletRiskWarningDialogUpdated)
 
     const onClose = useCallback(async () => {
@@ -68,7 +71,7 @@ export function WalletRiskWarningDialog() {
 
     const onConfirm = useCallback(async () => {
         if (!account) {
-            enqueueSnackbar(t('wallet_risk_warning_no_select_wallet'), {
+            showSnackbar(t('wallet_risk_warning_no_select_wallet'), {
                 variant: 'error',
                 preventDuplicate: true,
             })
@@ -76,10 +79,13 @@ export function WalletRiskWarningDialog() {
         }
         await WalletRPC.confirmRiskWarning(account)
         setDialog({ open: false, type: 'confirm' })
-    }, [enqueueSnackbar, account, setDialog])
+    }, [showSnackbar, account, setDialog])
 
     return (
-        <InjectedDialog title={t('wallet_risk_warning_dialog_title')} open={open} onClose={onClose}>
+        <InjectedDialog
+            title={isMobile ? undefined : t('wallet_risk_warning_dialog_title')}
+            open={open}
+            onClose={onClose}>
             <DialogContent>
                 <Paper className={classes.paper} elevation={0}>
                     <div className={classes.icon}>
@@ -97,19 +103,19 @@ export function WalletRiskWarningDialog() {
                         variant="body2"
                         children={<Trans i18nKey="multiline">{t('wallet_risk_warning_content')}</Trans>}
                     />
-                    <Paper elevation={0} className={classes.wallet}>
+                    <Paper elevation={0} className={`${classes.wallet} dashboard-style`}>
                         <Typography variant="body1" color="textSecondary">
                             Wallet
                         </Typography>
                         <Typography variant="body1" color="textPrimary">
-                            {account}
+                            {isMobile ? formatEthereumAddress(account, 5) : account}
                         </Typography>
                     </Paper>
                 </Paper>
             </DialogContent>
             <DialogActions className={classes.buttons}>
                 <Button
-                    className={classnames(classes.button, classes.cancel)}
+                    className={classnames(classes.button, classes.cancel, 'dashboard-style')}
                     fullWidth
                     variant="outlined"
                     onClick={onClose}

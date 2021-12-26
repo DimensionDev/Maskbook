@@ -12,10 +12,17 @@ export interface PersonaInformation {
 export interface ProfileInformation {
     /** The nickname of the profile. Should be used in prior. */
     nickname?: string
+    avatar?: string
     identifier: ProfileIdentifier
 }
+
+export enum RelationFavor {
+    COLLECTED = -1,
+    UNCOLLECTED = 1,
+    DEPRECATED = 0,
+}
 export interface RelationProfile {
-    favorite?: number
+    favorite?: boolean
     avatar?: string
     name: string
     fingerprint?: string
@@ -25,6 +32,6 @@ export interface RelationProfile {
 export interface Relation {
     profile: ProfileIdentifier
     linked: PersonaIdentifier
-    favor: 0 | 1
+    favor: RelationFavor
     network: string
 }

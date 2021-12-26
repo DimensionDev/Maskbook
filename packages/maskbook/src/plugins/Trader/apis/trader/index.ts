@@ -1,10 +1,9 @@
 import { safeUnreachable } from '@dimensiondev/kit'
-import { getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared'
-import { currentChainIdSettings } from '../../../Wallet/settings'
-import { TagType, TradeProvider } from '../../types'
+import { TradeProvider } from '@masknet/public-api'
+import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 
-export async function getAvailableTraderProviders(type?: TagType, keyword?: string) {
-    const networkType = getNetworkTypeFromChainId(currentChainIdSettings.value)
+export async function getAvailableTraderProviders(chainId: ChainId) {
+    const networkType = getNetworkTypeFromChainId(chainId)
     if (!networkType) return []
     switch (networkType) {
         case NetworkType.Ethereum:
@@ -17,6 +16,7 @@ export async function getAvailableTraderProviders(type?: TagType, keyword?: stri
                 TradeProvider.BALANCER,
                 TradeProvider.DODO,
                 TradeProvider.ONE_INCH,
+                TradeProvider.BANCOR,
             ]
         case NetworkType.Polygon:
             return [

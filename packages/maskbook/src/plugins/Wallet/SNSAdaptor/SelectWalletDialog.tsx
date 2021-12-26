@@ -1,15 +1,14 @@
 import { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
-import { Button, DialogActions, DialogContent } from '@material-ui/core'
+import { Button, DialogActions, DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared'
+import { ProviderType, useWallets, useWallet, NetworkType } from '@masknet/web3-shared-evm'
 import { delay, useI18N } from '../../../utils'
-import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
+import { DashboardRoutes, useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages, WalletRPC } from '../messages'
 import { WalletInList } from '../../../components/shared/SelectWallet/WalletInList'
 import Services from '../../../extension/service'
-import { DashboardRoute } from '../../../extension/options-page/Route'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { useState } from 'react'
 
@@ -26,7 +25,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    const wallets = useWallets(ProviderType.Maskbook)
+    const wallets = useWallets(ProviderType.MaskWallet)
     const selectedWallet = useWallet()
 
     //#region remote controlled dialog logic
@@ -42,8 +41,7 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
             closeDialog()
             await WalletRPC.updateAccount({
                 account: address,
-                chainId: undefined,
-                providerType: ProviderType.Maskbook,
+                providerType: ProviderType.MaskWallet,
                 networkType,
             })
         },
@@ -55,8 +53,8 @@ function SelectWalletDialogUI(props: SelectWalletDialogUIProps) {
     const onCreate = useCallback(async () => {
         closeDialog()
         await delay(100)
-        if (isEnvironment(Environment.ManifestOptions)) history.push(`${DashboardRoute.Wallets}?create=${Date.now()}`)
-        else await Services.Welcome.openOptionsPage(DashboardRoute.Wallets, `create=${Date.now()}`)
+        if (isEnvironment(Environment.ManifestOptions)) history.push('')
+        else await Services.Welcome.openOptionsPage(DashboardRoutes.CreateMaskWallet, `create=${Date.now()}`)
     }, [history, closeDialog])
     //#endregion
 

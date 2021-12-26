@@ -1,39 +1,45 @@
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import formatDateTime from 'date-fns/format'
-import type { Transaction } from '@masknet/web3-shared'
-import { Box, TableCell, TableRow, Typography, Link } from '@material-ui/core'
+import type { Transaction } from '@masknet/web3-shared-evm'
+import { Box, TableCell, TableRow, Typography, Link, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     ChainId,
     DebankTransactionDirection,
-    resolveLinkOnExplorer,
+    formatEthereumAddress,
+    resolveTransactionLinkOnExplorer,
+    TransactionType,
     useChainId,
     ZerionTransactionDirection,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { TransactionIcon } from '../TransactionIcon'
 import { LinkOutIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
 import classNames from 'classnames'
-import { formatEthereumAddress } from '@masknet/web3-shared'
 
 const useStyles = makeStyles()((theme) => ({
     type: {
-        marginLeft: 14,
+        maxWidth: '240px',
+        textOverflow: 'ellipsis',
+        textTransform: 'capitalize',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
     },
     cell: {
-        padding: '16px 28px',
+        padding: `${theme.spacing(1.25)} ${theme.spacing(2.5)}`,
         border: 'none',
         fontSize: theme.typography.pxToRem(14),
     },
     link: {
-        display: 'flex',
+        display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
+        height: 21,
         color: MaskColorVar.textPrimary,
     },
     linkIcon: {
         fill: 'none',
-        fontSize: 20,
+        fontSize: 16,
         marginLeft: 10,
     },
     pair: {
@@ -50,14 +56,23 @@ export interface HistoryTableRowProps {
 
 export const HistoryTableRow = memo<HistoryTableRowProps>(({ transaction }) => {
     const chainId = useChainId()
-    return <HistoryTableRowUI transaction={transaction} chainId={chainId} />
+
+    const transactionType = useMemo(() => {
+        if (transaction.type === TransactionType.CREATE_RED_PACKET) {
+            return 'Create Luck Drop'
+        }
+        return (transaction.type ?? '').replace(/_/g, ' ')
+    }, [transaction.type])
+
+    return <HistoryTableRowUI transaction={transaction} formattedType={transactionType} chainId={chainId} />
 })
 
 export interface HistoryTableRowUIProps extends HistoryTableRowProps {
     chainId: ChainId
+    formattedType: string
 }
 
-export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId }) => {
+export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, chainId, formattedType }) => {
     const { classes } = useStyles()
     return (
         <TableRow>
@@ -65,10 +80,18 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                 <Box style={{ display: 'flex', alignItems: 'center' }}>
                     <TransactionIcon
                         transactionType={transaction.transactionType}
+                        type={transaction.type}
                         address={transaction.toAddress}
                         failed={transaction.failed}
                     />
-                    <Typography className={classes.type}>{transaction.type}</Typography>
+                    <Stack pl={2}>
+                        <Typography textAlign="left" className={classes.type} variant="body2">
+                            {formattedType}
+                        </Typography>
+                        <Typography fontSize={12} textAlign="left" color={MaskColorVar.textSecondary}>
+                            {formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}
+                        </Typography>
+                    </Stack>
                 </Box>
             </TableCell>
             <TableCell className={classes.cell} align="center">
@@ -77,24 +100,36 @@ export const HistoryTableRowUI = memo<HistoryTableRowUIProps>(({ transaction, ch
                         pair.direction === DebankTransactionDirection.SEND ||
                         pair.direction === ZerionTransactionDirection.OUT
                     return (
-                        <div key={index} className={classNames(classes.pair, { [classes.send]: direction })}>
-                            <span>{direction ? '-' : '+'}</span>
-                            <span>{pair.amount.toFixed(pair.amount < 1 ? 6 : 2)}</span>
-                            <span style={{ color: MaskColorVar.textPrimary, marginLeft: 10 }}>{pair.symbol}</span>
-                        </div>
+                        <Stack
+                            key={index}
+                            className={classNames(classes.pair, { [classes.send]: direction })}
+                            justifyContent="center"
+                            gap={2}
+                            direction="row">
+                            <Box width="50%" flexGrow={0} flexShrink={0} textAlign="right">
+                                <span>{direction ? '-' : '+'}</span>
+                                <span>{pair.amount.toFixed(pair.amount < 1 ? 6 : 2)}</span>
+                            </Box>
+                            <Box width="50%" flexGrow={0} flexShrink={0} textAlign="left">
+                                <Typography variant="body2" color={MaskColorVar.textPrimary}>
+                                    {pair.symbol}
+                                </Typography>
+                            </Box>
+                        </Stack>
                     )
                 })}
             </TableCell>
             <TableCell className={classes.cell} align="center">
-                <Typography fontSize="inherit">{formatDateTime(transaction.timeAt, 'yyyy-MM-dd HH:mm')}</Typography>
-            </TableCell>
-            <TableCell className={classes.cell} align="center">
-                <Link
-                    href={`${resolveLinkOnExplorer(chainId)}/address/${transaction.toAddress}`}
-                    className={classes.link}>
-                    <span>{formatEthereumAddress(transaction.toAddress, 5)}</span>
-                    <LinkOutIcon className={classes.linkIcon} />
-                </Link>
+                <Box className={classes.link}>
+                    <Typography variant="body2">{formatEthereumAddress(transaction.toAddress, 4)}</Typography>
+                    <Link
+                        sx={{ height: 21 }}
+                        href={resolveTransactionLinkOnExplorer(chainId, transaction.id)}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        <LinkOutIcon className={classes.linkIcon} />
+                    </Link>
+                </Box>
             </TableCell>
         </TableRow>
     )

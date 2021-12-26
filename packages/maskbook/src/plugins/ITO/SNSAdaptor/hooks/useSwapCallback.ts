@@ -11,13 +11,11 @@ import {
     TransactionEventType,
     TransactionStateType,
     useAccount,
-    useGasPrice,
-    useNonce,
     useChainId,
     useTransactionState,
     isSameAddress,
     useITOConstants,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
@@ -36,8 +34,6 @@ export function useSwapCallback(
 ) {
     const { t } = useI18N()
 
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
@@ -190,8 +186,6 @@ export function useSwapCallback(
                           })
                           throw error
                       }),
-            gasPrice,
-            nonce,
             value,
         }
 
@@ -213,37 +207,16 @@ export function useSwapCallback(
                 })
                 reject(error)
             }
-            const onHash = (hash: string) => {
-                setSwapState({
-                    type: TransactionStateType.HASH,
-                    hash,
-                })
-                resolve()
-            }
-            const promiEvent = (
-                version === 1
-                    ? (ITO_Contract as ITO).methods.swap(...swapParamsV1)
-                    : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)
-            ).send(config as PayableTx)
-
-            promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, onHash)
-                .on(TransactionEventType.ERROR, onFailed)
-                .on(TransactionEventType.CONFIRMATION, onSucceed)
+            ;(version === 1
+                ? (ITO_Contract as ITO).methods.swap(...swapParamsV1)
+                : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)
+            )
+                .send(config as PayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
+                .on(TransactionEventType.CONFIRMATION, onSucceed)
+                .on(TransactionEventType.ERROR, onFailed)
         })
-    }, [
-        gasPrice,
-        nonce,
-        ITO_Contract,
-        chainId,
-        qualificationContract,
-        account,
-        payload,
-        total,
-        token.address,
-        isQualificationHasLucky,
-    ])
+    }, [ITO_Contract, chainId, qualificationContract, account, payload, total, token.address, isQualificationHasLucky])
 
     const resetCallback = useCallback(() => {
         setSwapState({

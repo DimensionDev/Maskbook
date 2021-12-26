@@ -1,6 +1,6 @@
 import type { RelationProfile } from '@masknet/shared'
 import { memo, useCallback } from 'react'
-import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@material-ui/core'
+import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { StarIcon, MaskBlueIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
@@ -10,7 +10,7 @@ import { generateContactAvatarColor } from '../../../../utils/generateContactAva
 import { useAddContactToFavorite, useRemoveContactFromFavorite } from '../../hooks/useFavoriteContact'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useAsyncFn } from 'react-use'
-import { LoadingButton } from '@material-ui/lab'
+import { LoadingButton } from '@mui/lab'
 
 const useStyles = makeStyles()({
     favorite: {
@@ -49,9 +49,10 @@ export interface ContactTableRowProps {
     contact: RelationProfile
     index: number
     network: string
+    onReset: () => void
 }
 
-export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, index }) => {
+export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, index, onReset }) => {
     const t = useDashboardI18N()
     const { currentPersona } = PersonaContext.useContainer()
     const [, addContactToFavorite] = useAddContactToFavorite()
@@ -59,16 +60,17 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
 
     const theme = useTheme().palette.mode
 
-    const handleClickStar = useCallback(() => {
+    const handleClickStar = useCallback(async () => {
         if (currentPersona) {
             contact.favorite
-                ? removeContactFromFavorite(contact.identifier, currentPersona)
-                : addContactToFavorite(contact.identifier, currentPersona)
+                ? await removeContactFromFavorite(contact.identifier, currentPersona)
+                : await addContactToFavorite(contact.identifier, currentPersona)
+            onReset()
         }
-    }, [contact, currentPersona])
+    }, [contact, currentPersona, onReset])
 
     const [{ loading }, handleClickInvite] = useAsyncFn(async () => {
-        return Services.Helper.createNewWindowAndPasteShareContent(
+        return Services.SocialNetwork.openShareLink(
             network,
             t.personas_invite_post({ identifier: contact.identifier.userId }),
         )
@@ -86,13 +88,16 @@ export const ContactTableRow = memo<ContactTableRowProps>(({ network, contact, i
     )
 })
 
-export interface ContactTableRowUIProps extends Omit<ContactTableRowProps, 'network'> {
+export interface ContactTableRowUIProps {
+    contact: RelationProfile
+    index: number
     handleClickInvite(): void
     handleClickStar(): void
     loading: boolean
     theme: 'light' | 'dark'
 }
 
+const SPACE_CODEPOINT = ' '.codePointAt(0)!
 export const ContactTableRowUI = memo<ContactTableRowUIProps>(
     ({ contact, index, handleClickStar, handleClickInvite, theme, loading }) => {
         const t = useDashboardI18N()
@@ -101,7 +106,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
 
         return (
             <TableRow>
-                <TableCell align="left" variant="body">
+                <TableCell align="left" variant="body" sx={{ border: 'none', p: 1.5 }}>
                     <Box display="flex" alignItems="center">
                         <Typography>{index}</Typography>
                         <Box className={classes.favorite}>
@@ -124,8 +129,9 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                                     width: 48,
                                     height: 48,
                                 }}>
-                                {first[0]}
-                                {(last || '')[0]}
+                                {/* To support emoji */}
+                                {String.fromCodePoint(first.codePointAt(0) || SPACE_CODEPOINT)}
+                                {String.fromCodePoint((last || '').codePointAt(0) || SPACE_CODEPOINT)}
                             </Avatar>
                             {contact.fingerprint ? <MaskBlueIcon className={classes.maskIcon} /> : null}
                         </Box>
@@ -135,7 +141,7 @@ export const ContactTableRowUI = memo<ContactTableRowUIProps>(
                         </Box>
                     </Box>
                 </TableCell>
-                <TableCell align="center">
+                <TableCell align="center" sx={{ border: 'none' }}>
                     {!contact.fingerprint ? (
                         <LoadingButton
                             loading={loading}

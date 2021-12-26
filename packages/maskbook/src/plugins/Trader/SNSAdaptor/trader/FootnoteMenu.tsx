@@ -1,7 +1,6 @@
-import { useState } from 'react'
-import { Typography, MenuItem, Link } from '@material-ui/core'
+import { Typography, MenuItem, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { ShadowRootMenu } from '../../../../utils/shadow-root/ShadowRootComponents'
+import { useMenu } from '../../../../utils'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -31,29 +30,37 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
     const { children, options, selectedIndex = -1, onChange } = props
 
     const { classes } = useStyles()
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-    const onOpen = (event: React.MouseEvent<HTMLAnchorElement>) => setAnchorEl(event.currentTarget)
     const onSelect = (option: FootnoteMenuOption) => {
         onChange?.(option)
-        onClose()
     }
-    const onClose = () => setAnchorEl(null)
+    const [menu, openMenu] = useMenu(
+        options.map((x, i) => (
+            <MenuItem selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
+                {x.name}
+            </MenuItem>
+        )),
+        false,
+        {
+            anchorOrigin: {
+                vertical: 'top',
+                horizontal: 'left',
+            },
+            transformOrigin: {
+                vertical: 'bottom',
+                horizontal: 'left',
+            },
+        },
+    )
 
     return (
         <>
-            <Link className={classes.link} color="inherit" underline="none" onClick={onOpen}>
+            <Link className={classes.link} color="inherit" underline="none" onClick={openMenu}>
                 <Typography className={classes.title} variant="subtitle2">
                     {options[selectedIndex]?.name}
                 </Typography>
                 {children}
             </Link>
-            <ShadowRootMenu open={!!anchorEl} onClose={onClose} anchorEl={anchorEl}>
-                {options.map((x, i) => (
-                    <MenuItem selected={selectedIndex === i} key={x.value} onClick={() => onSelect(x)}>
-                        {x.name}
-                    </MenuItem>
-                ))}
-            </ShadowRootMenu>
+            {menu}
         </>
     )
 }

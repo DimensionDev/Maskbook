@@ -1,14 +1,16 @@
 import { memo, useState } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
-import { TabContext, TabPanel } from '@material-ui/lab'
-import { Tab, Tabs, Box, Button } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar } from '@masknet/theme'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { Box, Button, Tab } from '@mui/material'
+import { makeStyles, useTabs } from '@masknet/theme'
 import { TokenTable } from '../TokenTable'
 import { useDashboardI18N } from '../../../../locales'
-import { AddTokenDialog } from '../AddTokenDialog'
 import { CollectibleList } from '../CollectibleList'
 import { AddCollectibleDialog } from '../AddCollectibleDialog'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { PluginMessages } from '../../../../API'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { useCurrentCollectibleDataProvider } from '../../api'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -16,17 +18,14 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        borderBottom: `1px solid ${MaskColorVar.lineLighter}`,
     },
     addCustomTokenButton: {
         borderRadius: Number(theme.shape.borderRadius) * 3.5,
         fontSize: theme.typography.caption.fontSize,
-        lineHeight: theme.typography.pxToRem(16),
     },
     tab: {
         flex: 1,
         padding: '0px',
-        overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
     },
@@ -35,64 +34,72 @@ const useStyles = makeStyles()((theme) => ({
 export enum AssetTab {
     Token = 'Token',
     Investment = 'Investment',
-    Collections = 'Collections',
+    Collectibles = 'Collectibles',
 }
 
-const assetTabs = [AssetTab.Token, AssetTab.Collections] as const
+const assetTabs = [AssetTab.Token, AssetTab.Collectibles] as const
 
-export const TokenAssets = memo(() => {
+interface TokenAssetsProps {
+    selectedChainId: ChainId | null
+}
+
+export const TokenAssets = memo<TokenAssetsProps>(({ selectedChainId }) => {
     const t = useDashboardI18N()
     const { classes } = useStyles()
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
         [AssetTab.Investment]: t.wallets_assets_investment(),
-        [AssetTab.Collections]: t.wallets_assets_collections(),
+        [AssetTab.Collectibles]: t.wallets_assets_collectibles(),
     }
+    // Workaround: if useCurrentCollectibleDataProvider hook in CollectibleList component, will lead tooltip error: Maximum update depth exceeded.
+    const provider = useCurrentCollectibleDataProvider()
 
-    const [activeTab, setActiveTab] = useState<AssetTab>(assetTabs[0])
+    const [currentTab, onChange] = useTabs(AssetTab.Token, AssetTab.Collectibles)
 
-    const [addTokenOpen, setAddTokenOpen] = useState(false)
     const [addCollectibleOpen, setAddCollectibleOpen] = useState(false)
+    const { setDialog: setSelectToken } = useRemoteControlledDialog(
+        PluginMessages.Wallet.events.selectERC20TokenDialogUpdated,
+    )
 
     return (
         <>
-            <ContentContainer
-                sx={{ marginTop: 3, display: 'flex', flexDirection: 'column', maxHeight: 'calc(100% - 114px)' }}>
-                <TabContext value={activeTab}>
+            <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
+                <TabContext value={currentTab}>
                     <Box className={classes.caption}>
-                        <Tabs value={activeTab} onChange={(event, tab) => setActiveTab(tab)}>
+                        <TabList onChange={onChange}>
                             {assetTabs.map((key) => (
                                 <Tab key={key} value={key} label={assetTabsLabel[key]} />
                             ))}
-                        </Tabs>
+                        </TabList>
                         <Button
+                            size="small"
                             color="secondary"
                             className={classes.addCustomTokenButton}
                             onClick={() =>
-                                activeTab === AssetTab.Token ? setAddTokenOpen(true) : setAddCollectibleOpen(true)
+                                currentTab === AssetTab.Token
+                                    ? setSelectToken({ open: true, props: { whitelist: [] } })
+                                    : setAddCollectibleOpen(true)
                             }>
                             +{' '}
-                            {activeTab === AssetTab.Token
-                                ? t.wallets_assets_custom_token()
+                            {currentTab === AssetTab.Token
+                                ? t.wallets_add_token()
                                 : t.wallets_assets_custom_collectible()}
                         </Button>
                     </Box>
-                    <TabPanel
-                        value={AssetTab.Token}
-                        key={AssetTab.Token}
-                        className={activeTab === AssetTab.Token ? classes.tab : undefined}>
-                        <TokenTable />
+                    <TabPanel value={AssetTab.Token} key={AssetTab.Token} sx={{ minHeight: 'calc(100% - 48px)' }}>
+                        <TokenTable selectedChainId={selectedChainId} />
                     </TabPanel>
                     <TabPanel
-                        value={AssetTab.Collections}
-                        key={AssetTab.Collections}
-                        className={activeTab === AssetTab.Collections ? classes.tab : undefined}>
-                        <CollectibleList />
+                        value={AssetTab.Collectibles}
+                        key={AssetTab.Collectibles}
+                        sx={{ minHeight: 'calc(100% - 48px)' }}>
+                        <CollectibleList selectedChainId={selectedChainId} provider={provider} />
                     </TabPanel>
                 </TabContext>
             </ContentContainer>
-            <AddTokenDialog open={addTokenOpen} onClose={() => setAddTokenOpen(false)} />
-            <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
+            {addCollectibleOpen && (
+                <AddCollectibleDialog open={addCollectibleOpen} onClose={() => setAddCollectibleOpen(false)} />
+            )}
         </>
     )
 })

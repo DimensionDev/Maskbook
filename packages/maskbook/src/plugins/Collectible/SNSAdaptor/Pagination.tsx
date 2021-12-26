@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { TableFooter, TablePagination, TableRow } from '@material-ui/core'
+import { TableFooter, TablePagination, TableRow } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()({

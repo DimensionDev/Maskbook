@@ -1,5 +1,5 @@
-import { styled } from '@material-ui/core/styles'
-import { buttonClasses, Stack } from '@material-ui/core'
+import { styled } from '@mui/material/styles'
+import { buttonClasses, Stack } from '@mui/material'
 import type { PropsWithChildren } from 'react'
 
 const ButtonContainerUI = styled(Stack)(({ theme }) => ({
@@ -8,6 +8,9 @@ const ButtonContainerUI = styled(Stack)(({ theme }) => ({
     [`& > .${buttonClasses.root}`]: {
         width: '100%',
         fontSize: 16,
+    },
+    [theme.breakpoints.down('md')]: {
+        margin: `${theme.spacing(4)} auto`,
     },
 }))
 

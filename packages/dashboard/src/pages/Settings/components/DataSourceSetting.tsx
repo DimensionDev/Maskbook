@@ -1,4 +1,4 @@
-import { MenuItem } from '@material-ui/core'
+import { MenuItem } from '@mui/material'
 import SettingSelect from './SettingSelect'
 import { useTrendingDataSource } from '../api'
 import { Services } from '../../../API'

@@ -1,0 +1,340 @@
+[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "claimer",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "claimed_token_id",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "token_address",
+                "type": "address"
+            }
+        ],
+        "name": "ClaimSuccess",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "total_tokens",
+                "type": "uint256"
+            },
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "name",
+                "type": "string"
+            },
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "message",
+                "type": "string"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "creator",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "creation_time",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "address",
+                "name": "token_address",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "packet_number",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "duration",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256[]",
+                "name": "token_ids",
+                "type": "uint256[]"
+            }
+        ],
+        "name": "CreationSuccess",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": true,
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "token_address",
+                "type": "address"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint16",
+                "name": "remaining_balance",
+                "type": "uint16"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256[]",
+                "name": "remaining_token_ids",
+                "type": "uint256[]"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "bit_status",
+                "type": "uint256"
+            }
+        ],
+        "name": "RefundSuccess",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "pkt_id",
+                "type": "bytes32"
+            }
+        ],
+        "name": "check_availability",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "token_address",
+                "type": "address"
+            },
+            {
+                "internalType": "uint16",
+                "name": "balance",
+                "type": "uint16"
+            },
+            {
+                "internalType": "uint256",
+                "name": "total_pkts",
+                "type": "uint256"
+            },
+            {
+                "internalType": "bool",
+                "name": "expired",
+                "type": "bool"
+            },
+            {
+                "internalType": "uint256",
+                "name": "claimed_id",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256",
+                "name": "bit_status",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            }
+        ],
+        "name": "check_claimed_id",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "claimed_token_id",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            }
+        ],
+        "name": "check_erc721_remain_ids",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "bit_status",
+                "type": "uint256"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "erc721_token_ids",
+                "type": "uint256[]"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256[]",
+                "name": "erc721_token_id_list",
+                "type": "uint256[]"
+            },
+            {
+                "internalType": "address",
+                "name": "token_addr",
+                "type": "address"
+            }
+        ],
+        "name": "check_ownership",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "is_your_token",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "pkt_id",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "bytes",
+                "name": "signedMsg",
+                "type": "bytes"
+            },
+            {
+                "internalType": "address payable",
+                "name": "recipient",
+                "type": "address"
+            }
+        ],
+        "name": "claim",
+        "outputs": [
+            {
+                "internalType": "uint256",
+                "name": "claimed",
+                "type": "uint256"
+            }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "_public_key",
+                "type": "address"
+            },
+            {
+                "internalType": "uint64",
+                "name": "_duration",
+                "type": "uint64"
+            },
+            {
+                "internalType": "bytes32",
+                "name": "_seed",
+                "type": "bytes32"
+            },
+            {
+                "internalType": "string",
+                "name": "_message",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "_name",
+                "type": "string"
+            },
+            {
+                "internalType": "address",
+                "name": "_token_addr",
+                "type": "address"
+            },
+            {
+                "internalType": "uint256[]",
+                "name": "_erc721_token_ids",
+                "type": "uint256[]"
+            }
+        ],
+        "name": "create_red_packet",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "bytes32",
+                "name": "id",
+                "type": "bytes32"
+            }
+        ],
+        "name": "refund",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]

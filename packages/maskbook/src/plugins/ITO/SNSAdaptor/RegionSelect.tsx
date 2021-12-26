@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback, forwardRef, useImperativeHandle } from 'react'
-import type { InputBaseComponentProps } from '@material-ui/core'
+import type { InputBaseComponentProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useDebounce } from 'react-use'
 import {
@@ -12,7 +12,7 @@ import {
     FormControl,
     InputAdornment,
     FilledInput,
-} from '@material-ui/core'
+} from '@mui/material'
 
 import { Flags, useI18N, usePortalShadowRoot } from '../../../utils'
 import { useRegionList } from './hooks/useRegion'

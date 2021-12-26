@@ -1,32 +1,30 @@
-export const is_iOSApp = process.env.target === 'safari' && process.env.architecture === 'app'
-export const isAndroidApp = process.env.architecture === 'app' && process.env.target === 'firefox'
+export const is_iOSApp = process.env.engine === 'safari' && process.env.architecture === 'app'
+export const isAndroidApp = process.env.architecture === 'app' && process.env.engine === 'firefox'
 
 const appOnly = process.env.architecture === 'app'
 const devOnly = process.env.NODE_ENV === 'development'
 const webOnly = process.env.architecture === 'web' || devOnly
-const insiderOnly = process.env.build === 'insider' || devOnly
-const betaOrInsiderOnly = insiderOnly || process.env.build === 'beta'
+const insiderOnly = process.env.channel === 'insider' || devOnly
+const betaOrInsiderOnly = insiderOnly || process.env.channel === 'beta'
 
 // TODO: In future, we can turn this object into a Proxy to receive flags from remote
 export const Flags = {
     __raw__: {
-        target: process.env.target,
+        target: process.env.engine,
         architecture: process.env.architecture,
     },
-    /** The Mask Network v2 main switch. */
-    v2_enabled: betaOrInsiderOnly,
+    mask_SDK_ready: betaOrInsiderOnly,
     /** There is no "tabs" to navigate to. We must be careful with this. */
     has_no_browser_tab_ui: appOnly,
     has_no_connected_user_link: appOnly,
     has_native_nav_bar: appOnly,
-    /** In E2E, prefer open shadow root so we can test it. */
-    using_ShadowDOM_attach_mode: process.env.target === 'E2E' ? 'open' : 'closed',
+    using_ShadowDOM_attach_mode: 'closed' as ShadowRootMode,
     /** Don't inject injected script in this mode. Native side will do the job. */
-    support_native_injected_script_declaration: is_iOSApp,
+    support_declarative_user_script: is_iOSApp,
     /** Don't show welcome page in this mode. Native side will do the job. */
     has_native_welcome_ui: appOnly,
     /** Firefox has a special API that can inject to the document with a higher permission. */
-    requires_injected_script_run_directly: process.env.target === 'firefox',
+    has_firefox_xray_vision: process.env.engine === 'firefox',
     support_eth_network_switch: betaOrInsiderOnly,
     //#region Experimental features
     image_payload_marked_as_beta: appOnly,
@@ -46,20 +44,20 @@ export const Flags = {
     plugin_switch_enabled: betaOrInsiderOnly,
     //#endregion
 
-    EIP1159_enabled: false,
+    EIP1559_enabled: true,
 
     bsc_enabled: true,
     polygon_enabled: true,
     arbitrum_enabled: true,
     xdai_enabled: true,
+    nft_airdrop_enabled: false,
 
     //#region Functionality missing / broken
     /**
      * - iOS: WebExtension polyfill didn't implemented the dynamic permission API
-     * - E2E: Cannot click the "allow" button (maybe a bug) in the Puppeteer
      */
-    no_web_extension_dynamic_permission_request: is_iOSApp || process.env.target === 'E2E',
-    has_no_WebRTC: process.env.target === 'safari' || !globalThis?.navigator?.permissions?.query,
+    no_web_extension_dynamic_permission_request: is_iOSApp,
+    has_no_WebRTC: process.env.engine === 'safari' || !globalThis?.navigator?.permissions?.query,
     //#endregion
     using_emoji_flag: true,
 } as const

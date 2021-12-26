@@ -1,9 +1,9 @@
 import type { FC } from 'react'
-import { CardActions, Link, Typography } from '@material-ui/core'
+import { CardActions, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
-import { MaskbookTextIcon } from '../../../../resources/MaskbookIcon'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { MaskTextIcon } from '../../../../resources/MaskIcon'
 import type { DataProvider, TradeProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveTradeProviderName } from '../../pipes'
 import { DataProviderIcon } from './DataProviderIcon'
@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
         footName: {
             marginLeft: theme.spacing(0.5),
         },
-        maskbook: {
+        mask: {
             width: 40,
             height: 10,
         },
@@ -79,7 +79,7 @@ export const TradeFooter: FC<TradeFooterProps> = (props) => {
                     rel="noopener noreferrer"
                     title="Mask"
                     href="https://mask.io">
-                    <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                    <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
                 </Link>
             </Typography>
             {showDataProviderIcon ? (

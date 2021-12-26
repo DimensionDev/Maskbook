@@ -1,12 +1,19 @@
 import { makeStyles } from '@masknet/theme'
-import { InputBase } from '@material-ui/core'
+import { InputBase, Box } from '@mui/material'
 import { useI18N } from '../../utils'
+import { activatedSocialNetworkUI } from '../../social-network'
+import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
 
-const useStyles = makeStyles()({
+interface StyleProps {
+    snsId: string
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
     root: {
+        flex: 1,
         fontSize: 13,
         background: '#3a3b3c',
-        width: '100%',
+        width: snsId === MINDS_ID ? '96%' : '100%',
         height: 34,
         borderRadius: 20,
         padding: '2px 1em',
@@ -23,29 +30,31 @@ const useStyles = makeStyles()({
             color: '#d0d2d6',
         },
     },
-})
+}))
 
 export interface CommentBoxProps {
     onSubmit: (newVal: string) => void
     inputProps?: Partial<PropsOf<typeof InputBase>>
 }
 export function CommentBox(props: CommentBoxProps) {
-    const { classes } = useStyles()
+    const { classes } = useStyles({ snsId: activatedSocialNetworkUI.networkIdentifier })
     const { t } = useI18N()
     return (
-        <InputBase
-            className={classes.root}
-            inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
-            placeholder={t('comment_box__placeholder')}
-            onKeyDownCapture={(e) => {
-                const node = e.target as HTMLInputElement
-                if (!node.value) return
-                if (e.key === 'Enter') {
-                    props.onSubmit(node.value)
-                    node.value = ''
-                }
-            }}
-            {...props.inputProps}
-        />
+        <Box sx={{ display: 'flex', width: '100%' }}>
+            <InputBase
+                className={classes.root}
+                inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
+                placeholder={t('comment_box__placeholder')}
+                onKeyDownCapture={(e) => {
+                    const node = e.target as HTMLInputElement
+                    if (!node.value) return
+                    if (e.key === 'Enter') {
+                        props.onSubmit(node.value)
+                        node.value = ''
+                    }
+                }}
+                {...props.inputProps}
+            />
+        </Box>
     )
 }

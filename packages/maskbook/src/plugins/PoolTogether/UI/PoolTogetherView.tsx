@@ -1,11 +1,11 @@
 import { RefreshIcon } from '@masknet/icons'
 import { DarkColor } from '@masknet/theme/constants'
-import { usePoolTogetherConstants } from '@masknet/web3-shared'
-import { Card, CardActions, CardContent, CircularProgress, Link, Paper, Tab, Tabs, Typography } from '@material-ui/core'
+import { usePoolTogetherConstants } from '@masknet/web3-shared-evm'
+import { Card, CardActions, CardContent, CircularProgress, Link, Paper, Tab, Tabs, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import React, { useState } from 'react'
 import { useEffect } from 'react'
-import { MaskbookTextIcon } from '../../../resources/MaskbookIcon'
+import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { PoolTogetherIcon } from '../../../resources/PoolTogetherIcon'
 import { useI18N } from '../../../utils/i18n-next-ui'
 import { usePool, usePools } from '../hooks/usePools'
@@ -88,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
     footName: {
         marginLeft: theme.spacing(0.5),
     },
-    maskbook: {
+    mask: {
         width: 40,
         height: 10,
     },
@@ -185,7 +185,7 @@ export function PoolTogetherView(props: PoolTogetherViewProps) {
                         rel="noopener noreferrer"
                         title="Mask"
                         href="https://mask.io">
-                        <MaskbookTextIcon classes={{ root: classes.maskbook }} viewBox="0 0 80 20" />
+                        <MaskTextIcon classes={{ root: classes.mask }} viewBox="0 0 80 20" />
                     </Link>
                 </Typography>
                 <Typography className={classes.footnote} color={DarkColor.textSecondary} variant="subtitle2">

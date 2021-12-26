@@ -1,4 +1,4 @@
-import { Card, CardContent, Typography } from '@material-ui/core'
+import { Card, CardContent, Typography } from '@mui/material'
 import { useI18N } from '../../../utils'
 
 export function MissingParameter(props: { message: string }) {

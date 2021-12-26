@@ -25,7 +25,7 @@ packages/storybook-shared/*.js
 dist/*
 /build
 /storybook-static
-/Maskbook.*.zip
+/MaskNetwork.*.zip
 
 # Environment files
 .env.local
@@ -35,16 +35,6 @@ dist/*
 
 # Block-chain contract files
 /contracts
-
-# E2E tests
-/.env/e2e-test
-/.env/e2e-development
-/.env/e2e-production
-/.pptr-alice
-/.pptr-bob
-/screenshots
-/.env
-/.pptr-*
 
 # Temp profiles
 .firefox
@@ -174,7 +164,7 @@ common/temp/
 common/autoinstallers/*/.npmrc
 **/.rush/temp/
 
-## storybook-shared
+# storybook-shared
 packages/storybook-shared/*.js
 packages/storybook-shared/*.map
 packages/storybook-shared/*.d.ts

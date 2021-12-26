@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { EthereumTokenType, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared'
+import { EthereumTokenType, FungibleTokenDetailed, ZERO } from '@masknet/web3-shared-evm'
 import { TradeComputed, TradeStrategy } from '../../types'
 
 export interface NativeTokenWrapper {

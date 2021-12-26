@@ -5,7 +5,7 @@ import {
     getChainName,
     getRedPacketConstants,
     NativeTokenDetailed,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import stringify from 'json-stable-stringify'
 import { first, pick } from 'lodash-es'
 import { tokenIntoMask } from '../../../ITO/SNSAdaptor/helpers'
@@ -108,7 +108,13 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
     if (!data?.redPackets) return []
     return data.redPackets
         .map((x) => {
-            const redPacketSubgraphInMask = { ...x, token: tokenIntoMask(x.token) } as RedPacketSubgraphInMask
+            const redPacketSubgraphInMask = {
+                ...x,
+                token: tokenIntoMask(x.token),
+                duration: x.duration * 1000,
+                creation_time: x.creation_time * 1000,
+                last_updated_time: x.last_updated_time * 1000,
+            } as RedPacketSubgraphInMask
             const redPacketBasic = pick(redPacketSubgraphInMask, redPacketBasicKeys)
             redPacketBasic.creation_time = redPacketSubgraphInMask.creation_time * 1000
             const sender = {
@@ -118,10 +124,9 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
             }
             const network = getChainName(redPacketSubgraphInMask.chain_id)
 
-            let token
             if (redPacketSubgraphInMask.token.type === EthereumTokenType.Native) {
                 const detailed = getChainDetailed(redPacketSubgraphInMask.token.chainId)
-                token = {
+                const token = {
                     ...redPacketSubgraphInMask.token,
                     name: detailed?.nativeCurrency.name ?? 'Ether',
                     symbol: detailed?.nativeCurrency.symbol ?? 'ETH',
@@ -143,3 +148,5 @@ export async function getRedPacketHistory(address: string, chainId: ChainId) {
         })
         .sort((a, b) => b.creation_time - a.creation_time)
 }
+
+export * from './nftRedpacket'

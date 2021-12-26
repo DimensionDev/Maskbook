@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { CollectibleState } from '../hooks/useCollectibleState'
@@ -7,7 +7,7 @@ import { useControlledDialog } from '../../../utils/hooks/useControlledDialog'
 import { MakeOfferDialog } from './MakeOfferDialog'
 import { PostListingDialog } from './PostListingDialog'
 import { CheckoutDialog } from './CheckoutDialog'
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {

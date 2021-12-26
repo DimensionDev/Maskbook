@@ -7,13 +7,11 @@ export const useEnterDashboard = () => {
                 active: true,
                 url: browser.runtime.getURL('/debug.html'),
             })
-        } else if (process.env.NODE_ENV === 'development' && event.ctrlKey) {
+        } else {
             browser.tabs.create({
                 active: true,
-                url: browser.runtime.getURL('/next.html'),
+                url: browser.runtime.getURL('/dashboard.html'),
             })
-        } else {
-            browser.runtime.openOptionsPage()
         }
     }, [])
 }

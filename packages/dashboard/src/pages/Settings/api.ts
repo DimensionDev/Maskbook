@@ -24,6 +24,16 @@ export const [useBinanceNetworkTradeProvider] = createGlobalState(
     Messages.events.binanceNetworkTradeProviderSettings.on,
 )
 
+export const [useArbitrumNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getArbitrumNetworkTradeProvider,
+    Messages.events.arbitrumNetworkTradeProviderSettings.on,
+)
+
+export const [useXDaiNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getxDaiNetworkTradeProvider,
+    Messages.events.xdaiNetworkTradeProviderSettings.on,
+)
+
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {
@@ -70,7 +80,7 @@ export const sendCode = ({ account, type, scenario, locale }: SendCodeRequest) =
     return fetchBackupInstance('v1/backup/send_code', {
         method: 'POST',
         body: JSON.stringify({
-            account,
+            account: account.replace(' ', ''),
             account_type: type,
             scenario,
             locale,
@@ -84,7 +94,7 @@ export const fetchUploadLink = ({ code, account, abstract, type }: UploadLinkReq
         body: JSON.stringify({
             code,
             account_type: type,
-            account,
+            account: account.replace(' ', ''),
             abstract,
         }),
     }).then<string>((res) => res.upload_url)
@@ -96,7 +106,7 @@ export const fetchDownloadLink = ({ account, code, type }: VerifyCodeRequest) =>
         body: JSON.stringify({
             code,
             account_type: type,
-            account,
+            account: account.replace(' ', ''),
         }),
     }).then<BackupFileInfo>(({ abstract, download_url, size, uploaded_at }) => {
         return {
@@ -112,7 +122,7 @@ export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
     return fetchBackupInstance('v1/backup/validate_code', {
         method: 'POST',
         body: JSON.stringify({
-            account,
+            account: account.replace(' ', ''),
             account_type: type,
             code,
         }),
@@ -120,14 +130,14 @@ export const verifyCode = ({ account, type, code }: VerifyCodeRequest) => {
 }
 
 export const fetchBackupValue = (downloadLink: string) => {
-    return fetchBase<string>(downloadLink, { method: 'GET' }, (res) => res.text())
+    return fetchBase<ArrayBuffer>(downloadLink, { method: 'GET' }, (res) => res.arrayBuffer())
 }
 
-export const uploadBackupValue = (uploadLink: string, content: string) => {
+export const uploadBackupValue = (uploadLink: string, content: ArrayBuffer) => {
     return fetch(uploadLink, {
         method: 'PUT',
         // mode: 'no-cors',
-        headers: new Headers({ 'content-type': 'text/plain' }),
+        headers: new Headers({ 'content-type': 'application/octet-stream' }),
         body: content,
     })
 }

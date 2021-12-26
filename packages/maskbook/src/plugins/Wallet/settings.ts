@@ -2,21 +2,46 @@ import { createGlobalSettings } from '../../settings/createSettings'
 import { i18n } from '../../utils/i18n-next'
 import {
     ChainId,
-    ProviderType,
-    PortfolioProvider,
     CollectibleProvider,
+    CryptoPrice,
+    GasOptions,
     NetworkType,
-    GasNow,
-} from '@masknet/web3-shared'
+    PortfolioProvider,
+    ProviderType,
+    LockStatus,
+} from '@masknet/web3-shared-evm'
 import { PLUGIN_IDENTIFIER } from './constants'
 import { isEqual } from 'lodash-es'
-import { connectGasNow } from './apis/gasnow'
-import { trackEtherPrice } from './apis/coingecko'
-import { startEffects } from '../../utils/side-effects'
 
 export const currentAccountSettings = createGlobalSettings<string>(`${PLUGIN_IDENTIFIER}+selectedWalletAddress`, '', {
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
+
+export const currentMaskWalletAccountSettings = createGlobalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+selectedMaskWalletAddress`,
+    '',
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
+export const currentMaskWalletChainIdSettings = createGlobalSettings<number>(
+    `${PLUGIN_IDENTIFIER}+maskWalletChainId`,
+    ChainId.Mainnet,
+    {
+        primary: () => i18n.t('settings_choose_eth_network'),
+        secondary: () => 'This only affects the built-in wallet.',
+    },
+)
+
+export const currentMaskWalletBalanceSettings = createGlobalSettings<string>(
+    `${PLUGIN_IDENTIFIER}+maskWalletBalance`,
+    '0',
+    {
+        primary: () => i18n.t('settings_choose_eth_network'),
+        secondary: () => 'This only affects the built-in wallet.',
+    },
+)
 
 /**
  * The network type of the selected wallet
@@ -29,12 +54,20 @@ export const currentNetworkSettings = createGlobalSettings<NetworkType>(
     },
 )
 
+export const currentMaskWalletNetworkSettings = createGlobalSettings<NetworkType>(
+    `${PLUGIN_IDENTIFIER}+selectedMaskWalletNetwork`,
+    NetworkType.Ethereum,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+)
+
 /**
  * The provider type of the selected wallet
  */
 export const currentProviderSettings = createGlobalSettings<ProviderType>(
     `${PLUGIN_IDENTIFIER}+selectedWalletProvider`,
-    ProviderType.Maskbook,
+    ProviderType.MaskWallet,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
@@ -57,10 +90,21 @@ export const currentPortfolioDataProviderSettings = createGlobalSettings<Portfol
  */
 export const currentCollectibleDataProviderSettings = createGlobalSettings<CollectibleProvider>(
     `${PLUGIN_IDENTIFIER}+collectibleProvider`,
-    CollectibleProvider.OPENSEAN,
+    CollectibleProvider.OPENSEA,
     {
         primary: () => i18n.t('plugin_wallet_settings_collectible_data_source_primary'),
         secondary: () => i18n.t('plugin_wallet_settings_collectible_data_source_secondary'),
+    },
+)
+
+/**
+ * Is the current selected wallet has been locked?
+ */
+export const currentMaskWalletLockStatusSettings = createGlobalSettings<LockStatus>(
+    `${PLUGIN_IDENTIFIER}+maskWalletLockStatus`,
+    LockStatus.INIT,
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
     },
 )
 
@@ -106,15 +150,15 @@ export const currentGasPriceSettings = createGlobalSettings<number>(
 )
 
 /**
- * Gas Now
+ * Gas Options
  */
-export const currentGasNowSettings = createGlobalSettings<GasNow | null>(
-    `${PLUGIN_IDENTIFIER}+gasNow`,
+export const currentGasOptionsSettings = createGlobalSettings<GasOptions | null>(
+    `${PLUGIN_IDENTIFIER}+gasOptions`,
     null,
     {
         primary: () => 'DO NOT DISPLAY IT IN UI',
     },
-    (a: GasNow | null, b: GasNow | null) => isEqual(a, b),
+    (a: GasOptions | null, b: GasOptions | null) => isEqual(a, b),
 )
 
 /**
@@ -124,13 +168,14 @@ export const currentEtherPriceSettings = createGlobalSettings<number>(`${PLUGIN_
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-const effect = startEffects(import.meta.webpackHot)
-
-effect(() => {
-    try {
-        return connectGasNow()
-    } catch {
-        return () => {}
-    }
-})
-effect(() => trackEtherPrice())
+/**
+ * ERC20 Token prices or native token prices
+ */
+export const currentTokenPricesSettings = createGlobalSettings<CryptoPrice>(
+    `${PLUGIN_IDENTIFIER}+tokenPrices`,
+    {},
+    {
+        primary: () => 'DO NOT DISPLAY IT IN UI',
+    },
+    (a, b) => isEqual(a, b),
+)

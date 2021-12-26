@@ -11,9 +11,9 @@ import {
     MenuItem,
     Divider,
     CircularProgress,
-} from '@material-ui/core'
+} from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import AddIcon from '@material-ui/icons/Add'
+import AddIcon from '@mui/icons-material/Add'
 import addDate from 'date-fns/add'
 import { usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
@@ -116,7 +116,7 @@ function NewPollUI(props: PollsDialogProps & NewPollProps) {
         })
     }
 
-    // react hooks are not binded with the function identity but hooks order
+    // react hooks are not bound with the function identity but hooks order
     const useSelect = (count: number, fn: (newVal: number) => void, defaultIndex = 0) => {
         const options = Array.from<string>({ length: count }).fill('')
 

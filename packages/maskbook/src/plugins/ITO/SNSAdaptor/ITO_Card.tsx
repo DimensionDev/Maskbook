@@ -1,15 +1,17 @@
-import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared'
-import { Alert, Box, Skeleton, Typography } from '@material-ui/core'
+import { ERC20TokenDetailed, formatBalance, TransactionStateType } from '@masknet/web3-shared-evm'
+import { Alert, Box, Skeleton, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useEffect } from 'react'
 import { usePostLink } from '../../../components/DataSource/usePostInfo'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { WalletMessages } from '../../Wallet/messages'
 import { useMaskClaimCallback } from './hooks/useMaskClaimCallback'
 import { useMaskITO_Packet } from './hooks/useMaskITO_Packet'
+import { useI18N } from '../../../utils/i18n-next-ui'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -55,7 +57,7 @@ export interface ITO_CardProps extends withClasses<never> {
 
 export function ITO_Card(props: ITO_CardProps) {
     const { token, onUpdateAmount, onUpdateBalance } = props
-
+    const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
     const { value: packet, loading: packetLoading, error: packetError, retry: packetRetry } = useMaskITO_Packet()
 
@@ -72,11 +74,13 @@ export function ITO_Card(props: ITO_CardProps) {
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             [
-                `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(
-                    packet?.claimable,
-                    18,
-                    6,
-                )}. Follow @realMaskbook (mask.io) to claim airdrop.`,
+                `I just claimed ${cashTag}${token?.symbol} with ${formatBalance(packet?.claimable, 18, 6)}.${
+                    isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                        ? `Follow @${
+                              isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                          } (mask.io) to claim airdrop.`
+                        : ''
+                }`,
                 '#mask_io',
                 postLink,
             ].join('\n'),

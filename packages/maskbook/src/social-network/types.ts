@@ -7,13 +7,14 @@ import type {
     ReadonlyIdentifierMap,
     ObservableWeakMap,
 } from '@masknet/shared'
-import type { PaletteMode, Theme } from '@material-ui/core'
+import type { PaletteMode, Theme } from '@mui/material'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { PostInfo } from './PostInfo'
 import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
 import type { TypedMessage } from '../protocols/typed-message'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
+import type { Subscription } from 'use-subscription'
 
 type ClassNameMap<ClassKey extends string = string> = { [P in ClassKey]: string }
 // Don't define values in namespaces
@@ -29,6 +30,8 @@ export namespace SocialNetwork {
     export interface Utils {
         /** @returns the homepage url. e.g.: https://twitter.com/ */
         getHomePage?(): string
+        /** @returns the profile url. e.g.: https://twitter.com/realMaskNetwork */
+        getProfilePage?(userId?: string): string
         /** @returns post URL from PostIdentifier */
         getPostURL?(post: PostIdentifier<Identifier>): URL | null
         /** Is this username valid in this network */
@@ -51,8 +54,9 @@ export namespace SocialNetwork {
          * !!! THIS SHOULD NOT BE USED TO CONSTRUCT A NEW ProfileIdentifier !!!
          */
         networkIdentifier: string
+        name: string
         /**
-         * This field _will_ be overwritten by SocialNetworkUI.permessions
+         * This field _will_ be overwritten by SocialNetworkUI.permissions
          */
         declarativePermissions: SocialNetworkUI.DeclarativePermission
         /** Should this UI content script activate? */
@@ -111,7 +115,7 @@ export namespace SocialNetworkUI {
             /** Display the additional content (decrypted, plugin, ...) below the post */
             postInspector?(signal: AbortSignal, current: PostInfo): void
             /** Inject a tool box that displayed in the navigation bar of the SNS */
-            toolBoxInNavBar?(signal: AbortSignal): void
+            toolbox?(signal: AbortSignal): void
             /** Inject the UI that used to notify if the user has not completely setup the current network. */
             setupPrompt?(signal: AbortSignal): void
             /**
@@ -126,6 +130,23 @@ export namespace SocialNetworkUI {
             /** Inject UI to the Profile page */
             enhancedProfileTab?(signal: AbortSignal): void
             enhancedProfile?(signal: AbortSignal): void
+
+            /**
+             * @deprecated
+             * TODO: by @Jack-Works This should be in the plugin infra.
+             * SNS Adaptor provides avatar enhancement point,
+             * and plugin infra provides AvatarEnhancementProvider.
+             * Only 1 plugin can provide enhancement to avatar.
+             */
+            userAvatar?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
+            enhancedProfileNFTAvatar?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
+            profileAvatar?(signal: AbortSignal): void
+            /** @deprecated same reason as userAvatar */
+            postAvatar?(signal: AbortSignal, current: PostInfo): void
+            /** @deprecated same reason as userAvatar */
+            openNFTAvatar?(signal: AbortSignal): void
         }
         export interface NewPostComposition {
             start(signal: AbortSignal): void
@@ -146,7 +167,7 @@ export namespace SocialNetworkUI {
     }
     export namespace AutomationCapabilities {
         export interface Define {
-            /** Automation on the composition dialog that the social network provies */
+            /** Automation on the composition dialog that the social network provides */
             nativeCompositionDialog?: NativeCompositionDialog
             maskCompositionDialog?: MaskCompositionDialog
             nativeCommentBox?: NativeCommentBox
@@ -183,13 +204,15 @@ export namespace SocialNetworkUI {
         export interface Define {
             /** Resolve the information of who am I on the current network. */
             identityProvider?: IdentityResolveProvider
+            /** Resolve the information of identity on the current page which has been browsing. */
+            currentVisitingIdentityProvider?: IdentityResolveProvider
             /** Maintain all the posts up-to-date. */
             postsProvider?: PostsProvider
             /** Get searched keyword */
             getSearchedKeyword?(): string
         }
         export type ProfileUI = { bioContent: string }
-        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar'>
+        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio'>
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {
@@ -200,7 +223,7 @@ export namespace SocialNetworkUI {
             /**
              * The account that user is using (may not in the database)
              */
-            readonly lastRecognized: ValueRef<IdentityResolved>
+            readonly recognized: ValueRef<IdentityResolved>
             /**
              * Start to maintain the posts.
              * It should add new seen posts and remove gone posts.
@@ -227,14 +250,14 @@ export namespace SocialNetworkUI {
              *
              * Should follow the color scheme of the website.
              */
-            useTheme?(): Theme
+            useTheme?(baseTheme: Theme): Theme
             /** Provide the ability to detect the current color scheme (light or dark) in the current SNS */
             paletteMode?: PaletteModeProvider
             i18nOverwrite?: I18NOverwrite
             componentOverwrite?: ComponentOverwrite
         }
         export interface PaletteModeProvider {
-            current: ValueRef<PaletteMode>
+            current: Subscription<PaletteMode>
             start(signal: AbortSignal): void
         }
         export interface ComponentOverwrite {

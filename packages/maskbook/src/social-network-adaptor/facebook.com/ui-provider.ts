@@ -19,10 +19,83 @@ import { pasteImageToCompositionDefault } from '../../social-network/defaults/au
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
 import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
+import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
 import { currentSelectedIdentity } from '../../settings/settings'
 import { unreachable } from '@dimensiondev/kit'
+import { makeStyles } from '@masknet/theme'
 import { ProfileIdentifier } from '@masknet/shared'
 import { globalUIState } from '../../social-network'
+import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
+
+const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
+    const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
+    return {
+        root: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            [smallQuery]: {
+                display: 'block !important',
+            },
+        },
+        container: {
+            alignItems: 'center',
+        },
+        paper: {
+            width: '600px !important',
+            maxWidth: 'none',
+            boxShadow: 'none',
+            backgroundImage: 'none',
+            [smallQuery]: {
+                display: 'block !important',
+                borderRadius: '0 !important',
+            },
+        },
+        dialogTitle: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: '3px 16px',
+            borderBottom: `1px solid ${theme.palette.mode === 'dark' ? '#2f3336' : '#ccd6dd'}`,
+            '& > h2': {
+                display: 'inline-block',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+            },
+            [smallQuery]: {
+                display: 'flex',
+                justifyContent: 'space-between',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px 11px !important',
+            },
+        },
+        dialogContent: {
+            padding: 16,
+            [smallQuery]: {
+                display: 'flex',
+                flexDirection: 'column',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
+        },
+        dialogActions: {
+            padding: '6px 16px',
+            [smallQuery]: {
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                maxWidth: 600,
+                margin: '0 auto',
+                padding: '7px 14px 6px !important',
+            },
+        },
+        dialogBackdropRoot: {
+            backgroundColor: theme.palette.mode === 'dark' ? 'rgba(110, 118, 125, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+        },
+    }
+})
 
 const facebookUI: SocialNetworkUI.Definition = {
     ...facebookBase,
@@ -59,7 +132,15 @@ const facebookUI: SocialNetworkUI.Definition = {
         identityProvider: IdentityProviderFacebook,
         postsProvider: PostProviderFacebook,
     },
-    customization: {},
+    customization: {
+        paletteMode: PaletteModeProviderFacebook,
+        componentOverwrite: {
+            InjectedDialog: {
+                classes: useInjectedDialogClassesOverwriteFacebook,
+            },
+        },
+        useTheme: useThemeFacebookVariant,
+    },
     init(signal) {
         const friends = stateCreator.friends()
         const profiles = stateCreator.profiles()
@@ -86,11 +167,22 @@ const facebookUI: SocialNetworkUI.Definition = {
         setupPrompt: injectSetupPromptFacebook,
         commentComposition: {
             compositionBox: injectPostCommentsDefault(),
-            commentInspector: injectCommentBoxDefaultFactory(pasteToCommentBoxFacebook),
+            commentInspector: injectCommentBoxDefaultFactory(
+                pasteToCommentBoxFacebook,
+                undefined,
+                undefined,
+                (node) => {
+                    setTimeout(() => {
+                        node.after.style.flexBasis = '100%'
+                        node.current.parentElement!.style.flexWrap = 'wrap'
+                    })
+                },
+            ),
         },
         postInspector: injectPostInspectorFacebook,
         pageInspector: injectPageInspectorDefault(),
-        setupWizard: createTaskStartSetupGuideDefault(facebookBase.networkIdentifier),
+        setupWizard: createTaskStartSetupGuideDefault(),
+        toolbox: injectToolboxAtFacebook,
     },
     configuration: {
         steganography: {
@@ -100,7 +192,7 @@ const facebookUI: SocialNetworkUI.Definition = {
                 // ! Change this might be a breaking change !
                 return new ProfileIdentifier(
                     'facebook.com',
-                    ProfileIdentifier.getUserName(IdentityProviderFacebook.lastRecognized.value.identifier) ||
+                    ProfileIdentifier.getUserName(IdentityProviderFacebook.recognized.value.identifier) ||
                         ProfileIdentifier.getUserName(currentSelectedIdentity[facebookBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),

@@ -9,6 +9,8 @@ import type {
     SwapResponse,
     SwapRouteSuccessResponse,
     SwapQuoteOneResponse,
+    SwapBancorRequest,
+    SwapRouteSuccessResponse,
     TradeComputed,
 } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
@@ -17,13 +19,14 @@ import { useTradeCallback as useUniswapCallback } from './uniswap/useTradeCallba
 import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCallback'
 import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback'
 import { useTradeCallback as useONECallback } from './1inch/useTradeCallback'
+import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
 import { TradeContext } from './useTradeContext'
 
 export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeComputed<unknown> | null) {
-    // trade conetxt
+    // trade context
     const context = useContext(TradeContext)
 
     // create trade computed
@@ -42,6 +45,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
         ? (tradeComputed as TradeComputed<SwapRouteSuccessResponse>)
         : null
     const tradeComputedForONE = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapQuoteOneResponse>) : null
+    const tradeComputedForBancor = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapBancorRequest>) : null
 
     // uniswap like providers
     const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like)
@@ -58,6 +62,7 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
     const zrx = useZrxCallback(provider === TradeProvider.ZRX ? tradeComputedForZRX : null)
     const dodo = useDODOCallback(provider === TradeProvider.DODO ? tradeComputedForDODO : null)
     const one = useONECallback(provider === TradeProvider.ONE_INCH ? tradeComputedForONE : null)
+    const bancor = useBancorCallback(provider === TradeProvider.BANCOR ? tradeComputedForBancor : null)
 
     // the trade is an ETH-WETH pair
     const nativeTokenWrapper = useNativeTokenWrapperCallback(tradeComputed as TradeComputed<NativeTokenWrapper>)
@@ -85,6 +90,8 @@ export function useTradeCallback(provider: TradeProvider, tradeComputed: TradeCo
             return dodo
         case TradeProvider.ONE_INCH:
             return one
+        case TradeProvider.BANCOR:
+            return bancor
         default:
             unreachable(provider)
     }

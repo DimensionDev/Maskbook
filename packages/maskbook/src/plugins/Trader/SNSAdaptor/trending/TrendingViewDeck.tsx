@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
-import { Avatar, Button, CardContent, CardHeader, IconButton, Paper, Typography } from '@material-ui/core'
+import { Avatar, Button, CardContent, CardHeader, IconButton, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import MonetizationOnOutlinedIcon from '@material-ui/icons/MonetizationOnOutlined'
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
+import MonetizationOnOutlinedIcon from '@mui/icons-material/MonetizationOnOutlined'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import stringify from 'json-stable-stringify'
 import { first, last } from 'lodash-es'
 import { FormattedCurrency, useValueRef, useRemoteControlledDialog, useStylesExtends, TokenIcon } from '@masknet/shared'
@@ -13,7 +13,7 @@ import { PriceChanged } from './PriceChanged'
 import { Linking } from './Linking'
 import { TrendingCard, TrendingCardProps } from './TrendingCard'
 import { PluginTransakMessages } from '../../../Transak/messages'
-import { useAccount } from '@masknet/web3-shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import type { FootnoteMenuOption } from '../trader/FootnoteMenu'
 import { TradeFooter } from '../trader/TradeFooter'
 import {
@@ -23,7 +23,7 @@ import {
 } from '../../settings'
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
-import { CoinSaftyAlert } from './CoinSaftyAlert'
+import { CoinSafetyAlert } from './CoinSafetyAlert'
 import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
 import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
@@ -252,7 +252,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                 disableTypography
             />
             <CardContent className={classes.content}>
-                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSaftyAlert coin={trending.coin} />}
+                {dataProvider === DataProvider.UNISWAP_INFO && <CoinSafetyAlert coin={trending.coin} />}
                 <Paper className={classes.body} elevation={0}>
                     {children}
                 </Paper>

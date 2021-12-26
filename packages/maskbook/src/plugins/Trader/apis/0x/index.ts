@@ -8,20 +8,18 @@ import type {
     SwapServerErrorResponse,
     SwapValidationErrorResponse,
 } from '../../types'
-import type { NetworkType } from '@masknet/web3-shared'
+import type { NetworkType } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 
 export async function swapQuote(request: SwapQuoteRequest, networkType: NetworkType) {
-    const params: Record<string, string> = {}
+    const params: Record<string, string | number> = {}
     Object.entries(request).map(([key, value]) => {
-        if (typeof value === 'string') params[key] = value
+        params[key] = value
     })
     if (request.slippagePercentage)
         params.slippagePercentage = new BigNumber(request.slippagePercentage).dividedBy(BIPS_BASE).toFixed()
     if (request.buyTokenPercentageFee)
         params.buyTokenPercentageFee = new BigNumber(request.buyTokenPercentageFee).dividedBy(100).toFixed()
-    if (request.includedSources) params.includedSources = request.includedSources.join()
-    if (request.excludedSources) params.excludedSources = request.excludedSources.join()
 
     const response = await fetch(urlcat(ZRX_BASE_URL[networkType], 'swap/v1/quote', params))
     const response_ = (await response.json()) as SwapQuoteResponse | SwapErrorResponse

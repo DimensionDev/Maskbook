@@ -1,1 +1,11 @@
-{}
+{
+    "error_boundary_crash_title": "{{subject}} 오류가 발생합니다.",
+    "error_boundary_try_to_recover": "복구하기",
+    "error_boundary_report_github": "GitHub에서 보고하기",
+    "error_boundary_report_email": "이메일로 보고하기",
+    "snackbar_done": "완료",
+    "import": "불러오기",
+    "balance": "잔액",
+    "select_token": "토큰 선택",
+    "erc20_token_list_placeholder": "토큰 이름이나 컨트렉트 주소"
+}

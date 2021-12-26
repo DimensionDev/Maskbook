@@ -5,9 +5,9 @@ import { omit } from 'lodash-es'
 
 export const PoolDatabase = createPluginDatabase<PoolRecordInDatabase>(ITO_PluginID)
 
-export async function getPoolsFromDB(rpids: string[]) {
+export async function getAllPoolsAsSeller(rpids: string[]) {
     const records: PoolRecord[] = []
-    for await (const record of PoolDatabase.iterate('ito-pool')) {
+    for await (const { value: record } of PoolDatabase.iterate('ito-pool')) {
         if (rpids.includes(record.payload.pid)) records.push(PoolRecordOutDB(record))
     }
     return records

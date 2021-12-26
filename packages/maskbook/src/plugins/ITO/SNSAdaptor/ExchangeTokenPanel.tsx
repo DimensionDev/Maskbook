@@ -1,8 +1,8 @@
-import { EthereumTokenType, FungibleTokenDetailed, useTokenBalance } from '@masknet/web3-shared'
-import { IconButton, Paper } from '@material-ui/core'
+import { EthereumTokenType, FungibleTokenDetailed, useFungibleTokenBalance } from '@masknet/web3-shared-evm'
+import { IconButton, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import AddIcon from '@material-ui/icons/AddOutlined'
-import RemoveIcon from '@material-ui/icons/RemoveOutlined'
+import AddIcon from '@mui/icons-material/AddOutlined'
+import RemoveIcon from '@mui/icons-material/RemoveOutlined'
 import { useCallback, useEffect, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useI18N } from '../../../utils'
@@ -30,10 +30,14 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         margin: theme.spacing(1),
         borderRadius: 10,
+        [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
+            margin: theme.spacing(0),
+            padding: theme.spacing(0, 0, 0, 0.5),
+        },
     },
 }))
 
-export interface ExchangetokenPanelProps {
+export interface ExchangeTokenPanelProps {
     onAmountChange: (amount: string, key: string) => void
     inputAmount: string
 
@@ -55,7 +59,7 @@ export interface ExchangetokenPanelProps {
     TokenAmountPanelProps: Partial<TokenAmountPanelProps>
 }
 
-export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
+export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
     const {
         onAmountChange,
         dataIndex,
@@ -100,7 +104,7 @@ export function ExchangeTokenPanel(props: ExchangetokenPanelProps) {
     //#endregion
 
     //#region balance
-    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useTokenBalance(
+    const { value: tokenBalance = '0', loading: loadingTokenBalance } = useFungibleTokenBalance(
         exchangeToken?.type ?? EthereumTokenType.Native,
         exchangeToken?.address ?? '',
     )

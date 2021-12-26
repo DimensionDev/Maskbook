@@ -2,20 +2,12 @@ import { useCallback } from 'react'
 import Web3Utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    useTransactionState,
-    TransactionStateType,
-    TransactionEventType,
-    useGasPrice,
-    useNonce,
-} from '@masknet/web3-shared'
+import { useTransactionState, TransactionStateType, TransactionEventType } from '@masknet/web3-shared-evm'
 import type { TransactionReceipt } from 'web3-core'
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4'
 
 export function useClaimCallback(version: number, from: string, id?: string, password?: string) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const [claimState, setClaimState] = useTransactionState()
     const redPacketContract = useRedPacketContract(version)
     const claimCallback = useCallback(async () => {
@@ -44,7 +36,7 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                           Web3Utils.sha3(from)!,
                       )
 
-        // esitimate gas and compose transaction
+        // estimate gas and compose transaction
         const config = {
             from,
             gas: await claim()
@@ -58,39 +50,29 @@ export function useClaimCallback(version: number, from: string, id?: string, pas
                     })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
 
         // step 2-1: blocking
         return new Promise<void>((resolve, reject) => {
-            const promiEvent = claim().send(config as NonPayableTx)
-
-            promiEvent.on(TransactionEventType.TRANSACTION_HASH, (hash: string) => {
-                setClaimState({
-                    type: TransactionStateType.HASH,
-                    hash,
+            claim()
+                .send(config as NonPayableTx)
+                .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                    setClaimState({
+                        type: TransactionStateType.CONFIRMED,
+                        no,
+                        receipt,
+                    })
+                    resolve()
                 })
-                resolve()
-            })
-
-            promiEvent.on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
-                setClaimState({
-                    type: TransactionStateType.CONFIRMED,
-                    no,
-                    receipt,
+                .on(TransactionEventType.ERROR, (error: Error) => {
+                    setClaimState({
+                        type: TransactionStateType.FAILED,
+                        error,
+                    })
+                    reject(error)
                 })
-                resolve()
-            })
-            promiEvent.on(TransactionEventType.ERROR, (error: Error) => {
-                setClaimState({
-                    type: TransactionStateType.FAILED,
-                    error,
-                })
-                reject(error)
-            })
         })
-    }, [gasPrice, nonce, id, password, from, redPacketContract])
+    }, [id, password, from, redPacketContract])
 
     const resetCallback = useCallback(() => {
         setClaimState({

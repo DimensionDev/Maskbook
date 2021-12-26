@@ -1,5 +1,5 @@
 import { MaskDialog } from '@masknet/theme'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { Services } from '../../../API'
 import { useDashboardI18N } from '../../../locales'
 import { MarketTrendProvider } from '../../../type'

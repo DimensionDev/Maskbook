@@ -1,4 +1,4 @@
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import Services from '../../../extension/service'
 import type { SocialNetworkUI } from '../../types'
 import type { ValueRef } from '@dimensiondev/holoflows-kit'
@@ -12,7 +12,7 @@ export function InitAutonomousStateProfiles(
     query(network, ref)
     signal.addEventListener(
         'abort',
-        MaskMessage.events.personaChanged.on((e) => e.some((x) => x.owned) && query(network, ref)),
+        MaskMessages.events.ownPersonaChanged.on(() => query(network, ref)),
     )
 
     async function query(network: string, ref: ValueRef<readonly Profile[]>) {

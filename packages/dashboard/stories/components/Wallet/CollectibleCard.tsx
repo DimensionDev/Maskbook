@@ -1,6 +1,6 @@
 import { story } from '@masknet/storybook-shared'
 import { CollectibleCard as C } from '../../../src/pages/Wallets/components/CollectibleCard'
-import { ChainId, createERC721Token, CollectibleProvider, EthereumTokenType } from '@masknet/web3-shared'
+import { ChainId, createERC721Token, CollectibleProvider, EthereumTokenType } from '@masknet/web3-shared-evm'
 
 const { meta, of } = story(C)
 
@@ -8,7 +8,7 @@ export default meta({ title: 'Components/Wallet/Collectible Card' })
 export const CollectibleCard = of({
     args: {
         chainId: ChainId.Mainnet,
-        provider: CollectibleProvider.OPENSEAN,
+        provider: CollectibleProvider.OPENSEA,
         token: createERC721Token(
             {
                 type: EthereumTokenType.ERC721,

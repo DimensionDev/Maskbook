@@ -1,5 +1,5 @@
 import stringify from 'json-stable-stringify'
-import { MaskNetworkAPIs, NetworkType } from '@masknet/public-api'
+import { MaskNetworkAPIs, NetworkType, RelationFavor } from '@masknet/public-api'
 import { encodeArrayBuffer, encodeText, unreachable } from '@dimensiondev/kit'
 import { Environment, assertEnvironment } from '@dimensiondev/holoflows-kit'
 import { ECKeyIdentifier, Identifier, ProfileIdentifier } from '@masknet/shared-base'
@@ -9,7 +9,7 @@ import Services from '../../extension/service'
 import type { Persona, Profile } from '../../database'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
-import { ProviderType } from '@masknet/web3-shared'
+import { ProviderType } from '@masknet/web3-shared-evm'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
@@ -41,9 +41,25 @@ const profileFormatter = (p: Profile) => {
     }
 }
 
+const profileRelationFormatter = (
+    p: Profile,
+    personaIdentifier: string | undefined,
+    favor: RelationFavor | undefined,
+) => {
+    return {
+        identifier: p.identifier.toText(),
+        nickname: p.nickname,
+        linkedPersona: !!p.linkedPersona,
+        createdAt: p.createdAt.getTime(),
+        updatedAt: p.updatedAt.getTime(),
+        personaIdentifier: personaIdentifier,
+        favor: favor,
+    }
+}
+
 export const MaskNetworkAPI: MaskNetworkAPIs = {
     web_echo: async (arg) => arg.echo,
-    getDashboardURL: async () => browser.runtime.getURL('/index.html'),
+    getDashboardURL: async () => browser.runtime.getURL('/dashboard.html'),
     getConnectedPersonas: async () => {
         const personas = await Services.Identity.queryMyPersonas()
         const connectedPersonas: { network: string; connected: boolean }[][] = personas
@@ -61,8 +77,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             })
         return stringify(connectedPersonas)
     },
-    app_isPluginEnabled: ({ pluginID }) => Services.Settings.isPluginEnabled(pluginID),
-    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginStatus(pluginID, enabled),
+    app_isPluginEnabled: ({ pluginID }) => Services.Settings.getPluginEnabled(pluginID),
+    app_setPluginStatus: ({ pluginID, enabled }) => Services.Settings.setPluginEnabled(pluginID, enabled),
     setting_getNetworkTraderProvider: ({ network }) => {
         switch (network) {
             case NetworkType.Ethereum:
@@ -172,17 +188,25 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             filter: { type: 'persona', wanted: [persona.identifier] },
         })
     },
+    persona_restoreFromPrivateKey: async ({ privateKey, nickname }) => {
+        const identifier = await Services.Identity.createPersonaByPrivateKey(privateKey, nickname)
+        const persona = await Services.Identity.queryPersona(identifier)
+        return personaFormatter(persona)
+    },
     persona_backupBase64: async ({ identifier }) => {
         const file = await MaskNetworkAPI.persona_backupJson({ identifier })
         return encodeArrayBuffer(encodeText(JSON.stringify(file)))
     },
     persona_backupPrivateKey: async ({ identifier }) => {
-        const privateKey = await Services.Identity.backupPersonaPrivateKey(stringToPersonaIdentifier(identifier))
-        if (privateKey) {
-            return JSON.stringify(privateKey)
-        }
-
+        const privateKey = await Services.Identity.exportPersonaPrivateKey(stringToPersonaIdentifier(identifier))
         return privateKey
+    },
+    persona_getCurrentPersonaIdentifier: async () => {
+        const identifier = await Services.Settings.getCurrentPersonaIdentifier()
+        return identifier?.toText()
+    },
+    persona_setCurrentPersonaIdentifier: async ({ identifier }) => {
+        await Services.Settings.setCurrentPersonaIdentifier(stringToPersonaIdentifier(identifier))
     },
     profile_queryProfiles: async ({ network }) => {
         const result = await Services.Identity.queryProfiles(network)
@@ -200,21 +224,61 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
     profile_removeProfile: async ({ identifier }) => {
         await Services.Identity.removeProfile(stringToProfileIdentifier(identifier))
     },
+    profile_updateRelation: async ({ profile, linked, favor }) => {
+        await Services.Identity.updateRelation(
+            stringToProfileIdentifier(profile),
+            stringToPersonaIdentifier(linked),
+            favor,
+        )
+    },
+    profile_queryRelationPaged: async ({ network, after, count }) => {
+        let afterRecord
+        if (after) {
+            afterRecord = {
+                ...after,
+                profile: stringToProfileIdentifier(after.profile),
+                linked: stringToPersonaIdentifier(after.linked),
+            }
+        }
+        const records = await Services.Identity.queryRelationPaged({ network, after: afterRecord }, count)
+
+        const profiles = await Services.Identity.queryProfilesWithIdentifiers(records.map((x) => x.profile))
+
+        return profiles.map((profile) => {
+            const record = records.find((x) => x.profile.equals(profile.identifier))
+            const favor = record?.favor
+            const personaIdentifier = record?.linked.toText()
+            return profileRelationFormatter(profile, personaIdentifier, favor)
+        })
+    },
     wallet_updateEthereumAccount: async ({ account }) => {
         await WalletRPC.updateAccount({
             account,
+            providerType: ProviderType.MaskWallet,
         })
         WalletMessages.events.walletsUpdated.sendToAll()
     },
     wallet_updateEthereumChainId: async ({ chainId }) => {
         await WalletRPC.updateAccount({
             chainId,
-            providerType: ProviderType.Maskbook,
         })
+    },
+    wallet_getLegacyWalletInfo: async () => {
+        const wallets = await WalletRPC.getLegacyWallets()
+        return wallets.map((x) => ({
+            address: x.address,
+            name: x.name || undefined,
+            path: x.path,
+            mnemonic: x.mnemonic,
+            passphrase: x.passphrase,
+            private_key: x._private_key_,
+            createdAt: x.createdAt.getTime(),
+            updatedAt: x.updatedAt.getTime(),
+        }))
     },
     async SNSAdaptor_getCurrentDetectedProfile() {
         const { activatedSocialNetworkUI } = await import('../../social-network')
-        return activatedSocialNetworkUI.collecting.identityProvider?.lastRecognized.value.identifier.toText()
+        return activatedSocialNetworkUI.collecting.identityProvider?.recognized.value.identifier.toText()
     },
 }
 

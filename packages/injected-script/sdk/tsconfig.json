@@ -5,6 +5,6 @@
     "outDir": "../dist/sdk",
     "tsBuildInfoFile": "../dist/sdk.tsbuildinfo"
   },
-  "files": ["./index.ts"],
+  "files": ["./index.ts", "./bridgedEthereum.ts", "utils.ts"],
   "references": [{ "path": "../shared/" }]
 }

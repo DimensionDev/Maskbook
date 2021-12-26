@@ -1,7 +1,7 @@
 import type { BigNumber } from 'bignumber.js'
 import { FC, Fragment } from 'react'
 import { makeStyles } from '@masknet/theme'
-import { formatBalance, formatCurrency, formatEthereumAddress } from '@masknet/web3-shared'
+import { formatBalance, formatCurrency, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useStylesExtends } from '../UI/UIHelper/custom-ui-helper'
 
 const useStyles = makeStyles()((theme) => ({

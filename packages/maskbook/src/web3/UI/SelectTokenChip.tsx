@@ -1,11 +1,11 @@
 import classNames from 'classnames'
-import { Chip, ChipProps, CircularProgress } from '@material-ui/core'
+import { Chip, ChipProps, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
-import ErrorIcon from '@material-ui/icons/Error'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import ErrorIcon from '@mui/icons-material/Error'
 import { noop } from 'lodash-es'
 import { TokenIcon } from '@masknet/shared'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../utils'
 
 const useStyles = makeStyles()((theme) => {

@@ -1,8 +1,9 @@
+import { identity } from 'lodash-es'
 import { Network } from 'opensea-js'
-import { unreachable } from '@dimensiondev/kit'
-import { ChainId } from '@masknet/web3-shared'
+import { ChainId, createLookupTableResolver } from '@masknet/web3-shared-evm'
 import { NullAddress, RaribleRopstenUserURL, RaribleUserURL } from '../constants'
 import { CollectibleProvider, OpenSeaAssetEventType, RaribleEventType } from '../types'
+import urlcat from 'urlcat'
 
 export function resolveOpenSeaAssetEventType(eventType: OpenSeaAssetEventType, fromUserName?: string) {
     switch (eventType) {
@@ -25,62 +26,49 @@ export function resolveOpenSeaAssetEventType(eventType: OpenSeaAssetEventType, f
     }
 }
 
-export function resolveRaribleAssetEventType(eventType: RaribleEventType) {
-    switch (eventType) {
-        case RaribleEventType.BUY:
-            return 'Buy'
-        case RaribleEventType.OFFER:
-            return 'Offer'
-        case RaribleEventType.ORDER:
-            return 'Order'
-        case RaribleEventType.TRANSFER:
-            return 'Transfer'
-        default:
-            return eventType
-    }
-}
+export const resolveRaribleAssetEventType = createLookupTableResolver<RaribleEventType, string>(
+    {
+        [RaribleEventType.BUY]: 'Buy',
+        [RaribleEventType.OFFER]: 'Offer',
+        [RaribleEventType.ORDER]: 'Order',
+        [RaribleEventType.TRANSFER]: 'Transfer',
+    },
+    identity,
+)
 
-export function resolveOpenSeaNetwork(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return Network.Main
-        case ChainId.Rinkeby:
-            return Network.Rinkeby
-        default:
-            throw new Error(`The chain id ${chainId} is not supported.`)
-    }
-}
+export const resolveOpenSeaNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, Network>(
+    {
+        [ChainId.Mainnet]: Network.Main,
+        [ChainId.Rinkeby]: Network.Rinkeby,
+    },
+    Network.Main,
+)
 
-export function resolveCollectibleProviderName(provider: CollectibleProvider) {
-    switch (provider) {
-        case CollectibleProvider.OPENSEA:
-            return 'OpenSea'
-        case CollectibleProvider.RARIBLE:
-            return 'Rarible'
-        default:
-            unreachable(provider)
-    }
-}
+export const resolveCollectibleProviderName = createLookupTableResolver<CollectibleProvider, string>(
+    {
+        [CollectibleProvider.OPENSEA]: 'OpenSea',
+        [CollectibleProvider.RARIBLE]: 'Rarible',
+    },
+    (providerType) => {
+        throw new Error(`Unknown provider type: ${providerType}.`)
+    },
+)
 
-export function resolveRaribleUserNetwork(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Mainnet:
-            return RaribleUserURL
-        case ChainId.Ropsten:
-            return RaribleRopstenUserURL
-        default:
-            throw new Error(`The chain id ${chainId} is not supported.`)
-    }
-}
+export const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | ChainId.Ropsten, string>(
+    {
+        [ChainId.Mainnet]: RaribleUserURL,
+        [ChainId.Ropsten]: RaribleRopstenUserURL,
+    },
+    RaribleUserURL,
+)
 
-export function resolveLinkOnOpenSea(chainId: ChainId) {
-    switch (chainId) {
-        case ChainId.Rinkeby:
-            return 'https://testnets.opensea.io'
-        default:
-            return 'https://opensea.io'
-    }
-}
+export const resolveLinkOnOpenSea = createLookupTableResolver<ChainId.Mainnet | ChainId.Rinkeby, string>(
+    {
+        [ChainId.Mainnet]: 'https://opensea.io',
+        [ChainId.Rinkeby]: 'https://testnets.opensea.io',
+    },
+    'https://opensea.io',
+)
 
 export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search: string, value: string) {
     if (chainId === ChainId.Rinkeby) {
@@ -91,5 +79,8 @@ export function resolveTraitLinkOnOpenSea(chainId: ChainId, slug: string, search
 }
 
 export function resolveAssetLinkOnOpenSea(chainId: ChainId, address: string, id: string) {
-    return `${resolveLinkOnOpenSea(chainId)}/assets/${address}/${id}`
+    return urlcat(
+        resolveLinkOnOpenSea(chainId === ChainId.Mainnet ? ChainId.Mainnet : ChainId.Rinkeby),
+        `/assets/${address}/${id}`,
+    )
 }

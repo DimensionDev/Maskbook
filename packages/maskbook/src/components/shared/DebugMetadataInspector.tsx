@@ -10,10 +10,10 @@ import {
     DialogContent,
     TextField,
     Typography,
-} from '@material-ui/core'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+} from '@mui/material'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { InjectedDialog } from './InjectedDialog'
-import { Autocomplete } from '@material-ui/core'
+import { Autocomplete } from '@mui/material'
 import { isDataMatchJSONSchema, metadataSchemaStoreReadonly } from '../../protocols/typed-message'
 import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootComponents'
 import { useState } from 'react'

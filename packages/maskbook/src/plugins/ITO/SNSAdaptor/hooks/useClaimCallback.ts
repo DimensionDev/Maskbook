@@ -6,18 +6,14 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useGasPrice,
-    useNonce,
     useTransactionState,
     useITOConstants,
     isSameAddress,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useITO_Contract } from './useITO_Contract'
 import { checkAvailability } from '../../Worker/apis/checkAvailability'
 
 export function useClaimCallback(pids: string[], contractAddress: string | undefined) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const { ITO_CONTRACT_ADDRESS } = useITOConstants()
@@ -67,27 +63,20 @@ export function useClaimCallback(pids: string[], contractAddress: string | undef
                     setClaimState({ type: TransactionStateType.FAILED, error })
                     throw error
                 }),
-            gasPrice,
-            nonce,
         }
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = ITO_Contract.methods.claim(pids).send(config as NonPayableTx)
-
-            promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setClaimState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                })
+            ITO_Contract.methods
+                .claim(pids)
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setClaimState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setClaimState({

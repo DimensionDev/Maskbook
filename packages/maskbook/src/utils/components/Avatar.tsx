@@ -1,6 +1,6 @@
-import MuiAvatar, { AvatarProps } from '@material-ui/core/Avatar/Avatar'
+import MuiAvatar, { AvatarProps } from '@mui/material/Avatar/Avatar'
 import type { Profile } from '../../database'
-import { useTheme } from '@material-ui/core'
+import { useTheme } from '@mui/material'
 
 export const mapContactAvatarColor = (string: string, theme: 'light' | 'dark') => {
     const hash = [...string].reduce((prev, current) => {

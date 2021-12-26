@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { useAccount, useMutlipleContractSingleData } from '@masknet/web3-shared'
+import { useAccount, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { usePoolTogetherTicketContracts } from '../contracts/usePoolTogetherTicket'
 import type { PoolTogetherTicket } from '@masknet/web3-contracts/types/PoolTogetherTicket'
 import { useAsyncRetry } from 'react-use'
@@ -17,7 +17,7 @@ export function useAccountBalance(pools: Pool[]) {
         Boolean,
     ) as PoolTogetherTicket[]
 
-    const [results, calls, _, callback] = useMutlipleContractSingleData(
+    const [results, calls, _, callback] = useMultipleContractSingleData(
         ticketContracts,
         Array.from<'balanceOf'>({ length: ticketContracts.length }).fill('balanceOf'),
         [account || ZERO_ADDRESS],

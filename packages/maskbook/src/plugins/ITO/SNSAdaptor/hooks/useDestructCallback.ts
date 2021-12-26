@@ -1,19 +1,10 @@
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    TransactionEventType,
-    TransactionStateType,
-    useAccount,
-    useGasPrice,
-    useNonce,
-    useTransactionState,
-} from '@masknet/web3-shared'
+import { TransactionEventType, TransactionStateType, useAccount, useTransactionState } from '@masknet/web3-shared-evm'
 import { useITO_Contract } from './useITO_Contract'
 
 export function useDestructCallback(ito_address: string) {
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const { contract: ITO_Contract } = useITO_Contract(ito_address)
     const [destructState, setDestructState] = useTransactionState()
@@ -47,29 +38,36 @@ export function useDestructCallback(ito_address: string) {
                         })
                         throw error
                     }),
-                gasPrice,
-                nonce,
             }
 
             // send transaction and wait for hash
             return new Promise<string>((resolve, reject) => {
-                const onConfirm = (no: number, receipt: TransactionReceipt) => {
-                    setDestructState({
-                        type: TransactionStateType.CONFIRMED,
-                        no,
-                        receipt,
+                ITO_Contract.methods
+                    .destruct(id)
+                    .send(config as NonPayableTx)
+                    .on(TransactionEventType.RECEIPT, (receipt: TransactionReceipt) => {
+                        setDestructState({
+                            type: TransactionStateType.CONFIRMED,
+                            no: 0,
+                            receipt,
+                        })
+                        resolve(receipt.transactionHash)
                     })
-                    resolve(receipt.transactionHash)
-                }
-                const onFailed = (error: Error) => {
-                    setDestructState({
-                        type: TransactionStateType.FAILED,
-                        error,
+                    .on(TransactionEventType.CONFIRMATION, (no: number, receipt: TransactionReceipt) => {
+                        setDestructState({
+                            type: TransactionStateType.CONFIRMED,
+                            no,
+                            receipt,
+                        })
+                        resolve(receipt.transactionHash)
                     })
-                    reject(error)
-                }
-                const promiEvent = ITO_Contract.methods.destruct(id).send(config as NonPayableTx)
-                promiEvent.on(TransactionEventType.CONFIRMATION, onConfirm).on(TransactionEventType.ERROR, onFailed)
+                    .on(TransactionEventType.ERROR, (error: Error) => {
+                        setDestructState({
+                            type: TransactionStateType.FAILED,
+                            error,
+                        })
+                        reject(error)
+                    })
             })
         },
         [ITO_Contract],

@@ -1,4 +1,4 @@
-import { Box } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncRetry } from 'react-use'

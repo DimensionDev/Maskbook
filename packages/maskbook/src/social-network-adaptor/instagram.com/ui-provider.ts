@@ -37,7 +37,7 @@ const define: SocialNetworkUI.Definition = {
         return { friends, profiles }
     },
     injection: {
-        setupWizard: createTaskStartSetupGuideDefault(instagramBase.networkIdentifier),
+        setupWizard: createTaskStartSetupGuideDefault(),
         postInspector: injectPostInspectorInstagram,
         newPostComposition: {
             start: newPostCompositionInstagram,

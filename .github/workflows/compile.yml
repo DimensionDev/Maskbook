@@ -2,9 +2,9 @@ name: Build
 
 on:
   push:
-    branches: [master, develop, released]
+    branches: [master, develop*, released]
   pull_request:
-    branches: [master, develop, released]
+    branches: [master, develop*, released]
 
 jobs:
   build:
@@ -43,40 +43,40 @@ jobs:
       - name: Restore Webpack cache
         uses: actions/cache@v2
         with:
-          path: packages/maskbook/node_modules/.cache/webpack
+          path: packages/maskbook/node_modules/.cache/
           key: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           # Not fallback to different dependencies. Webpack seems like have bug.
           # An example caused by the webpack cache bug: https://github.com/facebook/react/issues/21587
           restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
       - run: npx pnpm install
       - run: npx gulp build-ci
-      - name: Upload `Maskbook.base.zip`
+      - name: Upload `MaskNetwork.base.zip`
         uses: actions/upload-artifact@v2
         with:
-          name: Maskbook.base.zip
-          path: Maskbook.base.zip
-      - name: Upload `Maskbook.iOS.zip`
+          name: MaskNetwork.base.zip
+          path: MaskNetwork.base.zip
+      - name: Upload `MaskNetwork.iOS.zip`
         uses: actions/upload-artifact@v2
         with:
-          name: Maskbook.iOS.zip
-          path: Maskbook.iOS.zip
-      - name: Upload `Maskbook.chromium.zip`
+          name: MaskNetwork.iOS.zip
+          path: MaskNetwork.iOS.zip
+      - name: Upload `MaskNetwork.chromium.zip`
         uses: actions/upload-artifact@v2
         with:
-          name: Maskbook.chromium.zip
-          path: Maskbook.chromium.zip
-      - name: Upload `Maskbook.chromium-beta.zip`
+          name: MaskNetwork.chromium.zip
+          path: MaskNetwork.chromium.zip
+      - name: Upload `MaskNetwork.chromium-beta.zip`
         uses: actions/upload-artifact@v2
         with:
-          name: Maskbook.chromium-beta.zip
-          path: Maskbook.chromium-beta.zip
-      - name: Upload `Maskbook.firefox.zip`
+          name: MaskNetwork.chromium-beta.zip
+          path: MaskNetwork.chromium-beta.zip
+      - name: Upload `MaskNetwork.firefox.zip`
         uses: actions/upload-artifact@v2
         with:
-          name: Maskbook.firefox.zip
-          path: Maskbook.firefox.zip
-      - name: Upload `Maskbook.gecko.zip`
+          name: MaskNetwork.firefox.zip
+          path: MaskNetwork.firefox.zip
+      - name: Upload `MaskNetwork.gecko.zip`
         uses: actions/upload-artifact@v2
         with:
-          name: Maskbook.gecko.zip
-          path: Maskbook.gecko.zip
+          name: MaskNetwork.gecko.zip
+          path: MaskNetwork.gecko.zip

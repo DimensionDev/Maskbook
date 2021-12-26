@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+        <style>
+            body {
+                font-family: PingFang SC, system-ui, serif;
+            }
+
+            ol {
+                list-style: none;
+                counter-reset: li;
+            }
+
+            ol li:before {
+                position: absolute;
+                content: counter(li) '. ';
+                display: inline-block;
+                width: 1em;
+                margin-left: -1.5em;
+                color: #7b8192;
+                font-size: 14px;
+            }
+
+            .sub li:before {
+                content: counter(li, lower-alpha) '. ';
+            }
+
+            .sub-sub li:before {
+                content: counter(li, lower-roman) '. ';
+            }
+
+            li {
+                position: relative;
+                counter-increment: li;
+                margin: 1em;
+            }
+
+            h3 {
+                margin: 36px 0;
+                font-weight: 500;
+                font-size: 24px;
+                line-height: 30px;
+                text-align: center;
+            }
+
+            h6 {
+                margin: 24px 0;
+                font-size: 14px;
+                line-height: 20px;
+                font-weight: normal;
+            }
+
+            p {
+                margin: 0;
+                font-size: 14px;
+                line-height: 20px;
+                color: #7b8192;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <section>
+                <h3>Mask Network Service Agreement beta</h3>
+            </section>
+            <h6>Dear user,</h6>
+            <p>
+                Thank you for choosing the service of Mask Network. The "Mask Network Service Agreement" (hereinafter
+                referred to as the "Agreement") is signed by
+                <span>http://mask.io</span> (hereinafter referred to as "Mask Network" or "we") and the user
+                (hereinafter referred to as "you" or "user"). The agreement establishes the legal effect of contract
+                between you and Mask Network.
+            </p>
+            <p>
+                Mask Network hereby reminds you that before using Mask Network (hereinafter referred to as "Mask
+                Network" or "the software"), please carefully read the "Mask Network Service Agreement" and the relevant
+                terms mentioned later especially those in "Disclaimer and Limitation of Liability", to ensure that you
+                fully understand the terms of this agreement and take risks into consideration autonomously.
+            </p>
+
+            <h6>1. Regarding the Confirmation and Acceptance of this Agreement</h6>
+            <ol>
+                <li>
+                    <p>
+                        You understand that this agreement and related agreements apply to Mask Network and the
+                        decentralized applications autonomously developed and owned by Mask Network on Mask Network
+                        (referred to as "DApps") (excluding DApps developed by third parties).
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        If you download the Mask Network software and create or import an account, you shall be deemed
+                        to have fully read and accepted all the terms of this agreement. This agreement shall take
+                        effect immediately and be binding on both parties.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        This agreement can be updated by Mask Network at any time. Once the modified agreement is
+                        published on Mask Network, it will take effect immediately without further notice. After Mask
+                        Network announces the revised agreement terms, if you do not accept the revised terms, please
+                        stop using Mask Network immediately. Your continued use of Mask Network will mean that you
+                        accept and agree to the revised terms.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        If you are under the age of 18, or if you have no civil capacity or limited capacity of civil
+                        conduct, please use Mask Network under the guidance of your parents or guardians.
+                    </p>
+                </li>
+            </ol>
+
+            <h6>2. Definition</h6>
+            <ol>
+                <li>
+                    <p>
+                        Mask Network: refers to the multi-chain based encrypted social assistance tool developed by Mask
+                        Network. The tool is compatible with some decentralized networks and is able to run some DApps.
+                    </p>
+                </li>
+                <li>
+                    <p>The user:</p>
+                    <ol>
+                        <li>
+                            <p>The user must be a natural person with full civil capacity;</p>
+                        </li>
+                        <li>
+                            <p>
+                                If you are a minor under the age of 18, you need to use Mask Network under the guidance
+                                of your parents or guardians. If a person with no civil capacity engages in transactions
+                                using Mask Network, or a person with limited civil capacity engages in transactions
+                                beyond the scope of their civil rights or capacity, Mask Network has the right to hold
+                                the person and the person’s parents or guardians responsible for all consequences.
+                            </p>
+                        </li>
+                    </ol>
+                </li>
+                <li>
+                    <p>
+                        Creating or importing a wallet: refers to the process of using Mask Network to create or import
+                        a wallet in compliance with this agreement.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Identity code: Mask Network provides identity code for users, which is composed of 12 ordered
+                        mnemonic words randomly generated by algorithms. It is the key to create and restore your
+                        digital identity. Please store it carefully.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Persona: user identity with public and private key pair, derived from the identity code in the
+                        system. Each Persona will have its corresponding public and private keys, which are used to post
+                        encrypted information and decrypt information shared by others.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Wallet account: refers to the process of creating a wallet on Mask Network. As a decentralized
+                        application, a set of mnemonic words will be provided during the initial setup of wallet. The
+                        wallet can be re-imported through plaintext private key, mnemonic words or encrypted
+                        keystore/json file.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Wallet payment password: refers to the password determined by you during the process of creating
+                        the Mask Wallet, which will be used to encrypt and protect your wallet. As Mask Network is a
+                        decentralized application, we will not store any of your wallet data. Once you lose or forget
+                        the wallet password, you need to reset the wallet password with the help of a private key or
+                        mnemonic phrase.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Backup password: the backup password is used to encrypt files when you export data. Any exported
+                        data is protected by your backup password. Mask Network does not store user passwords, nor do we
+                        provide a centralized function of password recovery. Please protect your encrypted backup and
+                        backup password.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Information prompt: It is recommended that the user follow the relevant steps of the information
+                        prompt provided by the user interface of Mask Network software.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Private key: It is composed of 256-bit random characters and is the core of user’s ownership and
+                        management of digital assets.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Public key: It is a digital wallet address generated by one-way derivation from the private key
+                        under the principles of cryptography. It is the public address for receiving digital assets.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Keystore: It is a file where the private key or mnemonic phrase is stored and encrypted by the
+                        wallet password set up by the user. It is only stored in your local device and will not be
+                        synchronized to the Mask Network server.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Mnemonic phrase: It is another form of plaintext private key. Mask Network uses 12 words for
+                        encryption. The generation sequence is based on certain algorithm. Please back up your mnemonic
+                        phrase in time with physical medium, such as writing the mnemonic down on paper with a pen.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Digital assets: refers to the types of digital assets currently supported by Mask Network,
+                        including but not limited to ETH, DAI, etc.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Third-party services: refer to products and services provided by third-party DApps, third-party
+                        smart contracts, third-party open source agreements, third-party products and wallets, etc.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Personal information: refers to various information of a natural person recorded electronically
+                        or in other ways that can identify the user's personal identity alone or in combination with
+                        other information, including but not limited to the name, date of birth, ID number, personal
+                        biometric information, address, phone number, bank card number, email address, wallet address,
+                        mobile device information, operation records, transaction records, etc., but does not include
+                        the user’s wallet password, private key, mnemonic phrase and keystore.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Risk warning: refers to the risk warning that needs to be confirmed when using any
+                        wallet-related plug-ins in Mask Network.
+                    </p>
+                </li>
+            </ol>
+            <h6>3. Service Content</h6>
+            <ol>
+                <li>
+                    <p>
+                        Create identity code: The identity code consists of 12 random words and supports the encryption
+                        and decryption of encrypted social information signed and posted by the digital identity.
+                        Through "create an identity" provided by Mask network, you can create or restore your identity
+                        (login). You can manage multiple personas within the identity at the same time.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Create or import a wallet. For digital assets supported by Mask Network, you can use Mask
+                        Network to generate a new wallet or import compatible wallets generated by other wallet tools in
+                        relevant blockchain networks. Mask wallet currently supports three chains: ETH, BSC, Polygon
+                        (Matic network). In the future, we may integrate other chains
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Backup and recovery: You can use the global backup function to back up data locally or via the
+                        cloud, including identity, Persona, encrypted social information, wallet (optional), etc. The
+                        user needs to set up a backup password to encrypt the selected data. If the user chooses to back
+                        up the Mask wallet, the user needs to enter the payment password to verify the wallet. When the
+                        user chooses to back up via cloud provided by Mask Network, the user needs to set up a mobile
+                        phone number or email address for sending and receiving verification codes so that the encrypted
+                        backup data can be fetched from cloud.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Blockchain contract interactions such as transfer, receiving, lucky drops, Swap, ITO, etc. You
+                        can use Mask Network's services such as transfer, receiving, lucky drops and Swap to manage
+                        digital assets, that is, use private keys for electronic signatures and to modify related
+                        blockchain ledger. Transfer means that the payer uses the payee's blockchain address to conduct
+                        transfer operations. The actual transfer and receiving operations occur in the relevant
+                        blockchain systems (not Mask Network).
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Post encrypted information. You can install the Mask Network plug-in in your browser, and use
+                        the Mask Network plug-in on supported social media platforms to post encrypted information.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Browse through DApps. Mask Network Dashboard - Mask Labs provides self-owned DApps and DApps
+                        provided by third-party platforms. For DApps provided by third-party platforms, Mask Network
+                        only provides users with access to the DApp and provides a blockchain browser, and users can
+                        click it to jump to the third-party DApp and use the services provided by the DApp. As Mask
+                        Network provides non-commercial integration services, it will integrate plug-ins provided by
+                        community members and excellent teams of third-party DApps. Before using any wallet-related
+                        plug-ins in Mask Network (including Mask Network’s own DApps and third-party DApps), the users
+                        need to confirm the risk warning.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Transaction Records. We will display transaction records through blockchain systems. The
+                        transaction records are subject to the records of the blockchain systems.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        The file storage system currently used by Mask Network is Arweave's permanent storage system.
+                        Currently, Mask Network is the official payer of storage service fees. As long as the storage
+                        funds of Mask Network are sufficient, Mask Network will continue to pay for users. We do not
+                        rule out the possibility that with the rapid expansion of Mask Network users in the future,
+                        users may need to pay for file storage by themselves. Arweave's file storage can only be
+                        encrypted and stored by user's own account. Mask Network cannot parse any user’s encrypted
+                        files. The files can only be decrypted by users of Mask Network themselves. As the file storage
+                        service is provided by Arweave, Arweave is responsible for any file problems that might occur
+                        and Mask Network shall not be held accountable.
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        Service of suspension. You understand that based on the "irrevocable" nature of blockchain
+                        system transactions, we cannot suspend or cancel transactions for you.
+                    </p>
+                </li>
+                <li><p>Other services that Mask Network deems necessary to provide.</p></li>
+                <li>
+                    <p>
+                        Users should learn about the following common problems when accepting the above services
+                        provided by Mask Network:
+                    </p>
+                    <ol>
+                        <li>
+                            <p>
+                                a). Adhering to the decentralized characteristics of blockchain, Mask Network provides
+                                decentralized services which are essentially different from banking financial
+                                institutions in order to protect the security of users' digital assets. Users should
+                                understand that Mask Network does not provide the following services:
+                            </p>
+                            <ol>
+                                <li>
+                                    <p>
+                                        i. Store the Identity code, backup password, wallet payment password, private
+                                        key, mnemonic phrase, keystore of non-hosted users.
+                                    </p>
+                                </li>
+                                <li>
+                                    <p>ii. Freeze a wallet;</p>
+                                </li>
+                                <li>
+                                    <p>iii. Report a lost wallet;</p>
+                                </li>
+                                <li>
+                                    <p>iv. Restore a wallet;</p>
+                                </li>
+                                <li>
+                                    <p>v. Transaction rollback;</p>
+                                </li>
+                            </ol>
+                        </li>
+                        <li></li>
+                    </ol>
+                </li>
+                <div>
+                    <p>
+                        b). Since Mask Network does not provide the above services, users should keep the mobile devices
+                        with installation of Mask Network safe, back up the identity code of Mask Network, back up
+                        wallet payment password, mnemonic phrase, private key and Keystore by themselves. If the user
+                        should lose the mobile device, or delete the identity code of Mask Network without backup, or
+                        delete the wallet without backup, or forget the wallet password, private key, mnemonic phrase,
+                        Keystore, or if the wallet is stolen, Mask Network cannot restore the wallet or retrieve the
+                        wallet password, private key, Mnemonic phrase or Keystore; If the user should make a mistake
+                        during a transaction (such as entering the wrong transfer address), Mask Network cannot cancel
+                        the transaction.
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        c). Mask Network and the digital asset management services provided by Mask Network do not
+                        include all existing digital assets. Please do not operate any digital assets that Mask Network
+                        does not support through Mask Network.
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        d). Mask Network is only a digital asset management tool for users, not an exchange or trading
+                        platform. Although this agreement will refer to "transactions" many times, it generally means
+                        the transfer and receiving operations conducted by users using Mask Network, which is
+                        essentially different from "transactions" conducted on exchanges or trading platforms.
+                    </p>
+                </div>
+                <div>
+                    <p>
+                        e). The integrated DApps on Mask Network include DApps owned by Mask Network and DApps that are
+                        provided by third-party platforms. For DApps provided by third-party platforms, Mask Network
+                        only provides blockchain explorer for users to enter the DApps. Before accepting the service or
+                        conducting transactions, users must judge and evaluate by themselves whether there is risk in
+                        the service or transaction provided by the third-party DApps.
+                    </p>
+                </div>
+            </ol>
+
+            <h6>4. Your Rights and Obligations</h6>
+            <p>1). Create or import a wallet</p>
+            <div>
+                <p>
+                    a). Create or import a wallet: You have the right to create and/or import a wallet through Mask
+                    Network on your mobile device, and you have the right to use your own wallet to conduct transactions
+                    such as transfer and receiving on the blockchain through the Mask Network application. Mask Network
+                    may develop different software versions for different terminal devices. You should choose to
+                    download and install the appropriate version according to your actual needs. If you obtain a
+                    software or an installation program with the same name as the Mask Network software from an
+                    unauthorized third party, Mask Network cannot guarantee the normal use of the software, nor its
+                    security, and you shall be responsible for any losses caused by the software.
+                </p>
+            </div>
+            <div>
+                <p>
+                    b). After the new version of this software is released, the old version of the software may not be
+                    available to use. Mask Network does not guarantee the security, continued availability and
+                    corresponding customer service of the old version of the software. Please back up your existing data
+                    at any time, check and download the latest version.
+                </p>
+            </div>
+            <p>2). Use</p>
+            <div>
+                <p>
+                    a). Users should properly keep the mobile device, wallet password, private key, mnemonic phrase,
+                    Keystore and other information by themselves. Without authorization, Mask Network is not responsible
+                    for keeping the above information for users. All risks, liabilities, losses, and expenses caused by
+                    your loss of mobile device, active or passive disclosure of wallet password, forgetting wallet
+                    password, private key, mnemonic phrase and Keystore, or attack and fraud by others shall be borne by
+                    you.
+                </p>
+            </div>
+            <div>
+                <p>
+                    b). Follow the information prompts. You understand and agree to follow the information prompts
+                    provided by Mask Network and operate in accordance with the content of the information prompts.
+                    Otherwise, all risks, responsibilities, losses and expenses shall be borne by you.
+                </p>
+            </div>
+            <div>
+                <p>
+                    c). You know and understand that Mask Network is not obliged to perform due diligence on the linked
+                    third-party DApp services or transactions, and you should make rational investment decisions and
+                    bear the corresponding investment risks independently.
+                </p>
+            </div>
+            <div>
+                <p>
+                    d). Actively complete identity verification. When Mask Network reasonably believes that your
+                    transaction behavior or transaction condition is abnormal, or that your identity information is
+                    suspicious, or that your ID or other necessary documents should be verified, please actively
+                    cooperate with Mask Network to verify your valid ID or other necessary documents and complete the
+                    relevant identity verification in time.
+                </p>
+            </div>
+            <p>3). Transfer.</p>
+            <div>
+                <p>
+                    a). You understand that because of the "irrevocable" attribute of blockchain-based operations, when
+                    you use Mask Network’s transfer function, you should bear the consequences caused by your mistakes
+                    by yourself (including but not limited to wrong transfer address, your own choice of the node
+                    server).
+                </p>
+            </div>
+            <div>
+                <p>
+                    b). You understand that when using the Mask Network service, the following situations may lead to
+                    "transaction failure" or "packing timeout" in transfers:
+                </p>
+            </div>
+            <div>
+                <p>i. Insufficient wallet balance;</p>
+            </div>
+            <div>
+                <p>ii. Insufficient transaction miner fees;</p>
+            </div>
+            <div>
+                <p>iii. The block chain failed to execute the contract code;</p>
+            </div>
+            <div>
+                <p>iv. Technical failures with network, equipment, etc.;</p>
+            </div>
+            <div>
+                <p>v. Blockchain network congestion, failure and other reasons cause transactions to be abandoned;</p>
+            </div>
+            <div>
+                <p>
+                    vi. Your address or the address of the counterparty is identified as a special address, such as a
+                    high-risk address, an exchange address, an ICO address, a Token address, etc.
+                </p>
+            </div>
+            <p>
+                4). You know that Mask Network only provides you with transfer tools. After you use Mask Network to
+                complete the transfer, Mask Network has completed all the obligations of the current service. Mask
+                Network will not bear any obligations for other disputes.
+            </p>
+            <p>
+                5). Legal compliance. You understand that you should follow the requirements of relevant laws,
+                regulations and national policies when operating on Mask Network or using DApps on Mask Network to
+                conduct transactions.
+            </p>
+            <p>6). Service fees and tax liability:</p>
+            <div>
+                <p>
+                    (a) Mask Network does not charge you any form of service fee or handling fee for the time being, and
+                    specific terms will be further agreed or announced when certain services need to be charged in the
+                    future;
+                </p>
+            </div>
+            <div>
+                <p>
+                    (b) When you use Mask Network to transfer funds, you should pay miner fees, and the amount is
+                    determined by you. Miner fees are collected by the relevant blockchain system;
+                </p>
+            </div>
+            <div>
+                <p>
+                    (c) You know that under certain circumstances, if your transfer operation is not completed because
+                    of your environment and unstable network status, the relevant blockchain system will still charge
+                    miner fees;
+                </p>
+            </div>
+            <div>
+                <p>
+                    (d) You are responsible for paying all taxable expenses and other expenses incurred by you for
+                    trading on Mask Network.
+                </p>
+            </div>
+
+            <h6>5. Risk Warning</h6>
+            <p>
+                1). You understand that due to the unsound laws, regulations and policies in the field of digital
+                assets, there might be major risks such as inability to cash out digital assets and technical
+                instability. What’s more, the price volatility of digital assets is much higher than other financial
+                assets. We cautiously remind you that you should rationally choose to hold or sell any digital asset
+                based on your financial situation and risk appetite. Mask Network provides the service of viewing the
+                third-party market trend, which displays only search results from capturing the exchange rate of digital
+                assets on some exchanges, and does not represent the latest market trend or the best offer.
+            </p>
+            <p>
+                2). When using the Mask Network service, if you or your counterparty fail to comply with the agreement,
+                or with the operation prompts and rules on related pages such as website instructions, transactions,
+                payments, sending and receiving lucky drops, Mask Network does not guarantee that the transaction will
+                be completed smoothly, and Mask Network is not liable for losses. If the foregoing situation occurs and
+                the money has been credited to your or your counterparty’s Mask Network wallet or third-party wallet,
+                you understand that due to the "irreversible" attribute of blockchain operations and the "irrevocable"
+                characteristic of related transactions, you and your counterparty shall bear the corresponding risks and
+                consequences.
+            </p>
+            <p>
+                3). When you use the third-party DApp services integrated by Mask Network or conduct transactions, for
+                your benefit, Mask Network recommends that you carefully read this agreement and Mask Network prompts,
+                understand the transaction party and product information, and carefully assess the risks before taking
+                action. All your transactions in third-party DApps are your personal behaviors. A binding contractual
+                relationship is established between you and your counterparty, not with Mask Network. Mask Network
+                assumes no responsibility for all risks, liabilities, losses, and expenses caused by your trading
+                operations.
+            </p>
+            <p>
+                4). During the transaction, you should judge by yourself whether the counterparty is a person with full
+                civil capacity and decide whether to trade with the counterparty or transfer funds to the counterparty,
+                and you shall bear all risks related to this.
+            </p>
+            <p>
+                5). During the transfer process, if there are abnormal information prompts such as "transaction failed"
+                and "package timeout", you should reconfirm through the official channel of the relevant blockchain
+                system or other blockchain query tools to avoid duplicate transfer; otherwise, all losses and expenses
+                caused by this shall be borne by you.
+            </p>
+            <p>
+                6). You understand that after you create or import a wallet on Mask Network, your keystore, private key,
+                mnemonic phrase and other information are only stored in your current mobile device, not on the Mask
+                Network or Mask Network servers. You can change your mobile device by synchronizing your wallet and by
+                other ways according to the operation guide provided by Mask Network. However, if you do not save or
+                back up your wallet password, private key, mnemonic phrase, keystore and other information, when your
+                device is lost, your digital assets will be lost consequentially. Mask Network cannot retrieve it for
+                you and you shall bear the corresponding loss by yourself. When you export, save or back up wallet
+                passwords, private keys, mnemonics, keystore and other information, if the information is leaked, or if
+                the device or server that has stored or backed up the above information is hacked or controlled, your
+                digital assets will be lost consequentially. Mask Network cannot retrieve it for you and you shall bear
+                the corresponding loss by yourself.
+            </p>
+            <p>
+                7). We recommend that you back up your wallet password, private key, mnemonic phrase, and keystore
+                securely when creating or importing a wallet. Please do not use the following backup methods:
+                screenshots, emails, notepads, text messages, WeChat, QQ and other electronic backup methods. We
+                recommend that you write down information such as mnemonics and keystores on a paper notebook, and you
+                can also store your electronic data in a password manager.
+            </p>
+            <p>
+                8). We recommend that you use Mask Network in a secure network environment and ensure that your mobile
+                device is not jailbroken or rooted to avoid possible security risks.
+            </p>
+            <p>
+                9). Please be alert to non-official Mask Network frauds when using our services. Once you discover such
+                behavior, we encourage you to inform us as soon as possible.
+            </p>
+
+            <h6>6. Service Change, Interruption, and Termination</h6>
+            <p>
+                1). You agree that Mask Network can temporarily provide some service functions, or suspend some service
+                functions or provide new service functions in the future in order to guarantee the right of independent
+                business operation. When any function is reduced, increased or changed, as long as you still use the
+                services provided by Mask Network, it means that you still agree to this agreement or the revised terms
+                of this agreement.
+            </p>
+            <p>
+                2). In order to protect the security of your digital assets, please try to avoid the misoperation or
+                risks caused by using Mask Network without basic knowledge of blockchain. Otherwise, Mask Network
+                reserves the right to restrict or refuse to provide some or all of the service functions.
+            </p>
+            <p>3). You understand that Mask Network will suspend services under the following circumstances:</p>
+            <div>
+                <p>
+                    a). Due to technical reasons such as your equipment failure, blockchain system maintenance, upgrade,
+                    failure and communication interruption;
+                </p>
+            </div>
+            <div>
+                <p>
+                    b). Due to force majeure factors such as typhoons, earthquakes, tsunamis, floods, power outages,
+                    wars or terrorist attacks, viruses, Trojan horses, hacker attacks, system instability, or government
+                    actions.
+                </p>
+            </div>
+            <div>
+                <p>c). Other situations that Mask Network cannot control or reasonably foresee.</p>
+            </div>
+            <p>
+                4). When you change, suspend, or terminate Mask Network Service, it will not affect the migration and
+                storage of user's local data.
+            </p>
+
+            <h6>7. Your Promise to Legally use Mask Network Services</h6>
+            <p>
+                1). You should abide by the laws and regulations of the country or region of residence and must not use
+                Mask Network for any illegal purpose or use Mask Network services in any illegal way.
+            </p>
+            <p>
+                2). You may not use Mask Network to engage in illegal or criminal activities, including but not limited
+                to:
+            </p>
+            <div>
+                <p>
+                    a. Oppose the basic principles established by the Constitution, endanger national security, leak
+                    state secrets, subvert state power, or undermine national unity;
+                </p>
+            </div>
+            <div>
+                <p>
+                    b. Engage in any illegal and criminal acts, including but not limited to money laundering, illegal
+                    fund-raising, etc.;
+                </p>
+            </div>
+            <div>
+                <p>
+                    c. Use any automated programs, software, engines, web crawlers, web analysis tools, data mining
+                    tools or similar tools to have access to Mask Network services, collect or process the content
+                    provided by Mask Network, interfere or attempt to interfere with users, or gain access to Mask
+                    Network services in any other ways.
+                </p>
+            </div>
+            <div>
+                <p>d. Provide gambling information or induce others to participate in gambling in any way;</p>
+            </div>
+            <div>
+                <p>e. Invade others' Mask Network wallet to steal digital assets;</p>
+            </div>
+            <div>
+                <p>
+                    f. Conduct transactions that are inconsistent with the transaction content declared by the
+                    counterparty, or untrue transactions;
+                </p>
+            </div>
+            <div>
+                <p>g. Engage in any act that infringes or may infringe the Mask Network service system and data;</p>
+            </div>
+            <div>
+                <p>
+                    h. Other acts that violate laws or acts that Mask Network deem inappropriate with legitimate
+                    reasons.
+                </p>
+            </div>
+            <p>
+                3). You understand and agree that if you violate the relevant laws (including but not limited to customs
+                and taxation regulations) or the provisions of this agreement and cause Mask Network to suffer any loss
+                or to be subject to any third-party claims or any administrative penalties, you should compensate Mask
+                Network including reasonable attorney's fees.
+            </p>
+            <p>
+                4). You promise to pay Mask Network's service fees (if any) on time, otherwise Mask Network has the
+                right to suspend or terminate the service provided to you.
+            </p>
+
+            <h6>8. Privacy Policy</h6>
+            <p>
+                Mask Network attaches great importance to the protection of user privacy. For related privacy protection
+                policies, please refer to the "Mask Network Privacy Policy" published and updated by Mask Network.
+            </p>
+
+            <h6>9. Disclaimer and Limitation of Liability</h6>
+            <p>1). Mask Network is only responsible for the obligations listed in this agreement.</p>
+            <p>
+                2). You understand and agree that, within the scope permitted by law, Mask Network can only provide
+                services in accordance with the current technical level and conditions. Mask Network is not responsible
+                for failing to provide services due to the following reasons:
+            </p>
+            <div>
+                <p>a). Force majeure such as typhoons, earthquakes, floods, lightning or terrorist attacks;</p>
+            </div>
+            <div>
+                <p>
+                    b). Your mobile device's software and hardware, communication lines, and power supply lines are
+                    faulty;
+                </p>
+            </div>
+            <div>
+                <p>
+                    c). Viruses, Trojan horses, malicious program attacks, network congestion, system instability,
+                    system or equipment failures, communication failures, power failures, banks, or government actions;
+                </p>
+            </div>
+            <div>
+                <p>d). Any other reasons not caused by the Mask Network.</p>
+            </div>
+            <p>3). Mask Network is not responsible for the following situations:</p>
+            <div>
+                <p>
+                    a). Loss of digital assets caused by the user's loss of mobile device, deletion of Mask Network
+                    without backup, deletion of wallet without backup, stolen wallet, forgetting of wallet password,
+                    private key, mnemonic phrase and Keystore;
+                </p>
+            </div>
+            <div>
+                <p>
+                    b).The user discloses the wallet password, private key, mnemonic phrase and keystore, or lends,
+                    transfers or authorizes others to use his/her own mobile device or Mask Network wallet, or does not
+                    download the Mask Network application through the official channels of Mask Network, or use Mask
+                    Network application in other unsafe ways, and causes the loss of digital assets.
+                </p>
+            </div>
+            <div>
+                <p>
+                    c). Loss of digital assets due to user misoperation (including but not limited to inputting the
+                    wrong transfer address);
+                </p>
+            </div>
+            <div>
+                <p>
+                    d). Loss of digital assets caused by misoperation because users do not understand the nature of
+                    blockchain technology;
+                </p>
+            </div>
+            <div>
+                <p>
+                    e). Users' transaction records copied by Mask Network derivate from those on the blockchain due to
+                    time lag, the instability of the blockchain system, etc.
+                </p>
+            </div>
+            <div>
+                <p>f). The risks and consequences caused by users' operations on third-party DApps.</p>
+            </div>
+            <p>
+                4). You understand that Mask Network is only used as a tool for your digital asset management. Mask
+                Network cannot control the quality, safety or legality of products and services, and the authenticity or
+                accuracy of information provided by third-party DApps, nor can we control the ability of the
+                counterparty to fulfill its obligations under the agreement signed with you. All your transactions in
+                third-party DApps are your personal behaviors, and a binding contractual relationship is established
+                between you and your counterparty, not with Mask Network. Mask Network reminds you that you should use
+                your own prudent judgment to determine the authenticity, legality and validity of the DApp and its
+                related information when login. You should also bear the risks arising from your transaction with any
+                third party.
+            </p>
+            <p>
+                5). Mask Network may provide services to you and your counterparty at the same time. You agree to
+                explicitly exempt any actual or potential conflicts of interest from such actions that might exist, and
+                you are not allowed to claim that Mask Network has legal flaws when providing services, or aggravate
+                Mask Network's responsibility or duty of care.
+            </p>
+            <p>6). Mask Network does not guarantee:</p>
+            <div>
+                <p>a). The Mask Network service will meet all your needs;</p>
+            </div>
+            <div>
+                <p>
+                    b). Any technology, products, services, and information you obtain through the Mask Network service
+                    will meet your expectations;
+                </p>
+            </div>
+            <div>
+                <p>
+                    c). The timeliness, accuracy, completeness and reliability of market transaction information of
+                    digital assets captured from third-party exchanges by Mask Network;
+                </p>
+            </div>
+            <div>
+                <p>
+                    d). The transaction parties on Mask Network will promptly fulfill their obligations in compliance
+                    with the agreement with you.
+                </p>
+            </div>
+            <p>7). In any case, Mask Network’s total liability for breach of contract shall not exceed 10 USD.</p>
+            <p>
+                8). You understand that Mask Network is only used as a tool for users to manage digital assets and
+                display transaction information. Mask Network does not provide services such as legal, tax or investment
+                advice. You should seek advice from professionals in the field of law, taxation, and investment. Mask
+                Network is not responsible for any investment loss and data loss that incurs during your use of our
+                services.
+            </p>
+
+            <h6>10. Entire Agreement</h6>
+            <p>1). This agreement consists of "Mask Network Service Agreement" and "Mask Network Privacy Policy".</p>
+            <p>
+                2). If part of the content of this agreement is deemed to be violating or invalid by the court with
+                jurisdiction, the validity of other content will not be affected.
+            </p>
+            <p>
+                3). Any translated version of this agreement is provided for the convenience of users only, and there is
+                no intention to modify the terms of this agreement. If there is a conflict between the English version
+                of this agreement and the non-English version, the English version shall prevail.
+            </p>
+
+            <h6>11. Intellectual Property Protection</h6>
+            <p>
+                1). Mask Network is an application developed and owned by Mask Network. If you need to use it, please
+                refer to the Mask Network source code authorization agreement.
+            </p>
+
+            <h6>12. Application of Law and Dispute Resolution</h6>
+            <p>
+                1). The validity, interpretation, modification, execution and dispute resolution of this agreement and
+                its revised version shall be governed by the laws of the People's Republic of China. If there are no
+                relevant legal provisions, international business practices and/or industry practices shall apply.
+            </p>
+            <p>
+                2). If there is any dispute or dispute between you and Mask Network, you should first settle it through
+                friendly negotiation. If the negotiation fails, either party can submit it to the People's Court with
+                jurisdiction where Mask Network is located.
+            </p>
+
+            <h6>13. Others</h6>
+            <p>
+                1). If you are a user outside the People's Republic of China, you need to fully understand and abide by
+                all relevant laws, regulations and rules regarding the use of Mask Network services in your
+                jurisdiction.
+            </p>
+            <p>
+                2). If you encounter any problems while using Mask Network services, you can contact us by submitting
+                your feedback on Mask Network.
+            </p>
+            <p>
+                3). You can view this agreement in Mask Network. Mask Network encourages you to check Mask Network's
+                service agreement every time you visit Mask Network.
+            </p>
+            <p>
+                4). This agreement shall be effective from August 24, 2021. For matters not covered in this agreement,
+                you need to comply with Mask Network's updated service agreement terms.
+            </p>
+        </main>
+    </body>
+</html>

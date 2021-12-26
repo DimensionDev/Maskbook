@@ -1,4 +1,4 @@
-import type { PaletteMode, ThemeOptions } from '@material-ui/core'
+import type { PaletteMode, ThemeOptions } from '@mui/material'
 import type { Color } from './constants'
 
 function css_var<T extends Record<string, unknown>>(
@@ -17,6 +17,27 @@ function css_var<T extends Record<string, unknown>>(
     }
 }
 type Theme = ThemeOptions | ((mode: PaletteMode, colors: Color) => ThemeOptions)
+
+export const BaseLine: Theme = (mode, colors): ThemeOptions => ({
+    components: {
+        MuiCssBaseline: {
+            styleOverrides: {
+                body: {
+                    scrollbarColor: 'red',
+                    '&::-webkit-scrollbar, & *::-webkit-scrollbar': {
+                        width: '10px',
+                    },
+                    '&::-webkit-scrollbar-thumb, & *::-webkit-scrollbar-thumb': {
+                        borderRadius: '6px',
+                        border: '2px solid rgba(0, 0, 0, 0)',
+                        backgroundColor: mode === 'dark' ? 'rgba(250, 250, 250, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                        backgroundClip: 'padding-box',
+                    },
+                },
+            },
+        },
+    },
+})
 
 export const Grid: Theme = {
     components: { MuiGrid: {} },
@@ -87,25 +108,81 @@ export const Button: Theme = (mode, colors): ThemeOptions => ({
                     props: { color: 'warning' },
                     style: { [button.main]: colors.warning, [button.contrast]: colors.primaryContrastText },
                 },
+                {
+                    props: { size: 'small' },
+                    style: { height: '28px', fontSize: '12px' },
+                },
+                {
+                    props: { size: 'medium' },
+                    style: { height: '38px', fontSize: '14px' },
+                },
+                {
+                    props: { size: 'large' },
+                    style: { height: '48px', fontSize: '16px' },
+                },
             ],
         },
     },
 })
 
-export const Dialog: Theme = {
+export const Dialog: Theme = (mode, colors): ThemeOptions => ({
     components: {
         MuiDialog: {
             styleOverrides: {
-                paper: { minHeight: 200, minWidth: 440 },
+                root: {
+                    [`& .dashboard-style`]: {
+                        backgroundColor: mode === 'dark' ? colors.primaryBackground : colors.secondaryBackground,
+                    },
+                },
+                paper: { minHeight: 200, minWidth: 440, background: colors.mainBackground },
+            },
+            defaultProps: {
+                BackdropProps: {
+                    sx: {
+                        backdropFilter: 'blur(8px)',
+                        backgroundColor: 'rgba(0, 0, 0, 0.3)',
+                    },
+                },
+            },
+        },
+        MuiDialogTitle: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: colors.mainBackground,
+                    '&.dashboard-dialog-title-hook': {
+                        backgroundColor: colors.mainBackground,
+                        display: 'flex',
+                        flexDirection: 'row-reverse',
+                        alignItems: 'center',
+                        borderBottom: 'none!important',
+                        p: {
+                            width: '100%',
+                            display: 'inline-flex',
+                            justifyContent: 'start',
+                        },
+                    },
+                },
+            },
+        },
+        MuiDialogContent: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: colors.mainBackground,
+                },
             },
         },
         MuiDialogActions: {
             styleOverrides: {
-                root: { justifyContent: 'center', paddingBottom: 24, '&>:not(:first-of-type)': { marginLeft: 18 } },
+                root: {
+                    justifyContent: 'center',
+                    paddingBottom: 24,
+                    '&>:not(:first-of-type)': { marginLeft: 18 },
+                    backgroundColor: colors.mainBackground,
+                },
             },
         },
     },
-}
+})
 
 export const TextField: Theme = {
     components: {

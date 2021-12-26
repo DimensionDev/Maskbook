@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@material-ui/core'
+import { Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import isBefore from 'date-fns/isBefore'
 import intervalToDuration from 'date-fns/intervalToDuration'

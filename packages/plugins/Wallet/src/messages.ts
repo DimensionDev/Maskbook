@@ -1,11 +1,15 @@
+import type BigNumber from 'bignumber.js'
+import type { JsonRpcPayload } from 'web3-core-helpers'
 import type {
     FungibleTokenDetailed,
-    GasNow,
+    ERC721ContractDetailed,
+    GasOptions,
     NetworkType,
     ProviderType,
     TransactionState,
     Wallet,
-} from '@masknet/web3-shared'
+    GasOption,
+} from '@masknet/web3-shared-evm'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
 
@@ -23,7 +27,7 @@ export type TransactionDialogEvent =
 
 export type GasPriceDialogEvent = {
     open: boolean
-    type?: keyof GasNow
+    type?: keyof GasOptions
 }
 
 export type SelectProviderDialogEvent =
@@ -54,22 +58,18 @@ export type SelectWalletDialogEvent =
           open: false
       }
 
-export type CreateImportWalletDialogEvent = {
-    open: boolean
-}
-
-export type CreateWalletDialogEvent = {
-    name?: string
-    open: boolean
-}
-
-export type ImportWalletDialogEvent = {
-    name?: string
-    open: boolean
-}
-
 export type WalletStatusDialogEvent = {
     open: boolean
+}
+
+export type GasSettingDialogEvent = {
+    open: boolean
+    gasLimit: number
+    minGasLimit?: number
+    gasPrice?: BigNumber.Value
+    maxFee?: BigNumber.Value
+    priorityFee?: BigNumber.Value
+    gasOption?: GasOption | null
 }
 
 export type WalletRenameDialogEvent = {
@@ -119,6 +119,30 @@ export type SelectTokenDialogEvent =
            */
           token?: FungibleTokenDetailed
       }
+export type SelectERC20TokenDialogEvent =
+    | {
+          open: true
+          props?: {
+              whitelist?: string[]
+              blacklist?: string[]
+              tokens?: FungibleTokenDetailed[]
+              selectedTokens?: string[]
+              onSelect?(token: FungibleTokenDetailed | null): void
+          }
+      }
+    | {
+          open: false
+      }
+
+export type SelectNftContractDialogEvent = {
+    open: boolean
+    uuid: string
+
+    /**
+     * The selected detailed nft contract.
+     */
+    contract?: ERC721ContractDetailed
+}
 
 export interface WalletMessage {
     /**
@@ -135,21 +159,6 @@ export interface WalletMessage {
      * Select wallet dialog
      */
     selectWalletDialogUpdated: SelectWalletDialogEvent
-
-    /**
-     * Create or import wallet choose dialog
-     */
-    createImportWalletDialogUpdated: CreateImportWalletDialogEvent
-
-    /**
-     * Create wallet dialog
-     */
-    createWalletDialogUpdated: CreateWalletDialogEvent
-
-    /**
-     * import wallet dialog
-     */
-    importWalletDialogUpdated: ImportWalletDialogEvent
 
     /**
      * Select provider dialog
@@ -172,9 +181,19 @@ export interface WalletMessage {
     walletRenameDialogUpdated: WalletRenameDialogEvent
 
     /**
+     * Gas setting dialog
+     */
+    gasSettingDialogUpdated: GasSettingDialogEvent
+
+    /**
      * Select token dialog
      */
     selectTokenDialogUpdated: SelectTokenDialogEvent
+
+    /**
+     * Select nft contract dialog
+     */
+    selectNftContractDialogUpdated: SelectNftContractDialogEvent
 
     /**
      * WalletConnect QR Code dialog
@@ -185,11 +204,21 @@ export interface WalletMessage {
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
+    /**
+     * Select token dialog
+     */
+    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void
+    addressBookUpdated: void
     transactionsUpdated: void
-    requestsUpdated: void
+    transactionStateUpdated: TransactionState
+    transactionProgressUpdated: {
+        state: TransactionState
+        payload: JsonRpcPayload
+    }
+    requestsUpdated: { hasRequest: boolean }
     erc20TokensUpdated: void
     erc721TokensUpdated: void
     erc1155TokensUpdated: void

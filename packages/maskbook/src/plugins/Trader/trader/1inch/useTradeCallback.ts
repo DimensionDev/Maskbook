@@ -11,7 +11,7 @@ import {
     useGasPrice,
     useNonce,
     useWeb3,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import type { TradeComputed, SwapQuoteOneResponse } from '../../types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteOneResponse> | null) {

@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { styled, Typography } from '@material-ui/core'
+import { styled, Typography } from '@mui/material'
 import { WalletQRCodeContainer } from '../WalletQRCodeContainer'
 import { MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'

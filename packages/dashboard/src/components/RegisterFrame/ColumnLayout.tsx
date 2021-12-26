@@ -1,21 +1,24 @@
-import { styled } from '@material-ui/core/styles'
+import { styled, useTheme } from '@mui/material/styles'
 import { FooterLine } from '../FooterLine'
-import { Paper, Typography } from '@material-ui/core'
+import { Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MaskBannerIcon, MaskNotSquareIcon } from '@masknet/icons'
-import { useAppearance } from '../../pages/Personas/api'
 
-const Container = styled('div')(`
+const Container = styled('div')(
+    ({ theme }) => `
     position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: ${theme.spacing(4)};
     height: 100%;
     width: 100%;
-`)
+`,
+)
 
 const Content = styled('div')(`
-    width: 950px;
+    width: 900px;
+    max-height: 90%;
 `)
 
 const useStyles = makeStyles()((theme) => ({
@@ -25,11 +28,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface ColumnLayoutProps extends React.PropsWithChildren<{}> {}
+interface ColumnLayoutProps extends React.PropsWithChildren<{}> {
+    haveFooter?: boolean
+}
 
-export const ColumnLayout = ({ children }: ColumnLayoutProps) => {
+export const ColumnLayout = ({ haveFooter = true, children }: ColumnLayoutProps) => {
     const { classes } = useStyles()
-    const mode = useAppearance()
+    const mode = useTheme().palette.mode
 
     return (
         <Container>
@@ -38,7 +43,7 @@ export const ColumnLayout = ({ children }: ColumnLayoutProps) => {
                     <Typography>{mode === 'dark' ? <MaskBannerIcon /> : <MaskNotSquareIcon />}</Typography>
                     {children}
                 </Paper>
-                <FooterLine />
+                {haveFooter && <FooterLine />}
             </Content>
         </Container>
     )

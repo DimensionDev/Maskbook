@@ -14,6 +14,7 @@ export const twitterShared: SocialNetwork.Shared & SocialNetwork.Base = {
     ...twitterBase,
     utils: {
         getHomePage: () => 'https://twitter.com',
+        getProfilePage: (userId) => `https://twitter.com/${userId}`,
         isValidUsername: usernameValidator,
         publicKeyEncoding: {
             encoder(text) {

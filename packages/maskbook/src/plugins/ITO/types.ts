@@ -1,4 +1,4 @@
-import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared'
+import type { ChainId, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
 
 export interface JSON_PayloadInMask {
     contract_address: string
@@ -12,10 +12,6 @@ export interface JSON_PayloadInMask {
         address: string
         name?: string
     }
-    buyers: {
-        address: string
-        name: string
-    }[]
     chain_id: ChainId
     start_time: number
     end_time: number
@@ -26,14 +22,16 @@ export interface JSON_PayloadInMask {
     exchange_amounts: string[]
     exchange_tokens: FungibleTokenDetailed[]
     regions: string
-    // @deprecated
-    is_mask?: boolean
-    // @deprecated
-    test_nums?: number[]
+    block_number?: number
 }
 
-export interface PoolSubgraph {
-    pool: JSON_PayloadInMask
+export interface JSON_PayloadFromChain extends Omit<JSON_PayloadInMask, 'exchange_tokens' | 'token'> {
+    exchange_token_addresses: string[]
+    token_address: string
+}
+
+export interface PoolFromNetwork {
+    pool: JSON_PayloadInMask | JSON_PayloadFromChain
     exchange_in_volumes: string[]
     exchange_out_volumes: string[]
 }
@@ -98,3 +96,28 @@ export interface Availability {
     end_time?: string
     qualification_addr?: string
 }
+
+//#region SpaceStation
+export interface ClaimableCount {
+    maxCount: number
+    usedCount: number
+}
+
+export interface CampaignInfo {
+    id: number
+    name: string
+    description: string
+    chain: string
+    endTime: number
+    startTime: number
+    nfts: { image: string }[]
+}
+
+export interface ClaimParams {
+    allow: boolean
+    signature: string
+    verifyIDs: number[]
+    powahs: number[]
+    nftCoreAddress: string
+}
+//#endregion

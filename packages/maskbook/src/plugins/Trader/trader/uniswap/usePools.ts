@@ -3,7 +3,7 @@ import { useAsyncRetry } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { computePoolAddress, Pool, FeeAmount } from '@uniswap/v3-sdk'
 import type { Token, Currency } from '@uniswap/sdk-core'
-import { MulticalStateType, useChainId, useMutlipleContractSingleData } from '@masknet/web3-shared'
+import { MulticallStateType, useChainId, useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { usePoolContracts } from '../../contracts/uniswap/usePoolContract'
 import { TradeContext } from '../useTradeContext'
 
@@ -47,12 +47,12 @@ export function usePools(
 
     const poolContracts = usePoolContracts(poolAddresses)
 
-    const [slot0s, slot0sCalls, slot0sState, slot0sCallback] = useMutlipleContractSingleData(
+    const [slot0s, slot0sCalls, slot0sState, slot0sCallback] = useMultipleContractSingleData(
         poolContracts,
         Array.from<'slot0'>({ length: poolContracts.length }).fill('slot0'),
         [],
     )
-    const [liquidities, liquiditiesCalls, liquiditiesState, liquiditiesCallback] = useMutlipleContractSingleData(
+    const [liquidities, liquiditiesCalls, liquiditiesState, liquiditiesCallback] = useMultipleContractSingleData(
         poolContracts,
         Array.from<'liquidity'>({ length: poolContracts.length }).fill('liquidity'),
         [],
@@ -68,8 +68,8 @@ export function usePools(
 
             const { value: slot0, error: slot0Error } = slot0s[index] ?? {}
             const { value: liquidity, error: liquidityError } = liquidities[index] ?? {}
-            const slot0Loading = slot0sState.type === MulticalStateType.PENDING
-            const liquiditiesLoading = liquiditiesState.type === MulticalStateType.PENDING
+            const slot0Loading = slot0sState.type === MulticallStateType.PENDING
+            const liquiditiesLoading = liquiditiesState.type === MulticallStateType.PENDING
 
             if (slot0Error || liquidityError) return [PoolState.INVALID, null]
             if (slot0Loading || liquiditiesLoading) return [PoolState.LOADING, null]

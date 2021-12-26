@@ -1,13 +1,14 @@
 import { forwardRef, useImperativeHandle, useMemo, useRef, useState, startTransition, useCallback } from 'react'
-import { Typography, Chip, Button } from '@material-ui/core'
-import { LoadingButton } from '@material-ui/lab'
+import { Typography, Chip, Button } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 import type { TypedMessage } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Send } from '@material-ui/icons'
+import { Send } from '@mui/icons-material'
 import { PluginEntryRender, PluginEntryRenderRef } from './PluginEntryRender'
 import { TypedMessageEditor, TypedMessageEditorRef } from './TypedMessageEditor'
 import { CharLimitIndicator } from './CharLimitIndicator'
-import { Flags, useI18N, useValueRef } from '../../utils'
+import { Flags, useI18N } from '../../utils'
 import { debugModeSetting } from '../../settings/settings'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
@@ -50,6 +51,7 @@ export interface CompositionProps {
     requireClipboardPermission?: boolean
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
+    onQueryClipboardPermission?(): void
 }
 export interface SubmitComposition {
     target: 'Everyone' | Profile[]
@@ -149,7 +151,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
                 target: encryptionKind === 'E2E' ? recipients : 'Everyone',
             })
             .finally(reset)
-    }, [encodingKind, encryptionKind, recipients])
+    }, [encodingKind, encryptionKind, recipients, props.onSubmit])
     return (
         <CompositionContext.Provider value={context}>
             <div className={classes.root}>

@@ -1,32 +1,57 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import { ContentContainer } from '../../../../components/ContentContainer'
-import { Box, Tab } from '@material-ui/core'
-import { makeStyles } from '@masknet/theme'
-import { MaskColorVar, useTabs } from '@masknet/theme'
-import { TabContext, TabList, TabPanel } from '@material-ui/lab'
+import { Box, Tab } from '@mui/material'
+import { useTabs } from '@masknet/theme'
+import { TabContext, TabList, TabPanel } from '@mui/lab'
+import { TransferERC20 } from './TransferERC20'
+import { ERC721TokenDetailed, FungibleTokenDetailed, useNativeTokenDetailed } from '@masknet/web3-shared-evm'
+import { useLocation } from 'react-router-dom'
+import { useDashboardI18N } from '../../../../locales'
+import { TransferERC721 } from './TransferERC721'
 
-const useStyles = makeStyles()((theme) => ({
-    caption: {
-        paddingRight: theme.spacing(2.5),
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: `1px solid ${MaskColorVar.lineLighter}`,
-    },
-}))
+export enum TransferTab {
+    Token = 'Token',
+    Collectibles = 'Collectibles',
+}
+
+const assetTabs = [TransferTab.Token, TransferTab.Collectibles] as const
 
 export const Transfer = memo(() => {
-    const { classes } = useStyles()
-    const [currentTab, onChange, tabs] = useTabs('tokens')
+    const t = useDashboardI18N()
+    const { state } = useLocation() as {
+        state: { token?: FungibleTokenDetailed; erc721Token?: ERC721TokenDetailed; type?: TransferTab } | null
+    }
+    const { value: nativeToken } = useNativeTokenDetailed()
+    const transferTabsLabel: Record<TransferTab, string> = {
+        [TransferTab.Token]: t.wallets_assets_token(),
+        [TransferTab.Collectibles]: t.wallets_assets_collectibles(),
+    }
+    const [currentTab, onChange, , setTab] = useTabs(TransferTab.Token, TransferTab.Collectibles)
+
+    useEffect(() => {
+        if (!state) return
+        if (!state.erc721Token || state.type !== TransferTab.Collectibles) return
+
+        setTab(TransferTab.Collectibles)
+    }, [state])
+
+    if (!nativeToken && !state?.token) return null
 
     return (
         <ContentContainer sx={{ marginTop: 3, display: 'flex', flexDirection: 'column' }}>
-            <Box className={classes.caption}>
+            <Box>
                 <TabContext value={currentTab}>
                     <TabList onChange={onChange}>
-                        <Tab label="Token" value={tabs.tokens} />
+                        {assetTabs.map((key) => (
+                            <Tab key={key} value={key} label={transferTabsLabel[key]} />
+                        ))}
                     </TabList>
-                    <TabPanel value={tabs.tokens}>TBD</TabPanel>
+                    <TabPanel value={TransferTab.Token}>
+                        <TransferERC20 token={state?.token! || nativeToken} />
+                    </TabPanel>
+                    <TabPanel value={TransferTab.Collectibles}>
+                        <TransferERC721 />
+                    </TabPanel>
                 </TabContext>
             </Box>
         </ContentContainer>

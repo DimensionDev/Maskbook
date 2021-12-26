@@ -7,9 +7,9 @@ import {
     pow10,
     TransactionStateType,
     useAccount,
-    useTokenBalance,
-} from '@masknet/web3-shared'
-import { DialogContent, Grid, Typography } from '@material-ui/core'
+    useFungibleTokenBalance,
+} from '@masknet/web3-shared-evm'
+import { DialogContent, Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -30,6 +30,7 @@ import { useDepositCallback } from '../hooks/useDepositCallback'
 import { PluginPoolTogetherMessages } from '../messages'
 import type { Pool } from '../types'
 import { calculateOdds, getPrizePeriod } from '../utils'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -62,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
     oddsValue: {
         background:
             'linear-gradient(40deg,#ff9304,#ff04ea 10%,#9b4beb 20%,#0e8dd6 30%,#0bc6df 40%,#07d464 50%,#dfd105 60%,#ff04ab 78%,#8933eb 90%,#3b89ff)',
-        '-webkit-background-clip': 'text',
+        webkitBackgroundClip: 'text',
         color: 'transparent',
         animation: '$rainbow_animation 6s linear infinite',
         backgroundSize: '600% 600%',
@@ -133,7 +134,7 @@ export function DepositDialog() {
         value: tokenBalance = '0',
         loading: loadingTokenBalance,
         retry: retryLoadTokenBalance,
-    } = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    } = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 
     useEffect(() => {
@@ -153,7 +154,7 @@ export function DepositDialog() {
         pool?.prizePool.address ?? '',
         amount.toFixed(),
         pool?.tokens.ticket.address ?? '',
-        ADDRESS_ZERO, // TODO: accoriding to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
+        ADDRESS_ZERO, // TODO: according to reference at 18 Jul 2021: https://github.com/pooltogether/pooltogether-community-ui/blob/a827bf7932eb6cd7870df99da66d0843abcf727d/lib/components/DepositUI.jsx#L25
         token,
     )
     //#endregion
@@ -192,12 +193,18 @@ export function DepositDialog() {
     const shareLink = activatedSocialNetworkUI.utils
         .getShareLinkURL?.(
             token
-                ? t('plugin_pooltogether_share', {
-                      amount: rawAmount,
-                      cashTag: cashTag,
-                      symbol: token.symbol,
-                      pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
-                  })
+                ? t(
+                      isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                          ? 'plugin_pooltogether_share'
+                          : 'plugin_pooltogether_share_no_official_account',
+                      {
+                          amount: rawAmount,
+                          cashTag: cashTag,
+                          symbol: token.symbol,
+                          pool: pool?.name ?? `${pool?.tokens.underlyingToken.symbol} Pool`,
+                          account: isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account'),
+                      },
+                  )
                 : '',
         )
         .toString()
@@ -209,13 +216,12 @@ export function DepositDialog() {
             (ev) => {
                 if (!ev.open) {
                     retryLoadTokenBalance()
-                    openSwapDialog({ open: false })
                     if (depositState.type === TransactionStateType.HASH) onClose()
                 }
                 if (depositState.type === TransactionStateType.HASH) setRawAmount('')
                 resetDepositCallback()
             },
-            [id, depositState, openSwapDialog, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
+            [id, depositState, retryLoadTokenBalance, retryLoadTokenBalance, onClose],
         ),
     )
 

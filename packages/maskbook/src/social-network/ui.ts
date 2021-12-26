@@ -15,7 +15,6 @@ import { startPluginSNSAdaptor } from '@masknet/plugin-infra'
 import { getCurrentSNSNetwork } from '../social-network-adaptor/utils'
 import { createPluginHost } from '../plugin-infra/host'
 import { definedSocialNetworkUIs } from './define'
-import { MaskMessage } from '../utils/messages'
 
 const definedSocialNetworkUIsResolved = new Map<string, SocialNetworkUI.Definition>()
 export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
@@ -32,6 +31,7 @@ export let activatedSocialNetworkUI: SocialNetworkUI.Definition = {
     },
     injection: {},
     networkIdentifier: 'localhost',
+    name: '',
     shouldActivate: () => false,
     utils: { createPostContext: null! },
     notReadyForProduction: true,
@@ -71,20 +71,27 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
 
     ui.collecting.postsProvider?.start(signal)
     startPostListener()
-
+    ui.collecting.currentVisitingIdentityProvider?.start(signal)
     ui.injection.pageInspector?.(signal)
-    if (Flags.toolbox_enabled) ui.injection.toolBoxInNavBar?.(signal)
+    if (Flags.toolbox_enabled) ui.injection.toolbox?.(signal)
     ui.injection.setupPrompt?.(signal)
     ui.injection.newPostComposition?.start?.(signal)
     ui.injection.searchResult?.(signal)
     ui.injection.userBadge?.(signal)
 
-    setTimeout(activateSNSAdaptorPluginOnStart, 1000)
-
     ui.injection.enhancedProfile?.(signal)
     ui.injection.enhancedProfileTab?.(signal)
 
-    startPluginSNSAdaptor(getCurrentSNSNetwork(ui.networkIdentifier), createPluginHost(signal))
+    ui.injection.userAvatar?.(signal)
+    ui.injection.profileAvatar?.(signal)
+
+    ui.injection.enhancedProfileNFTAvatar?.(signal)
+    ui.injection.openNFTAvatar?.(signal)
+
+    startPluginSNSAdaptor(
+        getCurrentSNSNetwork(ui.networkIdentifier),
+        createPluginHost(signal, () => undefined),
+    )
 
     function i18nOverwrite() {
         const i18n = ui.customization.i18nOverwrite || {}
@@ -104,7 +111,7 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         const provider = ui.collecting.identityProvider
         provider?.start(signal)
         if (provider?.hasDeprecatedPlaceholderName) {
-            provider.lastRecognized.addListener((id) => {
+            provider.recognized.addListener((id) => {
                 if (signal.aborted) return
                 if (id.identifier.isUnknown) return
                 Services.Identity.resolveIdentity(id.identifier)
@@ -152,17 +159,6 @@ export async function activateSocialNetworkUIInner(ui_deferred: SocialNetworkUI.
         currentSetupGuideStatus[network].addListener(onStatusUpdate)
         currentSetupGuideStatus[network].readyPromise.then(onStatusUpdate)
         onStatusUpdate(id)
-    }
-
-    async function activateSNSAdaptorPluginOnStart() {
-        const plugin = await Services.Settings.shouldActivatePluginOnSNSStart()
-        if (!plugin) return
-        await delay(500)
-        MaskMessage.events.requestComposition.sendToLocal({
-            open: true,
-            reason: 'timeline',
-            options: { startupPlugin: plugin },
-        })
     }
 }
 

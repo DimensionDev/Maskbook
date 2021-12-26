@@ -4,18 +4,20 @@ import { MaskColorVar } from '@masknet/theme'
 
 const useStyles = makeStyles()({
     root: {
-        width: '100vw',
-        height: '100vh',
         padding: '3vw',
-        backgroundColor: MaskColorVar.lightBackground,
+        minHeight: '100vh',
+        backgroundColor: MaskColorVar.bottom,
+        display: 'flex',
+        flexDirection: 'column',
     },
     container: {
-        contain: 'strict',
-        backgroundColor: MaskColorVar.white,
+        backgroundColor: MaskColorVar.background,
         borderRadius: 24,
-        width: '100%',
-        height: '100%',
-        minHeight: 832,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
     },
 })
 

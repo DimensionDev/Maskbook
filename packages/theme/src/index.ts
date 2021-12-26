@@ -1,9 +1,9 @@
 /// <reference path="./extended.d.ts" />
-import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@material-ui/core'
+import { createTheme, PaletteMode, ThemeOptions, useMediaQuery } from '@mui/material'
 import * as Changes from './changes'
 import * as Components from './component-changes'
 import { merge } from 'lodash-es'
-import type { PaletteOptions } from '@material-ui/core/styles/createPalette'
+import type { PaletteOptions } from '@mui/material/styles/createPalette'
 import { DarkColor, LightColor, Color } from './constants'
 
 const color = (mode: PaletteMode, color: Color): PaletteOptions => ({
@@ -40,10 +40,10 @@ export * from './ShadowRoot'
 export { getMaskColor, useMaskColor, MaskColorVar, applyMaskColorVars } from './constants'
 
 const query = '(prefers-color-scheme: dark)'
-export function useSystemPreferencePalatte(): PaletteMode {
+export function useSystemPreferencePalette(): PaletteMode {
     return useMediaQuery(query) ? 'dark' : 'light'
 }
-export function currentSystemPreferencePalatte(): PaletteMode {
+export function currentSystemPreferencePalette(): PaletteMode {
     return matchMedia(query).matches ? 'dark' : 'light'
 }
 

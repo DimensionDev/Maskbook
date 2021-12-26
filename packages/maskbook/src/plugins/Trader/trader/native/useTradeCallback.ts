@@ -1,4 +1,4 @@
-import { EthereumTokenType, useNativeTokenWrapperCallback } from '@masknet/web3-shared'
+import { EthereumTokenType, useNativeTokenWrapperCallback } from '@masknet/web3-shared-evm'
 import { TradeComputed, TradeStrategy } from '../../types'
 import type { NativeTokenWrapper } from './useTradeComputed'
 

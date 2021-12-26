@@ -5,24 +5,10 @@
 
 declare module NodeJS {
     interface ProcessEnv {
-        /** test means Jest. Puppeteer test does not use "test".  */
-        readonly NODE_ENV: 'development' | 'production' | 'test'
-        readonly STORYBOOK?: boolean
-        readonly target: 'chromium' | 'firefox' | 'safari' | 'E2E'
-        readonly build: 'stable' | 'beta' | 'insider'
+        readonly NODE_ENV: 'development' | 'production'
+        readonly engine: 'chromium' | 'firefox' | 'safari'
+        readonly channel: 'stable' | 'beta' | 'insider'
         readonly architecture: 'web' | 'app'
-        /** fennec = stable firefox; geckoview = next generation firefox (used in Android App, in future it will become the default engine on Firefox for Android) */
-        readonly firefoxVariant: 'fennec' | 'geckoview' | false
-        /**
-         * STRONGLY SUGGEST to make the app flexible as possible!
-         * This value is the build time fallback for the screen size.
-         * It DOESN't means the app MUST run in this size.
-         */
-        readonly resolution: 'desktop' | 'mobile'
-        /**
-         * Which version of Web Extension manifest
-         */
-        readonly manifest: 2 | 3
 
         /**
          * Debug flags
@@ -36,11 +22,6 @@ declare module NodeJS {
         BRANCH_NAME: string
         DIRTY: boolean
         TAG_DIRTY: boolean
-
-        /**
-         * Web3 Constants
-         */
-        WEB3_CONSTANTS_RPC: string
     }
 }
 
@@ -54,13 +35,4 @@ declare class ClipboardItem {
 
 interface Permissions {
     request(permission: { name: PermissionName }): Promise<PermissionStatus>
-}
-
-declare module 'react-middle-ellipsis' {
-    import React from 'react'
-    interface ComponentProps {
-        children?: React.ReactNode
-    }
-    const component: (props: ComponentProps) => JSX.Element
-    export default component
 }

@@ -22,7 +22,9 @@
     "@masknet/plugin-infra": "workspace:*",
     "@masknet/shared": "workspace:*",
     "@masknet/theme": "workspace:*",
-    "@masknet/web3-shared": "workspace:*",
-    "react-use": "^17.3.1"
+    "@masknet/web3-shared-evm": "workspace:*",
+    "bignumber.js": "^9.0.1",
+    "react-use": "^17.3.1",
+    "web3-core-helpers": "1.5.2"
   }
 }

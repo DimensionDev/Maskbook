@@ -1,16 +1,16 @@
 import { memo } from 'react'
-import { IconButton } from '@material-ui/core'
+import { IconButton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
-import { useMyIdentities } from '../DataSource/useActivatedUI'
 import type { BannerProps } from '../Welcomes/Banner'
-import { useValueRef } from '@masknet/shared'
+import { useStylesExtends, useValueRef } from '@masknet/shared'
+import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
+import { MaskSharpIcon } from '../../resources/MaskIcon'
+import { useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { isMobileFacebook } from '../../social-network-adaptor/facebook.com/utils/isMobile'
-import { MaskbookSharpIcon } from '../../resources/MaskbookIcon'
 
-export interface PostDialogHintUIProps {
+export interface PostDialogHintUIProps extends withClasses<'buttonTransform'> {
     onHintButtonClicked: () => void
 }
 
@@ -34,16 +34,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
-    const { classes } = useStyles()
+    const classes = useStylesExtends(useStyles(), props)
+
     return (
         <IconButton size="large" className={classes.button} onClick={props.onHintButtonClicked}>
-            <MaskbookSharpIcon color="primary" />
+            <MaskSharpIcon color="primary" />
         </IconButton>
     )
 })
 
-export const PostDialogHintUI = memo(function PostDialogHintUI({ onHintButtonClicked }: PostDialogHintUIProps) {
-    const { classes } = useStyles()
+export const PostDialogHintUI = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
+    const { onHintButtonClicked } = props
+    const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     return isMobileFacebook ? (
@@ -52,7 +54,9 @@ export const PostDialogHintUI = memo(function PostDialogHintUI({ onHintButtonCli
             <span className={classes.text}>{t('post_modal_hint__button')}</span>
         </div>
     ) : (
-        <EntryIconButton onHintButtonClicked={onHintButtonClicked} />
+        <div className={classes.buttonTransform}>
+            <EntryIconButton onHintButtonClicked={onHintButtonClicked} />
+        </div>
     )
 })
 
@@ -62,6 +66,7 @@ export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
 export function PostDialogHint(props: PostDialogHintProps) {
     const identities = useMyIdentities()
     const connecting = useValueRef(currentSetupGuideStatus[activatedSocialNetworkUI.networkIdentifier])
+
     if (connecting || identities.length === 0) return null
     return <PostDialogHintUI onHintButtonClicked={() => {}} {...props} />
 }

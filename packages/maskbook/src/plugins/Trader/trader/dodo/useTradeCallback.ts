@@ -2,21 +2,11 @@ import { useCallback, useMemo, useState } from 'react'
 import stringify from 'json-stable-stringify'
 import { pick } from 'lodash-es'
 import type { TransactionConfig } from 'web3-core'
-import {
-    TransactionState,
-    TransactionStateType,
-    useAccount,
-    useChainId,
-    useGasPrice,
-    useNonce,
-    useWeb3,
-} from '@masknet/web3-shared'
+import { TransactionState, TransactionStateType, useAccount, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import type { SwapRouteSuccessResponse, TradeComputed } from '../../types'
 
 export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessResponse> | null) {
     const web3 = useWeb3()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const [tradeState, setTradeState] = useState<TransactionState>({
@@ -56,8 +46,6 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
                 })
                 throw error
             }),
-            gasPrice,
-            nonce,
         }
 
         // send transaction and wait for hash
@@ -78,7 +66,7 @@ export function useTradeCallback(tradeComputed: TradeComputed<SwapRouteSuccessRe
                 }
             })
         })
-    }, [web3, nonce, gasPrice, account, chainId, stringify(config)])
+    }, [web3, account, chainId, stringify(config)])
 
     const resetCallback = useCallback(() => {
         setTradeState({

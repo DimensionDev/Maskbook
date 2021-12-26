@@ -1,8 +1,8 @@
-import { Box, TextField, Typography } from '@material-ui/core'
+import { Box, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState, useCallback } from 'react'
 import { useStylesExtends } from '@masknet/shared'
-import type { ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { CheckStateType, useCheckCallback } from '../hooks/useCheckCallback'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 

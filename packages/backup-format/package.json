@@ -1,11 +1,10 @@
 {
   "name": "@masknet/backup-format",
-  "version": "0.0.0",
   "private": true,
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@dimensiondev/kit": "^0.0.0-20210712114527-dc8eac6",
+    "@dimensiondev/kit": "^0.0.0-20210913111737-84c17d7",
     "@msgpack/msgpack": "^2.7.1"
   }
 }

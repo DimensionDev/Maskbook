@@ -13,15 +13,13 @@ import {
     TransactionStateType,
     useAccount,
     useChainId,
-    useGasPrice,
-    useNonce,
     useTransactionState,
     useWeb3,
     FungibleTokenDetailed,
     ERC20TokenDetailed,
     TransactionState,
     FAKE_SIGN_PASSWORD,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useITO_Contract } from './useITO_Contract'
 import { gcd, sortTokens } from '../helpers'
 import { ITO_CONTRACT_BASE_TIMESTAMP, MSG_DELIMITER } from '../../constants'
@@ -67,8 +65,6 @@ type paramsObjType = {
 
 export function useFillCallback(poolSettings?: PoolSettings) {
     const web3 = useWeb3()
-    const nonce = useNonce()
-    const gasPrice = useGasPrice()
     const account = useAccount()
     const chainId = useChainId()
     const { contract: ITO_Contract } = useITO_Contract()
@@ -139,27 +135,20 @@ export function useFillCallback(poolSettings?: PoolSettings) {
         const config = {
             from: account,
             gas,
-            gasPrice,
-            nonce,
         }
 
         // send transaction and wait for hash
         return new Promise<void>(async (resolve, reject) => {
-            const promiEvent = (ITO_Contract as ITO2).methods.fill_pool(...params).send(config as NonPayableTx)
-
-            promiEvent
-                .on(TransactionEventType.TRANSACTION_HASH, (hash) => {
-                    setFillState({
-                        type: TransactionStateType.HASH,
-                        hash,
-                    })
-                })
+            ;(ITO_Contract as ITO2).methods
+                .fill_pool(...params)
+                .send(config as NonPayableTx)
                 .on(TransactionEventType.RECEIPT, (receipt) => {
                     setFillState({
                         type: TransactionStateType.CONFIRMED,
                         no: 0,
                         receipt,
                     })
+                    resolve()
                 })
                 .on(TransactionEventType.CONFIRMATION, (no, receipt) => {
                     setFillState({
@@ -177,7 +166,7 @@ export function useFillCallback(poolSettings?: PoolSettings) {
                     reject(error)
                 })
         })
-    }, [web3, gasPrice, nonce, account, chainId, ITO_Contract, poolSettings, paramResult, setFillState])
+    }, [web3, account, chainId, ITO_Contract, poolSettings, paramResult, setFillState])
 
     const resetCallback = useCallback(() => {
         setFillState({
@@ -288,7 +277,7 @@ export function useFillParams(poolSettings: PoolSettings | undefined) {
     }, [poolSettings]).value
 }
 
-function checkParams(paramsObj: paramsObjType, setFillState?: (value: React.SetStateAction<TransactionState>) => void) {
+function checkParams(paramsObj: paramsObjType, setFillState?: (value: TransactionState) => void) {
     // error: the start time before BASE TIMESTAMP
     if (paramsObj.startTime < 0) {
         setFillState?.({

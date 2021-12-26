@@ -1,6 +1,6 @@
-import { Box, Chip } from '@material-ui/core'
+import { Box, Chip } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import AddIcon from '@material-ui/icons/Add'
+import AddIcon from '@mui/icons-material/Add'
 import { useState } from 'react'
 import { difference } from 'lodash-es'
 import { useI18N } from '../../../utils'

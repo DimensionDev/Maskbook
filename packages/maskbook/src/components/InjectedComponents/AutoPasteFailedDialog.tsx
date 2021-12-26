@@ -14,15 +14,18 @@ import {
     Paper,
     Link,
     Button,
-} from '@material-ui/core'
+    Typography,
+} from '@mui/material'
 import { useStylesExtends } from '@masknet/shared'
 import { Image } from '../shared/Image'
-import { useSnackbar } from '@masknet/theme'
+import { useCustomSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'
-import Download from '@material-ui/icons/CloudDownload'
-import CloseIcon from '@material-ui/icons/Close'
-import OpenInBrowser from '@material-ui/icons/OpenInBrowser'
-import { saveAsFileFromUrl } from '../../extension/background-script/HelperService'
+import Download from '@mui/icons-material/CloudDownload'
+import CloseIcon from '@mui/icons-material/Close'
+import OpenInBrowser from '@mui/icons-material/OpenInBrowser'
+// TODO: it should not import a background service, but
+// it might downloading a blob:// file thus rewrite to Services.Helpers.* might trigger a CSP failure.
+import { saveAsFileFromUrl } from '../../extension/background-script/HelperService/saveAsFile'
 
 export interface AutoPasteFailedDialogProps extends withClasses<never> {
     onClose: () => void
@@ -30,7 +33,8 @@ export interface AutoPasteFailedDialogProps extends withClasses<never> {
 }
 const useStyles = makeStyles()((theme) => ({
     title: { marginLeft: theme.spacing(1) },
-    paper: { border: '1px solid white' },
+    paper: {},
+    button: { marginRight: theme.spacing(1) },
 }))
 
 export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
@@ -38,11 +42,11 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
     const [url, setURL] = useState('')
     const classes = useStylesExtends(useStyles(), props)
     const { onClose, data } = props
-    const { enqueueSnackbar } = useSnackbar()
+    const { showSnackbar } = useCustomSnackbar()
     const [, copy] = useCopyToClipboard()
     const isMobile = useMatchXS()
     const permission = useQueryNavigatorPermission(true, 'clipboard-write')
-    const fileName = `maskbook-encrypted-${formatDateTime(Date.now(), 'yyyyMMddHHmmss')}.png`
+    const fileName = `masknetwork-encrypted-${formatDateTime(Date.now(), 'yyyyMMddHHmmss')}.png`
 
     return (
         <DraggableDiv>
@@ -55,8 +59,12 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         <span className={classes.title}>{t('auto_paste_failed_dialog_title')}</span>
                     </DialogTitle>
                 </nav>
-                <DialogContent>
-                    <DialogContentText>{t('auto_paste_failed_dialog_content')}</DialogContentText>
+                <DialogContent sx={{ paddingTop: 0 }}>
+                    <DialogContentText>
+                        <Typography color="textPrimary" sx={{ marginBottom: 1 }}>
+                            {t('auto_paste_failed_dialog_content')}
+                        </Typography>
+                    </DialogContentText>
                     {props.data.text ? (
                         <>
                             <TextField multiline fullWidth value={data.text} InputProps={{ readOnly: true }} />
@@ -66,10 +74,11 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 }}
                             />
                             <Button
+                                className={classes.button}
                                 variant="contained"
                                 onClick={() => {
                                     copy(data.text)
-                                    enqueueSnackbar(t('copy_success_of_text'), {
+                                    showSnackbar(t('copy_success_of_text'), {
                                         variant: 'success',
                                         preventDuplicate: true,
                                         anchorOrigin: {
@@ -91,7 +100,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                     <div style={{ textAlign: permission === 'granted' ? 'left' : 'center' }}>
                         {data.image ? (
                             // It must be img
-                            <Image component="img" onURL={setURL} src={data.image} width={260} height={180} />
+                            <Image component="img" onURL={setURL} src={data.image} style={{ height: 'auto' }} />
                         ) : null}
                         <Box
                             sx={{
@@ -100,13 +109,14 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         />
                         {permission === 'granted' ? (
                             <Button
+                                className={classes.button}
                                 variant="contained"
                                 onClick={async () => {
                                     if (!data.image) return
                                     await navigator.clipboard.write([
                                         new ClipboardItem({ [data.image.type]: data.image }),
                                     ])
-                                    enqueueSnackbar(t('copy_success_of_image'), {
+                                    showSnackbar(t('copy_success_of_image'), {
                                         variant: 'success',
                                         preventDuplicate: true,
                                         anchorOrigin: {
@@ -119,8 +129,9 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             </Button>
                         ) : null}
                         {url ? (
-                            process.env.architecture === 'app' && process.env.target === 'firefox' ? (
+                            process.env.architecture === 'app' && process.env.engine === 'firefox' ? (
                                 <Button
+                                    className={classes.button}
                                     component={Link}
                                     variant="text"
                                     href={url}
@@ -130,6 +141,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 </Button>
                             ) : (
                                 <Button
+                                    className={classes.button}
                                     variant="text"
                                     onClick={() => saveAsFileFromUrl(url, fileName)}
                                     startIcon={<Download />}>
@@ -140,6 +152,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                         {/* Open it in a new tab does not make sense for app. */}
                         {url && process.env.architecture === 'web' ? (
                             <Button
+                                className={classes.button}
                                 variant="text"
                                 component={Link}
                                 href={url}

@@ -3,11 +3,9 @@ import { useSubscription, Subscription } from 'use-subscription'
 import { createManager } from './manage'
 import { getPluginDefine } from './store'
 import type { CurrentSNSNetwork, Plugin } from '../types'
-import { useChainId } from '@masknet/web3-shared'
+import { useChainId } from '@masknet/web3-shared-evm'
 
-const { events, activated, startDaemon } = createManager({
-    getLoader: (plugin) => plugin.SNSAdaptor,
-})
+const { events, activated, startDaemon } = createManager((def) => def.SNSAdaptor)
 
 const subscription: Subscription<Plugin.SNSAdaptor.Definition[]> = {
     getCurrentValue: () => [...activated.plugins],

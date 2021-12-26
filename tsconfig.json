@@ -1,13 +1,16 @@
 {
   "references": [
     // Only list top-level projects here
-    { "path": "./e2e/" },
     { "path": "./packages/maskbook/" },
     { "path": "./packages/injected-script/main" },
+    { "path": "./packages/mask-sdk/main" },
+    { "path": "./packages/mask-sdk/public-api" },
     { "path": "./packages/dashboard" },
     // Storybooks are considered as a "project" not depended by any other project
     { "path": "./packages/dashboard/stories" },
-    { "path": "./packages/theme/stories" }
+    { "path": "./packages/theme/stories" },
+    // Tests
+    { "path": "./packages/backup-format/tsconfig.tests.json" }
   ],
   "compilerOptions": {
     // Classification follows https://www.typescriptlang.org/tsconfig
@@ -29,6 +32,8 @@
     "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
+    // Exclude everything by default. Include them in each project on-demand
+    "types": ["web", "masknet__global-types"],
 
     // Emit
     "declaration": true,
@@ -62,15 +67,8 @@
   "files": [],
   "ts-node": {
     "compilerOptions": {
-      "module": "CommonJS",
-      "plugins": [
-        {
-          // Support import.meta syntax in commonjs
-          "transform": "@magic-works/commonjs-import.meta"
-        }
-      ]
+      "module": "CommonJS"
     },
-    "transpileOnly": true,
-    "compiler": "ttypescript"
+    "transpileOnly": true
   }
 }

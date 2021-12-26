@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Link, Tab, Tabs } from '@material-ui/core'
+import { Link, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useI18N, useSettingsSwitcher, useValueRef } from '../../../../utils'
+import { useValueRef } from '@masknet/shared'
+import { useI18N, useSettingsSwitcher } from '../../../../utils'
 import type { TagType } from '../../types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 import { resolveDataProviderName, resolveDataProviderLink } from '../../pipes'
@@ -21,7 +22,7 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid } from '@masknet/web3-shared'
+import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid } from '@masknet/web3-shared-evm'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
 import { currentNetworkSettings } from '../../../Wallet/settings'
 
@@ -206,7 +207,7 @@ export function TraderView(props: TraderViewProps) {
 
     //#region if the coin is a native token or contract address exists
 
-    const isSwapable =
+    const isSwappable =
         (!!trending?.coin.contract_address ||
             ['eth', 'matic', 'bnb'].includes(trending?.coin.symbol.toLowerCase() ?? '')) &&
         chainIdValid &&
@@ -229,7 +230,7 @@ export function TraderView(props: TraderViewProps) {
         <Tab className={classes.tab} key="market" label={t('plugin_trader_tab_market')} />,
         <Tab className={classes.tab} key="price" label={t('plugin_trader_tab_price')} />,
         <Tab className={classes.tab} key="exchange" label={t('plugin_trader_tab_exchange')} />,
-        isSwapable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
+        isSwappable ? <Tab className={classes.tab} key="swap" label={t('plugin_trader_tab_swap')} /> : null,
     ].filter(Boolean)
     //#endregion
 
@@ -282,7 +283,7 @@ export function TraderView(props: TraderViewProps) {
                     </>
                 ) : null}
                 {tabIndex === 2 ? <TickersTable tickers={tickers} dataProvider={dataProvider} /> : null}
-                {tabIndex === 3 && isSwapable ? (
+                {tabIndex === 3 && isSwappable ? (
                     <TradeView
                         classes={{ root: classes.tradeViewRoot }}
                         TraderProps={{

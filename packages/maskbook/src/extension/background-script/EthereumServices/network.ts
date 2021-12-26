@@ -6,7 +6,8 @@ import type {
     PastLogsOptions,
     Log,
 } from 'web3-core'
-import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared'
+import { toHex } from 'web3-utils'
+import { ChainId, EthereumChainDetailed, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { request } from './request'
 import type { SendOverrides } from './send'
 
@@ -71,7 +72,7 @@ export async function getTransactionByHash(hash: string, overrides?: SendOverrid
 export async function getTransactionReceipt(hash: string, overrides?: SendOverrides) {
     return request<TransactionReceipt | null>(
         {
-            method: EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT,
+            method: EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT,
             params: [hash],
         },
         overrides,
@@ -87,6 +88,24 @@ export async function getTransactionCount(address: string, overrides?: SendOverr
         overrides,
     )
     return Number.parseInt(count, 16) || 0
+}
+
+export async function getPendingTransactions(address: string, overrides?: SendOverrides) {
+    const filterId = await request<string>(
+        {
+            method: EthereumMethodType.ETH_NEW_PENDING_TRANSACTION_FILTER,
+            params: [],
+        },
+        overrides,
+    )
+    const transactions = await request<string[]>(
+        {
+            method: EthereumMethodType.ETH_GET_FILTER_CHANGES,
+            params: [filterId],
+        },
+        overrides,
+    )
+    return transactions
 }
 
 export async function call(config: TransactionConfig, overrides?: SendOverrides) {
@@ -150,7 +169,7 @@ export async function switchEthereumChain(chainId: ChainId, overrides?: SendOver
             method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
             params: [
                 {
-                    chainId: `0x${chainId.toString(16)}`,
+                    chainId: toHex(chainId),
                 },
             ],
         },

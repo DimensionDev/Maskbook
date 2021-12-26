@@ -1,4 +1,4 @@
-import { encodeText } from '../../utils/type-transform/String-ArrayBuffer'
+import { encodeText } from '@dimensiondev/kit'
 import { delay } from '../../utils/utils'
 import { recover_ECDH_256k1_KeyPair_ByMnemonicWord } from '../../utils/mnemonic-code'
 import { createPersonaByJsonWebKey } from '../../database'
@@ -7,8 +7,8 @@ import { deriveLocalKeyFromECDHKey } from '../../utils/mnemonic-code/localKeyGen
 import type { PersonaIdentifier, ProfileIdentifier } from '../../database/type'
 import { BackupOptions, generateBackupJSON } from './WelcomeServices/generateBackupJSON'
 import type { AESJsonWebKey } from '../../modules/CryptoAlgorithm/interfaces/utils'
-import { saveAsFileFromBuffer } from './HelperService'
-import type { DashboardRoute } from '../options-page/Route'
+import { requestExtensionPermission } from './HelperService/extensionPermission'
+import { saveAsFileFromBuffer } from './HelperService/saveAsFile'
 import {
     BackupJSONFileLatest,
     getBackupPreviewInfo,
@@ -16,9 +16,10 @@ import {
 } from '../../utils/type-transform/BackupFormat/JSON/latest'
 
 import { assertEnvironment, Environment } from '@dimensiondev/holoflows-kit'
-import { decompressBackupFile, extraPermissions, requestPermissions } from '../../utils'
+import { decompressBackupFile, extraPermissions } from '../../utils'
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
+import type { DashboardRoutes } from '@masknet/shared-base'
 
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
@@ -64,6 +65,17 @@ export async function downloadBackup<T>(obj: T, type?: 'txt' | 'json') {
     return obj
 }
 
+export async function downloadBackupV2(buffer: ArrayBuffer) {
+    const date = new Date()
+    const today = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date
+        .getDate()
+        .toString()
+        .padStart(2, '0')}`
+    const fileName = `mask-network-keystore-backup-${today}.bin`
+
+    saveAsFileFromBuffer(buffer, 'application/octet-stream', fileName)
+}
+
 export async function createBackupFile(
     options: { download: boolean; onlyBackupWhoAmI: boolean } & Partial<BackupOptions>,
 ): Promise<BackupJSONFileLatest> {
@@ -92,15 +104,15 @@ async function createBackupInfo<T>(obj: T, type?: 'txt' | 'json') {
         .getDate()
         .toString()
         .padStart(2, '0')}`
-    const fileName = `maskbook-keystore-backup-${today}.${type ?? 'json'}`
+    const fileName = `mask-network-keystore-backup-${today}.${type ?? 'json'}`
     const mimeType = type === 'txt' ? 'text/plain' : 'application/json'
     return { buffer, mimeType, fileName }
 }
 
-export async function openOptionsPage(route?: DashboardRoute, search?: string) {
+export async function openOptionsPage(route?: DashboardRoutes, search?: string) {
     return browser.tabs.create({
         active: true,
-        url: browser.runtime.getURL(route ? `/index.html#${route}${search ? `?${search}` : ''}` : '/index.html'),
+        url: browser.runtime.getURL(`/dashboard.html#/${route}${search ? `?${search}` : ''}`),
     })
 }
 
@@ -123,15 +135,10 @@ export async function checkPermissionsAndRestore(id: string) {
     if (json) {
         const permissions = await extraPermissions(json.grantedHostPermissions)
         if (permissions.length) {
-            const granted = await requestPermissions(permissions)
+            const granted = await requestExtensionPermission({ origins: permissions })
             if (!granted) return
         }
 
         await restoreBackup(json)
     }
-}
-
-// permissions
-export function queryPermission(permission: browser.permissions.Permissions) {
-    return browser.permissions.contains(permission)
 }

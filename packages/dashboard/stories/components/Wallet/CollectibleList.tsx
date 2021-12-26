@@ -1,7 +1,7 @@
 import { story } from '@masknet/storybook-shared'
 import { action } from '@storybook/addon-actions'
 import { CollectibleListUI as C } from '../../../src/pages/Wallets/components/CollectibleList'
-import { ChainId, CollectibleProvider } from '@masknet/web3-shared'
+import { ChainId, CollectibleProvider } from '@masknet/web3-shared-evm'
 
 const { meta, of } = story(C)
 
@@ -16,7 +16,7 @@ export const CollectibleList = of({
         isEmpty: false,
         showPagination: true,
         chainId: ChainId.Mainnet,
-        provider: CollectibleProvider.OPENSEAN,
+        provider: CollectibleProvider.OPENSEA,
         dataSource: [],
     },
 })

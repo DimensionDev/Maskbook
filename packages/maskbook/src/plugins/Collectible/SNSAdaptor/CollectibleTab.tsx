@@ -1,4 +1,4 @@
-import { Card, CardContent, CardProps } from '@material-ui/core'
+import { Card, CardContent, CardProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useStylesExtends } from '@masknet/shared'
 
@@ -7,6 +7,7 @@ const useStyles = makeStyles()({
         width: '100%',
         height: '100%',
         borderRadius: 0,
+        overflow: 'auto',
     },
 })
 

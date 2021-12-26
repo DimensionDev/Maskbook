@@ -8,9 +8,9 @@ import {
     useChainId,
     useGitcoinConstants,
     useNativeTokenDetailed,
-    useTokenBalance,
-} from '@masknet/web3-shared'
-import { DialogContent, Link, Typography } from '@material-ui/core'
+    useFungibleTokenBalance,
+} from '@masknet/web3-shared-evm'
+import { DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import BigNumber from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -20,6 +20,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { activatedSocialNetworkUI } from '../../../social-network'
 import { isTwitter } from '../../../social-network-adaptor/twitter.com/base'
+import { isFacebook } from '../../../social-network-adaptor/facebook.com/base'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { EthereumERC20TokenApprovedBoundary } from '../../../web3/UI/EthereumERC20TokenApprovedBoundary'
@@ -82,7 +83,7 @@ export function DonateDialog(props: DonateDialogProps) {
     const [token = nativeTokenDetailed.value, setToken] = useState<FungibleTokenDetailed | undefined>(
         nativeTokenDetailed.value,
     )
-    const tokenBalance = useTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
+    const tokenBalance = useFungibleTokenBalance(token?.type ?? EthereumTokenType.Native, token?.address ?? '')
     //#endregion
 
     //#region select token dialog
@@ -126,7 +127,13 @@ export function DonateDialog(props: DonateDialogProps) {
                 ? [
                       `I just donated ${title} with ${formatBalance(amount, token.decimals)} ${cashTag}${
                           token.symbol
-                      }. Follow @realMaskbook (mask.io) to donate Gitcoin grants.`,
+                      }. ${
+                          isTwitter(activatedSocialNetworkUI) || isFacebook(activatedSocialNetworkUI)
+                              ? `Follow @${
+                                    isTwitter(activatedSocialNetworkUI) ? t('twitter_account') : t('facebook_account')
+                                } (mask.io) to donate Gitcoin grants.`
+                              : ''
+                      }`,
                       '#mask_io',
                   ].join('\n')
                 : '',

@@ -5,13 +5,11 @@
   "main": "./dist/index.js",
   "types": "./dist",
   "scripts": {
-    "start": "dev -- snowpack dev"
   },
   "dependencies": {
     "@masknet/theme": "workspace:*",
     "ef.js": "^0.13.12"
   },
   "devDependencies": {
-    "snowpack": "^3.8.8"
   }
 }

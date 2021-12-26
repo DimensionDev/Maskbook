@@ -11,7 +11,7 @@ export function injectSetupPromptAtMinds(signal: AbortSignal) {
 }
 
 function injectSetupPrompt<T>(ls: LiveSelector<T, true>, signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(ls, document.querySelector('m-page')!)
+    const watcher = new MutationObserverWatcher(ls, document.querySelector('m-app')!)
     startWatch(watcher, signal)
 
     watcher.useForeach((node, key, meta) => {

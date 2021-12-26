@@ -1,11 +1,11 @@
 import { HashRouter } from 'react-router-dom'
-import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@material-ui/core'
+import { CssBaseline, ThemeProvider, StyledEngineProvider, Theme } from '@mui/material'
 import {
     CustomSnackbarProvider,
     MaskLightTheme,
     applyMaskColorVars,
     MaskDarkTheme,
-    useSystemPreferencePalatte,
+    useSystemPreferencePalette,
     NoEffectUsePortalShadowRootContext,
 } from '@masknet/theme'
 import { ErrorBoundary } from '@masknet/shared'
@@ -17,7 +17,7 @@ import './PluginHost'
 import { createInjectHooksRenderer, useActivatedPluginsDashboard } from '@masknet/plugin-infra'
 import { Pages } from '../pages/routes'
 import { useAppearance } from '../pages/Personas/api'
-import { Web3Provider } from '@masknet/web3-shared'
+import { Web3Provider } from '@masknet/web3-shared-evm'
 import { Web3Context } from '../web3/context'
 import { PersonaContext } from '../pages/Personas/hooks/usePersonaContext'
 
@@ -25,7 +25,7 @@ const PluginRender = createInjectHooksRenderer(useActivatedPluginsDashboard, (x)
 
 export default function DashboardRoot() {
     const settings = useAppearance()
-    const mode = useSystemPreferencePalatte()
+    const mode = useSystemPreferencePalette()
     const themes: Record<typeof settings, Theme> = {
         dark: MaskDarkTheme,
         light: MaskLightTheme,

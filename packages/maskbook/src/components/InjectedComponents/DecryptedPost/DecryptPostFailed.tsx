@@ -19,7 +19,7 @@ export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptP
     const { AdditionalContentProps, NotSetupYetPromptProps, author, postedBy, error } = props
     const { t } = useI18N()
     if (error?.message === DecryptFailedReason.MyCryptoKeyNotFound)
-        return <NotSetupYetPrompt {...NotSetupYetPromptProps} />
+        return <NotSetupYetPrompt {...NotSetupYetPromptProps} description="decryptPostFailed" />
     return (
         <AdditionalContent
             title={t('service_decryption_failed')}

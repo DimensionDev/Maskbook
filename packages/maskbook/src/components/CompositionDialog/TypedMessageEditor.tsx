@@ -1,6 +1,6 @@
 import { isTypedMessageEqual, isTypedMessageText, makeTypedMessageText, TypedMessage } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { InputBase, Alert, Button } from '@material-ui/core'
+import { InputBase, Alert, Button } from '@mui/material'
 import { useCallback, useImperativeHandle, useState } from 'react'
 import { useRef } from 'react'
 import { forwardRef, memo } from 'react'

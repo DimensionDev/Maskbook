@@ -1,19 +1,22 @@
 import { useContext } from 'react'
 import BigNumber from 'bignumber.js'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared'
-import { pow10 } from '@masknet/web3-shared'
-import { TradeProvider, TradeStrategy } from '../types'
+import { pow10, FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import type { TradeStrategy } from '../types'
 import { useTrade as useNativeTokenTrade } from './native/useTrade'
 import { useTradeComputed as useNativeTokenTradeComputed } from './native/useTradeComputed'
-import { useV2Trade as useUnswapV2Trade, useV3Trade as useUnswapV3Trade } from './uniswap/useTrade'
+import { useV2Trade as useUniswapV2Trade, useV3Trade as useUniswapV3Trade } from './uniswap/useTrade'
 import { useTradeComputed as useUniswapTradeComputed } from './uniswap/useTradeComputed'
 import { useTradeComputed as useZrxTradeComputed } from './0x/useTradeComputed'
 import { useTradeComputed as useBalancerTradeComputed } from './balancer/useTradeComputed'
 import { useTradeComputed as useDODOTradeComputed } from './dodo/useTradeComputed'
+import { useTradeComputed as useBancorTradeComputed } from './bancor/useTradeComputed'
 import { useTrade as useZrxTrade } from './0x/useTrade'
 import { useTrade as useBalancerTrade } from './balancer/useTrade'
 import { useTrade as useDODOTrade } from './dodo/useTrade'
+import { useTrade as useBancorTrade } from './bancor/useTrade'
+
 import { unreachable } from '@dimensiondev/kit'
+import { TradeProvider } from '@masknet/public-api'
 import { TradeContext } from './useTradeContext'
 
 export function useTradeComputed(
@@ -29,7 +32,7 @@ export function useTradeComputed(
     const inputAmount_ = new BigNumber(inputAmount || '0').multipliedBy(inputTokenProduct).integerValue().toFixed()
     const outputAmount_ = new BigNumber(outputAmount || '0').multipliedBy(outputTokenProduct).integerValue().toFixed()
 
-    // trade conetxt
+    // trade context
     const context = useContext(TradeContext)
 
     // NATIVE-WNATIVE pair
@@ -44,7 +47,7 @@ export function useTradeComputed(
     )
 
     // uniswap-v2 like providers
-    const uniswapV2_ = useUnswapV2Trade(
+    const uniswapV2_ = useUniswapV2Trade(
         strategy,
         context?.IS_UNISWAP_V2_LIKE ? inputAmount_ : '0',
         context?.IS_UNISWAP_V2_LIKE ? outputAmount_ : '0',
@@ -54,7 +57,7 @@ export function useTradeComputed(
     const uniswapV2 = useUniswapTradeComputed(uniswapV2_.value, inputToken, outputToken)
 
     // uniswap-v3 like providers
-    const uniswapV3_ = useUnswapV3Trade(
+    const uniswapV3_ = useUniswapV3Trade(
         strategy,
         context?.IS_UNISWAP_V3_LIKE ? inputAmount_ : '0',
         context?.IS_UNISWAP_V3_LIKE ? outputAmount_ : '0',
@@ -109,6 +112,15 @@ export function useTradeComputed(
         outputToken,
     )
     const one = useZrxTradeComputed(one_.value ?? null, strategy, inputToken, outputToken)
+    const bancor_ = useBancorTrade(
+        strategy,
+        provider === TradeProvider.BANCOR ? inputAmount_ : '0',
+        provider === TradeProvider.BANCOR ? outputAmount_ : '0',
+        inputToken,
+        outputToken,
+    )
+
+    const bancor = useBancorTradeComputed(bancor_.value ?? null, strategy, inputToken, outputToken)
 
     if (nativeToken_.value)
         return {
@@ -150,6 +162,11 @@ export function useTradeComputed(
             return {
                 ...one_,
                 value: one,
+            }
+        case TradeProvider.BANCOR:
+            return {
+                ...bancor_,
+                value: bancor,
             }
         default:
             unreachable(provider)

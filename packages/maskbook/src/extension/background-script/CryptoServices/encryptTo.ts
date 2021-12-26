@@ -1,6 +1,6 @@
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
 import { GunAPI as Gun2 } from '../../../network/gun'
-import { encodeArrayBuffer } from '../../../utils/type-transform/String-ArrayBuffer'
+import { encodeArrayBuffer } from '@dimensiondev/kit'
 import { constructAlpha38, PayloadLatest } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
@@ -12,7 +12,6 @@ import { compressSecp256k1Key } from '../../../utils/type-transform/SECP256k1-Co
 import { i18n } from '../../../utils/i18n-next'
 import { isTypedMessageText, TypedMessage, TypedMessageText } from '../../../protocols/typed-message'
 import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
-import { Flags } from '../../../utils'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -44,7 +43,7 @@ export async function encryptTo(
 
     const usingPersona = await queryProfile(whoAmI)
     const minePrivateKey = await queryPrivateKey(whoAmI)
-    if (!minePrivateKey) throw new TypeError('Not inited yet')
+    if (!minePrivateKey) throw new TypeError('Not initialized yet')
     const stringifiedContent = Alpha38.typedMessageStringify(content)
     const localKey = publicShared ? Alpha38.publicSharedAESKey : (await queryLocalKey(whoAmI))!
     const {
@@ -88,11 +87,9 @@ export async function encryptTo(
         foundAt: new Date(),
         encryptBy: usingPersona.linkedPersona?.identifier,
     }
-    if (Flags.v2_enabled) {
-        if (isTypedMessageText(content)) {
-            newPostRecord.summary = getSummary(content)
-            newPostRecord.interestedMeta = content.meta
-        }
+    if (isTypedMessageText(content)) {
+        newPostRecord.summary = getSummary(content)
+        newPostRecord.interestedMeta = content.meta
     }
     await createPostDB(newPostRecord)
 
@@ -114,18 +111,22 @@ export async function publishPostAESKey(iv: string) {
     // Use the latest payload version here since we do not accept new post for older version.
     return Gun2.publishPostAESKeyOnGun2(-38, iv, ...info)
 }
+
+const SUMMARY_MAX_LENGTH = 40
 function getSummary(content: TypedMessageText) {
     let result = ''
+    const sliceLength = content.content.length > SUMMARY_MAX_LENGTH ? SUMMARY_MAX_LENGTH + 1 : SUMMARY_MAX_LENGTH
+
     // UTF-8 aware summary
     if (Intl.Segmenter) {
         // it seems like using "en" can also split the word correctly.
         const seg = new Intl.Segmenter('en')
         for (const word of seg.segment(content.content)) {
-            if (result.length >= 20) break
+            if (result.length >= sliceLength) break
             result += word.segment
         }
     } else {
-        result = result.slice(0, 20)
+        result = content.content.slice(0, sliceLength)
     }
     return result
 }

@@ -1,5 +1,5 @@
-import { ButtonGroup, ButtonGroupProps, Tab } from '@material-ui/core'
-import { useTabContext, getPanelId, getTabId } from '@material-ui/lab/TabContext'
+import { ButtonGroup, ButtonGroupProps, Tab } from '@mui/material'
+import { useTabContext, getPanelId, getTabId } from '@mui/lab/TabContext'
 import { forwardRef, cloneElement, Children, isValidElement } from 'react'
 import { ButtonTab } from './ButtonGroupTab'
 export interface ButtonGroupTabListProps
@@ -8,10 +8,10 @@ export interface ButtonGroupTabListProps
     'aria-label': string
 }
 /**
- * This component is like TabList + Tabs in the @material-ui.
+ * This component is like TabList + Tabs in the @mui/material.
  * It should be used with <ButtonGroupTab>.
  *
- * Warning: Only a few "value" and "label" props on the @material-ui <Tab> component will work.
+ * Warning: Only a few "value" and "label" props on the @mui/material <Tab> component will work.
  *
  * @example
  *  const [currentTab, onChange, tabs, setTab] = useTab('tab1', 'tab2', 'tab3')

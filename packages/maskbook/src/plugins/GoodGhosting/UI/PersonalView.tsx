@@ -4,8 +4,8 @@ import {
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
-} from '@masknet/web3-shared'
-import { Grid, Typography, Button, Link } from '@material-ui/core'
+} from '@masknet/web3-shared-evm'
+import { Grid, Typography, Button, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { useI18N } from '../../../utils'

@@ -1,14 +1,6 @@
-import {
-    SyntheticEvent,
-    useRef,
-    cloneElement,
-    isValidElement,
-    useCallback,
-    useState,
-    createContext,
-    useContext,
-} from 'react'
-import { Menu, MenuProps } from '@material-ui/core'
+import { SyntheticEvent, cloneElement, isValidElement, useCallback, useState, createContext, useContext } from 'react'
+import { Menu, MenuProps } from '@mui/material'
+import { useUpdate } from 'react-use'
 
 /** Provide ShadowRootMenu for useMenu in content script. */
 export const useMenuContext = createContext<React.ComponentType<MenuProps>>(Menu)
@@ -31,7 +23,7 @@ export function useMenuConfig(
     openDialog: (anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => void,
     closeDialog: () => void,
 ] {
-    const anchorEl = useRef<HTMLElement>()
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
     const [status, setOpen] = useState(false)
     const open = useCallback((anchorElOrEvent: HTMLElement | SyntheticEvent<HTMLElement>) => {
         let element: HTMLElement
@@ -40,13 +32,17 @@ export function useMenuConfig(
         } else {
             element = anchorElOrEvent.currentTarget
         }
-        anchorEl.current = element
+        setAnchorEl(element)
         setOpen(true)
+        // HACK: it seems like anchor doesn't work correctly
+        // but a force repaint can solve the problem.
+        window.requestAnimationFrame(update)
     }, [])
+    const update = useUpdate()
     const close = useCallback(() => setOpen(false), [])
     const Menu = useContext(useMenuContext)
     return [
-        <Menu open={status} onClose={close} onClick={close} anchorEl={anchorEl.current}>
+        <Menu open={status} onClose={close} onClick={close} anchorEl={anchorEl}>
             {elements?.map((element, key) =>
                 isValidElement<object>(element) ? cloneElement(element, { ...element.props, key }) : element,
             )}

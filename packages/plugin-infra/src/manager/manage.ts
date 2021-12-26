@@ -3,28 +3,28 @@ import { ALL_EVENTS } from '@masknet/shared'
 import type { Plugin } from '../types'
 import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store'
 
-interface ActivatedPluginInstance<U extends Plugin.Shared.DefinitionDeferred> {
-    instance: U
-    controller: AbortController
-}
-export interface CreateManagerOptions<T extends Plugin.Shared.DefinitionDeferred> {
-    getLoader(deferred: Plugin.DeferredDefinition): undefined | Plugin.Loader<T>
-}
 // Plugin state machine
 // not-loaded => loaded
 // loaded => activated (activatePlugin)
 // activated => loaded (stopPlugin)
-export function createManager<T extends Plugin.Shared.DefinitionDeferred>(_: CreateManagerOptions<T>) {
-    const { getLoader } = _
-
+export function createManager<T extends Plugin.Shared.DefinitionDeferred<Context>, Context>(
+    selectLoader: (plugin: Plugin.DeferredDefinition) => undefined | Plugin.Loader<T>,
+) {
+    interface ActivatedPluginInstance {
+        instance: T
+        controller: AbortController
+        context: Context
+    }
     const resolved = new Map<string, T>()
-    const activated = new Map<string, ActivatedPluginInstance<T>>()
+    const activated = new Map<string, ActivatedPluginInstance>()
+    let _host: Plugin.__Host.Host<Context> = undefined!
     const events = new Emitter<{
         activated: [id: string]
         stopped: [id: string]
     }>()
 
     return {
+        configureHostHooks: (host: Plugin.__Host.Host<Context>) => (_host = host),
         activatePlugin,
         stopPlugin,
         isActivated,
@@ -40,8 +40,9 @@ export function createManager<T extends Plugin.Shared.DefinitionDeferred>(_: Cre
         events,
     }
 
-    function startDaemon(host: Plugin.__Host.Host, extraCheck?: (id: string) => boolean) {
-        const { enabled, signal, addI18NResource } = host
+    function startDaemon(host: Plugin.__Host.Host<Context>, extraCheck?: (id: string) => boolean) {
+        _host = host
+        const { enabled, signal, addI18NResource } = _host
         const off2 = enabled.events.on(ALL_EVENTS, checkRequirementAndStartOrStop)
 
         signal?.addEventListener('abort', () => [...activated.keys()].forEach(stopPlugin))
@@ -69,6 +70,13 @@ export function createManager<T extends Plugin.Shared.DefinitionDeferred>(_: Cre
         }
     }
 
+    function verifyHostHooks() {
+        if (!_host)
+            throw new Error(
+                `[@masknet/plugin-infra] You must call configureHostHooks or startDaemon to configure host hooks.`,
+            )
+    }
+
     async function activatePlugin(id: string) {
         if (activated.has(id)) return
         const definition = await __getDefinition(id)
@@ -89,12 +97,15 @@ export function createManager<T extends Plugin.Shared.DefinitionDeferred>(_: Cre
             definition.experimentalMark = true
         }
 
-        const activatedPlugin: ActivatedPluginInstance<T> = {
+        verifyHostHooks()
+        const abort = new AbortController()
+        const activatedPlugin: ActivatedPluginInstance = {
             instance: definition,
-            controller: new AbortController(),
+            controller: abort,
+            context: _host.createContext(id, abort.signal),
         }
         activated.set(id, activatedPlugin)
-        await definition.init(activatedPlugin.controller.signal)
+        await definition.init(activatedPlugin.controller.signal, activatedPlugin.context)
         events.emit('activated', id)
     }
 
@@ -115,7 +126,7 @@ export function createManager<T extends Plugin.Shared.DefinitionDeferred>(_: Cre
 
         const deferredDefinition = getPluginDefine(id)
         if (!deferredDefinition) return
-        const loader = getLoader(deferredDefinition)
+        const loader = selectLoader(deferredDefinition)
         if (!loader) return
 
         const definition = (await loader.load()).default

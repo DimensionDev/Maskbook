@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, Card, Typography } from '@material-ui/core'
-import { ExpandMore } from '@material-ui/icons'
+import { Accordion, AccordionDetails, AccordionSummary, Card, Typography } from '@mui/material'
+import { ExpandMore } from '@mui/icons-material'
 import { useI18N } from '../../../utils'
 
 export function UnreviewedWarning() {

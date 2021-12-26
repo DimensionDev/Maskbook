@@ -1,5 +1,5 @@
 import { memo } from 'react'
-import { Box, Typography, Link, Button, FilledInput } from '@material-ui/core'
+import { Box, Typography, Link, Button, FilledInput } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { EmptyIcon } from '@masknet/icons'
 import { MaskColorVar } from '@masknet/theme'
@@ -43,7 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const downloadUrl = 'https: //mask.io/download-links/'
+const downloadUrl = 'https://mask.io/download-links/'
 
 export const EmptyContactPlaceholder = memo(() => {
     const [, copyToClipboard] = useCopyToClipboard()

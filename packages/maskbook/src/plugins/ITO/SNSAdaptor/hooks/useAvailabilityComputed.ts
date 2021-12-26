@@ -1,11 +1,11 @@
 import { compact } from 'lodash-es'
-import { useChainId, useITOConstants } from '@masknet/web3-shared'
-import { JSON_PayloadInMask, ITO_Status } from '../../types'
+import { useChainId, useITOConstants } from '@masknet/web3-shared-evm'
+import { JSON_PayloadInMask, JSON_PayloadFromChain, ITO_Status } from '../../types'
 import { useAvailability } from './useAvailability'
 import { useQualification } from './useQualification'
 import { ITO_CONTRACT_BASE_TIMESTAMP } from '../../constants'
 
-export function useAvailabilityComputed(payload: JSON_PayloadInMask) {
+export function useAvailabilityComputed(payload: JSON_PayloadInMask | JSON_PayloadFromChain) {
     const chainId = useChainId()
     const { DEFAULT_QUALIFICATION2_ADDRESS } = useITOConstants()
     const asyncResult = useAvailability(payload.pid, payload.contract_address)

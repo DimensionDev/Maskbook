@@ -55,7 +55,7 @@ export function useTradeBreakdown(trade: Trade | null) {
             realizedLPFeePercent,
             realizedLPFeeAmount,
 
-            // different ver of @uniswap/sdk-core were userd by @uniswap/v2-sdk and @uniswap/v3-sdk
+            // different ver of @uniswap/sdk-core were used by @uniswap/v2-sdk and @uniswap/v3-sdk
             realizedLPFee: trade.inputAmount.multiply(realizedLPFeePercent) as CurrencyAmount<Currency>,
             priceImpact: trade.priceImpact.subtract(realizedLPFeePercent) as Percent,
         }

@@ -19,7 +19,7 @@ export const DatabaseOps: React.FC = () => {
             ]
             return values.map((value) => value.toString().padStart(2, '0')).join('')
         })(new Date())
-        download(`maskbook-dump-${timestamp}.json`, payload)
+        download(`masknetwork-dump-${timestamp}.json`, payload)
     }
     const onRestore = async () => {
         const file = await select()
@@ -36,8 +36,8 @@ export const DatabaseOps: React.FC = () => {
         }
         await Promise.all(
             databases.map(async ({ name }) => {
+                if (!name) return
                 await timeout(wrap(indexedDB.deleteDatabase(name)), 500)
-                console.log(`clear ${name}`)
             }),
         )
     }
@@ -79,7 +79,6 @@ function timeout<T>(promise: PromiseLike<T>, time: number): Promise<T | undefine
 }
 
 async function restoreAll(parsed: BackupFormat) {
-    console.log('restoring with', parsed)
     for (const { name, version, stores } of parsed.instances) {
         const db = await openDB(name, version, {
             upgrade(db) {
@@ -120,6 +119,7 @@ async function backupAll() {
     }
     const instances: BackupFormat['instances'] = []
     for (const { name, version } of databases) {
+        if (!name || !version) continue
         const db = await timeout(openDB(name, version), 500)
         if (db === undefined) {
             continue

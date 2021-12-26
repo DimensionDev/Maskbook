@@ -1,0 +1,30 @@
+{
+    "RPC": {
+        "Mainnet": ["https://mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Ropsten": ["https://ropsten.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Rinkeby": ["https://rinkeby.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Kovan": ["https://kovan.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Gorli": ["https://goerli.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "BSC": ["https://bsc-dataseed.binance.org/"],
+        "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+        "Matic": ["https://polygon-mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Mumbai": ["https://polygon-mumbai.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb"],
+        "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
+        "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
+        "xDai": ["https://rpc.xdaichain.com/"]
+    },
+    "RPC_WEIGHTS": {
+        "Mainnet": [0, 0, 0, 0],
+        "Ropsten": [0, 0, 0, 0],
+        "Rinkeby": [0, 0, 0, 0],
+        "Kovan": [0, 0, 0, 0],
+        "Gorli": [0, 0, 0, 0],
+        "BSC": [0, 0, 0, 0],
+        "BSCT": [0, 0, 0, 0],
+        "Matic": [0, 0, 0, 0],
+        "Mumbai": [0, 0, 0, 0],
+        "Arbitrum": [0, 0, 0, 0],
+        "Arbitrum_Rinkeby": [0, 0, 0, 0],
+        "xDai": [0, 0, 0, 0]
+    }
+}

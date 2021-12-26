@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import type { Instance } from '@popperjs/core'
-import { Popper, ClickAwayListener, PopperProps, Fade } from '@material-ui/core'
+import { Popper, ClickAwayListener, PopperProps, Fade } from '@mui/material'
 import { useLocation, useWindowScroll } from 'react-use'
 import { PluginTraderMessages } from '../../messages'
 import { WalletMessages } from '../../../Wallet/messages'
@@ -21,7 +20,7 @@ export interface TrendingPopperProps {
 }
 
 export function TrendingPopper(props: TrendingPopperProps) {
-    const popperRef = useRef<Instance | null>(null)
+    const popperRef = useRef<{ update(): void } | null>(null)
     const [freezed, setFreezed] = useState(false) // disable any click
     const [locked, setLocked] = useState(false) // state is updating, lock UI
     const [name, setName] = useState('')
@@ -99,7 +98,7 @@ export function TrendingPopper(props: TrendingPopperProps) {
                 disablePortal
                 transition
                 style={{ zIndex: 100, margin: 4 }}
-                popperRef={popperRef}
+                popperRef={(ref) => (popperRef.current = ref)}
                 {...props.PopperProps}>
                 {({ TransitionProps }) => (
                     <Fade in={Boolean(anchorEl)} {...TransitionProps}>

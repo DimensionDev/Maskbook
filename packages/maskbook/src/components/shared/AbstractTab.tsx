@@ -1,5 +1,6 @@
 import { makeStyles } from '@masknet/theme'
-import { Tabs, Tab, Box, BoxProps, Paper } from '@material-ui/core'
+import classNames from 'classnames'
+import { Tabs, Tab, Box, BoxProps, Paper } from '@mui/material'
 import { useStylesExtends } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
@@ -7,7 +8,7 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 'unset',
     },
     tabPanel: {
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(1),
     },
 }))
 
@@ -16,10 +17,17 @@ interface TabPanelProps extends BoxProps {
     label: string | React.ReactNode
 }
 
-export interface AbstractTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator'> {
-    tabs: (Omit<TabPanelProps, 'height' | 'minHeight'> & { cb?: () => void })[]
+export interface AbstractTabProps
+    extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
+    tabs: (Omit<TabPanelProps, 'height' | 'minHeight'> & {
+        cb?: () => void
+        disableFocusRipple?: boolean
+        disableRipple?: boolean
+    })[]
     state?: readonly [number, (next: number) => void]
     index?: number
+    disableFocusRipple?: boolean
+    disableRipple?: boolean
     margin?: true | 'top' | 'bottom'
     height?: number | string
     hasOnlyOneChild?: boolean
@@ -33,7 +41,7 @@ export default function AbstractTab(props: AbstractTabProps) {
 
     return (
         <>
-            <Paper square elevation={0}>
+            <Paper square elevation={0} className={classes.tabPaper}>
                 <Tabs
                     className={classes.tabs}
                     classes={{
@@ -47,7 +55,9 @@ export default function AbstractTab(props: AbstractTabProps) {
                     onChange={(_: React.SyntheticEvent, newValue: number) => setValue?.(newValue)}>
                     {tabs.map((tab, i) => (
                         <Tab
-                            className={classes.tab}
+                            className={classNames(classes.tab, [index, value].includes(i) ? classes.focusTab : '')}
+                            disableFocusRipple={tab.disableFocusRipple}
+                            disableRipple={tab.disableRipple}
                             onClick={tab.cb}
                             label={tab.label}
                             key={i}

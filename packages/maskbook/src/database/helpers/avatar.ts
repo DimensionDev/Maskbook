@@ -1,7 +1,7 @@
 import { ProfileIdentifier } from '../type'
 import { queryAvatarDB, isAvatarOutdatedDB, storeAvatarDB, IdentityWithAvatar } from '../avatar'
 import { memoizePromise } from '../../utils/memoize'
-import { MaskMessage } from '../../utils/messages'
+import { MaskMessages } from '../../utils/messages'
 import { downloadUrl } from '../../utils/utils'
 import { blobToArrayBuffer, blobToDataURL } from '@dimensiondev/kit'
 
@@ -46,7 +46,7 @@ export async function storeAvatar(
     } finally {
         queryAvatarDataURL.cache.delete(identifier.toText())
         if (identifier instanceof ProfileIdentifier) {
-            MaskMessage.events.profilesChanged.sendToAll([{ of: identifier, reason: 'update' }])
+            MaskMessages.events.profilesChanged.sendToAll([{ of: identifier, reason: 'update' }])
         }
     }
 }

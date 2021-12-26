@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import Web3Utils from 'web3-utils'
-import { DialogContent } from '@material-ui/core'
+import { DialogContent } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -12,24 +12,26 @@ import AbstractTab, { AbstractTabProps } from '../../../components/shared/Abstra
 import { payloadOutMask } from './helpers'
 import { PoolList } from './PoolList'
 import { PluginITO_RPC } from '../messages'
+import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
 import Services from '../../../extension/service'
-import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared'
+import { formatBalance, useChainId, useAccount, TransactionStateType, useITOConstants } from '@masknet/web3-shared-evm'
 import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-es'
 import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles()(() => ({
     content: {
         position: 'relative',
-        paddingTop: 50,
+        paddingTop: 0,
     },
     tabs: {
         top: 0,
         left: 0,
         right: 0,
-        position: 'absolute',
+        position: 'sticky',
+        marginBottom: 24,
     },
 }))
 
@@ -88,7 +90,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             // the settings is not available
             if (!fillSettings?.token) return
 
-            // earily return happended
+            // early return happened
             if (fillState.type !== TransactionStateType.CONFIRMED) return
 
             const { receipt } = fillState
@@ -114,7 +116,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 seller: {
                     address: FillSuccess.creator,
                 },
-                buyers: [],
                 chain_id: chainId,
                 start_time: fillSettings.startTime.getTime(),
                 end_time: fillSettings.endTime.getTime(),
@@ -136,6 +137,9 @@ export function CompositionDialog(props: CompositionDialogProps) {
     //#region tabs
     const state = useState<DialogTabs>(DialogTabs.create)
 
+    const currentIdentity = useCurrentIdentity()
+    const senderName = currentIdentity?.identifier.userId ?? currentIdentity?.linkedPersona?.nickname
+
     const onCreateOrSelect = useCallback(
         async (payload: JSON_PayloadInMask) => {
             if (!payload.password) {
@@ -147,6 +151,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
                 return
             }
 
+            senderName && (payload.seller.name = senderName)
             // To meet the max allowance of the data size of image steganography, we need to
             //  cut off and simplify some properties, such as save the token address string only.
             const payloadDetail = omit(
@@ -159,7 +164,6 @@ export function CompositionDialog(props: CompositionDialogProps) {
                     'creation_time',
                     'unlock_time',
                     'total_remaining',
-                    'buyers',
                     'regions',
                     'start_time',
                     'end_time',
@@ -176,7 +180,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             const [, setValue] = state
             setValue(DialogTabs.create)
         },
-        [account, chainId, props.onConfirm, state],
+        [account, chainId, props.onConfirm, state, senderName],
     )
 
     const onClose = useCallback(() => {
@@ -223,6 +227,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
             }),
         })
     }, [fillState, poolSettings, setTransactionDialog])
+    //#endregion
 
     useEffect(() => {
         if (!ITO2_CONTRACT_ADDRESS) onClose()

@@ -1,26 +1,23 @@
 import { memo, useCallback } from 'react'
-import { Box, MenuItem, Typography } from '@material-ui/core'
+import { Box, MenuItem, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Flags } from '../../../../utils'
 import {
     ChainId,
     getChainIdFromNetworkType,
     getChainName,
-    getChainShortName,
+    getNetworkName,
     NetworkType,
+    ProviderType,
     resolveNetworkName,
-} from '@masknet/web3-shared'
-import { currentChainIdSettings } from '../../../../plugins/Wallet/settings'
-import { useMenu, useValueRef } from '@masknet/shared'
+    useAccount,
+} from '@masknet/web3-shared-evm'
+import { currentMaskWalletChainIdSettings, currentProviderSettings } from '../../../../plugins/Wallet/settings'
+import { ChainIcon, useMenu, useValueRef } from '@masknet/shared'
 import { ArrowDownRound } from '@masknet/icons'
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { ChainIcon } from '../ChainIcon'
-
-const networks = [
-    NetworkType.Ethereum,
-    Flags.bsc_enabled ? NetworkType.Binance : undefined,
-    Flags.polygon_enabled ? NetworkType.Polygon : undefined,
-].filter(Boolean) as NetworkType[]
+import { useAsync } from 'react-use'
+import { WalletRPC } from '../../../../plugins/Wallet/messages'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -55,42 +52,61 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const NetworkSelector = memo(() => {
-    const currentChainId = useValueRef(currentChainIdSettings)
+    const account = useAccount()
+    const currentChainId = useValueRef(currentMaskWalletChainIdSettings)
+    const currentProvider = useValueRef(currentProviderSettings)
+    const { value: networks } = useAsync(async () => WalletRPC.getSupportedNetworks(), [])
+    const onChainChange = useCallback(
+        async (chainId: ChainId) => {
+            if (currentProvider === ProviderType.MaskWallet) {
+                await WalletRPC.updateAccount({
+                    chainId,
+                })
+            }
+            return WalletRPC.updateMaskAccount({
+                chainId,
+            })
+        },
+        [currentProvider, account],
+    )
 
-    const onChainChange = useCallback((chainId: ChainId) => {
-        currentChainIdSettings.value = chainId
-    }, [])
-
-    return <NetworkSelectorUI currentChainId={currentChainId} onChainChange={onChainChange} />
+    return <NetworkSelectorUI currentChainId={currentChainId} onChainChange={onChainChange} networks={networks} />
 })
 
 export interface NetworkSelectorUIProps {
     currentChainId: ChainId
     onChainChange: (chainId: ChainId) => void
+    networks?: NetworkType[]
 }
 
-export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId, onChainChange }) => {
+export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId, onChainChange, networks }) => {
     const { classes } = useStyles()
     const [menu, openMenu] = useMenu(
-        ...(Flags.support_eth_network_switch
+        ...((Flags.support_eth_network_switch
             ? getEnumAsArray(ChainId).map(({ value: chainId }) => {
                   return (
-                      <MenuItem key={chainId} onClick={() => onChainChange(chainId)}>
+                      <MenuItem
+                          key={chainId}
+                          onClick={() => onChainChange(chainId)}
+                          selected={chainId === currentChainId}>
                           <ChainIcon chainId={chainId} />
                           <Typography className={classes.networkName}>{getChainName(chainId)}</Typography>
                       </MenuItem>
                   )
               })
-            : networks.map((network) => {
+            : networks?.map((network) => {
                   const chainId = getChainIdFromNetworkType(network)
 
                   return (
-                      <MenuItem key={network} onClick={() => onChainChange(chainId)}>
+                      <MenuItem
+                          key={network}
+                          onClick={() => onChainChange(chainId)}
+                          selected={chainId === currentChainId}>
                           <ChainIcon chainId={chainId} />
                           <Typography>{resolveNetworkName(network)}</Typography>
                       </MenuItem>
                   )
-              })),
+              })) ?? []),
     )
 
     return (
@@ -100,7 +116,7 @@ export const NetworkSelectorUI = memo<NetworkSelectorUIProps>(({ currentChainId,
                     <div className={classes.iconWrapper}>
                         <ChainIcon chainId={currentChainId} />
                     </div>
-                    <Typography className={classes.title}>{getChainShortName(currentChainId)}</Typography>
+                    <Typography className={classes.title}>{getNetworkName(currentChainId)}</Typography>
                 </div>
                 <ArrowDownRound className={classes.arrow} />
             </Box>

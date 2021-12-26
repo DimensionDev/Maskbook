@@ -1,8 +1,9 @@
 import ConfirmDialog from '../../../../components/ConfirmDialog'
 import React, { useContext, useState } from 'react'
-import { Box, TextField } from '@material-ui/core'
+import { Box } from '@mui/material'
 import { UserContext } from '../../hooks/UserContext'
 import { useDashboardI18N } from '../../../../locales'
+import PasswordField from '../../../../components/PasswordField'
 
 interface VerifyPasswordDialogProps {
     open: boolean
@@ -40,13 +41,11 @@ export default function VerifyPasswordDialog({ open, onVerified, onClose }: Veri
             onClose={handleClose}
             onConfirm={handleConfirm}>
             <Box sx={{ minHeight: '168px', padding: '0 90px', display: 'flex', alignItems: 'center' }}>
-                <TextField
+                <PasswordField
                     fullWidth
                     value={password}
                     onChange={handleChange}
-                    type="password"
                     label={t.settings_label_backup_password()}
-                    variant="outlined"
                     error={passwordMismatched}
                     helperText={passwordMismatched ? 'Incorrect password' : ''}
                 />

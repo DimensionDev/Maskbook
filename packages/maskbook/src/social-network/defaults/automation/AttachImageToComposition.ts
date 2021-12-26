@@ -1,6 +1,6 @@
 import { activatedSocialNetworkUI, SocialNetworkUI } from '../../index'
 import { untilDocumentReady } from '../../../utils/dom'
-import { MaskMessage } from '../../../utils/messages'
+import { MaskMessages } from '../../../utils/messages'
 import { delay, downloadUrl, pasteImageToActiveElements } from '../../../utils/utils'
 
 export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean> | boolean) {
@@ -20,7 +20,7 @@ export function pasteImageToCompositionDefault(hasSucceed: () => Promise<boolean
 
         if (await hasSucceed()) return
         if (recover) {
-            MaskMessage.events.autoPasteFailed.sendToLocal({ text: relatedTextPayload || '', image })
+            MaskMessages.events.autoPasteFailed.sendToLocal({ text: relatedTextPayload || '', image })
         }
     }
 }

@@ -1,14 +1,14 @@
 import { useCallback, useState } from 'react'
-import { Typography, DialogContent, DialogActions, Button, CircularProgress, Link } from '@material-ui/core'
+import { Typography, DialogContent, DialogActions, Button, CircularProgress, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import WarningIcon from '@material-ui/icons/Warning'
-import DoneIcon from '@material-ui/icons/Done'
+import WarningIcon from '@mui/icons-material/Warning'
+import DoneIcon from '@mui/icons-material/Done'
 import {
     useChainId,
     TransactionState,
     TransactionStateType,
     resolveTransactionLinkOnExplorer,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog, useStylesExtends } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
@@ -72,7 +72,7 @@ function TransactionDialogUI(props: TransactionDialogUIProps) {
 
     if (!state) return null
     return (
-        <InjectedDialog open={open} onClose={closeDialog} title={title} maxWidth="xs">
+        <InjectedDialog open={open} onClose={closeDialog} title={title}>
             <DialogContent className={classes.content}>
                 {state.type === TransactionStateType.WAIT_FOR_CONFIRMING ? (
                     <>

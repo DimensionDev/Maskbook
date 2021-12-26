@@ -1,9 +1,10 @@
 import { createGlobalSettings, createNetworkSettings, NetworkSettings } from './createSettings'
 import { i18n } from '../utils/i18n-next'
-import { sideEffect } from '../utils/side-effects'
+import { startEffect } from '../utils/side-effects'
 import { LaunchPage } from './types'
 import { Appearance } from '@masknet/theme'
 import { LanguageOptions } from '@masknet/public-api'
+import { Identifier, ProfileIdentifier } from '@masknet/shared-base'
 
 /**
  * Does the debug mode on
@@ -51,7 +52,13 @@ export const languageSettings = createGlobalSettings<LanguageOptions>('language'
  */
 export const currentImagePayloadStatus: NetworkSettings<string> = createNetworkSettings('currentImagePayloadStatus', '')
 export const currentSelectedIdentity: NetworkSettings<string> = createNetworkSettings('currentSelectedIdentity', '')
+export function getCurrentSelectedIdentity(network: string) {
+    return Identifier.fromString<ProfileIdentifier>(currentSelectedIdentity[network].value, ProfileIdentifier).unwrapOr(
+        ProfileIdentifier.unknown,
+    )
+}
 export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSettings('currentSetupGuideStatus', '')
+export const userGuideStatus: NetworkSettings<string> = createNetworkSettings('userGuideStatus', '')
 // This is a misuse of concept "NetworkSettings" as "namespaced settings"
 // The refactor is tracked in https://github.com/DimensionDev/Maskbook/issues/1884
 /**
@@ -61,9 +68,6 @@ export const currentSetupGuideStatus: NetworkSettings<string> = createNetworkSet
  * `useActivatedPluginsDashboard().find((x) => x.ID === PLUGIN_ID)` instead
  */
 export const currentPluginEnabledStatus: NetworkSettings<boolean> = createNetworkSettings('pluginsEnabled', true)
-export const currentImportingBackup = createGlobalSettings<boolean>('importingBackup', false, {
-    primary: () => 'DO NOT DISPLAY IT IN UI',
-})
 //#endregion
 
 export const launchPageSettings = createGlobalSettings<LaunchPage>('launchPage', LaunchPage.dashboard, {
@@ -80,10 +84,11 @@ export const currentPersonaIdentifier = createGlobalSettings<string>('currentPer
     primary: () => 'DO NOT DISPLAY IT IN UI',
 })
 
-sideEffect.then(() => {
-    // reset it to false after Mask startup
-    currentImportingBackup.value = false
+export const currentPopupWindowId = createGlobalSettings<number>('currentPopupWindowId', 0, {
+    primary: () => 'DO NOT DISPLAY IT IN UI',
+})
 
+startEffect(import.meta.webpackHot, () => {
     // Migrate language settings
     const lng: string = languageSettings.value
     if (lng === 'en') languageSettings.value = LanguageOptions.enUS

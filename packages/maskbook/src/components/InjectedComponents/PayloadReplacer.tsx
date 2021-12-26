@@ -1,4 +1,4 @@
-import { Typography, Link } from '@material-ui/core'
+import { Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 const useStyle = makeStyles()((theme) => ({

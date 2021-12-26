@@ -7,11 +7,11 @@ import { EmailField } from './steps/EmailField'
 import { PhoneField } from './steps/PhoneField'
 import { LoadingCard } from './steps/LoadingCard'
 import { ValidationAccount } from './steps/ValidationAccount'
-import { ValidationCodeStep } from './steps/Commont'
+import { ValidationCodeStep } from './steps/common'
 import type { AccountType } from '../../pages/Settings/type'
 
 interface CodeValidationProps {
-    onValidated(downloadLink: string, account: string, password: string): Promise<string | null>
+    onValidated(downloadLink: string, account: string, password: string, type: AccountType): Promise<string | null>
 }
 
 export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
@@ -34,8 +34,12 @@ export const CodeValidation = memo(({ onValidated }: CodeValidationProps) => {
                 )}
             </Step>
             <Step name={ValidationCodeStep.ConfirmBackupInfo}>
-                {(toStep, { backupInfo, account }) => (
-                    <ConfirmBackupInfo toStep={toStep} backupInfo={backupInfo} account={account} onNext={onValidated} />
+                {(toStep, { backupInfo, account, type }) => (
+                    <ConfirmBackupInfo
+                        toStep={toStep}
+                        backupInfo={backupInfo}
+                        onNext={(password) => onValidated(backupInfo.downloadURL, account, password, type)}
+                    />
                 )}
             </Step>
         </Stepper>

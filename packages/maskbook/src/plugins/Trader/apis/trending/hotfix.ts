@@ -1,4 +1,4 @@
-import { NetworkType } from '@masknet/web3-shared'
+import { NetworkType } from '@masknet/web3-shared-evm'
 import { TagType } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
@@ -44,7 +44,7 @@ const KEYWORD_ALIAS_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-const KEYWORK_ID_MAP: {
+const KEYWORD_ID_MAP: {
     [key in DataProvider]: {
         [key in NetworkType]?: Record<string, string>
     }
@@ -93,13 +93,14 @@ const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
         ethereum: NetworkType.Ethereum,
         'binance-smart-chain': NetworkType.Binance,
         'polygon-pos': NetworkType.Polygon,
-        arbitrum: NetworkType.Arbitrum,
+        'arbitrum-one': NetworkType.Arbitrum,
         xdai: NetworkType.xDai,
     },
     [DataProvider.COIN_MARKET_CAP]: {
         '1027': NetworkType.Ethereum,
         '1839': NetworkType.Binance,
         '3890': NetworkType.Polygon,
+        '11841': NetworkType.Arbitrum,
         '5601': NetworkType.xDai,
     },
     [DataProvider.UNISWAP_INFO]: {},
@@ -111,7 +112,7 @@ export function resolveAlias(keyword: string, dataProvider: DataProvider) {
 }
 
 export function resolveCoinId(keyword: string, dataProvider: DataProvider) {
-    return KEYWORK_ID_MAP[dataProvider][currentNetworkSettings.value]?.[keyword.toUpperCase()]
+    return KEYWORD_ID_MAP[dataProvider][currentNetworkSettings.value]?.[keyword.toUpperCase()]
 }
 
 export function resolveCoinAddress(id: string, dataProvider: DataProvider) {

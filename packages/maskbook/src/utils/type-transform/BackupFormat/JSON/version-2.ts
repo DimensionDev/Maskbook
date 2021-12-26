@@ -2,13 +2,10 @@
 import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
 import type { BackupJSONFileVersion1 } from './version-1'
 import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../database/type'
-import type {
-    AESJsonWebKey,
-    EC_Public_JsonWebKey,
-    EC_Private_JsonWebKey,
-} from '../../../../modules/CryptoAlgorithm/interfaces/utils'
+import type { AESJsonWebKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
 import { twitterBase } from '../../../../social-network-adaptor/twitter.com/base'
 import { facebookBase } from '../../../../social-network-adaptor/facebook.com/base'
+import type { RelationFavor } from '@masknet/shared-base'
 
 export type RecipientReasonJSON = (
     | { type: 'auto-share' }
@@ -52,6 +49,11 @@ export interface BackupJSONFileVersion2 {
         linkedPersona?: string // PersonaIdentifier.toText()
         createdAt: number // Unix timestamp
         updatedAt: number // Unix timestamp
+    }>
+    relations: Array<{
+        profile: string // ProfileIdentifier.toText()
+        persona: string // PersonaIdentifier.toText()
+        favor: RelationFavor
     }>
     /** @deprecated */
     userGroups: never[]
@@ -157,6 +159,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
         wallets: [],
         personas,
         profiles,
+        relations: [],
         userGroups: [],
         grantedHostPermissions: json.grantedHostPermissions,
     }
@@ -164,6 +167,7 @@ export function upgradeFromBackupJSONFileVersion1(json: BackupJSONFileVersion1):
 
 export function patchNonBreakingUpgradeForBackupJSONFileVersion2(json: BackupJSONFileVersion2): BackupJSONFileVersion2 {
     json.wallets = json.wallets ?? []
+    json.relations = json.relations ?? []
     const permissions = new Set<string>(json.grantedHostPermissions)
     if (json.grantedHostPermissions.some((x) => x.includes('twitter.com'))) {
         const a = twitterBase.declarativePermissions.origins

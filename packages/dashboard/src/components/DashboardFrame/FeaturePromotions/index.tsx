@@ -1,10 +1,11 @@
-import { memo, useMemo } from 'react'
+import { memo, useCallback, useMemo } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { makeStyles } from '@masknet/theme'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages, Services } from '../../../API'
 import { PLUGIN_IDS } from '../../../pages/Labs/constants'
-import { useRemoteControlledDialog } from '@masknet/shared'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
-import { useNavigate } from 'react-router'
 import { RoutePaths } from '../../../type'
 
 const useStyles = makeStyles()((theme) => ({
@@ -14,6 +15,9 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         '& > *': {
             marginBottom: theme.spacing(2),
+        },
+        [theme.breakpoints.down('md')]: {
+            display: 'none',
         },
     },
     img: {
@@ -30,9 +34,10 @@ const TWITTER_ADDRESS = 'https://www.twitter.com'
 export const FeaturePromotions = memo(() => {
     const { classes } = useStyles()
     const navigate = useNavigate()
+    const account = useAccount()
 
     const { currentPersona, connectPersona } = PersonaContext.useContainer()
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginMessages.Swap.swapDialogUpdated)
+    const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginMessages.Transak.buyTokenDialogUpdated)
 
     const isConnectedTwitter = useMemo(() => {
         if (!currentPersona) return false
@@ -43,19 +48,26 @@ export const FeaturePromotions = memo(() => {
         return !!linkedProfiles.find((profile) => profile.identifier.network === TWITTER_NETWORK)
     }, [currentPersona])
 
+    const openTransakDialog = useCallback(() => {
+        setBuyDialog({
+            open: true,
+            address: account ?? '',
+        })
+    }, [])
+
     const openTwitter = (pluginId: string) => async () => {
         if (!currentPersona) {
             navigate(RoutePaths.SignUp)
             return
         }
         if (isConnectedTwitter) {
-            await Services.Settings.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/home`, pluginId)
+            await Services.SocialNetwork.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/home`, pluginId)
             return
         }
         connectPersona(currentPersona.identifier, TWITTER_NETWORK)
     }
 
-    const openMaskNetwork = () => Services.Settings.openSNSAndActivatePlugin(`${TWITTER_ADDRESS}/realmaskbook`, '')
+    const openMaskNetwork = () => window.open(`${TWITTER_ADDRESS}/realMaskNetwork`)
 
     return (
         <div className={classes.container}>
@@ -71,7 +83,7 @@ export const FeaturePromotions = memo(() => {
             />
             <img
                 className={classes.img}
-                onClick={openSwapDialog}
+                onClick={openTransakDialog}
                 src={new URL('./BuyETH.png', import.meta.url).toString()}
             />
             <img

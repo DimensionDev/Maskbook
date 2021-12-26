@@ -1,4 +1,4 @@
-import type { ERC20TokenDetailed } from '@masknet/web3-shared'
+import type { ERC20TokenDetailed } from '@masknet/web3-shared-evm'
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
 import { POOLTOGETHER_PLUGIN_ID } from './constants'
 import type { Pool } from './types'

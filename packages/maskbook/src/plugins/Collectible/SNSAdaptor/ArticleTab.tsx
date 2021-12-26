@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { Link } from '@material-ui/core'
+import { Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Video } from '../../../components/shared/Video'
 import { CollectibleTab } from './CollectibleTab'

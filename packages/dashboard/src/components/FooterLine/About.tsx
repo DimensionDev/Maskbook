@@ -1,12 +1,12 @@
 import { DiscordIcon, MaskBlueIcon, MaskGreyIcon, MaskTextIcon, MaskTextNightlyIcon } from '@masknet/icons'
-import { Avatar, IconButton, Link, Typography } from '@material-ui/core'
+import { Avatar, IconButton, Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import FacebookIcon from '@material-ui/icons/Facebook'
-import GitHubIcon from '@material-ui/icons/GitHub'
-import TelegramIcon from '@material-ui/icons/Telegram'
-import TwitterIcon from '@material-ui/icons/Twitter'
+import FacebookIcon from '@mui/icons-material/Facebook'
+import GitHubIcon from '@mui/icons-material/GitHub'
+import TelegramIcon from '@mui/icons-material/Telegram'
+import TwitterIcon from '@mui/icons-material/Twitter'
 import { useDashboardI18N } from '../../locales'
-import { styled } from '@material-ui/core/styles'
+import { styled } from '@mui/material/styles'
 import { Version } from './Version'
 import { getMaskColor } from '@masknet/theme'
 import links from './links.json'
@@ -99,7 +99,7 @@ const TextIconContainer = styled('div')(
 
 const brands: Record<string, React.ReactNode> = {
     'https://www.facebook.com/masknetwork': <FacebookIcon />,
-    'https://twitter.com/realmaskbook': <TwitterIcon />,
+    'https://twitter.com/realMaskNetwork': <TwitterIcon />,
     'https://github.com/DimensionDev/Maskbook': <GitHubIcon />,
     'https://t.me/maskbook_group': <TelegramIcon />,
     'https://discord.gg/4SVXvj7': <DiscordIcon />,
@@ -149,8 +149,8 @@ export function About() {
                     </Typography>
                     <Typography component="p" variant="inherit">
                         <span>{t.about_dialog_source_code()}</span>
-                        <Link classes={{ root: classes.link }} href={links.MASKBOOK_GITHUB}>
-                            {links.MASKBOOK_GITHUB}
+                        <Link classes={{ root: classes.link }} href={links.MASK_GITHUB}>
+                            {links.MASK_GITHUB}
                         </Link>
                     </Typography>
                     <Typography component="p" variant="inherit">

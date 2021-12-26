@@ -1,4 +1,4 @@
-import { Card, Link } from '@material-ui/core'
+import { Card, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import {
     Wallet,
@@ -6,9 +6,9 @@ import {
     ERC721TokenDetailed,
     resolveCollectibleLink,
     CollectibleProvider,
-} from '@masknet/web3-shared'
+} from '@masknet/web3-shared-evm'
 import { Image } from '../../../../components/shared/Image'
-import { MaskbookIconOutlined } from '../../../../resources/MaskbookIcon'
+import { MaskSharpIconOfSize } from '../../../../resources/MaskIcon'
 import { ActionsBarNFT } from '../ActionsBarNFT'
 import { Video } from '../../../../components/shared/Video'
 
@@ -28,7 +28,8 @@ const useStyles = makeStyles()((theme) => ({
         zIndex: 1,
         backgroundColor: `${theme.palette.background.paper} !important`,
     },
-    placeholder: {
+    placeholderIcon: {
+        color: theme.palette.mode === 'dark' ? 'rgb(255, 255, 255)' : 'rgb(15, 20, 25)',
         width: 64,
         height: 64,
         opacity: 0.1,
@@ -71,7 +72,7 @@ export function CollectibleCard(props: CollectibleCardProps) {
                         />
                     )
                 ) : (
-                    <MaskbookIconOutlined className={classes.placeholder} />
+                    <MaskSharpIconOfSize classes={{ root: classes.placeholderIcon }} size={22} />
                 )}
             </Card>
         </Link>

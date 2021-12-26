@@ -2,13 +2,14 @@ import { useContext } from 'react'
 import { ExternalLink } from 'react-feather'
 import type { Trade } from '@uniswap/v2-sdk'
 import type { Currency, TradeType } from '@uniswap/sdk-core'
-import { Link, Typography } from '@material-ui/core'
+import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { resolveTradePairLink } from '../../pipes'
-import type { TradeComputed, TradeProvider } from '../../types'
+import type { TradeComputed } from '../../types'
 import { TradeContext } from '../../trader/useTradeContext'
 import { getPairAddress } from '../../helpers'
-import { useNetworkType } from '@masknet/web3-shared'
+import { useNetworkType } from '@masknet/web3-shared-evm'
+import type { TradeProvider } from '@masknet/public-api'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { useChainId } from '@masknet/web3-shared'
+import { ChainId, useChainId } from '@masknet/web3-shared-evm'
 import { CollectibleToken, NFTHistory, CollectibleProvider, OpenSeaAssetEventType } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { NullAddress, NullContractAddress, OpenSeaAccountURL } from '../constants'
@@ -9,7 +9,7 @@ import { resolveRaribleUserNetwork } from '../pipes'
 export function useEvents(provider: CollectibleProvider, token?: CollectibleToken, cursor?: string) {
     const chainId = useChainId()
     return useAsyncRetry<{ data: NFTHistory[]; pageInfo: { hasNextPage: boolean; endCursor?: string } }>(async () => {
-        if (!token)
+        if (!token || (chainId !== ChainId.Mainnet && chainId !== ChainId.Ropsten))
             return {
                 data: [] as NFTHistory[],
                 pageInfo: {
@@ -84,7 +84,7 @@ export function useEvents(provider: CollectibleProvider, token?: CollectibleToke
                 return {
                     data: raribleEvents.map((event) => {
                         return {
-                            id: event.salt,
+                            id: event.id,
                             accountPair: {
                                 from: event.fromInfo
                                     ? {

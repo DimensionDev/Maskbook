@@ -1,7 +1,7 @@
 import { clone_into, redefineEventTargetPrototype, unwrapXRay_CPPBindingObject } from '../utils'
 import { apply, error, no_xray_Proxy, warn, xray_Map } from '../intrinsic'
 
-const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste'] as (keyof DocumentEventMap)[])
+const CapturingEvents: Set<string> = new Set(['keyup', 'input', 'paste', 'change'] as (keyof DocumentEventMap)[])
 
 type EventListenerDescriptor = { once: boolean; passive: boolean; capture: boolean }
 const CapturedListeners = new WeakMap<Node | Document, Map<string, Map<EventListener, EventListenerDescriptor>>>()
@@ -135,7 +135,7 @@ export function dispatchEventRaw<T extends Event>(
             event,
             clone_into({
                 get(target, key) {
-                    if (key === 'currentTarget') return unwrapXRay_CPPBindingObject(currentTarget())
+                    if (key === 'currentTarget' || key === 'target') return unwrapXRay_CPPBindingObject(currentTarget())
                     return (source as any)[key] ?? (unwrapXRay_CPPBindingObject(target) as any)[key]
                 },
             }),

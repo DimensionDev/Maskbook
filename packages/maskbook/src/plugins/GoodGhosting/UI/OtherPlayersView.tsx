@@ -1,4 +1,4 @@
-import { Grid, Box, Typography, Button } from '@material-ui/core'
+import { Grid, Box, Typography, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { AsyncStateRetry } from 'react-use/lib/useAsyncRetry'
 import { useI18N } from '../../../utils'

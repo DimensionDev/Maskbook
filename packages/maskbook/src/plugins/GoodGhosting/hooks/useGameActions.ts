@@ -1,4 +1,4 @@
-import { TransactionEventType, TransactionStateType, useAccount, useGasPrice } from '@masknet/web3-shared'
+import { TransactionEventType, TransactionStateType, useAccount, useGasPrice } from '@masknet/web3-shared-evm'
 import { useGoodGhostingContract } from '../contracts/useGoodGhostingContract'
 import type { GoodGhostingInfo } from '../types'
 import { getPlayerStatus, PlayerStatus } from '../utils'
@@ -7,7 +7,6 @@ import type { TransactionReceipt } from 'web3-core'
 export function useJoinGame(info: GoodGhostingInfo) {
     const account = useAccount()
     const contract = useGoodGhostingContract(info.contractAddress)
-    const gasPrice = useGasPrice()
     const canJoinGame =
         (!info.currentPlayer || info.currentPlayer.canRejoin) &&
         info.currentSegment === 0 &&
@@ -16,42 +15,37 @@ export function useJoinGame(info: GoodGhostingInfo) {
     return {
         canJoinGame,
         joinGame: async () => {
-            if (contract) {
-                const gasEstimate = await contract.methods
-                    .joinGame()
-                    .estimateGas({
-                        from: account,
-                    })
-                    .catch(() => gasPrice)
+            if (!contract) return
+            const gasEstimate = await contract.methods.joinGame().estimateGas({
+                from: account,
+            })
 
-                let txHash = ''
-                return new Promise<void>(async (resolve, reject) => {
-                    contract.methods
-                        .joinGame()
-                        .send({
-                            from: account,
-                            gas: gasEstimate,
-                            gasPrice,
-                        })
-                        .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
-                        .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
-                            if (receipt.status) {
-                                resolve()
-                            } else {
-                                reject({
-                                    gameActionStatus: TransactionStateType.CONFIRMED,
-                                    ...receipt,
-                                })
-                            }
-                        })
-                        .on(TransactionEventType.ERROR, (error) => {
+            let txHash = ''
+            return new Promise<void>(async (resolve, reject) => {
+                contract.methods
+                    .joinGame()
+                    .send({
+                        from: account,
+                        gas: gasEstimate,
+                    })
+                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
+                    .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
+                        if (receipt.status) {
+                            resolve()
+                        } else {
                             reject({
-                                gameActionStatus: TransactionStateType.FAILED,
-                                transactionHash: txHash,
+                                gameActionStatus: TransactionStateType.CONFIRMED,
+                                ...receipt,
                             })
+                        }
+                    })
+                    .on(TransactionEventType.ERROR, (error) => {
+                        reject({
+                            gameActionStatus: TransactionStateType.FAILED,
+                            transactionHash: txHash,
                         })
-                })
-            }
+                    })
+            })
         },
     }
 }
@@ -83,7 +77,6 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
                         .send({
                             from: account,
                             gas: gasEstimate,
-                            gasPrice,
                         })
                         .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
                         .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
@@ -130,7 +123,6 @@ export function useWithdraw(info: GoodGhostingInfo) {
                         .send({
                             from: account,
                             gas: gasEstimate,
-                            gasPrice,
                         })
                         .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
                         .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
@@ -178,7 +170,6 @@ export function useEarlyWithdraw(info: GoodGhostingInfo) {
                         .send({
                             from: account,
                             gas: gasEstimate,
-                            gasPrice,
                         })
                         .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
                         .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {

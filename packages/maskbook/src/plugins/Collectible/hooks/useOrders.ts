@@ -58,7 +58,7 @@ export function useOrders(provider: CollectibleProvider, token?: CollectibleToke
                         return 0
                     })
             case CollectibleProvider.RARIBLE:
-                return PluginCollectibleRPC.getOrderFromRarbile(token.contractAddress, token.tokenId, side)
+                return PluginCollectibleRPC.getOrderFromRarible(token.contractAddress, token.tokenId, side)
             default:
                 unreachable(provider)
         }

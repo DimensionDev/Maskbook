@@ -1,14 +1,12 @@
 import { ValueRef, isEnvironment, Environment } from '@dimensiondev/holoflows-kit'
 import Services from '../extension/service'
-import { MaskMessage } from '../utils/messages'
+import { MaskMessages } from '../utils/messages'
 import { defer } from '../utils/utils'
 
 export interface SettingsTexts {
     primary: () => string
     secondary?: () => string
 }
-export const texts = new WeakMap<ValueRef<any>, SettingsTexts>()
-
 export type InternalSettings<T> = ValueRef<T> & {
     readonly key: string
     readonly ready: boolean
@@ -21,15 +19,16 @@ const cached: Map<string, InternalSettings<any>> = new Map()
 const lastEventId: Map<string, number> = new Map()
 
 if (isEnvironment(Environment.ManifestBackground)) {
-    MaskMessage.events.createInternalSettingsChanged.on(async (payload) => {
+    MaskMessages.events.createInternalSettingsChanged.on(async (payload) => {
         const { id, key, value, initial } = payload
 
-        const stored = await Services.Helper.getStorage(key)
-        if (!initial || (initial && typeof stored === 'undefined')) await Services.Helper.setStorage(key, value)
+        const stored = await Services.Helper.__deprecated__getStorage(key)
+        if (!initial || (initial && typeof stored === 'undefined'))
+            await Services.Helper.__deprecated__setStorage(key, value)
 
-        const updated = await Services.Helper.getStorage(key)
+        const updated = await Services.Helper.__deprecated__getStorage(key)
         if (typeof updated === 'undefined') return
-        MaskMessage.events.createInternalSettingsUpdated.sendToAll({
+        MaskMessages.events.createInternalSettingsUpdated.sendToAll({
             id,
             key,
             value: updated,
@@ -38,7 +37,7 @@ if (isEnvironment(Environment.ManifestBackground)) {
     })
 }
 
-MaskMessage.events.createInternalSettingsUpdated.on(async (payload) => {
+MaskMessages.events.createInternalSettingsUpdated.on(async (payload) => {
     const { id, key, value } = payload
     const settings = cached.get(key)
     if (!settings) return
@@ -71,7 +70,7 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     const id = Date.now()
     cached.set(key, settings)
     lastEventId.set(key, id)
-    MaskMessage.events.createInternalSettingsChanged.sendToAll({
+    MaskMessages.events.createInternalSettingsChanged.sendToAll({
         id,
         key,
         value,
@@ -80,7 +79,7 @@ export function createInternalSettings<T extends browser.storage.StorageValue>(
     settings.addListener((newVal) => {
         const id = Date.now()
         lastEventId.set(key, id)
-        MaskMessage.events.createInternalSettingsChanged.sendToAll({
+        MaskMessages.events.createInternalSettingsChanged.sendToAll({
             id,
             key,
             value: newVal,
@@ -97,7 +96,6 @@ export function createGlobalSettings<T extends browser.storage.StorageValue>(
     comparer: (a: T, b: T) => boolean = (a, b) => a === b,
 ) {
     const settings = createInternalSettings(`settings+${key}`, value, comparer)
-    texts.set(settings, UITexts)
     return settings
 }
 
@@ -107,7 +105,7 @@ export interface NetworkSettings<T> {
 
 export function createNetworkSettings<T extends browser.storage.StorageValue>(settingsKey: string, defaultValue: T) {
     const cached: NetworkSettings<T> = {}
-    MaskMessage.events.createNetworkSettingsReady.on((networkKey) => {
+    MaskMessages.events.createNetworkSettingsReady.on((networkKey) => {
         if (networkKey.startsWith('plugin:') || settingsKey === 'pluginsEnabled') return
         if (!(networkKey in cached))
             cached[networkKey] = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
@@ -117,7 +115,7 @@ export function createNetworkSettings<T extends browser.storage.StorageValue>(se
             if (!(networkKey in target)) {
                 const settings = createInternalSettings(`${networkKey}+${settingsKey}`, defaultValue)
                 target[networkKey] = settings
-                settings.readyPromise.then(() => MaskMessage.events.createNetworkSettingsReady.sendToAll(networkKey))
+                settings.readyPromise.then(() => MaskMessages.events.createNetworkSettingsReady.sendToAll(networkKey))
             }
             return target[networkKey]
         },

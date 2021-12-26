@@ -1,9 +1,9 @@
 import { Suspense, useMemo } from 'react'
 import { Plugin, usePostInfoDetails } from '@masknet/plugin-infra'
 import { extractTextFromTypedMessage, parseURL } from '@masknet/shared'
-import { SnackbarContent } from '@material-ui/core'
+import { SnackbarContent } from '@mui/material'
 import { base } from '../base'
-import MaskbookPluginWrapper from '../../MaskbookPluginWrapper'
+import MaskPluginWrapper from '../../MaskPluginWrapper'
 import { PoolView } from '../UI/PoolView'
 import { InvestDialog } from '../UI/InvestDialog'
 import { escapeRegExp } from 'lodash-es'
@@ -52,10 +52,10 @@ export default sns
 
 function Renderer(props: React.PropsWithChildren<{ link: string; address: string }>) {
     return (
-        <MaskbookPluginWrapper pluginName="dHEDGE">
+        <MaskPluginWrapper pluginName="dHEDGE">
             <Suspense fallback={<SnackbarContent message="Mask is loading this plugin..." />}>
                 <PoolView address={props.address} link={props.link} />
             </Suspense>
-        </MaskbookPluginWrapper>
+        </MaskPluginWrapper>
     )
 }

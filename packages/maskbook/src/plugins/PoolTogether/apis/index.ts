@@ -1,9 +1,9 @@
-import { ChainId, formatBalance } from '@masknet/web3-shared'
+import { ChainId, formatBalance } from '@masknet/web3-shared-evm'
 import { API_URL } from '../constants'
 import type { Pool, TokenFaucet } from '../types'
 
 export async function fetchPools(chainId: ChainId) {
-    // See https://github.com/pooltogether/pooltogether-api-monorepo for API documention
+    // See https://github.com/pooltogether/pooltogether-api-monorepo for API documentation
     const url = new URL(`/pools/${chainId}.json`, API_URL)
     const response = await fetch(url.toString(), {})
     const data = (await response.json()) as Pool[] | null
@@ -54,8 +54,8 @@ export async function fetchPool(address?: string, subgraphUrl?: string) {
     const result = (await response.json())?.data
     const prizePool = result.prizePool
 
-    const prizeStrategy = prizePool.prizeStrategy.singleRandomWinne
-        ? prizePool.prizeStrategy.singleRandomWinne
+    const prizeStrategy = prizePool.prizeStrategy.singleRandomWinner
+        ? prizePool.prizeStrategy.singleRandomWinner
         : prizePool.prizeStrategy.multipleWinners
 
     return {
