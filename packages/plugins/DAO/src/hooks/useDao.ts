@@ -28,11 +28,11 @@ export function useDao(identifier: ProfileIdentifier) {
     return useAsyncRetry(async () => {
         if (identifier.isUnknown) return
         try {
-            const repsonse = await fetch(
+            const response = await fetch(
                 `https://dimensiondev.github.io/Maskbook-Configuration/com.maskbook.dao-${identifier.userId.toLowerCase()}.json`,
             )
-            if (!repsonse.ok) return
-            return (await repsonse.json()) as DAO_Payload
+            if (!response.ok) return
+            return (await response.json()) as DAO_Payload
         } catch {
             return
         }
