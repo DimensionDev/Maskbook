@@ -12,7 +12,8 @@
         "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Celo": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -27,6 +28,7 @@
         "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Celo": ""
     }
 }
