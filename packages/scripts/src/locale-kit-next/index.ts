@@ -43,26 +43,6 @@ export async function syncLanguages() {
                 code += `import { createI18NBundle } from '${target}'\n`
                 code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', languages)\n`
             }
-
-            {
-                const allImportPath: string[] = []
-                const binding: string[] = []
-                for (const [language, familyName] of languages) {
-                    allImportPath.push(`./${language}.json`)
-                    binding.push(`'${familyName}': ${language.replace('-', '_')}`)
-                }
-                code += `// @ts-ignore
-                        if (import.meta.webpack) {
-                            // @ts-ignore
-                            import.meta.webpackHot.accept(
-                                ${JSON.stringify(allImportPath)},
-                                () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR', {
-                                    detail: ['${namespace}', { ${binding.join(', ')} }]
-                                }))
-                            )
-                        }
-                        `
-            }
             code = await prettier(code)
             await writeFile(join(inputDir, 'languages.ts'), code, { encoding: 'utf8' })
         }

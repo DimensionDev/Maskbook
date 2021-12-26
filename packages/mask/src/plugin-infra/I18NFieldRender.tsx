@@ -7,6 +7,7 @@ export interface PluginI18NFieldRenderProps {
 }
 export function PluginI18NFieldRender({ pluginID, field }: PluginI18NFieldRenderProps) {
     const [t] = useTranslation()
+    console.log(pluginID, field)
     if (!field) return null
     if (typeof field === 'object' && 'fallback' in field) {
         if (field.i18nKey) {
