@@ -152,8 +152,10 @@ export class ProviderProxy {
     }
 }
 
-// TODO: Production
-const DEV = 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
+const SOCKET_POINT =
+    process.env.NODE_ENV === 'development'
+        ? 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
+        : 'wss://hyper-proxy.r2d2.to'
 
 enum SocketState {
     CONNECTING = 0,
@@ -166,7 +168,7 @@ function getProxyWebsocketInstanceWrapper(): (notify: NotifyFn) => Promise<Provi
     let cachedInstance: ProviderProxy
 
     const createNewInstance = async (notify: NotifyFn) => {
-        cachedInstance = new ProviderProxy(DEV, notify)
+        cachedInstance = new ProviderProxy(SOCKET_POINT, notify)
         await cachedInstance.waitingOpen()
         cachedInstance.registerMessage()
     }
@@ -194,9 +196,8 @@ function getProxyWebsocketInstanceWrapper(): (notify: NotifyFn) => Promise<Provi
     }
 }
 
-export const sendMessageToProxy = async <T>(message: RequestMessage) => {
-    let data: T[] = []
-    const socket = new WebSocket(DEV)
+export const getWebSocketInstance = async (point: string) => {
+    const socket = new WebSocket(point)
     const waitingOpen = () => {
         return new Promise<void>((resolve, reject) => {
             socket.addEventListener('open', () => resolve())
@@ -204,6 +205,14 @@ export const sendMessageToProxy = async <T>(message: RequestMessage) => {
         })
     }
     await waitingOpen()
+    return socket
+}
+
+export const sendMessageToProxy = async <T>(message: RequestMessage) => {
+    let data: T[] = []
+
+    const socket = await getWebSocketInstance(SOCKET_POINT)
+
     const sendPromise = () =>
         new Promise<T[]>((resolve, reject) => {
             socket.addEventListener('message', (event: MessageEvent<string>) => {
