@@ -3,6 +3,7 @@ import type { AbiItem } from 'web3-utils'
 import STETHABI from './steth.abi.json'
 import { EthereumTokenType } from '@masknet/web3-shared-evm'
 import type { Contract } from 'web3-eth-contract'
+import type BigNumber from 'bignumber.js'
 
 /*
  *
@@ -37,6 +38,11 @@ export const LidoReferralAddress = `0x278D7e418a28ff763eEeDf29238CD6dfcade3A3a`
 
 export const LidoAPR = `https://cors.r2d2.to/?uri=https://stake.lido.fi/api/steth-apr`
 
+export function lidoContract(chainId: number, web3: Web3): Contract {
+    const contract = new web3.eth.Contract(STETHABI as AbiItem[], LidoContracts[chainId].stEthContract)
+    return contract
+}
+
 export async function getLidoAPR() {
     try {
         const response = await fetch(LidoAPR)
@@ -47,19 +53,50 @@ export async function getLidoAPR() {
     }
 }
 
-export function lidoContract(chainId: number, web3: Web3): Contract {
-    const contract = new web3.eth.Contract(STETHABI as AbiItem[], LidoContracts[chainId].stEthContract)
-    console.log('contract methods', contract.methods)
-    return contract
+export async function getLidoBalance(chainId: number, web3: Web3, account: string) {
+    try {
+        const contract = lidoContract(chainId, web3)
+        const balance = await contract.methods.balanceOf(account).call()
+
+        return (balance / Math.pow(10, 18)).toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 6,
+        })
+    } catch (error) {
+        console.log('lido balance error', error)
+        return '0.00'
+    }
 }
 
-export async function getLidoBalance(chainId: number, web3: Web3, account: string) {
-    const contract = lidoContract(chainId, web3)
+export async function lidoDeposit(account: string, chainId: number, web3: Web3, value: BigNumber) {
+    try {
+        const contract = lidoContract(chainId, web3)
 
-    const balance = await contract.methods.balanceOf(account).call()
+        await contract.methods.submit(LidoReferralAddress).send({
+            from: account,
+            value,
+            gasLimit: 2100000,
+        })
 
-    return (balance / Math.pow(10, 18)).toLocaleString(undefined, {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 6,
-    })
+        return true
+    } catch (error) {
+        console.error('LDO Protocol Deposit Error', error)
+        return false
+    }
+}
+
+export async function lidoWithdraw(account: string, chainId: number, web3: Web3, value: BigNumber) {
+    /*
+     * @TODO: Implement withdraw when stETH Beacon Chain allows for withdraws
+     *
+     * For now, just redirect to swap plugin
+     *
+     * await contract.methods
+     *     .withdraw(inputTokenTradeAmount, '0x0000000000000000000000000000000000000000')
+     *     .send({
+     *         from: account,
+     *         gasLimit: 2100000,
+     *     })
+     */
+    return false
 }

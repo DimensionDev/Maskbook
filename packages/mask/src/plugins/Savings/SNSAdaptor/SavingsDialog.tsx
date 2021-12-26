@@ -10,7 +10,7 @@ import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletRPC } from '../../Wallet/messages'
 import { getLidoAPR, getLidoBalance } from './protocols/LDOProtocol'
 import { useStyles } from './SavingsDialogStyles'
-import { SavingsProtocols } from '../constants'
+import { SavingsProtocols } from './protocols'
 import { SavingsTab } from './SavingsTab'
 import { SavingsTable } from './SavingsTable'
 import { SavingsForm } from './SavingsForm'
@@ -36,12 +36,14 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
 
     useEffect(() => {
         ;(async () => {
-            // Set Lido APR
-            const lidoAPR = await getLidoAPR()
-            SavingsProtocols[0].apr = lidoAPR
             // Set Lido Balance
             const lidoBalance = await getLidoBalance(5, web3, account) // change to `chainId` before merge
             SavingsProtocols[0].balance = lidoBalance
+            // Set Lido APR
+            const lidoAPR = await getLidoAPR()
+            SavingsProtocols[0].apr = lidoAPR
+
+            console.log('lido balance', lidoBalance)
         })()
     }, [])
 

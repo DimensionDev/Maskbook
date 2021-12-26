@@ -1,7 +1,7 @@
 import { Box, Grid, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { IconURLS } from './IconURL'
-import { SavingsProtocols } from '../constants'
+import { SavingsProtocols } from './protocols'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {

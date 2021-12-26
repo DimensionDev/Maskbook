@@ -5,8 +5,7 @@ import { EthereumTokenType, useFungibleTokenBalance, useWeb3, useAccount } from 
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
 import { IconURLS } from './IconURL'
-import { SavingsProtocols } from '../constants'
-import { LidoContracts, LidoReferralAddress, lidoContract } from './protocols/LDOProtocol'
+import { SavingsProtocols } from './protocols'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -31,26 +30,27 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
 
     const [inputAmount, setInputAmount] = useState('' as string)
 
-    const { value: inputTokenBalance, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
-        tab === 'deposit' ? EthereumTokenType.Native : EthereumTokenType.ERC20,
-        tab === 'deposit' ? '' : LidoContracts[targetChainId].stEthContract,
+    const { value: nativeTokenBalance, loading: loadingNativeTokenBalance } = useFungibleTokenBalance(
+        EthereumTokenType.Native,
+        '',
         targetChainId,
     )
 
     //#region form controls
-    const formattedBalance = Number.parseInt(inputTokenBalance || '0', 16) / Math.pow(10, 18)
-    const inputTokenTradeAmount = rightShift(inputAmount || '0', 18)
+    const formattedBalance = Number.parseInt(nativeTokenBalance || '0', 16) / Math.pow(10, 18)
+    const tokenAmount = rightShift(inputAmount || '0', 18)
     //#endregion
 
     //#region UI logic
     // validate form return a message if an error exists
     const validationMessage = useMemo(() => {
-        if (inputTokenTradeAmount.isZero()) return t('plugin_trader_error_amount_absence')
+        if (tokenAmount.isZero()) return t('plugin_trader_error_amount_absence')
         if (isLessThan(inputAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
         if (
             new BigNumber(
-                (tab === 'deposit' ? inputTokenBalance : Number.parseFloat(protocol.balance) * Math.pow(10, 18)) || '0',
-            ).isLessThan(inputTokenTradeAmount)
+                (tab === 'deposit' ? nativeTokenBalance : Number.parseFloat(protocol.balance) * Math.pow(10, 18)) ||
+                    '0',
+            ).isLessThan(tokenAmount)
         ) {
             return t('plugin_trader_error_insufficient_balance', {
                 symbol: tab === 'deposit' ? protocol.base : protocol.pair,
@@ -58,7 +58,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
         }
 
         return ''
-    }, [inputAmount, inputTokenTradeAmount.toFixed(), formattedBalance])
+    }, [inputAmount, tokenAmount.toFixed(), formattedBalance])
     //#endregion
 
     const needsSwap = protocol.name === 'Lido' && tab === 'withdraw'
@@ -132,32 +132,17 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                         color="primary"
                         disabled={validationMessage && !needsSwap ? true : false}
                         onClick={async () => {
-                            const contract = lidoContract(targetChainId, web3)
-
                             if (tab === 'deposit') {
-                                await contract.methods.submit(LidoReferralAddress).send({
-                                    from: account,
-                                    value: inputTokenTradeAmount,
-                                    gasLimit: 2100000,
-                                })
-
+                                await protocol.deposit(account, targetChainId, web3, tokenAmount)
                                 onClose?.()
                             } else {
-                                onClose?.()
-                                onSwapDialogOpen?.()
-
-                                /*
-                                 * @TODO: Implement withdraw when stETH Beacon Chain allows for withdraws
-                                 *
-                                 * For now, just redirect to balancer swap
-                                 *
-                                 * await contract.methods
-                                 *     .withdraw(inputTokenTradeAmount, '0x0000000000000000000000000000000000000000')
-                                 *     .send({
-                                 *         from: account,
-                                 *         gasLimit: 2100000,
-                                 *     })
-                                 */
+                                if (needsSwap) {
+                                    onClose?.()
+                                    onSwapDialogOpen?.()
+                                } else {
+                                    await protocol.withdraw(account, targetChainId, web3, tokenAmount)
+                                    onClose?.()
+                                }
                             }
                         }}>
                         {needsSwap
