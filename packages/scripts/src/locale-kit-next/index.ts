@@ -52,7 +52,7 @@ export async function syncLanguages() {
                     binding.push(`'${familyName}': ${language.replace('-', '_')}`)
                 }
                 code += `// @ts-ignore
-                        if (import.meta.webpack) {
+                        if (import.meta.webpackHot) {
                             // @ts-ignore
                             import.meta.webpackHot.accept(
                                 ${JSON.stringify(allImportPath)},

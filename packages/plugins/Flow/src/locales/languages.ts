@@ -17,7 +17,7 @@ export const languages = {
     zh: zh_TW,
 }
 // @ts-ignore
-if (import.meta.webpack) {
+if (import.meta.webpackHot) {
     // @ts-ignore
     import.meta.webpackHot.accept(
         ['./en-US.json', './ja-JP.json', './ko-KR.json', './qya-AA.json', './zh-CN.json', './zh-TW.json'],
