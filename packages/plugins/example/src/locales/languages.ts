@@ -8,3 +8,14 @@ export const languages = {
     en: en_US,
     zh: zh_TW,
 }
+// @ts-ignore
+if (import.meta.webpack) {
+    // @ts-ignore
+    import.meta.webpackHot.accept(['./en-US.json', './zh-TW.json'], () =>
+        globalThis.dispatchEvent?.(
+            new CustomEvent('MASK_I18N_HMR', {
+                detail: ['io.mask.example', { en: en_US, zh: zh_TW }],
+            }),
+        ),
+    )
+}
