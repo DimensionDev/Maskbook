@@ -26,6 +26,10 @@ Mask Network fetches on-chain data from various data sources. Therefore, you can
 | CoinMarketCap | `packages/web3-constants/evm/coinmarketcap.json` |
 | Zerion        | `packages/web3-constants/evm/zerion.json`        |
 
+#### Learn more
+
+- https://api.coingecko.com/api/v3/asset_platforms
+
 ### Token List
 
 The team maintains a token list https://github.com/DimensionDev/Mask-Token-List. So free feel to create one for the chain. And add the token list link to `packages/web3-constants/evm/token-list.json`.

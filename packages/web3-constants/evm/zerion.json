@@ -11,7 +11,8 @@
         "Mumbai": "",
         "Arbitrum": "arbitrum-assets",
         "Arbitrum_Rinkeby": "",
-        "xDai": "xdai-assets"
+        "xDai": "xdai-assets",
+        "Celo": "celo-assets"
     },
     "TRANSACTIONS_SCOPE_NAME": {
         "Mainnet": "transactions",
@@ -25,6 +26,7 @@
         "Mumbai": "",
         "Arbitrum": "arbitrum-transactions",
         "Arbitrum_Rinkeby": "",
-        "xDai": "xdai-transactions"
+        "xDai": "xdai-transactions",
+        "Celo": "celo-transactions"
     }
 }

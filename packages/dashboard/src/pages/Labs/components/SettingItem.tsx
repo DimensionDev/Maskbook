@@ -20,7 +20,7 @@ export interface SettingItemProps {
     legend: string
     value: any
     options: option[]
-    onChange?: (value: any) => void
+    onChange?: (value: string) => void
 }
 
 interface StyledFormControlLabelProps extends FormControlLabelProps {

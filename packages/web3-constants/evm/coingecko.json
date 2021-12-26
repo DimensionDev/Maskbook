@@ -11,7 +11,8 @@
         "Mumbai": "",
         "Arbitrum": "arbitrum-one",
         "Arbitrum_Rinkeby": "",
-        "xDai": "xdai"
+        "xDai": "xdai",
+        "Celo": "celo"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -22,9 +23,10 @@
         "BSC": "binancecoin",
         "BSCT": "",
         "Matic": "matic-network",
-        "Mumbai": "",
+        "Mumbai": "arbitrum-one",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": "xdai"
+        "xDai": "xdai",
+        "Celo": "celo"
     }
 }
