@@ -355,7 +355,8 @@
         "Kodav",
         "koda",
         "poap",
-        "irss"
+        "irss",
+        "CELO"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

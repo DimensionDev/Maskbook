@@ -1,4 +1,9 @@
-import { NetworkType } from '@masknet/web3-shared-evm'
+import {
+    getChainIdFromNetworkType,
+    getCoinGeckoConstants,
+    getCoinMarketCapConstants,
+    NetworkType,
+} from '@masknet/web3-shared-evm'
 import { TagType } from '../../types'
 import { DataProvider } from '@masknet/public-api'
 import MIRRORED_TOKENS from './mirrored_tokens.json'
@@ -6,6 +11,7 @@ import STOCKS_KEYWORDS from './stocks.json'
 import CASHTAG_KEYWORDS from './cashtag.json'
 import HASHTAG_KEYWORDS from './hashtag.json'
 import { currentNetworkSettings } from '../../../Wallet/settings'
+import { getEnumAsArray } from '@dimensiondev/kit'
 
 const BLACKLIST_MAP: {
     [key in DataProvider]: {
@@ -88,32 +94,21 @@ const ID_ADDRESS_MAP: {
     [DataProvider.UNISWAP_INFO]: {},
 }
 
-const NETWORK_ID_MAP: Record<DataProvider, Record<NetworkType, string>> = {
-    [DataProvider.COIN_GECKO]: {
-        [NetworkType.Ethereum]: 'ethereum',
-        [NetworkType.Binance]: 'binance-smart-chain',
-        [NetworkType.Polygon]: 'polygon-pos',
-        [NetworkType.Arbitrum]: 'arbitrum-one',
-        [NetworkType.xDai]: 'xdai',
-        [NetworkType.Celo]: 'celo',
-    },
-    [DataProvider.COIN_MARKET_CAP]: {
-        [NetworkType.Ethereum]: '1027',
-        [NetworkType.Binance]: '1839',
-        [NetworkType.Polygon]: '3890',
-        [NetworkType.Arbitrum]: '11841',
-        [NetworkType.xDai]: '5601',
-        [NetworkType.Celo]: '0',
-    },
-    [DataProvider.UNISWAP_INFO]: {
-        [NetworkType.Ethereum]: '',
-        [NetworkType.Binance]: '',
-        [NetworkType.Polygon]: '',
-        [NetworkType.Arbitrum]: '',
-        [NetworkType.xDai]: '',
-        [NetworkType.Celo]: '',
-    },
+const NETWORK_ID_MAP: {
+    [key in DataProvider]: {
+        [key in NetworkType]?: string
+    }
+} = {
+    [DataProvider.COIN_GECKO]: {},
+    [DataProvider.COIN_MARKET_CAP]: {},
+    [DataProvider.UNISWAP_INFO]: {},
 }
+
+getEnumAsArray(NetworkType).map(({ value: networkType }) => {
+    const chainId = getChainIdFromNetworkType(networkType)
+    NETWORK_ID_MAP[DataProvider.COIN_GECKO][networkType] = getCoinGeckoConstants(chainId).PLATFORM_ID ?? ''
+    NETWORK_ID_MAP[DataProvider.COIN_MARKET_CAP][networkType] = getCoinMarketCapConstants(chainId).CHAIN_ID ?? ''
+})
 
 export function resolveAlias(keyword: string, dataProvider: DataProvider) {
     if (dataProvider === DataProvider.UNISWAP_INFO) return keyword

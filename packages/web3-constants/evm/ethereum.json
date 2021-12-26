@@ -1,32 +1,4 @@
 {
-    "ERC20_TOKEN_LISTS": {
-        "Mainnet": [
-            "https://api.1inch.exchange/v3.0/1/tokens",
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/1/tokens.json"
-        ],
-        "Ropsten": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/3/tokens.json"],
-        "Rinkeby": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/4/tokens.json"],
-        "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
-        "Gorli": [],
-        "BSC": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/56/tokens.json",
-            "https://api.1inch.exchange/v3.0/56/tokens"
-        ],
-        "BSCT": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "Matic": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/137/tokens.json",
-            "https://api.1inch.exchange/v3.0/137/tokens"
-        ],
-        "Mumbai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/80001/tokens.json"],
-        "Arbitrum": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42161/tokens.json"
-        ],
-        "Arbitrum_Rinkeby": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/421611/tokens.json"
-        ],
-        "xDai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/100/tokens.json"],
-        "Celo": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42220/tokens.json"]
-    },
     "BALANCE_CHECKER_ADDRESS": {
         "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",
         "Ropsten": "0xD5C432dFbDEcB6068583BC5241D1b308D70721a4",

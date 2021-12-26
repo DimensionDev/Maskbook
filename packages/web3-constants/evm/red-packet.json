@@ -56,7 +56,8 @@
         "Mumbai": "",
         "Arbitrum": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Arbitrum_Rinkeby": "",
-        "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B"
+        "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
+        "Celo": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
         "Mainnet": 12939427,
@@ -70,7 +71,8 @@
         "Mumbai": 0,
         "Arbitrum": 909051,
         "Arbitrum_Rinkeby": 0,
-        "xDai": 18101937
+        "xDai": 18101937,
+        "Celo": 0
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
@@ -84,6 +86,7 @@
         "Mumbai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mumbai",
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-arbitrum-one",
         "Arbitrum_Rinkeby": "",
-        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai"
+        "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai",
+        "Celo": ""
     }
 }

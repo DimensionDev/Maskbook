@@ -5,6 +5,8 @@ import {
     FilterTransactionType,
     NetworkType,
     FungibleAssetProvider,
+    getChainIdFromNetworkType,
+    getZerionConstants,
 } from '@masknet/web3-shared-evm'
 import type { SocketRequestAssetScope } from '../types'
 
@@ -30,41 +32,13 @@ export function resolveDebankTransactionType(category: string) {
     }
 }
 
-export const resolveDebankChainName = createLookupTableResolver<NetworkType, string>(
-    {
-        [NetworkType.Ethereum]: 'eth',
-        [NetworkType.Binance]: 'bsc',
-        [NetworkType.Polygon]: 'matic',
-        [NetworkType.Arbitrum]: 'arb',
-        [NetworkType.xDai]: 'xdai',
-        [NetworkType.Celo]: 'celo',
-    },
-    '',
-)
+export function resolveZerionAssetsScopeName(networkType: NetworkType) {
+    return getZerionConstants(getChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
+}
 
-export const resolveZerionAssetsScopeName = createLookupTableResolver<NetworkType, string>(
-    {
-        [NetworkType.Ethereum]: 'assets',
-        [NetworkType.Binance]: 'bsc-assets',
-        [NetworkType.Polygon]: 'polygon-assets',
-        [NetworkType.Arbitrum]: 'arbitrum-assets',
-        [NetworkType.xDai]: 'xdai-assets',
-        [NetworkType.Celo]: 'celo-assets',
-    },
-    '',
-)
-
-export const resolveZerionTransactionsScopeName = createLookupTableResolver<NetworkType, string>(
-    {
-        [NetworkType.Ethereum]: 'transactions',
-        [NetworkType.Binance]: 'bsc-transactions',
-        [NetworkType.Polygon]: 'polygon-transactions',
-        [NetworkType.Arbitrum]: 'arbitrum-transactions',
-        [NetworkType.xDai]: 'xdai-transactions',
-        [NetworkType.Celo]: 'celo-transactions',
-    },
-    '',
-)
+export function resolveZerionTransactionsScopeName(networkType: NetworkType) {
+    return getZerionConstants(getChainIdFromNetworkType(networkType)).TRANSACTIONS_SCOPE_NAME ?? ''
+}
 
 export const resolveChainByScope = createLookupTableResolver<
     SocketRequestAssetScope,

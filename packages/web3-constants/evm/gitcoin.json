@@ -56,6 +56,7 @@
         "Mumbai": 5,
         "Arbitrum": 5,
         "Arbitrum_Rinkeby": 5,
-        "xDai": 5
+        "xDai": 5,
+        "Celo": 0
     }
 }
