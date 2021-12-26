@@ -15,4 +15,5 @@ export const SUSHISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     [ChainId.Matic]: [WNATIVE, USDC, WBTC, DAI, USDT].map((x) => x[ChainId.Matic]),
     [ChainId.BSC]: [WNATIVE, DAI, BUSD, USDC, USDT, BTCB].map((x) => x[ChainId.BSC]),
     [ChainId.xDai]: [WNATIVE, USDC, USDT, WBTC].map((x) => x[ChainId.xDai]),
+    [ChainId.Fuse]: [WNATIVE, USDC, USDT, WBTC].map((x) => x[ChainId.Fuse]),
 }

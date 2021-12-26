@@ -175,6 +175,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Fuse = 'Fuse',
 }
 
 export enum DataProvider {

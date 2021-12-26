@@ -11,7 +11,9 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Fuse": "",
+        "Fuse_Sparknet": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -25,7 +27,9 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Fuse": "",
+        "Fuse_Sparknet": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -39,7 +43,9 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Fuse": "",
+        "Fuse_Sparknet": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -53,6 +59,8 @@
         "Mumbai": 5,
         "Arbitrum": 0,
         "Arbitrum_Rinkeby": 0,
-        "xDai": 0
+        "xDai": 0,
+        "Fuse": 0,
+        "Fuse_Sparknet": 0
     }
 }

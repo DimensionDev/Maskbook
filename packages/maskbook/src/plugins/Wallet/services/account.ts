@@ -115,5 +115,6 @@ export async function getSupportedNetworks() {
         Flags.polygon_enabled ? NetworkType.Polygon : undefined,
         Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
         Flags.xdai_enabled ? NetworkType.xDai : undefined,
+        Flags.fuse_enabled ? NetworkType.Fuse : undefined,
     ].filter(Boolean) as NetworkType[]
 }

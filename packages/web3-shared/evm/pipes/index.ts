@@ -67,7 +67,9 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Mumbai]: 'rgb(130, 71, 229)',
         [ChainId.Arbitrum]: 'rgb(36, 150, 238)',
         [ChainId.Arbitrum_Rinkeby]: 'rgb(36, 150, 238)',
-        [ChainId.xDai]: 'rgb(73, 169, 166)',
+        [ChainId.xDai]: 'rgb(189, 169, 166)',
+        [ChainId.Fuse]: 'rgb(189, 254, 173)',
+        [ChainId.Fuse_Sparknet]: 'rgb(189, 254, 173)',
     },
     'rgb(214, 217, 220)',
 )

@@ -11,7 +11,9 @@
         "Mumbai": "0x1e82cFbcF7292DEf91a2A5736265555883FF0289",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Fuse": "",
+        "Fuse_Sparknet": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -25,6 +27,8 @@
         "Mumbai": "https://graphigo.stg.galaxy.eco/query",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Fuse": "",
+        "Fuse_Sparknet": ""
     }
 }

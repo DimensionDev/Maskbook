@@ -40,6 +40,10 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    // Fuse
+    Fuse = 122,
+    Fuse_Sparknet = 123,
 }
 
 export enum ProviderType {
@@ -63,6 +67,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Fuse = 'Fuse',
 }
 
 export interface Wallet {

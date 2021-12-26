@@ -9,6 +9,7 @@ import {
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
+    useFuseNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -47,6 +48,13 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const xDaiOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
+    const fuseOptions = [
+        {
+            label: 'SushiSwap',
+            value: TradeProvider.SUSHISWAP,
+        },
+    ]
+
     const t = useDashboardI18N()
 
     const items = [
@@ -79,6 +87,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useXDaiNetworkTradeProvider(),
             options: xDaiOptions,
             onChange: (value: any) => Services.Settings.setxDaiNetworkTradeProvider(+value),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Fuse' }),
+            value: useFuseNetworkTradeProvider(),
+            options: fuseOptions,
+            onChange: (value: any) => Services.Settings.setFuseNetworkTradeProvider(+value),
         },
     ]
 

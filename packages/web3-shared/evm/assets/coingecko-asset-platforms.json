@@ -6,6 +6,12 @@
         "shortname": ""
     },
     {
+        "id": "fuse",
+        "chainId": 122,
+        "name": "Fuse",
+        "shortname": "fuse"
+    },
+    {
         "id": "binance-smart-chain",
         "chainId": 56,
         "name": "Binance Smart Chain",
