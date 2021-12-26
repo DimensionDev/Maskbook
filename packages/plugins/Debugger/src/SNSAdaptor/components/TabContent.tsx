@@ -13,17 +13,20 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
                 <ListItem>
                     <ListItemText
                         primary={<Typography color="textPrimary">Nickname</Typography>}
-                        secondary={identity?.nickname}></ListItemText>
+                        secondary={identity?.nickname}
+                    />
                 </ListItem>
                 <ListItem>
                     <ListItemText
                         primary={<Typography color="textPrimary">Bio</Typography>}
-                        secondary={identity?.bio}></ListItemText>
+                        secondary={identity?.bio}
+                    />
                 </ListItem>
                 <ListItem>
                     <ListItemText
                         primary={<Typography color="textPrimary">Home Page</Typography>}
-                        secondary={identity?.homepage}></ListItemText>
+                        secondary={identity?.homepage}
+                    />
                 </ListItem>
                 <ListItem>
                     <ListItemText
@@ -37,7 +40,8 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
                                     <img src={identity?.avatar} />
                                 </Box>
                             </Box>
-                        }></ListItemText>
+                        }
+                    />
                 </ListItem>
             </List>
         )
@@ -47,14 +51,15 @@ export function TabContent({ identity, addressNames }: TabContentProps) {
         return (
             <List>
                 {addressNames?.map((x) => (
-                    <ListItem>
+                    <ListItem key={x.type}>
                         <ListItemText
                             primary={
                                 <Typography color="textPrimary">
                                     {x.type}: {x.label}
                                 </Typography>
                             }
-                            secondary={x.resolvedAddress}></ListItemText>
+                            secondary={x.resolvedAddress}
+                        />
                     </ListItem>
                 ))}
             </List>

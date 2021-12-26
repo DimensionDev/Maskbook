@@ -4,15 +4,19 @@ import { first } from 'lodash-unified'
 import { Box, CircularProgress } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useAddressNames } from '@masknet/web3-shared-evm'
-import { createInjectHooksRenderer, Plugin } from '@masknet/plugin-infra'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
 import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
 import { PLUGIN_ID as PLUGIN_ID_DEBUGGER } from '@masknet/plugin-debugger'
 import { PLUGIN_ID as PLUGIN_ID_DAO } from '@masknet/plugin-dao'
+import { PLUGIN_ID as PLUGIN_ID_RSS3 } from '@masknet/plugin-rss3'
+import { PLUGIN_ID as PLUGIN_ID_EXAMPLE } from '@masknet/plugin-example'
 import { PLUGIN_ID as PLUGIN_ID_COLLECTIBLE } from '../../plugins/Collectible/constants'
+
+console.log(PLUGIN_ID_RSS3)
+console.log(PLUGIN_ID_EXAMPLE)
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => {
