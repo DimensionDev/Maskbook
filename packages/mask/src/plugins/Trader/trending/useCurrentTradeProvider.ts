@@ -2,6 +2,7 @@ import { useValueRef } from '@masknet/shared'
 import {
     ethereumNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
@@ -15,6 +16,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
     const networkType = getNetworkTypeFromChainId(chainId ?? currentChainIdSettings.value)
     const ethNetworkTradeProvider = useValueRef(ethereumNetworkTradeProviderSettings)
     const polygonNetworkTradeProvider = useValueRef(polygonNetworkTradeProviderSettings)
+    const fantomNetworkTradeProvider = useValueRef(fantomNetworkTradeProviderSettings)
     const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)
     const arbitrumNetworkTradeProvider = useValueRef(arbitrumNetworkTradeProviderSettings)
     const xdaiNetworkTradeProvider = useValueRef(xdaiNetworkTradeProviderSettings)
@@ -25,6 +27,8 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return ethNetworkTradeProvider
         case NetworkType.Polygon:
             return polygonNetworkTradeProvider
+        case NetworkType.Fantom:
+            return fantomNetworkTradeProvider
         case NetworkType.Binance:
             return binanceNetworkTradeProvider
         case NetworkType.Arbitrum:

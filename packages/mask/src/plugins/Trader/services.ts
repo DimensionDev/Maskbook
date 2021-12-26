@@ -9,6 +9,7 @@ import {
     ethereumNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
 } from './settings'
@@ -28,6 +29,11 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
             break
         case NetworkType.Polygon:
             currentTradeProviderSettings.value = polygonNetworkTradeProviderSettings.value
+            if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
+                currentDataProviderSettings.value = DataProvider.COIN_GECKO
+            break
+        case NetworkType.Fantom:
+            currentTradeProviderSettings.value = fantomNetworkTradeProviderSettings.value
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_GECKO
             break
@@ -58,6 +64,9 @@ currentTradeProviderSettings.addListener((tradeProvider: TradeProvider) => {
             break
         case NetworkType.Polygon:
             polygonNetworkTradeProviderSettings.value = tradeProvider
+            break
+        case NetworkType.Fantom:
+            fantomNetworkTradeProviderSettings.value = tradeProvider
             break
         case NetworkType.Arbitrum:
             arbitrumNetworkTradeProviderSettings.value = tradeProvider

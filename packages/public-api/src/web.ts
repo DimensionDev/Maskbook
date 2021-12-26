@@ -189,6 +189,7 @@ export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
     Polygon = 'Polygon',
+    Fantom = 'Fantom',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
 }

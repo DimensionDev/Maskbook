@@ -9,6 +9,7 @@
         "BSCT": "",
         "Matic": "0xdeb1F826c512EEE2FA9398225A3401A0Dd5311E2",
         "Mumbai": "0x1e82cFbcF7292DEf91a2A5736265555883FF0289",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -23,6 +24,7 @@
         "BSCT": "",
         "Matic": "https://graphigo.prd.galaxy.eco/query",
         "Mumbai": "https://graphigo.stg.galaxy.eco/query",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""

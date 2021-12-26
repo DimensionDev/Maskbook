@@ -26,6 +26,7 @@ const chainIdMap: Record<number, string> = {
     [ChainId.BSC]: 'bsc',
     [ChainId.xDai]: 'xdai',
     [ChainId.Matic]: 'matic',
+    [ChainId.Fantom]: 'ftm',
     [ChainId.Arbitrum]: 'arb',
 }
 

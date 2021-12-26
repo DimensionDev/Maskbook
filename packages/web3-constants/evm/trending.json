@@ -9,6 +9,7 @@
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -23,6 +24,7 @@
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -37,6 +39,7 @@
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
+        "Fantom": "https://api.thegraph.com/subgraphs/name/publu/fantom-blocks",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""

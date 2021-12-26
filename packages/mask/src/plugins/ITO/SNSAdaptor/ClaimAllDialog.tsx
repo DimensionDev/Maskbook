@@ -227,7 +227,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Fantom, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
             ? currentChainId
             : ChainId.Mainnet,
     )
@@ -366,7 +366,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             chainId={chainId}
                             setChainId={setChainId}
                             classes={classes}
-                            chains={[ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai]}
+                            chains={[ChainId.Mainnet, ChainId.BSC, ChainId.Fantom, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai]}
                         />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>

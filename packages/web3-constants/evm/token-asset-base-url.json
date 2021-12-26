@@ -36,6 +36,10 @@
             "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon",
             "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/polygon"
         ],
+        "Fantom": [
+            "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom",
+            "https://rawcdn.githack.com/trustwallet/assets/master/blockchains/fantom"
+        ],
         "Arbitrum": [],
         "Arbitrum_Rinkeby": [],
         "xDai": []

@@ -9,6 +9,7 @@
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -23,6 +24,7 @@
         "BSCT": "",
         "Matic": "",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -37,6 +39,7 @@
         "BSCT": "",
         "Matic": "0xF9F7C1496c21bC0180f4B64daBE0754ebFc8A8c0",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
         "Arbitrum_Rinkeby": "0x9b3649eC8C9f68484acC76D437B145a4e58Bf2A2",
         "xDai": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c"
@@ -51,6 +54,7 @@
         "BSCT": 0,
         "Matic": 16516643,
         "Mumbai": 0,
+        "Fantom": 0,
         "Arbitrum": 102022,
         "Arbitrum_Rinkeby": 708696,
         "xDai": 17865755
@@ -65,6 +69,7 @@
         "BSCT": "",
         "Matic": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -79,6 +84,7 @@
         "BSCT": "",
         "Matic": "0x2cf91AD8C175305EBe6970Bd8f81231585EFbd77",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Arbitrum_Rinkeby": "0xEbd753E66649C824241E63894301BA8Db5DBF5Bb",
         "xDai": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9"
@@ -93,6 +99,7 @@
         "BSCT": "",
         "Matic": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-polygon",
         "Mumbai": "",
+        "Fantom": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-fantom",
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai"

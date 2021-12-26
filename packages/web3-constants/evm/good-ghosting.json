@@ -9,6 +9,7 @@
         "BSCT": "",
         "Matic": "https://raw.githubusercontent.com/Good-Ghosting/mask-plugin-integration/master/games.json",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -23,6 +24,7 @@
         "BSCT": "",
         "Matic": "0x357D51124f59836DeD84c8a1730D72B749d8BC23",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""

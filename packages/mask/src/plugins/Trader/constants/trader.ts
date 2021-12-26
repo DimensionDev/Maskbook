@@ -57,6 +57,7 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.BSC]: [WNATIVE[ChainId.BSC]],
     [ChainId.BSCT]: [WNATIVE[ChainId.BSCT]],
     [ChainId.Matic]: [WNATIVE[ChainId.Matic]],
+    [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
     [ChainId.Mumbai]: [WNATIVE[ChainId.Mumbai]],
     [ChainId.Arbitrum]: [WNATIVE[ChainId.Arbitrum]],
     [ChainId.Arbitrum_Rinkeby]: [WNATIVE[ChainId.Arbitrum_Rinkeby]],

@@ -9,6 +9,7 @@
         "BSCT": "",
         "Matic": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
         "Mumbai": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -23,6 +24,7 @@
         "BSCT": "",
         "Matic": "0xb99080b9407436eBb2b8Fe56D45fFA47E9bb8877",
         "Mumbai": "0x3E2849E2A489C8fE47F52847c42aF2E8A82B9973",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -37,6 +39,7 @@
         "BSCT": "",
         "Matic": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Mumbai": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -51,6 +54,7 @@
         "BSCT": 5,
         "Matic": 5,
         "Mumbai": 5,
+        "Fantom": 5,
         "Arbitrum": 5,
         "Arbitrum_Rinkeby": 5,
         "xDai": 5

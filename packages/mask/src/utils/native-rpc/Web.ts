@@ -111,6 +111,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getBinanceNetworkTradeProvider()
             case NetworkType.Polygon:
                 return Services.Settings.getPolygonNetworkTradeProvider()
+            case NetworkType.Fantom:
+                return Services.Settings.getFantomNetworkTradeProvider()
             case NetworkType.Arbitrum:
                 return Services.Settings.getArbitrumNetworkTradeProvider()
             case NetworkType.xDai:
@@ -127,6 +129,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setBinanceNetworkTradeProvider(provider)
             case NetworkType.Polygon:
                 return Services.Settings.setPolygonNetworkTradeProvider(provider)
+            case NetworkType.Fantom:
+                return Services.Settings.setFantomNetworkTradeProvider(provider)
             case NetworkType.Arbitrum:
                 return Services.Settings.setArbitrumNetworkTradeProvider(provider)
             case NetworkType.xDai:

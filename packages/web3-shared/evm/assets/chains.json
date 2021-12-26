@@ -219,6 +219,31 @@
         "infoURL": "https://matic.network/"
     },
     {
+        "name": "Fantom Opera",
+        "chainId": 250,
+        "fullName": "Fantom",
+        "shortName": "ftm",
+        "chain": "Fantom",
+        "network": "mainnet",
+        "networkId": 250,
+        "nativeCurrency": {
+            "name": "Fantom",
+            "symbol": "FTM",
+            "decimals": 18,
+            "logoURI": "https://static.debank.com/image/eth_token/logo_url/0x4e15361fd6b4bb609fa63c81a2be19d873717870/473fa8995183174cb7da314e38855213.png"
+        },
+        "faucets": [],
+        "features": [],
+        "explorers": [
+            {
+                "name": "fantom",
+                "url": "https://ftmscan.com",
+                "standard": "EIP3091"
+            }
+        ],
+        "infoURL": "https://fantom.foundation/"
+    },
+    {
         "name": "Arbitrum One",
         "chainId": 42161,
         "fullName": "Arbitrum",

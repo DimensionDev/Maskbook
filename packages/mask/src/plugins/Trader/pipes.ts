@@ -76,6 +76,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://bsc.api.0x.org/'
                 case NetworkType.Polygon:
                     return 'https://polygon.api.0x.org/'
+                case NetworkType.Fantom:
+                    return 'https://fantom.api.0x.org/'
                 case NetworkType.Arbitrum:
                     return 'https://aribitrum.api.0x.org/'
                 case NetworkType.xDai:
@@ -130,6 +132,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-bsc.sushi.com/pairs/${address}`
                 case NetworkType.Polygon:
                     return `https://analytics-polygon.sushi.com/pairs/${address}`
+                case NetworkType.Fantom:
+                    return `https://analytics-fantom.sushi.com/pairs/${address}`    
                 case NetworkType.Arbitrum:
                     return `https://analytics-aribtrum.sushi.com/pairs/${address}`
                 case NetworkType.xDai:

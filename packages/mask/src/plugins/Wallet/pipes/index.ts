@@ -35,6 +35,7 @@ export const resolveDebankChainName = createLookupTableResolver<NetworkType, str
         [NetworkType.Ethereum]: 'eth',
         [NetworkType.Binance]: 'bsc',
         [NetworkType.Polygon]: 'matic',
+        [NetworkType.Fantom]: 'ftm',
         [NetworkType.Arbitrum]: 'arb',
         [NetworkType.xDai]: 'xdai',
     },
@@ -81,6 +82,10 @@ export const resolveChainByScope = createLookupTableResolver<
         },
         'polygon-assets': {
             chain: 'matic',
+            chainId: ChainId.Matic,
+        },
+        'fantom-assets': {
+            chain: 'ftm',
             chainId: ChainId.Matic,
         },
     },

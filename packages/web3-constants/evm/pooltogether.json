@@ -9,6 +9,7 @@
         "BSCT": "",
         "Matic": "https://api.thegraph.com/subgraphs/name/pooltogether/polygon-v3_3_8",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
@@ -23,6 +24,7 @@
         "BSCT": "",
         "Matic": "0x345dc966180d5cf6b57a476362e9c859b725991e",
         "Mumbai": "",
+        "Fantom": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""

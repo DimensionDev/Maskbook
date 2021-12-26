@@ -19,6 +19,11 @@ export const [usePolygonNetworkTradeProvider] = createGlobalState(
     Messages.events.polygonNetworkTradeProviderSettings.on,
 )
 
+export const [P] = createGlobalState(
+    Services.Settings.getFantomNetworkTradeProvider,
+    Messages.events.fantomNetworkTradeProviderSettings.on,
+)
+
 export const [useBinanceNetworkTradeProvider] = createGlobalState(
     Services.Settings.getBinanceNetworkTradeProvider,
     Messages.events.binanceNetworkTradeProviderSettings.on,

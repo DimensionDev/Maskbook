@@ -55,6 +55,9 @@ export enum ChainId {
     Matic = 137,
     Mumbai = 80001,
 
+    // Fantom
+    Fantom = 250,
+
     // Arbitrum
     Arbitrum = 42161,
     Arbitrum_Rinkeby = 421611,
@@ -86,6 +89,7 @@ export enum NetworkType {
     Ethereum = 'Ethereum',
     Binance = 'Binance',
     Polygon = 'Polygon',
+    Fantom = 'Fantom',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
 }

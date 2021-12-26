@@ -30,7 +30,8 @@
                 "Matic",
                 "Mumbai",
                 "Arbitrum",
-                "Arbitrum_Rinkeby"
+                "Arbitrum_Rinkeby",
+                "Fantom"
             ]
         },
         "primitive": {

@@ -13,6 +13,7 @@ import {
     ethereumNetworkTradeProviderSettings,
     binanceNetworkTradeProviderSettings,
     polygonNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
@@ -65,6 +66,11 @@ export const [getEthereumNetworkTradeProvider, setEthNetworkTradeProvider] = cre
 export const [getPolygonNetworkTradeProvider, setPolygonNetworkTradeProvider] = create(
     polygonNetworkTradeProviderSettings,
 )
+
+export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(
+    fantomNetworkTradeProviderSettings,
+)
+
 export const [getBinanceNetworkTradeProvider, setBinanceNetworkTradeProvider] = create(
     binanceNetworkTradeProviderSettings,
 )

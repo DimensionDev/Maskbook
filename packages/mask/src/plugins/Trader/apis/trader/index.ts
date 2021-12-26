@@ -19,6 +19,8 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             ]
         case NetworkType.Polygon:
             return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
+        case NetworkType.Fantom:
+            return [TradeProvider.SUSHISWAP, TradeProvider.ZRX]
         case NetworkType.Binance:
             return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
         case NetworkType.Arbitrum:

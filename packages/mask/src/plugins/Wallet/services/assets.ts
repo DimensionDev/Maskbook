@@ -118,7 +118,7 @@ export async function getAssetsList(
             //xdai-assets is not support
             const scopes = network
                 ? [resolveZerionAssetsScopeName(network)]
-                : ['assets', 'bsc-assets', 'polygon-assets', 'arbitrum-assets']
+                : ['assets', 'bsc-assets', 'polygon-assets', 'fantom-assets', 'arbitrum-assets']
             for (const scope of scopes) {
                 const { meta, payload } = await ZerionAPI.getAssetsList(address, scope)
                 if (meta.status !== 'ok') throw new Error('Fail to load assets.')
@@ -194,7 +194,7 @@ function formatAssetsFromZerion(
     return data.map(({ asset, quantity }) => {
         const balance = leftShift(quantity, asset.decimals).toNumber()
         const value = (asset as ZerionAsset).price?.value ?? (asset as ZerionCovalentAsset).value ?? 0
-        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'ARETH'].includes(symbol)
+        const isNativeToken = (symbol: string) => ['ETH', 'BNB', 'MATIC', 'FTM', 'ARETH'].includes(symbol)
 
         return {
             token: {

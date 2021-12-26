@@ -48,6 +48,7 @@ compileConstants(path.join(__dirname, 'evm'), [
     'BSC',
     'BSCT',
     'Matic',
+    'Fantom',
     'Mumbai',
     'Arbitrum',
     'Arbitrum_Rinkeby',

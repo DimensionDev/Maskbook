@@ -7,6 +7,7 @@ import {
     useBinanceNetworkTradeProvider,
     useEthereumNetworkTradeProvider,
     usePolygonNetworkTradeProvider,
+    useFantomNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
 } from '../../Settings/api'
@@ -36,6 +37,11 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'DODO', value: TradeProvider.DODO },
     ]
 
+    const fantomOptions = [
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: '0x', value: TradeProvider.ZRX }
+    ]
+
     const bscOptions = [
         { label: 'PancakeSwap', value: TradeProvider.PANCAKESWAP },
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
@@ -61,6 +67,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: usePolygonNetworkTradeProvider(),
             options: polygonOptions,
             onChange: (value: any) => Services.Settings.setPolygonNetworkTradeProvider(+value),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Fantom' }),
+            value: useFantomNetworkTradeProvider(),
+            options: fantomOptions,
+            onChange: (value: any) => Services.Settings.setFantomNetworkTradeProvider(+value),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'BSC' }),

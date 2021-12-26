@@ -55,6 +55,12 @@ export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradePr
 
 export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+polygon+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+
+export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+fantom+tradeProvider`,
     TradeProvider.QUICKSWAP,
     { primary: () => '' },
 )

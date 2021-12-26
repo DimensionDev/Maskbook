@@ -122,6 +122,7 @@ export async function getSupportedNetworks() {
         NetworkType.Ethereum,
         Flags.bsc_enabled ? NetworkType.Binance : undefined,
         Flags.polygon_enabled ? NetworkType.Polygon : undefined,
+        Flags.fantom_enabled ? NetworkType.Fantom : undefined,
         Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
         Flags.xdai_enabled ? NetworkType.xDai : undefined,
     ].filter(Boolean) as NetworkType[]
