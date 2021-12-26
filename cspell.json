@@ -361,6 +361,7 @@
         "flac",
         "treeshake",
         "xtest",
+        "xdescribe",
         "irss"
     ],
     "ignoreRegExpList": ["/@servie/"],
