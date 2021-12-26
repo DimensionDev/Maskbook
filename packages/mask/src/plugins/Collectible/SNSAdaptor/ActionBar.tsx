@@ -81,6 +81,13 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_sell')}
                 </ActionButton>
             ) : null}
+            <ActionButton
+                color="primary"
+                className={classes.button}
+                variant="contained"
+                onClick={() => console.log('go2swap')}>
+                Get More ETH
+            </ActionButton>
             <CheckoutDialog
                 assetOrder={assetOrder}
                 asset={asset}
