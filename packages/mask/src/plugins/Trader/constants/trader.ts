@@ -40,6 +40,8 @@ export const CAKE = createERC20Tokens('CAKE_ADDRESS', 'PancakeSwap Token', 'CAKE
 export const maUSDC = createERC20Tokens('maUSDC_ADDRESS', 'Matic Aave interest bearing USDC', 'maUSDC', 6)
 export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
 export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
+export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
+export const CEUR = createERC20Tokens('cEUR_ADDRESS', 'Celo Euro', 'cEUR', 18)
 
 export const WNATIVE = createERC20Tokens(
     'WNATIVE_ADDRESS',
@@ -61,6 +63,7 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Arbitrum]: [WNATIVE[ChainId.Arbitrum]],
     [ChainId.Arbitrum_Rinkeby]: [WNATIVE[ChainId.Arbitrum_Rinkeby]],
     [ChainId.xDai]: [WNATIVE[ChainId.xDai]],
+    [ChainId.Celo]: [WNATIVE[ChainId.Celo]],
 }
 
 export const BIPS_BASE = new BigNumber(10000)
