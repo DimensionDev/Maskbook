@@ -60,7 +60,7 @@ const FileServiceDialog: React.FC<Props> = (props) => {
         showSnackbar(t.uploading_on_cancel())
     }
     return (
-        <MaskDialog DialogProps={{ scroll: 'paper' }} open={props.open} title={t.display_name()} onClose={onDecline}>
+        <MaskDialog DialogProps={{ scroll: 'paper' }} open={props.open} title={t.__display_name()} onClose={onDecline}>
             <DialogContent style={{ minWidth: 515 }}>
                 <Exchange onUploading={setUploading} onInsert={setSelectedFileInfo}>
                     <Entry />
