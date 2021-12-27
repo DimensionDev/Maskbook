@@ -362,7 +362,8 @@
         "irss",
         "CELO",
         "flac",
-        "Aurora"
+        "Aurora",
+        "Betanet"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
