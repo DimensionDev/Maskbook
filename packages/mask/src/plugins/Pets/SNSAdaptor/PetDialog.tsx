@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo, ReactNode } from 'react'
+import { useAsync } from 'react-use'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { useChainId, isSameAddress } from '@masknet/web3-shared-evm'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
@@ -106,10 +107,13 @@ export function PetDialog() {
         }
     }, [open])
 
-    useEffect(() => {
-        Promise.all(nfts.map((i) => PluginPetRPC.getAssetContract(i.contract, chainId))).then((lists) => {
-            setExtraData(lists)
-        })
+    useAsync(async () => {
+        const lists = []
+        for (const i of nfts) {
+            const contract = await PluginPetRPC.getAssetContract(i.contract, chainId)
+            lists.push(contract)
+        }
+        setExtraData(lists)
     }, [nfts])
 
     let timer: NodeJS.Timeout

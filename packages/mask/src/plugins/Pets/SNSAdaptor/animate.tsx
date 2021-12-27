@@ -112,7 +112,7 @@ const AnimatePic = () => {
     const [infoShow, setInfoShow] = useState(false)
 
     useEffect(() => {
-        setShowMeta(user.userId === visitor.userId ? userMeta ?? defMeta : visitorMeta ?? defMeta)
+        setShowMeta((user.userId === visitor.userId ? userMeta : visitorMeta) ?? defMeta)
     }, [userMeta, visitorMeta, defMeta])
 
     const handleClose = () => setShow(false)
