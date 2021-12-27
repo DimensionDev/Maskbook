@@ -28,7 +28,7 @@ export const MaskDialogTitle = memo((props: MaskDialogTitleProps) => {
     return (
         <Title>
             {backButton}
-            <Typography component="span" variant="h6" fontSize={24}>
+            <Typography component="span" variant="h6">
                 {children}
             </Typography>
             <Box sx={{ flex: 1 }} />

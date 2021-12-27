@@ -4,7 +4,7 @@ import {
     patchNonBreakingUpgradeForBackupJSONFileVersion1,
     upgradeFromBackupJSONFileVersion0,
 } from './version-1'
-import type { ProfileIdentifier } from '@masknet/shared-base'
+import { PluginID_FileService, ProfileIdentifier } from '@masknet/shared-base'
 import { isBackupJSONFileVersion0 } from './version-0'
 import {
     BackupJSONFileVersion2,
@@ -12,7 +12,6 @@ import {
     upgradeFromBackupJSONFileVersion1,
     patchNonBreakingUpgradeForBackupJSONFileVersion2,
 } from './version-2'
-import { FileServicePluginID } from '../../../../plugins/FileService/constants'
 
 export interface BackupPreview {
     personas: number
@@ -48,7 +47,7 @@ export function getBackupPreviewInfo(json: BackupJSONFileLatest): BackupPreview 
         posts: json.posts.length,
         contacts: json.profiles.length,
         relations: json.relations.length,
-        files: json.plugin?.[FileServicePluginID]?.length || 0,
+        files: json.plugin?.[PluginID_FileService]?.length || 0,
         wallets: json.wallets.length,
         createdAt: json._meta_.createdAt,
     }

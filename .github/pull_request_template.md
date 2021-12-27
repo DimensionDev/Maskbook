@@ -22,6 +22,8 @@ Closes # (NO_ISSUE)
 
 - [ ] My code follows the style guidelines of this project.
 - [ ] I have performed a self-review of my own code.
+  - [ ] I have removed all in development `console.log`s
+  - [ ] I have removed all commented code.
 - [ ] I have commented on my code, particularly in hard-to-understand areas.
 - [ ] I have read [Internationalization Guide](https://github.com/DimensionDev/Maskbook/blob/develop/docs/i18n-guide.md) and moved text fields to the i18n JSON file.
 
