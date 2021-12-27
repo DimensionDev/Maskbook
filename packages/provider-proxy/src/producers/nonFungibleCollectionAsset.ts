@@ -1,6 +1,12 @@
-import { Collection, getOpenSeaCollectionList } from '@masknet/web3-providers'
+import { getOpenSeaCollectionList } from '@masknet/web3-providers'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 import { collectAllPageDate } from '../helper/request'
+
+interface Collection {
+    name: string
+    image?: string
+    slug: string
+}
 
 interface NonFungibleCollectibleAssetArgs extends ProducerArgBase {
     address: string
@@ -14,8 +20,10 @@ const nonFungibleCollectionAsset = async (
     const { address } = args
     const openSeaApiKey = await getKeys('opensea')
 
-    const collectFromOpenSea = await collectAllPageDate<Collection>((page: number) =>
-        getOpenSeaCollectionList(openSeaApiKey, address, page, 50),
+    const pageSize = 50
+    const collectFromOpenSea = await collectAllPageDate<Collection>(
+        (page: number) => getOpenSeaCollectionList(openSeaApiKey, address, page, pageSize),
+        pageSize,
     )
     await push(collectFromOpenSea)
 }

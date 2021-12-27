@@ -16,7 +16,11 @@ const nonFungibleCollectibleAsset = async (
     const size = 50
     const openSeaApiKey = await getKeys('opensea')
 
-    await collectAllPageDate<ERC721TokenDetailed>((page) => getOpenSeaNFTList(openSeaApiKey, address, page, size), push)
+    await collectAllPageDate<ERC721TokenDetailed>(
+        (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
+        size,
+        push,
+    )
 }
 
 const producer: RPCMethodRegistrationValue<ERC721TokenDetailed, NonFungibleTokenAssetArgs> = {

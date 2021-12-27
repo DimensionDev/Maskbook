@@ -25,13 +25,13 @@ import type {
 } from './types'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_KEY, OPENSEA_API_URL } from './constants'
 
-async function fetchFromOpenSea<T>(url: string, chainId: ChainId) {
+async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId)) return
     try {
         const response = await fetch(urlcat(OPENSEA_API_URL, url), {
             method: 'GET',
             mode: 'cors',
-            headers: { 'x-api-key': OPENSEA_API_KEY, Accept: 'application/json' },
+            headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
         })
         return response.json() as Promise<T>
     } catch {
@@ -69,6 +69,11 @@ function createERC721TokenFromAsset(
             owner: asset?.owner.address ?? '',
         },
         tokenId,
+        {
+            name: asset.collection.name,
+            image: asset.collection.image_url || undefined,
+            slug: asset.collection.slug,
+        },
     )
 }
 
@@ -232,6 +237,10 @@ function createAssetOrder(order: OpenSeaAssetOrder): NonFungibleTokenAPI.AssetOr
 }
 
 export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
+    private readonly _apiKey
+    constructor(apiKey?: string) {
+        this._apiKey = apiKey
+    }
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const requestPath = urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId })
         const response = await fetchFromOpenSea<OpenSeaResponse>(requestPath, chainId)
@@ -261,7 +270,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             limit: size,
             collection: opts.pageInfo?.collection,
         })
-        const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId)
+        const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId, this._apiKey)
         const assets =
             response?.assets
                 .filter(
@@ -340,71 +349,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
     }
 }
 
-export async function getAssetsListFromOpenSea(
-    from: string,
-    opts: { chainId?: ChainId; page?: number; size?: number; collection?: string },
-    apiKey: string,
-) {
-    const { page = 0, size = 50, collection } = opts
-    const params = new URLSearchParams()
-    params.append('owner', from.toLowerCase())
-    params.append('limit', String(size))
-    params.append('offset', String(size * page))
-    if (collection) {
-        params.append('collection', collection)
-    }
-
-    const response = await fetch(`${OPENSEA_API}/api/v1/assets?${params.toString()}`, {
-        method: 'GET',
-        headers: {
-            'x-api-key': apiKey ?? OPENSEA_API_KEY,
-        },
-    })
-    return (await response.json()) as AssetsListResponse
+export function getOpenSeaNFTList(apiKey: string, address: string, page?: number, size?: number) {
+    const opensea = new OpenSeaAPI()
+    return opensea.getTokens(address, { page, size })
 }
 
-export async function getCollectionsFromOpenSea(owner: string, opts: { page?: number; size?: number }, apiKey: string) {
-    const { page = 0, size = 300 } = opts
-    const params = new URLSearchParams()
-    params.append('asset_owner', owner.toLowerCase())
-    params.append('limit', String(size))
-    params.append('offset', String(size * page))
-
-    const response = await fetch(`${OPENSEA_API}/api/v1/collections?${params.toString()}`, {
-        method: 'GET',
-        headers: {
-            'x-api-key': apiKey ?? OPENSEA_API_KEY,
-        },
-    })
-    const collections = (await response.json()) as AssetCollection[]
-
-    return { collections }
-}
-
-export async function getOpenSeaNFTList(
-    apiKey: string,
-    address: string,
-    page?: number,
-    size?: number,
-    collection?: string,
-) {
-    const { assets } = await getAssetsListFromOpenSea(address, { page, size, collection }, apiKey)
-    return format(address, size ?? 50, assets)
-}
-
-export interface Collection {
-    name: string
-    image: string
-    slug: string
-}
-export async function getOpenSeaCollectionList(apiKey: string, address: string, page?: number, size?: number) {
-    const { collections } = await getCollectionsFromOpenSea(address, { page, size }, apiKey)
-    return {
-        data: collections.map((x) => ({
-            name: x.name,
-            image: x.image_url || undefined,
-            slug: x.slug,
-        })) as Collection[],
-        hasNextPage: collections.length === size,
-    }
+export function getOpenSeaCollectionList(apiKey: string, address: string, page?: number, size?: number) {
+    const opensea = new OpenSeaAPI(apiKey)
+    return opensea.getCollections(address, { page, size })
 }

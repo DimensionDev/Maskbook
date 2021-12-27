@@ -10,3 +10,7 @@ export const OpenSea = new OpenSeaAPI()
 export const Rarible = new RaribleAPI()
 export const NFTScan = new NFTScanAPI()
 export const CoinGecko = new CoinGeckoAPI()
+
+// Method for provider proxy
+export { getOpenSeaNFTList, getOpenSeaCollectionList } from './opensea'
+export { getAssetListFromDebank } from './debank'

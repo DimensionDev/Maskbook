@@ -1,12 +1,8 @@
 import type { ProducerPushFunction } from '../types'
 
-interface Response<T> {
-    data: T[]
-    hasNextPage?: boolean
-}
-
 export async function collectAllPageDate<T>(
-    fetcher: (page: number) => Promise<Response<T>>,
+    fetcher: (page: number) => Promise<T[]>,
+    pageSize: number,
     handler?: ProducerPushFunction<T>,
 ) {
     let data: T[] = []
@@ -14,9 +10,9 @@ export async function collectAllPageDate<T>(
     let page = 0
     while (hasNextPage) {
         const result = await fetcher(page)
-        await handler?.(result.data)
-        data = [...data, ...result.data]
-        hasNextPage = !!result.hasNextPage
+        await handler?.(result)
+        data = [...data, ...result]
+        hasNextPage = result.length === pageSize
         page = page + 1
     }
 
