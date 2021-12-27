@@ -16,6 +16,7 @@
     "anchorme": "^2.1.2",
     "async-call-rpc": "^6.0.1",
     "bignumber.js": "^9.0.2",
+    "idb": "^7.0.0",
     "immer": "^9.0.7",
     "lodash-es": "^4.17.21",
     "pvtsutils": "^1.2.1",

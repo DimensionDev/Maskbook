@@ -39,7 +39,6 @@
     "@types/react-dom": "^17.0.11",
     "@types/web": "^0.0.48",
     "i18next": "^21.6.3",
-    "idb": "7.0.0",
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lodash-unified": "1.0.1",

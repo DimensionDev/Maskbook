@@ -44,7 +44,6 @@ importers:
       gulp: ^4.0.2
       husky: ^7.0.4
       i18next: ^21.6.3
-      idb: 7.0.0
       jest: ^27.4.5
       lint-staged: ^12.1.4
       lodash: ^4.17.21
@@ -78,7 +77,6 @@ importers:
       '@types/react-dom': 17.0.11
       '@types/web': 0.0.48
       i18next: 21.6.3
-      idb: 7.0.0
       lodash: 4.17.21
       lodash-es: 4.17.21
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
@@ -358,6 +356,7 @@ importers:
       html-webpack-plugin: ^5.5.0
       https-browserify: ^1.0.0
       i18next-browser-languagedetector: ^6.1.2
+      idb: ^7.0.0
       iframe-resizer-react: ^1.1.0
       immer: ^9.0.7
       isomorphic-dompurify: ^0.17.0
@@ -484,6 +483,7 @@ importers:
       history: 5.2.0
       https-browserify: 1.0.0
       i18next-browser-languagedetector: 6.1.2
+      idb: 7.0.0
       iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
       immer: 9.0.7
       isomorphic-dompurify: 0.17.0
@@ -775,6 +775,7 @@ importers:
       anchorme: ^2.1.2
       async-call-rpc: ^6.0.1
       bignumber.js: ^9.0.2
+      idb: ^7.0.0
       immer: ^9.0.7
       lodash-es: ^4.17.21
       pvtsutils: ^1.2.1
@@ -796,6 +797,7 @@ importers:
       anchorme: 2.1.2
       async-call-rpc: 6.0.1
       bignumber.js: 9.0.2
+      idb: 7.0.0
       immer: 9.0.7
       lodash-es: 4.17.21
       pvtsutils: 1.2.1

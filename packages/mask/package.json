@@ -79,6 +79,7 @@
     "history": "^5.2.0",
     "https-browserify": "^1.0.0",
     "i18next-browser-languagedetector": "^6.1.2",
+    "idb": "^7.0.0",
     "iframe-resizer-react": "^1.1.0",
     "immer": "^9.0.7",
     "isomorphic-dompurify": "^0.17.0",
