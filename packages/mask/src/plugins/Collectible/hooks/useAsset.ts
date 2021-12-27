@@ -40,7 +40,6 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                             ).toNumber(),
                     ),
                 )
-
                 return {
                     is_verified: ['approved', 'verified'].includes(
                         openSeaResponse.collection?.safelist_request_status ?? '',
@@ -52,7 +51,9 @@ export function useAsset(provider: CollectibleProvider, token?: CollectibleToken
                     ),
                     is_owner: openSeaResponse.top_ownerships.some((item) => isSameAddress(item.owner.address, account)),
                     // it's an IOS string as my inspection
-                    is_auction: Date.parse(`${openSeaResponse.endTime ?? ''}Z`) > Date.now(),
+                    is_auction: Date.parse(`${openSeaResponse['endTime' ?? 'end_time'] ?? ''}Z`) > Date.now(),
+                    is_sale_end: Date.parse(`${openSeaResponse['endTime' ?? 'end_time'] ?? ''}Z`) < Date.now(),
+                    num_sales: openSeaResponse.num_sales,
                     image_url:
                         openSeaResponse.image_url_original ??
                         openSeaResponse.image_url ??

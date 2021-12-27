@@ -12,27 +12,25 @@ export function useAssetOrder(provider: CollectibleProvider, token?: Collectible
         switch (provider) {
             case CollectibleProvider.OPENSEA:
                 const openSeaResponse = await PluginCollectibleRPC.getAssetFromSDK(token.contractAddress, token.tokenId)
-
                 const desktopOrder = head(
                     (openSeaResponse.sellOrders ?? []).sort(
                         (a, b) =>
                             new BigNumber(
                                 getOrderUnitPrice(
-                                    a.currentPrice?.toFixed(),
+                                    a.currentPrice as string | undefined,
                                     a.paymentTokenContract?.decimals,
-                                    a.quantity.toFixed(),
+                                    a.quantity as unknown as string | undefined,
                                 ) ?? 0,
                             ).toNumber() -
                             new BigNumber(
                                 getOrderUnitPrice(
-                                    b.currentPrice?.toFixed(),
+                                    b.currentPrice as string | undefined,
                                     b.paymentTokenContract?.decimals,
-                                    b.quantity.toFixed(),
+                                    b.quantity as unknown as string | undefined,
                                 ) ?? 0,
                             ).toNumber(),
                     ),
                 )
-
                 return desktopOrder
             case CollectibleProvider.RARIBLE:
                 return

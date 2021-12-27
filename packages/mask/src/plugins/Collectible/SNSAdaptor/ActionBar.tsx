@@ -41,9 +41,15 @@ export function ActionBar(props: ActionBarProps) {
     } = useControlledDialog()
 
     if (!asset.value) return null
+    const is_show_buy_now =
+        !asset.value.is_owner && !asset.value.is_sale_end && asset.value.num_sales && assetOrder.value
+    const is_show_place_bid =
+        !asset.value.is_owner && asset.value.end_time && !asset.value.is_sale_end && !asset.value.num_sales
+    const is_show_make_offer = !asset.value.is_owner && asset.value.num_sales
+    const is_show_sell = asset.value.is_owner
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
-            {!asset.value.is_owner && asset.value.is_auction && assetOrder.value ? (
+            {is_show_buy_now && (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -51,8 +57,8 @@ export function ActionBar(props: ActionBarProps) {
                     onClick={onOpenCheckoutDialog}>
                     {t('plugin_collectible_buy_now')}
                 </ActionButton>
-            ) : null}
-            {!asset.value.is_owner && asset.value.is_auction ? (
+            )}
+            {is_show_place_bid && (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -61,9 +67,8 @@ export function ActionBar(props: ActionBarProps) {
                     onClick={onOpenOfferDialog}>
                     {t('plugin_collectible_place_bid')}
                 </ActionButton>
-            ) : null}
-
-            {!asset.value.is_owner && !asset.value.is_auction ? (
+            )}
+            {is_show_make_offer && (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -71,8 +76,8 @@ export function ActionBar(props: ActionBarProps) {
                     onClick={onOpenOfferDialog}>
                     {t('plugin_collectible_make_offer')}
                 </ActionButton>
-            ) : null}
-            {asset.value.is_owner ? (
+            )}
+            {is_show_sell && (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -80,14 +85,7 @@ export function ActionBar(props: ActionBarProps) {
                     onClick={onOpenListingDialog}>
                     {t('plugin_collectible_sell')}
                 </ActionButton>
-            ) : null}
-            <ActionButton
-                color="primary"
-                className={classes.button}
-                variant="contained"
-                onClick={() => console.log('go2swap')}>
-                Get More ETH
-            </ActionButton>
+            )}
             <CheckoutDialog
                 assetOrder={assetOrder}
                 asset={asset}
