@@ -8,7 +8,7 @@ export interface MessageBase {
 export interface RequestMessage extends MessageBase {
     method: string
     params: unknown
-    notify?: NotifyFn
+    notify: NotifyFn
 }
 
 export interface PayloadMessage<T extends unknown = unknown> extends MessageBase {
@@ -33,9 +33,9 @@ const POOL_CACHE_EXPIRE_TIME = 10
 export class ProviderProxy {
     private readonly _socket: WebSocket
     private readonly _pool: Map<string, SocketPoolItem>
-    private readonly _globalNotify: NotifyFn
+    private readonly _globalNotify?: NotifyFn
 
-    constructor(point: string, notifyFn: NotifyFn) {
+    constructor(point: string, notifyFn?: NotifyFn) {
         this._socket = new WebSocket(point)
         this._pool = new Map<string, SocketPoolItem>()
         this._globalNotify = notifyFn
@@ -168,16 +168,16 @@ enum SocketState {
  * Provider a ProxySocket instance
  * @returns a function to operate socket instance
  */
-function getProxyWebsocketInstanceWrapper(): (notify: NotifyFn) => Promise<ProviderProxy> {
+function getProxyWebsocketInstanceWrapper(): (notify?: NotifyFn) => Promise<ProviderProxy> {
     let cachedInstance: ProviderProxy
 
-    const createNewInstance = async (notify: NotifyFn) => {
+    const createNewInstance = async (notify?: NotifyFn) => {
         cachedInstance = new ProviderProxy(SOCKET_POINT, notify)
         await cachedInstance.waitingOpen()
         cachedInstance.registerMessage()
     }
 
-    return async (notify: NotifyFn) => {
+    return async (notify?: NotifyFn) => {
         const state = cachedInstance?.socket.readyState
         if (!cachedInstance || state === SocketState.CLOSING || state === SocketState.CLOSED) {
             await createNewInstance(notify)
@@ -207,8 +207,8 @@ export const getProxyWebsocketInstance = getProxyWebsocketInstanceWrapper()
  * @param endPoint websocket endpoint
  * @returns websocket instance
  */
-export const getWebSocketInstance = async (endPoint: string) => {
-    const socket = new WebSocket(endPoint)
+export const getWebSocketInstance = async (endPoint?: string) => {
+    const socket = new WebSocket(endPoint ?? SOCKET_POINT)
     const waitingOpen = () => {
         return new Promise<void>((resolve, reject) => {
             socket.addEventListener('open', () => resolve())

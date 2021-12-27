@@ -2,7 +2,7 @@ import type { ChainId, ERC721TokenCollectionInfo, ERC721TokenDetailed } from '..
 import { useWeb3Context } from '../context'
 import { uniqWith } from 'lodash-unified'
 import { isSameAddress } from '../utils'
-import { useWebSocket } from './useWebSocket'
+import { useSocketOnce } from './useSocketOnce'
 
 export function useCollections(address: string, chainId: ChainId | null) {
     const id = `mask.fetchNonFungibleCollectibleAsset_${address}_${chainId}`
@@ -14,7 +14,7 @@ export function useCollections(address: string, chainId: ChainId | null) {
             pageSize: 100,
         },
     }
-    return useWebSocket<ERC721TokenCollectionInfo>(message)
+    return useSocketOnce<ERC721TokenCollectionInfo>(message)
 }
 
 export function useCollectibles(address: string, chainId: ChainId | null) {
@@ -29,7 +29,7 @@ export function useCollectibles(address: string, chainId: ChainId | null) {
         },
     }
 
-    const { data, done, error, retry } = useWebSocket<ERC721TokenDetailed>(message)
+    const { data, done, error, retry } = useSocketOnce<ERC721TokenDetailed>(message)
     const all = uniqWith(
         [
             ...(data ?? []),

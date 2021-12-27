@@ -60,7 +60,7 @@ export * from './useChainColor'
 export * from './useResolveENS'
 export * from './useResolveUNS'
 export * from './useGasLimit'
-export * from './useWebSocket'
+export * from './useSocketOnce'
 
 // wallet plugin related
 export * from './useWalletPrimary'

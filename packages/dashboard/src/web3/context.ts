@@ -16,6 +16,7 @@ import {
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
 import { Services, Messages, PluginServices, PluginMessages } from '../API'
+import { getProxyWebsocketInstance } from '@masknet/web3-shared-base'
 
 const Web3Provider = createExternalProvider()
 
@@ -113,6 +114,7 @@ export const Web3Context: Web3ProviderType = {
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
+    providerSocket: getProxyWebsocketInstance(),
 }
 
 export function createExternalProvider() {

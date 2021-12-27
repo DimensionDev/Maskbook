@@ -1,38 +1,12 @@
+import { getWebSocketInstance, PayloadMessage, RequestMessage } from '@masknet/web3-shared-base'
 import { useEffect, useState } from 'react'
 import { useAsyncRetry } from 'react-use'
 
-export interface MessageBase {
-    id: string
-}
-
-export interface RequestMessage extends MessageBase {
-    method: string
-    params: unknown
-}
-
-export interface PayloadMessage<T> extends MessageBase {
-    error?: unknown
-    results?: T[]
-}
-
-const DEV = 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
-const getWebSocketInstance = async (point: string) => {
-    const socket = new WebSocket(point)
-    const waitingOpen = () => {
-        return new Promise<void>((resolve, reject) => {
-            socket.addEventListener('open', () => resolve())
-            socket.addEventListener('error', () => reject())
-        })
-    }
-    await waitingOpen()
-    return socket
-}
-
-export const useWebSocket = <T>(message: RequestMessage) => {
+export const useSocketOnce = <T>(message: Omit<RequestMessage, 'notify'>) => {
     const [data, setData] = useState<T[]>([])
     const [done, setDone] = useState(false)
     const [error, setError] = useState<unknown>()
-    const { value: ws, retry } = useAsyncRetry(() => getWebSocketInstance(DEV), [])
+    const { value: ws, retry } = useAsyncRetry(() => getWebSocketInstance(), [])
 
     useEffect(() => {
         if (!ws) return
