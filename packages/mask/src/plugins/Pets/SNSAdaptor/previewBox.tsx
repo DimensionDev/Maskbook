@@ -122,7 +122,7 @@ export function PreviewBox(props: Props) {
             {props.imageUrl && <img className={classes.image} src={props.imageUrl} />}
             {!(props.message || props.imageUrl) && (
                 <div className={classes.noData}>
-                    <Typography>{t('plugin_pets_dialog_preview')}</Typography>
+                    <Typography color="textPrimary">{t('plugin_pets_dialog_preview')}</Typography>
                 </div>
             )}
         </div>

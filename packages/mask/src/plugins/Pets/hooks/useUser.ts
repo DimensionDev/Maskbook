@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAccount, useEthereumAddress } from '@masknet/web3-shared-evm'
+import { useAccount, useAddressNames } from '@masknet/web3-shared-evm'
 import type { User } from '../types'
 import { PluginNFTAvatarRPC } from '../../Avatar/messages'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '../../../components/DataSource/useActivatedUI'
@@ -20,12 +20,7 @@ export function useCurrentVisitingUser() {
     const [user, setUser] = useState<User>({ userId: '', address: '' })
     const [avaAddress, setAvaAddress] = useState('')
     const identity = useCurrentVisitingIdentity()
-    const { value: valueEVM } = useEthereumAddress(
-        identity.nickname ?? '',
-        identity.identifier.userId,
-        identity.bio ?? '',
-    )
-    const { address } = valueEVM ?? {}
+    const { value: addressNames = [] } = useAddressNames(identity)
 
     useEffect(() => {
         const userId = identity.identifier.userId
@@ -35,7 +30,10 @@ export function useCurrentVisitingUser() {
     }, [identity])
 
     useEffect(() => {
-        setUser({ userId: identity.identifier.userId ?? '', address: address || avaAddress })
-    }, [address, avaAddress])
+        setUser({
+            userId: identity.identifier.userId ?? '',
+            address: addressNames.length ? addressNames[0].resolvedAddress : avaAddress,
+        })
+    }, [addressNames, avaAddress])
     return user
 }
