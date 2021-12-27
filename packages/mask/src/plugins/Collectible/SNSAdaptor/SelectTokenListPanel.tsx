@@ -4,6 +4,8 @@ import { ListItemIcon, MenuItem, Typography } from '@mui/material'
 import { useMenu } from '../../../utils'
 import { useEffect, useState } from 'react'
 import { noop } from 'lodash-unified'
+import { TokenIcon } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 
 export interface SelectTokenPanelProps {
     amount: string
@@ -16,6 +18,12 @@ export interface SelectTokenPanelProps {
     TokenAmountPanelProps?: Partial<TokenAmountPanelProps>
 }
 
+const useStyles = makeStyles()((theme) => ({
+    icon: {
+        width: 24,
+        height: 24,
+    },
+}))
 export function SelectTokenListPanel(props: SelectTokenPanelProps) {
     const {
         amount,
@@ -28,24 +36,34 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
         TokenAmountPanelProps,
     } = props
 
+    const { classes } = useStyles()
+
     const [haveMenu, setHaveMenu] = useState(true)
 
     useEffect(() => {
         if (!FungibleTokenListProps?.tokens || FungibleTokenListProps.tokens.length === 0) setHaveMenu(false)
-        if (token?.symbol === 'WETH') setHaveMenu(false)
     }, [FungibleTokenListProps, token])
 
     const [menu, openMenu] = useMenu(
-        FungibleTokenListProps?.tokens?.map((x, i) => (
-            <MenuItem
-                key={i}
-                onClick={() => {
-                    onTokenChange(x)
-                }}>
-                <ListItemIcon>{x.logoURI}</ListItemIcon>
-                <Typography variant="inherit">{x.name}</Typography>
-            </MenuItem>
-        )) ?? [],
+        FungibleTokenListProps?.tokens?.map((x, i) => {
+            return (
+                <MenuItem
+                    key={i}
+                    onClick={() => {
+                        onTokenChange(x)
+                    }}>
+                    <ListItemIcon>
+                        <TokenIcon
+                            classes={{ icon: classes.icon }}
+                            address={x.address}
+                            name={x.name}
+                            logoURI={x.logoURI}
+                        />
+                    </ListItemIcon>
+                    <Typography variant="inherit">{x.name}</Typography>
+                </MenuItem>
+            )
+        }) ?? [],
         false,
         {
             anchorOrigin: {
