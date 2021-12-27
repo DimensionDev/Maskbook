@@ -302,6 +302,7 @@ importers:
       '@masknet/shared-base': workspace:*
       '@masknet/theme': workspace:*
       '@masknet/web3-contracts': workspace:*
+      '@masknet/web3-providers': workspace:*
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-evm': workspace:*
       '@msgpack/msgpack': ^2.7.1
@@ -436,6 +437,7 @@ importers:
       '@masknet/shared-base': link:../shared-base
       '@masknet/theme': link:../theme
       '@masknet/web3-contracts': link:../web3-contracts
+      '@masknet/web3-providers': link:../web3-providers
       '@masknet/web3-shared-base': link:../web3-shared/base
       '@masknet/web3-shared-evm': link:../web3-shared/evm
       '@msgpack/msgpack': 2.7.1
@@ -888,11 +890,19 @@ importers:
   packages/web3-providers:
     specifiers:
       '@masknet/plugin-infra': workspace:*
+      '@masknet/web3-shared-base': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      bignumber.js: ^9.0.1
+      date-fns: ^2.27.0
       json-stable-stringify: ^1.0.1
       lodash-unified: 1.0.1
       urlcat: ^2.0.4
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/web3-shared-base': link:../web3-shared/base
+      '@masknet/web3-shared-evm': link:../web3-shared/evm
+      bignumber.js: 9.0.1
+      date-fns: 2.27.0
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
       urlcat: 2.0.4

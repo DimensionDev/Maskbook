@@ -15,10 +15,11 @@ import { ActionButtonPromise } from '../../../extension/options-page/DashboardCo
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
-import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
 import getUnixTime from 'date-fns/getUnixTime'
+import type { useAsset } from '../../EVM/hooks'
+import { isWyvernSchemaName } from '../utils'
 
 const useStyles = makeStyles()((theme) => ({
     footer: {
@@ -49,7 +50,6 @@ export interface ListingByHighestBidCardProps {
 export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
     const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
-
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -71,11 +71,12 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.ERC20) return
+        const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schema_name,
+                schemaName: isWyvernSchemaName(schemaName) ? schemaName : undefined,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
