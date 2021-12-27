@@ -333,6 +333,7 @@ importers:
       '@uniswap/v2-sdk': 3.0.0-alpha.2
       '@uniswap/v3-sdk': ^3.3.2
       '@walletconnect/client': ^1.2.2
+      '@yfi/sdk': ^1.0.12
       anchorme: ^2.1.2
       arweave: 1.10.13
       assert: ^2.0.0
@@ -462,6 +463,7 @@ importers:
       '@uniswap/v2-sdk': 3.0.0-alpha.2
       '@uniswap/v3-sdk': 3.3.2
       '@walletconnect/client': 1.4.1
+      '@yfi/sdk': 1.0.12_0bdb8bbbea97e2dd602ca076e59e5bac
       anchorme: 2.1.2
       arweave: 1.10.13
       assert: 2.0.0
@@ -8443,6 +8445,26 @@ packages:
     resolution: {integrity: sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==}
     dev: true
 
+  /@yfi/sdk/1.0.12_0bdb8bbbea97e2dd602ca076e59e5bac:
+    resolution: {integrity: sha512-6UlR1RgtuoO1qf06qFyT5bUaVlAmnm8XlyyzkYrL/DMTTf1DkrODqf5+5IOWwsireW5XDkS0yW3IeVhKYsnELg==}
+    engines: {node: '>=12.0.0'}
+    peerDependencies:
+      '@ethersproject/abi': ^5.4.0
+      '@ethersproject/address': ^5.4.0
+      '@ethersproject/bignumber': ^5.4.1
+      '@ethersproject/contracts': ^5.4.1
+      '@ethersproject/providers': ^5.4.3
+    dependencies:
+      '@ethersproject/abi': 5.4.0
+      '@ethersproject/address': 5.4.0
+      '@ethersproject/providers': 5.4.2
+      bignumber.js: 9.0.1
+      cross-fetch: 3.1.4
+      dotenv: 10.0.0
+      emittery: 0.8.1
+      type-fest: 1.4.0
+    dev: false
+
   /JSONStream/1.3.5:
     resolution: {integrity: sha512-E+iruNOY8VV9s4JEbe1aNEm6MiszPRr/UfcHMz0TQh1BXSxHK+ASV1R6W4HpjBhSeS+54PIsAMCBmwD06LLsqQ==}
     hasBin: true
@@ -11259,7 +11281,7 @@ packages:
 
   /core-js/2.6.12:
     resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
-    deprecated: core-js@<3.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
+    deprecated: core-js@<3.4 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
     requiresBuild: true
     dev: false
 
@@ -12311,6 +12333,11 @@ packages:
     resolution: {integrity: sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==}
     dev: true
 
+  /dotenv/10.0.0:
+    resolution: {integrity: sha512-rlBi9d8jpv9Sf1klPjNfFAuWDjKLwTIJJ/VxtoTwIR6hnZxcEOQCZg2oIL3MWBYw5GpUDKOEnND7LXTbIpQ03Q==}
+    engines: {node: '>=10'}
+    dev: false
+
   /dotenv/8.6.0:
     resolution: {integrity: sha512-IrPdXQsk2BbzvCBGBOTmmSH5SodmqZNt4ERAZDmW4CT+tL8VtvinqywuANaFu4bOMWki16nqf0e4oC0QIaDr/g==}
     engines: {node: '>=10'}
@@ -12437,7 +12464,6 @@ packages:
   /emittery/0.8.1:
     resolution: {integrity: sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==}
     engines: {node: '>=10'}
-    dev: true
 
   /emoji-regex/8.0.0:
     resolution: {integrity: sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A==}
@@ -16037,7 +16063,7 @@ packages:
   /isomorphic-unfetch/2.1.1:
     resolution: {integrity: sha512-nd8AULy4i2rA8dv0nOBT9xieIegd3xi7NDxTQ9+iNXDTyaG6VbUYW3F+TdMRqxqXhDFWM2k7fttKx9W2Wd8JpQ==}
     dependencies:
-      node-fetch: 2.6.1
+      node-fetch: 2.6.6
       unfetch: 3.1.2
     dev: false
 
@@ -18149,7 +18175,6 @@ packages:
     engines: {node: 4.x || >=6.0.0}
     dependencies:
       whatwg-url: 5.0.0
-    dev: true
 
   /node-forge/0.10.0:
     resolution: {integrity: sha512-PPmu8eEeG9saEUvI97fm4OYxXVB6bFvyNTyiUOBichBpFG8A1Ljw3bY62+5oOjDEMHRnd0Y7HQ+x7uzxOzC6JA==}
@@ -22390,7 +22415,6 @@ packages:
 
   /tr46/0.0.3:
     resolution: {integrity: sha1-gYT9NH2snNwYWZLzpmIuFLnZq2o=}
-    dev: true
 
   /tr46/2.1.0:
     resolution: {integrity: sha512-15Ih7phfcdP5YxqiB+iDtLoaTz4Nd35+IiAv0kQ5FNKHzXgdWqPoTIqEDDJmXceQt4JZk6lVPT8lnDlPpGDppw==}
@@ -22714,6 +22738,11 @@ packages:
   /type-fest/0.8.1:
     resolution: {integrity: sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==}
     engines: {node: '>=8'}
+
+  /type-fest/1.4.0:
+    resolution: {integrity: sha512-yGSza74xk0UG8k+pLh5oeoYirvIiWo5t0/o3zHHAO2tRDiZcxWP7fywNlXhqb6/r6sWvwi+RsyQMWhVLe4BVuA==}
+    engines: {node: '>=10'}
+    dev: false
 
   /type-is/1.6.18:
     resolution: {integrity: sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==}
@@ -23817,7 +23846,6 @@ packages:
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=}
-    dev: true
 
   /webidl-conversions/5.0.0:
     resolution: {integrity: sha512-VlZwKPCkYKxQgeSbH5EyngOmRp7Ww7I9rQLERETtf5ofd9pGeswWiOtogpEO850jziPRarreGxn5QIiTqpb2wA==}
@@ -24233,7 +24261,6 @@ packages:
     dependencies:
       tr46: 0.0.3
       webidl-conversions: 3.0.1
-    dev: true
 
   /whatwg-url/8.7.0:
     resolution: {integrity: sha512-gAojqb/m9Q8a5IV96E3fHJM70AzCkgt4uXYX2O7EmuyOnLrViCQlsEBmF9UQIu3/aeAIp2U17rtbpZWNntQqdg==}
@@ -24766,6 +24793,26 @@ packages:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
 
+  github.com/ProjectOpenSea/wyvern-js/1634ad0e2f9961accca62edbf4ac624effa18552:
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/1634ad0e2f9961accca62edbf4ac624effa18552}
+    name: wyvern-js
+    version: 3.2.0
+    dependencies:
+      '@0xproject/abi-gen': 0.1.7
+      '@0xproject/assert': 0.0.11
+      '@0xproject/json-schemas': 0.7.24
+      '@0xproject/utils': 0.1.3
+      '@0xproject/web3-wrapper': 0.1.14
+      0x.js: 0.29.2
+      bn.js: 4.12.0
+      ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d
+      ethereumjs-util: 5.2.1
+      json-loader: 0.5.7
+      jsonschema: 1.4.0
+      lodash: 4.17.21
+      web3: 0.20.7
+    dev: false
+
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e:
     resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/fabb7660f23f2252c141077e32193d281036299e}
     name: wyvern-js
@@ -24808,7 +24855,7 @@ packages:
       bignumber.js: 6.0.0
       typed-promisify: 0.4.0
       web3-provider-engine: 13.8.0
-      wyvern-js: github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e
+      wyvern-js: github.com/ProjectOpenSea/wyvern-js/1634ad0e2f9961accca62edbf4ac624effa18552
     transitivePeerDependencies:
       - debug
     dev: false
