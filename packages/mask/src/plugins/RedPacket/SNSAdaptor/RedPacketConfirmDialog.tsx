@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useEffect } from 'react'
-import { formatBalance, isNative, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -92,7 +92,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             <Grid item xs={6}>
                 <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
                     <span>{settings?.token?.symbol}</span>
-                    {isNative(settings?.token?.address!) ? null : (
+                    {isNativeTokenAddress(settings?.token?.address!) ? null : (
                         <Link
                             color="textPrimary"
                             className={classes.link}

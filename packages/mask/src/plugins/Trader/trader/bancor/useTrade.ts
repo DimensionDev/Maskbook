@@ -1,6 +1,5 @@
 import {
     FungibleTokenDetailed,
-    isNative,
     useAccount,
     useBlockNumber,
     useTokenConstants,
@@ -38,11 +37,11 @@ export function useTrade(
         if (outputAmountWei === '0' && !isExactIn) return null
         if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId)) return null
 
-        const fromToken = isNative(inputToken.address)
+        const fromToken = isNativeTokenAddress(inputToken.address)
             ? { ...inputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : inputToken
 
-        const toToken = isNative(outputToken.address)
+        const toToken = isNativeTokenAddress(outputToken.address)
             ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : outputToken
 

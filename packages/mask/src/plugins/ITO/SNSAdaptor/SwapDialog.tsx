@@ -12,7 +12,6 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isNative,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
@@ -172,7 +171,7 @@ export function SwapDialog(props: SwapDialogProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableNativeToken: !exchangeTokens.some((x) => isNative(x.address)),
+            disableNativeToken: !exchangeTokens.some((x) => isNativeTokenAddress(x.address)),
             disableSearchBar: true,
             FungibleTokenListProps: {
                 whitelist: exchangeTokens.map((x) => x.address),

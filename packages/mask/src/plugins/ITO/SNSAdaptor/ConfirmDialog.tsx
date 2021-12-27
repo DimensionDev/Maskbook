@@ -4,7 +4,6 @@ import {
     formatBalance,
     formatEthereumAddress,
     FungibleTokenDetailed,
-    isNative,
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
     useChainId,
@@ -152,7 +151,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography variant="body1" component="span">
                             {poolSettings?.token?.symbol}
                         </Typography>
-                        {isNative(poolSettings?.token?.address!) ? null : (
+                        {isNativeTokenAddress(poolSettings?.token?.address!) ? null : (
                             <Link
                                 className={classes.link}
                                 href={resolveTokenLinkOnExplorer(poolSettings?.token!)}

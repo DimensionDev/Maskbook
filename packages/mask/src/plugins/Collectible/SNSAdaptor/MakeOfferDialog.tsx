@@ -13,13 +13,7 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import {
-    FungibleTokenDetailed,
-    EthereumTokenType,
-    useAccount,
-    isNative,
-    useFungibleTokenWatched,
-} from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
@@ -167,7 +161,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
-                            disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
+                            disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{

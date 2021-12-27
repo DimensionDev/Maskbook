@@ -1,7 +1,6 @@
 import {
     FungibleTokenDetailed,
     getNetworkTypeFromChainId,
-    isNative,
     NetworkType,
     useAccount,
     useBlockNumber,
@@ -58,10 +57,10 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
 
-        const sellToken = isNative(inputToken.address)
+        const sellToken = isNativeTokenAddress(inputToken.address)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : inputToken.address
-        const buyToken = isNative(outputToken.address)
+        const buyToken = isNativeTokenAddress(outputToken.address)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : outputToken.address
         return PluginTraderRPC.swapQuote(

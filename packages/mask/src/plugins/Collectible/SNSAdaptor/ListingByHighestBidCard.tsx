@@ -1,13 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Card, CardActions, CardContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    EthereumTokenType,
-    FungibleTokenDetailed,
-    isNative,
-    FungibleTokenWatched,
-    useAccount,
-} from '@masknet/web3-shared-evm'
+import { EthereumTokenType, FungibleTokenDetailed, FungibleTokenWatched, useAccount } from '@masknet/web3-shared-evm'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
@@ -99,7 +93,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value as FungibleTokenDetailed}
-                    disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
+                    disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{

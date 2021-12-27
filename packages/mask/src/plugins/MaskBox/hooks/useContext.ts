@@ -22,7 +22,6 @@ import {
     useERC721ContractDetailed,
     useMaskBoxConstants,
     ZERO_ADDRESS,
-    isNative,
     isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
@@ -67,7 +66,7 @@ function useContext(initialState?: { boxId: string }) {
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
         maskBoxStatus?.payment?.map(([address]) => {
             return {
-                type: isNative(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                type: isNativeTokenAddress(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 address,
             }
         }) ?? [],

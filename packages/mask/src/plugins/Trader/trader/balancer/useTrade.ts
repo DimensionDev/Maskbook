@@ -1,4 +1,4 @@
-import { FungibleTokenDetailed, isNative, useBlockNumber, useTokenConstants } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, useBlockNumber, useTokenConstants } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { BALANCER_SWAP_TYPE } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
@@ -23,8 +23,8 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
         // the WETH address is used for looking for available pools
-        const sellToken = isNative(inputToken.address) ? WNATIVE_ADDRESS : inputToken.address
-        const buyToken = isNative(outputToken.address) ? WNATIVE_ADDRESS : outputToken.address
+        const sellToken = isNativeTokenAddress(inputToken.address) ? WNATIVE_ADDRESS : inputToken.address
+        const buyToken = isNativeTokenAddress(outputToken.address) ? WNATIVE_ADDRESS : outputToken.address
         const { swaps, routes } = await PluginTraderRPC.getSwaps(
             sellToken,
             buyToken,

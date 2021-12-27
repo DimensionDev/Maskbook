@@ -1,6 +1,5 @@
 import {
     FungibleTokenDetailed,
-    isNative,
     useAccount,
     useBlockNumber,
     useRPCConstants,
@@ -33,12 +32,14 @@ export function useTrade(
     return useAsyncRetry(async () => {
         if (!inputToken || !outputToken) return null
         if (inputAmount === '0') return null
-        const sellToken = isNative(inputToken.address) ? { ...inputToken, address: DODO_ETH_ADDRESS ?? '' } : inputToken
-        const buyToken = isNative(outputToken.address)
+        const sellToken = isNativeTokenAddress(inputToken.address)
+            ? { ...inputToken, address: DODO_ETH_ADDRESS ?? '' }
+            : inputToken
+        const buyToken = isNativeTokenAddress(outputToken.address)
             ? { ...outputToken, address: DODO_ETH_ADDRESS ?? '' }
             : outputToken
         return PluginTraderRPC.swapRoute({
-            isNativeSellToken: isNative(inputToken.address),
+            isNativeSellToken: isNativeTokenAddress(inputToken.address),
             fromToken: sellToken,
             toToken: buyToken,
             fromAmount: inputAmount,
