@@ -6,5 +6,9 @@
   "dependencies": {
     "bignumber.js": "9.0.2",
     "date-fns": "^2.27.0"
+  },
+  "devDependencies": {
+    "jest-websocket-mock": "^2.2.1",
+    "mock-socket": "^9.0.8"
   }
 }
