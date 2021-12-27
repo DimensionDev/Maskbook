@@ -25,6 +25,8 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             return [TradeProvider.UNISWAP_V3]
         case NetworkType.xDai:
             return [TradeProvider.SUSHISWAP]
+        case NetworkType.Boba:
+            return [TradeProvider.SUSHISWAP, TradeProvider.OOlONGSWAP]
         default:
             safeUnreachable(networkType)
             return []

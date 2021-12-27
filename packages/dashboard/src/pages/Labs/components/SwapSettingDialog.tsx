@@ -9,6 +9,7 @@ import {
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
+    useBobaNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -47,6 +48,11 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const xDaiOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
+    const bobaOptions = [
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'OolongSwap', value: TradeProvider.OOlONGSWAP },
+    ]
+
     const t = useDashboardI18N()
 
     const items = [
@@ -79,6 +85,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useXDaiNetworkTradeProvider(),
             options: xDaiOptions,
             onChange: (value: any) => Services.Settings.setxDaiNetworkTradeProvider(+value),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Boba' }),
+            value: useBobaNetworkTradeProvider(),
+            options: bobaOptions,
+            onChange: (value: any) => Services.Settings.setBobaNetworkTradeProvider(+value),
         },
     ]
 

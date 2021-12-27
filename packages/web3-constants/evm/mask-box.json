@@ -11,7 +11,9 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Boba": "",
+        "Boba_Rinkeby": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
         "Mainnet": 13396393,
@@ -25,7 +27,9 @@
         "Mumbai": 0,
         "Arbitrum": 0,
         "Arbitrum_Rinkeby": 0,
-        "xDai": 0
+        "xDai": 0,
+        "Boba": 0,
+        "Boba_Rinkeby": 0
     },
     "MASK_BOX_TEST_NFT": {
         "Mainnet": "",
@@ -39,7 +43,9 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Boba": "",
+        "Boba_Rinkeby": ""
     },
     "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -53,7 +59,9 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Boba": "",
+        "Boba_Rinkeby": ""
     },
     "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -67,6 +75,8 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Boba": "",
+        "Boba_Rinkeby": ""
     }
 }

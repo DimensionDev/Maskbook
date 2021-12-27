@@ -175,6 +175,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Boba = 'Boba',
 }
 
 export enum DataProvider {
@@ -194,6 +195,7 @@ export enum TradeProvider {
     DODO = 7,
     UNISWAP_V3 = 8,
     BANCOR = 9,
+    OOlONGSWAP = 10,
 }
 /** Supported language settings */
 export enum LanguageOptions {

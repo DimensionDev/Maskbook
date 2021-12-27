@@ -40,6 +40,10 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    // Boba Network
+    Boba = 288,
+    Boba_Rinkeby = 28,
 }
 
 export enum ProviderType {
@@ -63,6 +67,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Boba = 'Boba',
 }
 
 export interface Wallet {

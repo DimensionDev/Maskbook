@@ -224,7 +224,9 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].includes(currentChainId)
+        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Boba].includes(
+            currentChainId,
+        )
             ? currentChainId
             : ChainId.Mainnet,
     )
@@ -352,8 +354,11 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
             createTabItem('Polygon/Matic', ChainId.Matic),
             createTabItem('Arbitrum', ChainId.Arbitrum),
             createTabItem('xDai', ChainId.xDai),
+            createTabItem('Boba', ChainId.Boba),
         ],
-        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai].indexOf(chainId),
+        index: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Boba].indexOf(
+            chainId,
+        ),
         classes,
         hasOnlyOneChild: true,
     }

@@ -5,6 +5,7 @@ import {
     binanceNetworkTradeProviderSettings,
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
+    bobaNetworkTradeProviderSettings,
 } from '../settings'
 import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
@@ -18,6 +19,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
     const binanceNetworkTradeProvider = useValueRef(binanceNetworkTradeProviderSettings)
     const arbitrumNetworkTradeProvider = useValueRef(arbitrumNetworkTradeProviderSettings)
     const xdaiNetworkTradeProvider = useValueRef(xdaiNetworkTradeProviderSettings)
+    const bobaNetworkTradeProvider = useValueRef(bobaNetworkTradeProviderSettings)
 
     if (!networkType) return TradeProvider.UNISWAP_V2
     switch (networkType) {
@@ -31,6 +33,8 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return arbitrumNetworkTradeProvider
         case NetworkType.xDai:
             return xdaiNetworkTradeProvider
+        case NetworkType.Boba:
+            return bobaNetworkTradeProvider
         default:
             unreachable(networkType)
     }

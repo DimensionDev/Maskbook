@@ -6,6 +6,12 @@
         "shortname": ""
     },
     {
+        "id": "boba",
+        "chainId": 288,
+        "name": "Boba",
+        "shortname": ""
+    },
+    {
         "id": "binance-smart-chain",
         "chainId": 56,
         "name": "Binance Smart Chain",

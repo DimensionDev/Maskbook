@@ -20,6 +20,7 @@ const chainIdMap: Record<number, string> = {
     [ChainId.xDai]: 'xdai',
     [ChainId.Matic]: 'matic',
     [ChainId.Arbitrum]: 'arb',
+    [ChainId.Boba]: 'bob',
 }
 
 const getDebankChain = (chainId: number) => {

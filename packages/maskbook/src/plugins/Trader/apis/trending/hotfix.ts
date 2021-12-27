@@ -95,6 +95,7 @@ const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
         'polygon-pos': NetworkType.Polygon,
         'arbitrum-one': NetworkType.Arbitrum,
         xdai: NetworkType.xDai,
+        boba: NetworkType.Boba,
     },
     [DataProvider.COIN_MARKET_CAP]: {
         '1027': NetworkType.Ethereum,
@@ -102,6 +103,7 @@ const ID_NETWORK_MAP: Record<DataProvider, Record<string, NetworkType>> = {
         '3890': NetworkType.Polygon,
         '11841': NetworkType.Arbitrum,
         '5601': NetworkType.xDai,
+        '288': NetworkType.Boba,
     },
     [DataProvider.UNISWAP_INFO]: {},
 }

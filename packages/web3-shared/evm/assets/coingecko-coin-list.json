@@ -22,5 +22,11 @@
         "symbol": "matic",
         "chainId": 137,
         "name": "Polygon"
+    },
+    {
+        "id": "boba-network",
+        "symbol": "eth",
+        "chainId": 288,
+        "name": "Boba"
     }
 ]

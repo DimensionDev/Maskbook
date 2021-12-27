@@ -48,6 +48,7 @@ export const resolveZerionAssetsScopeName = createLookupTableResolver<NetworkTyp
         [NetworkType.Polygon]: 'polygon-assets',
         [NetworkType.Arbitrum]: 'arbitrum-assets',
         [NetworkType.xDai]: 'xdai-assets',
+        [NetworkType.Boba]: 'boba-assets',
     },
     '',
 )
@@ -59,6 +60,7 @@ export const resolveZerionTransactionsScopeName = createLookupTableResolver<Netw
         [NetworkType.Polygon]: 'polygon-transactions',
         [NetworkType.Arbitrum]: 'arbitrum-transactions',
         [NetworkType.xDai]: 'xdai-transactions',
+        [NetworkType.Boba]: 'boba-transactions',
     },
     '',
 )

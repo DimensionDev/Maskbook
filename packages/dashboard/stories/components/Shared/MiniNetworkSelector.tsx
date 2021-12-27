@@ -10,7 +10,7 @@ export default meta({
 export const MiniNetworkSelector = of({
     args: {
         selectedChainId: 1,
-        networks: [NetworkType.Ethereum, NetworkType.Binance, NetworkType.Polygon, NetworkType.xDai],
+        networks: [NetworkType.Ethereum, NetworkType.Binance, NetworkType.Polygon, NetworkType.xDai, NetworkType.Boba],
         onSelect: () => {},
         hideAllNetworkButton: false,
         disabledNonCurrentNetwork: false,
