@@ -1,5 +1,12 @@
 import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import { ChainId, createLookupTableResolver, getTokenConstants, NetworkType } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    createLookupTableResolver,
+    getChainIdFromNetworkType,
+    getTokenConstants,
+    getZerionConstants,
+    NetworkType,
+} from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import type {
     SocketRequestAssetScope,
@@ -13,16 +20,9 @@ import { TokenType } from '@masknet/plugin-infra'
 
 type Asset = Web3Plugin.Asset<Web3Plugin.FungibleToken>
 
-export const resolveZerionAssetsScopeName = createLookupTableResolver<NetworkType, string>(
-    {
-        [NetworkType.Ethereum]: 'assets',
-        [NetworkType.Binance]: 'bsc-assets',
-        [NetworkType.Polygon]: 'polygon-assets',
-        [NetworkType.Arbitrum]: 'arbitrum-assets',
-        [NetworkType.xDai]: 'xdai-assets',
-    },
-    '',
-)
+export function resolveZerionAssetsScopeName(networkType: NetworkType) {
+    return getZerionConstants(getChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
+}
 
 export const resolveChainByScope = createLookupTableResolver<
     SocketRequestAssetScope,
