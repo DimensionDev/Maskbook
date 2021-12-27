@@ -5,12 +5,30 @@
 import en_US from './en-US.json'
 import ja_JP from './ja-JP.json'
 import ko_KR from './ko-KR.json'
+import qya_AA from './qya-AA.json'
 import zh_CN from './zh-CN.json'
 import zh_TW from './zh-TW.json'
 export const languages = {
     en: en_US,
     ja: ja_JP,
     ko: ko_KR,
+    qy: qya_AA,
     'zh-CN': zh_CN,
     zh: zh_TW,
+}
+// @ts-ignore
+if (import.meta.webpackHot) {
+    // @ts-ignore
+    import.meta.webpackHot.accept(
+        ['./en-US.json', './ja-JP.json', './ko-KR.json', './qya-AA.json', './zh-CN.json', './zh-TW.json'],
+        () =>
+            globalThis.dispatchEvent?.(
+                new CustomEvent('MASK_I18N_HMR', {
+                    detail: [
+                        'com.maskbook.fileservice',
+                        { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW },
+                    ],
+                }),
+            ),
+    )
 }

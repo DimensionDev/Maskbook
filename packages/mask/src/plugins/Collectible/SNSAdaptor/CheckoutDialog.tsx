@@ -19,10 +19,10 @@ import { useI18N } from '../../../utils'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import type { useAsset } from '../hooks/useAsset'
 import { PluginCollectibleRPC } from '../messages'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
+import type { useAsset } from '../../EVM/hooks/useAsset'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
 
 const useStyles = makeStyles()((theme) => {
@@ -55,16 +55,15 @@ const useStyles = makeStyles()((theme) => {
 
 export interface CheckoutDialogProps {
     asset?: ReturnType<typeof useAsset>
-    assetOrder?: ReturnType<typeof useAssetOrder>
+    order: ReturnType<typeof useAssetOrder>
     open: boolean
     onClose: () => void
 }
 
 export function CheckoutDialog(props: CheckoutDialogProps) {
-    const { asset, open, onClose, assetOrder } = props
+    const { asset, open, onClose, order } = props
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
-
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -76,13 +75,14 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const onCheckout = useCallback(async () => {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
-        if (!assetOrder?.value) return
+        if (!order.value) return
+
         await PluginCollectibleRPC.fulfillOrder({
-            order: assetOrder.value,
+            order: order.value,
             accountAddress: account,
             recipientAddress: account,
         })
-    }, [asset?.value, account, assetOrder?.value])
+    }, [asset?.value, account, order?.value])
 
     const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
 
@@ -103,7 +103,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                             </Box>
                         )}
                         <Box sx={{ padding: 2 }}>
-                            <CheckoutOrder asset={asset} assetOrder={assetOrder} />
+                            <CheckoutOrder asset={asset} assetOrder={order} />
                             {isVerified ? null : (
                                 <>
                                     <FormControlLabel
@@ -172,7 +172,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {asset?.value?.is_order_weth ? (
+                                {asset?.value?.isOrderWeth ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"
