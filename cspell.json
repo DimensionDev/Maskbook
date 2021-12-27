@@ -22,6 +22,7 @@
         "Burkina",
         "CAIP",
         "Caicos",
+        "Celo",
         "Checksummed",
         "Cunha",
         "Cura",
@@ -243,7 +244,11 @@
         "solana",
         "Görli",
         "resizer",
-        "Pageable"
+        "Pageable",
+        "metaverse",
+        "hexlify",
+        "contribs",
+        "contrib"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -257,6 +262,8 @@
         "Gorli",
         "Gwapj",
         "HUSD",
+        "CUSD",
+        "CEUR",
         "Horiz",
         "Huobi",
         "MSKA",
@@ -347,7 +354,10 @@
         "AICANFT",
         "CANFT",
         "Kodav",
-        "koda"
+        "koda",
+        "poap",
+        "irss",
+        "CELO"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

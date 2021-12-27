@@ -223,12 +223,7 @@ export function PoolInList(props: PoolInListProps) {
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton
-                        fullWidth
-                        size="small"
-                        variant="contained"
-                        disabled={true}
-                        className={classes.actionButton}>
+                    <ActionButton fullWidth size="small" variant="contained" disabled className={classes.actionButton}>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}

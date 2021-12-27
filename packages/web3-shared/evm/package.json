@@ -5,6 +5,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
+    "@masknet/shared-base": "workspace:*",
     "@masknet/web3-constants": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",

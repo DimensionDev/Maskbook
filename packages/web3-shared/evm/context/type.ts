@@ -14,7 +14,6 @@ import type {
     NonFungibleAssetProvider,
     Transaction,
     AddressName,
-    AddressNameType,
     CryptoPrice,
     BalanceOfChains,
     ERC721TokenCollectionInfo,
@@ -59,7 +58,16 @@ export interface Web3ProviderType {
         page?: number,
         size?: number,
     ) => Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }>
-    getAddressNamesList: (twitterId: string, addressNameType: AddressNameType) => Promise<AddressName[]>
+    getAddressNamesList: (identity: {
+        identifier: {
+            userId: string
+            network: string
+        }
+        avatar?: string
+        bio?: string
+        nickname?: string
+        homepage?: string
+    }) => Promise<AddressName[]>
     getTransactionList: (
         address: string,
         network: NetworkType,

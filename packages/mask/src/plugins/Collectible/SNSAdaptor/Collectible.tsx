@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { ReactElement, useCallback } from 'react'
 import {
     Avatar,
     Box,
@@ -29,16 +29,16 @@ import { HistoryTab } from './HistoryTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { CollectibleCard } from './CollectibleCard'
 import { CollectibleProviderIcon } from './CollectibleProviderIcon'
-import { PluginSkeleton } from './PluginSkeleton'
 import { CollectibleProvider, CollectibleTab } from '../types'
 import { currentCollectibleProviderSettings } from '../settings'
 import { MaskTextIcon } from '../../../resources/MaskIcon'
 import { resolveAssetLinkOnOpenSea, resolveCollectibleProviderName } from '../pipes'
-import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 import { ActionBar } from './ActionBar'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { getEnumAsArray } from '@dimensiondev/kit'
 import { FootnoteMenu, FootnoteMenuOption } from '../../Trader/SNSAdaptor/trader/FootnoteMenu'
+import { LoadingAnimation } from '@masknet/shared'
+import { Markdown } from '../../Snapshot/SNSAdaptor/Markdown'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -131,6 +131,19 @@ const useStyles = makeStyles()((theme) => {
             backgroundColor: '#eb5757',
             padding: theme.spacing(0.5, 2),
         },
+        loading: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+            padding: theme.spacing(8, 0),
+        },
+        markdown: {
+            'text-overflow': 'ellipsis',
+            display: '-webkit-box',
+            '-webkit-box-orient': 'vertical',
+            '-webkit-line-clamp': '3',
+        },
     }
 })
 
@@ -157,7 +170,6 @@ export function Collectible(props: CollectibleProps) {
     )
     //#endregion
 
-    if (asset.loading) return <PluginSkeleton />
     if (!asset.value)
         return (
             <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
@@ -175,7 +187,6 @@ export function Collectible(props: CollectibleProps) {
                 </Button>
             </Box>
         )
-
     const tabs = [
         <Tab className={classes.tab} key="article" label={t('plugin_collectible_article')} />,
         <Tab className={classes.tab} key="details" label={t('plugin_collectible_details')} />,
@@ -183,6 +194,18 @@ export function Collectible(props: CollectibleProps) {
         <Tab className={classes.tab} key="listing" label={t('plugin_collectible_listing')} />,
         <Tab className={classes.tab} key="history" label={t('plugin_collectible_history')} />,
     ]
+
+    const renderTab = (tabIndex: CollectibleTab) => {
+        const tabMap: Record<CollectibleTab, ReactElement> = {
+            [CollectibleTab.ARTICLE]: <ArticleTab />,
+            [CollectibleTab.TOKEN]: <TokenTab />,
+            [CollectibleTab.OFFER]: <OfferTab />,
+            [CollectibleTab.LISTING]: <ListingTab />,
+            [CollectibleTab.HISTORY]: <HistoryTab />,
+        }
+
+        return tabMap[tabIndex] || null
+    }
 
     const endDate = asset.value?.end_time
     return (
@@ -225,7 +248,10 @@ export function Collectible(props: CollectibleProps) {
                             {asset.value.description ? (
                                 <Box display="flex" alignItems="center">
                                     <Typography className={classes.subtitle} component="div" variant="body2">
-                                        <Markdown content={asset.value.description} />
+                                        <Markdown
+                                            classes={{ root: classes.markdown }}
+                                            content={asset.value.description}
+                                        />
                                     </Typography>
                                 </Box>
                             ) : null}
@@ -262,11 +288,11 @@ export function Collectible(props: CollectibleProps) {
                         {tabs}
                     </Tabs>
                     <Paper className={classes.body}>
-                        {tabIndex === CollectibleTab.ARTICLE ? <ArticleTab /> : null}
-                        {tabIndex === CollectibleTab.TOKEN ? <TokenTab /> : null}
-                        {tabIndex === CollectibleTab.OFFER ? <OfferTab /> : null}
-                        {tabIndex === CollectibleTab.LISTING ? <ListingTab /> : null}
-                        {tabIndex === CollectibleTab.HISTORY ? <HistoryTab /> : null}
+                        {(asset.loading && (
+                            <div className={classes.loading}>
+                                <LoadingAnimation />
+                            </div>
+                        )) || <>{renderTab(tabIndex)}</>}
                     </Paper>
                 </CardContent>
                 <CardActions className={classes.footer}>

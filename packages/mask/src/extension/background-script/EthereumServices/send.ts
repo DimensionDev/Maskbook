@@ -462,6 +462,9 @@ export async function INTERNAL_nativeSend(
     const chainIdFinally = getPayloadChainId(payload) ?? chainId
     const config = getPayloadConfig(payload)
     if (config && !config.chainId) config.chainId = chainIdFinally
+    if (payload.method === EthereumMethodType.MASK_GET_TRANSACTION_RECEIPT)
+        payload.method = EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT
+
     try {
         const response = await nativeAPI?.api.send(payload)
         callback(null, response)

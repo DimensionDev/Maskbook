@@ -275,7 +275,6 @@ importers:
   packages/mask:
     specifiers:
       '@balancer-labs/sor': ^1.0.0
-      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
       '@dimensiondev/holoflows-kit': ^0.9.0-20210902104757-7c3d0d0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
@@ -293,6 +292,7 @@ importers:
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
       '@masknet/plugin-example': workspace:*
+      '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
       '@masknet/plugin-infra': workspace:*
       '@masknet/plugin-wallet': workspace:*
@@ -332,9 +332,9 @@ importers:
       '@uniswap/sdk-core': ^3.0.1
       '@uniswap/v2-sdk': 3.0.0-alpha.2
       '@uniswap/v3-sdk': ^3.3.2
+      '@unstoppabledomains/resolution': ^5.0.1
       '@walletconnect/client': ^1.2.2
       anchorme: ^2.1.2
-      arweave: 1.10.13
       assert: ^2.0.0
       async-call-rpc: ^6.0.1
       bignumber.js: ^9.0.1
@@ -411,7 +411,6 @@ importers:
       zod: 3.11.6
     dependencies:
       '@balancer-labs/sor': 1.0.0
-      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0_webextension-polyfill@0.8.0
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
@@ -428,6 +427,7 @@ importers:
       '@masknet/icons': link:../icons
       '@masknet/injected-script': link:../injected-script
       '@masknet/plugin-example': link:../plugins/example
+      '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
       '@masknet/plugin-infra': link:../plugin-infra
       '@masknet/plugin-wallet': link:../plugins/Wallet
@@ -461,9 +461,9 @@ importers:
       '@uniswap/sdk-core': 3.0.1
       '@uniswap/v2-sdk': 3.0.0-alpha.2
       '@uniswap/v3-sdk': 3.3.2
+      '@unstoppabledomains/resolution': 5.0.1
       '@walletconnect/client': 1.4.1
       anchorme: 2.1.2
-      arweave: 1.10.13
       assert: 2.0.0
       async-call-rpc: 6.0.1
       bignumber.js: 9.0.1
@@ -589,6 +589,34 @@ importers:
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-rc.0
+
+  packages/plugins/FileService:
+    specifiers:
+      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-wallet': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@msgpack/msgpack': ^2.7.1
+      arweave: ^1.10.3
+      date-fns: ^2.27.0
+      react-feather: ^2.0.9
+      react-router-dom: '5'
+      react-use: ^17.3.1
+    dependencies:
+      '@dimensiondev/common-protocols': 1.6.0-20210723072221-8f46a92
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/plugin-wallet': link:../Wallet
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/theme': link:../../theme
+      '@msgpack/msgpack': 2.7.1
+      arweave: 1.10.13
+      date-fns: 2.27.0
+      react-feather: 2.0.9_react@18.0.0-rc.0
+      react-router-dom: 5.3.0_react@18.0.0-rc.0
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
 
   packages/plugins/Flow:
     specifiers:
@@ -757,6 +785,7 @@ importers:
       typeson: ^6.1.0
       typeson-registry: ^1.0.0-alpha.38
       use-subscription: ^1.5.1
+      z-schema: ^5.0.2
     dependencies:
       '@dimensiondev/holoflows-kit': 0.9.0-20210902104757-7c3d0d0
       '@msgpack/msgpack': 2.7.1
@@ -777,6 +806,7 @@ importers:
       typeson: 6.1.0
       typeson-registry: 1.0.0-alpha.39
       use-subscription: 1.5.1_react@18.0.0-rc.0
+      z-schema: 5.0.2
 
   packages/storybook-shared:
     specifiers:
@@ -878,6 +908,7 @@ importers:
   packages/web3-shared/evm:
     specifiers:
       '@ensdomains/address-encoder': ^0.2.6
+      '@masknet/shared-base': workspace:*
       '@masknet/web3-constants': workspace:*
       '@masknet/web3-contracts': workspace:*
       '@masknet/web3-shared-base': workspace:*
@@ -901,6 +932,7 @@ importers:
       web3-utils: 1.5.2
     dependencies:
       '@ensdomains/address-encoder': 0.2.6
+      '@masknet/shared-base': link:../../shared-base
       '@masknet/web3-constants': link:../../web3-constants
       '@masknet/web3-contracts': link:../../web3-contracts
       '@masknet/web3-shared-base': link:../base
@@ -11259,7 +11291,7 @@ packages:
 
   /core-js/2.6.12:
     resolution: {integrity: sha512-Kb2wC0fvsWfQrgk8HU5lW6U/Lcs8+9aaYcy4ZFc6DDlo4nZ7n70dEgE5rtR0oG6ufKDUnrwfWL1mXR5ljDatrQ==}
-    deprecated: core-js@<3.3 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
+    deprecated: core-js@<3.4 is no longer maintained and not recommended for usage due to the number of issues. Because of the V8 engine whims, feature detection in old core-js versions could cause a slowdown up to 100x even if nothing is polyfilled. Please, upgrade your dependencies to the actual version of core-js.
     requiresBuild: true
     dev: false
 
@@ -11891,6 +11923,11 @@ packages:
 
   /date-fns/2.26.0:
     resolution: {integrity: sha512-VQI812dRi3cusdY/fhoBKvc6l2W8BPWU1FNVnFH9Nttjx4AFBRzfSVb/Eyc7jBT6e9sg1XtAGsYpBQ6c/jygbg==}
+    engines: {node: '>=0.11'}
+    dev: false
+
+  /date-fns/2.27.0:
+    resolution: {integrity: sha512-sj+J0Mo2p2X1e306MHq282WS4/A8Pz/95GIFcsPNMPMZVI3EUrAdSv90al1k+p74WGLCruMXk23bfEDZa71X9Q==}
     engines: {node: '>=0.11'}
     dev: false
 
@@ -24766,6 +24803,26 @@ packages:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
     dev: true
 
+  github.com/ProjectOpenSea/wyvern-js/1634ad0e2f9961accca62edbf4ac624effa18552:
+    resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/1634ad0e2f9961accca62edbf4ac624effa18552}
+    name: wyvern-js
+    version: 3.2.0
+    dependencies:
+      '@0xproject/abi-gen': 0.1.7
+      '@0xproject/assert': 0.0.11
+      '@0xproject/json-schemas': 0.7.24
+      '@0xproject/utils': 0.1.3
+      '@0xproject/web3-wrapper': 0.1.14
+      0x.js: 0.29.2
+      bn.js: 4.12.0
+      ethereumjs-abi: github.com/ProjectWyvern/ethereumjs-abi/3d2d89641a6ad5984929b6ca4b646452ec74f73d
+      ethereumjs-util: 5.2.1
+      json-loader: 0.5.7
+      jsonschema: 1.4.0
+      lodash: 4.17.21
+      web3: 0.20.7
+    dev: false
+
   github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e:
     resolution: {tarball: https://codeload.github.com/ProjectOpenSea/wyvern-js/tar.gz/fabb7660f23f2252c141077e32193d281036299e}
     name: wyvern-js
@@ -24808,7 +24865,7 @@ packages:
       bignumber.js: 6.0.0
       typed-promisify: 0.4.0
       web3-provider-engine: 13.8.0
-      wyvern-js: github.com/ProjectOpenSea/wyvern-js/fabb7660f23f2252c141077e32193d281036299e
+      wyvern-js: github.com/ProjectOpenSea/wyvern-js/1634ad0e2f9961accca62edbf4ac624effa18552
     transitivePeerDependencies:
       - debug
     dev: false

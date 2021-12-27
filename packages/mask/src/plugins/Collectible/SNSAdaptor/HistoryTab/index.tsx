@@ -7,12 +7,15 @@ import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
 import { CollectibleProvider } from '../../types'
 import { TableListPagination } from '../Pagination'
-import { LoadingTable } from '../LoadingTable'
+import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
         root: {
             overflow: 'auto',
+        },
+        head: {
+            wordBreak: 'keep-all',
         },
         content: {
             padding: '0 !important',
@@ -49,7 +52,12 @@ export function HistoryTab(props: HistoryTabProps) {
     }, [events.value, provider])
     //#endregion
 
-    if (events.loading) return <LoadingTable />
+    if (events.loading)
+        return (
+            <div className={classes.empty}>
+                <LoadingAnimation />
+            </div>
+        )
     if (!events.value || events.error || !events.value?.data.length)
         return (
             <Table size="small" stickyHeader>
@@ -74,7 +82,7 @@ export function HistoryTab(props: HistoryTabProps) {
     return (
         <CollectibleTab classes={{ root: classes.root, content: classes.content }}>
             <Table size="small" stickyHeader>
-                <TableHead>
+                <TableHead className={classes.head}>
                     <TableRow>
                         <TableCell>{t('plugin_collectible_event')}</TableCell>
                         {isDifferenceToken ? (
