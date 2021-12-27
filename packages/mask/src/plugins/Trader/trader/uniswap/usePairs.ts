@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Pair } from '@uniswap/v2-sdk'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import { useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { getPairAddress } from '../../helpers'
@@ -11,6 +10,7 @@ import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { numberToHex } from 'web3-utils'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
+import { EMPTY_LIST } from '../../../../../utils-pure'
 
 export enum PairState {
     NOT_EXISTS = 0,

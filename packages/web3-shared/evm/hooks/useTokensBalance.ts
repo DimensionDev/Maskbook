@@ -1,9 +1,9 @@
 import { useAsyncRetry } from 'react-use'
-import { EMPTY_LIST } from '@masknet/shared-base'
 import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import type { ChainId } from '../types'
+import { EMPTY_LIST } from '../utils'
 import { numberToHex } from 'web3-utils'
 
 /**

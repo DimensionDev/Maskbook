@@ -1,4 +1,3 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
 import type { ChainId, FungibleTokenDetailed } from '../types'
 import { useWallet } from './useWallet'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
@@ -6,7 +5,7 @@ import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
 import { useCallback, useMemo } from 'react'
 import { useAssetsMerged } from './useAssetsMerged'
-import { formatEthereumAddress } from '../utils'
+import { formatEthereumAddress, EMPTY_LIST } from '../utils'
 
 export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | 'all') {
     const wallet = useWallet()
