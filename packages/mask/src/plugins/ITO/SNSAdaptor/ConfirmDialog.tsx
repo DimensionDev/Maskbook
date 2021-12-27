@@ -152,7 +152,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography variant="body1" component="span">
                             {poolSettings?.token?.symbol}
                         </Typography>
-                        {isNativeTokenAddress(poolSettings?.token?.address!) ? null : (
+                        {isNativeTokenAddress(poolSettings?.token) ? null : (
                             <Link
                                 className={classes.link}
                                 href={resolveTokenLinkOnExplorer(poolSettings?.token!)}

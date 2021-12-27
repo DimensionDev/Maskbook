@@ -28,8 +28,8 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
         // the WETH address is used for looking for available pools
-        const sellToken = isNativeTokenAddress(inputToken.address) ? WNATIVE_ADDRESS : inputToken.address
-        const buyToken = isNativeTokenAddress(outputToken.address) ? WNATIVE_ADDRESS : outputToken.address
+        const sellToken = isNativeTokenAddress(inputToken) ? WNATIVE_ADDRESS : inputToken.address
+        const buyToken = isNativeTokenAddress(outputToken) ? WNATIVE_ADDRESS : outputToken.address
         const { swaps, routes } = await PluginTraderRPC.getSwaps(
             sellToken,
             buyToken,

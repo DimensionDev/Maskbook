@@ -92,7 +92,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
             <Grid item xs={6}>
                 <Typography variant="body1" color="textPrimary" align="right" className={classes.token}>
                     <span>{settings?.token?.symbol}</span>
-                    {isNativeTokenAddress(settings?.token?.address!) ? null : (
+                    {isNativeTokenAddress(settings?.token) ? null : (
                         <Link
                             color="textPrimary"
                             className={classes.link}
