@@ -46,7 +46,7 @@ export default function EncryptionCard(props: EncryptionCardProps) {
     const { value: clue, error } = useAsync(async () => {
         return clueId
             ? fetchClue(clueId, address)
-            : { decrypted: false, condition: undefined, frontImg: '', backImg: '' }
+            : { decrypted: false, conditions: undefined, frontImg: '', backImg: '' }
     }, [clueId, address])
 
     return (
@@ -77,12 +77,12 @@ export default function EncryptionCard(props: EncryptionCardProps) {
                                         src={clue.frontImg}
                                         style={{ width: '100%', objectFit: 'cover', cursor: 'pointer' }}
                                     />
-                                ) : clue.condition ? (
+                                ) : clue.conditions ? (
                                     <NoNftCard
                                         cardHeight={backImgHeight}
                                         sx={{ marginTop: 0 }}
                                         onClick={() => setFlipped(false)}
-                                        conditions={[clue.condition]}
+                                        conditions={clue.conditions}
                                     />
                                 ) : null}
                             </FlipCard>

@@ -20,7 +20,7 @@ export interface Stage {
 }
 
 export interface PuzzleCondition {
-    type: 'hold-erc721' | 'hold-erc1155'
+    type: string
     chain: string
     chainId: number
     address: string
@@ -145,7 +145,7 @@ export interface SubmitPollParams {
 
 export interface DecryptedClue {
     decrypted: boolean
-    condition?: PuzzleCondition
+    conditions?: PuzzleCondition[]
     frontImg: string
     backImg: string
 }

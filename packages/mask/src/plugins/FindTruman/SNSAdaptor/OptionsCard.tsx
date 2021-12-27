@@ -17,11 +17,8 @@ import {
 } from '@mui/material'
 import { RadioButtonChecked, RadioButtonUnchecked, DoneOutlined, Send, RefreshOutlined } from '@mui/icons-material'
 import NoNftCard from './NoNftCard'
-import { createContract, useChainId, useWeb3 } from '@masknet/web3-shared-evm'
+import { useChainId, useWeb3 } from '@masknet/web3-shared-evm'
 import { FindTrumanContext } from '../context'
-import type { ERC721 } from '@masknet/web3-contracts/types/ERC721'
-import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import type { AbiItem } from 'web3-utils'
 import { BorderLinearProgress } from './ResultCard'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -117,36 +114,6 @@ export default function OptionsCard(props: OptionsViewProps) {
         setChoice(userStatus ? userStatus.choice : -1)
         setSelected(userStatus ? userStatus.choice !== -1 : true)
     }, [userStatus])
-
-    const checkCondition = async () => {
-        setError('')
-        setUnmeetCondition([])
-        if (userStatus) {
-            for (const condition of userStatus.conditions) {
-                if (condition.chainId !== chainId) {
-                    setError('unsupported-chain')
-                    return
-                }
-            }
-            const _unmeetCondition: PuzzleCondition[] = []
-            for (const condition of userStatus.conditions) {
-                const { type, address, minAmount } = condition
-                switch (type) {
-                    case 'hold-erc721':
-                        const contract = createContract<ERC721>(web3, address, ERC721ABI as AbiItem[])
-                        const res = contract && (await contract.methods.balanceOf(account).call())
-                        if (Number(res) < minAmount) {
-                            setError('insufficient-nft')
-                            _unmeetCondition.push(condition)
-                        }
-                        break
-                    case 'hold-erc1155':
-                        break
-                }
-            }
-            setUnmeetCondition(_unmeetCondition)
-        }
-    }
 
     const renderOptions = (userStatus: UserPuzzleStatus | UserPollStatus) => {
         const showCount = !!userStatus.count

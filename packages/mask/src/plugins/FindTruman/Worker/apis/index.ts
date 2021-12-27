@@ -14,8 +14,7 @@ import {
     UserStoryStatus,
 } from '../../types'
 
-// const PREFIX = 'https://findtruman.io/api'
-const PREFIX = 'http://192.168.10.2:3300'
+const PREFIX = 'https://findtruman.io/api'
 
 async function request<T>(url: string, options?: RequestInit) {
     const response = await fetch(urlcat(PREFIX, url), {

@@ -1,4 +1,4 @@
-import { Box, CardMedia, Typography, Card, CardContent, CardActions, Button, Theme } from '@mui/material'
+import { Box, CardMedia, Typography, Card, CardContent, CardActions, Button, Theme, Divider } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { PuzzleCondition } from '../types'
 import { useContext } from 'react'
@@ -78,10 +78,28 @@ export default function NoNftCard(props: NoNftCardProps) {
     }
 
     return (
-        <Box sx={{ marginTop: 1, ...(sx || {}) }}>
-            {conditions.map((condition) =>
-                renderNftCard(condition.name, condition.img, condition.url, condition.minAmount, condition.address),
-            )}
-        </Box>
+        <Card
+            className={classes.card}
+            variant="outlined"
+            onClick={() => {
+                onClick?.()
+            }}
+            sx={{ marginTop: 1, height: cardHeight || 'auto', cursor: onClick ? 'pointer' : 'auto', ...(sx || {}) }}>
+            <CardContent>
+                <Typography variant="h6" component="div">
+                    {t('plugin_find_truman_decrypt_tip')}
+                </Typography>
+                <Divider sx={{ margin: '8px 0' }} />
+                <Box>
+                    {conditions.map((condition) => (
+                        <Typography variant="body2" color="textSecondary" gutterBottom key={condition.name}>
+                            <li>
+                                {condition.minAmount} {condition.name}
+                            </li>
+                        </Typography>
+                    ))}
+                </Box>
+            </CardContent>
+        </Card>
     )
 }
