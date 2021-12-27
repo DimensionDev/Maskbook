@@ -15,12 +15,17 @@ import { makeStyles } from '@masknet/theme'
 import { useCallback, useState, useEffect } from 'react'
 import { SearchIcon } from '@masknet/icons'
 import CheckIcon from '@mui/icons-material/Check'
+import { Trans } from 'react-i18next'
 import { useUpdate } from 'react-use'
 import { NftImage } from './NftImage'
-import { findLastIndex } from 'lodash-unified'
+import { findLastIndex, uniqBy } from 'lodash-unified'
 import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
-const useStyles = makeStyles()((theme) => ({
+interface StyleProps {
+    isSelectSharesExceed: boolean
+}
+
+const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     dialogContent: {
         minHeight: 380,
     },
@@ -38,9 +43,9 @@ const useStyles = makeStyles()((theme) => ({
     ownerTokenBox: {
         background: theme.palette.mode === 'light' ? '#F7F9FA' : '#17191D',
         width: '96%',
-        height: 450,
+        height: 480,
         borderRadius: 12,
-        margin: '16px auto',
+        margin: '14px auto',
         padding: 10,
     },
     ownerList: {
@@ -123,6 +128,8 @@ const useStyles = makeStyles()((theme) => ({
     },
     confirmButton: {
         width: '100%',
+        backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#000',
+        color: theme.palette.mode === 'dark' ? '#000' : '#fff',
     },
     tokenSelector: {
         display: 'grid',
@@ -149,7 +156,7 @@ const useStyles = makeStyles()((theme) => ({
         width: 120,
     },
     hide: {
-        display: 'none',
+        display: 'none !important',
     },
     loadingWrapper: {
         display: 'flex',
@@ -201,7 +208,7 @@ const useStyles = makeStyles()((theme) => ({
         height: 64,
     },
     selectedTokenAmount: {
-        color: '#1C68F3',
+        color: props.isSelectSharesExceed ? '#FF5F5F' : '#1C68F3',
     },
     totalAmount: {
         paddingLeft: 1,
@@ -210,7 +217,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'row-reverse',
         alignItems: 'center',
-        margin: '24px 0px',
     },
     questionMarkIcon: {
         padding: 2,
@@ -246,6 +252,18 @@ const useStyles = makeStyles()((theme) => ({
         border: '2px solid #6E748E',
         backgroundColor: 'white',
     },
+    selectAllCheckBoxText: {
+        pointerEvents: 'none',
+    },
+    selectSharesExceed: {
+        color: '#FF5F5F',
+    },
+    selectSharesExceedBox: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        margin: '14px 4px',
+    },
     arrow: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#111418',
         transform: 'translateX(260px) !important',
@@ -255,6 +273,19 @@ const useStyles = makeStyles()((theme) => ({
         padding: '10px 20px',
         width: 256,
         backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#111418',
+    },
+    tooltipText: {
+        color: theme.palette.mode === 'dark' ? '#000' : '#fff',
+    },
+    tokenId: {
+        color: '#1D9BF0',
+    },
+    nonExistedTokenBox: {
+        height: 388,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 }))
 
@@ -269,7 +300,6 @@ export interface SelectNftTokenDialogProps extends withClasses<never> {
 }
 
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
-    const { classes } = useStyles()
     const {
         open,
         contract,
@@ -289,14 +319,37 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contract)
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>([])
+    const [nonExistedTokenIdList, setNonExistedTokenIdList] = useState<string[]>([])
     const [selectAll, setSelectAll] = useState<boolean>(false)
+    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
+    const isSelectSharesExceed = NFT_RED_PACKET_MAX_SHARES < tokenDetailedSelectedList.length
+    const { classes } = useStyles({ isSelectSharesExceed })
+    const selectAllHandler = useCallback(() => {
+        setTokenDetailedSelectedList(
+            tokenIdFilterList.length === 0
+                ? []
+                : selectAll
+                ? tokenDetailedSelectedList.filter((t) => !tokenIdFilterList.includes(t.tokenId))
+                : tokenDetailedSelectedList,
+        )
+
+        if (!selectAll) {
+            const newlyAdded = tokenDetailedOwnerList
+                .filter((t) => tokenIdFilterList.length === 0 || tokenIdFilterList.includes(t.tokenId))
+                .slice(0, maxSelectShares)
+            setTokenDetailedSelectedList(uniqBy(newlyAdded.concat(tokenDetailedSelectedList), 'tokenId'))
+        }
+
+        setSelectAll(!selectAll)
+    }, [selectAll, maxSelectShares, tokenIdFilterList, tokenDetailedSelectedList])
 
     useEffect(() => {
-        if (!selectAll) {
-            setTokenDetailedSelectedList([])
-        } else {
-        }
-    }, [selectAll])
+        setSelectAll(
+            tokenIdFilterList.length === 0
+                ? tokenDetailedSelectedList.length >= maxSelectShares
+                : tokenIdFilterList.every((id) => tokenDetailedSelectedList.map((t) => t.tokenId).includes(id)),
+        )
+    }, [tokenDetailedSelectedList, maxSelectShares, tokenIdListInput, tokenIdFilterList])
 
     useEffect(() => {
         setTokenDetailed(undefined)
@@ -307,6 +360,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
 
     useEffect(() => {
         setTokenIdFilterList([])
+        setNonExistedTokenIdList([])
     }, [tokenIdListInput])
 
     const update = useUpdate()
@@ -319,7 +373,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
             shiftKey: boolean,
             index: number,
         ) => {
-            if (!shiftKey) {
+            if (!shiftKey || tokenIdFilterList.length > 0) {
                 if (findToken) {
                     setTokenDetailedSelectedList(
                         tokenDetailedSelectedList.filter((v) => v.tokenId !== findToken.tokenId),
@@ -357,7 +411,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 }
             }
         },
-        [tokenDetailedSelectedList, setTokenDetailedSelectedList],
+        [tokenDetailedSelectedList, setTokenDetailedSelectedList, tokenIdFilterList],
     )
     //#region fetch token detail
     const onSearch = useCallback(async () => {
@@ -383,7 +437,9 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
 
     const onFilter = useCallback(() => {
         if (!/^(\s?(\d+)?\s?,?)+$/.test(tokenIdListInput)) return
-        setTokenIdFilterList(tokenIdListInput.split(',').map((v) => Number(v).toString()))
+        const list = tokenIdListInput.split(',').map((v) => Number(v).toString())
+        setTokenIdFilterList(list)
+        setNonExistedTokenIdList(list.filter((v) => !tokenDetailedOwnerList.map((t) => t.tokenId).includes(v)))
     }, [tokenIdListInput])
 
     const onSubmit = useCallback(() => {
@@ -392,6 +448,24 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         )
         onClose()
     }, [tokenDetailed, tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
+
+    const NonExistedTokenList = () => (
+        <Trans
+            i18nKey="plugin_red_packet_nft_non_existed_tip"
+            components={{
+                tokenIdList: (
+                    <span>
+                        {nonExistedTokenIdList.map((id, i) => (
+                            <span key={i.toString()}>
+                                <span className={classes.tokenId}>{' #' + id}</span>
+                                {i < nonExistedTokenIdList.length - 1 ? ', ' : ' '}
+                            </span>
+                        ))}
+                    </span>
+                ),
+            }}
+        />
+    )
 
     return (
         <InjectedDialog
@@ -495,103 +569,143 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : (
                             <>
-                                <div className={classes.selectBar}>
-                                    <div className={classes.selectAll}>
-                                        <div
-                                            className={classNames(
-                                                classes.selectAllCheckBox,
-                                                selectAll ? classes.checked : '',
-                                            )}
-                                            onClick={() => setSelectAll(!selectAll)}>
-                                            {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
-                                        </div>
-                                        <Typography>Select all</Typography>
-                                    </div>
-                                    <Typography>
-                                        You can also use <span style={{ color: '#1C68F3' }}>Shift</span> to select
-                                        multiple NFTs.
-                                    </Typography>
-                                </div>
-                                <div className={classes.tokenSelector}>
-                                    {tokenDetailedOwnerList.map((token, i) => {
-                                        const findToken = tokenDetailedSelectedList.find(
-                                            (t) => t.tokenId === token.tokenId,
-                                        )
-
-                                        return (
-                                            <ListItem
+                                {tokenIdFilterList.length === 0 ? (
+                                    <div className={classes.selectBar}>
+                                        <div className={classes.selectAll}>
+                                            <div
                                                 className={classNames(
-                                                    classes.selectWrapper,
-                                                    tokenIdFilterList.length > 0 &&
-                                                        !tokenIdFilterList.includes(token.tokenId)
-                                                        ? classes.hide
-                                                        : '',
+                                                    classes.selectAllCheckBox,
+                                                    selectAll ? classes.checked : '',
                                                 )}
-                                                key={i.toString()}>
-                                                <NftImage
-                                                    token={token}
-                                                    classes={{
-                                                        loadingFailImage: classes.loadingFailImage,
-                                                    }}
-                                                    fallbackImage={
-                                                        new URL('./assets/nft_token_fallback.png', import.meta.url)
-                                                    }
-                                                />
-                                                <div className={classes.selectWrapperNftNameWrapper}>
-                                                    <Typography
-                                                        className={classes.selectWrapperNftName}
-                                                        color="textSecondary">
-                                                        {token?.info.name}
-                                                    </Typography>
-                                                </div>
+                                                onClick={selectAllHandler}>
+                                                {selectAll ? <CheckIcon className={classes.checkIcon} /> : null}
+                                            </div>
+                                            <Typography className={classNames(classes.selectAllCheckBoxText)}>
+                                                {t('select_all')}
+                                            </Typography>
+                                        </div>
+                                        <Typography>
+                                            <Trans
+                                                i18nKey="plugin_red_packet_nft_shift_select_tip"
+                                                components={{
+                                                    text: <span style={{ color: '#1C68F3' }} />,
+                                                }}
+                                                values={{
+                                                    text: 'Shift',
+                                                }}
+                                            />
+                                        </Typography>
+                                    </div>
+                                ) : null}
+                                {nonExistedTokenIdList.length > 0 &&
+                                nonExistedTokenIdList.length === tokenIdFilterList.length ? (
+                                    <div className={classes.nonExistedTokenBox}>
+                                        <Typography color="textPrimary">
+                                            <NonExistedTokenList />
+                                        </Typography>
+                                    </div>
+                                ) : (
+                                    <div className={classes.tokenSelector}>
+                                        {tokenDetailedOwnerList.map((token, i) => {
+                                            const findToken = tokenDetailedSelectedList.find(
+                                                (t) => t.tokenId === token.tokenId,
+                                            )
 
-                                                <div
+                                            return (
+                                                <ListItem
                                                     className={classNames(
-                                                        classes.checkbox,
-                                                        findToken ? classes.checked : '',
+                                                        classes.selectWrapper,
+                                                        tokenIdFilterList.length > 0 &&
+                                                            !tokenIdFilterList.includes(token.tokenId)
+                                                            ? classes.hide
+                                                            : '',
                                                     )}
-                                                    onClick={(event) =>
-                                                        selectToken(token, findToken, event.shiftKey, token.index)
-                                                    }>
-                                                    {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
-                                                </div>
+                                                    key={i.toString()}>
+                                                    <NftImage
+                                                        token={token}
+                                                        classes={{
+                                                            loadingFailImage: classes.loadingFailImage,
+                                                        }}
+                                                        fallbackImage={
+                                                            new URL('./assets/nft_token_fallback.png', import.meta.url)
+                                                        }
+                                                    />
+                                                    <div className={classes.selectWrapperNftNameWrapper}>
+                                                        <Typography
+                                                            className={classes.selectWrapperNftName}
+                                                            color="textSecondary">
+                                                            {token?.info.name}
+                                                        </Typography>
+                                                    </div>
+
+                                                    <div
+                                                        className={classNames(
+                                                            classes.checkbox,
+                                                            findToken ? classes.checked : '',
+                                                        )}
+                                                        onClick={(event) =>
+                                                            selectToken(token, findToken, event.shiftKey, token.index)
+                                                        }>
+                                                        {findToken ? <CheckIcon className={classes.checkIcon} /> : null}
+                                                    </div>
+                                                </ListItem>
+                                            )
+                                        })}
+                                        {loadingOwnerList ? (
+                                            <ListItem
+                                                className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
+                                                <CircularProgress size={25} />
                                             </ListItem>
-                                        )
-                                    })}
-                                    {loadingOwnerList ? (
-                                        <ListItem className={classNames(classes.selectWrapper, classes.loadingWrapper)}>
-                                            <CircularProgress size={25} />
-                                        </ListItem>
-                                    ) : null}
-                                </div>
+                                        ) : null}
+                                    </div>
+                                )}
                             </>
                         )}
                     </Box>
-                    <Box className={classes.selectAmountBox}>
-                        <ShadowRootTooltip
-                            title={
-                                <Typography className="">
-                                    {t('plugin_red_packet_nft_max_shares', { amount: NFT_RED_PACKET_MAX_SHARES })}
-                                </Typography>
-                            }
-                            placement="top-end"
-                            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                            arrow>
-                            <QuestionMarkIcon className={classes.questionMarkIcon} />
-                        </ShadowRootTooltip>
-                        <Typography>
-                            <span className={classes.selectedTokenAmount}>
-                                {tokenDetailedSelectedList.length + ' '}
-                            </span>
-                            /<span className={classes.totalAmount}>{tokenDetailedOwnerList.length}</span>
-                        </Typography>
-                    </Box>
+                    <div className={classes.selectSharesExceedBox}>
+                        <div>
+                            <Typography color="textPrimary">
+                                {nonExistedTokenIdList.length > 0 &&
+                                nonExistedTokenIdList.length !== tokenIdFilterList.length ? (
+                                    <NonExistedTokenList />
+                                ) : null}
+                            </Typography>
+                            <Typography className={classes.selectSharesExceed}>
+                                {isSelectSharesExceed
+                                    ? t('plugin_red_packet_nft_max_shares_tip', { amount: NFT_RED_PACKET_MAX_SHARES })
+                                    : null}
+                            </Typography>
+                        </div>
+
+                        <Box className={classes.selectAmountBox}>
+                            <ShadowRootTooltip
+                                title={
+                                    <Typography className={classes.tooltipText}>
+                                        {t('plugin_red_packet_nft_max_shares', {
+                                            amount: NFT_RED_PACKET_MAX_SHARES,
+                                        })}
+                                    </Typography>
+                                }
+                                placement="top-end"
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                arrow>
+                                <QuestionMarkIcon className={classes.questionMarkIcon} />
+                            </ShadowRootTooltip>
+                            <Typography>
+                                <span className={classes.selectedTokenAmount}>
+                                    {tokenDetailedSelectedList.length + ' '}
+                                </span>
+                                /<span className={classes.totalAmount}>{tokenDetailedOwnerList.length}</span>
+                            </Typography>
+                        </Box>
+                    </div>
                     <Button
                         disabled={
                             loadingToken ||
                             (!tokenDetailed && tokenDetailedSelectedList.length === 0) ||
                             !isOwner ||
-                            isAdded
+                            isAdded ||
+                            isSelectSharesExceed
                         }
                         className={classes.confirmButton}
                         variant="contained"
