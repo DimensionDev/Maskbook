@@ -37,6 +37,7 @@ export const resolveDebankChainName = createLookupTableResolver<NetworkType, str
         [NetworkType.Polygon]: 'matic',
         [NetworkType.Arbitrum]: 'arbitrum',
         [NetworkType.xDai]: 'xdai',
+        [NetworkType.Boba]: 'boba',
     },
     '',
 )

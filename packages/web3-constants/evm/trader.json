@@ -542,5 +542,37 @@
         "xDai": "",
         "Boba": "0x17C83E2B96ACfb5190d63F5E46d93c107eC0b514",
         "Boba_Rinkeby": "0x4df04E20cCd9a8B82634754fcB041e86c5FF085A"
+    },
+    "OOLONGSWAP_THEGRAPH": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Boba": "",
+        "Boba_Rinkeby": ""
+    },
+    "OOLONGSWAP_INIT_CODE_HASH": {
+        "Mainnet": "",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "",
+        "BSCT": "",
+        "Matic": "",
+        "Mumbai": "",
+        "Arbitrum": "",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "",
+        "Boba": "0x6e71edae12b1b97f4d1f60370fef10105fa2faae0126114a169c64845d6126c9",
+        "Boba_Rinkeby": ""
     }
 }
