@@ -67,7 +67,7 @@ const FlipCard: React.FC<ReactFlipCardProps> = (props) => {
             : FlipCardRotateDegree.backRotate
     }deg)`
 
-    const styles: any = {
+    const styles: Record<string, React.CSSProperties> = {
         back: {
             WebkitBackfaceVisibility: 'hidden',
             backfaceVisibility: 'hidden',
