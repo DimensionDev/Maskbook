@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Pair } from '@uniswap/v2-sdk'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { CurrencyAmount, Token } from '@uniswap/sdk-core'
 import { useMultipleContractSingleData } from '@masknet/web3-shared-evm'
 import { getPairAddress } from '../../helpers'
@@ -18,8 +19,6 @@ export enum PairState {
 }
 
 export type TokenPair = [Token, Token]
-
-const EMPTY_LIST: never[] = []
 
 export function usePairs(tradeProvider: TradeProvider, tokenPairs: readonly TokenPair[]) {
     const context = useGetTradeContext(tradeProvider)

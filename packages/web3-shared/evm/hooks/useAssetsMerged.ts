@@ -1,11 +1,11 @@
-import type { Asset } from '../types'
-import { useChainId } from './useChainId'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { uniqBy } from 'lodash-unified'
-import { formatEthereumAddress, makeSortAssertFn } from '../utils'
-import { useTokenConstants } from '../constants'
 import { useMemo } from 'react'
+import { useTokenConstants } from '../constants'
+import type { Asset } from '../types'
+import { formatEthereumAddress, makeSortAssertFn } from '../utils'
+import { useChainId } from './useChainId'
 
-const EMPTY_LIST: never[] = []
 /**
  * Merge multiple token lists into one which sorted by balance.
  * The order of result values is determined by the order they occur in the array.

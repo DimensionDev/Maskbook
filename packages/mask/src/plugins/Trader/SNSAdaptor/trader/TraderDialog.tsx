@@ -13,7 +13,7 @@ import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
-import { isDashboardPage } from '@masknet/shared-base'
+import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     walletStatusBox: {
@@ -83,7 +83,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
         },
     )
 
-    const { value: chains = [] } = useAsync(async () => {
+    const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])

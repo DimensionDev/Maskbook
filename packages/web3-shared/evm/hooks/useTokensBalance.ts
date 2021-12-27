@@ -1,11 +1,11 @@
 import { useAsyncRetry } from 'react-use'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { useBalanceCheckerContract } from '../contracts/useBalanceChecker'
 import { useAccount } from './useAccount'
 import { useChainId } from './useChainId'
 import type { ChainId } from '../types'
 import { numberToHex } from 'web3-utils'
 
-const EMPTY_LIST: never[] = []
 /**
  * Fetch balance of multiple tokens from chain
  * @param listOfAddress
