@@ -148,17 +148,6 @@ export const Upload: React.FC = () => {
                     className={classes.encrypted}
                     label={t.on_encrypt_it()}
                 />
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            color="secondary"
-                            checked={useCDN}
-                            onChange={(event) => setUseCDN(event.target.checked)}
-                        />
-                    }
-                    className={classes.usedCDN}
-                    label={t.use_cdn()}
-                />
                 {cdnButton}
             </section>
             <section className={classes.checkItems}>{allProviderOptions}</section>
