@@ -61,6 +61,9 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    // Celo
+    Celo = 42220,
 }
 
 export enum ProviderType {
@@ -88,6 +91,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Celo = 'Celo',
 }
 
 export interface Wallet {
@@ -162,8 +166,11 @@ export interface ERC721ContractDetailed extends ERC721Token {
 export interface ERC721TokenInfo {
     name?: string
     description?: string
+    tokenURI?: string
     mediaUrl?: string
     owner?: string
+    // loading tokenURI
+    hasTokenDetailed?: boolean
 }
 
 export interface ERC721TokenDetailed {

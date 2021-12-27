@@ -1,0 +1,17 @@
+{
+    "CHAIN_ID": {
+        "Mainnet": "1027",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "1839",
+        "BSCT": "",
+        "Matic": "3890",
+        "Mumbai": "",
+        "Arbitrum": "11841",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "5601",
+        "Celo": "5567"
+    }
+}

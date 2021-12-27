@@ -22,10 +22,11 @@ import LaunchIcon from '@mui/icons-material/Launch'
 import { useI18N } from '../../../utils'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback'
 import { useCurrentIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { useCompositionContext } from '@masknet/plugin-infra'
 import { RedPacketNftMetaKey } from '../constants'
 import { WalletMessages } from '../../Wallet/messages'
 import { RedPacketRPC } from '../messages'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -86,11 +87,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 180,
         overflow: 'hidden',
     },
-    imgWrapper: {
-        height: 160,
-        width: '100%',
-        overflow: 'hidden',
-    },
     nftImg: {
         maxWidth: '100%',
     },
@@ -135,6 +131,13 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         transform: 'translateY(1px)',
+    },
+    loadingFailImage: {
+        minHeight: '0px !important',
+        maxWidth: 'none',
+        transform: 'translateY(10px)',
+        width: 64,
+        height: 64,
     },
 }))
 export interface RedpacketNftConfirmDialogProps {
@@ -280,9 +283,14 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                         <List className={classes.tokenSelector}>
                             {tokenList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <div className={classes.imgWrapper}>
-                                        <img className={classes.nftImg} src={value.info.mediaUrl} />
-                                    </div>
+                                    <NftImage
+                                        token={value}
+                                        classes={{
+                                            loadingFailImage: classes.loadingFailImage,
+                                        }}
+                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
+                                    />
+
                                     <div className={classes.nftNameWrapper}>
                                         <Typography className={classes.nftName} color="textSecondary">
                                             {value.info.name}

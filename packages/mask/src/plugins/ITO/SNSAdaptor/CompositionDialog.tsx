@@ -18,7 +18,7 @@ import { PoolSettings, useFillCallback } from './hooks/useFill'
 import { ConfirmDialog } from './ConfirmDialog'
 import { WalletMessages } from '../../Wallet/messages'
 import { omit, set } from 'lodash-unified'
-import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { useCompositionContext } from '@masknet/plugin-infra'
 import { MINDS_ID } from '../../../social-network-adaptor/minds.com/base'
 import { activatedSocialNetworkUI } from '../../../social-network'
 

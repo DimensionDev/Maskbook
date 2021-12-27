@@ -1,5 +1,6 @@
 import type { UnboundedRegistry as MessageChannel } from '@dimensiondev/holoflows-kit'
 import type { Subscription } from 'use-subscription'
+import { combineAbortSignal } from '../utils/abortSignal'
 import type { KVStorageBackend } from './types'
 
 export { createInMemoryKVStorageBackend } from './in-memory'
@@ -84,14 +85,7 @@ function createScope(
 
     return {
         createSubScope(subScope, defaultValues, scopeSignal) {
-            let aggregatedSignal = signal
-            if (scopeSignal) {
-                const aggregatedAbortController = new AbortController()
-                const abort = () => aggregatedAbortController.abort()
-                signal.addEventListener('abort', abort, { once: true })
-                scopeSignal.addEventListener('abort', abort, { once: true })
-                aggregatedSignal = aggregatedAbortController.signal
-            }
+            const aggregatedSignal = combineAbortSignal(scopeSignal, signal)
             return createScope(aggregatedSignal, backend, message, currentScope, subScope, defaultValues)
         },
         storage,

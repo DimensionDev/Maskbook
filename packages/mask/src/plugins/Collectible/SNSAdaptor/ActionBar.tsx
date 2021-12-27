@@ -41,11 +41,19 @@ export function ActionBar(props: ActionBarProps) {
         onClose: onCloseListingDialog,
     } = useControlledDialog()
 
-    if (!assets) return null
-
+    if (!asset.value) return null
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
-            {!assets.isOwner && assets.is_auction ? (
+            {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
+                <ActionButton
+                    className={classes.button}
+                    color="primary"
+                    variant="contained"
+                    onClick={onOpenCheckoutDialog}>
+                    {t('plugin_collectible_buy_now')}
+                </ActionButton>
+            ) : null}
+            {!asset.value.isOwner && asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -55,16 +63,8 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_place_bid')}
                 </ActionButton>
             ) : null}
-            {!assets.isOwner && !assets.is_auction && assets?.desktopOrder ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenCheckoutDialog}>
-                    {t('plugin_collectible_buy_now')}
-                </ActionButton>
-            ) : null}
-            {!assets.isOwner && !assets.is_auction ? (
+
+            {!asset.value.isOwner && !asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"
@@ -73,7 +73,7 @@ export function ActionBar(props: ActionBarProps) {
                     {t('plugin_collectible_make_offer')}
                 </ActionButton>
             ) : null}
-            {assets.isOwner ? (
+            {assets?.isOwner ? (
                 <ActionButton
                     className={classes.button}
                     color="primary"

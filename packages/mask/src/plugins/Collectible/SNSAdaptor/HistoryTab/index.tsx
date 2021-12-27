@@ -6,7 +6,7 @@ import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
 import { TableListPagination } from '../Pagination'
-import { LoadingTable } from '../LoadingTable'
+import { LoadingAnimation } from '@masknet/shared'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
@@ -44,8 +44,6 @@ export function HistoryTab(props: HistoryTabProps) {
     const { classes } = useStyles()
     const { provider, events, eventPage, setEventPage } = CollectibleState.useContainer()
 
-    console.log('000000000')
-    console.log(events)
     //#region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
         if (provider === NonFungibleAssetProvider.OPENSEA)
@@ -54,8 +52,13 @@ export function HistoryTab(props: HistoryTabProps) {
     }, [events.value, provider])
     //#endregion
 
-    if (events.loading) return <LoadingTable />
-    if (!events.value || !events.value?.data || events.error || !events.value?.data.length)
+    if (events.loading)
+        return (
+            <div className={classes.empty}>
+                <LoadingAnimation />
+            </div>
+        )
+    if (!events.value || events.error || !events.value?.data.length)
         return (
             <Table size="small" stickyHeader>
                 <TableBody className={classes.empty}>

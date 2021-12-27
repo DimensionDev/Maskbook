@@ -25,7 +25,7 @@ import type { PollMetaData } from '../types'
 import { POLL_META_KEY_1 } from '../constants'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { PluginPollRPC } from '../messages'
-import { useCompositionContext } from '../../../components/CompositionDialog/CompositionContext'
+import { useCompositionContext } from '@masknet/plugin-infra'
 
 const useNewPollStyles = makeStyles()((theme) => ({
     menuPaper: {
