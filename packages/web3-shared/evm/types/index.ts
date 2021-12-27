@@ -62,6 +62,9 @@ export enum ChainId {
     // xDai
     xDai = 100,
 
+    // Celo
+    Celo = 42220,
+
     // Fantom
     Fantom = 250,
 }
@@ -91,6 +94,7 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Celo = 'Celo',
     Fantom = 'Fantom',
 }
 

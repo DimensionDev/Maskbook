@@ -52,6 +52,7 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Arbitrum',
     'Arbitrum_Rinkeby',
     'xDai',
+    'Celo',
     'Fantom',
 ])
 

@@ -34,6 +34,7 @@ export interface MaskSettingsEvents {
     arbitrumNetworkTradeProviderSettings: TradeProvider
     xdaiNetworkTradeProviderSettings: TradeProvider
     fantomNetworkTradeProviderSettings: TradeProvider
+    celoNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {

@@ -15,6 +15,8 @@ import {
     STETH,
     BUSD,
     BTCB,
+    CUSD,
+    CEUR,
 } from './trader'
 import type { ERC20AgainstToken, ERC20TokenCustomizedBase } from './types'
 
@@ -31,5 +33,6 @@ export const SUSHISWAP_BASE_AGAINST_TOKENS: ERC20AgainstToken = {
     [ChainId.Matic]: [WNATIVE, USDC, WBTC, DAI, USDT].map((x) => x[ChainId.Matic]),
     [ChainId.BSC]: [WNATIVE, DAI, BUSD, USDC, USDT, BTCB].map((x) => x[ChainId.BSC]),
     [ChainId.xDai]: [WNATIVE, USDC, USDT, WBTC].map((x) => x[ChainId.xDai]),
+    [ChainId.Celo]: [WNATIVE, CUSD, CEUR].map((x) => x[ChainId.Celo]),
     [ChainId.Fantom]: [WNATIVE, DAI, USDC, fUSDT, WBTC].map((x) => x[ChainId.Fantom]),
 }

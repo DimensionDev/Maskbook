@@ -12,6 +12,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
@@ -27,6 +28,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "GITCOIN_ETH_ADDRESS": {
@@ -42,6 +44,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
@@ -57,6 +60,7 @@
         "Arbitrum": 5,
         "Arbitrum_Rinkeby": 5,
         "xDai": 5,
-        "Fantom": ""
+        "Celo": 0,
+        "Fantom": 0
     }
 }

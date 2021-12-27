@@ -12,6 +12,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
@@ -27,6 +28,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     }
 }

@@ -12,6 +12,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "UNISWAP_V2_HEALTH_URL": {
@@ -27,6 +28,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
@@ -42,6 +44,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     }
 }

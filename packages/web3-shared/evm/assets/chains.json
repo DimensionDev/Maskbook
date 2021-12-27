@@ -2042,13 +2042,19 @@
         "chainId": 42220,
         "shortName": "CELO",
         "chain": "CELO",
-        "network": "Mainnet",
+        "network": "mainnet",
         "networkId": 42220,
-        "nativeCurrency": { "name": "CELO", "symbol": "CELO", "decimals": 18 },
+
+        "nativeCurrency": {
+            "name": "CELO",
+            "symbol": "CELO",
+            "decimals": 18,
+            "logoURI": "https://assets.coingecko.com/coins/images/11090/small/icon-celo-CELO-color-500.png"
+        },
         "rpc": ["https://forno.celo.org", "wss://forno.celo.org/ws"],
         "faucets": [],
         "features": [],
-        "infoURL": "https://docs.celo.org/"
+        "infoURL": "https://explorer.celo.org/"
     },
     {
         "name": "Athereum",
@@ -2093,7 +2099,7 @@
         "name": "Celo Alfajores Testnet",
         "chainId": 44787,
         "shortName": "ALFA",
-        "chain": "CELO",
+        "chain": "Celo",
         "network": "Alfajores",
         "networkId": 44787,
         "nativeCurrency": { "name": "CELO", "symbol": "CELO", "decimals": 18 },
@@ -2120,7 +2126,7 @@
         "name": "Celo Baklava Testnet",
         "chainId": 62320,
         "shortName": "BKLV",
-        "chain": "CELO",
+        "chain": "Celo",
         "network": "Baklava",
         "networkId": 62320,
         "nativeCurrency": { "name": "CELO", "symbol": "CELO", "decimals": 18 },

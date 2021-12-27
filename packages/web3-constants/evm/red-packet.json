@@ -12,6 +12,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
@@ -27,6 +28,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
@@ -42,6 +44,7 @@
         "Arbitrum": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
         "Arbitrum_Rinkeby": "0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
@@ -57,6 +60,7 @@
         "Arbitrum": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Arbitrum_Rinkeby": "",
         "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
+        "Celo": "",
         "Fantom": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
@@ -72,7 +76,8 @@
         "Arbitrum": 909051,
         "Arbitrum_Rinkeby": 0,
         "xDai": 18101937,
-        "Fantom": ""
+        "Celo": 0,
+        "Fantom": 0
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-mainnet",
@@ -87,6 +92,7 @@
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai",
+        "Celo": "",
         "Fantom": ""
     }
 }

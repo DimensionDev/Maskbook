@@ -12,6 +12,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "MASK_ITO_CONTRACT_ADDRESS": {
@@ -27,6 +28,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "ITO2_CONTRACT_ADDRESS": {
@@ -42,6 +44,7 @@
         "Arbitrum": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
         "Arbitrum_Rinkeby": "0x9b3649eC8C9f68484acC76D437B145a4e58Bf2A2",
         "xDai": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
+        "Celo": "",
         "Fantom": ""
     },
     "ITO2_CONTRACT_CREATION_BLOCK_HEIGHT": {
@@ -57,6 +60,7 @@
         "Arbitrum": 102022,
         "Arbitrum_Rinkeby": 708696,
         "xDai": 17865755,
+        "Celo": "",
         "Fantom": ""
     },
     "DEFAULT_QUALIFICATION_ADDRESS": {
@@ -72,6 +76,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "DEFAULT_QUALIFICATION2_ADDRESS": {
@@ -87,6 +92,7 @@
         "Arbitrum": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c",
         "Arbitrum_Rinkeby": "0xEbd753E66649C824241E63894301BA8Db5DBF5Bb",
         "xDai": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
+        "Celo": "",
         "Fantom": ""
     },
     "SUBGRAPH_URL": {
@@ -102,6 +108,7 @@
         "Arbitrum": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-ito-xdai",
+        "Celo": "",
         "Fantom": ""
     }
 }

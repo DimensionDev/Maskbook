@@ -7,7 +7,7 @@ import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
 import { CollectibleProvider } from '../../types'
 import { TableListPagination } from '../Pagination'
-import { LoadingTable } from '../LoadingTable'
+import { LoadingAnimation } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -52,7 +52,12 @@ export function HistoryTab(props: HistoryTabProps) {
     }, [events.value, provider])
     //#endregion
 
-    if (events.loading) return <LoadingTable />
+    if (events.loading)
+        return (
+            <div className={classes.empty}>
+                <LoadingAnimation />
+            </div>
+        )
     if (!events.value || events.error || !events.value?.data.length)
         return (
             <Table size="small" stickyHeader>

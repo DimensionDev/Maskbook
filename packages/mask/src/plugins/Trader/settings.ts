@@ -82,6 +82,12 @@ export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProv
     { primary: () => '' },
 )
 
+export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+celo+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]

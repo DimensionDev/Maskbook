@@ -1,32 +1,4 @@
 {
-    "ERC20_TOKEN_LISTS": {
-        "Mainnet": [
-            "https://api.1inch.exchange/v3.0/1/tokens",
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/1/tokens.json"
-        ],
-        "Ropsten": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/3/tokens.json"],
-        "Rinkeby": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/4/tokens.json"],
-        "Kovan": ["https://irhonin.github.io/kovan-token-list/kovan-token-list.json"],
-        "Gorli": [],
-        "BSC": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/56/tokens.json",
-            "https://api.1inch.exchange/v3.0/56/tokens"
-        ],
-        "BSCT": ["https://dimensiondev.github.io/Mask-Token-List/mask.json"],
-        "Matic": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/137/tokens.json",
-            "https://api.1inch.exchange/v3.0/137/tokens"
-        ],
-        "Mumbai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/80001/tokens.json"],
-        "Arbitrum": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/42161/tokens.json"
-        ],
-        "Arbitrum_Rinkeby": [
-            "https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/421611/tokens.json"
-        ],
-        "xDai": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/100/tokens.json"],
-        "Fantom": ["https://raw.githubusercontent.com/DimensionDev/Mask-Token-List/gh-pages/latest/250/tokens.json"]
-    },
     "BALANCE_CHECKER_ADDRESS": {
         "Mainnet": "0xb1F8e55c7f64D203C1400B9D8555d050F94aDF39",
         "Ropsten": "0xD5C432dFbDEcB6068583BC5241D1b308D70721a4",
@@ -40,6 +12,7 @@
         "Arbitrum": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
         "Arbitrum_Rinkeby": "0xF98dC9391273c5ab9fa2c980A8d4F875ece802db",
         "xDai": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186",
+        "Celo": "0x8e28F1d64ceD52b9A09aB1AA3071Aa3c05802d1F",
         "Fantom": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39"
     },
     "MULTICALL_ADDRESS": {
@@ -55,6 +28,7 @@
         "Arbitrum": "0xadF885960B47eA2CD9B55E6DAc6B42b7Cb2806dB",
         "Arbitrum_Rinkeby": "0xa501c031958F579dB7676fF1CE78AD305794d579",
         "xDai": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
+        "Celo": "0x072453AdEC16cFC7FB6Af1517c3f25407180cccC",
         "Fantom": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c"
     },
     "ENS_REGISTRAR_ADDRESS": {
@@ -70,6 +44,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     },
     "ENS_REVERSE_RECORDS_ADDRESS": {
@@ -85,6 +60,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
+        "Celo": "",
         "Fantom": ""
     }
 }

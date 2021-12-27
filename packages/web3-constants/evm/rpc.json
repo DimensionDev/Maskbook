@@ -12,6 +12,7 @@
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.xdaichain.com/"],
+        "Celo": ["https://forno.celo.org"],
         "Fantom": ["https://rpcapi.fantom.network/"]
     },
     "RPC_WEIGHTS": {
@@ -27,6 +28,7 @@
         "Arbitrum": [0, 0, 0, 0],
         "Arbitrum_Rinkeby": [0, 0, 0, 0],
         "xDai": [0, 0, 0, 0],
+        "Celo": [0, 0, 0, 0],
         "Fantom": [0, 0, 0, 0]
     }
 }
