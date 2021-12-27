@@ -109,7 +109,7 @@ export async function getAddressNames(identity: {
         isValidAddress(addressRSS3)
             ? {
                   type: AddressNameType.RSS3,
-                  label: `${RSS3Id}.rss`,
+                  label: `${RSS3Id}.rss3`,
                   resolvedAddress: addressRSS3,
               }
             : null,

@@ -1,5 +1,9 @@
 import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
 import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
+import DeBank from '@masknet/web3-constants/evm/debank.json'
+import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
+import CoinMarketCap from '@masknet/web3-constants/evm/coinmarketcap.json'
+import Zerion from '@masknet/web3-constants/evm/zerion.json'
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
 import ITO from '@masknet/web3-constants/evm/ito.json'
 import LBP from '@masknet/web3-constants/evm/lbp.json'
@@ -11,11 +15,12 @@ import Trending from '@masknet/web3-constants/evm/trending.json'
 import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
 import RPC from '@masknet/web3-constants/evm/rpc.json'
 import PoolTogether from '@masknet/web3-constants/evm/pooltogether.json'
+import TokenList from '@masknet/web3-constants/evm/token-list.json'
 import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
 import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
-import Chain from '@masknet/web3-constants/evm/chain.json'
+import Explorer from '@masknet/web3-constants/evm/explorer.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
@@ -26,6 +31,18 @@ export const useAirdropConstants = hookTransform(getAirdropConstants)
 
 export const getEthereumConstants = transform(Ethereum)
 export const useEthereumConstants = hookTransform(getEthereumConstants)
+
+export const getDeBankConstants = transform(DeBank)
+export const useDeBankConstants = hookTransform(getDeBankConstants)
+
+export const getCoinGeckoConstants = transform(CoinGecko)
+export const useCoinGeckoConstants = hookTransform(getCoinGeckoConstants)
+
+export const getCoinMarketCapConstants = transform(CoinMarketCap)
+export const useCoinMarketCapConstants = hookTransform(getCoinMarketCapConstants)
+
+export const getZerionConstants = transform(Zerion)
+export const useZerionConstants = hookTransform(getZerionConstants)
 
 export const getGitcoinConstants = transform(Gitcoin)
 export const useGitcoinConstants = hookTransform(getGitcoinConstants)
@@ -59,6 +76,9 @@ try {
 export const getRPCConstants = transformFromJSON(WEB3_CONSTANTS_RPC, RPC)
 export const useRPCConstants = hookTransform(getRPCConstants)
 
+export const getTokenListConstants = transform(TokenList)
+export const useTokenListConstants = hookTransform(getTokenListConstants)
+
 export const getTokenAssetBaseURLConstants = transform(TokenAssetBaseURL)
 export const useTokenAssetBaseURLConstants = hookTransform(getTokenAssetBaseURLConstants)
 
@@ -73,8 +93,8 @@ export const useSpaceStationGalaxyConstants = hookTransform(getSpaceStationGalax
 export const getOpenseaAPIConstants = transform(OpenseaAPI)
 export const useOpenseaAPIConstants = hookTransform(getOpenseaAPIConstants)
 
-export const getChainConstants = transform(Chain)
-export const useChainConstants = hookTransform(getChainConstants)
+export const getExplorerConstants = transform(Explorer)
+export const useExplorerConstants = hookTransform(getExplorerConstants)
 
 export const getCryptoArtAIConstants = transform(CryptoArtAI)
 export const useCryptoArtAIConstants = hookTransform(getCryptoArtAIConstants)

@@ -20,7 +20,6 @@ import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '../types'
 import RedPacketDialog from './RedPacketDialog'
 import { RedPacketInPost } from './RedPacketInPost'
 import { RedPacketNftInPost } from './RedPacketNftInPost'
-import { ToolIconURLs } from '../../../resources/tool-icon'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -63,10 +62,6 @@ const sns: Plugin.SNSAdaptor.Definition = {
     CompositionDialogEntry: {
         dialog: RedPacketDialog,
         label: { fallback: '💰 Lucky Drop' },
-    },
-    ToolbarEntry: {
-        ...ToolIconURLs.redpacket,
-        onClick: 'openCompositionEntry',
     },
 }
 interface ERC20RedpacketBadgeProps {
