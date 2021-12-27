@@ -1,5 +1,5 @@
 import {
-    isSameAddress,
+    isZeroAddress,
     useAccount,
     useGoodGhostingConstants,
     useSingleContractMultipleData,
@@ -101,7 +101,7 @@ export function useGameInfo(gameData: GameMetaData) {
             adaiTokenAddress: adaiToken,
             lendingPoolAddress: lendingPool,
             earlyWithdrawalFee,
-            currentPlayer: !isSameAddress(player?.addr, ZERO_ADDRESS) ? player : undefined,
+            currentPlayer: !isZeroAddress(player?.addr) ? player : undefined,
             gameHasEnded: Number.parseInt(currentSegment, 10) > Number.parseInt(lastSegment, 10),
             refresh: asyncResult.retry,
         } as GoodGhostingInfo

@@ -17,8 +17,8 @@ import {
     FungibleTokenDetailed,
     EthereumTokenType,
     useAccount,
-    isNative,
     useFungibleTokenWatched,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import formatDateTime from 'date-fns/format'
 import { useI18N } from '../../../utils'
@@ -167,7 +167,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
-                            disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
+                            disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{
