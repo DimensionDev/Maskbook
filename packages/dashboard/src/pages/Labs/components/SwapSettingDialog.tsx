@@ -10,6 +10,7 @@ import {
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
     useCeloNetworkTradeProvider,
+    useMetisNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -50,6 +51,11 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
+    const metisOptions = [
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'NetSwap', value: TradeProvider.NETSWAP },
+    ]
+
     const t = useDashboardI18N()
 
     const items = [
@@ -88,6 +94,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useCeloNetworkTradeProvider(),
             options: celoOptions,
             onChange: (value: string) => Services.Settings.setCeloNetworkTradeProvider(Number.parseInt(value, 10)),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Metis' }),
+            value: useMetisNetworkTradeProvider(),
+            options: metisOptions,
+            onChange: (value: string) => Services.Settings.setMetisNetworkTradeProvider(Number.parseInt(value, 10)),
         },
     ]
 

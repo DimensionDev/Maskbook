@@ -12,7 +12,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
         "Mainnet": 13687866,
@@ -27,7 +29,9 @@
         "Arbitrum": 0,
         "Arbitrum_Rinkeby": 0,
         "xDai": 0,
-        "Celo": 0
+        "Celo": 0,
+        "Metis": 0,
+        "Metis_Stardust": 0
     },
     "MASK_BOX_TEST_NFT": {
         "Mainnet": "0x56136E69A5771436a9598804c5eA792230c21181",
@@ -42,7 +46,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": ""
     },
     "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -57,7 +63,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": ""
     },
     "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -72,6 +80,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": ""
     }
 }

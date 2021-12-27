@@ -83,6 +83,12 @@ export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
     { primary: () => '' },
 )
 
+export const metisNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+metis+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+
 //#region trade provider general settings
 export interface TradeProviderSettings {
     pools: ZrxTradePool[]
@@ -98,6 +104,7 @@ const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+bancor`, '')
+const netswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+netswap`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -124,6 +131,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return dodoSettings
         case TradeProvider.BANCOR:
             return bancorSettings
+        case TradeProvider.NETSWAP:
+            return netswapSettings
         default:
             unreachable(tradeProvider)
     }

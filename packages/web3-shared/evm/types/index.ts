@@ -64,6 +64,10 @@ export enum ChainId {
 
     // Celo
     Celo = 42220,
+
+    // Metis
+    Metis = 1088,
+    Metis_Stardust = 588,
 }
 
 export enum ProviderType {
@@ -92,6 +96,7 @@ export enum NetworkType {
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
     Celo = 'Celo',
+    Metis = 'Metis',
 }
 
 export interface Wallet {

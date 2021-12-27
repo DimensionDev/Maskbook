@@ -195,28 +195,52 @@
         "infoURL": "https://matic.network/"
     },
     {
-        "name": "Matic Testnet Mumbai",
+        "name": "Metis Andromeda Mainnet",
         "chainId": 80001,
-        "fullName": "Polygon",
-        "shortName": "maticmum",
-        "chain": "Matic",
-        "network": "testnet",
-        "networkId": 80001,
+        "fullName": "Metis",
+        "shortName": "metis",
+        "chain": "Metis",
+        "network": "mainnet",
+        "networkId": 1088,
         "nativeCurrency": {
-            "name": "Matic",
-            "symbol": "tMATIC",
+            "name": "Metis",
+            "symbol": "METIS",
             "decimals": 18
         },
-        "faucets": ["https://faucet.matic.network/"],
+        "faucets": [],
         "features": [],
         "explorers": [
             {
-                "name": "matic",
-                "url": "https://explorer-mumbai.maticvigil.com",
+                "name": "metis",
+                "url": "https://andromeda-explorer.metis.io/",
                 "standard": "EIP3091"
             }
         ],
-        "infoURL": "https://matic.network/"
+        "infoURL": "https://metis.io/"
+    },
+    {
+        "name": "Metis Stardust Testnet",
+        "chainId": 588,
+        "fullName": "Metis",
+        "shortName": "metis",
+        "chain": "Metis",
+        "network": "testnet",
+        "networkId": 588,
+        "nativeCurrency": {
+            "name": "Metis",
+            "symbol": "Metis",
+            "decimals": 18
+        },
+        "faucets": ["https://faucets.chain.link/rinkeby"],
+        "features": [],
+        "explorers": [
+            {
+                "name": "metis",
+                "url": "https://stardust-explorer.metis.io/",
+                "standard": "EIP3091"
+            }
+        ],
+        "infoURL": "https://metis.io/"
     },
     {
         "name": "Arbitrum One",

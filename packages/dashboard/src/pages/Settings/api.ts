@@ -39,6 +39,11 @@ export const [useCeloNetworkTradeProvider] = createGlobalState(
     Messages.events.celoNetworkTradeProviderSettings.on,
 )
 
+export const [useMetisNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getMetisNetworkTradeProvider,
+    Messages.events.metisNetworkTradeProviderSettings.on,
+)
+
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {

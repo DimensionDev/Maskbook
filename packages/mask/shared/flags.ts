@@ -53,6 +53,7 @@ export const Flags = {
     xdai_enabled: true,
     flow_enabled: true,
     celo_enabled: true,
+    metis_enabled: true,
     nft_airdrop_enabled: false,
 
     //#region Functionality missing / broken

@@ -12,7 +12,9 @@
         "Arbitrum": "arbitrum-one",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
-        "Celo": "celo"
+        "Celo": "celo",
+        "Metis": "metis",
+        "Metis_Stardust": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -27,6 +29,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
-        "Celo": "celo"
+        "Celo": "celo",
+        "Metis": "metis",
+        "Metis_Stardust": ""
     }
 }

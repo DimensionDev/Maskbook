@@ -53,6 +53,8 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Arbitrum_Rinkeby',
     'xDai',
     'Celo',
+    'Metis',
+    'Metis_Stardust',
 ])
 
 compileConstants(path.join(__dirname, 'solana'), ['mainnet-beta', 'testnet', 'devnet'])

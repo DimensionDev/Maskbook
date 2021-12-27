@@ -34,6 +34,7 @@ export interface MaskSettingsEvents {
     arbitrumNetworkTradeProviderSettings: TradeProvider
     xdaiNetworkTradeProviderSettings: TradeProvider
     celoNetworkTradeProviderSettings: TradeProvider
+    metisNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {

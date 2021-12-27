@@ -12,7 +12,9 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -27,6 +29,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Metis": "",
+        "Metis_Stardust": ""
     }
 }

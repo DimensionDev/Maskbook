@@ -137,6 +137,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         iconColor: 'rgb(53, 208, 127)',
         isMainnet: true,
     },
+    {
+        ID: `${PLUGIN_ID}_metis`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Metis,
+        type: NetworkType.Metis,
+        name: 'Metis',
+        icon: new URL('./assets/metis.png', import.meta.url),
+        iconColor: 'rgb(2, 223, 206)',
+        isMainnet: true,
+    },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {

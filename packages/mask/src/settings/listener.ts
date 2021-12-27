@@ -26,6 +26,7 @@ import {
     arbitrumNetworkTradeProviderSettings,
     xdaiNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
+    metisNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
 import type { InternalSettings } from './createSettings'
 
@@ -54,5 +55,6 @@ export function ToBeListened(): ToBeListedSettings {
         arbitrumNetworkTradeProviderSettings,
         xdaiNetworkTradeProviderSettings,
         celoNetworkTradeProviderSettings,
+        metisNetworkTradeProviderSettings,
     }
 }
