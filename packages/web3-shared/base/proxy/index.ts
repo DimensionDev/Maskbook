@@ -225,7 +225,7 @@ export const getWebSocketInstance = async (endPoint?: string) => {
  * @param [endPoint = SOCKET_POINT] endPoint
  * @returns promise of request
  */
-export const sendMessageToProxy = async <T>(message: RequestMessage, endPoint?: string) => {
+export const sendMessageToProxy = async <T>(message: Omit<RequestMessage, 'notify'>, endPoint?: string) => {
     let data: T[] = []
 
     const socket = await getWebSocketInstance(SOCKET_POINT ?? endPoint)

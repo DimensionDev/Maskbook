@@ -10,7 +10,7 @@ import type {
     SocketRequestAssetScope,
 } from './type'
 import { values } from 'lodash-unified'
-import { createLookupTableResolver, NetworkType } from '@masknet/web3-shared-evm'
+import { getChainIdFromNetworkType, getZerionConstants, NetworkType } from '@masknet/web3-shared-evm'
 import { formatAssets } from './format'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 
@@ -19,16 +19,9 @@ const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 
 let socket: SocketIOClient.Socket | null = null
 
-export const resolveZerionAssetsScopeName = createLookupTableResolver<NetworkType, string>(
-    {
-        [NetworkType.Ethereum]: 'assets',
-        [NetworkType.Binance]: 'bsc-assets',
-        [NetworkType.Polygon]: 'polygon-assets',
-        [NetworkType.Arbitrum]: 'arbitrum-assets',
-        [NetworkType.xDai]: 'xdai-assets',
-    },
-    '',
-)
+export function resolveZerionAssetsScopeName(networkType: NetworkType) {
+    return getZerionConstants(getChainIdFromNetworkType(networkType)).ASSETS_SCOPE_NAME ?? ''
+}
 
 function createSocket() {
     if (socket?.connected) return socket
