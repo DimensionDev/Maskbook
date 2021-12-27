@@ -11,11 +11,11 @@ import {
     EthereumMethodType,
     EthereumRpcType,
     EthereumTransactionConfig,
-    ZERO_ADDRESS,
     isEIP1559Supported,
     isSameAddress,
     ProviderType,
     SendOverrides,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
@@ -138,7 +138,7 @@ async function handleTransferTransaction(chainId: ChainId, payload: JsonRpcPaylo
     const from = (computedPayload._tx.from as string) ?? ''
     const to = getTo(computedPayload)
 
-    if (!isSameAddress(from, to) && !isSameAddress(to, ZERO_ADDRESS)) await WalletRPC.addAddress(chainId, to)
+    if (!isSameAddress(from, to) && !isZeroAddress(to)) await WalletRPC.addAddress(chainId, to)
 }
 
 function handleRecentTransaction(
@@ -512,7 +512,13 @@ export async function INTERNAL_nativeSend(
         payload.method = EthereumMethodType.ETH_GET_TRANSACTION_RECEIPT
 
     try {
-        const response = await nativeAPI?.api.send(payload)
+        let response: JsonRpcResponse | undefined
+        if (nativeAPI?.type === 'Android') {
+            const jsonResponse = await nativeAPI?.api.sendJsonString(JSON.stringify(payload))
+            response = JSON.parse(jsonResponse)
+        } else {
+            response = await nativeAPI?.api.send(payload)
+        }
         callback(null, response)
         if (payload.method === EthereumMethodType.ETH_SEND_TRANSACTION) {
             handleNonce(chainIdFinally, account, null, response)

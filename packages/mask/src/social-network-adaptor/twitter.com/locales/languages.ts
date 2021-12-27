@@ -18,3 +18,16 @@ export const languages = {
 }
 import { createI18NBundle } from '@masknet/shared-base'
 export const addDO_NOT_USEI18N = createI18NBundle('DO_NOT_USE', languages)
+// @ts-ignore
+if (import.meta.webpackHot) {
+    // @ts-ignore
+    import.meta.webpackHot.accept(
+        ['./en-US.json', './ja-JP.json', './ko-KR.json', './qya-AA.json', './zh-CN.json', './zh-TW.json'],
+        () =>
+            globalThis.dispatchEvent?.(
+                new CustomEvent('MASK_I18N_HMR', {
+                    detail: ['DO_NOT_USE', { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW }],
+                }),
+            ),
+    )
+}

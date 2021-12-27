@@ -1,13 +1,6 @@
 import { EthereumAddress } from 'wallet.ts'
 import { Resolution } from '@unstoppabledomains/resolution'
-import {
-    AddressName,
-    AddressNameType,
-    ChainId,
-    isSameAddress,
-    ProviderType,
-    ZERO_ADDRESS,
-} from '@masknet/web3-shared-evm'
+import { AddressName, AddressNameType, ChainId, isZeroAddress, ProviderType } from '@masknet/web3-shared-evm'
 import * as ENS from '../apis/ens'
 import { createWeb3 } from '../../../extension/background-script/EthereumServices/web3'
 import { PluginProfileRPC } from '../../Profile/messages'
@@ -19,7 +12,7 @@ const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.rss3\.bio/
 const RSS3_RNS_RE = /(?<name>[\w.]+)\.rss3/
 
 function isValidAddress(address: string) {
-    return address && EthereumAddress.isValid(address) && !isSameAddress(address, ZERO_ADDRESS)
+    return address && EthereumAddress.isValid(address) && !isZeroAddress(address)
 }
 
 function getEthereumName(twitterId: string, nickname: string, bio: string) {
