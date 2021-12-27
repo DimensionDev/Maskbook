@@ -16,7 +16,7 @@ xdescribe('Proxy websocket', () => {
     beforeEach(async () => {
         mockNotifyCallback = jest.fn()
         server = new mockWS.WS(POINT, { jsonProtocol: true })
-        client = new ProviderProxy(POINT, mockNotifyCallback)
+        client = new ProviderProxy(POINT)
         await client.waitingOpen()
         client.registerMessage()
 
@@ -26,7 +26,7 @@ xdescribe('Proxy websocket', () => {
     test('should cache data by request id', async () => {
         const id = 'fetchAsset'
         const mockData = { id, results: ['eth', 'bsc'] }
-        const testMethod = { method: 'fetchAsset', params: [], id }
+        const testMethod = { method: 'fetchAsset', params: [], id, notify: mockNotifyCallback }
         client.send(testMethod)
         pushToClientMockData(mockData)
 
@@ -41,7 +41,7 @@ xdescribe('Proxy websocket', () => {
 
     test('should merge cache data when server push two times data', async () => {
         const id = 'fetchAsset2'
-        const testMethod = { method: 'fetchAsset2', params: [], id }
+        const testMethod = { method: 'fetchAsset2', params: [], id, notify: mockNotifyCallback }
         client.send(testMethod)
         const mockData1 = { id, results: ['eth', 'bsc'] }
         const mockData2 = { id, results: ['matic'] }
@@ -61,8 +61,8 @@ xdescribe('Proxy websocket', () => {
     test('should cache divide data when server push different response', async () => {
         const requestID1 = 'fetchAsset1'
         const requestID2 = 'fetchAsset2'
-        const testMethod1 = { method: requestID1, params: [], id: requestID1 }
-        const testMethod2 = { method: requestID1, params: [], id: requestID2 }
+        const testMethod1 = { method: requestID1, params: [], id: requestID1, notify: mockNotifyCallback }
+        const testMethod2 = { method: requestID1, params: [], id: requestID2, notify: mockNotifyCallback }
         client.send(testMethod1)
         client.send(testMethod2)
         const mockData1 = { id: requestID1, results: ['eth', 'bsc'] }
@@ -89,7 +89,7 @@ xdescribe('Proxy websocket', () => {
 
     test('should use cache when last pick within 30 second', async () => {
         const id = 'fetchAsset'
-        const testMethod = { method: 'fetchAsset', params: [], id }
+        const testMethod = { method: 'fetchAsset', params: [], id, notify: mockNotifyCallback }
         client.send(testMethod)
         const mockData = { id, results: ['matic'] }
         pushToClientMockData(mockData)
@@ -102,7 +102,7 @@ xdescribe('Proxy websocket', () => {
         Array.from({ length: 11 }, (v, i) => i).forEach((x) => {
             const id = `mask.fetchAsset_${x}`
             const mockData = { id, results: ['eth', 'bsc'] }
-            const testMethod = { method: 'fetchAsset', params: [], id }
+            const testMethod = { method: 'fetchAsset', params: [], id, notify: mockNotifyCallback }
             client.send(testMethod)
             pushToClientMockData(mockData)
 
@@ -117,7 +117,7 @@ xdescribe('Proxy websocket', () => {
 
     xtest('should merge cache data when server push two times data and uniq', async () => {
         const id = 'fetchAsset3'
-        const testMethod = { method: 'fetchAsset2', params: [], id }
+        const testMethod = { method: 'fetchAsset2', params: [], id, notify: mockNotifyCallback }
         client.send(testMethod)
         const mockData1 = { id, result: ['eth', 'bsc'] }
         const mockData2 = { id, result: ['eth', 'matic'] }
