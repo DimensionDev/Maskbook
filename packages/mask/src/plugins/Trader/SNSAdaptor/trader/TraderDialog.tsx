@@ -13,7 +13,8 @@ import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
-import { isDashboardPage, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST } from '../../../../../utils-pure'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     walletStatusBox: {

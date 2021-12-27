@@ -32,7 +32,7 @@ Mask Network fetches on-chain data from various data sources. Therefore, you can
 
 ### Token List
 
-The team maintains a token list https://github.com/DimensionDev/Mask-Token-List. So free feel to create one for the chain. And add the token list link to `packages/web3-constants/evm/token-list.json`.
+The team maintains a token list <https://github.com/DimensionDev/Mask-Token-List>. So free feel to create one for the chain. And add the token list link to `packages/web3-constants/evm/token-list.json`.
 
 ### Token Icon
 
