@@ -5,6 +5,7 @@ import {
     useTokenConstants,
     useTraderConstants,
     ChainId,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'

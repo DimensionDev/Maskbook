@@ -2,7 +2,13 @@ import { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react'
 import { EthereumAddress } from 'wallet.ts'
 import { Box, Card, CardActions, CardContent, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { EthereumTokenType, FungibleTokenDetailed, FungibleTokenWatched, useAccount } from '@masknet/web3-shared-evm'
+import {
+    EthereumTokenType,
+    FungibleTokenDetailed,
+    FungibleTokenWatched,
+    isNativeTokenAddress,
+    useAccount,
+} from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
 import { isGreaterThan } from '@masknet/web3-shared-base'
 import formatDateTime from 'date-fns/format'
@@ -137,7 +143,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value as FungibleTokenDetailed}
-                    disableNativeToken={!paymentTokens.some((x) => isNativeTokenAddress(x.address))}
+                    disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{

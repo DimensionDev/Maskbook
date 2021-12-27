@@ -1,5 +1,6 @@
 import {
     FungibleTokenDetailed,
+    isNativeTokenAddress,
     useAccount,
     useBlockNumber,
     useRPCConstants,

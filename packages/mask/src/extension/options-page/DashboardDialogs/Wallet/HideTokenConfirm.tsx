@@ -6,6 +6,7 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'

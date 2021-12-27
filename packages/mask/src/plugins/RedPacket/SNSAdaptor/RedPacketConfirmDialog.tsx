@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js'
 import classNames from 'classnames'
 import { useEffect } from 'react'
-import { formatBalance, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
+import { formatBalance, isNativeTokenAddress, resolveTokenLinkOnExplorer, useChainId } from '@masknet/web3-shared-evm'
 import { Grid, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'

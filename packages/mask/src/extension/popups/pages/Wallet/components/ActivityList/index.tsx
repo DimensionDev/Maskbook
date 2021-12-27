@@ -8,6 +8,7 @@ import { Button, Link, List } from '@mui/material'
 import {
     ChainId,
     EthereumRpcType,
+    isNativeTokenAddress,
     isSameAddress,
     resolveTransactionLinkOnExplorer,
     useChainId,

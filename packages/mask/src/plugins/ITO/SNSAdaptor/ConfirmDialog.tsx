@@ -4,6 +4,7 @@ import {
     formatBalance,
     formatEthereumAddress,
     FungibleTokenDetailed,
+    isNativeTokenAddress,
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
     useChainId,

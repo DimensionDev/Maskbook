@@ -10,6 +10,7 @@ import {
     ERC721TokenDetailed,
     useWeb3,
     TransactionStateType,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import classNames from 'classnames'

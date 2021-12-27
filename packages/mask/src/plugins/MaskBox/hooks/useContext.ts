@@ -23,6 +23,7 @@ import {
     useMaskBoxConstants,
     ZERO_ADDRESS,
     isZeroAddress,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'

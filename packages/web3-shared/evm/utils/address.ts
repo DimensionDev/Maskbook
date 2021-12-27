@@ -1,5 +1,5 @@
 import { getEnumAsArray } from '@dimensiondev/kit'
-import { toArray } from 'lodash-unified'
+import { toArray, uniq } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
 import { getRedPacketConstants, getTokenConstants, ZERO_ADDRESS } from '../constants'
 import { ChainId } from '../types'
@@ -10,7 +10,7 @@ export function isSameAddress(a = '', b = '') {
 }
 
 export function currySameAddress(addresses: string | string[] = []) {
-    addresses = toArray(addresses).map((address) => address.toLowerCase())
+    addresses = uniq(toArray(addresses).map((address) => address.toLowerCase()))
     return (target?: string | { address: string }) => {
         if (addresses.length === 0 || !target) return false
         if (typeof target === 'string') {

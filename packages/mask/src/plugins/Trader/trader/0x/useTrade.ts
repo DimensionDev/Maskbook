@@ -1,6 +1,7 @@
 import {
     FungibleTokenDetailed,
     getNetworkTypeFromChainId,
+    isNativeTokenAddress,
     NetworkType,
     useAccount,
     useBlockNumber,

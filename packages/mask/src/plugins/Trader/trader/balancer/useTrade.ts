@@ -1,4 +1,9 @@
-import { FungibleTokenDetailed, useBlockNumber, useTokenConstants } from '@masknet/web3-shared-evm'
+import {
+    FungibleTokenDetailed,
+    isNativeTokenAddress,
+    useBlockNumber,
+    useTokenConstants,
+} from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { BALANCER_SWAP_TYPE } from '../../constants'
 import { PluginTraderRPC } from '../../messages'
