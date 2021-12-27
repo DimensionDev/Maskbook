@@ -207,6 +207,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])
 
+    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
+
     const clearToken = useCallback(() => {
         setExistTokenDetailedList([])
         clearTokenDetailedOwnerList()
@@ -214,7 +216,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     }, [clearTokenDetailedOwnerList])
 
     useEffect(() => {
-        setExistTokenDetailedList(selectOption === NFTSelectOption.Partial ? [] : tokenDetailedOwnerList)
+        setExistTokenDetailedList(
+            selectOption === NFTSelectOption.Partial ? [] : tokenDetailedOwnerList.slice(0, maxSelectShares),
+        )
     }, [selectOption, tokenDetailedOwnerList])
 
     const clearContract = useCallback(() => {
