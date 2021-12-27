@@ -76,8 +76,6 @@ export interface MakeOfferDialogProps {
 export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
 
-    console.log('--------------------')
-    console.log(asset)
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
     const leastPrice =
