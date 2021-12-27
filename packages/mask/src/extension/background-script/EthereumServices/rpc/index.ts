@@ -12,6 +12,7 @@ import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getCode } from '../network'
 import { readABI } from './abi'
+import { isZeroAddress } from 'ethereumjs-util'
 
 // fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder
@@ -132,7 +133,7 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
         }
 
         // contract deployment
-        if (isSameAddress(to, ZERO_ADDRESS)) {
+        if (isZeroAddress(to)) {
             return {
                 type: EthereumRpcType.CONTRACT_DEPLOYMENT,
                 code: data,

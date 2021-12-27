@@ -11,11 +11,11 @@ import {
     EthereumMethodType,
     EthereumRpcType,
     EthereumTransactionConfig,
-    ZERO_ADDRESS,
     isEIP1559Supported,
     isSameAddress,
     ProviderType,
     SendOverrides,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import type { IJsonRpcRequest } from '@walletconnect/types'
 import * as MetaMask from './providers/MetaMask'
@@ -138,7 +138,7 @@ async function handleTransferTransaction(chainId: ChainId, payload: JsonRpcPaylo
     const from = (computedPayload._tx.from as string) ?? ''
     const to = getTo(computedPayload)
 
-    if (!isSameAddress(from, to) && !isSameAddress(to, ZERO_ADDRESS)) await WalletRPC.addAddress(chainId, to)
+    if (!isSameAddress(from, to) && !isZeroAddress(to)) await WalletRPC.addAddress(chainId, to)
 }
 
 function handleRecentTransaction(

@@ -22,6 +22,8 @@ import {
     useERC721ContractDetailed,
     useMaskBoxConstants,
     ZERO_ADDRESS,
+    isNative,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
@@ -65,7 +67,7 @@ function useContext(initialState?: { boxId: string }) {
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
         maskBoxStatus?.payment?.map(([address]) => {
             return {
-                type: isSameAddress(address, ZERO_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                type: isNative(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 address,
             }
         }) ?? [],
@@ -83,8 +85,7 @@ function useContext(initialState?: { boxId: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (!maskBoxInfo || !maskBoxStatus || isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS))
-            return null
+        if (!maskBoxInfo || !maskBoxStatus || isZeroAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS)) return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
         const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
         const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box
@@ -148,9 +149,7 @@ function useContext(initialState?: { boxId: string }) {
 
     const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
     const isQualifiedByContract =
-        boxInfo?.qualificationAddress && !isSameAddress(boxInfo?.qualificationAddress, ZERO_ADDRESS)
-            ? isWhitelisted
-            : true
+        boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
 
     //#region check holder min token
     const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)

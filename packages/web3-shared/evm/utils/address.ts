@@ -1,24 +1,32 @@
+import { getEnumAsArray } from '@dimensiondev/kit'
+import { toArray } from 'lodash-unified'
 import { EthereumAddress } from 'wallet.ts'
-import { getRedPacketConstants, getTokenConstants } from '../constants'
+import { getRedPacketConstants, getTokenConstants, ZERO_ADDRESS } from '../constants'
+import { ChainId } from '../types'
 
-export function isSameAddress(addrA: string = '', addrB: string = '') {
-    if (!addrA || !addrB) return false
-    return addrA.toLowerCase() === addrB.toLowerCase()
+export function isSameAddress(source = '', target = '') {
+    if (!source || !target) return false
+    return source.toLowerCase() === target.toLowerCase()
 }
 
-export function currySameAddress(base?: string) {
-    return (target: string | { address: string }) => {
-        if (!base) return false
+export function currySameAddress(addresses: string | string[] = []) {
+    addresses = toArray(addresses).map((address) => address.toLowerCase())
+    return (target?: string | { address: string }) => {
+        if (addresses.length === 0 || !target) return false
         if (typeof target === 'string') {
-            return isSameAddress(base, target)
+            return addresses.includes(target.toLowerCase())
         } else if (typeof target === 'object' && typeof target.address === 'string') {
-            return isSameAddress(base, target.address)
+            return addresses.includes(target.address.toLowerCase())
         }
         throw new Error('Unsupported `target` address format')
     }
 }
 
-export const isNative = currySameAddress(getTokenConstants().NATIVE_TOKEN_ADDRESS)
+export const isZeroAddress = currySameAddress(ZERO_ADDRESS)
+
+export const isNative = currySameAddress(
+    getEnumAsArray(ChainId).map(({ value }) => getTokenConstants(value).NATIVE_TOKEN_ADDRESS!),
+)
 
 export function isRedPacketAddress(address: string, version?: 1 | 2 | 3 | 4) {
     const {
