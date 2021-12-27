@@ -3,14 +3,15 @@ import {
     Body,
     ColumnContentLayout,
     Footer,
+    PersonaLogoBox,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { useDashboardI18N } from '../../../locales'
 import { PersonaContext } from '../../Personas/hooks/usePersonaContext'
-import { upperFirst } from 'lodash-es'
+import { upperFirst } from 'lodash-unified'
 import { Button, Stack } from '@mui/material'
 import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { ActionCard } from '../../../components/ActionCard'
@@ -22,7 +23,7 @@ export const ConnectSocialMedia = () => {
 
     useEffect(() => {
         if (currentPersona && currentPersona?.linkedProfiles.length > 0) {
-            navigate(RoutePaths.Personas, { replace: true })
+            navigate(DashboardRoutes.Personas, { replace: true })
         }
     }, [currentPersona])
 
@@ -37,13 +38,15 @@ export const ConnectSocialMedia = () => {
             <Header
                 title={t.create_account_connect_social_media_title()}
                 subtitle={t.create_account_persona_subtitle()}
-                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
+                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(DashboardRoutes.SignIn) }}
             />
             <Body>
-                <SignUpAccountLogo />
+                <PersonaLogoBox>
+                    <SignUpAccountLogo />
+                </PersonaLogoBox>
                 <div>
                     <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(4) }}>
-                        <Button variant="text" onClick={() => navigate(RoutePaths.Setup)}>
+                        <Button variant="text" onClick={() => navigate(DashboardRoutes.Setup)}>
                             {t.go_back()}
                         </Button>
                     </Stack>

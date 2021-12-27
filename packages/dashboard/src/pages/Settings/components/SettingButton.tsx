@@ -6,4 +6,4 @@ export default styled<typeof Button>(Button)(({ theme }) => ({
         borderRadius: 24,
         minWidth: 140,
     },
-}))
+})) as any as typeof Button

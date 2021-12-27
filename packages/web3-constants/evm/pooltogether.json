@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     }
 }

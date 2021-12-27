@@ -1,51 +1,54 @@
 {
     "GITCOIN_MAINTAINER_ADDRESS": {
         "Mainnet": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
-        "Ropsten": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Ropsten": "",
         "Rinkeby": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
         "Kovan": "",
         "Gorli": "",
         "BSC": "",
         "BSCT": "",
-        "Matic": "",
-        "Mumbai": "",
+        "Matic": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
+        "Mumbai": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
-        "Ropsten": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
+        "Ropsten": "",
         "Rinkeby": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
         "Kovan": "",
         "Gorli": "",
         "BSC": "",
         "BSCT": "",
-        "Matic": "",
-        "Mumbai": "",
+        "Matic": "0xb99080b9407436eBb2b8Fe56D45fFA47E9bb8877",
+        "Mumbai": "0x3E2849E2A489C8fE47F52847c42aF2E8A82B9973",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-        "Ropsten": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Ropsten": "",
         "Rinkeby": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Kovan": "",
         "Gorli": "",
         "BSC": "",
         "BSCT": "",
-        "Matic": "",
-        "Mumbai": "",
+        "Matic": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Mumbai": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -61,6 +64,7 @@
         "Arbitrum_Rinkeby": 0,
         "xDai": 0,
         "Boba": 0,
-        "Boba_Rinkeby": 0
+        "Boba_Rinkeby": 0,
+        "Celo": 0
     }
 }

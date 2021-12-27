@@ -1,5 +1,5 @@
-export * from './Dialogs/index'
-export * from './ButtonGroupTab/index'
+export * from './Dialogs'
+export * from './ButtonGroupTab'
 export * from './Snackbar'
 export * from './SearchableList'
 export * from './TextField'

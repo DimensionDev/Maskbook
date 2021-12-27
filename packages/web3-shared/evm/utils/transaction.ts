@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { EthereumTransactionConfig, TransactionStateType } from '..'
+import { EthereumTransactionConfig, TransactionStateType } from '../types'
 
 export function isEIP1559Transaction(receipt: EthereumTransactionConfig) {
     return typeof receipt.maxFeePerGas !== 'undefined' && typeof receipt.maxPriorityFeePerGas !== 'undefined'

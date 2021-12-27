@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     }
 }

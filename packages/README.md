@@ -2,7 +2,7 @@
 
 ## Code
 
-- [maskbook](maskbook)
+- [mask](mask)
 
   The main repo of the extension
 

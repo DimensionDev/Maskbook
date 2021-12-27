@@ -1,7 +1,8 @@
+// @ts-check
 import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material'
-import { MaskLightTheme, applyMaskColorVars, CustomSnackbarProvider } from '@masknet/theme'
-// import { addMaskSharedI18N, fallbackLng } from '@masknet/shared'
+import { MaskLightTheme, applyMaskColorVars, CustomSnackbarProvider, MaskDarkTheme } from '@masknet/theme'
+import { addSharedI18N } from '@masknet/shared'
 import { fallbackLng } from '../../shared-base/src/i18n/fallbackRule'
 // import { withMatrix } from 'storybook-addon-matrix'
 import { addDashboardI18N } from '../src/locales'
@@ -15,7 +16,7 @@ i18n.init({
 })
 i18n.use(initReactI18next)
 addDashboardI18N(i18n)
-// addMaskSharedI18N(i18n)
+addSharedI18N(i18n)
 export const parameters = {
     actions: { argTypesRegex: '^on[A-Z].*' },
 }
@@ -24,7 +25,7 @@ export const decorators = [
     (Story) => (
         <React.Suspense fallback="">
             <StyledEngineProvider injectFirst>
-                <ThemeProvider theme={MaskLightTheme}>
+                <ThemeProvider theme={MaskDarkTheme}>
                     <I18nextProvider i18n={i18n}>
                         <CustomSnackbarProvider>
                             <Story />

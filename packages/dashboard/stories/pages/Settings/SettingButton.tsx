@@ -9,7 +9,7 @@ export default meta({
     title: 'Pages/Settings/Setting Button',
 })
 
-export const SettingButton = of({
+export const SettingButton: any = of({
     args: {
         children: 'Button',
     },

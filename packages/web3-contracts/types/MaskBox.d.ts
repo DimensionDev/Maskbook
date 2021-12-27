@@ -21,6 +21,12 @@ interface EventOptions {
     topics?: string[]
 }
 
+export type CancelSuccess = ContractEventLog<{
+    box_id: string
+    creator: string
+    0: string
+    1: string
+}>
 export type ClaimPayment = ContractEventLog<{
     creator: string
     box_id: string
@@ -70,10 +76,18 @@ export interface MaskBox extends BaseContract {
     constructor(jsonInterface: any[], address?: string, options?: ContractOptions): MaskBox
     clone(): MaskBox
     methods: {
+        addAdmin(addrs: string[]): NonPayableTransactionObject<void>
+
         addNftIntoBox(
             box_id: number | string | BN,
             nft_id_list: (number | string | BN)[],
         ): NonPayableTransactionObject<void>
+
+        addWhitelist(addrs: string[]): NonPayableTransactionObject<void>
+
+        admin(arg0: string): NonPayableTransactionObject<boolean>
+
+        cancelBox(box_id: number | string | BN): NonPayableTransactionObject<void>
 
         claimPayment(box_ids: (number | string | BN)[]): NonPayableTransactionObject<void>
 
@@ -87,29 +101,40 @@ export interface MaskBox extends BaseContract {
             sell_all: boolean,
             nft_id_list: (number | string | BN)[],
             qualification: string,
+            holder_token_addr: string,
+            holder_min_token_amount: number | string | BN,
         ): NonPayableTransactionObject<void>
 
         getBoxInfo(box_id: number | string | BN): NonPayableTransactionObject<{
             creator: string
             nft_address: string
             name: string
-            payment: [string, string, string][]
             personal_limit: string
-            started: boolean
-            expired: boolean
-            remaining: string
-            total: string
             qualification: string
+            holder_token_addr: string
+            holder_min_token_amount: string
             0: string
             1: string
             2: string
-            3: [string, string, string][]
+            3: string
             4: string
-            5: boolean
-            6: boolean
-            7: string
-            8: string
-            9: string
+            5: string
+            6: string
+        }>
+
+        getBoxStatus(box_id: number | string | BN): NonPayableTransactionObject<{
+            payment: [string, string, string][]
+            started: boolean
+            expired: boolean
+            canceled: boolean
+            remaining: string
+            total: string
+            0: [string, string, string][]
+            1: boolean
+            2: boolean
+            3: boolean
+            4: string
+            5: string
         }>
 
         getNftListForSale(
@@ -131,11 +156,18 @@ export interface MaskBox extends BaseContract {
 
         owner(): NonPayableTransactionObject<string>
 
+        removeWhitelist(addrs: string[]): NonPayableTransactionObject<void>
+
         renounceOwnership(): NonPayableTransactionObject<void>
 
         transferOwnership(newOwner: string): NonPayableTransactionObject<void>
+
+        whitelist(arg0: string): NonPayableTransactionObject<boolean>
     }
     events: {
+        CancelSuccess(cb?: Callback<CancelSuccess>): EventEmitter
+        CancelSuccess(options?: EventOptions, cb?: Callback<CancelSuccess>): EventEmitter
+
         ClaimPayment(cb?: Callback<ClaimPayment>): EventEmitter
         ClaimPayment(options?: EventOptions, cb?: Callback<ClaimPayment>): EventEmitter
 
@@ -150,6 +182,9 @@ export interface MaskBox extends BaseContract {
 
         allEvents(options?: EventOptions, cb?: Callback<EventLog>): EventEmitter
     }
+
+    once(event: 'CancelSuccess', cb: Callback<CancelSuccess>): void
+    once(event: 'CancelSuccess', options: EventOptions, cb: Callback<CancelSuccess>): void
 
     once(event: 'ClaimPayment', cb: Callback<ClaimPayment>): void
     once(event: 'ClaimPayment', options: EventOptions, cb: Callback<ClaimPayment>): void

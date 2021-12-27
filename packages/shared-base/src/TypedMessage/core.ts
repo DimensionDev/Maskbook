@@ -66,7 +66,10 @@ export interface TypedMessageTupleSerializable<
 }
 export const isTypedMessageTuple = (x: TypedMessage): x is TypedMessageTuple | TypedMessageTupleSerializable =>
     x.type === 'tuple'
-export const isTypedMessageTupleSerializable = composeEvery(isTypedMessageTuple, isSerializableTypedMessage)
+export const isTypedMessageTupleSerializable: (x: TypedMessage) => x is TypedMessageTupleSerializable = composeEvery(
+    isTypedMessageTuple,
+    isSerializableTypedMessage,
+) as any
 export function makeTypedMessageTuple<T extends readonly TypedMessage[] = readonly TypedMessage[]>(
     items: T,
     meta?: Meta,

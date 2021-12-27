@@ -1,5 +1,5 @@
 <a href="https://mask.io">
-  <img src="https://dimensiondev.github.io/Maskbook-VI/assets/Logo/MB--Logo--Geo--ForceCircle--Blue.svg"
+  <img src="https://raw.githubusercontent.com/DimensionDev/Maskbook-Website/master/img/MB--CircleCanvas--WhiteOverBlue.svg"
        width="200" height="200" title="([I:b])" alt="([I:b])">
 </a>
 
@@ -13,13 +13,11 @@
 [![FOSSA Status][badge-fossa]][fossa]
 [![Crowdin][badge-crowdin]][crowdin]
 
-Mask Network is a portal to the new, open internet.
-With Mask Network, you can send encrypted posts to your friends,
-participate in cryptocurrencies lucky-draws, and share encrypted files on the platforms you are already using.
+Mask Network is a portal to the new, open internet, that bridge from Web2.0 to Web3.0 .
+With Mask Network, you can send encrypted posts to your friends, trade your best token on Twitter, enjoy NFT pfps,
+participate in crypto lucky-draws, and share encrypted files on the platforms you are already using.
 
 For general introductions, see [Mask.io](https://mask.io).
-
-/_I thought what I'd do was, I'd pretend I was one of those deaf-mutes._/
 
 [![FOSSA Status][fossa-status]][fossa]
 
@@ -47,12 +45,6 @@ Please check out [docs](docs)
 ## Work for Mask Network
 
 Please submit your **resume** to `jobs (at) mask.io`
-
-## Donation
-
-Help us by donating us:
-
-- Gitcoin (ETH/ERC20): [Mask Network](https://gitcoin.co/grants/159/mask-networkmaskbook-the-portal-to-the-new-open-i)
 
 [badge-chrome]: https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store
 [badge-ci]: https://img.shields.io/circleci/project/github/DimensionDev/Maskbook.svg?style=flat-square&logo=circleci

@@ -1,4 +1,4 @@
-import { useAccount } from '.'
+import { useAccount } from './useAccount'
 import { useWeb3StateContext } from '../context'
 import { ProviderType } from '../types'
 import { currySameAddress } from '../utils'

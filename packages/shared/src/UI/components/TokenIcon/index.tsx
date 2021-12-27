@@ -11,10 +11,9 @@ import {
     useTokenAssetBaseURLConstants,
 } from '@masknet/web3-shared-evm'
 import { Avatar, AvatarProps } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useImageFailOver } from '../../index'
+import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { useImageFailOver } from '../../hooks'
 import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
-import { useStylesExtends } from '../../UIHelper/custom-ui-helper'
 
 function getFallbackIcons(address: string, baseURIs: string[]) {
     const checkSummedAddress = formatEthereumAddress(address)
@@ -87,7 +86,7 @@ export const TokenIconUI = memo<TokenIconUIProps>((props) => {
 
     return (
         <Avatar className={classes.icon} src={logoURL} {...AvatarProps}>
-            {name?.substr(0, 1).toLocaleUpperCase()}
+            {name?.substr(0, 1).toUpperCase()}
         </Avatar>
     )
 })

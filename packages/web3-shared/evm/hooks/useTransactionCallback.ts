@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import type { PayableTransactionObject, PayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionStateType, useTransactionState } from '.'
-import { TransactionEventType } from '..'
+import { useTransactionState } from './useTransactionState'
+import { TransactionStateType, TransactionEventType } from '../types'
 
 export function useTransactionCallback<T extends unknown>(
     type: TransactionStateType.HASH | TransactionStateType.RECEIPT | TransactionStateType.CONFIRMED,

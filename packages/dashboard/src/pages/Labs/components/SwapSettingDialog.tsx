@@ -9,6 +9,7 @@ import {
     usePolygonNetworkTradeProvider,
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
+    useCeloNetworkTradeProvider,
     useBobaNetworkTradeProvider,
 } from '../../Settings/api'
 
@@ -50,8 +51,10 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const bobaOptions = [
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
-        { label: 'OolongSwap', value: TradeProvider.OOlONGSWAP },
+        { label: 'OolongSwap', value: TradeProvider.OOLONGSWAP },
     ]
+
+    const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
     const t = useDashboardI18N()
 
@@ -60,31 +63,37 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             legend: t.labs_settings_swap_network({ network: 'ETH' }),
             value: useEthereumNetworkTradeProvider(),
             options: ethOptions,
-            onChange: (value: any) => Services.Settings.setEthNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setEthNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'Polygon/Matic' }),
             value: usePolygonNetworkTradeProvider(),
             options: polygonOptions,
-            onChange: (value: any) => Services.Settings.setPolygonNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setPolygonNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'BSC' }),
             value: useBinanceNetworkTradeProvider(),
             options: bscOptions,
-            onChange: (value: any) => Services.Settings.setBinanceNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setBinanceNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'Arbitrum' }),
             value: useArbitrumNetworkTradeProvider(),
             options: arbitrumOptions,
-            onChange: (value: any) => Services.Settings.setArbitrumNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setArbitrumNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'xDai' }),
             value: useXDaiNetworkTradeProvider(),
             options: xDaiOptions,
-            onChange: (value: any) => Services.Settings.setxDaiNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setxDaiNetworkTradeProvider(Number.parseInt(value, 10)),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Celo' }),
+            value: useCeloNetworkTradeProvider(),
+            options: celoOptions,
+            onChange: (value: string) => Services.Settings.setCeloNetworkTradeProvider(Number.parseInt(value, 10)),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'Boba' }),

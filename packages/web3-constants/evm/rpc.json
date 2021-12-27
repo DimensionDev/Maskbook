@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.xdaichain.com/"],
         "Boba": ["https://mainnet.boba.network/"],
-        "Boba_Rinkeby": ["https://rinkeby.boba.network/"]
+        "Boba_Rinkeby": ["https://rinkeby.boba.network/"],
+        "Celo": ["https://forno.celo.org"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": [0, 0, 0, 0],
         "xDai": [0, 0, 0, 0],
         "Boba": [0, 0, 0, 0],
-        "Boba_Rinkeby": [0, 0, 0, 0]
+        "Boba_Rinkeby": [0, 0, 0, 0],
+        "Celo": [0, 0, 0, 0]
     }
 }

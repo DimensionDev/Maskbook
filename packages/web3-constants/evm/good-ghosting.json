@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Boba": "",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Celo": ""
     }
 }

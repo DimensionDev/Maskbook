@@ -27,5 +27,3 @@ export function useChainIdMatched(chainId?: ChainId) {
     if (!chainId) return false
     return chainDetailed?.chainId === chainId
 }
-
-export const useChainIDAvailable = useChainId

@@ -1,0 +1,6 @@
+export const RaribleURL = 'https://api.rarible.com/'
+export const RaribleChainURL = 'https://ethereum-api.rarible.org/'
+export const RaribleIPFSURL = 'https://ipfs.rarible.com/ipfs/'
+export const RaribleUserURL = 'https://rarible.com/user/'
+export const RaribleRopstenUserURL = 'https://ropsten.rarible.com/user/'
+export const RaribleMainnetURL = 'https://api-mainnet.rarible.com/marketplace/api/v4/'

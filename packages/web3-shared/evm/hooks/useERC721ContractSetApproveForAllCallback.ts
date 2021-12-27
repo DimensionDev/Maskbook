@@ -1,13 +1,10 @@
 import { useCallback } from 'react'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import {
-    useAccount,
-    useTransactionState,
-    useERC721TokenContract,
-    TransactionStateType,
-    TransactionEventType,
-    useChainId,
-} from '../index'
+import { useAccount } from './useAccount'
+import { useTransactionState } from './useTransactionState'
+import { useERC721TokenContract } from '../contracts'
+import { TransactionStateType, TransactionEventType } from '../types'
+import { useChainId } from './useChainId'
 
 /**
  * @param contractAddress NFT contract Address.

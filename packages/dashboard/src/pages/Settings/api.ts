@@ -6,7 +6,7 @@ export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Me
 
 export const [useTrendingDataSource] = createGlobalState<DataProvider>(
     Services.Settings.getTrendingDataSource,
-    Messages.events.currentTrendingDataProviderSettings.on,
+    Messages.events.currentDataProviderSettings.on,
 )
 
 export const [useEthereumNetworkTradeProvider] = createGlobalState(
@@ -36,7 +36,12 @@ export const [useXDaiNetworkTradeProvider] = createGlobalState(
 
 export const [useBobaNetworkTradeProvider] = createGlobalState(
     Services.Settings.getBobaNetworkTradeProvider,
-    Messages.events.xdaiNetworkTradeProviderSettings.on,
+    Messages.events.bobaNetworkTradeProviderSettings.on,
+)
+
+export const [useCeloNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getCeloNetworkTradeProvider,
+    Messages.events.celoNetworkTradeProviderSettings.on,
 )
 
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'

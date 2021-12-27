@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { NetworkType } from '@masknet/web3-shared-evm'
-import { useStylesExtends } from '../..'
+import { useStylesExtends } from '@masknet/theme'
 
 const useStyles = makeStyles()({
     icon: {
@@ -21,6 +21,7 @@ const icons: Record<NetworkType, string> = {
     [NetworkType.Arbitrum]: new URL('./wallet-network-icon/arbitrum.png', import.meta.url).toString(),
     [NetworkType.xDai]: new URL('./wallet-network-icon/xdai.png', import.meta.url).toString(),
     [NetworkType.Boba]: new URL('./wallet-network-icon/boba.png', import.meta.url).toString(),
+    [NetworkType.Celo]: new URL('./wallet-network-icon/celo.png', import.meta.url).toString(),
 }
 
 export function NetworkIcon(props: NetworkIconProps) {

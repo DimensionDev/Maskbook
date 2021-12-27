@@ -12,6 +12,7 @@ import type {
 } from '@masknet/web3-shared-evm'
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
 import { PLUGIN_IDENTIFIER } from './constants'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export type TransactionDialogEvent =
     | {
@@ -47,6 +48,7 @@ export type ConnectWalletDialogEvent =
       }
     | {
           open: false
+          result: boolean
       }
 
 export type SelectWalletDialogEvent =
@@ -87,6 +89,10 @@ export type WalletRiskWarningDialogEvent =
           type: 'cancel' | 'confirm'
       }
 
+export type RestoreLegacyWalletDialogEvent = {
+    open: boolean
+}
+
 export type WalletConnectQRCodeDialogEvent =
     | {
           open: true
@@ -100,9 +106,10 @@ export type SelectTokenDialogEvent =
     | {
           open: true
           uuid: string
+          chainId?: ChainId
           disableNativeToken?: boolean
           disableSearchBar?: boolean
-          FixedTokenListProps?: {
+          FungibleTokenListProps?: {
               keyword?: string
               whitelist?: string[]
               blacklist?: string[]
@@ -118,20 +125,6 @@ export type SelectTokenDialogEvent =
            * The selected detailed token.
            */
           token?: FungibleTokenDetailed
-      }
-export type SelectERC20TokenDialogEvent =
-    | {
-          open: true
-          props?: {
-              whitelist?: string[]
-              blacklist?: string[]
-              tokens?: FungibleTokenDetailed[]
-              selectedTokens?: string[]
-              onSelect?(token: FungibleTokenDetailed | null): void
-          }
-      }
-    | {
-          open: false
       }
 
 export type SelectNftContractDialogEvent = {
@@ -204,10 +197,11 @@ export interface WalletMessage {
      * Wallet Risk Warning dialog
      */
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
+
     /**
-     * Select token dialog
+     * Restore Legacy Wallet Dialog
      */
-    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
+    restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void
@@ -224,6 +218,7 @@ export interface WalletMessage {
     erc1155TokensUpdated: void
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
+
     rpc: unknown
 }
 

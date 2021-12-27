@@ -5,14 +5,15 @@ import {
     Body,
     ColumnContentLayout,
     Footer,
+    PersonaLogoBox,
     SignUpAccountLogo,
 } from '../../../components/RegisterFrame/ColumnContentLayout'
-import { RoutePaths } from '../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { Header } from '../../../components/RegisterFrame/ColumnContentHeader'
 import { Box, Typography } from '@mui/material'
 import { useDashboardI18N } from '../../../locales'
 import { SignUpRoutePath } from '../routePath'
-import { delay } from '@masknet/shared'
+import { delay } from '@masknet/shared-base'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2'
 import { Services } from '../../../API'
 import { ButtonContainer } from '../../../components/RegisterFrame/ButtonContainer'
@@ -44,7 +45,7 @@ export const PersonaCreate = () => {
             (!state?.mnemonic || !Services.Identity.validateMnemonic(state?.mnemonic.join(' '))) &&
             !state?.privateKey
         ) {
-            navigate(RoutePaths.SignUp, { replace: true })
+            navigate(DashboardRoutes.SignUp, { replace: true })
         }
     }, [state?.mnemonic, state?.privateKey])
 
@@ -58,7 +59,7 @@ export const PersonaCreate = () => {
             showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
 
             await delay(300)
-            navigate(`${RoutePaths.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
+            navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
         } catch (error) {
             setError((error as Error).message)
         }
@@ -69,10 +70,12 @@ export const PersonaCreate = () => {
             <Header
                 title={t.create_account_persona_title()}
                 subtitle={t.create_account_persona_subtitle()}
-                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(RoutePaths.SignIn) }}
+                action={{ name: t.create_account_sign_in_button(), callback: () => navigate(DashboardRoutes.SignIn) }}
             />
             <Body>
-                <SignUpAccountLogo />
+                <PersonaLogoBox>
+                    <SignUpAccountLogo />
+                </PersonaLogoBox>
                 <Box>
                     <MaskTextField
                         required

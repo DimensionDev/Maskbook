@@ -1,6 +1,6 @@
 import type { Asset } from '../types'
 import { useChainId } from './useChainId'
-import { uniqBy } from 'lodash-es'
+import { uniqBy } from 'lodash-unified'
 import { formatEthereumAddress, makeSortAssertFn } from '../utils'
 import { useTokenConstants } from '../constants'
 

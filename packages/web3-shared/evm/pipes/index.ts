@@ -1,3 +1,4 @@
+import urlcat from 'urlcat'
 import { unreachable } from '@dimensiondev/kit'
 import {
     ChainId,
@@ -5,21 +6,55 @@ import {
     ERC721Token,
     NativeToken,
     NetworkType,
-    ERC721TokenDetailed,
     ProviderType,
-    CollectibleProvider,
+    NonFungibleAssetProvider,
+    ERC721TokenDetailed,
 } from '../types'
 import { getChainDetailed, createLookupTableResolver } from '../utils'
-import urlcat from 'urlcat'
 
 export const resolveProviderName = createLookupTableResolver<ProviderType, string>(
     {
-        [ProviderType.MaskWallet]: 'Mask',
+        [ProviderType.MaskWallet]: 'Mask Network',
         [ProviderType.MetaMask]: 'MetaMask',
         [ProviderType.WalletConnect]: 'WalletConnect',
         [ProviderType.CustomNetwork]: 'CustomNetwork',
+        [ProviderType.Coin98]: 'Coin98',
+        [ProviderType.WalletLink]: 'Coinbase',
+        [ProviderType.MathWallet]: 'MathWallet',
+        [ProviderType.Fortmatic]: 'Fortmatic',
     },
     'Unknown Network',
+)
+
+export const resolveProviderDownloadLink = createLookupTableResolver<ProviderType, string>(
+    {
+        [ProviderType.MaskWallet]: 'https://mask.io/download-links',
+        [ProviderType.MetaMask]: 'https://metamask.io/download.html',
+        [ProviderType.WalletConnect]: '',
+        [ProviderType.Coin98]: 'https://coin98insights.com/introduction-to-coin98-wallet-extension',
+        [ProviderType.WalletLink]: 'https://wallet.coinbase.com/',
+        [ProviderType.MathWallet]: 'https://mathwallet.org/en-us/#extension',
+        [ProviderType.Fortmatic]: '',
+        [ProviderType.CustomNetwork]: '',
+    },
+    '',
+)
+
+export const resolveProviderInjectedKey = createLookupTableResolver<
+    ProviderType,
+    'isMaskWallet' | 'isMetaMask' | 'isMathWallet' | 'isCoin98' | 'isWalletLink' | ''
+>(
+    {
+        [ProviderType.MaskWallet]: 'isMaskWallet',
+        [ProviderType.MetaMask]: 'isMetaMask',
+        [ProviderType.WalletConnect]: '',
+        [ProviderType.MathWallet]: 'isMathWallet',
+        [ProviderType.Coin98]: 'isCoin98',
+        [ProviderType.WalletLink]: 'isWalletLink',
+        [ProviderType.Fortmatic]: '',
+        [ProviderType.CustomNetwork]: '',
+    },
+    '',
 )
 
 export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType, string>(
@@ -30,18 +65,20 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Arbitrum]: 'arbitrum',
         [NetworkType.xDai]: 'xdai',
         [NetworkType.Boba]: 'boba',
+        [NetworkType.Celo]: 'celo',
     },
     'ethereum',
 )
 
 export const resolveNetworkName = createLookupTableResolver<NetworkType, string>(
     {
+        [NetworkType.Ethereum]: 'Ethereum',
         [NetworkType.Binance]: 'Binance Smart Chain',
         [NetworkType.Polygon]: 'Polygon',
-        [NetworkType.Ethereum]: 'Ethereum',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
         [NetworkType.Boba]: 'Boba',
+        [NetworkType.Celo]: 'Celo',
     },
     'Unknown',
 )
@@ -72,6 +109,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.xDai]: 'rgb(73, 169, 166)',
         [ChainId.Boba]: 'rgb(204, 255, 0)',
         [ChainId.Boba_Rinkeby]: 'rgb(204, 255, 0)',
+        [ChainId.Celo]: 'rgb(53, 208, 127)',
     },
     'rgb(214, 217, 220)',
 )
@@ -102,9 +140,14 @@ export function resolveIPFSLink(ipfs: string): string {
     return urlcat('https://ipfs.fleek.co/ipfs/:ipfs', { ipfs })
 }
 
-export function resolveCollectibleProviderLink(chainId: ChainId, provider: CollectibleProvider) {
+export function resolveDomainLink(domain?: string) {
+    if (!domain) return ''
+    return urlcat('https://app.ens.domains/name/:domain/details', { domain })
+}
+
+export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFungibleAssetProvider) {
     switch (provider) {
-        case CollectibleProvider.OPENSEA:
+        case NonFungibleAssetProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
             return `https://opensea.io`
         default:
@@ -112,9 +155,9 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: Colle
     }
 }
 
-export function resolveCollectibleAssetLink(chainId: ChainId, provider: CollectibleProvider) {
+export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungibleAssetProvider) {
     switch (provider) {
-        case CollectibleProvider.OPENSEA:
+        case NonFungibleAssetProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io/assets`
             if (chainId === ChainId.Matic) return `https://opensea.io/assets/matic`
             return `https://opensea.io/assets`
@@ -125,11 +168,11 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: Collecti
 
 export function resolveCollectibleLink(
     chainId: ChainId,
-    provider: CollectibleProvider,
+    provider: NonFungibleAssetProvider,
     { contractDetailed: { address }, tokenId }: ERC721TokenDetailed,
 ) {
     switch (provider) {
-        case CollectibleProvider.OPENSEA:
+        case NonFungibleAssetProvider.OPENSEA:
             return urlcat(resolveCollectibleAssetLink(chainId, provider), '/:address/:tokenId', {
                 address,
                 tokenId,
