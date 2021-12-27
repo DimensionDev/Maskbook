@@ -1,5 +1,6 @@
-export * from './type'
 import { hasNativeAPI } from '../../../shared/native-rpc'
+
+export * from './type'
 
 export const { createPostDB, updatePostDB, queryPostDB, queryPostsDB, queryPostPagedDB, PostDBAccess } = new Proxy(
     {} as any as typeof import('./web'),

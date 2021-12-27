@@ -11,7 +11,8 @@ import {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, PrototypeLess, restorePrototype, restorePrototypeArray } from '../../../utils-pure'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
+import { PrototypeLess, restorePrototype, restorePrototypeArray } from '@masknet/utils'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 import type {
     RecipientReason,

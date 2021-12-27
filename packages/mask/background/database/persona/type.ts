@@ -1,6 +1,5 @@
-import type { IDBPSafeTransaction } from '../utils/openDB'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { PrototypeLess } from '../../../utils-pure'
+import type { PrototypeLess } from '@masknet/utils'
 import type {
     PersonaIdentifier,
     AESJsonWebKey,
@@ -10,6 +9,7 @@ import type {
     ProfileIdentifier,
     RelationFavor,
 } from '@masknet/shared-base'
+import type { IDBPSafeTransaction } from '../utils/openDB'
 
 export type FullPersonaDBTransaction<Mode extends 'readonly' | 'readwrite'> = IDBPSafeTransaction<
     PersonaDB,

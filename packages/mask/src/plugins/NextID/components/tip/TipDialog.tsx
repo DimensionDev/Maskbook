@@ -1,6 +1,6 @@
 import { PluginId, useActivatedPlugin, usePluginIDContext } from '@masknet/plugin-infra'
 import { makeStyles } from '@masknet/theme'
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/utils'
 import { DialogContent } from '@mui/material'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'

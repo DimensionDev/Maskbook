@@ -1,0 +1,10 @@
+{
+  "name": "@masknet/utils",
+  "description": "This is a utility package. It should not have side effect when imported or depends on some environment-specific library like React or @emotion.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "sideEffect": false,
+  "dependencies": {
+    "lodash-unified": "1.0.1"
+  }
+}

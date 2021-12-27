@@ -6,9 +6,9 @@
  */
 export interface OnDemandWorker extends Worker {
     /**
-     * How many million seconds after no activity should the internal worker be terminated?
+     * How many milliseconds after no activity should the internal worker be terminated?
      *
-     * @default 15 minute
+     * @default 15 minutes
      */
     inactiveTimeToTerminate: number
     /**

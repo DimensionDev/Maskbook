@@ -7,7 +7,7 @@ import type {
     ProfileIdentifier,
 } from '@masknet/shared-base'
 import type { DBSchema } from 'idb/with-async-ittr'
-import type { PrototypeLess } from '../../../utils-pure'
+import type { PrototypeLess } from '@masknet/utils'
 import type { IDBPSafeTransaction } from '../utils/openDB'
 
 export type RecipientReason = (

@@ -10,7 +10,7 @@ import { useGetTradeContext } from '../useGetTradeContext'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { numberToHex } from 'web3-utils'
 import { useTargetBlockNumber } from '../useTargetBlockNumber'
-import { EMPTY_LIST } from '../../../../../utils-pure'
+import { EMPTY_LIST } from '@masknet/utils'
 
 export enum PairState {
     NOT_EXISTS = 0,

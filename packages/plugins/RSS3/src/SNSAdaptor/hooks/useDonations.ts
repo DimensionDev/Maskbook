@@ -1,4 +1,4 @@
-import { EMPTY_LIST } from '@masknet/web3-shared-evm'
+import { EMPTY_LIST } from '@masknet/utils'
 import { useAsync } from 'react-use'
 import { PluginProfileRPC } from '../../messages'
 

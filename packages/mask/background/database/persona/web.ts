@@ -1,6 +1,7 @@
 import Fuse from 'fuse.js'
 import { openDB } from 'idb/with-async-ittr'
-import { CryptoKeyToJsonWebKey, restorePrototype } from '../../../utils-pure'
+import { restorePrototype } from '@masknet/utils'
+import { CryptoKeyToJsonWebKey } from '../../../utils-pure'
 import { createDBAccessWithAsyncUpgrade, createTransaction } from '../utils/openDB'
 import { assertPersonaDBConsistency } from './consistency'
 import {
