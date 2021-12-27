@@ -53,7 +53,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
                 horizontal: 'left',
             },
             transformOrigin: {
-                vertical: 'bottom',
+                vertical: 'top',
                 horizontal: 'left',
             },
         },
