@@ -213,7 +213,7 @@ export function CollectionList({ address }: { address: string }) {
         retry: retryFetchCollectible,
     } = useCollectibles(address, chainId)
 
-    if (!collections.length && loadingCollectibleDone)
+    if (collections && !collections.length && loadingCollectibleDone)
         return (
             <Box display="flex" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>

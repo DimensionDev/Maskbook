@@ -6,7 +6,7 @@ export interface NonFungibleTokenAssetArgs extends ProducerArgBase {
     address: string
 }
 
-const nonFungibleTokenAsset = async (
+const nonFungibleCollectableAsset = async (
     push: ProducerPushFunction<ERC721TokenDetailed>,
     getKeys: ProducerKeyFunction,
     args: NonFungibleTokenAssetArgs,
@@ -24,7 +24,7 @@ const nonFungibleTokenAsset = async (
 
 const producer: RPCMethodRegistrationValue<ERC721TokenDetailed, NonFungibleTokenAssetArgs> = {
     method: 'mask.fetchNonFungibleTokenAsset',
-    producer: nonFungibleTokenAsset,
+    producer: nonFungibleCollectableAsset,
     distinctBy: (item) => `${item.tokenId}_${item.contractDetailed.address}`,
 }
 

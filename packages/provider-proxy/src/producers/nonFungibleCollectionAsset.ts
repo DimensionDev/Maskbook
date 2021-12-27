@@ -6,7 +6,7 @@ interface NonFungibleCollectibleAssetArgs extends ProducerArgBase {
     address: string
 }
 
-const nonFungibleCollectibleAsset = async (
+const nonFungibleCollectionAsset = async (
     push: ProducerPushFunction<Collection>,
     getKeys: ProducerKeyFunction,
     args: NonFungibleCollectibleAssetArgs,
@@ -20,9 +20,10 @@ const nonFungibleCollectibleAsset = async (
     await push(collectFromOpenSea)
 }
 
+// TODO: rename method name
 const producer: RPCMethodRegistrationValue<Collection, NonFungibleCollectibleAssetArgs> = {
     method: 'mask.fetchNonFungibleCollectibleAsset',
-    producer: nonFungibleCollectibleAsset,
+    producer: nonFungibleCollectionAsset,
     distinctBy: (item) => item.name,
 }
 

@@ -7,7 +7,9 @@ export interface MessageBase {
 
 export interface RequestMessage extends MessageBase {
     method: string
-    params: unknown
+    params: {
+        pageSize: number
+    } & any
     notify: NotifyFn
 }
 
@@ -28,7 +30,7 @@ export interface SocketPoolItem<T extends unknown = unknown> {
 export type OutMessageEvent = { id: string; done: boolean; error?: unknown }
 export type NotifyFn = (event: OutMessageEvent) => void
 
-const POOL_CACHE_EXPIRE_TIME = 10
+const POOL_CACHE_EXPIRE_TIME = 30
 
 export class ProviderProxy {
     private readonly _socket: WebSocket
@@ -91,18 +93,18 @@ export class ProviderProxy {
      * Send async request to proxy websocket, Avoid use this method
      * @param message
      */
-    async sendAsync<T>(message: RequestMessage) {
+    async sendAsync<T>(message: Omit<RequestMessage, 'notify'>) {
         this.clearPool()
         const cache = this._pool.get(message.id)
         if (cache && !this.isExpired(cache!)) return this.getResult<T>(message.id) ?? []
 
         const innerMessagePromise = () =>
             new Promise<OutMessageEvent>((resolve, reject) => {
-                message.notify = (info: OutMessageEvent) => {
+                ;(message as RequestMessage).notify = (info: OutMessageEvent) => {
                     if (info.done) resolve(info)
                     if (info.error) reject(info)
                 }
-                this.send(message)
+                this.send(message as RequestMessage)
             })
         await innerMessagePromise()
 
