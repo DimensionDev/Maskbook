@@ -7,12 +7,12 @@ import {
     EthereumMethodType,
     getChainDetailedCAIP,
     ZERO_ADDRESS,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { getCode } from '../network'
 import { readABI } from './abi'
-import { isZeroAddress } from 'ethereumjs-util'
 
 // fix the type error
 const coder = ABICoder as unknown as ABICoder.AbiCoder
