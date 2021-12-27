@@ -5,31 +5,31 @@ import { isSameAddress } from '../utils'
 import { useSocket } from './useSocket'
 
 export function useCollections(address: string, chainId: ChainId | null) {
-    const id = `mask.fetchNonFungibleCollectibleAsset_${address}_${chainId}`
+    const id = `mask.fetchNonFungibleCollectionAsset_${address}_${chainId}`
     const message = {
         id,
-        method: 'mask.fetchNonFungibleCollectibleAsset',
+        method: 'mask.fetchNonFungibleCollectionAsset',
         params: {
             address: address,
-            pageSize: 100,
+            pageSize: 200,
         },
     }
     return useSocket<ERC721TokenCollectionInfo>(message)
 }
 
-export function useCollectibles(address: string, chainId: ChainId | null) {
+export function useCollectibles(address: string, chainId: ChainId | null, dependReady?: boolean) {
     const { erc721Tokens } = useWeb3Context()
-    const id = `mask.fetchNonFungibleTokenAsset_${address}_${chainId}`
+    const id = `mask.fetchNonFungibleCollectibleAsset_${address}_${chainId}`
     const message = {
-        id,
-        method: 'mask.fetchNonFungibleTokenAsset',
+        id: dependReady === undefined ? id : dependReady ? id : '',
+        method: 'mask.fetchNonFungibleCollectibleAsset',
         params: {
             address: address,
-            pageSize: 50,
+            pageSize: 30,
         },
     }
 
-    const { data, done, error, retry } = useSocket<ERC721TokenDetailed>(message)
+    const { data, state, error, retry } = useSocket<ERC721TokenDetailed>(message)
     const all = uniqWith(
         [
             ...(data ?? []),
@@ -39,7 +39,7 @@ export function useCollectibles(address: string, chainId: ChainId | null) {
     )
     return {
         data: all as ERC721TokenDetailed[],
-        done,
+        state,
         error,
         retry,
     }

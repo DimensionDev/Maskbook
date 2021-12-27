@@ -165,10 +165,10 @@ export const getNonFungibleTokenFn =
             tokenInDb = fromChain.filter(Boolean) as any[]
         }
 
-        const socketId = `mask.fetchNonFungibleCollectableAsset_${address}`
+        const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}`
         let tokenFromProvider = await socket.sendAsync<ERC721TokenDetailed>({
             id: socketId,
-            method: 'mask.fetchNonFungibleTokenAsset',
+            method: 'mask.fetchNonFungibleCollectibleAsset',
             params: { address, pageSize: 40 },
         })
 

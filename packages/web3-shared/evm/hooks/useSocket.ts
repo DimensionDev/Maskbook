@@ -7,26 +7,41 @@ import { useState } from 'react'
 
 type SocketMessage = Omit<RequestMessage, 'notify'>
 
+export enum SocketState {
+    init = 'init',
+    sent = 'sent',
+    receiving = 'receiving',
+    done = 'done',
+}
+
 export const useSocket = <T>(message: SocketMessage) => {
     const { providerSocket } = useWeb3Context()
-    const [count, setCount] = useState(0)
-    const [done, setDone] = useState(false)
+    const [data, setData] = useState<T[]>([])
+    const [state, setState] = useState(SocketState.init)
     const [error, setError] = useState<unknown>()
     const [id] = useState(uuid())
+    const { value: socket } = useAsyncRetry(() => providerSocket, [])
 
-    const notifyUpdated: NotifyFn = (info) => {
-        setDone(info.done)
-        setError(info.error)
-        setCount((prov) => prov + 1)
-    }
-
-    const { value, retry } = useAsyncRetry(async () => {
-        const socket = await providerSocket
+    const { retry } = useAsyncRetry(async () => {
+        if (!socket || !message.id) return
         const requestId = `${message.id}_${id}`
+        const notifyUpdatedHook: NotifyFn = (info) => {
+            if (!info.done) {
+                setState(SocketState.receiving)
+            } else {
+                setState(SocketState.done)
+            }
+            setError(info.error)
+            if (!socket) return
+            const requestId = `${message.id}_${id}`
+            setData(socket.getResult<T>(requestId))
+        }
 
-        socket.send({ ...message, notify: notifyUpdated, id: requestId })
-        return socket.getResult<T>(requestId)
-    }, [count, message.id])
+        socket.send({ ...message, notify: notifyUpdatedHook, id: requestId })
+        // Get data from cache
+        setData(socket.getResult<T>(requestId))
+        setState(SocketState.sent)
+    }, [message.id, socket])
 
-    return { data: value, done, error, retry }
+    return { data: data ?? [], state, error, retry }
 }

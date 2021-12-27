@@ -131,10 +131,10 @@ export class ProviderProxy {
     isExpired(item: SocketPoolItem) {
         const now = new Date()
         // lasted update time > 30s
-        if (!!item.updatedAt && differenceInSeconds(now, item.updatedAt) > POOL_CACHE_EXPIRE_TIME) return true
+        return !!item.updatedAt && differenceInSeconds(now, item.updatedAt) > POOL_CACHE_EXPIRE_TIME
 
         // lasted pick time > 30s
-        return !!item.pickedAt && differenceInSeconds(now, item.pickedAt) > POOL_CACHE_EXPIRE_TIME
+        // return !!item.pickedAt && differenceInSeconds(now, item.pickedAt) > POOL_CACHE_EXPIRE_TIME
     }
 
     private clearPool() {
@@ -156,7 +156,7 @@ export class ProviderProxy {
 
 const SOCKET_POINT =
     process.env.NODE_ENV === 'development'
-        ? 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
+        ? 'wss://hyper-proxy-development.laanfor.workers.dev'
         : 'wss://hyper-proxy.r2d2.to'
 
 enum SocketState {

@@ -2,8 +2,9 @@ import { createContext, useEffect, useState } from 'react'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
-    NonFungibleAssetProvider,
     ERC721TokenDetailed,
+    NonFungibleAssetProvider,
+    SocketState,
     useCollectibles,
     useCollections,
     Wallet,
@@ -121,30 +122,28 @@ function CollectibleListUI(props: CollectibleListUIProps) {
 
     useEffect(() => WalletMessages.events.erc721TokensUpdated.on(collectiblesRetry))
 
-    if (loading)
-        return (
-            <Box className={classes.root}>
-                {Array.from({ length: 3 })
-                    .fill(0)
-                    .map((_, i) => (
-                        <Box className={classes.card} display="flex" flexDirection="column" key={i}>
-                            <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
-                            <Skeleton
-                                animation="wave"
-                                variant="text"
-                                width={172}
-                                height={20}
-                                style={{ marginTop: 4 }}
-                            />
-                        </Box>
-                    ))}
-            </Box>
-        )
-
     return (
         <CollectibleContext.Provider value={{ collectiblesRetry }}>
             <Box className={classes.container}>
-                {error || collectibles.length === 0 ? (
+                {loading && (
+                    <Box className={classes.root}>
+                        {Array.from({ length: 3 })
+                            .fill(0)
+                            .map((_, i) => (
+                                <Box className={classes.card} display="flex" flexDirection="column" key={i}>
+                                    <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
+                                    <Skeleton
+                                        animation="wave"
+                                        variant="text"
+                                        width={172}
+                                        height={20}
+                                        style={{ marginTop: 4 }}
+                                    />
+                                </Box>
+                            ))}
+                    </Box>
+                )}
+                {error || (collectibles.length === 0 && !loading) ? (
                     <Box className={classes.text}>
                         <Typography color="textSecondary">{t('dashboard_no_collectible_found')}</Typography>
                         {hasRetry ? (
@@ -206,14 +205,41 @@ export function CollectionList({ address }: { address: string }) {
     const { classes } = useStyles()
     const [counts, setCounts] = useState<number[]>([])
 
-    const { data: collections, retry: retryFetchCollection } = useCollections(address, chainId)
+    const {
+        data: collections,
+        retry: retryFetchCollection,
+        state: loadingCollectionDone,
+    } = useCollections(address, chainId)
     const {
         data: collectibles,
-        done: loadingCollectibleDone,
+        state: loadingCollectibleDone,
         retry: retryFetchCollectible,
-    } = useCollectibles(address, chainId)
+    } = useCollectibles(address, chainId, !!collections.length)
 
-    if (collections && !collections.length && loadingCollectibleDone)
+    const isLoading = loadingCollectibleDone !== SocketState.done || loadingCollectionDone !== SocketState.done
+
+    if (loadingCollectionDone !== SocketState.done) {
+        return (
+            <Box className={classes.root}>
+                {Array.from({ length: 3 })
+                    .fill(0)
+                    .map((_, i) => (
+                        <Box className={classes.card} display="flex" flexDirection="column" key={i}>
+                            <Skeleton animation="wave" variant="rectangular" width={172} height={172} />
+                            <Skeleton
+                                animation="wave"
+                                variant="text"
+                                width={172}
+                                height={20}
+                                style={{ marginTop: 4 }}
+                            />
+                        </Box>
+                    ))}
+            </Box>
+        )
+    }
+
+    if (!isLoading && !collections.length)
         return (
             <Box display="flex" alignItems="center" justifyContent="center">
                 <Typography color="textPrimary" sx={{ paddingTop: 4, paddingBottom: 4 }}>
@@ -251,7 +277,7 @@ export function CollectionList({ address }: { address: string }) {
                             retryFetchCollection()
                         }}
                         collectibles={collectibles.filter((c) => c.collection?.slug === x.slug)}
-                        loading={loadingCollectibleDone ? false : collectibles.length === 0}
+                        loading={isLoading}
                     />
                 </Box>
             ))}

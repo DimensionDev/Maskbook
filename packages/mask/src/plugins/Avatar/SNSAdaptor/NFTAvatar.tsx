@@ -3,7 +3,7 @@ import { uniqBy } from 'lodash-unified'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SocketState } from '@masknet/web3-shared-evm'
 import {
     ERC721TokenDetailed,
     formatEthereumAddress,
@@ -94,7 +94,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
     const [open_, setOpen_] = useState(false)
     const [collectibles_, setCollectibles_] = useState<ERC721TokenDetailed[]>([])
     const { t } = useI18N()
-    const { data: collectibles, error, retry, done } = useCollectibles(account, ChainId.Mainnet)
+    const { data: collectibles, error, retry, state } = useCollectibles(account, ChainId.Mainnet)
 
     const onClick = useCallback(async () => {
         if (!selectedToken) return
@@ -146,7 +146,7 @@ export function NFTAvatar(props: NFTAvatarProps) {
                 <EthereumChainBoundary chainId={chainId}>
                     <Box className={classes.galleryItem}>
                         <Box className={classes.gallery}>
-                            {!done && collectibles.length === 0
+                            {state !== SocketState.done && collectibles.length === 0
                                 ? LoadStatus
                                 : error || (collectibles.length === 0 && collectibles_.length === 0)
                                 ? Retry

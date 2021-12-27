@@ -27,7 +27,7 @@ export function createERC721Token(
 
 export function format(address: string, size: number, assets: Asset[]) {
     return {
-        assets: assets
+        data: assets
             .filter(
                 (x) =>
                     ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||

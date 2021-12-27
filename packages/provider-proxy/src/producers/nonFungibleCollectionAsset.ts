@@ -14,15 +14,15 @@ const nonFungibleCollectionAsset = async (
     const { address } = args
     const openSeaApiKey = await getKeys('opensea')
 
-    const collectFromOpenSea = await collectAllPageDate<Collection>(() =>
-        getOpenSeaCollectionList(openSeaApiKey, address),
+    const collectFromOpenSea = await collectAllPageDate<Collection>((page: number) =>
+        getOpenSeaCollectionList(openSeaApiKey, address, page, 50),
     )
     await push(collectFromOpenSea)
 }
 
 // TODO: rename method name
 const producer: RPCMethodRegistrationValue<Collection, NonFungibleCollectibleAssetArgs> = {
-    method: 'mask.fetchNonFungibleCollectibleAsset',
+    method: 'mask.fetchNonFungibleCollectionAsset',
     producer: nonFungibleCollectionAsset,
     distinctBy: (item) => item.name,
 }
