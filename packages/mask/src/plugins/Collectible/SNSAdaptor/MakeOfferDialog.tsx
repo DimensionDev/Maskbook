@@ -26,7 +26,6 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
-import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import type { useAsset } from '../hooks/useAsset'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
@@ -37,6 +36,7 @@ import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
 import { rightShift, ZERO } from '@masknet/web3-shared-base/utils/number'
 import type { Coin } from '../../Trader/types'
+import { SelectTokenListPanel } from './SelectTokenListPanel'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -163,7 +163,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                 <UnreviewedWarning />
                             </Box>
                         )}
-                        <SelectTokenAmountPanel
+                        <SelectTokenListPanel
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
