@@ -16,7 +16,7 @@ export interface PayloadMessage<T extends unknown = unknown> extends MessageBase
     results?: T[]
 }
 
-export interface PoolItem<T extends unknown = unknown> {
+export interface SocketPoolItem<T extends unknown = unknown> {
     createdAt: Date
     notify: NotifyFn
     data: T[]
@@ -32,12 +32,12 @@ const POOL_CACHE_EXPIRE_TIME = 10
 
 export class ProviderProxy {
     private readonly _socket: WebSocket
-    private readonly _pool: Map<string, PoolItem>
+    private readonly _pool: Map<string, SocketPoolItem>
     private readonly _globalNotify: NotifyFn
 
     constructor(point: string, notifyFn: NotifyFn) {
         this._socket = new WebSocket(point)
-        this._pool = new Map<string, PoolItem>()
+        this._pool = new Map<string, SocketPoolItem>()
         this._globalNotify = notifyFn
     }
 
@@ -126,7 +126,7 @@ export class ProviderProxy {
      * @param item cache item
      * @returns boolean
      */
-    isExpired(item: PoolItem) {
+    isExpired(item: SocketPoolItem) {
         const now = new Date()
         // lasted update time > 30s
         if (!!item.updatedAt && differenceInSeconds(now, item.updatedAt) > POOL_CACHE_EXPIRE_TIME) return true
@@ -164,6 +164,10 @@ enum SocketState {
     CLOSED = 3,
 }
 
+/**
+ * Provider a ProxySocket instance
+ * @returns a function to operate socket instance
+ */
 function getProxyWebsocketInstanceWrapper(): (notify: NotifyFn) => Promise<ProviderProxy> {
     let cachedInstance: ProviderProxy
 
@@ -196,8 +200,15 @@ function getProxyWebsocketInstanceWrapper(): (notify: NotifyFn) => Promise<Provi
     }
 }
 
-export const getWebSocketInstance = async (point: string) => {
-    const socket = new WebSocket(point)
+export const getProxyWebsocketInstance = getProxyWebsocketInstanceWrapper()
+
+/**
+ * Provide a websocket instance for once, avoid use it.
+ * @param endPoint websocket endpoint
+ * @returns websocket instance
+ */
+export const getWebSocketInstance = async (endPoint: string) => {
+    const socket = new WebSocket(endPoint)
     const waitingOpen = () => {
         return new Promise<void>((resolve, reject) => {
             socket.addEventListener('open', () => resolve())
@@ -208,10 +219,16 @@ export const getWebSocketInstance = async (point: string) => {
     return socket
 }
 
-export const sendMessageToProxy = async <T>(message: RequestMessage) => {
+/**
+ * Provide a websocket instance for once, avoid use it.
+ * @param message endPoint
+ * @param [endPoint = SOCKET_POINT] endPoint
+ * @returns promise of request
+ */
+export const sendMessageToProxy = async <T>(message: RequestMessage, endPoint?: string) => {
     let data: T[] = []
 
-    const socket = await getWebSocketInstance(SOCKET_POINT)
+    const socket = await getWebSocketInstance(SOCKET_POINT ?? endPoint)
 
     const sendPromise = () =>
         new Promise<T[]>((resolve, reject) => {
@@ -232,5 +249,3 @@ export const sendMessageToProxy = async <T>(message: RequestMessage) => {
 
     return sendPromise()
 }
-
-export const getProxyWebsocketInstance = getProxyWebsocketInstanceWrapper()
