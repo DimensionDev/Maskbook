@@ -85,6 +85,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://celo.api.0x.org/'
                 case NetworkType.Fantom:
                     return 'https://fantom.api.0x.org/'
+                case NetworkType.Aurora:
+                    return 'https://aurora.api.0x.org/'
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -145,6 +147,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                     return `https://analytics-celo.sushi.com/pairs/${address}`
                 case NetworkType.Fantom:
                     return `https://analytics-ftm.sushi.com/pairs/${address}`
+                case NetworkType.Aurora:
+                    return `https://analytics-aurora.sushi.com/pairs/${address}`
                 default:
                     safeUnreachable(networkType)
                     return ''

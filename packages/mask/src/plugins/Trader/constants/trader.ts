@@ -66,6 +66,9 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.xDai]: [WNATIVE[ChainId.xDai]],
     [ChainId.Celo]: [WNATIVE[ChainId.Celo]],
     [ChainId.Fantom]: [WNATIVE[ChainId.Fantom]],
+    [ChainId.Aurora]: [WNATIVE[ChainId.Aurora]],
+    [ChainId.Aurora_Testnet]: [WNATIVE[ChainId.Aurora_Testnet]],
+    [ChainId.Aurora_Betanet]: [WNATIVE[ChainId.Aurora_Betanet]],
 }
 
 export const BIPS_BASE = new BigNumber(10000)

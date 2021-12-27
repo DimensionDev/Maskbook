@@ -9,11 +9,14 @@
         "BSCT": "",
         "Matic": "https://api.polygonscan.com/api",
         "Mumbai": "",
-        "Arbitrum": "",
+        "Arbitrum": "https://api.arbscan.io/api",
         "Arbitrum_Rinkeby": "",
-        "xDai": "",
-        "Celo": "",
-        "Fantom": "https://api.ftmscan.com/api"
+        "xDai": "https://blockscout.com/xdai/mainnet/",
+        "Fantom": "https://api.ftmscan.com/api",
+        "Celo": "https://explorer.celo.org/api",
+        "Aurora": "https://explorer.mainnet.aurora.dev/api",
+        "Aurora_Testnet": "https://explorer.testnet.aurora.dev/api",
+        "Aurora_Betanet": "https://explorer.betanet.aurora.dev/api"
     },
     "EXPLORER_API_KEY": {
         "Mainnet": "99IX9MBZKG8FYQUECXDNDPATGVDDH6JCWW",
@@ -29,6 +32,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Aurora": "",
+        "Aurora_Testnet": "",
+        "Aurora_Betanet": ""
     }
 }

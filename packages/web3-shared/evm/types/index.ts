@@ -67,6 +67,11 @@ export enum ChainId {
 
     // Fantom
     Fantom = 250,
+
+    // Aurora
+    Aurora = 1313161554,
+    Aurora_Testnet = 1313161555,
+    Aurora_Betanet = 1313161556,
 }
 
 export enum ProviderType {
@@ -96,6 +101,7 @@ export enum NetworkType {
     xDai = 'xDai',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Aurora = 'Aurora',
 }
 
 export interface Wallet {

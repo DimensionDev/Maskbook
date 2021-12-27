@@ -13,7 +13,10 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
-        "Fantom": "fantom"
+        "Fantom": "fantom",
+        "Aurora": "aurora",
+        "Aurora_Testnet": "",
+        "Aurora_Betanet": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -29,6 +32,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
-        "Fantom": "fantom"
+        "Fantom": "fantom",
+        "Aurora": "aurora",
+        "Aurora_Testnet": "",
+        "Aurora_Betanet": ""
     }
 }

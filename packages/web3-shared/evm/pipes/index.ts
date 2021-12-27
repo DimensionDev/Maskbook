@@ -66,6 +66,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.xDai]: 'xdai',
         [NetworkType.Celo]: 'celo',
         [NetworkType.Fantom]: 'fantom',
+        [NetworkType.Aurora]: 'Aurora',
     },
     'ethereum',
 )
@@ -79,6 +80,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.xDai]: 'xDai',
         [NetworkType.Celo]: 'Celo',
         [NetworkType.Fantom]: 'Fantom',
+        [NetworkType.Aurora]: 'Aurora',
     },
     'Unknown',
 )
@@ -109,6 +111,9 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.xDai]: 'rgb(73, 169, 166)',
         [ChainId.Celo]: 'rgb(53, 208, 127)',
         [ChainId.Fantom]: 'rgb(19, 181, 236)',
+        [ChainId.Aurora]: 'rgb(112, 212, 74)',
+        [ChainId.Aurora_Testnet]: 'rgb(112, 212, 74)',
+        [ChainId.Aurora_Betanet]: 'rgb(112, 212, 74)',
     },
     'rgb(214, 217, 220)',
 )

@@ -36,13 +36,15 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.OPENOCEAN,
             ]
         case NetworkType.Arbitrum:
-            return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN]
+            return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN, TradeProvider.DODO]
         case NetworkType.xDai:
             return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         case NetworkType.Celo:
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Fantom:
             return [TradeProvider.SUSHISWAP]
+        case NetworkType.Aurora:
+            return [TradeProvider.DODO, TradeProvider.ZRX]
         default:
             safeUnreachable(networkType)
             return []

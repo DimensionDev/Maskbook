@@ -13,7 +13,10 @@
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.xdaichain.com/"],
         "Celo": ["https://forno.celo.org"],
-        "Fantom": ["https://rpcapi.fantom.network/"]
+        "Fantom": ["https://rpcapi.fantom.network/"],
+        "Aurora": ["https://mainnet.aurora.dev"],
+        "Aurora_Testnet": ["https://testnet.aurora.dev"],
+        "Aurora_Betanet": ["https://betanet.aurora.dev"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -29,6 +32,9 @@
         "Arbitrum_Rinkeby": [0, 0, 0, 0],
         "xDai": [0, 0, 0, 0],
         "Celo": [0, 0, 0, 0],
-        "Fantom": [0, 0, 0, 0]
+        "Fantom": [0, 0, 0, 0],
+        "Aurora": [0, 0, 0, 0],
+        "Aurora_Testnet": [0, 0, 0, 0],
+        "Aurora_Betanet": [0, 0, 0, 0]
     }
 }
