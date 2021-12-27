@@ -186,7 +186,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
-    const [selectOption, setSelectOpion] = useState(NFTSelectOption.Partial)
+    const [selectOption, setSelectOption] = useState(NFTSelectOption.Partial)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const account = useAccount()
     const chainId = useChainId()
@@ -214,12 +214,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         clearTokenDetailedOwnerList()
         setOpenConfirmDialog(false)
     }, [clearTokenDetailedOwnerList])
-
-    useEffect(() => {
-        setExistTokenDetailedList(
-            selectOption === NFTSelectOption.Partial ? [] : tokenDetailedOwnerList.slice(0, maxSelectShares),
-        )
-    }, [selectOption, tokenDetailedOwnerList])
 
     const clearContract = useCallback(() => {
         setContract(undefined)
@@ -253,7 +247,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 />
                 {tokenDetailedOwnerList.length > 0 ? (
                     <Box className={classes.selectWrapper}>
-                        <div className={classes.option} onClick={() => setSelectOpion(NFTSelectOption.All)}>
+                        <div
+                            className={classes.option}
+                            onClick={() => {
+                                setSelectOption(NFTSelectOption.All)
+                                setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                            }}>
                             <div
                                 className={classNames(
                                     classes.checkIconWrapper,
@@ -267,7 +266,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 })}
                             </Typography>
                         </div>
-                        <div className={classes.option} onClick={() => setSelectOpion(NFTSelectOption.Partial)}>
+                        <div
+                            className={classes.option}
+                            onClick={() => {
+                                setSelectOption(NFTSelectOption.Partial)
+                                setExistTokenDetailedList([])
+                            }}>
                             <div
                                 className={classNames(
                                     classes.checkIconWrapper,
