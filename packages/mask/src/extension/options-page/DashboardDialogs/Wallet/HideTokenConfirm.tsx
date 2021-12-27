@@ -6,7 +6,7 @@ import {
     ERC721TokenDetailed,
     EthereumTokenType,
     FungibleTokenDetailed,
-    isNative,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useSnackbarCallback } from '@masknet/shared'
 import { WalletRPC } from '../../../../plugins/Wallet/messages'
@@ -52,7 +52,7 @@ export function DashboardWalletHideTokenConfirmDialog(
         props.onClose,
     )
 
-    if (isNative(tokenAddress)) return null
+    if (isNativeTokenAddress(tokenAddress)) return null
     return (
         <DashboardDialogCore fullScreen={false} {...props}>
             <DashboardDialogWrapper

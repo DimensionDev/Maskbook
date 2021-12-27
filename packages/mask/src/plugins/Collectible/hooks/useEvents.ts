@@ -1,5 +1,5 @@
 import { useAsyncRetry } from 'react-use'
-import { ChainId, useChainId, ZERO_ADDRESS, isSameAddress } from '@masknet/web3-shared-evm'
+import { ChainId, useChainId, isZeroAddress } from '@masknet/web3-shared-evm'
 import { CollectibleToken, NFTHistory, CollectibleProvider, OpenSeaAssetEventType } from '../types'
 import { PluginCollectibleRPC } from '../messages'
 import { NullAddress, OpenSeaAccountURL } from '../constants'
@@ -92,7 +92,7 @@ export function useEvents(provider: CollectibleProvider, token?: CollectibleToke
                             accountPair: {
                                 from: event.fromInfo
                                     ? {
-                                          username: isSameAddress(event.fromInfo?.id, ZERO_ADDRESS)
+                                          username: isZeroAddress(event.fromInfo?.id)
                                               ? NullAddress
                                               : event.fromInfo?.name,
                                           address: event.fromInfo?.id,

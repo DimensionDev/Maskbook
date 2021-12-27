@@ -1,6 +1,6 @@
 import type { FC, HTMLProps } from 'react'
 import type BigNumber from 'bignumber.js'
-import { ChainId, CurrencyType, isSameAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
+import { ChainId, CurrencyType, isZeroAddress } from '@masknet/web3-shared-evm'
 import { useNativeTokenPrice, useTokenPrice } from '../../plugins/Wallet/hooks/useTokenPrice'
 import { multipliedBy } from '@masknet/web3-shared-base'
 
@@ -20,6 +20,6 @@ export const TokenPrice: FC<TokenPriceProps> = ({
 }) => {
     const tokenPrice = useTokenPrice(chainId, contractAddress?.toLowerCase(), currencyType)
     const nativeTokenPrice = useNativeTokenPrice(chainId)
-    const price = isSameAddress(contractAddress, ZERO_ADDRESS) ? nativeTokenPrice : tokenPrice
+    const price = isZeroAddress(contractAddress) ? nativeTokenPrice : tokenPrice
     return <span {...rest}>${multipliedBy(amount, price).toFixed(2)}</span>
 }
