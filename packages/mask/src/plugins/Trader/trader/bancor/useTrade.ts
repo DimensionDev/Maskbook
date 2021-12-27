@@ -1,11 +1,11 @@
 import {
     FungibleTokenDetailed,
-    isNative,
     useAccount,
     useBlockNumber,
     useTokenConstants,
     useTraderConstants,
     ChainId,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
@@ -38,11 +38,11 @@ export function useTrade(
         if (outputAmountWei === '0' && !isExactIn) return null
         if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId)) return null
 
-        const fromToken = isNative(inputToken.address)
+        const fromToken = isNativeTokenAddress(inputToken)
             ? { ...inputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : inputToken
 
-        const toToken = isNative(outputToken.address)
+        const toToken = isNativeTokenAddress(outputToken)
             ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : outputToken
 

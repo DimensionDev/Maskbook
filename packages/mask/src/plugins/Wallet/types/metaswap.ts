@@ -7,7 +7,7 @@ export interface estimateSuggestOption {
 
 export interface estimateSuggestResponse {
     estimatedBaseFee: string
-    low: estimateSuggestOption
-    medium: estimateSuggestOption
-    high: estimateSuggestOption
+    low?: estimateSuggestOption
+    medium?: estimateSuggestOption
+    high?: estimateSuggestOption
 }

@@ -2,8 +2,8 @@ import Web3 from 'web3'
 import RSS3 from 'rss3-next'
 import { isSameAddress } from '@masknet/web3-shared-evm'
 import { personalSign } from '../../../extension/background-script/EthereumService'
-import { RSS3_APP } from '../constants'
 import type { EssayRSSNode, PetMetaDB } from '../types'
+import { RSS3_APP } from '../../Avatar/constants'
 
 export async function createRSS3(address: string) {
     return new RSS3({

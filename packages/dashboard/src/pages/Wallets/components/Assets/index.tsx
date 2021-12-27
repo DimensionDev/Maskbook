@@ -11,6 +11,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { PluginMessages } from '../../../../API'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { v4 as uuid } from 'uuid'
 
 const useStyles = makeStyles()((theme) => ({
     caption: {
@@ -47,6 +48,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
     const t = useDashboardI18N()
     const pluginId = usePluginIDContext()
     const { classes } = useStyles()
+    const [id] = useState(uuid())
     const assetTabsLabel: Record<AssetTab, string> = {
         [AssetTab.Token]: t.wallets_assets_token(),
         [AssetTab.Investment]: t.wallets_assets_investment(),
@@ -57,7 +59,7 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
 
     const [addCollectibleOpen, setAddCollectibleOpen] = useState(false)
     const { setDialog: setSelectToken } = useRemoteControlledDialog(
-        PluginMessages.Wallet.events.selectERC20TokenDialogUpdated,
+        PluginMessages.Wallet.events.selectTokenDialogUpdated,
     )
 
     useEffect(() => {
@@ -83,7 +85,11 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                                 className={classes.addCustomTokenButton}
                                 onClick={() =>
                                     currentTab === AssetTab.Token
-                                        ? setSelectToken({ open: true, props: { whitelist: [] } })
+                                        ? setSelectToken({
+                                              open: true,
+                                              uuid: id,
+                                              FungibleTokenListProps: { whitelist: [] },
+                                          })
                                         : setAddCollectibleOpen(true)
                                 }>
                                 +{' '}

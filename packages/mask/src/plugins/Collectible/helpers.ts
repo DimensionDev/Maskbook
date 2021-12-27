@@ -1,6 +1,6 @@
 import type { Asset, OpenSeaFungibleToken, WyvernSchemaName } from 'opensea-js/lib/types'
 import { ChainId, createERC20Token, createNativeToken } from '@masknet/web3-shared-evm'
-import { createRenderWithMetadata, createTypedMessageMetadataReader } from '../../protocols/typed-message'
+import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/shared-base'
 import { PLUGIN_META_KEY, RaribleIPFSURL } from './constants'
 import type { CollectibleJSON_Payload, CollectibleToken } from './types'
 import schema from './schema.json'

@@ -7,6 +7,7 @@ export * from './manager/sns-adaptor'
 export * from './manager/worker'
 export * from './utils'
 export * from './PostContext'
+export * from './CompositionContext'
 export * from 'ts-results'
 export {
     getPluginDefine,

@@ -5,8 +5,8 @@ import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
-    isNative,
     FungibleTokenWatched,
+    isNativeTokenAddress,
     useAccount,
 } from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
@@ -143,7 +143,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value as FungibleTokenDetailed}
-                    disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
+                    disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
@@ -159,7 +159,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                                 : t('plugin_collectible_ending_price_tip'),
                         },
                     }}
-                    FixedTokenListProps={{
+                    FungibleTokenListProps={{
                         selectedTokens: token.value ? [token.value.address] : [],
                         tokens: paymentTokens,
                         whitelist: paymentTokens.map((x) => x.address),

@@ -1,14 +1,15 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils'
-import { FungibleTokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, isZeroAddress } from '@masknet/web3-shared-evm'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
 import { FormattedBalance, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
-import { ZERO_ADDRESS, ChainId } from '@masknet/web3-shared-evm'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     filledInput: {
@@ -22,6 +23,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         fontSize: 14,
         lineHeight: '20px',
         color: theme.palette.text.primary,
+        wordBreak: 'keep-all',
     },
     amount: {
         marginLeft: 10,
@@ -93,8 +95,8 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
 
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({ chainId, token, balance, onAmountChange, amount, ...props }) => {
+        const isDashboard = isDashboardPage()
         const { t } = useI18N()
-        const isDashboard = location.href.includes('dashboard.html')
         const { classes } = useStyles({ isDashboard })
 
         //#region update amount by self
@@ -117,7 +119,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
 
         const tokenPrice = useTokenPrice(
             chainId,
-            !isSameAddress(token?.address, ZERO_ADDRESS) ? token?.address.toLowerCase() : undefined,
+            !isZeroAddress(token?.address) ? token?.address.toLowerCase() : undefined,
         )
 
         const tokenValueUSD = useMemo(

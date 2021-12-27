@@ -1,9 +1,8 @@
 import { memo } from 'react'
-import { useLocation } from 'react-router-dom'
+import { NavLink, useHistory, useLocation, useRouteMatch } from 'react-router-dom'
 import { Box, GlobalStyles, Paper } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ArrowBackIcon, MiniMaskIcon } from '@masknet/icons'
-import { NavLink, useHistory, useRouteMatch } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useMyPersonas } from '../../../../components/DataSource/useMyPersonas'
 import { InitialPlaceholder } from '../InitialPlaceholder'
@@ -18,6 +17,7 @@ function GlobalCss() {
                     overflowX: 'hidden',
                     margin: '0 auto !important',
                     maxWidth: '100%',
+                    '-webkit-font-smoothing': 'subpixel-antialiased',
                     '&::-webkit-scrollbar': {
                         display: 'none',
                     },
@@ -94,13 +94,12 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             PopupRoutes.GasSetting,
             PopupRoutes.SelectWallet,
             PopupRoutes.WalletRecovered,
-            PopupRoutes.Unlock,
         ],
         exact: true,
     })
 
     const matchRecovery = useRouteMatch({
-        path: PopupRoutes.WalletRecovered,
+        path: [PopupRoutes.WalletRecovered, PopupRoutes.Unlock],
         exact: true,
     })
 

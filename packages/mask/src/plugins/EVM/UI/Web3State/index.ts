@@ -21,7 +21,7 @@ import {
     isValidDomain,
     resolveDomainLink,
     formatDomainName,
-    ZERO_ADDRESS,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import Ens from 'ethjs-ens'
 import { getStorage } from '../../storage'
@@ -66,11 +66,7 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
                 network: chainId,
             }).lookup(domain)
 
-            if (
-                isSameAddress(address, ZERO_ADDRESS) ||
-                isSameAddress(address, ZERO_X_ERROR_ADDRESS) ||
-                isValidAddress(address)
-            ) {
+            if (isZeroAddress(address) || isSameAddress(address, ZERO_X_ERROR_ADDRESS) || !isValidAddress(address)) {
                 return undefined
             }
 
@@ -102,6 +98,10 @@ export function fixWeb3State(state?: Web3Plugin.ObjectCapabilities.Capabilities,
                 provider,
                 network: chainId,
             }).reverse(address)
+
+            if (isZeroAddress(domain) || isSameAddress(domain, ZERO_X_ERROR_ADDRESS)) {
+                return undefined
+            }
 
             if (domain)
                 await getStorage().domainAddressBook.setValue({

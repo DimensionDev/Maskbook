@@ -7,7 +7,7 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { FileServicePluginID } from '../../plugins/FileService/constants'
+import { PluginID_FileService } from '@masknet/shared-base'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { PluginPetMessages } from '../../plugins/Pets/messages'
@@ -197,7 +197,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         createEntry(
             'File Service',
             new URL('./assets/files.png', import.meta.url).toString(),
-            () => openEncryptedMessage(FileServicePluginID),
+            () => openEncryptedMessage(PluginID_FileService),
             undefined,
             false,
             false,
@@ -295,7 +295,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ]),
                         createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
                     ],
-                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
+                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Celo],
                 ),
             undefined,
             true,
@@ -314,7 +314,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             () => {},
                         ),
                     ],
-                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai],
+                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Celo],
                 ),
             undefined,
             true,

@@ -4,8 +4,8 @@ import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
-    isNative,
     FungibleTokenWatched,
+    isNativeTokenAddress,
     useAccount,
 } from '@masknet/web3-shared-evm'
 import { isZero, isLessThan } from '@masknet/web3-shared-base'
@@ -99,7 +99,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value as FungibleTokenDetailed}
-                    disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
+                    disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{
@@ -111,7 +111,7 @@ export function ListingByHighestBidCard(props: ListingByHighestBidCardProps) {
                             helperText: t('plugin_collectible_set_starting_bid_price'),
                         },
                     }}
-                    FixedTokenListProps={{
+                    FungibleTokenListProps={{
                         selectedTokens: token.value ? [token.value.address] : [],
                         tokens: paymentTokens,
                         whitelist: paymentTokens.map((x) => x.address),

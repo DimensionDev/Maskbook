@@ -3,7 +3,12 @@ import { DialogContent, Box, Card, CardContent, CardActions, Link } from '@mui/m
 import { makeStyles } from '@masknet/theme'
 import { first } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
-import { FungibleTokenDetailed, isNative, useFungibleTokenWatched, useChainId } from '@masknet/web3-shared-evm'
+import {
+    FungibleTokenDetailed,
+    useFungibleTokenWatched,
+    useChainId,
+    isNativeTokenAddress,
+} from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
@@ -213,13 +218,13 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             amount={amount}
                             balance={balance.value ?? '0'}
                             token={token.value as FungibleTokenDetailed}
-                            disableNativeToken={!paymentTokens.some((x: any) => isNative(x.address))}
+                            disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                             onAmountChange={setAmount}
                             onTokenChange={setToken}
                             TokenAmountPanelProps={{
                                 label: t('plugin_collectible_price'),
                             }}
-                            FixedTokenListProps={{
+                            FungibleTokenListProps={{
                                 selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
                                 tokens: paymentTokens,
                                 whitelist: paymentTokens.map((x: any) => x.address),

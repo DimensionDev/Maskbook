@@ -1,5 +1,8 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
+import fromUnixTime from 'date-fns/fromUnixTime'
+import addDays from 'date-fns/addDays'
+import subDays from 'date-fns/subDays'
 import { omit, clamp, first, uniq } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import { createContainer } from 'unstated-next'
@@ -19,6 +22,8 @@ import {
     useERC721ContractDetailed,
     useMaskBoxConstants,
     ZERO_ADDRESS,
+    isZeroAddress,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
 import { BoxInfo, BoxState } from '../type'
@@ -62,7 +67,7 @@ function useContext(initialState?: { boxId: string }) {
     const { value: paymentTokens = [] } = useFungibleTokensDetailed(
         maskBoxStatus?.payment?.map(([address]) => {
             return {
-                type: isSameAddress(address, ZERO_ADDRESS) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
+                type: isNativeTokenAddress(address) ? EthereumTokenType.Native : EthereumTokenType.ERC20,
                 address,
             }
         }) ?? [],
@@ -80,29 +85,27 @@ function useContext(initialState?: { boxId: string }) {
         loading: loadingBoxInfo,
         retry: retryBoxInfo,
     } = useAsyncRetry<BoxInfo | null>(async () => {
-        if (
-            !maskBoxInfo ||
-            !maskBoxStatus ||
-            isSameAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS, ZERO_ADDRESS) ||
-            !maskBoxCreationSuccessEvent
-        )
-            return null
+        if (!maskBoxInfo || !maskBoxStatus || isZeroAddress(maskBoxInfo?.creator ?? ZERO_ADDRESS)) return null
         const personalLimit = Number.parseInt(maskBoxInfo.personal_limit, 10)
-        const remaining = Number.parseInt(maskBoxStatus.remaining, 10)
-        const sold = Number.parseInt(maskBoxStatus.total, 10) - remaining
+        const remaining = Number.parseInt(maskBoxStatus.remaining, 10) // the current balance of the creator's account
+        const total = Number.parseInt(maskBoxStatus.total, 10) // the total amount of tokens in the box
+        const totalComputed = total && remaining && remaining > total ? remaining : total
+        const sold = Math.max(0, totalComputed - remaining)
         const personalRemaining = Math.max(0, personalLimit - purchasedTokens.length)
+        const startAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.start_time ?? '0', 10)
+        const endAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.end_time ?? '0', 10)
         const info: BoxInfo = {
             boxId,
             creator: maskBoxInfo.creator,
             name: maskBoxInfo.name,
-            sellAll: maskBoxCreationSuccessEvent.returnValues.sell_all,
+            sellAll: maskBoxCreationSuccessEvent?.returnValues.sell_all ?? false,
             personalLimit: personalLimit,
             personalRemaining,
             remaining,
             availableAmount: Math.min(personalRemaining, remaining),
-            startAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.start_time, 10) * 1000),
-            endAt: new Date(Number.parseInt(maskBoxCreationSuccessEvent.returnValues.end_time, 10) * 1000),
-            total: maskBoxStatus.total,
+            startAt: startAt === 0 ? subDays(new Date(), 1) : fromUnixTime(startAt),
+            endAt: endAt === 0 ? addDays(new Date(), 1) : fromUnixTime(endAt),
+            total: totalComputed,
             sold,
             canceled: maskBoxStatus.canceled,
             tokenIds: allTokens,
@@ -146,9 +149,7 @@ function useContext(initialState?: { boxId: string }) {
 
     const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
     const isQualifiedByContract =
-        boxInfo?.qualificationAddress && !isSameAddress(boxInfo?.qualificationAddress, ZERO_ADDRESS)
-            ? isWhitelisted
-            : true
+        boxInfo?.qualificationAddress && !isZeroAddress(boxInfo?.qualificationAddress) ? isWhitelisted : true
 
     //#region check holder min token
     const { value: holderToken } = useERC20TokenDetailed(boxInfo?.holderTokenAddress)

@@ -9,10 +9,8 @@ import {
     ECDSASignature,
 } from 'ethereumjs-util'
 import { MaskMessages } from '../../../utils'
-import { Convert } from 'pvtsutils'
-import { stringToBuffer } from 'arweave/web/lib/utils'
 import { constructSignRequestURL } from '../../popups'
-import { delay, PersonaIdentifier } from '@masknet/shared-base'
+import { delay, PersonaIdentifier, fromBase64URL } from '@masknet/shared-base'
 import { queryPersonasWithPrivateKey } from '../../../../background/database/persona/db'
 export interface SignRequest {
     /** The message to be signed. */
@@ -69,7 +67,7 @@ export async function signWithPersona({ message, method }: SignRequest): Promise
     // will have problem with UTF-8?
     const length = message.length
     const messageHash = keccakFromString(`\x19Ethereum Signed Message:\n${length}${message}`, 256)
-    const privateKey = Buffer.from(Convert.FromBase64Url(persona.privateKey.d!))
+    const privateKey = Buffer.from(fromBase64URL(persona.privateKey.d!))
     const signature = ecsign(messageHash, privateKey)
 
     return {
@@ -80,6 +78,6 @@ export async function signWithPersona({ message, method }: SignRequest): Promise
             EIP2098: toCompactSig(signature.v, signature.r, signature.s),
         },
         address: bufferToHex(publicToAddress(privateToPublic(privateKey))),
-        messageHex: bufferToHex(Buffer.from(stringToBuffer(message))),
+        messageHex: bufferToHex(Buffer.from(new TextEncoder().encode(message))),
     }
 }

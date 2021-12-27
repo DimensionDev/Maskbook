@@ -130,7 +130,7 @@ const AnimatePic = () => {
         const timer = setInterval(() => {
             const check = count % 9 < 5
             setStart(check)
-            count = count + 1
+            count += 1
         }, 1000 * 1)
         return () => {
             clearInterval(timer)
