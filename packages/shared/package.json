@@ -9,7 +9,7 @@
     "@masknet/theme": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
     "anchorme": "^2.1.2",
-    "bignumber.js": "^9.0.1",
+    "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
     "lodash-es": "^4.17.21",
     "qrcode": "^1.5.0",

@@ -13,12 +13,15 @@ export async function savePostKeyToDB(
         const t = createTransaction(await PostDBAccess(), 'readwrite')('post')
         const post = await queryPostDB(id, t)
         if (!post) {
-            await createPostDB({
-                identifier: id,
-                postCryptoKey: jwk,
-                foundAt: new Date(),
-                ...extraInfo,
-            })
+            await createPostDB(
+                {
+                    identifier: id,
+                    postCryptoKey: jwk,
+                    foundAt: new Date(),
+                    ...extraInfo,
+                },
+                t,
+            )
         } else {
             await updatePostDB({ ...post, postCryptoKey: jwk }, 'override', t)
         }
