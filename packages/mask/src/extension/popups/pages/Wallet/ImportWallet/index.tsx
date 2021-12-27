@@ -246,9 +246,21 @@ const ImportWallet = memo(() => {
                             if (errorMessage) setErrorMessage('')
                             onChange(event, tab)
                         }}>
-                        <Tab label={t('popups_wallet_name_mnemonic')} value={tabs.mnemonic} />
-                        <Tab label={t('popups_wallet_name_json_file')} value={tabs.json} />
-                        <Tab label={t('popups_wallet_name_private_key')} value={tabs.privateKey} />
+                        <Tab
+                            label={t('popups_wallet_name_mnemonic')}
+                            value={tabs.mnemonic}
+                            classes={{ root: classes.tab, selected: classes.selected }}
+                        />
+                        <Tab
+                            label={t('popups_wallet_name_json_file')}
+                            value={tabs.json}
+                            classes={{ root: classes.tab, selected: classes.selected }}
+                        />
+                        <Tab
+                            label={t('popups_wallet_name_private_key')}
+                            value={tabs.privateKey}
+                            classes={{ root: classes.tab, selected: classes.selected }}
+                        />
                     </Tabs>
                     <TabPanel value={tabs.mnemonic} className={classes.tabPanel}>
                         <TextField
