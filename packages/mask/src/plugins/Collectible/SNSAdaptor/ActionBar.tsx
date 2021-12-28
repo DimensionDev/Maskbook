@@ -44,15 +44,11 @@ export function ActionBar(props: ActionBarProps) {
     if (!asset.value) return null
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
-            {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? (
-                <ActionButton
-                    className={classes.button}
-                    color="primary"
-                    variant="contained"
-                    onClick={onOpenCheckoutDialog}>
-                    {t('plugin_collectible_buy_now')}
-                </ActionButton>
-            ) : null}
+            {/* {!asset.value.isOwner && asset.value.is_auction && assetOrder.value ? ( */}
+            <ActionButton className={classes.button} color="primary" variant="contained" onClick={onOpenCheckoutDialog}>
+                {t('plugin_collectible_buy_now')}
+            </ActionButton>
+            {/* ) : null} */}
             {!asset.value.isOwner && asset.value.is_auction ? (
                 <ActionButton
                     className={classes.button}

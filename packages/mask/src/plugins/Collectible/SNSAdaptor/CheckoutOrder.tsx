@@ -24,8 +24,8 @@ export interface CheckoutOrderProps {
 
 export function CheckoutOrder(props: CheckoutOrderProps) {
     const { t } = useI18N()
-    const { asset } = props
-    const order = asset?.value?.desktopOrder
+    const { asset, assetOrder } = props
+    const order = assetOrder ?? asset?.value?.desktopOrder
     const { classes } = useStyles()
     const chainId = useChainId()
 

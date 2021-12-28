@@ -1,6 +1,6 @@
 import { unreachable } from '@dimensiondev/kit'
 import { getOrderUnitPrice } from '@masknet/web3-providers'
-import { ONE } from '@masknet/web3-shared-base'
+import { ZERO } from '@masknet/web3-shared-base'
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { head } from 'lodash-unified'
 import type { Order } from 'opensea-js/lib/types'
@@ -16,13 +16,12 @@ export function useAssetOrder(provider: NonFungibleAssetProvider, token?: Collec
                 const openSeaResponse = await PluginCollectibleRPC.getAssetFromSDK(token.contractAddress, token.tokenId)
                 const getPrice = (order: Order) =>
                     getOrderUnitPrice(
-                        order.currentPrice?.toFixed(),
+                        order.currentPrice as unknown as string,
                         order.paymentTokenContract?.decimals ?? 0,
-                        order.quantity.toFixed(),
-                    ) ?? ONE
+                        order.quantity as unknown as string,
+                    ) ?? ZERO
                 const sellOrders = openSeaResponse.sellOrders ?? []
                 const desktopOrder = head(sellOrders.sort((a, b) => getPrice(a).toNumber() - getPrice(b).toNumber()))
-
                 return desktopOrder
             case NonFungibleAssetProvider.RARIBLE:
                 return
