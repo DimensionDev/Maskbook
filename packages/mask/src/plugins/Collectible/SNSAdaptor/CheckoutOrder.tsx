@@ -1,11 +1,10 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import type { Order } from 'opensea-js/lib/types'
 import { Image } from '../../../components/shared/Image'
 import { useChainId } from '@masknet/web3-shared-evm'
-import type { useAsset } from '../hooks/useAsset'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
 import { useI18N } from '../../../utils'
+import type { useAsset } from '../../EVM/hooks/useAsset'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
 
 const useStyles = makeStyles()((theme) => ({
@@ -25,8 +24,8 @@ export interface CheckoutOrderProps {
 
 export function CheckoutOrder(props: CheckoutOrderProps) {
     const { t } = useI18N()
-    const { asset, assetOrder } = props
-    const order = assetOrder?.value as Order | undefined
+    const { asset } = props
+    const order = asset?.value?.desktopOrder
     const { classes } = useStyles()
     const chainId = useChainId()
 
@@ -45,7 +44,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
                 <TableRow>
                     <TableCell>
                         <div className={classes.itemInfo}>
-                            <Image height={80} width={80} src={asset.value.image_url} />
+                            <Image height={80} width={80} src={asset.value?.image_url ?? ''} />
                             <div className={classes.texts}>
                                 <Typography>{asset.value.collection_name ?? ''}</Typography>
                                 {asset.value.token_address && asset.value.token_id ? (

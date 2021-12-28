@@ -127,6 +127,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         iconColor: 'rgb(73, 169, 166)',
         isMainnet: true,
     },
+    {
+        ID: `${PLUGIN_ID}_celo`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Celo,
+        type: NetworkType.Celo,
+        name: 'Celo',
+        icon: new URL('./assets/celo.png', import.meta.url),
+        iconColor: 'rgb(53, 208, 127)',
+        isMainnet: true,
+    },
 ]
 export const PLUGIN_PROVIDERS: Web3Plugin.ProviderDescriptor[] = [
     {

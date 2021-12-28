@@ -1,9 +1,9 @@
 import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import { NetworkType, FungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { NetworkType, FungibleAssetProvider, getChainIdFromNetworkType } from '@masknet/web3-shared-evm'
 import { isNil } from 'lodash-unified'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
-import { resolveDebankChainName, resolveDebankTransactionType, resolveZerionTransactionsScopeName } from '../pipes'
+import { resolveDebankTransactionType, resolveZerionTransactionsScopeName } from '../pipes'
 import {
     DebankTransactionDirection,
     HistoryResponse,
@@ -24,13 +24,13 @@ export async function getTransactionList(
     hasNextPage: boolean
 }> {
     if (provider === FungibleAssetProvider.DEBANK) {
-        const name = resolveDebankChainName(network)
-        if (!name)
+        const response = await DeBankAPI.getTransactionList(address, getChainIdFromNetworkType(network))
+        if (!response)
             return {
                 transactions: [],
                 hasNextPage: false,
             }
-        const { data, error_code } = await DeBankAPI.getTransactionList(address, name)
+        const { data, error_code } = response
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return {
             transactions: fromDeBank(data),

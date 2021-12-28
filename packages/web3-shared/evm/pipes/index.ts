@@ -64,6 +64,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Polygon]: 'polygon',
         [NetworkType.Arbitrum]: 'arbitrum',
         [NetworkType.xDai]: 'xdai',
+        [NetworkType.Celo]: 'celo',
     },
     'ethereum',
 )
@@ -75,6 +76,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Polygon]: 'Polygon',
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
+        [NetworkType.Celo]: 'Celo',
     },
     'Unknown',
 )
@@ -103,6 +105,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Arbitrum]: 'rgb(36, 150, 238)',
         [ChainId.Arbitrum_Rinkeby]: 'rgb(36, 150, 238)',
         [ChainId.xDai]: 'rgb(73, 169, 166)',
+        [ChainId.Celo]: 'rgb(53, 208, 127)',
     },
     'rgb(214, 217, 220)',
 )
@@ -143,6 +146,10 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
         case NonFungibleAssetProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
             return `https://opensea.io`
+        case NonFungibleAssetProvider.RARIBLE:
+            return 'https://rarible.com'
+        case NonFungibleAssetProvider.NFTSCAN:
+            return 'https://nftscan.com'
         default:
             unreachable(provider)
     }
@@ -154,6 +161,10 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io/assets`
             if (chainId === ChainId.Matic) return `https://opensea.io/assets/matic`
             return `https://opensea.io/assets`
+        case NonFungibleAssetProvider.RARIBLE:
+            return ''
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
         default:
             unreachable(provider)
     }
@@ -170,6 +181,10 @@ export function resolveCollectibleLink(
                 address,
                 tokenId,
             })
+        case NonFungibleAssetProvider.RARIBLE:
+            return ''
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
         default:
             unreachable(provider)
     }

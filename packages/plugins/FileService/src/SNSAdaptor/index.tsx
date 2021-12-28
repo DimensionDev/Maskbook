@@ -21,14 +21,8 @@ const definition: Plugin.SNSAdaptor.Definition = {
         [META_KEY_2, onAttachedFile],
     ]),
     CompositionDialogEntry: {
-        label: '📃 File Service',
+        label: { fallback: '📃 File Service', i18nKey: '__composition_entry' },
         dialog: FileServiceDialog,
-    },
-    ToolbarEntry: {
-        image: new URL('./files.png', import.meta.url).toString(),
-        label: 'File Service',
-        priority: 980,
-        onClick: 'openCompositionEntry',
     },
 }
 
