@@ -1,7 +1,7 @@
 import { blobToArrayBuffer } from '@dimensiondev/kit'
-import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
+import { GrayscaleAlgorithm, type ImageTemplateTypes } from '@masknet/encryption'
 import Services from '../../extension/service'
-import { ImageTemplateTypes, ImagePayloadURLs } from '../../resources/image-payload'
+import { ImagePayloadURLs } from '../../resources/image-payload'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { downloadUrl } from '../../utils/utils'
 
