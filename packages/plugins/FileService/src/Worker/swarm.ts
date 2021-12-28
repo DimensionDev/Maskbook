@@ -16,13 +16,16 @@ function createBee(): Bee {
 
 class SwarmAgent implements ProviderAgent {
     static providerName = 'Swarm'
-    bee: Bee
+    bee!: Bee
 
-    constructor() {
-        this.bee = createBee()
+    init() {
+        if (!this.bee) {
+            this.bee = createBee()
+        }
     }
 
     async makePayload(data: Uint8Array, type: string, name: string) {
+        this.init()
         const isHTML = type === 'text/html'
         if (isHTML) {
             const file: CollectionEntry<Uint8Array> = {

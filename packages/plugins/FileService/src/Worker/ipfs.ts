@@ -17,9 +17,12 @@ function creatClient(): IPFSHTTPClient {
 
 class IPFSAgent implements ProviderAgent {
     static providerName = 'IPFS'
-    client: IPFSHTTPClient
-    constructor() {
-        this.client = creatClient()
+    client!: IPFSHTTPClient
+
+    init() {
+        if (!this.client) {
+            this.client = creatClient()
+        }
     }
 
     async makeAttachment(options: AttachmentOptions) {
@@ -57,6 +60,7 @@ class IPFSAgent implements ProviderAgent {
     }
 
     async makePayload(data: Uint8Array, type: string) {
+        this.init()
         const file = await this.client.add(data)
         return file.cid.toString()
     }
