@@ -45,7 +45,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     const { Asset } = useWeb3PluginState()
     const network = useNetworkDescriptor()
     const [loadingSize, setLoadingSize] = useState<number>()
-    const [loading, setLoading] = useState(true)
+    const [loadingCollectible, setLoadingCollectible] = useState(true)
     const [renderData, setRenderData] = useState<Web3Plugin.NonFungibleToken[]>([])
 
     const {
@@ -55,7 +55,7 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
     } = useAsyncRetry(
         async () =>
             Asset?.getNonFungibleAssets?.(account, { page: page, size: 20 }, undefined, selectedNetwork ?? undefined),
-        [account, Asset, network, page, selectedNetwork],
+        [account, Asset, network, selectedNetwork],
     )
 
     useEffect(() => {
@@ -77,9 +77,11 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     useEffect(() => {
         PluginMessages.Wallet.events.erc721TokensUpdated.on(() => retry())
-        PluginMessages.Wallet.events.socketMessageUpdated.on(() => {
-            setLoading(false)
-            retry()
+        PluginMessages.Wallet.events.socketMessageUpdated.on((info) => {
+            if (!info.done) {
+                retry()
+            }
+            setLoadingCollectible(false)
         })
     }, [retry])
 
@@ -87,12 +89,14 @@ export const CollectibleList = memo<CollectibleListProps>(({ selectedNetwork }) 
 
     return (
         <CollectibleListUI
-            isLoading={renderData.length === 0 && loading}
-            isEmpty={(!!collectiblesError || renderData.length === 0) && !(renderData.length === 0 && loading)}
+            isLoading={renderData.length === 0 && loadingCollectible}
+            isEmpty={
+                (!!collectiblesError || renderData.length === 0) && !(renderData.length === 0 && loadingCollectible)
+            }
             page={page}
             onPageChange={setPage}
             hasNextPage={hasNextPage}
-            showPagination={!loading && !(page === 0 && !hasNextPage)}
+            showPagination={!loadingCollectible && !(page === 0 && !hasNextPage)}
             dataSource={renderData}
             chainId={network?.chainId ?? 1}
             onSend={onSend}

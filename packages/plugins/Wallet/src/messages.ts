@@ -141,6 +141,7 @@ export type SocketMessageUpdatedEvent = {
     id: string
     done: boolean
     error?: unknown
+    from: 'cache' | 'remote'
 }
 
 export interface WalletMessage {

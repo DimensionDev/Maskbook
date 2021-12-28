@@ -30,7 +30,7 @@ async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: strin
     try {
         const response = await fetch(urlcat(OPENSEA_API_URL, url), {
             method: 'GET',
-            mode: 'cors',
+            // mode: 'cors',
             headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
         })
         return response.json() as Promise<T>

@@ -27,7 +27,7 @@ export interface SocketPoolItem<T extends unknown = unknown> {
     pickedAt?: Date
 }
 
-export type OutMessageEvent = { id: string; done: boolean; error?: unknown }
+export type OutMessageEvent = { id: string; done: boolean; error?: unknown; from: 'cache' | 'remote' }
 export type NotifyFn = (event: OutMessageEvent) => void
 
 const POOL_CACHE_EXPIRE_TIME = 3000
@@ -56,18 +56,19 @@ export class ProviderProxy {
 
         if (!itemInPoll) return
         if (error || !id) {
-            itemInPoll.notify({ id, done: true, error: error })
+            itemInPoll.notify({ id, done: true, error: error, from: 'remote' })
         }
 
+        const updatedAt = new Date()
         if (!results || results.length === 0) {
-            itemInPoll.notify({ id, done: true })
+            this._pool.set(id, { ...itemInPoll, done: true })
+            itemInPoll.notify({ id, done: true, from: 'remote' })
             return
         }
-        const updatedAt = new Date()
         const dataInPool = itemInPoll?.data ?? []
         const patchData = [...dataInPool, ...(results ?? [])]
         this._pool.set(id, { ...itemInPoll, updatedAt, data: patchData })
-        itemInPoll.notify({ id, done: false })
+        itemInPoll.notify({ id, done: false, from: 'remote' })
     }
 
     registerMessage = () => {
@@ -83,7 +84,11 @@ export class ProviderProxy {
         this.clearPool()
         const cache = this._pool.get(message.id)
         if (cache && !cache.done) return
-        if (cache && !this.isExpired(cache)) return
+        if (cache && !this.isExpired(cache)) {
+            const notify = message.notify || this._globalNotify!
+            notify({ id: message.id, done: true, from: 'cache' })
+            return
+        }
 
         this._socket.send(JSON.stringify(message))
         this._pool.set(message.id, { data: [], createdAt: new Date(), notify: message.notify || this._globalNotify! })
@@ -156,7 +161,7 @@ export class ProviderProxy {
 
 const SOCKET_POINT =
     process.env.NODE_ENV === 'development'
-        ? 'wss://hyper-proxy-development.laanfor.workers.dev'
+        ? 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
         : 'wss://hyper-proxy.r2d2.to'
 
 enum SocketState {
