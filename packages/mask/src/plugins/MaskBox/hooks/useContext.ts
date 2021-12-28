@@ -106,6 +106,7 @@ function useContext(initialState?: { boxId: string }) {
             availableAmount: Math.min(personalRemaining, remaining),
             startAt: startAt === 0 ? subDays(new Date(), 1) : fromUnixTime(startAt),
             endAt: endAt === 0 ? addDays(new Date(), 1) : fromUnixTime(endAt),
+            started: maskBoxStatus.started,
             total: totalComputed,
             sold,
             canceled: maskBoxStatus.canceled,
@@ -136,13 +137,15 @@ function useContext(initialState?: { boxId: string }) {
 
     const boxState = useMemo(() => {
         if (errorMaskBoxInfo || errorMaskBoxStatus || errorBoxInfo) return BoxState.ERROR
-        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo) return BoxState.UNKNOWN
+        if (loadingMaskBoxInfo || loadingMaskBoxStatus || loadingBoxInfo) {
+            if (!maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
+        }
         if (maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         if (!maskBoxInfo || !maskBoxStatus || !boxInfo) return BoxState.NOT_FOUND
         if (maskBoxStatus.canceled) return BoxState.CANCELED
         if (isGreaterThanOrEqualTo(boxInfo.tokenIdsPurchased.length, boxInfo.personalLimit)) return BoxState.DRAWED_OUT
         if (isLessThanOrEqualTo(boxInfo.remaining, 0)) return BoxState.SOLD_OUT
-        if (boxInfo.startAt > now) return BoxState.NOT_READY
+        if (boxInfo.startAt > now || !boxInfo.started) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
     }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBeat])
@@ -172,7 +175,7 @@ function useContext(initialState?: { boxId: string }) {
             case BoxState.NOT_READY:
                 const nowAt = now.getTime()
                 const startAt = boxInfo?.startAt.getTime() ?? 0
-                if (startAt <= nowAt) return 'Loading...'
+                if (startAt <= nowAt) return 'Syncing status...'
                 const countdown = formatCountdown(startAt, nowAt)
                 return countdown ? `Start sale in ${countdown}` : 'Loading...'
             case BoxState.SOLD_OUT:
@@ -187,6 +190,15 @@ function useContext(initialState?: { boxId: string }) {
                 unreachable(boxState)
         }
     }, [boxState, boxInfo?.startAt, heartBeat])
+
+    useEffect(() => {
+        if (!boxInfo || boxInfo.started) return
+
+        if (boxInfo.startAt < now) {
+            retryMaskBoxStatus()
+        }
+    }, [boxInfo, heartBeat])
+
     //#endregion
 
     //#region the box metadata
