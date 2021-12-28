@@ -179,7 +179,10 @@ export const NftRedPacketHistoryItem: FC<NftRedPacketHistoryItemProps> = memo(
                         classes={{ icon: classes.icon }}
                         address={contractDetailed?.address ?? ''}
                         name={contractDetailed?.name ?? '-'}
-                        logoURI={contractDetailed?.iconURL ?? ''}
+                        logoURI={
+                            contractDetailed?.iconURL ??
+                            new URL('../../../resources/maskFilledIcon.png', import.meta.url).toString()
+                        }
                     />
                     <Box className={classes.content}>
                         <section className={classes.section}>
