@@ -92,8 +92,8 @@ function useContext(initialState?: { boxId: string }) {
         const totalComputed = total && remaining && remaining > total ? remaining : total
         const sold = Math.max(0, totalComputed - remaining)
         const personalRemaining = Math.max(0, personalLimit - purchasedTokens.length)
-        const startAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.start_time ?? '0', 10)
-        const endAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.end_time ?? '0', 10)
+        const startAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.start_time || '0', 10)
+        const endAt = Number.parseInt(maskBoxCreationSuccessEvent?.returnValues.end_time || '0', 10)
         const info: BoxInfo = {
             boxId,
             creator: maskBoxInfo.creator,
@@ -186,7 +186,7 @@ function useContext(initialState?: { boxId: string }) {
             default:
                 unreachable(boxState)
         }
-    }, [boxState, heartBit])
+    }, [boxState, boxInfo?.startAt, heartBit])
     //#endregion
 
     //#region the box metadata

@@ -13,20 +13,16 @@ const units = [
 export function formatCountdown(countdown: number) {
     if (countdown <= 0) return ''
 
-    const amounts: number[] = []
+    const segs: string[] = []
 
-    ;[msPerDay, msPerHour, msPerMinute, msPerSecond].reduce((accumulator, x) => {
-        amounts.push(Math.floor(accumulator / x))
+    ;[msPerDay, msPerHour, msPerMinute, msPerSecond].reduce((accumulator, x, index, list) => {
+        const isLast = index === list.length - 1
+        const value = isLast ? Math.ceil(accumulator / x) : Math.floor(accumulator / x)
+        if (segs.length !== 0 || value !== 0) {
+            segs.push(`${value} ${units[index][value === 1 ? 0 : 1]}`)
+        }
         return accumulator % x
     }, countdown)
 
-    return amounts
-        .map((x, i) => {
-            if (x <= 0) return ''
-            if (x === 1) return `${x} ${units[i][0]}`
-            return `${x} ${units[i][1]}`
-        })
-        .filter(Boolean)
-        .join(' ')
-        .trim()
+    return segs.join(' ')
 }
