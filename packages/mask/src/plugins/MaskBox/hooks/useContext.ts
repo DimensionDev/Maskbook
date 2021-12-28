@@ -173,7 +173,7 @@ function useContext(initialState?: { boxId: string }) {
                 const now = Date.now()
                 const startAt = boxInfo?.startAt.getTime() ?? 0
                 if (startAt <= now) return 'Loading...'
-                const countdown = formatCountdown(startAt - now)
+                const countdown = formatCountdown(startAt, now)
                 return countdown ? `Start sale in ${countdown}` : 'Loading...'
             case BoxState.SOLD_OUT:
                 return 'Sold Out'
