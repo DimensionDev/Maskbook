@@ -1,7 +1,8 @@
 import { useEffect, useState, useMemo, ReactNode } from 'react'
 import { useAsync } from 'react-use'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { useChainId, isSameAddress } from '@masknet/web3-shared-evm'
+import { useChainId, isSameAddress, ERC721ContractDetailed } from '@masknet/web3-shared-evm'
+import { OpenSea } from '@masknet/web3-providers'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import {
     Button,
@@ -18,7 +19,7 @@ import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { initMeta, initCollection } from '../constants'
 import { PreviewBox } from './previewBox'
-import type { PetMetaDB, FilterContract, CollectionNFT } from '../types'
+import type { PetMetaDB, FilterContract } from '../types'
 import { useUser, useNfts } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
@@ -89,7 +90,7 @@ export function PetDialog() {
     const chainId = useChainId()
     const user = useUser()
     const nfts = useNfts(user)
-    const [extraData, setExtraData] = useState<CollectionNFT[]>([])
+    const [extraData, setExtraData] = useState<ERC721ContractDetailed[]>([])
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
@@ -110,7 +111,7 @@ export function PetDialog() {
     useAsync(async () => {
         const lists = []
         for (const i of nfts) {
-            const contract = await PluginPetRPC.getAssetContract(i.contract, chainId)
+            const contract = await OpenSea.getContract(i.contract, chainId)
             lists.push(contract)
         }
         setExtraData(lists)
@@ -168,7 +169,7 @@ export function PetDialog() {
 
     const renderImg = (address: string) => {
         const imgItem = extraData.filter((i) => isSameAddress(i.address, address))
-        return <img className={classes.thumbnail} src={imgItem[0]?.image_url ?? ''} />
+        return <img className={classes.thumbnail} src={imgItem[0]?.iconURL ?? ''} />
     }
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>

@@ -5,9 +5,9 @@ import { useI18N } from '../../../../utils'
 import { CollectibleTab } from '../CollectibleTab'
 import { CollectibleState } from '../../hooks/useCollectibleState'
 import { Row } from './Row'
-import { CollectibleProvider } from '../../types'
 import { TableListPagination } from '../Pagination'
 import { LoadingAnimation } from '@masknet/shared'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -46,8 +46,8 @@ export function HistoryTab(props: HistoryTabProps) {
 
     //#region If there is a different asset, the unit price and quantity should be displayed
     const isDifferenceToken = useMemo(() => {
-        if (provider === CollectibleProvider.OPENSEA)
-            return events.value?.data.some((item) => item.price?.paymentToken?.symbol !== 'ETH')
+        if (provider === NonFungibleAssetProvider.OPENSEA)
+            return events.value?.data.some((item) => item.price?.asset?.asset_contract.symbol !== 'ETH')
         else return false
     }, [events.value, provider])
     //#endregion
@@ -103,7 +103,7 @@ export function HistoryTab(props: HistoryTabProps) {
                         <Row key={order.id} event={order} isDifferenceToken={isDifferenceToken} />
                     ))}
                 </TableBody>
-                {(provider === CollectibleProvider.OPENSEA && events.value.data.length) || eventPage > 0 ? (
+                {(provider === NonFungibleAssetProvider.OPENSEA && events.value.data.length) || eventPage > 0 ? (
                     <TableListPagination
                         handlePrevClick={() => setEventPage((prev) => prev - 1)}
                         handleNextClick={() => setEventPage((prev) => prev + 1)}

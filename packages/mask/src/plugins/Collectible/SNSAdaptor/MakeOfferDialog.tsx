@@ -28,15 +28,16 @@ import { UnreviewedWarning } from './UnreviewedWarning'
 import ActionButton, { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 import { SelectTokenAmountPanel } from '../../ITO/SNSAdaptor/SelectTokenAmountPanel'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
-import type { useAsset } from '../hooks/useAsset'
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
 import { PluginTraderMessages } from '../../Trader/messages'
 import { Trans } from 'react-i18next'
 import getUnixTime from 'date-fns/getUnixTime'
+import type { useAsset } from '../../EVM/hooks'
 import { rightShift, ZERO } from '@masknet/web3-shared-base/utils/number'
 import type { Coin } from '../../Trader/types'
+import { isWyvernSchemaName } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -74,14 +75,14 @@ export interface MakeOfferDialogProps {
 
 export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const { asset, open, onClose } = props
+
     const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
     const leastPrice =
-        asset?.value && asset.value.orders?.length ? new BigNumber(asset.value.orders[0].base_price ?? '0') : ZERO
+        asset?.value && asset.value.desktopOrder ? new BigNumber(asset.value.desktopOrder.current_price ?? '0') : ZERO
 
     const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
     const selectedPaymentToken = first(paymentTokens)
-
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -98,11 +99,12 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
+        const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createBuyOrder({
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schema_name,
+                schemaName: isWyvernSchemaName(schemaName) ? schemaName : undefined,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
@@ -258,7 +260,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {(isAuction ? asset.value?.is_collection_weth : asset.value?.is_order_weth) ? (
+                                {(isAuction ? asset.value?.isCollectionWeth : asset.value?.isOrderWeth) ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"

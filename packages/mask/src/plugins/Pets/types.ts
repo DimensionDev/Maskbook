@@ -32,11 +32,3 @@ export interface FilterContract {
     contract: string
     tokens: OwnerERC721TokenInfo[]
 }
-
-export interface CollectionNFT {
-    name: string
-    schema_name: string
-    image_url: string
-    symbol: string
-    address: string
-}

@@ -2,7 +2,7 @@
  * @deprecated This version of payload is not in use.
  * Please goto Crypto alpha v38
  */
-import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText, concatArrayBufferSync } from '@dimensiondev/kit'
+import { encodeText, encodeArrayBuffer, decodeArrayBuffer, decodeText, concatArrayBuffer } from '@dimensiondev/kit'
 import { memoizePromise } from '../../utils-pure'
 import { i18n } from '../../shared-ui/locales_legacy'
 import { CryptoWorker } from '../modules/workers'
@@ -37,15 +37,15 @@ async function deriveAESKey(
     const derivedKey = await CryptoWorker.aes_to_raw(await derive_AES_GCM_256_Key_From_ECDH_256k1_Keys(pr, op))
 
     const _salt = typeof salt === 'string' ? decodeArrayBuffer(salt) : salt
-    const UntitledUint8Array = concatArrayBufferSync(new Uint8Array(derivedKey), _salt)
+    const UntitledUint8Array = concatArrayBuffer(new Uint8Array(derivedKey), _salt)
     const password = await crypto.subtle.digest(
         'SHA-256',
-        concatArrayBufferSync(concatArrayBufferSync(UntitledUint8Array, _salt), decodeArrayBuffer('KEY')),
+        concatArrayBuffer(concatArrayBuffer(UntitledUint8Array, _salt), decodeArrayBuffer('KEY')),
     )
     const iv_pre = new Uint8Array(
         await crypto.subtle.digest(
             'SHA-256',
-            concatArrayBufferSync(concatArrayBufferSync(UntitledUint8Array, _salt), decodeArrayBuffer('IV')),
+            concatArrayBuffer(concatArrayBuffer(UntitledUint8Array, _salt), decodeArrayBuffer('IV')),
         ),
     )
     const iv = new Uint8Array(16)
