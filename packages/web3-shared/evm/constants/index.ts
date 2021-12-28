@@ -20,9 +20,9 @@ import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.
 import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
-import Foundation from '@masknet/web3-constants/evm/foundation.json'
 import Explorer from '@masknet/web3-constants/evm/explorer.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
+import Foundation from '@masknet/web3-constants/evm/foundation.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
 export { ZERO_ADDRESS, FAKE_SIGN_PASSWORD, EthereumNameType } from './specific'
