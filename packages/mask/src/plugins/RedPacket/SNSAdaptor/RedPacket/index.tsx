@@ -105,7 +105,7 @@ export function RedPacket(props: RedPacketProps) {
         const state = canClaim ? claimState : refundState
         if (state.type === TransactionStateType.UNKNOWN) return
         if (!availability || !token) return
-        if (state.type === TransactionStateType.HASH) {
+        if (state.type === TransactionStateType.CONFIRMED) {
             setTransactionDialog({
                 open: true,
                 shareLink: shareLink!.toString(),
@@ -119,7 +119,6 @@ export function RedPacket(props: RedPacketProps) {
                       })
                     : '',
             })
-        } else if (state.type === TransactionStateType.CONFIRMED) {
             resetClaimCallback()
             resetRefundCallback()
             revalidateAvailability()
@@ -227,14 +226,16 @@ export function RedPacket(props: RedPacketProps) {
                     </div>
                 </div>
             </Card>
-            <OperationFooter
-                canClaim={canClaim}
-                canRefund={canRefund}
-                claimState={claimState}
-                refundState={refundState}
-                shareLink={shareLink}
-                onClaimOrRefund={onClaimOrRefund}
-            />
+            {listOfStatus.includes(RedPacketStatus.expired) || listOfStatus.includes(RedPacketStatus.empty) ? null : (
+                <OperationFooter
+                    canClaim={canClaim}
+                    canRefund={canRefund}
+                    claimState={claimState}
+                    refundState={refundState}
+                    shareLink={shareLink}
+                    onClaimOrRefund={onClaimOrRefund}
+                />
+            )}
         </EthereumChainBoundary>
     )
 }

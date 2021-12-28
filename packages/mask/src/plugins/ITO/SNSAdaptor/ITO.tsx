@@ -585,7 +585,6 @@ export function ITO(props: ITO_Props) {
                 </Typography>
                 <Box className={classes.progressWrap}>
                     <StyledLinearProgress
-                        barColor="#fff"
                         variant="determinate"
                         value={Number(sold.multipliedBy(100).dividedBy(total))}
                     />
@@ -635,16 +634,8 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_region_ban')}
                     </ActionButton>
-                ) : total_remaining.isZero() && !isBuyer && !canWithdraw ? (
-                    <ActionButton
-                        disabled
-                        onClick={() => undefined}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_status_out_of_stock')}
-                    </ActionButton>
-                ) : loadingTradeInfo || loadingAvailability ? (
+                ) : (noRemain || listOfStatus.includes(ITO_Status.expired)) && !canWithdraw ? null : loadingTradeInfo ||
+                  loadingAvailability ? (
                     <ActionButton
                         disabled
                         onClick={() => undefined}
@@ -765,9 +756,26 @@ export function ITO(props: ITO_Props) {
                         ) : undefined}
                     </Grid>
                 ) : listOfStatus.includes(ITO_Status.started) ? (
-                    <ActionButton onClick={onClaim} variant="contained" size="large" className={classes.actionButton}>
-                        <Typography>{t('plugin_ito_enter')}</Typography>
-                    </ActionButton>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onShareSuccess}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_share')}
+                            </ActionButton>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onClaim}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                <Typography>{t('plugin_ito_enter')}</Typography>
+                            </ActionButton>
+                        </Grid>
+                    </Grid>
                 ) : null}
             </Box>
 

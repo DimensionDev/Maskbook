@@ -418,7 +418,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         </Typography>
                     </div>
                 </Card>
-            ) : (
+            ) : availability.isClaimedAll || availability.isCompleted ? null : (
                 <Grid container spacing={2} className={classes.buttonWrapper}>
                     <Grid item xs={availability.isClaimed ? 12 : 6}>
                         <Button className={classes.button} fullWidth onClick={onShare} size="large" variant="contained">
