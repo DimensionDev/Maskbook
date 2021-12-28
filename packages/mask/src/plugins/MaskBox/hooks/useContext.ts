@@ -253,8 +253,8 @@ function useContext(initialState?: { boxId: string }) {
     const canPurchase = !isBalanceInsufficient && isQualified && !!boxInfo?.personalRemaining
     const allowToPurchase = boxState === BoxState.READY
     const isAllowanceEnough = isNativeToken ? true : costAmount.lte(erc20Allowance ?? '0')
-    const { value: openBoxTransactionGasLimit = 0 } = useAsyncRetry(async () => {
-        if (!openBoxTransaction || !canPurchase || !allowToPurchase || !isAllowanceEnough) return 0
+    const { value: openBoxTransactionGasLimit } = useAsyncRetry(async () => {
+        if (!openBoxTransaction || !canPurchase || !allowToPurchase || !isAllowanceEnough) return
         const estimatedGas = await openBoxTransaction.method.estimateGas(omit(openBoxTransaction.config, 'gas'))
         return new BigNumber(estimatedGas).toNumber()
     }, [openBoxTransaction, canPurchase, allowToPurchase, isAllowanceEnough])

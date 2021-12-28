@@ -21,9 +21,13 @@ export function useTransactionCallback<T extends unknown>(
         setState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
+        const gasExpectedConfig = { ...config }
 
         try {
-            await method.estimateGas(config)
+            const estimatedGas = await method.estimateGas(config)
+            if (!gasExpectedConfig.gas && estimatedGas) {
+                gasExpectedConfig.gas = estimatedGas
+            }
         } catch (error) {
             try {
                 await method.call(config)
@@ -38,7 +42,7 @@ export function useTransactionCallback<T extends unknown>(
 
         return new Promise<void>(async (resolve, reject) => {
             method
-                .send(config)
+                .send(gasExpectedConfig)
                 .once(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     if (type !== TransactionStateType.HASH) return
                     setState({
