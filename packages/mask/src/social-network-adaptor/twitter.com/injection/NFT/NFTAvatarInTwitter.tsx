@@ -12,7 +12,7 @@ import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
-import { useMount, useUpdateEffect, useWindowSize } from 'react-use'
+import { useMount, useWindowSize } from 'react-use'
 import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
@@ -42,12 +42,18 @@ const useStyles = makeStyles()(() => ({
 
 function NFTAvatarInTwitter() {
     const rainBowElement = useRef<Element | null>()
+    const borderElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
     const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
 
     const windowSize = useWindowSize()
+
+    const showAvatar = useMemo(
+        () => getAvatarId(identity.avatar ?? '') === avatar?.avatarId && avatar.avatarId,
+        [avatar?.avatarId, identity.avatar],
+    )
 
     const size = useMemo(() => {
         const ele = searchTwitterAvatarSelector().evaluate()
@@ -112,6 +118,8 @@ function NFTAvatarInTwitter() {
 
             if (linkParentDom) linkParentDom.style.overflow = 'visible'
 
+            borderElement.current = linkDom.firstElementChild
+
             // remove useless border
             linkDom.removeChild(linkDom.firstElementChild)
 
@@ -129,25 +137,35 @@ function NFTAvatarInTwitter() {
                 }
             `
                 rainBowElement.current = linkDom.firstElementChild
-                linkDom.firstElementChild.classList.add('rainbowBorder')
+                if (showAvatar) linkDom.firstElementChild.classList.add('rainbowBorder')
                 linkDom.insertBefore(style, linkDom.firstChild)
             }
         }
     })
 
-    useUpdateEffect(() => {
-        if (!avatar) {
-            rainBowElement.current?.classList.remove('rainbowBorder')
-        } else {
+    useEffect(() => {
+        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
+        if (showAvatar) {
+            if (borderElement.current && linkDom?.firstElementChild === borderElement.current) {
+                linkDom?.removeChild(linkDom.firstElementChild)
+            }
+
             rainBowElement.current?.classList.add('rainbowBorder')
+        } else {
+            // recovery Twitter profile avatar style
+            if (borderElement.current && linkDom?.firstElementChild !== borderElement.current) {
+                linkDom?.insertBefore(borderElement.current, linkDom.firstChild)
+            }
+
+            rainBowElement.current?.classList.remove('rainbowBorder')
         }
-    }, [avatar])
+    }, [showAvatar])
 
     if (!avatar || !size) return null
 
     return (
         <>
-            {getAvatarId(identity.avatar ?? '') === avatar.avatarId && avatar.avatarId ? (
+            {showAvatar ? (
                 <NFTBadge
                     avatar={avatar}
                     size={size}
