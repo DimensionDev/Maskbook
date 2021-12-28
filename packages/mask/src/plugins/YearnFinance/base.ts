@@ -6,6 +6,7 @@ export const base: Plugin.Shared.Definition = {
     icon: PLUGIN_ICON,
     name: { fallback: PLUGIN_NAME },
     description: { fallback: PLUGIN_DESCRIPTION },
+    /* cspell:disable-next-line */
     publisher: { name: { fallback: 'Layinka' }, link: 'https://github.com/layinka' },
     enableRequirement: {
         architecture: { app: true, web: true },
