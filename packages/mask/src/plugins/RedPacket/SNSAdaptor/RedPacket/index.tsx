@@ -211,7 +211,7 @@ export function RedPacket(props: RedPacketProps) {
                     ) : null}
                 </div>
                 <div className={classNames(classes.content)}>
-                    <div>
+                    <div className={classes.fullWidthBox}>
                         <Typography className={classes.words} variant="h6">
                             {payload.sender.message}
                         </Typography>

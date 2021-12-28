@@ -158,5 +158,8 @@ to {
         connectWallet: {
             marginTop: 16,
         },
+        fullWidthBox: {
+            width: '100%',
+        },
     }
 })
