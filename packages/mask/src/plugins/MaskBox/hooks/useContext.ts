@@ -35,13 +35,13 @@ import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
-import { useHeartBit } from './useHeartBit'
+import { useHeartBeat } from './useHeartBeat'
 import { useIsWhitelisted } from './useIsWhitelisted'
 import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy } from '@masknet/web3-shared-base'
 
 function useContext(initialState?: { boxId: string }) {
     const now = new Date()
-    const heartBit = useHeartBit()
+    const heartBeat = useHeartBeat()
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
@@ -145,7 +145,7 @@ function useContext(initialState?: { boxId: string }) {
         if (boxInfo.startAt > now) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBit])
+    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBeat])
 
     const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
     const isQualifiedByContract =
@@ -186,7 +186,7 @@ function useContext(initialState?: { boxId: string }) {
             default:
                 unreachable(boxState)
         }
-    }, [boxState, boxInfo?.startAt, heartBit])
+    }, [boxState, boxInfo?.startAt, heartBeat])
     //#endregion
 
     //#region the box metadata
