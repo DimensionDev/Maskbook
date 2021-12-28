@@ -44,7 +44,14 @@ function createERC721ContractFromAssetContract(
     chainId: ChainId,
     assetContract?: OpenSeaAssetContract,
 ): ERC721ContractDetailed {
-    return createERC721ContractDetailed(chainId, address, assetContract?.name, assetContract?.token_symbol)
+    return createERC721ContractDetailed(
+        chainId,
+        address,
+        assetContract?.name,
+        assetContract?.token_symbol,
+        undefined,
+        assetContract?.image_url,
+    )
 }
 
 function createERC721TokenFromAsset(
