@@ -47,6 +47,7 @@ export interface BoxInfo {
     sold: number
     startAt: Date
     endAt: Date
+    started: boolean
     tokenIds: string[]
     tokenIdsPurchased: string[]
     tokenAddress: string
