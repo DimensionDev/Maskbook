@@ -1,6 +1,5 @@
 import Web3 from 'web3'
 import {
-    ChainId,
     createContract,
     createNativeToken,
     ERC721TokenDetailed,
@@ -11,7 +10,6 @@ import {
     getRPCConstants,
     getTokenConstants,
     isSameAddress,
-    NonFungibleAssetProvider,
     Web3ProviderType,
     FungibleAssetProvider,
 } from '@masknet/web3-shared-evm'
@@ -166,24 +164,13 @@ export const getNonFungibleTokenFn =
         }
 
         const socketId = `mask.fetchNonFungibleCollectibleAsset_${address}`
-        let tokenFromProvider = await socket.sendAsync<ERC721TokenDetailed>({
+        await socket.send({
             id: socketId,
             method: 'mask.fetchNonFungibleCollectibleAsset',
             params: { address, pageSize: 40 },
         })
 
-        if (!tokenFromProvider.length) {
-            tokenFromProvider = (
-                await context.getAssetsListNFT(
-                    address.toLowerCase(),
-                    network?.chainId ?? ChainId.Mainnet,
-                    NonFungibleAssetProvider.OPENSEA,
-                    pagination?.page ?? 0,
-                    pagination?.size ?? 20,
-                )
-            ).assets
-        }
-        console.log(tokenFromProvider)
+        const tokenFromProvider = socket.getResult<ERC721TokenDetailed>(socketId)
 
         const allData: Web3Plugin.NonFungibleToken[] = [...tokenInDb, ...tokenFromProvider]
             .map(

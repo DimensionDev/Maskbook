@@ -10,7 +10,7 @@ export interface RequestMessage extends MessageBase {
     params: {
         pageSize: number
     } & any
-    notify: NotifyFn
+    notify?: NotifyFn
 }
 
 export interface PayloadMessage<T extends unknown = unknown> extends MessageBase {
@@ -30,7 +30,7 @@ export interface SocketPoolItem<T extends unknown = unknown> {
 export type OutMessageEvent = { id: string; done: boolean; error?: unknown }
 export type NotifyFn = (event: OutMessageEvent) => void
 
-const POOL_CACHE_EXPIRE_TIME = 30
+const POOL_CACHE_EXPIRE_TIME = 3000
 
 export class ProviderProxy {
     private readonly _socket: WebSocket
@@ -86,7 +86,7 @@ export class ProviderProxy {
         if (cache && !this.isExpired(cache)) return
 
         this._socket.send(JSON.stringify(message))
-        this._pool.set(message.id, { data: [], createdAt: new Date(), notify: message.notify || this._globalNotify })
+        this._pool.set(message.id, { data: [], createdAt: new Date(), notify: message.notify || this._globalNotify! })
     }
 
     /**
@@ -156,7 +156,7 @@ export class ProviderProxy {
 
 const SOCKET_POINT =
     process.env.NODE_ENV === 'development'
-        ? 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
+        ? 'wss://hyper-proxy-development.laanfor.workers.dev'
         : 'wss://hyper-proxy.r2d2.to'
 
 enum SocketState {

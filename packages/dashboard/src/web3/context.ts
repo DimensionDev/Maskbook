@@ -114,7 +114,9 @@ export const Web3Context: Web3ProviderType = {
     getAddressNamesList: PluginServices.Wallet.getAddressNames,
     getTransactionList: PluginServices.Wallet.getTransactionList,
     fetchERC20TokensFromTokenLists: Services.Ethereum.fetchERC20TokensFromTokenLists,
-    providerSocket: getProxyWebsocketInstance(),
+    providerSocket: getProxyWebsocketInstance((info) =>
+        PluginMessages.Wallet.events.socketMessageUpdated.sendToAll(info),
+    ),
 }
 
 export function createExternalProvider() {
