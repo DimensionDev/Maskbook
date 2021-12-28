@@ -14,7 +14,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { InjectedDialog } from './InjectedDialog'
 import { Autocomplete } from '@mui/material'
-import { isDataMatchJSONSchema, metadataSchemaStoreReadonly } from '../../protocols/typed-message'
+import { isDataMatchJSONSchema, getKnownMetadataKeys, getMetadataSchema } from '@masknet/shared-base'
 import { ShadowRootPopper } from '../../utils/shadow-root/ShadowRootComponents'
 import { useState } from 'react'
 import { useI18N } from '../../utils'
@@ -32,7 +32,7 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
     const [content, setContent] = useState('{}')
     const { t } = useI18N()
 
-    const knownMetadata = [...metadataSchemaStoreReadonly.keys()]
+    const knownMetadata = getKnownMetadataKeys()
     const result = isValid(content)
     const isInvalid = result !== true
     const editor = onNewMeta ? (
@@ -155,9 +155,9 @@ export function DebugMetadataInspector(props: DebugMetadataInspectorProps) {
         } catch {
             return 'Invalid JSON'
         }
-        const validator = metadataSchemaStoreReadonly.get(field)
-        if (validator) {
-            const valid = isDataMatchJSONSchema(JSON.parse(newData), validator)
+        const validator = getMetadataSchema(field)
+        if (validator.some) {
+            const valid = isDataMatchJSONSchema(JSON.parse(newData), validator.val)
             if (valid.err) return 'Metadata content is invalid:\n' + valid.val.map((x) => '    ' + x.message).join('\n')
         }
         return true

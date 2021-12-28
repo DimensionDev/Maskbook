@@ -12,13 +12,12 @@ import {
     getChainIdFromNetworkType,
     isEIP1559Supported,
     useNativeTokenDetailed,
+    useNetworkType,
 } from '@masknet/web3-shared-evm'
-import { useValueRef } from '@masknet/shared'
-import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
+import { z as zod } from 'zod'
 import BigNumber from 'bignumber.js'
 import { useI18N } from '../../../../../utils'
 import { hexToNumber, toHex } from 'web3-utils'
-import { z as zod } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { StyledInput } from '../../../components/StyledInput'
@@ -79,7 +78,7 @@ const ReplaceTransaction = memo(() => {
 
     const { value: nativeToken } = useNativeTokenDetailed()
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
-    const networkType = useValueRef(currentNetworkSettings)
+    const networkType = useNetworkType()
     const is1559 = isEIP1559Supported(getChainIdFromNetworkType(networkType))
 
     const schema = useMemo(() => {

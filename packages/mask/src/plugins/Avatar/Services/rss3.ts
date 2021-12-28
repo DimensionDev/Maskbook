@@ -4,6 +4,7 @@ import { isSameAddress } from '@masknet/web3-shared-evm'
 import { personalSign } from '../../../extension/background-script/EthereumService'
 import { RSS3_APP } from '../constants'
 import type { AvatarMetaDB } from '../types'
+import addSeconds from 'date-fns/addSeconds'
 
 interface NFTRSSNode {
     signature: string
@@ -20,16 +21,19 @@ export async function createRSS3(address: string) {
     })
 }
 
-const cache = new Map<string, Promise<{ type: string; nfts: Record<string, NFTRSSNode> | NFTRSSNode } | undefined>>()
+const cache = new Map<
+    string,
+    [Promise<{ type: string; nfts: Record<string, NFTRSSNode> | NFTRSSNode } | undefined>, number]
+>()
 
 export async function getNFTAvatarFromRSS(userId: string, address: string) {
     let v = cache.get(address)
-    if (!v) {
-        v = _getNFTAvatarFromRSS(address)
-        cache.set(address, v)
+    if (!v || Date.now() > v[1]) {
+        cache.set(address, [_getNFTAvatarFromRSS(address), addSeconds(Date.now(), 60).getTime()])
     }
 
-    const result = await v
+    v = cache.get(address)
+    const result = await v?.[0]
     if (!result) return
     const { type, nfts } = result
 

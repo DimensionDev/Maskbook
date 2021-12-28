@@ -84,7 +84,7 @@ export function VotingCard() {
             ))}
             <EthereumWalletConnectedBoundary
                 classes={{ connectWallet: classes.button, unlockMetaMask: classes.button }}
-                offChain={true}>
+                offChain>
                 <Button
                     className={classes.button}
                     variant="contained"

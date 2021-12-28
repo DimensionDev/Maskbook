@@ -76,7 +76,7 @@ export const AdditionalContent = memo(function AdditionalContent(props: Addition
             <header className={classes.content}>{header}</header>
             {message ? (
                 <main className={classes.content}>
-                    <DefaultTypedMessageRenderer {...props} message={TypedMessage} allowTextEnlarge={true} />
+                    <DefaultTypedMessageRenderer {...props} message={TypedMessage} allowTextEnlarge />
                 </main>
             ) : null}
         </Card>

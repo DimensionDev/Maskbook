@@ -1,4 +1,4 @@
-import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBufferSync } from '@dimensiondev/kit'
+import { encodeArrayBuffer, decodeArrayBuffer, concatArrayBuffer } from '@dimensiondev/kit'
 import type { EC_JsonWebKey, EC_Public_JsonWebKey } from './JWKType'
 import { fromBase64URL, toBase64URL } from '../convert'
 import { ECKeyIdentifier } from '../Identifier/type'
@@ -12,7 +12,7 @@ const isExtension = globalThis?.location?.protocol?.includes('extension')
 const isTest = new URL('./is_test.json', import.meta.url).protocol === 'file:'
 let secp256k1!: typeof import('tiny-secp256k1')
 if (isExtension || isTest) {
-    secp256k1 = await import('tiny-secp256k1')
+    import('tiny-secp256k1').then((mod) => (secp256k1 = mod))
 }
 
 /**
@@ -21,7 +21,7 @@ if (isExtension || isTest) {
 export function compressSecp256k1Point(x: string, y: string): Uint8Array {
     const xb = fromBase64URL(x)
     const yb = fromBase64URL(y)
-    const point = new Uint8Array(concatArrayBufferSync(new Uint8Array([0x04]), xb, yb))
+    const point = new Uint8Array(concatArrayBuffer(new Uint8Array([0x04]), xb, yb))
     if (secp256k1.isPoint(point)) {
         return secp256k1.pointCompress(point, true)
     } else {

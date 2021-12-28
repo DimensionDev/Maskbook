@@ -216,7 +216,7 @@ export namespace SocialNetworkUI {
             getSearchedKeyword?(): string
         }
         export type ProfileUI = { bioContent: string }
-        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio'>
+        export type IdentityResolved = Pick<Profile, 'identifier' | 'nickname' | 'avatar' | 'bio' | 'homepage'>
 
         /** Resolve the information of who am I on the current network. */
         export interface IdentityResolveProvider {

@@ -3,6 +3,7 @@ import { useAccount, useWeb3 } from '@masknet/web3-shared-evm'
 import { useSwapParameters as useTradeParameters } from './useTradeParameters'
 import type { TradeProvider } from '@masknet/public-api'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { toHex } from 'web3-utils'
 import { useAsync } from 'react-use'
 import BigNumber from 'bignumber.js'
 import { swapErrorToUserReadableMessage } from '../../helpers'
@@ -44,9 +45,7 @@ export function useTradeGasLimit(trade: TradeComputed<Trade> | null, tradeProvid
                     from: account,
                     to: address,
                     data: calldata,
-                    ...(!value || /^0x0*$/.test(value)
-                        ? {}
-                        : { value: `0x${Number.parseInt(value, 16).toString(16)}` }),
+                    ...(!value || /^0x0*$/.test(value) ? {} : { value: toHex(value) }),
                 }
 
                 return web3.eth
