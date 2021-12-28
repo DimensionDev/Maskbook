@@ -11,7 +11,6 @@ export {
     type PayloadParseResult,
     type PayloadWellFormed,
 } from './payload'
-
 export {
     decrypt,
     DecryptError,
@@ -23,8 +22,12 @@ export {
     type DecryptProgress,
     type DecryptSuccess,
 } from './encryption'
-
-export { TwitterDecoder, __TwitterEncoder } from './social-network-encode-decode'
+export {
+    socialNetworkEncoder,
+    socialNetworkDecoder,
+    TwitterDecoder,
+    __TwitterEncoder,
+} from './social-network-encode-decode'
 export {
     type DecodeImageOptions,
     type EncodeImageOptions,
