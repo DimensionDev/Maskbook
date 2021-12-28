@@ -1,7 +1,6 @@
 import sucrase from '@rollup/plugin-sucrase'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import { terser } from 'rollup-plugin-terser'
 import json from '@rollup/plugin-json'
 import { join } from 'path'
 
@@ -56,6 +55,6 @@ function plugins() {
             exclude: ['node_modules/**'],
             transforms: ['typescript'],
         }),
-        terser({ mangle: false }),
+        // terser({ mangle: false }),
     ]
 }

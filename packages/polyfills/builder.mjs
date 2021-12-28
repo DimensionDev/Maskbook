@@ -20,7 +20,7 @@ let polyfillVersion = '__'
     const lockfile = await readFile(lockfilePath)
     const hash = createHash('sha256')
     hash.update(lockfile)
-    polyfillVersion = 'v2' + hash.digest('hex')
+    polyfillVersion = 'v3' + hash.digest('hex')
 }
 
 const versionFilePath = fileURLToPath(new URL('./dist/version.txt', import.meta.url))
@@ -53,7 +53,7 @@ for (const optionsObj of options) {
 }
 
 const elliptic = await readFile(fileURLToPath(new URL(`./dist/internal_elliptic.js`, import.meta.url)), 'utf-8')
-const liner = await readFile(require.resolve('webcrypto-liner/build/webcrypto-liner.shim.min.mjs'), 'utf-8')
+const liner = await readFile(require.resolve('webcrypto-liner/build/webcrypto-liner.shim.mjs'), 'utf-8')
 await writeFile(
     fileURLToPath(new URL(`./dist/secp256k1.js`, import.meta.url)),
     `${elliptic};
