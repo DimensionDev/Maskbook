@@ -312,15 +312,14 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
 
     async getCollections(address: string, { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {}) {
         const requestPath = urlcat('/api/v1/collections', {
-            address,
+            asset_owner: address,
             offset: page,
             limit: size,
         })
-        const response = await fetchFromOpenSea<{
-            collections: OpenSeaCollection[]
-        }>(requestPath, chainId)
+        const response = await fetchFromOpenSea<OpenSeaCollection[]>(requestPath, chainId)
+
         const collections =
-            response?.collections.map((x) => ({
+            response?.map((x) => ({
                 name: x.name,
                 image: x.image_url || undefined,
                 slug: x.slug,
