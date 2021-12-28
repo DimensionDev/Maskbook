@@ -46,7 +46,7 @@ function createERC721ContractFromAssetContract(
 ): ERC721ContractDetailed {
     return createERC721ContractDetailed(
         chainId,
-        address,
+        assetContract?.address ?? '',
         assetContract?.name,
         assetContract?.token_symbol,
         undefined,
@@ -260,7 +260,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             limit: size,
         })
         const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId)
-        return (
+        const assets =
             response?.assets
                 .filter(
                     (x: OpenSeaResponse) =>
@@ -268,7 +268,10 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                         ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
                 )
                 .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset)) ?? []
-        )
+        return {
+            data: assets,
+            hasNextPage: assets.length === size,
+        }
     }
 
     async getHistory(
@@ -316,12 +319,16 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         const response = await fetchFromOpenSea<{
             collections: OpenSeaCollection[]
         }>(requestPath, chainId)
-        return (
+        const collections =
             response?.collections.map((x) => ({
                 name: x.name,
                 image: x.image_url || undefined,
                 slug: x.slug,
             })) ?? []
-        )
+
+        return {
+            data: collections,
+            hasNextPage: collections.length === size,
+        }
     }
 }
