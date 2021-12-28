@@ -35,12 +35,13 @@ import { useMaskBoxPurchasedTokens } from './useMaskBoxPurchasedTokens'
 import { formatCountdown } from '../helpers/formatCountdown'
 import { useOpenBoxTransaction } from './useOpenBoxTransaction'
 import { useMaskBoxMetadata } from './useMaskBoxMetadata'
-import { useHeartBit } from './useHeartBit'
+import { useHeartBeat } from './useHeartBeat'
 import { useIsWhitelisted } from './useIsWhitelisted'
 import { isGreaterThanOrEqualTo, isLessThanOrEqualTo, isZero, multipliedBy } from '@masknet/web3-shared-base'
 
 function useContext(initialState?: { boxId: string }) {
-    const heartBit = useHeartBit()
+    const now = new Date()
+    const heartBeat = useHeartBeat()
     const account = useAccount()
     const chainId = useChainId()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(ChainId.Mainnet)
@@ -139,13 +140,12 @@ function useContext(initialState?: { boxId: string }) {
         if (maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         if (!maskBoxInfo || !maskBoxStatus || !boxInfo) return BoxState.NOT_FOUND
         if (maskBoxStatus.canceled) return BoxState.CANCELED
-        const now = new Date()
         if (isGreaterThanOrEqualTo(boxInfo.tokenIdsPurchased.length, boxInfo.personalLimit)) return BoxState.DRAWED_OUT
         if (isLessThanOrEqualTo(boxInfo.remaining, 0)) return BoxState.SOLD_OUT
         if (boxInfo.startAt > now) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
         return BoxState.READY
-    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBit])
+    }, [boxInfo, loadingBoxInfo, errorBoxInfo, maskBoxInfo, loadingMaskBoxInfo, errorMaskBoxInfo, heartBeat])
 
     const isWhitelisted = useIsWhitelisted(boxInfo?.qualificationAddress, account)
     const isQualifiedByContract =
@@ -170,10 +170,10 @@ function useContext(initialState?: { boxId: string }) {
             case BoxState.EXPIRED:
                 return 'Ended'
             case BoxState.NOT_READY:
-                const now = Date.now()
+                const nowAt = now.getTime()
                 const startAt = boxInfo?.startAt.getTime() ?? 0
-                if (startAt <= now) return 'Loading...'
-                const countdown = formatCountdown(startAt, now)
+                if (startAt <= nowAt) return 'Loading...'
+                const countdown = formatCountdown(startAt, nowAt)
                 return countdown ? `Start sale in ${countdown}` : 'Loading...'
             case BoxState.SOLD_OUT:
                 return 'Sold Out'
@@ -186,7 +186,7 @@ function useContext(initialState?: { boxId: string }) {
             default:
                 unreachable(boxState)
         }
-    }, [boxState, boxInfo?.startAt, heartBit])
+    }, [boxState, boxInfo?.startAt, heartBeat])
     //#endregion
 
     //#region the box metadata
