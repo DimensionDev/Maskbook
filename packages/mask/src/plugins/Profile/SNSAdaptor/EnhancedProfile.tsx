@@ -3,7 +3,7 @@ import { useUpdateEffect } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
+import { AddressName, AddressNameType, useAddressNames } from '@masknet/web3-shared-evm'
 import { MaskMessages, useI18N } from '../../../utils'
 import { useLocationChange } from '../../../utils/hooks/useLocationChange'
 import { WalletsPage } from './WalletsPage'
@@ -15,7 +15,33 @@ import { PageTags } from '../types'
 import { PageTag } from './PageTag'
 import { AddressViewer } from './components/AddressViewer'
 import { useCurrentVisitingIdentity } from '../../../components/DataSource/useActivatedUI'
-import { useDao } from './hooks'
+import { useDao, useDonations, useFootprints } from './hooks'
+
+function getAddressName(currentTag: PageTags, addressNames: AddressName[]) {
+    const getAddressByType = (type: AddressNameType) => addressNames?.find((x) => x.type === type)
+
+    const addressLiteral = getAddressByType(AddressNameType.ADDRESS)
+    const addressENS = getAddressByType(AddressNameType.ENS)
+    const addressUNS = getAddressByType(AddressNameType.UNS)
+    const addressGUN = getAddressByType(AddressNameType.GUN)
+    const addressRSS3 = getAddressByType(AddressNameType.RSS3)
+    const addressTheGraph = getAddressByType(AddressNameType.THE_GRAPH)
+
+    switch (currentTag) {
+        case PageTags.WalletTag:
+            return
+        case PageTags.NFTTag:
+            return addressENS || addressUNS || addressRSS3 || addressLiteral || addressGUN || addressTheGraph
+        case PageTags.DonationTag:
+            return addressRSS3 || addressENS || addressUNS || addressLiteral || addressGUN || addressTheGraph
+        case PageTags.FootprintTag:
+            return addressRSS3 || addressENS || addressUNS || addressLiteral || addressGUN || addressTheGraph
+        case PageTags.DAOTag:
+            return
+        default:
+            unreachable(currentTag)
+    }
+}
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -41,17 +67,14 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), props)
 
-    //#region identity
     const identity = useCurrentVisitingIdentity()
-    const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
-    //#endregion
+    const { value: addressNames = [], loading: loadingAddressNames } = useAddressNames(identity)
 
     const [hidden, setHidden] = useState(true)
-    const { value: daoPayload } = useDao(identity.identifier)
-    const [currentTag, setCurrentTag] = useState<PageTags>(PageTags.NFTTag)
+    const [currentTag, setCurrentTag] = useState<PageTags | undefined>()
 
     useLocationChange(() => {
-        setCurrentTag(PageTags.NFTTag)
+        setCurrentTag(undefined)
         MaskMessages.events.profileNFTsTabUpdated.sendToLocal('reset')
     })
 
@@ -62,57 +85,57 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
     }, [identity])
 
     useUpdateEffect(() => {
-        setCurrentTag(PageTags.NFTTag)
+        setCurrentTag(undefined)
     }, [identity.identifier])
 
+    const addressNFTs = getAddressName(PageTags.NFTTag, addressNames)
+    const addressRSS3 = getAddressName(PageTags.DonationTag, addressNames)
+
+    const { value: daoPayload, loading: loadingDAO } = useDao(identity.identifier)
+    const { value: donations, loading: loadingDonations } = useDonations(addressRSS3?.resolvedAddress ?? '')
+    const { value: footprints, loading: loadingFootprints } = useFootprints(addressRSS3?.resolvedAddress ?? '')
+
+    const currentTagComputed = currentTag ?? (addressNFTs ? PageTags.NFTTag : daoPayload ? PageTags.DAOTag : undefined)
+
     const addressName = useMemo(() => {
-        const getAddressByType = (type: AddressNameType) => addressNames?.find((x) => x.type === type)
-
-        const addressLiteral = getAddressByType(AddressNameType.ADDRESS)
-        const addressENS = getAddressByType(AddressNameType.ENS)
-        const addressUNS = getAddressByType(AddressNameType.UNS)
-        const addressGUN = getAddressByType(AddressNameType.GUN)
-        const addressRSS3 = getAddressByType(AddressNameType.RSS3)
-        const addressTheGraph = getAddressByType(AddressNameType.THE_GRAPH)
-
-        switch (currentTag) {
+        if (!currentTagComputed) return
+        switch (currentTagComputed) {
             case PageTags.WalletTag:
                 return
             case PageTags.NFTTag:
-                return addressENS || addressUNS || addressRSS3 || addressLiteral || addressGUN || addressTheGraph
+                return addressNFTs
             case PageTags.DonationTag:
-                return addressRSS3 || addressENS || addressUNS || addressLiteral || addressGUN || addressTheGraph
+                return addressRSS3
             case PageTags.FootprintTag:
-                return addressRSS3 || addressENS || addressUNS || addressLiteral || addressGUN || addressTheGraph
+                return addressRSS3
             case PageTags.DAOTag:
                 return
             default:
-                unreachable(currentTag)
+                unreachable(currentTagComputed)
         }
-    }, [currentTag, addressNames])
-
-    const address = addressName?.resolvedAddress ?? ''
+    }, [currentTagComputed, addressNFTs, addressRSS3])
 
     const content = useMemo(() => {
-        switch (currentTag) {
+        if (!currentTagComputed) return null
+        switch (currentTagComputed) {
             case PageTags.WalletTag:
                 return <WalletsPage />
             case PageTags.NFTTag:
-                return <NFTPage address={address} />
+                return <NFTPage address={addressNFTs?.resolvedAddress ?? ''} />
             case PageTags.DonationTag:
-                return <DonationPage address={address} />
+                return <DonationPage addressName={addressRSS3} donations={donations} />
             case PageTags.FootprintTag:
-                return <FootprintPage address={address} />
+                return <FootprintPage addressName={addressRSS3} footprints={footprints} />
             case PageTags.DAOTag:
                 return <DAOPage payload={daoPayload} identifier={identity.identifier} />
             default:
-                unreachable(currentTag)
+                unreachable(currentTagComputed)
         }
-    }, [address, currentTag, daoPayload, identity.identifier])
+    }, [addressNFTs, addressRSS3, currentTagComputed, daoPayload, donations, footprints, identity.identifier])
 
     if (hidden) return null
 
-    if (loadingAddressNames)
+    if (loadingAddressNames || loadingDAO)
         return (
             <div className={classes.root}>
                 <Box
@@ -125,7 +148,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
             </div>
         )
 
-    if (!addressName)
+    if (!addressNFTs && !addressRSS3 && !daoPayload)
         return (
             <div className={classes.root}>
                 <Box
@@ -142,11 +165,21 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
         <div className={classes.root}>
             <link rel="stylesheet" href={new URL('./styles/tailwind.css', import.meta.url).toString()} />
             <div className={classes.tags}>
-                <PageTag address={address} daoPayload={daoPayload} tag={currentTag} onChange={setCurrentTag} />
+                <PageTag
+                    addressNFTs={addressNFTs}
+                    addressRSS3={addressRSS3}
+                    daoPayload={daoPayload}
+                    donations={donations}
+                    footprints={footprints}
+                    tag={currentTagComputed}
+                    onChange={setCurrentTag}
+                />
             </div>
-            <div className={classes.metadata}>
-                <AddressViewer addressName={addressName} />
-            </div>
+            {addressName ? (
+                <div className={classes.metadata}>
+                    <AddressViewer addressName={addressName} />
+                </div>
+            ) : null}
             <div className={classes.content}>{content}</div>
         </div>
     )

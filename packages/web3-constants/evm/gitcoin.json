@@ -11,7 +11,8 @@
         "Mumbai": "0x00De4B13153673BCAE2616b67bf822500d325Fc3",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Celo": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -25,7 +26,8 @@
         "Mumbai": "0x3E2849E2A489C8fE47F52847c42aF2E8A82B9973",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Celo": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -39,7 +41,8 @@
         "Mumbai": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Celo": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -53,6 +56,7 @@
         "Mumbai": 5,
         "Arbitrum": 5,
         "Arbitrum_Rinkeby": 5,
-        "xDai": 5
+        "xDai": 5,
+        "Celo": 0
     }
 }

@@ -1,6 +1,6 @@
 import {
     ChainId,
-    getChainConstants,
+    getExplorerConstants,
     getRedPacketConstants,
     isSameAddress,
     getChainName,
@@ -21,7 +21,7 @@ export async function getRedPacketHistory(
     endBlock: number,
     senderAddress: string,
 ) {
-    const { EXPLORER_API, EXPLORER_API_KEY } = getChainConstants(chainId)
+    const { EXPLORER_API, EXPLORER_API_KEY } = getExplorerConstants(chainId)
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = getRedPacketConstants(chainId)
     if (!EXPLORER_API || !HAPPY_RED_PACKET_ADDRESS_V4 || !startBlock) return []
 
