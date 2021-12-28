@@ -20,7 +20,10 @@ async function request(requestArguments: RequestArguments) {
         else resolve(result)
     }
 
-    setTimeout(() => reject(new Error('The request is timeout.')), 45 * 1000)
+    setTimeout(
+        () => reject(new Error('The request is timeout.')),
+        requestArguments.method === EthereumMethodType.MASK_LOGIN_FORTMATIC ? 3 * 60 * 1000 : 45 * 1000,
+    )
     EVM_Messages.events.FORTMATIC_PROVIDER_RPC_RESPONSE.on(onResponse)
     EVM_Messages.events.FORTMATIC_PROVIDER_RPC_REQUEST.sendToVisiblePages({
         payload: {

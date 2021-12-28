@@ -17,6 +17,7 @@ function GlobalCss() {
                     overflowX: 'hidden',
                     margin: '0 auto !important',
                     maxWidth: '100%',
+                    '-webkit-font-smoothing': 'subpixel-antialiased',
                     '&::-webkit-scrollbar': {
                         display: 'none',
                     },
@@ -93,7 +94,6 @@ export const PopupFrame = memo<PopupFrameProps>((props) => {
             PopupRoutes.GasSetting,
             PopupRoutes.SelectWallet,
             PopupRoutes.WalletRecovered,
-            PopupRoutes.Unlock,
         ],
         exact: true,
     })

@@ -4,6 +4,7 @@ import { first } from 'lodash-unified'
 import { ChainId, EthereumMethodType, isFortmaticSupported, ProviderType } from '@masknet/web3-shared-evm'
 import * as Fortmatic from '@masknet/web3-shared-evm/providers/Fortmatic'
 import { NetworkPluginID, useChainId, useProviderType } from '@masknet/plugin-infra'
+import { isDashboardPage, isPopupPage } from '@masknet/shared-base'
 import { EVM_Messages } from '../../messages'
 import { WalletRPC } from '../../../Wallet/messages'
 import Services from '../../../../extension/service'
@@ -15,6 +16,7 @@ export function FortmaticProviderBridge(props: FortmaticProviderBridgeProps) {
     const providerType = useProviderType<ProviderType>(NetworkPluginID.PLUGIN_EVM)
 
     const onMounted = useCallback(async () => {
+        if (isDashboardPage() || isPopupPage()) return
         if (providerType !== ProviderType.Fortmatic) return
         const connected = await Services.Ethereum.connectFortmatic(
             isFortmaticSupported(chainId) ? chainId : ChainId.Mainnet,

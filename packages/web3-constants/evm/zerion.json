@@ -1,0 +1,32 @@
+{
+    "ASSETS_SCOPE_NAME": {
+        "Mainnet": "assets",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "bsc-assets",
+        "BSCT": "",
+        "Matic": "polygon-assets",
+        "Mumbai": "",
+        "Arbitrum": "arbitrum-assets",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "xdai-assets",
+        "Celo": "celo-assets"
+    },
+    "TRANSACTIONS_SCOPE_NAME": {
+        "Mainnet": "transactions",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "bsc-transactions",
+        "BSCT": "",
+        "Matic": "polygon-transactions",
+        "Mumbai": "",
+        "Arbitrum": "arbitrum-transactions",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "xdai-transactions",
+        "Celo": "celo-transactions"
+    }
+}

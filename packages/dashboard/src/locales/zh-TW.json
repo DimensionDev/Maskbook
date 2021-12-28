@@ -332,6 +332,7 @@
     "register_restore_backups_confirm": "恢復",
     "register_restore_backups_hint": "請點擊或拖拽文件到此處",
     "register_restore_backups_file": "檔案",
+    "register_restore_backups_text": "文本內容",
     "register_restore_backups_tabs": "還原備份",
     "create_wallet_mnemonic_tip": "請不要忘記保存助記詞，您將需要這個才能訪問您的錢包。",
     "create_wallet_password_uppercase_tip": "必須含有大寫字母",

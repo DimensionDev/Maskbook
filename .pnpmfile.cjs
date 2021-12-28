@@ -58,8 +58,17 @@ function validatePackage({ dependencies, devDependencies, optionalDependencies, 
     for (const [k, v] of notNormativeInstall(peerDependencies)) assertInstallationSourceValid(name, k, v)
 }
 
+function lockPackage(pkg) {
+    if (pkg.name === 'opensea-js') {
+        const prefix = 'git+https://github.com/ProjectOpenSea/wyvern-'
+        pkg.dependencies['wyvern-js'] = `${prefix}js.git#fabb7660f23f2252c141077e32193d281036299e`
+        pkg.dependencies['wyvern-schemas'] = `${prefix}schemas.git#e1a08fcf8ce2b11a0fe9cbdc7c9f77c59fadef26`
+    }
+}
+
 function readPackage(pkg, context) {
     validatePackage(pkg)
+    lockPackage(pkg)
     return pkg
 }
 
