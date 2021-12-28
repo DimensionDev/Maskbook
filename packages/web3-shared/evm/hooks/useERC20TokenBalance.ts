@@ -8,7 +8,8 @@ import { toHex } from 'web3-utils'
 
 /**
  * Fetch token balance from chain
- * @param token
+ * @param address
+ * @param targetChainId
  */
 export function useERC20TokenBalance(address?: string, targetChainId?: ChainId) {
     const account = useAccount()

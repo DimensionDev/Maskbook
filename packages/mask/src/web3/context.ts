@@ -10,7 +10,8 @@ import {
     resolveProviderInjectedKey,
     isInjectedProvider,
 } from '@masknet/web3-shared-evm'
-import { bridgedEthereumProvider } from '@masknet/injected-script'
+import { isPopupPage } from '@masknet/shared-base'
+import { bridgedCoin98Provider, bridgedEthereumProvider } from '@masknet/injected-script'
 import {
     currentBlockNumberSettings,
     currentBalanceSettings,
@@ -68,14 +69,16 @@ function createWeb3Context(disablePopup = false, isMask = false): Web3ProviderTy
                 const account = isMask ? currentMaskWalletAccountSettings.value : currentAccountSettings.value
                 const providerType = currentProviderSettings.value
 
-                if (location.href.includes('popups.html')) return account
+                if (isPopupPage()) return account
                 if (providerType === ProviderType.Fortmatic) return account
                 if (!isInjectedProvider(providerType)) return account
 
                 try {
+                    const bridgedProvider =
+                        providerType === ProviderType.Coin98 ? bridgedCoin98Provider : bridgedEthereumProvider
                     const injectedKey = resolveProviderInjectedKey(providerType)
                     if (!injectedKey) return ''
-                    const propertyValue = await bridgedEthereumProvider.getProperty(injectedKey)
+                    const propertyValue = await bridgedProvider.getProperty(injectedKey)
                     if (propertyValue === true) return account
                     return ''
                 } catch (error) {

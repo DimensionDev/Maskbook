@@ -75,8 +75,15 @@ function Wallets() {
     }, [pathname])
 
     const balance = useMemo(() => {
-        return BigNumber.sum.apply(null, detailedTokens?.map((asset) => getTokenUSDValue(asset.value)) ?? []).toNumber()
-    }, [detailedTokens])
+        return BigNumber.sum
+            .apply(
+                null,
+                detailedTokens
+                    ?.filter((x) => (selectedNetwork ? x.chainId === selectedNetwork.chainId : true))
+                    ?.map((y) => getTokenUSDValue(y.value)) ?? [],
+            )
+            .toNumber()
+    }, [selectedNetwork, detailedTokens])
 
     const pateTitle = useMemo(() => {
         if (wallets.length === 0) return t.create_wallet_form_title()

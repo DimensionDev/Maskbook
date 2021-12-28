@@ -4,13 +4,17 @@ This package provides the ability to encrypt/decrypt Mask Network payload.
 
 This package is designed with OCap and prepared to run under SES.
 
+## Decryption process
+
+```
+raw message (text or image)
+|> Social Network decoding (socialNetworkID)
+|> Standard Decryption
+```
+
 ## OCap requirements
 
 - Access to WebCrypto API
-
-## Todo
-
-- [ ] Add test cases
 
 ### Payload parser
 
@@ -27,7 +31,7 @@ This package is designed with OCap and prepared to run under SES.
 ### Encryption & Decryption
 
 - [ ] Encryption
-- [ ] Decryption
+- [x] Decryption
 
 ### Other
 

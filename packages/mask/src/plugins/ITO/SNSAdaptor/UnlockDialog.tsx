@@ -69,7 +69,7 @@ export function UnlockDialog(props: UnlockDialogProps) {
             uuid: id,
             disableNativeToken: true,
             disableSearchBar: true,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
                 whitelist: tokens.map((x) => x.address),
             },

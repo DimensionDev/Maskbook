@@ -58,7 +58,7 @@ export const DisconnectProfileDialog = ({
                                         variant="caption"
                                         key={x.userId}
                                         sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1 }}>
-                                        {`@${x.userId}`}
+                                        @{x.userId}
                                     </Typography>
                                 </Stack>
                                 <Box>

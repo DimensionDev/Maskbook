@@ -28,6 +28,7 @@ export const LightColor = {
     twitterInfoBackground: '#AFC3E1',
     twitterInfo: '#8CA3C7',
     twitterBg: '#F6F8F8',
+    twitterTooltipBg: 'rgba(0,0,0,.6)',
     twitterInput: '#EDF1F2',
     twitterLine: '#EBEEF0',
     redMain: '#ff5f5f',
@@ -68,6 +69,7 @@ export const LightColor = {
     main: '#1C68F3',
     errorBackground: 'rgba(255, 95, 95, 0.15)',
     tooltipBackground: '#ffffff',
+    warningBackground: 'rgba(255, 185, 21, 0.1)',
 }
 export const DarkColor: typeof LightColor = {
     primary: '#1c68f3',
@@ -98,6 +100,7 @@ export const DarkColor: typeof LightColor = {
     twitterInfo: '#8CA3C7',
     twitterLine: '#2F3336',
     twitterBg: '#15171A',
+    twitterTooltipBg: 'rgba(91,112,131,.6)',
     redMain: '#ff5f5f',
     redLight: '#46304a',
     redContrastText: '#ffffff',
@@ -138,6 +141,7 @@ export const DarkColor: typeof LightColor = {
     main: '#D4D4D4',
     errorBackground: 'rgba(255, 95, 95, 0.1)',
     tooltipBackground: '#1A1D20',
+    warningBackground: 'rgba(255, 185, 21, 0.1)',
 }
 
 export type Color = typeof LightColor

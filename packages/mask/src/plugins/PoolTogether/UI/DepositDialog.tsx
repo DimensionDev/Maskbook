@@ -119,7 +119,7 @@ export function DepositDialog() {
             open: true,
             uuid: id,
             disableNativeToken: true,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: [token.address],
                 whitelist: [token.address],
             },

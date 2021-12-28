@@ -50,7 +50,7 @@ export const searchProfileTabListSelector = () =>
 export const searchForegroundColorSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[data-testid="primaryColumn"] > div > div > div > div > div > div > div > div > div > div')
 export const searchNewTweetButtonSelector: () => LiveSelector<E, true> = () => {
-    const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"')
+    const q = querySelector<E>('[data-testid="FloatingActionButtons_Tweet_Button"]')
     if (q.evaluate()) return q
     return querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 }
@@ -86,10 +86,12 @@ export const composeAnchorTextSelector: () => LiveSelector<HTMLAnchorElement, tr
     )
 
 export const postEditorContentInPopupSelector: () => LiveSelector<E, true> = () =>
-    querySelector<E>('[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3)')
+    querySelector<E>(
+        '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3)',
+    )
 export const postEditorInPopupSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>(
-        '[aria-labelledby="modal-header"] > div:first-child > div:nth-child(3) > div:first-child > div:first-child [role="button"][aria-label]:nth-child(6)',
+        '[aria-labelledby="modal-header"] > div:first-child > div:first-child > div:first-child > div:nth-child(3) > div:first-child [role="button"][aria-label]:nth-child(6)',
     )
 export const toolBoxInSideBarSelector: () => LiveSelector<E, true> = () =>
     querySelector<E>('[role="banner"] [role="navigation"] > div')
@@ -120,6 +122,8 @@ export const twitterMainAvatarSelector: () => LiveSelector<E, true> = () =>
 export const newPostButtonSelector = () => querySelector<E>('[data-testid="SideNav_NewTweet_Button"]')
 
 export const bioDescriptionSelector = () => querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
+
+export const personalHomepageSelector = () => querySelector<HTMLDivElement>('[data-testid="UserUrl"]')
 
 export const bioPageUserNickNameSelector = () =>
     querySelector<HTMLDivElement>('[data-testid="UserDescription"]')
@@ -198,7 +202,9 @@ export const selfInfoSelectors = () => ({
 })
 
 //#region nft avatar
-export const searchProfileAvatarSelector = () => querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+export const searchProfileAvatarSelector = () => {
+    return querySelectorAll<E>('[data-testid="fileInput"]').at(1).closest<E>(4)
+}
 
 export const searchProfileAvatarParentSelector = () =>
     querySelectorAll<HTMLDivElement>('[data-testid="fileInput"]').at(1).closest<HTMLDivElement>(2).evaluate()[0]
@@ -220,20 +226,20 @@ export const searchProfileSaveSelector = () => querySelector<E>('[data-testid="P
 
 export const searchProfessionalButtonSelector = () =>
     querySelector<E>('[data-testid="ProfessionalButton_Switch_To_Professional"]')
+
+export const searchProfileSetAvatarSelector = () =>
+    searchProfessionalButtonSelector().closest<E>(3).querySelector('div > div:nth-child(2) > div:nth-child(2)')
 //#endregion
 
 //#region avatar selector
-
 export const searchTwitterAvatarLinkSelector: () => LiveSelector<E, true> = () =>
     querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('div  a')
 
-export const searchTwitterAvatarSelector = () => searchTwitterAvatarLinkSelector().querySelector<E>('div')
+export const searchTwitterAvatarSelector = () =>
+    querySelector<E, true>('[data-testid="UserProfileHeader_Items"]').closest<E>(2).querySelector('img').closest<E>(1)
 //#endregion
 
 //#region twitter avatar
-export const searchAccountSwitherButtonSelector = () =>
-    querySelector<E>('[data-testid="SideNav_AccountSwitcher_Button"]')
-
 export const searchUseCellSelector = () => querySelector<E>('[data-testid="UserCell"]')
 //#endregion
 

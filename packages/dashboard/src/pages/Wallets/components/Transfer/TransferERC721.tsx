@@ -8,6 +8,7 @@ import {
     EthereumTokenType,
     formatWeiToEther,
     isSameAddress,
+    isValidAddress,
     TransactionStateType,
     useAccount,
     useChainId,
@@ -37,8 +38,9 @@ import { unionBy } from 'lodash-unified'
 import { TransferTab } from './types'
 import { NetworkPluginID, useLookupAddress, useNetworkDescriptor, useWeb3State } from '@masknet/plugin-infra'
 import { NetworkType } from '@masknet/public-api'
-import { useUpdateEffect } from 'react-use'
+import { useAsync, useUpdateEffect } from 'react-use'
 import { multipliedBy } from '@masknet/web3-shared-base'
+import { Services } from '../../../../API'
 
 const useStyles = makeStyles()((theme) => ({
     disabled: {
@@ -65,9 +67,12 @@ export const TransferERC721 = memo(() => {
     const [defaultToken, setDefaultToken] = useState<ERC721TokenDetailed | null>(null)
     const navigate = useNavigate()
     const [popoverOpen, setPopoverOpen] = useState(false)
+    const [recipientError, setRecipientError] = useState<{
+        type: 'account' | 'contractAddress'
+        message: string
+    } | null>(null)
     const [minPopoverWidth, setMinPopoverWidth] = useState(0)
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [offset, setOffset] = useState(0)
     const [id] = useState(uuid())
     const [gasLimit_, setGasLimit_] = useState(0)
     const network = useNetworkDescriptor()
@@ -120,6 +125,30 @@ export const TransferERC721 = memo(() => {
     } = useLookupAddress(allFormFields.recipient, NetworkPluginID.PLUGIN_EVM)
     //#endregion
 
+    //#region check contract address and account address
+    useAsync(async () => {
+        const recipient = allFormFields.recipient
+        setRecipientError(null)
+        if (!recipient && !registeredAddress) return
+        if (!isValidAddress(recipient) && !isValidAddress(registeredAddress)) return
+
+        clearErrors()
+        if (isSameAddress(recipient, account) || isSameAddress(registeredAddress, account)) {
+            setRecipientError({
+                type: 'account',
+                message: t.wallets_transfer_error_same_address_with_current_account(),
+            })
+        }
+        const result = await Services.Ethereum.getCode(recipient)
+        if (result !== '0x') {
+            setRecipientError({
+                type: 'contractAddress',
+                message: t.wallets_transfer_error_is_contract_address(),
+            })
+        }
+    }, [allFormFields.recipient, clearErrors, registeredAddress])
+    //#endregion
+
     const erc721GasLimit = useGasLimit(
         EthereumTokenType.ERC721,
         contract?.address,
@@ -163,18 +192,15 @@ export const TransferERC721 = memo(() => {
                 setValue('contract', ev.contract.name || ev.contract.address, { shouldValidate: true })
                 setContract(ev.contract)
                 setValue('tokenId', '')
-                setOffset(0)
             }
         },
     )
 
     const {
-        asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList = [],
         refreshing,
-    } = useERC721TokenDetailedOwnerList(contract, account, offset)
-    const { tokenDetailedOwnerList, loadMore } = value
-
-    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 8) : void 0), [offset, loadMore])
+    } = useERC721TokenDetailedOwnerList(contract, account)
 
     useEffect(() => {
         if (transferState.type === TransactionStateType.HASH) {
@@ -275,8 +301,11 @@ export const TransferERC721 = memo(() => {
                                     {...field}
                                     required
                                     onChange={(e) => setValue('recipient', e.currentTarget.value)}
-                                    helperText={errors.recipient?.message}
-                                    error={!!errors.recipient}
+                                    helperText={errors.recipient?.message || recipientError?.message}
+                                    error={
+                                        !!errors.recipient ||
+                                        (!!recipientError && recipientError.type === 'contractAddress')
+                                    }
                                     value={field.field.value}
                                     InputProps={{
                                         onClick: (event) => {
@@ -344,7 +373,6 @@ export const TransferERC721 = memo(() => {
                                 control={control}
                                 render={(field) => (
                                     <SelectNFTList
-                                        onScroll={addOffset}
                                         onSelect={(value) => setValue('tokenId', value)}
                                         list={
                                             defaultToken
@@ -353,7 +381,6 @@ export const TransferERC721 = memo(() => {
                                         }
                                         selectedTokenId={field.field.value}
                                         loading={loadingOwnerList}
-                                        loadMore={loadMore}
                                     />
                                 )}
                                 name="tokenId"

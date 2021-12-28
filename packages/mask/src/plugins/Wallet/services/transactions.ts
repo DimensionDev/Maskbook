@@ -1,9 +1,9 @@
 import { leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import { NetworkType, FungibleAssetProvider } from '@masknet/web3-shared-evm'
+import { NetworkType, FungibleAssetProvider, getChainIdFromNetworkType } from '@masknet/web3-shared-evm'
 import { isNil } from 'lodash-unified'
 import * as DeBankAPI from '../apis/debank'
 import * as ZerionApi from '../apis/zerion'
-import { resolveDebankChainName, resolveDebankTransactionType, resolveZerionTransactionsScopeName } from '../pipes'
+import { resolveDebankTransactionType, resolveZerionTransactionsScopeName } from '../pipes'
 import {
     DebankTransactionDirection,
     HistoryResponse,
@@ -24,13 +24,13 @@ export async function getTransactionList(
     hasNextPage: boolean
 }> {
     if (provider === FungibleAssetProvider.DEBANK) {
-        const name = resolveDebankChainName(network)
-        if (!name)
+        const response = await DeBankAPI.getTransactionList(address, getChainIdFromNetworkType(network))
+        if (!response)
             return {
                 transactions: [],
                 hasNextPage: false,
             }
-        const { data, error_code } = await DeBankAPI.getTransactionList(address, name)
+        const { data, error_code } = response
         if (error_code !== 0) throw new Error('Fail to load transactions.')
         return {
             transactions: fromDeBank(data),
@@ -63,7 +63,7 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
         .map((transaction) => {
             let type = transaction.tx?.name
             if (!type && !isNil(transaction.cate_id)) {
-                type = cate_dict[transaction.cate_id].en
+                type = cate_dict[transaction.cate_id].name
             } else if (type === '') {
                 type = 'contract interaction'
             }
@@ -75,20 +75,20 @@ function fromDeBank({ cate_dict, history_list, token_dict }: HistoryResponse['da
                 failed: transaction.tx?.status === 0,
                 pairs: [
                     ...transaction.sends.map(({ amount, token_id }) => ({
-                        name: token_dict[token_id].name,
-                        symbol: token_dict[token_id].optimized_symbol,
+                        name: token_dict[token_id]?.name,
+                        symbol: token_dict[token_id]?.optimized_symbol,
                         address: token_id,
                         direction: DebankTransactionDirection.SEND,
                         amount,
                         logoURI: token_dict[token_id].logo_url,
                     })),
                     ...transaction.receives.map(({ amount, token_id }) => ({
-                        name: token_dict[token_id].name,
-                        symbol: token_dict[token_id].optimized_symbol,
+                        name: token_dict[token_id]?.name,
+                        symbol: token_dict[token_id]?.optimized_symbol,
                         address: token_id,
                         direction: DebankTransactionDirection.RECEIVE,
                         amount,
-                        logoURI: token_dict[token_id].logo_url,
+                        logoURI: token_dict[token_id]?.logo_url,
                     })),
                 ],
                 gasFee: transaction.tx

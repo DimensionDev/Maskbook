@@ -7,5 +7,8 @@
     "import": "crwdns8001:0crwdne8001:0",
     "balance": "crwdns8023:0crwdne8023:0",
     "select_token": "crwdns8025:0crwdne8025:0",
-    "erc20_token_list_placeholder": "crwdns9007:0crwdne9007:0"
+    "erc20_token_list_placeholder": "crwdns9007:0crwdne9007:0",
+    "erc20_token_list_loading": "crwdns10623:0crwdne10623:0",
+    "erc20_search_token_loading": "crwdns10625:0crwdne10625:0",
+    "erc20_search_not_token_found": "crwdns10627:0crwdne10627:0"
 }

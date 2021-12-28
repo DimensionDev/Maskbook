@@ -1,3 +1,4 @@
+import { Children, cloneElement } from 'react'
 import {
     DialogActions,
     DialogClassKey,
@@ -14,10 +15,10 @@ import {
     useMediaQuery,
 } from '@mui/material'
 import { makeStyles, useDialogStackActor, useStylesExtends, mergeClasses } from '@masknet/theme'
-import { Children, cloneElement } from 'react'
+import { ErrorBoundary } from '@masknet/shared'
+import { isDashboardPage } from '@masknet/shared-base'
 import { useI18N, usePortalShadowRoot } from '../../utils'
 import { DialogDismissIconUI } from '../InjectedComponents/DialogDismissIcon'
-import { ErrorBoundary } from '@masknet/shared'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { MINDS_ID } from '../../social-network-adaptor/minds.com/base'
 import { FACEBOOK_ID } from '../../social-network-adaptor/facebook.com/base'
@@ -35,7 +36,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         marginLeft: 6,
         verticalAlign: 'middle',
     },
-    dialogBackdropRoot: {},
     dialogCloseButton: {
         color: theme.palette.text.primary,
     },
@@ -81,7 +81,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
     // see https://github.com/import-js/eslint-plugin-import/issues/2288
     // eslint-disable-next-line import/no-deprecated
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const { children, open, disableBackdropClick, titleBarIconStyle, onClose, title, ...rest } = props
     const { t } = useI18N()
     const actions = CopyElementWithNewProps(children, DialogActions, { root: dialogActions })
