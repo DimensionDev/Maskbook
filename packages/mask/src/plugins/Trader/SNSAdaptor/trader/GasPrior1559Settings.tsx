@@ -18,6 +18,7 @@ import { ExpandMore } from '@mui/icons-material'
 import { toHex } from 'web3-utils'
 import BigNumber from 'bignumber.js'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     container: {
@@ -115,7 +116,7 @@ interface GasPrior1559SettingsProps {
 
 export const GasPrior1559Settings = memo<GasPrior1559SettingsProps>(({ onCancel, onSave: onSave_, gasConfig }) => {
     const chainId = useChainId()
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
     const { t } = useI18N()
     const [selected, setOption] = useState<number>(1)

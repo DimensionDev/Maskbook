@@ -15,6 +15,7 @@ import { fromWei, toHex } from 'web3-utils'
 import { isEmpty } from 'lodash-unified'
 import ActionButton from '../../../../extension/options-page/DashboardComponents/ActionButton'
 import { isGreaterThan, isLessThan, isLessThanOrEqualTo, isPositive, multipliedBy } from '@masknet/web3-shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     option: {
@@ -140,7 +141,7 @@ const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: onSave_, gasConfig }) => {
     const { t } = useI18N()
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const { classes } = useStyles({ isDashboard })
     const chainId = useChainId()
 

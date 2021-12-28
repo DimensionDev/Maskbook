@@ -1,10 +1,9 @@
 import { useState, useCallback } from 'react'
 import { v4 as uuid } from 'uuid'
 import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog } from '@masknet/shared'
+import { ERC20TokenListProps, useRemoteControlledDialog } from '@masknet/shared'
 import { SelectTokenDialogEvent, WalletMessages } from '../../Wallet/messages'
 import { TokenAmountPanel, TokenAmountPanelProps } from '../../../web3/UI/TokenAmountPanel'
-import type { FixedTokenListProps } from '../../../extension/options-page/DashboardComponents/FixedTokenList'
 
 export interface SelectTokenAmountPanelProps {
     amount: string
@@ -14,7 +13,7 @@ export interface SelectTokenAmountPanelProps {
     disableSearchBar?: boolean
     onAmountChange: (amount: string) => void
     onTokenChange: (token: FungibleTokenDetailed) => void
-    FixedTokenListProps?: Partial<FixedTokenListProps>
+    FungibleTokenListProps?: Partial<ERC20TokenListProps>
     TokenAmountPanelProps?: Partial<TokenAmountPanelProps>
 }
 
@@ -27,7 +26,7 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
         disableSearchBar = false,
         onAmountChange,
         onTokenChange,
-        FixedTokenListProps,
+        FungibleTokenListProps,
         TokenAmountPanelProps,
     } = props
 
@@ -49,9 +48,9 @@ export function SelectTokenAmountPanel(props: SelectTokenAmountPanelProps) {
             uuid: id,
             disableNativeToken,
             disableSearchBar,
-            FixedTokenListProps,
+            FungibleTokenListProps,
         })
-    }, [id, disableNativeToken, disableSearchBar, FixedTokenListProps])
+    }, [id, disableNativeToken, disableSearchBar, FungibleTokenListProps])
     //#endregion
 
     return (

@@ -1,6 +1,6 @@
-import { Typography } from '@mui/material'
-import classnames from 'classnames'
 import { ReactElement, useCallback, useEffect, useState } from 'react'
+import classnames from 'classnames'
+import { Typography } from '@mui/material'
 import { MaskMessages } from '../../../utils'
 
 export interface EnhancedProfileTabProps extends withClasses<'tab' | 'button' | 'selected'> {

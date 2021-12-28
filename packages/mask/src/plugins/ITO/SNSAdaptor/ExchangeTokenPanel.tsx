@@ -95,7 +95,7 @@ export function ExchangeTokenPanel(props: ExchangeTokenPanelProps) {
             open: true,
             uuid: id,
             disableNativeToken: isSell,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 blacklist: excludeTokensAddress,
                 selectedTokens: [exchangeToken?.address ?? '', ...selectedTokensAddress],
             },

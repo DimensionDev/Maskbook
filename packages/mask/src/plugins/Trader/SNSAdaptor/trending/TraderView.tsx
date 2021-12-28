@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, Tab, Tabs } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useValueRef } from '@masknet/shared'
 import { useI18N, useSettingsSwitcher } from '../../../../utils'
 import type { TagType } from '../../types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
@@ -22,20 +21,18 @@ import { TrendingViewDeck } from './TrendingViewDeck'
 import { currentDataProviderSettings } from '../../settings'
 import { useAvailableCoins } from '../../trending/useAvailableCoins'
 import { usePreferredCoinId } from '../../trending/useCurrentCoinId'
-import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, useFungibleTokenDetailed, useChainIdValid, useNetworkType } from '@masknet/web3-shared-evm'
 import { TradeContext, useTradeContext } from '../../trader/useTradeContext'
-import { currentNetworkSettings } from '../../../Wallet/settings'
 
 const useStyles = makeStyles<{ isPopper: boolean }>()((theme, props) => {
     return {
         root: props.isPopper
             ? {
                   width: 450,
-                  boxShadow: `${
+                  boxShadow:
                       theme.palette.mode === 'dark'
                           ? 'rgba(255, 255, 255, 0.2) 0px 0px 15px, rgba(255, 255, 255, 0.15) 0px 0px 3px 1px'
-                          : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px'
-                  }`,
+                          : 'rgba(101, 119, 134, 0.2) 0px 0px 15px, rgba(101, 119, 134, 0.15) 0px 0px 3px 1px',
               }
             : {
                   width: '100%',
@@ -114,7 +111,7 @@ export function TraderView(props: TraderViewProps) {
     const chainIdValid = useChainIdValid()
 
     //#region track network type
-    const networkType = useValueRef(currentNetworkSettings)
+    const networkType = useNetworkType()
     useEffect(() => setTabIndex(0), [networkType])
     //#endregion
 

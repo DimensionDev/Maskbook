@@ -1,5 +1,7 @@
+import { ProviderType } from '@masknet/web3-shared-evm'
 import { EthereumAddress } from 'wallet.ts'
 import { getTransactionCount } from './network'
+import { currentMaskWalletChainIdSettings } from '../../../plugins/Wallet/settings'
 
 class NonceManager {
     constructor(private address: string) {}
@@ -28,7 +30,14 @@ class NonceManager {
             const run = async () => {
                 try {
                     this.lock()
-                    callback(null, await getTransactionCount(this.address))
+                    callback(
+                        null,
+                        // Only mask wallets need to use Nonce
+                        await getTransactionCount(this.address, {
+                            providerType: ProviderType.MaskWallet,
+                            chainId: currentMaskWalletChainIdSettings.value,
+                        }),
+                    )
                 } catch (error: any) {
                     callback(error)
                 }

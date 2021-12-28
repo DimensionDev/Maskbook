@@ -93,7 +93,7 @@ export function InvestDialog() {
             open: true,
             uuid: id,
             disableNativeToken: true,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 whitelist: allowedTokens,
             },
         })

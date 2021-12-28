@@ -109,7 +109,7 @@ export type SelectTokenDialogEvent =
           chainId?: ChainId
           disableNativeToken?: boolean
           disableSearchBar?: boolean
-          FixedTokenListProps?: {
+          FungibleTokenListProps?: {
               keyword?: string
               whitelist?: string[]
               blacklist?: string[]
@@ -125,20 +125,6 @@ export type SelectTokenDialogEvent =
            * The selected detailed token.
            */
           token?: FungibleTokenDetailed
-      }
-export type SelectERC20TokenDialogEvent =
-    | {
-          open: true
-          props?: {
-              whitelist?: string[]
-              blacklist?: string[]
-              tokens?: FungibleTokenDetailed[]
-              selectedTokens?: string[]
-              onSelect?(token: FungibleTokenDetailed | null): void
-          }
-      }
-    | {
-          open: false
       }
 
 export type SelectNftContractDialogEvent = {
@@ -216,11 +202,6 @@ export interface WalletMessage {
      * Restore Legacy Wallet Dialog
      */
     restoreLegacyWalletDialogUpdated: RestoreLegacyWalletDialogEvent
-
-    /**
-     * Select token dialog
-     */
-    selectERC20TokenDialogUpdated: SelectERC20TokenDialogEvent
 
     walletsUpdated: void
     phrasesUpdated: void

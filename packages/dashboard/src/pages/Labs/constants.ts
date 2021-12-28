@@ -14,7 +14,6 @@ export const PLUGIN_IDS = {
     MASK_BOX: 'com.maskbook.box',
     POOL_TOGETHER: 'com.pooltogether',
     GOOD_GHOSTING: 'co.good_ghosting',
-    CRYPTOARTAI: 'com.maskbook.cryptoartai',
 }
 
 type TUTORIAL_URLS_OPT = {

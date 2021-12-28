@@ -133,6 +133,14 @@ export const Dialog: Theme = (mode, colors): ThemeOptions => ({
                     [`& .dashboard-style`]: {
                         backgroundColor: mode === 'dark' ? colors.primaryBackground : colors.secondaryBackground,
                     },
+                    // workaround for common component be used in dashboard and twitter
+                    [`& .dashboard.token-list`]: {
+                        padding: 10,
+                    },
+                    [`& .dashboard.token-list-symbol`]: {
+                        color: mode === 'dark' ? 'rgba(255, 255, 255, 0.8)' : '#7B8192',
+                        fontSize: 12,
+                    },
                 },
                 paper: { minHeight: 200, minWidth: 440, background: colors.mainBackground },
             },

@@ -7,5 +7,8 @@
     "import": "Import",
     "balance": "Balance",
     "select_token": "Select a Token",
-    "erc20_token_list_placeholder": "Token name or contract address"
+    "erc20_token_list_placeholder": "Token name or contract address",
+    "erc20_token_list_loading": "Loading token lists..",
+    "erc20_search_token_loading": "Loading token...",
+    "erc20_search_not_token_found": "No results or contract address does not meet the query criteria."
 }

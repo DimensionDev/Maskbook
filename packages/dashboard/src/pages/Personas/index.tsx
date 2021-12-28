@@ -71,7 +71,7 @@ function Personas() {
         <UserProvider>
             <PageFrame
                 title={t.personas()}
-                noBackgroundFill={true}
+                noBackgroundFill
                 primaryAction={
                     <PersonaStateBar
                         nickname={currentPersona?.nickname}

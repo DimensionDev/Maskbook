@@ -103,7 +103,7 @@ export function DonateDialog(props: DonateDialogProps) {
             open: true,
             uuid: id,
             disableNativeToken: false,
-            FixedTokenListProps: {
+            FungibleTokenListProps: {
                 selectedTokens: token ? [token.address] : [],
             },
         })
