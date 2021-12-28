@@ -14,3 +14,4 @@ export const CoinGecko = new CoinGeckoAPI()
 // Method for provider proxy
 export { getOpenSeaNFTList, getOpenSeaCollectionList } from './opensea'
 export { getAssetListFromDebank } from './debank'
+export { getRaribleNFTList } from './rarible'

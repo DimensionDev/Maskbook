@@ -35,7 +35,8 @@ const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | Ch
 
 async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
     const response = await fetch(urlcat(url, path), {
-        mode: 'cors',
+        // TODO: cors not work in cloudflare worker
+        // mode: 'cors',
         ...init,
     })
     return response.json() as Promise<T>
@@ -67,7 +68,7 @@ function createERC721TokenFromAsset(
         info: {
             name: asset?.meta.name ?? '',
             description: asset?.meta.description ?? '',
-            mediaUrl: toRaribleImage(asset?.meta.image.url.ORIGINAL ?? asset?.meta.image.url.PREVIEW ?? ''),
+            mediaUrl: toRaribleImage(asset?.meta.image?.url.ORIGINAL ?? asset?.meta.image?.url.PREVIEW ?? ''),
             owner: asset?.owners[0],
         },
         tokenId: tokenId,
@@ -81,7 +82,7 @@ function createNFTAsset(asset: RaribleNFTItemMapResponse, chainId: ChainId): Non
         is_verified: false,
         is_auction: false,
         token_address: asset.contract,
-        image_url: toRaribleImage(asset?.meta.image.url.ORIGINAL),
+        image_url: toRaribleImage(asset?.meta.image?.url.ORIGINAL),
         asset_contract: null,
         owner: owner
             ? {
@@ -324,4 +325,9 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
             } as NonFungibleTokenAPI.History
         })
     }
+}
+
+export function getRaribleNFTList(apiKey: string, address: string, page?: number, size?: number) {
+    const rarible = new RaribleAPI()
+    return rarible.getTokens(address, { page, size })
 }

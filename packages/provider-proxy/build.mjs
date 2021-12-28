@@ -35,6 +35,7 @@ const packageJSON = {
         'socket.io-client': '2.4.0',
         'lodash-unified': '1.0.1',
         'date-fns': '2.27.0',
+        urlcat: '^2.0.4',
     },
     main: './output.js',
     types: './output.d.ts',

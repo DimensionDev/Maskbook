@@ -156,7 +156,7 @@ export class ProviderProxy {
 
 const SOCKET_POINT =
     process.env.NODE_ENV === 'development'
-        ? 'wss://hyper-proxy-development.laanfor.workers.dev'
+        ? 'wss://hyper-proxy-development.mask-reverse-proxy.workers.dev'
         : 'wss://hyper-proxy.r2d2.to'
 
 enum SocketState {
