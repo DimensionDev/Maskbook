@@ -203,7 +203,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     {(() => {
                         if (!isQualified) {
                             const { symbol, decimals } = holderToken ?? {}
-                            const tokenPrice = `${formatBalance(boxInfo?.holderMinTokenAmount, decimals)}$${symbol}`
+                            const tokenPrice = `${formatBalance(boxInfo?.holderMinTokenAmount, decimals)} $${symbol}`
                             return `You must hold at least ${tokenPrice}`
                         }
                         return boxState === BoxState.READY && paymentTokenAddress ? (

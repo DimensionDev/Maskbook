@@ -9,7 +9,7 @@ import {
     isSecp256k1Point,
     isSecp256k1PrivateKey,
 } from '@masknet/shared-base'
-import { concatArrayBufferSync } from '@dimensiondev/kit'
+import { concatArrayBuffer } from '@dimensiondev/kit'
 
 export function keyToJWK(key: string, type: 'public'): EC_Public_JsonWebKey
 export function keyToJWK(key: string, type: 'private'): EC_Private_JsonWebKey
@@ -38,7 +38,7 @@ export function JWKToKey(jwk: EC_JsonWebKey, type: 'public' | 'private'): string
     if (type === 'public' && jwk.x && jwk.y) {
         const xb = fromBase64URL(jwk.x)
         const yb = fromBase64URL(jwk.y)
-        const point = new Uint8Array(concatArrayBufferSync(new Uint8Array([0x04]), xb, yb))
+        const point = new Uint8Array(concatArrayBuffer(new Uint8Array([0x04]), xb, yb))
         if (isSecp256k1Point(point)) return `0x${ec.keyFromPublic(point).getPublic(false, 'hex')}`
     }
     if (type === 'private' && jwk.d) {

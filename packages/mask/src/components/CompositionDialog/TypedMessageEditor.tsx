@@ -1,10 +1,15 @@
-import { isTypedMessageEqual, isTypedMessageText, makeTypedMessageText, TypedMessage } from '@masknet/shared-base'
+import {
+    isTypedMessageEqual,
+    isTypedMessageText,
+    makeTypedMessageText,
+    TypedMessage,
+    editTypedMessageMeta,
+} from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button } from '@mui/material'
 import { useCallback, useImperativeHandle, useState } from 'react'
 import { useRef } from 'react'
 import { forwardRef, memo } from 'react'
-import { editTypedMessageMeta } from '../../protocols/typed-message'
 import { useI18N } from '../../utils'
 import { BadgeRenderer } from './BadgeRenderer'
 
