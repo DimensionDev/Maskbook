@@ -64,6 +64,11 @@ export function useSwapCallback(
             return
         }
 
+        if (Array.isArray(password)) {
+            // TODO: handling array password
+            return
+        }
+
         // error: poll has expired
         if (payload.end_time < Date.now()) {
             setSwapState({

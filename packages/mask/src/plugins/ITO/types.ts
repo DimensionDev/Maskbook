@@ -3,7 +3,7 @@ import type { ChainId, FungibleTokenDetailed, FungibleTokenOutMask } from '@mask
 export interface JSON_PayloadInMask {
     contract_address: string
     pid: string // pool id
-    password: string
+    password: string | string[]
     message: string
     limit: string
     total: string

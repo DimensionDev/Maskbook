@@ -62,8 +62,11 @@
             "title": "pid"
         },
         "password": {
-            "type": "string",
-            "title": "password"
+            "type": ["string", "array"],
+            "title": "password",
+            "items": {
+                "type": "string"
+            }
         },
         "message": {
             "type": "string",
