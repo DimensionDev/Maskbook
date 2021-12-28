@@ -49,7 +49,7 @@ function createERC721ContractFromAssetContract(
         address,
         assetContract?.name,
         assetContract?.token_symbol,
-        assetContract?.image_url,
+        undefined,
         assetContract?.image_url,
     )
 }
