@@ -146,6 +146,10 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
         case NonFungibleAssetProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
             return `https://opensea.io`
+        case NonFungibleAssetProvider.RARIBLE:
+            return 'https://rarible.com'
+        case NonFungibleAssetProvider.NFTSCAN:
+            return 'https://nftscan.com'
         default:
             unreachable(provider)
     }
@@ -157,6 +161,10 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io/assets`
             if (chainId === ChainId.Matic) return `https://opensea.io/assets/matic`
             return `https://opensea.io/assets`
+        case NonFungibleAssetProvider.RARIBLE:
+            return ''
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
         default:
             unreachable(provider)
     }
@@ -173,6 +181,10 @@ export function resolveCollectibleLink(
                 address,
                 tokenId,
             })
+        case NonFungibleAssetProvider.RARIBLE:
+            return ''
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
         default:
             unreachable(provider)
     }

@@ -24,7 +24,7 @@ export type Dao_Payload = {
     version: number
 }
 export function useDao(identifier: ProfileIdentifier) {
-    const api = `https://dimensiondev.github.io/Maskbook-Configuration/com.maskbook.dao-${identifier.userId.toLowerCase()}.json`
+    const api = `https://configuration.r2d2.to/com.maskbook.dao-${identifier.userId.toLowerCase()}.json`
     return useAsyncRetry(async () => {
         if (identifier.isUnknown) return
         try {

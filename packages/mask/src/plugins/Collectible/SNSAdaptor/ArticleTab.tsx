@@ -47,10 +47,10 @@ export function ArticleTab(props: ArticleTabProps) {
             <div className={classes.body}>
                 {asset.value.animation_url ? (
                     <Link href={asset.value.animation_url} target="_blank" rel="noopener noreferrer">
-                        <AssetPlayer src={resourceUrl} alt={asset.value.name} />
+                        <AssetPlayer src={resourceUrl} alt={asset.value?.name ?? ''} />
                     </Link>
                 ) : (
-                    <AssetPlayer src={resourceUrl} alt={asset.value.name} />
+                    <AssetPlayer src={resourceUrl} alt={asset.value?.name ?? ''} />
                 )}
             </div>
         </CollectibleTab>
