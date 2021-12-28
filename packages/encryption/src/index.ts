@@ -4,13 +4,13 @@ export {
     AESAlgorithmEnum,
     PublicKeyAlgorithmEnum,
     SocialNetworkEnum,
+    SocialNetworkEnumToProfileDomain,
     type AESKey,
     type AsymmetryCryptoKey,
     type Signature,
     type PayloadParseResult,
     type PayloadWellFormed,
 } from './payload'
-
 export {
     decrypt,
     DecryptError,
@@ -22,7 +22,12 @@ export {
     type DecryptProgress,
     type DecryptSuccess,
 } from './encryption'
-
+export {
+    socialNetworkEncoder,
+    socialNetworkDecoder,
+    TwitterDecoder,
+    __TwitterEncoder,
+} from './social-network-encode-decode'
 export {
     type DecodeImageOptions,
     type EncodeImageOptions,
