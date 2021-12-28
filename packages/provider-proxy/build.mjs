@@ -1,11 +1,13 @@
 // @ts-check
 import { spawn } from 'child_process'
-import { readFile, writeFile, unlink, rmdir } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import { join, resolve } from 'path'
 import { fileURLToPath } from 'url'
+import { format as formatDate } from 'date-fns'
 
 const __file = fileURLToPath(import.meta.url)
 const __dirname = resolve(__file, '../')
+const __root = join(__dirname, './dist')
 
 function awaitChildProcess(child) {
     return new Promise((resolve, reject) => {
@@ -22,13 +24,12 @@ const rollup = awaitChildProcess(
     }),
 )
 await rollup
-const version = JSON.parse(await readFile(join(__dirname, './package.json'), 'utf-8')).version
-const now = new Date()
+const version = JSON.parse(await readFile(join(__dirname, 'package.json'), 'utf-8')).version
+const buildVersion = process.env.BUILD_VERSION ?? formatDate(Date.now(), 'yyyymmddHHMMss')
 const packageJSON = {
     name: '@dimensiondev/provider-proxy',
-    version: `${version}-${now.getFullYear()}${String(now.getMonth() + 1).padStart(2)}${String(now.getDate()).padStart(
-        2,
-    )}-${String(now.getHours()).padStart(2)}${String(now.getMinutes()).padStart(2)}`.replace(' ', '0'),
+    repository: 'https://github.com/DimensionDev/Maskbook',
+    version: `${version}-${buildVersion}`,
     dependencies: {
         // 'wallet.ts': '1.0.1',
         'bignumber.js': '9.0.1',
@@ -41,20 +42,19 @@ const packageJSON = {
     types: './output.d.ts',
     files: ['output.js', 'output.d.ts'],
 }
-await writeFile(join(__dirname, './dist/package.json'), JSON.stringify(packageJSON, undefined, 4))
+await writeFile(join(__root, 'package.json'), JSON.stringify(packageJSON, undefined, 4))
 
-const out = join(__dirname, './dist')
 // validate if there is dependency missing
 await awaitChildProcess(
     spawn('npm install', {
-        cwd: out,
+        cwd: __root,
         shell: true,
         stdio: 'inherit',
     }),
 )
 await awaitChildProcess(
     spawn('node output.js', {
-        cwd: out,
+        cwd: __root,
         shell: true,
         stdio: 'inherit',
     }),

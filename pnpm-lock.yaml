@@ -789,6 +789,7 @@ importers:
       '@rollup/plugin-json': ^4.1.0
       '@rollup/plugin-node-resolve': ^13.0.6
       '@rollup/plugin-sucrase': ^4.0.1
+      date-fns: ^2.27.0
       rollup: ^2.60.1
       rollup-plugin-dts: 4.0.1
       urlcat: ^2.0.4
@@ -804,6 +805,7 @@ importers:
       '@rollup/plugin-json': 4.1.0_rollup@2.62.0
       '@rollup/plugin-node-resolve': 13.1.1_rollup@2.62.0
       '@rollup/plugin-sucrase': 4.0.1_rollup@2.62.0
+      date-fns: 2.27.0
       rollup: 2.62.0
       rollup-plugin-dts: 4.0.1_f989a9f75f95e6331defeb4529ad92f3
 
@@ -12279,7 +12281,6 @@ packages:
   /date-fns/2.27.0:
     resolution: {integrity: sha512-sj+J0Mo2p2X1e306MHq282WS4/A8Pz/95GIFcsPNMPMZVI3EUrAdSv90al1k+p74WGLCruMXk23bfEDZa71X9Q==}
     engines: {node: '>=0.11'}
-    dev: false
 
   /debug/2.6.9:
     resolution: {integrity: sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==}

@@ -21,24 +21,22 @@ jobs:
           fetch-depth: 0
       - uses: pnpm/action-setup@v2
         with:
-          version: '6.23.1'
+          version: latest
       - uses: actions/setup-node@v2
         with:
-          node-version: '16'
-          cache: 'pnpm'
+          cache: pnpm
       - name: Restore cache
         uses: actions/cache@v2
         with:
           path: packages/mask/node_modules/.cache/
           key: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}-${{ steps.get-date.outputs.date }}
           restore-keys: ${{ runner.os }}-extension-${{ hashFiles('pnpm-lock.yaml') }}
-      - run: pnpm install
-      - run: pnpm build
-      - name: Run provider-proxy package build
-        working-directory: ./packages/provider-proxy
-        run: pnpm install && pnpm build
       - uses: DimensionDev/github-token-action@latest
         with:
           registry: true
-      - name: Publish package to github npm pkg
-        run: pnpm publish packages/provider-proxy/dist --no-git-checks
+      - run: pnpm install
+      - run: pnpm build
+      - run: pnpm build
+        working-directory: packages/provider-proxy
+      - run: npm publish
+        working-directory: packages/provider-proxy/dist
