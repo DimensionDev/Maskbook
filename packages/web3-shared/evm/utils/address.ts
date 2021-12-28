@@ -10,7 +10,8 @@ export function isSameAddress(a = '', b = '') {
 }
 
 export function currySameAddress(addresses: string | string[] = []) {
-    addresses = uniq(toArray(addresses).map((address) => address.toLowerCase()))
+    addresses =
+        typeof addresses === 'string' ? [addresses] : uniq(toArray(addresses).map((address) => address.toLowerCase()))
     return (target?: string | { address: string }) => {
         if (addresses.length === 0 || !target) return false
         if (typeof target === 'string') {
