@@ -34,9 +34,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
 
     if (!asset?.value) return null
     if (!order) return null
-    const price = assetOrder
-        ? assetOrder.value?.currentPrice ?? asset.value.current_price
-        : asset.value.current_price ?? ''
+    const price = order ? order.current_price ?? asset.value.current_price : asset.value.current_price ?? ''
     const getPrice = () => {
         if (!price) return 'error'
         const decimal = (asset.value?.response_ as OpenSeaResponse).collection.payment_tokens.find((item) => {

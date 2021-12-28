@@ -43,11 +43,11 @@ export function ActionBar(props: ActionBarProps) {
 
     if (!asset.value) return null
     const is_show_buy_now =
-        !asset.value.is_owner && !asset.value.is_sale_end && asset.value.num_sales && assetOrder.value
+        !asset.value.isOwner && asset.value.is_auction && asset.value.response_.num_sales && assetOrder.value
     const is_show_place_bid =
-        !asset.value.is_owner && asset.value.end_time && !asset.value.is_sale_end && !asset.value.num_sales
-    const is_show_make_offer = !asset.value.is_owner && asset.value.num_sales
-    const is_show_sell = asset.value.is_owner
+        !asset.value.isOwner && asset.value.end_time && asset.value.is_auction && !asset.value.response_.num_sales
+    const is_show_make_offer = !asset.value.isOwner && asset.value.isOwner
+    const is_show_sell = asset.value.isOwner
     return (
         <Box className={classes.root} sx={{ marginTop: 1 }} display="flex" justifyContent="center">
             {is_show_buy_now && (
