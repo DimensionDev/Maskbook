@@ -7,6 +7,7 @@ import {
     EthereumMethodType,
     getChainDetailedCAIP,
     ZERO_ADDRESS,
+    isZeroAddress,
 } from '@masknet/web3-shared-evm'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
@@ -132,7 +133,7 @@ export async function getSendTransactionComputedPayload(payload: JsonRpcPayload)
         }
 
         // contract deployment
-        if (isSameAddress(to, ZERO_ADDRESS)) {
+        if (isZeroAddress(to)) {
             return {
                 type: EthereumRpcType.CONTRACT_DEPLOYMENT,
                 code: data,

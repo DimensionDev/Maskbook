@@ -20,6 +20,7 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
 import { SelectNftTokenDialog } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
+import { NftImage } from './NftImage'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -49,11 +50,6 @@ const useStyles = makeStyles()((theme) => {
         },
         inputShrinkLabel: {
             transform: 'translate(17px, -3px) scale(0.75) !important',
-        },
-        imgWrapper: {
-            height: 160,
-            width: '100%',
-            overflow: 'hidden',
         },
         input: {
             flex: 1,
@@ -132,6 +128,13 @@ const useStyles = makeStyles()((theme) => {
             cursor: 'pointer',
             color: 'rgba(255, 95, 95, 1)',
         },
+        loadingFailImage: {
+            minHeight: '0px !important',
+            maxWidth: 'none',
+            transform: 'translateY(10px)',
+            width: 64,
+            height: 64,
+        },
     }
 })
 interface RedPacketERC721FormProps {
@@ -149,26 +152,21 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const [contract, setContract] = useState<ERC721ContractDetailed>()
     const [existTokenDetailedList, setExistTokenDetailedList] = useState<ERC721TokenDetailed[]>([])
     const [message, setMessage] = useState('Best Wishes!')
-    const [offset, setOffset] = useState(0)
     const {
-        asyncRetry: { value = { tokenDetailedOwnerList: [], loadMore: true }, loading: loadingOwnerList },
+        asyncRetry: { loading: loadingOwnerList },
+        tokenDetailedOwnerList = [],
         clearTokenDetailedOwnerList,
-    } = useERC721TokenDetailedOwnerList(contract, account, offset)
-
-    const { tokenDetailedOwnerList, loadMore } = value
-
-    const addOffset = useCallback(() => (loadMore ? setOffset(offset + 1) : void 0), [offset, loadMore])
+    } = useERC721TokenDetailedOwnerList(contract, account)
 
     const removeToken = useCallback((token: ERC721TokenDetailed) => {
         setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])
 
     const clearToken = useCallback(() => {
-        setOffset(0)
         setExistTokenDetailedList([])
         clearTokenDetailedOwnerList()
         setOpenConfirmDialog(false)
-    }, [clearTokenDetailedOwnerList, setOffset])
+    }, [clearTokenDetailedOwnerList])
 
     const clearContract = useCallback(() => {
         setContract(undefined)
@@ -205,9 +203,13 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
                                 <ListItem key={i.toString()} className={classNames(classes.tokenSelectorWrapper)}>
-                                    <div className={classes.imgWrapper}>
-                                        <img className={classes.nftImg} src={value.info.mediaUrl} />
-                                    </div>
+                                    <NftImage
+                                        token={value}
+                                        classes={{
+                                            loadingFailImage: classes.loadingFailImage,
+                                        }}
+                                        fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
+                                    />
                                     <div className={classes.nftNameWrapper}>
                                         <Typography className={classes.nftName} color="textSecondary">
                                             {value.info.name}
@@ -257,7 +259,6 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     setExistTokenDetailedList={setExistTokenDetailedList}
                     tokenDetailedOwnerList={tokenDetailedOwnerList}
                     loadingOwnerList={loadingOwnerList}
-                    addOffset={addOffset}
                 />
             ) : null}
             {openConfirmDialog && contract ? (

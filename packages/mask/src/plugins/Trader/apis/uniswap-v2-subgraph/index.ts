@@ -156,14 +156,13 @@ export async function fetchTokensByKeyword(keyword: string) {
     // so cased keywords will be added too
     const listOfKeywords = [keyword, keyword.toLowerCase(), keyword.toUpperCase()]
 
-    const data = await fetchFromUniswapV2Subgraph<{
-        tokens: {
-            id: string
-            name: string
-            symbol: string
-            decimals: number
-        }[]
-    }>(`
+    type Token = {
+        id: string
+        name: string
+        symbol: string
+        decimals: number
+    }
+    const data = await fetchFromUniswapV2Subgraph<{ tokens: Token[] }>(`
         query tokens {
             tokens (where: { symbol_in: ${stringify(listOfKeywords)} }, orderBy: tradeVolume, orderDirection: desc) {
                 id

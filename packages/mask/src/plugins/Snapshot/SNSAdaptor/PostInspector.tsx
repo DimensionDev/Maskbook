@@ -13,7 +13,7 @@ export function PostInspector(props: PostInspectorProps) {
     const retry = useRetry()
     return (
         <SnapshotContext.Provider value={identifier}>
-            <LoadingFailCard title="" isFullPluginDown={true} retry={retry}>
+            <LoadingFailCard title="" isFullPluginDown retry={retry}>
                 <Snapshot />
             </LoadingFailCard>
         </SnapshotContext.Provider>

@@ -34,6 +34,11 @@ export const [useXDaiNetworkTradeProvider] = createGlobalState(
     Messages.events.xdaiNetworkTradeProviderSettings.on,
 )
 
+export const [useCeloNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getCeloNetworkTradeProvider,
+    Messages.events.celoNetworkTradeProviderSettings.on,
+)
+
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
 interface BackupBaseRequest {

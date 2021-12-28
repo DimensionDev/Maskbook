@@ -56,7 +56,7 @@ export default function Footer() {
                         avatar={<Avatar alt="FindTruman" src={e.icon} />}
                         label={e.label}
                         variant="outlined"
-                        clickable={true}
+                        clickable
                         component="a"
                         target="_blank"
                         href={e.url}
