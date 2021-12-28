@@ -1,4 +1,5 @@
 import { useCallback } from 'react'
+import { omit } from 'lodash-unified'
 import type { PayableTransactionObject, PayableTx } from '@masknet/web3-contracts/types/types'
 import { useTransactionState } from './useTransactionState'
 import { TransactionStateType, TransactionEventType } from '../types'
@@ -24,7 +25,7 @@ export function useTransactionCallback<T extends unknown>(
         const gasExpectedConfig = { ...config }
 
         try {
-            const estimatedGas = await method.estimateGas(config)
+            const estimatedGas = await method.estimateGas(omit(config, 'gas'))
             if (!gasExpectedConfig.gas && estimatedGas) {
                 gasExpectedConfig.gas = estimatedGas
             }
