@@ -180,7 +180,7 @@ export namespace NonFungibleTokenAPI {
         pageInfo?: { [key in string]: unknown }
     }
 
-    interface ProviderPageable<T> {
+    export interface ProviderPageable<T> {
         data: T[]
         hasNextPage: boolean
         nextPageInfo?: { [key in string]: unknown }

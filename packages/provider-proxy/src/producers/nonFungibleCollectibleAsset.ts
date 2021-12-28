@@ -1,4 +1,4 @@
-import { getRaribleNFTList } from '@masknet/web3-providers'
+import { getOpenSeaNFTList, getRaribleNFTList } from '@masknet/web3-providers'
 import type { ERC721TokenDetailed } from '@masknet/web3-shared-evm'
 import type { ProducerArgBase, ProducerKeyFunction, ProducerPushFunction, RPCMethodRegistrationValue } from '../types'
 import { collectAllPageDate } from '../helper/request'
@@ -16,23 +16,26 @@ const nonFungibleCollectibleAsset = async (
     const size = 50
     const openSeaApiKey = await getKeys('opensea')
 
-    // await collectAllPageDate<ERC721TokenDetailed>(
-    //     (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
-    //     size,
-    //     push,
-    // )
-
-    await collectAllPageDate<ERC721TokenDetailed>(
-        (page) => getRaribleNFTList(openSeaApiKey, address, page, size),
+    const opensea = collectAllPageDate<ERC721TokenDetailed>(
+        (page) => getOpenSeaNFTList(openSeaApiKey, address, page, size),
         size,
         push,
     )
+
+    const rarible = collectAllPageDate<ERC721TokenDetailed>(
+        (page, pageInfo) => getRaribleNFTList(openSeaApiKey, address, page, size, pageInfo),
+        size,
+        push,
+    )
+
+    await Promise.allSettled([opensea, rarible])
 }
 
 const producer: RPCMethodRegistrationValue<ERC721TokenDetailed, NonFungibleTokenAssetArgs> = {
     method: 'mask.fetchNonFungibleCollectibleAsset',
     producer: nonFungibleCollectibleAsset,
-    distinctBy: (item) => `${item.tokenId}_${item.contractDetailed.address}`,
+    distinctBy: (item) =>
+        `${item.tokenId.toLowerCase()}_${item.contractDetailed.address.toLowerCase()}_${item.contractDetailed.chainId}`,
 }
 
 export default producer

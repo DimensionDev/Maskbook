@@ -15,13 +15,7 @@ import {
     RaribleOfferResponse,
     RaribleProfileResponse,
 } from './types'
-import {
-    RaribleUserURL,
-    RaribleRopstenUserURL,
-    RaribleMainnetURL,
-    RaribleChainURL,
-    RaribleMainnetAPI_URL,
-} from './constants'
+import { RaribleUserURL, RaribleRopstenUserURL, RaribleMainnetURL, RaribleChainURL, RaribleURL } from './constants'
 import { toRaribleImage } from './utils'
 import { NonFungibleTokenAPI } from '..'
 
@@ -155,13 +149,17 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
     }
 
     async getTokens(from: string, opts: NonFungibleTokenAPI.Options) {
-        const requestPath = urlcat('/ethereum/nft/items/byOwner', { owner: from, size: opts.size, ...opts.pageInfo })
+        const requestPath = urlcat('/protocol/v0.1/ethereum/nft/items/byOwner', {
+            owner: from,
+            size: opts.size,
+            ...opts.pageInfo,
+        })
         interface Payload {
             total: number
             continuation: string
             items: RaribleNFTItemMapResponse[]
         }
-        const asset = await fetchFromRarible<Payload>(RaribleMainnetAPI_URL, requestPath)
+        const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath)
         if (!asset)
             return {
                 data: [],
@@ -327,7 +325,13 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
     }
 }
 
-export function getRaribleNFTList(apiKey: string, address: string, page?: number, size?: number) {
+export function getRaribleNFTList(
+    apiKey: string,
+    address: string,
+    page?: number,
+    size?: number,
+    pageInfo?: { [key in string]: unknown },
+) {
     const rarible = new RaribleAPI()
-    return rarible.getTokens(address, { page, size })
+    return rarible.getTokens(address, { page, size, pageInfo })
 }
