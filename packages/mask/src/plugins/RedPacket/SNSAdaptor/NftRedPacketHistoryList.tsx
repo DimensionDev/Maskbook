@@ -9,11 +9,8 @@ import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem'
 import { useI18N } from '../../../utils'
 
-const useStyles = makeStyles()((theme, _, createRef) => {
+const useStyles = makeStyles<void, 'atBottom'>()((theme, _, refs) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
-    const atBottom = {
-        ref: createRef(),
-    } as const
     return {
         root: {
             display: 'flex',
@@ -53,13 +50,13 @@ const useStyles = makeStyles()((theme, _, createRef) => {
             borderRight: '6px solid transparent',
             borderTop: `6px solid ${theme.palette.mode === 'light' ? 'rgba(15, 20, 25, 1)' : '#fff'}`,
             transform: 'translate(-50%, 6px)',
-            [`&.${atBottom.ref}`]: {
+            [`&.${refs.atBottom}`]: {
                 bottom: 'auto',
                 top: 0,
                 transform: 'translate(-50%, -6px) rotate(180deg)',
             },
         },
-        atBottom,
+        atBottom: {},
         popperText: {
             cursor: 'default',
             color: theme.palette.mode === 'light' ? '#fff' : 'rgba(15, 20, 25, 1)',

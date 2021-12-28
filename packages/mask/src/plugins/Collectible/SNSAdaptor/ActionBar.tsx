@@ -26,7 +26,8 @@ export interface ActionBarProps {}
 export function ActionBar(props: ActionBarProps) {
     const { t } = useI18N()
     const { classes } = useStyles()
-    const { asset, token, assetOrder } = CollectibleState.useContainer()
+    const { asset, assetOrder } = CollectibleState.useContainer()
+    const assets = asset.value
 
     const {
         open: openCheckoutDialog,
@@ -87,8 +88,8 @@ export function ActionBar(props: ActionBarProps) {
                 </ActionButton>
             )}
             <CheckoutDialog
-                assetOrder={assetOrder}
                 asset={asset}
+                order={assetOrder}
                 open={openCheckoutDialog}
                 onClose={onCloseCheckoutDialog}
             />
