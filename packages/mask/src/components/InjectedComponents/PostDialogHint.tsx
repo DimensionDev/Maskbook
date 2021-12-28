@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { alpha, IconButton, Tooltip } from '@mui/material'
-import { useStylesExtends, makeStyles, MaskColorVar } from '@masknet/theme'
+import { IconButton, Tooltip } from '@mui/material'
+import { useStylesExtends, makeStyles } from '@masknet/theme'
 import { useI18N } from '../../utils'
 import type { BannerProps } from '../Welcomes/Banner'
 import { useValueRef } from '@masknet/shared'
@@ -9,10 +9,16 @@ import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMyIdentities } from '../DataSource/useActivatedUI'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { isTwitter } from '../../social-network-adaptor/twitter.com/base'
 import classNames from 'classnames'
 
-export interface PostDialogHintUIProps extends withClasses<'buttonTransform'> {
+interface TooltipConfigProps {
+    placement?: 'bottom' | 'top'
+    disabled?: boolean
+}
+
+export interface PostDialogHintUIProps extends withClasses<'buttonTransform' | 'iconButton' | 'tooltip'> {
+    size?: number
+    tooltip?: TooltipConfigProps
     onHintButtonClicked: () => void
 }
 
@@ -20,14 +26,6 @@ const useStyles = makeStyles()((theme) => ({
     button: {
         // TODO: is it correct? (what about twitter?)
         padding: isMobileFacebook ? 0 : '8px',
-        '&:hover': {
-            background: 'none',
-        },
-    },
-    buttonBg: {
-        '&:hover': {
-            background: alpha(theme.palette.primary.main, 0.1),
-        },
     },
     text: {
         fontSize: 14,
@@ -41,55 +39,51 @@ const useStyles = makeStyles()((theme) => ({
         padding: '8px 10px',
         borderBottom: '1px solid #dadde1',
     },
-    tooltip: {
-        marginTop: '2px !important',
-        borderRadius: 2,
-        padding: 4,
-        background: MaskColorVar.twitterTooltipBg,
-    },
 }))
 
 const EntryIconButton = memo((props: PostDialogHintUIProps) => {
+    const { size, tooltip } = props
     const classes = useStylesExtends(useStyles(), props)
-    const isTwitterNetwork = isTwitter(activatedSocialNetworkUI)
 
     return (
         <Tooltip
             title="Mask Network"
             classes={{ tooltip: classes.tooltip }}
-            disableHoverListener={!isTwitterNetwork}
+            placement={tooltip?.placement}
+            disableHoverListener={tooltip?.disabled}
             PopperProps={{
                 disablePortal: true,
             }}>
             <IconButton
                 size="large"
-                className={classNames(classes.button, isTwitterNetwork ? classes.buttonBg : null)}
+                className={classNames(classes.button, classes.iconButton)}
                 onClick={props.onHintButtonClicked}>
-                <MaskSharpIcon color="primary" />
+                <MaskSharpIcon size={size} color="primary" />
             </IconButton>
         </Tooltip>
     )
 })
 
 export const PostDialogHintUI = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
-    const { onHintButtonClicked } = props
+    const { onHintButtonClicked, size, ...others } = props
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
 
     return isMobileFacebook ? (
         <div className={classes.wrapper} onClick={onHintButtonClicked}>
-            <EntryIconButton onHintButtonClicked={() => undefined} />
+            <EntryIconButton size={size} onHintButtonClicked={() => undefined} />
             <span className={classes.text}>{t('post_modal_hint__button')}</span>
         </div>
     ) : (
         <div className={classes.buttonTransform}>
-            <EntryIconButton onHintButtonClicked={onHintButtonClicked} />
+            <EntryIconButton size={size} onHintButtonClicked={onHintButtonClicked} {...others} />
         </div>
     )
 })
 
 export interface PostDialogHintProps extends Partial<PostDialogHintUIProps> {
     NotSetupYetPromptProps?: Partial<BannerProps>
+    size?: number
 }
 export function PostDialogHint(props: PostDialogHintProps) {
     const identities = useMyIdentities()

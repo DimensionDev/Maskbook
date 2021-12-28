@@ -6,6 +6,22 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { MaskMessages } from '../../../utils/messages'
 import { hasEditor, isCompose } from '../utils/postBox'
 import { startWatch } from '../../../utils/watcher'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import { alpha } from '@mui/material'
+
+const useStyles = makeStyles()((theme) => ({
+    iconButton: {
+        '&:hover': {
+            background: alpha(theme.palette.primary.main, 0.1),
+        },
+    },
+    tooltip: {
+        marginTop: '2px !important',
+        borderRadius: 2,
+        padding: 4,
+        background: MaskColorVar.twitterTooltipBg,
+    },
+}))
 
 export function injectPostDialogHintAtTwitter(signal: AbortSignal) {
     const emptyNode = document.createElement('div')
@@ -27,9 +43,17 @@ function renderPostDialogHintTo<T>(reason: 'timeline' | 'popup', ls: LiveSelecto
 }
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
+    const { classes } = useStyles()
     const onHintButtonClicked = useCallback(
         () => MaskMessages.events.requestComposition.sendToLocal({ reason, open: true }),
         [reason],
     )
-    return <PostDialogHint onHintButtonClicked={onHintButtonClicked} />
+    return (
+        <PostDialogHint
+            classes={{ iconButton: classes.iconButton, tooltip: classes.tooltip }}
+            size={17}
+            onHintButtonClicked={onHintButtonClicked}
+            tooltip={{ disabled: false }}
+        />
+    )
 }
