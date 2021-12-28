@@ -27,6 +27,7 @@ export interface NFTsByPaginationOption {
     provider: NonFungibleAssetProvider
     page: number
     size: number
+    pageInfo?: { [key in string]: unknown }
 }
 
 export async function getNFT(options: NFTOption) {
