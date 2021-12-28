@@ -405,8 +405,7 @@ export function ITO(props: ITO_Props) {
         (ev) => {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return
-            resetDestructCallback()
-            retryITOCard()
+            window.location.reload()
         },
     )
 
