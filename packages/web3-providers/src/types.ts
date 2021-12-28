@@ -177,6 +177,13 @@ export namespace NonFungibleTokenAPI {
         chainId?: ChainId
         page?: number
         size?: number
+        pageInfo?: { [key in string]: unknown }
+    }
+
+    interface ProviderPageable<T> {
+        data: T[]
+        hasNextPage: boolean
+        nextPageInfo?: { [key in string]: unknown }
     }
 
     export interface Provider {
@@ -184,7 +191,7 @@ export namespace NonFungibleTokenAPI {
         getContractBalance?: (address: string) => Promise<ContractBalance[]>
         getAsset?: (address: string, tokenId: string, opts?: { chainId?: ChainId }) => Promise<Asset | undefined>
         getToken?: (address: string, tokenId: string, chainId: ChainId) => Promise<ERC721TokenDetailed | undefined>
-        getTokens?: (from: string, opts: Options) => Promise<ERC721TokenDetailed[]>
+        getTokens?: (from: string, opts: Options) => Promise<ProviderPageable<ERC721TokenDetailed>>
         getHistory?: (address: string, tokenId: string, opts?: Options) => Promise<History[]>
         getListings?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
         getOffers?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
@@ -194,6 +201,6 @@ export namespace NonFungibleTokenAPI {
             side: NonFungibleTokenAPI.OrderSide,
             opts?: Options,
         ) => Promise<AssetOrder[]>
-        getCollections?: (address: string, opts?: Options) => Promise<Collection[]>
+        getCollections?: (address: string, opts?: Options) => Promise<ProviderPageable<Collection>>
     }
 }

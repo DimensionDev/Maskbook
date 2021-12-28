@@ -34,6 +34,11 @@ const useStyles = makeStyles<StyleProps>()((theme, { reason }) => ({
     buttonTransform: {
         ...(reason === 'timeline' ? { width: '40px', transform: 'translateX(160px) translateY(-70px)' } : {}),
     },
+    iconButton: {
+        '&:hover': {
+            background: 'none',
+        },
+    },
 }))
 
 function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
@@ -45,9 +50,12 @@ function PostDialogHintAtMinds({ reason }: { reason: 'timeline' | 'popup' }) {
     )
     return (
         <PostDialogHint
+            size={17}
             onHintButtonClicked={onHintButtonClicked}
+            tooltip={{ disabled: true }}
             classes={{
                 buttonTransform: classes.buttonTransform,
+                iconButton: classes.iconButton,
             }}
             NotSetupYetPromptProps={{
                 classes: {
