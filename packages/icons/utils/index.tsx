@@ -58,7 +58,8 @@ export function createPaletteAwareIcon(
     return createIcon(
         name,
         (theme) => {
-            const isDim = useContext(MaskIconPaletteContext)
+            const palette = useContext(MaskIconPaletteContext)
+            const isDim = palette === 'dim'
             if (theme.palette.mode === 'dark') {
                 if (isDim && dim) return dim
                 return dark
