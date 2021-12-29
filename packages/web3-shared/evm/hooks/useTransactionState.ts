@@ -34,9 +34,8 @@ export type TransactionState =
       }
 
 function txStateReducer(state: TransactionState, nextState: TransactionState) {
-    const changeable =
-        nextState.type === TransactionStateType.UNKNOWN || isNextStateAvailable(state.type, nextState.type)
-    return changeable ? nextState : state
+    const allowed = nextState.type === TransactionStateType.UNKNOWN || isNextStateAvailable(state.type, nextState.type)
+    return allowed ? nextState : state
 }
 
 export function useTransactionState() {
