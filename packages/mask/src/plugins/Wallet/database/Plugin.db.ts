@@ -1,4 +1,4 @@
-import { PLUGIN_IDENTIFIER } from '../constants'
+import { PLUGIN_ID } from '../constants'
 import { createPluginDatabase } from '../../../database/Plugin'
 import type { AddressBookChunk } from '../services/addressBook'
 import type { RecentTransactionChunk } from '../services/transaction/database'
@@ -18,4 +18,4 @@ export const PluginDB = createPluginDatabase<
     | ERC20TokenRecord
     | ERC721TokenRecord
     | ERC1155TokenRecord
->(PLUGIN_IDENTIFIER)
+>(PLUGIN_ID)

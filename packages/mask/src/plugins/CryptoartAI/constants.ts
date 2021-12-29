@@ -1,10 +1,11 @@
+import { PluginId } from '@masknet/plugin-infra'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 export const PLUGIN_NAME = 'CRYPTOART.AI'
 export const PLUGIN_ICON = '🖼️'
 export const PLUGIN_DESCRIPTION = 'The decentralized world of CryptoArt.'
-export const PLUGIN_IDENTIFIER = 'com.maskbook.cryptoartai'
-export const PLUGIN_META_KEY = 'com.maskbook.cryptoartai:1'
+export const PLUGIN_ID = PluginId.CryptoArtAI
+export const PLUGIN_META_KEY = `${PluginId.CryptoArtAI}:1`
 
 export const prefixPath = '/gallery/detail'
 
