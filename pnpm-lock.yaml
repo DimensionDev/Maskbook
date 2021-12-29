@@ -605,7 +605,6 @@ importers:
       bignumber.js: ^9.0.1
       date-fns: ^2.27.0
       iframe-resizer-react: ^1.1.0
-      lodash-es: ^4.17.21
       react-use: ^17.3.1
       urlcat: ^2.0.4
     dependencies:
@@ -616,7 +615,6 @@ importers:
       bignumber.js: 9.0.1
       date-fns: 2.27.0
       iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
-      lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4
 
@@ -632,7 +630,6 @@ importers:
       '@masknet/web3-shared-evm': workspace:*
       bignumber.js: ^9.0.1
       date-fns: ^2.27.0
-      lodash-es: ^4.17.21
       react-use: ^17.3.1
       urlcat: ^2.0.4
     dependencies:
@@ -646,7 +643,6 @@ importers:
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.1
       date-fns: 2.27.0
-      lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4
 
@@ -690,7 +686,6 @@ importers:
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-flow': workspace:*
       bignumber.js: ^9.0.2
-      lodash-es: ^4.17.21
       react-use: ^17.3.1
     dependencies:
       '@blocto/fcl': 0.0.78-alpha.8
@@ -703,7 +698,6 @@ importers:
       '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
       bignumber.js: 9.0.2
-      lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
 
   packages/plugins/RSS3:
@@ -718,7 +712,6 @@ importers:
       '@masknet/web3-shared-evm': workspace:*
       bignumber.js: ^9.0.1
       date-fns: ^2.27.0
-      lodash-es: ^4.17.21
       react-use: ^17.3.1
       urlcat: ^2.0.4
     dependencies:
@@ -732,7 +725,6 @@ importers:
       '@masknet/web3-shared-evm': link:../../web3-shared/evm
       bignumber.js: 9.0.1
       date-fns: 2.27.0
-      lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       urlcat: 2.0.4
 
@@ -1020,7 +1012,6 @@ importers:
       ethereum-blockies: ^0.1.1
       fortmatic: ^2.2.1
       fuse.js: ^6.5.3
-      lodash-es: ^4.17.21
       punycode: ^2.1.1
       react-use: ^17.3.1
       unstated-next: ^1.1.0
@@ -1043,7 +1034,6 @@ importers:
       ethereum-blockies: 0.1.1
       fortmatic: 2.2.1
       fuse.js: 6.5.3
-      lodash-es: 4.17.21
       punycode: 2.1.1
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
