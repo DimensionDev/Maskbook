@@ -56,16 +56,16 @@ function registerPostCollectorInner(
     const updateProfileInfo = memoize(
         (info: PostInfo) => {
             const currentProfile = getCurrentIdentifier()
-            const profileIdentifier = info.postBy.getCurrentValue()
+            const profileIdentifier = info.author.getCurrentValue()
             Services.Identity.updateProfileInfo(profileIdentifier, {
                 nickname: info.nickname.getCurrentValue(),
-                avatarURL: info.avatarURL.getCurrentValue(),
+                avatarURL: info.avatarURL.getCurrentValue()?.toString(),
             })
             if (currentProfile?.linkedPersona) {
                 Services.Identity.createNewRelation(profileIdentifier, currentProfile.linkedPersona.identifier)
             }
         },
-        (info: PostInfo) => info.postBy.getCurrentValue()?.toText(),
+        (info: PostInfo) => info.author.getCurrentValue()?.toText(),
     )
     const watcher = new IntervalWatcher(postsContentSelector())
         .useForeach((node, _, proxy) => {
@@ -85,9 +85,8 @@ function registerPostCollectorInner(
             run()
             cancel.addEventListener(
                 'abort',
-                info.postPayload.subscribe(() => {
-                    const payload = info.postPayload.getCurrentValue()
-                    if (!payload) return
+                info.containingMaskPayload.subscribe(() => {
+                    const payload = info.containingMaskPayload.getCurrentValue()
                     if (payload.err && refs.postMetadataImages.size === 0) return
                     updateProfileInfo(info)
                 }),

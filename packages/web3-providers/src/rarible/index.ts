@@ -153,16 +153,28 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
         return createERC721TokenFromAsset(tokenAddress, tokenId, asset)
     }
 
-    async getTokens(from: string, opts: NonFungibleTokenAPI.Options): Promise<ERC721TokenDetailed[]> {
-        const requestPath = urlcat('/ethereum/nft/items/byOwner', { owner: from, size: opts.size })
+    async getTokens(from: string, opts: NonFungibleTokenAPI.Options) {
+        const requestPath = urlcat('/ethereum/nft/items/byOwner', { owner: from, size: opts.size, ...opts.pageInfo })
         interface Payload {
             total: number
             continuation: string
             items: RaribleNFTItemMapResponse[]
         }
         const asset = await fetchFromRarible<Payload>(RaribleMainnetAPI_URL, requestPath)
-        if (!asset) return []
-        return asset.items.map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+        if (!asset)
+            return {
+                data: [],
+                hasNextPage: false,
+            }
+
+        const data = asset.items.map((asset) => createERC721TokenFromAsset(asset.contract, asset.tokenId, asset))
+        return {
+            data,
+            hasNextPage: !!asset.continuation,
+            nextPageInfo: {
+                continuation: asset.continuation,
+            },
+        }
     }
 
     async getOffers(

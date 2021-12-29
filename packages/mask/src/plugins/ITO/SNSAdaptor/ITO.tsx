@@ -1,5 +1,4 @@
 import {
-    formatAmountPrecision,
     formatBalance,
     formatEthereumAddress,
     FungibleTokenDetailed,
@@ -154,7 +153,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     actionButton: {
-        color: '#fff',
         minHeight: 'auto',
         width: '100%',
     },
@@ -569,8 +567,8 @@ export function ITO(props: ITO_Props) {
                 </Box>
                 <Typography variant="body2" className={classes.totalText}>
                     {t('plugin_ito_swapped_status', {
-                        remain: formatAmountPrecision(sold, token.decimals, undefined, token.decimals),
-                        total: formatAmountPrecision(total, token.decimals, undefined, token.decimals),
+                        remain: formatBalance(sold, token.decimals),
+                        total: formatBalance(total, token.decimals),
                         token: token.symbol,
                     })}
                     <Link
