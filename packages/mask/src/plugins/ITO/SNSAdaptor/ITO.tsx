@@ -698,6 +698,14 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 )}
                             </Grid>
+                        ) : canWithdraw ? (
+                            <ActionButton
+                                onClick={onWithdraw}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                {t('plugin_ito_withdraw')}
+                            </ActionButton>
                         ) : null}
                         {noRemain || listOfStatus.includes(ITO_Status.expired) ? null : (
                             <Grid item xs={hasLockTime ? 6 : 12}>
