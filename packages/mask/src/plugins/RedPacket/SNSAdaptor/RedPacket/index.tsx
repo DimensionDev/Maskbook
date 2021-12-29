@@ -55,9 +55,11 @@ export function RedPacket(props: RedPacketProps) {
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
 
     const { value: tokenDetailed } = useFungibleTokenDetailed(
-        payload.token?.type ?? payload.token_type ?? isSameAddress(NATIVE_TOKEN_ADDRESS, payload.token_address)
-            ? EthereumTokenType.Native
-            : EthereumTokenType.ERC20,
+        payload.token?.type ??
+            payload.token_type ??
+            (isSameAddress(NATIVE_TOKEN_ADDRESS, payload.token_address)
+                ? EthereumTokenType.Native
+                : EthereumTokenType.ERC20),
         payload.token?.address ?? payload.token_address ?? '',
     )
     const token = payload.token ?? tokenDetailed
