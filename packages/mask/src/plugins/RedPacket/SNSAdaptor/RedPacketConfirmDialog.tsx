@@ -59,6 +59,10 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.mode === 'light' ? '#7B8192' : '#6F767C',
         },
     },
+    ellipsis: {
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+    },
 }))
 
 export interface ConfirmRedPacketFormProps {
@@ -81,7 +85,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     return (
         <Grid container spacing={2} className={classNames(classes.grid, classes.gridWrapper)}>
             <Grid item xs={12}>
-                <Typography variant="h4" color="textPrimary" align="center">
+                <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
                     {settings?.message}
                 </Typography>
             </Grid>

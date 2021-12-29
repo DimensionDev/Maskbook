@@ -514,7 +514,6 @@
     "plugin_ito_claim_all": "认领全部",
     "plugin_ito_claim_all_old_contract": "旧的ITO合约",
     "plugin_ito_claim_all_new_contract": "新的ITO合约",
-    "plugin_ito_claimed": "已认领",
     "plugin_ito_qualification_start_time": "资格认证开始时间：",
     "plugin_ito_error_qualification_start_time": "无效：资格认证开始时间应该早于ITO结束时间",
     "plugin_ito_end_time": "结束时间 {{zone}}",

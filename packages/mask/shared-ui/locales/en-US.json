@@ -526,7 +526,6 @@
     "plugin_ito_claim_all": "Claim All",
     "plugin_ito_claim_all_old_contract": "Old ITO Contract",
     "plugin_ito_claim_all_new_contract": "New ITO Contract",
-    "plugin_ito_claimed": "Claimed",
     "plugin_ito_qualification_start_time": "Qualification Start Time:",
     "plugin_ito_error_qualification_start_time": "Invalid: Qualification start time should be earlier than ITO end time",
     "plugin_ito_end_time": "End Time {{zone}}",
