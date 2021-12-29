@@ -17,6 +17,7 @@ import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { WalletMessages } from '../../../../plugins/Wallet/messages'
 import { Image } from '../../../../components/shared/Image'
+import { uniqBy } from 'lodash-unified'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -237,7 +238,7 @@ export function CollectionList({ address }: { address: string }) {
     const [counts, setCounts] = useState<number[]>([])
     const [rendCollections, setRendCollections] = useState<ERC721TokenCollectionInfo[]>([])
 
-    const { value = { collections: [], hasNextPage: false } } = useCollections(address, chainId, provider, page, 3)
+    const { value = { collections: [], hasNextPage: false } } = useCollections(address, chainId, provider, page, 10)
     const { collections = [], hasNextPage } = value
 
     useUpdateEffect(() => {
@@ -246,7 +247,7 @@ export function CollectionList({ address }: { address: string }) {
 
     useEffect(() => {
         if (!collections.length) return
-        setRendCollections([...rendCollections, ...collections])
+        setRendCollections(uniqBy([...rendCollections, ...collections], (x) => x.slug))
         if (!hasNextPage) return
         const timer = setTimeout(() => {
             setPage(page + 1)

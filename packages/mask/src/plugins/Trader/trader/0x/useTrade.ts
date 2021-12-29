@@ -32,6 +32,8 @@ export function getNativeTokenLabel(networkType: NetworkType) {
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Celo:
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        case NetworkType.Fantom:
+            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         default:
             safeUnreachable(networkType)
             return ''
