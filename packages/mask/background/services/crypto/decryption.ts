@@ -8,6 +8,10 @@ import {
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
     AsymmetryCryptoKey,
+    socialNetworkDecoder,
+    steganographyDecodeImageUrl,
+    DecryptError,
+    ErrorReasons,
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
@@ -37,7 +41,7 @@ export interface DecryptionContext {
 }
 export type SocialNetworkEncodedPayload =
     | { type: 'text'; text: string }
-    | { type: 'image'; image: Uint8Array }
+    // | { type: 'image'; image: Uint8Array }
     | { type: 'image-url'; url: string }
 
 export async function* decryptionWithSocialNetworkDecoding(
@@ -45,6 +49,18 @@ export async function* decryptionWithSocialNetworkDecoding(
     context: DecryptionContext,
 ) {
     let decoded!: string | Uint8Array
+    if (encoded.type === 'text') {
+        decoded = socialNetworkDecoder(context.currentSocialNetwork, encoded.text).unwrapOr(encoded.text)
+    } else if (encoded.type === 'image-url') {
+        if (!context.authorHint || context.authorHint.isUnknown) {
+            yield new DecryptError(ErrorReasons.UnrecognizedAuthor, undefined)
+            return
+        }
+        decoded = await steganographyDecodeImageUrl(encoded.url, {
+            pass: context.authorHint.toText(),
+            downloadImage: (url) => fetch(url).then((x) => x.arrayBuffer()),
+        })
+    }
     return yield* decryption(decoded, context)
 }
 export async function* decryption(payload: string | Uint8Array, context: DecryptionContext) {
