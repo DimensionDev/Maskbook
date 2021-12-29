@@ -656,7 +656,7 @@ export function ITO(props: ITO_Props) {
                 ) : isBuyer ? (
                     <Grid container spacing={2}>
                         {hasLockTime ? (
-                            <Grid item xs={6}>
+                            <Grid item xs={noRemain || listOfStatus.includes(ITO_Status.expired) ? 12 : 6}>
                                 {isUnlocked ? (
                                     !availability?.claimed ? (
                                         <ActionButton
@@ -691,15 +691,17 @@ export function ITO(props: ITO_Props) {
                                 )}
                             </Grid>
                         ) : null}
-                        <Grid item xs={hasLockTime ? 6 : 12}>
-                            <ActionButton
-                                onClick={onShareSuccess}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_share')}
-                            </ActionButton>
-                        </Grid>
+                        {noRemain || listOfStatus.includes(ITO_Status.expired) ? null : (
+                            <Grid item xs={hasLockTime ? 6 : 12}>
+                                <ActionButton
+                                    onClick={onShareSuccess}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_share')}
+                                </ActionButton>
+                            </Grid>
+                        )}
                     </Grid>
                 ) : canWithdraw ? (
                     <ActionButton

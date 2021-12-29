@@ -216,6 +216,13 @@ const useStyles = makeStyles()((theme) => ({
             borderColor: 'white',
         },
     },
+    ellipsis: {
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        maxWidth: 400,
+        fontSize: '1.5rem',
+    },
 }))
 export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
@@ -354,7 +361,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             <Card className={classes.card} component="article" elevation={0}>
                 <CardHeader
                     className={classNames(classes.title, availability.isEnd ? classes.hide : '', classes.whiteText)}
-                    title={payload.message}
+                    title={<Typography className={classes.ellipsis}>{payload.message}</Typography>}
                     subheader={
                         <span
                             className={classNames(classes.link, classes.whiteText)}
