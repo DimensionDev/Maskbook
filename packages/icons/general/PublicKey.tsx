@@ -20,5 +20,6 @@ export const PublicKeyIcon = createPaletteAwareIcon(
             strokeLinejoin="round"
         />
     </g>,
+    undefined,
     '0 0 20 20',
 )
