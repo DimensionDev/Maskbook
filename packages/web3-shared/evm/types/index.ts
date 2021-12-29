@@ -64,6 +64,9 @@ export enum ChainId {
 
     // Celo
     Celo = 42220,
+
+    // Fantom
+    Fantom = 250,
 }
 
 export enum ProviderType {
@@ -92,6 +95,7 @@ export enum NetworkType {
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
     Celo = 'Celo',
+    Fantom = 'Fantom',
 }
 
 export interface Wallet {
