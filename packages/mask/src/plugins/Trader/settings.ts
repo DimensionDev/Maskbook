@@ -99,17 +99,17 @@ export interface TradeProviderSettings {
     pools: ZrxTradePool[]
 }
 
-const uniswapV2Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v2`, '')
-const uniswapV3Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v3`, '')
-const zrxSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+zrx`, '')
-const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
-const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
-const quickswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
-const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
-const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
-const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
-const bancorSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+bancor`, '')
-const oolongswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+oolongswap`, '')
+const uniswapV2Settings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+uniswap+v2`, '')
+const uniswapV3Settings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+uniswap+v3`, '')
+const zrxSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+zrx`, '')
+const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+sushiswap`, '')
+const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+sashimiswap`, '')
+const quickswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+quickswap`, '')
+const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+pancakeswap`, '')
+const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+balancer`, '')
+const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
+const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
+const oolongswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+oolongswap`, '')
 
 /**
  * The general settings of specific tarde provider

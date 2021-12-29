@@ -13,9 +13,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
+        "Fantom": "fantom",
         "Boba": "boba",
-        "Boba_Rinkeby": "",
-        "Fantom": "fantom"
+        "Boba_Rinkeby": ""
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -31,8 +31,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
+        "Fantom": "fantom",
         "Boba": "boba",
-        "Boba_Rinkeby": "",
-        "Fantom": "fantom"
+        "Boba_Rinkeby": ""
     }
 }
