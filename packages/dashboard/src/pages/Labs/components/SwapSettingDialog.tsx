@@ -104,7 +104,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             legend: t.labs_settings_swap_network({ network: 'Avalanche' }),
             value: useAvalancheNetworkTradeProvider(),
             options: avalancheOptions,
-            onChange: (value: any) => Services.Settings.setAvalancheNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setAvalancheNetworkTradeProvider(+value),
         },
     ]
 

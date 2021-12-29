@@ -1,4 +1,4 @@
-import { Plugin } from '@masknet/plugin-infra'
+import { NetworkPluginID, Plugin } from '@masknet/plugin-infra'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { RedPacketPluginID } from './constants'
 
@@ -16,16 +16,17 @@ export const base: Plugin.Shared.Definition = {
         networks: { type: 'opt-out', networks: {} },
         target: 'stable',
         web3: {
-            operatingSupportedChains: [
-                ChainId.Mainnet,
-                ChainId.BSC,
-                ChainId.Matic,
-                ChainId.Arbitrum,
-                ChainId.xDai,
-                ChainId.Avalanche,
-                ChainId.Celo,
-                ChainId.Fantom,
-            ],
+            [NetworkPluginID.PLUGIN_EVM]: {
+                supportedChainIds: [
+                    ChainId.Mainnet,
+                    ChainId.BSC,
+                    ChainId.Matic,
+                    ChainId.Arbitrum,
+                    ChainId.xDai,
+                    ChainId.Fantom,
+                    ChainId.Avalanche,
+                ],
+            },
         },
     },
 }

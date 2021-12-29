@@ -139,6 +139,11 @@ const useStyles = makeStyles()((theme) => ({
         width: 64,
         height: 64,
     },
+    ellipsis: {
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+    },
 }))
 export interface RedpacketNftConfirmDialogProps {
     open: boolean
@@ -258,7 +263,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             variant="body1"
                             color="textPrimary"
                             align="right"
-                            className={(classes.text, classes.bold)}>
+                            className={(classes.text, classes.bold, classes.ellipsis)}>
                             {message}
                         </Typography>
                     </Grid>

@@ -456,7 +456,6 @@
     "plugin_ito_claim_all": "모두 수령",
     "plugin_ito_claim_all_old_contract": "Old ITO Contract",
     "plugin_ito_claim_all_new_contract": "New ITO Contract",
-    "plugin_ito_claimed": "수령됨",
     "plugin_ito_qualification_start_time": "자격 인정 시작 시간",
     "plugin_ito_error_qualification_start_time": "주의: 자격 인정 시작 시간이 ITO 종료 시간보다 빨아야 합니다.",
     "plugin_ito_end_time": "종료 시간 {{zone}}",

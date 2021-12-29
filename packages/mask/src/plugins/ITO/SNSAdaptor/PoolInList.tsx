@@ -121,6 +121,11 @@ const useStyles = makeStyles()((theme) => {
             border: `1px solid ${theme.palette.divider}`,
             color: theme.palette.text.secondary,
         },
+        ellipsis: {
+            maxWidth: 350,
+            textOverflow: 'ellipsis',
+            overflow: 'hidden',
+        },
     }
 })
 
@@ -235,7 +240,7 @@ export function PoolInList(props: PoolInListProps) {
                 <Box className={classes.content}>
                     <Box className={classes.header}>
                         <Box className={classes.title}>
-                            <Typography variant="body1" color="textPrimary">
+                            <Typography variant="body1" color="textPrimary" className={classes.ellipsis}>
                                 {title}
                             </Typography>
                             <Typography className={classes.date} variant="body2" color="textSecondary">
