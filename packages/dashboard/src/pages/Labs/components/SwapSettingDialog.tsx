@@ -101,7 +101,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             legend: t.labs_settings_swap_network({ network: 'Boba' }),
             value: useBobaNetworkTradeProvider(),
             options: bobaOptions,
-            onChange: (value: any) => Services.Settings.setBobaNetworkTradeProvider(+value),
+            onChange: (value: string) => Services.Settings.setBobaNetworkTradeProvider(+value),
         },
         {
             legend: t.labs_settings_swap_network({ network: 'Fantom' }),
