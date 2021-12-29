@@ -16,6 +16,11 @@ const isContentScript = (() => {
     return false
 })()
 if (!isContentScript) {
+    if (process.env.architecture === 'app') {
+        // Note: mobile (Android and iOS does not return a correct MINE type, therefore we can not use streaming to initialize the WASM module).
+        WebAssembly.instantiateStreaming = undefined
+        WebAssembly.compileStreaming = undefined
+    }
     import('tiny-secp256k1').then((mod) => (secp256k1 = mod))
 }
 
