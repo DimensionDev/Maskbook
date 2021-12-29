@@ -5,8 +5,8 @@ import { makeStyles } from '@masknet/theme'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
-    isNative,
     FungibleTokenWatched,
+    isNativeTokenAddress,
     useAccount,
 } from '@masknet/web3-shared-evm'
 import { isZero } from '@masknet/web3-shared-base'
@@ -19,8 +19,9 @@ import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWallet
 import { DateTimePanel } from '../../../web3/UI/DateTimePanel'
 import { PluginCollectibleRPC } from '../messages'
 import { toAsset } from '../helpers'
-import type { useAsset } from '../hooks/useAsset'
 import getUnixTime from 'date-fns/getUnixTime'
+import type { useAsset } from '../../EVM/hooks'
+import { isWyvernSchemaName } from '../utils'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -59,7 +60,6 @@ export interface ListingByPriceCardProps {
 export function ListingByPriceCard(props: ListingByPriceCardProps) {
     const { asset, tokenWatched, paymentTokens, open, onClose } = props
     const { amount, token, balance, setAmount, setToken } = tokenWatched
-
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -101,11 +101,12 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
         if (!asset.value.token_id || !asset.value.token_address) return
         if (!token?.value) return
         if (token.value.type !== EthereumTokenType.Native && token.value.type !== EthereumTokenType.ERC20) return
+        const schemaName = asset.value.asset_contract?.schemaName
         await PluginCollectibleRPC.createSellOrder({
             asset: toAsset({
                 tokenId: asset.value.token_id,
                 tokenAddress: asset.value.token_address,
-                schemaName: asset.value.asset_contract.schema_name,
+                schemaName: isWyvernSchemaName(schemaName) ? schemaName : undefined,
             }),
             accountAddress: account,
             startAmount: Number.parseFloat(amount),
@@ -143,7 +144,7 @@ export function ListingByPriceCard(props: ListingByPriceCardProps) {
                     amount={amount}
                     balance={balance.value ?? '0'}
                     token={token.value as FungibleTokenDetailed}
-                    disableNativeToken={!paymentTokens.some((x) => isNative(x.address))}
+                    disableNativeToken={!paymentTokens.some(isNativeTokenAddress)}
                     onAmountChange={setAmount}
                     onTokenChange={setToken}
                     TokenAmountPanelProps={{

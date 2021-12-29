@@ -2,7 +2,6 @@ import { useMemo, useCallback, useEffect, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import {
     formatEthereumAddress,
-    isNative,
     resolveAddressLinkOnExplorer,
     useChainId,
     useWallet,
@@ -11,6 +10,7 @@ import {
     ERC721TokenDetailed,
     useWeb3,
     TransactionStateType,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import classNames from 'classnames'
@@ -235,7 +235,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                             align="right"
                             className={classNames(classes.account, classes.bold, classes.text)}>
                             ({wallet?.name}) {formatEthereumAddress(account, 4)}
-                            {isNative(wallet?.address!) ? null : (
+                            {isNativeTokenAddress(wallet) ? null : (
                                 <Link
                                     color="textPrimary"
                                     className={classes.link}

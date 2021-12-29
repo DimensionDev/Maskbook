@@ -9,7 +9,7 @@ export const languages = {
     zh: zh_TW,
 }
 // @ts-ignore
-if (import.meta.webpack) {
+if (import.meta.webpackHot) {
     // @ts-ignore
     import.meta.webpackHot.accept(['./en-US.json', './zh-TW.json'], () =>
         globalThis.dispatchEvent?.(
