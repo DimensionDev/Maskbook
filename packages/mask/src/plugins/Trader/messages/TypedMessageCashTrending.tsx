@@ -1,15 +1,11 @@
 import { useState } from 'react'
 import { useChainId } from '@masknet/web3-shared-evm'
 import { Link, Typography } from '@mui/material'
-import {
-    TypedMessageAnchor,
-    registerTypedMessageRenderer,
-    TypedMessage,
-    isTypedMessageAnchor,
-} from '../../../protocols/typed-message'
+import { TypedMessageAnchor, TypedMessage, isTypedMessageAnchor } from '@masknet/shared-base'
 import type { TypedMessageRendererProps } from '../../../components/InjectedComponents/TypedMessageRenderer'
 import { PluginTraderMessages, PluginTraderRPC } from '../messages'
 import { TagType } from '../types'
+import { registerTypedMessageRenderer } from '../../../protocols/typed-message'
 
 export interface TypedMessageCashTrending extends Omit<TypedMessageAnchor, 'type'> {
     readonly type: 'x-cash-trending'

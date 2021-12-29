@@ -8,14 +8,14 @@ import { PersonaSetup } from './components/PersonaSetup'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
-import type { PersonaInformation } from '@masknet/shared'
+import type { PersonaInformation } from '@masknet/shared-base'
 import { ContentContainer } from '../../components/ContentContainer'
 import { PersonaContent } from './components/PersonaContent'
 import { PersonaRowCard } from './components/PersonaCard/Row'
 import { PersonaStateBar } from './components/PersonaStateBar'
 import { UserProvider } from '../Settings/hooks/UserContext'
 import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     tabPanel: {
@@ -55,7 +55,7 @@ function Personas() {
     useEffect(() => {
         if (personas?.length === 0) {
             showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
-            navigate(RoutePaths.Setup)
+            navigate(DashboardRoutes.Setup)
         }
     }, [personas])
 
@@ -71,7 +71,7 @@ function Personas() {
         <UserProvider>
             <PageFrame
                 title={t.personas()}
-                noBackgroundFill={true}
+                noBackgroundFill
                 primaryAction={
                     <PersonaStateBar
                         nickname={currentPersona?.nickname}

@@ -1,11 +1,15 @@
 /* eslint-disable import/no-deprecated */
-import type { LinkedProfileDetails } from '../../../../database/Persona/Persona.db'
+import type { LinkedProfileDetails } from '../../../../../background/database/persona/db'
 import type { BackupJSONFileVersion1 } from './version-1'
-import { ProfileIdentifier, ECKeyIdentifierFromJsonWebKey } from '../../../../database/type'
-import type { AESJsonWebKey, EC_Public_JsonWebKey, EC_Private_JsonWebKey } from '@masknet/shared-base'
+import {
+    type AESJsonWebKey,
+    type EC_Public_JsonWebKey,
+    type EC_Private_JsonWebKey,
+    ProfileIdentifier,
+} from '@masknet/shared-base'
 import { twitterBase } from '../../../../social-network-adaptor/twitter.com/base'
 import { facebookBase } from '../../../../social-network-adaptor/facebook.com/base'
-import type { RelationFavor } from '@masknet/shared-base'
+import { type RelationFavor, ECKeyIdentifierFromJsonWebKey } from '@masknet/shared-base'
 
 export type RecipientReasonJSON = (
     | { type: 'auto-share' }

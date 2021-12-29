@@ -1,5 +1,6 @@
 import { MutationObserverWatcher, ValueRef } from '@dimensiondev/holoflows-kit'
-import { SubscriptionFromValueRef, useValueRef } from '@masknet/shared'
+import { SubscriptionFromValueRef } from '@masknet/shared-base'
+import { useValueRef } from '@masknet/shared'
 import { PaletteMode, Theme, unstable_createMuiStrictModeTheme } from '@mui/material'
 import produce, { setAutoFreeze } from 'immer'
 import { useMemo } from 'react'

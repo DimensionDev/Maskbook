@@ -1,4 +1,5 @@
-import { delay, downloadUrl, MaskMessages, pasteImageToActiveElements, untilDocumentReady } from '../../../utils'
+import { downloadUrl, MaskMessages, pasteImageToActiveElements, untilDocumentReady } from '../../../utils'
+import { delay } from '@masknet/shared-base'
 import type { SocialNetworkUI } from '../../types'
 import { activatedSocialNetworkUI } from '../../ui'
 

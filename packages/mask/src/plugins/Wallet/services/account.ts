@@ -6,7 +6,6 @@ import {
     getNetworkTypeFromChainId,
     NetworkType,
     ProviderType,
-    resolveProviderName,
 } from '@masknet/web3-shared-evm'
 import {
     currentMaskWalletAccountSettings,
@@ -47,9 +46,7 @@ export async function updateAccount(
         providerType !== ProviderType.MaskWallet &&
         !(await hasWallet(account))
     ) {
-        await updateWallet(account, {
-            name: name || resolveProviderName(providerType),
-        })
+        await updateWallet(account, {})
     }
 
     // update global settings
@@ -127,5 +124,6 @@ export async function getSupportedNetworks() {
         Flags.polygon_enabled ? NetworkType.Polygon : undefined,
         Flags.arbitrum_enabled ? NetworkType.Arbitrum : undefined,
         Flags.xdai_enabled ? NetworkType.xDai : undefined,
+        Flags.celo_enabled ? NetworkType.Celo : undefined,
     ].filter(Boolean) as NetworkType[]
 }

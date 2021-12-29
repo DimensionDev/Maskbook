@@ -11,7 +11,7 @@ import { WalletMessages } from '@masknet/plugin-wallet'
 import { WalletRPC } from '../../plugins/Wallet/messages'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { MaskMessages } from '../messages'
-import type { PersonaInformation } from '@masknet/shared'
+import type { PersonaInformation } from '@masknet/shared-base'
 
 const stringToPersonaIdentifier = (str: string) => Identifier.fromString(str, ECKeyIdentifier).unwrap()
 const stringToProfileIdentifier = (str: string) => Identifier.fromString(str, ProfileIdentifier).unwrap()
@@ -115,6 +115,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getArbitrumNetworkTradeProvider()
             case NetworkType.xDai:
                 return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Celo:
+                return Services.Settings.getCeloNetworkTradeProvider()
             default:
                 unreachable(network)
         }
@@ -131,6 +133,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setArbitrumNetworkTradeProvider(provider)
             case NetworkType.xDai:
                 return Services.Settings.setxDaiNetworkTradeProvider(provider)
+            case NetworkType.Celo:
+                return Services.Settings.setCeloNetworkTradeProvider(provider)
             default:
                 unreachable(network)
         }

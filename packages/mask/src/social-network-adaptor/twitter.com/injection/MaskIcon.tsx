@@ -2,7 +2,7 @@ import { MutationObserverWatcher, DOMProxy, LiveSelector } from '@dimensiondev/h
 import { bioPageUserNickNameSelector, floatingBioCardSelector, bioPageUserIDSelector } from '../utils/selector'
 import type { PostInfo } from '../../../social-network/PostInfo'
 import Services from '../../../extension/service'
-import { ProfileIdentifier } from '../../../database/type'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { MaskIcon } from '../../../resources/MaskIcon'
 import { createReactRootShadowed } from '../../../utils/shadow-root/renderInShadowRoot'
 import { memoizePromise } from '../../../../utils-pure'

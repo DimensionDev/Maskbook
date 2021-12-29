@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js'
-import * as shared from '@masknet/shared'
 import * as kit from '@dimensiondev/holoflows-kit'
 
 // Run this file multiple times should be safe
@@ -15,7 +14,6 @@ Object.defineProperty(BigNumber.prototype, '__debug__amount__', {
 //#endregion
 
 //#region Useful global variables
-Object.assign(globalThis, shared)
 Object.assign(globalThis, kit)
 Object.assign(globalThis, { BigNumber })
 //#endregion

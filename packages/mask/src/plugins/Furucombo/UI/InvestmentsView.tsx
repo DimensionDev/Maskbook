@@ -159,8 +159,8 @@ export function InvestmentsView(props: InvestmentsProps) {
         const orderByA = orderBy as keyof typeof a
         const orderByB = orderBy as keyof typeof b
         return order === 'asc'
-            ? parseFloat(a[orderByA]) - parseFloat(b[orderByB])
-            : parseFloat(b[orderByB]) - parseFloat(a[orderByA])
+            ? Number.parseFloat(a[orderByA]) - Number.parseFloat(b[orderByB])
+            : Number.parseFloat(b[orderByB]) - Number.parseFloat(a[orderByA])
     })
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -171,7 +171,7 @@ export function InvestmentsView(props: InvestmentsProps) {
     }
 
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setRowsPerPage(parseInt(event.target.value, 10))
+        setRowsPerPage(Number.parseInt(event.target.value, 10))
         setPage(0)
     }
 
@@ -217,7 +217,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                         ? investables.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                         : investables
                     ).map((row: Investable) => (
-                        <TableRow key={row.token.address} className={classes.row}>
+                        <TableRow key={row.address} className={classes.row}>
                             <TableCell
                                 className={classes.cell}
                                 component="th"
@@ -231,7 +231,7 @@ export function InvestmentsView(props: InvestmentsProps) {
                                 <Button
                                     className={classes.invest}
                                     size="small"
-                                    href={`${BASE_URL}/${row.category}/${row.chainId}/${row.token.address}`}
+                                    href={`${BASE_URL}/${row.category}/${row.chainId}/${row.address}`}
                                     target="_blank">
                                     {t('plugin_furucombo_invest')}
                                 </Button>

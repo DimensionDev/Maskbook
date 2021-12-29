@@ -4,7 +4,8 @@ import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { useDashboardI18N } from '../../../../locales'
 import { makeStyles } from '@masknet/theme'
 import { DisconnectProfileDialog } from '../DisconnectProfileDialog'
-import { ProfileIdentifier, SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
+import type { ProfileIdentifier } from '@masknet/shared-base'
+import { SOCIAL_MEDIA_ICON_MAPPING } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 
 const useStyles = makeStyles()((theme) => ({
@@ -90,7 +91,7 @@ export const ConnectedPersonaLine = memo<ConnectedPersonaLineProps>(
                                     key={x.userId}
                                     onClick={() => handleUserIdClick(networkIdentifier, x.userId)}
                                     sx={{ color: MaskColorVar.textPrimary, fontSize: 13, mr: 1, cursor: 'pointer' }}>
-                                    {`@${x.userId}`}
+                                    @{x.userId}
                                 </Typography>
                             ))}
                         </Stack>

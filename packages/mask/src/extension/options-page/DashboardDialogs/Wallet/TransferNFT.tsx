@@ -92,13 +92,13 @@ export function DashboardWalletTransferDialogNFT(props: WrappedDialogProps<{ tok
             <DashboardDialogWrapper
                 primary={t('wallet_transfer_title')}
                 icon={
-                    token.info.image ? (
+                    token.info.mediaUrl ? (
                         <Image
                             component="img"
                             width={160}
                             height={220}
                             style={{ objectFit: 'contain' }}
-                            src={token.info.image}
+                            src={token.info.mediaUrl}
                         />
                     ) : (
                         <MaskIconOutlined className={classes.placeholder} />

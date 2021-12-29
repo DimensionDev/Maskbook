@@ -15,18 +15,21 @@ import {
     useChainId,
     useChainIdValid,
     useFungibleTokenBalance,
+    useProviderType,
     useTokenConstants,
     useWallet,
 } from '@masknet/web3-shared-evm'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
+import { useRemoteControlledDialog } from '@masknet/shared'
+import { delay } from '@masknet/shared-base'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
-import { delay, useI18N } from '../../../../utils'
+import { useI18N } from '../../../../utils'
 import { TradeForm } from './TradeForm'
 import { AllProviderTradeActionType, AllProviderTradeContext } from '../../trader/useAllProviderTradeContext'
-import { UST } from '../../constants'
+import { MINIMUM_AMOUNT, UST } from '../../constants'
 import { SelectTokenDialogEvent, WalletMessages } from '@masknet/plugin-wallet'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useAsync, useUnmount, useUpdateEffect } from 'react-use'
 import { isTwitter } from '../../../../social-network-adaptor/twitter.com/base'
 import { activatedSocialNetworkUI } from '../../../../social-network'
 import { isFacebook } from '../../../../social-network-adaptor/facebook.com/base'
@@ -34,7 +37,7 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import { isNativeTokenWrapper } from '../../helpers'
 import { ConfirmDialog } from './ConfirmDialog'
 import Services from '../../../../extension/service'
-import { currentAccountSettings, currentBalancesSettings, currentProviderSettings } from '../../../Wallet/settings'
+import { currentBalancesSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { WalletRPC } from '../../../Wallet/messages'
 import { PluginTraderMessages } from '../../messages'
@@ -42,17 +45,17 @@ import { NetworkType } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { SettingsDialog } from './SettingsDialog'
+import { useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => {
     return {
         root: {
-            width: 535,
             margin: 'auto',
         },
     }
 })
 
-export interface TraderProps extends withClasses<never> {
+export interface TraderProps extends withClasses<'root'> {
     coin?: Coin
     tokenDetailed?: FungibleTokenDetailed
     chainId?: ChainId
@@ -68,8 +71,8 @@ export function Trader(props: TraderProps) {
     const chainId = targetChainId ?? currentChainId
     const chainIdValid = useChainIdValid()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
-    const currentAccount = useValueRef(currentAccountSettings)
-    const currentProvider = useValueRef(currentProviderSettings)
+    const currentAccount = useAccount()
+    const currentProvider = useProviderType()
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()
@@ -97,6 +100,7 @@ export function Trader(props: TraderProps) {
     //#region if coin be changed, update output token
     useEffect(() => {
         if (!coin || currentChainId !== targetChainId) return
+
         // if coin be native token and input token also be native token, reset it
         if (
             isSameAddress(coin.contract_address, NATIVE_TOKEN_ADDRESS) &&
@@ -108,13 +112,15 @@ export function Trader(props: TraderProps) {
                 token: undefined,
             })
         }
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
-            token: coin.contract_address
-                ? createERC20Token(chainId, coin.contract_address, decimals ?? 0, coin.name ?? '', coin.symbol ?? '')
-                : undefined,
-        })
-    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, currentChainId, targetChainId])
+        if (!outputToken) {
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+                token: coin.contract_address
+                    ? createERC20Token(chainId, coin.contract_address, decimals, coin.name, coin.symbol)
+                    : undefined,
+            })
+        }
+    }, [coin, NATIVE_TOKEN_ADDRESS, inputToken, outputToken, currentChainId, targetChainId, decimals])
 
     const onInputAmountChange = useCallback((amount: string) => {
         dispatchTradeStore({
@@ -125,12 +131,17 @@ export function Trader(props: TraderProps) {
 
     //#region update balance
     const { value: inputTokenBalance_, loading: loadingInputTokenBalance } = useFungibleTokenBalance(
-        inputToken?.type ?? EthereumTokenType.Native,
+        isSameAddress(inputToken?.address, NATIVE_TOKEN_ADDRESS)
+            ? EthereumTokenType.Native
+            : inputToken?.type ?? EthereumTokenType.Native,
         inputToken?.address ?? '',
+        chainId,
     )
 
     const { value: outputTokenBalance_, loading: loadingOutputTokenBalance } = useFungibleTokenBalance(
-        outputToken?.type ?? EthereumTokenType.Native,
+        isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS)
+            ? EthereumTokenType.Native
+            : outputToken?.type ?? EthereumTokenType.Native,
         outputToken?.address ?? '',
         chainId,
     )
@@ -151,11 +162,12 @@ export function Trader(props: TraderProps) {
             outputToken?.type !== EthereumTokenType.Native &&
             outputTokenBalance_ &&
             !loadingOutputTokenBalance
-        )
+        ) {
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
                 balance: outputTokenBalance_,
             })
+        }
     }, [
         inputToken,
         outputToken,
@@ -163,12 +175,26 @@ export function Trader(props: TraderProps) {
         outputTokenBalance_,
         loadingInputTokenBalance,
         loadingOutputTokenBalance,
+        NATIVE_TOKEN_ADDRESS,
     ])
 
     // Query the balance of native tokens on target chain
     useAsync(async () => {
-        if (chainId) {
-            const cacheBalance = currentBalancesSettings.value[currentProvider][chainId]
+        if (!currentAccount) {
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
+                balance: '0',
+            })
+
+            dispatchTradeStore({
+                type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
+                balance: '0',
+            })
+            return
+        }
+
+        if (chainId && currentProvider && currentAccount) {
+            const cacheBalance = currentBalancesSettings.value[currentProvider]?.[chainId]
 
             let balance: string
 
@@ -192,7 +218,11 @@ export function Trader(props: TraderProps) {
 
             dispatchTradeStore({
                 type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN_BALANCE,
-                balance: outputToken?.type === EthereumTokenType.Native ? balance : '0',
+                balance:
+                    isSameAddress(outputToken?.address, NATIVE_TOKEN_ADDRESS) ||
+                    outputToken?.type === EthereumTokenType.Native
+                        ? balance
+                        : '0',
             })
         }
     }, [inputToken, outputToken, currentAccount, currentProvider, chainId, currentChainId])
@@ -233,7 +263,7 @@ export function Trader(props: TraderProps) {
                 open: true,
                 uuid: String(type),
                 disableNativeToken: false,
-                FixedTokenListProps: {
+                FungibleTokenListProps: {
                     selectedTokens: excludeTokens,
                 },
             })
@@ -265,11 +295,6 @@ export function Trader(props: TraderProps) {
         dispatchTradeStore({
             type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN,
             token: outputToken,
-        })
-
-        dispatchTradeStore({
-            type: AllProviderTradeActionType.UPDATE_INPUT_TOKEN_BALANCE,
-            balance: '',
         })
 
         dispatchTradeStore({
@@ -340,9 +365,9 @@ export function Trader(props: TraderProps) {
             } else {
                 if (network === NetworkType.Ethereum) {
                     const response = await WalletRPC.getEstimateGasFees(chainId)
-                    const maxFeePerGas = formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()
+                    const maxFeePerGas = formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toString()
                     const maxPriorityFeePerGas = formatGweiToWei(
-                        response?.medium.suggestedMaxPriorityFeePerGas ?? 0,
+                        response?.medium?.suggestedMaxPriorityFeePerGas ?? 0,
                     ).toString()
                     setGasConfig({
                         maxFeePerGas,
@@ -389,11 +414,16 @@ export function Trader(props: TraderProps) {
     const nativeTokenPrice = useNativeTokenPrice(chainId)
     const outputTokenPrice = useTokenPrice(chainId, outputToken?.address.toLowerCase())
     const sortedAllTradeComputed = useMemo(() => {
-        if (outputToken && outputTokenPrice) {
+        if (outputToken && (outputTokenPrice || nativeTokenPrice)) {
             return allTradeComputed
                 .map((trade) => {
-                    if (gasPrice && trade.value && trade.gas.value) {
-                        const gasFee = new BigNumber(gasPrice).multipliedBy(trade.gas.value).integerValue().toFixed()
+                    if (
+                        gasPrice &&
+                        trade.value &&
+                        isGreaterThan(trade.value.outputAmount, MINIMUM_AMOUNT) &&
+                        trade.gas.value
+                    ) {
+                        const gasFee = multipliedBy(gasPrice, trade.gas.value).integerValue().toFixed()
 
                         const gasFeeUSD = new BigNumber(formatBalance(gasFee ?? 0, outputToken.decimals)).times(
                             nativeTokenPrice,
@@ -412,15 +442,15 @@ export function Trader(props: TraderProps) {
                     }
                     return trade
                 })
-                .filter(({ finalPrice }) => !!finalPrice)
+                .filter(({ value }) => !!value && !value.outputAmount.isZero())
                 .sort(({ finalPrice: a }, { finalPrice: b }) => {
-                    if (a && b && new BigNumber(a).isGreaterThan(b)) return -1
-                    if (a && b && new BigNumber(a).isLessThan(b)) return 1
+                    if (a && b && isGreaterThan(a, b)) return -1
+                    if (a && b && isLessThan(a, b)) return 1
                     return 0
                 })
         }
         return allTradeComputed
-            .filter(({ value }) => !!value)
+            .filter(({ value }) => !!value && !value.outputAmount.isZero())
             .sort(({ value: a }, { value: b }) => {
                 if (a?.outputAmount.isGreaterThan(b?.outputAmount ?? 0)) return -1
                 if (a?.outputAmount.isLessThan(b?.outputAmount ?? 0)) return 1
@@ -436,7 +466,7 @@ export function Trader(props: TraderProps) {
     //#endregion
 
     //#region if chain id be changed, reset the chain id on context, and reset gas config
-    useUpdateEffect(() => {
+    useEffect(() => {
         if (chainId) {
             setTargetChainId(chainId)
             setGasConfig(undefined)
@@ -459,6 +489,13 @@ export function Trader(props: TraderProps) {
             if (event.gasConfig) setGasConfig(event.gasConfig)
         })
     }, [])
+
+    useUnmount(() => {
+        dispatchTradeStore({
+            type: AllProviderTradeActionType.UPDATE_OUTPUT_TOKEN,
+            token: undefined,
+        })
+    })
 
     return (
         <div className={classes.root}>

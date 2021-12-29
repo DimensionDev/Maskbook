@@ -11,13 +11,12 @@ import {
     TypedMessageTuple,
     TypedMessageUnknown,
     TypedMessagePromise,
-    registerTypedMessageRenderer,
     TypedMessageEmpty,
     makeTypedMessageText,
-} from '../../protocols/typed-message'
+} from '@masknet/shared-base'
 import { Image } from '../shared/Image'
 import { useAsync } from 'react-use'
-import { getRendererOfTypedMessage } from '../../protocols/typed-message'
+import { getRendererOfTypedMessage, registerTypedMessageRenderer } from '../../protocols/typed-message'
 import { deconstructPayload } from '../../utils/type-transform/Payload'
 import { PayloadReplacer } from './PayloadReplacer'
 import { useI18N } from '../../utils'
@@ -152,7 +151,12 @@ export const DefaultTypedMessageUnknownRenderer = memo(function DefaultTypedMess
 ) {
     const { t } = useI18N()
 
-    return renderWithMetadata(props, <Typography color="textPrimary">{`${t('unknown')} ${t('message')}`}</Typography>)
+    return renderWithMetadata(
+        props,
+        <Typography color="textPrimary">
+            {t('unknown')} {t('message')}
+        </Typography>,
+    )
 })
 registerTypedMessageRenderer('unknown', {
     component: DefaultTypedMessageUnknownRenderer,

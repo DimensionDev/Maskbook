@@ -139,7 +139,7 @@ function Content() {
                                 </Typography>
                             </ShadowRootTooltip>
                             <Typography className={classes.ratio}>
-                                {parseFloat(result.percentage.toFixed(2))}%
+                                {Number.parseFloat(result.percentage.toFixed(2))}%
                             </Typography>
                         </Box>
                         <Box className={classes.linearProgressWrap}>

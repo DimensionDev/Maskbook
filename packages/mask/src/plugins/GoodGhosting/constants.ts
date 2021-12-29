@@ -5,8 +5,6 @@ export const PLUGIN_NAME = 'GoodGhosting'
 export const PLUGIN_ICON = '👻'
 export const PLUGIN_DESCRIPTION = 'DeFi savings dApp game.'
 
-export const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000'
-
 export const DAI = createERC20Tokens('DAI_ADDRESS', 'Dai Stablecoin', 'DAI', 18)
 export const WETH = createERC20Tokens(
     'WNATIVE_ADDRESS',

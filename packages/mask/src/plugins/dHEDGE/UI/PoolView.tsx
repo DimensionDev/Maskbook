@@ -137,7 +137,7 @@ export function PoolView(props: PoolViewProps) {
             <Typography className={classes.message} color="textPrimary">
                 {t('plugin_dhedge_smt_wrong')}
                 <br />
-                {error?.message || errorAllowedTokens?.message}
+                {(error as any)?.message || errorAllowedTokens?.message}
                 <br />
                 <RefreshIcon className={classes.refresh} color="primary" onClick={error ? retry : retryAllowedTokens} />
             </Typography>

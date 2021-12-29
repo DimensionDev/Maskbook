@@ -1,6 +1,6 @@
 import { Dispatch, memo, SetStateAction, useEffect, useMemo, useState } from 'react'
 import { useContacts } from '../../hooks/useContacts'
-import type { RelationProfile } from '@masknet/shared'
+import type { RelationProfile } from '@masknet/shared-base'
 import { TableContainer, Box, TablePagination, Stack, Table, TableBody } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { MaskColorVar } from '@masknet/theme'
@@ -12,7 +12,7 @@ import { Messages } from '../../../../API'
 import { useContainer } from 'unstated-next'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useUpdateEffect } from 'react-use'
-import { RelationFavor } from '@masknet/shared'
+import { RelationFavor } from '@masknet/shared-base'
 import { ContactTableRow } from '../ContactTableRow'
 
 const useStyles = makeStyles()((theme) => ({

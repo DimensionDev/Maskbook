@@ -1,1 +1,6 @@
-{}
+{
+    "button_log_in": "登入",
+    "button_log_out": "登出",
+    "button_sign_up": "註冊",
+    "card_state_text_no_profile": "無文件"
+}

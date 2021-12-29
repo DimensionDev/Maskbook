@@ -2,28 +2,27 @@ import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
 import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
 import { decodeText } from '@dimensiondev/kit'
-import { deconstructPayload, Payload } from '../../../utils/type-transform/Payload'
+import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../../shared-ui/locales_legacy'
 import { queryPersonaRecord, queryLocalKey } from '../../../database'
-import { ProfileIdentifier, PostIVIdentifier } from '../../../database/type'
-import { PostRecord, queryPostDB, updatePostDB } from '../../../database/post'
+import { ProfileIdentifier, PostIVIdentifier, delay } from '@masknet/shared-base'
+import { PostRecord, queryPostDB, updatePostDB } from '../../../../background/database/post'
 import { getNetworkWorker, getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { cryptoProviderTable } from './cryptoProviderTable'
-import type { PersonaRecord } from '../../../database/Persona/Persona.db'
+import type { PersonaRecord } from '../../../../background/database/persona/db'
 import { verifyOthersProve } from './verifyOthersProve'
 import { publicSharedAESKey } from '../../../crypto/crypto-alpha-38'
 import { DecryptFailedReason } from '../../../utils/constants'
 import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/type-transform/asyncIteratorHelpers'
-import { delay } from '../../../utils/utils'
-import type { AESJsonWebKey } from '../../../modules/CryptoAlgorithm/interfaces/utils'
-import { steganographyDecodeImageUrl } from './Steganography'
-import type { TypedMessage } from '../../../protocols/typed-message'
+import { steganographyDecodeImageUrl } from '@masknet/encryption'
+import type { TypedMessage, AESJsonWebKey, Payload } from '@masknet/shared-base'
 import stringify from 'json-stable-stringify'
 import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessages } from '../../../utils/messages'
 import { GunAPI } from '../../../network/gun'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
+import { steganographyDownloadImage } from './utils'
 
 type Progress = (
     | { progress: 'finding_person_public_key' | 'finding_post_key' | 'init' | 'decode_post' }
@@ -318,6 +317,7 @@ async function* decryptFromImageUrlWithProgress_raw(
     yield makeProgress('decode_post', true)
     const post = await steganographyDecodeImageUrl(url, {
         pass: author.toText(),
+        downloadImage: steganographyDownloadImage,
     })
     if (!post.startsWith('🎼') && !/https:\/\/.+\..+\/(\?PostData_v\d=)?%20(.+)%40/.test(post))
         return makeError(i18n.t('service_decode_image_payload_failed'), true)

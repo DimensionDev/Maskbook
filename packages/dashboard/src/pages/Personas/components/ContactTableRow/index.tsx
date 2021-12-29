@@ -1,4 +1,4 @@
-import type { RelationProfile } from '@masknet/shared'
+import type { RelationProfile } from '@masknet/shared-base'
 import { memo, useCallback } from 'react'
 import { Box, TableCell, TableRow, Typography, Avatar, useTheme } from '@mui/material'
 import { makeStyles } from '@masknet/theme'

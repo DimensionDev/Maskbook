@@ -9,7 +9,7 @@ import { DesktopMnemonicConfirm } from '../../../../components/Mnemonic'
 import { useDashboardI18N } from '../../../../locales'
 import { useCopyToClipboard } from 'react-use'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     dialogTitle: {
@@ -105,7 +105,7 @@ export const VerifyMnemonicDialog = memo<VerifyMnemonicDialogProps>(
                 loading={loading}
                 address={address}
                 onCopy={copyWalletAddress}
-                onDoneClick={() => navigate(RoutePaths.Wallets)}
+                onDoneClick={() => navigate(DashboardRoutes.Wallets)}
             />
         )
     },

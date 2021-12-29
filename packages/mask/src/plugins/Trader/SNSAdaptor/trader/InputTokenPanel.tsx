@@ -1,6 +1,6 @@
 import { ChangeEvent, memo, useCallback, useMemo } from 'react'
 import { useI18N } from '../../../../utils'
-import type { FungibleTokenDetailed } from '@masknet/web3-shared-evm'
+import { FungibleTokenDetailed, isZeroAddress } from '@masknet/web3-shared-evm'
 import { Box, Chip, chipClasses, TextField, Typography } from '@mui/material'
 import { FormattedBalance, SelectTokenChip, SelectTokenChipProps } from '@masknet/shared'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -8,8 +8,8 @@ import { useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import BigNumber from 'bignumber.js'
 import { FormattedCurrency } from '@masknet/shared'
-import { ZERO_ADDRESS } from '../../../GoodGhosting/constants'
 import { formatBalance, formatCurrency } from '@masknet/web3-shared-evm'
+import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
     filledInput: {
@@ -23,6 +23,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         fontSize: 14,
         lineHeight: '20px',
         color: theme.palette.text.primary,
+        wordBreak: 'keep-all',
     },
     amount: {
         marginLeft: 10,
@@ -74,10 +75,10 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         [`& .${chipClasses.label}`]: {
             paddingTop: 9,
             paddingBottom: 9,
-            fontSize: 13,
+            fontSize: 10,
             lineHeight: '18px',
             color: theme.palette.primary.contrastText,
-            marginRight: 10,
+            marginRight: 0,
         },
     },
 }))
@@ -94,8 +95,8 @@ export interface InputTokenPanelProps extends withClasses<'root'> {
 
 export const InputTokenPanel = memo<InputTokenPanelProps>(
     ({ chainId, token, balance, onAmountChange, amount, ...props }) => {
+        const isDashboard = isDashboardPage()
         const { t } = useI18N()
-        const isDashboard = location.href.includes('dashboard.html')
         const { classes } = useStyles({ isDashboard })
 
         //#region update amount by self
@@ -118,7 +119,7 @@ export const InputTokenPanel = memo<InputTokenPanelProps>(
 
         const tokenPrice = useTokenPrice(
             chainId,
-            token?.address !== ZERO_ADDRESS ? token?.address.toLowerCase() : undefined,
+            !isZeroAddress(token?.address) ? token?.address.toLowerCase() : undefined,
         )
 
         const tokenValueUSD = useMemo(

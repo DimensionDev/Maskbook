@@ -13,6 +13,7 @@
     { "path": "../../shared" },
     { "path": "../../shared-base" },
     { "path": "../../theme" },
-    { "path": "../../web3-shared/flow" }
+    { "path": "../../web3-shared/flow" },
+    { "path": "../../web3-providers" }
   ]
 }

@@ -10,7 +10,7 @@ import { VerifyMnemonicDialog } from '../VerifyMnemonicDialog'
 import { useAsyncFn, useAsyncRetry } from 'react-use'
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { PluginServices, Services } from '../../../../API'
-import { RoutePaths } from '../../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import type { Search } from 'history'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { useMnemonicWordsPuzzle } from '../../../../hooks/useMnemonicWordsPuzzle'
@@ -98,7 +98,7 @@ const CreateMnemonic = memo(() => {
         // if the name doesn't exist, navigate to form page
         if (!name) {
             resetCallback()
-            navigate(RoutePaths.CreateMaskWalletForm)
+            navigate(DashboardRoutes.CreateMaskWalletForm)
             return
         }
 

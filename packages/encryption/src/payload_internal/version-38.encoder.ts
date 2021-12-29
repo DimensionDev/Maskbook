@@ -1,14 +1,11 @@
 import { encodeText, encodeArrayBuffer } from '@dimensiondev/kit'
-import { combine, Convert } from 'pvtsutils'
 import { Ok, Option, Result } from 'ts-results'
 import type { PayloadWellFormed, Signature } from '..'
 import { AESAlgorithmEnum } from '../payload'
 import { CryptoException, PayloadException } from '../types'
 import { encryptWithAES, exportCryptoKeyToJWK } from '../utils'
 import { get_v38PublicSharedCryptoKey } from './shared'
-import * as secp256k1 from 'tiny-secp256k1'
-import { CheckedError } from '@masknet/shared-base'
-const { isPoint, pointCompress } = secp256k1
+import { CheckedError, compressSecp256k1Point } from '@masknet/shared-base'
 
 const enum Index {
     authorPublicKey = 5,
@@ -80,23 +77,9 @@ function encodeSignature(sig: Option<Signature>) {
 async function compressSecp256k1Key(key: CryptoKey) {
     const jwk = await exportCryptoKeyToJWK(key)
     if (jwk.err) return jwk.mapErr((e) => new CheckedError(CryptoException.InvalidCryptoKey, e))
-    const arr = compressSecp256k1Point(jwk.val.x!, jwk.val.y!)
+    const arr = Result.wrap(() => compressSecp256k1Point(jwk.val.x!, jwk.val.y!)).mapErr(
+        (e) => new CheckedError(CryptoException.InvalidCryptoKey, e),
+    )
     if (arr.err) return arr
     return Ok(encodeArrayBuffer(arr.val.slice()))
-}
-
-/**
- * Compress x & y into a single x
- */
-function compressSecp256k1Point(x: string, y: string) {
-    return Result.wrap<Uint8Array, CheckedError<CryptoException.InvalidCryptoKey>>(() => {
-        const xb = Convert.FromBase64Url(x)
-        const yb = Convert.FromBase64Url(y)
-        const point = new Uint8Array(combine(new Uint8Array([0x04]), xb, yb))
-        if (isPoint(point)) {
-            return pointCompress(point, true)
-        } else {
-            throw new CheckedError(CryptoException.InvalidCryptoKey, 'invalid secp256k1 key')
-        }
-    })
 }

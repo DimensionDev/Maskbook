@@ -21,7 +21,7 @@ export function collectNodeText(node: HTMLElement | null | undefined, options: C
                 const result = options.onHTMLAnchorElement?.(each)
                 if (result?.some) return result.val
                 const href = each.getAttribute('href')
-                return href || each.innerText
+                return [href, each.innerText].join(' ')
             }
             if (each instanceof HTMLImageElement) {
                 const src = each.getAttribute('src')

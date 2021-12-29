@@ -25,7 +25,7 @@ import { useI18N, MaskMessages, useMatchXS, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
-import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '../../database/type'
+import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
 import Services from '../../extension/service'
 
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'

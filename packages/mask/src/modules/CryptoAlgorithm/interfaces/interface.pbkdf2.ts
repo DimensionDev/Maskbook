@@ -1,6 +1,6 @@
 import type { ShaName } from './interface'
 import type { AESName } from './interface.aes'
-import type { PBKDF2UnknownKey, AESJsonWebKey } from './utils'
+import type { PBKDF2UnknownKey, AESJsonWebKey } from '@masknet/shared-base'
 export interface PBKDF2Methods {
     import_pbkdf2(seed: ArrayBuffer): PromiseLike<PBKDF2UnknownKey>
     derive_aes_from_pbkdf2(

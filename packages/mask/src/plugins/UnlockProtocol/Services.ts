@@ -109,7 +109,7 @@ export const getLocks = async <UnlockLocks>(_address1: String) => {
         const data = await graphQLClients[key].request(query, variables)
         data.lockManagers.forEach(
             (element: { lock: { chain: number; name: string; price?: string; address: string } }) => {
-                element.lock.chain = parseInt(key, 10)
+                element.lock.chain = Number.parseInt(key, 10)
                 dataRes.push(element)
             },
         )
@@ -135,7 +135,7 @@ export const getPurchasedLocks = async (_address: string) => {
     for (const key of Object.keys(graphEndpointKeyVal)) {
         const data = await graphQLClients[key].request(query, variables)
         data.keyPurchases.forEach((element: { lock: string; chain: number }) => {
-            element.chain = parseInt(key, 10)
+            element.chain = Number.parseInt(key, 10)
             dataRes.push(element)
         })
     }

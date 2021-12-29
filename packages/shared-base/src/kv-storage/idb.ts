@@ -1,4 +1,6 @@
 import type { KVStorageBackend } from './types'
+// This package is used in jest. Import from the esm version will fail the test.
+// eslint-disable-next-line no-restricted-imports
 import { IDBPDatabase, openDB } from 'idb'
 import { None, Some } from 'ts-results'
 import Safari14Fix from 'safari-14-idb-fix'

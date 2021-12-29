@@ -39,7 +39,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         devtool: sourceMapKind,
         target: ['web', 'es2019'],
         entry: {},
-        experiments: { backCompat: false },
+        experiments: { backCompat: false, asyncWebAssembly: true },
         cache: {
             type: 'filesystem',
             buildDependencies: { config: [__filename] },
@@ -71,7 +71,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/theme': join(__dirname, '../../theme/src/'),
                     '@masknet/icons': join(__dirname, '../../icons/index.ts'),
                     '@masknet/web3-kit': join(__dirname, '../../web3-kit/src/'),
-                    '@masknet/web3-providers': join(__dirname, '../../web3-providers/src/'),
+                    '@masknet/web3-providers': join(__dirname, '../../web3-providers/src'),
                     '@masknet/web3-shared-evm': join(__dirname, '../../web3-shared/evm/'),
                     '@masknet/web3-shared-flow': join(__dirname, '../../web3-shared/flow/'),
                     '@masknet/web3-shared-solana': join(__dirname, '../../web3-shared/solana/'),
@@ -79,10 +79,12 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/plugin-example': join(__dirname, '../../plugins/example/src/'),
                     '@masknet/plugin-flow': join(__dirname, '../../plugins/Flow/src/'),
                     '@masknet/plugin-wallet': join(__dirname, '../../plugins/Wallet/src/'),
+                    '@masknet/plugin-file-service': join(__dirname, '../../plugins/FileService/src/'),
                     '@masknet/external-plugin-previewer': join(__dirname, '../../external-plugin-previewer/src/'),
                     '@masknet/public-api': join(__dirname, '../../public-api/src/'),
                     '@masknet/sdk': join(__dirname, '../../mask-sdk/server/'),
                     '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
+                    '@masknet/encryption': join(__dirname, '../../encryption/src'),
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
                 }
                 if (profiling) {
@@ -160,6 +162,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     ...runtime,
                     ...getGitInfo(reproducibleBuild),
                     channel: normalizedFlags.channel,
+                    manifest: String(runtime.manifest),
                 }
                 if (mode === 'development') return EnvironmentPluginCache(runtimeValues)
                 return EnvironmentPluginNoCache(runtimeValues)
@@ -274,7 +277,7 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
     } else {
         entries.background = normalizeEntryDescription(join(__dirname, '../src/background-service.ts'))
         plugins.push(new WebExtensionPlugin({ background: { entry: 'background', manifest: 2 } }))
-        plugins.push(addHTMLEntry({ chunks: ['background'], filename: 'background.html' }))
+        plugins.push(addHTMLEntry({ chunks: ['background'], filename: 'background.html', secp256k1: true }))
     }
     for (const entry in entries) {
         withReactDevTools(entries[entry])
@@ -296,10 +299,13 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
         }
     }
 }
-function addHTMLEntry(options: HTMLPlugin.Options = {}) {
+function addHTMLEntry(options: HTMLPlugin.Options & { secp256k1?: boolean } = {}) {
     let templateContent = readFileSync(join(__dirname, './template.html'), 'utf8')
-    if (options.chunks?.includes('background')) {
-        templateContent.replace(`<!-- background -->`, '<script src="/polyfill/secp256k1.js"></script>')
+    if (options.secp256k1) {
+        templateContent = templateContent.replace(
+            `<!-- secp256k1 -->`,
+            '<script src="/polyfill/secp256k1.js"></script>',
+        )
     }
     return new HTMLPlugin({
         templateContent,

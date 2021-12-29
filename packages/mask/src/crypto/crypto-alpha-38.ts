@@ -1,5 +1,4 @@
-import { TypedMessage, makeTypedMessageText, isTypedMessageText } from '../protocols/typed-message'
-import type { AESJsonWebKey } from '../modules/CryptoAlgorithm/interfaces/utils'
+import { TypedMessage, makeTypedMessageText, isTypedMessageText, type AESJsonWebKey } from '@masknet/shared-base'
 export * from './crypto-alpha-39'
 
 // @ts-ignore

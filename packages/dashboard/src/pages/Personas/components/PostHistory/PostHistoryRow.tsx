@@ -3,7 +3,7 @@ import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon } from '@masknet/icons'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
-import type { PostRecord } from '@masknet/shared'
+import type { PostRecord } from '@masknet/shared-base'
 import { PLUGIN_IDS } from '../../../Labs/constants'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
@@ -132,7 +132,9 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
         if (recipients === 'everyone') return ['Everyone']
 
         const userIds = Array.from(recipients.keys()).map((x) => (
-            <span key={x.userId} onClick={(e) => recipientClickHandler(e, x.userId)}>{`@${x.userId}`}</span>
+            <span key={x.userId} onClick={(e) => recipientClickHandler(e, x.userId)}>
+                @{x.userId}
+            </span>
         ))
         return userIds.length
             ? userIds

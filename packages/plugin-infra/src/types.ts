@@ -1,6 +1,6 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared'
+import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 
@@ -199,10 +199,6 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
-        /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
-        ToolbarEntry?: ToolbarEntry
-        /** This UI will be rendered as an entry in the wallet status dialog */
-        ApplicationEntry?: ApplicationEntry
     }
     //#region Composition entry
     /**
@@ -255,53 +251,6 @@ export namespace Plugin.SNSAdaptor {
         tooltip?: React.ReactChild
     }
     //#endregion
-
-    //#region Toolbar entry
-    export interface ToolbarEntry {
-        image: string
-        // TODO: remove string
-        label: I18NStringField | string
-        /**
-         * Used to order the toolbars
-         *
-         * TODO: can we make them unordered?
-         */
-        priority: number
-        /**
-         * This is a React hook. If it returns false, this entry will not be displayed.
-         */
-        useShouldDisplay?(): boolean
-        /**
-         * What to do if the entry is clicked.
-         */
-        // TODO: add support for DialogEntry.
-        // TODO: add support for onClick event.
-        onClick: 'openCompositionEntry'
-    }
-    //#endregion
-
-    export interface ApplicationEntry {
-        /**
-         * The icon image URL
-         */
-        icon: URL
-        /**
-         * The name of the application
-         */
-        label: I18NStringField | string
-        /**
-         * Also an entrance in a sub-folder
-         */
-        categoryID?: string
-        /**
-         * Used to order the applications on the board
-         */
-        priority: number
-        /**
-         * What to do if the application icon is clicked.
-         */
-        onClick(): void
-    }
 }
 
 /** This part runs in the dashboard */
@@ -487,6 +436,12 @@ export interface Pagination {
     size?: number
     /** The page index. */
     page?: number
+}
+
+export interface Pageable<T> {
+    currentPage: number
+    hasNextPage: boolean
+    data: T[]
 }
 /**
  * This namespace is not related to the plugin authors

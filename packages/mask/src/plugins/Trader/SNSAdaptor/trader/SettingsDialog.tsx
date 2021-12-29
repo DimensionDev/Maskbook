@@ -9,9 +9,8 @@ import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
 import { PluginTraderMessages } from '../../messages'
 import { ExpandMore } from '@mui/icons-material'
 import { Gas1559Settings } from './Gas1559Settings'
-import { currentNetworkSettings } from '../../../Wallet/settings'
 import { GasPrior1559Settings } from './GasPrior1559Settings'
-import { GasOptionConfig, NetworkType } from '@masknet/web3-shared-evm'
+import { GasOptionConfig, NetworkType, useNetworkType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -47,7 +46,7 @@ export function SettingsDialog(props: SettingsDialogProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     const slippage = useValueRef(currentSlippageSettings)
-    const networkType = useValueRef(currentNetworkSettings)
+    const networkType = useNetworkType()
 
     const [gasConfig, setGasConfig] = useState<GasOptionConfig>()
     const [unconfirmedSlippage, setUnconfirmedSlippage] = useState(slippage)

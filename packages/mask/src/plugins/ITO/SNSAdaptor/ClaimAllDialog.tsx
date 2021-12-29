@@ -419,7 +419,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                 <EthereumChainBoundary
                                     chainId={chainId}
                                     classes={{ switchButton: classes.claimAllButton }}
-                                    noSwitchNetworkTip={true}
+                                    noSwitchNetworkTip
                                     switchButtonStyle={{
                                         minHeight: 'auto',
                                         width: 540,

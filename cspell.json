@@ -22,6 +22,7 @@
         "Burkina",
         "CAIP",
         "Caicos",
+        "Celo",
         "Checksummed",
         "Cunha",
         "Cura",
@@ -242,7 +243,12 @@
         "NFTRSS",
         "solana",
         "Görli",
-        "resizer"
+        "resizer",
+        "Pageable",
+        "metaverse",
+        "hexlify",
+        "contribs",
+        "contrib"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -256,6 +262,8 @@
         "Gorli",
         "Gwapj",
         "HUSD",
+        "CUSD",
+        "CEUR",
         "Horiz",
         "Huobi",
         "MSKA",
@@ -336,7 +344,20 @@
         "isfacebook",
         "findtruman",
         "uaddr",
-        "consts"
+        "consts",
+        "cryptoartai",
+        "cryptoart",
+        "avator",
+        "testweb",
+        "metadate",
+        "AICANFT",
+        "CANFT",
+        "Kodav",
+        "koda",
+        "Enjin",
+        "poap",
+        "irss",
+        "CELO"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

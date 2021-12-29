@@ -1,5 +1,4 @@
-import { Emitter } from '@servie/events'
-import { ALL_EVENTS } from '@masknet/shared'
+import { Emitter, ALL_EVENTS } from '@servie/events'
 import type { Plugin } from '../types'
 import { getPluginDefine, registeredPluginIDs, registeredPlugins } from './store'
 

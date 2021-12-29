@@ -98,7 +98,7 @@ export function FurucomboView(props: PoolViewProps) {
 
     const investable = investables.find(
         (investable: Investable) =>
-            isSameAddress(investable.token.address, props.address) &&
+            isSameAddress(investable.address, props.address) &&
             investable.chainId === currentChainId &&
             investable.category === props.category,
     )

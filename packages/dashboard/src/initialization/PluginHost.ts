@@ -3,7 +3,7 @@ import './plugins'
 import { Emitter } from '@servie/events'
 import { startPluginDashboard, Plugin } from '@masknet/plugin-infra'
 import { Services, Messages } from '../API'
-import { createI18NBundle } from '@masknet/shared'
+import { createI18NBundle } from '@masknet/shared-base'
 import i18n from 'i18next'
 import { InMemoryStorages, PersistentStorages } from '../utils/kv-storage'
 

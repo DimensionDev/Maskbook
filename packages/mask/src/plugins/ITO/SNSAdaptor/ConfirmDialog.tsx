@@ -4,13 +4,13 @@ import {
     formatBalance,
     formatEthereumAddress,
     FungibleTokenDetailed,
-    isNative,
-    ONE,
+    isNativeTokenAddress,
     resolveAddressLinkOnExplorer,
     resolveTokenLinkOnExplorer,
     useChainId,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
+import { ONE } from '@masknet/web3-shared-base'
 import { Card, Grid, IconButton, Link, Paper, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import LaunchIcon from '@mui/icons-material/Launch'
@@ -84,6 +84,7 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1),
         textAlign: 'left',
         color: theme.palette.text.secondary,
+        wordBreak: 'keep-all',
     },
     button: {
         color: '#fff',
@@ -151,7 +152,7 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                         <Typography variant="body1" component="span">
                             {poolSettings?.token?.symbol}
                         </Typography>
-                        {isNative(poolSettings?.token?.address!) ? null : (
+                        {isNativeTokenAddress(poolSettings?.token) ? null : (
                             <Link
                                 className={classes.link}
                                 href={resolveTokenLinkOnExplorer(poolSettings?.token!)}
@@ -315,7 +316,12 @@ export function ConfirmDialog(props: ConfirmDialogProps) {
                 <Grid item lg={6} xs={12} className={classes.button}>
                     <ActionButton className={classes.buttonText} fullWidth variant="contained" onClick={onDone}>
                         {t('plugin_ito_send_text', {
-                            total: formatAmountPrecision(poolSettings?.total, poolSettings?.token?.decimals),
+                            total: formatAmountPrecision(
+                                poolSettings?.total,
+                                poolSettings?.token?.decimals,
+                                undefined,
+                                poolSettings?.token?.decimals,
+                            ),
                             symbol: poolSettings?.token?.symbol,
                         })}
                     </ActionButton>

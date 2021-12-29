@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
+import { ExternalLink } from 'react-feather'
+import BigNumber from 'bignumber.js'
 import { Alert, Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { makeStyles, MaskColorVar, useStylesExtends } from '@masknet/theme'
-import BigNumber from 'bignumber.js'
 import { FormattedAddress, FormattedBalance, useValueRef } from '@masknet/shared'
 import type { TradeComputed } from '../../types'
 import { InjectedDialog } from '../../../../components/shared/InjectedDialog'
@@ -11,13 +12,13 @@ import {
     formatBalance,
     formatEthereumAddress,
     formatWeiToEther,
-    pow10,
     resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../../utils'
 import { InfoIcon, RetweetIcon } from '@masknet/icons'
-import { ExternalLink } from 'react-feather'
 import { TokenIcon } from '@masknet/shared'
+import { multipliedBy } from '@masknet/web3-shared-base'
+import { isDashboardPage } from '@masknet/shared-base'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { currentSlippageSettings } from '../../settings'
 import { useNativeTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
@@ -96,7 +97,7 @@ export interface ConfirmDialogUIProps extends withClasses<never> {
 export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const { t } = useI18N()
     const currentSlippage = useValueRef(currentSlippageSettings)
-    const isDashboard = location.href.includes('dashboard.html')
+    const isDashboard = isDashboardPage()
     const classes = useStylesExtends(useStyles({ isDashboard }), props)
     const { open, trade, wallet, inputToken, outputToken, onConfirm, onClose, gas, gasPrice } = props
     const { inputAmount, outputAmount } = trade
@@ -119,7 +120,7 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
     const tokenPrice = useNativeTokenPrice(chainId)
 
     const gasFee = useMemo(() => {
-        return gas && gasPrice ? new BigNumber(gasPrice).multipliedBy(gas).integerValue().toFixed() : '0'
+        return gas && gasPrice ? multipliedBy(gasPrice, gas).integerValue().toFixed() : '0'
     }, [gas, gasPrice])
 
     const feeValueUSD = useMemo(
@@ -199,8 +200,8 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                         {formatBalance(
                                             inputAmount
                                                 .dividedBy(outputAmount)
-                                                .multipliedBy(pow10(outputToken.decimals - inputToken.decimals))
-                                                .multipliedBy(pow10(inputToken.decimals))
+                                                .shiftedBy(outputToken.decimals - inputToken.decimals)
+                                                .shiftedBy(inputToken.decimals)
                                                 .integerValue(),
                                             inputToken.decimals,
                                             6,
@@ -213,15 +214,16 @@ export function ConfirmDialogUI(props: ConfirmDialogUIProps) {
                                     <span>1 {inputToken.symbol}</span>
                                     {' = '}
                                     <span>
-                                        {`${formatBalance(
+                                        {formatBalance(
                                             outputAmount
                                                 .dividedBy(inputAmount)
-                                                .multipliedBy(pow10(inputToken.decimals - outputToken.decimals))
-                                                .multipliedBy(pow10(outputToken.decimals))
+                                                .shiftedBy(inputToken.decimals - outputToken.decimals)
+                                                .shiftedBy(outputToken.decimals)
                                                 .integerValue(),
                                             outputToken.decimals,
                                             6,
-                                        )} ${outputToken.symbol}`}
+                                        )}{' '}
+                                        {outputToken.symbol}
                                     </span>
                                 </span>
                             )}

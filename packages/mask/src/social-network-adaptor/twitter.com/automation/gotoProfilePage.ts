@@ -1,4 +1,4 @@
-import type { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 
 export function gotoProfilePageTwitter(profile: ProfileIdentifier) {
     const path = `/${profile.userId}`

@@ -5,13 +5,12 @@ import { Currency, Token, CurrencyAmount, TradeType, Percent, Price, Ether } fro
 import type { Trade } from '@uniswap/v2-sdk'
 import {
     formatEthereumAddress,
-    pow10,
     ChainId,
     EthereumTokenType,
     FungibleTokenDetailed,
     isSameAddress,
-    isGreaterThan,
 } from '@masknet/web3-shared-evm'
+import { pow10, isGreaterThan } from '@masknet/web3-shared-base'
 import { ONE_HUNDRED_PERCENT, WNATIVE, ZERO_PERCENT } from '../constants'
 
 export function swapErrorToUserReadableMessage(error: any): string {

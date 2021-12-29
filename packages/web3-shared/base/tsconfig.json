@@ -1,0 +1,10 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/base",
+    "tsBuildInfoFile": "../dist/base.tsbuildinfo"
+  },
+  "include": ["./", "./**/*.json"],
+  "references": [{ "path": "../../injected-script/sdk" }]
+}

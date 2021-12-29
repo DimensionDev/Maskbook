@@ -11,11 +11,11 @@ import {
     Payload,
     PostIdentifier,
     ProfileIdentifier,
-    SubscriptionFromValueRef,
-    SubscriptionDebug as debug,
     TypedMessage,
     TypedMessageTuple,
-} from '@masknet/shared'
+    SubscriptionFromValueRef,
+    SubscriptionDebug as debug,
+} from '@masknet/shared-base'
 import { Err, Result } from 'ts-results'
 import type { Subscription } from 'use-subscription'
 import { activatedSocialNetworkUI } from '../'

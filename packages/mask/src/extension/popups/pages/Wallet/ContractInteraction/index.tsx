@@ -12,12 +12,12 @@ import {
     getChainIdFromNetworkType,
     isEIP1559Supported,
     NetworkType,
-    pow10,
     useChainId,
     useERC20TokenDetailed,
     useNativeTokenDetailed,
+    useNetworkType,
 } from '@masknet/web3-shared-evm'
-import { FormattedBalance, FormattedCurrency, TokenIcon, useValueRef } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { Link, Typography } from '@mui/material'
 import { useI18N } from '../../../../../utils'
 import { PopupRoutes } from '@masknet/shared-base'
@@ -25,12 +25,12 @@ import { LoadingButton } from '@mui/lab'
 import { unreachable } from '@dimensiondev/kit'
 import { WalletRPC } from '../../../../../plugins/Wallet/messages'
 import Services from '../../../../service'
-import { currentNetworkSettings } from '../../../../../plugins/Wallet/settings'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../../../plugins/Wallet/hooks/useTokenPrice'
 import { LoadingPlaceholder } from '../../../components/LoadingPlaceholder'
 import { toHex } from 'web3-utils'
 import { NetworkPluginID, useReverseAddress, useWeb3State } from '@masknet/plugin-infra'
+import { isGreaterThan, leftShift, pow10 } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -136,7 +136,7 @@ const ContractInteraction = memo(() => {
     const location = useLocation()
     const history = useHistory()
     const chainId = useChainId()
-    const networkType = useValueRef(currentNetworkSettings)
+    const networkType = useNetworkType()
     const [transferError, setTransferError] = useState(false)
     const { value: request, loading: requestLoading } = useUnconfirmedRequest()
 
@@ -231,9 +231,9 @@ const ContractInteraction = memo(() => {
             // Gwei to wei
             return {
                 maxPriorityFeePerGas: toHex(
-                    formatGweiToWei(response?.medium.suggestedMaxPriorityFeePerGas ?? 0).toString(),
+                    formatGweiToWei(response?.medium?.suggestedMaxPriorityFeePerGas ?? 0).toString(),
                 ),
-                maxFeePerGas: toHex(formatGweiToWei(response?.medium.suggestedMaxFeePerGas ?? 0).toString()),
+                maxFeePerGas: toHex(formatGweiToWei(response?.medium?.suggestedMaxFeePerGas ?? 0).toString()),
             }
         } else if (!gasPrice) {
             const response = await WalletRPC.getGasPriceDictFromDeBank(chainId)
@@ -282,8 +282,7 @@ const ContractInteraction = memo(() => {
     // token estimated value
     const tokenPrice = useTokenPrice(chainId, !isNativeTokenInteraction ? token?.address : undefined)
     const nativeTokenPrice = useNativeTokenPrice(nativeToken?.chainId)
-    const tokenValueUSD = new BigNumber(tokenAmount)
-        .dividedBy(pow10(tokenDecimals ?? 0))
+    const tokenValueUSD = leftShift(tokenAmount, tokenDecimals)
         .times((!isNativeTokenInteraction ? tokenPrice : nativeTokenPrice) ?? 0)
         .toString()
 
@@ -335,7 +334,7 @@ const ContractInteraction = memo(() => {
                         {tokenDecimals !== undefined ? (
                             <>
                                 <Typography className={classes.amount}>
-                                    {new BigNumber(formatBalance(tokenAmount, tokenDecimals)).isGreaterThan(10 ** 9) ? (
+                                    {isGreaterThan(formatBalance(tokenAmount, tokenDecimals), pow10(9)) ? (
                                         'infinite'
                                     ) : (
                                         <FormattedBalance
@@ -347,7 +346,7 @@ const ContractInteraction = memo(() => {
                                     )}
                                 </Typography>
                                 <Typography>
-                                    {new BigNumber(tokenValueUSD).isGreaterThan(10 ** 9) ? (
+                                    {isGreaterThan(tokenValueUSD, pow10(9)) ? (
                                         'infinite'
                                     ) : (
                                         <FormattedCurrency value={tokenValueUSD} sign="$" formatter={formatCurrency} />
@@ -383,7 +382,7 @@ const ContractInteraction = memo(() => {
                             {t('popups_wallet_contract_interaction_total')}
                         </Typography>
                         <Typography className={classes.gasPrice}>
-                            {new BigNumber(totalUSD).isGreaterThan(10 ** 9) ? (
+                            {isGreaterThan(totalUSD, pow10(9)) ? (
                                 'infinite'
                             ) : (
                                 <FormattedCurrency value={totalUSD} sign="$" formatter={formatCurrency} />

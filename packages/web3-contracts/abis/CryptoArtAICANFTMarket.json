@@ -1,0 +1,371 @@
+[
+    {
+        "inputs": [
+            { "internalType": "contract IAccessControl", "name": "access", "type": "address" },
+            { "internalType": "contract ICAAsset", "name": "caAsset", "type": "address" },
+            { "internalType": "address payable", "name": "treasury", "type": "address" }
+        ],
+        "stateMutability": "nonpayable",
+        "type": "constructor"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "indexed": true, "internalType": "address", "name": "bidder", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "award", "type": "uint256" }
+        ],
+        "name": "AuctionAwardUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": false, "internalType": "uint32", "name": "caPoints", "type": "uint32" },
+            { "indexed": false, "internalType": "uint32", "name": "artistPoints", "type": "uint32" },
+            { "indexed": false, "internalType": "uint32", "name": "sellerPoints", "type": "uint32" },
+            { "indexed": false, "internalType": "uint32", "name": "auctionAwardPoints", "type": "uint32" },
+            { "indexed": false, "internalType": "uint32", "name": "sharePoints", "type": "uint32" }
+        ],
+        "name": "MarketFeesUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "indexed": true, "internalType": "address", "name": "bidder", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "endTime", "type": "uint256" }
+        ],
+        "name": "ReserveAuctionBidPlaced",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [{ "indexed": true, "internalType": "uint256", "name": "auctionId", "type": "uint256" }],
+        "name": "ReserveAuctionCanceled",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "indexed": false, "internalType": "string", "name": "reason", "type": "string" }
+        ],
+        "name": "ReserveAuctionCanceledByAdmin",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint32",
+                "name": "minPercentIncrementInBasisPoints",
+                "type": "uint32"
+            },
+            { "indexed": false, "internalType": "uint256", "name": "maxBidIncrementRequirement", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "duration", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "extensionDuration", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "goLiveDate", "type": "uint256" }
+        ],
+        "name": "ReserveAuctionConfigUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "seller", "type": "address" },
+            { "indexed": true, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+            { "indexed": true, "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "duration", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "extensionDuration", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "reservePrice", "type": "uint256" }
+        ],
+        "name": "ReserveAuctionCreated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "indexed": true, "internalType": "address", "name": "seller", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "bidder", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
+        ],
+        "name": "ReserveAuctionFinalized",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "indexed": true, "internalType": "address", "name": "originalSellerAddress", "type": "address" },
+            { "indexed": true, "internalType": "address", "name": "newSellerAddress", "type": "address" }
+        ],
+        "name": "ReserveAuctionSellerMigrated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "indexed": false, "internalType": "uint256", "name": "reservePrice", "type": "uint256" }
+        ],
+        "name": "ReserveAuctionUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "share", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "award", "type": "uint256" }
+        ],
+        "name": "ShareAwardUpdated",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
+        ],
+        "name": "WithdrawPending",
+        "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            { "indexed": true, "internalType": "address", "name": "user", "type": "address" },
+            { "indexed": false, "internalType": "uint256", "name": "amount", "type": "uint256" }
+        ],
+        "name": "Withdrawal",
+        "type": "event"
+    },
+    {
+        "inputs": [],
+        "name": "accessControl",
+        "outputs": [{ "internalType": "contract IAccessControl", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "internalType": "string", "name": "reason", "type": "string" }
+        ],
+        "name": "adminCancelReserveAuction",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint32", "name": "minPercentIncrementInBasisPoints", "type": "uint32" },
+            { "internalType": "uint32", "name": "duration", "type": "uint32" },
+            { "internalType": "uint32", "name": "_caPoints", "type": "uint32" },
+            { "internalType": "uint32", "name": "_artistPoints", "type": "uint32" },
+            { "internalType": "uint32", "name": "_sellerPoints", "type": "uint32" },
+            { "internalType": "uint32", "name": "_auctionAwardPoints", "type": "uint32" },
+            { "internalType": "uint32", "name": "_sharePoints", "type": "uint32" }
+        ],
+        "name": "adminUpdateConfig",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "name": "awards",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "auctionId", "type": "uint256" }],
+        "name": "cancelReserveAuction",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+            { "internalType": "address", "name": "seller", "type": "address" },
+            { "internalType": "uint256", "name": "reservePrice", "type": "uint256" }
+        ],
+        "name": "createReserveAuction",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "auctionId", "type": "uint256" }],
+        "name": "finalizeReserveAuction",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+        "name": "getArtist",
+        "outputs": [{ "internalType": "address", "name": "artist", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getCATreasury",
+        "outputs": [{ "internalType": "address payable", "name": "", "type": "address" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getFeeConfig",
+        "outputs": [
+            { "internalType": "uint32", "name": "", "type": "uint32" },
+            { "internalType": "uint32", "name": "", "type": "uint32" },
+            { "internalType": "uint32", "name": "", "type": "uint32" },
+            { "internalType": "uint32", "name": "", "type": "uint32" },
+            { "internalType": "uint32", "name": "", "type": "uint32" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+            { "internalType": "uint256", "name": "price", "type": "uint256" }
+        ],
+        "name": "getFees",
+        "outputs": [
+            { "internalType": "uint256", "name": "caFee", "type": "uint256" },
+            { "internalType": "uint256", "name": "artistFee", "type": "uint256" },
+            { "internalType": "uint256", "name": "sellerFee", "type": "uint256" },
+            { "internalType": "uint256", "name": "auctionFee", "type": "uint256" },
+            { "internalType": "uint256", "name": "shareFee", "type": "uint256" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+        "name": "getIsPrimary",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "auctionId", "type": "uint256" }],
+        "name": "getMinBidAmount",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "user", "type": "address" }],
+        "name": "getPendingWithdrawal",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "auctionId", "type": "uint256" }],
+        "name": "getReserveAuction",
+        "outputs": [
+            {
+                "components": [
+                    { "internalType": "uint256", "name": "tokenId", "type": "uint256" },
+                    { "internalType": "address", "name": "seller", "type": "address" },
+                    { "internalType": "uint32", "name": "duration", "type": "uint32" },
+                    { "internalType": "uint32", "name": "extensionDuration", "type": "uint32" },
+                    { "internalType": "uint32", "name": "endTime", "type": "uint32" },
+                    { "internalType": "address", "name": "bidder", "type": "address" },
+                    { "internalType": "uint256", "name": "amount", "type": "uint256" },
+                    { "internalType": "address", "name": "shareUser", "type": "address" }
+                ],
+                "internalType": "struct NFTMarketReserveAuction.ReserveAuction",
+                "name": "",
+                "type": "tuple"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getReserveAuctionConfig",
+        "outputs": [
+            { "internalType": "uint256", "name": "minPercentIncrementInBasisPoints", "type": "uint256" },
+            { "internalType": "uint256", "name": "duration", "type": "uint256" }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "uint256", "name": "tokenId", "type": "uint256" }],
+        "name": "getReserveAuctionIdFor",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "internalType": "address", "name": "shareUser", "type": "address" }
+        ],
+        "name": "placeBid",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address payable", "name": "_treasury", "type": "address" }],
+        "name": "setCATreasury",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            { "internalType": "uint256", "name": "auctionId", "type": "uint256" },
+            { "internalType": "uint256", "name": "reservePrice", "type": "uint256" }
+        ],
+        "name": "updateReserveAuction",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    { "inputs": [], "name": "withdraw", "outputs": [], "stateMutability": "nonpayable", "type": "function" },
+    {
+        "inputs": [{ "internalType": "address payable", "name": "user", "type": "address" }],
+        "name": "withdrawFor",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "to", "type": "address" }],
+        "name": "withdrawFunds",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [{ "internalType": "address", "name": "_withdrawalAccount", "type": "address" }],
+        "name": "withdrawStuckEther",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "withdrawThreshold",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "stateMutability": "view",
+        "type": "function"
+    }
+]

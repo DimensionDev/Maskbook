@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { useI18N } from '../../../utils'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
 import type { DecryptionProgress } from '../../../extension/background-script/CryptoServices/decryptFrom'
-import type { ProfileIdentifier } from '../../../database/type'
+import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
 export interface DecryptPostAwaitingProps {
     type?: DecryptionProgress

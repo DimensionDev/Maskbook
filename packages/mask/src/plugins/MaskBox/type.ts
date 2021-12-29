@@ -43,10 +43,11 @@ export interface BoxInfo {
     payments: PaymentInfo[]
     remaining: number
     availableAmount: number
-    total: string
+    total: number
     sold: number
     startAt: Date
     endAt: Date
+    started: boolean
     tokenIds: string[]
     tokenIdsPurchased: string[]
     tokenAddress: string

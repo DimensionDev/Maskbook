@@ -16,16 +16,14 @@ import {
     Button,
     Typography,
 } from '@mui/material'
-import type { AutoPasteFailedEvent } from '@masknet/shared'
+import type { AutoPasteFailedEvent } from '@masknet/shared-base'
 import { Image } from '../shared/Image'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DraggableDiv } from '../shared/DraggableDiv'
 import Download from '@mui/icons-material/CloudDownload'
 import CloseIcon from '@mui/icons-material/Close'
 import OpenInBrowser from '@mui/icons-material/OpenInBrowser'
-// TODO: it should not import a background service, but
-// it might downloading a blob:// file thus rewrite to Services.Helpers.* might trigger a CSP failure.
-import { saveAsFileFromUrl } from '../../extension/background-script/HelperService/saveAsFile'
+import { saveFileFromUrl } from '../../../shared'
 
 export interface AutoPasteFailedDialogProps extends withClasses<never> {
     onClose: () => void
@@ -143,7 +141,7 @@ export function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 <Button
                                     className={classes.button}
                                     variant="text"
-                                    onClick={() => saveAsFileFromUrl(url, fileName)}
+                                    onClick={() => saveFileFromUrl(url, fileName)}
                                     startIcon={<Download />}>
                                     {t('download')}
                                 </Button>

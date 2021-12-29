@@ -1,19 +1,18 @@
 import {
     FungibleTokenDetailed,
-    isNative,
     useAccount,
     useBlockNumber,
     useTokenConstants,
     useTraderConstants,
-    pow10,
     ChainId,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import { TradeStrategy } from '../../types'
 import { useSlippageTolerance } from './useSlippageTolerance'
-import BigNumber from 'bignumber.js'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
+import { leftShift } from '@masknet/web3-shared-base'
 
 export function useTrade(
     strategy: TradeStrategy,
@@ -29,8 +28,8 @@ export function useTrade(
     const { BANCOR_ETH_ADDRESS } = useTraderConstants(chainId)
     const user = useAccount()
 
-    const inputAmount = new BigNumber(inputAmountWei).dividedBy(pow10(inputToken?.decimals ?? 0)).toFixed()
-    const outputAmount = new BigNumber(outputAmountWei).dividedBy(pow10(outputToken?.decimals ?? 0)).toFixed()
+    const inputAmount = leftShift(inputAmountWei, inputToken?.decimals).toFixed()
+    const outputAmount = leftShift(outputAmountWei, outputToken?.decimals).toFixed()
     const isExactIn = strategy === TradeStrategy.ExactIn
 
     return useAsyncRetry(async () => {
@@ -39,11 +38,11 @@ export function useTrade(
         if (outputAmountWei === '0' && !isExactIn) return null
         if (![ChainId.Mainnet, ChainId.Ropsten].includes(chainId)) return null
 
-        const fromToken = isNative(inputToken.address)
+        const fromToken = isNativeTokenAddress(inputToken)
             ? { ...inputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : inputToken
 
-        const toToken = isNative(outputToken.address)
+        const toToken = isNativeTokenAddress(outputToken)
             ? { ...outputToken, address: BANCOR_ETH_ADDRESS ?? '' }
             : outputToken
 

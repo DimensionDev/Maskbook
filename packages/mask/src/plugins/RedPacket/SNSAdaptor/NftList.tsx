@@ -90,17 +90,17 @@ export const NftItem: FC<NftItemProps> = ({ contract, tokenId, className, claime
     const { t } = useI18N()
     const result = useERC721TokenDetailed(contract, tokenId)
     const { classes } = useStyles()
-    if (!result.value || !contract) {
+    if (!result.tokenDetailed || !contract) {
         return (
             <div className={classnames(className, classes.nft, classes.loading)} {...rest}>
                 <Skeleton height={185} width={120} />
             </div>
         )
     }
-    const info = result.value.info
+    const info = result.tokenDetailed.info
     return (
         <div className={classnames(className, classes.nft)} {...rest}>
-            <img className={classes.media} src={info.image} alt={info.name} />
+            <img className={classes.media} src={info.mediaUrl} alt={info.name} />
             <Typography className={classes.name}>{info.name}</Typography>
             {claimed && <Typography className={classes.claimedBadge}>{t('plugin_red_packet_claimed')}</Typography>}
         </div>

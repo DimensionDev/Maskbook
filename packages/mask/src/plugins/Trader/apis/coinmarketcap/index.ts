@@ -1,5 +1,6 @@
 import { CMC_V1_BASE_URL, THIRD_PARTY_V1_BASE_URL } from '../../constants'
 import { Flags } from '../../../../../shared'
+import getUnixTime from 'date-fns/getUnixTime'
 
 export interface Status {
     credit_count: number
@@ -195,13 +196,12 @@ export async function getHistorical(
     endDate: Date,
     interval: string = '1d',
 ) {
-    const toUnixTimestamp = (d: Date) => String(Math.floor(d.getTime() / 1000))
     const params = new URLSearchParams('format=chart_crypto_details')
     params.append('convert', currency)
     params.append('id', id)
     params.append('interval', interval)
-    params.append('time_end', toUnixTimestamp(endDate))
-    params.append('time_start', toUnixTimestamp(startDate))
+    params.append('time_end', getUnixTime(endDate).toString())
+    params.append('time_start', getUnixTime(startDate).toString())
 
     const response = await fetch(`${CMC_V1_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
         cache: Flags.trader_all_api_cached_enabled ? 'force-cache' : 'default',

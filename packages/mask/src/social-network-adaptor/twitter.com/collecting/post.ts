@@ -7,16 +7,16 @@ import { memoize } from 'lodash-unified'
 import Services from '../../../extension/service'
 import { injectMaskIconToPostTwitter } from '../injection/MaskIcon'
 import { postsImageSelector } from '../utils/selector'
-import { ProfileIdentifier } from '../../../database/type'
-import { postParser, postImagesParser } from '../utils/fetch'
-import { untilElementAvailable } from '../../../utils/dom'
 import {
+    ProfileIdentifier,
     makeTypedMessageImage,
     makeTypedMessageTupleFromList,
     makeTypedMessageEmpty,
     makeTypedMessagePromise,
     makeTypedMessageTuple,
-} from '../../../protocols/typed-message'
+} from '@masknet/shared-base'
+import { postParser, postImagesParser } from '../utils/fetch'
+import { untilElementAvailable } from '../../../utils/dom'
 import { twitterBase } from '../base'
 import { twitterShared } from '../shared'
 import { createRefsForCreatePostContext } from '../../../social-network/utils/create-post-context'

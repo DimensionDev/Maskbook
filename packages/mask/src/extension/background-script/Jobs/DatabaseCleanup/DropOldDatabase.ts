@@ -1,4 +1,4 @@
-import { deleteDB } from 'idb'
+import { deleteDB } from 'idb/with-async-ittr'
 import { noop } from 'lodash-unified'
 
 try {

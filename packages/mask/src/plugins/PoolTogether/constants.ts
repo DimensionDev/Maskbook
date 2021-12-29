@@ -12,5 +12,3 @@ export const URL_PATTERN = new RegExp(`(http|https)\:\/\/.*\.?${escapeRegExp(BAS
 export const ONE_SECOND = 1000
 export const ONE_DAY_SECONDS = 86400
 export const ONE_WEEK_SECONDS = ONE_DAY_SECONDS * 7
-
-export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'

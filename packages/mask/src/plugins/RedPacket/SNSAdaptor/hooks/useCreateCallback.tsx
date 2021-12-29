@@ -9,7 +9,6 @@ import type { PayableTx } from '@masknet/web3-contracts/types/types'
 import {
     EthereumTokenType,
     FungibleTokenDetailed,
-    isLessThan,
     TransactionEventType,
     TransactionState,
     TransactionStateType,
@@ -18,6 +17,7 @@ import {
     useTokenConstants,
     useTransactionState,
 } from '@masknet/web3-shared-evm'
+import { isLessThan } from '@masknet/web3-shared-base'
 import { useRedPacketContract } from './useRedPacketContract'
 
 export interface RedPacketSettings {

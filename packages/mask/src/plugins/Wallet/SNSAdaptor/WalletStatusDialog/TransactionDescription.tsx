@@ -6,18 +6,19 @@ import {
     NativeTokenDetailed,
     ERC20TokenDetailed,
     FungibleTokenDetailed,
-    pow10,
     useERC20TokenDetailed,
 } from '@masknet/web3-shared-evm'
+import { pow10 } from '@masknet/web3-shared-base'
 import type Services from '../../../../extension/service'
 import { first, last } from 'lodash-unified'
 
 function getTokenAmountDescription(amount = '0', tokenDetailed?: FungibleTokenDetailed, negative?: boolean) {
-    return `${negative ? '- ' : ''}${
-        pow10(9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
-            ? formatBalance(amount, tokenDetailed?.decimals ?? 0, 4)
-            : 'infinite'
-    } ${tokenDetailed?.symbol}`.trim()
+    const symbol = negative ? '- ' : ''
+    const value = pow10(9 + (tokenDetailed?.decimals ?? 18)).isGreaterThanOrEqualTo(amount)
+        ? formatBalance(amount, tokenDetailed?.decimals ?? 0, 4)
+        : 'infinite'
+    const token = tokenDetailed?.symbol?.trim()
+    return `${symbol}${value} ${token}`
 }
 
 function getTransactionDescription(

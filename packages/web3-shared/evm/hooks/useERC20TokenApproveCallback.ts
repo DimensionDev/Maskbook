@@ -8,7 +8,7 @@ import { useAccount } from './useAccount'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
 import { useTransactionState } from './useTransactionState'
-import { isLessThan } from '../utils'
+import { isLessThan } from '@masknet/web3-shared-base'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 

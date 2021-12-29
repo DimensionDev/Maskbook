@@ -1,9 +1,9 @@
-import { CheckedError } from '@masknet/shared-base'
+import { AESCryptoKey, CheckedError } from '@masknet/shared-base'
 import { Result, Ok } from 'ts-results'
 import { AESAlgorithmEnum, PublicKeyAlgorithmEnum } from '../payload'
 import { CryptoException } from '../types'
 
-export function importAESFromJWK(key: JsonWebKey, kind: AESAlgorithmEnum) {
+export function importAESFromJWK(key: JsonWebKey, kind: AESAlgorithmEnum): Promise<Result<AESCryptoKey, unknown>> {
     return Result.wrapAsync(() => {
         const param: Record<AESAlgorithmEnum, AesKeyAlgorithm> = {
             [AESAlgorithmEnum.A256GCM]: {
@@ -11,7 +11,7 @@ export function importAESFromJWK(key: JsonWebKey, kind: AESAlgorithmEnum) {
                 length: 256,
             },
         }
-        return crypto.subtle.importKey('jwk', key, param[kind], true, ['encrypt', 'decrypt'])
+        return crypto.subtle.importKey('jwk', key, param[kind], true, ['encrypt', 'decrypt']) as any
     })
 }
 importAESFromJWK.AES_GCM_256 = (key: JsonWebKey) => importAESFromJWK(key, AESAlgorithmEnum.A256GCM)

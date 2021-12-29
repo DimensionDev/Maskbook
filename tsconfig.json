@@ -58,7 +58,7 @@
 
     // Language and Environment
     "jsx": "react-jsx",
-    "lib": ["ES2020"], // don't add "DOM", we use @types/web
+    "lib": ["ES2022"], // don't add "DOM", we use @types/web
     "target": "ES2019",
     "useDefineForClassFields": true,
 

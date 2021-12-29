@@ -1,4 +1,4 @@
-import type { IDBPTransaction } from 'idb/build/cjs'
+import type { IDBPTransaction } from 'idb/with-async-ittr'
 import type { Plugin, IndexableTaggedUnion } from '@masknet/plugin-infra'
 import { createPluginDBAccess, PluginDatabase, pluginDataHasValidKeyPath, toStore } from './base'
 
@@ -22,7 +22,7 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
     plugin_id: string,
     signal?: AbortSignal,
 ): Plugin.Worker.DatabaseStorage<Data> {
-    let livingTransaction: IDBPTransaction<PluginDatabase, ['PluginStore']> | undefined = undefined
+    let livingTransaction: IDBPTransaction<PluginDatabase, ['PluginStore'], 'readwrite'> | undefined = undefined
     let ended = false
     signal?.addEventListener('abort', () => {
         // give some extra time after the plugin shutdown to store data.
@@ -51,9 +51,12 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
             if (!pluginDataHasValidKeyPath(data)) throw new TypeError("Data doesn't have a valid key path")
             if (await t.store.get(key(data))) await t.store.put(toStore(plugin_id, data))
             else await t.store.add(toStore(plugin_id, data))
+            t.commit()
         },
         async remove(type, id) {
-            ;(await c('rw')).store.delete(key({ type, id }))
+            const t = await c('rw')
+            await t.store.delete(key({ type, id }))
+            t.commit()
         },
         async *iterate(type) {
             const db = await c('r')
@@ -91,7 +94,7 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
     }
     async function c(usage: 'r' | 'rw'): Promise<NonNullable<typeof livingTransaction>> {
         ensureAlive()
-        if (usage === 'rw' && livingTransaction?.mode === 'readonly') invalidateTransaction()
+        if (usage === 'rw' && (livingTransaction as any)?.mode === 'readonly') invalidateTransaction()
         try {
             await livingTransaction?.store.openCursor()
         } catch {
@@ -99,14 +102,14 @@ export function createPluginDatabase<Data extends IndexableTaggedUnion>(
         }
         if (livingTransaction === undefined) {
             const db = await createPluginDBAccess()
-            const tx = db.transaction('PluginStore', usage === 'r' ? 'readonly' : 'readwrite')
+            const tx = db.transaction('PluginStore', usage === 'r' ? 'readonly' : 'readwrite') as any
             livingTransaction = tx
             // Oops, workaround for https://bugs.webkit.org/show_bug.cgi?id=216769 or https://github.com/jakearchibald/idb/issues/201
             try {
                 await tx.store.openCursor()
             } catch {
-                livingTransaction = db.transaction('PluginStore', usage === 'r' ? 'readonly' : 'readwrite')
-                return livingTransaction
+                livingTransaction = db.transaction('PluginStore', usage === 'r' ? 'readonly' : 'readwrite') as any
+                return livingTransaction as any
             }
             return tx
         }

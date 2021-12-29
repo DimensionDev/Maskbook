@@ -12,14 +12,21 @@
                     { "name": "lodash", "message": "Please use lodash-unified instead." },
                     { "name": "lodash-es", "message": "Please use lodash-unified instead." },
                     { "name": "date-fns", "message": "Please use date-fns/{submodule} instead." },
-                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." }
+                    { "name": "date-fns/esm", "message": "Please use date-fns/{submodule} instead." },
+                    { "name": "idb", "message": "Please use idb/with-async-ittr instead." },
+                    { "name": "idb/with-async-ittr-cjs", "message": "Please use idb/with-async-ittr instead." }
                 ]
             }
         ],
         "yoda": "error",
         "radix": "error",
         "eqeqeq": ["error", "always"],
+        "prefer-regex-literals": "error",
+        "react/jsx-boolean-value": "error",
         "react/jsx-curly-brace-presence": ["warn", { "props": "never", "children": "never" }],
+        "react/jsx-key": "error",
+        "react/no-invalid-html-attribute": "error",
+        "react/no-unknown-property": "error",
         "react/self-closing-comp": ["warn", { "component": true, "html": true }],
         "react-hooks/exhaustive-deps": "off",
         "react-hooks/rules-of-hooks": "error",
@@ -34,6 +41,7 @@
         "unicorn/prefer-add-event-listener": "error",
         "unicorn/prefer-date-now": "error",
         "unicorn/prefer-dom-node-dataset": "error",
+        "unicorn/prefer-number-properties": "error",
         "unicorn/throw-new-error": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-for-in-array": "error",

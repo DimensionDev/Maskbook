@@ -1,9 +1,8 @@
 import { LiveSelector } from '@dimensiondev/holoflows-kit'
 import { MaskMessages, CompositionRequest } from '../../../utils/messages'
 import { i18n } from '../../../../shared-ui/locales_legacy'
-import { delay } from '../../../utils/utils'
 import { untilDocumentReady } from '../../../utils/dom'
-import { makeTypedMessageText, TypedMessage } from '../../../protocols/typed-message'
+import { makeTypedMessageText, TypedMessage, delay } from '@masknet/shared-base'
 
 const nativeComposeButtonSelector = () =>
     new LiveSelector()

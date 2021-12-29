@@ -3,12 +3,11 @@ import {
     EthereumTokenType,
     formatAmount,
     formatBalance,
-    isGreaterThan,
-    isZero,
     useAccount,
     useITOConstants,
     useFungibleTokenBalance,
 } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
 import { Box, CircularProgress, Stack, TextField, Typography } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import CheckIcon from '@mui/icons-material/Check'
@@ -183,13 +182,22 @@ export function CreateForm(props: CreateFormProps) {
         tokenAndAmount?.token?.address ?? '',
     )
 
-    const onTotalOfPerWalletChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
-        const total = ev.currentTarget.value
-        if (total === '') setTotalOfPerWallet('')
-        if (/^\d+\.?\d*$/.test(total)) {
-            setTotalOfPerWallet(total)
-        }
-    }, [])
+    const RE_MATCH_WHOLE_AMOUNT = useMemo(
+        () => new RegExp(`^\\d*\\.?\\d{0,${tokenAndAmount?.token?.decimals ?? 18}}$`), // d.ddd...d
+        [tokenAndAmount?.token?.decimals],
+    )
+
+    const onTotalOfPerWalletChange = useCallback(
+        (ev: ChangeEvent<HTMLInputElement>) => {
+            const total = ev.currentTarget.value
+            if (!RE_MATCH_WHOLE_AMOUNT.test(total)) return
+            if (total === '') setTotalOfPerWallet('')
+            if (/^\d+\.?\d*$/.test(total)) {
+                setTotalOfPerWallet(total)
+            }
+        },
+        [tokenAndAmount?.token?.decimals, RE_MATCH_WHOLE_AMOUNT],
+    )
 
     // qualificationAddress
     const [qualificationAddress, setQualificationAddress] = useState(

@@ -10,7 +10,7 @@ import {
     isTypedMessageEmpty,
     isTypedMessageText,
     TypedMessageText,
-} from '@masknet/shared'
+} from '@masknet/shared-base'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils'
 
 /**

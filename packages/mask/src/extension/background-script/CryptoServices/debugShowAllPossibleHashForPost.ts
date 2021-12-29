@@ -1,4 +1,4 @@
-import type { PostIVIdentifier } from '../../../database/type'
+import type { PostIVIdentifier } from '@masknet/shared-base'
 import { hashPostSalt, hashCryptoKey, hashCryptoKeyUnstable } from '../../../network/gun/version.2/hash'
 import { queryProfilesWithQuery, queryPublicKey } from '../../../database'
 import { getNetworkWorkerUninitialized } from '../../../social-network/worker'

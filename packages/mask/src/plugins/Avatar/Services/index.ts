@@ -28,7 +28,7 @@ export async function saveNFTAvatar(address: string, nft: AvatarMetaDB) {
 
 export async function getAddress(userId: string) {
     const address = await getUserAddress(userId)
-    return address
+    return (address ?? '') as string
 }
 
 export { getNFTContractVerifiedFromJSON } from './verified'

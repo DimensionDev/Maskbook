@@ -2,7 +2,7 @@ import { createReactRootShadowed, MaskMessages, NFTAvatarEvent, startWatch } fro
 import { searchTwitterAvatarLinkSelector, searchTwitterAvatarSelector } from '../../utils/selector'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
 import { useWallet } from '@masknet/web3-shared-evm'
@@ -12,6 +12,8 @@ import { getAvatarId } from '../../utils/user'
 import { PluginNFTAvatarRPC } from '../../../../plugins/Avatar/messages'
 import { NFTBadge } from '../../../../plugins/Avatar/SNSAdaptor/NFTBadge'
 import { NFTAvatar } from '../../../../plugins/Avatar/SNSAdaptor/NFTAvatar'
+import { useMount, useUpdateEffect, useWindowSize } from 'react-use'
+import { rainbowBorderKeyFrames } from '../../../../plugins/Avatar/SNSAdaptor/RainbowBox'
 
 export function injectNFTAvatarInTwitter(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchTwitterAvatarSelector())
@@ -22,19 +24,11 @@ export function injectNFTAvatarInTwitter(signal: AbortSignal) {
 const useStyles = makeStyles()(() => ({
     root: {
         position: 'absolute',
-        bottom: '-10px !important',
-        left: 0,
         textAlign: 'center',
         color: 'white',
-        minWidth: 134,
-    },
-    update: {
-        position: 'absolute',
-        bottom: '-10px !important',
-        left: 55,
-        textAlign: 'center',
-        color: 'white',
-        minWidth: 134,
+        zIndex: 2,
+        width: '100%',
+        height: '100%',
     },
     text: {
         fontSize: '20px !important',
@@ -47,17 +41,24 @@ const useStyles = makeStyles()(() => ({
 }))
 
 function NFTAvatarInTwitter() {
-    const { classes } = useStyles()
+    const rainBowElement = useRef<Element | null>()
     const identity = useCurrentVisitingIdentity()
     const wallet = useWallet()
     const { value: _avatar } = useNFTAvatar(identity.identifier.userId)
     const [avatar, setAvatar] = useState<AvatarMetaDB | undefined>()
-    const ele = searchTwitterAvatarLinkSelector().evaluate()
-    let size = 170
-    if (ele) {
-        const style = window.getComputedStyle(ele)
-        size = Number(style.width.replace('px', '') ?? 0) - Number(style.borderWidth.replace('px', '') ?? 0) - 3
-    }
+
+    const windowSize = useWindowSize()
+
+    const size = useMemo(() => {
+        const ele = searchTwitterAvatarSelector().evaluate()
+        if (ele) {
+            const style = window.getComputedStyle(ele)
+            return Number.parseInt(style.width.replace('px', '') ?? 0, 10)
+        }
+        return 0
+    }, [windowSize])
+
+    const { classes } = useStyles()
 
     const [NFTEvent, setNFTEvent] = useState<NFTAvatarEvent>()
     const onUpdate = (data: NFTAvatarEvent) => {
@@ -103,23 +104,46 @@ function NFTAvatarInTwitter() {
         return MaskMessages.events.NFTAvatarUpdated.on((data) => onUpdate(data))
     }, [onUpdate])
 
-    useEffect(() => {
-        if (!avatar || !avatar.avatarId) return
-        if (getAvatarId(identity.avatar ?? '') !== avatar.avatarId) return
-        const avatarDom = searchTwitterAvatarSelector().evaluate()?.parentElement
-        if (avatarDom) {
-            avatarDom.style.marginBottom = '10px'
-            avatarDom.style.overflow = 'unset'
-        }
+    useMount(() => {
+        const linkDom = searchTwitterAvatarLinkSelector().evaluate()
 
-        const backgroundImgDom = searchTwitterAvatarSelector().evaluate()?.firstChild?.nextSibling?.firstChild
-            ?.firstChild as HTMLElement
-        if (backgroundImgDom) {
-            backgroundImgDom.style.borderRadius = '100%'
-        }
-    }, [identity, avatar, searchTwitterAvatarSelector, searchTwitterAvatarSelector])
+        if (linkDom?.firstElementChild && linkDom.childNodes.length === 4) {
+            const linkParentDom = linkDom.closest('div')
 
-    if (!avatar) return null
+            if (linkParentDom) linkParentDom.style.overflow = 'visible'
+
+            // remove useless border
+            linkDom.removeChild(linkDom.firstElementChild)
+
+            // create rainbow shadow border
+            if (linkDom.firstElementChild.tagName !== 'style') {
+                const style = document.createElement('style')
+                style.innerText = `
+                ${rainbowBorderKeyFrames.styles}
+
+                .rainbowBorder {
+                    animation: ${rainbowBorderKeyFrames.name} 6s linear infinite;
+                    box-shadow: 0 5px 15px rgba(0, 248, 255, 0.4), 0 10px 30px rgba(37, 41, 46, 0.2);
+                    transition: .125s ease;
+                    border: 2px solid #00f8ff;
+                }
+            `
+                rainBowElement.current = linkDom.firstElementChild
+                linkDom.firstElementChild.classList.add('rainbowBorder')
+                linkDom.insertBefore(style, linkDom.firstChild)
+            }
+        }
+    })
+
+    useUpdateEffect(() => {
+        if (!avatar) {
+            rainBowElement.current?.classList.remove('rainbowBorder')
+        } else {
+            rainBowElement.current?.classList.add('rainbowBorder')
+        }
+    }, [avatar])
+
+    if (!avatar || !size) return null
 
     return (
         <>

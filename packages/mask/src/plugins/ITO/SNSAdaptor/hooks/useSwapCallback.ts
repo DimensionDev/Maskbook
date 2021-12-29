@@ -7,7 +7,6 @@ import {
     currySameAddress,
     EthereumTokenType,
     FungibleTokenDetailed,
-    isZero,
     TransactionEventType,
     TransactionStateType,
     useAccount,
@@ -16,12 +15,13 @@ import {
     isSameAddress,
     useITOConstants,
 } from '@masknet/web3-shared-evm'
+import { isPositive, isZero } from '@masknet/web3-shared-base'
 import BigNumber from 'bignumber.js'
 import { useCallback } from 'react'
 import type { TransactionReceipt } from 'web3-core'
 import Web3Utils from 'web3-utils'
 import { useI18N } from '../../../../utils'
-import { HexStringToUint8Array as hex2buf, Uint8ArrayToHexString as buf2hex } from '../../../../../utils-pure'
+import { fromHex, toHex } from '@masknet/shared-base'
 import { useITO_Contract } from './useITO_Contract'
 import { useQualificationContract } from './useQualificationContract'
 import type { JSON_PayloadInMask } from '../../types'
@@ -74,7 +74,7 @@ export function useSwapCallback(
         }
 
         // error: invalid swap amount
-        if (!new BigNumber(total).isPositive()) {
+        if (!isPositive(total)) {
             setSwapState({
                 type: TransactionStateType.FAILED,
                 error: new Error('Invalid swap amount.'),
@@ -147,7 +147,7 @@ export function useSwapCallback(
         const swapParamsV1 = [
             pid,
             Web3Utils.soliditySha3(
-                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
+                Web3Utils.hexToNumber(`0x${toHex(fromHex(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
                 account,
             )!,
             Web3Utils.sha3(account)!,
@@ -158,7 +158,7 @@ export function useSwapCallback(
         const swapParamsV2 = [
             pid,
             Web3Utils.soliditySha3(
-                Web3Utils.hexToNumber(`0x${buf2hex(hex2buf(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
+                Web3Utils.hexToNumber(`0x${toHex(fromHex(Web3Utils.sha3(password) ?? '').slice(0, 5))}`),
                 account,
             )!,
             swapTokenAt,
@@ -213,7 +213,6 @@ export function useSwapCallback(
                 : (ITO_Contract as ITO2).methods.swap(...swapParamsV2)
             )
                 .send(config as PayableTx)
-                .on(TransactionEventType.RECEIPT, (receipt) => onSucceed(0, receipt))
                 .on(TransactionEventType.CONFIRMATION, onSucceed)
                 .on(TransactionEventType.ERROR, onFailed)
         })

@@ -14,7 +14,7 @@ import { debugModeSetting } from '../../settings/settings'
 import { ClickableChip } from '../shared/SelectRecipients/ClickableChip'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients'
 import type { Profile } from '../../database'
-import { CompositionContext } from './CompositionContext'
+import { CompositionContext } from '@masknet/plugin-infra'
 import { DebugMetadataInspector } from '../shared/DebugMetadataInspector'
 import { Trans } from 'react-i18next'
 
@@ -144,7 +144,7 @@ export const CompositionDialogUI = forwardRef<CompositionRef, CompositionProps>(
         ...useMetadataDebugger(context, Editor.current),
     ].filter(Boolean)
 
-    const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Infinity)
+    const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
     const onSubmit = useCallback(() => {
         if (!Editor.current) return
         setSending(true)

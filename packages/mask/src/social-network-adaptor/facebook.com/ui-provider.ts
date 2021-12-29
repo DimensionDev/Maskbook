@@ -18,12 +18,11 @@ import { PostProviderFacebook } from './collecting/posts'
 import { pasteImageToCompositionDefault } from '../../social-network/defaults/automation/AttachImageToComposition'
 import { injectPageInspectorDefault } from '../../social-network/defaults/inject/PageInspector'
 import { createTaskStartSetupGuideDefault } from '../../social-network/defaults/inject/StartSetupGuide'
-import { GrayscaleAlgorithm } from '@dimensiondev/stego-js/esm/grayscale'
+import { GrayscaleAlgorithm } from '@masknet/encryption'
 import { PaletteModeProviderFacebook, useThemeFacebookVariant } from './customization/custom'
-import { currentSelectedIdentity } from '../../settings/settings'
 import { unreachable } from '@dimensiondev/kit'
 import { makeStyles } from '@masknet/theme'
-import { ProfileIdentifier } from '@masknet/shared'
+import { ProfileIdentifier } from '@masknet/shared-base'
 import { globalUIState } from '../../social-network'
 import { injectToolboxHintAtFacebook as injectToolboxAtFacebook } from './injection/Toolbar'
 
@@ -193,7 +192,6 @@ const facebookUI: SocialNetworkUI.Definition = {
                 return new ProfileIdentifier(
                     'facebook.com',
                     ProfileIdentifier.getUserName(IdentityProviderFacebook.recognized.value.identifier) ||
-                        ProfileIdentifier.getUserName(currentSelectedIdentity[facebookBase.networkIdentifier].value) ||
                         ProfileIdentifier.getUserName(globalUIState.profiles.value[0].identifier) ||
                         unreachable('Cannot figure out password' as never),
                 ).toText()

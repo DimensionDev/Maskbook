@@ -6,7 +6,7 @@ import { useAccount } from '@masknet/web3-shared-evm'
 import { PluginMessages, Services } from '../../../API'
 import { PLUGIN_IDS } from '../../../pages/Labs/constants'
 import { PersonaContext } from '../../../pages/Personas/hooks/usePersonaContext'
-import { RoutePaths } from '../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -57,7 +57,7 @@ export const FeaturePromotions = memo(() => {
 
     const openTwitter = (pluginId: string) => async () => {
         if (!currentPersona) {
-            navigate(RoutePaths.SignUp)
+            navigate(DashboardRoutes.SignUp)
             return
         }
         if (isConnectedTwitter) {
