@@ -5,7 +5,7 @@ import { EthereumTokenType, useFungibleTokenBalance, useWeb3, useAccount } from 
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
 import { IconURLS } from './IconURL'
-import { SavingsProtocols } from './protocols'
+import { SavingsProtocols } from '../protocols'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
@@ -23,7 +23,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     const { t } = useI18N()
     const { classes } = useStyles()
     const protocol = SavingsProtocols[selectedProtocol]
-    const targetChainId = 5 // change to `chainId` later
+    const targetChainId = chainId
 
     const web3 = useWeb3(false, targetChainId)
     const account = useAccount()
@@ -46,12 +46,13 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     const validationMessage = useMemo(() => {
         if (tokenAmount.isZero()) return t('plugin_trader_error_amount_absence')
         if (isLessThan(inputAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
-        if (
-            new BigNumber(
-                (tab === 'deposit' ? nativeTokenBalance : Number.parseFloat(protocol.balance) * Math.pow(10, 18)) ||
-                    '0',
-            ).isLessThan(tokenAmount)
-        ) {
+
+        const tokenBalance =
+            (tab === 'deposit'
+                ? nativeTokenBalance
+                : (Number.parseFloat(protocol.balance) * Math.pow(10, 18)).toString()) || '0'
+
+        if (new BigNumber(tokenBalance).isLessThan(tokenAmount)) {
             return t('plugin_trader_error_insufficient_balance', {
                 symbol: tab === 'deposit' ? protocol.base : protocol.pair,
             })

@@ -1,7 +1,9 @@
+import { useAsync } from 'react-use'
 import { Box, Grid, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { useWeb3, useAccount } from '@masknet/web3-shared-evm'
 import { IconURLS } from './IconURL'
-import { SavingsProtocols } from './protocols'
+import { SavingsProtocols } from '../protocols'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -40,6 +42,17 @@ export interface SavingsTableProps {
 
 export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTableProps) {
     const { classes } = useStyles()
+
+    const web3 = useWeb3(false, chainId)
+    const account = useAccount()
+
+    // Only fetch protocol APR and Balance on chainId change
+    useAsync(async () => {
+        for (const protocol of SavingsProtocols) {
+            await protocol.getApr()
+            await protocol.getBalance(chainId, web3, account)
+        }
+    }, [chainId])
 
     return (
         <Box className={classes.containerWrap}>
