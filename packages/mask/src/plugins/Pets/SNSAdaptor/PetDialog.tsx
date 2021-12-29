@@ -221,6 +221,7 @@ export function PetDialog() {
                                 onChange={(_event, newValue) => onImageChange(newValue?.mediaUrl ?? '')}
                                 getOptionLabel={(option) => option.name ?? ''}
                                 PaperComponent={({ children }) => paperComponent(children)}
+                                PopperComponent={ShadowRootPopper}
                                 renderOption={(props, option) => (
                                     <Box component="li" className={classes.itemFix} {...props}>
                                         <img className={classes.thumbnail} src={option.mediaUrl} />
