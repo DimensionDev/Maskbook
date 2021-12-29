@@ -43,7 +43,7 @@ export async function getCollectionsNFT(
     size?: number,
 ): Promise<{ collections: ERC721TokenCollectionInfo[]; hasNextPage: boolean }> {
     if (provider === NonFungibleAssetProvider.OPENSEA) {
-        const collections = await EVM_RPC.getCollections({
+        const { data, hasNextPage } = await EVM_RPC.getCollections({
             address,
             chainId,
             provider,
@@ -52,8 +52,8 @@ export async function getCollectionsNFT(
         })
 
         return {
-            collections,
-            hasNextPage: collections.length === size,
+            collections: data,
+            hasNextPage,
         }
     }
 
@@ -70,22 +70,25 @@ export async function getAssetsListNFT(
     page?: number,
     size?: number,
     collection?: string,
+    continuation?: string,
 ): Promise<{ assets: ERC721TokenDetailed[]; hasNextPage: boolean }> {
     if (!EthereumAddress.isValid(address))
         return {
             assets: [],
             hasNextPage: false,
         }
-    const tokens = await EVM_RPC.getNFTsByPagination({
+    const pageInfo = { collection, continuation }
+    const { data, hasNextPage } = await EVM_RPC.getNFTsByPagination({
         from: address,
         chainId,
         provider,
         page: page ?? 0,
         size: size ?? 50,
+        pageInfo,
     })
     return {
-        assets: tokens,
-        hasNextPage: tokens.length === size,
+        assets: data,
+        hasNextPage: hasNextPage,
     }
 }
 

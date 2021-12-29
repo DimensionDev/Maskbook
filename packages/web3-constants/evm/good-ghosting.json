@@ -14,7 +14,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -31,6 +32,7 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     }
 }

@@ -14,7 +14,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -31,7 +32,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -48,7 +50,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -64,7 +67,8 @@
         "Arbitrum_Rinkeby": 5,
         "xDai": 5,
         "Celo": 0,
-        "Metis": 0,
-        "Metis_Stardust": 5
+        "Metis": 5,
+        "Metis_Stardust": 5,
+        "Fantom": 0
     }
 }

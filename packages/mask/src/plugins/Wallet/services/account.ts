@@ -126,5 +126,6 @@ export async function getSupportedNetworks() {
         Flags.xdai_enabled ? NetworkType.xDai : undefined,
         Flags.celo_enabled ? NetworkType.Celo : undefined,
         Flags.metis_enabled ? NetworkType.Metis : undefined,
+        Flags.fantom_enabled ? NetworkType.Fantom : undefined,
     ].filter(Boolean) as NetworkType[]
 }

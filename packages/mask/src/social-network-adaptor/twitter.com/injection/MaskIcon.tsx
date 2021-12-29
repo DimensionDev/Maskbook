@@ -55,15 +55,15 @@ export function injectMaskUserBadgeAtTwitter(signal: AbortSignal) {
     _(floatingBioCardSelector, 20, signal)
 }
 export function injectMaskIconToPostTwitter(post: PostInfo, signal: AbortSignal) {
-    const ls = new LiveSelector([post.rootNodeProxy])
+    const ls = new LiveSelector([post.rootElement])
         .map((x) =>
             x.current.parentElement?.parentElement?.previousElementSibling?.querySelector<HTMLDivElement>(
                 'a[role="link"] > div > div:first-child',
             ),
         )
         .enableSingleMode()
-    ifUsingMask(post.postBy.getCurrentValue()).then(add, remove)
-    post.postBy.subscribe(() => ifUsingMask(post.postBy.getCurrentValue()).then(add, remove))
+    ifUsingMask(post.author.getCurrentValue()).then(add, remove)
+    post.author.subscribe(() => ifUsingMask(post.author.getCurrentValue()).then(add, remove))
     let remover = () => {}
     function add() {
         if (signal?.aborted) return

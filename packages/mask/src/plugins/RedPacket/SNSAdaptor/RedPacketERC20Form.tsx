@@ -7,6 +7,7 @@ import {
     useNativeTokenDetailed,
     useRedPacketConstants,
     useFungibleTokenBalance,
+    useChainId,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isZero, multipliedBy, rightShift } from '@masknet/web3-shared-base'
 import { omit } from 'lodash-unified'
@@ -89,6 +90,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { onChange, onNext, origin } = props
     // context
     const account = useAccount()
+    const chainId = useChainId()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants()
 
     //#region select token
@@ -147,6 +149,10 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     const amount = rightShift(rawAmount ?? '0', token?.decimals)
     const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares])
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
+
+    useEffect(() => {
+        setToken(nativeTokenDetailed)
+    }, [chainId, nativeTokenDetailed])
 
     useEffect(() => {
         setRawAmount('0')

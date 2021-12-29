@@ -14,7 +14,8 @@
         "xDai": "0x96c7D011cdFD467f551605f0f5Fce279F86F4186",
         "Celo": "0x8e28F1d64ceD52b9A09aB1AA3071Aa3c05802d1F",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": "0xc119574d5fb333f5ac018658d4d8b5035e16bf39"
     },
     "MULTICALL_ADDRESS": {
         "Mainnet": "0x1F98415757620B543A52E61c46B32eB19261F984",
@@ -31,7 +32,8 @@
         "xDai": "0xAb7B1bE4233A04e5C43a810E75657ECED8E5463B",
         "Celo": "0x072453AdEC16cFC7FB6Af1517c3f25407180cccC",
         "Metis": "0x0071DDb5a2e80B6b22317594a0307599836621CD",
-        "Metis_Stardust": "0xb96EC7593A05cA620585fCfb2EAd7da01EE64619"
+        "Metis_Stardust": "0xb96EC7593A05cA620585fCfb2EAd7da01EE64619",
+        "Fantom": "0x913975af2Bb8a6Be4100D7dc5e9765B77F6A5d6c"
     },
     "ENS_REGISTRAR_ADDRESS": {
         "Mainnet": "0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e",
@@ -48,7 +50,8 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     },
     "ENS_REVERSE_RECORDS_ADDRESS": {
         "Mainnet": "0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C",
@@ -65,6 +68,7 @@
         "xDai": "",
         "Celo": "",
         "Metis": "",
-        "Metis_Stardust": ""
+        "Metis_Stardust": "",
+        "Fantom": ""
     }
 }

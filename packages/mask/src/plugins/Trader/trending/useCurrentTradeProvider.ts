@@ -7,6 +7,7 @@ import {
     xdaiNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     metisNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
 } from '../settings'
 import { ChainId, getNetworkTypeFromChainId, NetworkType } from '@masknet/web3-shared-evm'
 import { unreachable } from '@dimensiondev/kit'
@@ -22,6 +23,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
     const xdaiNetworkTradeProvider = useValueRef(xdaiNetworkTradeProviderSettings)
     const celoNetworkTradeProvider = useValueRef(celoNetworkTradeProviderSettings)
     const metisNetworkTradeProvider = useValueRef(metisNetworkTradeProviderSettings)
+    const fantomNetworkTradeProvider = useValueRef(fantomNetworkTradeProviderSettings)
 
     if (!networkType) return TradeProvider.UNISWAP_V2
     switch (networkType) {
@@ -39,6 +41,8 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
             return celoNetworkTradeProvider
         case NetworkType.Metis:
             return metisNetworkTradeProvider
+        case NetworkType.Fantom:
+            return fantomNetworkTradeProvider
         default:
             unreachable(networkType)
     }

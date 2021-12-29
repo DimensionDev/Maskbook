@@ -14,7 +14,8 @@
         "xDai": ["https://rpc.xdaichain.com/"],
         "Celo": ["https://forno.celo.org"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
-        "Metis_Stardust": ["https://stardust.metis.io/?owner=588"]
+        "Metis_Stardust": ["https://stardust.metis.io/?owner=588"],
+        "Fantom": ["https://rpcapi.fantom.network/"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -31,6 +32,7 @@
         "xDai": [0, 0, 0, 0],
         "Celo": [0, 0, 0, 0],
         "Metis": [0, 0, 0, 0],
-        "Metis_Stardust": [0, 0, 0, 0]
+        "Metis_Stardust": [0, 0, 0, 0],
+        "Fantom": [0, 0, 0, 0]
     }
 }

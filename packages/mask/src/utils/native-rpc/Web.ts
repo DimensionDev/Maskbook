@@ -119,6 +119,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getCeloNetworkTradeProvider()
             case NetworkType.Metis:
                 return Services.Settings.getMetisNetworkTradeProvider()
+            case NetworkType.Fantom:
+                return Services.Settings.getxDaiNetworkTradeProvider()
             default:
                 unreachable(network)
         }
@@ -139,6 +141,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setCeloNetworkTradeProvider(provider)
             case NetworkType.Metis:
                 return Services.Settings.setMetisNetworkTradeProvider(provider)
+            case NetworkType.Fantom:
+                return Services.Settings.setFantomNetworkTradeProvider(provider)
             default:
                 unreachable(network)
         }

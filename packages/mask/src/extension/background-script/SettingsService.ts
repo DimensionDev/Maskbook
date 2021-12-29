@@ -17,6 +17,7 @@ import {
     xdaiNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
     metisNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
 } from '../../plugins/Trader/settings'
 import { queryMyPersonas } from './IdentityService'
 import {
@@ -78,6 +79,8 @@ export const [getxDaiNetworkTradeProvider, setxDaiNetworkTradeProvider] = create
 export const [getCeloNetworkTradeProvider, setCeloNetworkTradeProvider] = create(celoNetworkTradeProviderSettings)
 
 export const [getMetisNetworkTradeProvider, setMetisNetworkTradeProvider] = create(metisNetworkTradeProviderSettings)
+
+export const [getFantomNetworkTradeProvider, setFantomNetworkTradeProvider] = create(fantomNetworkTradeProviderSettings)
 
 export const [getCurrentSelectedWalletProvider, setCurrentSelectedWalletProvider] = create(currentProviderSettings)
 
