@@ -2,6 +2,7 @@ declare global {
     module '@mui/material/Button' {
         interface ButtonPropsVariantOverrides {
             rounded: true
+            sns: true
         }
         interface ButtonPropsColorOverrides {
             warning: true
