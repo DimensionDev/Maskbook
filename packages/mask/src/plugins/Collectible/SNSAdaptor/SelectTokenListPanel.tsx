@@ -41,7 +41,7 @@ export function SelectTokenListPanel(props: SelectTokenPanelProps) {
     const [haveMenu, setHaveMenu] = useState(true)
 
     useEffect(() => {
-        if (!FungibleTokenListProps?.tokens || FungibleTokenListProps.tokens.length === 0) setHaveMenu(false)
+        if (!FungibleTokenListProps?.tokens || FungibleTokenListProps.tokens.length <= 1) setHaveMenu(false)
     }, [FungibleTokenListProps, token])
 
     const [menu, openMenu] = useMenu(

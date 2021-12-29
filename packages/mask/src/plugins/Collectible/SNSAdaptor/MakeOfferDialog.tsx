@@ -11,7 +11,7 @@ import {
     Link,
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { first } from 'lodash-unified'
+import { first, uniqBy } from 'lodash-unified'
 import BigNumber from 'bignumber.js'
 import {
     FungibleTokenDetailed,
@@ -82,7 +82,12 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
         asset?.value && asset.value.desktopOrder ? new BigNumber(asset.value.desktopOrder.current_price ?? '0') : ZERO
 
     const paymentTokens = (isAuction ? asset?.value?.offer_payment_tokens : asset?.value?.order_payment_tokens) ?? []
-    const selectedPaymentToken = first(paymentTokens)
+    const selectedPaymentToken = first(
+        uniqBy(
+            [...(asset?.value?.offer_payment_tokens ?? []), ...(asset?.value?.order_payment_tokens ?? [])],
+            (x) => x.address,
+        ),
+    )
     const { t } = useI18N()
     const { classes } = useStyles()
 
@@ -177,7 +182,13 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                             }}
                             FungibleTokenListProps={{
                                 selectedTokens: selectedPaymentToken ? [selectedPaymentToken.address] : [],
-                                tokens: paymentTokens,
+                                tokens: uniqBy(
+                                    [
+                                        ...(asset?.value?.offer_payment_tokens ?? []),
+                                        ...(asset?.value?.order_payment_tokens ?? []),
+                                    ],
+                                    (x) => x.address,
+                                ),
                                 whitelist: paymentTokens.map((x) => x.address),
                             }}
                         />
