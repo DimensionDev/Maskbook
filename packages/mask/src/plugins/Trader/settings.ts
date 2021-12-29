@@ -76,6 +76,11 @@ export const xdaiNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
     TradeProvider.SUSHISWAP,
     { primary: () => '' },
 )
+export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+fantom+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
 
 export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+celo+tradeProvider`,

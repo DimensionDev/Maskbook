@@ -1,7 +1,7 @@
-import type { Transaction as Web3Transaction } from 'web3-core'
 import type { Transaction } from './types'
+import type { ExplorerAPI } from '..'
 
-export function toTransaction(transaction: Transaction): Web3Transaction & {
+export function toTransaction(transaction: Transaction): ExplorerAPI.Transaction & {
     status: '0' | '1'
     confirmations: number
 } {

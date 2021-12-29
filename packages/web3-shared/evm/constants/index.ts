@@ -21,7 +21,6 @@ import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.
 import GoodGhosting from '@masknet/web3-constants/evm/good-ghosting.json'
 import SpaceStationGalaxy from '@masknet/web3-constants/evm/space-station-galaxy.json'
 import OpenseaAPI from '@masknet/web3-constants/evm/opensea-api.json'
-import Explorer from '@masknet/web3-constants/evm/explorer.json'
 import CryptoArtAI from '@masknet/web3-constants/evm/cryptoartai.json'
 import { hookTransform, transform, transformFromJSON } from './utils'
 
@@ -97,11 +96,9 @@ export const useGoodGhostingConstants = hookTransform(getGoodGhostingConstants)
 
 export const getSpaceStationGalaxyConstants = transform(SpaceStationGalaxy)
 export const useSpaceStationGalaxyConstants = hookTransform(getSpaceStationGalaxyConstants)
+
 export const getOpenseaAPIConstants = transform(OpenseaAPI)
 export const useOpenseaAPIConstants = hookTransform(getOpenseaAPIConstants)
-
-export const getExplorerConstants = transform(Explorer)
-export const useExplorerConstants = hookTransform(getExplorerConstants)
 
 export const getCryptoArtAIConstants = transform(CryptoArtAI)
 export const useCryptoArtAIConstants = hookTransform(getCryptoArtAIConstants)

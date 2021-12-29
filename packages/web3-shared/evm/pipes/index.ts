@@ -65,6 +65,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Arbitrum]: 'arbitrum',
         [NetworkType.xDai]: 'xdai',
         [NetworkType.Celo]: 'celo',
+        [NetworkType.Fantom]: 'fantom',
     },
     'ethereum',
 )
@@ -77,6 +78,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
         [NetworkType.Celo]: 'Celo',
+        [NetworkType.Fantom]: 'Fantom',
     },
     'Unknown',
 )
@@ -106,26 +108,9 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Arbitrum_Rinkeby]: 'rgb(36, 150, 238)',
         [ChainId.xDai]: 'rgb(73, 169, 166)',
         [ChainId.Celo]: 'rgb(53, 208, 127)',
+        [ChainId.Fantom]: 'rgb(19, 181, 236)',
     },
     'rgb(214, 217, 220)',
-)
-
-export const resolveExplorerAPI = createLookupTableResolver<ChainId, string>(
-    {
-        [ChainId.Mainnet]: 'https://api.etherscan.io/api',
-        [ChainId.Ropsten]: '',
-        [ChainId.Kovan]: '',
-        [ChainId.Rinkeby]: '',
-        [ChainId.Gorli]: '',
-        [ChainId.BSC]: 'https://api.bscscan.com/api',
-        [ChainId.BSCT]: '',
-        [ChainId.Matic]: 'https://api.polygonscan.com/api',
-        [ChainId.Mumbai]: '',
-        [ChainId.Arbitrum]: 'https://api.arbiscan.io/api',
-        [ChainId.Arbitrum_Rinkeby]: '',
-        [ChainId.xDai]: 'https://blockscout.com/xdai/mainnet/api',
-    },
-    '',
 )
 
 export function resolveLinkOnExplorer(chainId: ChainId) {
@@ -164,6 +149,10 @@ export function resolveCollectibleProviderLink(chainId: ChainId, provider: NonFu
         case NonFungibleAssetProvider.OPENSEA:
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io`
             return `https://opensea.io`
+        case NonFungibleAssetProvider.RARIBLE:
+            return 'https://rarible.com'
+        case NonFungibleAssetProvider.NFTSCAN:
+            return 'https://nftscan.com'
         default:
             unreachable(provider)
     }
@@ -175,6 +164,10 @@ export function resolveCollectibleAssetLink(chainId: ChainId, provider: NonFungi
             if (chainId === ChainId.Rinkeby) return `https://testnets.opensea.io/assets`
             if (chainId === ChainId.Matic) return `https://opensea.io/assets/matic`
             return `https://opensea.io/assets`
+        case NonFungibleAssetProvider.RARIBLE:
+            return ''
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
         default:
             unreachable(provider)
     }
@@ -191,6 +184,10 @@ export function resolveCollectibleLink(
                 address,
                 tokenId,
             })
+        case NonFungibleAssetProvider.RARIBLE:
+            return ''
+        case NonFungibleAssetProvider.NFTSCAN:
+            return ''
         default:
             unreachable(provider)
     }

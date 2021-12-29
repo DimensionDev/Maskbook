@@ -12,7 +12,7 @@ import type { PaletteMode, Theme } from '@mui/material'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { PostInfo } from './PostInfo'
-import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
+import type { GrayscaleAlgorithm } from '@masknet/encryption'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 import type { Subscription } from 'use-subscription'
 

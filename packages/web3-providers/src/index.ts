@@ -1,4 +1,14 @@
-export * from './opensea'
-export * from './coingecko'
-export * from './rarible'
-export * from './explorer'
+import { CoinGeckoAPI } from './coingecko'
+import { OpenSeaAPI } from './opensea'
+import { RaribleAPI } from './rarible'
+import { NFTScanAPI } from './NFTScan'
+import { NativeExplorerAPI } from './explorer'
+
+export * from './types'
+export * from './opensea/utils'
+
+export const OpenSea = new OpenSeaAPI()
+export const Rarible = new RaribleAPI()
+export const NFTScan = new NFTScanAPI()
+export const CoinGecko = new CoinGeckoAPI()
+export const Explorer = new NativeExplorerAPI()

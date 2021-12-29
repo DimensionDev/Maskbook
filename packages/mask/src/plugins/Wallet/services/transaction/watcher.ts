@@ -2,12 +2,11 @@ import { first } from 'lodash-unified'
 import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { getLatestTransactions } from '@masknet/web3-providers'
+import { Explorer } from '@masknet/web3-providers'
 import {
     ChainId,
     getExplorerConstants,
     isSameAddress,
-    resolveExplorerAPI,
     TransactionStateType,
 } from '@masknet/web3-shared-evm'
 import * as EthereumService from '../../../../extension/background-script/EthereumService'
@@ -121,11 +120,10 @@ async function checkReceipt(chainId: ChainId) {
 }
 
 async function checkAccount(chainId: ChainId, account: string) {
-    const API_URL = resolveExplorerAPI(chainId)
-    const { API_KEYS = [] } = getExplorerConstants(chainId)
+    const { API_KEYS = [], EXPLORER_API = '' } = getExplorerConstants(chainId)
 
     const watchedTransactions = storage.getWatched(chainId)
-    const latestTransactions = await getLatestTransactions(account, API_URL, {
+    const latestTransactions = await Explorer.getLatestTransactions(account, EXPLORER_API, {
         offset: CHECK_LATEST_SIZE,
         apikey: first(API_KEYS),
     })

@@ -11,11 +11,11 @@
     "gulp-zip": "^5.1.0",
     "proper-lockfile": "^4.1.1",
     "rimraf": "^3.0.2",
-    "yargs": "^17.2.1"
+    "yargs": "^17.3.1"
   },
   "devDependencies": {
     "@types/gulp": "^4.0.9",
-    "@types/lodash": "^4.14.177",
+    "@types/lodash": "^4.14.178",
     "@types/proper-lockfile": "^4.1.2",
     "ts-node": "^10.4.0"
   }
