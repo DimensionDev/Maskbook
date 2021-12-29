@@ -22,43 +22,9 @@ export interface AlchemyNFTItemResponse {
         mimeType: string
     }
     metadata: {
-        metadata: [
-            {
-                name: string
-                value: string
-            },
-            {
-                name: string
-                value: string
-            },
-            {
-                name: string
-                value: string
-            },
-            {
-                name: string
-                value: string
-            },
-            {
-                name: string
-                value: string
-            },
-            {
-                name: string
-                value: string
-            },
-            {
-                name: string
-                value: string
-            },
-            {
-                name: string
-                value: string
-            },
-            {
-                name: string
-                value: string
-            },
-        ]
+        metadata: {
+            name: string
+            value: string
+        }[]
     }
 }
