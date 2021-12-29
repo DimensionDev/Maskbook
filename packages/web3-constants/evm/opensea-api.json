@@ -12,7 +12,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "GET_SINGLE_ASSET_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/asset",
@@ -27,7 +28,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "GET_ASSETS_URL": {
         "Mainnet": "https://api.opensea.io/api/v1/assets",
@@ -42,6 +44,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     }
 }

@@ -23,7 +23,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
     PostInspector: function Component() {
         const link = usePostInfoDetails
             .postMetadataMentionedLinks()
-            .concat(usePostInfoDetails.postMentionedLinks())
+            .concat(usePostInfoDetails.mentionedLinks())
             .find(isFurucomboLink)
         if (!link) return null
         return <Renderer url={link} />

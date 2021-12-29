@@ -79,9 +79,6 @@ const useStyles = makeStyles()((theme) => {
                 flexDirection: 'column',
             },
         },
-        actionButton: {
-            color: '#fff',
-        },
         button: {
             borderRadius: 50,
             [smallQuery]: {
@@ -116,12 +113,12 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 0,
         },
         cell: {
-            border: '1px solid rgba(224, 224, 224, 1)',
+            border: `1px solid ${theme.palette.divider}`,
             color: theme.palette.text.primary,
             wordBreak: 'break-word',
         },
         head: {
-            border: '1px solid rgba(224, 224, 224, 1)',
+            border: `1px solid ${theme.palette.divider}`,
             color: theme.palette.text.secondary,
         },
         ellipsis: {
@@ -203,12 +200,7 @@ export function PoolInList(props: PoolInListProps) {
         return (
             <>
                 {loadingTradeInfo || loadingAvailability ? null : canWithdraw ? (
-                    <ActionButton
-                        fullWidth
-                        size="small"
-                        variant="contained"
-                        onClick={() => destructCallback(pool.pid)}
-                        className={classes.actionButton}>
+                    <ActionButton fullWidth size="small" variant="contained" onClick={() => destructCallback(pool.pid)}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : canSend ? (
@@ -223,12 +215,11 @@ export function PoolInList(props: PoolInListProps) {
                                     'exchange_token_addresses',
                                 ]) as JSON_PayloadInMask,
                             )
-                        }
-                        className={classes.actionButton}>
+                        }>
                         {t('plugin_ito_list_button_send')}
                     </ActionButton>
                 ) : isWithdrawn ? (
-                    <ActionButton fullWidth size="small" variant="contained" disabled className={classes.actionButton}>
+                    <ActionButton fullWidth size="small" variant="contained" disabled>
                         {t('plugin_ito_withdrawn')}
                     </ActionButton>
                 ) : null}

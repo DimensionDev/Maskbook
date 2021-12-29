@@ -161,5 +161,10 @@ to {
         fullWidthBox: {
             width: '100%',
         },
+        loadingText: {
+            textAlign: 'center',
+            fontSize: 24,
+            marginTop: 210,
+        },
     }
 })

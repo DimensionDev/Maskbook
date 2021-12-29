@@ -12,7 +12,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -27,7 +28,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -42,7 +44,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -57,6 +60,7 @@
         "Arbitrum": 5,
         "Arbitrum_Rinkeby": 5,
         "xDai": 5,
-        "Celo": 0
+        "Celo": 0,
+        "Fantom": 0
     }
 }

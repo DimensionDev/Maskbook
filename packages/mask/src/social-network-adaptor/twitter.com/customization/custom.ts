@@ -9,6 +9,7 @@ import { fromRGB, getBackgroundColor, getForegroundColor, isDark, shade, toRGB }
 import { isMobileTwitter } from '../utils/isMobile'
 import { composeAnchorSelector, composeAnchorTextSelector } from '../utils/selector'
 import twitterColorSchema from './twitter-color-schema.json'
+import { parseColor } from '@masknet/theme'
 
 const primaryColorRef = new ValueRef(toRGB([29, 161, 242]))
 const primaryColorContrastColorRef = new ValueRef(toRGB([255, 255, 255]))
@@ -60,11 +61,21 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 contrastText: toRGB(primaryContrastColorRGB),
             }
             const themeName = isDark ? (isDarker ? 'darker' : 'dark') : 'light'
+
+            // Just for design
+            if (themeName === 'dark') {
+                theme.palette.background.paper = '#151D26'
+            }
+
             const colorSchema = twitterColorSchema[themeName]
             const colors = Object.keys(colorSchema) as Array<keyof typeof colorSchema>
             colors.forEach((color) => {
-                Object.assign(theme.palette[color], colorSchema[color])
+                if (typeof theme.palette[color] === 'object') {
+                    Object.assign(theme.palette[color], colorSchema[color])
+                }
             })
+            theme.palette.divider = colorSchema.divider
+            theme.palette.divider2 = colorSchema.divider2
             theme.shape.borderRadius = isMobileTwitter ? 0 : 15
             theme.breakpoints.values = { xs: 0, sm: 687, md: 1024, lg: 1280, xl: 1920 }
             theme.components = theme.components || {}
@@ -74,8 +85,26 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     size: 'medium',
                     disableElevation: true,
                 },
+                variants: [
+                    {
+                        props: { variant: 'sns' },
+                        style: {
+                            backgroundColor: theme.palette.primary.main,
+                            color: theme.palette.common.white,
+                            '&:hover': {
+                                backgroundColor: theme.palette.primary.dark,
+                                color: theme.palette.common.white,
+                            },
+                            '&.Mui-disabled': {
+                                opacity: 0.5,
+                                backgroundColor: theme.palette.primary.main,
+                                color: theme.palette.common.white,
+                            },
+                        },
+                    },
+                ],
                 styleOverrides: {
-                    root: {
+                    contained: {
                         borderRadius: 500,
                         textTransform: 'initial',
                         fontWeight: 'bold',
@@ -83,12 +112,50 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         paddingLeft: 15,
                         paddingRight: 15,
                         boxShadow: 'none',
+                        backgroundColor: theme.palette.text.primary,
+                        color: theme.palette.text.buttonText,
+                        '&.Mui-disabled': {
+                            opacity: 0.5,
+                            backgroundColor: theme.palette.text.primary,
+                            color: theme.palette.text.buttonText,
+                        },
+                        '&:hover': {
+                            backgroundColor: theme.palette.action.buttonHover,
+                        },
                         [smallQuery]: {
                             '&': {
                                 height: 30,
                                 minHeight: 'auto !important',
                                 padding: '0 14px !important',
                             },
+                        },
+                    },
+                    containedSecondary: {
+                        backgroundColor: theme.palette.background.default,
+                        color: theme.palette.text.strong,
+                        '&:hover': {
+                            color: theme.palette.action.buttonHover,
+                            backgroundColor: theme.palette.action.bgHover,
+                        },
+                        '&.Mui-disabled': {
+                            opacity: 0.5,
+                            backgroundColor: theme.palette.background.default,
+                            color: theme.palette.text.strong,
+                        },
+                    },
+                    outlined: {
+                        color: theme.palette.text.strong,
+                        borderColor: theme.palette.divider2,
+                        backgroundColor: 'transparent',
+                        '&:hover': {
+                            color: theme.palette.action.buttonHover,
+                            borderColor: theme.palette.divider2,
+                            backgroundColor: parseColor(theme.palette.text.primary).setAlpha(0.1).toRgbString(),
+                        },
+                        '&.Mui-disabled': {
+                            opacity: 0.5,
+                            color: theme.palette.text.strong,
+                            backgroundColor: 'transparent',
                         },
                     },
                     sizeLarge: {
@@ -128,6 +195,47 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 styleOverrides: {
                     root: {
                         textTransform: 'none',
+                    },
+                },
+            }
+            theme.components.MuiChip = {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: theme.palette.background.default,
+                        color: theme.palette.text.strong,
+                    },
+                    colorPrimary: {
+                        backgroundColor: theme.palette.primary.main,
+                        color: theme.palette.common.white,
+                        '&:hover': {
+                            backgroundColor: parseColor(theme.palette.text.primary).setAlpha(0.1).toRgbString(),
+                        },
+                    },
+                },
+            }
+            theme.components.MuiBackdrop = {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: theme.palette.action.mask,
+                    },
+                },
+            }
+            theme.components.MuiTooltip = {
+                styleOverrides: {
+                    tooltip: {
+                        backgroundColor: theme.palette.background.tipMask,
+                        color: theme.palette.text.buttonText,
+                        borderRadius: 8,
+                    },
+                    tooltipArrow: {
+                        backgroundColor: theme.palette.background.tipMask,
+                    },
+                },
+            }
+            theme.components.MuiSnackbar = {
+                styleOverrides: {
+                    root: {
+                        filter: `drop-shadow(0px 0px 16px ${theme.palette.background.messageShadow});`,
                     },
                 },
             }

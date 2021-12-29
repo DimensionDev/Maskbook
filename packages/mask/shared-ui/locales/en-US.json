@@ -991,7 +991,6 @@
     "plugin_profile_binding_rule3": "The ID + suffix is ENS or RNS.",
     "plugin_profile_binding_rule4": "The address used to sign the PFP NFTs.",
     "plugin_profile_current_display_of": "Current display of {{type}}: ",
-    "plugin_profile_loading": "Loading...",
     "plugin_profile_error_no_address": "Failed to find any valid address.",
     "plugin_profile_address_name_ens": "ENS",
     "plugin_profile_address_name_uns": "UNS",
