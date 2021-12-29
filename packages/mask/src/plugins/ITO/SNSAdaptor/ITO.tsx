@@ -359,8 +359,7 @@ export function ITO(props: ITO_Props) {
                 (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
             )
                 return
-            resetClaimCallback()
-            retryITOCard()
+            window.location.reload()
         },
     )
 
