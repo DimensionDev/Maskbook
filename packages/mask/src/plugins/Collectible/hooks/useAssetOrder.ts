@@ -1,40 +1,32 @@
 import { unreachable } from '@dimensiondev/kit'
-import { BigNumber } from 'bignumber.js'
+import { getOrderUnitPrice } from '@masknet/web3-providers'
+import { ONE } from '@masknet/web3-shared-base'
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm'
 import { head } from 'lodash-unified'
+import type { Order } from 'opensea-js/lib/types'
 import { useAsyncRetry } from 'react-use'
 import { PluginCollectibleRPC } from '../messages'
-import { CollectibleProvider, CollectibleToken } from '../types'
-import { getOrderUnitPrice } from '../utils'
+import type { CollectibleToken } from '../types'
 
-export function useAssetOrder(provider: CollectibleProvider, token?: CollectibleToken) {
+export function useAssetOrder(provider: NonFungibleAssetProvider, token?: CollectibleToken) {
     return useAsyncRetry(async () => {
         if (!token) return
         switch (provider) {
-            case CollectibleProvider.OPENSEA:
+            case NonFungibleAssetProvider.OPENSEA:
                 const openSeaResponse = await PluginCollectibleRPC.getAssetFromSDK(token.contractAddress, token.tokenId)
-
-                const desktopOrder = head(
-                    (openSeaResponse.sellOrders ?? []).sort(
-                        (a, b) =>
-                            new BigNumber(
-                                getOrderUnitPrice(
-                                    a.currentPrice?.toFixed(),
-                                    a.paymentTokenContract?.decimals,
-                                    a.quantity.toFixed(),
-                                ) ?? 0,
-                            ).toNumber() -
-                            new BigNumber(
-                                getOrderUnitPrice(
-                                    b.currentPrice?.toFixed(),
-                                    b.paymentTokenContract?.decimals,
-                                    b.quantity.toFixed(),
-                                ) ?? 0,
-                            ).toNumber(),
-                    ),
-                )
+                const getPrice = (order: Order) =>
+                    getOrderUnitPrice(
+                        order.currentPrice?.toFixed(),
+                        order.paymentTokenContract?.decimals ?? 0,
+                        order.quantity.toFixed(),
+                    ) ?? ONE
+                const sellOrders = openSeaResponse.sellOrders ?? []
+                const desktopOrder = head(sellOrders.sort((a, b) => getPrice(a).toNumber() - getPrice(b).toNumber()))
 
                 return desktopOrder
-            case CollectibleProvider.RARIBLE:
+            case NonFungibleAssetProvider.RARIBLE:
+                return
+            case NonFungibleAssetProvider.NFTSCAN:
                 return
             default:
                 unreachable(provider)

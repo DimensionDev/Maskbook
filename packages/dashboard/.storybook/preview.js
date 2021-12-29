@@ -2,11 +2,11 @@
 import React from 'react'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material'
 import { MaskLightTheme, applyMaskColorVars, CustomSnackbarProvider, MaskDarkTheme } from '@masknet/theme'
-import { addSharedI18N } from '@masknet/shared'
+import { addSharedI18N, I18NextProviderHMR } from '@masknet/shared'
 import { fallbackLng } from '../../shared-base/src/i18n/fallbackRule'
 // import { withMatrix } from 'storybook-addon-matrix'
-import { addDashboardI18N } from '../src/locales'
-import { I18nextProvider, initReactI18next } from 'react-i18next'
+import { addDashboardI18N } from '../src/locales/languages'
+import { initReactI18next } from 'react-i18next'
 import i18n from 'i18next'
 i18n.init({
     keySeparator: false,
@@ -26,11 +26,11 @@ export const decorators = [
         <React.Suspense fallback="">
             <StyledEngineProvider injectFirst>
                 <ThemeProvider theme={MaskDarkTheme}>
-                    <I18nextProvider i18n={i18n}>
+                    <I18NextProviderHMR i18n={i18n}>
                         <CustomSnackbarProvider>
                             <Story />
                         </CustomSnackbarProvider>
-                    </I18nextProvider>
+                    </I18NextProviderHMR>
                 </ThemeProvider>
             </StyledEngineProvider>
         </React.Suspense>

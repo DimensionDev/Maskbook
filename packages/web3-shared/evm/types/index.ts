@@ -61,6 +61,12 @@ export enum ChainId {
 
     // xDai
     xDai = 100,
+
+    // Celo
+    Celo = 42220,
+
+    // Fantom
+    Fantom = 250,
 }
 
 export enum ProviderType {
@@ -88,6 +94,8 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Celo = 'Celo',
+    Fantom = 'Fantom',
 }
 
 export interface Wallet {
@@ -546,6 +554,8 @@ export enum FungibleAssetProvider {
 
 export enum NonFungibleAssetProvider {
     OPENSEA = 'OpenSea',
+    RARIBLE = 'Rarible',
+    NFTSCAN = 'NFTScan',
 }
 
 export type UnboxTransactionObject<T> = T extends NonPayableTransactionObject<infer R>

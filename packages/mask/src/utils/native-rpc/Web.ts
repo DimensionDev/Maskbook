@@ -115,6 +115,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getArbitrumNetworkTradeProvider()
             case NetworkType.xDai:
                 return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Celo:
+                return Services.Settings.getCeloNetworkTradeProvider()
+            case NetworkType.Fantom:
+                return Services.Settings.getxDaiNetworkTradeProvider()
             default:
                 unreachable(network)
         }
@@ -131,6 +135,10 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setArbitrumNetworkTradeProvider(provider)
             case NetworkType.xDai:
                 return Services.Settings.setxDaiNetworkTradeProvider(provider)
+            case NetworkType.Celo:
+                return Services.Settings.setCeloNetworkTradeProvider(provider)
+            case NetworkType.Fantom:
+                return Services.Settings.setFantomNetworkTradeProvider(provider)
             default:
                 unreachable(network)
         }

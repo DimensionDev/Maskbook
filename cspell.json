@@ -22,6 +22,7 @@
         "Burkina",
         "CAIP",
         "Caicos",
+        "Celo",
         "Checksummed",
         "Cunha",
         "Cura",
@@ -262,6 +263,8 @@
         "Gorli",
         "Gwapj",
         "HUSD",
+        "CUSD",
+        "CEUR",
         "Horiz",
         "Huobi",
         "MSKA",
@@ -352,8 +355,10 @@
         "CANFT",
         "Kodav",
         "koda",
+        "Enjin",
         "poap",
-        "irss"
+        "irss",
+        "CELO"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

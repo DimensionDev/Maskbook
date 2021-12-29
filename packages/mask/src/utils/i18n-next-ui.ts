@@ -1,8 +1,6 @@
 import type { i18n } from 'i18next'
 import { initReactI18next, useTranslation as useTranslation_, UseTranslationOptions } from 'react-i18next'
 import type { TOptions } from 'i18next'
-import { useEffect } from 'react'
-import { useUpdate } from 'react-use'
 import type en from '../../shared-ui/locales/en-US.json'
 import i18nNextInstance from '../../shared-ui/locales_legacy'
 import { languageSettings } from '../settings/settings'
@@ -26,15 +24,6 @@ export function useI18N(opt?: UseTranslationOptions): {
     i18n: i18n
     ready: boolean
 } {
-    if (process.env.NODE_ENV === 'development') {
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        const update = useUpdate()
-        // eslint-disable-next-line react-hooks/rules-of-hooks
-        useEffect(() => {
-            document.addEventListener('i18n-hmr', update)
-            return () => document.removeEventListener('i18n-hmr', update)
-        }, [])
-    }
     return useTranslation_('mask', opt)
 }
 

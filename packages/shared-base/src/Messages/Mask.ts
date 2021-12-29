@@ -33,6 +33,8 @@ export interface MaskSettingsEvents {
     binanceNetworkTradeProviderSettings: TradeProvider
     arbitrumNetworkTradeProviderSettings: TradeProvider
     xdaiNetworkTradeProviderSettings: TradeProvider
+    fantomNetworkTradeProviderSettings: TradeProvider
+    celoNetworkTradeProviderSettings: TradeProvider
 }
 
 export interface MaskMobileOnlyEvents {
