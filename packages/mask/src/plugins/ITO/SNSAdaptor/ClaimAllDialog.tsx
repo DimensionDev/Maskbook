@@ -227,9 +227,15 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(
-        [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Fantom].includes(
-            currentChainId,
-        )
+        [
+            ChainId.Mainnet,
+            ChainId.BSC,
+            ChainId.Matic,
+            ChainId.Arbitrum,
+            ChainId.xDai,
+            ChainId.Fantom,
+            ChainId.Avalanche,
+        ].includes(currentChainId)
             ? currentChainId
             : ChainId.Mainnet,
     )
@@ -375,6 +381,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                                 ChainId.Arbitrum,
                                 ChainId.xDai,
                                 ChainId.Fantom,
+                                ChainId.Avalanche,
                             ]}
                         />
                     </div>

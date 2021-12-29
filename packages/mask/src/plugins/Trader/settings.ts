@@ -81,6 +81,11 @@ export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProv
     TradeProvider.SUSHISWAP,
     { primary: () => '' },
 )
+export const avalancheNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_IDENTIFIER}+avalanche+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
 
 export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_IDENTIFIER}+celo+tradeProvider`,

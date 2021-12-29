@@ -13,6 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V2": {
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V3": {
@@ -45,6 +47,7 @@
         "Arbitrum_Rinkeby": "0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4": {
@@ -61,6 +64,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "HAPPY_RED_PACKET_ADDRESS_V4_BLOCK_HEIGHT": {
@@ -77,6 +81,7 @@
         "Arbitrum_Rinkeby": 0,
         "xDai": 18101937,
         "Celo": 0,
+        "Avalanche": 0,
         "Fantom": 0
     },
     "SUBGRAPH_URL": {
@@ -93,6 +98,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-red-packet-xdai",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     }
 }

@@ -119,6 +119,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getCeloNetworkTradeProvider()
             case NetworkType.Fantom:
                 return Services.Settings.getxDaiNetworkTradeProvider()
+            case NetworkType.Avalanche:
+                return Services.Settings.getxDaiNetworkTradeProvider()
             default:
                 unreachable(network)
         }
@@ -139,6 +141,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setCeloNetworkTradeProvider(provider)
             case NetworkType.Fantom:
                 return Services.Settings.setFantomNetworkTradeProvider(provider)
+            case NetworkType.Avalanche:
+                return Services.Settings.setAvalancheNetworkTradeProvider(provider)
             default:
                 unreachable(network)
         }

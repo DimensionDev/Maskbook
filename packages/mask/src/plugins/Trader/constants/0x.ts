@@ -8,6 +8,7 @@ export const ZRX_BASE_URL: Record<NetworkType, string> = {
     [NetworkType.xDai]: 'https://xdai.api.0x.org/',
     [NetworkType.Celo]: 'https://celo.api.0x.org/',
     [NetworkType.Fantom]: 'https://fantom.api.0x.org/',
+    [NetworkType.Avalanche]: 'https://avalanche.api.0x.org/',
 }
 
 export const ZRX_AFFILIATE_ADDRESS = '0x934B510D4C9103E6a87AEf13b816fb080286D649'

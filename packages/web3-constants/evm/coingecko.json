@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
-        "Fantom": "fantom"
+        "Fantom": "fantom",
+        "Avalanche": "avalanche"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai",
         "Celo": "celo",
-        "Fantom": "fantom"
+        "Fantom": "fantom",
+        "Avalanche": "avalanche"
     }
 }

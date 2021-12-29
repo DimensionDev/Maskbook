@@ -38,6 +38,11 @@ export const [useFantomNetworkTradeProvider] = createGlobalState(
     Messages.events.fantomNetworkTradeProviderSettings.on,
 )
 
+export const [useAvalancheNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getAvalancheNetworkTradeProvider,
+    Messages.events.avalancheNetworkTradeProviderSettings.on,
+)
+
 export const [useCeloNetworkTradeProvider] = createGlobalState(
     Services.Settings.getCeloNetworkTradeProvider,
     Messages.events.celoNetworkTradeProviderSettings.on,

@@ -13,7 +13,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "GITCOIN_ETH_ADDRESS": {
@@ -45,6 +47,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
@@ -61,6 +64,7 @@
         "Arbitrum_Rinkeby": 5,
         "xDai": 5,
         "Celo": 0,
+        "Avalanche": 0,
         "Fantom": 0
     }
 }

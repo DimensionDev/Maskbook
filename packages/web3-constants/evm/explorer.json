@@ -13,6 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "https://api.ftmscan.com/api",
         "Fantom": "https://api.ftmscan.com/api"
     },
     "EXPLORER_API_KEY": {
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Fantom": "",
         "Fantom": ""
     }
 }

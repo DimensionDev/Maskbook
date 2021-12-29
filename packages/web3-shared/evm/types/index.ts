@@ -67,6 +67,9 @@ export enum ChainId {
 
     // Fantom
     Fantom = 250,
+
+    //Avalanche
+    Avalanche = 43114,
 }
 
 export enum ProviderType {
@@ -96,6 +99,7 @@ export enum NetworkType {
     xDai = 'xDai',
     Celo = 'Celo',
     Fantom = 'Fantom',
+    Avalanche = 'Avalanche',
 }
 
 export interface Wallet {
