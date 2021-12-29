@@ -113,7 +113,7 @@ export default function MaskPluginWrapper(props: PluginWrapperProps) {
                 <MaskIcon size={45} />
                 <div className={classes.title}>
                     <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
-                        Mask Plugin
+                        Mask Plugin {!personaConnectStatus.connected && pluginName ? `(${pluginName})` : ''}
                     </Typography>
                     <Typography variant="h6" fontSize="1.1rem" fontWeight="400">
                         {name}
