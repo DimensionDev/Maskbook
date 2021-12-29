@@ -304,7 +304,8 @@
         "metaverse",
         "hexlify",
         "contribs",
-        "contrib"
+        "contrib",
+        "juicebox"
     ],
     "ignoreWords": [
         "cryptopunks",

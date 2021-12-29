@@ -14,7 +14,8 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V2_HEALTH_URL": {
         "Mainnet": "https://api.thegraph.com/index-node/graphql",
@@ -31,7 +32,8 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
@@ -48,6 +50,7 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     }
 }

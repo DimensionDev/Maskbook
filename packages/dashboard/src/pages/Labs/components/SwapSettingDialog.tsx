@@ -11,6 +11,7 @@ import {
     useXDaiNetworkTradeProvider,
     useCeloNetworkTradeProvider,
     useBobaNetworkTradeProvider,
+    useFantomNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -48,6 +49,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
     const arbitrumOptions = [{ label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 }]
 
     const xDaiOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
+    const fantomOptions = xDaiOptions
 
     const bobaOptions = [
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
@@ -100,6 +102,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useBobaNetworkTradeProvider(),
             options: bobaOptions,
             onChange: (value: any) => Services.Settings.setBobaNetworkTradeProvider(+value),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Fantom' }),
+            value: useFantomNetworkTradeProvider(),
+            options: fantomOptions,
+            onChange: (value: string) => Services.Settings.setFantomNetworkTradeProvider(Number.parseInt(value, 10)),
         },
     ]
 

@@ -27,6 +27,7 @@ import {
     xdaiNetworkTradeProviderSettings,
     bobaNetworkTradeProviderSettings,
     celoNetworkTradeProviderSettings,
+    fantomNetworkTradeProviderSettings,
 } from '../plugins/Trader/settings'
 import type { InternalSettings } from './createSettings'
 
@@ -56,5 +57,6 @@ export function ToBeListened(): ToBeListedSettings {
         xdaiNetworkTradeProviderSettings,
         celoNetworkTradeProviderSettings,
         bobaNetworkTradeProviderSettings,
+        fantomNetworkTradeProviderSettings,
     }
 }

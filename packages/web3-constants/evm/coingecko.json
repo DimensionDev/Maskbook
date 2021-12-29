@@ -14,7 +14,8 @@
         "xDai": "xdai",
         "Celo": "celo",
         "Boba": "boba",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Fantom": "fantom"
     },
     "COIN_ID": {
         "Mainnet": "ethereum",
@@ -31,6 +32,7 @@
         "xDai": "xdai",
         "Celo": "celo",
         "Boba": "boba",
-        "Boba_Rinkeby": ""
+        "Boba_Rinkeby": "",
+        "Fantom": "fantom"
     }
 }

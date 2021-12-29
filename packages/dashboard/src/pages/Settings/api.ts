@@ -33,6 +33,10 @@ export const [useXDaiNetworkTradeProvider] = createGlobalState(
     Services.Settings.getxDaiNetworkTradeProvider,
     Messages.events.xdaiNetworkTradeProviderSettings.on,
 )
+export const [useFantomNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getFantomNetworkTradeProvider,
+    Messages.events.fantomNetworkTradeProviderSettings.on,
+)
 
 export const [useBobaNetworkTradeProvider] = createGlobalState(
     Services.Settings.getBobaNetworkTradeProvider,

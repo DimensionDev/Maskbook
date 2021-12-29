@@ -29,6 +29,8 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
             return [TradeProvider.SUSHISWAP, TradeProvider.OOLONGSWAP]
         case NetworkType.Celo:
             return [TradeProvider.SUSHISWAP]
+        case NetworkType.Fantom:
+            return [TradeProvider.SUSHISWAP]
         default:
             safeUnreachable(networkType)
             return []

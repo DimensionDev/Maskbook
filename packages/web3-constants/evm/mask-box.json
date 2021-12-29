@@ -14,7 +14,8 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
         "Mainnet": 13687866,
@@ -31,7 +32,8 @@
         "xDai": 0,
         "Boba": 0,
         "Boba_Rinkeby": 0,
-        "Celo": 0
+        "Celo": 0,
+        "Fantom": 0
     },
     "MASK_BOX_TEST_NFT": {
         "Mainnet": "0x56136E69A5771436a9598804c5eA792230c21181",
@@ -48,7 +50,8 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -65,7 +68,8 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -82,6 +86,7 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     }
 }

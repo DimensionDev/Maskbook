@@ -13,6 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-assets",
         "Celo": "celo-assets",
+        "Fantom": "fantom-assets",
         "Boba": "boba-assets",
         "Boba_Rinkeby": ""
     },
@@ -30,6 +31,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "xdai-transactions",
         "Celo": "celo-transactions",
+        "Fantom": "fantom-transactions",
         "Boba": "boba-transactions",
         "Boba_Rinkeby": ""
     }

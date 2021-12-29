@@ -96,11 +96,21 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
             total: number
         }>('getAllNftByUserAddress', {
             page_size: size,
-            page_index: page,
+            // page is start from 1 in NFTScan
+            page_index: page + 1,
             use_address: from,
             erc: 'erc721',
         })
-        if (!response) return []
-        return response.data.content.map(createERC721TokenAsset)
+        if (!response)
+            return {
+                data: [],
+                hasNextPage: false,
+            }
+        const data = response.data.content.map(createERC721TokenAsset)
+        const total = response.data.total
+        return {
+            data,
+            hasNextPage: total - (page + 1) * size > 0,
+        }
     }
 }

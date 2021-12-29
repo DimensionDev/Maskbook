@@ -68,6 +68,9 @@ export enum ChainId {
 
     // Celo
     Celo = 42220,
+
+    // Fantom
+    Fantom = 250,
 }
 
 export enum ProviderType {
@@ -97,6 +100,7 @@ export enum NetworkType {
     xDai = 'xDai',
     Boba = 'Boba',
     Celo = 'Celo',
+    Fantom = 'Fantom',
 }
 
 export interface Wallet {
@@ -623,13 +627,13 @@ export interface Transaction {
 
 //#region address name
 export enum AddressNameType {
-    ADDRESS = 1,
-    ENS = 2,
-    UNS = 3,
-    DNS = 4,
-    RSS3 = 5,
-    GUN = 6,
-    THE_GRAPH = 7,
+    ADDRESS = 'ADDRESS',
+    ENS = 'ENS',
+    UNS = 'UNS',
+    DNS = 'DNS',
+    RSS3 = 'RSS3',
+    GUN = 'GUN',
+    THE_GRAPH = 'THE_GRAPH',
 }
 
 export interface AddressName {

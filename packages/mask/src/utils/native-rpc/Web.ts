@@ -119,6 +119,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.getBobaNetworkTradeProvider()
             case NetworkType.Celo:
                 return Services.Settings.getCeloNetworkTradeProvider()
+            case NetworkType.Fantom:
+                return Services.Settings.getxDaiNetworkTradeProvider()
             default:
                 unreachable(network)
         }
@@ -139,6 +141,8 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
                 return Services.Settings.setBobaNetworkTradeProvider(provider)
             case NetworkType.Celo:
                 return Services.Settings.setCeloNetworkTradeProvider(provider)
+            case NetworkType.Fantom:
+                return Services.Settings.setFantomNetworkTradeProvider(provider)
             default:
                 unreachable(network)
         }

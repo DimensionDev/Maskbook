@@ -14,7 +14,8 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": "https://api.ftmscan.com/api"
     },
     "EXPLORER_API_KEY": {
         "Mainnet": "99IX9MBZKG8FYQUECXDNDPATGVDDH6JCWW",
@@ -31,6 +32,7 @@
         "xDai": "",
         "Boba": "",
         "Boba_Rinkeby": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     }
 }
