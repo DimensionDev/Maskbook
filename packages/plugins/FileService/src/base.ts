@@ -1,8 +1,8 @@
-import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID_FileService } from '@masknet/shared-base'
+import { Plugin, PluginId } from '@masknet/plugin-infra'
 import { languages } from './locales/languages'
+
 export const base: Plugin.Shared.Definition = {
-    ID: PluginID_FileService,
+    ID: PluginId.FileService,
     icon: '📃',
     name: { fallback: 'File Service', i18nKey: '__display_name' },
     description: {

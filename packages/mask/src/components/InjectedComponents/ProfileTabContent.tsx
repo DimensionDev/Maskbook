@@ -4,19 +4,11 @@ import { first } from 'lodash-unified'
 import { Box, CircularProgress } from '@mui/material'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useAddressNames } from '@masknet/web3-shared-evm'
-import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin } from '@masknet/plugin-infra'
+import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor, Plugin, PluginId } from '@masknet/plugin-infra'
 import { PageTab } from '../InjectedComponents/PageTab'
 import { useLocationChange } from '../../utils/hooks/useLocationChange'
 import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
-import { PLUGIN_ID as PLUGIN_ID_DEBUGGER } from '@masknet/plugin-debugger'
-import { PLUGIN_ID as PLUGIN_ID_DAO } from '@masknet/plugin-dao'
-import { PLUGIN_ID as PLUGIN_ID_RSS3 } from '@masknet/plugin-rss3'
-import { PLUGIN_ID as PLUGIN_ID_EXAMPLE } from '@masknet/plugin-example'
-import { PLUGIN_ID as PLUGIN_ID_COLLECTIBLE } from '../../plugins/Collectible/constants'
-
-console.log(PLUGIN_ID_RSS3)
-console.log(PLUGIN_ID_EXAMPLE)
 
 function getTabContent(tabId: string) {
     return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => {
@@ -61,16 +53,16 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
         .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {
             // order those tabs from collectible first
-            if (a.pluginID === PLUGIN_ID_COLLECTIBLE) return -1
-            if (z.pluginID === PLUGIN_ID_COLLECTIBLE) return 1
+            if (a.pluginID === PluginId.Collectible) return -1
+            if (z.pluginID === PluginId.Collectible) return 1
 
             // place those tabs from debugger last
-            if (a.pluginID === PLUGIN_ID_DEBUGGER) return 1
-            if (z.pluginID === PLUGIN_ID_DEBUGGER) return -1
+            if (a.pluginID === PluginId.Debugger) return 1
+            if (z.pluginID === PluginId.Debugger) return -1
 
             // place those tabs from dao before the last
-            if (a.pluginID === PLUGIN_ID_DAO) return 1
-            if (z.pluginID === PLUGIN_ID_DAO) return -1
+            if (a.pluginID === PluginId.DAO) return 1
+            if (z.pluginID === PluginId.DAO) return -1
 
             return a.priority - z.priority
         })

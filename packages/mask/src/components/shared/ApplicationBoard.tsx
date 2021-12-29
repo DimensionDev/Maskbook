@@ -7,14 +7,13 @@ import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { PluginID_FileService } from '@masknet/shared-base'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
 import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -192,7 +191,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         createEntry(
             'File Service',
             new URL('./assets/files.png', import.meta.url).toString(),
-            () => openEncryptedMessage(PluginID_FileService),
+            () => openEncryptedMessage(PluginId.FileService),
             undefined,
             false,
             false,

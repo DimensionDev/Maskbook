@@ -161,7 +161,6 @@ importers:
       history: ^5.2.0
       i18next-browser-languagedetector: ^6.1.2
       json-stable-stringify: ^1.0.1
-      lodash-es: ^4.17.21
       path-browserify: ^1.0.1
       react-avatar-editor: ^12.0.0
       react-hook-form: ^7.22.5
@@ -205,7 +204,6 @@ importers:
       history: 5.2.0
       i18next-browser-languagedetector: 6.1.2
       json-stable-stringify: 1.0.1
-      lodash-es: 4.17.21
       react-avatar-editor: 12.0.0_2a5ce53653c2861b1c74a6612fe40887
       react-hook-form: 7.22.5_react@18.0.0-rc.0
       react-router: 6.0.0-beta.4_history@5.2.0+react@18.0.0-rc.0
@@ -318,7 +316,6 @@ importers:
       '@types/elliptic': ^6.4.14
       '@types/json-stable-stringify': ^1.0.33
       '@types/json2csv': ^5.0.3
-      '@types/lodash-es': ^4.17.5
       '@types/node': ^16.11.6
       '@types/react-highlight-words': ^0.16.4
       '@types/react-router-dom': ^5.3.2
@@ -369,7 +366,6 @@ importers:
       json-stable-stringify: ^1.0.1
       json2csv: ^5.0.6
       jsx-jsonml-devtools-renderer: ^1.4.3
-      lodash-es: npm:lodash@^4.17.11
       millify: ^4.0.0
       next-tick: ^1.0.0
       opensea-js: ^1.1.11
@@ -453,7 +449,6 @@ importers:
       '@types/elliptic': 6.4.14
       '@types/json-stable-stringify': 1.0.33
       '@types/json2csv': 5.0.3
-      '@types/lodash-es': 4.17.5
       '@types/node': 16.11.17
       '@types/react-highlight-words': 0.16.4
       '@types/react-router-dom': 5.3.2
@@ -499,7 +494,6 @@ importers:
       json-stable-stringify: 1.0.1
       json2csv: 5.0.6
       jsx-jsonml-devtools-renderer: 1.4.3
-      lodash-es: /lodash/4.17.21
       millify: 4.0.0
       next-tick: 1.1.0
       opensea-js: 1.1.11
@@ -578,7 +572,6 @@ importers:
       '@types/use-subscription': ^1.0.0
       async-call-rpc: ^6.0.1
       bignumber.js: ^9.0.2
-      lodash-es: ^4.17.21
       react-use: ^17.3.1
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
@@ -591,7 +584,6 @@ importers:
       '@types/use-subscription': 1.0.0
       async-call-rpc: 6.0.1
       bignumber.js: 9.0.2
-      lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-rc.0
@@ -824,7 +816,6 @@ importers:
       anchorme: ^2.1.2
       bignumber.js: ^9.0.2
       classnames: ^2.3.1
-      lodash-es: ^4.17.21
       qrcode: ^1.5.0
       react-feather: ^2.0.9
       react-use: ^17.3.1
@@ -839,7 +830,6 @@ importers:
       anchorme: 2.1.2
       bignumber.js: 9.0.2
       classnames: 2.3.1
-      lodash-es: 4.17.21
       qrcode: 1.5.0
       react-feather: 2.0.9_react@18.0.0-rc.0
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
@@ -861,7 +851,6 @@ importers:
       bignumber.js: ^9.0.2
       idb: ^7.0.0
       immer: ^9.0.7
-      lodash-es: ^4.17.21
       pvtsutils: ^1.2.1
       react: ../empty
       tiny-secp256k1: ^2.1.2
@@ -883,7 +872,6 @@ importers:
       bignumber.js: 9.0.2
       idb: 7.0.0
       immer: 9.0.7
-      lodash-es: 4.17.21
       pvtsutils: 1.2.1
       react: link:../empty
       tiny-secp256k1: 2.1.2
@@ -919,7 +907,6 @@ importers:
       babel-loader: ^8.2.3
       classnames: ^2.3.1
       fuse.js: ^6.5.3
-      lodash-es: ^4.17.20
       notistack: 2.0.3
       react-window: ^1.8.6
       tinycolor2: ^1.4.2
@@ -933,7 +920,6 @@ importers:
       '@types/tinycolor2': 1.4.3
       classnames: 2.3.1
       fuse.js: 6.5.3
-      lodash-es: 4.17.21
       notistack: 2.0.3_0c77e0d86225a149d00932b576596ba9
       react-window: 1.8.6_757a802188413a36d4f24237d13b8e90
       tinycolor2: 1.4.2
@@ -7775,9 +7761,11 @@ packages:
     resolution: {integrity: sha512-SHBoI8/0aoMQWAgUHMQ599VM6ZiSKg8sh/0cFqqlQQMyY9uEplc0ULU5yQNzcvdR4ZKa0ey8+vFmahuRbOCT1A==}
     dependencies:
       '@types/lodash': 4.14.177
+    dev: true
 
   /@types/lodash/4.14.177:
     resolution: {integrity: sha512-0fDwydE2clKe9MNfvXHBHF9WEahRuj+msTuQqOmAApNORFvhMYZKNGGJdCzuhheVjMps/ti0Ak/iJPACMaevvw==}
+    dev: true
 
   /@types/lodash/4.14.178:
     resolution: {integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==}

@@ -548,6 +548,40 @@ export enum CurrentSNSNetwork {
     Instagram = 3,
 }
 
+/**
+ * All integrated Plugin IDs
+ */
+export enum PluginId {
+    Avatar = 'com.maskbook.avatar',
+    Collectible = 'com.maskbook.collectibles',
+    CryptoArtAI = 'com.maskbook.cryptoartai',
+    dHEDGE = 'org.dhedge',
+    EVM = 'com.mask.evm',
+    External = 'io.mask.external',
+    Furucombo = 'app.furucombo',
+    Gitcoin = 'co.gitcoin',
+    GoodGhosting = 'co.good_ghosting',
+    MaskBox = 'com.maskbook.box',
+    Poll = 'com.maskbook.poll',
+    Profile = 'com.mask.profile',
+    Trader = 'com.maskbook.trader',
+    Transak = 'com.maskbook.transak',
+    Valuables = 'com.maskbook.tweet',
+    DAO = 'money.juicebox',
+    Debugger = 'io.mask.debugger',
+    Example = 'io.mask.example',
+    Flow = 'com.mask.flow',
+    RSS3 = 'bio.rss3',
+    RedPacket = 'com.maskbook.red_packet',
+    Pets = 'io.mask.mintteam',
+    Snapshot = 'page.snapshot',
+    ITO = 'com.maskbook.ito',
+    Wallet = 'io.mask.wallet',
+    PoolTogether = 'com.pooltogether',
+    UnlockProtocol = 'com.maskbook.unlockprotocol',
+    FileService = 'io.mask.fileservice',
+}
+
 export interface Pagination {
     /** The item size of each page. */
     size?: number
