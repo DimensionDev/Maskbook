@@ -8,7 +8,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         signal.addEventListener('abort', () => console.debug('Example plugin has been terminated'))
     },
     // PostInspector: HelloWorld,
-    // SearchBoxComponent: HelloWorld,
+    // SearchBox: HelloWorld,
     // DecryptedInspector: HelloWorld,
     // GlobalInjection: GlobalComponent,
     CompositionDialogEntry: {

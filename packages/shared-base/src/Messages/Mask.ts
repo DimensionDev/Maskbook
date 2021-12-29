@@ -33,6 +33,7 @@ export interface MaskSettingsEvents {
     binanceNetworkTradeProviderSettings: TradeProvider
     arbitrumNetworkTradeProviderSettings: TradeProvider
     xdaiNetworkTradeProviderSettings: TradeProvider
+    fantomNetworkTradeProviderSettings: TradeProvider
     celoNetworkTradeProviderSettings: TradeProvider
 }
 
@@ -47,7 +48,7 @@ export interface MaskSNSEvents {
     requestComposition: CompositionRequest
     replaceComposition: TypedMessage
     // TODO: move to plugin message
-    profileNFTsPageUpdated: ProfileNFTsPageEvent
+    profileTabUpdated: ProfileNFTsPageEvent
     // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent

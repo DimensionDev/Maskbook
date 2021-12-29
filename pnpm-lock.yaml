@@ -161,7 +161,6 @@ importers:
       history: ^5.2.0
       i18next-browser-languagedetector: ^6.1.2
       json-stable-stringify: ^1.0.1
-      lodash-es: ^4.17.21
       path-browserify: ^1.0.1
       react-avatar-editor: ^12.0.0
       react-hook-form: ^7.22.5
@@ -205,7 +204,6 @@ importers:
       history: 5.2.0
       i18next-browser-languagedetector: 6.1.2
       json-stable-stringify: 1.0.1
-      lodash-es: 4.17.21
       react-avatar-editor: 12.0.0_2a5ce53653c2861b1c74a6612fe40887
       react-hook-form: 7.22.5_react@18.0.0-rc.0
       react-router: 6.0.0-beta.4_history@5.2.0+react@18.0.0-rc.0
@@ -237,9 +235,11 @@ importers:
 
   packages/encryption:
     specifiers:
+      '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': workspace:*
       '@msgpack/msgpack': ^2.7.0
     dependencies:
+      '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@masknet/shared-base': link:../shared-base
       '@msgpack/msgpack': 2.7.1
 
@@ -277,7 +277,6 @@ importers:
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/snapshot.js': 0.2.0
-      '@dimensiondev/stego-js': '=0.11.1-20201027083223-8ab41be'
       '@dimensiondev/webextension-shim': 0.0.3-20210823035705-4257e12
       '@ethersproject/abi': ^5.4.0
       '@ethersproject/address': ^5.0.4
@@ -290,10 +289,13 @@ importers:
       '@masknet/external-plugin-previewer': workspace:*
       '@masknet/icons': workspace:*
       '@masknet/injected-script': workspace:*
+      '@masknet/plugin-dao': workspace:*
+      '@masknet/plugin-debugger': workspace:*
       '@masknet/plugin-example': workspace:*
       '@masknet/plugin-file-service': workspace:*
       '@masknet/plugin-flow': workspace:*
       '@masknet/plugin-infra': workspace:*
+      '@masknet/plugin-rss3': workspace:*
       '@masknet/plugin-wallet': workspace:*
       '@masknet/public-api': workspace:*
       '@masknet/sdk': workspace:*
@@ -315,7 +317,6 @@ importers:
       '@types/elliptic': ^6.4.14
       '@types/json-stable-stringify': ^1.0.33
       '@types/json2csv': ^5.0.3
-      '@types/lodash-es': ^4.17.5
       '@types/node': ^16.11.6
       '@types/react-highlight-words': ^0.16.4
       '@types/react-router-dom': ^5.3.2
@@ -367,7 +368,6 @@ importers:
       json-stable-stringify: ^1.0.1
       json2csv: ^5.0.6
       jsx-jsonml-devtools-renderer: ^1.4.3
-      lodash-es: npm:lodash@^4.17.11
       millify: ^4.0.0
       next-tick: ^1.0.0
       opensea-js: ^1.1.11
@@ -416,7 +416,6 @@ importers:
       '@dimensiondev/mask-wallet-core': 0.1.0-20211013082857-eb62e5f_protobufjs@6.11.2
       '@dimensiondev/metamask-extension-provider': 3.0.6-20210519045409-1835d4d
       '@dimensiondev/snapshot.js': 0.2.0
-      '@dimensiondev/stego-js': 0.11.1-20201027083223-8ab41be
       '@ethersproject/abi': 5.4.0
       '@ethersproject/address': 5.4.0
       '@ethersproject/providers': 5.4.2
@@ -428,10 +427,13 @@ importers:
       '@masknet/external-plugin-previewer': link:../external-plugin-previewer
       '@masknet/icons': link:../icons
       '@masknet/injected-script': link:../injected-script
+      '@masknet/plugin-dao': link:../plugins/DAO
+      '@masknet/plugin-debugger': link:../plugins/Debugger
       '@masknet/plugin-example': link:../plugins/example
       '@masknet/plugin-file-service': link:../plugins/FileService
       '@masknet/plugin-flow': link:../plugins/Flow
       '@masknet/plugin-infra': link:../plugin-infra
+      '@masknet/plugin-rss3': link:../plugins/RSS3
       '@masknet/plugin-wallet': link:../plugins/Wallet
       '@masknet/public-api': link:../public-api
       '@masknet/sdk': link:../mask-sdk
@@ -450,7 +452,6 @@ importers:
       '@types/elliptic': 6.4.14
       '@types/json-stable-stringify': 1.0.33
       '@types/json2csv': 5.0.3
-      '@types/lodash-es': 4.17.5
       '@types/node': 16.11.17
       '@types/react-highlight-words': 0.16.4
       '@types/react-router-dom': 5.3.2
@@ -497,7 +498,6 @@ importers:
       json-stable-stringify: 1.0.1
       json2csv: 5.0.6
       jsx-jsonml-devtools-renderer: 1.4.3
-      lodash-es: /lodash/4.17.21
       millify: 4.0.0
       next-tick: 1.1.0
       opensea-js: 1.1.11
@@ -576,7 +576,6 @@ importers:
       '@types/use-subscription': ^1.0.0
       async-call-rpc: ^6.0.1
       bignumber.js: ^9.0.2
-      lodash-es: ^4.17.21
       react-use: ^17.3.1
       unstated-next: ^1.1.0
       use-subscription: ^1.5.1
@@ -589,10 +588,59 @@ importers:
       '@types/use-subscription': 1.0.0
       async-call-rpc: 6.0.1
       bignumber.js: 9.0.2
-      lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
       use-subscription: 1.5.1_react@18.0.0-rc.0
+
+  packages/plugins/DAO:
+    specifiers:
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      bignumber.js: ^9.0.1
+      date-fns: ^2.27.0
+      iframe-resizer-react: ^1.1.0
+      react-use: ^17.3.1
+      urlcat: ^2.0.4
+    dependencies:
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      bignumber.js: 9.0.1
+      date-fns: 2.27.0
+      iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
+      urlcat: 2.0.4
+
+  packages/plugins/Debugger:
+    specifiers:
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-base': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      bignumber.js: ^9.0.1
+      date-fns: ^2.27.0
+      react-use: ^17.3.1
+      urlcat: ^2.0.4
+    dependencies:
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-base': link:../../web3-shared/base
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      bignumber.js: 9.0.1
+      date-fns: 2.27.0
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
+      urlcat: 2.0.4
 
   packages/plugins/FileService:
     specifiers:
@@ -634,7 +682,6 @@ importers:
       '@masknet/web3-shared-base': workspace:*
       '@masknet/web3-shared-flow': workspace:*
       bignumber.js: ^9.0.2
-      lodash-es: ^4.17.21
       react-use: ^17.3.1
     dependencies:
       '@blocto/fcl': 0.0.78-alpha.8
@@ -647,8 +694,35 @@ importers:
       '@masknet/web3-shared-base': link:../../web3-shared/base
       '@masknet/web3-shared-flow': link:../../web3-shared/flow
       bignumber.js: 9.0.2
-      lodash-es: 4.17.21
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
+
+  packages/plugins/RSS3:
+    specifiers:
+      '@masknet/icons': workspace:*
+      '@masknet/plugin-infra': workspace:*
+      '@masknet/shared': workspace:*
+      '@masknet/shared-base': workspace:*
+      '@masknet/theme': workspace:*
+      '@masknet/web3-providers': workspace:*
+      '@masknet/web3-shared-base': workspace:*
+      '@masknet/web3-shared-evm': workspace:*
+      bignumber.js: ^9.0.1
+      date-fns: ^2.27.0
+      react-use: ^17.3.1
+      urlcat: ^2.0.4
+    dependencies:
+      '@masknet/icons': link:../../icons
+      '@masknet/plugin-infra': link:../../plugin-infra
+      '@masknet/shared': link:../../shared
+      '@masknet/shared-base': link:../../shared-base
+      '@masknet/theme': link:../../theme
+      '@masknet/web3-providers': link:../../web3-providers
+      '@masknet/web3-shared-base': link:../../web3-shared/base
+      '@masknet/web3-shared-evm': link:../../web3-shared/evm
+      bignumber.js: 9.0.1
+      date-fns: 2.27.0
+      react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
+      urlcat: 2.0.4
 
   packages/plugins/Wallet:
     specifiers:
@@ -746,7 +820,6 @@ importers:
       anchorme: ^2.1.2
       bignumber.js: ^9.0.2
       classnames: ^2.3.1
-      lodash-es: ^4.17.21
       qrcode: ^1.5.0
       react-feather: ^2.0.9
       react-use: ^17.3.1
@@ -761,7 +834,6 @@ importers:
       anchorme: 2.1.2
       bignumber.js: 9.0.2
       classnames: 2.3.1
-      lodash-es: 4.17.21
       qrcode: 1.5.0
       react-feather: 2.0.9_react@18.0.0-rc.0
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
@@ -783,7 +855,6 @@ importers:
       bignumber.js: ^9.0.2
       idb: ^7.0.0
       immer: ^9.0.7
-      lodash-es: ^4.17.21
       pvtsutils: ^1.2.1
       react: ../empty
       tiny-secp256k1: ^2.1.2
@@ -805,7 +876,6 @@ importers:
       bignumber.js: 9.0.2
       idb: 7.0.0
       immer: 9.0.7
-      lodash-es: 4.17.21
       pvtsutils: 1.2.1
       react: link:../empty
       tiny-secp256k1: 2.1.2
@@ -841,7 +911,6 @@ importers:
       babel-loader: ^8.2.3
       classnames: ^2.3.1
       fuse.js: ^6.5.3
-      lodash-es: ^4.17.20
       notistack: 2.0.3
       react-window: ^1.8.6
       tinycolor2: ^1.4.2
@@ -855,7 +924,6 @@ importers:
       '@types/tinycolor2': 1.4.3
       classnames: 2.3.1
       fuse.js: 6.5.3
-      lodash-es: 4.17.21
       notistack: 2.0.3_0c77e0d86225a149d00932b576596ba9
       react-window: 1.8.6_757a802188413a36d4f24237d13b8e90
       tinycolor2: 1.4.2
@@ -934,7 +1002,6 @@ importers:
       ethereum-blockies: ^0.1.1
       fortmatic: ^2.2.1
       fuse.js: ^6.5.3
-      lodash-es: ^4.17.21
       punycode: ^2.1.1
       react-use: ^17.3.1
       unstated-next: ^1.1.0
@@ -957,7 +1024,6 @@ importers:
       ethereum-blockies: 0.1.1
       fortmatic: 2.2.1
       fuse.js: 6.5.3
-      lodash-es: 4.17.21
       punycode: 2.1.1
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
       unstated-next: 1.1.0
@@ -7699,9 +7765,11 @@ packages:
     resolution: {integrity: sha512-SHBoI8/0aoMQWAgUHMQ599VM6ZiSKg8sh/0cFqqlQQMyY9uEplc0ULU5yQNzcvdR4ZKa0ey8+vFmahuRbOCT1A==}
     dependencies:
       '@types/lodash': 4.14.177
+    dev: true
 
   /@types/lodash/4.14.177:
     resolution: {integrity: sha512-0fDwydE2clKe9MNfvXHBHF9WEahRuj+msTuQqOmAApNORFvhMYZKNGGJdCzuhheVjMps/ti0Ak/iJPACMaevvw==}
+    dev: true
 
   /@types/lodash/4.14.178:
     resolution: {integrity: sha512-0d5Wd09ItQWH1qFbEyQ7oTQ3GZrMfth5JkbN3EvTKLXcHLRDSXeLnlvlOn0wvxVIwK5o2M8JzP/OWz7T3NRsbw==}
@@ -18703,6 +18771,7 @@ packages:
 
   /object-inspect/1.11.1:
     resolution: {integrity: sha512-If7BjFlpkzzBeV1cqgT3OSWT3azyoxDGajR+iGnFBfVV2EWyDyWaZZW2ERDjUaY2QM8i5jI3Sj7mhsM4DDAqWA==}
+    dev: false
 
   /object-inspect/1.12.0:
     resolution: {integrity: sha512-Ho2z80bVIvJloH+YzRmpZVQe87+qASmBUKZDWgx9cu+KDrX2ZDH/3tMy+gXbZETVGs2M8YdxObOh7XAtim9Y0g==}
@@ -21474,7 +21543,7 @@ packages:
     dependencies:
       call-bind: 1.0.2
       get-intrinsic: 1.1.1
-      object-inspect: 1.11.1
+      object-inspect: 1.12.0
 
   /signal-exit/3.0.3:
     resolution: {integrity: sha512-VUJ49FC8U1OxwZLxIbTTrDvLnf/6TDgxZcK8wxR8zs13xpx7xbG60ndBlhNrFi2EMuFRoeDoJO7wthSLq42EjA==}
