@@ -319,6 +319,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             limit: size,
         })
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(requestPath, chainId)
+        if (!response) {
+            return {
+                data: [],
+                hasNextPage: false,
+            }
+        }
 
         const collections =
             response?.map((x) => ({
