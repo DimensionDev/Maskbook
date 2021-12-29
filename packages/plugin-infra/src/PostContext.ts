@@ -23,12 +23,10 @@ export interface PostContextSNSActions {
 }
 export interface PostContextAuthor {
     readonly nickname: Subscription<string | null>
-    // TODO: change type to URL
-    readonly avatarURL: Subscription<string | null>
-    // TODO: rename to author
-    readonly postBy: Subscription<ProfileIdentifier>
-    // TODO: rename to id
-    readonly postID: Subscription<string | null>
+    readonly avatarURL: Subscription<URL | null>
+    readonly author: Subscription<ProfileIdentifier>
+    /** ID on the SNS network. */
+    readonly snsID: Subscription<string | null>
 }
 export interface PostContextComment {
     readonly commentsSelector: LiveSelector<HTMLElement, false>
@@ -55,36 +53,30 @@ export interface PostContextCreation extends PostContextAuthor {
 export interface PostContext extends PostContextAuthor {
     //#region DOM knowledge
     get rootNode(): HTMLElement | null
-    // TODO: rename to rootElement
-    readonly rootNodeProxy: DOMProxy
-    // TODO: rename to suggestedInjectionPoint
-    readonly postContentNode: HTMLElement
+    readonly rootElement: DOMProxy
+    readonly suggestedInjectionPoint: HTMLElement
     //#endregion
     readonly comment: undefined | PostContextComment
     //#region Metadata of a post (author, mentioned items, ...)
     /** Auto computed */
-    // TODO: rename to identifier
-    readonly postIdentifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
+    readonly identifier: Subscription<null | PostIdentifier<ProfileIdentifier>>
     readonly url: Subscription<URL | null>
     // Meta
-    // TODO: rename to mentionedLinks
-    readonly postMentionedLinks: Subscription<string[]>
+    readonly mentionedLinks: Subscription<string[]>
     /** @deprecated It should appears in rawMessage */
     readonly postMetadataImages: Subscription<string[]>
     /** @deprecated Use postMentionedLinks instead */
     readonly postMetadataMentionedLinks: Subscription<string[]>
     //#endregion
     //#region Raw post content (not decrypted)
-    // TODO: rename to rawMessage
-    readonly postMessage: Subscription<TypedMessageTuple>
-    // TODO: rename to rawMessagePiped, should be a Subscription
-    readonly transformedPostContent: ValueRef<TypedMessageTuple>
+    readonly rawMessage: Subscription<TypedMessageTuple>
+    // TODO: should be a Subscription
+    readonly rawMessagePiped: ValueRef<TypedMessageTuple>
     /** @deprecated Use postMessage or transformedPostContent (depends on your usage) instead */
     readonly postContent: Subscription<string>
     //#endregion
     //#region Post payload discovered in the rawMessage
-    // TODO: rename to payload
-    readonly postPayload: Subscription<Result<Payload, unknown>>
+    readonly containingMaskPayload: Subscription<Result<Payload, unknown>>
     /** @deprecated Use postPayload instead */
     readonly decryptedPayloadForImage: ValueRef<Payload | null>
     // TODO: should be a Subscription
@@ -146,7 +138,7 @@ function isSubscription(x: any): x is Subscription<any> {
 }
 
 export function usePostInfoSharedPublic(): boolean {
-    const info = usePostInfoDetails.postPayload()
+    const info = usePostInfoDetails.containingMaskPayload()
     if (info.err) return false
     const payload = info.val
     if (payload.version !== -38) return false
