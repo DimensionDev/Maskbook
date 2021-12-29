@@ -3,9 +3,9 @@ import { useWallet } from './useWallet'
 import { useNativeTokenDetailed } from './useNativeTokenDetailed'
 import { useAssetsFromChain } from './useAssetsFromChain'
 import { useAssetsFromProvider } from './useAssetsFromProvider'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useAssetsMerged } from './useAssetsMerged'
-import { formatEthereumAddress } from '../utils'
+import { formatEthereumAddress, EMPTY_LIST } from '../utils'
 
 export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | 'all') {
     const wallet = useWallet()
@@ -17,14 +17,14 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
     } = useNativeTokenDetailed(chainId === 'all' ? undefined : chainId)
 
     const {
-        value: assetsDetailedChain = [],
+        value: assetsFromChain = EMPTY_LIST,
         loading: assetsDetailedChainLoading,
         error: assetsDetailedChainError,
         retry: retryAssetsDetailedChain,
     } = useAssetsFromChain(nativeTokenDetailed ? [nativeTokenDetailed, ...tokens] : tokens)
 
     const {
-        value: assetsDetailedProvider = [],
+        value: assetsFromProvider = EMPTY_LIST,
         loading: assetsDetailedProviderLoading,
         error: assetsDetailedProviderError,
         retry: retryAssetsDetailedDebank,
@@ -36,13 +36,19 @@ export function useAssets(tokens: FungibleTokenDetailed[], chainId?: ChainId | '
         retryAssetsDetailedDebank()
     }, [retryNativeTokenDetailed, retryAssetsDetailedChain, retryAssetsDetailedDebank])
 
-    const assetsDetailed = useAssetsMerged(
-        assetsDetailedProvider,
-        assetsDetailedChain.filter((x) => !chainId || chainId === 'all' || x.token.chainId === chainId),
+    const matchedAssetsFromChain = useMemo(
+        () => assetsFromChain.filter((x) => !chainId || chainId === 'all' || x.token.chainId === chainId),
+        [assetsFromChain, chainId],
+    )
+    const assetsDetailed = useAssetsMerged(assetsFromProvider, matchedAssetsFromChain)
+
+    const assets = useMemo(
+        () => assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatEthereumAddress(x.token.address))),
+        [assetsDetailed, wallet?.erc20_token_blacklist],
     )
 
     return {
-        value: assetsDetailed.filter((x) => !wallet?.erc20_token_blacklist.has(formatEthereumAddress(x.token.address))),
+        value: assets,
         error: nativeTokenDetailedError || assetsDetailedChainError || assetsDetailedProviderError,
         loading: nativeTokenDetailedLoading || assetsDetailedChainLoading || assetsDetailedProviderLoading,
         retry: detailedTokensRetry,

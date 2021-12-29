@@ -36,7 +36,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { snsId }) => ({
         marginLeft: 6,
         verticalAlign: 'middle',
     },
-    dialogBackdropRoot: {},
     dialogCloseButton: {
         color: theme.palette.text.primary,
     },

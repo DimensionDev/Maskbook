@@ -15,11 +15,12 @@ import {
     useChainId,
     useChainIdValid,
     useFungibleTokenBalance,
+    useProviderType,
     useTokenConstants,
     useWallet,
 } from '@masknet/web3-shared-evm'
 import { isGreaterThan, isLessThan, multipliedBy } from '@masknet/web3-shared-base'
-import { useRemoteControlledDialog, useValueRef } from '@masknet/shared'
+import { useRemoteControlledDialog } from '@masknet/shared'
 import { delay } from '@masknet/shared-base'
 import type { Coin } from '../../types'
 import { TokenPanelType, TradeInfo } from '../../types'
@@ -36,7 +37,7 @@ import { useTradeCallback } from '../../trader/useTradeCallback'
 import { isNativeTokenWrapper } from '../../helpers'
 import { ConfirmDialog } from './ConfirmDialog'
 import Services from '../../../../extension/service'
-import { currentBalancesSettings, currentProviderSettings } from '../../../Wallet/settings'
+import { currentBalancesSettings } from '../../../Wallet/settings'
 import { TargetChainIdContext } from '../../trader/useTargetChainIdContext'
 import { WalletRPC } from '../../../Wallet/messages'
 import { PluginTraderMessages } from '../../messages'
@@ -44,7 +45,7 @@ import { NetworkType } from '@masknet/public-api'
 import BigNumber from 'bignumber.js'
 import { useNativeTokenPrice, useTokenPrice } from '../../../Wallet/hooks/useTokenPrice'
 import { SettingsDialog } from './SettingsDialog'
-import { useAccount } from '@masknet/plugin-infra'
+import { useAccount } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()(() => {
     return {
@@ -71,7 +72,7 @@ export function Trader(props: TraderProps) {
     const chainIdValid = useChainIdValid()
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const currentAccount = useAccount()
-    const currentProvider = useValueRef(currentProviderSettings)
+    const currentProvider = useProviderType()
     const classes = useStylesExtends(useStyles(), props)
     const { t } = useI18N()
     const { setTargetChainId } = TargetChainIdContext.useContainer()

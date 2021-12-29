@@ -9,13 +9,11 @@ export function PluginI18NFieldRender({ pluginID, field }: PluginI18NFieldRender
     const [t] = useTranslation()
     if (!field) return null
     if (typeof field === 'object' && 'fallback' in field) {
-        return (
-            <>
-                {field.i18nKey
-                    ? t(field.i18nKey, { ns: pluginID, nsSeparator: '%%%', defaultValue: field.fallback })
-                    : field.fallback}
-            </>
-        )
+        if (field.i18nKey) {
+            const translate = t(field.i18nKey, { ns: pluginID, nsSeparator: '%%%', defaultValue: field.fallback })
+            return <>{translate}</>
+        }
+        return <>{field.fallback}</>
     }
     return <>{field}</>
 }

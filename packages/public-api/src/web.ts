@@ -191,6 +191,8 @@ export enum NetworkType {
     Polygon = 'Polygon',
     Arbitrum = 'Arbitrum',
     xDai = 'xDai',
+    Celo = 'Celo',
+    Fantom = 'Fantom',
 }
 
 export enum DataProvider {
