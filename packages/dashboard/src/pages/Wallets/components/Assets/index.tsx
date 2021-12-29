@@ -72,11 +72,9 @@ export const Assets = memo<TokenAssetsProps>(({ network }) => {
                 <TabContext value={currentTab}>
                     <Box className={classes.caption}>
                         <TabList onChange={onChange}>
-                            {assetTabs
-                                .filter((x) => pluginId === NetworkPluginID.PLUGIN_EVM || x === AssetTab.Token)
-                                .map((key) => (
-                                    <Tab key={key} value={key} label={assetTabsLabel[key]} />
-                                ))}
+                            {assetTabs.map((key) => (
+                                <Tab key={key} value={key} label={assetTabsLabel[key]} />
+                            ))}
                         </TabList>
                         {pluginId === NetworkPluginID.PLUGIN_EVM && (
                             <Button

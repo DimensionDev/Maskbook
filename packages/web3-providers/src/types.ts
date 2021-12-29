@@ -6,6 +6,7 @@ import type {
     ERC721TokenDetailed,
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
+import type { Web3Plugin } from '@masknet/plugin-infra'
 
 export namespace PriceAPI {
     export interface CryptoPrice {
@@ -195,7 +196,11 @@ export namespace NonFungibleTokenAPI {
         getContractBalance?: (address: string) => Promise<ContractBalance[]>
         getAsset?: (address: string, tokenId: string, opts?: { chainId?: ChainId }) => Promise<Asset | undefined>
         getToken?: (address: string, tokenId: string, chainId: ChainId) => Promise<ERC721TokenDetailed | undefined>
-        getTokens?: (from: string, opts: Options) => Promise<ProviderPageable<ERC721TokenDetailed>>
+        // TODO: should return Web3Plugin.NonFungibleToken
+        getTokens?: (
+            from: string,
+            opts: Options,
+        ) => Promise<ProviderPageable<ERC721TokenDetailed | Web3Plugin.NonFungibleToken>>
         getHistory?: (address: string, tokenId: string, opts?: Options) => Promise<History[]>
         getListings?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
         getOffers?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
