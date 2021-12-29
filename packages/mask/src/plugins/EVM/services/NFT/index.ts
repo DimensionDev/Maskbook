@@ -74,16 +74,11 @@ export async function getNFTsByPagination(options: NFTsByPaginationOption) {
     const { provider, from, chainId, page, size } = options
     switch (provider) {
         case NonFungibleAssetProvider.OPENSEA:
-            return OpenSea.getTokens(from, {
-                size: options.size,
-                page: options.page,
-                chainId: options.chainId,
-                pageInfo: options.pageInfo,
-            })
+            return OpenSea.getTokens(from, options)
         case NonFungibleAssetProvider.NFTSCAN:
-            return NFTScan.getTokens(from, { size: options.size, page: options.page, chainId: options.chainId })
+            return NFTScan.getTokens(from, options)
         case NonFungibleAssetProvider.RARIBLE:
-            return Rarible.getTokens(from, { size: options.size, page: options.page, chainId: options.chainId })
+            return Rarible.getTokens(from, options)
         default:
             unreachable(provider)
     }
