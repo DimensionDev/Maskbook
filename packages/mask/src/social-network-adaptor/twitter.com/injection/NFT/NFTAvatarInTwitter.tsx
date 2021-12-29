@@ -4,7 +4,7 @@ import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI'
-import { useWallet } from '@masknet/web3-shared-evm'
+import { resolveOpenSeaLink, useWallet } from '@masknet/web3-shared-evm'
 import type { AvatarMetaDB } from '../../../../plugins/Avatar/types'
 import { useNFTAvatar } from '../../../../plugins/Avatar/hooks'
 import { getAvatarId } from '../../utils/user'
@@ -170,6 +170,22 @@ function NFTAvatarInTwitter() {
             setAvatar(undefined)
         }
     }, [location, identity])
+
+    useUpdateEffect(() => {
+        const linkParentDom = searchTwitterAvatarLinkSelector().evaluate()?.closest('div')
+
+        if (!avatar || !linkParentDom) return
+
+        const handler = () => {
+            window.open(resolveOpenSeaLink(avatar.address, avatar.tokenId), '_blank')
+        }
+
+        linkParentDom.addEventListener('click', handler)
+
+        return () => {
+            linkParentDom.removeEventListener('click', handler)
+        }
+    }, [avatar])
 
     if (!avatar || !size) return null
 
