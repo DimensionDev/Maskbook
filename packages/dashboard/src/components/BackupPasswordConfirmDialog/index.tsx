@@ -4,7 +4,7 @@ import { ConfirmPasswordOption, UserContext } from '../../pages/Settings/hooks/U
 import { MaskDialog } from '@masknet/theme'
 import { useDashboardI18N } from '../../locales'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import PasswordField from '../PasswordField'
 
 interface DialogProps {
@@ -46,7 +46,7 @@ export const BackupPasswordConfirmDialog = memo<DialogProps>(({ onConfirmed, onC
                         <Button color="secondary" onClick={onClose}>
                             {t.personas_cancel()}
                         </Button>
-                        <Button onClick={() => navigate(RoutePaths.Settings, { state: { open: 'password' } })}>
+                        <Button onClick={() => navigate(DashboardRoutes.Settings, { state: { open: 'password' } })}>
                             {t.settings()}
                         </Button>
                     </DialogActions>

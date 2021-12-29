@@ -1,4 +1,4 @@
-import type { Component } from './index'
+import type { Component } from './types'
 import { styled } from '@mui/material'
 
 const BlockQuote = styled('blockquote')`

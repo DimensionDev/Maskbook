@@ -11,7 +11,9 @@
         "Mumbai": "",
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
-        "xDai": ""
+        "xDai": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "GOOD_GHOSTING_INCENTIVES_CONTRACT_ADDRESS": {
         "Mainnet": "",
@@ -27,6 +29,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Avalanche": "",
-        "Avalanche_Fuji": ""
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": ""
     }
 }

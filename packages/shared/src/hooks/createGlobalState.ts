@@ -1,12 +1,7 @@
-import type {} from 'react/next'
-import {
-    unstable_createMutableSource as createMutableSource,
-    unstable_useMutableSource as useMutableSource,
-} from 'react'
+import { useSubscription, Subscription } from 'use-subscription'
+import { Some, None, Err, Result, Ok, Option } from 'ts-results'
 /**
  * Create a new global state.
- *
- * This is compatible with concurrent mode.
  *
  * @param f The async function that return the data needed.
  * @param subscribe
@@ -22,54 +17,37 @@ import {
  *
  * The second item is the revalidation function. It can be called anywhere and returns a Promise.
  * It will resolves regardless the f itself fullfilled or rejected.
- *
- * The third item is the data itself in case you're not in a React context.
  */
 export function createGlobalState<T>(f: () => Promise<T>, subscribe: (callback: () => void) => () => void) {
-    const data: { version: number; data: T; error: unknown } = { version: -1, data: null!, error: null }
-    const source = createMutableSource(data, () => data.version)
-    function snap(x: typeof data) {
-        return { ...x }
+    const listeners = new Set<Function>()
+
+    let currentValue: Option<Result<T, any>> = None
+    let pending: Promise<any> | void
+    const sub: Subscription<T> = {
+        getCurrentValue() {
+            if (currentValue.none) {
+                subscribe(revalidate)
+                throw (pending ||= revalidate())
+            }
+            if (currentValue.val.err) throw currentValue.val.val
+            return currentValue.val.val
+        },
+        subscribe(f) {
+            listeners.add(f)
+            return () => listeners.delete(f)
+        },
     }
-    const event = new EventTarget()
-    function revalidate(callback = (): void => void event.dispatchEvent(new Event('update'))) {
+    function useData() {
+        return useSubscription(sub)
+    }
+    function revalidate() {
         return f()
             .then(
-                (val) => {
-                    data.version += 1
-                    data.data = val
-                    data.error = undefined
-                },
-                (error) => {
-                    data.version += 1
-                    data.error = error
-                },
+                (val) => (currentValue = Some(Ok(val))),
+                (err) => (currentValue = Some(Err(err))),
             )
-            .finally(callback)
+            .then<void>(() => undefined)
+            .finally(() => listeners.forEach((f) => f()))
     }
-    function subscriber(x: typeof data, callback: () => void) {
-        const undo = subscribe(() => revalidate(callback))
-        event.addEventListener('update', callback)
-        return () => {
-            event.removeEventListener('update', callback)
-            undo()
-        }
-    }
-
-    function useData(checked: true): Result<T>
-    function useData(checked?: false): T
-    function useData(checked = false): T | Result<T> {
-        const val = useMutableSource(source, snap, subscriber) as typeof data
-        if (val.version === -1) throw revalidate()
-        // there is no any stale data available. considered as not recoverable.
-        if (checked) return { error: val.error, data: val.data }
-        if (val.error && val.version === 0) throw val.error
-        return val.data
-    }
-    return [useData, () => revalidate(), { value: data.data as Readonly<T>, error: data.error } as const] as const
-}
-export interface Result<T> {
-    error: unknown
-    /** In case there is error, the data might be outdated */
-    data?: T
+    return [useData, revalidate] as const
 }

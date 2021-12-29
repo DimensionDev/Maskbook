@@ -8,7 +8,7 @@ const { defineProperty, deleteProperty } = Reflect
 const setTimeoutCaptured = setTimeout.bind(window)
 const clearTimeoutCaptured = clearTimeout.bind(window)
 export function hookInputUploadOnce(...[format, fileName, fileArray]: InternalEvents['hookInputUploadOnce']) {
-    let timer: number | null = null
+    let timer: NodeJS.Timeout | null = null
     const e = new no_xray_Event('change', {
         bubbles: true,
         cancelable: true,

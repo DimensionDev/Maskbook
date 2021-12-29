@@ -3,12 +3,26 @@ import { memo, ReactNode, useCallback, useMemo } from 'react'
 import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon } from '@masknet/icons'
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
-import type { PostRecord } from '@masknet/shared'
-import { PLUGIN_IDS } from '../../../Labs/constants'
+import type { PostRecord } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
+import { makeStyles } from '@masknet/theme'
+import { PluginId } from '@masknet/plugin-infra'
 
 const MSG_DELIMITER = '2c1aca02'
+
+const useStyles = makeStyles()((theme) => {
+    return {
+        hover: {
+            '&:hover': {
+                backgroundColor: theme.palette.background.default,
+            },
+            alignItems: 'center',
+            padding: `${theme.spacing(2)} ${theme.spacing(3)}`,
+            borderRadius: '8px',
+        },
+    }
+})
 
 const parseFileServiceMessage = (body: any) => {
     const link = `https://arweave.net/${body.landingTxID}/#${body.key}`
@@ -39,22 +53,22 @@ const SUPPORT_PLUGIN: Record<
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.red_packet:1': {
-        pluginId: PLUGIN_IDS.RED_PACKET,
+        pluginId: PluginId.RedPacket,
         icon: <RedPacketIcon />,
         messageParse: (body: any) => body.sender.message,
     },
     'com.maskbook.ito:1': {
-        pluginId: PLUGIN_IDS.MARKETS,
+        pluginId: PluginId.ITO,
         icon: <ITOIcon />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.ito:2': {
-        pluginId: PLUGIN_IDS.MARKETS,
+        pluginId: PluginId.ITO,
         icon: <ITOIcon />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.poll:1': {
-        pluginId: PLUGIN_IDS.POLL,
+        pluginId: PluginId.Poll,
         icon: <PollIcon />,
         messageParse: (body: any) => body.question,
     },
@@ -118,7 +132,9 @@ export const PostHistoryRow = memo(({ post, network }: PostHistoryRowProps) => {
         if (recipients === 'everyone') return ['Everyone']
 
         const userIds = Array.from(recipients.keys()).map((x) => (
-            <span key={x.userId} onClick={(e) => recipientClickHandler(e, x.userId)}>{`@${x.userId}`}</span>
+            <span key={x.userId} onClick={(e) => recipientClickHandler(e, x.userId)}>
+                @{x.userId}
+            </span>
         ))
         return userIds.length
             ? userIds
@@ -151,8 +167,9 @@ interface PostHistoryRowUIProps {
 }
 
 const PostHistoryRowUI = memo<PostHistoryRowUIProps>(({ post, message, icon, operation, onClick, recipients }) => {
+    const { classes } = useStyles()
     return (
-        <Stack direction="row" gap={1.5} sx={{ mb: 3 }} alignItems="center">
+        <Stack direction="row" gap={1.5} className={classes.hover}>
             <Stack
                 justifyContent="center"
                 alignItems="center"

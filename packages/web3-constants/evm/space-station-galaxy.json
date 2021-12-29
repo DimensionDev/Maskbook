@@ -13,7 +13,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Avalanche": "",
-        "Avalanche_Fuji": ""
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -29,6 +31,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Avalanche": "",
-        "Avalanche_Fuji": ""
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": ""
     }
 }

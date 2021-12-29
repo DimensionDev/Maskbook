@@ -13,7 +13,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Avalanche": "",
-        "Avalanche_Fuji": ""
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V2_HEALTH_URL": {
         "Mainnet": "https://api.thegraph.com/index-node/graphql",
@@ -29,7 +31,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Avalanche": "",
-        "Avalanche_Fuji": ""
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
@@ -45,6 +49,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Avalanche": "",
-        "Avalanche_Fuji": ""
+        "Avalanche_Fuji": "",
+        "Celo": "",
+        "Fantom": ""
     }
 }
