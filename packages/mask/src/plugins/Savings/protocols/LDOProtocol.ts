@@ -21,13 +21,13 @@ export interface LidoContract {
 }
 
 export const LidoContracts: { [key: number]: LidoContract } = {
-    1: {
+    [ChainId.Mainnet]: {
         type: EthereumTokenType.ERC20,
         chainName: 'Ethereum',
         ldoContract: '0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32',
         stEthContract: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
     },
-    5: {
+    [ChainId.Gorli]: {
         type: EthereumTokenType.ERC20,
         chainName: 'Gorli',
         ldoContract: '0x56340274fB5a72af1A3C6609061c451De7961Bd4',

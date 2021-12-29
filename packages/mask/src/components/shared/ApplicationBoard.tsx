@@ -1,13 +1,12 @@
 import { useCallback, useState } from 'react'
 import classNames from 'classnames'
 import { Typography } from '@mui/material'
-import { makeStyles, getMaskColor } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { ChainId, useChainId, useAccount, useWallet } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared'
 import { MaskMessages } from '../../utils/messages'
 import { useControlledDialog } from '../../utils/hooks/useControlledDialog'
 import { RedPacketPluginID } from '../../plugins/RedPacket/constants'
-import { PluginID_FileService } from '@masknet/shared-base'
 import { ITO_PluginID } from '../../plugins/ITO/constants'
 import { PluginTransakMessages } from '../../plugins/Transak/messages'
 import { ClaimAllDialog } from '../../plugins/ITO/SNSAdaptor/ClaimAllDialog'
@@ -15,7 +14,7 @@ import { EntrySecondLevelDialog } from './EntrySecondLevelDialog'
 import { NetworkTab } from './NetworkTab'
 import { SavingsDialog } from '../../plugins/Savings/SNSAdaptor/SavingsDialog'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
-import { NetworkPluginID, usePluginIDContext } from '@masknet/plugin-infra'
+import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -54,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: getMaskColor(theme).twitterBackground,
+        backgroundColor: theme.palette.background.default,
         borderRadius: '8px',
         cursor: 'pointer',
         height: 100,
@@ -201,7 +200,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
         createEntry(
             'File Service',
             new URL('./assets/files.png', import.meta.url).toString(),
-            () => openEncryptedMessage(PluginID_FileService),
+            () => openEncryptedMessage(PluginId.FileService),
             undefined,
             false,
             false,
@@ -298,7 +297,15 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ]),
                         createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
                     ],
-                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Celo],
+                    [
+                        ChainId.Mainnet,
+                        ChainId.BSC,
+                        ChainId.Matic,
+                        ChainId.Arbitrum,
+                        ChainId.xDai,
+                        ChainId.Celo,
+                        ChainId.Fantom,
+                    ],
                 ),
             undefined,
             true,
@@ -316,7 +323,15 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             () => {},
                         ),
                     ],
-                    [ChainId.Mainnet, ChainId.BSC, ChainId.Matic, ChainId.Arbitrum, ChainId.xDai, ChainId.Celo],
+                    [
+                        ChainId.Mainnet,
+                        ChainId.BSC,
+                        ChainId.Matic,
+                        ChainId.Arbitrum,
+                        ChainId.xDai,
+                        ChainId.Celo,
+                        ChainId.Fantom,
+                    ],
                 ),
             undefined,
             true,

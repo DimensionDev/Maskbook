@@ -65,7 +65,6 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.text.secondary,
         },
         button: {
-            color: '#fff',
             marginTop: theme.spacing(1.5),
             [smallQuery]: {
                 lineHeight: 1.2,

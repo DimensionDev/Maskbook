@@ -12,7 +12,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "MASK_POOL_ADDRESS": {
         "Mainnet": "",
@@ -27,6 +28,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     }
 }

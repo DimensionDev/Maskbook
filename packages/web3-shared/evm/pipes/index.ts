@@ -65,6 +65,7 @@ export const resolveNetworkAddressPrefix = createLookupTableResolver<NetworkType
         [NetworkType.Arbitrum]: 'arbitrum',
         [NetworkType.xDai]: 'xdai',
         [NetworkType.Celo]: 'celo',
+        [NetworkType.Fantom]: 'fantom',
     },
     'ethereum',
 )
@@ -77,6 +78,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.Arbitrum]: 'Arbitrum',
         [NetworkType.xDai]: 'xDai',
         [NetworkType.Celo]: 'Celo',
+        [NetworkType.Fantom]: 'Fantom',
     },
     'Unknown',
 )
@@ -106,6 +108,7 @@ export const resolveChainColor = createLookupTableResolver<ChainId, string>(
         [ChainId.Arbitrum_Rinkeby]: 'rgb(36, 150, 238)',
         [ChainId.xDai]: 'rgb(73, 169, 166)',
         [ChainId.Celo]: 'rgb(53, 208, 127)',
+        [ChainId.Fantom]: 'rgb(19, 181, 236)',
     },
     'rgb(214, 217, 220)',
 )
