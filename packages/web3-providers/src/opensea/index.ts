@@ -46,7 +46,7 @@ function createERC721ContractFromAssetContract(
 ): ERC721ContractDetailed {
     return createERC721ContractDetailed(
         chainId,
-        address,
+        assetContract?.address ?? '',
         assetContract?.name,
         assetContract?.token_symbol,
         undefined,
