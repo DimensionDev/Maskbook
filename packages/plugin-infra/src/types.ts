@@ -573,13 +573,13 @@ export enum PluginId {
     Flow = 'com.mask.flow',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
-    Pets = 'io.mask.mintteam',
-    Snapshot = 'page.snapshot',
+    Pets = 'com.maskbook.pets',
+    Snapshot = 'org.snapshot',
     ITO = 'com.maskbook.ito',
-    Wallet = 'io.mask.wallet',
+    Wallet = 'com.maskbook.wallet',
     PoolTogether = 'com.pooltogether',
     UnlockProtocol = 'com.maskbook.unlockprotocol',
-    FileService = 'io.mask.fileservice',
+    FileService = 'com.maskbook.fileservice',
 }
 
 export interface Pagination {

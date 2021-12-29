@@ -26,14 +26,14 @@ export function injectPostReplacer<T extends string>(
     const unzipPostF = unzipPost || noop
     return function injectPostReplacer(current: PostInfo, signal: AbortSignal) {
         signal.addEventListener('abort', unzipPostF)
-        createReactRootShadowed(current.rootNodeProxy.afterShadow, {
+        createReactRootShadowed(current.rootElement.afterShadow, {
             key: 'post-replacer',
             signal,
         }).render(
             <PostInfoProvider post={current}>
                 <PostReplacerDefault
-                    zipPost={() => zipPostF(current.rootNodeProxy)}
-                    unZipPost={() => unzipPostF(current.rootNodeProxy)}
+                    zipPost={() => zipPostF(current.rootElement)}
+                    unZipPost={() => unzipPostF(current.rootElement)}
                     {...current}
                 />
             </PostInfoProvider>,
