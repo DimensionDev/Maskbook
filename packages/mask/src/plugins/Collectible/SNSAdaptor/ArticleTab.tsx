@@ -34,18 +34,16 @@ export function ArticleTab(props: ArticleTabProps) {
         return (
             <CollectibleTab>
                 <div className={classes.body}>
-                    {resourceUrl ? (
-                        <AssetPlayer
-                            url={resourceUrl}
-                            options={{
-                                playsInline: true,
-                            }}
-                            classes={{
-                                errorPlaceholder: classes.errorPlaceholder,
-                                loadingPlaceholder: classes.loadingPlaceholder,
-                            }}
-                        />
-                    ) : null}
+                    <AssetPlayer
+                        url={resourceUrl}
+                        options={{
+                            playsInline: true,
+                        }}
+                        classes={{
+                            errorPlaceholder: classes.errorPlaceholder,
+                            loadingPlaceholder: classes.loadingPlaceholder,
+                        }}
+                    />
                 </div>
             </CollectibleTab>
         )

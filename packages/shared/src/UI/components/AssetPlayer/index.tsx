@@ -8,7 +8,7 @@ import { AssetLoadingIcon, MaskGreyIcon } from '@masknet/icons'
 
 interface AssetPlayerProps
     extends withClasses<'errorPlaceholder' | 'errorIcon' | 'loadingPlaceholder' | 'loadingIcon'> {
-    url: string
+    url?: string
     type?: string
     options?: {
         autoPlay?: boolean
@@ -56,7 +56,7 @@ const TIMEOUT = 10000
 export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconProps, ...props }) => {
     const ref = useRef<IFrameComponent | null>(null)
     const classes = useStylesExtends(useStyles(), props)
-    const [playerState, setPlayerState] = useState(AssetPlayerState.LOADING)
+    const [playerState, setPlayerState] = useState(url ? AssetPlayerState.LOADING : AssetPlayerState.ERROR)
 
     //#region If onResized is not triggered within the specified time, set player state to error
     const [, cancel, reset] = useTimeoutFn(() => {
@@ -70,19 +70,24 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
     const setIframe = useCallback(() => {
         // if iframe isn't be init or the load error has been existed
         if (!ref.current || playerState === AssetPlayerState.ERROR) return
-        else if (playerState === AssetPlayerState.INIT || playerState === AssetPlayerState.NORMAL) {
+        if (!url) {
+            setPlayerState(AssetPlayerState.ERROR)
+            return
+        }
+        if (playerState === AssetPlayerState.INIT || playerState === AssetPlayerState.NORMAL) {
             reset()
             ref.current.iFrameResizer.sendMessage({
                 url,
                 type,
                 ...options,
             })
+            return
         }
     }, [url, type, options, playerState])
     //endregion
 
     //#region resource loaded error
-    const onMessage = useCallback(({ message }: { message: any }) => {
+    const onMessage = useCallback(({ message }: { message: { name: string } }) => {
         if (message?.name === 'Error') {
             setPlayerState(AssetPlayerState.ERROR)
         }
