@@ -77,7 +77,7 @@ export async function getAssetsListNFT(
             assets: [],
             hasNextPage: false,
         }
-    const pageInfo = continuation ? { continuation } : undefined
+    const pageInfo = { collection, continuation }
     const { data, hasNextPage } = await EVM_RPC.getNFTsByPagination({
         from: address,
         chainId,

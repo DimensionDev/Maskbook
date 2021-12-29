@@ -254,10 +254,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
 
     async getTokens(from: string, opts: NonFungibleTokenAPI.Options) {
         const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
+
         const requestPath = urlcat('/api/v1/assets', {
             owner: from,
             offset: page,
             limit: size,
+            collection: opts.pageInfo?.collection,
         })
         const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId)
         const assets =
