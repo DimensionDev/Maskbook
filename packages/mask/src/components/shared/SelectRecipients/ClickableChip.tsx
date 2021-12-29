@@ -15,11 +15,11 @@ const useStyles = makeStyles<StyleProps>()((theme, { checked }) => ({
         marginRight: 6,
         marginBottom: 6,
         cursor: 'pointer',
-        ...(checked ? { color: '#fff' } : {}),
+        ...(checked ? { color: theme.palette.text.buttonText, backgroundColor: theme.palette.text.primary } : {}),
     },
     icon: {
         backgroundColor: 'transparent !important',
-        ...(checked ? { color: '#fff !important' } : {}),
+        ...(checked ? { color: `${theme.palette.text.buttonText} !important` } : {}),
     },
     label: {
         display: 'flex',

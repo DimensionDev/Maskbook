@@ -1,5 +1,5 @@
 import { createPluginMessage, PluginMessageEmitter, createPluginRPC } from '@masknet/plugin-infra'
-import { GITCOIN_PLUGIN_ID } from './constants'
+import { PLUGIN_ID } from './constants'
 
 type DonationDialogUpdated =
     | {
@@ -21,9 +21,5 @@ interface GitcoinMessages {
     rpc: unknown
 }
 
-export const PluginGitcoinMessages: PluginMessageEmitter<GitcoinMessages> = createPluginMessage(GITCOIN_PLUGIN_ID)
-export const PluginGitcoinRPC = createPluginRPC(
-    GITCOIN_PLUGIN_ID,
-    () => import('./services'),
-    PluginGitcoinMessages.rpc,
-)
+export const PluginGitcoinMessages: PluginMessageEmitter<GitcoinMessages> = createPluginMessage(PLUGIN_ID)
+export const PluginGitcoinRPC = createPluginRPC(PLUGIN_ID, () => import('./services'), PluginGitcoinMessages.rpc)

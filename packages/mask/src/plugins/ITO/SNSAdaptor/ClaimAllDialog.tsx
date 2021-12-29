@@ -112,8 +112,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         border: `1px solid ${theme.palette.mode === 'light' ? '#EBEEF0' : '#2F3336'}`,
     },
     cardContentClaimable: {
-        background: theme.palette.mode === 'light' ? 'rgba(119, 224, 181, 0.15)' : 'rgba(56, 221, 192, 0.2)',
-        border: '1px solid rgba(56, 221, 192, 0.2)',
+        background: 'rgba(119, 224, 181, 0.1)',
+        border: '1px solid rgba(56, 221, 192, 0.4)',
     },
     content: {
         marginBottom: theme.spacing(2),

@@ -49,7 +49,7 @@ export interface MaskSNSEvents {
     requestComposition: CompositionRequest
     replaceComposition: TypedMessage
     // TODO: move to plugin message
-    profileNFTsPageUpdated: ProfileNFTsPageEvent
+    profileTabUpdated: ProfileNFTsPageEvent
     // TODO: move to plugin message
     profileNFTsTabUpdated: 'reset'
     NFTAvatarUpdated: NFTAvatarEvent
