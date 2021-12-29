@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { CircularProgress } from '@mui/material'
 import { useUpdateEffect } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { unreachable } from '@dimensiondev/kit'
@@ -58,6 +59,9 @@ const useStyles = makeStyles()((theme) => ({
     content: {
         position: 'relative',
         padding: theme.spacing(1),
+    },
+    loading: {
+        marginTop: 190,
     },
 }))
 
@@ -143,7 +147,7 @@ export function EnhancedProfilePage(props: EnhancedProfilePageProps) {
                     alignItems="center"
                     justifyContent="center"
                     sx={{ paddingTop: 4, paddingBottom: 4 }}>
-                    <Typography color="textPrimary">{t('plugin_profile_loading')}</Typography>
+                    <CircularProgress size={24} className={classes.loading} />
                 </Box>
             </div>
         )
