@@ -199,13 +199,7 @@ export namespace Plugin.SNSAdaptor {
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
-        /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
-        ToolbarEntry?: ToolbarEntry
-        /** This UI will be rendered as an entry in the wallet status dialog */
-        ApplicationEntry?: ApplicationEntry
-        /** This UI will be rendered as sliders on the profile page */
-        ProfileSliders?: ProfileSlider[]
-        /** This UI will be rendered as tabs on the profile page */
+        /** This UI will be rendered inside the tabs of the profile page */
         ProfileTabs?: ProfileTab[]
     }
     //#region Composition entry
@@ -259,54 +253,6 @@ export namespace Plugin.SNSAdaptor {
         tooltip?: React.ReactChild
     }
     //#endregion
-
-    //#region Toolbar entry
-    export interface ToolbarEntry {
-        image: string
-        // TODO: remove string
-        label: I18NStringField | string
-        /**
-         * Used to order the toolbars
-         *
-         * TODO: can we make them unordered?
-         */
-        priority: number
-        /**
-         * This is a React hook. If it returns false, this entry will not be displayed.
-         */
-        useShouldDisplay?(): boolean
-        /**
-         * What to do if the entry is clicked.
-         */
-        // TODO: add support for DialogEntry.
-        // TODO: add support for onClick event.
-        onClick: 'openCompositionEntry'
-    }
-    //#endregion
-
-    export interface ApplicationEntry {
-        /**
-         * The icon image URL
-         */
-        icon: URL
-        /**
-         * The name of the application
-         */
-        label: I18NStringField | string
-        /**
-         * Also an entrance in a sub-folder
-         */
-        categoryID?: string
-        /**
-         * Used to order the applications on the board
-         */
-        priority: number
-        /**
-         * What to do if the application icon is clicked.
-         */
-        onClick(): void
-    }
-
     export interface ProfileIdentity {
         avatar?: string
         bio?: string
@@ -319,23 +265,6 @@ export namespace Plugin.SNSAdaptor {
         type: string
         label: string
         resolvedAddress: string
-    }
-
-    export interface ProfileSlider {
-        ID: string
-
-        /**
-         * The name of the slider card
-         */
-        label: I18NStringField | string
-        /**
-         * Used to order the sliders
-         */
-        priority: number
-        /**
-         * The injected UI
-         */
-        children: InjectUI<{}>
     }
 
     export interface ProfileTab {
