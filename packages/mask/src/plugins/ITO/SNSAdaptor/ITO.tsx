@@ -353,14 +353,23 @@ export function ITO(props: ITO_Props) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
+
+            if (
+                claimState.type !== TransactionStateType.CONFIRMED ||
+                (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
+            )
+                return
             resetClaimCallback()
-            if (claimState.type !== TransactionStateType.CONFIRMED) return
             retryITOCard()
         },
     )
 
     useEffect(() => {
-        if (claimState.type === TransactionStateType.UNKNOWN) return
+        if (
+            claimState.type === TransactionStateType.UNKNOWN ||
+            (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
+        )
+            return
         setClaimTransactionDialog({
             open: true,
             state: claimState,
@@ -669,16 +678,15 @@ export function ITO(props: ITO_Props) {
                                                 ? t('plugin_ito_claiming')
                                                 : t('plugin_ito_claim')}
                                         </ActionButton>
-                                    ) : (
+                                    ) : canWithdraw ? (
                                         <ActionButton
-                                            onClick={() => undefined}
-                                            disabled
+                                            onClick={onWithdraw}
                                             variant="contained"
                                             size="large"
                                             className={classes.actionButton}>
-                                            {t('plugin_ito_claimed')}
+                                            {t('plugin_ito_withdraw')}
                                         </ActionButton>
-                                    )
+                                    ) : null
                                 ) : (
                                     <ActionButton
                                         onClick={() => undefined}

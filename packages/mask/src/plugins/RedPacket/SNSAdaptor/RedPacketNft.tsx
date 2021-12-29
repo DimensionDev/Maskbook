@@ -400,7 +400,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         className={classes.whiteText}>
-                        Mask.io
+                        <Typography variant="body1">Mask.io</Typography>
                     </Link>
                     <Typography variant="body1">From: @{payload.senderName}</Typography>
                 </div>
