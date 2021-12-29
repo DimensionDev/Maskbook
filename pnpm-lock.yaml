@@ -966,6 +966,7 @@ importers:
       date-fns: ^2.27.0
       json-stable-stringify: ^1.0.1
       lodash-unified: 1.0.1
+      rss3-next: ^0.6.17
       urlcat: ^2.0.4
     dependencies:
       '@masknet/plugin-infra': link:../plugin-infra
@@ -975,6 +976,7 @@ importers:
       date-fns: 2.27.0
       json-stable-stringify: 1.0.1
       lodash-unified: 1.0.1_bd4845f8c1bf1d81a616b60758034d0a
+      rss3-next: 0.6.17_typescript@4.6.0-dev.20211202
       urlcat: 2.0.4
 
   packages/web3-shared/base:
@@ -3921,7 +3923,7 @@ packages:
     dependencies:
       '@ethersproject/abi': 5.4.0
       '@ethersproject/abstract-provider': 5.4.0
-      '@ethersproject/abstract-signer': 5.4.0
+      '@ethersproject/abstract-signer': 5.4.1
       '@ethersproject/address': 5.4.0
       '@ethersproject/bignumber': 5.4.1
       '@ethersproject/bytes': 5.4.0
@@ -9484,7 +9486,7 @@ packages:
   /axios/0.21.1:
     resolution: {integrity: sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==}
     dependencies:
-      follow-redirects: 1.14.5
+      follow-redirects: 1.14.6
     transitivePeerDependencies:
       - debug
     dev: false
@@ -14369,6 +14371,7 @@ packages:
     peerDependenciesMeta:
       debug:
         optional: true
+    dev: true
 
   /follow-redirects/1.14.6:
     resolution: {integrity: sha512-fhUl5EwSJbbl8AR+uYL2KQDxLkdSjZGR36xy46AO7cOMTrCMON6Sa28FmAnC2tRTDbd/Uuzz3aJBv7EBN7JH8A==}
