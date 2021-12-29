@@ -633,7 +633,9 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_region_ban')}
                     </ActionButton>
-                ) : (noRemain || listOfStatus.includes(ITO_Status.expired)) && !canWithdraw ? null : loadingTradeInfo ||
+                ) : (noRemain || listOfStatus.includes(ITO_Status.expired)) &&
+                  !canWithdraw &&
+                  ((availability?.claimed && hasLockTime) || !hasLockTime) ? null : loadingTradeInfo ||
                   loadingAvailability ? (
                     <ActionButton
                         disabled
@@ -650,14 +652,6 @@ export function ITO(props: ITO_Props) {
                         size="large"
                         className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
-                    </ActionButton>
-                ) : canWithdraw ? (
-                    <ActionButton
-                        onClick={onWithdraw}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_withdraw')}
                     </ActionButton>
                 ) : isBuyer ? (
                     <Grid container spacing={2}>
@@ -707,6 +701,14 @@ export function ITO(props: ITO_Props) {
                             </ActionButton>
                         </Grid>
                     </Grid>
+                ) : canWithdraw ? (
+                    <ActionButton
+                        onClick={onWithdraw}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_withdraw')}
+                    </ActionButton>
                 ) : !ifQualified || !(ifQualified as Qual_V2).qualified ? (
                     <ActionButton
                         onClick={retryIfQualified}
@@ -758,20 +760,20 @@ export function ITO(props: ITO_Props) {
                     <Grid container spacing={2}>
                         <Grid item xs={6}>
                             <ActionButton
-                                onClick={onShareSuccess}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_share')}
-                            </ActionButton>
-                        </Grid>
-                        <Grid item xs={6}>
-                            <ActionButton
                                 onClick={onClaim}
                                 variant="contained"
                                 size="large"
                                 className={classes.actionButton}>
                                 <Typography>{t('plugin_ito_enter')}</Typography>
+                            </ActionButton>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onShareSuccess}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                <Typography>{t('plugin_ito_share')}</Typography>
                             </ActionButton>
                         </Grid>
                     </Grid>
