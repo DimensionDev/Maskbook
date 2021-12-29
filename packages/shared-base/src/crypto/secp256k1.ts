@@ -15,7 +15,7 @@ const isContentScript = (() => {
     } catch {}
     return false
 })()
-if (isContentScript) {
+if (!isContentScript) {
     import('tiny-secp256k1').then((mod) => (secp256k1 = mod))
 }
 
