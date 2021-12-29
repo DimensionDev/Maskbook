@@ -175,6 +175,10 @@ const useStyles = makeStyles()((theme) => {
             color: '#FF5F5F',
             margin: '0px 4px 24px 4px',
         },
+        disabledSelector: {
+            opacity: 0.5,
+            pointerEvents: 'none',
+        },
     }
 })
 interface RedPacketERC721FormProps {
@@ -186,7 +190,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
-    const [selectOption, setSelectOption] = useState(NFTSelectOption.Partial)
+    const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const account = useAccount()
     const chainId = useChainId()
@@ -220,6 +224,10 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     }, [])
 
     useEffect(() => {
+        if (tokenDetailedOwnerList.length > 0 && !selectOption) setSelectOption(NFTSelectOption.Partial)
+    }, [tokenDetailedOwnerList, selectOption])
+
+    useEffect(() => {
         clearToken()
         setOpen(false)
     }, [contract, account])
@@ -245,8 +253,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     onContractChange={setContract}
                     onBalanceChange={setBalance}
                 />
-                {tokenDetailedOwnerList.length > 0 ? (
-                    <Box className={classes.selectWrapper}>
+                {contract && balance ? (
+                    <Box
+                        className={classNames(
+                            classes.selectWrapper,
+                            tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
+                        )}>
                         <div
                             className={classes.option}
                             onClick={() => {
