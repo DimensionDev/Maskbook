@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { base } from '../base'
-import AnimatePic from './animate'
+import AnimatePic from './Animate'
 import { PetDialog } from './PetDialog'
 
 const sns: Plugin.SNSAdaptor.Definition = {

@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { Typography, Box } from '@mui/material'
 import { getAssetAsBlobURL } from '../../../utils'
-import Drag from './drag'
+import Drag from './Drag'
 import { useUser, useNfts, useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
+import { useStyles as boxUseStyles } from './PreviewBox'
+import classNames from 'classnames'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -40,50 +42,8 @@ const useStyles = makeStyles()(() => ({
         maxWidth: 150,
         maxHeight: 85,
         bottom: 150,
-        backgroundColor: '#fff',
-        borderRadius: 12,
-        boxShadow: '0 0 8px #ddd',
-        opacity: 1,
-        pointerEvents: 'none',
-        transition: 'all 200ms',
-        padding: 12,
+        width: 'auto',
         textAlign: 'left',
-        animation: 'word-show 0.9s both',
-        '&:before': {
-            content: '""',
-            width: 8,
-            height: 8,
-            backgroundColor: '#fff',
-            position: 'absolute',
-            bottom: -4,
-            left: '50%',
-            boxShadow: '3px 3px 6px #ccc',
-            transform: 'translateX(-50%) rotate(45deg)',
-        },
-        '@keyframes word-show': {
-            '0%': {
-                opacity: '0',
-                transform: 'scale3d(1, 1, 1)',
-            },
-            '30%': {
-                transform: 'scale3d(1.25, 0.75, 1)',
-            },
-            '40%': {
-                transform: 'scale3d(0.75, 1.25, 1)',
-            },
-            '50%': {
-                transform: 'scale3d(1.15, 0.85, 1)',
-            },
-            '65%': {
-                transform: 'scale3d(0.95, 1.05, 1)',
-            },
-            '75%': {
-                transform: 'scale3d(1.05, 0.95, 1)',
-            },
-            '100%': {
-                transform: 'scale3d(1, 1, 1)',
-            },
-        },
     },
     word: {
         fontSize: '12px',
@@ -96,6 +56,7 @@ const useStyles = makeStyles()(() => ({
 
 const AnimatePic = () => {
     const classes = useStylesExtends(useStyles(), {})
+    const boxClasses = useStylesExtends(boxUseStyles(), {})
     const Close = getAssetAsBlobURL(new URL('../assets/close.png', import.meta.url))
 
     const [start, setStart] = useState(true)
@@ -125,7 +86,7 @@ const AnimatePic = () => {
             const check = count % 9 < 5
             setStart(check)
             count += 1
-        }, 1000 * 1)
+        }, 1000)
         return () => {
             clearInterval(timer)
         }
@@ -137,7 +98,7 @@ const AnimatePic = () => {
             <Drag>
                 {start && showMeta?.word ? (
                     <Box className={classes.wordContent}>
-                        <Box className={classes.wordBox}>
+                        <Box className={classNames(boxClasses.msgBox, classes.wordBox)}>
                             <Typography className={classes.word}>{showMeta?.word}</Typography>
                         </Box>
                     </Box>

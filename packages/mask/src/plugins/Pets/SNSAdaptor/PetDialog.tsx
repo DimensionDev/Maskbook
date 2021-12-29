@@ -18,11 +18,12 @@ import {
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { initMeta, initCollection } from '../constants'
-import { PreviewBox } from './previewBox'
+import { PreviewBox } from './PreviewBox'
 import type { PetMetaDB, FilterContract } from '../types'
 import { useUser, useNfts } from '../hooks'
 import { useI18N } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
+import { ImgLoader } from './ImgLoader'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -68,6 +69,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     itemTxt: {
         flex: 1,
+        marginLeft: theme.spacing(0.5),
     },
     prevBox: {
         margin: theme.spacing(2, 0, 0),
@@ -91,6 +93,7 @@ export function PetDialog() {
     const user = useUser()
     const nfts = useNfts(user)
     const [extraData, setExtraData] = useState<ERC721ContractDetailed[]>([])
+
     const { open, closeDialog } = useRemoteControlledDialog(PluginPetMessages.essayDialogUpdated, () => {})
 
     const [collection, setCollection] = useState<FilterContract>(initCollection)
@@ -169,7 +172,7 @@ export function PetDialog() {
 
     const renderImg = (address: string) => {
         const imgItem = extraData.filter((i) => isSameAddress(i.address, address))
-        return <img className={classes.thumbnail} src={imgItem[0]?.iconURL ?? ''} />
+        return imgItem ? <ImgLoader className={classes.thumbnail} src={imgItem[0]?.iconURL ?? ''} /> : null
     }
 
     const paperComponent = (children: ReactNode | undefined) => <Box className={classes.boxPaper}>{children}</Box>

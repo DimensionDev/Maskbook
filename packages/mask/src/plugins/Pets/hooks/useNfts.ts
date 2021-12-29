@@ -1,19 +1,25 @@
 import { useEffect, useState } from 'react'
 import { useValueRef } from '@masknet/shared'
-import { useChainId, useCollectibles, ERC721TokenDetailed, isSameAddress } from '@masknet/web3-shared-evm'
+import {
+    useChainId,
+    useCollectibles,
+    useNFTListConstants,
+    ERC721TokenDetailed,
+    isSameAddress,
+} from '@masknet/web3-shared-evm'
 import type { User, FilterContract } from '../types'
-import { PetCollections } from '../constants'
 import { currentNonFungibleAssetDataProviderSettings } from '../../Wallet/settings'
 
-function initContracts() {
-    return PetCollections.map((i) => ({ ...i, tokens: [] }))
-}
-
 export function useNfts(user: User) {
-    const [nfts, setNfts] = useState<FilterContract[]>(initContracts())
+    const nftList = useNFTListConstants()
+    const initContracts = Object.keys(nftList).map((i) => {
+        const value = nftList[i as keyof typeof nftList]
+        return { name: i, contract: value || '', tokens: [] }
+    })
+    const [nfts, setNfts] = useState<FilterContract[]>(initContracts)
     const [page, setPage] = useState(0)
     const chainId = useChainId()
-    const [fetchTotal, setFetchtotal] = useState<ERC721TokenDetailed[]>([])
+    const [fetchTotal, setFetchTotal] = useState<ERC721TokenDetailed[]>([])
     const provider = useValueRef(currentNonFungibleAssetDataProviderSettings)
     const { value = { collectibles: [], hasNextPage: false } } = useCollectibles(
         user.address,
@@ -24,10 +30,10 @@ export function useNfts(user: User) {
     )
     const { collectibles = [], hasNextPage } = value
     useEffect(() => {
-        const tempNfts: FilterContract[] = initContracts()
+        const tempNfts: FilterContract[] = initContracts
         if (collectibles.length) {
             const total = [...fetchTotal, ...collectibles]
-            setFetchtotal(total)
+            setFetchTotal(total)
             total.forEach((x) => {
                 tempNfts.forEach((y, idx) => {
                     if (isSameAddress(y.contract, x.contractDetailed.address)) {
@@ -47,5 +53,6 @@ export function useNfts(user: User) {
         }
         return () => {}
     }, [user, collectibles])
+
     return nfts
 }

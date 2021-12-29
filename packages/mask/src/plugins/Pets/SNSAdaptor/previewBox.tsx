@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import classNames from 'classnames'
 import { useI18N } from '../../../utils'
 
-const useStyles = makeStyles()((theme) => ({
+export const useStyles = makeStyles()((theme) => ({
     box: {
         position: 'relative',
         display: 'flex',
