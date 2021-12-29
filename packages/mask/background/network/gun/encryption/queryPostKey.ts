@@ -1,9 +1,9 @@
 import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import type { DecryptStaticECDH_PostKey } from '@masknet/encryption'
-import type { EC_Public_CryptoKey, EC_Public_JsonWebKey, ProfileIdentifier } from '@masknet/shared-base'
+import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import type { default as gun } from 'gun'
 import { CryptoKeyToJsonWebKey } from '../../../../utils-pure'
-import { getGunData, subscribeGunMapData } from '../utils'
+import { getGunData, pushToGunDataArray, subscribeGunMapData } from '../utils'
 import { EventIterator } from 'event-iterator'
 import { noop } from 'lodash-unified'
 type Gun = ReturnType<typeof gun>
@@ -12,10 +12,10 @@ type Gun = ReturnType<typeof gun>
 export async function GUN_queryPostKey_version40(
     gun: Gun,
     iv: Uint8Array,
-    whoAmI: ProfileIdentifier,
+    whoAmI: string,
 ): Promise<null | DecryptStaticECDH_PostKey> {
     // PATH ON GUN: maskbook > posts > iv > userID
-    const result = await getGunData(gun, 'maskbook', 'posts', encodeArrayBuffer(iv), whoAmI.userId)
+    const result = await getGunData(gun, 'maskbook', 'posts', encodeArrayBuffer(iv), whoAmI)
     if (!isValidData(result)) return null
     return {
         encryptedPostKey: new Uint8Array(decodeArrayBuffer(result.encryptedKey)),
@@ -70,6 +70,33 @@ namespace Version38Or39 {
             }
         })
         yield* iter
+    }
+
+    export type PublishedAESKeyRecord = {
+        aesKey: { encryptedKey: string; salt: string }
+        receiverKey: EC_Public_JsonWebKey
+    }
+
+    /**
+     * Publish post keys on the gun
+     * @param version current payload
+     * @param postIV Post iv
+     * @param receiversKeys Keys needs to publish
+     */
+    export async function publishPostAESKey_version39Or38(
+        gun: Gun,
+        version: -39 | -38,
+        postIV: Uint8Array,
+        networkHint: string,
+        receiversKeys: PublishedAESKeyRecord[],
+    ) {
+        const postHash = await hashIV(networkHint, postIV)
+        // Store AES key to gun
+        receiversKeys.forEach(async ({ aesKey, receiverKey }) => {
+            const keyHash = await (version === -38 ? hashKey38 : hashKey39)(receiverKey)
+            console.log(`gun[${postHash}][${keyHash}].push(`, aesKey, `)`)
+            pushToGunDataArray(gun, [postHash, keyHash], aesKey)
+        })
     }
 
     type DataOnGun = {
@@ -158,4 +185,5 @@ namespace Version38Or39 {
     }
 }
 
-export const { GUN_queryPostKey_version39Or38 } = Version38Or39
+export const { GUN_queryPostKey_version39Or38, publishPostAESKey_version39Or38 } = Version38Or39
+export type PublishedAESKeyRecord_version39Or38 = Version38Or39.PublishedAESKeyRecord

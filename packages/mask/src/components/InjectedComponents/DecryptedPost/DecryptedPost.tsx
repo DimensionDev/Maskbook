@@ -19,7 +19,6 @@ import type {
 import { DecryptPostSuccess, DecryptPostSuccessProps } from './DecryptedPostSuccess'
 import { DecryptPostAwaiting, DecryptPostAwaitingProps } from './DecryptPostAwaiting'
 import { DecryptPostFailed, DecryptPostFailedProps } from './DecryptPostFailed'
-import { DecryptedPostDebug } from './DecryptedPostDebug'
 import { usePostClaimedAuthor, usePostInfoDetails, usePostInfoSharedPublic } from '../../DataSource/usePostInfo'
 import { asyncIteratorWithResult } from '../../../utils/type-transform/asyncIteratorHelpers'
 import { usePostInfo } from '../../../components/DataSource/usePostInfo'
@@ -234,15 +233,6 @@ export function DecryptPost(props: DecryptPostProps) {
         }
         const rendered = render()
         if (!rendered) return null
-        return (
-            <>
-                {rendered}
-                <DecryptedPostDebug
-                    debugHash={debugHash}
-                    whoAmI={whoAmI}
-                    decryptedResult={progress.type === 'progress' ? null : progress}
-                />
-            </>
-        )
+        return rendered
     }
 }

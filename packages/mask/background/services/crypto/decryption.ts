@@ -7,6 +7,7 @@ import {
     DecryptProgress,
     SocialNetworkEnum,
     SocialNetworkEnumToProfileDomain,
+    AsymmetryCryptoKey,
 } from '@masknet/encryption'
 import {
     AESCryptoKey,
@@ -20,7 +21,7 @@ import { decryptByLocalKey, deriveAESByECDH, hasLocalKeyOf } from '../../databas
 import { queryPostDB } from '../../database/post'
 import { savePostKeyToDB } from '../../database/post/helper'
 import { GUN_queryPostKey_version39Or38, GUN_queryPostKey_version40 } from '../../network/gun/encryption/queryPostKey'
-import type { GunRoot } from '../../network/gun/utils'
+import { getGunInstance } from '../../network/gun/instance'
 
 export type DecryptionInfo = {
     type: DecryptProgressKind.Info
@@ -71,18 +72,13 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
 
     // TODO: read in-memory cache to avoid db lookup
 
-    //#region Store author public key
     try {
-        const author = parse.unwrap().author.unwrap().unwrap()
-        const authorPub = parse.unwrap().authorPublicKey.unwrap().unwrap()
-        if (author.equals(authorHint)) {
-            // TODO: store the public key
-            if (authorPub.algr !== PublicKeyAlgorithmEnum.secp256k1) throw new Error('TODO: support other curves')
-        } else {
-            // ! Author detected is not equal to AuthorHint. Skip store the public key because it might be a security problem.
-        }
+        storeAuthorPublicKey(
+            parse.unwrap().author.unwrap().unwrap(),
+            authorHint,
+            parse.unwrap().authorPublicKey.unwrap().unwrap(),
+        )
     } catch {}
-    //#endregion
 
     const progress = decrypt(
         { message: parse.val },
@@ -124,7 +120,7 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
             },
             async *queryPostKey_version38(iv, signal) {
                 yield* GUN_queryPostKey_version39Or38(
-                    {} as GunRoot,
+                    getGunInstance(),
                     -38,
                     iv,
                     {} as any,
@@ -134,7 +130,7 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
             },
             async *queryPostKey_version39(iv, signal) {
                 yield* GUN_queryPostKey_version39Or38(
-                    {} as GunRoot,
+                    getGunInstance(),
                     -39,
                     iv,
                     {} as any,
@@ -144,7 +140,7 @@ export async function* decryption(payload: string | Uint8Array, context: Decrypt
             },
             async queryPostKey_version40(iv) {
                 if (!currentProfile) return null
-                return GUN_queryPostKey_version40({} as GunRoot, iv, currentProfile)
+                return GUN_queryPostKey_version40(getGunInstance(), iv, currentProfile.userId)
             },
         },
     )
@@ -159,4 +155,18 @@ async function getPostKeyCache(id: PostIVIdentifier) {
         'decrypt',
     ])
     return k as AESCryptoKey
+}
+
+async function storeAuthorPublicKey(
+    payloadAuthor: ProfileIdentifier,
+    postAuthor: ProfileIdentifier | null,
+    pub: AsymmetryCryptoKey,
+) {
+    if (payloadAuthor.equals(postAuthor)) {
+        if (pub.algr !== PublicKeyAlgorithmEnum.ed25519) {
+            throw new Error('TODO: support other curves')
+        }
+        // TODO: store the key
+    }
+    // ! Author detected is not equal to AuthorHint. Skip store the public key because it might be a security problem.
 }

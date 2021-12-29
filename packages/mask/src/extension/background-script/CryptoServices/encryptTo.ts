@@ -1,6 +1,5 @@
 import * as Alpha38 from '../../../crypto/crypto-alpha-38'
-import { GunAPI as Gun2 } from '../../../network/gun'
-import { encodeArrayBuffer } from '@dimensiondev/kit'
+import { decodeArrayBuffer, encodeArrayBuffer } from '@dimensiondev/kit'
 import { constructAlpha38 } from '../../../utils/type-transform/Payload'
 import { queryPrivateKey, queryLocalKey, queryProfile } from '../../../database'
 import { ProfileIdentifier, PostIVIdentifier } from '@masknet/shared-base'
@@ -17,6 +16,8 @@ import {
     compressSecp256k1Key,
 } from '@masknet/shared-base'
 import { encodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
+import { publishPostAESKey_version39Or38 } from '../../../../background/network/gun/encryption/queryPostKey'
+import { getGunInstance } from '../../../../background/network/gun/instance'
 
 type EncryptedText = string
 type OthersAESKeyEncryptedToken = string
@@ -114,7 +115,7 @@ export async function publishPostAESKey(iv: string) {
     if (!info) throw new Error(i18n.t('service_publish_post_aes_key_failed'))
     if (!info[1].length) return
     // Use the latest payload version here since we do not accept new post for older version.
-    return Gun2.publishPostAESKeyOnGun2(-38, iv, ...info)
+    return publishPostAESKey_version39Or38(getGunInstance(), -38, new Uint8Array(decodeArrayBuffer(iv)), ...info)
 }
 
 const SUMMARY_MAX_LENGTH = 40

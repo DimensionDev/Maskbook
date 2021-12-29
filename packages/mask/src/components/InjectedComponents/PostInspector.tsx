@@ -11,9 +11,6 @@ import {
 } from '@masknet/shared-base'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
-import { useValueRef } from '@masknet/shared'
-import { debugModeSetting } from '../../settings/settings'
-import { DebugList } from '../DebugModeUI/DebugList'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
 import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
@@ -37,7 +34,6 @@ export function PostInspector(props: PostInspectorProps) {
     const postId = usePostInfoDetails.postIdentifier()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postImages = usePostInfoDetails.postMetadataImages()
-    const isDebugging = useValueRef(debugModeSetting)
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
@@ -50,24 +46,8 @@ export function PostInspector(props: PostInspectorProps) {
     }, [postBy, whoAmI, encryptedPost])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
-    const debugInfo = isDebugging ? (
-        <DebugList
-            items={[
-                ['Post by', postBy.userId],
-                [
-                    'Who am I',
-                    whoAmI ? `Nickname ${whoAmI.nickname || 'unknown'}, UserID ${whoAmI.identifier.userId}` : 'Unknown',
-                ],
-                ['My fingerprint', whoAmI?.linkedPersona?.fingerprint ?? 'Unknown'],
-                ['Post ID', postId?.toText() || 'Unknown'],
-                ['Post Content', postContent],
-                ['Post Attachment Links', JSON.stringify(postImages)],
-            ]}
-        />
-    ) : null
-
     if (encryptedPost.ok || postImages.length) {
-        if (!isDebugging) props.needZip()
+        props.needZip()
         const DecryptPostX = props.DecryptPostComponent || DecryptPost
         return withAdditionalContent(
             <DecryptPostX
@@ -120,7 +100,6 @@ export function PostInspector(props: PostInspectorProps) {
                 {props.slotPosition !== 'after' && slot}
                 {x}
                 <PluginHooksRenderer />
-                {debugInfo}
                 {props.slotPosition !== 'before' && slot}
             </>
         )

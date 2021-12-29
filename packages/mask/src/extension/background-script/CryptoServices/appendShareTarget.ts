@@ -1,5 +1,4 @@
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import { GunAPI as Gun2 } from '../../../network/gun/'
 import {
     ProfileIdentifier,
     PostIVIdentifier,
@@ -12,6 +11,9 @@ import { cryptoProviderTable } from './cryptoProviderTable'
 import { updatePostDB, RecipientDetail, RecipientReason } from '../../../../background/database/post'
 import { getNetworkWorkerUninitialized } from '../../../social-network/worker'
 import { queryPrivateKey, queryLocalKey } from '../../../database'
+import { publishPostAESKey_version39Or38 } from '../../../../background/network/gun/encryption/queryPostKey'
+import { getGunInstance } from '../../../../background/network/gun/instance'
+import { decodeArrayBuffer } from '@dimensiondev/kit'
 export async function appendShareTarget(
     version: -40 | -39 | -38,
     postAESKey: string | AESJsonWebKey,
@@ -40,7 +42,14 @@ export async function appendShareTarget(
             Array.from(toKey.values()),
         )
         const gunHint = getNetworkWorkerUninitialized(whoAmI)?.gunNetworkHint
-        gunHint && Gun2.publishPostAESKeyOnGun2(version, iv, gunHint, othersAESKeyEncrypted)
+        gunHint &&
+            publishPostAESKey_version39Or38(
+                getGunInstance(),
+                version,
+                new Uint8Array(decodeArrayBuffer(iv)),
+                gunHint,
+                othersAESKeyEncrypted,
+            )
         updatePostDB(
             {
                 identifier: new PostIVIdentifier(whoAmI.network, iv),

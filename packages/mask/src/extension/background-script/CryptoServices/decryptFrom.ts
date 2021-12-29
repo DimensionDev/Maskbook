@@ -1,6 +1,5 @@
 import * as Alpha40 from '../../../crypto/crypto-alpha-40'
 import * as Alpha39 from '../../../crypto/crypto-alpha-39'
-import { GunAPI as Gun2, GunAPISubscribe as Gun2Subscribe, GunWorker } from '../../../network/gun/'
 import { decodeText } from '@dimensiondev/kit'
 import { deconstructPayload } from '../../../utils/type-transform/Payload'
 import { i18n } from '../../../../shared-ui/locales_legacy'
@@ -17,9 +16,7 @@ import { asyncIteratorWithResult, memorizeAsyncGenerator } from '../../../utils/
 import { steganographyDecodeImageUrl } from '@masknet/encryption'
 import type { TypedMessage, AESJsonWebKey, Payload } from '@masknet/shared-base'
 import stringify from 'json-stable-stringify'
-import type { SharedAESKeyGun2 } from '../../../network/gun/version.2'
 import { MaskMessages } from '../../../utils/messages'
-import { GunAPI } from '../../../network/gun'
 import { Err, Ok, Result } from 'ts-results'
 import { decodeTextPayloadWorker } from '../../../social-network/utils/text-payload-worker'
 import { steganographyDownloadImage } from './utils'
@@ -182,15 +179,6 @@ async function* decryptFromPayloadWithProgress_raw(
         if (!mine?.privateKey) return makeError(DecryptFailedReason.MyCryptoKeyNotFound)
 
         const { publicKey: minePublic, privateKey: minePrivate } = mine
-        const networkWorker = getNetworkWorkerUninitialized(whoAmI)
-        try {
-            if (version === -40) throw ''
-            const gunNetworkHint = networkWorker!.gunNetworkHint
-            const { keyHash, postHash } = await (
-                await import('../../../network/gun/version.2/hash')
-            ).calculatePostKeyPartition(version, iv, minePublic, gunNetworkHint)
-            yield { type: 'debug', debug: 'debug_finding_hash', hash: [postHash, keyHash] }
-        } catch {}
         if (cachedPostResult) return makeSuccessResult(cachedPostResult, ['post_key_cached'])
 
         let lastError: unknown
@@ -219,73 +207,7 @@ async function* decryptFromPayloadWithProgress_raw(
         }
 
         yield makeProgress('finding_post_key')
-        const aesKeyEncrypted: Array<Alpha40.PublishedAESKey | SharedAESKeyGun2> = []
-        if (version === -40) {
-            // Deprecated payload
-            // eslint-disable-next-line import/no-deprecated
-            const result = await GunAPI.queryVersion1PostAESKey(iv, whoAmI.userId)
-            if (result === undefined) return makeError(i18n.t('service_not_share_target'))
-            aesKeyEncrypted.push(result)
-        } else if (version === -39 || version === -38) {
-            const keys = await Gun2.queryPostKeysOnGun2(version, iv, minePublic, authorNetworkWorker.val.gunNetworkHint)
-            aesKeyEncrypted.push(...keys)
-        }
-        // If we can decrypt with current info, just do it.
-        try {
-            // ! Do not remove the await here.
-            return await decryptWith(aesKeyEncrypted)
-        } catch (error) {
-            if (error instanceof Error && error.message === i18n.t('service_not_share_target')) {
-                console.debug(error)
-                // TODO: Replace this error with:
-                // You do not have the necessary private key to decrypt this message.
-                // What to do next: You can ask your friend to visit your profile page, so that their Mask extension will detect and add you to recipients.
-                // ? after the auto-share with friends is done.
-                yield makeError(error)
-            } else {
-                return handleDOMException(error)
-            }
-        }
-
-        // Failed, we have to wait for the future info from gun.
-        if (version === -40) return makeError(i18n.t('service_not_share_target'))
-        const subscription = Gun2Subscribe.subscribePostKeysOnGun2(
-            version,
-            iv,
-            minePublic,
-            authorNetworkWorker.val.gunNetworkHint,
-        )
-        GunWorker?.onTerminated(() => subscription.return?.())
-        for await (const aes of subscription) {
-            console.log('New key received, trying', aes)
-            try {
-                return await decryptWith(aes)
-            } catch (error) {
-                console.debug(error)
-            }
-        }
         return makeError(i18n.t('service_not_share_target'))
-
-        async function decryptWith(
-            key:
-                | Alpha39.PublishedAESKey
-                | Alpha40.PublishedAESKey
-                | Array<Alpha39.PublishedAESKey | Alpha40.PublishedAESKey>,
-        ): Promise<Success> {
-            const [contentArrayBuffer, postAESKey] = await cryptoProvider.decryptMessage1ToNByOther({
-                version,
-                AESKeyEncrypted: key,
-                authorsPublicKeyECDH: authorPersona.publicKey,
-                encryptedContent: encryptedText,
-                privateKeyECDH: minePrivate!,
-                iv,
-            })
-
-            // Store the key to speed up next time decrypt
-            setPostCache(postAESKey)
-            const content = decodeText(contentArrayBuffer)
-            return makeSuccessResult(content, ['normal_decrypted'])
-        }
 
         async function decryptAsAuthor(authorIdentifier: ProfileIdentifier) {
             const localKey = sharePublic ? publicSharedAESKey : await queryLocalKey(authorIdentifier)

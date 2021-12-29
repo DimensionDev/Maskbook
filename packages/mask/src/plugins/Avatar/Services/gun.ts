@@ -1,45 +1,30 @@
 import { delay } from '@masknet/shared-base'
-import { gun2 } from '../../../network/gun/version.2'
-import { NFT_AVATAR_GUN_SERVER } from '../constants'
-
-const NFTAvatarGUN = gun2.get(NFT_AVATAR_GUN_SERVER)
+import { getGunInstance } from '../../../../background/network/gun/instance'
+import { getGunData, setGunData } from '../../../../background/network/gun/utils'
+import { NFT_AVATAR_GUN_ROOT_NODE } from '../constants'
 
 // After reinstalling the system, it cannot be retrieved for the first time, so it needs to be taken twice
 export async function getUserAddress(userId: string) {
-    let result = await NFTAvatarGUN
-        //@ts-expect-error
-        .get(userId).then!()
+    let result = await getGunData(getGunInstance(), NFT_AVATAR_GUN_ROOT_NODE, userId)
 
     if (!result) {
         await delay(500)
-        result = await NFTAvatarGUN
-            //@ts-expect-error
-            .get(userId).then!()
+        result = await getGunData(getGunInstance(), NFT_AVATAR_GUN_ROOT_NODE, userId)
     }
 
-    return result
+    return result as any as string
 }
 
 export async function setUserAddress(userId: string, address: string) {
-    // delete userId
-    await NFTAvatarGUN
-        //@ts-expect-error
-        .get(userId)
-        //@ts-expect-error
-        .put(null).then!()
-
     // save userId
-    await NFTAvatarGUN
-        // @ts-expect-error
-        .get(userId)
-        // @ts-expect-error
-        .put(address).then!()
+    setGunData(getGunInstance(), [NFT_AVATAR_GUN_ROOT_NODE, userId], address)
 }
 
 export async function getUserAddresses() {
-    const NFTAvatarKeys = Object.keys(await NFTAvatarGUN).filter((x) => x !== '_')
+    // TODO:
+    const NFTAvatarKeys = Object.keys([]).filter((x) => x !== '_')
     const resultPromise = NFTAvatarKeys.map((key) => getUserAddress(key))
     const result = (await Promise.all(resultPromise)).filter((x) => x)
 
-    return result
+    return result as any as string[]
 }
