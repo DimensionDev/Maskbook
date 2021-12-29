@@ -3,12 +3,7 @@ import type { TransactionReceipt } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { WalletMessages } from '@masknet/plugin-wallet'
 import { Explorer } from '@masknet/web3-providers'
-import {
-    ChainId,
-    getExplorerConstants,
-    isSameAddress,
-    TransactionStateType,
-} from '@masknet/web3-shared-evm'
+import { ChainId, getExplorerConstants, isSameAddress, TransactionStateType } from '@masknet/web3-shared-evm'
 import * as EthereumService from '../../../../extension/background-script/EthereumService'
 import * as progress from './progress'
 import * as helpers from './helpers'
@@ -23,7 +18,7 @@ interface StorageItem {
 }
 
 class Storage {
-    static SIZE = 40
+    static MAX_ITEM_SIZE = 40
 
     private map = new Map<ChainId, Map<string, StorageItem>>()
 
@@ -54,11 +49,11 @@ class Storage {
     }
 
     public getWatched(chainId: ChainId) {
-        return this.getItems(chainId).slice(0, Storage.SIZE)
+        return this.getItems(chainId).slice(0, Storage.MAX_ITEM_SIZE)
     }
 
     public getUnwatched(chainId: ChainId) {
-        return this.getItems(chainId).slice(Storage.SIZE)
+        return this.getItems(chainId).slice(Storage.MAX_ITEM_SIZE)
     }
 
     public getWatchedAccounts(chainId: ChainId) {

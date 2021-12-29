@@ -9,7 +9,6 @@ import {
     EthereumErrorType,
     EthereumMethodType,
     EthereumRpcType,
-    EthereumTransactionConfig,
     isEIP1559Supported,
     isSameAddress,
     ProviderType,
