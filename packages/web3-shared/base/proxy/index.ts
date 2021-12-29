@@ -30,7 +30,7 @@ export interface SocketPoolItem<T extends unknown = unknown> {
 export type OutMessageEvent = { id: string; done: boolean; error?: unknown; from: 'cache' | 'remote' }
 export type NotifyFn = (event: OutMessageEvent) => void
 
-const POOL_CACHE_EXPIRE_TIME = 3000
+const POOL_CACHE_EXPIRE_TIME = 30
 
 export class ProviderProxy {
     private readonly _socket: WebSocket
@@ -135,11 +135,7 @@ export class ProviderProxy {
      */
     isExpired(item: SocketPoolItem) {
         const now = new Date()
-        // lasted update time > 30s
         return !!item.updatedAt && differenceInSeconds(now, item.updatedAt) > POOL_CACHE_EXPIRE_TIME
-
-        // lasted pick time > 30s
-        // return !!item.pickedAt && differenceInSeconds(now, item.pickedAt) > POOL_CACHE_EXPIRE_TIME
     }
 
     private clearPool() {

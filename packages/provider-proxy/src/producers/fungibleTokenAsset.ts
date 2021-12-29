@@ -11,11 +11,10 @@ const fungibleTokenAsset = async (
     getKeys: ProducerKeyFunction,
     args: FungibleTokenAssetArgs,
 ): Promise<void> => {
+    // TODO: add zerion
     const { address } = args
     const data = await getAssetListFromDebank(address)
     await push(data)
-    // const data = await getAssetListByZerion(address)
-    // await push(data)
 }
 
 const producer: RPCMethodRegistrationValue<Web3Plugin.Asset<Web3Plugin.FungibleToken>, FungibleTokenAssetArgs> = {

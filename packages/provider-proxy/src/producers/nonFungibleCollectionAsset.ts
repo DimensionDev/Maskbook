@@ -28,7 +28,6 @@ const nonFungibleCollectionAsset = async (
     await push(collectFromOpenSea)
 }
 
-// TODO: rename method name
 const producer: RPCMethodRegistrationValue<Collection, NonFungibleCollectibleAssetArgs> = {
     method: 'mask.fetchNonFungibleCollectionAsset',
     producer: nonFungibleCollectionAsset,
