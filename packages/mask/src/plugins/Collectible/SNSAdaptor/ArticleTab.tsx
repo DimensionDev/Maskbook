@@ -2,6 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { CollectibleTab } from './CollectibleTab'
 import { CollectibleState } from '../hooks/useCollectibleState'
 import { AssetPlayer } from '@masknet/shared'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles()({
     body: {
@@ -13,6 +14,12 @@ const useStyles = makeStyles()({
         maxHeight: '100%',
         border: 'none',
     },
+    errorPlaceholder: {
+        padding: '82px 0',
+    },
+    loadingPlaceholder: {
+        padding: '74px 0',
+    },
 })
 
 export interface ArticleTabProps {}
@@ -21,20 +28,26 @@ export function ArticleTab(props: ArticleTabProps) {
     const { classes } = useStyles()
     const { asset } = CollectibleState.useContainer()
 
-    if (!asset.value) return null
-    const resourceUrl = asset.value.animation_url || asset.value.image_url
-    return (
-        <CollectibleTab>
-            <div className={classes.body}>
-                {resourceUrl ? (
-                    <AssetPlayer
-                        url={resourceUrl}
-                        options={{
-                            playsInline: true,
-                        }}
-                    />
-                ) : null}
-            </div>
-        </CollectibleTab>
-    )
+    return useMemo(() => {
+        if (!asset.value) return null
+        const resourceUrl = asset.value.animation_url || asset.value.image_url
+        return (
+            <CollectibleTab>
+                <div className={classes.body}>
+                    {resourceUrl ? (
+                        <AssetPlayer
+                            url={resourceUrl}
+                            options={{
+                                playsInline: true,
+                            }}
+                            classes={{
+                                errorPlaceholder: classes.errorPlaceholder,
+                                loadingPlaceholder: classes.loadingPlaceholder,
+                            }}
+                        />
+                    ) : null}
+                </div>
+            </CollectibleTab>
+        )
+    }, [asset.value?.animation_url, asset.value?.image_url, classes])
 }
