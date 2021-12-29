@@ -19,7 +19,7 @@ import { convertBackupFileToObject, extraPermissions, fixBackupFilePermission } 
 import { v4 as uuid } from 'uuid'
 import { getUnconfirmedBackup, restoreBackup, setUnconfirmedBackup } from './WelcomeServices/restoreBackup'
 import { openPopupWindow } from './HelperService'
-import formatDate from 'date-fns/format'
+import formatDateTime from 'date-fns/format'
 
 export { generateBackupJSON, generateBackupPreviewInfo } from './WelcomeServices/generateBackupJSON'
 export * from './WelcomeServices/restoreBackup'
@@ -144,5 +144,6 @@ export async function checkPermissionAndOpenWalletRecovery(id: string) {
 }
 
 function makeBackupName(extension: string) {
-    return `mask-network-keystore-backup-${formatDate(Date.now(), 'yyyy-mm-dd')}.${extension}`
+    const now = formatDateTime(Date.now(), 'yyyy-MM-dd')
+    return `mask-network-keystore-backup-${now}.${extension}`
 }

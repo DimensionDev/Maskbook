@@ -13,6 +13,7 @@ import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../../components/shared/NetworkTab'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { WalletRPC } from '../../../Wallet/messages'
+import { EMPTY_LIST } from '../../../../../utils-pure'
 import { isDashboardPage } from '@masknet/shared-base'
 
 const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }) => ({
@@ -83,7 +84,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
         },
     )
 
-    const { value: chains } = useAsync(async () => {
+    const { value: chains = EMPTY_LIST } = useAsync(async () => {
         const networks = await WalletRPC.getSupportedNetworks()
         return networks.map((network) => getChainIdFromNetworkType(network))
     }, [])
@@ -116,12 +117,7 @@ export function TraderDialog({ open, onClose }: TraderDialogProps) {
                             </div>
                         ) : null}
                         <div className={classes.abstractTabWrapper}>
-                            <NetworkTab
-                                chainId={chainId}
-                                setChainId={setChainId}
-                                classes={classes}
-                                chains={chains ?? []}
-                            />
+                            <NetworkTab chainId={chainId} setChainId={setChainId} classes={classes} chains={chains} />
                         </div>
                         <Trader {...traderProps} chainId={chainId} classes={{ root: classes.tradeRoot }} />
                     </DialogContent>

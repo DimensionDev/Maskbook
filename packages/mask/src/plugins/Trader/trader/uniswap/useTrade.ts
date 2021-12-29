@@ -22,7 +22,6 @@ function useTrade(
         !outputToken ||
         (inputAmount === '0' && isExactIn) ||
         (outputAmount === '0' && !isExactIn)
-
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
     const inputCurrency = toUniswapCurrency(chainId, inputToken)
     const outputCurrency = toUniswapCurrency(chainId, outputToken)
@@ -96,7 +95,7 @@ export function useV3Trade(
         outputToken,
     )
 
-    //#region v2
+    //#region v3
     const v3BestTradeExactIn = useV3BestTradeExactIn(isExactIn ? tradeAmount : undefined, outputCurrency)
     const v3BestTradeExactOut = useV3BestTradeExactOut(inputCurrency, !isExactIn ? tradeAmount : undefined)
     //#endregion
