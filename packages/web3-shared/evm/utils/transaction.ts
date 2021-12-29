@@ -15,12 +15,11 @@ export function isFinalState(type: TransactionStateType) {
  * UNKNOWN, WAIT_FOR_CONFIRMING, HASH -> RECEIPT
  * WAIT_FOR_CONFIRMING, HASH, RECEIPT -> CONFIRMED
  * UNKNOWN, WAIT_FOR_CONFIRMING, HASH, RECEIPT -> FAILED
- * FAILED -> UNKNOWN
  */
 export function isNextStateAvailable(type: TransactionStateType, nextType: TransactionStateType) {
     switch (nextType) {
         case TransactionStateType.UNKNOWN:
-            return [TransactionStateType.FAILED].includes(type)
+            return false
         case TransactionStateType.WAIT_FOR_CONFIRMING:
             return [TransactionStateType.UNKNOWN].includes(type)
         case TransactionStateType.HASH:
