@@ -122,8 +122,8 @@ function NFTAvatarInTwitter() {
             // create rainbow shadow border
             if (linkDom.lastElementChild?.tagName !== 'STYLE') {
                 borderElement.current = linkDom.firstElementChild
-                // remove useless border
 
+                // remove useless border
                 linkDom.removeChild(linkDom.firstElementChild)
                 const style = document.createElement('style')
                 style.innerText = `
