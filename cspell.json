@@ -360,6 +360,7 @@
         "irss",
         "STETHABI",
         "CELO"
+        "flac"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

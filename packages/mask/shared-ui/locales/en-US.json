@@ -575,6 +575,7 @@
     "plugin_collectible_you": "You",
     "plugin_collectible_done": "Done",
     "plugin_collectible_retry": "Retry",
+    "plugin_collectible_get_more_token": "Get more {{token}}",
     "plugin_collectible_sell": "Sell",
     "plugin_collectible_checkout": "Checkout",
     "plugin_collectible_place_bid": "Place Bid",
