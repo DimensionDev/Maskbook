@@ -269,7 +269,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
 
         const requestPath = urlcat('/api/v1/assets', {
             owner: from,
-            offset: page,
+            offset: page * size,
             limit: size,
             collection: opts.pageInfo?.collection,
         })
@@ -283,7 +283,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             response?.assets
                 .filter(
                     (x: OpenSeaResponse) =>
-                        ['non-fungible', 'semi-fungible'].includes(x.asset_contract.type) ||
+                        ['non-fungible', 'semi-fungible'].includes(x.asset_contract.asset_contract_type) ||
                         ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
                 )
                 .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset)) ?? []
@@ -329,10 +329,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
         return response?.orders?.map(createAssetOrder) ?? []
     }
 
-    async getCollections(address: string, { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {}) {
+    async getCollections(address: string, opts: NonFungibleTokenAPI.Options = {}) {
+        const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
         const requestPath = urlcat('/api/v1/collections', {
             asset_owner: address,
-            offset: page,
+            offset: page * size,
             limit: size,
         })
         const response = await fetchFromOpenSea<OpenSeaCollection[]>(requestPath, chainId, this._apiKey, this._env)
