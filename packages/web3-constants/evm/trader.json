@@ -544,8 +544,8 @@
         "Fantom": ""
     },
     "TRADERJOE_ROUTER_ADDRESS": {
-        "Mainnet": "",
-        "Ropsten": "",
+        "Mainnet": "0x2F9EC37d6CcFFf1caB21733BdaDEdE11c823cCB0",
+        "Ropsten": "0x2F9EC37d6CcFFf1caB21733BdaDEdE11c823cCB0",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
@@ -561,8 +561,8 @@
         "Avalanche": "0x60aE616a2155Ee3d9A68541Ba4544862310933d4"
     },
     "TRADERJOE_FACTORY_ADDRESS": {
-        "Mainnet": "",
-        "Ropsten": "",
+        "Mainnet": "0x2F9EC37d6CcFFf1caB21733BdaDEdE11c823cCB0",
+        "Ropsten": "0x2F9EC37d6CcFFf1caB21733BdaDEdE11c823cCB0",
         "Rinkeby": "",
         "Kovan": "",
         "Gorli": "",
@@ -578,7 +578,7 @@
         "Avalanche": "0x9Ad6C38BE94206cA50bb0d90783181662f0Cfa10"
     },
     "TRADERJOE_THEGRAPH": {
-        "Mainnet": "",
+        "Mainnet": "0x2F9EC37d6CcFFf1caB21733BdaDEdE11c823cCB0",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
@@ -595,7 +595,7 @@
         "Avalanche": ""
     },
     "TRADERJOE_INIT_CODE_HASH": {
-        "Mainnet": "",
+        "Mainnet": "0x2F9EC37d6CcFFf1caB21733BdaDEdE11c823cCB0",
         "Ropsten": "",
         "Rinkeby": "",
         "Kovan": "",
