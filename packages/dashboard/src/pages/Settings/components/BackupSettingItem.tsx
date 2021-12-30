@@ -14,13 +14,15 @@ export default function BackupSettingItem() {
         if (user.backupAt) {
             const method = user.backupMethod === 'local' ? t.settings_local_backup() : t.settings_cloud_backup()
             const last = t.settings_global_backup_last({ backupMethod: method, backupAt: user.backupAt })
-
             setDesc(last)
         }
     }, [user.backupAt])
 
     return (
-        <SettingItem icon={<SettingsBackupIcon />} title={t.settings_global_backup_title()} desc={desc}>
+        <SettingItem
+            icon={<SettingsBackupIcon />}
+            title={t.settings_global_backup_title()}
+            desc={user.backupAt ? desc : t.settings_global_backup_desc()}>
             <BackupSetting />
         </SettingItem>
     )

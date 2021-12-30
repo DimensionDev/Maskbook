@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-imports */
-import { keys, omit } from 'lodash'
+import { keys, omit } from 'lodash-unified'
 import {
     findAllUnusedKeys,
     getLocaleRelativePath,

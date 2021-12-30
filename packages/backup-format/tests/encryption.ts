@@ -1,6 +1,6 @@
 import { test, expect, beforeAll } from '@jest/globals'
 import { webcrypto } from 'crypto'
-import { encryptBackup, decryptBackup } from '../src'
+import { encryptBackup, decryptBackup } from '../src/index'
 
 beforeAll(() => {
     Reflect.set(globalThis, 'crypto', webcrypto)

@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import { useERC721TokenContract } from '../contracts/useERC721TokenContract'
 import { safeNonPayableTransactionCall } from '../utils'
 import { EthereumAddress } from 'wallet.ts'
-import { useChainId } from './index'
+import { useChainId } from './useChainId'
 
 export function useERC721ContractBalance(address: string | undefined, account: string) {
     const chainId = useChainId()

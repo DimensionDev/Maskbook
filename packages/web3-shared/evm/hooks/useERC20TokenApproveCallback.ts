@@ -1,14 +1,14 @@
 import { useCallback, useMemo } from 'react'
 import BigNumber from 'bignumber.js'
-import { once } from 'lodash-es'
+import { once } from 'lodash-unified'
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionEventType } from '../types'
+import { TransactionStateType, TransactionEventType } from '../types'
 import { useERC20TokenContract } from '../contracts/useERC20TokenContract'
 import { useAccount } from './useAccount'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance'
 import { useERC20TokenBalance } from './useERC20TokenBalance'
-import { TransactionStateType, useTransactionState } from './useTransactionState'
-import { isLessThan } from '../utils'
+import { useTransactionState } from './useTransactionState'
+import { isLessThan } from '@masknet/web3-shared-base'
 
 const MaxUint256 = new BigNumber('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff').toFixed()
 
@@ -61,10 +61,10 @@ export function useERC20TokenApproveCallback(address?: string, amount?: string, 
 
     const approveCallback = useCallback(
         async (useExact = false) => {
+            setTransactionState({
+                type: TransactionStateType.UNKNOWN,
+            })
             if (approveStateType === ApproveStateType.UNKNOWN || !amount || !spender || !erc20Contract) {
-                setTransactionState({
-                    type: TransactionStateType.UNKNOWN,
-                })
                 return
             }
 

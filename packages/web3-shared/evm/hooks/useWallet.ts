@@ -1,6 +1,6 @@
 import { useWeb3StateContext } from '../context'
 import { currySameAddress } from '../utils'
-import { useAccount } from '.'
+import { useAccount } from './useAccount'
 
 export function useWallet() {
     const account = useAccount()

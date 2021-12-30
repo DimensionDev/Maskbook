@@ -1,8 +1,8 @@
 import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { Services } from '../../../API'
-import type { Relation } from '@masknet/shared'
+import type { Relation } from '@masknet/shared-base'
 import { useRef } from 'react'
-import { last } from 'lodash-es'
+import { last } from 'lodash-unified'
 import { PersonaContext } from './usePersonaContext'
 
 export const useContacts = (network: string, page: number, size = 20) => {

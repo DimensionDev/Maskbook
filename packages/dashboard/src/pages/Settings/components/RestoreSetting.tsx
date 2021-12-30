@@ -1,14 +1,14 @@
 import SettingButton from './SettingButton'
 import { useDashboardI18N } from '../../../locales'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 export default function RestoreSetting() {
     const t = useDashboardI18N()
     const navigate = useNavigate()
 
     const onRecovery = () => {
-        navigate(RoutePaths.SignIn, { state: { from: RoutePaths.Settings } })
+        navigate(DashboardRoutes.SignIn, { state: { from: DashboardRoutes.Settings } })
     }
 
     return (

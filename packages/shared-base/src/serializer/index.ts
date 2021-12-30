@@ -1,8 +1,9 @@
 /// <reference path="./typeson.d.ts" />
 import Typeson from 'typeson'
 import type { Serialization } from 'async-call-rpc'
-import { Ok, Err } from 'ts-results'
-import { BigNumber } from 'bignumber.js'
+import { Ok, Err, Some, None } from 'ts-results'
+import * as BN from 'bignumber.js'
+const { default: BigNumber } = BN
 
 /** @internal */
 export function serialize<T, Q>(name: string, ser?: (x: T) => Q, des?: (x: Q) => T) {
@@ -48,6 +49,8 @@ typeson.register(num)
 typeson.register([blob, file, fileList, imageBitMap, num])
 serialize('Ok')(Ok)
 serialize('Err')(Err)
+serialize('Some')(Some)
+typeson.register({ None: [(x) => x === None, () => 'None', () => None] })
 serialize('BigNumber')(BigNumber)
 export const serializer: Serialization = {
     serialization(from: unknown) {
