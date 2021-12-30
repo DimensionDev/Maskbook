@@ -13,6 +13,7 @@ import { pluginIDSettings } from './settings/settings'
 import { fixWeb3State } from './plugins/EVM/UI/Web3State'
 import { getBackgroundColor } from './utils'
 import { MaskIconPaletteContext } from '@masknet/icons'
+import { isTwitter } from './social-network-adaptor/twitter.com/base'
 const identity = (jsx: React.ReactNode) => jsx as JSX.Element
 function compose(init: React.ReactNode, ...f: ((children: React.ReactNode) => JSX.Element)[]) {
     return f.reduceRight((prev, curr) => curr(prev), <>{init}</>)
@@ -32,7 +33,8 @@ function MaskThemeProvider({ children, baseline, useTheme }: MaskThemeProvider) 
     return compose(
         children,
         (jsx) => (
-            <MaskIconPaletteContext.Provider value={isDark ? (isDarker ? 'dark' : 'dim') : 'light'}>
+            <MaskIconPaletteContext.Provider
+                value={isDark ? (!isDarker && isTwitter(activatedSocialNetworkUI) ? 'dim' : 'dark') : 'light'}>
                 {jsx}
             </MaskIconPaletteContext.Provider>
         ),
