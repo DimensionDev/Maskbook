@@ -24,8 +24,8 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 import type { useAsset } from '../../EVM/hooks/useAsset'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
-import BigNumber from 'bignumber.js'
 import type { Coin } from '../../Trader/types'
+import { isGreaterThan } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -107,9 +107,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     }, [token.value, openSwapDialog])
 
     const validationMessage = useMemo(() => {
-        const basePrice = new BigNumber(order?.value?.basePrice ?? '0')
-        const balance_ = new BigNumber(balance.value ?? '0')
-        if (basePrice.isGreaterThan(balance_)) {
+        if (isGreaterThan(order?.value?.basePrice ?? 0, balance.value ?? 0)) {
             setIsInsufficientBalance(true)
             return t('plugin_collectible_insufficient_balance')
         }

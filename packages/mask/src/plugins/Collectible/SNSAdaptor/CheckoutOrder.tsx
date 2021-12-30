@@ -40,7 +40,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
             return item.symbol === asset.value?.current_symbol
         })?.decimals
         if (!decimal) return 'error'
-        return formatBalance(new BigNumber(price), decimal()) ?? 'error'
+        return formatBalance(new BigNumber(price), decimal) ?? 'error'
     }
 
     return (
