@@ -50,10 +50,13 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
 
     const xDaiOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
     const fantomOptions = xDaiOptions
-    const avalancheOptions = xDaiOptions
 
     const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
+    const avalancheOptions = [
+        { label: 'TraderJoe', value: TradeProvider.TRADERJOE },
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+    ]
     const t = useDashboardI18N()
 
     const items = [

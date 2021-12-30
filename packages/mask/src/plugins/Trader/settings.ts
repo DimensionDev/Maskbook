@@ -83,7 +83,7 @@ export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProv
 )
 export const avalancheNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
     `${PLUGIN_ID}+avalanche+tradeProvider`,
-    TradeProvider.SUSHISWAP,
+    TradeProvider.TRADERJOE,
     { primary: () => '' },
 )
 
@@ -108,6 +108,7 @@ const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradePr
 const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+balancer`, '')
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
+const traderjoeSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+traderjoe`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -134,6 +135,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return dodoSettings
         case TradeProvider.BANCOR:
             return bancorSettings
+        case TradeProvider.TRADERJOE:
+            return traderjoeSettings
         default:
             unreachable(tradeProvider)
     }

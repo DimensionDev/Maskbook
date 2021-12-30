@@ -13,6 +13,8 @@ import {
     SUSHISWAP_CUSTOM_BASES,
     UNISWAP_BASE_AGAINST_TOKENS,
     UNISWAP_CUSTOM_BASES,
+    TRADERJOE_BASE_AGAINST_TOKENS,
+    TRADERJOE_CUSTOM_BASES,
 } from '../constants'
 import type { TradeContext as TradeContext_ } from '../types'
 import { TargetChainIdContext } from './useTargetChainIdContext'
@@ -113,6 +115,18 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                 return {
                     TYPE: tradeProvider,
                     ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BANCOR_EXCHANGE_PROXY_ADDRESS,
+                }
+            case TradeProvider.TRADERJOE:
+                return {
+                    TYPE: tradeProvider,
+                    IS_UNISWAP_V2_LIKE: true,
+                    GRAPH_API: getTraderConstants(chainId).TRADERJOE_THEGRAPH,
+                    INIT_CODE_HASH: getTraderConstants(chainId).TRADERJOE_INIT_CODE_HASH,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).TRADERJOE_ROUTER_ADDRESS,
+                    FACTORY_CONTRACT_ADDRESS: getTraderConstants(chainId).TRADERJOE_FACTORY_ADDRESS,
+                    AGAINST_TOKENS: TRADERJOE_BASE_AGAINST_TOKENS,
+                    ADDITIONAL_TOKENS: {},
+                    CUSTOM_TOKENS: TRADERJOE_CUSTOM_BASES,
                 }
             default:
                 unreachable(tradeProvider)

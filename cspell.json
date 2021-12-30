@@ -253,7 +253,9 @@
         "avalanche",
         "avax",
         "AVAX",
-        "Avalanche"
+        "Avalanche",
+        "traderjoe",
+        "TraderJoe"
     ],
     "ignoreWords": [
         "cryptopunks",

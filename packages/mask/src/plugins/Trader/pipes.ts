@@ -56,6 +56,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.PANCAKESWAP]: 'PancakeSwap',
         [TradeProvider.DODO]: 'DODO',
         [TradeProvider.BANCOR]: 'Bancor',
+        [TradeProvider.TRADERJOE]: 'TraderJoe',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -104,6 +105,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://app.dodoex.io'
         case TradeProvider.BANCOR:
             return 'https://app.bancor.network/eth/swap'
+        case TradeProvider.TRADERJOE:
+            return 'https://traderjoexyz.com/'
         default:
             unreachable(tradeProvider)
     }
@@ -161,6 +164,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
             return ``
+        case TradeProvider.TRADERJOE:
+            return `https://analytics.traderjoexyz.com/pairs/${address}`
         default:
             unreachable(tradeProvider)
     }
@@ -250,6 +255,7 @@ export const resolveZrxTradePoolName = createLookupTableResolver<ZrxTradePool, s
         [ZrxTradePool.UniswapV3]: 'Uniswap V3',
         [ZrxTradePool.WaultSwap]: 'WaultSwap',
         [ZrxTradePool.xSigma]: 'xSigma',
+        [ZrxTradePool.TraderJoe]: 'TraderJoe',
     },
     'Unknown',
 )

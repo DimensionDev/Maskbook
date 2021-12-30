@@ -5,6 +5,7 @@ import { BalancerIcon } from '../../../../resources/BalancerIcon'
 import { BancorIcon } from '../../../../resources/BancorIcon'
 import { SashimiSwapIcon } from '../../../../resources/SashimiSwapIcon'
 import { SushiSwapIcon } from '../../../../resources/SushiSwapIcon'
+import { TraderJoeIcon } from '../../../../resources/TraderJoeIcon'
 import { UniswapIcon } from '../../../../resources/UniswapIcon'
 import { ZRXIcon } from '../../../../resources/ZRXIcon'
 import { DODOIcon } from '../../../../resources/DODOIcon'
@@ -59,6 +60,8 @@ export function TradeProviderIcon(props: TradeProviderIconProps) {
             return <DODOIcon classes={{ root: classes.icon }} />
         case TradeProvider.BANCOR:
             return <BancorIcon classes={{ root: classes.icon }} />
+        case TradeProvider.TRADERJOE:
+            return <TraderJoeIcon classes={{ root: classes.icon }} />
         default:
             unreachable(props.provider)
     }

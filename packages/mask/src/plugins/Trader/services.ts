@@ -55,7 +55,7 @@ currentChainIdSettings.addListener((chainId: ChainId) => {
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break
         case NetworkType.Avalanche:
-            currentTradeProviderSettings.value = TradeProvider.SUSHISWAP
+            currentTradeProviderSettings.value = avalancheNetworkTradeProviderSettings.value
             if (currentDataProviderSettings.value === DataProvider.UNISWAP_INFO)
                 currentDataProviderSettings.value = DataProvider.COIN_MARKET_CAP
             break

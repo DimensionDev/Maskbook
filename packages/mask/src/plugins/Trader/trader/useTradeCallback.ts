@@ -96,6 +96,8 @@ export function useTradeCallback(
             return dodo
         case TradeProvider.BANCOR:
             return bancor
+        case TradeProvider.TRADERJOE:
+            return uniswapV2Like
         default:
             if (provider) unreachable(provider)
             return []
