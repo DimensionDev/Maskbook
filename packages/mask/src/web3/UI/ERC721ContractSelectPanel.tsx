@@ -44,10 +44,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => {
             alignItems: 'center',
             justifyContent: 'space-between',
         },
-        IconWrapper: {
-            display: 'flex',
-            alignItems: 'center',
-        },
         nftName: {
             marginLeft: theme.spacing(props.hasIcon ? 1 : 0),
             fontWeight: 300,
@@ -70,10 +66,9 @@ export interface ERC721TokenSelectPanelProps {
     onContractChange: (contract: ERC721ContractDetailed) => void
     onBalanceChange: (balance: number) => void
     contract: ERC721ContractDetailed | undefined
-    loadingOwnerList?: boolean
 }
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
-    const { onContractChange, onBalanceChange, contract, loadingOwnerList = false } = props
+    const { onContractChange, onBalanceChange, contract } = props
     const account = useAccount()
     const { classes } = useStyles({ hasIcon: Boolean(contract?.iconURL) })
     const { value: balanceFromChain, loading: loadingFromChain } = useERC721ContractBalance(contract?.address, account)
@@ -136,10 +131,8 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                         </Typography>
                     ) : null}
                 </div>
-                <div className={classes.IconWrapper}>
-                    {!loading && loadingOwnerList ? <CircularProgress size={16} /> : null}
-                    <ExpandMoreIcon className={classes.expandIcon} />
-                </div>
+
+                <ExpandMoreIcon className={classes.expandIcon} />
             </div>
         </Box>
     )

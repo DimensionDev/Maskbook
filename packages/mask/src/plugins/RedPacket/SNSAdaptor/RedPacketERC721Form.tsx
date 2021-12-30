@@ -1,4 +1,4 @@
-import { Box, Typography, List, ListItem } from '@mui/material'
+import { Box, Typography, List, ListItem, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../../../utils'
@@ -179,6 +179,9 @@ const useStyles = makeStyles()((theme) => {
             opacity: 0.5,
             pointerEvents: 'none',
         },
+        loadingOwnerList: {
+            margin: '24px auto 16px',
+        },
     }
 })
 interface RedPacketERC721FormProps {
@@ -252,51 +255,54 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     contract={contract}
                     onContractChange={setContract}
                     onBalanceChange={setBalance}
-                    loadingOwnerList={loadingOwnerList}
                 />
                 {contract && balance ? (
-                    <Box
-                        className={classNames(
-                            classes.selectWrapper,
-                            tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
-                        )}>
-                        <div
-                            className={classes.option}
-                            onClick={() => {
-                                setSelectOption(NFTSelectOption.All)
-                                setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
-                            }}>
+                    loadingOwnerList ? (
+                        <CircularProgress size={24} className={classes.loadingOwnerList} />
+                    ) : (
+                        <Box
+                            className={classNames(
+                                classes.selectWrapper,
+                                tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
+                            )}>
                             <div
-                                className={classNames(
-                                    classes.checkIconWrapper,
-                                    selectOption === NFTSelectOption.All ? classes.checked : '',
-                                )}>
-                                <CheckIcon className={classes.checkIcon} />
+                                className={classes.option}
+                                onClick={() => {
+                                    setSelectOption(NFTSelectOption.All)
+                                    setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                }}>
+                                <div
+                                    className={classNames(
+                                        classes.checkIconWrapper,
+                                        selectOption === NFTSelectOption.All ? classes.checked : '',
+                                    )}>
+                                    <CheckIcon className={classes.checkIcon} />
+                                </div>
+                                <Typography color="textPrimary">
+                                    {t('plugin_red_packet_nft_select_all_option', {
+                                        total: Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length),
+                                    })}
+                                </Typography>
                             </div>
-                            <Typography color="textPrimary">
-                                {t('plugin_red_packet_nft_select_all_option', {
-                                    total: Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length),
-                                })}
-                            </Typography>
-                        </div>
-                        <div
-                            className={classes.option}
-                            onClick={() => {
-                                setSelectOption(NFTSelectOption.Partial)
-                                setExistTokenDetailedList([])
-                            }}>
                             <div
-                                className={classNames(
-                                    classes.checkIconWrapper,
-                                    selectOption === NFTSelectOption.Partial ? classes.checked : '',
-                                )}>
-                                <CheckIcon className={classes.checkIcon} />
+                                className={classes.option}
+                                onClick={() => {
+                                    setSelectOption(NFTSelectOption.Partial)
+                                    setExistTokenDetailedList([])
+                                }}>
+                                <div
+                                    className={classNames(
+                                        classes.checkIconWrapper,
+                                        selectOption === NFTSelectOption.Partial ? classes.checked : '',
+                                    )}>
+                                    <CheckIcon className={classes.checkIcon} />
+                                </div>
+                                <Typography color="textPrimary">
+                                    {t('plugin_red_packet_nft_select_partially_option')}
+                                </Typography>
                             </div>
-                            <Typography color="textPrimary">
-                                {t('plugin_red_packet_nft_select_partially_option')}
-                            </Typography>
-                        </div>
-                    </Box>
+                        </Box>
+                    )
                 ) : null}
                 {contract &&
                 balance &&
