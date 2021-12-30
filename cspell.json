@@ -249,7 +249,11 @@
         "hexlify",
         "contribs",
         "contrib",
-        "juicebox"
+        "juicebox",
+        "avalanche",
+        "avax",
+        "AVAX",
+        "Avalanche"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -359,10 +363,7 @@
         "poap",
         "irss",
         "CELO",
-        "avalanche",
-        "avax",
-        "AVAX",
-        "Avalanche"
+        "flac"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
