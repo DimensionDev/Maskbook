@@ -13,6 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "UNISWAP_V2_HEALTH_URL": {
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
@@ -45,6 +47,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     }
 }

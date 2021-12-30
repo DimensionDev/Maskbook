@@ -120,7 +120,7 @@ export const MaskNetworkAPI: MaskNetworkAPIs = {
             case NetworkType.Fantom:
                 return Services.Settings.getxDaiNetworkTradeProvider()
             case NetworkType.Avalanche:
-                return Services.Settings.getxDaiNetworkTradeProvider()
+                return Services.Settings.getAvalancheNetworkTradeProvider()
             default:
                 unreachable(network)
         }

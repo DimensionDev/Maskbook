@@ -13,6 +13,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "MASK_BOX_CONTRACT_FROM_BLOCK": {
@@ -29,6 +30,7 @@
         "Arbitrum_Rinkeby": 0,
         "xDai": 0,
         "Celo": 0,
+        "Avalanche": 0,
         "Fantom": 0
     },
     "MASK_BOX_TEST_NFT": {
@@ -45,6 +47,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "WHITE_LIST_QUALIFICATION_CONTRACT_ADDRESS": {
@@ -61,6 +64,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     },
     "SIG_VERIFY_QULIFICATION_CONTRACT_ADDRESS": {
@@ -77,6 +81,7 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
+        "Avalanche": "",
         "Fantom": ""
     }
 }
