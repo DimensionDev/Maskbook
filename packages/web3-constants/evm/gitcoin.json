@@ -30,8 +30,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -47,8 +47,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Celo": "",
-        "Avalanche": "",
-        "Fantom": ""
+        "Fantom": "",
+        "Avalanche": ""
     },
     "GITCOIN_TIP_PERCENTAGE": {
         "Mainnet": 5,
@@ -64,7 +64,7 @@
         "Arbitrum_Rinkeby": 5,
         "xDai": 5,
         "Celo": 0,
-        "Avalanche": 0,
-        "Fantom": 0
+        "Fantom": 0,
+        "Avalanche": 0
     }
 }

@@ -14,7 +14,7 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "https://api.ftmscan.com/api",
-        "Fantom": "https://api.ftmscan.com/api"
+        "Avalanche": "https://api.avax.network/"
     },
     "EXPLORER_API_KEY": {
         "Mainnet": "99IX9MBZKG8FYQUECXDNDPATGVDDH6JCWW",
@@ -31,6 +31,6 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "",
-        "Fantom": ""
+        "Avalanche": ""
     }
 }
