@@ -1,5 +1,7 @@
+import { PluginId } from '@masknet/plugin-infra'
+
 //#region plugin settings
-export const PLUGIN_IDENTIFIER = 'com.maskbook.trader'
+export const PLUGIN_ID = PluginId.Trader
 //#endregion
 
 //#region apis

@@ -60,6 +60,7 @@ export function useCollectibles(
             size,
             collection,
         )
+
         return {
             collectibles: uniqWith(
                 [

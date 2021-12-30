@@ -46,7 +46,7 @@ function createERC721ContractFromAssetContract(
 ): ERC721ContractDetailed {
     return createERC721ContractDetailed(
         chainId,
-        address,
+        assetContract?.address ?? '',
         assetContract?.name,
         assetContract?.token_symbol,
         undefined,
@@ -254,13 +254,15 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
 
     async getTokens(from: string, opts: NonFungibleTokenAPI.Options) {
         const { chainId = ChainId.Mainnet, page = 0, size = 50 } = opts
+
         const requestPath = urlcat('/api/v1/assets', {
             owner: from,
             offset: page,
             limit: size,
+            collection: opts.pageInfo?.collection,
         })
         const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId)
-        return (
+        const assets =
             response?.assets
                 .filter(
                     (x: OpenSeaResponse) =>
@@ -268,7 +270,10 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
                         ['ERC721', 'ERC1155'].includes(x.asset_contract.schema_name),
                 )
                 .map((asset: OpenSeaResponse) => createERC721TokenFromAsset(from, asset.token_id, chainId, asset)) ?? []
-        )
+        return {
+            data: assets,
+            hasNextPage: assets.length === size,
+        }
     }
 
     async getHistory(
@@ -309,19 +314,28 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
 
     async getCollections(address: string, { chainId = ChainId.Mainnet, page, size }: NonFungibleTokenAPI.Options = {}) {
         const requestPath = urlcat('/api/v1/collections', {
-            address,
+            asset_owner: address,
             offset: page,
             limit: size,
         })
-        const response = await fetchFromOpenSea<{
-            collections: OpenSeaCollection[]
-        }>(requestPath, chainId)
-        return (
-            response?.collections.map((x) => ({
+        const response = await fetchFromOpenSea<OpenSeaCollection[]>(requestPath, chainId)
+        if (!response) {
+            return {
+                data: [],
+                hasNextPage: false,
+            }
+        }
+
+        const collections =
+            response?.map((x) => ({
                 name: x.name,
                 image: x.image_url || undefined,
                 slug: x.slug,
             })) ?? []
-        )
+
+        return {
+            data: collections,
+            hasNextPage: collections.length === size,
+        }
     }
 }

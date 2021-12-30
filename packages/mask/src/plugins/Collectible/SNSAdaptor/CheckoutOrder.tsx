@@ -1,14 +1,12 @@
 import { Table, TableHead, TableBody, TableRow, TableCell, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '../../../components/shared/Image'
-import { useChainId } from '@masknet/web3-shared-evm'
+import { ERC20TokenDetailed, useChainId, formatBalance } from '@masknet/web3-shared-evm'
 import { resolveAssetLinkOnOpenSea } from '../pipes'
 import { useI18N } from '../../../utils'
 import type { useAsset } from '../../EVM/hooks/useAsset'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
-import BigNumber from 'bignumber.js'
-import { leftShift } from '@masknet/web3-shared-base'
-import type { OpenSeaResponse } from '../types/opensea'
+import type { Order } from 'opensea-js/lib/types'
 
 const useStyles = makeStyles()((theme) => ({
     itemInfo: {
@@ -27,22 +25,23 @@ export interface CheckoutOrderProps {
 
 export function CheckoutOrder(props: CheckoutOrderProps) {
     const { t } = useI18N()
-    const { asset } = props
-    const order = asset?.value?.desktopOrder
+    const { asset, assetOrder } = props
+    const order = assetOrder?.value ?? asset?.value?.desktopOrder
     const { classes } = useStyles()
     const chainId = useChainId()
-
     if (!asset?.value) return null
     if (!order) return null
-    const price = order ? order.current_price ?? asset.value.current_price : asset.value.current_price ?? ''
+
+    const price = (order as Order).currentPrice ?? asset.value.current_price
     const getPrice = () => {
         if (!price) return 'error'
-        const decimal = (asset.value?.response_ as OpenSeaResponse).collection.payment_tokens.find((item) => {
+        const decimal = asset.value?.response_.collection.payment_tokens.find((item: ERC20TokenDetailed) => {
             return item.symbol === asset.value?.current_symbol
         })?.decimals
         if (!decimal) return 'error'
-        return leftShift(new BigNumber(price), decimal).toFixed() ?? 'error'
+        return formatBalance(price, decimal) ?? 'error'
     }
+
     return (
         <Table size="small">
             <TableHead>

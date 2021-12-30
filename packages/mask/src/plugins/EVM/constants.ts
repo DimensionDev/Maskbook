@@ -1,8 +1,8 @@
-import type { Web3Plugin } from '@masknet/plugin-infra'
+import { PluginId, Web3Plugin } from '@masknet/plugin-infra'
 import { ChainId, NetworkType, ProviderType } from '@masknet/web3-shared-evm'
 
-export const PLUGIN_META_KEY = 'com.mask.evm'
-export const PLUGIN_ID = 'com.mask.evm'
+export const PLUGIN_ID = PluginId.EVM
+export const PLUGIN_META_KEY = `${PluginId.EVM}:1`
 export const PLUGIN_NAME = 'EVM'
 export const PLUGIN_ICON = 'Ξ'
 export const PLUGIN_DESCRIPTION = ''
@@ -135,6 +135,16 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         name: 'Celo',
         icon: new URL('./assets/celo.png', import.meta.url),
         iconColor: 'rgb(53, 208, 127)',
+        isMainnet: true,
+    },
+    {
+        ID: `${PLUGIN_ID}_fantom`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Fantom,
+        type: NetworkType.Fantom,
+        name: 'Fantom',
+        icon: new URL('./assets/fantom.png', import.meta.url),
+        iconColor: 'rgb(73, 169, 166)',
         isMainnet: true,
     },
 ]

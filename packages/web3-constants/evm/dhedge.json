@@ -12,7 +12,8 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -27,6 +28,7 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": "",
-        "Celo": ""
+        "Celo": "",
+        "Fantom": ""
     }
 }
