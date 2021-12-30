@@ -1,6 +1,6 @@
 import { useSubscription, Subscription } from 'use-subscription'
 import { useMemo } from 'react'
-import type { ObservableMap, ObservableSet } from '..'
+import type { ObservableMap, ObservableSet } from '@masknet/shared-base'
 
 export function useObservableValues<T>(map: ObservableMap<any, T> | ObservableSet<T>) {
     const subscription = useMemo<Subscription<T[]>>(

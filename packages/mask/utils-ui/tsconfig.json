@@ -1,0 +1,12 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./",
+    "outDir": "../dist/utils-ui/",
+    "tsBuildInfoFile": "../dist/utils-ui.tsbuildinfo",
+    "emitDeclarationOnly": true,
+    "lib": ["ES2021"]
+  },
+  "include": ["./"],
+  "references": []
+}

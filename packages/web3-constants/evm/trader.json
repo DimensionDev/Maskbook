@@ -14,7 +14,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V2_FACTORY_ADDRESS": {
         "Mainnet": "0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f",
@@ -31,7 +33,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V2_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v2",
@@ -48,7 +52,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V2_INIT_CODE_HASH": {
         "Mainnet": "0x96e8ac4277198ff8b6f785478aa9a39f403cb768dd02cbee326c3e7da348845f",
@@ -65,7 +71,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_SWAP_ROUTER_ADDRESS": {
         "Mainnet": "0xe592427a0aece92de3edee1f18e0157c05861564",
@@ -82,7 +90,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V3_FACTORY_ADDRESS": {
         "Mainnet": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
@@ -99,7 +109,9 @@
         "xDai": "",
         "Optimistic": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
         "Optimistic_Kovan": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
-        "Optimistic_Goerli": "0x1F98431c8aD98523631AE4a59f267346ea31F984"
+        "Optimistic_Goerli": "0x1F98431c8aD98523631AE4a59f267346ea31F984",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V3_QUOTER_ADDRESS": {
         "Mainnet": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
@@ -116,7 +128,9 @@
         "xDai": "",
         "Optimistic": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
         "Optimistic_Kovan": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
-        "Optimistic_Goerli": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6"
+        "Optimistic_Goerli": "0xb27308f9F90D607463bb33eA1BeBb41C27CE5AB6",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V3_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
@@ -133,7 +147,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
-        "Optimistic_Goerli": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3"
+        "Optimistic_Goerli": "https://api.thegraph.com/subgraphs/name/uniswap/uniswap-v3",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V3_INIT_CODE_HASH": {
         "Mainnet": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
@@ -150,7 +166,9 @@
         "xDai": "",
         "Optimistic": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
         "Optimistic_Kovan": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
-        "Optimistic_Goerli": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54"
+        "Optimistic_Goerli": "0xe34f199b19b2b4f47f68442619d555527d244f78a3297ea89325f843f87b8b54",
+        "Celo": "",
+        "Fantom": ""
     },
     "SUSHISWAP_ROUTER_ADDRESS": {
         "Mainnet": "0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F",
@@ -164,7 +182,9 @@
         "Mumbai": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Arbitrum": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
         "Arbitrum_Rinkeby": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
-        "xDai": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506"
+        "xDai": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",
+        "Celo": "0x1421bDe4B10e8dd459b3BCb598810B1337D56842",
+        "Fantom": "0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506"
     },
     "SUSHISWAP_FACTORY_ADDRESS": {
         "Mainnet": "0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac",
@@ -181,7 +201,9 @@
         "xDai": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4",
+        "Fantom": "0xc35DADB65012eC5796536bD9864eD8773aBc74C4"
     },
     "SUSHISWAP_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/zippoxer/sushiswap-subgraph-fork",
@@ -198,7 +220,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "SUSHISWAP_INIT_CODE_HASH": {
         "Mainnet": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
@@ -215,7 +239,9 @@
         "xDai": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303",
+        "Fantom": "0xe18a34eb0e04b04f7a0ac29a6e80748dca96319b42c54d679cb821dca90c6303"
     },
     "SASHIMISWAP_ROUTER_ADDRESS": {
         "Mainnet": "0xe4fe6a45f354e845f954cddee6084603cedb9410",
@@ -232,7 +258,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "SASHIMISWAP_FACTORY_ADDRESS": {
         "Mainnet": "0xF028F723ED1D0fE01cC59973C49298AA95c57472",
@@ -249,7 +277,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "SASHIMISWAP_THEGRAPH": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/sashimiproject/sashimi",
@@ -266,7 +296,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "SASHIMISWAP_INIT_CODE_HASH": {
         "Mainnet": "0xb465bbe4edb8c9b0da8ff0b2b36ce0065de9fcd5a33f32c6856ea821779c8b72",
@@ -283,7 +315,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "QUICKSWAP_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -300,7 +334,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "QUICKSWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -317,7 +353,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "QUICKSWAP_THEGRAPH": {
         "Mainnet": "",
@@ -334,7 +372,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "QUICKSWAP_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -351,7 +391,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "PANCAKESWAP_ROUTER_ADDRESS": {
         "Mainnet": "",
@@ -368,7 +410,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "PANCAKESWAP_FACTORY_ADDRESS": {
         "Mainnet": "",
@@ -385,7 +429,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "PANCAKESWAP_THEGRAPH": {
         "Mainnet": "",
@@ -402,7 +448,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "PANCAKESWAP_INIT_CODE_HASH": {
         "Mainnet": "",
@@ -419,7 +467,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "BALANCER_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -436,7 +486,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "BALANCER_EXCHANGE_PROXY_ADDRESS": {
         "Mainnet": "0x3E66B66Fd1d0b02fDa6C811Da9E0547970DB2f21",
@@ -453,7 +505,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "BALANCER_POOLS_URL": {
         "Mainnet": "https://ipfs.fleek.co/ipns/balancer-bucket.storage.fleek.co/balancer-exchange/pools",
@@ -470,7 +524,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "DODO_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -487,7 +543,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "DODO_EXCHANGE_PROXY_ADDRESS": {
         "Mainnet": "0xCB859eA579b28e02B87A1FDE08d087ab9dbE5149",
@@ -504,7 +562,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "BANCOR_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -521,7 +581,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "BANCOR_EXCHANGE_PROXY_ADDRESS": {
         "Mainnet": "0x2F9EC37d6CcFFf1caB21733BdaDEdE11c823cCB0",
@@ -538,6 +600,8 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     }
 }

@@ -14,7 +14,9 @@
         "xDai": ["https://rpc.xdaichain.com/"],
         "Optimistic": ["https://mainnet.optimism.io"],
         "Optimistic_Kovan": ["https://kovan.optimism.io"],
-        "Optimistic_Goerli": ["https://goerli.optimism.io"]
+        "Optimistic_Goerli": ["https://goerli.optimism.io"],
+        "Celo": ["https://forno.celo.org"],
+        "Fantom": ["https://rpcapi.fantom.network/"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -31,6 +33,8 @@
         "xDai": [0, 0, 0, 0],
         "Optimistic": [0, 0, 0, 0],
         "Optimistic_Kovan": [0, 0, 0, 0],
-        "Optimistic_Goerli": [0, 0, 0, 0]
+        "Optimistic_Goerli": [0, 0, 0, 0],
+        "Celo": [0, 0, 0, 0],
+        "Fantom": [0, 0, 0, 0]
     }
 }

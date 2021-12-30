@@ -55,6 +55,10 @@ compileConstants(path.join(__dirname, 'evm'), [
     'Optimistic',
     'Optimistic_Kovan',
     'Optimistic_Goerli',
+    'Celo',
+    'Fantom',
 ])
 
 compileConstants(path.join(__dirname, 'solana'), ['mainnet-beta', 'testnet', 'devnet'])
+
+compileConstants(path.join(__dirname, 'flow'), ['Mainnet', 'Testnet'])

@@ -1,21 +1,21 @@
 import { Paper, Stack, Tab, Tabs } from '@mui/material'
 import { makeStyles, MaskColorVar, useCustomSnackbar } from '@masknet/theme'
-import { PageFrame } from '../../components/DashboardFrame'
+import { PageFrame } from '../../components/PageFrame'
 import { useEffect, useState } from 'react'
-import { capitalize } from 'lodash-es'
+import { capitalize } from 'lodash-unified'
 import { TabContext, TabPanel } from '@mui/lab'
 import { PersonaSetup } from './components/PersonaSetup'
 import { PersonaDrawer } from './components/PersonaDrawer'
 import { PersonaContext } from './hooks/usePersonaContext'
 import { useDashboardI18N } from '../../locales'
-import type { PersonaInformation } from '@masknet/shared'
+import type { PersonaInformation } from '@masknet/shared-base'
 import { ContentContainer } from '../../components/ContentContainer'
 import { PersonaContent } from './components/PersonaContent'
 import { PersonaRowCard } from './components/PersonaCard/Row'
 import { PersonaStateBar } from './components/PersonaStateBar'
 import { UserProvider } from '../Settings/hooks/UserContext'
 import { useNavigate } from 'react-router'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     tabPanel: {
@@ -55,7 +55,7 @@ function Personas() {
     useEffect(() => {
         if (personas?.length === 0) {
             showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
-            navigate(RoutePaths.Setup)
+            navigate(DashboardRoutes.Setup)
         }
     }, [personas])
 
@@ -71,7 +71,7 @@ function Personas() {
         <UserProvider>
             <PageFrame
                 title={t.personas()}
-                noBackgroundFill={true}
+                noBackgroundFill
                 primaryAction={
                     <PersonaStateBar
                         nickname={currentPersona?.nickname}
@@ -83,7 +83,7 @@ function Personas() {
                 <Paper variant="rounded" className={classes.personaCard}>
                     <PersonaRowCard />
                 </Paper>
-                <ContentContainer style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                <ContentContainer style={{ display: 'flex', flexDirection: 'column' }}>
                     <TabContext value={activeTab}>
                         <Tabs value={!!activeTab ? activeTab : false} onChange={(event, tab) => setActiveTab(tab)}>
                             {definedSocialNetworks.map(({ networkIdentifier }) => (

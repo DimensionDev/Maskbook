@@ -29,4 +29,4 @@ export default styled<typeof Switch>(Switch)(({ size }) => {
             transform: `translateX(${isSmall ? 4 : 2}px)`,
         },
     }
-})
+}) as any as typeof Switch

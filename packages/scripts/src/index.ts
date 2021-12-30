@@ -17,3 +17,4 @@ export { syncLanguages } from './locale-kit-next'
 // Sub-projects build commands
 export { buildInjectedScript, watchInjectedScript } from './projects/injected-scripts'
 export { buildMaskSDK, watchMaskSDK } from './projects/mask-sdk'
+export { buildPolyfill } from './projects/polyfill'

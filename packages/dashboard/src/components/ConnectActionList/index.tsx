@@ -1,6 +1,13 @@
-import { styled, listItemClasses } from '@mui/material'
+import type { StyledComponent } from '@emotion/styled'
+import { styled, listItemClasses, Theme } from '@mui/material'
+import type { MUIStyledCommonProps } from '@mui/system'
+import type { DetailedHTMLProps, HTMLAttributes } from 'react'
 
-export const ConnectActionList = styled('ul')(({ theme }) => ({
+export const ConnectActionList: StyledComponent<
+    MUIStyledCommonProps<Theme>,
+    DetailedHTMLProps<HTMLAttributes<HTMLUListElement>, HTMLUListElement>,
+    {}
+> = styled('ul')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     listStyle: 'none',

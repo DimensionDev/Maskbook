@@ -1,9 +1,10 @@
-import type { TypedMessage, TypedMessageTuple } from '@masknet/shared'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import type { Emitter } from '@servie/events'
+import type React from 'react'
 import type { Option, Result } from 'ts-results'
+import type { TypedMessage, TypedMessageTuple, ScopedStorage, ProfileIdentifier } from '@masknet/shared-base'
+import type { Emitter } from '@servie/events'
+import type { Web3Plugin } from './web3-types'
 
-export namespace Plugin {
+export declare namespace Plugin {
     /**
      * A code loader interface of the plugin API.
      *
@@ -53,6 +54,12 @@ export namespace Plugin {
  * Basic knowledge of the plugin (ID, name, publisher, ...).
  */
 export namespace Plugin.Shared {
+    export interface SharedContext {
+        /**
+         * A lightweight K/V storage used to store some simple data.
+         */
+        createKVStorage<T extends object>(type: 'memory' | 'persistent', defaultValues: T): ScopedStorage<T>
+    }
     export interface Definition {
         /**
          * ID of the plugin. It should be unique.
@@ -95,12 +102,20 @@ export namespace Plugin.Shared {
         management?: ManagementProperty
         /** i18n resources of this plugin */
         i18n?: I18NResource
+        /** Introduce networks information. */
+        declareWeb3Networks?: Web3Plugin.NetworkDescriptor[]
+        /** Introduce wallet providers information. */
+        declareWeb3Providers?: Web3Plugin.ProviderDescriptor[]
+        /** Introduce application category information. */
+        declareApplicationCategories?: Web3Plugin.ApplicationCategoryDescriptor[]
     }
     /**
      * This part is shared between Dashboard, SNSAdaptor and Worker part
      * which you should include the information above in those three parts.
      */
-    export interface DefinitionDeferred<Context = undefined> extends Definition, Utilities {
+    export interface DefinitionDeferred<Context extends Shared.SharedContext = Shared.SharedContext>
+        extends Definition,
+            Utilities {
         /**
          * This function is called when the plugin is initialized.
          *
@@ -135,13 +150,9 @@ export namespace Plugin.Shared {
         architecture: Record<'app' | 'web', boolean>
         /** The SNS Network this plugin supports. */
         networks: SupportedNetworksDeclare
-        web3?: Web3EnableRequirement
+        /** The Web3 Network this plugin supports */
+        web3?: Web3Plugin.EnableRequirement
     }
-    export interface Web3EnableRequirement {
-        /** Plugin can declare what chain it supports. When the current chain is not supported, the composition entry will be hidden. */
-        operatingSupportedChains?: ChainId[]
-    }
-
     export interface ManagementProperty {
         /** This plugin should not displayed in the plugin management page. */
         internal?: boolean
@@ -170,21 +181,32 @@ export namespace Plugin.Shared {
 
 /** This part runs in the SNSAdaptor */
 export namespace Plugin.SNSAdaptor {
-    export interface Definition extends Shared.DefinitionDeferred {
+    export interface SNSAdaptorContext extends Shared.SharedContext {}
+    export interface Definition extends Shared.DefinitionDeferred<SNSAdaptorContext> {
         /** This UI will be rendered for each post found. */
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
-        /** This UI will be rendered under the Search box of the SNS. */
-        SearchBoxComponent?: InjectUI<{}>
+        /** This UI will be rendered under the Search of the SNS. */
+        SearchResultBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
+        /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
+        Web3UI?: Web3Plugin.UI.UI
+        /** This is the context of the currently chosen network. */
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
         /** This UI will be an entry to the plugin in the Composition dialog of Mask. */
         CompositionDialogEntry?: CompositionDialogEntry
         /** This UI will be use when there is known badges. */
         CompositionDialogMetadataBadgeRender?: CompositionMetadataBadgeRender
         /** This UI will be rendered as an entry in the toolbar (if the SNS has a Toolbar support) */
         ToolbarEntry?: ToolbarEntry
+        /** This UI will be rendered as an entry in the wallet status dialog */
+        ApplicationEntry?: ApplicationEntry
+        /** This UI will be rendered as sliders on the profile page */
+        ProfileSliders?: ProfileSlider[]
+        /** This UI will be rendered as tabs on the profile page */
+        ProfileTabs?: ProfileTab[]
     }
     //#region Composition entry
     /**
@@ -194,6 +216,7 @@ export namespace Plugin.SNSAdaptor {
      * - Custom type: Fallback choice if the dialog type cannot do what you want to do.
      */
     export type CompositionDialogEntry = CompositionDialogEntryCustom | CompositionDialogEntryDialog
+
     export interface CompositionDialogEntryCustom {
         /**
          * A label that will be rendered in the CompositionDialog as a chip.
@@ -260,21 +283,113 @@ export namespace Plugin.SNSAdaptor {
         onClick: 'openCompositionEntry'
     }
     //#endregion
+
+    export interface ApplicationEntry {
+        /**
+         * The icon image URL
+         */
+        icon: URL
+        /**
+         * The name of the application
+         */
+        label: I18NStringField | string
+        /**
+         * Also an entrance in a sub-folder
+         */
+        categoryID?: string
+        /**
+         * Used to order the applications on the board
+         */
+        priority: number
+        /**
+         * What to do if the application icon is clicked.
+         */
+        onClick(): void
+    }
+
+    export interface ProfileIdentity {
+        avatar?: string
+        bio?: string
+        homepage?: string
+        nickname?: string
+        identifier: ProfileIdentifier
+    }
+
+    export interface ProfileAddress {
+        type: string
+        label: string
+        resolvedAddress: string
+    }
+
+    export interface ProfileSlider {
+        ID: string
+
+        /**
+         * The name of the slider card
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+        /**
+         * The injected UI
+         */
+        children: InjectUI<{}>
+    }
+
+    export interface ProfileTab {
+        ID: string
+
+        /**
+         * The name of the tab
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+
+        UI?: {
+            /**
+             * The injected tab content
+             */
+            TabContent: InjectUI<{ identity?: ProfileIdentity; addressNames?: ProfileAddress[] }>
+        }
+        Utils?: {
+            /**
+             * If it returns false, this tab will not be displayed.
+             */
+            shouldDisplay?: (identity?: ProfileIdentity, addressNames?: ProfileAddress[]) => boolean
+
+            /**
+             * Sort address name in expected order.
+             */
+            addressNameSorter?: (a: ProfileAddress, z: ProfileAddress) => number
+        }
+    }
 }
 
 /** This part runs in the dashboard */
 export namespace Plugin.Dashboard {
+    export interface DashboardContext extends Shared.SharedContext {}
     // As you can see we currently don't have so much use case for an API here.
-    export interface Definition extends Shared.DefinitionDeferred {
+    export interface Definition extends Shared.DefinitionDeferred<DashboardContext> {
         /** This UI will be injected into the global scope of the Dashboard. */
         GlobalInjection?: InjectUI<{}>
+        /**
+         * This is a chunk of web3 UIs to be rendered into various places of Mask UI.
+         */
+        Web3UI?: Web3Plugin.UI.UI
+        /** This is the context of the currently chosen network. */
+        Web3State?: Web3Plugin.ObjectCapabilities.Capabilities
     }
 }
 
 /** This part runs in the background page */
 export namespace Plugin.Worker {
-    export interface WorkerContext {
-        getStorage<T extends IndexableTaggedUnion>(): Storage<T>
+    export interface WorkerContext extends Shared.SharedContext {
+        getDatabaseStorage<T extends IndexableTaggedUnion>(): DatabaseStorage<T>
     }
     export interface Definition extends Shared.DefinitionDeferred<WorkerContext> {
         backup?: BackupHandler
@@ -327,7 +442,7 @@ export namespace Plugin.Worker {
      *     await cursor.delete()
      * }
      */
-    export interface Storage<Data extends IndexableTaggedUnion = IndexableTaggedUnion> {
+    export interface DatabaseStorage<Data extends IndexableTaggedUnion = IndexableTaggedUnion> {
         /**
          * Query an object from the database
          * @param type "type" field on the object
@@ -415,7 +530,6 @@ export type IndexableTaggedUnion = {
     type: string | number
     id: string | number
 }
-// TODO: Plugin i18n is not read today.
 export interface I18NStringField {
     /** The i18n key of the string content. */
     i18nKey?: string
@@ -434,6 +548,52 @@ export enum CurrentSNSNetwork {
     Instagram = 3,
 }
 
+/**
+ * All integrated Plugin IDs
+ */
+export enum PluginId {
+    Avatar = 'com.maskbook.avatar',
+    Collectible = 'com.maskbook.collectibles',
+    CryptoArtAI = 'com.maskbook.cryptoartai',
+    dHEDGE = 'org.dhedge',
+    EVM = 'com.mask.evm',
+    External = 'io.mask.external',
+    Furucombo = 'app.furucombo',
+    Gitcoin = 'co.gitcoin',
+    GoodGhosting = 'co.good_ghosting',
+    MaskBox = 'com.maskbook.box',
+    Poll = 'com.maskbook.poll',
+    Profile = 'com.mask.profile',
+    Trader = 'com.maskbook.trader',
+    Transak = 'com.maskbook.transak',
+    Valuables = 'com.maskbook.tweet',
+    DAO = 'money.juicebox',
+    Debugger = 'io.mask.debugger',
+    Example = 'io.mask.example',
+    Flow = 'com.mask.flow',
+    RSS3 = 'bio.rss3',
+    RedPacket = 'com.maskbook.red_packet',
+    Pets = 'com.maskbook.pets',
+    Snapshot = 'org.snapshot',
+    ITO = 'com.maskbook.ito',
+    Wallet = 'com.maskbook.wallet',
+    PoolTogether = 'com.pooltogether',
+    UnlockProtocol = 'com.maskbook.unlockprotocol',
+    FileService = 'com.maskbook.fileservice',
+}
+
+export interface Pagination {
+    /** The item size of each page. */
+    size?: number
+    /** The page index. */
+    page?: number
+}
+
+export interface Pageable<T> {
+    currentPage: number
+    hasNextPage: boolean
+    data: T[]
+}
 /**
  * This namespace is not related to the plugin authors
  */

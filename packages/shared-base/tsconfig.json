@@ -6,5 +6,6 @@
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
   "include": ["./src", "./src/**/*.json"],
-  "references": []
+  // Only type-level dependency.
+  "references": [{ "path": "../public-api" }, { "path": "../web3-shared/evm" }]
 }

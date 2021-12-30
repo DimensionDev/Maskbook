@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { ConnectedPersonaLine, UnconnectedPersonaLine } from '../PersonaLine'
-import type { PersonaIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared'
+import type { PersonaIdentifier, ProfileIdentifier, ProfileInformation } from '@masknet/shared-base'
 import { formatFingerprint } from '@masknet/shared'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import type { SocialNetwork } from '../../api'
@@ -100,7 +100,6 @@ export const PersonaCardUI = memo<PersonaCardUIProps>((props) => {
                             (x) => x.identifier.network === networkIdentifier,
                         )
 
-                        currentNetworkProfiles.map(() => {})
                         if (!currentNetworkProfiles.length) {
                             return (
                                 <UnconnectedPersonaLine

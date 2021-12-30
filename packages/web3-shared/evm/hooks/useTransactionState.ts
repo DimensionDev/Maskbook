@@ -1,20 +1,7 @@
-import { useState, useCallback } from 'react'
+import { useReducer } from 'react'
 import type { TransactionReceipt } from 'web3-core'
-import { isNextStateAvailable } from '..'
-
-export enum TransactionStateType {
-    UNKNOWN = 0,
-    /** Wait for external provider */
-    WAIT_FOR_CONFIRMING = 1,
-    /** Hash is available */
-    HASH = 2,
-    /** Receipt is available */
-    RECEIPT = 3,
-    /** Confirmed or Reverted */
-    CONFIRMED = 4,
-    /** Fail to send */
-    FAILED = 5,
-}
+import { TransactionStateType } from '../types'
+import { isNextStateAvailable } from '../utils'
 
 export type TransactionState =
     | {
@@ -46,16 +33,13 @@ export type TransactionState =
           receipt?: TransactionReceipt
       }
 
+function txStateReducer(state: TransactionState, nextState: TransactionState) {
+    const allowed = nextState.type === TransactionStateType.UNKNOWN || isNextStateAvailable(state.type, nextState.type)
+    return allowed ? nextState : state
+}
+
 export function useTransactionState() {
-    const [state, setState] = useState<TransactionState>({
+    return useReducer(txStateReducer, {
         type: TransactionStateType.UNKNOWN,
     })
-    const setStateWithConfirmation = useCallback(
-        (nextState: TransactionState) => {
-            if (nextState.type === TransactionStateType.UNKNOWN || isNextStateAvailable(state.type, nextState.type))
-                setState(nextState)
-        },
-        [state],
-    )
-    return [state, setStateWithConfirmation] as const
 }

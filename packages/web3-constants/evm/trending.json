@@ -14,7 +14,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "UNISWAP_V2_HEALTH_URL": {
         "Mainnet": "https://api.thegraph.com/index-node/graphql",
@@ -31,7 +33,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "ETHEREUM_BLOCKS_SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/blocklytics/ethereum-blocks",
@@ -48,6 +52,8 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     }
 }

@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "files": [],
+  "ts-node": {
+    "transpileOnly": true,
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  },
+  "references": [{ "path": "./src" }]
+}

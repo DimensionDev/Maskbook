@@ -1,7 +1,7 @@
 import { ROOT_PATH, task } from '../utils'
 import { readdir, writeFile } from 'fs/promises'
 import { resolve, dirname, join } from 'path'
-import { upperFirst } from 'lodash'
+import { upperFirst } from 'lodash-unified'
 import { prettier } from '../utils/prettier'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
@@ -20,28 +20,52 @@ export async function syncLanguages() {
 
         const languages = await getLanguages(inputDir)
 
-        let code = header
-        for (const [language] of languages) {
-            code += `import ${language.replace('-', '_')} from './${language}.json'\n`
+        {
+            let code = header
+            code += `\nexport * from './i18n_generated'\n`
+            code = await prettier(code)
+            await writeFile(join(inputDir, 'index.ts'), code, { encoding: 'utf8' })
         }
-        code += `\nexport * from './i18n_generated'\n`
-        code += `export const languages = {\n`
-        for (const [language, familyName] of languages) {
-            code += `    '${familyName}': ${language.replace('-', '_')},\n`
-        }
-        code += `}\n`
-        // Non-plugin i18n files
-        if (!namespace.includes('.')) {
-            let target = `@masknet/shared`
-            if (namespace === 'shared') {
-                target += '-base'
-            }
-            code += `import { createI18NBundle } from '${target}'\n`
-            code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', languages)\n`
-        }
-        code = await prettier(code)
 
-        await writeFile(join(inputDir, 'index.ts'), code, { encoding: 'utf8' })
+        {
+            let code = header
+            for (const [language] of languages) {
+                code += `import ${language.replace('-', '_')} from './${language}.json'\n`
+            }
+            code += `export const languages = {\n`
+            for (const [language, familyName] of languages) {
+                code += `    '${familyName}': ${language.replace('-', '_')},\n`
+            }
+            code += `}\n`
+            // Non-plugin i18n files
+            if (!namespace.includes('.')) {
+                const target = `@masknet/shared-base`
+                code += `import { createI18NBundle } from '${target}'\n`
+                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', languages)\n`
+            }
+
+            {
+                const allImportPath: string[] = []
+                const binding: string[] = []
+                for (const [language, familyName] of languages) {
+                    allImportPath.push(`./${language}.json`)
+                    binding.push(`'${familyName}': ${language.replace('-', '_')}`)
+                }
+                code += `// @ts-ignore
+                        if (import.meta.webpackHot) {
+                            // @ts-ignore
+                            import.meta.webpackHot.accept(
+                                ${JSON.stringify(allImportPath)},
+                                () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR', {
+                                    detail: ['${namespace}', { ${binding.join(', ')} }]
+                                }))
+                            )
+                        }
+                        `
+            }
+            code = await prettier(code)
+            await writeFile(join(inputDir, 'languages.ts'), code, { encoding: 'utf8' })
+        }
     }
 }
 task(

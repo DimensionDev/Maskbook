@@ -14,7 +14,9 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "https://api.thegraph.com/subgraphs/name/dimensiondev/mask-nft-red-packet-mainnet",
@@ -31,6 +33,8 @@
         "xDai": "",
         "Optimistic": "",
         "Optimistic_Kovan": "",
-        "Optimistic_Goerli": ""
+        "Optimistic_Goerli": "",
+        "Celo": "",
+        "Fantom": ""
     }
 }

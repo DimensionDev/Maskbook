@@ -174,7 +174,7 @@
         "chainId": 137,
         "fullName": "Polygon",
         "shortName": "matic",
-        "chain": "Matic",
+        "chain": "Polygon",
         "network": "mainnet",
         "networkId": 137,
         "nativeCurrency": {
@@ -1236,7 +1236,15 @@
         "chainId": 250,
         "networkId": 250,
         "icon": "fantom",
-        "explorers": [{ "name": "ftmscan", "url": "https://ftmscan.com", "icon": "ftmscan", "standard": "EIP3091" }]
+        "explorers": [
+            {
+                "name": "ftmscan",
+                "url": "https://ftmscan.com",
+                "icon": "ftmscan",
+                "standard": "EIP3091",
+                "logoURI": "https://static.debank.com/image/ftm_token/logo_url/ftm/33fdb9c5067e94f3a1b9e78f6fa86984.png"
+            }
+        ]
     },
     {
         "name": "Huobi ECO Chain Testnet",
@@ -2060,13 +2068,19 @@
         "chainId": 42220,
         "shortName": "CELO",
         "chain": "CELO",
-        "network": "Mainnet",
+        "network": "mainnet",
         "networkId": 42220,
-        "nativeCurrency": { "name": "CELO", "symbol": "CELO", "decimals": 18 },
+
+        "nativeCurrency": {
+            "name": "CELO",
+            "symbol": "CELO",
+            "decimals": 18,
+            "logoURI": "https://assets.coingecko.com/coins/images/11090/small/icon-celo-CELO-color-500.png"
+        },
         "rpc": ["https://forno.celo.org", "wss://forno.celo.org/ws"],
         "faucets": [],
         "features": [],
-        "infoURL": "https://docs.celo.org/"
+        "infoURL": "https://explorer.celo.org/"
     },
     {
         "name": "Athereum",
@@ -2111,7 +2125,7 @@
         "name": "Celo Alfajores Testnet",
         "chainId": 44787,
         "shortName": "ALFA",
-        "chain": "CELO",
+        "chain": "Celo",
         "network": "Alfajores",
         "networkId": 44787,
         "nativeCurrency": { "name": "CELO", "symbol": "CELO", "decimals": 18 },
@@ -2138,7 +2152,7 @@
         "name": "Celo Baklava Testnet",
         "chainId": 62320,
         "shortName": "BKLV",
-        "chain": "CELO",
+        "chain": "Celo",
         "network": "Baklava",
         "networkId": 62320,
         "nativeCurrency": { "name": "CELO", "symbol": "CELO", "decimals": 18 },

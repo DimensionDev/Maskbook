@@ -5,7 +5,7 @@ import { useState, useContext, useMemo, useEffect } from 'react'
 import { UserContext } from '../../hooks/UserContext'
 import { fetchDownloadLink, sendCode, useLanguage, VerifyCodeRequest } from '../../api'
 import { BackupFileInfo, AccountType, Scenario, Locale } from '../../type'
-import { LoadingButton } from '@mui/lab'
+import { LoadingButton } from '../../../../components/LoadingButton'
 import { useAsyncFn } from 'react-use'
 
 export interface VerifyNextData {
