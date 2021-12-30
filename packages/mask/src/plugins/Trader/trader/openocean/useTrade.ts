@@ -3,7 +3,6 @@ import {
     isNativeTokenAddress,
     useAccount,
     useBlockNumber,
-    useChainId,
     useRPCConstants,
     useTokenConstants,
     useTraderConstants,
@@ -11,6 +10,7 @@ import {
 import { useAsyncRetry } from 'react-use'
 import { PluginTraderRPC } from '../../messages'
 import type { TradeStrategy } from '../../types'
+import { TargetChainIdContext } from '../useTargetChainIdContext'
 import { useSlippageTolerance } from './useSlippageTolerance'
 import { first } from 'lodash-unified'
 
@@ -24,10 +24,10 @@ export function useTrade(
     const { NATIVE_TOKEN_ADDRESS } = useTokenConstants()
     const blockNumber = useBlockNumber()
     const slippage = useSlippageTolerance()
-    const chainId = useChainId()
-    const { RPC } = useRPCConstants(chainId)
+    const { targetChainId } = TargetChainIdContext.useContainer()
+    const { RPC } = useRPCConstants(targetChainId)
     const providerURL = first(RPC)
-    const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(chainId)
+    const { OPENOCEAN_ETH_ADDRESS } = useTraderConstants(targetChainId)
     const account = useAccount()
 
     return useAsyncRetry(async () => {
@@ -47,7 +47,7 @@ export function useTrade(
             slippage,
             userAddr: account,
             rpc: providerURL,
-            chainId,
+            chainId: targetChainId,
         })
     }, [
         NATIVE_TOKEN_ADDRESS,
@@ -60,6 +60,6 @@ export function useTrade(
         blockNumber, // refresh api each block
         account,
         providerURL,
-        chainId,
+        targetChainId,
     ])
 }
