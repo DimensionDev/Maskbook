@@ -6,7 +6,7 @@ import { head } from 'lodash-unified'
 import type { Order } from 'opensea-js/lib/types'
 import { useAsyncRetry } from 'react-use'
 import { PluginCollectibleRPC } from '../messages'
-import type { CollectibleToken } from '../types'
+import type { AssetOrder, CollectibleToken } from '../types'
 
 export function useAssetOrder(provider: NonFungibleAssetProvider, token?: CollectibleToken) {
     return useAsyncRetry(async () => {
@@ -14,12 +14,17 @@ export function useAssetOrder(provider: NonFungibleAssetProvider, token?: Collec
         switch (provider) {
             case NonFungibleAssetProvider.OPENSEA:
                 const openSeaResponse = await PluginCollectibleRPC.getAssetFromSDK(token.contractAddress, token.tokenId)
-                const getPrice = (order: Order) =>
-                    getOrderUnitPrice(
-                        order.currentPrice as unknown as string,
-                        order.paymentTokenContract?.decimals ?? 0,
-                        order.quantity as unknown as string,
-                    ) ?? ZERO
+                const getPrice = (order: Order | AssetOrder) => {
+                    const _order = order as AssetOrder
+                    return (
+                        getOrderUnitPrice(
+                            _order.currentPrice,
+                            _order.paymentTokenContract?.decimals,
+                            _order.quantity,
+                        ) ?? ZERO
+                    )
+                }
+
                 const sellOrders = openSeaResponse.sellOrders ?? []
                 const desktopOrder = head(sellOrders.sort((a, b) => getPrice(a).toNumber() - getPrice(b).toNumber()))
                 return desktopOrder
