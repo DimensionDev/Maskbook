@@ -506,17 +506,49 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             </Box>
                         ) : (
                             <Box className={classNames(classes.wrapper, classes.nftWrapper)}>
-                                <img className={classes.nftImg} src={tokenDetailed.info.mediaUrl} />
-                                <div className={classes.nftNameWrapper}>
-                                    <Typography className={classes.nftName} color="textSecondary">
-                                        {tokenDetailed.info.name}
+                                <NftImage
+                                    token={tokenDetailed}
+                                    classes={{
+                                        loadingFailImage: classes.loadingFailImage,
+                                    }}
+                                    fallbackImage={new URL('./assets/nft_token_fallback.png', import.meta.url)}
+                                />
+                                <div className={classes.selectWrapperNftNameWrapper}>
+                                    <Typography className={classes.selectWrapperNftName} color="textSecondary">
+                                        {tokenDetailed?.info.name}
                                     </Typography>
                                 </div>
                             </Box>
                         )}
                     </Box>
+                    <div className={classes.selectSharesExceedBox}>
+                        <Typography className={classes.selectSharesExceed}>
+                            {isSelectSharesExceed
+                                ? t('plugin_red_packet_nft_max_shares_tip', { amount: NFT_RED_PACKET_MAX_SHARES })
+                                : null}
+                        </Typography>
+                        <Box className={classes.selectAmountBox}>
+                            <ShadowRootTooltip
+                                title={
+                                    <Typography className={classes.tooltipText}>
+                                        {t('plugin_red_packet_nft_max_shares', {
+                                            amount: NFT_RED_PACKET_MAX_SHARES,
+                                        })}
+                                    </Typography>
+                                }
+                                placement="top-end"
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                arrow>
+                                <QuestionMarkIcon className={classes.questionMarkIcon} />
+                            </ShadowRootTooltip>
+                            <Typography>
+                                <span className={classes.selectedTokenAmount}>{tokenDetailedSelectedList.length}</span>{' '}
+                                NFTs
+                            </Typography>
+                        </Box>
+                    </div>
                     <Button
-                        disabled={loadingToken || !tokenDetailed || !isOwner || isAdded}
+                        disabled={loadingToken || !tokenDetailed || !isOwner || isAdded || isSelectSharesExceed}
                         className={classes.confirmButton}
                         variant="contained"
                         onClick={onSubmit}>

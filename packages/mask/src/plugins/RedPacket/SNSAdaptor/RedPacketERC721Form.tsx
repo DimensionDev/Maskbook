@@ -140,15 +140,16 @@ const useStyles = makeStyles()((theme) => {
         },
         selectWrapper: {
             display: 'flex',
-            justifyContent: 'space-between',
             alignItems: 'center',
-            width: 250,
             margin: '16px 0 8px 0',
         },
         option: {
             display: 'flex',
             alignItems: 'center',
             cursor: 'pointer',
+        },
+        optionLeft: {
+            marginRight: '16px',
         },
         checkIcon: {
             width: 15,
@@ -227,7 +228,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     }, [])
 
     useEffect(() => {
-        if (tokenDetailedOwnerList.length > 0 && !selectOption) setSelectOption(NFTSelectOption.Partial)
+        if (!selectOption) setSelectOption(NFTSelectOption.Partial)
     }, [tokenDetailedOwnerList, selectOption])
 
     useEffect(() => {
@@ -260,13 +261,13 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     loadingOwnerList ? (
                         <CircularProgress size={24} className={classes.loadingOwnerList} />
                     ) : (
-                        <Box
-                            className={classNames(
-                                classes.selectWrapper,
-                                tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
-                            )}>
+                        <Box className={classes.selectWrapper}>
                             <div
-                                className={classes.option}
+                                className={classNames(
+                                    classes.optionLeft,
+                                    classes.option,
+                                    tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
+                                )}
                                 onClick={() => {
                                     setSelectOption(NFTSelectOption.All)
                                     setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
@@ -279,9 +280,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                     <CheckIcon className={classes.checkIcon} />
                                 </div>
                                 <Typography color="textPrimary">
-                                    {t('plugin_red_packet_nft_select_all_option', {
-                                        total: Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length),
-                                    })}
+                                    {tokenDetailedOwnerList.length === 0
+                                        ? 'All'
+                                        : t('plugin_red_packet_nft_select_all_option', {
+                                              total: Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length),
+                                          })}
                                 </Typography>
                             </div>
                             <div
@@ -304,10 +307,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         </Box>
                     )
                 ) : null}
-                {contract &&
-                balance &&
-                tokenDetailedOwnerList.length > 0 &&
-                selectOption === NFTSelectOption.Partial ? (
+                {contract && balance && selectOption === NFTSelectOption.Partial ? (
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
