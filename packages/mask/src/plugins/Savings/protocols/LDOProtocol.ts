@@ -1,17 +1,10 @@
 import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
-import { EthereumTokenType, ChainId } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, ChainId, getSavingsConstants } from '@masknet/web3-shared-evm'
 import type { Contract } from 'web3-eth-contract'
 import type BigNumber from 'bignumber.js'
 import STETHABI from './steth.abi.json'
 import type { SavingsNetwork, SavingsProtocol } from '../types'
-
-/*
- *
- * Other Lido Contracts can be found at
- * https://github.com/lidofinance/lido-dao
- *
- */
 
 export interface LidoContract {
     type: EthereumTokenType
@@ -24,14 +17,14 @@ export const LidoContracts: { [key: number]: LidoContract } = {
     [ChainId.Mainnet]: {
         type: EthereumTokenType.ERC20,
         chainName: 'Ethereum',
-        ldoContract: '0x5A98FcBEA516Cf06857215779Fd812CA3beF1B32',
-        stEthContract: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',
+        ldoContract: getSavingsConstants(ChainId.Mainnet).LIDO || '',
+        stEthContract: getSavingsConstants(ChainId.Mainnet).LIDO_STETH || '',
     },
     [ChainId.Gorli]: {
         type: EthereumTokenType.ERC20,
         chainName: 'Gorli',
-        ldoContract: '0x56340274fB5a72af1A3C6609061c451De7961Bd4',
-        stEthContract: '0x1643E812aE58766192Cf7D2Cf9567dF2C37e9B7F',
+        ldoContract: getSavingsConstants(ChainId.Gorli).LIDO || '',
+        stEthContract: getSavingsConstants(ChainId.Gorli).LIDO_STETH || '',
     },
 }
 
@@ -108,6 +101,8 @@ export class LidoProtocol implements SavingsProtocol {
     public async withdraw(account: string, chainId: number, web3: Web3, value: BigNumber) {
         /*
          * @TODO: Implement withdraw when stETH Beacon Chain allows for withdraws
+         *
+         * Review: https://github.com/lidofinance/lido-dao when ETH 2.0 is implemented.
          *
          * For now, just redirect to swap plugin
          *
