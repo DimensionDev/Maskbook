@@ -394,7 +394,6 @@
     "plugin_ito_claim": "認領",
     "plugin_ito_claiming": "認領中",
     "plugin_ito_claim_all": "認領全部",
-    "plugin_ito_claimed": "已認領",
     "plugin_ito_qualification_start_time": "資格開始時間：",
     "plugin_ito_error_qualification_start_time": "錯誤：資格開始時間應早於 ITO 結束時間",
     "plugin_ito_end_time": "結束時間 {{zone}}",
