@@ -42,7 +42,7 @@ export function useCurrentTradeProvider(chainId?: ChainId) {
         case NetworkType.Fantom:
             return fantomNetworkTradeProvider
         case NetworkType.Avalanche:
-            return fantomNetworkTradeProvider
+            return avalancheNetworkTradeProvider
         default:
             unreachable(networkType)
     }
