@@ -8,6 +8,7 @@ import { makeStyles } from '@masknet/theme'
 import { ArrowRightIcon } from '@masknet/icons'
 import { TokenIcon, FormattedBalance } from '@masknet/shared'
 import { WalletContext } from '../../hooks/useWalletContext'
+import { isNaN } from 'lodash-unified'
 
 const useStyles = makeStyles()({
     list: {
@@ -73,8 +74,8 @@ export const AssetsListUI = memo<AssetsListUIProps>(({ dataSource, onItemClick }
                         <ListItemText className={classes.text}>
                             <FormattedBalance
                                 classes={{ symbol: classes.symbol, balance: classes.balance }}
-                                value={asset.balance}
-                                decimals={asset.token.decimals}
+                                value={isNaN(asset.balance) ? 0 : asset.balance}
+                                decimals={isNaN(asset.token.decimals) ? 0 : asset.token.decimals}
                                 symbol={asset.token.symbol}
                                 significant={6}
                                 formatter={formatBalance}

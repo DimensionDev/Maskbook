@@ -12,7 +12,7 @@ import type { PaletteMode, Theme } from '@mui/material'
 import type { InjectedDialogClassKey, InjectedDialogProps } from '../components/shared/InjectedDialog'
 import type { Profile } from '../database'
 import type { PostInfo } from './PostInfo'
-import type { GrayscaleAlgorithm } from '@dimensiondev/stego-js/umd/grayscale'
+import type { GrayscaleAlgorithm } from '@masknet/encryption'
 import type { createSNSAdaptorSpecializedPostContext } from './utils/create-post-context'
 import type { Subscription } from 'use-subscription'
 
@@ -126,10 +126,13 @@ export namespace SocialNetworkUI {
             userBadge?(signal: AbortSignal): void
             /** Inject UI to the search result */
             searchResult?(signal: AbortSignal): void
+            /** Inject UI to the profile slider */
+            profileSlider?(signal: AbortSignal): void
+            /** Inject UI to the profile tab */
+            profileTab?(signal: AbortSignal): void
+            /** Inject UI to the profile page */
+            profileTabContent?(signal: AbortSignal): void
             setupWizard?(signal: AbortSignal, for_: PersonaIdentifier): void
-            /** Inject UI to the Profile page */
-            enhancedProfileTab?(signal: AbortSignal): void
-            enhancedProfile?(signal: AbortSignal): void
 
             /**
              * @deprecated

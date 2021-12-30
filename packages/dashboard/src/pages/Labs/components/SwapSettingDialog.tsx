@@ -10,6 +10,7 @@ import {
     useArbitrumNetworkTradeProvider,
     useXDaiNetworkTradeProvider,
     useCeloNetworkTradeProvider,
+    useFantomNetworkTradeProvider,
 } from '../../Settings/api'
 
 import SettingItem from './SettingItem'
@@ -56,6 +57,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
+    const fantomOptions = xDaiOptions
 
     const celoOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
 
@@ -97,6 +99,12 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
             value: useCeloNetworkTradeProvider(),
             options: celoOptions,
             onChange: (value: string) => Services.Settings.setCeloNetworkTradeProvider(Number.parseInt(value, 10)),
+        },
+        {
+            legend: t.labs_settings_swap_network({ network: 'Fantom' }),
+            value: useFantomNetworkTradeProvider(),
+            options: fantomOptions,
+            onChange: (value: string) => Services.Settings.setFantomNetworkTradeProvider(Number.parseInt(value, 10)),
         },
     ]
 

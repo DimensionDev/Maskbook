@@ -30,7 +30,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         padding: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
         display: 'flex',
-        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : getMaskColor(theme).twitterBackground,
+        backgroundColor: isDashboard ? getMaskColor(theme).primaryBackground2 : theme.palette.background.default,
         borderRadius: 8,
         alignItems: 'center',
     },
@@ -73,7 +73,7 @@ const useStyles = makeStyles<{ isDashboard: boolean }>()((theme, { isDashboard }
         border: `1px solid ${theme.palette.background.default}`,
     },
     twitterProviderBorder: {
-        border: `1px solid ${getMaskColor(theme).twitterBackground}`,
+        border: `1px solid ${theme.palette.background.default}`,
         width: 14,
         height: 14,
     },
@@ -224,12 +224,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         failIcon={<></>}
                     />
                 ) : null}
-                <Button
-                    className={classNames(classes.actionButton)}
-                    color="primary"
-                    variant="contained"
-                    size="small"
-                    onClick={onChange}>
+                <Button className={classNames(classes.actionButton)} size="small" onClick={onChange}>
                     {t('wallet_status_button_change')}
                 </Button>
             </section>

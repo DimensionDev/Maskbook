@@ -13,19 +13,21 @@ export function getPairAddress(factoryAddress: string, initCodeHash: string, tok
     const tokens = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA] // does safety checks
     let cache = map.get(initCodeHash)
 
-    if (cache?.[tokens[0].address]?.[tokens[1].address] === undefined) {
+    const token0Addr = tokens[0].address
+    const token1Addr = tokens[1].address
+    if (cache?.[token0Addr]?.[token1Addr] === undefined) {
         cache = {
             ...cache,
-            [tokens[0].address]: {
-                ...cache?.[tokens[0].address],
-                [tokens[1].address]: getCreate2Address(
+            [token0Addr]: {
+                ...cache?.[token0Addr],
+                [token1Addr]: getCreate2Address(
                     factoryAddress,
-                    keccak256(['bytes'], [pack(['address', 'address'], [tokens[0].address, tokens[1].address])]),
+                    keccak256(['bytes'], [pack(['address', 'address'], [token0Addr, token1Addr])]),
                     initCodeHash,
                 ),
             },
         }
         map.set(initCodeHash, cache)
     }
-    return cache?.[tokens[0].address][tokens[1].address]
+    return cache[token0Addr][token1Addr]
 }

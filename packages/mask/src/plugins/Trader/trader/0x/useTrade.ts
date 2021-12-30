@@ -1,7 +1,7 @@
 import {
     FungibleTokenDetailed,
     getNetworkTypeFromChainId,
-    isNative,
+    isNativeTokenAddress,
     NetworkType,
     useAccount,
     useBlockNumber,
@@ -32,6 +32,8 @@ export function getNativeTokenLabel(networkType: NetworkType) {
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         case NetworkType.Celo:
             return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        case NetworkType.Fantom:
+            return '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
         default:
             safeUnreachable(networkType)
             return ''
@@ -58,10 +60,10 @@ export function useTrade(
         if (inputAmount === '0' && isExactIn) return null
         if (outputAmount === '0' && !isExactIn) return null
 
-        const sellToken = isNative(inputToken.address)
+        const sellToken = isNativeTokenAddress(inputToken)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : inputToken.address
-        const buyToken = isNative(outputToken.address)
+        const buyToken = isNativeTokenAddress(outputToken)
             ? getNativeTokenLabel(getNetworkTypeFromChainId(targetChainId) ?? currentNetworkSettings.value)
             : outputToken.address
         return PluginTraderRPC.swapQuote(

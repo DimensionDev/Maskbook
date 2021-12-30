@@ -12,7 +12,6 @@ import {
     EthereumTokenType,
     formatBalance,
     FungibleTokenDetailed,
-    isNative,
     resolveTransactionLinkOnExplorer,
     TransactionStateType,
     useChainId,
@@ -20,6 +19,7 @@ import {
     useFungibleTokenDetailed,
     isSameAddress,
     useTokenConstants,
+    isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
 import { leftShift, rightShift, ZERO } from '@masknet/web3-shared-base'
 import { SelectTokenDialogEvent, WalletMessages, WalletRPC } from '../../Wallet/messages'
@@ -137,7 +137,6 @@ export function SwapDialog(props: SwapDialogProps) {
     const [inputAmountForUI, setInputAmountForUI] = useState(
         swapAmount.isZero() ? '' : formatBalance(swapAmount, swapToken?.decimals),
     )
-
     //#region select token
     const [id] = useState(uuid())
     const { setDialog: setSelectTokenDialog } = useRemoteControlledDialog(
@@ -172,7 +171,7 @@ export function SwapDialog(props: SwapDialogProps) {
         setSelectTokenDialog({
             open: true,
             uuid: id,
-            disableNativeToken: !exchangeTokens.some((x) => isNative(x.address)),
+            disableNativeToken: !exchangeTokens.some(isNativeTokenAddress),
             disableSearchBar: true,
             FungibleTokenListProps: {
                 whitelist: exchangeTokens.map((x) => x.address),
@@ -257,7 +256,8 @@ export function SwapDialog(props: SwapDialogProps) {
     //#endregion
 
     const validationMessage = useMemo(() => {
-        if (swapAmount.isZero()) return t('plugin_ito_error_enter_amount')
+        if (swapAmount.isZero() || tokenAmount.isZero() || swapAmount.dividedBy(ratio).isLessThan(1))
+            return t('plugin_ito_error_enter_amount')
         if (swapAmount.isGreaterThan(tokenBalance)) return t('plugin_ito_error_balance', { symbol: swapToken?.symbol })
         if (tokenAmount.isGreaterThan(maxSwapAmount)) return t('plugin_ito_dialog_swap_exceed_wallet_limit')
         return ''

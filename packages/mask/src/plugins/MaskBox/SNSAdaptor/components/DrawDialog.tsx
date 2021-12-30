@@ -9,7 +9,6 @@ import {
     formatBalance,
     formatEthereumAddress,
     useAccount,
-    useProviderType,
     useChainId,
     useMaskBoxConstants,
     EthereumTokenType,
@@ -115,7 +114,6 @@ export function DrawDialog(props: DrawDialogProps) {
     const providerDescriptor = useProviderDescriptor()
     const account = useAccount()
     const chainId = useChainId()
-    const providerType = useProviderType()
 
     const onCount = useCallback(
         (step: number) => {
@@ -256,7 +254,7 @@ export function DrawDialog(props: DrawDialogProps) {
                                 </Typography>
                                 <Box className={classes.content}>
                                     <GasSettingBar
-                                        gasLimit={openBoxTransactionGasLimit}
+                                        gasLimit={openBoxTransactionGasLimit || 0}
                                         onChange={setOpenBoxTransactionOverrides}
                                     />
                                 </Box>
