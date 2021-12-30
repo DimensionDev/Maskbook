@@ -143,9 +143,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
                 case NetworkType.Celo:
                     return `https://analytics-celo.sushi.com/pairs/${address}`
                 case NetworkType.Fantom:
-                    return `https://analytics-avalanche.sushi.com/pairs/${address}`
+                    return `https://analytics-ftm.sushi.com/pairs/${address}`
                 case NetworkType.Avalanche:
-                    return ``
+                    return `https://analytics-avalanche.sushi.com/pairs/${address}`
                 default:
                     safeUnreachable(networkType)
                     return ''
