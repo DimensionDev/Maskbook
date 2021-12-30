@@ -1,20 +1,19 @@
-import BigNumber from 'bignumber.js'
 import type { Web3Plugin } from '@masknet/plugin-infra'
+import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
 import {
     ChainId,
     NetworkType,
     ProviderType,
+    resolveAddressLinkOnExplorer,
     resolveBlockLinkOnExplorer,
     resolveTransactionLinkOnExplorer,
-    resolveAddressLinkOnExplorer,
 } from '@masknet/web3-shared-solana'
-import { createConstantSubscription, mapSubscription } from '@masknet/shared-base'
-import { getStorage, StorageDefaultValue } from '../../storage'
+import BigNumber from 'bignumber.js'
 import { formatAddress } from '../../helpers'
-import { getFungibleAssets } from '../../apis'
+import { getStorage, StorageDefaultValue } from '../../storage'
 
-function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValue.user) => T) {
-    return mapSubscription(getStorage().user.subscription, getter)
+function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValue.publicKey) => T) {
+    return mapSubscription(getStorage().publicKey.subscription, getter)
 }
 
 export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilities.Capabilities {
@@ -24,14 +23,14 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
         Shared: {
             allowTestnet: createConstantSubscription(false),
             account: createSubscriptionFromUser((user) => {
-                return user?.addr ?? ''
+                return user?.toString() ?? ''
             }),
             wallets: createSubscriptionFromUser((user): Web3Plugin.Wallet[] => {
-                if (!user?.addr) return []
+                if (!user) return []
                 return [
                     {
                         name: 'Solana',
-                        address: user?.addr,
+                        address: user.toString(),
                         hasDerivationPath: false,
                         hasStoredKeyInfo: false,
                     },
@@ -40,12 +39,10 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             chainId: createConstantSubscription(chainId),
             networkType: createConstantSubscription(NetworkType.Solana),
             providerType: createSubscriptionFromUser((user) => {
-                return user?.addr ? ProviderType.Blocto : undefined
+                return user ? ProviderType.Sollet : undefined
             }),
         },
-        Asset: {
-            getFungibleAssets,
-        },
+        Asset: {},
         Utils: {
             formatAddress,
             formatBalance: (value) => new BigNumber(value).toFixed(),

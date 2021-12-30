@@ -249,7 +249,9 @@
         "hexlify",
         "contribs",
         "contrib",
-        "juicebox"
+        "juicebox",
+        "sollet",
+        "signup"
     ],
     "ignoreWords": [
         "cryptopunks",

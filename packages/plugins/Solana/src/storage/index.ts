@@ -1,7 +1,8 @@
+import type { PublicKey } from '@solana/web3.js'
 import type { ScopedStorage } from '@masknet/shared-base'
 
 export const StorageDefaultValue = {
-    user: null,
+    publicKey: null as null | PublicKey,
 }
 
 let storage: ScopedStorage<typeof StorageDefaultValue> = null!

@@ -90,6 +90,8 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
                     '@masknet/encryption': join(__dirname, '../../encryption/src'),
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
+                    '@solana/wallet-adapter-wallets$': require.resolve('@solana/wallet-adapter-wallets/lib/index.js'),
+                    '@solana/wallet-adapter-base$': require.resolve('@solana/wallet-adapter-base/lib/index.js'),
                 }
                 if (profiling) {
                     alias['react-dom$'] = 'react-dom/profiling'
@@ -121,10 +123,18 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                 { test: /(async-call|webextension).+\.js$/, enforce: 'pre', use: ['source-map-loader'] },
                 // TypeScript
                 {
-                    test: /\.tsx?$/,
+                    test: /\.(t|j)sx?$/,
+                    resolve: {
+                        fullySpecified: false, // disable the behaviour
+                        extensions: ['.js', '.ts', '.tsx'],
+                    },
                     parser: { worker: ['OnDemandWorker', '...'] },
                     // Compile all ts files in the workspace
-                    include: join(__dirname, '../../'),
+                    include: [
+                        join(__dirname, '../../'),
+                        // https://github.com/solana-labs/wallet-adapter/issues/231
+                        /node_modules\/@solana\/wallet-adapter-\w+/,
+                    ],
                     loader: require.resolve('swc-loader'),
                     options: {
                         // https://swc.rs/docs/configuring-swc/
