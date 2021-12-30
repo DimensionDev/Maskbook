@@ -109,7 +109,6 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const validationMessage = useMemo(() => {
         if (isGreaterThan(order?.value?.basePrice ?? 0, balance.value ?? 0)) {
             setInsufficientBalance(true)
-            console.log(insufficientBalance, 'fff')
             return t('plugin_collectible_insufficient_balance')
         }
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
