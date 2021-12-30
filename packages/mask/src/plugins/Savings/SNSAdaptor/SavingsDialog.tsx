@@ -8,6 +8,7 @@ import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { WalletStatusBox } from '../../../components/shared/WalletStatusBox'
 import { NetworkTab } from '../../../components/shared/NetworkTab'
 import { WalletRPC } from '../../Wallet/messages'
+import { TabType } from '../types'
 import { useStyles } from './SavingsDialogStyles'
 import { SavingsTab } from './SavingsTab'
 import { SavingsTable } from './SavingsTable'
@@ -26,7 +27,7 @@ export function SavingsDialog({ open, onClose, onSwapDialogOpen }: SavingsDialog
 
     const currentChainId = useChainId()
     const [chainId, setChainId] = useState<ChainId>(currentChainId)
-    const [tab, setTab] = useState<'deposit' | 'withdraw'>('deposit')
+    const [tab, setTab] = useState<TabType>(TabType.Deposit)
     const [selectedProtocol, setSelectedProtocol] = useState(-1)
 
     const { value: chains } = useAsync(async () => {

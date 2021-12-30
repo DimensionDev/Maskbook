@@ -1,4 +1,5 @@
 import { makeStyles, useStylesExtends } from '@masknet/theme'
+import { TabType } from '../types'
 import AbstractTab, { AbstractTabProps } from '../../../components/shared/AbstractTab'
 
 interface StyleProps {
@@ -27,8 +28,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
 }))
 
 interface SavingsTabProps extends withClasses<'tab' | 'tabs' | 'tabPanel' | 'indicator' | 'focusTab' | 'tabPaper'> {
-    tab: 'deposit' | 'withdraw'
-    setTab(tab: 'deposit' | 'withdraw'): void
+    tab: TabType
+    setTab(tab: TabType): void
 }
 
 export function SavingsTab(props: SavingsTabProps) {
@@ -37,14 +38,14 @@ export function SavingsTab(props: SavingsTabProps) {
     const createTabItem = (name: string) => ({
         label: <span>{name}</span>,
         sx: { p: 0 },
-        cb: () => props.setTab(name === 'Deposit' ? 'deposit' : 'withdraw'),
+        cb: () => props.setTab(name === 'Deposit' ? TabType.Deposit : TabType.Withdraw),
     })
 
     const tabs = [createTabItem('Deposit'), createTabItem('Withdraw')]
 
     const tabProps: AbstractTabProps = {
         tabs,
-        index: props.tab === 'deposit' ? 0 : 1,
+        index: props.tab === TabType.Deposit ? 0 : 1,
         classes,
         hasOnlyOneChild: true,
     }

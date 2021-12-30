@@ -10,15 +10,17 @@ export const useStyles = makeStyles()((theme, props) => ({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
+        fontSize: '24px',
+        margin: '0 0 15px 0',
     },
     titleImage: {
         height: '32px',
-        margin: '0 10px 0 0',
+        margin: '0 15px 0 0',
     },
     inputLabel: {
         textAlign: 'right',
         fontSize: '12px',
-        padding: '0 10px',
+        padding: '0 10px 5px 10px',
     },
     inputWrap: {
         position: 'relative',
@@ -56,13 +58,14 @@ export const useStyles = makeStyles()((theme, props) => ({
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '15px 5px',
-        fontWeight: 'bold',
     },
     infoRowLeft: {
         display: 'flex',
         alignItems: 'center',
     },
-    infoRowRight: {},
+    infoRowRight: {
+        fontWeight: 'bold',
+    },
     rowImage: {
         height: '24px',
     },

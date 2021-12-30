@@ -3,6 +3,7 @@ import { Box, Grid, Button } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useWeb3, useAccount } from '@masknet/web3-shared-evm'
 import { IconURLS } from './IconURL'
+import { TabType } from '../types'
 import { SavingsProtocols } from '../protocols'
 
 const useStyles = makeStyles()((theme, props) => ({
@@ -36,7 +37,7 @@ const useStyles = makeStyles()((theme, props) => ({
 
 export interface SavingsTableProps {
     chainId: number
-    tab: 'deposit' | 'withdraw'
+    tab: TabType
     setSelectedProtocol(protocol: number): void
 }
 
@@ -67,7 +68,7 @@ export function SavingsTable({ chainId, tab, setSelectedProtocol }: SavingsTable
                     Value
                 </Grid>
                 <Grid item xs={3} className={classes.tableCell}>
-                    {tab === 'deposit' ? 'Deposit' : 'Withdraw'}
+                    {tab === TabType.Deposit ? 'Deposit' : 'Withdraw'}
                 </Grid>
             </Grid>
 

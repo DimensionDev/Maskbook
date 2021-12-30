@@ -1,20 +1,20 @@
-import BigNumber from 'bignumber.js'
-import { TextField, Button } from '@mui/material'
+import { TextField, Button, Typography } from '@mui/material'
 import { useState, useMemo } from 'react'
 import { EthereumTokenType, useFungibleTokenBalance, useWeb3, useAccount } from '@masknet/web3-shared-evm'
 import { useI18N } from '../../../utils'
 import { useStyles } from './SavingsFormStyles'
 import { IconURLS } from './IconURL'
+import { TabType } from '../types'
 import { SavingsProtocols } from '../protocols'
-import { isLessThan, rightShift } from '@masknet/web3-shared-base'
+import { isLessThan, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { EthereumWalletConnectedBoundary } from '../../../web3/UI/EthereumWalletConnectedBoundary'
 import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
-import ActionButton from '../../../extension/options-page/DashboardComponents/ActionButton'
+import { ActionButtonPromise } from '../../../extension/options-page/DashboardComponents/ActionButton'
 
 export interface SavingsFormProps {
     chainId: number
     selectedProtocol: number
-    tab: 'deposit' | 'withdraw'
+    tab: TabType
     onClose?: () => void
     onSwapDialogOpen?: () => void
 }
@@ -28,7 +28,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     const web3 = useWeb3(false, targetChainId)
     const account = useAccount()
 
-    const [inputAmount, setInputAmount] = useState('' as string)
+    const [inputAmount, setInputAmount] = useState('')
 
     const { value: nativeTokenBalance, loading: loadingNativeTokenBalance } = useFungibleTokenBalance(
         EthereumTokenType.Native,
@@ -37,7 +37,7 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
     )
 
     //#region form controls
-    const formattedBalance = Number.parseInt(nativeTokenBalance || '0', 16) / Math.pow(10, 18)
+    const formattedBalance = leftShift(Number.parseInt(nativeTokenBalance || '0', 16), 18)
     const tokenAmount = rightShift(inputAmount || '0', 18)
     //#endregion
 
@@ -48,13 +48,13 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
         if (isLessThan(inputAmount, 0)) return t('plugin_trade_error_input_amount_less_minimum_amount')
 
         const tokenBalance =
-            (tab === 'deposit'
+            (tab === TabType.Deposit
                 ? nativeTokenBalance
-                : (Number.parseFloat(protocol.balance) * Math.pow(10, 18)).toString()) || '0'
+                : rightShift(protocol.balance, 18).integerValue().toFixed()) || '0'
 
-        if (new BigNumber(tokenBalance).isLessThan(tokenAmount)) {
+        if (isLessThan(tokenBalance, tokenAmount)) {
             return t('plugin_trader_error_insufficient_balance', {
-                symbol: tab === 'deposit' ? protocol.base : protocol.pair,
+                symbol: tab === TabType.Deposit ? protocol.base : protocol.pair,
             })
         }
 
@@ -66,18 +66,20 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
 
     return (
         <div className={classes.containerWrap}>
-            <h3 className={classes.title}>
+            <Typography variant="h3" className={classes.title}>
                 <img src={IconURLS.lido} className={classes.titleImage} />
-                {tab === 'deposit' ? 'Stake' : 'Withdraw'} {protocol.name}
-            </h3>
+                {tab === TabType.Deposit ? 'Stake' : 'Withdraw'} {protocol.name}
+            </Typography>
 
-            <p className={classes.inputLabel}>
+            <Typography variant="body1" className={classes.inputLabel}>
                 Balance:{' '}
-                {tab === 'deposit'
-                    ? formattedBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })
+                {tab === TabType.Deposit
+                    ? formattedBalance
+                          .toNumber()
+                          .toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 6 })
                     : protocol.balance}{' '}
-                {tab === 'deposit' ? protocol.base : protocol.pair}
-            </p>
+                {tab === TabType.Deposit ? protocol.base : protocol.pair}
+            </Typography>
 
             <div className={classes.inputWrap}>
                 <TextField
@@ -95,23 +97,25 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                         color="primary"
                         className={classes.inputButton}
                         onClick={(e) =>
-                            setInputAmount(tab === 'deposit' ? formattedBalance.toString() : protocol.balance)
+                            setInputAmount(tab === TabType.Deposit ? formattedBalance.toString() : protocol.balance)
                         }>
                         Max
                     </Button>
                     <div className={classes.inputCurrency}>
                         <img src={IconURLS.eth} className={classes.inputImage} />
-                        <p>{tab === 'deposit' ? protocol.base : protocol.pair}</p>
+                        <p>{tab === TabType.Deposit ? protocol.base : protocol.pair}</p>
                     </div>
                 </div>
             </div>
 
             <div className={classes.infoRow}>
-                <div className={classes.infoRowLeft}>
+                <Typography variant="body1" className={classes.infoRowLeft}>
                     <img src={IconURLS.eth} className={classes.rowImage} />
                     {protocol.pair} APY%
-                </div>
-                <div className={classes.infoRowRight}>{protocol.apr}%</div>
+                </Typography>
+                <Typography variant="body1" className={classes.infoRowRight}>
+                    {protocol.apr}%
+                </Typography>
             </div>
             <EthereumChainBoundary
                 chainId={targetChainId}
@@ -126,31 +130,34 @@ export function SavingsForm({ chainId, selectedProtocol, tab, onClose, onSwapDia
                 <EthereumWalletConnectedBoundary
                     ActionButtonProps={{ color: 'primary', classes: { root: classes.button } }}
                     classes={{ connectWallet: classes.connectWallet, button: classes.button }}>
-                    <ActionButton
+                    <ActionButtonPromise
                         fullWidth
-                        variant="contained"
-                        classes={{ root: classes.button, disabled: classes.disabledButton }}
                         color="primary"
-                        disabled={validationMessage && !needsSwap ? true : false}
-                        onClick={async () => {
-                            if (tab === 'deposit') {
+                        size="large"
+                        variant="contained"
+                        init={
+                            needsSwap
+                                ? 'Swap ' + protocol.pair
+                                : validationMessage ||
+                                  (tab === TabType.Deposit ? 'Deposit ' + protocol.base : 'Withdraw ' + protocol.pair)
+                        }
+                        waiting={TabType.Deposit ? 'Processing Deposit' : 'Processing Withdrawal'}
+                        failed={t('failed')}
+                        complete={t('done')}
+                        disabled={validationMessage !== '' && !needsSwap}
+                        executor={async () => {
+                            if (tab === TabType.Deposit) {
                                 await protocol.deposit(account, targetChainId, web3, tokenAmount)
-                                onClose?.()
                             } else {
                                 if (needsSwap) {
                                     onClose?.()
                                     onSwapDialogOpen?.()
                                 } else {
                                     await protocol.withdraw(account, targetChainId, web3, tokenAmount)
-                                    onClose?.()
                                 }
                             }
-                        }}>
-                        {needsSwap
-                            ? 'Swap ' + protocol.pair
-                            : validationMessage ||
-                              (tab === 'deposit' ? 'Deposit ' + protocol.base : 'Withdraw ' + protocol.pair)}
-                    </ActionButton>
+                        }}
+                    />
                 </EthereumWalletConnectedBoundary>
             </EthereumChainBoundary>
         </div>

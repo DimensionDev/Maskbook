@@ -2,8 +2,8 @@ import type Web3 from 'web3'
 import type { AbiItem } from 'web3-utils'
 import { EthereumTokenType, ChainId, getSavingsConstants } from '@masknet/web3-shared-evm'
 import type { Contract } from 'web3-eth-contract'
+import LidoStETHABI from '@masknet/web3-contracts/abis/LidoStETH.json'
 import type BigNumber from 'bignumber.js'
-import STETHABI from './steth.abi.json'
 import type { SavingsNetwork, SavingsProtocol } from '../types'
 
 export interface LidoContract {
@@ -43,7 +43,7 @@ export class LidoProtocol implements SavingsProtocol {
     ]
 
     public getContract(chainId: number, web3: Web3): Contract {
-        const contract = new web3.eth.Contract(STETHABI as AbiItem[], LidoContracts[chainId].stEthContract)
+        const contract = new web3.eth.Contract(LidoStETHABI as AbiItem[], LidoContracts[chainId].stEthContract)
         return contract
     }
 

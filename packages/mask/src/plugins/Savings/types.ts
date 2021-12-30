@@ -1,9 +1,10 @@
 import type BigNumber from 'bignumber.js'
 import type Web3 from 'web3'
 import type { Contract } from 'web3-eth-contract'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export interface SavingsNetwork {
-    chainId: number
+    chainId: ChainId
     chainName: string
 }
 
@@ -17,9 +18,14 @@ export interface SavingsProtocol {
     apr: string
     balance: string
 
-    getContract(chainId: number, web3: Web3): Contract
+    getContract(chainId: ChainId, web3: Web3): Contract
     getApr(): Promise<string>
-    getBalance(chainId: number, web3: Web3, account: string): Promise<string>
-    deposit(account: string, chainId: number, web3: Web3, value: BigNumber): Promise<boolean>
-    withdraw(account: string, chainId: number, web3: Web3, value: BigNumber): Promise<boolean>
+    getBalance(chainId: ChainId, web3: Web3, account: string): Promise<string>
+    deposit(account: string, chainId: ChainId, web3: Web3, value: BigNumber): Promise<boolean>
+    withdraw(account: string, chainId: ChainId, web3: Web3, value: BigNumber): Promise<boolean>
+}
+
+export enum TabType {
+    Deposit = 'deposit',
+    Withdraw = 'withdraw',
 }
