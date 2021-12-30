@@ -27,10 +27,11 @@ const resolveRaribleUserNetwork = createLookupTableResolver<ChainId.Mainnet | Ch
     RaribleUserURL,
 )
 
-async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit) {
+async function fetchFromRarible<T>(url: string, path: string, init?: RequestInit, env?: NonFungibleTokenAPI.APIEnv) {
+    const currentEnv = env ?? NonFungibleTokenAPI.APIEnv.browser
     const response = await fetch(urlcat(url, path), {
         // TODO: cors not work in cloudflare worker
-        // mode: 'cors',
+        ...(currentEnv === NonFungibleTokenAPI.APIEnv.browser && { mode: 'cors' }),
         ...init,
     })
     return response.json() as Promise<T>
@@ -137,6 +138,10 @@ function _getAsset(address: string, tokenId: string) {
 }
 
 export class RaribleAPI implements NonFungibleTokenAPI.Provider {
+    private readonly _env: NonFungibleTokenAPI.APIEnv
+    constructor(env?: NonFungibleTokenAPI.APIEnv) {
+        this._env = env ?? NonFungibleTokenAPI.APIEnv.browser
+    }
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const asset = await _getAsset(address, tokenId)
         if (!asset) return
@@ -159,7 +164,7 @@ export class RaribleAPI implements NonFungibleTokenAPI.Provider {
             continuation: string
             items: RaribleNFTItemMapResponse[]
         }
-        const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath)
+        const asset = await fetchFromRarible<Payload>(RaribleURL, requestPath, undefined, this._env)
         if (!asset)
             return {
                 data: [],
@@ -332,6 +337,6 @@ export function getRaribleNFTList(
     size?: number,
     pageInfo?: { [key in string]: unknown },
 ) {
-    const rarible = new RaribleAPI()
+    const rarible = new RaribleAPI(NonFungibleTokenAPI.APIEnv.proxy)
     return rarible.getTokens(address, { page, size, pageInfo })
 }

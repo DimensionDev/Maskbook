@@ -148,7 +148,7 @@ export class ProviderProxy {
         if (entities.length > 10) {
             const picks = entities
                 .sort((a, b) => compareAsc(a[1].pickedAt || a[1].createdAt, b[1].pickedAt || b[1].createdAt))
-                .splice(0, entities.length - 10)
+                .slice(0, entities.length - 10)
             beCleaned.concat(picks)
         }
         beCleaned.forEach((x) => this._pool.delete(x[0]))

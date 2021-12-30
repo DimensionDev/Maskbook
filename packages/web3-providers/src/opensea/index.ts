@@ -13,7 +13,7 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import isAfter from 'date-fns/isAfter'
 import { head, uniqBy } from 'lodash-unified'
 import urlcat from 'urlcat'
-import type { NonFungibleTokenAPI } from '../types'
+import { NonFungibleTokenAPI } from '../types'
 import { getOrderUnitPrice, getOrderUSDPrice } from './utils'
 import type {
     OpenSeaAssetContract,
@@ -25,13 +25,14 @@ import type {
 } from './types'
 import { OPENSEA_ACCOUNT_URL, OPENSEA_API_KEY, OPENSEA_API_URL } from './constants'
 
-async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string) {
+async function fetchFromOpenSea<T>(url: string, chainId: ChainId, apiKey?: string, env?: NonFungibleTokenAPI.APIEnv) {
     if (![ChainId.Mainnet, ChainId.Rinkeby].includes(chainId)) return
+    const currentEnv = env ?? NonFungibleTokenAPI.APIEnv.browser
     try {
         const response = await fetch(urlcat(OPENSEA_API_URL, url), {
             method: 'GET',
-            // mode: 'cors',
             headers: { 'x-api-key': apiKey ?? OPENSEA_API_KEY, Accept: 'application/json' },
+            ...(currentEnv === NonFungibleTokenAPI.APIEnv.browser && { mode: 'cors' }),
         })
         return response.json() as Promise<T>
     } catch {
@@ -238,8 +239,10 @@ function createAssetOrder(order: OpenSeaAssetOrder): NonFungibleTokenAPI.AssetOr
 
 export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
     private readonly _apiKey
-    constructor(apiKey?: string) {
+    private readonly _env: NonFungibleTokenAPI.APIEnv
+    constructor(apiKey?: string, env?: NonFungibleTokenAPI.APIEnv) {
         this._apiKey = apiKey
+        this._env = env ?? NonFungibleTokenAPI.APIEnv.browser
     }
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: { chainId?: ChainId } = {}) {
         const requestPath = urlcat('/api/v1/asset/:address/:tokenId', { address, tokenId })
@@ -270,7 +273,12 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             limit: size,
             collection: opts.pageInfo?.collection,
         })
-        const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(requestPath, chainId, this._apiKey)
+        const response = await fetchFromOpenSea<{ assets: OpenSeaResponse[] }>(
+            requestPath,
+            chainId,
+            this._apiKey,
+            this._env,
+        )
         const assets =
             response?.assets
                 .filter(
@@ -327,7 +335,7 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
             offset: page,
             limit: size,
         })
-        const response = await fetchFromOpenSea<OpenSeaCollection[]>(requestPath, chainId)
+        const response = await fetchFromOpenSea<OpenSeaCollection[]>(requestPath, chainId, this._apiKey, this._env)
         if (!response) {
             return {
                 data: [],
@@ -350,11 +358,11 @@ export class OpenSeaAPI implements NonFungibleTokenAPI.Provider {
 }
 
 export function getOpenSeaNFTList(apiKey: string, address: string, page?: number, size?: number) {
-    const opensea = new OpenSeaAPI()
+    const opensea = new OpenSeaAPI(apiKey, NonFungibleTokenAPI.APIEnv.proxy)
     return opensea.getTokens(address, { page, size })
 }
 
 export function getOpenSeaCollectionList(apiKey: string, address: string, page?: number, size?: number) {
-    const opensea = new OpenSeaAPI(apiKey)
+    const opensea = new OpenSeaAPI(apiKey, NonFungibleTokenAPI.APIEnv.proxy)
     return opensea.getCollections(address, { page, size })
 }
