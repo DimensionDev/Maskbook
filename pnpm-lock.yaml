@@ -368,7 +368,7 @@ importers:
       jsx-jsonml-devtools-renderer: ^1.4.3
       millify: ^4.0.0
       next-tick: ^1.0.0
-      opensea-js: ^1.1.11
+      opensea-js: ^1.2.7
       promievent: ^0.1.4
       protobufjs: ^6.11.2
       react-devtools-core: ^4.22.1
