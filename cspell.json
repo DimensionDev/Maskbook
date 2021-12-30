@@ -358,7 +358,11 @@
         "Enjin",
         "poap",
         "irss",
-        "CELO"
+        "CELO",
+        "avalanche",
+        "avax",
+        "AVAX",
+        "Avalanche"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
