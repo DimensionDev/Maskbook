@@ -2094,7 +2094,7 @@
             "symbol": "AVAX",
             "decimals": 18
         },
-        "infoURL": "https://cchain.explorer.avax.network/",
+        "infoURL": "https://explorer.avax.network/",
         "shortName": "Avalanche",
         "chainId": 43114,
         "networkId": 43114

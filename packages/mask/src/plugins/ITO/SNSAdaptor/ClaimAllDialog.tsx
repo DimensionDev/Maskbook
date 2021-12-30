@@ -32,7 +32,15 @@ import { EthereumChainBoundary } from '../../../web3/UI/EthereumChainBoundary'
 interface StyleProps {
     shortITOwrapper: boolean
 }
-
+const ALLOWED_CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Fantom,
+    ChainId.Avalanche,
+]
 const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     wrapper: {
         paddingBottom: '0px !important',
@@ -220,15 +228,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
-    const ALLOWED_CHAIN_ID_LIST = [
-        ChainId.Mainnet,
-        ChainId.BSC,
-        ChainId.Matic,
-        ChainId.Arbitrum,
-        ChainId.xDai,
-        ChainId.Fantom,
-        ChainId.Avalanche,
-    ]
+
     const {
         value: campaignInfos,
         loading: loadingAirdrop,
