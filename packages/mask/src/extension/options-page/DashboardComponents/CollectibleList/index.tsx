@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react'
+import { createContext, useEffect, useMemo, useState } from 'react'
 import { useValueRef } from '@masknet/shared'
 import {
     ChainId,
@@ -16,7 +16,6 @@ import { useI18N } from '../../../../utils'
 import { CollectibleCard } from './CollectibleCard'
 import { Image } from '../../../../components/shared/Image'
 import { WalletMessages } from '@masknet/plugin-wallet'
-import { uniqBy } from 'lodash-unified'
 
 export const CollectibleContext = createContext<{
     collectiblesRetry: () => void
@@ -218,6 +217,11 @@ export function CollectionList({ address }: { address: string }) {
 
     const isLoading = loadingCollectibleDone !== SocketState.done || loadingCollectionDone !== SocketState.done
 
+    const renderWithRarible = useMemo(() => {
+        if (isLoading) return []
+        return collectibles.filter((item) => !item.collection)
+    }, [collections?.length, collectibles?.length])
+
     if (loadingCollectionDone !== SocketState.done) {
         return (
             <Box className={classes.root}>
@@ -281,6 +285,30 @@ export function CollectionList({ address }: { address: string }) {
                     />
                 </Box>
             ))}
+            {!!renderWithRarible.length && (
+                <Box key="rarible">
+                    <Box display="flex" alignItems="center" sx={{ marginTop: '16px' }}>
+                        <Typography
+                            className={classes.name}
+                            color="textPrimary"
+                            variant="body2"
+                            sx={{ fontSize: '16px' }}>
+                            Rarible ({renderWithRarible.length})
+                        </Typography>
+                    </Box>
+                    <CollectibleList
+                        address={address}
+                        collection="Rarible"
+                        setCount={() => {}}
+                        retry={() => {
+                            retryFetchCollectible()
+                            retryFetchCollection()
+                        }}
+                        collectibles={renderWithRarible}
+                        loading={false}
+                    />
+                </Box>
+            )}
         </Box>
     )
 }
