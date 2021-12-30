@@ -816,9 +816,12 @@ importers:
       anchorme: ^2.1.2
       bignumber.js: ^9.0.2
       classnames: ^2.3.1
+      iframe-resizer-react: ^1.1.0
+      lodash-es: ^4.17.21
       qrcode: ^1.5.0
       react-feather: ^2.0.9
       react-use: ^17.3.1
+      urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
     dependencies:
@@ -830,9 +833,12 @@ importers:
       anchorme: 2.1.2
       bignumber.js: 9.0.2
       classnames: 2.3.1
+      iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
+      lodash-es: 4.17.21
       qrcode: 1.5.0
       react-feather: 2.0.9_react@18.0.0-rc.0
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
+      urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
       uuid: 8.3.2
 
@@ -1064,7 +1070,7 @@ packages:
       bintrees: 1.0.2
       bn.js: 4.12.0
       compare-versions: 3.6.0
-      ethereumjs-abi: 0.6.8
+      ethereumjs-abi: 0.6.6
       ethereumjs-blockstream: 2.0.7
       ethereumjs-util: 5.2.1
       find-versions: 2.0.0
@@ -13523,11 +13529,11 @@ packages:
     resolution: {integrity: sha512-5qwJ5n3YhjSpE6O/WEBXCAb2nagUgyagJ6C0lGUBWC4LjKp/rRzD+pwtDJ6KCiITFEAoX4eIrWOjRy0Sylq5Hg==}
     dev: false
 
-  /ethereumjs-abi/0.6.8:
-    resolution: {integrity: sha512-Tx0r/iXI6r+lRsdvkFDlut0N08jWMnKRZ6Gkq+Nmw75lZe4e6o3EkSnkaBP5NF6+m5PTGAr9JP43N3LyeoglsA==}
+  /ethereumjs-abi/0.6.6:
+    resolution: {integrity: sha512-w8KubDsA/+OAuqtIR9RGsMcoZ5nhM8vxwjJAJvEIY+clhxA3BHoLG3+ClYQaQhD0n3mlDt3U5rBrmSVJvI3c8A==}
     dependencies:
       bn.js: 4.12.0
-      ethereumjs-util: 6.2.1
+      ethereumjs-util: 5.2.1
     dev: false
 
   /ethereumjs-account/2.0.5:
