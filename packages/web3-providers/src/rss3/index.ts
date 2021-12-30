@@ -36,14 +36,14 @@ export class RSS3API implements RSS3BaseAPI.Provider {
         return value as T
     }
     async getDonations(address: string) {
-        const url = urlcat('https://hub.pass3.me/assets/list', {
+        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
             personaID: address,
             type: RSS3BaseAPI.AssetType.GitcoinDonation,
         })
         return fetchJSON<RSS3BaseAPI.GeneralAssetResponse>(url)
     }
     async getFootprints(address: string) {
-        const url = urlcat('https://hub.pass3.me/assets/list', {
+        const url = urlcat(RSS3_ENDPOINT, '/assets/list', {
             personaID: address,
             type: RSS3BaseAPI.AssetType.POAP,
         })
@@ -56,7 +56,7 @@ export class RSS3API implements RSS3BaseAPI.Provider {
     }
     async getProfileInfo(address: string) {
         if (!address) return
-        const url = urlcat('https://hub.pass3.me/:address', { address })
+        const url = urlcat(RSS3_ENDPOINT, '/:address', { address })
         const rsp = await fetchJSON<{
             profile: RSS3BaseAPI.ProfileInfo
         }>(url)
