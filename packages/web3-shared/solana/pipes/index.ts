@@ -4,8 +4,9 @@ import { ChainId, ProviderType } from '../types'
 
 export const resolveChainName = createLookupTableResolver<ChainId, string>(
     {
-        [ChainId.Mainnet]: 'mainnet',
+        [ChainId.MainnetBeta]: 'mainnet',
         [ChainId.Testnet]: 'testnet',
+        [ChainId.Devnet]: 'devnet',
     },
     () => 'Unknown chain id',
 )
