@@ -1,5 +1,6 @@
 import differenceInSeconds from 'date-fns/differenceInSeconds'
 import compareAsc from 'date-fns/compareAsc'
+import ReconnectingWebSocket from 'reconnecting-websocket'
 
 export interface MessageBase {
     id: string
@@ -33,12 +34,12 @@ export type NotifyFn = (event: OutMessageEvent) => void
 const POOL_CACHE_EXPIRE_TIME = 30
 
 export class ProviderProxy {
-    private readonly _socket: WebSocket
+    private readonly _socket: ReconnectingWebSocket
     private readonly _pool: Map<string, SocketPoolItem>
     private readonly _globalNotify?: NotifyFn
 
     constructor(point: string, notifyFn?: NotifyFn) {
-        this._socket = new WebSocket(point)
+        this._socket = new ReconnectingWebSocket(point)
         this._pool = new Map<string, SocketPoolItem>()
         this._globalNotify = notifyFn
     }
@@ -116,7 +117,7 @@ export class ProviderProxy {
         return this.getResult<T>(message.id) ?? []
     }
 
-    get socket(): WebSocket {
+    get socket(): ReconnectingWebSocket {
         return this._socket
     }
 
@@ -181,24 +182,7 @@ function getProxyWebsocketInstanceWrapper(): (notify?: NotifyFn) => Promise<Prov
     }
 
     return async (notify?: NotifyFn) => {
-        const state = cachedInstance?.socket.readyState
-        if (!cachedInstance || state === SocketState.CLOSING || state === SocketState.CLOSED) {
-            await createNewInstance(notify)
-            // reconnect when closed
-            cachedInstance.socket.addEventListener('close', () => {
-                setTimeout(async function () {
-                    await createNewInstance(notify)
-                }, 1000)
-            })
-            return cachedInstance
-        }
-
-        if (cachedInstance?.socket.readyState === SocketState.CONNECTING) {
-            await cachedInstance.waitingOpen()
-            cachedInstance.registerMessage()
-            return cachedInstance
-        }
-
+        await createNewInstance(notify)
         return cachedInstance
     }
 }

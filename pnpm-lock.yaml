@@ -1024,9 +1024,11 @@ importers:
       date-fns: ^2.27.0
       jest-websocket-mock: ^2.2.1
       mock-socket: ^9.0.8
+      reconnecting-websocket: ^4.4.0
     dependencies:
       bignumber.js: 9.0.2
       date-fns: 2.27.0
+      reconnecting-websocket: 4.4.0
     devDependencies:
       jest-websocket-mock: 2.2.1_mock-socket@9.0.8
       mock-socket: 9.0.8
@@ -20631,6 +20633,10 @@ packages:
     dependencies:
       resolve: 1.20.0
     dev: true
+
+  /reconnecting-websocket/4.4.0:
+    resolution: {integrity: sha512-D2E33ceRPga0NvTDhJmphEgJ7FUYF0v4lr1ki0csq06OdlxKfugGzN0dSkxM/NfqCxYELK4KcaTOUOjTV6Dcng==}
+    dev: false
 
   /recursive-readdir/2.2.2:
     resolution: {integrity: sha512-nRCcW9Sj7NuZwa2XvH9co8NPeXUBhZP7CRKJtU+cS6PW9FpCIFoI5ib0NT1ZrbNuPoRy0ylyCaUL8Gih4LSyFg==}

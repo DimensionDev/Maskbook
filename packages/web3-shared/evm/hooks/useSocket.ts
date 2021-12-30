@@ -20,10 +20,10 @@ export const useSocket = <T>(message: SocketMessage) => {
     const [state, setState] = useState(SocketState.init)
     const [error, setError] = useState<unknown>()
     const [id] = useState(uuid())
-    const { value: socket } = useAsyncRetry(() => providerSocket, [])
+    const { value: socket, loading } = useAsyncRetry(() => providerSocket, [])
 
     const { retry } = useAsyncRetry(async () => {
-        if (!socket || !message.id) return
+        if (!socket || !message.id || loading) return
         const requestId = `${message.id}_${id}`
         const notifyUpdatedHook: NotifyFn = (info) => {
             if (!info.done) {
@@ -41,7 +41,7 @@ export const useSocket = <T>(message: SocketMessage) => {
         // Get data from cache
         setData(socket.getResult<T>(requestId))
         setState(SocketState.sent)
-    }, [message.id, socket])
+    }, [message.id, socket, loading])
 
     return { data: data ?? [], state, error, retry }
 }
