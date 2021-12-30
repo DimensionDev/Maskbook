@@ -32,7 +32,6 @@ export interface TradeViewProps extends withClasses<'root'> {
 export function TradeView(props: TradeViewProps) {
     const { TraderProps } = props
     const chainId = useChainId()
-    console.log(chainId)
     const classes = useStylesExtends(useStyles(), props)
     return (
         <div className={classes.root}>
