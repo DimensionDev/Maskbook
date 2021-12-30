@@ -6,7 +6,6 @@ import { resolveAssetLinkOnOpenSea } from '../pipes'
 import { useI18N } from '../../../utils'
 import type { useAsset } from '../../EVM/hooks/useAsset'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
-import BigNumber from 'bignumber.js'
 import type { Order } from 'opensea-js/lib/types'
 
 const useStyles = makeStyles()((theme) => ({
@@ -40,7 +39,7 @@ export function CheckoutOrder(props: CheckoutOrderProps) {
             return item.symbol === asset.value?.current_symbol
         })?.decimals
         if (!decimal) return 'error'
-        return formatBalance(new BigNumber(price), decimal) ?? 'error'
+        return formatBalance(price, decimal) ?? 'error'
     }
 
     return (

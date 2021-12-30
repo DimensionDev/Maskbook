@@ -71,7 +71,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
-    const [isInsufficientBalance, setIsInsufficientBalance] = useState(false)
+    const [insufficientBalance, setInsufficientBalance] = useState(false)
     const { token, balance } = useFungibleTokenWatched({
         type: EthereumTokenType.Native,
         address: order.value?.paymentTokenContract?.address ?? '',
@@ -108,7 +108,8 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
 
     const validationMessage = useMemo(() => {
         if (isGreaterThan(order?.value?.basePrice ?? 0, balance.value ?? 0)) {
-            setIsInsufficientBalance(true)
+            setInsufficientBalance(true)
+            console.log(insufficientBalance, 'fff')
             return t('plugin_collectible_insufficient_balance')
         }
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
@@ -196,13 +197,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {asset?.value?.isOrderWeth || isInsufficientBalance ? (
+                                {asset?.value?.isOrderWeth || insufficientBalance ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"
                                         size="large"
                                         onClick={onConvertClick}>
-                                        {isInsufficientBalance
+                                        {insufficientBalance
                                             ? t('plugin_collectible_get_more_token', { token: token.value?.symbol })
                                             : t('plugin_collectible_convert_eth')}
                                     </ActionButton>
