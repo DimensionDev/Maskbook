@@ -182,6 +182,7 @@ function getProxyWebsocketInstanceWrapper(): (notify?: NotifyFn) => Promise<Prov
     }
 
     return async (notify?: NotifyFn) => {
+        if (cachedInstance) return cachedInstance
         await createNewInstance(notify)
         return cachedInstance
     }
