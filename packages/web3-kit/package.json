@@ -1,0 +1,6 @@
+{
+  "name": "@masknet/web3-kit",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts"
+}

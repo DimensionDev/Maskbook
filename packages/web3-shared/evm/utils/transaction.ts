@@ -1,5 +1,5 @@
 import { unreachable } from '@dimensiondev/kit'
-import { EthereumTransactionConfig, TransactionStateType } from '..'
+import { EthereumTransactionConfig, TransactionStateType } from '../types'
 
 export function isEIP1559Transaction(receipt: EthereumTransactionConfig) {
     return typeof receipt.maxFeePerGas !== 'undefined' && typeof receipt.maxPriorityFeePerGas !== 'undefined'
@@ -9,6 +9,13 @@ export function isFinalState(type: TransactionStateType) {
     return [TransactionStateType.CONFIRMED, TransactionStateType.FAILED].includes(type)
 }
 
+/**
+ * UNKNOWN -> WAIT_FOR_CONFIRMING
+ * UNKNOWN, WAIT_FOR_CONFIRMING -> HASH
+ * UNKNOWN, WAIT_FOR_CONFIRMING, HASH -> RECEIPT
+ * WAIT_FOR_CONFIRMING, HASH, RECEIPT -> CONFIRMED
+ * UNKNOWN, WAIT_FOR_CONFIRMING, HASH, RECEIPT -> FAILED
+ */
 export function isNextStateAvailable(type: TransactionStateType, nextType: TransactionStateType) {
     switch (nextType) {
         case TransactionStateType.UNKNOWN:
@@ -25,7 +32,6 @@ export function isNextStateAvailable(type: TransactionStateType, nextType: Trans
             ].includes(type)
         case TransactionStateType.CONFIRMED:
             return [
-                TransactionStateType.UNKNOWN,
                 TransactionStateType.WAIT_FOR_CONFIRMING,
                 TransactionStateType.HASH,
                 TransactionStateType.RECEIPT,

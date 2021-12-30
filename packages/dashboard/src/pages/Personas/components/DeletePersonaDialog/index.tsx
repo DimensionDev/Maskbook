@@ -3,10 +3,9 @@ import { memo, useCallback } from 'react'
 import { MaskColorVar, MaskDialog, useCustomSnackbar } from '@masknet/theme'
 import { DashboardTrans, useDashboardI18N } from '../../../../locales'
 import { Services } from '../../../../API'
-import type { PersonaIdentifier } from '@masknet/shared'
+import { PersonaIdentifier, DashboardRoutes } from '@masknet/shared-base'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../../../type'
 
 export interface DeletePersonaDialogProps {
     open: boolean
@@ -29,7 +28,7 @@ export const DeletePersonaDialog = memo<DeletePersonaDialogProps>(({ open, onClo
             await changeCurrentPersona(lastedPersona.identifier)
         } else {
             showSnackbar(t.personas_setup_tip(), { variant: 'warning' })
-            navigate(RoutePaths.Setup)
+            navigate(DashboardRoutes.Setup)
         }
     }, [nickname, identifier])
 

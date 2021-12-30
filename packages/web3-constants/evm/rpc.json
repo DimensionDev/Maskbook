@@ -13,7 +13,9 @@
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
         "xDai": ["https://rpc.xdaichain.com/"],
         "Fuse": ["https://rpc.fuse.io"],
-        "Fuse_Sparknet": ["https://rpc.fusespark.io/"]
+        "Fuse_Sparknet": ["https://rpc.fusespark.io/"],
+        "Celo": ["https://forno.celo.org"],
+        "Fantom": ["https://rpcapi.fantom.network/"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 0, 0, 0],
@@ -29,6 +31,8 @@
         "Arbitrum_Rinkeby": [0, 0, 0, 0],
         "xDai": [0, 0, 0, 0],
         "Fuse": [0, 0, 0, 0],
-        "Fuse_Sparknet": [0, 0, 0, 0]
+        "Fuse_Sparknet": [0, 0, 0, 0],
+        "Celo": [0, 0, 0, 0],
+        "Fantom": [0, 0, 0, 0]
     }
 }

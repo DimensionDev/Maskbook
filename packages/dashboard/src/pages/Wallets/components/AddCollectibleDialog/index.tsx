@@ -103,8 +103,8 @@ export const AddCollectibleDialogUI = memo<AddCollectibleDialogUIProps>(
 
         useEffect(() => {
             const subscription = watch((value) => {
-                onAddressChange(value.address)
-                onTokenIdChange(value.tokenId)
+                onAddressChange(value.address!)
+                onTokenIdChange(value.tokenId!)
             })
             return () => subscription.unsubscribe()
         }, [watch])

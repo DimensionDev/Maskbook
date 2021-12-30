@@ -13,7 +13,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Fuse": "",
-        "Fuse_Sparknet": ""
+        "Fuse_Sparknet": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "API_URL": {
         "Mainnet": "https://api-v2.dhedge.org/graphql",
@@ -29,6 +31,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Fuse": "",
-        "Fuse_Sparknet": ""
+        "Fuse_Sparknet": "",
+        "Celo": "",
+        "Fantom": ""
     }
 }

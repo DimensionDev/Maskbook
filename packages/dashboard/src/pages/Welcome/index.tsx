@@ -1,6 +1,6 @@
 import { Button, useTheme } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '../../type'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { ColumnLayout } from '../../components/RegisterFrame/ColumnLayout'
 import { styled } from '@mui/material/styles'
 import { memo, MutableRefObject, useEffect, useMemo, useRef } from 'react'
@@ -80,7 +80,7 @@ export default function Welcome() {
             iframeRef={iframeRef}
             privacyPolicyURL={agreementContentPageURL}
             iframeLoadHandler={handleIFrameLoad}
-            agreeHandler={() => navigate(RoutePaths.Setup)}
+            agreeHandler={() => navigate(DashboardRoutes.Setup)}
             cancelHandler={() => window.close()}
         />
     )

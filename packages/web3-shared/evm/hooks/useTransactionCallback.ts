@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
+import { omit } from 'lodash-unified'
 import type { PayableTransactionObject, PayableTx } from '@masknet/web3-contracts/types/types'
-import { TransactionStateType, useTransactionState } from '.'
-import { TransactionEventType } from '..'
+import { useTransactionState } from './useTransactionState'
+import { TransactionStateType, TransactionEventType } from '../types'
 
 export function useTransactionCallback<T extends unknown>(
     type: TransactionStateType.HASH | TransactionStateType.RECEIPT | TransactionStateType.CONFIRMED,
@@ -21,9 +22,13 @@ export function useTransactionCallback<T extends unknown>(
         setState({
             type: TransactionStateType.WAIT_FOR_CONFIRMING,
         })
+        const gasExpectedConfig = { ...config }
 
         try {
-            await method.estimateGas(config)
+            const estimatedGas = await method.estimateGas(omit(config, 'gas'))
+            if (!gasExpectedConfig.gas && estimatedGas) {
+                gasExpectedConfig.gas = estimatedGas
+            }
         } catch (error) {
             try {
                 await method.call(config)
@@ -38,7 +43,7 @@ export function useTransactionCallback<T extends unknown>(
 
         return new Promise<void>(async (resolve, reject) => {
             method
-                .send(config)
+                .send(gasExpectedConfig)
                 .once(TransactionEventType.TRANSACTION_HASH, (hash) => {
                     if (type !== TransactionStateType.HASH) return
                     setState({

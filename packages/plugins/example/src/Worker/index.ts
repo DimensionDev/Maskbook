@@ -12,11 +12,11 @@ interface Folder {
     id: string
     files: File['id'][]
 }
-let storage: Plugin.Worker.Storage<File | Folder> | undefined
+let storage: Plugin.Worker.DatabaseStorage<File | Folder> | undefined
 const worker: Plugin.Worker.Definition = {
     ...base,
     init(signal, context) {
-        storage = context.getStorage()
+        storage = context.getDatabaseStorage()
         console.debug('Example plugin installed on the background')
         signal.addEventListener('abort', () => console.debug('Example plugin stopped'))
     },

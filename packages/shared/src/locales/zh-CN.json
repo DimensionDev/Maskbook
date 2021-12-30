@@ -1,1 +1,11 @@
-{}
+{
+    "error_boundary_crash_title": "{{subject}} 发生错误",
+    "error_boundary_try_to_recover": "尝试恢复",
+    "error_boundary_report_github": "在 GitHub 上报告",
+    "error_boundary_report_email": "通过电子邮件报告",
+    "snackbar_done": "完成",
+    "import": "导入",
+    "balance": "余额",
+    "select_token": "选择代币",
+    "erc20_token_list_placeholder": "代币代号名称或合约地址"
+}

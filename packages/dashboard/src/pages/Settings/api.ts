@@ -6,7 +6,7 @@ export const [useLanguage] = createGlobalState(Services.Settings.getLanguage, Me
 
 export const [useTrendingDataSource] = createGlobalState<DataProvider>(
     Services.Settings.getTrendingDataSource,
-    Messages.events.currentTrendingDataProviderSettings.on,
+    Messages.events.currentDataProviderSettings.on,
 )
 
 export const [useEthereumNetworkTradeProvider] = createGlobalState(
@@ -32,6 +32,15 @@ export const [useArbitrumNetworkTradeProvider] = createGlobalState(
 export const [useXDaiNetworkTradeProvider] = createGlobalState(
     Services.Settings.getxDaiNetworkTradeProvider,
     Messages.events.xdaiNetworkTradeProviderSettings.on,
+)
+export const [useFantomNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getFantomNetworkTradeProvider,
+    Messages.events.fantomNetworkTradeProviderSettings.on,
+)
+
+export const [useCeloNetworkTradeProvider] = createGlobalState(
+    Services.Settings.getCeloNetworkTradeProvider,
+    Messages.events.celoNetworkTradeProviderSettings.on,
 )
 
 export const [useFuseNetworkTradeProvider] = createGlobalState(

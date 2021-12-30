@@ -1,7 +1,7 @@
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { useAsyncRetry } from 'react-use'
 import { EthereumAddress } from 'wallet.ts'
-import { ChainId } from '..'
+import { ChainId } from '../types'
 import { useReverseRecordsContract } from '../contracts/useReverseLookupContract'
 
 const cached: Map<string, string> = new Map()

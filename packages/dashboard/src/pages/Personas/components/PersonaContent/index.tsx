@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { ContactsTable } from '../ContactsTable'
 import { PostHistory } from '../PostHistory'
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     container: {
         flex: 1,
         height: '100%',
@@ -14,11 +14,12 @@ const useStyles = makeStyles()({
         maxHeight: '100%',
         height: '100%',
         overflow: 'auto',
+        padding: `${theme.spacing(3)} 0`,
     },
     tabs: {
         width: '288px',
     },
-})
+}))
 
 enum PersonaContentTab {
     Posts = 'POST',

@@ -22,10 +22,10 @@ export function watchTask(
 /** Generate Task and Task-Watch from npm scripts (`npm start` and `npm build`) */
 export function fromNPMTask(baseDir: string, name: string, description: string, flags?: TaskFunction['flags']) {
     function build() {
-        return awaitChildProcess(shell.cwd(baseDir)`npm run build`)
+        return awaitChildProcess(shell.cwd(baseDir)`pnpm run build`)
     }
     async function watch() {
-        shell.cwd(baseDir)`npm run start`
+        shell.cwd(baseDir)`pnpm run start`
     }
     watchTask(build, watch, name, description, flags)
     return [build, watch]

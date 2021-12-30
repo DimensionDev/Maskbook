@@ -13,7 +13,9 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Fuse": "",
-        "Fuse_Sparknet": ""
+        "Fuse_Sparknet": "",
+        "Celo": "",
+        "Fantom": ""
     },
     "SUBGRAPH_URL": {
         "Mainnet": "",
@@ -29,6 +31,8 @@
         "Arbitrum_Rinkeby": "",
         "xDai": "",
         "Fuse": "",
-        "Fuse_Sparknet": ""
+        "Fuse_Sparknet": "",
+        "Celo": "",
+        "Fantom": ""
     }
 }

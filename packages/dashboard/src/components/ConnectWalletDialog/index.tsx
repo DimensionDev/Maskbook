@@ -1,6 +1,6 @@
 import { memo } from 'react'
-import { ConnectActionList, ConnectActionListItem } from '../ConnectActionList'
 import { PolkaDotIcon, WalletConnectIcon, MetaMaskIcon } from '@masknet/icons'
+import { ConnectActionList, ConnectActionListItem } from '../ConnectActionList'
 import { useDashboardI18N } from '../../locales'
 
 export enum ConnectWalletTargets {
