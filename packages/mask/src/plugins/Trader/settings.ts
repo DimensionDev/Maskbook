@@ -89,7 +89,7 @@ export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvid
 )
 
 export const metisNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+metis+tradeProvider`,
+    `${PLUGIN_ID}+metis+tradeProvider`,
     TradeProvider.SUSHISWAP,
     { primary: () => '' },
 )
