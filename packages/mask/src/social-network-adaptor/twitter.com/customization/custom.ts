@@ -84,6 +84,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 defaultProps: {
                     size: 'medium',
                     disableElevation: true,
+                    variant: 'contained',
                 },
                 variants: [
                     {
