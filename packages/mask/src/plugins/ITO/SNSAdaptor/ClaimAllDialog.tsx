@@ -220,6 +220,15 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     const DialogRef = useRef<HTMLDivElement>(null)
     const account = useAccount()
     const currentChainId = useChainId()
+    const ALLOWED_CHAIN_ID_LIST = [
+        ChainId.Mainnet,
+        ChainId.BSC,
+        ChainId.Matic,
+        ChainId.Arbitrum,
+        ChainId.xDai,
+        ChainId.Fantom,
+        ChainId.Avalanche,
+    ]
     const {
         value: campaignInfos,
         loading: loadingAirdrop,
@@ -227,17 +236,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
     } = useSpaceStationCampaignInfo(account, Flags.nft_airdrop_enabled)
 
     const [chainId, setChainId] = useState(
-        [
-            ChainId.Mainnet,
-            ChainId.BSC,
-            ChainId.Matic,
-            ChainId.Arbitrum,
-            ChainId.xDai,
-            ChainId.Fantom,
-            ChainId.Avalanche,
-        ].includes(currentChainId)
-            ? currentChainId
-            : ChainId.Mainnet,
+        ALLOWED_CHAIN_ID_LIST.includes(currentChainId) ? currentChainId : ChainId.Mainnet,
     )
     const { value: swappedTokens, loading, retry } = useClaimablePools(chainId)
     const { ITO_CONTRACT_ADDRESS: ITO_CONTRACT_ADDRESS_MAINNET } = useITOConstants(ChainId.Mainnet)
@@ -374,15 +373,7 @@ export function ClaimAllDialog(props: ClaimAllDialogProps) {
                             chainId={chainId}
                             setChainId={setChainId}
                             classes={classes}
-                            chains={[
-                                ChainId.Mainnet,
-                                ChainId.BSC,
-                                ChainId.Matic,
-                                ChainId.Arbitrum,
-                                ChainId.xDai,
-                                ChainId.Fantom,
-                                ChainId.Avalanche,
-                            ]}
+                            chains={ALLOWED_CHAIN_ID_LIST}
                         />
                     </div>
                     <div className={classes.contentWrapper} ref={DialogRef}>
