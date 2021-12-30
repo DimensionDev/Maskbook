@@ -13,7 +13,7 @@ export function RedPacketInPost(props: RedPacketInPostProps) {
     const { payload } = props
 
     //#region discover red packet
-    const postIdentifier = usePostInfoDetails.postIdentifier()
+    const postIdentifier = usePostInfoDetails.identifier()
     const fromUrl =
         postIdentifier && !postIdentifier.isUnknown
             ? activatedSocialNetworkUI.utils.getPostURL?.(postIdentifier)?.toString()

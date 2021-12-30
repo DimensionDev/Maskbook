@@ -153,7 +153,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         marginTop: theme.spacing(1),
     },
     actionButton: {
-        color: '#fff',
         minHeight: 'auto',
         width: '100%',
     },
@@ -352,14 +351,22 @@ export function ITO(props: ITO_Props) {
         WalletMessages.events.transactionDialogUpdated,
         (ev) => {
             if (ev.open) return
-            resetClaimCallback()
-            if (claimState.type !== TransactionStateType.CONFIRMED) return
-            retryITOCard()
+
+            if (
+                claimState.type !== TransactionStateType.CONFIRMED ||
+                (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
+            )
+                return
+            window.location.reload()
         },
     )
 
     useEffect(() => {
-        if (claimState.type === TransactionStateType.UNKNOWN) return
+        if (
+            claimState.type === TransactionStateType.UNKNOWN ||
+            (claimState.type === TransactionStateType.CONFIRMED && claimState.no !== 0)
+        )
+            return
         setClaimTransactionDialog({
             open: true,
             state: claimState,
@@ -404,8 +411,7 @@ export function ITO(props: ITO_Props) {
         (ev) => {
             if (ev.open) return
             if (destructState.type !== TransactionStateType.CONFIRMED) return
-            resetDestructCallback()
-            retryITOCard()
+            window.location.reload()
         },
     )
 
@@ -584,7 +590,6 @@ export function ITO(props: ITO_Props) {
                 </Typography>
                 <Box className={classes.progressWrap}>
                     <StyledLinearProgress
-                        barColor="#fff"
                         variant="determinate"
                         value={Number(sold.multipliedBy(100).dividedBy(total))}
                     />
@@ -634,16 +639,10 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_region_ban')}
                     </ActionButton>
-                ) : total_remaining.isZero() && !isBuyer && !canWithdraw ? (
-                    <ActionButton
-                        disabled
-                        onClick={() => undefined}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_status_out_of_stock')}
-                    </ActionButton>
-                ) : loadingTradeInfo || loadingAvailability ? (
+                ) : (noRemain || listOfStatus.includes(ITO_Status.expired)) &&
+                  !canWithdraw &&
+                  ((availability?.claimed && hasLockTime) || !hasLockTime) ? null : loadingTradeInfo ||
+                  loadingAvailability ? (
                     <ActionButton
                         disabled
                         onClick={() => undefined}
@@ -660,18 +659,10 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_wallet_connect_a_wallet')}
                     </ActionButton>
-                ) : canWithdraw ? (
-                    <ActionButton
-                        onClick={onWithdraw}
-                        variant="contained"
-                        size="large"
-                        className={classes.actionButton}>
-                        {t('plugin_ito_withdraw')}
-                    </ActionButton>
                 ) : isBuyer ? (
                     <Grid container spacing={2}>
                         {hasLockTime ? (
-                            <Grid item xs={6}>
+                            <Grid item xs={noRemain || listOfStatus.includes(ITO_Status.expired) ? 12 : 6}>
                                 {isUnlocked ? (
                                     !availability?.claimed ? (
                                         <ActionButton
@@ -684,16 +675,15 @@ export function ITO(props: ITO_Props) {
                                                 ? t('plugin_ito_claiming')
                                                 : t('plugin_ito_claim')}
                                         </ActionButton>
-                                    ) : (
+                                    ) : canWithdraw ? (
                                         <ActionButton
-                                            onClick={() => undefined}
-                                            disabled
+                                            onClick={onWithdraw}
                                             variant="contained"
                                             size="large"
                                             className={classes.actionButton}>
-                                            {t('plugin_ito_claimed')}
+                                            {t('plugin_ito_withdraw')}
                                         </ActionButton>
-                                    )
+                                    ) : null
                                 ) : (
                                     <ActionButton
                                         onClick={() => undefined}
@@ -705,17 +695,37 @@ export function ITO(props: ITO_Props) {
                                     </ActionButton>
                                 )}
                             </Grid>
+                        ) : canWithdraw ? (
+                            <Grid item xs={12}>
+                                <ActionButton
+                                    onClick={onWithdraw}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_withdraw')}
+                                </ActionButton>
+                            </Grid>
                         ) : null}
-                        <Grid item xs={hasLockTime ? 6 : 12}>
-                            <ActionButton
-                                onClick={onShareSuccess}
-                                variant="contained"
-                                size="large"
-                                className={classes.actionButton}>
-                                {t('plugin_ito_share')}
-                            </ActionButton>
-                        </Grid>
+                        {noRemain || listOfStatus.includes(ITO_Status.expired) ? null : (
+                            <Grid item xs={hasLockTime ? 6 : 12}>
+                                <ActionButton
+                                    onClick={onShareSuccess}
+                                    variant="contained"
+                                    size="large"
+                                    className={classes.actionButton}>
+                                    {t('plugin_ito_share')}
+                                </ActionButton>
+                            </Grid>
+                        )}
                     </Grid>
+                ) : canWithdraw ? (
+                    <ActionButton
+                        onClick={onWithdraw}
+                        variant="contained"
+                        size="large"
+                        className={classes.actionButton}>
+                        {t('plugin_ito_withdraw')}
+                    </ActionButton>
                 ) : !ifQualified || !(ifQualified as Qual_V2).qualified ? (
                     <ActionButton
                         onClick={retryIfQualified}
@@ -764,9 +774,26 @@ export function ITO(props: ITO_Props) {
                         ) : undefined}
                     </Grid>
                 ) : listOfStatus.includes(ITO_Status.started) ? (
-                    <ActionButton onClick={onClaim} variant="contained" size="large" className={classes.actionButton}>
-                        <Typography>{t('plugin_ito_enter')}</Typography>
-                    </ActionButton>
+                    <Grid container spacing={2}>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onClaim}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                <Typography>{t('plugin_ito_enter')}</Typography>
+                            </ActionButton>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <ActionButton
+                                onClick={onShareSuccess}
+                                variant="contained"
+                                size="large"
+                                className={classes.actionButton}>
+                                <Typography>{t('plugin_ito_share')}</Typography>
+                            </ActionButton>
+                        </Grid>
+                    </Grid>
                 ) : null}
             </Box>
 
