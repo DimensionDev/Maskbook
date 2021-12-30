@@ -2,9 +2,7 @@
   "name": "@masknet/extension",
   "private": true,
   "license": "AGPL-3.0-or-later",
-  "scripts": {
-    
-  },
+  "scripts": {},
   "dependencies": {
     "@balancer-labs/sor": "^1.0.0",
     "@dimensiondev/holoflows-kit": "^0.9.0-20210902104757-7c3d0d0",
@@ -35,9 +33,9 @@
     "@masknet/shared-base": "workspace:*",
     "@masknet/theme": "workspace:*",
     "@masknet/web3-contracts": "workspace:*",
+    "@masknet/web3-providers": "workspace:*",
     "@masknet/web3-shared-base": "workspace:*",
     "@masknet/web3-shared-evm": "workspace:*",
-    "@masknet/web3-providers": "workspace:*",
     "@msgpack/msgpack": "^2.7.1",
     "@servie/events": "^3.0.0",
     "@sinonjs/text-encoding": "^0.7.1",
@@ -93,7 +91,7 @@
     "jsx-jsonml-devtools-renderer": "^1.4.3",
     "millify": "^4.0.0",
     "next-tick": "^1.0.0",
-    "opensea-js": "^1.1.11",
+    "opensea-js": "^1.2.7",
     "promievent": "^0.1.4",
     "protobufjs": "^6.11.2",
     "react-draggable": "^4.4.4",
