@@ -39,7 +39,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
         return <Renderer link={market.link} slug={market.slug} />
     },
     PostInspector: function Component() {
-        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.postMentionedLinks())
+        const links = usePostInfoDetails.postMetadataMentionedLinks().concat(usePostInfoDetails.mentionedLinks())
         const market = getMarketFromLinks(links)
         if (!market?.slug) return null
         return <Renderer link={market.link} slug={market.slug} />
