@@ -10,7 +10,7 @@ export interface EssayRSSNode {
     essay: PetMetaDB
 }
 
-export enum ImgeType {
+export enum ImageType {
     NORMAL = 'normal',
     GLB = 'glb',
 }
@@ -24,7 +24,7 @@ export interface PetMetaDB extends ShowMeta {
 export interface ShowMeta {
     image: string
     word: string
-    type: ImgeType
+    type: ImageType
 }
 
 export interface User {

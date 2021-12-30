@@ -19,7 +19,7 @@ import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { initMeta, initCollection, Punk3D } from '../constants'
 import { PreviewBox } from './PreviewBox'
-import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImgeType } from '../types'
+import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImageType } from '../types'
 import { useUser, useNfts } from '../hooks'
 import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
@@ -183,7 +183,7 @@ export function PetDialog() {
         setMetaData({
             ...metaData,
             image: select ? Punk3D.url : tokenInfoSelect?.mediaUrl ?? '',
-            type: select ? ImgeType.GLB : ImgeType.NORMAL,
+            type: select ? ImageType.GLB : ImageType.NORMAL,
         })
     }
 

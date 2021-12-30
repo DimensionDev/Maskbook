@@ -1,4 +1,4 @@
-import { ImgeType } from './types'
+import { ImageType } from './types'
 export const PetsPluginID = 'com.maskbook.pets'
 export const TWITTER = 'twitter.com'
 export const DEFAULT_WORD = 'Hello Mask'
@@ -9,7 +9,7 @@ export const initMeta = {
     contract: '',
     word: '',
     image: '',
-    type: ImgeType.NORMAL,
+    type: ImageType.NORMAL,
 }
 
 export const initCollection = {

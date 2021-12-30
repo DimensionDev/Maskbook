@@ -59,20 +59,17 @@ export function ModelNFT(props: ModelNFTProps) {
                 <div style={{ position: 'absolute' }}>
                     <img className={classes.dragImg} src={DragIcon} />
                 </div>
-                {
-                    // start &&
-                    showMeta?.word ? (
-                        <Box className={classes.wordContent}>
-                            <Box
-                                className={classNames(classes.word, {
-                                    [boxClasses.msgBox]: true,
-                                    [boxClasses.wordShow]: true,
-                                })}>
-                                {showMeta?.word}
-                            </Box>
+                {start && showMeta?.word ? (
+                    <Box className={classes.wordContent}>
+                        <Box
+                            className={classNames(classes.word, {
+                                [boxClasses.msgBox]: true,
+                                [boxClasses.wordShow]: true,
+                            })}>
+                            {showMeta?.word}
                         </Box>
-                    ) : null
-                }
+                    </Box>
+                ) : null}
             </Drag>
         </div>
     )

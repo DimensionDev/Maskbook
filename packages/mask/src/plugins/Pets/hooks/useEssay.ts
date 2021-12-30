@@ -1,4 +1,4 @@
-import { ImgeType, ShowMeta } from './../types'
+import { ImageType, ShowMeta } from './../types'
 import { useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
 import { PluginPetRPC } from '../messages'
@@ -22,7 +22,7 @@ export function useDefaultEssay(nfts: FilterContract[]) {
             setEssayMeta({
                 image: filter[0].tokens[0]?.mediaUrl ?? '',
                 word: DEFAULT_WORD,
-                type: filter[0].tokens[0]?.glbSupport ? ImgeType.GLB : ImgeType.NORMAL,
+                type: filter[0].tokens[0]?.glbSupport ? ImageType.GLB : ImageType.NORMAL,
             })
         } else {
             setEssayMeta(undefined)

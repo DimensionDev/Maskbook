@@ -3,7 +3,7 @@ import { makeStyles, useStylesExtends } from '@masknet/theme'
 import { useUser, useNfts, useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
 import { ModelNFT } from './ModelNFT'
 import { NormalNFT } from './NormalNFT'
-import { ImgeType, ShowMeta } from '../types'
+import { ImageType, ShowMeta } from '../types'
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -51,7 +51,7 @@ const AnimatePic = () => {
     if (!show || !showMeta?.image) return <></>
     return (
         <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {showMeta.type === ImgeType.GLB ? (
+            {showMeta.type === ImageType.GLB ? (
                 <ModelNFT start={start} showMeta={showMeta} />
             ) : (
                 <NormalNFT start={start} infoShow={infoShow} showMeta={showMeta} handleClose={handleClose} />
