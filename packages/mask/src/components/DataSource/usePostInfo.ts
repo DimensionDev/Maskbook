@@ -4,15 +4,14 @@ import type { ProfileIdentifier } from '@masknet/shared-base'
 
 export { usePostInfo, PostInfoProvider, usePostInfoDetails, usePostInfoSharedPublic } from '@masknet/plugin-infra'
 export function usePostLink() {
-    const postID = usePostInfoDetails.postID()
-    const postIdentifier = usePostInfoDetails.postIdentifier()
-    if (!postID || !postIdentifier) return ''
-    return activatedSocialNetworkUI.utils.getPostURL?.(postIdentifier) ?? ''
+    const id = usePostInfoDetails.snsID()
+    const identifier = usePostInfoDetails.identifier()
+    if (!id || !identifier) return ''
+    return activatedSocialNetworkUI.utils.getPostURL?.(identifier) ?? ''
 }
 export function usePostClaimedAuthor(): ProfileIdentifier | undefined {
-    const info = usePostInfoDetails.postPayload()
-    if (info.err) return undefined
-    const payload = info.val
+    const payload = usePostInfoDetails.containingMaskPayload().unwrapOr(undefined)
+    if (!payload) return undefined
     if (payload.version !== -38) return undefined
     return payload.authorUserID
 }

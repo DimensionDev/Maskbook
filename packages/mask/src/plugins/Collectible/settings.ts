@@ -1,9 +1,9 @@
 import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm/types'
 import { createGlobalSettings } from '../../settings/createSettings'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { PLUGIN_ID } from './constants'
 
 export const currentNonFungibleAssetProviderSettings = createGlobalSettings<NonFungibleAssetProvider>(
-    `${PLUGIN_IDENTIFIER}+nonFungibleAssetProvider`,
+    `${PLUGIN_ID}+nonFungibleAssetProvider`,
     NonFungibleAssetProvider.OPENSEA,
     {
         primary: () => '',

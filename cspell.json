@@ -248,7 +248,8 @@
         "metaverse",
         "hexlify",
         "contribs",
-        "contrib"
+        "contrib",
+        "juicebox"
     ],
     "ignoreWords": [
         "cryptopunks",
@@ -360,7 +361,8 @@
         "Enjin",
         "poap",
         "irss",
-        "CELO"
+        "CELO",
+        "flac"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [
