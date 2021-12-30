@@ -18,7 +18,7 @@ export const PLUGIN_NETWORKS: Web3Plugin.NetworkDescriptor[] = [
         isMainnet: true,
     },
     {
-        ID: `${PLUGIN_ID}_solana`,
+        ID: `${PLUGIN_ID}_solana_testnet`,
         networkSupporterPluginID: PLUGIN_ID,
         chainId: ChainId.Testnet,
         type: NetworkType.Solana,

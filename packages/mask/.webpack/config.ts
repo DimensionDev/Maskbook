@@ -90,8 +90,6 @@ export function createConfiguration(rawFlags: BuildFlags): Configuration {
                     '@masknet/backup-format': join(__dirname, '../../backup-format/src/'),
                     '@masknet/encryption': join(__dirname, '../../encryption/src'),
                     '@uniswap/v3-sdk': require.resolve('@uniswap/v3-sdk/dist/index.js'),
-                    '@solana/wallet-adapter-wallets$': require.resolve('@solana/wallet-adapter-wallets/lib/index.js'),
-                    '@solana/wallet-adapter-base$': require.resolve('@solana/wallet-adapter-base/lib/index.js'),
                 }
                 if (profiling) {
                     alias['react-dom$'] = 'react-dom/profiling'

@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { languages } from './locales'
+import { languages } from './locales/languages'
 import { PLUGIN_ID, PLUGIN_ICON, PLUGIN_NAME, PLUGIN_DESCRIPTION, PLUGIN_PROVIDERS, PLUGIN_NETWORKS } from './constants'
 
 export const base: Plugin.Shared.Definition = {
@@ -14,6 +14,7 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     i18n: languages,
+    declareApplicationCategories: [],
     declareWeb3Networks: PLUGIN_NETWORKS,
     declareWeb3Providers: PLUGIN_PROVIDERS,
 }

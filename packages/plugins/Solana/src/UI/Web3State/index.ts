@@ -12,25 +12,25 @@ import BigNumber from 'bignumber.js'
 import { formatAddress } from '../../helpers'
 import { getStorage, StorageDefaultValue } from '../../storage'
 
-function createSubscriptionFromUser<T>(getter: (value: typeof StorageDefaultValue.publicKey) => T) {
+function createSubscriptionFromPublicKey<T>(getter: (value: typeof StorageDefaultValue.publicKey) => T) {
     return mapSubscription(getStorage().publicKey.subscription, getter)
 }
 
 export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilities.Capabilities {
-    const chainId = ChainId.Testnet
+    const chainId = ChainId.MainnetBeta
 
     return {
         Shared: {
             allowTestnet: createConstantSubscription(false),
-            account: createSubscriptionFromUser((user) => {
-                return user?.toString() ?? ''
+            account: createSubscriptionFromPublicKey((publicKey) => {
+                return publicKey ?? ''
             }),
-            wallets: createSubscriptionFromUser((user): Web3Plugin.Wallet[] => {
-                if (!user) return []
+            wallets: createSubscriptionFromPublicKey((publicKey): Web3Plugin.Wallet[] => {
+                if (!publicKey) return []
                 return [
                     {
                         name: 'Solana',
-                        address: user.toString(),
+                        address: publicKey,
                         hasDerivationPath: false,
                         hasStoredKeyInfo: false,
                     },
@@ -38,8 +38,8 @@ export function createWeb3State(signal: AbortSignal): Web3Plugin.ObjectCapabilit
             }),
             chainId: createConstantSubscription(chainId),
             networkType: createConstantSubscription(NetworkType.Solana),
-            providerType: createSubscriptionFromUser((user) => {
-                return user ? ProviderType.Sollet : undefined
+            providerType: createSubscriptionFromPublicKey((publicKey) => {
+                return publicKey ? ProviderType.Sollet : undefined
             }),
         },
         Asset: {},
