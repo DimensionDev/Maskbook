@@ -189,6 +189,8 @@ export interface AssetOrder {
     expiration_time: number
     order_hash: string
     base_price?: string
+    currentPrice?: string
+    paymentTokenContract?: OpenSeaFungibleToken
 }
 
 export interface OpenSeaResponse extends Asset {
