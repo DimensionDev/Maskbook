@@ -70,7 +70,10 @@ export function useTradeCallback(
     const zrx = useZrxCallback(provider === TradeProvider.ZRX ? tradeComputedForZRX : null, gasConfig)
     const dodo = useDODOCallback(provider === TradeProvider.DODO ? tradeComputedForDODO : null, gasConfig)
     const bancor = useBancorCallback(provider === TradeProvider.BANCOR ? tradeComputedForBancor : null, gasConfig)
-    const openocean = useOpenOceanCallback(provider === TradeProvider.OPENOCEAN ? tradeComputedForOpenOcean : null)
+    const openocean = useOpenOceanCallback(
+        provider === TradeProvider.OPENOCEAN ? tradeComputedForOpenOcean : null,
+        gasConfig,
+    )
 
     // the trade is an ETH-WETH pair
     const nativeTokenWrapper = useNativeTokenWrapperCallback(
