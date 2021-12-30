@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '16px',
         background: 'rgba(0,0,0,.85)',
         boxShadow: '0 4px 8px rgba(0,0,0,.1)',
-        boxSizeing: 'border-box',
+        boxSizing: 'border-box',
         color: '#fff',
         '&.arrow-top:after': {
             content: '""',
