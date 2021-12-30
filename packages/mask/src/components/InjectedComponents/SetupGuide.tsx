@@ -1,27 +1,10 @@
-import { useMemo, useState, useEffect, useCallback } from 'react'
-import {
-    Paper,
-    Typography,
-    TextField,
-    ThemeProvider,
-    InputAdornment,
-    LinearProgress,
-    unstable_createMuiStrictModeTheme,
-    IconButton,
-    Box,
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
-    useMediaQuery,
-    Theme,
-} from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ArrowRight } from 'react-feather'
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail'
+import { useMemo, useState, useEffect } from 'react'
+import { Paper, Typography, ThemeProvider, IconButton, Box, Theme } from '@mui/material'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
 import CloseIcon from '@mui/icons-material/Close'
 import { ActionButtonPromise } from '../../extension/options-page/DashboardComponents/ActionButton'
-import { noop } from 'lodash-unified'
 import { useValueRef } from '@masknet/shared'
-import { useI18N, MaskMessages, useMatchXS, extendsTheme } from '../../utils'
+import { useI18N, MaskMessages, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
 import { currentSetupGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
@@ -29,6 +12,11 @@ import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } fro
 import Services from '../../extension/service'
 
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI'
+import { MaskIcon } from '../../resources/MaskIcon'
+import { useAsync, useCopyToClipboard } from 'react-use'
+import classNames from 'classnames'
+import VerifiedIcon from '@mui/icons-material/Verified'
+import { makeTypedMessageText } from '@masknet/shared-base'
 
 export enum SetupGuideStep {
     FindUsername = 'find-username',
@@ -89,7 +77,7 @@ const wizardTheme = extendsTheme((theme: Theme) => ({
 
 const useWizardDialogStyles = makeStyles()((theme) => ({
     root: {
-        padding: '12px 16px 20px',
+        padding: theme.spacing(3),
         position: 'relative',
         boxShadow: theme.palette.mode === 'dark' ? 'none' : theme.shadows[4],
         border: `${theme.palette.mode === 'dark' ? 'solid' : 'none'} 1px ${theme.palette.divider}`,
@@ -108,13 +96,13 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         },
         userSelect: 'none',
         boxSizing: 'border-box',
-        width: 260,
+        width: 480,
         overflow: 'hidden',
     },
     button: {
-        width: '100%',
-        height: 32,
-        minHeight: 32,
+        width: 150,
+        height: 40,
+        minHeight: 40,
         marginLeft: 0,
         marginTop: 0,
         [theme.breakpoints.down('sm')]: {
@@ -123,8 +111,12 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
             marginTop: 20,
             borderRadius: 0,
         },
-        fontSize: 16,
+        fontSize: 14,
         wordBreak: 'keep-all',
+        '&,&:hover': {
+            color: `${MaskColorVar.twitterButtonText} !important`,
+            background: `${MaskColorVar.twitterButton} !important`,
+        },
     },
     back: {
         color: theme.palette.text.primary,
@@ -153,9 +145,9 @@ const useWizardDialogStyles = makeStyles()((theme) => ({
         marginTop: 16,
     },
     tip: {
-        fontSize: 14,
-        fontWeight: 600,
-        lineHeight: '20px',
+        fontSize: 16,
+        fontWeight: 500,
+        lineHeight: '22px',
         paddingTop: 16,
     },
     textButton: {
@@ -184,7 +176,7 @@ const useStyles = makeStyles()({
     content: {},
     footer: {
         marginLeft: 0,
-        marginTop: 0,
+        marginTop: 24,
         flex: 1,
         display: 'flex',
         alignItems: 'center',
@@ -203,26 +195,13 @@ interface ContentUIProps {
 
 function ContentUI(props: ContentUIProps) {
     const { classes } = useStyles()
-    const xsMatch = useMatchXS()
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
-    const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
     switch (props.dialogType) {
         case SetupGuideStep.FindUsername:
             return (
-                <Box
-                    sx={{
-                        display: 'block',
-                    }}>
-                    <Box
-                        sx={{
-                            display: xsMatch ? 'flex' : 'block',
-                        }}>
-                        <main className={classes.content}>{props.content}</main>
-                        {onlyXS ? <div>{props.tip}</div> : null}
-                        <footer className={classes.footer}>{props.footer}</footer>
-                    </Box>
-                    {!onlyXS ? <div>{props.tip}</div> : null}
+                <Box>
+                    <main className={classes.content}>{props.content}</main>
+                    <div>{props.tip}</div>
+                    <footer className={classes.footer}>{props.footer}</footer>
                 </Box>
             )
 
@@ -234,7 +213,7 @@ function ContentUI(props: ContentUIProps) {
 interface WizardDialogProps {
     title: string
     dialogType: SetupGuideStep
-    completion: number
+    completion?: number
     status: boolean | 'undetermined'
     optional?: boolean
     content?: React.ReactNode
@@ -245,62 +224,24 @@ interface WizardDialogProps {
 }
 
 function WizardDialog(props: WizardDialogProps) {
-    const { t } = useI18N()
-    const { title, dialogType, optional = false, completion, status, content, tip, footer, onBack, onClose } = props
+    const { title, dialogType, status, content, tip, footer, onBack, onClose } = props
     const { classes } = useWizardDialogStyles()
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
-    const onlyXS = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
     return (
         <ThemeProvider theme={wizardTheme}>
-            <ThemeProvider
-                theme={(theme: Theme) => {
-                    const getSecondaryColor = () => {
-                        switch (status) {
-                            case true:
-                                return theme.palette.success
-                            case false:
-                                return theme.palette.error
-                            default:
-                                return theme.palette.warning
-                        }
-                    }
-                    return unstable_createMuiStrictModeTheme({
-                        ...theme,
-                        palette: {
-                            ...theme.palette,
-                            secondary: getSecondaryColor(),
-                        },
-                    })
-                }}>
-                <Paper className={classes.root}>
-                    <header className={classes.header}>
-                        <Typography className={classes.primary} color="textPrimary" variant="h3">
-                            {title}
-                        </Typography>
-                        {optional ? (
-                            <Typography className={classes.secondary} color="textSecondary" variant="body2">
-                                {t('setup_guide_optional')}
-                            </Typography>
-                        ) : null}
-                    </header>
-                    <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
-                    {onlyXS ? (
-                        <LinearProgress
-                            className={classes.progress}
-                            color="secondary"
-                            variant="determinate"
-                            value={completion}
-                        />
-                    ) : null}
-                    {onClose ? (
-                        <IconButton className={classes.close} size="small" onClick={onClose}>
-                            <CloseIcon cursor="pointer" />
-                        </IconButton>
-                    ) : null}
-                </Paper>
-            </ThemeProvider>
+            <Paper className={classes.root}>
+                <header className={classes.header}>
+                    <Typography className={classes.primary} color="textPrimary" variant="h3">
+                        {title}
+                    </Typography>
+                </header>
+                <ContentUI dialogType={dialogType} content={content} tip={tip} footer={footer} />
+                {onClose ? (
+                    <IconButton className={classes.close} size="medium" onClick={onClose}>
+                        <CloseIcon cursor="pointer" />
+                    </IconButton>
+                ) : null}
+            </Paper>
         </ThemeProvider>
     )
 }
@@ -308,99 +249,92 @@ function WizardDialog(props: WizardDialogProps) {
 
 //#region find username
 const useFindUsernameStyles = makeStyles()((theme) => ({
-    input: {
-        marginTop: '30px !important',
-        marginBottom: 16,
+    main: {
+        marginTop: theme.spacing(5),
+        marginBottom: theme.spacing(2),
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-around',
     },
-    inputFocus: {
-        '& svg': {
-            color: theme.palette.primary.main,
+    avatar: {
+        display: 'block',
+        width: 48,
+        height: 48,
+        borderRadius: '50%',
+        border: `solid 1px ${MaskColorVar.border}`,
+        '&.connected': {
+            borderColor: MaskColorVar.success,
         },
     },
-    button: {
-        marginLeft: theme.spacing(1),
-    },
-    icon: {
-        color: 'inherit',
+    verified: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
         fontSize: 16,
+        color: MaskColorVar.success,
+    },
+    connectItem: {
+        height: 75,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    line: {
+        width: 100,
+        height: 1,
+        borderTop: `dashed 1px  ${MaskColorVar.borderSecondary}`,
+    },
+    name: {
+        fontSize: 16,
+        fontWeight: 500,
     },
 }))
 
 interface FindUsernameProps extends Partial<WizardDialogProps> {
     username: string
+    personaName?: string
+    avatar?: string
     onUsernameChange?: (username: string) => void
     onConnect: () => Promise<void>
     onDone?: () => void
 }
 
-function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange = noop }: FindUsernameProps) {
+function FindUsername({ personaName, username, avatar, onConnect, onDone, onClose }: FindUsernameProps) {
     const { t } = useI18N()
-    const ui = activatedSocialNetworkUI
-    const gotoProfilePageImpl = ui.automation.redirect?.profilePage
     const [connected, setConnected] = useState(false)
 
     const { classes } = useWizardDialogStyles()
     const { classes: findUsernameClasses } = useFindUsernameStyles()
-    const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>): void => {
-        e.stopPropagation()
-        if (e.key !== 'Enter') return
-        e.preventDefault()
-        onConnect()
-    }
-    // see https://github.com/import-js/eslint-plugin-import/issues/2288
-    // eslint-disable-next-line import/no-deprecated
-    const xsOnly = useMediaQuery((theme: Theme) => theme.breakpoints.only('xs'))
 
-    const onJump = useCallback(
-        (ev: React.MouseEvent<SVGElement>) => {
-            ev.preventDefault()
-            gotoProfilePageImpl?.(new ProfileIdentifier(ui.networkIdentifier, username))
-        },
-        [gotoProfilePageImpl, ui.networkIdentifier, username],
-    )
     return (
         <WizardDialog
             completion={33.33}
             dialogType={SetupGuideStep.FindUsername}
             status="undetermined"
-            title={t('setup_guide_find_username_title')}
+            title=""
             content={
-                <form>
-                    <Box
-                        className={findUsernameClasses.input}
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                        }}>
-                        <TextField
-                            label={t('username')}
-                            value={username}
-                            disabled={connected}
-                            InputProps={{
-                                classes: {
-                                    focused: findUsernameClasses.inputFocus,
-                                },
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <AlternateEmailIcon className={findUsernameClasses.icon} />
-                                    </InputAdornment>
-                                ),
-                            }}
-                            onChange={(e) => onUsernameChange(e.target.value)}
-                            onKeyDown={onKeyDown}
-                            inputProps={{ 'data-testid': 'username_input' }}
-                        />
-                        {gotoProfilePageImpl && xsOnly ? (
-                            <IconButton
-                                size="large"
-                                className={findUsernameClasses.button}
-                                color={username ? 'primary' : 'default'}
-                                disabled={!username}>
-                                <ArrowRight className={findUsernameClasses.icon} cursor="pinter" onClick={onJump} />
-                            </IconButton>
-                        ) : null}
+                <Box className={findUsernameClasses.main}>
+                    <Box className={findUsernameClasses.connectItem}>
+                        <MaskIcon size={48} />
+                        <Typography variant="body2" className={findUsernameClasses.name}>
+                            {personaName}
+                        </Typography>
                     </Box>
-                </form>
+                    <Box className={findUsernameClasses.line} />
+                    <Box className={findUsernameClasses.connectItem}>
+                        <Box position="relative" width={48}>
+                            <img
+                                src={avatar}
+                                className={classNames(findUsernameClasses.avatar, connected ? 'connected' : '')}
+                            />
+                            {connected ? <VerifiedIcon className={findUsernameClasses.verified} /> : null}
+                        </Box>
+                        <Typography variant="body2" className={findUsernameClasses.name}>
+                            {username}
+                        </Typography>
+                    </Box>
+                </Box>
             }
             tip={
                 <Typography
@@ -417,7 +351,7 @@ function FindUsername({ username, onConnect, onDone, onClose, onUsernameChange =
                     variant="contained"
                     init={t('setup_guide_connect_auto')}
                     waiting={t('connecting')}
-                    complete={t('done')}
+                    complete={t('ok')}
                     failed={t('setup_guide_connect_failed')}
                     executor={onConnect}
                     completeOnClick={onDone}
@@ -446,6 +380,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const { t } = useI18N()
     const { persona } = props
     const ui = activatedSocialNetworkUI
+    const [, copyToClipboard] = useCopyToClipboard()
     const [step, setStep] = useState(SetupGuideStep.FindUsername)
 
     //#region parse setup status
@@ -468,6 +403,7 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     const getUsername = () =>
         lastState.username || (lastRecognized.identifier.isUnknown ? '' : lastRecognized.identifier.userId)
     const [username, setUsername] = useState(getUsername)
+
     useEffect(
         () =>
             activatedSocialNetworkUI.collecting.identityProvider?.recognized.addListener((val) => {
@@ -477,6 +413,10 @@ function SetupGuideUI(props: SetupGuideUIProps) {
     )
     //#endregion
 
+    const { value: persona_ } = useAsync(async () => {
+        return Services.Identity.queryPersona(Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap())
+    }, [persona])
+
     const onConnect = async () => {
         // attach persona with SNS profile
         await Services.Identity.attachProfile(new ProfileIdentifier(ui.networkIdentifier, username), persona, {
@@ -484,11 +424,8 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         })
 
         // auto-finish the setup process
-        const persona_ = await Services.Identity.queryPersona(
-            Identifier.fromString(persona.toText(), ECKeyIdentifier).unwrap(),
-        )
-        if (!persona_.hasPrivateKey) throw new Error('invalid persona')
-        await Services.Identity.setupPersona(persona_.identifier)
+        if (!persona_?.hasPrivateKey) throw new Error('invalid persona')
+        await Services.Identity.setupPersona(persona_?.identifier)
         MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
     }
 
@@ -496,12 +433,29 @@ function SetupGuideUI(props: SetupGuideUIProps) {
         currentSetupGuideStatus[ui.networkIdentifier].value = ''
     }
 
+    const onDone = () => {
+        // check user guide status
+
+        onClose()
+        onCreate()
+    }
+
+    const onCreate = async () => {
+        const content = t('setup_guide_say_hello_content')
+        copyToClipboard(content)
+        ui.automation.maskCompositionDialog?.open?.(makeTypedMessageText(content), {
+            target: 'Everyone',
+        })
+    }
+
     return step === SetupGuideStep.FindUsername ? (
         <FindUsername
+            personaName={persona_?.nickname}
             username={username}
+            avatar={lastRecognized.avatar}
             onUsernameChange={setUsername}
             onConnect={onConnect}
-            onDone={onClose}
+            onDone={onDone}
             onClose={onClose}
         />
     ) : null
