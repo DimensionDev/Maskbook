@@ -816,9 +816,12 @@ importers:
       anchorme: ^2.1.2
       bignumber.js: ^9.0.2
       classnames: ^2.3.1
+      iframe-resizer-react: ^1.1.0
+      lodash-es: ^4.17.21
       qrcode: ^1.5.0
       react-feather: ^2.0.9
       react-use: ^17.3.1
+      urlcat: ^2.0.4
       use-subscription: ^1.5.1
       uuid: ^8.3.2
     dependencies:
@@ -830,9 +833,12 @@ importers:
       anchorme: 2.1.2
       bignumber.js: 9.0.2
       classnames: 2.3.1
+      iframe-resizer-react: 1.1.0_757a802188413a36d4f24237d13b8e90
+      lodash-es: 4.17.21
       qrcode: 1.5.0
       react-feather: 2.0.9_react@18.0.0-rc.0
       react-use: 17.3.1_757a802188413a36d4f24237d13b8e90
+      urlcat: 2.0.4
       use-subscription: 1.5.1_react@18.0.0-rc.0
       uuid: 8.3.2
 
