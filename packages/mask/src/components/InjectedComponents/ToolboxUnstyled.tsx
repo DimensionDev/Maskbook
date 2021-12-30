@@ -137,7 +137,7 @@ export function ToolboxHintUnstyled(props: ToolboxHintProps) {
 
     return (
         <>
-            <GuideStep step={1} total={2} tip={t('user_guide_tip_1')}>
+            <GuideStep step={1} total={3} tip={t('user_guide_tip_1')}>
                 <Container>
                     <ListItemButton onClick={onClick}>
                         <ListItemIcon>

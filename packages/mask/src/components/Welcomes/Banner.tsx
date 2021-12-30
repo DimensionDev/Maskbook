@@ -8,8 +8,7 @@ import { useValueRef } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskSharpIcon } from '../../resources/MaskIcon'
 import { useMount } from 'react-use'
-import { hasNativeAPI, nativeAPI, useI18N } from '../../utils'
-import GuideStep from '../GuideStep'
+import { hasNativeAPI, nativeAPI } from '../../utils'
 import { userGuideStatus } from '../../settings/settings'
 
 interface BannerUIProps extends withClasses<never | 'header' | 'content' | 'actions' | 'buttonText'> {
@@ -37,14 +36,11 @@ const useStyles = makeStyles()({
 
 export function BannerUI(props: BannerUIProps) {
     const classes = useStylesExtends(useStyles(), props)
-    const { t } = useI18N()
 
     return props.nextStep === 'hidden' ? null : (
-        <GuideStep step={2} total={2} tip={t('user_guide_tip_2')} disabled={props.description === 'decryptPostFailed'}>
-            <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
-                <MaskSharpIcon color="primary" />
-            </IconButton>
-        </GuideStep>
+        <IconButton size="large" className={classes.buttonText} onClick={props.nextStep.onClick}>
+            <MaskSharpIcon color="primary" />
+        </IconButton>
     )
 }
 
@@ -79,7 +75,7 @@ export function Banner(props: BannerProps) {
     const [mounted, setMounted] = useState(false)
     useMount(() => setMounted(true))
 
-    return ((userGuideVal && userGuideVal !== 'completed') || identities.length === 0) && mounted ? (
+    return identities.length === 0 && mounted ? (
         <BannerUI
             {...props}
             username={props.username ?? defaultUserName}

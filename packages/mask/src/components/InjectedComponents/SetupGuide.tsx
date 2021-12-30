@@ -6,7 +6,7 @@ import { ActionButtonPromise } from '../../extension/options-page/DashboardCompo
 import { useValueRef } from '@masknet/shared'
 import { useI18N, MaskMessages, extendsTheme } from '../../utils'
 import { activatedSocialNetworkUI } from '../../social-network'
-import { currentSetupGuideStatus } from '../../settings/settings'
+import { currentSetupGuideStatus, userGuideStatus } from '../../settings/settings'
 import type { SetupGuideCrossContextStatus } from '../../settings/types'
 import { PersonaIdentifier, ProfileIdentifier, Identifier, ECKeyIdentifier } from '@masknet/shared-base'
 import Services from '../../extension/service'
@@ -435,9 +435,14 @@ function SetupGuideUI(props: SetupGuideUIProps) {
 
     const onDone = () => {
         // check user guide status
+        const network = ui.networkIdentifier
+        if (network === 'twitter.com' && userGuideStatus[network].value !== 'completed') {
+            userGuideStatus[network].value = '1'
+        } else {
+            onCreate()
+        }
 
         onClose()
-        onCreate()
     }
 
     const onCreate = async () => {
