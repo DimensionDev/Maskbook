@@ -1,6 +1,6 @@
 import type React from 'react'
 import type { Option, Result } from 'ts-results'
-import type { TypedMessage, TypedMessageTuple, ScopedStorage } from '@masknet/shared-base'
+import type { TypedMessage, TypedMessageTuple, ScopedStorage, ProfileIdentifier } from '@masknet/shared-base'
 import type { Emitter } from '@servie/events'
 import type { Web3Plugin } from './web3-types'
 
@@ -187,8 +187,8 @@ export namespace Plugin.SNSAdaptor {
         PostInspector?: InjectUI<{}>
         /** This UI will be rendered for each decrypted post. */
         DecryptedInspector?: InjectUI<{ message: TypedMessage }>
-        /** This UI will be rendered under the Search box of the SNS. */
-        SearchBoxComponent?: InjectUI<{}>
+        /** This UI will be rendered under the Search of the SNS. */
+        SearchResultBox?: InjectUI<{}>
         /** This UI will be rendered into the global scope of an SNS. */
         GlobalInjection?: InjectUI<{}>
         /** This is a chunk of web3 UIs to be rendered into various places of Mask UI. */
@@ -203,6 +203,10 @@ export namespace Plugin.SNSAdaptor {
         ToolbarEntry?: ToolbarEntry
         /** This UI will be rendered as an entry in the wallet status dialog */
         ApplicationEntry?: ApplicationEntry
+        /** This UI will be rendered as sliders on the profile page */
+        ProfileSliders?: ProfileSlider[]
+        /** This UI will be rendered as tabs on the profile page */
+        ProfileTabs?: ProfileTab[]
     }
     //#region Composition entry
     /**
@@ -301,6 +305,68 @@ export namespace Plugin.SNSAdaptor {
          * What to do if the application icon is clicked.
          */
         onClick(): void
+    }
+
+    export interface ProfileIdentity {
+        avatar?: string
+        bio?: string
+        homepage?: string
+        nickname?: string
+        identifier: ProfileIdentifier
+    }
+
+    export interface ProfileAddress {
+        type: string
+        label: string
+        resolvedAddress: string
+    }
+
+    export interface ProfileSlider {
+        ID: string
+
+        /**
+         * The name of the slider card
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+        /**
+         * The injected UI
+         */
+        children: InjectUI<{}>
+    }
+
+    export interface ProfileTab {
+        ID: string
+
+        /**
+         * The name of the tab
+         */
+        label: I18NStringField | string
+        /**
+         * Used to order the sliders
+         */
+        priority: number
+
+        UI?: {
+            /**
+             * The injected tab content
+             */
+            TabContent: InjectUI<{ identity?: ProfileIdentity; addressNames?: ProfileAddress[] }>
+        }
+        Utils?: {
+            /**
+             * If it returns false, this tab will not be displayed.
+             */
+            shouldDisplay?: (identity?: ProfileIdentity, addressNames?: ProfileAddress[]) => boolean
+
+            /**
+             * Sort address name in expected order.
+             */
+            addressNameSorter?: (a: ProfileAddress, z: ProfileAddress) => number
+        }
     }
 }
 
@@ -480,6 +546,41 @@ export enum CurrentSNSNetwork {
     Facebook = 1,
     Twitter = 2,
     Instagram = 3,
+}
+
+/**
+ * All integrated Plugin IDs
+ */
+export enum PluginId {
+    Avatar = 'com.maskbook.avatar',
+    Collectible = 'com.maskbook.collectibles',
+    CryptoArtAI = 'com.maskbook.cryptoartai',
+    dHEDGE = 'org.dhedge',
+    EVM = 'com.mask.evm',
+    External = 'io.mask.external',
+    Furucombo = 'app.furucombo',
+    Gitcoin = 'co.gitcoin',
+    GoodGhosting = 'co.good_ghosting',
+    MaskBox = 'com.maskbook.box',
+    Poll = 'com.maskbook.poll',
+    Profile = 'com.mask.profile',
+    Trader = 'com.maskbook.trader',
+    Transak = 'com.maskbook.transak',
+    Valuables = 'com.maskbook.tweet',
+    DAO = 'money.juicebox',
+    Debugger = 'io.mask.debugger',
+    Example = 'io.mask.example',
+    Flow = 'com.mask.flow',
+    RSS3 = 'bio.rss3',
+    RedPacket = 'com.maskbook.red_packet',
+    Pets = 'com.maskbook.pets',
+    Snapshot = 'org.snapshot',
+    ITO = 'com.maskbook.ito',
+    Wallet = 'com.maskbook.wallet',
+    PoolTogether = 'com.pooltogether',
+    UnlockProtocol = 'com.maskbook.unlockprotocol',
+    FileService = 'com.maskbook.fileservice',
+    RealityCards = 'co.realitycards',
 }
 
 export interface Pagination {

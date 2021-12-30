@@ -14,7 +14,7 @@ const approvedList = new Map([
         'wyvern-js',
         ['git+https://github.com/ProjectOpenSea/wyvern-js.git#v3.2.1', 'github:ProjectOpenSea/wyvern-js#semver:^3.2.1'],
     ],
-    ['wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.11.1'],
+    ['wyvern-schemas', 'git+https://github.com/ProjectOpenSea/wyvern-schemas.git#v0.13.1'],
     ['bignumber.js', 'git+https://github.com/frozeman/bignumber.js-nolookahead.git'],
     /* cspell:disable-next-line */
     ['html-parse-stringify2', 'github:locize/html-parse-stringify2'],

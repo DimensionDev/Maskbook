@@ -1,10 +1,10 @@
+import { NonFungibleAssetProvider } from '@masknet/web3-shared-evm/types'
 import { createGlobalSettings } from '../../settings/createSettings'
-import { PLUGIN_IDENTIFIER } from './constants'
-import { CollectibleProvider } from './types'
+import { PLUGIN_ID } from './constants'
 
-export const currentCollectibleProviderSettings = createGlobalSettings<CollectibleProvider>(
-    `${PLUGIN_IDENTIFIER}+tradeProvider`,
-    CollectibleProvider.OPENSEA,
+export const currentNonFungibleAssetProviderSettings = createGlobalSettings<NonFungibleAssetProvider>(
+    `${PLUGIN_ID}+nonFungibleAssetProvider`,
+    NonFungibleAssetProvider.OPENSEA,
     {
         primary: () => '',
     },

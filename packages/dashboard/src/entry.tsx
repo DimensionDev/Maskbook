@@ -3,4 +3,4 @@
 
 export { IntegratedDashboard } from './Dashboard'
 export { setService, setPluginMessages, setMessages, setPluginServices } from './API'
-export { addDashboardI18N } from './locales'
+export { addDashboardI18N } from './locales/languages'

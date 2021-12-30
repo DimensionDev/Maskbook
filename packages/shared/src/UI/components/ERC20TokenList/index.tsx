@@ -15,7 +15,7 @@ import {
     useChainId,
     useERC20TokenDetailed,
     useERC20TokensDetailedFromTokenLists,
-    useEthereumConstants,
+    useTokenListConstants,
     useNativeTokenDetailed,
     useTrustedERC20Tokens,
 } from '@masknet/web3-shared-evm'
@@ -63,11 +63,10 @@ export const ERC20TokenList = memo<ERC20TokenListProps>((props) => {
         selectedTokens = [],
     } = props
 
-    const { ERC20_TOKEN_LISTS } = useEthereumConstants(chainId)
-
+    const { ERC20 } = useTokenListConstants(chainId)
     const { value: erc20TokensDetailed = [], loading: erc20TokensDetailedLoading } =
         useERC20TokensDetailedFromTokenLists(
-            ERC20_TOKEN_LISTS,
+            ERC20,
             keyword,
             nativeToken ? [...trustedERC20Tokens, nativeToken] : trustedERC20Tokens,
             chainId,

@@ -4,6 +4,6 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "bignumber.js": "9.0.1"
+    "bignumber.js": "9.0.2"
   }
 }
