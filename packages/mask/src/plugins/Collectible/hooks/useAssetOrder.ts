@@ -14,6 +14,7 @@ export function useAssetOrder(provider: NonFungibleAssetProvider, token?: Collec
         switch (provider) {
             case NonFungibleAssetProvider.OPENSEA:
                 const openSeaResponse = await PluginCollectibleRPC.getAssetFromSDK(token.contractAddress, token.tokenId)
+                console.log(openSeaResponse.sellOrders, 'fff')
                 const getPrice = (order: Order) =>
                     getOrderUnitPrice(
                         order.currentPrice as unknown as string,

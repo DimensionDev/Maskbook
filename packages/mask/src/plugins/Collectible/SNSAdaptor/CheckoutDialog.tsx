@@ -67,12 +67,11 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
     const isVerified = asset?.value?.is_verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
-
     const account = useAccount()
 
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
-    const [is_insufficient_balance, setIs_insufficient_balance] = useState(false)
+    const [isInsufficientBalance, setIsInsufficientBalance] = useState(false)
     const { token, balance } = useFungibleTokenWatched({
         type: EthereumTokenType.Native,
         address: order.value?.paymentTokenContract?.address ?? '',
@@ -111,7 +110,7 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         const basePrice = new BigNumber(order?.value?.basePrice ?? '0')
         const balance_ = new BigNumber(balance.value ?? '0')
         if (basePrice.isGreaterThan(balance_)) {
-            setIs_insufficient_balance(true)
+            setIsInsufficientBalance(true)
             return t('plugin_collectible_insufficient_balance')
         }
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
@@ -199,13 +198,13 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {asset?.value?.isOrderWeth || is_insufficient_balance ? (
+                                {asset?.value?.isOrderWeth || isInsufficientBalance ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"
                                         size="large"
                                         onClick={onConvertClick}>
-                                        {is_insufficient_balance
+                                        {isInsufficientBalance
                                             ? t('plugin_collectible_get_more_token', { token: token.value?.symbol })
                                             : t('plugin_collectible_convert_eth')}
                                     </ActionButton>
