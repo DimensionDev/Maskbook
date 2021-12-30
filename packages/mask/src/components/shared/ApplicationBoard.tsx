@@ -15,6 +15,17 @@ import { NetworkTab } from './NetworkTab'
 import { TraderDialog } from '../../plugins/Trader/SNSAdaptor/trader/TraderDialog'
 import { NetworkPluginID, PluginId, usePluginIDContext } from '@masknet/plugin-infra'
 
+const CHAIN_ID_LIST = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Matic,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Celo,
+    ChainId.Fantom,
+    ChainId.Avalanche,
+]
+
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
         position: 'sticky',
@@ -281,16 +292,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                         ]),
                         createEntry('dHEDGE', new URL('./assets/dHEDGE.png', import.meta.url).toString(), () => {}),
                     ],
-                    [
-                        ChainId.Mainnet,
-                        ChainId.BSC,
-                        ChainId.Matic,
-                        ChainId.Arbitrum,
-                        ChainId.xDai,
-                        ChainId.Celo,
-                        ChainId.Fantom,
-                        ChainId.Avalanche,
-                    ],
+                    CHAIN_ID_LIST,
                 ),
             undefined,
             true,
@@ -309,16 +311,7 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
                             () => {},
                         ),
                     ],
-                    [
-                        ChainId.Mainnet,
-                        ChainId.BSC,
-                        ChainId.Matic,
-                        ChainId.Arbitrum,
-                        ChainId.xDai,
-                        ChainId.Celo,
-                        ChainId.Fantom,
-                        ChainId.Avalanche,
-                    ],
+                    CHAIN_ID_LIST,
                 ),
             undefined,
             true,

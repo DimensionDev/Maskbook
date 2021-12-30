@@ -80,7 +80,7 @@ export const resolveNetworkName = createLookupTableResolver<NetworkType, string>
         [NetworkType.xDai]: 'xDai',
         [NetworkType.Celo]: 'Celo',
         [NetworkType.Fantom]: 'Fantom',
-        [NetworkType.Avalanche]: 'avalanche',
+        [NetworkType.Avalanche]: 'Avalanche',
     },
     'Unknown',
 )
