@@ -9,6 +9,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import type { User, FilterContract } from '../types'
 import { currentNonFungibleAssetDataProviderSettings } from '../../Wallet/settings'
+import { Punk3D } from '../constants'
 
 export function useNfts(user: User) {
     const nftList = useNFTListConstants()
@@ -37,7 +38,9 @@ export function useNfts(user: User) {
             total.forEach((x) => {
                 tempNfts.forEach((y, idx) => {
                     if (isSameAddress(y.contract, x.contractDetailed.address)) {
-                        tempNfts[idx].tokens.push({ ...x.info, tokenId: x.tokenId })
+                        const glbSupport =
+                            isSameAddress(x.contractDetailed.address, Punk3D.contract) && x.tokenId === Punk3D.tokenId
+                        tempNfts[idx].tokens.push({ ...x.info, tokenId: x.tokenId, glbSupport })
                     }
                 })
             })

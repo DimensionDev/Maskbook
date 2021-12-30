@@ -15,10 +15,21 @@ const startPosition = {
     x: 50,
     y: 150,
 }
-class Draggable extends React.PureComponent {
+
+interface DraggableProps {
+    baseWidth?: number
+    baseHeight?: number
+    moveHandle?: (x: number, y: number) => void
+}
+
+class Draggable extends React.PureComponent<DraggableProps> {
     ref = React.createRef<HTMLDivElement | null>()
     mouseMoveFuc = this.onMouseMove.bind(this)
     mouseUpFuc = this.onMouseUp.bind(this)
+
+    static defaultProps = {
+        transferMsg: (x: number, y: number) => {},
+    }
 
     override state: StateProps = {
         pos: {
@@ -56,10 +67,13 @@ class Draggable extends React.PureComponent {
         if (!this.state.dragging) return
         this.setState({
             pos: {
-                x: window.innerWidth - contentWidth - (e.pageX - this.state.rel.x),
-                y: window.innerHeight - contentHeight - (e.pageY - this.state.rel.y),
+                x: window.innerWidth - (this.props.baseWidth || contentWidth) - (e.pageX - this.state.rel.x),
+                y: window.innerHeight - (this.props.baseHeight || contentHeight) - (e.pageY - this.state.rel.y),
             },
         })
+        if (this.props.moveHandle) {
+            this.props.moveHandle(this.state.pos.x, this.state.pos.y)
+        }
         e.stopPropagation()
         e.preventDefault()
     }
@@ -77,7 +91,6 @@ class Draggable extends React.PureComponent {
         document.removeEventListener('mousemove', this.mouseMoveFuc)
         document.removeEventListener('mouseup', this.mouseUpFuc)
     }
-
     override render() {
         return (
             <div
@@ -88,8 +101,8 @@ class Draggable extends React.PureComponent {
                     position: 'fixed',
                     right: this.state.pos.x,
                     bottom: this.state.pos.y,
-                    width: contentWidth,
-                    height: contentHeight,
+                    width: this.props.baseWidth || contentWidth,
+                    height: this.props.baseHeight || contentHeight,
                 }}>
                 {this.props.children || null}
             </div>

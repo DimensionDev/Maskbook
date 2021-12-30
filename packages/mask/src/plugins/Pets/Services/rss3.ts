@@ -18,6 +18,7 @@ export async function createRSS3(address: string) {
 const cache = new Map<string, Promise<PetMetaDB | undefined>>()
 
 export async function getCustomEssayFromRSS(address: string) {
+    if (!address) return
     let f = cache.get(address)
     if (!f) {
         f = _getCustomEssayFromRSS(address)

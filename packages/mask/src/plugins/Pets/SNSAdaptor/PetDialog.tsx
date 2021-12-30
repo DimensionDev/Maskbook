@@ -17,11 +17,11 @@ import {
 } from '@mui/material'
 import { PluginPetMessages, PluginPetRPC } from '../messages'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
-import { initMeta, initCollection } from '../constants'
+import { initMeta, initCollection, Punk3D } from '../constants'
 import { PreviewBox } from './PreviewBox'
-import type { PetMetaDB, FilterContract } from '../types'
+import { PetMetaDB, FilterContract, OwnerERC721TokenInfo, ImgeType } from '../types'
 import { useUser, useNfts } from '../hooks'
-import { useI18N } from '../../../utils'
+import { useI18N, getAssetAsBlobURL } from '../../../utils'
 import { ShadowRootPopper } from '../../../utils/shadow-root/ShadowRootComponents'
 import { ImgLoader } from './ImgLoader'
 
@@ -62,6 +62,11 @@ const useStyles = makeStyles()((theme) => ({
         display: 'inline-block',
         borderRadius: 4,
     },
+    glbIcon: {
+        width: 15,
+        height: 18,
+        marginLeft: theme.spacing(1),
+    },
     itemFix: {
         display: 'flex',
         alignItems: 'center',
@@ -89,6 +94,8 @@ const useStyles = makeStyles()((theme) => ({
 export function PetDialog() {
     const { t } = useI18N()
     const classes = useStylesExtends(useStyles(), {})
+    const GLB3DIcon = getAssetAsBlobURL(new URL('../assets/glb3D.png', import.meta.url))
+
     const chainId = useChainId()
     const user = useUser()
     const nfts = useNfts(user)
@@ -103,11 +110,13 @@ export function PetDialog() {
     const [isImageError, setImageError] = useState(false)
     const [isTipShow, setTipShow] = useState(false)
     const [holderChange, setHolderChange] = useState(true)
+    const [tokenInfoSelect, setTokenInfoSelect] = useState<OwnerERC721TokenInfo | null>(null)
 
     useEffect(() => {
         if (!open) {
             setMetaData(initMeta)
             setCollection(initCollection)
+            setTokenInfoSelect(null)
         }
     }, [open])
 
@@ -153,8 +162,14 @@ export function PetDialog() {
         setCollectionsError(false)
     }
 
-    const onImageChange = (v: string) => {
-        setMetaData({ ...metaData, image: v })
+    const onImageChange = (v: OwnerERC721TokenInfo | null) => {
+        setTokenInfoSelect(v)
+        setMetaData({
+            ...metaData,
+            userId: user.userId,
+            tokenId: v?.tokenId ?? '',
+            image: v?.mediaUrl ?? '',
+        })
         setImageError(false)
     }
 
@@ -164,9 +179,17 @@ export function PetDialog() {
         }
     }
 
+    const setGlbSelect = (select: boolean) => {
+        setMetaData({
+            ...metaData,
+            image: select ? Punk3D.url : tokenInfoSelect?.mediaUrl ?? '',
+            type: select ? ImgeType.GLB : ImgeType.NORMAL,
+        })
+    }
+
     const imageChose = useMemo(() => {
         if (!metaData.image) return ''
-        const imageChosen = collection.tokens.find((item) => item.mediaUrl === metaData.image)
+        const imageChosen = collection.tokens.find((item) => item.tokenId === metaData.tokenId)
         return imageChosen?.mediaUrl
     }, [metaData.image])
 
@@ -183,7 +206,12 @@ export function PetDialog() {
                 <DialogContent>
                     <Grid container spacing={2}>
                         <Grid item xs={4}>
-                            <PreviewBox message={metaData.word} imageUrl={imageChose} />
+                            <PreviewBox
+                                message={metaData.word}
+                                imageUrl={imageChose}
+                                tokenInfo={tokenInfoSelect}
+                                glbTransferHandle={setGlbSelect}
+                            />
                         </Grid>
                         <Grid item xs={8}>
                             <Autocomplete
@@ -221,7 +249,7 @@ export function PetDialog() {
                                 disablePortal
                                 id="token-box"
                                 options={collection.tokens}
-                                onChange={(_event, newValue) => onImageChange(newValue?.mediaUrl ?? '')}
+                                onChange={(_event, newValue) => onImageChange(newValue)}
                                 getOptionLabel={(option) => option.name ?? ''}
                                 PaperComponent={({ children }) => paperComponent(children)}
                                 PopperComponent={ShadowRootPopper}
@@ -229,6 +257,7 @@ export function PetDialog() {
                                     <Box component="li" className={classes.itemFix} {...props}>
                                         <img className={classes.thumbnail} src={option.mediaUrl} />
                                         <Typography>{option.name}</Typography>
+                                        {option.glbSupport ? <img className={classes.glbIcon} src={GLB3DIcon} /> : null}
                                     </Box>
                                 )}
                                 renderInput={(params) => (

@@ -10,12 +10,21 @@ export interface EssayRSSNode {
     essay: PetMetaDB
 }
 
-export interface PetMetaDB {
+export enum ImgeType {
+    NORMAL = 'normal',
+    GLB = 'glb',
+}
+
+export interface PetMetaDB extends ShowMeta {
     userId: string
     tokenId: string
     contract: string
-    word: string
+}
+
+export interface ShowMeta {
     image: string
+    word: string
+    type: ImgeType
 }
 
 export interface User {
@@ -25,6 +34,7 @@ export interface User {
 
 export interface OwnerERC721TokenInfo extends ERC721TokenInfo {
     tokenId: string
+    glbSupport: boolean
 }
 
 export interface FilterContract {
