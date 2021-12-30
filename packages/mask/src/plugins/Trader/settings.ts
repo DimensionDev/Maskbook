@@ -82,7 +82,7 @@ export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProv
     { primary: () => '' },
 )
 export const avalancheNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+avalanche+tradeProvider`,
+    `${PLUGIN_ID}+avalanche+tradeProvider`,
     TradeProvider.SUSHISWAP,
     { primary: () => '' },
 )
