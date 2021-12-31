@@ -213,6 +213,7 @@ export enum TradeProvider {
     DODO = 7,
     UNISWAP_V3 = 8,
     BANCOR = 9,
+    OPENOCEAN = 10,
     TRADERJOE = 11,
 }
 /** Supported language settings */

@@ -81,7 +81,7 @@ export interface Availability {
     remaining: number
     started: boolean
     expired: boolean
-    unlocked: boolean
+    destructed: boolean
     unlock_time: string
     swapped: string
     exchanged_tokens: string[]

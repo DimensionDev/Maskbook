@@ -128,6 +128,11 @@ export function useTradeContext(tradeProvider: TradeProvider) {
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: TRADERJOE_CUSTOM_BASES,
                 }
+            case TradeProvider.OPENOCEAN:
+                return {
+                    TYPE: tradeProvider,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).OPENOCEAN_EXCHANGE_PROXY_ADDRESS,
+                }
             default:
                 unreachable(tradeProvider)
         }

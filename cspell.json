@@ -293,6 +293,8 @@
         "crwdns",
         "dodoapi",
         "getdodoroute",
+        "openocean",
+        "OPENOCEAN",
         "getx",
         "hookform",
         "idiv",
@@ -362,7 +364,8 @@
         "Enjin",
         "poap",
         "irss",
-        "CELO"
+        "CELO",
+        "flac"
     ],
     "ignoreRegExpList": ["/@servie/"],
     "overrides": [

@@ -84,6 +84,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                 defaultProps: {
                     size: 'medium',
                     disableElevation: true,
+                    variant: 'contained',
                 },
                 variants: [
                     {
@@ -104,7 +105,7 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                     },
                 ],
                 styleOverrides: {
-                    contained: {
+                    root: {
                         borderRadius: 500,
                         textTransform: 'initial',
                         fontWeight: 'bold',
@@ -112,6 +113,15 @@ export function useThemeTwitterVariant(baseTheme: Theme) {
                         paddingLeft: 15,
                         paddingRight: 15,
                         boxShadow: 'none',
+                        [smallQuery]: {
+                            '&': {
+                                height: 30,
+                                minHeight: 'auto !important',
+                                padding: '0 14px !important',
+                            },
+                        },
+                    },
+                    contained: {
                         backgroundColor: theme.palette.text.primary,
                         color: theme.palette.text.buttonText,
                         '&.Mui-disabled': {

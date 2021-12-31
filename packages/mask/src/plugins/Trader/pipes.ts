@@ -57,6 +57,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.DODO]: 'DODO',
         [TradeProvider.BANCOR]: 'Bancor',
         [TradeProvider.TRADERJOE]: 'TraderJoe',
+        [TradeProvider.OPENOCEAN]: 'OpenOcean',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -107,6 +108,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://app.bancor.network/eth/swap'
         case TradeProvider.TRADERJOE:
             return 'https://traderjoexyz.com/#/trade'
+        case TradeProvider.OPENOCEAN:
+            return 'https://openocean.finance/classic'
         default:
             unreachable(tradeProvider)
     }
@@ -163,6 +166,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://pancakeswap.info/pool/${address}`
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
+            return ``
+        case TradeProvider.OPENOCEAN:
+            // TODO - OpenOcean
             return ``
         case TradeProvider.TRADERJOE:
             // TODO - Trader Joe Analytics

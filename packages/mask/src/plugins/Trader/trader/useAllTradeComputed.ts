@@ -18,10 +18,13 @@ import { useTradeGasLimit as useDODOTradeGasLimit } from './dodo/useTradeGasLimi
 import { useTrade as useBancorTrade } from './bancor/useTrade'
 import { useTradeComputed as useBancorTradeComputed } from './bancor/useTradeComputed'
 import { useTradeGasLimit as useBancorTradeGasLimit } from './bancor/useTradeGasLimit'
+import { useTradeComputed as useOpenOceanTradeComputed } from './openocean/useTradeComputed'
+import { useTrade as useOpenOceanTrade } from './openocean/useTrade'
 import { TradeProvider } from '@masknet/public-api'
 import { useAvailableTraderProviders } from '../trending/useAvailableTraderProviders'
 import { useNativeTradeGasLimit } from './useNativeTradeGasLimit'
 import { TargetChainIdContext } from './useTargetChainIdContext'
+import type { TradeComputed, SwapRouteData } from '../types'
 
 export function useAllTradeComputed(
     inputAmount: string,
@@ -186,6 +189,16 @@ export function useAllTradeComputed(
     const traderJoe = useUniswapTradeComputed(traderJoe_.value, inputToken, outputToken)
     const traderJoeEstimateGas = useUniswapTradeGasLimit(traderJoe_, TradeProvider.TRADERJOE)
 
+    // openocean
+    const openocean_ = useOpenOceanTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
+    const openocean = useOpenOceanTradeComputed(
+        openocean_.value ?? null,
+        TradeStrategy.ExactIn,
+        inputToken,
+        outputToken,
+    )
+    const openoceanSwapEstimateGas = useDODOTradeGasLimit(openocean as TradeComputed<SwapRouteData> | null)
+
     const allTradeResult = [
         { provider: TradeProvider.UNISWAP_V2, ...uniswapV2_, value: uniswapV2, gas: uniswapV2EstimateGas },
         { provider: TradeProvider.SUSHISWAP, ...sushiSwap_, value: sushiSwap, gas: sushiSwapEstimateGas },
@@ -198,6 +211,7 @@ export function useAllTradeComputed(
         { provider: TradeProvider.DODO, ...dodo_, value: dodo, gas: dodoSwapEstimateGas },
         { provider: TradeProvider.BANCOR, ...bancor_, value: bancor, gas: bancorSwapEstimateGas },
         { provider: TradeProvider.TRADERJOE, ...traderJoe_, value: traderJoe, gas: traderJoeEstimateGas },
+        { provider: TradeProvider.OPENOCEAN, ...openocean_, value: openocean, gas: openoceanSwapEstimateGas },
     ]
 
     return nativeToken_.value
