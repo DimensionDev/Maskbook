@@ -11,7 +11,7 @@ import { MaskMessages, useI18N } from '../../utils'
 import { useCurrentVisitingIdentity } from '../DataSource/useActivatedUI'
 
 function getTabContent(tabId: string) {
-    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (x) => {
+    return createInjectHooksRenderer(useActivatedPluginsSNSAdaptor.visibility.useAnyMode, (x) => {
         const tab = x.ProfileTabs?.find((x) => x.ID === tabId)
         if (!tab) return
         return tab.UI?.TabContent
@@ -48,7 +48,7 @@ export function ProfileTabContent(props: ProfileTabContentProps) {
     const identity = useCurrentVisitingIdentity()
     const { value: addressNames, loading: loadingAddressNames } = useAddressNames(identity)
 
-    const tabs = useActivatedPluginsSNSAdaptor()
+    const tabs = useActivatedPluginsSNSAdaptor('any')
         .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) ?? [])
         .filter((z) => z.Utils?.shouldDisplay?.(identity, addressNames) ?? true)
         .sort((a, z) => {

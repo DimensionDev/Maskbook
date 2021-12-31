@@ -125,6 +125,11 @@ export function useGetTradeContext(tradeProvider?: TradeProvider) {
                     ADDITIONAL_TOKENS: {},
                     CUSTOM_TOKENS: SUSHISWAP_CUSTOM_BASES,
                 }
+            case TradeProvider.OPENOCEAN:
+                return {
+                    TYPE: tradeProvider,
+                    ROUTER_CONTRACT_ADDRESS: getTraderConstants(chainId).BANCOR_EXCHANGE_PROXY_ADDRESS,
+                }
             default:
                 if (tradeProvider) unreachable(tradeProvider)
                 return null

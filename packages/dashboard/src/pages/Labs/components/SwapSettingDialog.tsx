@@ -30,6 +30,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'Balancer', value: TradeProvider.BALANCER },
         { label: 'DODO', value: TradeProvider.DODO },
         { label: 'Bancor', value: TradeProvider.BANCOR },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
 
     const polygonOptions = [
@@ -37,6 +38,7 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: '0x', value: TradeProvider.ZRX },
         { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
 
     const bscOptions = [
@@ -44,11 +46,18 @@ export default function SwapSettingDialog({ open, onClose }: SettingDialogProps)
         { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
         { label: '0x', value: TradeProvider.ZRX },
         { label: 'DODO', value: TradeProvider.DODO },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
     ]
 
-    const arbitrumOptions = [{ label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 }]
+    const arbitrumOptions = [
+        { label: 'UniSwap V3', value: TradeProvider.UNISWAP_V3 },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+    ]
 
-    const xDaiOptions = [{ label: 'SushiSwap', value: TradeProvider.SUSHISWAP }]
+    const xDaiOptions = [
+        { label: 'SushiSwap', value: TradeProvider.SUSHISWAP },
+        { label: 'OpenOcean', value: TradeProvider.OPENOCEAN },
+    ]
     const fantomOptions = xDaiOptions
 
     const bobaOptions = [

@@ -83,7 +83,7 @@ export const AssetPlayer = memo<AssetPlayerProps>(({ url, type, options, iconPro
             })
             return
         }
-    }, [url, type, options, playerState])
+    }, [url, type, JSON.stringify(options), playerState])
     //endregion
 
     //#region resource loaded error

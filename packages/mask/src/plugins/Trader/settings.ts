@@ -110,6 +110,7 @@ const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvi
 const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
 const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
 const oolongswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+oolongswap`, '')
+const openoceanSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+openocean`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -138,6 +139,8 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
             return bancorSettings
         case TradeProvider.OOLONGSWAP:
             return oolongswapSettings
+        case TradeProvider.OPENOCEAN:
+            return openoceanSettings
         default:
             unreachable(tradeProvider)
     }

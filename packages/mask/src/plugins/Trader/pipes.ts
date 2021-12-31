@@ -57,6 +57,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.DODO]: 'DODO',
         [TradeProvider.BANCOR]: 'Bancor',
         [TradeProvider.OOLONGSWAP]: 'OolongSwap',
+        [TradeProvider.OPENOCEAN]: 'OpenOcean',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -107,6 +108,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://app.bancor.network/eth/swap'
         case TradeProvider.OOLONGSWAP:
             return 'https://oolongswap.com/'
+        case TradeProvider.OPENOCEAN:
+            return 'https://openocean.finance/classic'
         default:
             unreachable(tradeProvider)
     }
@@ -166,6 +169,9 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return ``
         case TradeProvider.OOLONGSWAP:
             // TODO - add OOLONGSWAP analytics
+            return ``
+        case TradeProvider.OPENOCEAN:
+            // TODO - OpenOcean
             return ``
         default:
             unreachable(tradeProvider)

@@ -1,11 +1,12 @@
 import { memo } from 'react'
 import { useI18N } from '../../../utils'
 import { AdditionalContent, AdditionalContentProps } from '../AdditionalPostContent'
-import { NotSetupYetPrompt } from '../../shared/NotSetupYetPrompt'
 import type { BannerProps } from '../../Welcomes/Banner'
 import { DecryptFailedReason } from '../../../utils/constants'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { wrapAuthorDifferentMessage } from './authorDifferentMessage'
+import MaskPluginWrapper from '../../../plugins/MaskPluginWrapper'
+
 export interface DecryptPostFailedProps {
     error: Error
     AdditionalContentProps?: Partial<AdditionalContentProps>
@@ -16,10 +17,12 @@ export interface DecryptPostFailedProps {
     postedBy?: ProfileIdentifier
 }
 export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptPostFailedProps) {
-    const { AdditionalContentProps, NotSetupYetPromptProps, author, postedBy, error } = props
+    const { AdditionalContentProps, author, postedBy, error } = props
     const { t } = useI18N()
-    if (error?.message === DecryptFailedReason.MyCryptoKeyNotFound)
-        return <NotSetupYetPrompt {...NotSetupYetPromptProps} description="decryptPostFailed" />
+
+    if (error?.message === DecryptFailedReason.MyCryptoKeyNotFound) {
+        return <MaskPluginWrapper pluginName="" />
+    }
     return (
         <AdditionalContent
             title={t('service_decryption_failed')}
