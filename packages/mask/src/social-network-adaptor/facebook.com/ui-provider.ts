@@ -104,7 +104,7 @@ const facebookUI: SocialNetworkUI.Definition = {
             profilePage(profile) {
                 // there is no PWA way on Facebook desktop.
                 // mobile not tested
-                location.href = getProfilePageUrlAtFacebook(profile)
+                location.assign(getProfilePageUrlAtFacebook(profile))
             },
             newsFeed() {
                 const homeLink = document.querySelector<HTMLAnchorElement>(

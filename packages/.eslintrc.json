@@ -49,7 +49,7 @@
         "unicorn/throw-new-error": "error",
         "unused-imports/no-unused-imports-ts": "error",
         "@dimensiondev/no-jsx-template-literal": "error",
-        "@dimensiondev/no-number-constructor": "error",
+        "@dimensiondev/no-number-constructor": "off",
         "@dimensiondev/prefer-early-return": "error",
         "@typescript-eslint/await-thenable": "error",
         "@typescript-eslint/no-for-in-array": "error",

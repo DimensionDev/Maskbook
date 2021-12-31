@@ -64,39 +64,32 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
 
     return {
         canMakeDeposit,
-        makeDeposit: async () => {
-            if (contract) {
-                const gasEstimate = await contract.methods.makeDeposit().estimateGas({
-                    from: account,
-                })
+        async makeDeposi() {
+            if (!contract) return
+            const gasEstimate = await contract.methods.makeDeposit().estimateGas({
+                from: account,
+            })
 
-                let txHash = ''
-                return new Promise<void>(async (resolve, reject) => {
-                    contract.methods
-                        .makeDeposit()
-                        .send({
-                            from: account,
-                            gas: gasEstimate,
+            let txHash = ''
+            return new Promise<void>(async (resolve, reject) => {
+                contract.methods
+                    .makeDeposit()
+                    .send({ from: account, gas: gasEstimate })
+                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
+                    .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
+                        if (receipt.status) {
+                            resolve()
+                        } else {
+                            reject({ gameActionStatus: TransactionStateType.CONFIRMED, ...receipt })
+                        }
+                    })
+                    .on(TransactionEventType.ERROR, () => {
+                        reject({
+                            gameActionStatus: TransactionStateType.FAILED,
+                            transactionHash: txHash,
                         })
-                        .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
-                        .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
-                            if (receipt.status) {
-                                resolve()
-                            } else {
-                                reject({
-                                    gameActionStatus: TransactionStateType.CONFIRMED,
-                                    ...receipt,
-                                })
-                            }
-                        })
-                        .on(TransactionEventType.ERROR, (error) => {
-                            reject({
-                                gameActionStatus: TransactionStateType.FAILED,
-                                transactionHash: txHash,
-                            })
-                        })
-                })
-            }
+                    })
+            })
         },
     }
 }
@@ -110,39 +103,31 @@ export function useWithdraw(info: GoodGhostingInfo) {
 
     return {
         canWithdraw,
-        withdraw: async () => {
-            if (contract) {
-                const gasEstimate = await contract.methods.withdraw().estimateGas({
-                    from: account,
-                })
-
-                let txHash = ''
-                return new Promise<void>(async (resolve, reject) => {
-                    contract.methods
-                        .withdraw()
-                        .send({
-                            from: account,
-                            gas: gasEstimate,
+        async withdraw() {
+            if (!contract) return
+            const gasEstimate = await contract.methods.withdraw().estimateGas({
+                from: account,
+            })
+            let txHash = ''
+            return new Promise<void>(async (resolve, reject) => {
+                contract.methods
+                    .withdraw()
+                    .send({ from: account, gas: gasEstimate })
+                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
+                    .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
+                        if (receipt.status) {
+                            resolve()
+                        } else {
+                            reject({ gameActionStatus: TransactionStateType.CONFIRMED, ...receipt })
+                        }
+                    })
+                    .on(TransactionEventType.ERROR, () => {
+                        reject({
+                            gameActionStatus: TransactionStateType.FAILED,
+                            transactionHash: txHash,
                         })
-                        .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
-                        .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
-                            if (receipt.status) {
-                                resolve()
-                            } else {
-                                reject({
-                                    gameActionStatus: TransactionStateType.CONFIRMED,
-                                    ...receipt,
-                                })
-                            }
-                        })
-                        .on(TransactionEventType.ERROR, (error) => {
-                            reject({
-                                gameActionStatus: TransactionStateType.FAILED,
-                                transactionHash: txHash,
-                            })
-                        })
-                })
-            }
+                    })
+            })
         },
     }
 }
@@ -157,39 +142,31 @@ export function useEarlyWithdraw(info: GoodGhostingInfo) {
 
     return {
         canEarlyWithdraw,
-        earlyWithdraw: async () => {
-            if (contract) {
-                const gasEstimate = await contract.methods.earlyWithdraw().estimateGas({
-                    from: account,
-                })
-
-                let txHash = ''
-                return new Promise<void>(async (resolve, reject) => {
-                    contract.methods
-                        .earlyWithdraw()
-                        .send({
-                            from: account,
-                            gas: gasEstimate,
+        async earlyWithdraw() {
+            if (!contract) return
+            const gasEstimate = await contract.methods.earlyWithdraw().estimateGas({
+                from: account,
+            })
+            let txHash = ''
+            return new Promise<void>(async (resolve, reject) => {
+                contract.methods
+                    .earlyWithdraw()
+                    .send({ from: account, gas: gasEstimate })
+                    .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
+                    .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
+                        if (receipt.status) {
+                            resolve()
+                        } else {
+                            reject({ gameActionStatus: TransactionStateType.CONFIRMED, ...receipt })
+                        }
+                    })
+                    .on(TransactionEventType.ERROR, () => {
+                        reject({
+                            gameActionStatus: TransactionStateType.FAILED,
+                            transactionHash: txHash,
                         })
-                        .on(TransactionEventType.TRANSACTION_HASH, (hash) => (txHash = hash))
-                        .on(TransactionEventType.CONFIRMATION, (_no, receipt: TransactionReceipt) => {
-                            if (receipt.status) {
-                                resolve()
-                            } else {
-                                reject({
-                                    gameActionStatus: TransactionStateType.CONFIRMED,
-                                    ...receipt,
-                                })
-                            }
-                        })
-                        .on(TransactionEventType.ERROR, (error) => {
-                            reject({
-                                gameActionStatus: TransactionStateType.FAILED,
-                                transactionHash: txHash,
-                            })
-                        })
-                })
-            }
+                    })
+            })
         },
     }
 }

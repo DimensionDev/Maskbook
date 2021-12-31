@@ -235,28 +235,19 @@ export const Gas1559Settings = memo<Gas1559SettingsProps>(({ onCancel, onSave: o
 
     //#region If the selected changed, set the value on the option to the form data
     useEffect(() => {
-        if (selected !== null) {
-            setValue(
-                'maxPriorityFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxPriorityFeePerGas ?? 0).toFixed() ?? '',
-            )
-            setValue(
-                'maxFeePerGas',
-                new BigNumber(options[selected].content?.suggestedMaxFeePerGas ?? 0).toFixed() ?? '',
-            )
-        }
+        if (selected === null) return
+        const { content } = options[selected]
+        setValue('maxPriorityFeePerGas', new BigNumber(content?.suggestedMaxPriorityFeePerGas ?? 0).toFixed() ?? '')
+        setValue('maxFeePerGas', new BigNumber(content?.suggestedMaxFeePerGas ?? 0).toFixed() ?? '')
     }, [selected, setValue, options])
     //#endregion
 
     useEffect(() => {
-        if (gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas && gasConfig?.maxPriorityFeePerGas) {
-            setOption(null)
-            setValue('maxFeePerGas', fromWei(new BigNumber(gasConfig.maxFeePerGas).toString(), 'gwei').toString())
-            setValue(
-                'maxPriorityFeePerGas',
-                fromWei(new BigNumber(gasConfig.maxPriorityFeePerGas).toString(), 'gwei').toString(),
-            )
-        }
+        if (!(gasConfig?.maxPriorityFeePerGas && gasConfig?.maxFeePerGas)) return
+        const { maxFeePerGas, maxPriorityFeePerGas } = gasConfig
+        setOption(null)
+        setValue('maxFeePerGas', fromWei(maxFeePerGas.toString(), 'gwei').toString())
+        setValue('maxPriorityFeePerGas', fromWei(maxPriorityFeePerGas.toString(), 'gwei').toString())
     }, [gasConfig, setValue])
 
     return (

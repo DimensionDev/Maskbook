@@ -314,25 +314,18 @@ export const Transfer1559 = memo<Transfer1559Props>(({ selectedAsset, openAssetM
 
     //#region set default gasLimit
     useUpdateEffect(() => {
-        if (minGasLimit) {
-            methods.setValue('gasLimit', `${minGasLimit}`)
-            setMinGasLimitContext(minGasLimit)
-        }
+        if (!minGasLimit) return
+        methods.setValue('gasLimit', `${minGasLimit}`)
+        setMinGasLimitContext(minGasLimit)
     }, [minGasLimit, methods.setValue])
     //#endregion
 
     //#region set default Max priority gas fee and max fee
     useUpdateEffect(() => {
-        if (estimateGasFees) {
-            methods.setValue(
-                'maxFeePerGas',
-                new BigNumber(estimateGasFees.medium?.suggestedMaxFeePerGas ?? 0).toString(),
-            )
-            methods.setValue(
-                'maxPriorityFeePerGas',
-                new BigNumber(estimateGasFees.medium?.suggestedMaxPriorityFeePerGas ?? 0).toString(),
-            )
-        }
+        if (!estimateGasFees) return
+        const { medium } = estimateGasFees
+        methods.setValue('maxFeePerGas', new BigNumber(medium?.suggestedMaxFeePerGas ?? 0).toString())
+        methods.setValue('maxPriorityFeePerGas', new BigNumber(medium?.suggestedMaxPriorityFeePerGas ?? 0).toString())
     }, [estimateGasFees, methods.setValue])
     //#endregion
 
