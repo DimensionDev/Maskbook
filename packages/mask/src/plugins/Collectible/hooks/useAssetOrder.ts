@@ -30,7 +30,6 @@ export function useAssetOrder(provider: NonFungibleAssetProvider, token?: Collec
                 return desktopOrder
             case NonFungibleAssetProvider.RARIBLE:
                 return
-
             default:
                 unreachable(provider)
         }
