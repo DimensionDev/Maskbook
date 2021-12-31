@@ -64,7 +64,7 @@ export function useMakeDeposit(info: GoodGhostingInfo) {
 
     return {
         canMakeDeposit,
-        async makeDeposi() {
+        async makeDeposit() {
             if (!contract) return
             const gasEstimate = await contract.methods.makeDeposit().estimateGas({
                 from: account,
