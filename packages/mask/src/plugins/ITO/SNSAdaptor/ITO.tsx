@@ -11,7 +11,7 @@ import {
     useChainId,
     useChainIdValid,
     useTokenConstants,
-    isNativeTokenAddress,
+    isNative,
 } from '@masknet/web3-shared-evm'
 import { isZero, ZERO, isGreaterThan } from '@masknet/web3-shared-base'
 import { Box, Card, Grid, Link, Typography } from '@mui/material'
@@ -727,8 +727,7 @@ export function ITO(props: ITO_Props) {
                         className={classes.actionButton}>
                         {t('plugin_ito_withdraw')}
                     </ActionButton>
-                ) : (!ifQualified || !(ifQualified as Qual_V2).qualified) &&
-                  !isNativeTokenAddress(qualificationAddress) ? (
+                ) : (!ifQualified || !(ifQualified as Qual_V2).qualified) && !isNative(qualificationAddress) ? (
                     <ActionButton
                         onClick={retryIfQualified}
                         loading={loadingIfQualified}
