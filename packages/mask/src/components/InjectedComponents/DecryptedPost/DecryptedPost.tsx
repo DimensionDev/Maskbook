@@ -30,14 +30,13 @@ export function DecryptPost(props: DecryptPostProps) {
     useEffect(() => {
         const abort = new AbortController()
         async function main() {
-            const m = flattenTypedMessage(await waitTypedMessage(raw))
-            const t = extractTextFromTypedMessage(m).unwrapOr('')
-            const i = extractImageFromTypedMessage(m).filter((x): x is string => typeof x === 'string')
-            console.log(m, t, i)
-            const x: SocialNetworkEncodedPayload = i.length
-                ? { type: 'image-url', url: i.at(0)! }
-                : { type: 'text', text: t }
-            const process = ServicesWithProgress.decryptionWithSocialNetworkDecoding(x, {
+            const message = flattenTypedMessage(await waitTypedMessage(raw))
+            const text = extractTextFromTypedMessage(message).unwrapOr('')
+            const images = extractImageFromTypedMessage(message).filter((x): x is string => typeof x === 'string')
+            const payloads: SocialNetworkEncodedPayload[] = []
+            payloads.push({ type: 'text', text })
+            payloads.push(...images.map<SocialNetworkEncodedPayload>((url) => ({ type: 'image-url', url })))
+            const process = ServicesWithProgress.decryptionWithSocialNetworkDecoding(payloads, {
                 authorHint: author,
                 currentProfile: whoAmI,
                 currentSocialNetwork: SocialNetworkEnum.Twitter,
