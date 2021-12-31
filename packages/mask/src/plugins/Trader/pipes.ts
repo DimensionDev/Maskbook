@@ -56,6 +56,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.PANCAKESWAP]: 'PancakeSwap',
         [TradeProvider.DODO]: 'DODO',
         [TradeProvider.BANCOR]: 'Bancor',
+        [TradeProvider.ONE_INCH]: '1inch',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -84,6 +85,26 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
                     return 'https://celo.api.0x.org/'
                 case NetworkType.Fantom:
                     return 'https://fantom.api.0x.org/'
+                default:
+                    safeUnreachable(networkType)
+                    return ''
+            }
+        case TradeProvider.ONE_INCH:
+            switch (networkType) {
+                case NetworkType.Ethereum:
+                    return 'https://api.1inch.exchange/v4.0/1/'
+                case NetworkType.Binance:
+                    return 'https://api.1inch.exchange/v4.0/56/'
+                case NetworkType.Polygon:
+                    return 'https://api.1inch.exchange/v4.0/137/'
+                case NetworkType.Arbitrum:
+                    return 'https://api.1inch.exchange/v4.0/42161/'
+                case NetworkType.xDai:
+                    return 'https://api.1inch.exchange/v4.0/100/'
+                case NetworkType.Celo:
+                    return 'https://api.1inch.exchange/v4.0/42220/'
+                case NetworkType.Fantom:
+                    return 'https://api.1inch.exchange/v4.0/250/'
                 default:
                     safeUnreachable(networkType)
                     return ''
@@ -156,6 +177,8 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             return `https://pancakeswap.info/pool/${address}`
         case TradeProvider.BANCOR:
             // TODO - Bancor analytics should be available with V3
+            return ``
+        case TradeProvider.ONE_INCH:
             return ``
         default:
             unreachable(tradeProvider)

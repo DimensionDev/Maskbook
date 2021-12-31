@@ -10,10 +10,13 @@ import {
     useAccount,
     useWeb3,
 } from '@masknet/web3-shared-evm'
-import type { SwapQuoteResponse, TradeComputed } from '../../types'
+import type { SwapQuoteOneResponse, TradeComputed } from '../../types'
 import { TargetChainIdContext } from '../useTargetChainIdContext'
 
-export function useTradeCallback(tradeComputed: TradeComputed<SwapQuoteResponse> | null, gasConfig?: GasOptionConfig) {
+export function useTradeCallback(
+    tradeComputed: TradeComputed<SwapQuoteOneResponse> | null,
+    gasConfig?: GasOptionConfig,
+) {
     const account = useAccount()
     const { targetChainId: chainId } = TargetChainIdContext.useContainer()
 

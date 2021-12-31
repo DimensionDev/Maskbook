@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { first } from 'lodash-es'
+import { first } from 'lodash-unified'
 import { BIPS_BASE, ONE_INCH_BASE_URL } from '../../constants'
 import type {
     SwapQuoteOneResponse,
