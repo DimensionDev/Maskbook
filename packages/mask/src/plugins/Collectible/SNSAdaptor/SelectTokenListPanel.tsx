@@ -43,6 +43,7 @@ const useStyles = makeStyles()((theme) => ({
     icon: {
         width: 24,
         height: 24,
+        paddingRight: theme.spacing(0.5),
     },
     input: {},
 
