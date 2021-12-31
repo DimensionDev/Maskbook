@@ -228,8 +228,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     }, [])
 
     useEffect(() => {
-        if (!selectOption) setSelectOption(NFTSelectOption.Partial)
-    }, [tokenDetailedOwnerList, selectOption])
+        if (loadingOwnerList) {
+            setSelectOption(undefined)
+        } else if (!selectOption) {
+            setSelectOption(NFTSelectOption.Partial)
+        }
+    }, [tokenDetailedOwnerList, selectOption, loadingOwnerList])
 
     useEffect(() => {
         clearToken()
@@ -307,7 +311,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                         </Box>
                     )
                 ) : null}
-                {contract && balance && selectOption === NFTSelectOption.Partial ? (
+                {contract && balance && selectOption === NFTSelectOption.Partial && !loadingOwnerList ? (
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
