@@ -23,7 +23,7 @@ const AnimatePic = () => {
     const visitor = useCurrentVisitingUser()
     const visitorNfts = useNfts(visitor)
     const visitorMeta = useEssay(visitor, start)
-    const defMeta = useDefaultEssay(visitorNfts)
+    const defMeta = useDefaultEssay(visitor)
 
     const [showMeta, setShowMeta] = useState<ShowMeta | undefined>(undefined)
     const [show, setShow] = useState(true)

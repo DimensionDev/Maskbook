@@ -278,9 +278,9 @@ export function ApplicationBoard({ secondEntries, secondEntryChainTabs }: MaskAp
             'Non-F Friends',
             new URL('./assets/mintTeam.png', import.meta.url).toString(),
             () => setPetDialog({ open: true }),
-            undefined,
-            false,
-            false,
+            [ChainId.Mainnet],
+            currentChainId !== ChainId.Mainnet,
+            true,
         ),
         createEntry(
             'Investment',

@@ -21,7 +21,9 @@ const useStyles = makeStyles()(() => ({
         justifyContent: 'center',
     },
     imgBox: {
-        width: '70%',
+        width: '80%',
+        height: '80%',
+        textAlign: 'center',
     },
     close: {
         width: 15,
@@ -39,7 +41,6 @@ const useStyles = makeStyles()(() => ({
     wordBox: {
         position: 'absolute',
         maxWidth: 150,
-        maxHeight: 85,
         bottom: 150,
     },
     dragImg: {

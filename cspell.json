@@ -249,7 +249,8 @@
         "hexlify",
         "contribs",
         "contrib",
-        "juicebox"
+        "juicebox",
+        "webcomponents"
     ],
     "ignoreWords": [
         "cryptopunks",

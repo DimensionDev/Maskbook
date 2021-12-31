@@ -1,7 +1,9 @@
 import { ImageType } from './types'
 export const PetsPluginID = 'com.maskbook.pets'
 export const TWITTER = 'twitter.com'
-export const DEFAULT_WORD = 'Hello Mask'
+export const MASK_TWITTER = 'realMaskNetwork'
+export const DEFAULT_SET_WORD = 'Set up your Non-Fungible Friend by clicking the Mask icon to the left!'
+export const DEFAULT_MASK_WORD = 'hello Mask'
 
 export const initMeta = {
     userId: '',
