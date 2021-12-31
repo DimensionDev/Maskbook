@@ -114,7 +114,7 @@ const facebookUI: SocialNetworkUI.Definition = {
                     ].join(','),
                 )
                 if (homeLink) homeLink.click()
-                else if (location.pathname !== '/') location.pathname = '/'
+                else if (location.pathname !== '/') location.assign('/')
             },
         },
         maskCompositionDialog: { open: taskOpenComposeBoxFacebook },
