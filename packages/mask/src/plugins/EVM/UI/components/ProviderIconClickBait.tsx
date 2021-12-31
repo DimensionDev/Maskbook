@@ -74,6 +74,9 @@ export function ProviderIconClickBait({
         onClick?.(network, provider)
     }, [network, provider, injectedEthereumProviderType, injectedCoin98ProviderType, onClick])
 
+    // hide c98 & fortmatic
+    if ([ProviderType.Coin98, ProviderType.Fortmatic].includes(providerType)) return null
+
     // hide injected provider in dashboard
     if (isInjectedProvider(providerType) && isDashboardPage()) return null
 
