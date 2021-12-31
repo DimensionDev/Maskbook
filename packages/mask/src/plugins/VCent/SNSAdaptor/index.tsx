@@ -12,7 +12,7 @@ const sns: Plugin.SNSAdaptor.Definition = {
 export default sns
 
 function Component() {
-    const tweetAddress = usePostInfoDetails.postID()
+    const tweetAddress = usePostInfoDetails.snsID()
 
     if (!tweetAddress) return null
     // only for the primary tweet on the detailed page

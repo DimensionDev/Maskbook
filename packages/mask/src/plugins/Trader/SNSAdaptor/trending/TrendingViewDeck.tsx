@@ -24,8 +24,7 @@ import {
 import { CoinMenu, CoinMenuOption } from './CoinMenu'
 import { useTransakAllowanceCoin } from '../../../Transak/hooks/useTransakAllowanceCoin'
 import { CoinSafetyAlert } from './CoinSafetyAlert'
-import { PLUGIN_IDENTIFIER as TRANSAK_PLUGIN_ID } from '../../../Transak/constants'
-import { useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
+import { PluginId, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -127,7 +126,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const classes = useStylesExtends(useStyles(), props)
 
     //#region buy
-    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === TRANSAK_PLUGIN_ID)
+    const transakPluginEnabled = useActivatedPluginsSNSAdaptor().find((x) => x.ID === PluginId.Transak)
     const account = useAccount()
     const isAllowanceCoin = useTransakAllowanceCoin(coin)
     const { setDialog: setBuyDialog } = useRemoteControlledDialog(PluginTransakMessages.buyTokenDialogUpdated)

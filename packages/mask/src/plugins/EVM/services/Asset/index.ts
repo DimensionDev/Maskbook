@@ -43,6 +43,11 @@ export interface CollectionOption {
     size: number
 }
 
+const defaultPageableData = {
+    data: [],
+    hasNextPage: false,
+}
+
 export async function getAsset(options: AssetOption) {
     switch (options.provider) {
         case NonFungibleAssetProvider.OPENSEA:
@@ -108,9 +113,9 @@ export async function getCollections(options: CollectionOption) {
         case NonFungibleAssetProvider.OPENSEA:
             return OpenSea.getCollections(address, { chainId, page, size })
         case NonFungibleAssetProvider.RARIBLE:
-            return []
+            return defaultPageableData
         case NonFungibleAssetProvider.NFTSCAN:
-            return []
+            return defaultPageableData
         default:
             unreachable(provider)
     }

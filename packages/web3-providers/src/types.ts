@@ -1,3 +1,4 @@
+import type RSS3 from 'rss3-next'
 import type { CurrencyType } from '@masknet/plugin-infra'
 import type {
     ChainId,
@@ -6,6 +7,68 @@ import type {
     ERC721TokenDetailed,
     NativeTokenDetailed,
 } from '@masknet/web3-shared-evm'
+
+export namespace RSS3BaseAPI {
+    export interface GeneralAsset {
+        platform: string
+        identity: string
+        id: string // contractAddress-id or admin_address
+        type: string
+        info: {
+            collection?: string
+            collection_icon?: string
+            image_preview_url?: string | null
+            animation_url?: string | null
+            animation_original_url?: string | null
+            title?: string
+            total_contribs?: number
+            token_contribs?: {
+                token: string
+                amount: string
+            }[]
+            start_date?: string
+            end_date?: string
+            country?: string
+            city?: string
+        }
+    }
+
+    export interface GeneralAssetWithTags extends GeneralAsset {
+        tags?: string[]
+    }
+
+    export interface GeneralAssetResponse {
+        status: boolean
+        assets: GeneralAsset[]
+    }
+
+    export interface ProfileInfo {
+        avatar: string[]
+        bio: string
+        name: string
+    }
+
+    export enum AssetType {
+        GitcoinDonation = 'Gitcoin-Donation',
+        POAP = 'POAP',
+    }
+
+    export interface NameInfo {
+        rnsName: string
+        ensName: string | null
+        address: string
+    }
+
+    export interface Provider {
+        createRSS3(address: string): RSS3
+        getFileData<T>(rss3: RSS3, address: string, key: string): Promise<T | undefined>
+        setFileData<T>(rss3: RSS3, address: string, key: string, data: T): Promise<T>
+        getDonations(address: string): Promise<GeneralAssetResponse | undefined>
+        getFootprints(address: string): Promise<GeneralAssetResponse | undefined>
+        getNameInfo(id: string): Promise<NameInfo | undefined>
+        getProfileInfo(address: string): Promise<ProfileInfo | undefined>
+    }
+}
 
 export namespace PriceAPI {
     export interface CryptoPrice {
@@ -177,6 +240,13 @@ export namespace NonFungibleTokenAPI {
         chainId?: ChainId
         page?: number
         size?: number
+        pageInfo?: { [key in string]: unknown }
+    }
+
+    interface ProviderPageable<T> {
+        data: T[]
+        hasNextPage: boolean
+        nextPageInfo?: { [key in string]: unknown }
     }
 
     export interface Provider {
@@ -184,7 +254,7 @@ export namespace NonFungibleTokenAPI {
         getContractBalance?: (address: string) => Promise<ContractBalance[]>
         getAsset?: (address: string, tokenId: string, opts?: { chainId?: ChainId }) => Promise<Asset | undefined>
         getToken?: (address: string, tokenId: string, chainId: ChainId) => Promise<ERC721TokenDetailed | undefined>
-        getTokens?: (from: string, opts: Options) => Promise<ERC721TokenDetailed[]>
+        getTokens?: (from: string, opts: Options) => Promise<ProviderPageable<ERC721TokenDetailed>>
         getHistory?: (address: string, tokenId: string, opts?: Options) => Promise<History[]>
         getListings?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
         getOffers?: (address: string, tokenId: string, opts?: Options) => Promise<AssetOrder[]>
@@ -194,6 +264,6 @@ export namespace NonFungibleTokenAPI {
             side: NonFungibleTokenAPI.OrderSide,
             opts?: Options,
         ) => Promise<AssetOrder[]>
-        getCollections?: (address: string, opts?: Options) => Promise<Collection[]>
+        getCollections?: (address: string, opts?: Options) => Promise<ProviderPageable<Collection>>
     }
 }

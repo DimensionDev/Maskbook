@@ -16,9 +16,9 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI } = props
-    const raw = extractTextFromTypedMessage(usePostInfoDetails.postMessage())
+    const raw = extractTextFromTypedMessage(usePostInfoDetails.rawMessage())
     const image = usePostInfoDetails.postMetadataImages()
-    const author = usePostInfoDetails.postBy()
+    const author = usePostInfoDetails.author()
     const url = usePostInfoDetails.url()
     console.log(raw.unwrapOr(''), image)
 

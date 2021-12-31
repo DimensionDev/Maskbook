@@ -1,7 +1,7 @@
 import { unreachable } from '@dimensiondev/kit'
 import { createGlobalSettings, createInternalSettings } from '../../settings/createSettings'
 import { i18n } from '../../../shared-ui/locales_legacy'
-import { PLUGIN_IDENTIFIER, SLIPPAGE_DEFAULT } from './constants'
+import { PLUGIN_ID, SLIPPAGE_DEFAULT } from './constants'
 import type { ZrxTradePool } from './types'
 import { DataProvider, TradeProvider } from '@masknet/public-api'
 
@@ -9,7 +9,7 @@ import { DataProvider, TradeProvider } from '@masknet/public-api'
  * The slippage tolerance of trader
  */
 export const currentSlippageSettings = createGlobalSettings<number>(
-    `${PLUGIN_IDENTIFIER}+slippageTolerance`,
+    `${PLUGIN_ID}+slippageTolerance`,
     SLIPPAGE_DEFAULT,
     {
         primary: () => '',
@@ -19,7 +19,7 @@ export const currentSlippageSettings = createGlobalSettings<number>(
 /**
  * Single Hop
  */
-export const currentSingleHopOnlySettings = createGlobalSettings<boolean>(`${PLUGIN_IDENTIFIER}+singleHopOnly`, false, {
+export const currentSingleHopOnlySettings = createGlobalSettings<boolean>(`${PLUGIN_ID}+singleHopOnly`, false, {
     primary: () => '',
 })
 
@@ -27,7 +27,7 @@ export const currentSingleHopOnlySettings = createGlobalSettings<boolean>(`${PLU
  * The default data provider
  */
 export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
-    `${PLUGIN_IDENTIFIER}+dataProvider`,
+    `${PLUGIN_ID}+dataProvider`,
     DataProvider.COIN_GECKO,
     {
         primary: () => i18n.t('plugin_trader_settings_data_source_primary'),
@@ -39,7 +39,7 @@ export const currentDataProviderSettings = createGlobalSettings<DataProvider>(
  * The default trader provider
  */
 export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+tradeProvider`,
+    `${PLUGIN_ID}+tradeProvider`,
     TradeProvider.UNISWAP_V2,
     {
         primary: () => i18n.t('plugin_trader_settings_trade_provider_primary'),
@@ -48,37 +48,42 @@ export const currentTradeProviderSettings = createGlobalSettings<TradeProvider>(
 )
 
 export const ethereumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+ethereum+tradeProvider`,
+    `${PLUGIN_ID}+ethereum+tradeProvider`,
     TradeProvider.UNISWAP_V2,
     { primary: () => '' },
 )
 
 export const polygonNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+polygon+tradeProvider`,
+    `${PLUGIN_ID}+polygon+tradeProvider`,
     TradeProvider.QUICKSWAP,
     { primary: () => '' },
 )
 
 export const binanceNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+binance+tradeProvider`,
+    `${PLUGIN_ID}+binance+tradeProvider`,
     TradeProvider.PANCAKESWAP,
     { primary: () => '' },
 )
 
 export const arbitrumNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+arbitrum+tradeProvider`,
+    `${PLUGIN_ID}+arbitrum+tradeProvider`,
     TradeProvider.UNISWAP_V3,
     { primary: () => '' },
 )
 
 export const xdaiNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+xdai+tradeProvider`,
+    `${PLUGIN_ID}+xdai+tradeProvider`,
+    TradeProvider.SUSHISWAP,
+    { primary: () => '' },
+)
+export const fantomNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
+    `${PLUGIN_ID}+fantom+tradeProvider`,
     TradeProvider.SUSHISWAP,
     { primary: () => '' },
 )
 
 export const celoNetworkTradeProviderSettings = createGlobalSettings<TradeProvider>(
-    `${PLUGIN_IDENTIFIER}+celo+tradeProvider`,
+    `${PLUGIN_ID}+celo+tradeProvider`,
     TradeProvider.SUSHISWAP,
     { primary: () => '' },
 )
@@ -88,16 +93,16 @@ export interface TradeProviderSettings {
     pools: ZrxTradePool[]
 }
 
-const uniswapV2Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v2`, '')
-const uniswapV3Settings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+uniswap+v3`, '')
-const zrxSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+zrx`, '')
-const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sushiswap`, '')
-const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+sashimiswap`, '')
-const quickswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+quickswap`, '')
-const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+pancakeswap`, '')
-const balancerSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+balancer`, '')
-const dodoSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+dodo`, '')
-const bancorSettings = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+tradeProvider+bancor`, '')
+const uniswapV2Settings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+uniswap+v2`, '')
+const uniswapV3Settings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+uniswap+v3`, '')
+const zrxSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+zrx`, '')
+const sushiswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+sushiswap`, '')
+const sashimiswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+sashimiswap`, '')
+const quickswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+quickswap`, '')
+const pancakeswapSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+pancakeswap`, '')
+const balancerSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+balancer`, '')
+const dodoSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+dodo`, '')
+const bancorSettings = createInternalSettings<string>(`${PLUGIN_ID}+tradeProvider+bancor`, '')
 
 /**
  * The general settings of specific tarde provider
@@ -131,9 +136,9 @@ export function getCurrentTradeProviderGeneralSettings(tradeProvider: TradeProvi
 //#endregion
 
 //#region data provider general settings
-const coinGeckoSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinGeckoSettings`, '')
-const coinMarketCapSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinMarketCapSettings`, '')
-const coinUniswapSettings = createInternalSettings(`${PLUGIN_IDENTIFIER}+currentCoinUniswapSettings`, '')
+const coinGeckoSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinGeckoSettings`, '')
+const coinMarketCapSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinMarketCapSettings`, '')
+const coinUniswapSettings = createInternalSettings(`${PLUGIN_ID}+currentCoinUniswapSettings`, '')
 
 /**
  * The general settings of specific data provider
@@ -153,16 +158,13 @@ export function getCurrentDataProviderGeneralSettings(dataProvider: DataProvider
 //#endregion
 
 //#region the user preferred coin id
-const coinGeckoPreferredCoinId = createInternalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+currentCoinGeckoPreferredCoinId`,
-    '{}',
-)
+const coinGeckoPreferredCoinId = createInternalSettings<string>(`${PLUGIN_ID}+currentCoinGeckoPreferredCoinId`, '{}')
 const coinMarketCapPreferredCoinId = createInternalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+currentCoinMarketCapPreferredCoinId`,
+    `${PLUGIN_ID}+currentCoinMarketCapPreferredCoinId`,
     '{}',
 )
 const coinUniswapPreferredCoinId = createInternalSettings<string>(
-    `${PLUGIN_IDENTIFIER}+currentCoinUniswapPreferredCoinId`,
+    `${PLUGIN_ID}+currentCoinUniswapPreferredCoinId`,
     '{}',
 )
 
@@ -183,4 +185,4 @@ export function getCurrentPreferredCoinIdSettings(dataProvider: DataProvider) {
 /**
  * The approved tokens from uniswap
  */
-export const approvedTokensFromUniSwap = createInternalSettings<string>(`${PLUGIN_IDENTIFIER}+approvedTokens`, '[]')
+export const approvedTokensFromUniSwap = createInternalSettings<string>(`${PLUGIN_ID}+approvedTokens`, '[]')

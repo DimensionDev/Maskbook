@@ -1,10 +1,9 @@
-export const pluginName = 'Poll'
-export const identifier = 'com.maskbook.poll'
-export const POLL_META_KEY_1 = 'com.maskbook.poll:1'
+import { PluginId } from '@masknet/plugin-infra'
+
 export const PollGunRootNode = 'com.maskbook.plugin.polls'
 
-export const PLUGIN_META_KEY = 'com.maskbook.poll:1'
-export const PLUGIN_ID = 'com.maskbook.poll'
+export const PLUGIN_META_KEY = `${PluginId.Poll}:1`
+export const PLUGIN_ID = PluginId.Poll
 export const PLUGIN_NAME = 'Poll'
 export const PLUGIN_ICON = '🗳️'
 export const PLUGIN_DESCRIPTION = 'Easily create a Poll for receiving public votes.'
