@@ -14,7 +14,7 @@
         "xDai": "",
         "Celo": "",
         "Fantom": "https://api.ftmscan.com/api",
-        "Avalanche": ""
+        "Avalanche": "https://api.snowtrace.io/api"
     },
     "EXPLORER_API_KEY": {
         "Mainnet": "99IX9MBZKG8FYQUECXDNDPATGVDDH6JCWW",
