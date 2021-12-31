@@ -187,7 +187,7 @@ export function useAllTradeComputed(
         tradeProviders.some((x) => x === TradeProvider.TRADERJOE) ? outputToken : undefined,
     )
     const traderJoe = useUniswapTradeComputed(traderJoe_.value, inputToken, outputToken)
-    const traderJoeEstimateGas = useUniswapTradeGasLimit(traderJoe_, TradeProvider.TRADERJOE)
+    const traderJoeEstimateGas = useUniswapTradeGasLimit(traderJoe, TradeProvider.TRADERJOE)
 
     // openocean
     const openocean_ = useOpenOceanTrade(TradeStrategy.ExactIn, inputAmount_, '0', inputToken, outputToken)
