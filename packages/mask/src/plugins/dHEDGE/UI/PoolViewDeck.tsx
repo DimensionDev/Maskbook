@@ -38,8 +38,8 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         textOverflow: 'ellipsis',
         display: '-webkit-box',
-        '-webkit-line-clamp': '4',
-        '-webkit-box-orient': 'vertical',
+        WebkitLineClamp: '4',
+        webkitBoxOrient: 'vertical',
     },
     button: {
         marginTop: theme.spacing(2),
