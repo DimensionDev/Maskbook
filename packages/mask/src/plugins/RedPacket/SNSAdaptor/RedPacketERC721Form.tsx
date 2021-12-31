@@ -19,7 +19,7 @@ import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
-import { SelectNftTokenDialog } from './SelectNftTokenDialog'
+import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
 import { NftImage } from './NftImage'
 import { NFTSelectOption } from '../types'
@@ -199,18 +199,14 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const account = useAccount()
     const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [existTokenDetailedList, setExistTokenDetailedList] = useState<(ERC721TokenDetailed & { index: number })[]>(
-        [],
-    )
+    const [existTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
     const [message, setMessage] = useState('Best Wishes!')
     const {
         asyncRetry: { loading: loadingOwnerList },
         tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
         clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(contract, account)
-    const tokenDetailedOwnerList = _tokenDetailedOwnerList.map(
-        (v, index) => ({ ...v, index } as ERC721TokenDetailed & { index: number }),
-    )
+    const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
     const removeToken = useCallback((token: ERC721TokenDetailed) => {
         setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])

@@ -288,14 +288,16 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
 }))
 
+export type OrderedERC721Token = ERC721TokenDetailed & { index: number }
+
 export interface SelectNftTokenDialogProps extends withClasses<never> {
     open: boolean
     loadingOwnerList: boolean
     onClose: () => void
     contract: ERC721ContractDetailed | undefined
-    existTokenDetailedList: (ERC721TokenDetailed & { index: number })[]
-    tokenDetailedOwnerList: (ERC721TokenDetailed & { index: number })[]
-    setExistTokenDetailedList: React.Dispatch<React.SetStateAction<(ERC721TokenDetailed & { index: number })[]>>
+    existTokenDetailedList: OrderedERC721Token[]
+    tokenDetailedOwnerList: OrderedERC721Token[]
+    setExistTokenDetailedList: React.Dispatch<React.SetStateAction<OrderedERC721Token[]>>
 }
 
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
@@ -310,10 +312,10 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     } = props
     const { t } = useI18N()
     const account = useAccount()
-    const [tokenDetailed, setTokenDetailed] = useState<ERC721TokenDetailed & { index: number }>()
+    const [tokenDetailed, setTokenDetailed] = useState<OrderedERC721Token>()
     const [searched, setSearched] = useState(false)
     const [tokenDetailedSelectedList, setTokenDetailedSelectedList] =
-        useState<(ERC721TokenDetailed & { index: number })[]>(existTokenDetailedList)
+        useState<OrderedERC721Token[]>(existTokenDetailedList)
     const [loadingToken, setLoadingToken] = useState(false)
     const [tokenId, setTokenId, erc721TokenDetailedCallback] = useERC721TokenDetailedCallback(contract)
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
@@ -358,12 +360,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     useEffect(update, [tokenDetailedOwnerList])
 
     const selectToken = useCallback(
-        (
-            token: ERC721TokenDetailed & { index: number },
-            findToken: (ERC721TokenDetailed & { index: number }) | undefined,
-            shiftKey: boolean,
-            index: number,
-        ) => {
+        (token: OrderedERC721Token, findToken: OrderedERC721Token | undefined, shiftKey: boolean, index: number) => {
             if (!shiftKey || tokenIdFilterList.length > 0) {
                 if (findToken) {
                     setTokenDetailedSelectedList(
@@ -378,7 +375,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 )
                 if (findToken) {
                     const unselectedTokenIdList: string[] = []
-                    let nextToken: (ERC721TokenDetailed & { index: number }) | undefined = findToken
+                    let nextToken: OrderedERC721Token | undefined = findToken
                     while (nextToken) {
                         unselectedTokenIdList.push(nextToken.tokenId)
                         const nextTokenIndex: number = (nextToken?.index ?? 0) + 1
