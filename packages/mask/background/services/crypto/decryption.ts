@@ -56,10 +56,13 @@ export async function* decryptionWithSocialNetworkDecoding(
             yield new DecryptError(ErrorReasons.UnrecognizedAuthor, undefined)
             return
         }
-        decoded = await steganographyDecodeImageUrl(encoded.url, {
-            pass: context.authorHint.toText(),
-            downloadImage: (url) => fetch(url).then((x) => x.arrayBuffer()),
-        })
+        decoded = socialNetworkDecoder(
+            context.currentSocialNetwork,
+            await steganographyDecodeImageUrl(encoded.url, {
+                pass: context.authorHint.toText(),
+                downloadImage: (url) => fetch(url).then((x) => x.arrayBuffer()),
+            }),
+        ).unwrapOr('')
     }
     return yield* decryption(decoded, context)
 }
@@ -179,7 +182,7 @@ async function storeAuthorPublicKey(
     pub: AsymmetryCryptoKey,
 ) {
     if (payloadAuthor.equals(postAuthor)) {
-        if (pub.algr !== PublicKeyAlgorithmEnum.ed25519) {
+        if (pub.algr !== PublicKeyAlgorithmEnum.secp256k1) {
             throw new Error('TODO: support other curves')
         }
         // TODO: store the key

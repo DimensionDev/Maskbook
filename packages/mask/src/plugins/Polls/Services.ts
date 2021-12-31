@@ -1,5 +1,4 @@
 import { first } from 'lodash-unified'
-import '../../network/gun/gun-worker.patch'
 import type { PollMetaData } from './types'
 
 const defaultPoll: PollGunDB = {
