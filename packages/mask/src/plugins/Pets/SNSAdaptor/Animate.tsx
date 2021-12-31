@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { makeStyles, useStylesExtends } from '@masknet/theme'
-import { useUser, useNfts, useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
+import { useUser, useEssay, useDefaultEssay, useCurrentVisitingUser } from '../hooks'
 import { ModelNFT } from './ModelNFT'
 import { NormalNFT } from './NormalNFT'
 import { ImageType, ShowMeta } from '../types'
@@ -21,7 +21,6 @@ const AnimatePic = () => {
     const user = useUser()
     const userMeta = useEssay(user, start)
     const visitor = useCurrentVisitingUser()
-    const visitorNfts = useNfts(visitor)
     const visitorMeta = useEssay(visitor, start)
     const defMeta = useDefaultEssay(visitor)
 
@@ -48,7 +47,7 @@ const AnimatePic = () => {
             clearInterval(timer)
         }
     }, [])
-    if (!show || !showMeta?.image) return <></>
+    if (!visitor.userId || visitor.userId === '$unknown' || !show || !showMeta?.image) return <></>
     return (
         <div className={classes.root} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
             {showMeta.type === ImageType.GLB ? (

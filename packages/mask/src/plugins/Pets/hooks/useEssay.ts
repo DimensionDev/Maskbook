@@ -19,7 +19,7 @@ export function useDefaultEssay(user: User) {
     const [essayMeta, setEssayMeta] = useState<ShowMeta | undefined>(undefined)
     const PunkIcon = getAssetAsBlobURL(new URL('../assets/punk2d.png', import.meta.url))
     useEffect(() => {
-        if (user?.userId) {
+        if (user?.userId || user?.userId !== '$unknown') {
             setEssayMeta({
                 image: PunkIcon,
                 word: user.userId === MASK_TWITTER ? DEFAULT_MASK_WORD : DEFAULT_SET_WORD,
