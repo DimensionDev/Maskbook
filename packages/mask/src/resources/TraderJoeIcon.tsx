@@ -1,7 +1,7 @@
 import { SvgIconProps, SvgIcon } from '@mui/material'
 
 const svg = (
-    <svg width="1000" height="1000" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M42 37v4l-7 4v-4l7-4Z" fill="#3C1A26" />
         <path d="m35 45-12-7v-4l12 7v4Z" fill="#29121A" />
         <path d="m35 41-12-7 7-5 12 8-7 4Z" fill="#421D2A" />
