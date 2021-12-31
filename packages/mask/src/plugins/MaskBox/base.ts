@@ -1,9 +1,9 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { languages } from './locales'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { PLUGIN_ID } from './constants'
 
 export const base: Plugin.Shared.Definition = {
-    ID: PLUGIN_IDENTIFIER,
+    ID: PLUGIN_ID,
     icon: '🎁',
     name: { fallback: 'MaskBox' },
     description: { fallback: 'The mystery box with NFT inside which is provided by Mask Network.' },

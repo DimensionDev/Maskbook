@@ -2,8 +2,9 @@ import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@maskn
 
 const PluginRenderer = createInjectHooksRenderer(
     useActivatedPluginsSNSAdaptor.visibility.useNotMinimalMode,
-    (x) => x.SearchBoxComponent,
+    (x) => x.SearchResultBox,
 )
+
 export interface SearchResultBoxProps {}
 
 export function SearchResultBox(props: SearchResultBoxProps) {

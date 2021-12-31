@@ -23,12 +23,13 @@ import MarketTrendSettingDialog from './components/MarketTrendSettingDialog'
 import { useAccount } from '@masknet/web3-shared-evm'
 import { Messages, Services, PluginMessages } from '../../API'
 import { useRemoteControlledDialog } from '@masknet/shared'
-import { PLUGIN_IDS, TUTORIAL_URLS_EN } from './constants'
+import { TUTORIAL_URLS_EN } from './constants'
 import { ContentContainer } from '../../components/ContentContainer'
 import { WalletStateBar } from '../Wallets/components/WalletStateBar'
 import { PoolTogetherURL } from '../../assets'
 import { DHEDGEIcon } from '../../../../mask/src/resources/DHEDGEIcon'
 import TutorialDialog from './components/TutorialDialog'
+import { PluginId } from '@masknet/plugin-infra'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -54,19 +55,20 @@ export default function Plugins() {
     const [openTrendSetting, setOpenTrendSetting] = useState(false)
     const [openSetupTutorial, setOpenSetupTutorial] = useState(!localStorage.getItem('dismissTutorialDialog'))
     const [pluginStatus, setPluginStatus] = useState({
-        [PLUGIN_IDS.FILE_SERVICE]: true,
-        [PLUGIN_IDS.GITCOIN]: true,
-        [PLUGIN_IDS.DHEDGE]: true,
-        [PLUGIN_IDS.RED_PACKET]: true,
-        [PLUGIN_IDS.TRANSAK]: true,
-        [PLUGIN_IDS.COLLECTIBLES]: true,
-        [PLUGIN_IDS.SWAP]: true,
-        [PLUGIN_IDS.SNAPSHOT]: true,
-        [PLUGIN_IDS.MARKETS]: true,
-        [PLUGIN_IDS.VALUABLES]: true,
-        [PLUGIN_IDS.MASK_BOX]: true,
-        [PLUGIN_IDS.GOOD_GHOSTING]: true,
-        [PLUGIN_IDS.POOL_TOGETHER]: true,
+        [PluginId.FileService]: true,
+        [PluginId.Gitcoin]: true,
+        [PluginId.dHEDGE]: true,
+        [PluginId.Pets]: true,
+        [PluginId.RedPacket]: true,
+        [PluginId.Transak]: true,
+        [PluginId.Collectible]: true,
+        [PluginId.Trader]: true,
+        [PluginId.Snapshot]: true,
+        [PluginId.ITO]: true,
+        [PluginId.Valuables]: true,
+        [PluginId.MaskBox]: true,
+        [PluginId.GoodGhosting]: true,
+        [PluginId.PoolTogether]: true,
     })
 
     useEffect(
@@ -79,105 +81,105 @@ export default function Plugins() {
 
     const plugins = [
         {
-            id: PLUGIN_IDS.RED_PACKET,
+            id: PluginId.RedPacket,
             title: t.labs_red_packet(),
             desc: t.labs_red_packet_desc(),
             icon: <RedPacketIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.RED_PACKET],
+            enabled: pluginStatus[PluginId.RedPacket],
         },
         {
-            id: PLUGIN_IDS.FILE_SERVICE,
+            id: PluginId.FileService,
             title: t.labs_file_service(),
             desc: t.labs_file_service_desc(),
             icon: <FileServiceIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.FILE_SERVICE],
+            enabled: pluginStatus[PluginId.FileService],
         },
         {
-            id: PLUGIN_IDS.MARKETS,
+            id: PluginId.ITO,
             title: t.labs_markets(),
             desc: t.labs_markets_desc(),
             icon: <MarketsIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.MARKETS],
+            enabled: pluginStatus[PluginId.ITO],
         },
         {
-            id: PLUGIN_IDS.MASK_BOX,
+            id: PluginId.MaskBox,
             title: t.labs_mask_box(),
             desc: t.labs_mask_box_desc(),
             icon: <MaskBoxIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.MASK_BOX],
+            enabled: pluginStatus[PluginId.MaskBox],
         },
         {
-            id: PLUGIN_IDS.SWAP,
+            id: PluginId.Trader,
             title: t.labs_swap(),
             desc: t.labs_swap_desc(),
             icon: <SwapServiceIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.SWAP],
+            enabled: pluginStatus[PluginId.Trader],
             setting: true,
             hideSwitch: true,
         },
         {
-            id: PLUGIN_IDS.TRANSAK,
+            id: PluginId.Transak,
             title: t.labs_transak(),
             desc: t.labs_transak_desc(),
             icon: <TransakIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.TRANSAK],
+            enabled: pluginStatus[PluginId.Transak],
             hideSwitch: true,
         },
         {
-            id: PLUGIN_IDS.COLLECTIBLES,
+            id: PluginId.Collectible,
             title: t.labs_collectibles(),
             desc: t.labs_collectibles_desc(),
             icon: <CollectiblesIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.COLLECTIBLES],
+            enabled: pluginStatus[PluginId.Collectible],
         },
         {
-            id: PLUGIN_IDS.SNAPSHOT,
+            id: PluginId.Snapshot,
             title: t.labs_snapshot(),
             desc: t.labs_snapshot_desc(),
             icon: <SnapshotIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.SNAPSHOT],
+            enabled: pluginStatus[PluginId.Snapshot],
         },
         {
-            id: PLUGIN_IDS.GITCOIN,
+            id: PluginId.Gitcoin,
             title: t.labs_gitcoin(),
             desc: t.labs_gitcoin_desc(),
             icon: <GitcoinIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.GITCOIN],
+            enabled: pluginStatus[PluginId.Gitcoin],
         },
         {
-            id: PLUGIN_IDS.VALUABLES,
+            id: PluginId.Valuables,
             title: t.labs_valuables(),
             desc: t.labs_valuables_desc(),
             icon: <ValuablesIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.VALUABLES],
+            enabled: pluginStatus[PluginId.Valuables],
         },
         {
-            id: PLUGIN_IDS.DHEDGE,
+            id: PluginId.dHEDGE,
             title: t.labs_dhedge(),
             desc: t.labs_dhedge_desc(),
             icon: <DHEDGEIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.DHEDGE],
+            enabled: pluginStatus[PluginId.dHEDGE],
         },
         {
-            id: PLUGIN_IDS.PETS,
+            id: PluginId.Pets,
             title: t.labs_pets(),
             desc: t.labs_pets_desc(),
             icon: <PetIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.PETS],
+            enabled: pluginStatus[PluginId.Pets],
         },
         {
-            id: PLUGIN_IDS.GOOD_GHOSTING,
+            id: PluginId.GoodGhosting,
             title: t.labs_good_ghosting(),
             desc: t.labs_good_ghosting_desc(),
             icon: <GoogGhostingIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.GOOD_GHOSTING],
+            enabled: pluginStatus[PluginId.GoodGhosting],
         },
         {
-            id: PLUGIN_IDS.POOL_TOGETHER,
+            id: PluginId.PoolTogether,
             title: t.labs_pool_together(),
             desc: t.labs_pool_together_desc(),
             icon: <PoolTogetherIcon />,
-            enabled: pluginStatus[PLUGIN_IDS.POOL_TOGETHER],
+            enabled: pluginStatus[PluginId.PoolTogether],
         },
     ]
 
@@ -202,7 +204,7 @@ export default function Plugins() {
     }
 
     function onSetting(id: string) {
-        if (id === PLUGIN_IDS.SWAP) {
+        if (id === PluginId.Trader) {
             setOpenTrendSetting(true)
         }
     }
@@ -222,8 +224,8 @@ export default function Plugins() {
     }
 
     useEffect(() => {
-        Object.values(PLUGIN_IDS).forEach(async (id) => {
-            const enabled = !(await Services.Settings.getPluginMinimalModeEnabled(id))
+        Object.values(PluginId).forEach(async (id) => {
+            const enabled = await Services.Settings.getPluginMinimalModeEnabled(id)
             setPluginStatus((status) => ({ ...status, [id]: enabled }))
         })
     }, [])

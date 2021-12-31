@@ -1,5 +1,5 @@
 import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
-import { PLUGIN_IDENTIFIER } from './constants'
+import { PLUGIN_ID } from './constants'
 
 type BuyTokenDialogEvent =
     | {
@@ -17,4 +17,4 @@ interface PluginTransakMessage {
 }
 
 if (import.meta.webpackHot) import.meta.webpackHot.accept()
-export const PluginTransakMessages: PluginMessageEmitter<PluginTransakMessage> = createPluginMessage(PLUGIN_IDENTIFIER)
+export const PluginTransakMessages: PluginMessageEmitter<PluginTransakMessage> = createPluginMessage(PLUGIN_ID)

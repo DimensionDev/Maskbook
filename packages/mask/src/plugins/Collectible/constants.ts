@@ -1,8 +1,10 @@
+import { PluginId } from '@masknet/plugin-infra'
+
 export const PLUGIN_NAME = 'Collectibles'
 export const PLUGIN_ICON = '🖼️'
 export const PLUGIN_DESCRIPTION = 'An NFT collectible viewer.'
-export const PLUGIN_IDENTIFIER = 'com.maskbook.collectibles'
-export const PLUGIN_META_KEY = 'com.maskbook.collectibles:1'
+export const PLUGIN_ID = PluginId.Collectible
+export const PLUGIN_META_KEY = `${PluginId.Collectible}:1`
 
 export const openseaHostnames = ['opensea.io', 'testnets.opensea.io']
 export const openseaPathnameRegexMatcher = /^\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/

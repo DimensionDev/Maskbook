@@ -35,10 +35,10 @@ export interface PostInspectorProps {
     slotPosition?: 'before' | 'after'
 }
 export function PostInspector(props: PostInspectorProps) {
-    const postBy = usePostInfoDetails.postBy()
+    const postBy = usePostInfoDetails.author()
     const postContent = usePostInfoDetails.postContent()
-    const encryptedPost = usePostInfoDetails.postPayload()
-    const postId = usePostInfoDetails.postIdentifier()
+    const encryptedPost = usePostInfoDetails.containingMaskPayload()
+    const postId = usePostInfoDetails.identifier()
     const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
     const postImages = usePostInfoDetails.postMetadataImages()
     const isDebugging = useValueRef(debugModeSetting)

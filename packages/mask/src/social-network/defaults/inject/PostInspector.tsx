@@ -29,14 +29,14 @@ export function injectPostInspectorDefault<T extends string>(
             <PostInfoProvider post={current}>
                 <PostInspectorDefault
                     onDecrypted={(typed) => {
-                        current.transformedPostContent.value = typed
+                        current.rawMessagePiped.value = typed
                     }}
-                    zipPost={() => zipPostF(current.rootNodeProxy)}
+                    zipPost={() => zipPostF(current.rootElement)}
                     {...current}
                 />
             </PostInfoProvider>
         )
-        const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootNodeProxy.afterShadow, {
+        const root = createReactRootShadowed(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
             key: 'post-inspector',
             signal,
         })
