@@ -72,6 +72,9 @@ export class NFTScanAPI implements NonFungibleTokenAPI.Provider {
                     ChainId.Mainnet,
                     x.nft_contract_address,
                     x.nft_platform_name,
+                    undefined,
+                    undefined,
+                    x.nft_platform_image,
                 )
                 const balance = x.nft_asset.length
                 return { contractDetailed, balance }
