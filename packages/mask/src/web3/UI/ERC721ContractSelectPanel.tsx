@@ -131,7 +131,6 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                         </Typography>
                     ) : null}
                 </div>
-
                 <ExpandMoreIcon className={classes.expandIcon} />
             </div>
         </Box>
