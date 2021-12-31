@@ -1,5 +1,12 @@
 import { useEffect } from 'react'
-import { TypedMessageTuple, ProfileIdentifier, extractTextFromTypedMessage } from '@masknet/shared-base'
+import {
+    TypedMessageTuple,
+    ProfileIdentifier,
+    extractTextFromTypedMessage,
+    waitTypedMessage,
+    flattenTypedMessage,
+    extractImageFromTypedMessage,
+} from '@masknet/shared-base'
 
 import type { Profile } from '../../../database'
 import { usePostInfoDetails } from '@masknet/plugin-infra'
@@ -16,16 +23,20 @@ export interface DecryptPostProps {
 }
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI } = props
-    const raw = extractTextFromTypedMessage(usePostInfoDetails.rawMessage())
+    const raw = usePostInfoDetails.rawMessage()
     const author = usePostInfoDetails.author()
     const url = usePostInfoDetails.url()
 
     useEffect(() => {
         const abort = new AbortController()
         async function main() {
-            const x: SocialNetworkEncodedPayload = [].length
-                ? { type: 'image-url', url: [].at(0)! }
-                : { type: 'text', text: raw.unwrapOr('') }
+            const m = flattenTypedMessage(await waitTypedMessage(raw))
+            const t = extractTextFromTypedMessage(m).unwrapOr('')
+            const i = extractImageFromTypedMessage(m).filter((x): x is string => typeof x === 'string')
+            console.log(m, t, i)
+            const x: SocialNetworkEncodedPayload = i.length
+                ? { type: 'image-url', url: i.at(0)! }
+                : { type: 'text', text: t }
             const process = ServicesWithProgress.decryptionWithSocialNetworkDecoding(x, {
                 authorHint: author,
                 currentProfile: whoAmI,
