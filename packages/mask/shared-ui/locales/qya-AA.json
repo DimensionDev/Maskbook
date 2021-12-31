@@ -979,17 +979,5 @@
     "nft_button_add_collectible": "crwdns9209:0crwdne9209:0",
     "nft_avatar": "crwdns9211:0crwdne9211:0",
     "plugin_profile_no_wallets": "crwdns9327:0crwdne9327:0",
-    "plugin_profile_binding_rules_title": "crwdns10417:0crwdne10417:0",
-    "plugin_profile_binding_rule1": "crwdns10419:0crwdne10419:0",
-    "plugin_profile_binding_rule2": "crwdns10421:0crwdne10421:0",
-    "plugin_profile_binding_rule3": "crwdns10423:0crwdne10423:0",
-    "plugin_profile_binding_rule4": "crwdns10425:0crwdne10425:0",
-    "plugin_profile_current_display_of": "crwdns10427:0{{type}}crwdne10427:0",
-    "plugin_profile_loading": "crwdns10669:0crwdne10669:0",
-    "plugin_profile_address_name_ens": "crwdns10673:0crwdne10673:0",
-    "plugin_profile_address_name_uns": "crwdns10675:0crwdne10675:0",
-    "plugin_profile_address_name_dns": "crwdns10677:0crwdne10677:0",
-    "plugin_profile_address_name_rns": "crwdns10679:0crwdne10679:0",
-    "plugin_profile_address_name_address": "crwdns10681:0crwdne10681:0",
     "plugin_vcent_last_offer_at": "crwdns10295:0crwdne10295:0"
 }

@@ -12,7 +12,7 @@ import {
 } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from 'react-i18next'
-import { useAccount } from '@masknet/web3-shared-evm'
+import { EthereumTokenType, useAccount, useFungibleTokenWatched } from '@masknet/web3-shared-evm'
 import { InjectedDialog } from '../../../components/shared/InjectedDialog'
 import { UnreviewedWarning } from './UnreviewedWarning'
 import { useI18N } from '../../../utils'
@@ -24,6 +24,8 @@ import { PluginTraderMessages } from '../../Trader/messages'
 import { CheckoutOrder } from './CheckoutOrder'
 import type { useAsset } from '../../EVM/hooks/useAsset'
 import type { useAssetOrder } from '../hooks/useAssetOrder'
+import type { Coin } from '../../Trader/types'
+import { isGreaterThan } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -62,16 +64,18 @@ export interface CheckoutDialogProps {
 
 export function CheckoutDialog(props: CheckoutDialogProps) {
     const { asset, open, onClose, order } = props
-    const isAuction = asset?.value?.is_auction ?? false
     const isVerified = asset?.value?.is_verified ?? false
     const { t } = useI18N()
     const { classes } = useStyles()
-
     const account = useAccount()
 
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
-
+    const [insufficientBalance, setInsufficientBalance] = useState(false)
+    const { token, balance } = useFungibleTokenWatched({
+        type: EthereumTokenType.Native,
+        address: order.value?.paymentTokenContract?.address ?? '',
+    })
     const onCheckout = useCallback(async () => {
         if (!asset?.value) return
         if (!asset.value.token_id || !asset.value.token_address) return
@@ -84,13 +88,33 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
         })
     }, [asset?.value, account, order?.value])
 
-    const { openDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+    const { setDialog: openSwapDialog } = useRemoteControlledDialog(PluginTraderMessages.swapDialogUpdated)
+
+    const onConvertClick = useCallback(() => {
+        if (!token?.value) return
+        openSwapDialog({
+            open: true,
+            traderProps: {
+                coin: {
+                    id: token.value.address,
+                    name: token.value.name ?? '',
+                    symbol: token.value.symbol ?? '',
+                    contract_address: token.value.address,
+                    decimals: token.value.decimals,
+                } as Coin,
+            },
+        })
+    }, [token.value, openSwapDialog])
 
     const validationMessage = useMemo(() => {
+        if (isGreaterThan(order?.value?.basePrice ?? 0, balance.value ?? 0)) {
+            setInsufficientBalance(true)
+            return t('plugin_collectible_insufficient_balance')
+        }
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
         if (!isVerified && !ToS_Checked) return t('plugin_collectible_check_tos_document')
         return ''
-    }, [isVerified, unreviewedChecked, ToS_Checked])
+    }, [isVerified, unreviewedChecked, ToS_Checked, order.value])
 
     return (
         <InjectedDialog title={t('plugin_collectible_checkout')} open={open} onClose={onClose}>
@@ -172,13 +196,15 @@ export function CheckoutDialog(props: CheckoutDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {asset?.value?.isOrderWeth ? (
+                                {asset?.value?.isOrderWeth || insufficientBalance ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"
                                         size="large"
-                                        onClick={openSwapDialog}>
-                                        {t('plugin_collectible_convert_eth')}
+                                        onClick={onConvertClick}>
+                                        {insufficientBalance
+                                            ? t('plugin_collectible_get_more_token', { token: token.value?.symbol })
+                                            : t('plugin_collectible_convert_eth')}
                                     </ActionButton>
                                 ) : null}
                             </Box>
