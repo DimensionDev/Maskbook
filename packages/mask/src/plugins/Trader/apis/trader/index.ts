@@ -18,7 +18,13 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.BANCOR,
             ]
         case NetworkType.Polygon:
-            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
+            return [
+                TradeProvider.UNISWAP_V3,
+                TradeProvider.QUICKSWAP,
+                TradeProvider.SUSHISWAP,
+                TradeProvider.DODO,
+                TradeProvider.ZRX,
+            ]
         case NetworkType.Binance:
             return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
         case NetworkType.Arbitrum:
