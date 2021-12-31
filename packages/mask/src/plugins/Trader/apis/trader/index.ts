@@ -16,15 +16,28 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.BALANCER,
                 TradeProvider.DODO,
                 TradeProvider.BANCOR,
+                TradeProvider.OPENOCEAN,
             ]
         case NetworkType.Polygon:
-            return [TradeProvider.QUICKSWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
+            return [
+                TradeProvider.QUICKSWAP,
+                TradeProvider.SUSHISWAP,
+                TradeProvider.DODO,
+                TradeProvider.ZRX,
+                TradeProvider.OPENOCEAN,
+            ]
         case NetworkType.Binance:
-            return [TradeProvider.PANCAKESWAP, TradeProvider.SUSHISWAP, TradeProvider.DODO, TradeProvider.ZRX]
+            return [
+                TradeProvider.PANCAKESWAP,
+                TradeProvider.SUSHISWAP,
+                TradeProvider.DODO,
+                TradeProvider.ZRX,
+                TradeProvider.OPENOCEAN,
+            ]
         case NetworkType.Arbitrum:
-            return [TradeProvider.UNISWAP_V3]
+            return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN]
         case NetworkType.xDai:
-            return [TradeProvider.SUSHISWAP]
+            return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         default:
             safeUnreachable(networkType)
             return []

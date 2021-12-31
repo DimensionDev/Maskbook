@@ -446,5 +446,33 @@
         "Arbitrum": "",
         "Arbitrum_Rinkeby": "",
         "xDai": ""
+    },
+    "OPENOCEAN_ETH_ADDRESS": {
+        "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "BSCT": "",
+        "Matic": "0x0000000000000000000000000000000000001010",
+        "Mumbai": "",
+        "Arbitrum": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "0x0000000000000000000000000000000000000000"
+    },
+    "OPENOCEAN_EXCHANGE_PROXY_ADDRESS": {
+        "Mainnet": "0x6352a56caadC4F1E25CD6c75970Fa768A3304e64",
+        "Ropsten": "",
+        "Rinkeby": "",
+        "Kovan": "",
+        "Gorli": "",
+        "BSC": "0x6352a56caadC4F1E25CD6c75970Fa768A3304e64",
+        "BSCT": "",
+        "Matic": "0x6352a56caadc4f1e25cd6c75970fa768a3304e64",
+        "Mumbai": "",
+        "Arbitrum": "0x6352a56caadc4f1e25cd6c75970fa768a3304e64",
+        "Arbitrum_Rinkeby": "",
+        "xDai": "0x6352a56caadC4F1E25CD6c75970Fa768A3304e64"
     }
 }
