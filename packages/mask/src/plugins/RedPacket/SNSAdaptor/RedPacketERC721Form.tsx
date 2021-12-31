@@ -1,4 +1,4 @@
-import { Box, Typography, List, ListItem } from '@mui/material'
+import { Box, Typography, List, ListItem, CircularProgress } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useI18N } from '../../../utils'
@@ -15,12 +15,15 @@ import {
     useChainId,
     useNftRedPacketConstants,
 } from '@masknet/web3-shared-evm'
+import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { RedpacketMessagePanel } from './RedpacketMessagePanel'
-import { SelectNftTokenDialog } from './SelectNftTokenDialog'
+import { SelectNftTokenDialog, OrderedERC721Token } from './SelectNftTokenDialog'
 import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog'
 import { NftImage } from './NftImage'
+import { NFTSelectOption } from '../types'
+import { NFT_RED_PACKET_MAX_SHARES } from '../constants'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -135,6 +138,51 @@ const useStyles = makeStyles()((theme) => {
             width: 64,
             height: 64,
         },
+        selectWrapper: {
+            display: 'flex',
+            alignItems: 'center',
+            margin: '16px 0 8px 0',
+        },
+        option: {
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+        },
+        optionLeft: {
+            marginRight: '16px',
+        },
+        checkIcon: {
+            width: 15,
+            height: 15,
+            color: '#fff',
+        },
+        checkIconWrapper: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            cursor: 'pointer',
+            width: 17,
+            height: 17,
+            borderRadius: 999,
+            marginRight: 5,
+            border: '1px solid #6E748E',
+            backgroundColor: 'white',
+        },
+        checked: {
+            borderColor: '#1D9BF0 !important',
+            background: '#1D9BF0 !important',
+        },
+        approveAllTip: {
+            color: '#FF5F5F',
+            margin: '0px 4px 24px 4px',
+        },
+        disabledSelector: {
+            opacity: 0.5,
+            pointerEvents: 'none',
+        },
+        loadingOwnerList: {
+            margin: '24px auto 16px',
+        },
     }
 })
 interface RedPacketERC721FormProps {
@@ -146,21 +194,24 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
     const [balance, setBalance] = useState(0)
+    const [selectOption, setSelectOption] = useState<NFTSelectOption | undefined>(undefined)
     const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
     const account = useAccount()
     const chainId = useChainId()
     const [contract, setContract] = useState<ERC721ContractDetailed>()
-    const [existTokenDetailedList, setExistTokenDetailedList] = useState<ERC721TokenDetailed[]>([])
+    const [existTokenDetailedList, setExistTokenDetailedList] = useState<OrderedERC721Token[]>([])
     const [message, setMessage] = useState('Best Wishes!')
     const {
         asyncRetry: { loading: loadingOwnerList },
-        tokenDetailedOwnerList = [],
+        tokenDetailedOwnerList: _tokenDetailedOwnerList = [],
         clearTokenDetailedOwnerList,
     } = useERC721TokenDetailedOwnerList(contract, account)
-
+    const tokenDetailedOwnerList = _tokenDetailedOwnerList.map((v, index) => ({ ...v, index } as OrderedERC721Token))
     const removeToken = useCallback((token: ERC721TokenDetailed) => {
         setExistTokenDetailedList((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])
+
+    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
 
     const clearToken = useCallback(() => {
         setExistTokenDetailedList([])
@@ -171,6 +222,14 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const clearContract = useCallback(() => {
         setContract(undefined)
     }, [])
+
+    useEffect(() => {
+        if (loadingOwnerList) {
+            setSelectOption(undefined)
+        } else if (!selectOption) {
+            setSelectOption(NFTSelectOption.Partial)
+        }
+    }, [tokenDetailedOwnerList, selectOption, loadingOwnerList])
 
     useEffect(() => {
         clearToken()
@@ -199,6 +258,56 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     onBalanceChange={setBalance}
                 />
                 {contract && balance ? (
+                    loadingOwnerList ? (
+                        <CircularProgress size={24} className={classes.loadingOwnerList} />
+                    ) : (
+                        <Box className={classes.selectWrapper}>
+                            <div
+                                className={classNames(
+                                    classes.optionLeft,
+                                    classes.option,
+                                    tokenDetailedOwnerList.length === 0 ? classes.disabledSelector : null,
+                                )}
+                                onClick={() => {
+                                    setSelectOption(NFTSelectOption.All)
+                                    setExistTokenDetailedList(tokenDetailedOwnerList.slice(0, maxSelectShares))
+                                }}>
+                                <div
+                                    className={classNames(
+                                        classes.checkIconWrapper,
+                                        selectOption === NFTSelectOption.All ? classes.checked : '',
+                                    )}>
+                                    <CheckIcon className={classes.checkIcon} />
+                                </div>
+                                <Typography color="textPrimary">
+                                    {tokenDetailedOwnerList.length === 0
+                                        ? 'All'
+                                        : t('plugin_red_packet_nft_select_all_option', {
+                                              total: Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length),
+                                          })}
+                                </Typography>
+                            </div>
+                            <div
+                                className={classes.option}
+                                onClick={() => {
+                                    setSelectOption(NFTSelectOption.Partial)
+                                    setExistTokenDetailedList([])
+                                }}>
+                                <div
+                                    className={classNames(
+                                        classes.checkIconWrapper,
+                                        selectOption === NFTSelectOption.Partial ? classes.checked : '',
+                                    )}>
+                                    <CheckIcon className={classes.checkIcon} />
+                                </div>
+                                <Typography color="textPrimary">
+                                    {t('plugin_red_packet_nft_select_partially_option')}
+                                </Typography>
+                            </div>
+                        </Box>
+                    )
+                ) : null}
+                {contract && balance && selectOption === NFTSelectOption.Partial && !loadingOwnerList ? (
                     <div className={classes.tokenSelectorParent}>
                         <List className={classes.tokenSelector}>
                             {existTokenDetailedList.map((value, i) => (
@@ -233,6 +342,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                 <div className={classes.line}>
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
+                {contract && balance && !loadingOwnerList ? (
+                    <Typography className={classes.approveAllTip}>
+                        {t('plugin_red_packet_nft_approve_all_tip')}
+                    </Typography>
+                ) : null}
                 <EthereumWalletConnectedBoundary>
                     <EthereumERC721TokenApprovedBoundary
                         validationMessage={validationMessage}
