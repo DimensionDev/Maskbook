@@ -27,7 +27,6 @@
     "@types/tinycolor2": "^1.4.3",
     "classnames": "^2.3.1",
     "fuse.js": "^6.5.3",
-    "lodash-es": "^4.17.20",
     "notistack": "2.0.3",
     "react-window": "^1.8.6",
     "tinycolor2": "^1.4.2",

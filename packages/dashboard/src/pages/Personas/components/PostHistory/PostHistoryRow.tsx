@@ -4,10 +4,10 @@ import { FileMessageIcon, ITOIcon, MessageIcon, PollIcon, RedPacketIcon } from '
 import { getMaskColor, MaskColorVar } from '@masknet/theme'
 import { Services } from '../../../../API'
 import type { PostRecord } from '@masknet/shared-base'
-import { PLUGIN_IDS } from '../../../Labs/constants'
 import { useDashboardI18N } from '../../../../locales'
 import { PersonaContext } from '../../hooks/usePersonaContext'
 import { makeStyles } from '@masknet/theme'
+import { PluginId } from '@masknet/plugin-infra'
 
 const MSG_DELIMITER = '2c1aca02'
 
@@ -53,22 +53,22 @@ const SUPPORT_PLUGIN: Record<
         messageParse: parseFileServiceMessage,
     },
     'com.maskbook.red_packet:1': {
-        pluginId: PLUGIN_IDS.RED_PACKET,
+        pluginId: PluginId.RedPacket,
         icon: <RedPacketIcon />,
         messageParse: (body: any) => body.sender.message,
     },
     'com.maskbook.ito:1': {
-        pluginId: PLUGIN_IDS.MARKETS,
+        pluginId: PluginId.ITO,
         icon: <ITOIcon />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.ito:2': {
-        pluginId: PLUGIN_IDS.MARKETS,
+        pluginId: PluginId.ITO,
         icon: <ITOIcon />,
         messageParse: (body: any) => body.message.split(MSG_DELIMITER)[1],
     },
     'com.maskbook.poll:1': {
-        pluginId: PLUGIN_IDS.POLL,
+        pluginId: PluginId.Poll,
         icon: <PollIcon />,
         messageParse: (body: any) => body.question,
     },

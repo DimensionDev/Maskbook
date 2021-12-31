@@ -158,6 +158,9 @@ to {
         connectWallet: {
             marginTop: 16,
         },
+        fullWidthBox: {
+            width: '100%',
+        },
         loadingText: {
             textAlign: 'center',
             fontSize: 24,

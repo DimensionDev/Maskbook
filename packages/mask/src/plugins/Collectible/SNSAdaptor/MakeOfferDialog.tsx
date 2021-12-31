@@ -96,6 +96,7 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     const [expirationDateTime, setExpirationDateTime] = useState(new Date())
     const [unreviewedChecked, setUnreviewedChecked] = useState(false)
     const [ToS_Checked, setToS_Checked] = useState(false)
+    const [insufficientBalance, setInsufficientBalance] = useState(false)
 
     const { amount, token, balance, setAmount, setToken } = useFungibleTokenWatched(selectedPaymentToken)
 
@@ -142,10 +143,14 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
     }, [open])
 
     const validationMessage = useMemo(() => {
+        setInsufficientBalance(false)
         const amount_ = rightShift(amount, token.value?.decimals)
         const balance_ = new BigNumber(balance.value ?? '0')
         if (amount_.isNaN() || amount_.isZero()) return t('plugin_collectible_enter_a_price')
-        if (balance_.isZero() || amount_.isGreaterThan(balance_)) return t('plugin_collectible_insufficient_balance')
+        if (balance_.isZero() || amount_.isGreaterThan(balance_)) {
+            setInsufficientBalance(true)
+            return t('plugin_collectible_insufficient_balance')
+        }
         if (!isAuction && expirationDateTime.getTime() - Date.now() <= 0)
             return t('plugin_collectible_invalid_expiration_date')
         if (!isVerified && !unreviewedChecked) return t('plugin_collectible_ensure_unreviewed_item')
@@ -271,13 +276,16 @@ export function MakeOfferDialog(props: MakeOfferDialogProps) {
                                     completeOnClick={onClose}
                                     failedOnClick="use executor"
                                 />
-                                {(isAuction ? asset.value?.isCollectionWeth : asset.value?.isOrderWeth) ? (
+                                {(isAuction ? asset.value?.isCollectionWeth : asset.value?.isOrderWeth) ||
+                                insufficientBalance ? (
                                     <ActionButton
                                         className={classes.button}
                                         variant="contained"
                                         size="large"
                                         onClick={onConvertClick}>
-                                        Convert ETH
+                                        {insufficientBalance
+                                            ? t('plugin_collectible_get_more_token', { token: token.value?.symbol })
+                                            : t('plugin_collectible_convert_eth')}
                                     </ActionButton>
                                 ) : null}
                             </Box>
