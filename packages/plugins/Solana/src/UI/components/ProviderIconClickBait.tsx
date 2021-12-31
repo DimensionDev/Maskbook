@@ -1,7 +1,7 @@
 import { useCallback, cloneElement, isValidElement } from 'react'
 import type { Web3Plugin } from '@masknet/plugin-infra'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
-import { useSolletWallet } from '../../hooks/useSolletWallet'
+import { useSolletWallet } from '../../hooks'
 import { getStorage } from '../../storage'
 
 export function ProviderIconClickBait({
