@@ -17,6 +17,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.DODO,
                 TradeProvider.ONE_INCH,
                 TradeProvider.BANCOR,
+                TradeProvider.OPENOCEAN,
             ]
         case NetworkType.Polygon:
             return [
@@ -26,6 +27,7 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.DODO,
                 TradeProvider.ZRX,
                 TradeProvider.ONE_INCH,
+                TradeProvider.OPENOCEAN,
             ]
         case NetworkType.Binance:
             return [
@@ -34,11 +36,12 @@ export async function getAvailableTraderProviders(chainId: ChainId) {
                 TradeProvider.DODO,
                 TradeProvider.ZRX,
                 TradeProvider.ONE_INCH,
+                TradeProvider.OPENOCEAN,
             ]
         case NetworkType.Arbitrum:
-            return [TradeProvider.UNISWAP_V3]
+            return [TradeProvider.UNISWAP_V3, TradeProvider.OPENOCEAN]
         case NetworkType.xDai:
-            return [TradeProvider.SUSHISWAP]
+            return [TradeProvider.SUSHISWAP, TradeProvider.OPENOCEAN]
         case NetworkType.Celo:
             return [TradeProvider.SUSHISWAP]
         case NetworkType.Fantom:

@@ -3,7 +3,7 @@ import { useActivatedPluginsSNSAdaptor } from '../manager/sns-adaptor'
 import type { Web3Plugin } from '../web3-types'
 
 export function useAllPluginsWeb3State() {
-    const pluginsSNSAdaptor = useActivatedPluginsSNSAdaptor()
+    const pluginsSNSAdaptor = useActivatedPluginsSNSAdaptor('any')
     const pluginsDashboard = useActivatedPluginsDashboard()
 
     return [...pluginsSNSAdaptor, ...pluginsDashboard].reduce<

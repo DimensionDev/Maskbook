@@ -57,6 +57,7 @@ export const resolveTradeProviderName = createLookupTableResolver<TradeProvider,
         [TradeProvider.DODO]: 'DODO',
         [TradeProvider.BANCOR]: 'Bancor',
         [TradeProvider.ONE_INCH]: '1inch',
+        [TradeProvider.OPENOCEAN]: 'OpenOcean',
     },
     (tradeProvider) => {
         throw new Error(`Unknown provider type: ${tradeProvider}`)
@@ -123,6 +124,8 @@ export function resolveTradeProviderLink(tradeProvider: TradeProvider, networkTy
             return 'https://app.dodoex.io'
         case TradeProvider.BANCOR:
             return 'https://app.bancor.network/eth/swap'
+        case TradeProvider.OPENOCEAN:
+            return 'https://openocean.finance/classic'
         default:
             unreachable(tradeProvider)
     }
@@ -179,6 +182,10 @@ export function resolveTradePairLink(tradeProvider: TradeProvider, address: stri
             // TODO - Bancor analytics should be available with V3
             return ``
         case TradeProvider.ONE_INCH:
+            // TODO - 1inch
+            return ``
+        case TradeProvider.OPENOCEAN:
+            // TODO - OpenOcean
             return ``
         default:
             unreachable(tradeProvider)

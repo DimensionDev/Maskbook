@@ -10,6 +10,7 @@ import type {
     SwapQuoteOneResponse,
     SwapBancorRequest,
     TradeComputed,
+    SwapOOSuccessResponse,
 } from '../types'
 import { useTradeCallback as useNativeTokenWrapperCallback } from './native/useTradeCallback'
 import { useTradeCallback as useZrxCallback } from './0x/useTradeCallback'
@@ -18,6 +19,7 @@ import { useTradeCallback as useBalancerCallback } from './balancer/useTradeCall
 import { useTradeCallback as useDODOCallback } from './dodo/useTradeCallback'
 import { useTradeCallback as useONECallback } from './1inch/useTradeCallback'
 import { useTradeCallback as useBancorCallback } from './bancor/useTradeCallback'
+import { useTradeCallback as useOpenOceanCallback } from './openocean/useTradeCallback'
 import { useExchangeProxyContract } from '../contracts/balancer/useExchangeProxyContract'
 import type { NativeTokenWrapper } from './native/useTradeComputed'
 import { isNativeTokenWrapper } from '../helpers'
@@ -51,7 +53,9 @@ export function useTradeCallback(
         : null
     const tradeComputedForONE = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapQuoteOneResponse>) : null
     const tradeComputedForBancor = !isNativeTokenWrapper_ ? (tradeComputed as TradeComputed<SwapBancorRequest>) : null
-
+    const tradeComputedForOpenOcean = !isNativeTokenWrapper_
+        ? (tradeComputed as TradeComputed<SwapOOSuccessResponse>)
+        : null
     // uniswap like providers
     const uniswapV2Like = useUniswapCallback(tradeComputedForUniswapV2Like, provider, gasConfig)
     const uniswapV3Like = useUniswapCallback(tradeComputedForUniswapV3Like, provider, gasConfig)
@@ -102,6 +106,8 @@ export function useTradeCallback(
             return one
         case TradeProvider.BANCOR:
             return bancor
+        case TradeProvider.OPENOCEAN:
+            return openocean
         default:
             if (provider) unreachable(provider)
             return []

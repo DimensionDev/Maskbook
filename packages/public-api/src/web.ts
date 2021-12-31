@@ -213,6 +213,7 @@ export enum TradeProvider {
     UNISWAP_V3 = 8,
     ONE_INCH = 10,
     BANCOR = 9,
+    OPENOCEAN = 10,
 }
 /** Supported language settings */
 export enum LanguageOptions {
