@@ -322,7 +322,9 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [nonExistedTokenIdList, setNonExistedTokenIdList] = useState<string[]>([])
     const [selectAll, setSelectAll] = useState<boolean>(false)
     const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, tokenDetailedOwnerList.length)
-    const isSelectSharesExceed = NFT_RED_PACKET_MAX_SHARES < tokenDetailedSelectedList.length
+    const isSelectSharesExceed =
+        (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
+        tokenDetailedSelectedList.length
     const { classes } = useStyles({ isSelectSharesExceed })
     const selectAllHandler = useCallback(() => {
         setTokenDetailedSelectedList(
