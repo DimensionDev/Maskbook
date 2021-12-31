@@ -42,8 +42,6 @@ export interface PostContextCreation extends PostContextAuthor {
      * You don't need to provide this to resolve links in `PostContext.postContent`.
      */
     readonly postMentionedLinksProvider?: Subscription<string[]>
-    /** @deprecated It should parse image into rawMessage */
-    readonly postImagesProvider?: Subscription<string[]>
     /**
      * The raw TypedMessage that the SNS gives.
      */
@@ -63,8 +61,6 @@ export interface PostContext extends PostContextAuthor {
     readonly url: Subscription<URL | null>
     // Meta
     readonly mentionedLinks: Subscription<string[]>
-    /** @deprecated It should appears in rawMessage */
-    readonly postMetadataImages: Subscription<string[]>
     /** @deprecated Use postMentionedLinks instead */
     readonly postMetadataMentionedLinks: Subscription<string[]>
     //#endregion
@@ -72,19 +68,10 @@ export interface PostContext extends PostContextAuthor {
     readonly rawMessage: Subscription<TypedMessageTuple>
     // TODO: should be a Subscription
     readonly rawMessagePiped: ValueRef<TypedMessageTuple>
-    /** @deprecated Use postMessage or transformedPostContent (depends on your usage) instead */
-    readonly postContent: Subscription<string>
     //#endregion
     //#region Post payload discovered in the rawMessage
     readonly containingMaskPayload: Subscription<Result<Payload, unknown>>
-    /** @deprecated Use postPayload instead */
-    readonly decryptedPayloadForImage: ValueRef<Payload | null>
-    // TODO: should be a Subscription
-    readonly iv: ValueRef<string | null>
-    /**
-     * undefined => payload not found
-     */
-    readonly publicShared: Subscription<boolean | undefined>
+
     //#endregion
 }
 export type PostInfo = PostContext
@@ -135,12 +122,4 @@ function isSubscription(x: any): x is Subscription<any> {
         x !== null &&
         Boolean((x as Subscription<any>).getCurrentValue && (x as Subscription<any>).subscribe)
     )
-}
-
-export function usePostInfoSharedPublic(): boolean {
-    const info = usePostInfoDetails.containingMaskPayload()
-    if (info.err) return false
-    const payload = info.val
-    if (payload.version !== -38) return false
-    return !!payload.sharedPublic
 }

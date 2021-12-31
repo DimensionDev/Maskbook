@@ -52,7 +52,8 @@ export function PostComment(props: PostCommentProps) {
     const comment = useValueRef(props.comment)
     const postContent = usePostInfoDetails.rawMessagePiped()
     const containingPayload = usePostInfoDetails.containingMaskPayload()
-    const iv = usePostInfoDetails.iv()
+    // TODO
+    const iv = null as string | null
     const postIV = containingPayload.map((x) => x.iv).unwrapOr(iv)
 
     const dec = useAsync(async () => {

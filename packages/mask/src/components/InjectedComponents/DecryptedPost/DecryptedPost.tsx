@@ -17,16 +17,14 @@ export interface DecryptPostProps {
 export function DecryptPost(props: DecryptPostProps) {
     const { whoAmI } = props
     const raw = extractTextFromTypedMessage(usePostInfoDetails.rawMessage())
-    const image = usePostInfoDetails.postMetadataImages()
     const author = usePostInfoDetails.author()
     const url = usePostInfoDetails.url()
-    console.log(raw.unwrapOr(''), image)
 
     useEffect(() => {
         const abort = new AbortController()
         async function main() {
-            const x: SocialNetworkEncodedPayload = image.length
-                ? { type: 'image-url', url: image.at(0)! }
+            const x: SocialNetworkEncodedPayload = [].length
+                ? { type: 'image-url', url: [].at(0)! }
                 : { type: 'text', text: raw.unwrapOr('') }
             const process = ServicesWithProgress.decryptionWithSocialNetworkDecoding(x, {
                 authorHint: author,

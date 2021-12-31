@@ -1,18 +1,11 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect } from 'react'
 import { useAsync } from 'react-use'
 import { DecryptPost } from './DecryptedPost/DecryptedPost'
-import { AddToKeyStore } from './AddToKeyStore'
 import Services from '../../extension/service'
-import {
-    ProfileIdentifier,
-    type TypedMessageTuple,
-    type PayloadAlpha40_Or_Alpha39,
-    type PayloadAlpha38,
-} from '@masknet/shared-base'
+import { ProfileIdentifier, type TypedMessageTuple } from '@masknet/shared-base'
 import type { Profile } from '../../database'
 import { useCurrentIdentity, useFriendsList } from '../DataSource/useActivatedUI'
 import { usePostInfoDetails } from '../DataSource/usePostInfo'
-import { decodePublicKeyUI } from '../../social-network/utils/text-payload-ui'
 import { createInjectHooksRenderer, useActivatedPluginsSNSAdaptor } from '@masknet/plugin-infra'
 
 const PluginHooksRenderer = createInjectHooksRenderer(useActivatedPluginsSNSAdaptor, (plugin) => plugin.PostInspector)
@@ -25,14 +18,10 @@ export interface PostInspectorProps {
 }
 export function PostInspector(props: PostInspectorProps) {
     const postBy = usePostInfoDetails.author()
-    const postContent = usePostInfoDetails.postContent()
     const encryptedPost = usePostInfoDetails.containingMaskPayload()
-    const decryptedPayloadForImage = usePostInfoDetails.decryptedPayloadForImage()
-    const postImages = usePostInfoDetails.postMetadataImages()
     const whoAmI = useCurrentIdentity()
     const friends = useFriendsList()
     const [alreadySelectedPreviously, setAlreadySelectedPreviously] = useState<Profile[]>([])
-    const provePost = useMemo(() => decodePublicKeyUI(postContent), [postContent])
 
     const { value: sharedListOfPost } = useAsync(async () => {
         if (!whoAmI || !whoAmI.identifier.equals(postBy) || !encryptedPost.ok) return []
@@ -41,44 +30,25 @@ export function PostInspector(props: PostInspectorProps) {
     }, [postBy, whoAmI, encryptedPost])
     useEffect(() => setAlreadySelectedPreviously(sharedListOfPost ?? []), [sharedListOfPost])
 
-    if (encryptedPost.ok || postImages.length) {
+    if (encryptedPost.ok) {
         props.needZip()
-        return withAdditionalContent(
-            <DecryptPost
-                onDecrypted={props.onDecrypted}
-                requestAppendRecipients={
-                    // So should not create new data on version -40
-                    (encryptedPost.ok && encryptedPost.val.version !== -40) || decryptedPayloadForImage
-                        ? async (profile) => {
-                              const val = (postImages ? decryptedPayloadForImage : encryptedPost.val) as
-                                  | PayloadAlpha40_Or_Alpha39
-                                  | PayloadAlpha38
-
-                              const { iv, version } = val
-                              const ownersAESKeyEncrypted =
-                                  val.version === -38 ? val.AESKeyEncrypted : val.ownersAESKeyEncrypted
-
-                              setAlreadySelectedPreviously(alreadySelectedPreviously.concat(profile))
-                              return Services.Crypto.appendShareTarget(
-                                  version,
-                                  ownersAESKeyEncrypted,
-                                  iv,
-                                  profile.map((x) => x.identifier),
-                                  whoAmI!.identifier,
-                                  { type: 'direct', at: new Date() },
-                              )
-                          }
-                        : undefined
-                }
-                alreadySelectedPreviously={alreadySelectedPreviously}
-                profiles={friends}
-                whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
-            />,
-        )
-    } else if (provePost.length) {
-        return withAdditionalContent(<AddToKeyStore postBy={postBy} provePost={postContent} />)
     }
-    return withAdditionalContent(null)
+    return withAdditionalContent(
+        <DecryptPost
+            onDecrypted={props.onDecrypted}
+            requestAppendRecipients={async () => {
+                // TODO
+            }}
+            alreadySelectedPreviously={alreadySelectedPreviously}
+            profiles={friends}
+            whoAmI={whoAmI ? whoAmI.identifier : ProfileIdentifier.unknown}
+        />,
+    )
+    // else if (provePost.length) {
+    //     // TODO:
+    //     return null
+    //     // return withAdditionalContent(<AddToKeyStore postBy={postBy} provePost={postContent} />)
+    // }
     function withAdditionalContent(x: JSX.Element | null) {
         const slot = encryptedPost.ok ? null : <slot />
         return (

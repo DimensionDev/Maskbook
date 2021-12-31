@@ -124,28 +124,12 @@ export function createSNSAdaptorSpecializedPostContext(create: PostContextSNSAct
             }),
 
             mentionedLinks: linksSubscribe,
-            postMetadataImages:
-                opt.postImagesProvider ||
-                debug({
-                    getCurrentValue: () => [],
-                    subscribe: () => () => {},
-                }),
             postMetadataMentionedLinks: linksSubscribe,
 
             rawMessage: opt.rawMessage,
             rawMessagePiped: transformedPostContent,
-            postContent: SubscriptionFromValueRef(postContent),
 
             containingMaskPayload: SubscriptionFromValueRef(postPayload),
-            decryptedPayloadForImage: new ValueRef(null),
-            iv: new ValueRef(null),
-            publicShared: debug({
-                getCurrentValue: () =>
-                    postPayload.value
-                        .map((val) => val.version === -38 && val.sharedPublic)
-                        .unwrapOr<undefined>(undefined),
-                subscribe: (sub) => postPayload.addListener(sub),
-            }),
         }
     }
 }
@@ -169,10 +153,6 @@ export function createRefsForCreatePostContext() {
         author: SubscriptionFromValueRef(postBy),
         snsID: SubscriptionFromValueRef(postID),
         rawMessage: SubscriptionFromValueRef(postMessage),
-        postImagesProvider: debug({
-            getCurrentValue: () => [...postMetadataImages],
-            subscribe: (sub) => postMetadataImages.event.on(ALL_EVENTS, sub),
-        }),
         postMentionedLinksProvider: debug({
             getCurrentValue: () => [...postMetadataMentionedLinks.values()],
             subscribe: (sub) => postMetadataMentionedLinks.event.on(ALL_EVENTS, sub),
